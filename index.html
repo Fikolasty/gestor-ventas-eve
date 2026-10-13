@@ -7,7 +7,7 @@
 <meta name="referrer" content="no-referrer">
 <title>PLAN &amp; GESTOR VENTAS</title>
 <style>
-/* ================= Gestor de Ventas v1.0.1 =================
+/* ================= Gestor de Ventas v1.0.2 =================
    Paleta: azul de base, naranja = acción, verde/rojo = ganancia/pérdida.
    Sin backdrop-filter: el vidrio se finge con rgba + bordes. */
 *{box-sizing:border-box;margin:0;padding:0}
@@ -998,6 +998,19 @@ html.lite .pl-fold,html.lite .pl-fold::before{transition:none}
 .pk-o:hover{transform:translateY(-1px);border-color:rgba(222,220,209,.22);box-shadow:0 1px 0 rgba(255,255,255,.05) inset,0 4px 8px rgba(0,0,0,.5),0 12px 24px rgba(0,0,0,.4)!important}
 .pk-o.on{background:#1c1a19!important;border-color:var(--clay);box-shadow:0 0 0 1px var(--clay),0 2px 4px rgba(0,0,0,.45),0 8px 18px rgba(0,0,0,.35)!important}
 html.lite .pk-o{box-shadow:none!important;transform:none!important}
+/* contrato: todos los valores con la misma letra, tamaño y alineación (copiables o no) */
+.ct-f td{padding:6px 0;vertical-align:middle}
+.ct-f td:first-child{font:400 .9rem var(--f-ui);color:var(--mut)}
+.ct-f td.r>span,.ct-f td.r .copy{display:inline-block;font:400 .92rem/1.35 var(--f-num)!important;color:var(--txt);padding:5px 11px;margin:0;border:1px solid transparent;border-radius:var(--r-sm);text-align:right;width:auto}
+.ct-f td.r .copy{border-color:var(--line2);background:#30302e}
+.ct-f td.r .copy:hover{background:#3a3937;border-color:rgba(222,220,209,.3)}
+@media(max-width:600px){.ct-f td.r>span,.ct-f td.r .copy{font-size:.84rem!important;padding:4px 8px}.ct-n{overflow:visible;text-overflow:clip;white-space:normal}}
+/* 1.0.2: fondo al 91% y viñeta suave solo en los bordes; título en mayúsculas */
+body::before{opacity:.91;filter:none}
+body::after{background:radial-gradient(130% 100% at 50% 40%,rgba(14,13,12,0) 55%,rgba(14,13,12,.45) 85%,rgba(10,9,8,.8) 100%)}
+html.lite body::before{opacity:.91}
+.hero h1{text-transform:uppercase;letter-spacing:.04em}
+.hero h1,.hero p,.hero .tagline,.top .brand,.foot-by{text-shadow:0 1px 3px rgba(0,0,0,.95),0 2px 14px rgba(0,0,0,.75)!important}
 </style>
 <script>/* v105: Firefox pinta peor los efectos pesados → Modo ligero automático */try{if(/firefox/i.test(navigator.userAgent))document.documentElement.classList.add('lite');}catch(e){}</script>
 </head>
@@ -1286,13 +1299,13 @@ Contraband Freight = no</textarea><small>Una regla por línea: Nombre = tax tota
 <button type="button" class="totop" id="toTop" aria-label="Volver arriba" title="Volver arriba (Inicio)" hidden><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 14l6-6 6 6"/></svg></button>
 <footer class="foot">
   <div class="foot-sec"><span class="ic i-lock" aria-hidden="true"></span><div><b>Nada se guarda.</b> Al cerrar o recargar la pestaña se borra todo, incluidos tus ajustes. La app solo se conecta a los servidores oficiales de Fenris Creations.</div></div>
-  <div class="foot-by">Creado por <b>Fiko McGivert</b> · Vanguardia DR · SIGMA GRINDSET · <span class="ver">v1.0.1</span> · <label class="lite-t"><input type="checkbox" id="liteOn"> Modo ligero</label></div>
+  <div class="foot-by">Creado por <b>Fiko McGivert</b> · Vanguardia DR · SIGMA GRINDSET · <span class="ver">v1.0.2</span> · <label class="lite-t"><input type="checkbox" id="liteOn"> Modo ligero</label></div>
 </footer>
 
 <script>
 'use strict';
 /* ============================================================
-   Plan y Gestor de Ventas v1.0.1 — SIGMA GRINDSET / Vanguardia DR
+   Plan y Gestor de Ventas v1.0.2 — SIGMA GRINDSET / Vanguardia DR
    Flujo:  pegado → ítems → carga (ESI: precios, volúmenes, historial) → verificación → plan → vista
      1. Pegado      parsePaste(): parser posicional de columnas de EVE (Name · Quantity · … · Volume · Est. Price).
      2. Carga       esiItems(): trae todo lo que falta; mientras carga, refresh() NO pinta (S.loading).

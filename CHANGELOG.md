@@ -2,6 +2,18 @@
 
 Cambios por versión del Gestor de Ventas. La más nueva arriba. El detalle técnico completo está en `docs/SPEC.txt`.
 
+## 1.0.2 — Datos del contrato uniformes
+*2026-10-13*
+
+- Tarjetas de contrato (Buyback, Courier, Jugador): todos los valores con la misma letra (la de números), mismo tamaño (.92rem), peso normal (400) y alineados a la derecha con el mismo relleno, sean copiables (con borde) o no (sin borde). Etiquetas de la izquierda en gris, peso normal.
+- Móvil: el nombre de los ítems del contrato ya no se corta con "…".
+- Verificado: node --check; smoke completo; Contratos y Envío en escritorio y móvil sin desborde ni errores.
+- Fondo: imagen de EVE al 91% de visibilidad, sin desaturar; viñeta suave solo en los bordes. En Modo ligero también 91% (es estática).
+- Título principal otra vez en MAYÚSCULAS (serif, espaciado .04em). Sombra de texto en el título, textos del héroe, marca y pie para que se lean sobre la imagen.
+
+
+---
+
 ## 1.0.1 — Ajustes visuales y de texto
 *2026-10-13*
 
