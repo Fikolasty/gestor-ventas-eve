@@ -7,7 +7,7 @@
 <meta name="referrer" content="no-referrer">
 <title>PLAN &amp; GESTOR VENTAS</title>
 <style>
-/* ================= Gestor de Ventas v1.0.5 =================
+/* ================= Gestor de Ventas v1.0.6 =================
    Paleta: azul de base, naranja = acción, verde/rojo = ganancia/pérdida.
    Sin backdrop-filter: el vidrio se finge con rgba + bordes. */
 *{box-sizing:border-box;margin:0;padding:0}
@@ -1044,6 +1044,34 @@ html.lite .ct,html.lite .sh-card,html.lite .scn>div,html.lite fieldset.st,html.l
 .route-m input{width:70px;padding:5px 8px;text-align:right}
 .k-fN,.v-what[data-k=fN]{background:rgba(224,168,79,.13)!important;color:#ecc27e!important;border-color:rgba(224,168,79,.4)!important}
 .k-fJ,.k-fJI,.v-what[data-k=fJ],.v-what[data-k=fJI]{background:rgba(122,170,224,.13)!important;color:#a9c9ee!important;border-color:rgba(122,170,224,.42)!important}
+/* v1.0.6: comprar en Jita al Sell y revender en HY-RWO */
+.fb2{margin:4px 0 6px;padding:16px 18px;border-radius:var(--r-md);background:#151515;border:1px solid rgba(92,186,134,.35);border-left:3px solid var(--gain);
+  box-shadow:0 1px 0 rgba(255,255,255,.04) inset,0 2px 4px rgba(0,0,0,.45),0 8px 18px rgba(0,0,0,.3)}
+.fb2 h4{font:600 1.05rem var(--f-ui);color:var(--txt);margin:0 0 4px}
+.fb2 .fb2-s{font-size:.88rem;color:var(--mut);margin:0 0 10px}
+.fb2-big{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap}
+.fb2-big b{font:700 2rem/1.1 var(--f-num)}.fb2-big span{font-size:.95rem;color:#e5e3da}
+.fb2-l{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin:12px 0}
+.fb2-l>div{padding:8px 10px;border-radius:var(--r-sm);background:#1c1b1a;border:1px solid rgba(222,220,209,.08)}
+.fb2-l span{display:block;font-size:.72rem;letter-spacing:.05em;text-transform:uppercase;color:var(--dim)}.fb2-l b{font:600 1rem var(--f-num)}
+.fb2 table{width:100%;font-size:.86rem;border-collapse:collapse}
+.fb2 th{font-size:.72rem;color:var(--dim);font-weight:600;text-transform:uppercase;letter-spacing:.04em;padding:4px 6px;text-align:left}
+.fb2 td{padding:5px 6px;border-top:1px solid rgba(255,255,255,.05)}.fb2 td.r,.fb2 th.r{text-align:right;white-space:nowrap}
+.fb2 td.r{font-family:var(--f-num)}
+.fb2 .fb2-n{font-size:.8rem;color:var(--dim);margin-top:8px}
+@media(max-width:700px){.fb2-l{grid-template-columns:1fr 1fr}.fb2 thead{display:none}.fb2 table,.fb2 tbody{display:block}
+ .fb2 tr{display:flex;flex-wrap:wrap;gap:2px 14px;padding:8px 0;border-top:1px solid rgba(255,255,255,.06)}.fb2 td{border:0;padding:0}.fb2 td:first-child{flex:1 1 100%;font-weight:600}
+ .fb2 td.r{text-align:left}.fb2 td[data-l]::before{content:attr(data-l);display:block;font-size:.66rem;color:var(--dim);text-transform:uppercase;font-family:var(--f-ui)}}
+/* v1.0.6: debajo del título, tres columnas iguales: Skill Points · qué hace la app · Antes de empezar */
+.hero-intro{grid-template-columns:repeat(3,minmax(0,1fr))!important;align-items:stretch!important;gap:14px!important;margin-top:20px!important}
+.hero-intro>.ref{max-width:none;margin:0;border-radius:var(--r-md);flex-direction:column;align-items:flex-start;justify-content:flex-start;gap:8px;padding:14px 16px;position:relative;font-size:.95rem}
+.hero-intro>.ref .ref-go{position:absolute;top:12px;right:14px;margin:0}
+.hero-intro>.hero-p{margin:0;padding:14px 16px;border-radius:var(--r-md);background:rgba(21,21,21,.82);border:1px solid rgba(222,220,209,.12);
+  box-shadow:0 2px 4px rgba(0,0,0,.45),0 8px 18px rgba(0,0,0,.3);font:400 .95rem/1.6 var(--f-ui)!important;color:#e5e3da;display:block;text-shadow:none!important}
+.hero-intro>.hero-p::before{content:"Qué hace";display:table;margin-bottom:8px;font-weight:600;font-size:.8rem;color:#1f1e1d;background:#d6d4cb;border-radius:999px;padding:1px 10px}
+.hero-intro>.paste,.hero .paste{margin-top:18px}
+.hero-intro>.start-note{max-width:none;margin:0}
+@media(max-width:980px){.hero-intro{grid-template-columns:minmax(0,1fr)!important}}
 </style>
 <script>/* v105: Firefox pinta peor los efectos pesados → Modo ligero automático */try{if(/firefox/i.test(navigator.userAgent))document.documentElement.classList.add('lite');}catch(e){}</script>
 </head>
@@ -1057,7 +1085,6 @@ html.lite .ct,html.lite .sh-card,html.lite .scn>div,html.lite fieldset.st,html.l
 </header>
 
 <section class="hero">
-  <button type="button" class="ref" data-link="referral"><span class="ref-tag">Gratis</span><span class="ref-t">Usa mi enlace para recibir <b>1 Millón de Skill Points</b> gratis</span><span class="ref-go">↗</span></button>
   <div class="title">
     <span class="logo-l vg" role="img" aria-label="Logo de Vanguardia DR"></span>
     <div><h1>Plan y Gestor de Ventas</h1><p class="tagline">¿Lo vendes en Null o lo llevas a Jita?</p></div>
@@ -1065,7 +1092,8 @@ html.lite .ct,html.lite .sh-card,html.lite .scn>div,html.lite fieldset.st,html.l
   <!-- v104: introducción + recordatorio visible a la derecha. Los botones comparten
        los paneles Ayuda y Ajustes existentes: no se duplica ningún formulario. -->
   <div class="hero-intro">
-    <p>Pega tu loot, ore o materiales. Comparamos rutas de venta con precios de Jita y costes configurados para que sepas cuántos ISK recibirías.</p>
+    <button type="button" class="ref" data-link="referral"><span class="ref-tag">Gratis</span><span class="ref-t">Usa mi enlace para recibir <b>1 Millón de Skill Points</b> gratis</span><span class="ref-go">↗</span></button>
+    <p class="hero-p">Pega tu loot, ore o materiales. Comparamos rutas de venta con precios de Jita y costes configurados para que sepas cuántos ISK recibirías.</p>
     <aside class="start-note" aria-label="Antes de empezar">
       <span class="ic i-bulb" aria-hidden="true"></span>
       <div class="start-note-body"><strong>Antes de empezar</strong>
@@ -1115,6 +1143,7 @@ html.lite .ct,html.lite .sh-card,html.lite .scn>div,html.lite fieldset.st,html.l
   <section class="panel summary res" id="pSum" hidden>
     <h2><span class="ic i-bulb" aria-hidden="true"></span>Resultado</h2>
     <p class="res-big"><span class="num" id="resIsk">—</span><span class="v-what" id="resWhat"></span></p>
+    <div class="fb2" id="flipBuy" hidden></div>
     <div class="pk-w"><h4 class="pk-t">Elige un Plan <small>El óptimo viene marcado. Si eliges otro, todo se ajusta a ese plan.</small></h4>
       <div class="pk" id="pk" role="radiogroup" aria-label="Plan de venta"></div>
       <p class="pk-note" id="pkNote" hidden></p></div>
@@ -1339,13 +1368,13 @@ Contraband Freight = no</textarea><small>Una regla por línea: Nombre = tax tota
 <button type="button" class="totop" id="toTop" aria-label="Volver arriba" title="Volver arriba (Inicio)" hidden><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 14l6-6 6 6"/></svg></button>
 <footer class="foot">
   <div class="foot-sec"><span class="ic i-lock" aria-hidden="true"></span><div><b>Nada se guarda.</b> Al cerrar o recargar la pestaña se borra todo, incluidos tus ajustes. La app solo se conecta a los servidores oficiales de Fenris Creations.</div></div>
-  <div class="foot-by">Creado por <b>Fiko McGivert</b> · Vanguardia DR · SIGMA GRINDSET · <span class="ver">v1.0.5</span> · <label class="lite-t"><input type="checkbox" id="liteOn"> Modo ligero</label></div>
+  <div class="foot-by">Creado por <b>Fiko McGivert</b> · Vanguardia DR · SIGMA GRINDSET · <span class="ver">v1.0.6</span> · <label class="lite-t"><input type="checkbox" id="liteOn"> Modo ligero</label></div>
 </footer>
 
 <script>
 'use strict';
 /* ============================================================
-   Plan y Gestor de Ventas v1.0.5 — SIGMA GRINDSET / Vanguardia DR
+   Plan y Gestor de Ventas v1.0.6 — SIGMA GRINDSET / Vanguardia DR
    Flujo:  pegado → ítems → carga (ESI: precios, volúmenes, historial) → verificación → plan → vista
      1. Pegado      parsePaste(): parser posicional de columnas de EVE (Name · Quantity · … · Volume · Est. Price).
      2. Carga       esiItems(): trae todo lo que falta; mientras carga, refresh() NO pinta (S.loading).
@@ -3138,6 +3167,28 @@ function paintPicker(P){
 }
 $('pSum').addEventListener('click',e=>{const b=e.target.closest('[data-m]');if(!b)return;const m=b.dataset.m==='auto'?null:b.dataset.m;
   if(m===S.planMode)return;S.planMode=m;czIdx=0;refreshNow();});
+// v1.0.6 (modo Jita → HY-RWO): si compras el lote en Jita al Sell, lo llevas a HY-RWO y lo vendes a Jita Sell + margen
+// (neto, ya con taxes): ganancia = venta neta − compra − envío. Todo el lote viaja (un solo cálculo de courier).
+function paintFlipBuy(P){
+  const box=$('flipBuy');box.textContent='';box.hidden=!S.flip;if(!S.flip)return;
+  const rows=P.rows.filter(r=>r.g.fN!=null&&r.o.ref!=null&&r.q>0);
+  if(!rows.length){box.hidden=true;return;}
+  const V=rows.reduce((a,r)=>a+r.ship.fN.v,0),Cc=rows.reduce((a,r)=>a+r.ship.fN.c,0),ship=V>0?courierCost(V,C.coll!=null?C.coll:Cc):0;
+  const it=rows.map(r=>{const buy=r.o.ref*r.q,sh=courierShare(r.ship.fN.v,r.ship.fN.c,V),sell=r.g.fN-r.prod;return{r,buy,sh,sell,p:sell-sh-buy};});
+  const buy=it.reduce((a,x)=>a+x.buy,0),sell=it.reduce((a,x)=>a+x.sell,0),profit=sell-ship-buy,roi=buy>0?profit/buy:0;
+  box.append(el('h4',null,'Comprar en Jita y Vender en HY-RWO'),el('p','fb2-s','Si compras '+(rows.length===1?'este ítem':'estos '+rows.length+' ítems')+' en Jita al Sell, los llevas con SIGMA Freight y los vendes en HY-RWO a Jita Sell +'+pct(C.impM)+'% neto.'));
+  const big=el('div','fb2-big');big.append(el('b','num '+sgn(profit),(profit>=0?'+':'−')+fmt(Math.abs(profit))),el('span',null,(profit>=0?'de ganancia':'de pérdida')+' · '+(roi>=0?'+':'−')+pct(Math.abs(roi))+'% sobre lo invertido'));box.append(big);
+  const l=el('div','fb2-l'),L=(t,v,c)=>{const d=el('div');d.append(el('span',null,t),el('b','num '+(c||''),v));l.append(d);};
+  L('Compras en Jita','−'+fmt(buy),'neg');L('Envío a HY-RWO','−'+fmt(ship),'neg');L('Vendes en HY-RWO (neto)',fmt(sell),'pos');L('Ganancia',(profit>=0?'+':'−')+fmt(Math.abs(profit)),sgn(profit));box.append(l);
+  const t=el('table'),th=el('thead'),hr=el('tr');[['Ítem',''],['Compras a /u','r'],['Vendes a /u','r'],['Envío','r'],['Ganancia','r'],['Margen','r']].forEach(([x,c])=>hr.append(el('th',c||null,x)));th.append(hr);t.append(th);
+  const tb=el('tbody');
+  it.sort((a,b)=>b.p-a.p).slice(0,10).forEach(x=>{const tr=el('tr');
+    const c=[el('td',null,x.r.o.name),el('td','r',fmtP(x.r.o.ref)),el('td','r',fmtP(x.r.np)),el('td','r','−'+fmt(x.sh)),el('td','r '+sgn(x.p),(x.p>=0?'+':'−')+fmt(Math.abs(x.p))),el('td','r '+sgn(x.p),(x.p>=0?'+':'−')+pct(Math.abs(x.buy>0?x.p/x.buy:0))+'%')];
+    ['','Compras a /u','Vendes a /u','Envío','Ganancia','Margen'].forEach((d,i)=>{if(d)c[i].dataset.l=d;});tr.append(...c);tb.append(tr);});
+  if(it.length>10){const tr=el('tr'),td=el('td','muted','y '+(it.length-10)+' ítems más');td.colSpan=6;tr.append(td);tb.append(tr);}
+  t.append(tb);box.append(t);
+  box.append(el('p','fb2-n','Compra = Jita Sell × cantidad (comprando de las órdenes de venta, sin broker). Venta = el precio de lista en HY-RWO ya con Sales Tax, Broker y SCC. El envío es un solo cálculo para todo el lote. El margen se cambia junto al botón de la ruta.'));
+}
 function paintSummary(P){
   const box=$('pSum'),none=!P.rows.length||P.missing.length===P.rows.length;box.hidden=none||!S.items.length;if(box.hidden)return;
   const sys=(C.ref.name||'Null').split(' - ')[0].trim()||'Null',cnt=n=>n+(n===1?' ítem':' ítems'),by=k=>P.rows.filter(r=>r.best===k);
@@ -3148,6 +3199,7 @@ function paintSummary(P){
   const li=(chip,cls,txt,sub,val,vcls)=>{const l=el('li');l.append(el('span','chip'+(cls?' '+cls:''),chip));const t=el('span');t.append(el('b',null,txt));if(sub)t.append(document.createTextNode(' · '),el('small',null,sub));l.append(t);if(val!=null)l.append(el('span','v num '+(vcls||''),val));return l;};
   const ded=['taxes','broker'];if(C.relistOn&&C.relists>0)ded.push('relists');if(P.Vs>0)ded.push('envío');
   paintPicker(P);
+  paintFlipBuy(P);
   A.append(el('h4',null,P.mode?'Plan Elegido · '+modeName(P.mode):'Plan Óptimo'));
   {const p0=el('p','lead2');p0.append(document.createTextNode(summaryPlanText(P,sys).replace(/^./,c=>c.toUpperCase())+'. Recibirías '+fmt(P.best)+' netos estimados, después de descontar '+ded.slice(0,-1).join(', ')+' y '+ded[ded.length-1]+'. Sigue este plan:'));A.append(p0);}
   const ul=el('ul');
