@@ -7,7 +7,7 @@
 <meta name="referrer" content="no-referrer">
 <title>PLAN &amp; GESTOR VENTAS</title>
 <style>
-/* ================= Gestor de Ventas v1.0.3 =================
+/* ================= Gestor de Ventas v1.0.4 =================
    Paleta: azul de base, naranja = acción, verde/rojo = ganancia/pérdida.
    Sin backdrop-filter: el vidrio se finge con rgba + bordes. */
 *{box-sizing:border-box;margin:0;padding:0}
@@ -1027,6 +1027,9 @@ html.lite body::before{opacity:.91}
 .ct-items,.sh-kpi>div,.sh-tips li{background:#1c1b1a!important}
 .sh-tips li{border-color:rgba(222,220,209,.08)!important}
 html.lite .ct,html.lite .sh-card,html.lite .scn>div,html.lite fieldset.st,html.lite .hp-c,html.lite .res-b ul:not(.why):not(.cmp2)>li,html.lite .ct-sum,html.lite .paste{box-shadow:none!important}
+/* 1.0.4: la fuente de números (Bahnschrift) solo para números; todo texto con la fuente de la interfaz */
+.brand,.tagline,legend,fieldset.st legend,.hp-c h3,.call b,.rx-fh,.scn h4,.copy,.ct-f td.r>span,.ct-f td.r .copy,.cz-pos,.pod-v,.fb-v,.rx-big,.foot-by .ver,.opt-v,.fact b,.receipt .amt,.guide li::before{font-family:var(--f-ui)!important}
+.copy.cp-n,.ct-f td.r>span.cp-n,.ct-f td.r .copy.cp-n,.scn h4 b,.lot-qty,.lot-net,td.r .num{font-family:var(--f-num)!important}
 </style>
 <script>/* v105: Firefox pinta peor los efectos pesados → Modo ligero automático */try{if(/firefox/i.test(navigator.userAgent))document.documentElement.classList.add('lite');}catch(e){}</script>
 </head>
@@ -1315,13 +1318,13 @@ Contraband Freight = no</textarea><small>Una regla por línea: Nombre = tax tota
 <button type="button" class="totop" id="toTop" aria-label="Volver arriba" title="Volver arriba (Inicio)" hidden><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 14l6-6 6 6"/></svg></button>
 <footer class="foot">
   <div class="foot-sec"><span class="ic i-lock" aria-hidden="true"></span><div><b>Nada se guarda.</b> Al cerrar o recargar la pestaña se borra todo, incluidos tus ajustes. La app solo se conecta a los servidores oficiales de Fenris Creations.</div></div>
-  <div class="foot-by">Creado por <b>Fiko McGivert</b> · Vanguardia DR · SIGMA GRINDSET · <span class="ver">v1.0.3</span> · <label class="lite-t"><input type="checkbox" id="liteOn"> Modo ligero</label></div>
+  <div class="foot-by">Creado por <b>Fiko McGivert</b> · Vanguardia DR · SIGMA GRINDSET · <span class="ver">v1.0.4</span> · <label class="lite-t"><input type="checkbox" id="liteOn"> Modo ligero</label></div>
 </footer>
 
 <script>
 'use strict';
 /* ============================================================
-   Plan y Gestor de Ventas v1.0.3 — SIGMA GRINDSET / Vanguardia DR
+   Plan y Gestor de Ventas v1.0.4 — SIGMA GRINDSET / Vanguardia DR
    Flujo:  pegado → ítems → carga (ESI: precios, volúmenes, historial) → verificación → plan → vista
      1. Pegado      parsePaste(): parser posicional de columnas de EVE (Name · Quantity · … · Volume · Est. Price).
      2. Carga       esiItems(): trae todo lo que falta; mientras carga, refresh() NO pinta (S.loading).
@@ -2104,7 +2107,8 @@ function buildLotDetails(o,ui){
   Object.assign(ui,{iRef,iM3,bBuy,bVol,pBody,checks,detailsReady:true});
 }
 // copia el valor limpio: números con máx. 2 decimales y sin "ISK" (listo para pegar en el juego)
-function copyBtn(v,label){const b=el('button','copy',label);b.type='button';b.dataset.v=typeof v==='number'?String(Math.round(v*100)/100):String(v);b.title='Clic para copiar';return b;}
+const isNumTxt=t=>/^[−+\-]?\s*[\d][\d,.\s]*(\s*(ISK|m³|m3|%|días?|u))?$/i.test(String(t).trim());
+function copyBtn(v,label){const b=el('button','copy'+(isNumTxt(label)?' cp-n':''),label);b.type='button';b.dataset.v=typeof v==='number'?String(Math.round(v*100)/100):String(v);b.title='Clic para copiar';return b;}
 document.addEventListener('click',e=>{
   const b=e.target.closest('button.copy');if(!b||!b.dataset.v)return;
   const v=b.dataset.v,done=()=>{const t=b.textContent;b.textContent='Copiado';setTimeout(()=>b.textContent=t,900);};
@@ -2624,7 +2628,7 @@ function paintContracts(P){
   {const sm=$('ctrSum');sm.textContent=nC?nC+(nC>1?' contratos':' contrato'):'Sin contratos';if(cs.length)sm.append(el('span','sm-hide',' · envío −'+fmt(shipR)));}
   if(!sec.open)return; // cerrada: solo el resumen del encabezado
   const cards=[];let cn=0;
-  const fields=(rows)=>{const t=el('table','prices ct-f'),tb=el('tbody');rows.forEach(([k,v,cp])=>{const tr=el('tr');tr.append(el('td',null,k));const td=el('td','r');td.append(cp?copyBtn(cp,v):el('span',null,v));tr.append(td);tb.append(tr);});t.append(tb);return t;};
+  const fields=(rows)=>{const t=el('table','prices ct-f'),tb=el('tbody');rows.forEach(([k,v,cp])=>{const tr=el('tr');tr.append(el('td',null,k));const td=el('td','r');td.append(cp?copyBtn(cp,v):el('span',isNumTxt(v)?'cp-n':null,v));tr.append(td);tb.append(tr);});t.append(tb);return t;};
   const items=(list,withC)=>{const w=el('div','ct-items'),hd=el('div','ct-ih');
     hd.append(el('span',null,list.length+(list.length>1?' ítems':' ítem')),copyBtn(list.map(x=>x.n+'\t'+Math.round(x.q)).join('\n'),'Copiar ítems'));w.append(hd);
     const ul=el('ul');list.slice(0,8).forEach(x=>{const li=el('li');const ic=iconFor(x.n);if(ic)li.append(ic);li.append(el('span','ct-n',x.n),el('span','ct-q num',fmtQ(x.q)+(withC?' · '+fmtV(Math.round(x.v*100)/100):'')));ul.append(li);});
