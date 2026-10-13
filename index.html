@@ -7,7 +7,7 @@
 <meta name="referrer" content="no-referrer">
 <title>PLAN &amp; GESTOR VENTAS</title>
 <style>
-/* ================= Gestor de Ventas v1.0.6 =================
+/* ================= Gestor de Ventas v1.0.7 =================
    Paleta: azul de base, naranja = acción, verde/rojo = ganancia/pérdida.
    Sin backdrop-filter: el vidrio se finge con rgba + bordes. */
 *{box-sizing:border-box;margin:0;padding:0}
@@ -1072,6 +1072,16 @@ html.lite .ct,html.lite .sh-card,html.lite .scn>div,html.lite fieldset.st,html.l
 .hero-intro>.paste,.hero .paste{margin-top:18px}
 .hero-intro>.start-note{max-width:none;margin:0}
 @media(max-width:980px){.hero-intro{grid-template-columns:minmax(0,1fr)!important}}
+/* v1.0.7: interruptor "Contar envío" */
+.sw{display:inline-flex;align-items:center;gap:8px;cursor:pointer;font-size:.9rem;color:#e5e3da;text-shadow:0 1px 3px rgba(0,0,0,.9);padding:6px 10px;border-radius:10px;background:rgba(21,21,21,.75);border:1px solid rgba(222,220,209,.12)}
+.sw input{position:absolute;opacity:0;width:1px;height:1px}
+.sw-t{position:relative;width:34px;height:20px;border-radius:999px;background:#3a3937;border:1px solid rgba(222,220,209,.2);transition:background .15s;flex:none}
+.sw-t::after{content:"";position:absolute;top:2px;left:2px;width:14px;height:14px;border-radius:50%;background:#c2c0b6;transition:transform .15s,background .15s}
+.sw input:checked+.sw-t{background:var(--clay);border-color:var(--clay)}
+.sw input:checked+.sw-t::after{transform:translateX(14px);background:#fff}
+.sw input:focus-visible+.sw-t{outline:2px solid #d6d4cb;outline-offset:2px}
+html.lite .sw-t,html.lite .sw-t::after{transition:none}
+.route-m{padding:4px 6px 4px 10px;border-radius:10px;background:rgba(21,21,21,.75);border:1px solid rgba(222,220,209,.12)}
 </style>
 <script>/* v105: Firefox pinta peor los efectos pesados → Modo ligero automático */try{if(/firefox/i.test(navigator.userAgent))document.documentElement.classList.add('lite');}catch(e){}</script>
 </head>
@@ -1111,6 +1121,7 @@ html.lite .ct,html.lite .sh-card,html.lite .scn>div,html.lite fieldset.st,html.l
     <span class="route-l">Tu lote está en</span>
     <button type="button" class="route-b" id="bFlip" aria-pressed="false" title="Invertir la ruta">
       <span class="route-from" id="rtFrom">HY-RWO</span><span class="route-ar" aria-hidden="true">→</span><span class="route-to" id="rtTo">Jita</span><span class="route-ic" aria-hidden="true"></span><span class="route-tx">Invertir</span></button>
+    <label class="sw" title="Apágalo si lo llevas tú mismo"><input type="checkbox" id="shipOn" checked><span class="sw-t" aria-hidden="true"></span><span>Contar envío (SIGMA Freight)</span></label>
     <label class="route-m" id="rtM" hidden>Vender en HY-RWO a Jita Sell +<input type="number" id="fImpM" min="0" step="0.5" value="15" aria-label="Margen al importar %">% neto</label>
   </div>
 </section>
@@ -1368,13 +1379,13 @@ Contraband Freight = no</textarea><small>Una regla por línea: Nombre = tax tota
 <button type="button" class="totop" id="toTop" aria-label="Volver arriba" title="Volver arriba (Inicio)" hidden><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 14l6-6 6 6"/></svg></button>
 <footer class="foot">
   <div class="foot-sec"><span class="ic i-lock" aria-hidden="true"></span><div><b>Nada se guarda.</b> Al cerrar o recargar la pestaña se borra todo, incluidos tus ajustes. La app solo se conecta a los servidores oficiales de Fenris Creations.</div></div>
-  <div class="foot-by">Creado por <b>Fiko McGivert</b> · Vanguardia DR · SIGMA GRINDSET · <span class="ver">v1.0.6</span> · <label class="lite-t"><input type="checkbox" id="liteOn"> Modo ligero</label></div>
+  <div class="foot-by">Creado por <b>Fiko McGivert</b> · Vanguardia DR · SIGMA GRINDSET · <span class="ver">v1.0.7</span> · <label class="lite-t"><input type="checkbox" id="liteOn"> Modo ligero</label></div>
 </footer>
 
 <script>
 'use strict';
 /* ============================================================
-   Plan y Gestor de Ventas v1.0.6 — SIGMA GRINDSET / Vanguardia DR
+   Plan y Gestor de Ventas v1.0.7 — SIGMA GRINDSET / Vanguardia DR
    Flujo:  pegado → ítems → carga (ESI: precios, volúmenes, historial) → verificación → plan → vista
      1. Pegado      parsePaste(): parser posicional de columnas de EVE (Name · Quantity · … · Volume · Est. Price).
      2. Carga       esiItems(): trae todo lo que falta; mientras carga, refresh() NO pinta (S.loading).
@@ -1423,7 +1434,7 @@ const FORGE=10000002,JITA44=60003760;
 const S={
   planMode:null,
   flip:false,    // v1.0.5: false = HY-RWO → Jita (normal); true = Jita → HY-RWO (importar a Null). Solo memoria. // v111: plan elegido por el usuario (null = óptimo). Solo en memoria.
-  cfg:{disc:{on:true,base:'buy',pct:1,days:3},ref:{name:'HY-RWO - Metal Exchange',struct:'tatara',rig:'t2',sec:'null',imp:.04},ice:{on:true,nullMode:'jbuy',nullDisc:.025,jitaMode:'under',nullDays:14},under:.001,nullDays:7,tax:.03375,broker:.01,brokerNull:.01,scc:.005,margin:0,prod:0,relists:1,abr:0,umbral:1000000,cDays:[1,3],fast:.05,impM:.15,discEdge:.1,relistOn:false,nullNonMod:.9,tick:true,qd:{on:true,max:.05},stdFac:0,stdCorp:0,
+  cfg:{disc:{on:true,base:'buy',pct:1,days:3},ref:{name:'HY-RWO - Metal Exchange',struct:'tatara',rig:'t2',sec:'null',imp:.04},ice:{on:true,nullMode:'jbuy',nullDisc:.025,jitaMode:'under',nullDays:14},under:.001,nullDays:7,tax:.03375,broker:.01,brokerNull:.01,scc:.005,margin:0,prod:0,relists:1,abr:0,umbral:1000000,cDays:[1,3],fast:.05,impM:.15,shipOn:true,discEdge:.1,relistOn:false,nullNonMod:.9,tick:true,qd:{on:true,max:.05},stdFac:0,stdCorp:0,
        base:10000000,perM3:653,collPct:.01,maxVol:350000,coll:null,
        bb:{on:true,tax:.05,base:'buy',special:{}}},
   items:[],      // {name,qty,srcQty,qtyCol,qtyDeduced,pasteRef,pasteTotal,pasteM3u,pasteM3tot,refMan,m3uMan,jita,ref,m3u,checks,notFound,ui}
@@ -1524,8 +1535,10 @@ const nullLabel=name=>{
 const nullBaseTxt=name=>isModule(name)?'Jita Buy'+(marginFor(name)>0?' +'+pct(marginFor(name))+'%':''):pct(C.nullNonMod)+'% de Jita Buy';
 const jitaLabel=name=>C.ice.on&&isIce(name)?(C.ice.jitaMode==='split'?'Orden en Jita (Split)':'Orden en Jita (Undercut)'):'Orden en Jita';
 const trips=v=>v>0&&C.maxVol>0?Math.ceil(v/C.maxVol):0;
-const courierCost=(v,c)=>trips(v)*C.base+C.perM3*v+C.collPct*(c||0);
-const courierShare=(v,c,V)=>C.perM3*v+C.collPct*(c||0)+(V>0?trips(V)*C.base*v/V:0);
+// v1.0.7: "Contar envío" (C.shipOn). Apagado = lo llevas tú: el courier no se descuenta ni se arman contratos de envío.
+const courierRaw=(v,c)=>trips(v)*C.base+C.perM3*v+C.collPct*(c||0);
+const courierCost=(v,c)=>C.shipOn?courierRaw(v,c):0;
+const courierShare=(v,c,V)=>C.shipOn?C.perM3*v+C.collPct*(c||0)+(V>0?trips(V)*C.base*v/V:0):0;
 
 // ================= Pegado =================
 // Números: 1,234.56 · 1.234,56 · 1 234,56
@@ -2425,7 +2438,7 @@ function paintVerdict(P){
   $('vIsk').textContent='';$('vIsk').append(document.createTextNode(v==null?'—':Math.round(v).toLocaleString('en-US')),el('span',null,'ISK'));
   $('vIsk').className='v-isk num '+sgn(v);
   // qué se descontó, según el plan
-  const ded=['taxes','broker'];if(C.relistOn&&C.relists>0)ded.push('relists');if(P.Vs>0)ded.push('envío');if(C.prod>0)ded.push('producción');
+  const ded=['taxes','broker'];if(C.relistOn&&C.relists>0)ded.push('relists');if(P.Vs>0&&C.shipOn)ded.push('envío');if(C.prod>0)ded.push('producción');
   {const ore=P.rows.some(r=>resolveOre(r.o.name));document.querySelectorAll('.if-ore').forEach(e=>e.hidden=!ore);} // "Sin Reproceso" solo si hay ore
   $('vCap').textContent=none?'Esperando precios de Jita…':'Recibes netos luego de deducciones ('+ded.join(', ')+')';
   // cuál es el plan, en una etiqueta: la acción que más aporta (y cuántas más hay)
@@ -2648,7 +2661,8 @@ function paintVerdict(P){
   // corto: un ítem por nombre; todo el lote "Tu lote"; si no, los dos primeros y "y N más"
   $('aCourS').textContent=P.Vs>0?'Llevar a Jita: '+(sh.length===P.rows.length&&sh.length>1?'tu lote completo':sh.length<=2?sh.map(what).join(' y '):sh.slice(0,2).map(r=>r.o.name).join(', ')+' y '+(sh.length-2)+' más…')+(sh.length>2&&!(sh.length===P.rows.length)?'':'.'):'Tu plan no envía nada a Jita.';
   $('aCourD').textContent='';
-  if(P.Vs>0){const n=trips(P.Vs),c=el('span','neg','Coste: −'+fmt(P.shipCost));$('aCourD').append(c,document.createTextNode(' · '+Math.round(P.Vs).toLocaleString('en-US')+' m³ · '+n+(n>1?' contratos':' contrato')));}
+  if(P.Vs>0&&!C.shipOn)$('aCourD').append(el('span',null,'Lo llevas tú (sin courier) · '+Math.round(P.Vs).toLocaleString('en-US')+' m³'));
+  else if(P.Vs>0){const n=trips(P.Vs),c=el('span','neg','Coste: −'+fmt(P.shipCost));$('aCourD').append(c,document.createTextNode(' · '+Math.round(P.Vs).toLocaleString('en-US')+' m³ · '+n+(n>1?' contratos':' contrato')));}
   else $('aCourD').textContent='';
   $('aCourD').hidden=!(P.Vs>0);
   $('vNote').hidden=true;
@@ -2676,6 +2690,7 @@ function paintVerdict(P){
 // (los ítems grandes primero; una pila se divide si no cabe). Cada courier: recompensa = base + ISK/m³ × vol + % × colateral.
 // Jugador: un Item Exchange por lo que se vende por Discord (solo si el plan lo elige).
 function packCouriers(P){
+  if(!C.shipOn)return [];
   const ent=[];
   P.rows.forEach(r=>{const k=r.best;if(!k||!SHIPS[k]||!r.ship[k])return;
     if(k==='rJita'&&r.mins)r.mins.forEach(x=>{const u=prodVol(x.m);if(x.n>0)ent.push({n:x.m,q:x.n,u,c:(x.p||0)});});
@@ -2762,6 +2777,11 @@ function paintShip(P,cs){
   const b=$('shBody');b.textContent='';
   $('shTitle').textContent='Envío a '+DEST();$('shRoute').textContent=(S.flip?'Jita 4-4 → HY-RWO':'HY-RWO → Jita 4-4')+' · SIGMA Freight';
   $('fBase').textContent=fmt(C.base);$('fPerM3').textContent=C.perM3.toLocaleString('en-US')+' ISK';$('fCollPct').textContent=pct(C.collPct)+'%';$('fMaxVol').textContent=fmtV(C.maxVol);
+  if(!C.shipOn){
+    const sh=P.rows.filter(r=>r.best&&SHIPS[r.best]&&r.ship[r.best]),V=sh.reduce((a,r)=>a+r.ship[r.best].v,0),Cc=sh.reduce((a,r)=>a+r.ship[r.best].c,0);
+    b.append(el('p','sh-none','El envío está apagado: lo llevas tú, así que no se descuenta courier ni se arman contratos de envío.'));
+    if(V>0){const n=trips(V);b.append(el('p','sh-none','Tu plan lleva '+fmtV(Math.round(V))+' a '+DEST()+' (valor '+fmt(Cc)+'). Con SIGMA Freight costaría −'+fmt(courierRaw(V,Cc))+' ('+n+(n>1?' contratos':' contrato')+').'));}
+    return;}
   if(!cs.length){
     const p=el('p','sh-none','Tu plan no manda nada a '+DEST()+', así que no pagas envío.');b.append(p);
     if(P.VJ>0){const n=trips(P.VJ),d=P.allJita!=null?P.best-P.allJita:null;
@@ -3179,7 +3199,7 @@ function paintFlipBuy(P){
   box.append(el('h4',null,'Comprar en Jita y Vender en HY-RWO'),el('p','fb2-s','Si compras '+(rows.length===1?'este ítem':'estos '+rows.length+' ítems')+' en Jita al Sell, los llevas con SIGMA Freight y los vendes en HY-RWO a Jita Sell +'+pct(C.impM)+'% neto.'));
   const big=el('div','fb2-big');big.append(el('b','num '+sgn(profit),(profit>=0?'+':'−')+fmt(Math.abs(profit))),el('span',null,(profit>=0?'de ganancia':'de pérdida')+' · '+(roi>=0?'+':'−')+pct(Math.abs(roi))+'% sobre lo invertido'));box.append(big);
   const l=el('div','fb2-l'),L=(t,v,c)=>{const d=el('div');d.append(el('span',null,t),el('b','num '+(c||''),v));l.append(d);};
-  L('Compras en Jita','−'+fmt(buy),'neg');L('Envío a HY-RWO','−'+fmt(ship),'neg');L('Vendes en HY-RWO (neto)',fmt(sell),'pos');L('Ganancia',(profit>=0?'+':'−')+fmt(Math.abs(profit)),sgn(profit));box.append(l);
+  L('Compras en Jita','−'+fmt(buy),'neg');L(C.shipOn?'Envío a HY-RWO':'Envío (lo llevas tú)',C.shipOn?'−'+fmt(ship):'0 ISK',C.shipOn?'neg':'');L('Vendes en HY-RWO (neto)',fmt(sell),'pos');L('Ganancia',(profit>=0?'+':'−')+fmt(Math.abs(profit)),sgn(profit));box.append(l);
   const t=el('table'),th=el('thead'),hr=el('tr');[['Ítem',''],['Compras a /u','r'],['Vendes a /u','r'],['Envío','r'],['Ganancia','r'],['Margen','r']].forEach(([x,c])=>hr.append(el('th',c||null,x)));th.append(hr);t.append(th);
   const tb=el('tbody');
   it.sort((a,b)=>b.p-a.p).slice(0,10).forEach(x=>{const tr=el('tr');
@@ -3197,7 +3217,7 @@ function paintSummary(P){
   const cs=packCouriers(P),hasBB=P.toBB.length>0,dr=by('disc');let n=0;
   const nBB=hasBB?++n:0,c0=n+1;n+=cs.length;const c1=n,nPl=dr.length?++n:0;
   const li=(chip,cls,txt,sub,val,vcls)=>{const l=el('li');l.append(el('span','chip'+(cls?' '+cls:''),chip));const t=el('span');t.append(el('b',null,txt));if(sub)t.append(document.createTextNode(' · '),el('small',null,sub));l.append(t);if(val!=null)l.append(el('span','v num '+(vcls||''),val));return l;};
-  const ded=['taxes','broker'];if(C.relistOn&&C.relists>0)ded.push('relists');if(P.Vs>0)ded.push('envío');
+  const ded=['taxes','broker'];if(C.relistOn&&C.relists>0)ded.push('relists');if(P.Vs>0&&C.shipOn)ded.push('envío');
   paintPicker(P);
   paintFlipBuy(P);
   A.append(el('h4',null,P.mode?'Plan Elegido · '+modeName(P.mode):'Plan Óptimo'));
@@ -3209,6 +3229,8 @@ function paintSummary(P){
   else if(cs.length){const jo=by('jOrd').length,ji=by('jInst').length,rj=by('rJita').length;
     const what=[jo?jo+' en orden de venta':'',ji?ji+' directo a las compras':'',rj?rj+' refinados':''].filter(Boolean).join(', ').replace(/, ([^,]*)$/,' y $1');
     ul.append(li(cs.length>1?'Contratos '+c0+'–'+c1:'Contrato '+c0,'','Envío a Jita',cnt(jo+ji+rj)+', '+NF0.format(Math.round(P.Vs))+' m³ (máx. '+NF0.format(C.maxVol)+' por contrato). Allá: '+what,'Envío −'+fmt(P.shipCost),'neg'));}
+  if(!C.shipOn&&P.Vs>0){const sh=P.rows.filter(r=>r.best&&SHIPS[r.best]);
+    ul.append(li('Tú','','Lo llevas tú a '+DEST(),cnt(sh.length)+', '+NF0.format(Math.round(P.Vs))+' m³. Sin courier: el envío no se descuenta',null));}
   if(S.flip){const fj=by('fJ').length+by('fJI').length;if(fj)ul.append(li('Órdenes','','Vender en Jita',cnt(fj)+(by('fJI').length?' (órdenes y venta rápida, sin contrato)':' en órdenes de venta (sin contrato)'),null));}
   const nn=by('null').length+by('rNull').length+by('fN').length;if(nn&&!S.flip)ul.append(li('Órdenes','nl','Vender en '+sys,cnt(nn)+' en órdenes de venta (sin contrato)',null));
   if(dr.length)ul.append(li('Contrato '+nPl,'pl','A un jugador por Discord',cnt(dr.length),null));
@@ -3281,6 +3303,7 @@ function setFlip(on){
   if(S.items.length)refreshNow();
 }
 $('bFlip').addEventListener('click',()=>setFlip(!S.flip));
+$('shipOn').addEventListener('change',e=>{C.shipOn=e.target.checked;S.planMode=null;czIdx=0;if(S.items.length)refreshNow();});
 const impSync=(src,dst)=>{const v=parseFloat($(src).value);if(!(v>=0))return;C.impM=v/100;$(dst).value=String(v);refresh();};
 $('fImpM').addEventListener('input',()=>impSync('fImpM','cImpM'));$('cImpM').addEventListener('input',()=>impSync('cImpM','fImpM'));
 $('cNullDest').addEventListener('input',()=>refresh());
