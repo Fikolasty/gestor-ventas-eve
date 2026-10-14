@@ -2,6 +2,15 @@
 
 Cambios por versión del Gestor de Ventas. La más nueva arriba. El detalle técnico completo está en `docs/SPEC.txt`.
 
+## 1.0.16 — Ajustes guardados e íconos en la web
+*2026-10-14*
+
+- **Los Ajustes se guardan en tu navegador** (localStorage, solo en esa PC): skills, taxes, Buyback, refinería, envío, idioma, tema Dark/Light y Modo Ligero. Se cargan solos la próxima vez.
+- Nuevo botón **Restablecer** en Ajustes: borra lo guardado y vuelve a los valores de fábrica.
+- Lo demás se reinicia en cada visita: inventario pegado, precios, ruta (HY-RWO → Jita), switch de envío (En HY-RWO) y menú contraído.
+- Modo Ligero ya no se activa solo en Firefox. Por defecto: Dark y sin Modo Ligero.
+- **Íconos de los ítems**: no salían en GitHub Pages porque se descargaban con fetch. Ahora se muestran directo desde images.evetech.net (CSP: img-src incluye ese host). Si un ícono no carga, se oculta.
+
 ## 1.0.15 — Menú lateral contraído por defecto
 *2026-10-14*
 

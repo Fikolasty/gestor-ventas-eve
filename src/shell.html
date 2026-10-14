@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src data: blob:; connect-src https://esi.evetech.net https://images.evetech.net; base-uri 'none'; form-action 'none'; object-src 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src data: blob: https://images.evetech.net; connect-src https://esi.evetech.net https://images.evetech.net; base-uri 'none'; form-action 'none'; object-src 'none'">
 <meta name="referrer" content="no-referrer">
 <title>Gestor de Ventas · SIGMA GRINDSET</title>
 <link rel="icon" type="image/png" href="__SIGMA__">
@@ -1286,7 +1286,7 @@ html.lite #settings fieldset.st:not(.closed){box-shadow:inset 3px 0 0 #d97757!im
 @keyframes stFlash{0%{box-shadow:0 0 0 2px rgba(217,119,87,.75)}100%{box-shadow:0 0 0 2px rgba(217,119,87,0)}}
 html.lite #settings .st-f.st-flash{animation:none}
 </style>
-<script>/* v105: Firefox pinta peor los efectos pesados → Modo ligero automático */try{if(/firefox/i.test(navigator.userAgent))document.documentElement.classList.add('lite');}catch(e){}</script>
+<script>/* v1.0.16: aplica tema y Modo Ligero guardados antes de pintar (sin parpadeo). Por defecto: Dark, sin Modo Ligero. */try{var g=JSON.parse(localStorage.getItem('gestorVentas.ajustes.v1')||'null');if(g&&g.ui){if(g.ui.light)document.documentElement.classList.add('light');if(g.ui.lite)document.documentElement.classList.add('lite');}}catch(e){}</script>
 </head>
 <body class="side-c">
 <!-- v1.0.11: menú lateral (como Claude): se expande y se contrae; opciones de cálculo, Ajustes y Ayuda -->
@@ -1332,11 +1332,11 @@ html.lite #settings .st-f.st-flash{animation:none}
   <section class="panel" id="settings" hidden>
     <div class="x-wrap"><button type="button" class="x-close" data-close="settings" aria-label="Cerrar Ajustes" title="Cerrar Ajustes"></button></div>
     <h2><span class="ic i-gear" aria-hidden="true"></span>Ajustes</h2>
-    <p class="lead">Configura las skills, impuestos y reglas de venta para reflejar tu situación en EVE. Los resultados se recalculan al cambiar un valor. Por privacidad, estos ajustes no se guardan al cerrar o recargar.</p>
-    <div class="st-tools"><button type="button" class="ghost" id="stOpenAll">Abrir Todo</button><button type="button" class="ghost" id="stCloseAll">Cerrar Todo</button></div>
+    <p class="lead">Configura las skills, impuestos y reglas de venta para reflejar tu situación en EVE. Los resultados se recalculan al cambiar un valor. Se guardan solos en este navegador y se cargan la próxima vez. «Restablecer» vuelve a los valores de fábrica.</p>
+    <div class="st-tools"><button type="button" class="ghost" id="stOpenAll">Abrir Todo</button><button type="button" class="ghost" id="stCloseAll">Cerrar Todo</button><button type="button" class="ghost" id="stReset" title="Borra los Ajustes guardados en este navegador y vuelve a los valores de fábrica.">Restablecer</button></div>
     <div class="st-wrap">
       <div class="st-sec"><h3 class="st-sec-t">Idioma</h3><p class="st-sec-i">Idioma de la interfaz.</p></div>
-      <fieldset class="st"><legend><span class="ic i-help" aria-hidden="true"></span><span class="st-tt">Idioma de la App<small class="st-sum">Español o English</small></span></legend><p class="st-i">Cambia el idioma de toda la app. Los nombres de ítems y sistemas de EVE no cambian.</p><div class="st-g"><label class="st-f"><span class="st-l">Idioma / Language</span><select id="langSel" title="Idioma de la interfaz: Español o English. No se guarda al cerrar."><option value="es" selected>Español</option><option value="en">English</option></select><small>No se guarda al cerrar la página.</small></label></div></fieldset>
+      <fieldset class="st"><legend><span class="ic i-help" aria-hidden="true"></span><span class="st-tt">Idioma de la App<small class="st-sum">Español o English</small></span></legend><p class="st-i">Cambia el idioma de toda la app. Los nombres de ítems y sistemas de EVE no cambian.</p><div class="st-g"><label class="st-f"><span class="st-l">Idioma / Language</span><select id="langSel" title="Idioma de la interfaz: Español o English."><option value="es" selected>Español</option><option value="en">English</option></select><small>Se guarda con tus Ajustes.</small></label></div></fieldset>
       <div class="st-sec"><h3 class="st-sec-t">Tu Personaje</h3><p class="st-sec-i">Lo que sabe tu piloto: baja los taxes y sube lo que recuperas al reprocesar.</p></div>
       <fieldset class="st"><legend><span class="ic i-key" aria-hidden="true"></span><span class="st-tt">Tus Skills<small class="st-sum">Accounting, Broker Relations y reproceso de tu piloto</small></span></legend><p class="st-i">Selecciona tus niveles reales. Accounting afecta el Sales Tax; Broker Relations reduce costes de órdenes; las skills de reproceso determinan cuántos materiales recuperas.</p><div class="st-g"><label class="st-f"><span class="st-l">Accounting</span><select id="skAcc"><option value="0">Nivel 0</option><option value="1">Nivel 1</option><option value="2">Nivel 2</option><option value="3">Nivel 3</option><option value="4">Nivel 4</option><option value="5" selected>Nivel 5</option></select><small>Baja el Sales Tax: 7.5% × (1 − 0.11 × nivel). Se enlaza con Sales Tax %.</small></label><label class="st-f"><span class="st-l">Broker Relations</span><select id="skBR"><option value="0">Nivel 0</option><option value="1">Nivel 1</option><option value="2">Nivel 2</option><option value="3">Nivel 3</option><option value="4">Nivel 4</option><option value="5" selected>Nivel 5</option></select><small>Baja el Broker de Jita: 3% − 0.3% × nivel. Se enlaza con Broker en Jita % y los standings.</small></label><label class="st-f"><span class="st-l">Advanced Broker Relations</span><select id="cAbr"><option value="0" selected>Nivel 0</option><option value="1">Nivel 1</option><option value="2">Nivel 2</option><option value="3">Nivel 3</option><option value="4">Nivel 4</option><option value="5">Nivel 5</option></select><small>Abarata cada Relist (cambio de precio).</small></label><label class="st-f"><span class="st-l">Reprocessing</span><select id="skRep"><option value="0">Nivel 0</option><option value="1">Nivel 1</option><option value="2">Nivel 2</option><option value="3">Nivel 3</option><option value="4">Nivel 4</option><option value="5" selected>Nivel 5</option></select><small>+3% de rendimiento por nivel.</small></label><label class="st-f"><span class="st-l">Reprocessing Efficiency</span><select id="skRepE"><option value="0">Nivel 0</option><option value="1">Nivel 1</option><option value="2">Nivel 2</option><option value="3">Nivel 3</option><option value="4">Nivel 4</option><option value="5" selected>Nivel 5</option></select><small>+2% de rendimiento por nivel.</small></label><label class="st-f"><span class="st-l">Skill del ore o hielo</span><select id="skOre"><option value="0">Nivel 0</option><option value="1">Nivel 1</option><option value="2">Nivel 2</option><option value="3">Nivel 3</option><option value="4">Nivel 4</option><option value="5" selected>Nivel 5</option></select><small>Ice Processing, Simple Ore Processing, etc.: +2% por nivel.</small></label></div></fieldset>
       <div class="st-sec"><h3 class="st-sec-t">Impuestos y Precios</h3><p class="st-sec-i">Lo que se descuenta en cada venta y cómo se ajustan los precios de Jita antes de calcular.</p></div>
@@ -1373,7 +1373,7 @@ Contraband Freight = no</textarea><small>Una regla por línea: Nombre = tax tota
         <p>Abre <b>Ver el análisis</b> para entrar a <b>Qué Hacer</b>. Cada recomendación tiene sus propios filtros, búsqueda y botón para copiar ítems. En <b>Contratos y Envío</b> encontrarás cada contrato (uno a la vez, pasa con las flechas) y lo que cuesta el envío.</p></div>
       <div class="hp-c"><h3><span class="hp-n">4</span>Ajusta a tu Medida</h3>
         <p>En <b>Ajustes</b> configura skills, Broker, Sales Tax, precio local de Nullsec, Buyback, refinería y tiempos de courier. Los valores iniciales son ejemplos operativos: cámbialos por los tuyos.</p>
-        <p>La herramienta no guarda inventarios ni configuración en el navegador. Una recarga borra la sesión de trabajo.</p></div>
+        <p>La herramienta guarda solo tus Ajustes en este navegador; los inventarios pegados nunca se guardan. Una recarga borra la sesión de trabajo.</p></div>
     </div>
     <h3 class="sub-h" style="margin-top:20px">Las Formas de Vender</h3>
     <div class="hp-t">
@@ -1612,7 +1612,7 @@ Contraband Freight = no</textarea><small>Una regla por línea: Nombre = tax tota
 
 <button type="button" class="totop" id="toTop" aria-label="Volver arriba" title="Volver arriba (Inicio)" hidden><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 14l6-6 6 6"/></svg></button>
 <footer class="foot">
-  <div class="foot-sec"><span class="ic i-lock" aria-hidden="true"></span><div><b>Nada se guarda.</b> Al cerrar o recargar la pestaña se borra todo, incluidos tus ajustes. La app solo se conecta a los servidores oficiales de Fenris Creations.</div></div>
+  <div class="foot-sec"><span class="ic i-lock" aria-hidden="true"></span><div><b>Tu inventario no se guarda.</b> Al cerrar o recargar se borra lo pegado; solo tus Ajustes quedan en este navegador. La app solo se conecta a los servidores oficiales de Fenris Creations.</div></div>
   <div class="foot-by">Creado por <b>Fiko McGivert</b> · Vanguardia DR · SIGMA GRINDSET · <span class="ver">v__VER__</span></div>
 </footer>
 

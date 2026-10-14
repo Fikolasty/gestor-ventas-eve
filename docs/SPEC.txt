@@ -968,3 +968,15 @@ Campos que no aplican se apagan (con el motivo debajo)
 ==================== v1.0.15 ====================
 - Menú lateral contraído por defecto (body class="side-c" desde el HTML, sin parpadeo). Antes se expandía en pantallas de 1300 px o más.
 - Proyecto en GitHub: github.com/Fikolasty/gestor-ventas-eve. La página pública es index.html en GitHub Pages; cada commit "vX.Y.Z — título" crea su tag y Release (workflow Versiones).
+
+==================== v1.0.16 ====================
+Cambio de regla (pedido de Arturo): los Ajustes SÍ persisten; todo lo demás no.
+- localStorage clave "gestorVentas.ajustes.v1": {v:1, f:{id: valor de cada input/select/textarea de #settings}, ui:{light, lite}}.
+  Se guarda 250 ms después de cada cambio (y al cerrar). Al abrir, stRestore() pone cada valor y dispara su evento en orden del DOM,
+  así C, los campos enlazados (Accounting/Tax, BR/standings/Broker) y el idioma quedan coherentes.
+- Un script en <head> aplica tema y Modo Ligero guardados antes de pintar (sin parpadeo).
+- Botón Restablecer: borra la clave y recarga.
+- No se guarda: pegado, precios/ESI, ítems, ruta (flip), switch de envío, menú lateral, plan elegido. pagehide sigue limpiando lo pegado.
+- Íconos: <img src="https://images.evetech.net/types/{id}/icon?size=64" referrerpolicy=no-referrer> (antes fetch+blob, fallaba en GitHub Pages).
+  CSP img-src: data: blob: https://images.evetech.net. Un solo listener de error (captura) oculta íconos que no cargan.
+- Modo Ligero ya no es automático en Firefox.

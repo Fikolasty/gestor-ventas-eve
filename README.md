@@ -31,7 +31,8 @@ Lo más exacto es copiar los % de *Broker's fee* y *Sales tax* que muestra la ve
 
 ## Seguridad y privacidad
 
-- **No guarda nada**: no usa cookies, localStorage ni ningún otro almacenamiento. Al cerrar o recargar la pestaña se borra todo, incluidos tus ajustes.
+- **Tu inventario nunca se guarda**: lo pegado, los precios y el plan se borran al cerrar o recargar.
+- **Tus Ajustes sí se guardan**, solo en tu navegador (localStorage): skills, taxes, Buyback, refinería, envío, idioma y tema. El botón **Restablecer** los borra.
 - **Solo se conecta a los servidores oficiales de EVE**: `esi.evetech.net` (precios) e `images.evetech.net` (íconos). Lo fuerza la Content-Security-Policy de la página.
 - No pide login ni contraseña de EVE.
 - Es un solo archivo HTML, sin librerías externas.
@@ -55,7 +56,7 @@ CHANGELOG.md          ← cambios por versión
 ### Generar la página
 Solo necesitas Python 3, sin dependencias:
 ```
-python3 build.py 1.0.15
+python3 build.py 1.0.16
 ```
 Eso escribe `index.html` con la versión indicada.
 

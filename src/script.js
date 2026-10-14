@@ -769,21 +769,20 @@ const ICON_EL={};
 function iconFor(name){
   const a=S.api[String(name).toLowerCase()],id=a&&a.id;if(!id)return null;
   let t=ICON_EL[id];
-  if(!t){t=ICON_EL[id]=el('img','ti');t.alt='';t.width=24;t.height=24;t.decoding='async';t.dataset.tid=id;if(ICON[id])t.src=ICON[id];else loadIcon(id);}
+  if(!t){t=ICON_EL[id]=el('img','ti');t.alt='';t.width=24;t.height=24;t.decoding='async';t.referrerPolicy='no-referrer';t.dataset.tid=id;if(ICON[id])t.src=ICON[id];else loadIcon(id);}
   // reusar un <img> ya cargado de la vista anterior (evita volver a decodificar la imagen)
   const pool=ICON_POOL[id];if(pool&&pool.length)return pool.pop();
   return t.cloneNode(false);
 }
 let ICON_POOL={};
+document.addEventListener('error',e=>{const t=e.target;if(t&&t.classList&&t.classList.contains('ti'))t.style.visibility='hidden';},true); // ícono que no carga: se oculta
 // Antes de vaciar un contenedor: guarda sus íconos para reusarlos al volver a pintarlo
 function poolIcons(root){ICON_POOL={};root.querySelectorAll('img.ti').forEach(i=>{const k=i.dataset.tid;(ICON_POOL[k]=ICON_POOL[k]||[]).push(i);});}
-function loadIcon(id){
+function loadIcon(id){ // v1.0.16: <img> directo al servidor de imágenes de CCP (antes fetch+blob, que fallaba en GitHub Pages)
   if(ICON_WAIT[id])return;ICON_WAIT[id]=1;
-  fetch('https://images.evetech.net/types/'+id+'/icon?size=64',{cache:'no-store',credentials:'omit',referrerPolicy:'no-referrer'})
-    .then(r=>r.ok?r.blob():Promise.reject()).then(b=>{ICON[id]=URL.createObjectURL(b);if(ICON_EL[id])ICON_EL[id].src=ICON[id];document.querySelectorAll('img.ti[data-tid="'+id+'"]').forEach(i=>i.src=ICON[id]);})
-    .catch(()=>{}); // sin ícono no pasa nada
+  ICON[id]='https://images.evetech.net/types/'+id+'/icon?size=64';
+  if(ICON_EL[id])ICON_EL[id].src=ICON[id];document.querySelectorAll('img.ti[data-tid="'+id+'"]').forEach(i=>i.src=ICON[id]);
 }
-addEventListener('pagehide',()=>{Object.values(ICON).forEach(u=>URL.revokeObjectURL(u));});
 
 // ================= Vista: filas del libro (se construyen una vez) =================
 function el(tag,cls,txt){const e=document.createElement(tag);if(cls)e.className=cls;if(txt!=null)e.textContent=txt;return e;}
@@ -1969,7 +1968,7 @@ function refreshNow(){
  addEventListener('scroll',()=>{const s=scrollY>600;if(s!==on){on=s;b.hidden=!s;}},{passive:true});
  b.addEventListener('click',()=>scrollTo({top:0,behavior:'smooth'}));}
 
-// v105: Modo ligero (pie de página). Automático en Firefox; se puede activar o quitar a mano. No se guarda.
+// v105: Modo ligero. v1.0.16: ya no es automático en Firefox; se guarda con los Ajustes.
 $('cAssignee').addEventListener('input',()=>refresh());
 // v1.0.5: invertir la ruta (flip). HY-RWO → Jita (normal) / Jita → HY-RWO (importar). Solo en memoria.
 // v1.0.12: el interruptor de envío dice dónde están tus ítems: encendido = en el origen (se cuenta el courier);
@@ -1990,7 +1989,7 @@ $('shipOn').addEventListener('change',e=>{C.shipOn=e.target.checked;syncShipLabe
 const impSync=(src,dst)=>{const v=parseFloat($(src).value);if(!(v>=0))return;C.impM=v/100;$(dst).value=String(v);refresh();};
 $('fImpM').addEventListener('input',()=>impSync('fImpM','cImpM'));$('cImpM').addEventListener('input',()=>impSync('cImpM','fImpM'));
 $('cNullDest').addEventListener('input',()=>refresh());
-$('liteOn').checked=document.documentElement.classList.contains('lite');
+$('liteOn').checked=document.documentElement.classList.contains('lite');$('themeLight').checked=document.documentElement.classList.contains('light');$('themeTxt').textContent=$('themeLight').checked?'Light':'Dark';
 syncShipSwitch();
 $('liteOn').addEventListener('change',e=>document.documentElement.classList.toggle('lite',e.target.checked));
 // v1.0.8: tema claro / oscuro (solo en memoria; empieza oscuro)
@@ -2166,12 +2165,35 @@ function setLang(l){
   if(lastP)refreshNow();}
 $('langSel').addEventListener('change',e=>setLang(e.target.value));
 
-// ================= Seguridad: nada persiste =================
+// ================= Seguridad: el inventario no persiste (los Ajustes sí, ver v1.0.16) =================
 try{['gestorVentasEVE.v35','gestorVentasEVE.esi'].forEach(k=>localStorage.removeItem(k));}catch(e){} // restos de v35–v38
 document.querySelectorAll('input,textarea,select').forEach(e=>e.setAttribute('autocomplete','off'));
 window.addEventListener('pagehide',()=>{if(i18nObs)i18nObs.disconnect();undoStack=[];$('paste').value='';$('dLink').value='';$('dTrade').value='';LINKS.sigmaTrade='';});
 window.addEventListener('pageshow',e=>{if(e.persisted)location.reload();});
 
+
+// ================= v1.0.16: los Ajustes se guardan en este navegador =================
+// Solo se guarda lo del panel Ajustes + tema + Modo Ligero (localStorage, en esta PC). El inventario pegado,
+// los precios, la ruta y el switch de envío NO se guardan: cada visita empieza limpia.
+const ST_KEY='gestorVentas.ajustes.v1';let stBusy=false,stT=0;
+const stFields=()=>[...document.querySelectorAll('#settings input,#settings select,#settings textarea')].filter(e=>e.id);
+function stSaveNow(){if(stBusy)return;const o={v:1,f:{},ui:{light:$('themeLight').checked,lite:$('liteOn').checked}};
+  stFields().forEach(e=>{o.f[e.id]=e.type==='checkbox'?e.checked:e.value;});
+  try{localStorage.setItem(ST_KEY,JSON.stringify(o));}catch(e){}}
+function stSave(){clearTimeout(stT);stT=setTimeout(stSaveNow,250);}
+function stRestore(){let o=null;try{o=JSON.parse(localStorage.getItem(ST_KEY)||'null');}catch(e){}
+  if(!o||!o.f)return;stBusy=true;
+  try{stFields().forEach(e=>{if(!(e.id in o.f))return;const v=o.f[e.id];
+    if(e.type==='checkbox'){if(e.checked===!!v)return;e.checked=!!v;e.dispatchEvent(new Event('change',{bubbles:true}));}
+    else{if(e.value===String(v))return;e.value=String(v);if(e.tagName==='SELECT'&&e.value!==String(v))return;
+      e.dispatchEvent(new Event(e.tagName==='SELECT'?'change':'input',{bubbles:true}));}});}
+  finally{stBusy=false;}}
+$('settings').addEventListener('input',stSave);$('settings').addEventListener('change',stSave);
+['themeLight','liteOn'].forEach(id=>$(id).addEventListener('change',stSave));
+$('stReset').addEventListener('click',()=>{if(!confirm('¿Volver todos los Ajustes a los valores de fábrica?'))return;
+  try{localStorage.removeItem(ST_KEY);}catch(e){}stBusy=true;location.reload();});
+addEventListener('pagehide',()=>{if(stT){clearTimeout(stT);stSaveNow();}});
+
 // arranque
-syncDeps();brokerNote();buildOreSelect();readBB();syncLots();refresh();
+stRestore();syncDeps();brokerNote();buildOreSelect();readBB();syncLots();refresh();
 
