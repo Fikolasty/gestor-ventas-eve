@@ -2,6 +2,21 @@
 
 Cambios por versión del Gestor de Ventas. La más nueva arriba. El detalle técnico completo está en `docs/SPEC.txt`.
 
+## 1.0.10 — Barra de opciones armónica
+*2026-10-14*
+
+- Se quitó "Tu lote está en". La ruta y los interruptores van en una sola barra (#route): fondo oscuro, esquinas 12 px, sombra, divisores finos entre controles, todos de 40 px de alto y el mismo relleno.
+- Los cinco controles se ven iguales: interruptor/ícono a la izquierda + texto normal (peso 500). La ruta usa un "interruptor" con ícono ⇄ que se pinta en arcilla cuando está invertida; texto "HY-RWO → Jita" / "Jita → HY-RWO".
+- Textos cortos: "Contar envío"; margen de importación "Margen + [15] % neto" (solo visible con la ruta invertida).
+- Tema claro: barra crema con texto oscuro. Móvil: rejilla de 2 columnas (ruta y margen a lo ancho).
+- Verificado: node --check; capturas oscuro/claro/invertido/móvil; smoke; modo invertido (margen 20%); escáner sin envío; motor idéntico a v105; cero errores; sin desborde.
+- Qué Hacer: la pestaña elegida (Todo / Hielo / Ore y Minerales / Loot y Otros) se marca en arcilla. Si no es "Todo", aparece "Mostrando solo X: n de N ítems. El plan completo está en «Todo». [Ver todo]" — explica por qué el desglose no coincide con el texto del Plan Óptimo (que siempre habla de todo el lote).
+- Comparación con Otros Planes: si una alternativa deja más que el plan (porque el óptimo eligió rapidez), dice "Ganas +X vs <plan>, pero se vende más lento (el plan óptimo prefiere vender rápido cuando la diferencia es pequeña)".
+- Corregido "ISK ISK" en la recomendación "Elegido por rapidez".
+
+
+---
+
 ## 1.0.9 — Sin envío = ítems ya en destino, una sola fuente, fondo
 *2026-10-14*
 

@@ -7,7 +7,7 @@
 <meta name="referrer" content="no-referrer">
 <title>PLAN &amp; GESTOR VENTAS</title>
 <style>
-/* ================= Gestor de Ventas v1.0.9 =================
+/* ================= Gestor de Ventas v1.0.10 =================
    Paleta: azul de base, naranja = acción, verde/rojo = ganancia/pérdida.
    Sin backdrop-filter: el vidrio se finge con rgba + bordes. */
 *{box-sizing:border-box;margin:0;padding:0}
@@ -1137,6 +1137,40 @@ body::after{background:
 html.lite body::after{background:none!important}
 /* Modo ligero: la imagen no es fija; se desvanece abajo para no cortarse de golpe (oscuro y claro) */
 html.lite body::before{-webkit-mask-image:linear-gradient(to bottom,#000 0%,#000 50%,transparent 100%);mask-image:linear-gradient(to bottom,#000 0%,#000 50%,transparent 100%)}
+/* v1.0.10: barra de opciones unificada (ruta + interruptores), todo a la misma altura y con divisores */
+.route{display:inline-flex!important;flex-wrap:wrap;align-items:stretch;gap:0!important;margin-top:14px;padding:4px;border-radius:12px;
+  background:rgba(21,21,21,.88);border:1px solid rgba(222,220,209,.12);box-shadow:0 2px 4px rgba(0,0,0,.45),0 8px 18px rgba(0,0,0,.3)}
+.route>*{display:inline-flex!important;align-items:center;gap:8px;min-height:40px;padding:0 14px!important;margin:0!important;border:0!important;border-radius:8px!important;
+  background:transparent!important;box-shadow:none!important;text-shadow:none!important;font-size:.9rem!important;color:#e5e3da}
+.route>*+*{position:relative}
+.route>*+*::after{content:"";position:absolute;left:0;top:9px;bottom:9px;width:1px;background:rgba(222,220,209,.12)}
+.route>button:hover,.route>.sw:hover{background:rgba(222,220,209,.06)!important}
+.route .route-b{font-weight:600}
+.route .route-b[aria-pressed="true"]{background:rgba(217,119,87,.14)!important;color:#f3e6c8}
+.route .route-m input{width:64px;padding:4px 8px;margin:0 2px}
+@media(max-width:700px){.route{display:grid!important;grid-template-columns:1fr 1fr;width:100%}.route>*{justify-content:flex-start}
+  .route>.route-b{grid-column:1/-1}.route>*+*::after{display:none}.route>*{border-top:1px solid rgba(222,220,209,.08)!important}.route>.route-b{border-top:0!important}
+  .route>.route-m{grid-column:1/-1}}
+/* v1.0.10: los cinco controles con el mismo aspecto: ícono/interruptor a la izquierda + texto normal */
+.route>*{font-weight:500!important;gap:10px!important}
+.route .route-b{font-weight:500!important}
+.route .route-ic{margin:0;width:34px;height:20px;border-radius:999px;background:#3a3937;border:1px solid rgba(222,220,209,.2);-webkit-mask:none;mask:none;position:relative;flex:none}
+.route .route-ic::before{content:"";position:absolute;inset:2px 9px;background:#c2c0b6;-webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M7 4L3 8l4 4M3 8h14M17 20l4-4-4-4M21 16H7'/%3E%3C/svg%3E") center/contain no-repeat;mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M7 4L3 8l4 4M3 8h14M17 20l4-4-4-4M21 16H7'/%3E%3C/svg%3E") center/contain no-repeat}
+.route .route-b[aria-pressed="true"] .route-ic{background:var(--clay);border-color:var(--clay)}
+.route .route-b[aria-pressed="true"] .route-ic::before{background:#fff}
+.route .route-b[aria-pressed="true"]{background:transparent!important;color:#e5e3da}
+.route .route-ar{color:var(--mut)}
+.route .route-m{gap:6px!important}
+html.light .route .route-ic{background:#e4e2da;border-color:rgba(31,30,29,.2)}html.light .route .route-ic::before{background:#5e5d59}
+html.light .route .route-b[aria-pressed="true"] .route-ic{background:#c96442;border-color:#c96442}html.light .route .route-b[aria-pressed="true"] .route-ic::before{background:#fff}
+html.light .route .route-b[aria-pressed="true"]{color:#2a2926}
+.route>[hidden]{display:none!important}
+.route>*{white-space:nowrap}
+/* v1.0.10: pestañas de Qué Hacer: la elegida se distingue claro (como la ruta: arcilla) */
+.tabs .tab{border-radius:8px!important}
+.tabs .tab[aria-selected="true"]{background:rgba(217,119,87,.16)!important;border-color:var(--clay)!important;color:var(--txt)!important;box-shadow:0 0 0 1px var(--clay)!important}
+.tab-note{font-size:.9rem;color:var(--mut);margin:-4px 0 12px}
+.tab-note button{margin-left:8px;padding:3px 10px;font-size:.82rem}
 /* ===== tema claro (generado desde el oscuro por light.py) ===== */
 html.light{--void:#e4e3dd;--hull:#e2e0da;--hull2:#e0ded8;--line:rgba(31,30,29,0.114);--line2:rgba(31,30,29,0.125);--txt:#1c1c1a;--mut:#54524d;--dim:#6c6a64;--ion:#413f3c;--blue:#a39d8b;--clay:#c96442;--thrust:#a67526;--gain:#418b62;--loss:#a92c23}
 html.light body::after{background:repeating-linear-gradient(180deg,rgba(31,30,29,0.011) 0 1px,transparent 1px 3px),
@@ -1461,6 +1495,22 @@ html.light .lot-head:focus-visible{outline:2px solid #413f3c}
 html.light body::after{background:radial-gradient(ellipse 88% 82% at 50% 45%,rgba(0,0,0,0) 48%,rgba(0,0,0,0.067) 76%,rgba(0,0,0,0.141) 100%),
   linear-gradient(90deg,rgba(0,0,0,0.096) 0%,rgba(0,0,0,0) 15%,rgba(0,0,0,0) 85%,rgba(0,0,0,0.096) 100%),
   linear-gradient(180deg,rgba(0,0,0,0.056) 0%,rgba(0,0,0,0) 12%,rgba(0,0,0,0) 82%,rgba(0,0,0,0.088) 100%)!important}
+html.light .route{background:rgba(240,237,229,0.88);border:1px solid rgba(31,30,29,0.114);box-shadow:0 2px 4px rgba(0,0,0,0.072),0 8px 18px rgba(0,0,0,0.048)}
+html.light .route>*{color:#33322f}
+html.light .route>*+*::after{background:rgba(31,30,29,0.114)}
+html.light .route>button:hover,html.light .route>.sw:hover{background:rgba(31,30,29,0.057)!important}
+html.light .route .route-b[aria-pressed="true"]{background:rgba(217,119,87,0.175)!important;color:#a17d2b}
+@media(max-width:700px){html.light .route>*{border-top:1px solid rgba(31,30,29,0.076)!important}}
+html.light .route .route-ic{background:#dfddd7;border:1px solid rgba(31,30,29,0.19)}
+html.light .route .route-ic::before{background:#54524d}
+html.light .route .route-b[aria-pressed="true"] .route-ic::before{background:#151514}
+html.light .route .route-b[aria-pressed="true"]{color:#33322f}
+html.light.light .route .route-ic{background:#33322f;border-color:rgba(240,237,229,0.6)}
+html.light.light .route .route-ic::before{background:#aea999}
+html.light.light .route .route-b[aria-pressed="true"] .route-ic{background:#994d33;border-color:#994d33}
+html.light.light .route .route-b[aria-pressed="true"] .route-ic::before{background:#151514}
+html.light.light .route .route-b[aria-pressed="true"]{color:#e4e2dc}
+html.light .tabs .tab[aria-selected="true"]{background:rgba(217,119,87,0.2)!important}
 /* ajustes a mano del tema claro */
 html.light body{background:#e6e3da;color:#1f1e1d}
 html.light body::before{opacity:.12;filter:grayscale(.35) brightness(1.1)}
@@ -1477,6 +1527,13 @@ html.light .sw input:checked+.sw-t::after{background:#fff}
 html.light .sw-t{background:#e4e2da;border-color:rgba(31,30,29,.2)}
 html.light .sw input:checked+.sw-t{background:#c96442;border-color:#c96442}
 html.light input,html.light select,html.light textarea{background:#f1eee6}
+html.light .route{background:rgba(240,237,229,.92);border-color:rgba(31,30,29,.14);box-shadow:0 2px 6px rgba(0,0,0,.08)}
+html.light .route>*{color:#2a2926}
+html.light .route .route-b[aria-pressed="true"]{color:#7a3a22}
+html.light .route .route-b[aria-pressed="true"]{background:transparent!important;color:#2a2926!important}
+html.light .route .route-b[aria-pressed="true"] .route-ic{background:#c96442;border-color:#c96442}
+html.light .route .route-b[aria-pressed="true"] .route-ic::before{background:#fff}
+html.light .route>*{color:#2a2926!important}
 </style>
 <script>/* v105: Firefox pinta peor los efectos pesados → Modo ligero automático */try{if(/firefox/i.test(navigator.userAgent))document.documentElement.classList.add('lite');}catch(e){}</script>
 </head>
@@ -1573,13 +1630,12 @@ Contraband Freight = no</textarea><small>Una regla por línea: Nombre = tax tota
   </div>
   <!-- v1.0.5: dirección del lote. Flip = el lote está en Jita y se evalúa llevarlo a HY-RWO -->
   <div class="route" id="route">
-    <span class="route-l">Tu lote está en</span>
     <button type="button" class="route-b" id="bFlip" aria-pressed="false" title="Invertir la ruta">
-      <span class="route-from" id="rtFrom">HY-RWO</span><span class="route-ar" aria-hidden="true">→</span><span class="route-to" id="rtTo">Jita</span><span class="route-ic" aria-hidden="true"></span><span class="route-tx">Invertir</span></button>
-    <label class="sw" title="Apágalo si lo llevas tú mismo"><input type="checkbox" id="shipOn" checked><span class="sw-t" aria-hidden="true"></span><span>Contar envío (SIGMA Freight)</span></label>
+      <span class="route-ic" aria-hidden="true"></span><span class="route-from" id="rtFrom">HY-RWO</span><span class="route-ar" aria-hidden="true">→</span><span class="route-to" id="rtTo">Jita</span></button>
+    <label class="sw" title="Apágalo si lo llevas tú mismo"><input type="checkbox" id="shipOn" checked><span class="sw-t" aria-hidden="true"></span><span>Contar envío</span></label>
     <label class="sw" title="Menos efectos visuales: más fluido en PCs lentas y en Firefox"><input type="checkbox" id="liteOn"><span class="sw-t" aria-hidden="true"></span><span>Modo ligero</span></label>
     <label class="sw" title="Cambiar entre tema oscuro y claro"><input type="checkbox" id="themeLight"><span class="sw-t" aria-hidden="true"></span><span>Tema claro</span></label>
-    <label class="route-m" id="rtM" hidden>Vender en HY-RWO a Jita Sell +<input type="number" id="fImpM" min="0" step="0.5" value="15" aria-label="Margen al importar %">% neto</label>
+    <label class="route-m" id="rtM" hidden>Margen +<input type="number" id="fImpM" min="0" step="0.5" value="15" aria-label="Margen al vender en HY-RWO, % neto sobre Jita Sell">% neto</label>
   </div>
 </section>
 
@@ -1783,13 +1839,13 @@ Contraband Freight = no</textarea><small>Una regla por línea: Nombre = tax tota
 <button type="button" class="totop" id="toTop" aria-label="Volver arriba" title="Volver arriba (Inicio)" hidden><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 14l6-6 6 6"/></svg></button>
 <footer class="foot">
   <div class="foot-sec"><span class="ic i-lock" aria-hidden="true"></span><div><b>Nada se guarda.</b> Al cerrar o recargar la pestaña se borra todo, incluidos tus ajustes. La app solo se conecta a los servidores oficiales de Fenris Creations.</div></div>
-  <div class="foot-by">Creado por <b>Fiko McGivert</b> · Vanguardia DR · SIGMA GRINDSET · <span class="ver">v1.0.9</span></div>
+  <div class="foot-by">Creado por <b>Fiko McGivert</b> · Vanguardia DR · SIGMA GRINDSET · <span class="ver">v1.0.10</span></div>
 </footer>
 
 <script>
 'use strict';
 /* ============================================================
-   Plan y Gestor de Ventas v1.0.9 — SIGMA GRINDSET / Vanguardia DR
+   Plan y Gestor de Ventas v1.0.10 — SIGMA GRINDSET / Vanguardia DR
    Flujo:  pegado → ítems → carga (ESI: precios, volúmenes, historial) → verificación → plan → vista
      1. Pegado      parsePaste(): parser posicional de columnas de EVE (Name · Quantity · … · Volume · Est. Price).
      2. Carga       esiItems(): trae todo lo que falta; mientras carga, refresh() NO pinta (S.loading).
@@ -2798,7 +2854,7 @@ function recoFor(k,g){
   if(fast.length){const loss=fast.reduce((a,r)=>a+Math.max(0,r.fast.loss),0);
     const days=fast.some(r=>isIce(r.o.name))&&C.ice.on?C.ice.nullDays:C.nullDays,act=t[1].split('. ')[0]+'.';
     const fromDisc=fast.some(r=>r.fast.from==='disc');
-    return{t:'Elegido por rapidez:',d:act+(fromDisc?' La oferta a jugadores podría dejar '+fmt(loss)+' ISK más, pero depende de encontrar comprador.':' Una venta en '+sys+' podría dejar '+fmt(loss)+' ISK más, aunque el plazo configurado para Nullsec es de '+days+' días.')+' La preferencia por rapidez está activada en Ajustes.'};}
+    return{t:'Elegido por rapidez:',d:act+(fromDisc?' La oferta a jugadores podría dejar '+fmt(loss)+' más, pero depende de encontrar comprador.':' Una venta en '+sys+' podría dejar '+fmt(loss)+' más, aunque el plazo configurado para Nullsec es de '+days+' días.')+' La preferencia por rapidez está activada en Ajustes.'};}
   return{t:t[0],d:t[1]};
 }
 // pestañas del plan: todo, hielo, ore y minerales, loot
@@ -2921,6 +2977,11 @@ function paintVerdict(P){
   if(cats.length>1)['all'].concat(cats).forEach(c=>{const n=c==='all'?P.rows.length:P.rows.filter(r=>catOf(r.o.name)===c).length;
     const b=el('button','tab',CAT_L[c]);b.type='button';b.setAttribute('role','tab');b.dataset.t=c;b.setAttribute('aria-selected',String(vTab===c));b.append(el('small',null,String(n)));tabs.append(b);});
   const rowsIn=P.rows.filter(r=>vTab==='all'||catOf(r.o.name)===vTab);
+  // v1.0.10: si la pestaña no es "Todo", decirlo: el desglose muestra solo una parte del plan
+  {let nt=$('vTabNote');if(!nt){nt=el('p','tab-note');nt.id='vTabNote';tabs.after(nt);}
+   nt.textContent='';nt.hidden=vTab==='all';
+   if(vTab!=='all'){nt.append(document.createTextNode('Mostrando solo '+CAT_L[vTab]+': '+rowsIn.length+' de '+P.rows.length+' ítems. El plan completo está en «Todo».'));
+     const b=el('button','ghost','Ver todo');b.type='button';b.addEventListener('click',()=>{vTab='all';paintVerdict(lastP);});nt.append(b);}}
   // plan: por acción, la recomendación y luego cada ítem con su precio por unidad
   const pl=$('vPlan');poolIcons(pl);pl.textContent='';
   // Botones de orden repetidos por grupo, siempre encima de sus ítems.
@@ -3074,7 +3135,7 @@ function paintVerdict(P){
     e.hidden=!bad;
   };
   const delta=(id,x)=>{const d=x==null||none?null:x-P.best;
-    $(id).textContent=d==null?'':(Math.round(d)===0?'Igual que '+best+'.':(d>0?'Ganas +':'Pierdes −')+fmt(Math.abs(d))+' vs '+best+'.');};
+    $(id).textContent=d==null?'':(Math.round(d)===0?'Igual que '+best+'.':(d>0?'Ganas +':'Pierdes −')+fmt(Math.abs(d))+' vs '+best+(d>0?', pero se vende más lento (el plan óptimo prefiere vender rápido cuando la diferencia es pequeña).':'.'));};
   // un solo tipo de ítem: su nombre; todo el lote: "Tu lote"; una parte: "El hielo (N ítems)" / "Los otros N ítems"
   const names=list=>list.length===1?list[0].name:list.length===S.items.length?'Tu lote':list.every(o=>isIce(o.name))?'El hielo ('+list.length+' ítems)':'Los otros '+list.length+' ítems';
   const ice=C.ice.on?S.items.filter(o=>isIce(o.name)):[],rest=S.items.filter(o=>!ice.includes(o));
