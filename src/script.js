@@ -1060,6 +1060,7 @@ function unitFor(r,k){const a=r.o.jita;
 // orden, mostrar más y copiar al hacer clic en nombre/cantidad/ganancia
 // v102: pestaña:acción es la clave en todas las preferencias de vista (sin persistencia).
 let vSort=Object.create(null),vShow=Object.create(null),vQuery=Object.create(null),vFold=Object.create(null);
+let stepDone=new Set(),itemDone=new Set(); // v1.0.19: progreso de los pasos (solo en memoria; se borra al recargar)
 // v1.0.1: las tablas de Qué Hacer empiezan plegadas (sin valor = plegada); se abren con la flecha
 const foldC=id=>vFold[id]!==false;
 let repaintPlanGroup=null; // solo pinta una tabla; no ejecuta computePlan() ni el resto de la pantalla.
@@ -1075,6 +1076,9 @@ $('vPlan').addEventListener('click',e=>{
     vShow[section.dataset.sortId]=+m.dataset.n;
     if(repaintPlanGroup)repaintPlanGroup(section);return;
   }
+  const ck=e.target.closest('[data-ck]');if(ck){const n=ck.dataset.ck,on=!itemDone.has(n);if(on)itemDone.add(n);else itemDone.delete(n);
+    ck.classList.toggle('on',on);ck.setAttribute('aria-pressed',String(on));const row=ck.closest('.pl-row');if(row)row.classList.toggle('ck-on',on);return;}
+  const dn=e.target.closest('[data-done]');if(dn&&lastP){const id=dn.dataset.done;if(stepDone.has(id))stepDone.delete(id);else stepDone.add(id);paintVerdict(lastP);return;}
   const fold=e.target.closest('[data-fold]');if(fold){
     const section=fold.closest('.pl-section');if(!section)return;
     const id=section.dataset.sortId,closed=!foldC(id);vFold[id]=closed;
@@ -1090,7 +1094,7 @@ $('vPlan').addEventListener('input',e=>{
   if(!e.target.matches('.pl-search'))return;
   const section=e.target.closest('.pl-section');if(!section||!repaintPlanGroup)return;
   vQuery[section.dataset.sortId]=e.target.value;
-  vShow[section.dataset.sortId]=10; // buscar siempre empieza por los primeros resultados
+  vShow[section.dataset.sortId]=5; // buscar siempre empieza por los primeros resultados
   repaintPlanGroup(section);
 });
 // Divulgación progresiva: primero el resultado; el análisis y la info extra solo si los pides
@@ -1106,7 +1110,7 @@ function clearViews(){
   ['vPlan','vRepList','ctrList','czDots','ctrTot','shBody','fScn','rx','rxFinal','dMsg','sumP1','sumP2'].forEach(id=>{const e=$(id);if(e)e.textContent='';});
   ['pCtr','pSum','vFast'].forEach(id=>{const e=$(id);if(e)e.hidden=true;});
   lastP=null;repaintPlanGroup=null;discRows=[];czCards=[];lastCs=[];czIdx=0;S.planMode=null;ICON_POOL={};
-  vShow=Object.create(null);vSort=Object.create(null);vQuery=Object.create(null);vFold=Object.create(null);
+  vShow=Object.create(null);vSort=Object.create(null);vQuery=Object.create(null);vFold=Object.create(null);stepDone=new Set();itemDone=new Set();if($('stepHead'))$('stepHead').textContent='';
 }
 function paintVerdict(P){
   const has=S.items.length>0;$('verdict').hidden=!has;$('ledger').hidden=!has;$('lCount').textContent=has?'· '+S.items.length+(S.items.length>1?' ítems':' ítem'):'';
@@ -1160,7 +1164,7 @@ function paintVerdict(P){
    $('vsRel').textContent=relP>0?fmt(relP):'0 ISK';$('vsRelW').hidden=!(C.relists>0)||!(relP>0);}
   // pestañas por tipo de ítem (solo si hay más de un tipo)
   lastP=P;
-  const cats=['ice','ore','loot'].filter(c=>P.rows.some(r=>catOf(r.o.name)===c));
+  const cats=[]; vTab='all'; // v1.0.19: sin pestañas; los pasos siguen el plan completo
   if(vTab!=='all'&&!cats.includes(vTab))vTab='all';
   const tabs=$('vTabs');tabs.hidden=cats.length<2;tabs.textContent='';
   if(cats.length>1)['all'].concat(cats).forEach(c=>{const n=c==='all'?P.rows.length:P.rows.filter(r=>catOf(r.o.name)===c).length;
@@ -1180,7 +1184,8 @@ function paintVerdict(P){
     b.setAttribute('aria-label',b.title);b.setAttribute('aria-pressed',String(active));hd.append(b);});return hd;};
   let tableTarget=null;
   const prow=(cls,n,sub,q,p,pl2,amt,note)=>{const d=el('div','pl-row'+(cls?' '+cls:''));
-    const nn=el('span','n');if(!cls||cls==='min'){const ic=iconFor(n.replace(/^↳ /,''));if(ic)nn.append(ic);}
+    const nn=el('span','n');if(!cls){const ck=el('button','pl-ck'+(itemDone.has(n)?' on':''));ck.type='button';ck.dataset.ck=n;ck.setAttribute('aria-pressed',String(itemDone.has(n)));ck.title='Marcar como hecho';nn.append(ck);d.classList.toggle('ck-on',itemDone.has(n));}
+    if(!cls||cls==='min'){const ic=iconFor(n.replace(/^↳ /,''));if(ic)nn.append(ic);}
     if(!cls||cls==='min'){const c=el('span','cp',n);c.dataset.v=n.replace(/^↳ /,'');c.title='Copiar';nn.append(c);}else nn.append(n);
     if(sub)nn.append(el('small',null,sub));
     const pp=el('span','p');if(p!=null)pp.append(copyBtn(p,fmtP(p)));if(pl2)pp.append(el('small',null,pl2));
@@ -1202,7 +1207,7 @@ function paintVerdict(P){
     // Orden y “mostrar más” solo aplican al listado filtrado, nunca al total financiero.
     const key=x=>sort.k==='n'?x.o.name.toLowerCase():sort.k==='q'?x.q:sort.k==='p'?(unitFor(x,k).p||0):(x.g[k]-x.prod);
     const gs=sort.k?[...filtered].sort((a,b)=>{const A=key(a),B=key(b);return (A<B?-1:A>B?1:0)*sort.d;}):filtered;
-    const lim=vShow[id]||10,vis=gs.slice(0,lim);
+    const lim=vShow[id]||5,vis=gs.slice(0,lim);
     vis.forEach(r=>{
       const u=unitFor(r,k),qdTxt=r.qd>=.0001&&k==='null'?'Con −'+pctQ(r.qd)+'% por cantidad':null;
       const fT=r.fast?'Por rapidez: '+(r.fast.from==='disc'?'a un jugador':'en Null')+' ganarías '+fmt(Math.max(0,r.fast.loss))+' más, pero tarda más.':null;
@@ -1216,11 +1221,9 @@ function paintVerdict(P){
           prow('min','↳ '+x.m,x.qd>=.0001&&k==='rNull'?'Con −'+pctQ(x.qd)+'% por cantidad':null,x.n,p,k==='rNull'?'Orden en Null':'Orden en Jita',p!=null?x.n*p*rt:null,'neto de este '+(isIce(r.o.name)?'producto':'mineral'));});}
     });
     if(!gs.length)groupTable.append(el('div','pl-nomatch',query?'No hay ítems con ese nombre en esta recomendación.':'No hay ítems.'));
-    if(gs.length>lim){const m=el('div','pl-more'),hid=gs.slice(lim),sum=hid.reduce((a,r)=>a+r.g[k]-r.prod,0);
-      const b1=el('button','ghost','Mostrar '+Math.min(20,hid.length)+' más');b1.type='button';b1.dataset.more=id;b1.dataset.n=String(lim+20);
-      const b2=el('button','ghost','Mostrar todos ('+gs.length+')');b2.type='button';b2.dataset.more=id;b2.dataset.n='99999';
-      m.append(el('span',null,hid.length+' ítems más · '+fmt(sum)),b1);if(hid.length>20)m.append(b2);groupTable.append(m);}
-    else if(lim>10&&gs.length>10){const m=el('div','pl-more');const b=el('button','ghost','Mostrar menos');b.type='button';b.dataset.more=id;b.dataset.n='10';m.append(b);groupTable.append(m);}
+    if(gs.length>lim){const hid=gs.slice(lim),sum=hid.reduce((a,r)=>a+r.g[k]-r.prod,0);
+      const b=el('button','pl-moreb','Ver '+(hid.length===1?'el ítem restante':'los '+hid.length+' ítems restantes')+' · '+fmt(sum)+' ▾');b.type='button';b.dataset.more=id;b.dataset.n='99999';groupTable.append(b);}
+    else if(lim>5&&gs.length>5){const b=el('button','pl-moreb','Mostrar menos ▴');b.type='button';b.dataset.more=id;b.dataset.n='5';groupTable.append(b);}
     groupTable.hidden=foldC(id);
     if(oldTable)oldTable.replaceWith(groupTable);else section.append(groupTable);
   }
@@ -1230,28 +1233,69 @@ function paintVerdict(P){
     const k=section.dataset.action,g=rowsIn.filter(r=>r.best===k);
     renderPlanTable(section,k,g);
   };
-  OPTS.forEach(([k,l])=>{
-    const g=rowsIn.filter(r=>r.best===k);if(!g.length)return;
-    const lab=PLAN_L[k]||l,gh=el('div','pl-g'),id=vTab+':'+k;
-    gh.append(el('span','pill k-'+k+' '+(k==='disc'?'p-disc':SHIPS[k]?'p-jita':'p-null'),lab));
+  // v1.0.19: «Pasos para Vender». Un paso por acción, en el orden en que se hacen: primero lo que se hace donde
+  // están los ítems, luego el courier (si hay envío) y al final lo que se hace al llegar. Cada paso: número,
+  // verbo, dónde se hace, ISK, y su tabla de ítems (con íconos) visible desde el inicio.
+  const sys=(C.ref.name||'Null').split(' - ')[0].trim()||'Null',orig=S.flip?'Jita':sys,dest=S.flip?sys:'Jita',arr=SH()?'Cuando llegue: ':'';
+  const ORDER=S.flip?['fJ','fJI','fN']:['bb','disc','null','rNull','rJita','jOrd','jInst'];
+  const tk=C.underTk>0?' − '+C.underTk+' tick'+(C.underTk===1?'':'s'):'';
+  const STEP={
+    bb:['Contrato al Buyback','En '+sys,'Item Exchange a '+($('bbAvail').value||'el programa')+' en '+($('bbLoc').value||sys)+'.'],
+    disc:['Vender a un jugador','En '+sys,'Publica la oferta WTS en Discord; el detalle está en «Vender a Jugadores».'],
+    null:['Publicar órdenes en '+sys,'En '+sys,'Precio por unidad para tu sell order. Clic en el precio para copiarlo.'],
+    rNull:['Reprocesar y vender en '+sys,'En '+sys,'Reprocesa en '+refName()+' y publica cada material al precio indicado.'],
+    rJita:['Reprocesar para llevar a Jita','En '+sys,'Reprocesa en '+refName()+'; los materiales van en el courier y se venden en Jita.'],
+    jOrd:[arr+'Publicar órdenes en Jita','En Jita','Precio = la venta más barata'+tk+'. Clic en el precio para copiarlo.'],
+    jInst:[arr+'Vender al instante en Jita','En Jita','Vende a las buy orders; el precio es el promedio que recibirías.'],
+    fJ:['Publicar órdenes en Jita','En Jita','Precio = la venta más barata'+tk+'. Clic en el precio para copiarlo.'],
+    fJI:['Vender al instante en Jita','En Jita','Vende a las buy orders; el precio es el promedio que recibirías.'],
+    fN:[arr+'Publicar órdenes en '+sys,'En '+sys,'Precio con tu margen de importación. Clic en el precio para copiarlo.']};
+  const groups=ORDER.map(k=>[k,rowsIn.filter(r=>r.best===k)]).filter(x=>x[1].length);
+  const shipG=SH()?groups.filter(([k])=>SHIPS[k]):[],shipRows=shipG.flatMap(x=>x[1]);
+  const seq=[];groups.forEach(([k,g])=>{if(SHIPS[k]&&SH()&&!seq.includes('ship'))seq.push('ship');seq.push(k);});
+  // los pasos de origen van antes del courier; rJita (reprocesar) también es de origen
+  const before=seq.filter(k=>k!=='ship'&&(!SHIPS[k]||k==='rJita'||!SH())),after=seq.filter(k=>k!=='ship'&&SHIPS[k]&&k!=='rJita'&&SH());
+  const steps=[...before,...(shipRows.length?['ship']:[]),...after];
+  const hd=$('stepHead');hd.textContent='';
+  const nDone=steps.filter(k=>stepDone.has(k)).length;
+  if(steps.length){const t=el('div','stp-top');t.append(el('span','stp-plan',(P.mode?modeName(P.mode):'Plan Óptimo')+' · '+rowsIn.length+(rowsIn.length===1?' ítem':' ítems')),el('span','stp-prog',nDone+' de '+steps.length+' pasos hechos'));
+    const bar=el('div','stp-bar'),bi=el('i');bi.style.width=(steps.length?nDone/steps.length*100:0)+'%';bar.append(bi);hd.append(t,bar);}
+  const iconStrip=g=>{const d=el('div','stp-icons');g.slice(0,14).forEach(r=>{const ic=iconFor(r.o.name);if(ic){ic.title=r.o.name;d.append(ic);}});if(g.length>14)d.append(el('small',null,'+'+(g.length-14)));return d;};
+  const stepBox=(id,num,title,where,sub,amt,amtNote)=>{
+    const box=el('section','stp'+(stepDone.has(id)?' done':''));box.dataset.step=id;
+    const n=el('span','stp-n',stepDone.has(id)?'✓':String(num));
+    const mid=el('div','stp-m'),t=el('div','stp-t',title);t.append(el('span','stp-w w-'+(where==='Envío'?'s':where==='En Jita'?'j':'n'),where));
+    mid.append(t,el('div','stp-s',sub));
+    const am=el('div','stp-a');if(amt!=null){am.append(el('b',amt<0?'neg':'pos',(amt<0?'−':'')+fmt(Math.abs(amt))));if(amtNote)am.append(el('small',null,amtNote));}
+    box.append(n,mid,am);return box;};
+  const doneBtn=id=>{const b=el('button','ghost stp-done',stepDone.has(id)?'Deshacer':'✓ Marcar hecho');b.type='button';b.dataset.done=id;return b;};
+  steps.forEach((k,i)=>{
+    if(k==='ship'){
+      const vol=shipRows.reduce((a,r)=>a+(r.ship[r.best]?r.ship[r.best].v:0),0),col=shipRows.reduce((a,r)=>a+(r.ship[r.best]?r.ship[r.best].c:0),0),n=trips(vol);
+      const box=stepBox('ship',i+1,'Courier a '+dest+' con SIGMA Freight','Envío',shipRows.length+(shipRows.length===1?' ítem':' ítems')+' · '+fmtV(Math.round(vol))+' · '+n+(n===1?' contrato':' contratos')+' · llega en '+C.cDays[0]+'–'+C.cDays[1]+' días',-(P.shipCost||0),'costo del envío');
+      const f=el('div','stp-f');[['Destinatario',$('cAssignee').value||'SIGMA Freight'],['Destino',destStation()],['Reward'+(n>1?' (total)':''),Math.round(P.shipCost||0)],['Colateral'+(n>1?' (total)':''),Math.round(col)]].forEach(([l,v])=>{
+        const c=el('div','stp-fi');c.append(el('span',null,l));const b=copyBtn(String(v),typeof v==='number'?fmtQ(v):v);c.append(b);f.append(c);});
+      const acts=el('div','stp-acts');const cb=copyBtn(shipRows.map(r=>r.o.name+'\t'+Math.round(r.q)).join('\n'),'Copiar '+shipRows.length+(shipRows.length>1?' ítems':' ítem'));cb.classList.add('cp-all','p');
+      acts.append(cb);if(n>1){const go=el('button','ghost','Ver los '+n+' contratos');go.type='button';go.addEventListener('click',()=>{const p=$('pCtr');if(p&&p.hidden&&$('bCtr'))$('bCtr').click();p&&p.scrollIntoView({behavior:'smooth',block:'start'});});acts.append(go);}
+      acts.append(doneBtn('ship'));
+      box.append(iconStrip(shipRows),f,acts);pl.append(box);return;}
+    const g=rowsIn.filter(r=>r.best===k),[title,where,sub]=STEP[k]||[PLAN_L[k]||k,'',''];
     const groupGross=g.reduce((a,r)=>a+r.g[k]-r.prod,0);
-    const brief=el('span','pl-brief');brief.append(el('span',null,g.length+(g.length===1?' ítem':' ítems')+' · '),el('b',null,fmt(groupGross)),el('span',null,SHIPS[k]&&SH()?'antes del envío':'netos'));gh.append(brief);
-    const rc=recoFor(k,g);if(rc){const r=el('p','reco');r.append(el('span','ic i-bulb'),el('b',null,rc.t),document.createTextNode(' '+rc.d));gh.append(r);}
-    // Copia siempre el grupo COMPLETO, aunque esté filtrado o contraído.
-    const cb=copyBtn(g.map(r=>r.o.name+'\t'+Math.round(r.q)).join('\n'),'Copiar '+g.length+(g.length>1?' ítems':' ítem'));cb.classList.add('cp-all');gh.append(cb);
-    const section=el('section','pl-section');section.dataset.sortId=id;section.dataset.action=k;
-    const tools=el('div','pl-tools'),search=el('input','pl-search');search.type='search';search.autocomplete='off';search.placeholder='Buscar ítem en esta recomendación';
-    search.value=vQuery[id]||'';search.setAttribute('aria-label','Buscar ítem en '+lab);tools.append(search);
-    const count=el('span','pl-match');tools.append(count);
-    const fold=el('button','pl-fold');fold.title=foldC(id)?'Mostrar tabla':'Ocultar tabla';fold.setAttribute('aria-label',fold.title);fold.type='button';fold.dataset.fold='1';fold.setAttribute('aria-expanded',String(!foldC(id)));tools.append(fold);
-    section.append(gh,tools);pl.append(section);renderPlanTable(section,k,g);
+    const box=stepBox(k,i+1,title,where,sub,groupGross,SHIPS[k]&&SH()?'antes del envío':'netos, ya con taxes');
+    box.classList.add('pl-section');box.dataset.sortId='all:'+k;box.dataset.action=k;
+    const acts=el('div','stp-acts');
+    const cb=copyBtn(g.map(r=>r.o.name+'\t'+Math.round(r.q)).join('\n'),'Copiar '+g.length+(g.length>1?' ítems':' ítem'));cb.classList.add('cp-all');acts.append(cb);
+    if(g.length>8){const search=el('input','pl-search');search.type='search';search.autocomplete='off';search.placeholder='Buscar ítem';
+      search.value=vQuery['all:'+k]||'';search.setAttribute('aria-label','Buscar ítem en '+title);acts.append(search,el('span','pl-match'));}
+    acts.append(doneBtn(k));box.append(acts);pl.append(box);
+    vFold['all:'+k]=false;renderPlanTable(box,k,g);
   });
   // El pie (envío y total) no pertenece a ningún grupo de ítems.
   tableTarget=el('div','pl pl-totals');pl.append(tableTarget);
   // envío: el del plan entero o la parte de esta pestaña
   const shipT=vTab==='all'?(P.Vs>0?P.shipCost:0):rowsIn.reduce((a,r)=>a+shipShare(r,P),0);
   const vT=vTab==='all'?P.Vs:rowsIn.reduce((a,r)=>a+(r.best&&r.ship[r.best]?r.ship[r.best].v:0),0);
-  if(shipT>0)prow('cost',vTab==='all'?'Costo del envío':'Su parte del envío',Math.round(vT).toLocaleString('en-US')+' m³ a Jita'+(vTab==='all'?' · '+trips(P.Vs)+(trips(P.Vs)>1?' contratos':' contrato'):''),null,null,null,shipT);
+  if(shipT>0&&false)prow('cost',vTab==='all'?'Costo del envío':'Su parte del envío',Math.round(vT).toLocaleString('en-US')+' m³ a Jita'+(vTab==='all'?' · '+trips(P.Vs)+(trips(P.Vs)>1?' contratos':' contrato'):''),null,null,null,shipT);
   const miss=rowsIn.filter(r=>!r.best);
   if(miss.length)prow('miss','Falta precio: '+miss.map(r=>r.o.name).join(', '),'No entran en el total.',null,null,null,null);
   const totT=vTab==='all'?P.best:rowsIn.reduce((a,r)=>a+(r.best?r.g[r.best]-r.prod:0),0)-shipT;

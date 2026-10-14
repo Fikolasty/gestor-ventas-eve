@@ -2,6 +2,15 @@
 
 Cambios por versión del Gestor de Ventas. La más nueva arriba. El detalle técnico completo está en `docs/SPEC.txt`.
 
+## 1.0.19 — Pasos para Vender
+*2026-10-14*
+
+- «Qué Hacer» ahora es **Pasos para Vender**: un paso numerado por acción, en el orden en que se hacen (primero lo que se hace donde están los ítems, luego el courier y al final lo que se hace al llegar).
+- Cada paso dice qué hacer y dónde (En HY-RWO / Envío / En Jita), cuánto ISK deja o cuesta, y muestra su tabla de ítems con íconos desde el inicio (primeros 5; botón ancho «Ver los N ítems restantes»).
+- Nuevo paso **Courier**: íconos de lo que viaja, destinatario, destino, reward y colateral para copiar, y botón para copiar los ítems.
+- Progreso: casilla por ítem, «Marcar hecho» por paso y barra «N de M pasos hechos» (solo en memoria; se reinicia al recargar).
+- Sin pestañas Todo / Ore / Loot; el buscador solo aparece en pasos con más de 8 ítems.
+
 ## 1.0.18 — Sin descuento por cantidad en Jita
 *2026-10-14*
 

@@ -994,3 +994,11 @@ Precio de la orden en Jita (pedido de Arturo, con caso real de su mercado)
 
 ==================== v1.0.18 ====================
 - jitaList ya no usa qdApply: sin descuento por cantidad en órdenes de Jita (tampoco minerales/productos en Jita). qtyDisc solo para Null.
+
+==================== v1.0.19 ====================
+Pasos para Vender (reemplaza Qué Hacer)
+- paintVerdict: vTab fijo 'all' (sin pestañas). ORDER normal: bb, disc, null, rNull, rJita | ship | jOrd, jInst. Flip: fJ, fJI | ship | fN.
+  El paso "ship" aparece si hay ítems con SHIPS[k] y SH(); muestra íconos, destinatario (cAssignee), destino (destStation()), reward (P.shipCost) y colateral.
+- Cada paso es <section class="stp pl-section" data-sort-id="all:k"> con renderPlanTable (orden, búsqueda, "ver más" siguen funcionando).
+  Tabla visible desde el inicio, vShow por defecto 5, botón .pl-moreb ancho.
+- Progreso en memoria: stepDone (Set de ids de paso), itemDone (Set de nombres). Se vacían en clearViews. No se guarda.

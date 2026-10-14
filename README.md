@@ -15,13 +15,14 @@ Descuenta los taxes, el Broker y el envío con SIGMA Freight.
 1. En EVE abre el inventario en **vista de lista** (columnas *Name* y *Quantity* como mínimo).
 2. Selecciona todo (**Ctrl+A**), copia (**Ctrl+C**) y pega en la página (**Ctrl+V**).
 3. La página consulta los precios de **Jita 4-4** en la API oficial de CCP y arma **tu mejor plan**.
-4. Abre **Ver el análisis** para ver qué hacer con cada grupo de ítems, los contratos que tienes que crear y lo que cuesta el envío.
+4. Abre **Ver el análisis** y sigue los **Pasos para Vender**: qué hacer, dónde y a qué precio, en orden.
 
 Antes, revisa **Ajustes** (el engranaje del menú): tus skills, los taxes, el Buyback, la refinería y el envío.
 Lo más exacto es copiar los % de *Broker's fee* y *Sales tax* que muestra la ventana de venta del juego.
 
 ### Funciones principales
 - **Plan óptimo** y planes alternativos que puedes elegir tú mismo.
+- **Pasos para Vender**: el plan en pasos numerados, en orden, con íconos, precios para copiar, datos del courier y casillas de progreso.
 - **Ruta invertible**: HY-RWO → Jita (vendes lo que tienes en Null) o Jita → HY-RWO (compras en Jita y vendes más caro en Null, con tu margen).
 - **Switch de envío**: con el courier de SIGMA Freight o con los ítems ya en el destino.
 - **Reproceso** de ore y hielo con tus skills, la estructura, el rig y el implante.
@@ -58,7 +59,7 @@ CHANGELOG.md          ← cambios por versión
 ### Generar la página
 Solo necesitas Python 3, sin dependencias:
 ```
-python3 build.py 1.0.18
+python3 build.py 1.0.19
 ```
 Eso escribe `index.html` con la versión indicada.
 

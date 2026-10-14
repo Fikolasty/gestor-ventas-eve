@@ -1285,6 +1285,44 @@ html.lite #settings fieldset.st:not(.closed){box-shadow:inset 3px 0 0 #d97757!im
 #settings .st-f.st-flash{animation:stFlash .9s ease}
 @keyframes stFlash{0%{box-shadow:0 0 0 2px rgba(217,119,87,.75)}100%{box-shadow:0 0 0 2px rgba(217,119,87,0)}}
 html.lite #settings .st-f.st-flash{animation:none}
+
+/* ================= v1.0.19: Pasos para Vender ================= */
+#stepHead .stp-top{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap;color:var(--dim);font-size:.9rem}
+#stepHead .stp-prog{color:var(--mut)}
+#stepHead .stp-bar{height:6px;border-radius:4px;background:#262624;margin:8px 0 14px;overflow:hidden;box-shadow:inset 0 1px 2px rgba(0,0,0,.6)}
+#stepHead .stp-bar i{display:block;height:100%;background:linear-gradient(90deg,#d97757,#e8a588);transition:width .25s}
+.stp-list{display:flex;flex-direction:column;gap:12px}
+.stp{display:grid;grid-template-columns:36px minmax(0,1fr) auto;gap:4px 14px;padding:16px 18px;border-radius:12px;border:1px solid rgba(222,220,209,.10);
+  background:linear-gradient(180deg,#1e1e1d,#151515);box-shadow:inset 0 1px 0 rgba(255,255,255,.05),0 2px 4px rgba(0,0,0,.45),0 8px 18px rgba(0,0,0,.3)}
+.stp-n{width:32px;height:32px;border-radius:50%;display:grid;place-items:center;font-weight:700;color:#fff;background:linear-gradient(180deg,#e08a6c,#c96442);box-shadow:inset 0 1px 0 rgba(255,255,255,.2),0 2px 6px rgba(0,0,0,.5)}
+.stp.done .stp-n{background:#22332a;color:var(--gain);border:1px solid rgba(92,186,134,.5)}
+.stp.done{opacity:.72}.stp.done .stp-t{text-decoration:line-through;text-decoration-color:rgba(222,220,209,.4)}
+.stp-t{font-weight:650;font-size:1.08rem;color:var(--txt);display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.stp-w{font-size:.72rem;font-weight:600;padding:2px 8px;border-radius:6px;border:1px solid;text-decoration:none}
+.stp-w.w-n{color:#9ed3b5;border-color:rgba(92,186,134,.4)}.stp-w.w-j{color:#e8a588;border-color:rgba(217,119,87,.45)}.stp-w.w-s{color:#ecc27e;border-color:rgba(224,168,79,.4)}
+.stp-s{color:var(--mut);font-size:.9rem;margin-top:2px}
+.stp-a{text-align:right;white-space:nowrap}.stp-a b{font:600 1.12rem var(--f-num)}.stp-a b.pos{color:var(--gain)}.stp-a b.neg{color:var(--loss)}.stp-a small{display:block;color:var(--dim);font-size:.76rem}
+.stp>.stp-acts,.stp>.stp-f,.stp>.pl,.stp>.stp-icons{grid-column:2/4}
+.stp-acts{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:10px}
+.stp-acts .pl-search{flex:0 1 240px;min-width:140px}
+.stp-acts .stp-done{margin-left:auto}
+.stp-acts .copy{width:auto!important;flex:none;margin:0!important;padding:7px 14px!important;border-radius:9px!important}
+.stp-list~.pl-totals,.stp-list .pl-totals{margin-top:4px}
+.stp-acts .copy.p{background:linear-gradient(180deg,#e08a6c,#c96442)!important;border-color:#e08a6c!important;color:#fff!important}
+.stp-f{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px;margin-top:10px}
+.stp-fi{background:#0f0f0f;border:1px solid rgba(222,220,209,.10);border-radius:9px;padding:7px 10px;box-shadow:inset 0 1px 3px rgba(0,0,0,.6);min-width:0}
+.stp-fi>span{display:block;color:var(--dim);font-size:.72rem}.stp-fi .copy{margin:2px 0 0;padding:0;border:0;background:none!important;box-shadow:none!important;text-align:left;width:100%;overflow:hidden;text-overflow:ellipsis}
+.stp-icons{display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin-top:10px}
+.stp-icons img.ti{width:28px;height:28px;border-radius:6px;background:#0f0f0f;border:1px solid rgba(222,220,209,.12)}
+.stp-icons small{color:var(--dim)}
+.stp>.pl{margin-top:10px}
+.pl-moreb{display:block;width:100%;padding:10px;border:0;border-top:1px dashed rgba(222,220,209,.18);background:rgba(255,255,255,.02);color:var(--mut);font-weight:600;font-size:.88rem;cursor:pointer}
+.pl-moreb:hover{background:rgba(217,119,87,.08);color:#fff}
+.pl-ck{width:18px;height:18px;flex:none;border:1.5px solid var(--dim);border-radius:5px;background:transparent;margin-right:8px;vertical-align:-3px;display:inline-grid;place-items:center;cursor:pointer;padding:0}
+.pl-ck.on{background:var(--gain);border-color:var(--gain)}.pl-ck.on::after{content:"✓";color:#0d0d0d;font-size:.72rem;font-weight:800}
+.pl-row.ck-on{opacity:.5}
+@media(max-width:700px){.stp{grid-template-columns:30px minmax(0,1fr);padding:14px 12px}.stp-a{grid-column:2;text-align:left}.stp>.stp-acts,.stp>.stp-f,.stp>.pl,.stp>.stp-icons{grid-column:1/-1}.stp-acts .stp-done{margin-left:0}}
+html.lite .stp{box-shadow:none}
 </style>
 <script>/* v1.0.16: aplica tema y Modo Ligero guardados antes de pintar (sin parpadeo). Por defecto: Dark, sin Modo Ligero. */try{var g=JSON.parse(localStorage.getItem('gestorVentas.ajustes.v1')||'null');if(g&&g.ui){if(g.ui.light)document.documentElement.classList.add('light');if(g.ui.lite)document.documentElement.classList.add('lite');}}catch(e){}</script>
 </head>
@@ -1370,7 +1408,7 @@ Contraband Freight = no</textarea><small>Una regla por línea: Nombre = tax tota
         <p>Los avisos no son errores automáticos: pueden indicar volumen distinto, precio atípico o compras insuficientes. Abre ese ítem para comprobarlo antes de publicar una orden.</p></div>
       <div class="hp-c"><h3><span class="hp-n">3</span>Lee el Plan</h3>
         <p><b>Resultado</b> reúne lo que recibirías según los precios disponibles y los costes configurados; no necesariamente es beneficio sobre lo que pagaste por el loot. La preferencia por rapidez puede elegir Jita aunque otra ruta deje un poco más.</p>
-        <p>Abre <b>Ver el análisis</b> para entrar a <b>Qué Hacer</b>. Cada recomendación tiene sus propios filtros, búsqueda y botón para copiar ítems. En <b>Contratos y Envío</b> encontrarás cada contrato (uno a la vez, pasa con las flechas) y lo que cuesta el envío.</p></div>
+        <p>Abre <b>Ver el análisis</b> para ver los <b>Pasos para Vender</b>: cada paso dice qué hacer y dónde, en orden, con sus ítems, precios para copiar y una casilla para marcar lo que ya hiciste. En <b>Contratos y Envío</b> encontrarás cada contrato (uno a la vez, pasa con las flechas) y lo que cuesta el envío.</p></div>
       <div class="hp-c"><h3><span class="hp-n">4</span>Ajusta a tu Medida</h3>
         <p>En <b>Ajustes</b> configura skills, Broker, Sales Tax, precio local de Nullsec, Buyback, refinería y tiempos de courier. Los valores iniciales son ejemplos operativos: cámbialos por los tuyos.</p>
         <p>La herramienta guarda solo tus Ajustes en este navegador; los inventarios pegados nunca se guardan. Una recarga borra la sesión de trabajo.</p></div>
@@ -1482,9 +1520,10 @@ Contraband Freight = no</textarea><small>Una regla por línea: Nombre = tax tota
       </div>
     </div>
 
-    <h3 class="sub-h v-h"><span class="ic i-list" aria-hidden="true"></span>Qué Hacer</h3>
+    <h3 class="sub-h v-h"><span class="ic i-list" aria-hidden="true"></span>Pasos para Vender</h3>
     <div class="tabs" id="vTabs" role="tablist" aria-label="Tipo de ítem" hidden></div>
-    <div class="pl-groups" id="vPlan"></div>
+    <div id="stepHead"></div>
+    <div class="pl-groups stp-list" id="vPlan"></div>
 
     <div id="vRep" hidden>
       <h3 class="sub-h v-h"><span class="ic i-flask" aria-hidden="true"></span>¿Reprocesar?<span id="vRepAns"></span></h3>
