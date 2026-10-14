@@ -2,6 +2,12 @@
 
 Cambios por versión del Gestor de Ventas. La más nueva arriba. El detalle técnico completo está en `docs/SPEC.txt`.
 
+## 1.0.18 — Sin descuento por cantidad en Jita
+*2026-10-14*
+
+- El descuento por cantidad ya no se aplica a las órdenes en Jita (ni al vender ítems que ya están en Jita): es un mercado grande y no hace falta bajar el precio. Solo queda para vender en Null.
+- El texto «Con −X% por cantidad» solo aparece en las ventas en Null.
+
 ## 1.0.17 — Anti-cebo, undercut de 1 tick y venta rápida por spread
 *2026-10-14*
 

@@ -991,3 +991,6 @@ Precio de la orden en Jita (pedido de Arturo, con caso real de su mercado)
   Si ya hubo flag outSell (5% del volumen), no se aplica.
 - tightSpread: si jl − Jita Buy ≤ C.spreadTk ticks (defecto 2) → r.tight; la selección cambia jOrd→jInst (y fJ→fJI en la regla de rapidez).
 - Ajustes: cUnderTk, cBaitTk, cSpreadTk (se guardan con los demás). cUnder % solo para Null (precio que ves) y hielo.
+
+==================== v1.0.18 ====================
+- jitaList ya no usa qdApply: sin descuento por cantidad en órdenes de Jita (tampoco minerales/productos en Jita). qtyDisc solo para Null.

@@ -12,7 +12,7 @@
                     la fila-resumen se crea una vez; los detalles solo se crean al abrirla.
    Secciones: Datos · Estado · Formato · Mercado · Pegado · API · Verificación · Reproceso · Motor ·
               Guía · Vista (filas, plan, jugador, envío, reproceso) · Recalcular · Ajustes · Tus Skills · Seguridad.
-   SEGURIDAD: nada se guarda (sin localStorage/sessionStorage/cookies). La app solo se conecta a
+   SEGURIDAD: el inventario nunca se guarda; solo los Ajustes (localStorage, v1.0.16). La app solo se conecta a
               esi.evetech.net e images.evetech.net (CSP). Sin login. Los links externos solo se abren en otra pestaña.
    RENDIMIENTO v102: rAF agrupa cambios; detalles del ledger perezosos; ordenar/buscar/expandir
                 una recomendación solo actualiza su tabla; el motor y sus números no cambian.
@@ -146,7 +146,7 @@ const ticksBetween=(lo,hi)=>lo>0&&hi>lo?(hi-lo)/tsz(lo):0;
 function jitaList(name,sell,buy,q,man){
   if(sell==null)return null;
   if(C.ice.on&&isIce(name)){if(C.ice.jitaMode==='split'&&buy!=null)return tickDown((sell+buy)/2);return tickDown(sell*(1-C.under));}
-  return qdApply(man?sell:tickBelow(sell,C.underTk),name,q);
+  return man?sell:tickBelow(sell,C.underTk); // v1.0.18: sin descuento por cantidad en Jita (mercado grande)
 }
 // v1.0.17: si tu precio de orden queda a C.spreadTk ticks o menos de la mejor compra, se prefiere vender al instante
 function tightSpread(jl,a){if(!(C.spreadTk>0)||jl==null||!a||a.buy==null||!(a.buy>0))return null;
@@ -986,14 +986,14 @@ function paintLot(r){
     const nullTxt=o.nullSeen?'Undercut de '+pct(C.under)+'% al precio que ves':(C.ice.on&&isIce(o.name)?iceNullTxt()+' (Jita Buy '+jb+')':nullBaseTxt(o.name)+' (Jita Buy '+jb+')');
     if(S.flip){
       priceRow(tb,'Vender en '+sys+' (importado)',r.np,'Jita Sell ('+js+') +'+pct(C.impM)+'% neto. Paga Sales Tax, Broker y SCC'+(SH()?'; resta su parte del envío.':'.'),nu('fN'),r.best==='fN');
-      priceRow(tb,'Orden de venta en Jita',r.jl,'Jita Sell ('+js+')'+qdN+'.',nu('fJ'),r.best==='fJ');
+      priceRow(tb,'Orden de venta en Jita',r.jl,'Jita Sell ('+js+').',nu('fJ'),r.best==='fJ');
       priceRow(tb,'Venta rápida en Jita',r.instAvg!=null?r.instAvg:(a&&a.buy!=null?a.buy:null),'Jita Buy.',nu('fJI'),r.best==='fJI');
       const n=el('tr');const nt=el('td','muted pr-foot');nt.colSpan=4;nt.textContent='Clic en un precio para copiarlo. En el juego se lista por unidad: pon este precio y la cantidad ('+fmtQ(r.q)+').';n.append(nt);tb.append(n);
     }else{
     priceRow(tb,'Vender en '+sys+' (Keepstar)',r.np,nullTxt+qdN+'. Paga Sales Tax, Broker y SCC.',nu('null'),r.best==='null');
     if(C.bb.on)priceRow(tb,'Buyback de la alianza',r.bbUnit,r.bbUnit!=null?pct(1-r.bbTax)+'% de Jita '+({buy:'Buy',split:'Split',sell:'Sell'})[C.bb.base]+' (tax '+pct(r.bbTax)+'%'+(C.bb.special[o.name.toLowerCase()]!=null?', especial de este ítem':'')+')'+(SH()?'. Sin Sales Tax ni envío.':'. Sin Sales Tax.'):(r.hint.bb||''),nu('bb'),r.best==='bb');
     if(C.disc.on)priceRow(tb,'Venta a jugador',r.discUnit,pct(C.disc.pct)+'% de Jita '+(C.disc.base==='split'?'Split':'Buy')+(SH()?'. Sin taxes ni envío.':'. Sin taxes.'),nu('disc'),r.best==='disc');
-    priceRow(tb,'Orden de venta en Jita',r.jl,(C.ice.on&&isIce(o.name)?(C.ice.jitaMode==='split'?'Split':'Jita Sell −'+pct(C.under)+'%'):(o.refMan!=null?'Tu precio':'Jita Sell'+(C.underTk>0?' −'+C.underTk+' tick'+(C.underTk===1?'':'s'):'')))+' ('+js+')'+qdN+(SH()?'. Resta envío, Sales Tax y Broker.':'. Resta Sales Tax y Broker.'),nu('jOrd'),r.best==='jOrd');
+    priceRow(tb,'Orden de venta en Jita',r.jl,(C.ice.on&&isIce(o.name)?(C.ice.jitaMode==='split'?'Split':'Jita Sell −'+pct(C.under)+'%'):(o.refMan!=null?'Tu precio':'Jita Sell'+(C.underTk>0?' −'+C.underTk+' tick'+(C.underTk===1?'':'s'):'')))+' ('+js+')'+(SH()?'. Resta envío, Sales Tax y Broker.':'. Resta Sales Tax y Broker.'),nu('jOrd'),r.best==='jOrd');
     priceRow(tb,'Venta rápida en Jita',r.instAvg!=null?r.instAvg:(a&&a.buy!=null?a.buy:null),'Jita Buy'+(r.instAvg!=null&&a&&r.instAvg<a.buy*.995?' (promedio al vender todo)':'')+(SH()?'. Resta envío y Sales Tax.':'. Resta Sales Tax.'),nu('jInst'),r.best==='jInst');
     const n=el('tr');const nt=el('td','muted pr-foot');nt.colSpan=4;nt.textContent='Clic en un precio para copiarlo. En el juego se lista por unidad: pon este precio y la cantidad ('+fmtQ(r.q)+').';n.append(nt);tb.append(n);
   }}
@@ -1204,7 +1204,7 @@ function paintVerdict(P){
     const gs=sort.k?[...filtered].sort((a,b)=>{const A=key(a),B=key(b);return (A<B?-1:A>B?1:0)*sort.d;}):filtered;
     const lim=vShow[id]||10,vis=gs.slice(0,lim);
     vis.forEach(r=>{
-      const u=unitFor(r,k),qdTxt=r.qd>=.0001&&(k==='null'||k==='jOrd')?'Con −'+pctQ(r.qd)+'% por cantidad':null;
+      const u=unitFor(r,k),qdTxt=r.qd>=.0001&&k==='null'?'Con −'+pctQ(r.qd)+'% por cantidad':null;
       const fT=r.fast?'Por rapidez: '+(r.fast.from==='disc'?'a un jugador':'en Null')+' ganarías '+fmt(Math.max(0,r.fast.loss))+' más, pero tarda más.':null;
       prow('',r.o.name,[qdTxt,fT].filter(Boolean).join(' · ')||null,r.q,u.p,u.l,r.g[k]-r.prod,SHIPS[k]&&SH()?'antes del envío':null);
       if((k==='rNull'||k==='rJita')&&r.mins){
@@ -1213,7 +1213,7 @@ function paintVerdict(P){
           sort.k==='p'?(pr(x)??-Infinity):sort.k==='a'?(pr(x)!=null?x.n*pr(x)*rt:-Infinity):0;
         const mins=sort.k?[...r.mins].sort((a,b)=>{const A=keyMin(a),B=keyMin(b);return (A<B?-1:A>B?1:0)*sort.d;}):r.mins;
         mins.forEach(x=>{const p=pr(x);
-          prow('min','↳ '+x.m,x.qd>=.0001?'Con −'+pctQ(x.qd)+'% por cantidad':null,x.n,p,k==='rNull'?'Orden en Null':'Orden en Jita',p!=null?x.n*p*rt:null,'neto de este '+(isIce(r.o.name)?'producto':'mineral'));});}
+          prow('min','↳ '+x.m,x.qd>=.0001&&k==='rNull'?'Con −'+pctQ(x.qd)+'% por cantidad':null,x.n,p,k==='rNull'?'Orden en Null':'Orden en Jita',p!=null?x.n*p*rt:null,'neto de este '+(isIce(r.o.name)?'producto':'mineral'));});}
     });
     if(!gs.length)groupTable.append(el('div','pl-nomatch',query?'No hay ítems con ese nombre en esta recomendación.':'No hay ítems.'));
     if(gs.length>lim){const m=el('div','pl-more'),hid=gs.slice(lim),sum=hid.reduce((a,r)=>a+r.g[k]-r.prod,0);
@@ -1611,7 +1611,7 @@ $('pCtr').addEventListener('toggle',()=>{if($('pCtr').open&&lastP){paintContract
 // ================= Reproceso: Refinado vs Sin Refinar (por mercado) =================
 // Cada mercado compara Refinado vs Sin Refinar con TODAS sus deducciones:
 //  Null (HY-RWO): precio de Null (hielo Jita Buy −2.5%; lo demás 90% de Jita Buy, con descuento por cantidad), sales tax, broker de la estructura + SCC, relists si están marcados.
-//  Jita: orden a Jita Sell (hielo con undercut, con descuento por cantidad), sales tax, broker de Jita, relists si están marcados, envío.
+//  Jita: orden a Jita Sell − 1 tick (hielo con undercut; sin descuento por cantidad desde v1.0.18), sales tax, broker de Jita, relists si están marcados, envío.
 //  Refinado además paga la tarifa de la refinería (tax % del valor de lo refinado).
 function paintRefCmp(r,q,nets){
   const box=$('rx'),fin=$('rxFinal');box.textContent='';fin.textContent='';
