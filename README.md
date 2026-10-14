@@ -21,7 +21,7 @@ Antes, revisa **Ajustes** (el engranaje del menú): tus skills, los taxes, el Bu
 Lo más exacto es copiar los % de *Broker's fee* y *Sales tax* que muestra la ventana de venta del juego.
 
 ### Funciones principales
-- **Plan óptimo** y planes alternativos que puedes elegir tú mismo.
+- **Elige un Plan**: el óptimo arriba y los demás en filas con rapidez, envío, valor y diferencia; se pueden ordenar y filtrar.
 - **Pasos para Vender**: el plan en pasos numerados, en orden, con íconos, precios para copiar, datos del courier y casillas de progreso.
 - **Ruta invertible**: HY-RWO → Jita (vendes lo que tienes en Null) o Jita → HY-RWO (compras en Jita y vendes más caro en Null, con tu margen).
 - **Switch de envío**: con el courier de SIGMA Freight o con los ítems ya en el destino.
@@ -59,7 +59,7 @@ CHANGELOG.md          ← cambios por versión
 ### Generar la página
 Solo necesitas Python 3, sin dependencias:
 ```
-python3 build.py 1.0.20
+python3 build.py 1.0.21
 ```
 Eso escribe `index.html` con la versión indicada.
 

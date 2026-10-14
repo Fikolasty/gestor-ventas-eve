@@ -58,3 +58,9 @@ html.light .pk-o.best .pk-bar i{background:linear-gradient(90deg,#3f8f63,#4ea877
 html.light .pk-o.on .pk-bar i{background:linear-gradient(90deg,#c96442,#d9785a)}
 html.light .pk .pk-o.on{background:linear-gradient(90deg,rgba(201,100,66,.10),rgba(255,255,255,.6) 60%)!important;box-shadow:inset 3px 0 0 #c96442!important}
 html.light .pk-rec{color:#2f7a52;border-color:rgba(47,122,82,.4)}
+html.light .pk-flt{background:#fff;border-color:rgba(31,30,29,.14);box-shadow:inset 0 1px 2px rgba(0,0,0,.08)}
+html.light .pk-fb.on{background:#f3efe7;color:#1f1e1d;box-shadow:0 0 0 1px rgba(201,100,66,.6)}
+html.light .pk-fb:hover{color:#1f1e1d}
+html.light .pk-sh.y{color:#9a6a12}
+html.light .pk-hc:hover:not(:disabled),html.light .pk-hc.on{color:#b5583a}
+html.light .pk .pk-o{background:linear-gradient(180deg,#f7f5ef,#efece4);border-color:rgba(31,30,29,.12);box-shadow:inset 0 1px 0 #fff,0 1px 2px rgba(0,0,0,.07)}

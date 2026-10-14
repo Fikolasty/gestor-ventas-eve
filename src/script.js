@@ -8,14 +8,18 @@
      3. Motor       computePlan(): puro, sin DOM. Por ítem calcula 7 opciones (Null, Buyback, Orden Jita,
                     Venta Rápida, Reprocesar→Null, Reprocesar→Jita, Jugador) con taxes, broker, relists,
                     producción y su parte del envío; elige la mejor y suma el plan.
-     4. Vista       paintVerdict / paintLot / paintCourier / paintDisc / paintRepro solo escriben textos;
-                    la fila-resumen se crea una vez; los detalles solo se crean al abrirla.
-   Secciones: Datos · Estado · Formato · Mercado · Pegado · API · Verificación · Reproceso · Motor ·
-              Guía · Vista (filas, plan, jugador, envío, reproceso) · Recalcular · Ajustes · Tus Skills · Seguridad.
-   SEGURIDAD: el inventario nunca se guarda; solo los Ajustes (localStorage, v1.0.16). La app solo se conecta a
-              esi.evetech.net e images.evetech.net (CSP). Sin login. Los links externos solo se abren en otra pestaña.
-   RENDIMIENTO v102: rAF agrupa cambios; detalles del ledger perezosos; ordenar/buscar/expandir
-                una recomendación solo actualiza su tabla; el motor y sus números no cambian.
+     4. Vista       paintVerdict (resultado + Pasos para Vender) · paintPicker (Elige un Plan) · paintLot ·
+                    paintCourier · paintDisc · paintRepro. Solo escriben textos; lo cerrado no se pinta.
+   Secciones: Datos · Estado · Formato · Mercado (ticks, anti-cebo, spread) · Pegado · API · Verificación ·
+              Reproceso · Motor · Vista (filas, pasos, selector de plan, jugador, envío, reproceso) · Recalcular ·
+              Ajustes (enlaces Skills↔Taxes, campos que no aplican) · Tus Skills · Idioma · Persistencia · Seguridad.
+   ESTADO: S (ítems, API, ruta, plan elegido) y C (configuración). La vista guarda solo preferencias en memoria
+           (vSort/vShow/vQuery, pkView, stepDone/itemDone) y clearViews() las vacía junto con las referencias al DOM.
+   MEMORIA: íconos = <img> directos (sin blobs); pruneCaches() suelta S.api de ítems que ya no están; las tablas
+            reutilizan <img> (ICON_POOL); un solo listener delegado por contenedor (sin closures por fila).
+   SEGURIDAD: el inventario nunca se guarda; solo los Ajustes (localStorage «gestorVentas.ajustes.v1», v1.0.16).
+              La app solo se conecta a esi.evetech.net e images.evetech.net (CSP). Sin login.
+   RENDIMIENTO: rAF agrupa cambios; detalles del ledger perezosos; ordenar/buscar/filtrar repinta solo su bloque.
    ============================================================ */
 const $=id=>document.getElementById(id);
 /*__REFINE__*/
@@ -1013,56 +1017,20 @@ function paintLot(r){
 }
 
 // ================= Vista: veredicto =================
-// recomendación en palabras simples para cada acción del plan
 // nombres de cada acción del plan (iguales a la etiqueta junto a "Tu Mejor Plan")
 const PLAN_L={fN:'Llevar a HY-RWO',fJ:'Vender en Jita (Orden)',fJI:'Vender en Jita al Instante',null:'Vender en null',rNull:'Vender en null reprocesado',jOrd:'Vender en Jita (Orden)',jInst:'Vender en Jita al Instante',rJita:'Vender en Jita Reprocesado',bb:'Vender al Buyback',disc:'Vender a Jugador'};
-function recoFor(k,g){
-  const ore=g.every(r=>{const x=resolveOre(r.o.name);return x&&x.d.cat!=='ice';}),ice=g.every(r=>isIce(r.o.name));
-  const what=ore?'el ore':ice?'el hielo':g.length>1?'estos ítems':'este ítem',raw=ore||ice?what+' sin reprocesar':what;
-  const sys=(C.ref.name||'Null').split(' - ')[0].trim()||'Null',prodW=ice?'productos':'minerales';
-  // lista de costos en español: "taxes, broker y envío"
-  const y=a=>a.length>1?a.slice(0,-1).join(', ')+' y '+a[a.length-1]:a[0];
-  const c=['taxes','broker'];if(C.relistOn&&C.relists>0)c.push('relists');if(C.prod>0)c.push('producción');
-  // v103: recomendaciones consistentes con la acción elegida por computePlan.
-  // No prometemos ventas instantáneas ni usamos «ganancia» como beneficio de fabricación.
-  const many=g.length>1,items=many?'estos '+g.length+' ítems':'este ítem';
-  const T={
-    fN:[SH()?'Importar a HY-RWO:':'Vender en HY-RWO:',(SH()?'Manda '+items+' de Jita a HY-RWO con SIGMA Freight y publica':'Publica '+items+' en HY-RWO con')+' órdenes de venta'+(SH()?' allí':'')+' a Jita Sell +'+pct(C.impM)+'% neto. El cálculo ya resta '+(SH()?'el envío, ':'')+'Sales Tax, Broker y SCC.'],
-    fJ:['Sell order en Jita:','Publica '+items+' en Jita 4-4.'],
-    fJI:['Venta rápida en Jita:','Vende '+items+' a las buy orders de Jita.'],
-    null:['Orden de venta en Nullsec:','Publica '+items+' en '+sys+' usando los precios de la tabla. La comparación ya descuenta Sales Tax, Broker'+(C.relistOn?' y Relists':'')+(SH()?'. No hace falta courier a Jita.':'.')],
-    bb:['Buyback de la alianza:','Agrupa '+items+' en un contrato Item Exchange. El valor estimado ya descuenta el tax configurado del programa; verifica la aceptación y la información del contrato.'],
-    jOrd:['Sell order en Jita:',SH()?'Envía '+items+' a Jita 4-4 y publica órdenes de venta. El cálculo incluye impuestos, Broker y su parte del courier.':'Publica '+items+' en Jita 4-4 con órdenes de venta. El cálculo incluye impuestos y Broker.'],
-    jInst:['Venta rápida en Jita:',SH()?'Envía '+items+' a Jita 4-4 y véndelos a las buy orders disponibles. La estimación considera el volumen de compra y los costes de envío y Sales Tax.':'Vende '+items+' a las buy orders de Jita. La estimación considera el volumen de compra y el Sales Tax.'],
-    rNull:['Reprocesar y vender en Nullsec:','Reprocesa '+(ice?'el hielo':ore?'el ore':items)+' en '+refName()+' y publica los materiales resultantes en '+sys+'. El rendimiento y los gastos están incorporados en el cálculo.'],
-    rJita:[SH()?'Reprocesar y enviar a Jita:':'Reprocesar y vender en Jita:','Reprocesa '+(ice?'el hielo':ore?'el ore':items)+' en '+refName()+(SH()?', envía los materiales resultantes a Jita y véndelos allí.':' y vende los materiales resultantes en Jita.')+' Se incluyen rendimiento, tasas'+(SH()?' y courier':'')+'.'],
-    disc:['Oferta a otros jugadores:','Ofrece '+items+' por Discord con su tasación de Janice. Depende de encontrar comprador; úsala como alternativa a las órdenes de mercado.']};
-  const t=T[k];if(!t)return null;
-  const fast=g.filter(r=>r.fast);
-  if(fast.length){const loss=fast.reduce((a,r)=>a+Math.max(0,r.fast.loss),0);
-    const days=fast.some(r=>isIce(r.o.name))&&C.ice.on?C.ice.nullDays:C.nullDays,act=t[1].split('. ')[0]+'.';
-    const fromDisc=fast.some(r=>r.fast.from==='disc');
-    return{t:'Elegido por rapidez:',d:act+(fromDisc?' La oferta a jugadores podría dejar '+fmt(loss)+' más, pero depende de encontrar comprador.':' Una venta en '+sys+' podría dejar '+fmt(loss)+' más, aunque el plazo configurado para Nullsec es de '+days+' días.')+' La preferencia por rapidez está activada en Ajustes.'};}
-  return{t:t[0],d:t[1]};
-}
-// pestañas del plan: todo, hielo, ore y minerales, loot
-let vTab='all',lastP=null;
-const CAT_L={all:'Todo',ice:'Hielo',ore:'Ore y Minerales',loot:'Loot y Otros'};
-const CAT_T={all:'Total del plan',ice:'Total del hielo',ore:'Total de ore y minerales',loot:'Total del loot'};
+let lastP=null;
 const ORE_PRODUCTS=new Set();Object.values(REFINE).forEach(d=>{if(d.cat!=='ice')Object.keys(d.out).forEach(m=>ORE_PRODUCTS.add(m.toLowerCase()));});
 function catOf(name){if(isIce(name))return 'ice';if(resolveOre(name)||ORE_PRODUCTS.has(String(name).toLowerCase()))return 'ore';return 'loot';}
 // parte del envío de un ítem: su m³ y su colateral, más su parte del precio base
-function shipShare(r,P){const s=r.best&&r.ship[r.best];if(!s||!(P.Vs>0))return 0;return C.perM3*s.v+C.collPct*s.c+C.base*trips(P.Vs)*s.v/P.Vs;}
 // precio por unidad de cada acción
 function unitFor(r,k){const a=r.o.jita;
   return k==='null'?{p:r.np,l:'Lístalo en Null a este Precio'}:k==='jOrd'?{p:r.jl,l:'Lístalo en Jita a este Precio'}:k==='jInst'?{p:r.instAvg!=null?r.instAvg:(a&&a.buy),l:'Te pagan (promedio)'}:
     k==='bb'?{p:r.bbUnit,l:'Te paga el Buyback'}:k==='disc'?{p:r.discUnit,l:'Pídelo en Discord'}:{p:null,l:'Precio de cada '+(isIce(r.o.name)?'producto':'mineral')+' abajo'};}
 // orden, mostrar más y copiar al hacer clic en nombre/cantidad/ganancia
 // v102: pestaña:acción es la clave en todas las preferencias de vista (sin persistencia).
-let vSort=Object.create(null),vShow=Object.create(null),vQuery=Object.create(null),vFold=Object.create(null);
+let vSort=Object.create(null),vShow=Object.create(null),vQuery=Object.create(null);
 let stepDone=new Set(),itemDone=new Set(); // v1.0.19: progreso de los pasos (solo en memoria; se borra al recargar)
-// v1.0.1: las tablas de Qué Hacer empiezan plegadas (sin valor = plegada); se abren con la flecha
-const foldC=id=>vFold[id]!==false;
 let repaintPlanGroup=null; // solo pinta una tabla; no ejecuta computePlan() ni el resto de la pantalla.
 $('vPlan').addEventListener('click',e=>{
   const s=e.target.closest('.srt');if(s&&lastP){
@@ -1079,13 +1047,6 @@ $('vPlan').addEventListener('click',e=>{
   const ck=e.target.closest('[data-ck]');if(ck){const n=ck.dataset.ck,on=!itemDone.has(n);if(on)itemDone.add(n);else itemDone.delete(n);
     ck.classList.toggle('on',on);ck.setAttribute('aria-pressed',String(on));const row=ck.closest('.pl-row');if(row)row.classList.toggle('ck-on',on);return;}
   const dn=e.target.closest('[data-done]');if(dn&&lastP){const id=dn.dataset.done;if(stepDone.has(id))stepDone.delete(id);else stepDone.add(id);paintVerdict(lastP);return;}
-  const fold=e.target.closest('[data-fold]');if(fold){
-    const section=fold.closest('.pl-section');if(!section)return;
-    const id=section.dataset.sortId,closed=!foldC(id);vFold[id]=closed;
-    const table=section.querySelector('.pl');if(table)table.hidden=closed;
-    fold.title=closed?'Mostrar tabla':'Ocultar tabla';fold.setAttribute('aria-label',fold.title);fold.setAttribute('aria-expanded',String(!closed));
-    return;
-  }
   const c=e.target.closest('.cp');if(c&&c.dataset.v){const v=c.dataset.v,done=()=>{c.classList.add('done');setTimeout(()=>c.classList.remove('done'),900);};
     if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(v).then(done,()=>prompt('Copia:',v));else prompt('Copia:',v);}
 });
@@ -1101,7 +1062,6 @@ $('vPlan').addEventListener('input',e=>{
 [['bDeep','deep','Ver el análisis ▾','Ocultar el análisis ▴'],['bMore','more','Ver más ▾','Ocultar ▴']].forEach(([b,t,o,c])=>$(b).addEventListener('click',()=>{
   const open=$(t).hidden;$(t).hidden=!open;$(b).setAttribute('aria-expanded',String(open));$(b).querySelector('b').textContent=open?c:o;
   if(open){if(lastP)refreshNow();$(b).scrollIntoView({behavior:'smooth',block:'start'});}}));
-$('vTabs').addEventListener('click',e=>{const b=e.target.closest('.tab');if(!b||!lastP)return;vTab=b.dataset.t;paintVerdict(lastP);});
 // nombre corto del mejor plan (sin "+ N más" ni "· por rapidez")
 const bestLabel=()=>$('vWhat').textContent.replace(/ · por rapidez$/,'').replace(/ \+ \d+ más$/,'');
 // Sin ítems: vacía todo lo pintado y suelta referencias (así el navegador libera la memoria de lotes grandes)
@@ -1110,7 +1070,7 @@ function clearViews(){
   ['vPlan','vRepList','ctrList','czDots','ctrTot','shBody','fScn','rx','rxFinal','dMsg','sumP1','sumP2'].forEach(id=>{const e=$(id);if(e)e.textContent='';});
   ['pCtr','pSum','vFast'].forEach(id=>{const e=$(id);if(e)e.hidden=true;});
   lastP=null;repaintPlanGroup=null;discRows=[];czCards=[];lastCs=[];czIdx=0;S.planMode=null;ICON_POOL={};
-  vShow=Object.create(null);vSort=Object.create(null);vQuery=Object.create(null);vFold=Object.create(null);stepDone=new Set();itemDone=new Set();if($('stepHead'))$('stepHead').textContent='';
+  vShow=Object.create(null);vSort=Object.create(null);vQuery=Object.create(null);stepDone=new Set();pkView={sort:'net',dir:-1,filter:'all'};itemDone=new Set();if($('stepHead'))$('stepHead').textContent='';
 }
 function paintVerdict(P){
   const has=S.items.length>0;$('verdict').hidden=!has;$('ledger').hidden=!has;$('lCount').textContent=has?'· '+S.items.length+(S.items.length>1?' ítems':' ítem'):'';
@@ -1162,19 +1122,8 @@ function paintVerdict(P){
    $('vsCn').textContent=all>0?fmt(all):'0 ISK';const d=$('vsC');d.textContent='';
    if(all>0){const s=el('small',null,'Broker '+fmt(brk)+' · Sales tax '+fmt(tax)+(rel>0?' · Relists '+fmt(rel):''));d.append(s);}
    $('vsRel').textContent=relP>0?fmt(relP):'0 ISK';$('vsRelW').hidden=!(C.relists>0)||!(relP>0);}
-  // pestañas por tipo de ítem (solo si hay más de un tipo)
-  lastP=P;
-  const cats=[]; vTab='all'; // v1.0.19: sin pestañas; los pasos siguen el plan completo
-  if(vTab!=='all'&&!cats.includes(vTab))vTab='all';
-  const tabs=$('vTabs');tabs.hidden=cats.length<2;tabs.textContent='';
-  if(cats.length>1)['all'].concat(cats).forEach(c=>{const n=c==='all'?P.rows.length:P.rows.filter(r=>catOf(r.o.name)===c).length;
-    const b=el('button','tab',CAT_L[c]);b.type='button';b.setAttribute('role','tab');b.dataset.t=c;b.setAttribute('aria-selected',String(vTab===c));b.append(el('small',null,String(n)));tabs.append(b);});
-  const rowsIn=P.rows.filter(r=>vTab==='all'||catOf(r.o.name)===vTab);
-  // v1.0.10: si la pestaña no es "Todo", decirlo: el desglose muestra solo una parte del plan
-  {let nt=$('vTabNote');if(!nt){nt=el('p','tab-note');nt.id='vTabNote';tabs.after(nt);}
-   nt.textContent='';nt.hidden=vTab==='all';
-   if(vTab!=='all'){nt.append(document.createTextNode('Mostrando solo '+CAT_L[vTab]+': '+rowsIn.length+' de '+P.rows.length+' ítems. El plan completo está en «Todo».'));
-     const b=el('button','ghost','Ver todo');b.type='button';b.addEventListener('click',()=>{vTab='all';paintVerdict(lastP);});nt.append(b);}}
+  // v1.0.19: sin pestañas por tipo; los pasos cubren el plan completo
+  const rowsIn=P.rows;
   // plan: por acción, la recomendación y luego cada ítem con su precio por unidad
   const pl=$('vPlan');poolIcons(pl);pl.textContent='';
   // Botones de orden repetidos por grupo, siempre encima de sus ítems.
@@ -1224,7 +1173,6 @@ function paintVerdict(P){
     if(gs.length>lim){const hid=gs.slice(lim),sum=hid.reduce((a,r)=>a+r.g[k]-r.prod,0);
       const b=el('button','pl-moreb','Ver '+(hid.length===1?'el ítem restante':'los '+hid.length+' ítems restantes')+' · '+fmt(sum)+' ▾');b.type='button';b.dataset.more=id;b.dataset.n='99999';groupTable.append(b);}
     else if(lim>5&&gs.length>5){const b=el('button','pl-moreb','Mostrar menos ▴');b.type='button';b.dataset.more=id;b.dataset.n='5';groupTable.append(b);}
-    groupTable.hidden=foldC(id);
     if(oldTable)oldTable.replaceWith(groupTable);else section.append(groupTable);
   }
   // Cierre sobre la pestaña actual: una interacción no recalcula ni repinta el resto del análisis.
@@ -1244,7 +1192,7 @@ function paintVerdict(P){
     disc:['Vender a un jugador','En '+sys,'Publica la oferta WTS en Discord; el detalle está en «Vender a Jugadores».'],
     null:['Publicar órdenes en '+sys,'En '+sys,'Precio por unidad para tu sell order. Clic en el precio para copiarlo.'],
     rNull:['Reprocesar y vender en '+sys,'En '+sys,'Reprocesa en '+refName()+' y publica cada material al precio indicado.'],
-    rJita:['Reprocesar para llevar a Jita','En '+sys,'Reprocesa en '+refName()+'; los materiales van en el courier y se venden en Jita.'],
+    rJita:[SH()?'Reprocesar para llevar a Jita':'Reprocesar y vender en Jita','En '+sys,'Reprocesa en '+refName()+(SH()?'; los materiales van en el courier y se venden en Jita.':' y vende los materiales en Jita.')],
     jOrd:[arr+'Publicar órdenes en Jita','En Jita','Precio = la venta más barata'+tk+'. Clic en el precio para copiarlo.'],
     jInst:[arr+'Vender al instante en Jita','En Jita','Vende a las buy orders; el precio es el promedio que recibirías.'],
     fJ:['Publicar órdenes en Jita','En Jita','Precio = la venta más barata'+tk+'. Clic en el precio para copiarlo.'],
@@ -1288,18 +1236,13 @@ function paintVerdict(P){
     if(g.length>8){const search=el('input','pl-search');search.type='search';search.autocomplete='off';search.placeholder='Buscar ítem';
       search.value=vQuery['all:'+k]||'';search.setAttribute('aria-label','Buscar ítem en '+title);acts.append(search,el('span','pl-match'));}
     acts.append(doneBtn(k));box.append(acts);pl.append(box);
-    vFold['all:'+k]=false;renderPlanTable(box,k,g);
+    renderPlanTable(box,k,g);
   });
   // El pie (envío y total) no pertenece a ningún grupo de ítems.
   tableTarget=el('div','pl pl-totals');pl.append(tableTarget);
-  // envío: el del plan entero o la parte de esta pestaña
-  const shipT=vTab==='all'?(P.Vs>0?P.shipCost:0):rowsIn.reduce((a,r)=>a+shipShare(r,P),0);
-  const vT=vTab==='all'?P.Vs:rowsIn.reduce((a,r)=>a+(r.best&&r.ship[r.best]?r.ship[r.best].v:0),0);
-  if(shipT>0&&false)prow('cost',vTab==='all'?'Costo del envío':'Su parte del envío',Math.round(vT).toLocaleString('en-US')+' m³ a Jita'+(vTab==='all'?' · '+trips(P.Vs)+(trips(P.Vs)>1?' contratos':' contrato'):''),null,null,null,shipT);
   const miss=rowsIn.filter(r=>!r.best);
   if(miss.length)prow('miss','Falta precio: '+miss.map(r=>r.o.name).join(', '),'No entran en el total.',null,null,null,null);
-  const totT=vTab==='all'?P.best:rowsIn.reduce((a,r)=>a+(r.best?r.g[r.best]-r.prod:0),0)-shipT;
-  if(!none)prow('total',CAT_T[vTab],null,null,null,null,totT);
+  if(!none)prow('total','Total del plan',null,null,null,null,P.best); // ya descuenta taxes y envío
   // barra: qué parte del valor se queda o viaja
   const tot=P.valShip+P.valStay||1,pS=P.valStay/tot,pJ=P.valShip/tot;
   $('sNull').style.width=(pS*100)+'%';$('sJita').style.width=(pJ*100)+'%';
@@ -1892,46 +1835,79 @@ function summaryPlanText(P,sys){
   return phrases.slice(0,-1).join('; ')+'; y '+phrases[phrases.length-1];
 }
 // ================= Vista: resumen final (el estudio en palabras) =================
-// v111: selector de plan. Cada opción muestra su total y la diferencia con el óptimo. Al elegir otra,
-// se recalcula y se repinta solo lo visible (las secciones cerradas no se pintan); el plan anterior no se guarda:
-// volver a él es otro clic que lo recalcula.
+// ================= Elige un Plan (v111 → v1.0.21) =================
+// Una fila por plan con columnas (Plan · Rapidez · Envío · Valor · Total · vs Óptimo), orden por columna y filtros.
+// El óptimo va SIEMPRE primero; los demás de mejor a peor por defecto. Todo sale de modeTotal() con los Ajustes,
+// la ruta (flip) y el switch de envío actuales: aquí no se calcula nada nuevo, solo se ordena y se pinta.
+// Elegir un plan recalcula (S.planMode → refreshNow). Orden y filtro viven en memoria (pkView) y se vacían al limpiar.
+let pkView={sort:'net',dir:-1,filter:'all'};
+const PK_FAST=new Set(['jInst','fJI','bb']);                 // cobras el mismo día (sin contar el envío)
+const PK_REP=new Set(['rNull','rJita']);
+function pkSpeed(m,P){const ship=pkShips(m,P),cd=C.cDays[0]+'–'+C.cDays[1]+' d';
+  if(m==='auto')return P.rows.every(r=>!r.best||PK_FAST.has(r.best))?(ship?'Envío '+cd:'Inmediato'):'Mixto';
+  if(PK_FAST.has(m))return ship?'Envío '+cd:(m==='bb'?'~1 día':'Inmediato');
+  if(m==='disc')return 'Incierto';
+  if(m==='null'||m==='rNull'||m==='fN')return (ship?'Envío + ':'')+'1–2 semanas';
+  return (ship?'Envío + días':'Días');}
+// rango para ordenar por rapidez (menor = más rápido)
+const pkSpeedRank=(m,P)=>m==='auto'?1.5:(PK_FAST.has(m)?0:m==='disc'?4:(m==='null'||m==='rNull'||m==='fN')?3:2)+(pkShips(m,P)?.5:0);
+function pkShips(m,P){if(!SH())return false;if(m==='auto')return P.Vs>0;return !!SHIPS[m];}
+const PK_FILTERS=[['all','Todos'],['fast','Rápidos'],['noship','Sin envío'],['rep','Con reproceso']];
+const PK_COLS=[['name','Plan'],['speed','Rapidez'],['ship','Envío'],['net','Valor'],['net','Total'],['diff','vs Óptimo']];
 function paintPicker(P){
-  const box=$('pk'),bar=$('pkNote');box.textContent='';bar.textContent='';
+  const box=$('pk'),bar=$('pkNote'),tools=$('pkTools');box.textContent='';bar.textContent='';tools.textContent='';
   const opt=modeTotal(P,'auto').net,cur=P.mode||'auto';
-  // ordenadas de mayor a menor total (a igual total, el óptimo primero)
-  // v1.0.8: un plan que es exactamente el óptimo (mismo destino para cada ítem) no se repite como tarjeta aparte;
-  // el óptimo dice "Es: <plan>".
+  // planes posibles con los Ajustes actuales (Buyback/Jugador apagados no salen; los que no aplican a ningún ítem tampoco)
   const all=MODES.filter(([m])=>!(m==='bb'&&!C.bb.on||m==='disc'&&!C.disc.on)&&(m==='auto'||P.rows.some(r=>r.g[m]!=null)))
    .map(([m,l])=>({m,l,t:m==='auto'?{net:opt,n:P.rows.length}:modeTotal(P,m)}));
+  // v1.0.8: un plan idéntico al óptimo (mismo destino para cada ítem) no se repite; el óptimo dice "Es igual a …"
   const same=all.filter(x=>x.m!=='auto'&&Math.round(x.t.net)===Math.round(opt)&&P.rows.every(r=>!r.auto||r.auto===x.m||r.g[x.m]==null)).map(x=>x.m);
   const curShown=same.includes(cur)?'auto':cur;
-  const maxNet=Math.max(...all.map(x=>x.t.net),1);
+  const list=all.filter(x=>!same.includes(x.m));
+  const maxNet=Math.max(...list.map(x=>x.t.net),1);
   const sys=(C.ref.name||'Null').split(' - ')[0].trim()||'Null',env=SH()?'Envías todo a Jita y ':'En Jita: ';
-  const PK_EXP={auto:()=>'Cada ítem va a donde más deja; si la diferencia es chica, prefiere vender rápido.',
-    fN:()=>(SH()?'Llevas todo de Jita a '+sys+' y ':'En '+sys+': ')+'lo vendes con tu margen de importación.',
-    fJ:()=>'Publicas todo en Jita con sell orders. Más ISK, se vende en días.',
-    fJI:()=>'Vendes todo en Jita a las buy orders. Cobras al instante.',
-    null:()=>'Sell orders en '+sys+' para todo. Sin envío, pero tarda días en venderse.',
-    jOrd:()=>env+'publicas sell orders. Más ISK, se vende en días.',
-    jInst:()=>env+'vendes a las buy orders. Cobras al instante.',
-    bb:()=>'Un contrato Item Exchange al Buyback de la alianza. Rápido y simple, menos ISK.',
-    rNull:()=>'Reprocesas el ore o hielo y vendes los materiales en '+sys+'.',
-    rJita:()=>'Reprocesas y llevas los materiales a Jita para venderlos allí.',
-    disc:()=>'Se lo vendes a otro jugador por Discord. Sin taxes, pero sin comprador garantizado.'};
-  all.filter(x=>!same.includes(x.m))
-   .sort((a,b)=>Math.round(b.t.net)-Math.round(a.t.net)||(a.m==='auto'?-1:b.m==='auto'?1:0))
-   .forEach(({m,l,t})=>{
+  const PK_EXP={auto:'Cada ítem va a donde más deja; si la diferencia es chica, prefiere vender rápido.',
+    fN:(SH()?'Llevas todo de Jita a '+sys+' y ':'En '+sys+': ')+'lo vendes con tu margen de importación.',
+    fJ:'Publicas todo en Jita con sell orders. Más ISK, se vende en días.',
+    fJI:'Vendes todo en Jita a las buy orders. Cobras al instante.',
+    null:'Sell orders en '+sys+' para todo.'+(SH()?' Sin envío, pero tarda':' Tarda')+' días en venderse.',
+    jOrd:env+'publicas sell orders. Más ISK, se vende en días.',
+    jInst:env+'vendes a las buy orders. Cobras al instante.',
+    bb:'Un contrato Item Exchange al Buyback de la alianza. Rápido y simple, menos ISK.',
+    rNull:'Reprocesas el ore o hielo y vendes los materiales en '+sys+'.',
+    rJita:'Reprocesas y llevas los materiales a Jita para venderlos allí.',
+    disc:'Se lo vendes a otro jugador por Discord. Sin taxes, pero sin comprador garantizado.'};
+  // filtros: solo los que tienen al menos un plan (además del óptimo)
+  const pass={all:()=>true,fast:x=>PK_FAST.has(x.m),noship:x=>!pkShips(x.m,P),rep:x=>PK_REP.has(x.m)};
+  const fl=PK_FILTERS.filter(([f])=>f==='all'||(f!=='noship'||SH())&&list.some(x=>x.m!=='auto'&&pass[f](x)));
+  box.classList.toggle('pk-noship',!SH()); // sin envío: la columna Envío no aporta nada
+  if(!fl.some(([f])=>f===pkView.filter))pkView.filter='all';
+  if(fl.length>2){const g=el('div','pk-flt');g.setAttribute('role','group');g.setAttribute('aria-label','Filtrar planes');
+    fl.forEach(([f,t])=>{const n=f==='all'?list.length-1:list.filter(x=>x.m!=='auto'&&pass[f](x)).length;
+      const b=el('button','pk-fb'+(pkView.filter===f?' on':''),t);b.type='button';b.dataset.pkf=f;b.setAttribute('aria-pressed',String(pkView.filter===f));b.append(el('small',null,String(n)));g.append(b);});
+    tools.append(g);}
+  // cabecera de columnas (clic = ordenar; el óptimo no se mueve)
+  const hd=el('div','pk-hd');
+  PK_COLS.forEach(([k,t],i)=>{const on=pkView.sort===k&&i!==3,b=el('button','pk-hc c'+i+(on?' on':''),t+(on?(pkView.dir>0?' ▲':' ▼'):''));
+    b.type='button';if(i===3){b.disabled=true;b.tabIndex=-1;}else{b.dataset.pks=k;b.title='Ordenar por '+t.toLowerCase();}hd.append(b);});
+  box.append(hd);
+  const key={name:x=>x.l.toLowerCase(),speed:x=>pkSpeedRank(x.m,P),ship:x=>pkShips(x.m,P)?1:0,net:x=>x.t.net,diff:x=>x.t.net};
+  const rest=list.filter(x=>x.m!=='auto'&&pass[pkView.filter](x))
+    .sort((a,b)=>{const A=key[pkView.sort](a),B=key[pkView.sort](b);return (A<B?-1:A>B?1:0)*pkView.dir||b.t.net-a.t.net;});
+  const rows=[list.find(x=>x.m==='auto'),...rest].filter(Boolean);
+  rows.forEach(({m,l,t})=>{
     const d=t.net-opt,on=m===curShown;
-    // v1.0.20: filas delgadas, una debajo de otra: punto de selección · nombre + qué significa · barra del valor · total · diferencia
     const b=el('button','pk-o'+(on?' on':'')+(m==='auto'?' best':''));b.type='button';b.dataset.m=m;b.setAttribute('role','radio');b.setAttribute('aria-checked',String(on));
     const txt=el('span','pk-tx'),nm=el('span','pk-l',l);if(m==='auto')nm.append(el('em','pk-rec','Recomendado'));
     const part=m!=='auto'&&t.n<P.rows.length?' '+t.n+' de '+P.rows.length+' ítems se venden así; los demás siguen el óptimo.':'';
-    txt.append(nm,el('small','pk-e',(PK_EXP[m]?PK_EXP[m]():'')+(m==='auto'&&same.length?' Es igual a «'+modeName(same[0])+'».':'')+part));
-    const barW=el('span','pk-bar'),bi=el('i');bi.style.width=Math.max(2,Math.min(100,maxNet>0?t.net/maxNet*100:0))+'%';barW.append(bi);
+    txt.append(nm,el('small','pk-e',(PK_EXP[m]||'')+(m==='auto'&&same.length?' Es igual a «'+modeName(same[0])+'».':'')+part));
+    const sp=el('span','pk-sp',pkSpeed(m,P)),sh=el('span','pk-sh'+(pkShips(m,P)?' y':''),pkShips(m,P)?'Sí':'No');
+    const barW=el('span','pk-bar'),bi=el('i');bi.style.width=Math.max(2,Math.min(100,t.net/maxNet*100))+'%';barW.append(bi);
     const dd=m==='auto'?'Óptimo':Math.round(d)===0?'Igual':d>0?'+'+compactIsk(d)+' · más lento':'−'+compactIsk(-d);
-    b.append(el('span','pk-dot'),txt,barW,el('b','pk-v num',fmt(t.net)),el('small','pk-d '+(m==='auto'||Math.round(d)===0?'':d>0?'pos':'neg'),dd));
+    b.append(el('span','pk-dot'),txt,sp,sh,barW,el('b','pk-v num',fmt(t.net)),el('small','pk-d '+(m==='auto'||Math.round(d)===0?'':d>0?'pos':'neg'),dd));
     if(part)b.title=part.trim();
     box.append(b);});
+  if(rows.length===1&&pkView.filter!=='all')box.append(el('p','pk-empty','Ningún otro plan cumple este filtro.'));
   if(P.mode){const d=opt-P.best,cant=P.rows.filter(r=>r.cant);
     bar.hidden=false;
     bar.append(el('b',null,'Elegiste: '+modeName(P.mode)+'. '),document.createTextNode(Math.round(d)>0?'Deja '+fmt(d)+' menos que el plan óptimo.':Math.round(d)<0?'Deja '+fmt(-d)+' más que el plan óptimo, pero se vende más lento (el óptimo prefiere vender rápido cuando la diferencia es pequeña).':'Deja lo mismo que el plan óptimo.'));
@@ -1940,6 +1916,10 @@ function paintPicker(P){
   }else bar.hidden=true;
   return same[0]||null;
 }
+// orden y filtro: solo repintan el selector (no recalculan el plan)
+$('pkTools').addEventListener('click',e=>{const b=e.target.closest('[data-pkf]');if(!b||!lastP)return;pkView.filter=b.dataset.pkf;paintPicker(lastP);});
+$('pk').addEventListener('click',e=>{const b=e.target.closest('[data-pks]');if(!b||!lastP)return;e.stopPropagation();const k=b.dataset.pks;
+  pkView=pkView.sort===k?{...pkView,dir:-pkView.dir}:{...pkView,sort:k,dir:k==='name'||k==='speed'||k==='ship'?1:-1};paintPicker(lastP);});
 $('pSum').addEventListener('click',e=>{const b=e.target.closest('[data-m]');if(!b)return;const m=b.dataset.m==='auto'?null:b.dataset.m;
   if(m===S.planMode)return;S.planMode=m;czIdx=0;refreshNow();});
 // v1.0.6 (modo Jita → HY-RWO): si compras el lote en Jita al Sell, lo llevas a HY-RWO y lo vendes a Jita Sell + margen
@@ -2046,7 +2026,7 @@ function refreshNow(){
   if(!S.repro.dirty&&!$('pRepro').hidden)fillFromItem();
   const P=computePlan();
   P.rows.forEach(paintLot);paintVerdict(P);paintContracts(P);paintCourier(P);paintDisc(P);paintRepro();paintSummary(P);
-  document.querySelectorAll('#vFastT,#fScnV,#aNullD,#aJitaD,#aBBD,#aCourD,#sumP1 .lead2,.pl-g .reco,#vRep .rw,.pl-row .n small').forEach(colorNums);
+  document.querySelectorAll('#vFastT,#fScnV,#aNullD,#aJitaD,#aBBD,#aCourD,#sumP1 .lead2,#vRep .rw,.pl-row .n small').forEach(colorNums);
   document.querySelectorAll('.margPct').forEach(e=>e.textContent=pct(C.margin));
 }
 

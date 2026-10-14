@@ -1005,3 +1005,14 @@ Pasos para Vender (reemplaza Qué Hacer)
 
 ==================== v1.0.20 ====================
 - paintPicker: cada plan es una fila (.pk-o grid): .pk-dot · .pk-tx (nombre + PK_EXP[m]) · .pk-bar (t.net/maxNet) · .pk-v (fmt) · .pk-d (diferencia). Óptimo con .pk-rec "Recomendado".
+
+==================== v1.0.21 ====================
+Elige un Plan con columnas y filtros
+- paintPicker: cabecera .pk-hd (botones data-pks: name, speed, ship, net, diff) y filtros .pk-fb (data-pkf: all, fast, noship, rep).
+  pkView={sort,dir,filter} en memoria; se resetea en clearViews. El óptimo (m='auto') siempre en la primera fila.
+  Orden por defecto: net desc; desempate por net. Ordenar/filtrar llama solo a paintPicker(lastP).
+- pkSpeed/pkSpeedRank: rapidez cualitativa por plan; pkShips(m,P)= SH() && (SHIPS[m] | P.Vs>0 para auto).
+- Sin envío (SH() falso): clase .pk-noship oculta la columna Envío y no se ofrece el filtro "Sin envío".
+Limpieza
+- Eliminados: vTab/CAT_L/CAT_T/tab-note/#vTabs, vFold/foldC/handler de plegado, recoFor, shipShare, CSS de .pl-g/.pl-fold/.tabs/.tab-note/.pl-brief/.pl-tools y tarjetas viejas .pk-o.
+- Verificado: node --check, smoke (55 controles), stress (155 ítems), leak4 (DOM y listeners estables), pk, ce, noship (0 menciones), tperm 1527/1536, tsec (solo hosts ESI), sk, persistencia, pasos, anti-cebo, inglés.

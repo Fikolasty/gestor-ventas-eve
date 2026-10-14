@@ -2,6 +2,24 @@
 
 Cambios por versión del Gestor de Ventas. La más nueva arriba. El detalle técnico completo está en `docs/SPEC.txt`.
 
+## 1.0.21 — Elige un Plan con columnas y filtros; limpieza del código
+*2026-10-14*
+
+**Elige un Plan**
+- Columnas: Plan · Rapidez · Envío · Valor (barra) · Total · vs Óptimo. Clic en un encabezado ordena por esa columna (otro clic invierte).
+- Filtros: Todos · Rápidos (cobras el mismo día: venta al instante y Buyback) · Sin envío · Con reproceso. Solo aparecen los que tienen planes; cada uno muestra cuántos.
+- El **Plan Óptimo va siempre primero**; los demás, de mejor a peor por defecto.
+- Rapidez según el plan y el switch de envío (Inmediato, ~1 día, Días, 1–2 semanas, Incierto; con envío suma «Envío 1–3 d»).
+- Con el envío apagado se ocultan la columna Envío y el filtro «Sin envío», y ningún texto habla de envío.
+- Ordenar o filtrar no recalcula el plan (solo repinta la lista). Todo sigue la ruta (HY-RWO → Jita o Jita → HY-RWO) y el switch.
+
+**Limpieza y optimización**
+- Fuera código muerto: pestañas Todo/Ore/Loot y su nota, plegado de tablas, recomendaciones antiguas (recoFor), shipShare y ~55 reglas CSS obsoletas (tarjetas viejas del selector, pestañas, botón de plegar).
+- La nota de pestaña creaba un listener nuevo en cada repintado; ya no existe.
+- clearViews() también vacía el orden/filtro del selector y el progreso de los pasos.
+- «Reprocesar para llevar a Jita» dice «y vender en Jita» cuando el envío está apagado.
+- Cabecera del código actualizada: flujo, estado, memoria, seguridad y rendimiento.
+
 ## 1.0.20 — Elige un Plan en filas
 *2026-10-14*
 
