@@ -14,14 +14,15 @@ const MineUI=(()=>{
   const TIERS=['T1','T2','Faction'],TL={T1:'Full T1',T2:'Full T2',Faction:'Facción'};
   const MATL={moon:'Moon ore',ice:'Hielo',gas:'Gas'};
   const DEF={moon:'Zeolites',ice:'Blue Ice',gas:'Fullerite-C50'};
-  const S={mat:'moon',lv:5,imp:1,met:'m3',tier:'Faction',item:{...DEF},base:'buy',cmp:true};
+  const S={mat:'moon',lv:5,imp:1,boost:'',met:'m3',tier:'Faction',item:{...DEF},base:'buy',cmp:true};
+  const BOOST=new Map((MINE.boosts||[]).map(b=>[b.n,b]));
   const PRICE={}; // por typeID: {buy,sell,at} — solo en memoria
   const NF0=new Intl.NumberFormat('en-US',{maximumFractionDigits:0}),NF1=new Intl.NumberFormat('en-US',{minimumFractionDigits:1,maximumFractionDigits:1}),
         NF2=new Intl.NumberFormat('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}),NFc=new Intl.NumberFormat('es-ES',{minimumFractionDigits:1,maximumFractionDigits:1});
   const cmpISK=v=>{if(v==null||!isFinite(v))return '—';const n=Math.abs(v);
     for(const [b,u] of [[1e12,'T'],[1e9,'B'],[1e6,'M'],[1e3,'K']])if(n>=b)return NFc.format(Math.trunc(v/b*10)/10)+' '+u;return NF0.format(v);};
-  const idx=new Map(ROWS.map(r=>[[r.lv,r.imp,r.mat,r.tier,r.ship].join('|'),r]));
-  const row=(ship,tier)=>idx.get([S.lv,S.imp,S.mat,tier,ship].join('|'));
+  const idx=new Map(ROWS.map(r=>[[r.boost,r.lv,r.imp,r.mat,r.tier,r.ship].join('|'),r]));
+  const row=(ship,tier)=>idx.get([S.boost,S.lv,S.imp,S.mat,tier,ship].join('|'));
   const MATS=MINE.mats,matByName=new Map(MATS.map(m=>[m.n,m]));
   let root=null,$q=null,drawn=false,lastW=0;
 
@@ -64,8 +65,10 @@ const MineUI=(()=>{
      '<div><span class="mn-lbl">Material</span>'+SEG('mat',[['moon','Moon ore'],['ice','Hielo'],['gas','Gas']])+'</div>'+
      '<div><span class="mn-lbl">Skills</span>'+SEG('lv',[['4','Todo a IV'],['5','Todo a V']])+'</div>'+
      '<div><span class="mn-lbl">Implantes +5%</span>'+SEG('imp',[['1','Con'],['0','Sin']])+'</div>'+
+     '<div><span class="mn-lbl">Boost</span>'+SEG('boost',[['','Sin boost'],['Porpoise','Porpoise'],['Orca','Orca'],['Rorqual','Rorqual']])+'</div>'+
      '<div><span class="mn-lbl">Ver</span>'+SEG('met',[['m3','m³/h'],['isk','ISK/h']])+'</div>'+
    '</div>'+
+   '<p class="mn-bst" hidden></p>'+
    '<div class="mn-price" hidden>'+
      '<label>Qué minas<select class="mn-item"></select></label>'+
      '<label>Precio en Jita 4-4<select class="mn-base"><option value="buy">Jita Buy (vender al instante)</option><option value="sell">Jita Sell (con orden)</option></select></label>'+
@@ -95,6 +98,7 @@ const MineUI=(()=>{
      '<li><b>Hulk</b> es la que más rinde en los tres materiales, pero solo en flota con alguien que le vacíe la bodega.</li>'+
      '<li><b>Mackinaw</b> para minar solo: algo menos que la Hulk, pero con la mejor autonomía por mucho.</li>'+
      '<li><b>Skiff</b> cuando hay riesgo (highsec bajo, lowsec, gas en wormholes o null): menos rendimiento a cambio del mejor tanque.</li>'+
+     '<li>Con <b>boosts</b>, Hulk y Covetor son las que más ganan: el ciclo baja y su bodega pequeña deja de importar porque la Orca o la Rorqual recogen el mineral. La Rorqual da el boost más fuerte, pero no entra en highsec.</li>'+
      '<li>En hielo, Hulk y Covetor tienen un bono de rol de ciclo muy fuerte. En gas, T2 y ORE rinden igual; el ORE no deja residuo y gasta menos CPU.</li></ul>'+
    '</div></details>'+
    '<details class="mn-how"><summary>Cómo se Calculó</summary><div class="mn-prose">'+
@@ -104,7 +108,8 @@ const MineUI=(()=>{
      '<li><b>Hielo</b>: 2 harvesters, 3 Ice Harvester Upgrades, Mining Survey Chipset, 1 Ice Harvester Accelerator (solo existe T1 y la calibración solo deja uno), 1 Drone Mining Augmentor y 1 drone de hielo.</li>'+
      '<li><b>Gas</b>: solo cuentan el harvester, las skills, la nave y el implante. No hay mejoras, rigs ni drones para gas.</li>'+
      '<li>Implantes de +5%: Highwall MX-1005 y Michi\'s Excavation Augmentor (moon), Yeti IH-1005 (hielo), Alchemist GH-805 (gas). Piden Cybernetics V.</li>'+
-     '<li>m³/h incluye los críticos promediados (probabilidad × bono), como Pyfa. El residuo no se descuenta: se pierde de la roca, no de tu bodega. Sin boosts de flota, sin módulos de tanque y sin tiempo de vuelo de los drones.</li>'+
+     '<li><b>Boost</b> al máximo: Mining Foreman Burst II con Mining Laser Optimization (menos ciclo en strip miners, ice y gas harvesters) y Mining Laser Efficiency (más crítico y menos residuo), Mining Director V, Mining Foreman Mindlink, la skill de la nave a V y su Industrial Core II (Medium en Porpoise, Large en Orca, Capital en Rorqual). La fórmula reproduce el máximo que publicó CCP para la Rorqual con los valores del core de entonces. Los drones no reciben boost.</li>'+
+     '<li>m³/h incluye los críticos promediados (probabilidad × bono), como Pyfa. El residuo no se descuenta: se pierde de la roca, no de tu bodega. Sin módulos de tanque y sin tiempo de vuelo de los drones.</li>'+
      '<li>ISK/h = m³/h ÷ volumen de una unidad × precio en Jita 4-4. Comprimir no cambia las unidades, solo el volumen.</li></ul>'+
      '<p class="mn-src">Datos estáticos del cliente build <span class="mn-build"></span>.</p>'+
    '</div></details>';
@@ -137,10 +142,16 @@ const MineUI=(()=>{
     const b=h('b','',NF2.format(v)+' ISK');
     st.replaceChildren(document.createTextNode('Precio por unidad: '),b,document.createTextNode(' · '+(S.cmp&&m.cid?'Compressed '+m.n:m.n)+' · '),
       document.createTextNode(NF1.format(m.vol)+' m³ por unidad sin comprimir · '),document.createTextNode('consultado '+new Date(p.at).toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'})));}
+  function paintBoost(){const p=$q('.mn-bst'),b=BOOST.get(S.boost);p.hidden=!b;if(!b)return;
+    const pc=v=>(v>0?'+':'−')+NF1.format(Math.abs(v))+'%';
+    p.replaceChildren(h('b','',b.n+' al máximo'),document.createTextNode(' (Mining Foreman Burst II, Mining Director V, mindlink, skill de la nave V y '+b.core+'): '),
+      document.createTextNode('ciclo '+pc(b.cycle)+' · probabilidad de crítico '+pc(b.crit)+' · residuo '+pc(b.residue)+'. '),
+      document.createTextNode('Los drones no se benefician.'));
+    if(b.n==='Rorqual')p.appendChild(document.createTextNode(' La Rorqual no entra en highsec: solo lowsec, null o wormholes.'));}
   function best(tier,ex,key){let b=null;SHIPS.filter(s=>EX.has(s)===ex).forEach(s=>{const r=row(s,tier);if(!r)return;const v=key(r);if(v==null)return;if(!b||v>b.v)b={s,r,v};});return b;}
   function paintTake(){const p=$q('.mn-take');p.replaceChildren();
     const bx=best('Faction',true,val),bb=best('Faction',false,val),au=best('Faction',true,r=>r.fill);if(!bx||!bb)return;
-    p.append(document.createTextNode(MATL[S.mat]+', '+(S.lv===4?'todo a IV':'todo a V')+', '+(S.imp?'con implantes':'sin implantes')+', fit de facción: '),
+    p.append(document.createTextNode(MATL[S.mat]+', '+(S.lv===4?'todo a IV':'todo a V')+', '+(S.imp?'con implantes':'sin implantes')+', '+(S.boost?'boost de '+S.boost:'sin boost')+', fit de facción: '),
       h('b','',bx.s),document.createTextNode(' es la mejor exhumer ('+fmtV(bx.v)+') y '),h('b','',bb.s),
       document.createTextNode(' la mejor barge ('+fmtV(bb.v)+'). Para minar solo, la que más aguanta sin vaciar es '),h('b','',au.s),
       document.createTextNode(' ('+NF1.format(au.v)+' min).'));}
@@ -204,7 +215,7 @@ const MineUI=(()=>{
       svg.appendChild(el('text',{x:cx,y:y(r.fill)-5,'text-anchor':'middle',class:'vl'},r.fill>=100?NF0.format(r.fill):NF1.format(r.fill)));
       svg.appendChild(el('text',{x:cx,y:H-8,'text-anchor':'middle',class:'lb'+(ex?' ex':''),style:bw<62?'font-size:10px':''},r.ship));});
     box.appendChild(svg);}
-  function paint(){if(!root)return;seg();paintPrice();paintTake();paintKpi();paintPivot();paintDetail();drawCharts();}
+  function paint(){if(!root)return;seg();paintBoost();paintPrice();paintTake();paintKpi();paintPivot();paintDetail();drawCharts();}
   function drawCharts(){if(!root||!root.offsetParent)return;lastW=root.clientWidth;paintBars();paintHold();drawn=true;}
 
   // ---------- montaje ----------

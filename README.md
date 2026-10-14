@@ -31,7 +31,7 @@ Lo más exacto es copiar los % de *Broker's fee* y *Sales tax* que muestra la ve
 - **Anti-cebo**: ignora órdenes de venta puestas muy baratas para tirar el precio (revisa las 5 más baratas, en cascada) y publica 1 tick por debajo.
 - **Venta rápida automática** cuando la orden casi no paga más que las compras (2 ticks o menos).
 - **Ajuste de precios** (por defecto −0.16% en la venta rápida), para no prometer más de lo que paga el mercado.
-- **Minería**: qué Barge o Exhumer rinde más en moon ore, hielo y gas (Full T1, Full T2, Facción; skills a IV o V; con o sin implantes), en m³/h o ISK/h con precios de Jita, con bodega, drones y autonomía.
+- **Minería**: qué Barge o Exhumer rinde más en moon ore, hielo y gas (Full T1, Full T2, Facción; skills a IV o V; con o sin implantes; sin boost o con Porpoise, Orca o Rorqual al máximo), en m³/h o ISK/h con precios de Jita, con bodega, drones y autonomía.
 - **Español / English**, tema **Dark / Light** y **Modo Ligero** para PCs lentas o Firefox.
 
 ## Seguridad y privacidad

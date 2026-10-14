@@ -8,7 +8,7 @@ cada parche de CCP. Así, si CCP cambia una nave o un módulo, basta con volver 
 import json, os, sys
 H = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, H)
-from calc import best, SHIPS, EXHUMERS, A, skills
+from calc import best, SHIPS, EXHUMERS, A, skills, boost_values
 from sde import types, groups, name2id, D
 
 MAT = {'moon': 'moon', 'ice': 'ice', 'gas': 'gas'}
@@ -16,23 +16,25 @@ short = lambda s: s.replace('Medium ', '').replace('Mining Survey Chipset', 'Sur
 meta = json.load(open(os.path.join(D, 'phobos', 'metadata.0.json')))
 build = next(r['field_value'] for r in meta if r['field_name'] == 'client_build')
 
+BOOSTS = [None, 'Porpoise', 'Orca', 'Rorqual']
 rows = []
-for lv in (4, 5):
+for bo in BOOSTS:
+  for lv in (4, 5):
     for imp in (True, False):
         for mat in MAT:
             for tier in ('T1', 'T2', 'Faction'):
                 for s in SHIPS:
-                    r = best(s, mat, tier, lv, imp)
+                    r = best(s, mat, tier, lv, imp, bo)
                     rigs = {}
                     for x in r['rigs']:
                         rigs[short(x)] = rigs.get(short(x), 0) + 1
-                    rows.append([lv, 1 if imp else 0, mat, tier, s, r['high'], r['low'],
+                    rows.append([bo or '', lv, 1 if imp else 0, mat, tier, s, r['high'], r['low'],
                                  short(r['mid']) if r['mid'] != '—' else '—',
                                  ', '.join(f'{n}x {k}' for k, n in rigs.items()) or '—', r['drone'],
                                  r['cycle_s'], r['per_cycle'], r['crit_p'], r['crit_b'], r['mod_mph'], r['drone_mph'],
                                  r['total_mph'], r['hold'], r['fill_min'], r['waste_p'], f"{r['cpu_used']:.1f} / {r['cpu_out']:.1f}",
                                  r['notes']])
-COLS = ['lv', 'imp', 'mat', 'tier', 'ship', 'high', 'low', 'mid', 'rigs', 'drones', 'cyc', 'amt', 'critP', 'critB',
+COLS = ['boost', 'lv', 'imp', 'mat', 'tier', 'ship', 'high', 'low', 'mid', 'rigs', 'drones', 'cyc', 'amt', 'critP', 'critB',
         'mod', 'dr', 'tot', 'hold', 'fill', 'waste', 'cpu', 'notes']
 
 ships = []
@@ -67,7 +69,9 @@ for k, t in types.items():
     mats.append(dict(n=n, id=int(k), cid=c, vol=t['volume'], cat=cat, grp=sub))
 mats.sort(key=lambda m: (['moon', 'ice', 'gas'].index(m['cat']), m['grp'], m['n']))
 
-data = dict(build=build, cols=COLS, rows=rows, ships=ships, mats=mats)
+boosts = [dict(n=b, core=v['core'], cycle=round(v['cycle'], 2), crit=round(v['crit'], 1), residue=round(v['residue'], 2))
+          for b in BOOSTS[1:] for v in [boost_values(b)]]
+data = dict(build=build, cols=COLS, rows=rows, ships=ships, mats=mats, boosts=boosts)
 out = os.path.join(H, '..', '..', 'src', 'mining_data.js')
 with open(out, 'w', encoding='utf-8') as f:
     f.write('// Generado por tools/mining/build_data.py desde los datos estáticos de EVE (Pyfa, build %s). No editar a mano.\n' % build)

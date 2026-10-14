@@ -2,6 +2,18 @@
 
 Cambios por versión del Gestor de Ventas. La más nueva arriba. El detalle técnico completo está en `docs/SPEC.txt`.
 
+## 1.0.24 — Minería: boosts de Porpoise, Orca y Rorqual
+*2026-10-14*
+
+- **Nuevo control «Boost»** en Minería: Sin boost · Porpoise · Orca · Rorqual, cada una **al máximo**.
+  - Mining Foreman Burst II con Mining Laser Optimization (menos ciclo en strip miners, ice y gas harvesters) y Mining Laser Efficiency (más probabilidad de crítico, menos residuo).
+  - Mining Director V, Mining Foreman Mindlink, la skill de la nave a V y su Industrial Core II (Medium, Large o Capital).
+  - Resultado: ciclo −41.6% (Porpoise), −46.5% (Orca), −61.5% (Rorqual); crítico +139% / +155% / +205%.
+- Una línea bajo los controles explica el boost elegido. La Rorqual avisa que no entra en highsec. Los drones no reciben boost.
+- Todo lo demás se recalcula con el boost: ganadora por escalón, tablas, gráficos y autonomía de la bodega.
+- La fórmula reproduce el máximo publicado por CCP para la Rorqual (−57.13% con el core de 2016); hoy el Capital Industrial Core II da +40%.
+- En móvil, los grupos de botones de Minería pasan a la línea siguiente si no caben.
+
 ## 1.0.23 — Minería: Barges y Exhumers
 *2026-10-14*
 
