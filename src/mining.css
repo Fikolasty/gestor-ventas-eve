@@ -1,0 +1,67 @@
+/* ================= Minería: Barges y Exhumers (v1.0.23) =================
+   Colores de serie: T1 azul, T2 naranja, Facción verde; exhumers destacados en amarillo.
+   El tema claro de estos colores está en light_extra.css (light.py los oscurecería de más). */
+.i-rock{--i:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 15l3-8 7-3 6 5-1 8-7 3-6-2z'/%3E%3Cpath d='M9 10l3 2 4-2M12 12v5'/%3E%3C/svg%3E")}
+.mn{--mn-t1:#3987e5;--mn-t2:#eb6834;--mn-t3:#1baf7a;--mn-ex:#eda100;--mn-grid:rgba(222,220,209,.10);--mn-axis:#9c9a92;--mn-mut:#6d6b67;
+  display:grid;gap:16px;margin-top:16px}
+.mn-ctl{display:flex;flex-wrap:wrap;gap:10px 18px;align-items:center}
+.mn-ctl .mn-lbl{font-size:.74rem;letter-spacing:.05em;text-transform:uppercase;color:var(--dim);margin-right:8px}
+.mn-ctl>div{display:flex;align-items:center}
+.mn-price{display:flex;flex-wrap:wrap;gap:10px 14px;align-items:end;padding:12px 14px;border-radius:var(--r-md);background:#151515;border:1px solid rgba(222,220,209,.09)}
+.mn-price label{font-size:.78rem;color:var(--mut)}
+.mn-price select{min-width:12rem;margin-top:4px;padding:6px 8px;font-size:.88rem}
+.mn-price .mn-pst{font-size:.86rem;color:var(--mut);line-height:1.45;flex:1 1 16rem}
+.mn-price .mn-pst b{color:var(--txt);font-weight:600}
+.mn-price .mn-pst.err{color:var(--loss)}
+.mn-take{font-family:var(--f-serif);color:#e5e3da;font-size:1.03rem;line-height:1.6;margin:0}
+.mn-take b{color:var(--txt);font-weight:600}
+.mn-sec{font:600 .74rem var(--f-ui);letter-spacing:.06em;text-transform:uppercase;color:var(--dim);margin:6px 0 -6px}
+.mn-kpi{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.mn-kpi>div{padding:10px 12px;border-radius:var(--r-sm);background:#151515;border:1px solid rgba(222,220,209,.09);min-height:7rem}
+.mn-kpi>div.ex{border-color:rgba(237,161,0,.32)}
+.mn-kpi span{display:block;font-size:.72rem;letter-spacing:.05em;text-transform:uppercase;color:var(--dim)}
+.mn-kpi b{display:block;font:600 1.25rem/1.25 var(--f-serif);color:var(--txt);margin:3px 0 1px}
+.mn-kpi .v{font:600 .95rem var(--f-num);color:var(--txt)}
+.mn-kpi small{display:block;font-size:.76rem;color:var(--mut);margin-top:4px;line-height:1.35}
+.mn-grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,26rem),1fr));gap:14px}
+.mn-card{padding:14px 16px;border-radius:var(--r-md);background:#151515;border:1px solid rgba(222,220,209,.09);min-width:0}
+.mn-card h3{font:600 1.02rem var(--f-ui);color:var(--txt);margin:0}
+.mn-card .mn-note{font-size:.82rem;color:var(--mut);margin:3px 0 10px;line-height:1.45}
+.mn-scroll{overflow-x:auto}
+.mn table{margin-top:0;font-size:.86rem;font-variant-numeric:tabular-nums}
+.mn th{font-size:.72rem;color:var(--dim);text-transform:uppercase;letter-spacing:.04em;padding:6px 8px;white-space:nowrap}
+.mn td{padding:7px 8px;border-bottom:1px solid rgba(222,220,209,.07);vertical-align:top}
+.mn-dt td{white-space:nowrap}
+.mn-dt td:last-child{white-space:normal;min-width:18rem;color:var(--mut);font-size:.8rem}
+.mn td.r,.mn th.r{text-align:right;white-space:nowrap}
+.mn tr.mn-g td{color:var(--dim);font-size:.72rem;letter-spacing:.05em;text-transform:uppercase;padding-top:12px;border-bottom:0}
+.mn tr.ex td:first-child{color:var(--mn-ex);font-weight:600}
+.mn td.cell{position:relative;min-width:7.5rem}
+.mn td.cell i{position:absolute;right:8px;bottom:3px;height:3px;border-radius:2px;opacity:.85}
+.mn td.cell.best span{font-weight:700;color:var(--txt)}
+.mn .mn-w{color:var(--thrust);cursor:help}
+.mn-leg{display:flex;flex-wrap:wrap;gap:14px;font-size:.8rem;color:var(--mut);margin-bottom:6px}
+.mn-leg i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:6px;vertical-align:-1px}
+.mn-chart{position:relative;min-height:20rem}
+.mn-chart.sm{min-height:13rem}
+.mn-chart svg{display:block;width:100%;height:auto;overflow:visible}
+.mn-chart text{font-family:var(--f-ui)}
+.mn .f1{fill:var(--mn-t1)} .mn .f2{fill:var(--mn-t2)} .mn .f3{fill:var(--mn-t3)} .mn .fx{fill:var(--mn-ex)} .mn .fm{fill:var(--mn-mut)}
+.mn .bg1{background:var(--mn-t1)} .mn .bg2{background:var(--mn-t2)} .mn .bg3{background:var(--mn-t3)} .mn .bgx{background:var(--mn-ex)} .mn .bgm{background:var(--mn-mut)}
+.mn .gl{stroke:var(--mn-grid)} .mn .tk{fill:var(--mn-axis);font-size:11px} .mn .lb{fill:var(--txt);font-size:12px} .mn .lb.ex{fill:var(--mn-ex);font-weight:600} .mn .vl{fill:var(--mut);font-size:10px}
+.mn-tt{position:absolute;pointer-events:none;z-index:4;opacity:0;white-space:nowrap;font-size:.8rem;line-height:1.45;padding:6px 10px;border-radius:var(--r-sm);
+  background:#1e1d1c;border:1px solid rgba(222,220,209,.18);box-shadow:0 6px 16px rgba(0,0,0,.45);color:var(--txt)}
+.mn-tt .h{color:var(--mut);margin-bottom:2px}
+.mn-empty{color:var(--mut);font-size:.88rem;padding:24px 0;text-align:center}
+.mn details{border-top:1px solid rgba(222,220,209,.09);padding-top:10px}
+.mn details>summary{cursor:pointer;font:600 1rem var(--f-ui);color:var(--txt);list-style:none}
+.mn details>summary::-webkit-details-marker{display:none}
+.mn details>summary::before{content:"›";display:inline-block;margin-right:10px;color:var(--ion);transition:transform .15s}
+.mn details[open]>summary::before{transform:rotate(90deg)}
+.mn-prose{font-size:.92rem;line-height:1.6;color:#e5e3da;max-width:70rem}
+.mn-prose h4{font:600 .95rem var(--f-ui);color:var(--txt);margin:14px 0 4px}
+.mn-prose ul{padding-left:20px} .mn-prose li{margin:4px 0}
+.mn-prose b{color:var(--txt)}
+.mn-src{font-size:.78rem;color:var(--dim)}
+@media (max-width:720px){.mn-kpi{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:460px){.mn-kpi{grid-template-columns:minmax(0,1fr)}}

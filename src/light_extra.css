@@ -69,3 +69,5 @@ html.light .ov-card,html.light .ov-kpi>div{background:linear-gradient(180deg,#f7
 html.light .ov-bar{background:#e4e1d8;box-shadow:inset 0 1px 2px rgba(0,0,0,.12)}
 html.light .ov-trk .tk{background:#5e5d59}html.light .ov-trk .me{border-color:#fff}
 html.light .ov-leg .cost b{color:#b23b32}
+/* v1.0.23 Minería: los colores de serie en su versión para fondo claro */
+html.light .mn{--mn-t1:#2a78d6;--mn-t2:#d95926;--mn-t3:#199e70;--mn-ex:#b07600;--mn-grid:rgba(31,30,29,.12);--mn-axis:#6d6b67;--mn-mut:#a9a69e}

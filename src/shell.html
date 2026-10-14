@@ -1355,6 +1355,7 @@ body.in-jita #bMore,body.in-jita #more,body.in-jita #vRep,body.in-jita .if-ore{d
 @media(max-width:900px){.ov-row{grid-template-columns:minmax(0,1fr)}}
 @media(max-width:520px){.ov-hd{flex-direction:column;align-items:flex-start}.ov-hd .v-isk{font-size:2rem}.ov-kpi{grid-template-columns:minmax(0,1fr)}.ov-mk-l b{font-size:.8rem}.ov-card{padding:12px}}
 html.lite .ov-card,html.lite .ov-kpi>div{box-shadow:none}
+/*__MINING_CSS__*/
 </style>
 <script>/* v1.0.16: aplica tema y Modo Ligero guardados antes de pintar (sin parpadeo). Por defecto: Dark, sin Modo Ligero. */try{var g=JSON.parse(localStorage.getItem('gestorVentas.ajustes.v1')||'null');if(g&&g.ui){if(g.ui.light)document.documentElement.classList.add('light');if(g.ui.lite)document.documentElement.classList.add('lite');}}catch(e){}</script>
 </head>
@@ -1378,6 +1379,7 @@ html.lite .ov-card,html.lite .ov-kpi>div{box-shadow:none}
   <div class="side-g"><span class="side-h">General</span>
     <button type="button" class="side-i" data-open="bSettings" title="Ajustes: skills, impuestos, ajuste de precios, envío, Buyback e idioma."><span class="ic i-gear" aria-hidden="true"></span><span class="side-l">Ajustes</span></button>
     <button type="button" class="side-i" data-open="bHelp" title="Ayuda: cómo pegar tu inventario y leer el plan."><span class="ic i-help" aria-hidden="true"></span><span class="side-l">Ayuda</span></button>
+    <button type="button" class="side-i" data-open="bMine" title="Minería: qué Barge o Exhumer rinde más en moon ore, hielo y gas, en m³/h e ISK/h."><span class="ic i-rock" aria-hidden="true"></span><span class="side-l">Minería</span></button>
   </div>
 </aside>
 <button type="button" class="side-fab" id="sideFab" aria-label="Abrir menú" title="Menú"><span class="ic i-panel" aria-hidden="true"></span></button>
@@ -1386,6 +1388,7 @@ html.lite .ov-card,html.lite .ov-kpi>div{box-shadow:none}
   <div class="brand"><span class="logo-s sig" aria-hidden="true"></span>SIGMA GRINDSET <small>EVE Online</small></div>
   <nav>
     <button class="ghost" id="bSettings" aria-label="Ajustes" title="Ajustes" aria-pressed="false" aria-controls="settings"><span class="ic i-gear" aria-hidden="true"></span><span class="tb-l">Ajustes</span></button>
+    <button class="ghost" id="bMine" aria-label="Minería" title="Minería" aria-pressed="false" aria-controls="mining"><span class="ic i-rock" aria-hidden="true"></span><span class="tb-l">Minería</span></button>
     <button class="ghost" id="bHelp" aria-label="Ayuda" title="Ayuda" aria-pressed="false" aria-controls="help"><span class="ic i-help" aria-hidden="true"></span><span class="tb-l">Ayuda</span></button>
   </nav>
 </header>
@@ -1463,6 +1466,12 @@ Contraband Freight = no</textarea><small>Una regla por línea: Nombre = tax tota
     </div>
     <h3 class="sub-h" style="margin-top:20px"><span class="ic i-lock" aria-hidden="true"></span>Seguridad</h3>
     <p class="lead">No necesitas introducir contraseña de EVE. La calculadora usa ESI de CCP para consultar datos de mercado y el servicio de imágenes de EVE para los íconos. Los enlaces a Janice, Discord, SIGMA Auth y Buyback se abren por separado. El inventario y los ajustes permanecen en memoria y se pierden al recargar.</p>
+  </section>
+  <section class="panel" id="mining" hidden>
+    <div class="x-wrap"><button type="button" class="x-close" data-close="mining" aria-label="Cerrar Minería" title="Cerrar Minería"></button></div>
+    <h2><span class="ic i-rock" aria-hidden="true"></span>Minería: Barges y Exhumers</h2>
+    <p class="lead">Qué nave saca más moon ore, hielo o gas en cada escalón: Full T1, Full T2 y Facción, con skills a IV o a V. Cuenta módulos, drones, implantes y cuánto tarda en llenarse la bodega. En ISK/h usa el precio de Jita 4-4.</p>
+    <div id="mnRoot"></div>
   </section>
   </div>
   <div class="hero-intro">
