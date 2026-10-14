@@ -1052,3 +1052,13 @@ Minería: Barges y Exhumers (tab y página aparte)
   diccionario y lectura (solo lectura) de «gestorVentas.ajustes.v1» para tema e idioma. CSP: connect-src solo esi.evetech.net.
 - Verificado: node --check, Playwright/Chromium con ESI simulado (m³/h, ISK/h, error de ESI), escritorio 1400 px y móvil 390 px sin desborde,
   tema claro, inglés, abrir/cerrar paneles (Ajustes, Ayuda, Minería) y el botón de la barra lateral; cero errores de consola.
+
+==================== v1.0.24 ====================
+Minería: boosts
+- calc.py: boost_values(ship) = base de la carga × Burst II (1.25) × mindlink (+25% al multiplicador de la carga) × (1 + Mining Director 10%×5)
+  × (1 + bono de casco×5: Porpoise 2%, Orca 3%, Rorqual 5%) × (1 + Industrial Core II: Medium 7.5%, Large 15%, Capital 40%).
+  Optimization (buff 24) baja el ciclo de módulos que piden Mining, Ice Harvesting o Gas Cloud Harvesting; Efficiency (2516) sube la
+  probabilidad de crítico de Mining e Ice Harvesting; residuo (2517) con penalización por apilamiento junto al chipset. Drones: sin boost.
+  Validado: con el core II de 2016 (+30%) da −57.13%, el máximo que publicó CCP.
+- MINE.rows suma la columna boost ('' | Porpoise | Orca | Rorqual): 864 escenarios. MINE.boosts = [{n, core, cycle, crit, residue}].
+- mining.js: S.boost; la clave de fila incluye el boost; .mn-bst explica el boost elegido; el resumen dice el boost.

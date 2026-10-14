@@ -45,6 +45,31 @@ def req_ok(item, sk):
 
 pct = lambda x: 1 + x / 100.0
 
+# ---------------------------------------------------------------- boosts (Mining Foreman Burst)
+# Al máximo: Mining Foreman Burst II, Mining Director V, Mining Foreman Mindlink, bono de casco con su skill a V y
+# el Industrial Core II de cada nave. Igual que Pyfa: el valor del buff = base de la carga × módulo × mindlink ×
+# (1 + Mining Director) × (1 + bono de casco) × (1 + core).
+BOOST_SHIPS = {'Porpoise': ('shipBonusICS2', 'Medium Industrial Core II'),
+               'Orca': ('shipBonusICS2', 'Large Industrial Core II'),
+               'Rorqual': ('shipBonusORECapital2', 'Capital Industrial Core II')}
+def boost_values(ship):
+    if not ship:
+        return None
+    bonus_attr, core = BOOST_SHIPS[ship]
+    k = A('Mining Foreman Burst II')['warfareBuff1Value'] * pct(A('Mining Foreman Mindlink')['mindlinkBonus']) \
+        * pct(A('Mining Director')['commandStrengthBonus'] * 5) * pct(A(ship)[bonus_attr] * 5) \
+        * pct(A(core)['industrialCoreBonusMiningBurstStrength'])
+    opt, eff = A('Mining Laser Optimization Charge'), A('Mining Laser Efficiency Charge')
+    return dict(ship=ship, core=core, k=round(k, 4), cycle=opt['warfareBuff1Multiplier'] * k,      # % ciclo (negativo)
+                crit=eff['warfareBuff1Multiplier'] * k, residue=eff['warfareBuff3Multiplier'] * k)  # % prob. crítico, % residuo
+def stack(mults):
+    # penalización por apilamiento de EVE (para el residuo: chipset + burst)
+    import math
+    out = 1.0
+    for i, m in enumerate(sorted(mults, key=lambda x: abs(x - 1), reverse=True)):
+        out *= 1 + (m - 1) * math.exp(-(i / 2.67) ** 2)
+    return out
+
 # ---------------------------------------------------------------- fits
 FITS = {
  'moon': {
@@ -70,7 +95,7 @@ IMPLANTS = {'moon': ["Inherent Implants 'Highwall' Mining MX-1005", "Michi's Exc
             'ice': ["Inherent Implants 'Yeti' Ice Harvesting IH-1005"],
             'gas': ["Eifyr and Co. 'Alchemist' Gas Harvesting GH-805"]}
 
-def calc(ship, mat, tier, level, implants=True, rigs_override=None, mid_override='__tier__'):
+def calc(ship, mat, tier, level, implants=True, rigs_override=None, mid_override='__tier__', boost=None):
     sh = A(ship); sk = skills(level, ship); fit = dict(FITS[mat][tier]); notes = []
     if rigs_override is not None: fit['rigs'] = rigs_override
     if mid_override != '__tier__': fit['mid'] = mid_override
@@ -117,13 +142,18 @@ def calc(ship, mat, tier, level, implants=True, rigs_override=None, mid_override
         dur *= pct(sh.get('exhumersBonusGasHarvestingDuration', 0) * lvl('Exhumers'))
         dur *= pct(sh.get('shipRoleBonusGasHarvesterDuration', 0))
         if implants: dur *= pct(A(IMPLANTS['gas'][0])['durationBonus'])
+    B = boost_values(boost)
+    if B:
+        dur *= pct(B['cycle'])  # Mining Laser Optimization: strip miners, ice y gas harvesters
     # crits (strip miners & ice harvesters only; gas harvesters have no crit attributes)
     crit_p = H.get('miningCritChance', 0); crit_b = H.get('miningCritBonusYield', 0)
     chip = A(fit['mid']) if fit['mid'] else {}
     crit_p *= pct(A('Mining Precision')['miningCritChanceBonus'] * lvl('Mining Precision')) * pct(chip.get('miningCritChanceBonus', 0))
     crit_b *= pct(A('Mining Exploitation')['miningCritBonusYieldBonus'] * lvl('Mining Exploitation')) * pct(chip.get('miningCritBonusYieldBonus', 0))
     # residue
-    waste_p = H['miningWasteProbability'] * pct(chip.get('miningWasteProbabilityBonus', 0))
+    if B and H.get('miningCritChance'):
+        crit_p *= pct(B['crit'])  # Mining Laser Efficiency: solo strip miners y ice harvesters
+    waste_p = H['miningWasteProbability'] * stack([pct(chip.get('miningWasteProbabilityBonus', 0))] + ([pct(B['residue'])] if B else []))
     base_mph = nH * amount / (dur / 1000) * 3600
     mod_mph = base_mph * (1 + crit_p * crit_b)
     # drones
@@ -178,9 +208,9 @@ MIDPOOL = {'T1': ['Mining Survey Chipset I', 'ML-3 Compact Mining Survey Chipset
            'T2': ['Mining Survey Chipset II', 'ML-3 Compact Mining Survey Chipset', None],
            'Faction': ['Republic Fleet Mining Survey Chipset', 'Mining Survey Chipset II', 'ML-3 Compact Mining Survey Chipset', None]}
 
-def best(ship, mat, tier, level, implants=True):
+def best(ship, mat, tier, level, implants=True, boost=None):
     if mat == 'gas':
-        return calc(ship, mat, tier, level, implants, rigs_override=[], mid_override=None)
+        return calc(ship, mat, tier, level, implants, rigs_override=[], mid_override=None, boost=boost)
     sh = A(ship); nslots = int(sh['rigSlots'])
     pool = RIGPOOL[mat]['T1' if tier == 'T1' else 'T2'] + [None]
     cands = []
@@ -188,7 +218,7 @@ def best(ship, mat, tier, level, implants=True):
         cost = sum(A(r)['upgradeCost'] for r in combo if r)
         if cost > sh['upgradeCapacity']: continue
         for mi, mid in enumerate(MIDPOOL[tier]):
-            r = calc(ship, mat, tier, level, implants, rigs_override=list(combo), mid_override=mid)
+            r = calc(ship, mat, tier, level, implants, rigs_override=list(combo), mid_override=mid, boost=boost)
             if r['fits']:
                 cands.append((-mi, r['total_mph'], -len(r['rigs']), r))
     cands.sort(key=lambda x: x[:3], reverse=True)

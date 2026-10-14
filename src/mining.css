@@ -6,13 +6,16 @@
   display:grid;gap:16px;margin-top:16px}
 .mn-ctl{display:flex;flex-wrap:wrap;gap:10px 18px;align-items:center}
 .mn-ctl .mn-lbl{font-size:.74rem;letter-spacing:.05em;text-transform:uppercase;color:var(--dim);margin-right:8px}
-.mn-ctl>div{display:flex;align-items:center}
+.mn-ctl>div{display:flex;align-items:center;flex-wrap:wrap;gap:4px 0;min-width:0;max-width:100%}
+.mn .pk-flt{flex-wrap:wrap;max-width:100%}
 .mn-price{display:flex;flex-wrap:wrap;gap:10px 14px;align-items:end;padding:12px 14px;border-radius:var(--r-md);background:#151515;border:1px solid rgba(222,220,209,.09)}
 .mn-price label{font-size:.78rem;color:var(--mut)}
 .mn-price select{min-width:12rem;margin-top:4px;padding:6px 8px;font-size:.88rem}
 .mn-price .mn-pst{font-size:.86rem;color:var(--mut);line-height:1.45;flex:1 1 16rem}
 .mn-price .mn-pst b{color:var(--txt);font-weight:600}
 .mn-price .mn-pst.err{color:var(--loss)}
+.mn-bst{margin:0;font-size:.86rem;color:var(--mut);line-height:1.5;padding:8px 12px;border-radius:var(--r-sm);border:1px solid rgba(222,220,209,.09);background:#151515}
+.mn-bst b{color:var(--txt);font-weight:600}
 .mn-take{font-family:var(--f-serif);color:#e5e3da;font-size:1.03rem;line-height:1.6;margin:0}
 .mn-take b{color:var(--txt);font-weight:600}
 .mn-sec{font:600 .74rem var(--f-ui);letter-spacing:.06em;text-transform:uppercase;color:var(--dim);margin:6px 0 -6px}
