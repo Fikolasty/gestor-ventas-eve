@@ -67,7 +67,7 @@ CHANGELOG.md          ← cambios por versión
 ### Generar la página
 Solo necesitas Python 3, sin dependencias:
 ```
-python3 build.py 1.0.27
+python3 build.py 1.0.28
 ```
 Eso escribe `index.html` y `mineria.html` con la versión indicada.
 

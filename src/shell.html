@@ -1359,21 +1359,21 @@ body.in-jita #bMore,body.in-jita #more,body.in-jita #vRep,body.in-jita .if-ore{d
 .appr{padding:14px 16px;border-radius:var(--r-md);background:linear-gradient(180deg,rgba(30,30,29,.92),rgba(21,21,21,.92));border:1px solid rgba(222,220,209,.12);
   box-shadow:inset 0 1px 0 rgba(255,255,255,.05),0 2px 4px rgba(0,0,0,.45),0 8px 18px rgba(0,0,0,.3);min-width:0;display:flex;flex-direction:column;gap:10px}
 .appr-tag{display:inline-block;align-self:flex-start;font-weight:600;font-size:.8rem;color:#1f1e1d;background:#d6d4cb;border-radius:999px;padding:1px 10px}
-.appr-g{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));margin:0;border:1px solid rgba(222,220,209,.10);border-radius:10px;overflow:hidden;background:#0f0f0f;box-shadow:inset 0 1px 3px rgba(0,0,0,.6)}
-.appr-g>div{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:9px 12px;border-bottom:1px solid rgba(222,220,209,.07);min-width:0}
-.appr-g>div:nth-child(odd){border-right:1px solid rgba(222,220,209,.07)}
-.appr-g>div:nth-last-child(-n+2){border-bottom:0}
+.appr-g{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));border:1px solid rgba(222,220,209,.10);border-radius:10px;overflow:hidden;background:#0f0f0f;box-shadow:inset 0 1px 3px rgba(0,0,0,.6)}
+.appr-c{margin:0;min-width:0}
+.appr-c+.appr-c{border-left:1px solid rgba(222,220,209,.07)}
+.appr-c>div{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:9px 12px;border-bottom:1px solid rgba(222,220,209,.07);min-width:0}
+.appr-c>div:last-child{border-bottom:0}
 .appr-g dt{color:var(--mut);font-size:.86rem;white-space:nowrap}
-.appr-g dd{margin:0;font:600 .95rem var(--f-num);text-align:right;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.appr-g dd{margin:0;font:600 .95rem var(--f-num);text-align:right;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--txt)}
 .appr-g dd .copy{margin:0;padding:2px 8px;font:inherit;background:none!important;border:0;box-shadow:none!important}
 .appr-g .t-buy dd,.appr-g .t-buy dd .copy{color:#ff9a9a!important}.appr-g .t-split dd,.appr-g .t-split dd .copy{color:#ecc27e!important}.appr-g .t-sell dd,.appr-g .t-sell dd .copy{color:#7fe0a6!important}
 @media(max-width:980px){.hero-intro{grid-template-columns:minmax(0,1fr)!important}}
-@media(max-width:520px){.appr-g .meta{order:2}.appr-g{grid-template-columns:minmax(0,1fr)}.appr-g>div:nth-child(odd){border-right:0}.appr-g>div:nth-last-child(2){border-bottom:1px solid rgba(222,220,209,.07)}}
+@media(max-width:520px){.appr-g{grid-template-columns:minmax(0,1fr)}.appr-c+.appr-c{border-left:0;border-top:1px solid rgba(222,220,209,.07)}}
 
 /* v1.0.23: rótulos de los controles del menú (Dirección / En) */
 .route>.route-cap{display:block!important;font-size:.62rem!important;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);margin:4px 0 -4px 6px!important;padding:0!important;background:none!important;border:0!important;box-shadow:none!important;min-height:0!important;height:auto!important}
 body.side-c .route>.route-cap{display:none!important}
-.appr-g>div.meta dd{color:var(--txt)}
 /*__MINING_CSS__*/
 
 /* v1.0.25: sin ítems no hay tasación: las dos tarjetas lado a lado */

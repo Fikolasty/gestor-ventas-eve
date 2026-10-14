@@ -2016,13 +2016,16 @@ function paintAppraisal(){
   // v1.0.25: la tasación solo aparece con ítems pegados; sin ítems, las tarjetas ocupan todo el ancho
   box.hidden=!its.length;box.parentNode.classList.toggle('no-appr',!its.length);if(!its.length)return;
   let vB=0,vS=0,vol=0,u=0;its.forEach(o=>{vol+=(o.m3u||0)*o.qty;u+=o.qty;});priced.forEach(o=>{vB+=o.jita.buy*o.qty;vS+=o.jita.sell*o.qty;});
-  const g=el('dl','appr-g'),cell=(k,v,c,cp)=>{const d=el('div',c||null);d.append(el('dt',null,k));const dd=el('dd','num');if(typeof v==='number'){dd.append(copyBtn(String(Math.round(v)),fmt(v)));}else if(cp!=null){dd.append(copyBtn(cp,v));}else dd.textContent=v;d.append(dd);g.append(d);};
+  // v1.0.28: dos columnas fijas, como Janice: datos del lote a la izquierda y los tres precios juntos a la derecha
+  const g=el('div','appr-g'),colL=el('dl','appr-c'),colR=el('dl','appr-c appr-p');
+  const cell=(col,k,v,c,cp)=>{const d=el('div',c||null);d.append(el('dt',null,k));const dd=el('dd','num');
+    if(typeof v==='number')dd.append(copyBtn(String(Math.round(v)),fmt(v)));else if(cp!=null)dd.append(copyBtn(cp,v));else dd.textContent=v;d.append(dd);col.append(d);};
   const ok=priced.length>0;
-  // filas como Janice: dato a la izquierda · valor del lote a la derecha
-  cell('Precios de','Jita 4-4','meta');cell('Buy',ok?vB:'—','t-buy');
-  cell('Volumen',fmtV(Math.round(vol*100)/100),'meta',String(Math.round(vol*100)/100)); // v1.0.26: clic copia el número (m³)cell('Split',ok?(vB+vS)/2:'—','t-split');
-  cell('Ítems',its.length+(its.length===1?' ítem · ':' ítems · ')+fmtQ(u)+' u.'+(priced.length<its.length?' ('+priced.length+' con precio)':'')+(S.loading?' · cargando…':''),'meta');cell('Sell',ok?vS:'—','t-sell');
-  box.append(el('span','appr-tag','Tasación'),g);
+  cell(colL,'Precios de','Jita 4-4');
+  cell(colL,'Volumen',fmtV(Math.round(vol*100)/100),null,String(Math.round(vol*100)/100)); // clic copia el número (m³)
+  cell(colL,'Ítems',its.length+(its.length===1?' ítem · ':' ítems · ')+fmtQ(u)+' u.'+(priced.length<its.length?' ('+priced.length+' con precio)':'')+(S.loading?' · cargando…':''));
+  cell(colR,'Buy',ok?vB:'—','t-buy');cell(colR,'Split',ok?(vB+vS)/2:'—','t-split');cell(colR,'Sell',ok?vS:'—','t-sell');
+  g.append(colL,colR);box.append(el('span','appr-tag','Tasación'),g);
 }
 function refreshNow(){
   if(refQ){cancelAnimationFrame(refQ);refQ=0;}

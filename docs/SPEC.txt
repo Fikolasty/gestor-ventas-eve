@@ -1094,3 +1094,6 @@ Comparativa Minera (antes «Minería»): plan para Omega nuevo
 
 ==================== v1.0.27 ====================
 - paintAppraisal: cell(k,v,c,cp) acepta un texto a copiar; el Volumen copia el número en m³ (sin separadores ni unidad).
+
+==================== v1.0.28 ====================
+- paintAppraisal: #appr .appr-g con dos <dl class="appr-c">: datos (Precios de, Volumen, Ítems) | precios (Buy, Split, Sell). En móvil una columna.

@@ -2,6 +2,12 @@
 
 Cambios por versión del Gestor de Ventas. La más nueva arriba. El detalle técnico completo está en `docs/SPEC.txt`.
 
+## 1.0.28 — Tasación con los precios juntos
+*2026-10-14*
+
+- Tasación en dos columnas fijas, como Janice: a la izquierda Precios de (Jita 4-4), Volumen e Ítems; a la derecha los tres precios juntos: Buy, Split y Sell.
+- Arreglado: en la 1.0.27 el Split no aparecía y los precios salían mezclados con los datos.
+
 ## 1.0.27 — Volumen copiable en la tasación
 *2026-10-14*
 
