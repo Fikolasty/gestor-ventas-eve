@@ -7,7 +7,7 @@
 <meta name="referrer" content="no-referrer">
 <title>PLAN &amp; GESTOR VENTAS</title>
 <style>
-/* ================= Gestor de Ventas v1.0.7 =================
+/* ================= Gestor de Ventas v1.0.8 =================
    Paleta: azul de base, naranja = acción, verde/rojo = ganancia/pérdida.
    Sin backdrop-filter: el vidrio se finge con rgba + bordes. */
 *{box-sizing:border-box;margin:0;padding:0}
@@ -179,7 +179,7 @@ details.panel>summary h2 .logo+.logo{margin-left:-4px}
 .prices .muted{color:var(--dim);font-size:.85rem}
 /* ---------- libro de lotes ---------- */
 .ledger-tools{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin:14px 0 12px}
-.ledger-head,.lot-head{display:grid;grid-template-columns:minmax(0,1fr) 110px 170px 170px 22px;gap:14px;align-items:center}
+.ledger-head,.lot-head{display:grid;grid-template-columns:minmax(0,1fr) 150px 100px 170px 170px 22px;gap:14px;align-items:center}
 .ledger-head{font-size:.85rem;color:var(--dim);padding:0 14px 6px;border-bottom:1px solid var(--line)}
 .ledger-head span:nth-child(n+2){text-align:right}
 .lot{border-bottom:1px solid var(--line)}
@@ -816,7 +816,8 @@ html.lite .panel,html.lite .ct,html.lite .alt-grid>div,html.lite .rx-c,html.lite
   .ship-t td{border:none!important;padding:2px 6px!important;min-width:0;overflow-wrap:anywhere}
 
   .ledger-head{display:none}
-  .lot-head{grid-template-columns:minmax(0,1fr) auto 22px;grid-template-areas:"name name chev" "qty net chev" ". dest chev";row-gap:4px}
+  .lot-head{grid-template-columns:minmax(0,1fr) auto 22px;grid-template-areas:"name name chev" "qty net chev" "pp dest chev";row-gap:4px}
+  .lot-pp{grid-area:pp;justify-self:start}
   .lot-name{grid-area:name}.lot-net{grid-area:net}.lot-qty{grid-area:qty;text-align:left;color:var(--mut);font-size:.85rem}.lot-dest{grid-area:dest}.chev{grid-area:chev}
   .lot-body{grid-template-columns:minmax(0,1fr);padding:6px 4px 18px}
   .opt{grid-template-columns:minmax(0,1fr) auto;row-gap:4px}
@@ -1082,6 +1083,377 @@ html.lite .ct,html.lite .sh-card,html.lite .scn>div,html.lite fieldset.st,html.l
 .sw input:focus-visible+.sw-t{outline:2px solid #d6d4cb;outline-offset:2px}
 html.lite .sw-t,html.lite .sw-t::after{transition:none}
 .route-m{padding:4px 6px 4px 10px;border-radius:10px;background:rgba(21,21,21,.75);border:1px solid rgba(222,220,209,.12)}
+/* v1.0.8: Ajustes y Ayuda arriba, con X fija y secciones desplegables */
+.top-slot{margin-top:18px;display:grid;gap:14px}
+.top-slot>.panel{margin:0}
+.x-wrap{position:sticky;top:12px;height:0;z-index:6;display:flex;justify-content:flex-end}
+.x-close{width:36px;height:36px;margin:-10px -8px 0 0;border-radius:10px;display:grid;place-items:center;background:#151515;border:1px solid rgba(222,220,209,.18);color:var(--txt);
+  box-shadow:0 2px 4px rgba(0,0,0,.45),0 6px 14px rgba(0,0,0,.35)}
+.x-close::before{content:"";width:16px;height:16px;background:currentColor;-webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round'%3E%3Cpath d='M6 6l12 12M18 6L6 18'/%3E%3C/svg%3E") center/contain no-repeat;mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round'%3E%3Cpath d='M6 6l12 12M18 6L6 18'/%3E%3C/svg%3E") center/contain no-repeat}
+.x-close:hover{border-color:var(--clay);color:#fff;background:#1c1a19}
+#settings .st-wrap{grid-template-columns:minmax(0,1fr)!important;gap:8px!important}
+#settings fieldset.st{padding:0 16px!important}
+#settings fieldset.st>legend{float:left;width:100%;display:flex;align-items:center;gap:8px;padding:14px 0!important;margin:0;cursor:pointer;user-select:none}
+#settings fieldset.st>legend::after{content:"";margin-left:auto;width:14px;height:14px;background:var(--mut);transition:transform .15s;-webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E") center/contain no-repeat;mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E") center/contain no-repeat}
+#settings fieldset.st:not(.closed)>legend::after{transform:rotate(180deg)}
+#settings fieldset.st>legend:hover{color:#fff}
+#settings fieldset.st>legend:focus-visible{outline:2px solid #d6d4cb;outline-offset:2px;border-radius:6px}
+#settings fieldset.st>legend+*{clear:both}
+#settings fieldset.st:not(.closed){padding-bottom:16px!important}
+#settings fieldset.st.closed>*:not(legend){display:none!important}
+#settings .st-g{grid-template-columns:repeat(auto-fill,minmax(230px,1fr))!important;align-items:start}
+#settings fieldset.st-full .st-g{grid-template-columns:repeat(auto-fill,minmax(230px,1fr))!important}
+#settings .st-f.st-w{grid-column:1/-1}
+.st-tools{display:flex;gap:8px;justify-content:flex-end;margin:12px 0 4px}
+.st-tools .ghost{padding:5px 12px;font-size:.84rem}
+/* v1.0.8: viñeta negra sobre la imagen de fondo (modo normal); en Modo ligero no hay viñeta */
+body::after{background:radial-gradient(120% 95% at 50% 42%,rgba(0,0,0,0) 38%,rgba(0,0,0,.5) 72%,rgba(0,0,0,.92) 100%)!important}
+html.lite body::after{background:none!important}
+/* v1.0.8: precio por unidad en la fila (copiable) */
+.lot-head{cursor:pointer}
+.lot-head:focus-visible{outline:2px solid #d6d4cb;outline-offset:-2px}
+.lot-pp{justify-self:end}
+.lot-pp .copy{width:auto;margin:0;padding:4px 10px;font-size:.88rem;text-align:right;white-space:nowrap}
+.lot-pp .copy:disabled{opacity:.45;cursor:default}
+.ledger-col{font-size:.85rem;color:var(--dim);text-align:right;padding-right:4px}
+.res-b ul.why>li{background:none!important;border:0!important;box-shadow:none!important}
+@media(max-width:600px){.lot-head{grid-template-areas:"name name chev" "qty net chev" "dest dest chev" "pp pp chev"!important}.lot-dest{justify-self:start}.lot-pp{justify-self:start!important}.ledger-col{display:none}}
+/* ===== tema claro (generado desde el oscuro por light.py) ===== */
+html.light{--void:#f7f6f5;--hull:#f5f4f2;--hull2:#f4f3f0;--line:rgba(31,30,29,0.114);--line2:rgba(31,30,29,0.125);--txt:#1c1c1a;--mut:#54524d;--dim:#6c6a64;--ion:#413f3c;--blue:#a39d8b;--clay:#c96442;--thrust:#a67526;--gain:#418b62;--loss:#a92c23}
+html.light body::after{background:repeating-linear-gradient(180deg,rgba(31,30,29,0.011) 0 1px,transparent 1px 3px),
+  radial-gradient(40% 50% at 18% 45%,rgba(31,30,29,0.057),transparent 70%),
+  radial-gradient(45% 40% at 92% 6%,rgba(31,30,29,0.095),transparent 70%),
+  linear-gradient(90deg,rgba(255,255,255,0.6) 0%,rgba(255,255,255,0.6) 45%,rgba(255,255,255,0.6) 75%,rgba(255,255,255,0.6) 100%),
+  linear-gradient(180deg,rgba(255,255,255,0.6) 0%,rgba(255,255,255,0.6) 10%,rgba(255,255,255,0.6) 62%,rgba(255,255,255,0.6) 100%)}
+html.light .who{border:1px solid rgba(53,194,110,0.438)}
+html.light .btn{color:#151514;background:linear-gradient(180deg,#c96442,#c96442);box-shadow:0 6px 14px rgba(217,119,87,0.4),inset 0 1px 0 rgba(31,30,29,0.427)}
+html.light .ghost{background:rgba(255,255,255,0.6)}
+html.light .ghost:hover,html.light .ghost[aria-pressed="true"]{border-color:rgba(31,30,29,0.285)}
+html.light input,html.light select,html.light textarea{background:rgba(255,255,255,0.85)}
+html.light input:focus,html.light select:focus,html.light textarea:focus{box-shadow:0 0 0 3px rgba(31,30,29,0.103)}
+html.light .hero>p{color:#413f3c}
+html.light .paste{background:rgba(255,255,255,0.92);box-shadow:0 8px 14px rgba(0,0,0,0.072)}
+html.light textarea{scrollbar-color:rgba(31,30,29,0.199) transparent}
+html.light textarea::-webkit-scrollbar-thumb{background:rgba(31,30,29,0.171)}
+html.light .panel{background:linear-gradient(180deg,rgba(255,255,255,0.94),rgba(255,255,255,0.96));box-shadow:0 8px 14px rgba(0,0,0,0.072),inset 0 1px 0 rgba(31,30,29,0.048)}
+html.light .split{background:rgba(31,30,29,0.057)}
+html.light .cmp td.bestc{background:rgba(53,194,110,0.125);box-shadow:inset 0 0 0 1px rgba(53,194,110,0.5)}
+html.light .guide{background:linear-gradient(180deg,rgba(31,30,29,0.095),rgba(31,30,29,0.038));border:1px solid rgba(31,30,29,0.125);box-shadow:inset 0 1px 0 rgba(31,30,29,0.057),0 6px 14px rgba(0,0,0,0.048)}
+html.light .guide li::before{box-shadow:0 0 10px rgba(31,30,29,0.228)}
+html.light .msg{background:rgba(255,255,255,0.85);box-shadow:inset 0 2px 6px rgba(0,0,0,0.088)}
+html.light .dest{background:linear-gradient(180deg,rgba(255,255,255,0.9),rgba(255,255,255,0.95));box-shadow:inset 0 1px 0 rgba(31,30,29,0.057),0 4px 10px rgba(0,0,0,0.056)}
+html.light .dest[aria-pressed="true"]{border-color:rgba(31,30,29,0.342);box-shadow:0 0 0 3px rgba(31,30,29,0.114),inset 0 1px 0 rgba(31,30,29,0.076),0 6px 14px rgba(0,0,0,0.064)}
+html.light .p-disc{color:#413f3c;border-color:rgba(31,30,29,0.285);background:rgba(31,30,29,0.095)}
+html.light .receipt{background:rgba(255,255,255,0.6);box-shadow:inset 0 2px 6px rgba(0,0,0,0.072)}
+html.light .lot-head:hover{background:rgba(31,30,29,0.057)}
+html.light .lot.open .lot-head{background:rgba(31,30,29,0.067)}
+html.light .p-null{border-color:rgba(53,194,110,0.562);background:rgba(53,194,110,0.1)}
+html.light .p-jita{border-color:rgba(31,30,29,0.314);background:rgba(31,30,29,0.095)}
+html.light .p-none{border-color:rgba(217,119,87,0.562);background:rgba(217,119,87,0.1)}
+html.light .tag.ok{border-color:rgba(53,194,110,0.438)}
+html.light .tag.warn{border-color:rgba(217,119,87,0.562)}
+html.light .opt-bar{background:rgba(31,30,29,0.048)}
+html.light .opt-bar i{background:rgba(31,30,29,0.257)}
+html.light .copy{border:1px solid rgba(31,30,29,0.228);background:rgba(31,30,29,0.095)}
+html.light .copy:hover{background:rgba(31,30,29,0.114)}
+html.light .stats div{background:rgba(255,255,255,0.92)}
+html.light .call{background:rgba(31,30,29,0.057)}
+html.light .panel{box-shadow:inset 0 1px 0 rgba(31,30,29,0.076),inset 0 -1px 0 rgba(0,0,0,0.08),
+    0 1px 2px rgba(0,0,0,0.08),0 8px 14px rgba(0,0,0,0.056),0 8px 14px rgba(0,0,0,0.072)}
+html.light .panel::before{background:linear-gradient(90deg,transparent,rgba(31,30,29,0.314),rgba(31,30,29,0.199),transparent)}
+html.light .verdict{background:radial-gradient(120% 90% at 0% 0%,rgba(53,194,110,0.125),transparent 55%),
+  linear-gradient(180deg,rgba(255,255,255,0.96),rgba(255,255,255,0.97));border-color:rgba(31,30,29,0.125)}
+html.light .split{box-shadow:inset 0 2px 4px rgba(0,0,0,0.096),0 1px 0 rgba(31,30,29,0.048)}
+html.light .split .s-null{background:linear-gradient(180deg,#27a558,#27a95b);box-shadow:0 0 12px rgba(53,194,110,0.562)}
+html.light .split .s-jita{background:linear-gradient(180deg,#5e5c57,#a39d8b);box-shadow:0 0 12px rgba(31,30,29,0.257)}
+html.light .stats div{background:linear-gradient(180deg,rgba(255,255,255,0.95),rgba(255,255,255,0.97));box-shadow:inset 0 1px 0 rgba(31,30,29,0.067),0 2px 4px rgba(0,0,0,0.072),0 8px 14px rgba(0,0,0,0.056)}
+html.light .paste{box-shadow:inset 0 1px 0 rgba(31,30,29,0.057),0 2px 4px rgba(0,0,0,0.08),0 8px 14px rgba(0,0,0,0.072),0 8px 14px rgba(0,0,0,0.056)}
+html.light .paste:focus-within{border-color:rgba(31,30,29,0.285);box-shadow:0 0 0 4px rgba(31,30,29,0.095),0 8px 14px rgba(0,0,0,0.072),0 8px 14px rgba(0,0,0,0.056)}
+html.light .lot.open{background:linear-gradient(180deg,rgba(255,255,255,0.75),rgba(255,255,255,0.85));box-shadow:inset 0 1px 0 rgba(31,30,29,0.067),0 4px 8px rgba(0,0,0,0.064),0 8px 14px rgba(0,0,0,0.072)}
+html.light .opt-bar{box-shadow:inset 0 1px 3px rgba(0,0,0,0.096)}
+html.light .opt-bar i{background:linear-gradient(180deg,rgba(31,30,29,0.342),rgba(31,30,29,0.257))}
+html.light .opt.best .opt-bar i{background:linear-gradient(180deg,#27a558,#27a95b);box-shadow:0 0 10px rgba(53,194,110,0.688)}
+html.light .opt.best.ship .opt-bar i{background:linear-gradient(180deg,#5e5c57,#a39d8b);box-shadow:0 0 10px rgba(31,30,29,0.314)}
+html.light .pill{box-shadow:inset 0 1px 0 rgba(31,30,29,0.114),0 2px 6px rgba(0,0,0,0.056)}
+html.light .copy{box-shadow:inset 0 1px 0 rgba(31,30,29,0.076),0 2px 5px rgba(0,0,0,0.064)}
+html.light .call{box-shadow:inset 3px 0 12px rgba(31,30,29,0.114),0 4px 12px rgba(0,0,0,0.048)}
+html.light input,html.light select,html.light textarea{box-shadow:inset 0 2px 5px rgba(0,0,0,0.088)}
+html.light .ghost{box-shadow:inset 0 1px 0 rgba(31,30,29,0.057),0 2px 6px rgba(0,0,0,0.056)}
+html.light .receipt .rw .reco .ic{color:#c96442}
+html.light .btn{box-shadow:inset 0 1px 0 rgba(31,30,29,0.266),0 6px 14px rgba(0,0,0,0.072),0 0 18px rgba(217,119,87,0.35)!important}
+html.light .btn:hover{color:#151514}
+html.light .ghost,html.light .dest{box-shadow:inset 0 1px 0 rgba(31,30,29,0.076),0 4px 12px rgba(0,0,0,0.072)!important}
+html.light .ghost:hover,html.light .dest:hover{border-color:rgba(31,30,29,0.314)}
+html.light .copy{box-shadow:inset 0 1px 0 rgba(31,30,29,0.095),0 2px 4px rgba(0,0,0,0.072)!important}
+html.light .copy:hover{border-color:rgba(31,30,29,0.399)}
+html.light .locked input{background:rgba(255,255,255,0.6)!important}
+html.light .v-stats>div{background:rgba(255,255,255,0.6);box-shadow:inset 0 1px 0 rgba(31,30,29,0.048),0 6px 14px rgba(0,0,0,0.048)}
+html.light .alt-grid>div{background:linear-gradient(180deg,rgba(255,255,255,0.95),rgba(255,255,255,0.97));box-shadow:inset 0 1px 0 rgba(31,30,29,0.067),0 2px 4px rgba(0,0,0,0.072),0 8px 14px rgba(0,0,0,0.056)}
+html.light .tab{background:rgba(255,255,255,0.7);box-shadow:inset 0 1px 0 rgba(31,30,29,0.057),0 3px 9px rgba(0,0,0,0.064)}
+html.light .tab[aria-selected="true"]{color:#151514;border-color:rgba(31,30,29,0.342);background:linear-gradient(180deg,rgba(31,30,29,0.182),rgba(31,30,29,0.08));box-shadow:inset 0 1px 0 rgba(31,30,29,0.095),0 4px 12px rgba(0,0,0,0.072),0 0 14px rgba(31,30,29,0.114)}
+html.light .pl{background:rgba(255,255,255,0.6);box-shadow:inset 0 1px 0 rgba(31,30,29,0.038),0 8px 14px rgba(0,0,0,0.056)}
+html.light .pl-head{background:rgba(31,30,29,0.019)}
+html.light .pl-g .reco .ic{color:#c96442}
+html.light .pl-row.total{background:rgba(53,194,110,0.088)}
+html.light .pl-row.miss .n{color:var(--warn,#c96442)}
+html.light .lamp{background:#a39d8b;box-shadow:inset 0 -2px 3px rgba(0,0,0,0.072),0 0 0 2px rgba(0,0,0,0.056)}
+html.light .lamp.pos{background:radial-gradient(circle at 35% 30%,#0ac24e,#35c26e 55%,#e4f1ea);box-shadow:0 0 10px rgba(53,194,110,0.8),0 0 22px rgba(53,194,110,0.562)}
+html.light .lamp.neg{background:radial-gradient(circle at 35% 30%,#c20a0a,#c20a0a 55%,#a02525);box-shadow:0 0 10px rgba(194,10,10,0.8),0 0 22px rgba(255,95,95,0.562)}
+html.light .pl-g .reco{color:#33322f;background:linear-gradient(90deg,rgba(217,119,87,0.163),rgba(217,119,87,0.037));border-left:3px solid #c96442}
+html.light .pl-g .reco b{color:#a34a29}
+html.light .pl-g .reco .ic{color:#c96442}
+html.light .lnk{color:#282725!important;border-color:rgba(31,30,29,0.314)!important;background:rgba(31,30,29,0.091)!important}
+html.light .lnk:hover{background:rgba(31,30,29,0.16)!important}
+html.light .spin{border:3px solid rgba(31,30,29,0.114)}
+html.light .ld-track{background:rgba(31,30,29,0.067)}
+html.light .ld-track i{background:linear-gradient(90deg,#a39d8b,var(--ion))}
+html.light .hero>p,html.light .hero .tagline{color:#33322f}
+html.light .rw small.rep-no{color:#c20a0a}
+html.light .rw small.rep-yes{color:#2e9e5b}
+html.light .summary{border-left:3px solid #c96442}
+html.light .summary h2 .ic{color:#c96442}
+html.light .summary p{color:#33322f}
+html.light .v-what{color:#27a555;background:rgba(53,194,110,0.175);border:1px solid rgba(53,194,110,0.562)}
+html.light .v-stats dd.neg-soft{color:#c20a0a}
+html.light .t-red{color:#c20a0a}
+html.light .t-red::before{background:#c20a0a;box-shadow:0 0 6px rgba(194,10,10,0.8)}
+html.light .t-amb{color:#a34a29}
+html.light .t-amb::before{background:#c96442;box-shadow:0 0 6px rgba(201,100,66,0.8)}
+html.light .t-grn{color:#2e9e5b}
+html.light .t-grn::before{background:#35c26e;box-shadow:0 0 6px rgba(53,194,110,0.8)}
+html.light .rl input{accent-color:#c96442}
+html.light .rl span{color:#a34a29}
+html.light .nc.pos{color:#309c5b}
+html.light .nc.neg{color:#c20a0a}
+html.light .neg-soft{color:#c20a0a}
+html.light img.ti{background:rgba(31,30,29,0.038);box-shadow:0 0 0 1px rgba(31,30,29,0.076)}
+html.light .scn>div{background:linear-gradient(180deg,rgba(255,255,255,0.95),rgba(255,255,255,0.97));box-shadow:inset 0 1px 0 rgba(31,30,29,0.067),0 4px 10px rgba(0,0,0,0.056)}
+html.light .scn>div.win{border-color:rgba(53,194,110,0.688);box-shadow:inset 0 1px 0 rgba(31,30,29,0.067),0 0 0 1px rgba(53,194,110,0.312),0 4px 10px rgba(0,0,0,0.056)}
+html.light .scn li{border-bottom:1px dashed rgba(31,30,29,0.048)}
+html.light .fastbox{border:1px solid rgba(31,30,29,0.257);background:linear-gradient(90deg,rgba(31,30,29,0.091),rgba(31,30,29,0.038));box-shadow:inset 0 1px 0 rgba(31,30,29,0.057),0 4px 10px rgba(0,0,0,0.048)}
+html.light .fb-h .ic{color:#5e5c57}
+html.light .fb-h b{color:#282725}
+html.light .rt-row{border-bottom:1px solid rgba(31,30,29,0.048)}
+html.light .rx-c{background:linear-gradient(180deg,rgba(255,255,255,0.95),rgba(255,255,255,0.97));box-shadow:inset 0 1px 0 rgba(31,30,29,0.057),0 4px 10px rgba(0,0,0,0.056)}
+html.light .rx-c td{border-top:1px solid rgba(31,30,29,0.048)}
+html.light .rx-c td.ded{color:#c20a0a}
+html.light .rx-c tr.net td.win{color:#309c5b}
+html.light .rx-final{border-left:3px solid #c96442;background:linear-gradient(90deg,rgba(217,119,87,0.15),rgba(217,119,87,0.025))}
+html.light .rx-final li:first-child b{color:#309c5b}
+html.light .p-none.rep-ans{color:#c20a0a;border-color:rgba(255,123,123,0.625);background:rgba(255,95,95,0.125)}
+html.light .rx-c.yes .rx-big{color:#2e9e5b}
+html.light .rx-c.no .rx-big{color:#c20a0a}
+html.light .foot-sec{border:1px solid rgba(53,194,110,0.438);background:linear-gradient(90deg,rgba(53,194,110,0.15),rgba(255,255,255,0.85));color:#3a3936}
+html.light .foot-sec .ic{color:#309c5b}
+html.light .foot-sec b{color:#151514}
+html.light .foot-by b{color:#a34a29}
+html.light .ref{border:1px solid rgba(217,119,87,0.625);background:linear-gradient(90deg,rgba(217,119,87,0.225),rgba(255,255,255,0.7));color:#a17d2b;box-shadow:inset 0 1px 0 rgba(31,30,29,0.076),0 4px 12px rgba(0,0,0,0.064)}
+html.light .ref:hover{border-color:rgba(201,100,66,0.85)}
+html.light .ref-tag{color:#fbfbfb;background:#c96442}
+html.light .ref-t b{color:#a34a29}
+html.light .ref-go{color:#c96442}
+html.light .rx-fh{color:#a34a29}
+html.light .pod{background:rgba(255,255,255,0.7)}
+html.light .pod.best{border:1px solid rgba(53,194,110,0.7);background:linear-gradient(180deg,rgba(53,194,110,0.275),rgba(255,255,255,0.9));box-shadow:0 0 0 1px rgba(53,194,110,0.375),0 6px 16px rgba(0,0,0,0.072)}
+html.light .pod.best .pod-r{color:#2e9e5b}
+html.light .pod-tr{background:rgba(31,30,29,0.057)}
+html.light .pod-bar{background:#a39d8b}
+html.light .pod.best .pod-bar{background:linear-gradient(90deg,#27a95b,#27a558)}
+html.light .pod.best .pod-d{color:#27a555}
+html.light .rx-call b{color:#a34a29}
+html.light .rx-call .ic{color:#c96442}
+html.light .pl-search{background:rgba(255,255,255,0.72);border:1px solid rgba(31,30,29,0.182)}
+html.light .pl-partial{color:#a34a29}
+html.light .cp:hover{background:rgba(31,30,29,0.08);box-shadow:inset 0 0 0 1px rgba(31,30,29,0.228)}
+html.light .cp.done{background:rgba(53,194,110,0.25);box-shadow:inset 0 0 0 1px rgba(53,194,110,0.6)}
+html.light .cp.done::after{color:#309c5b}
+html.light .pk-o{background:linear-gradient(180deg,rgba(255,255,255,0.85),rgba(255,255,255,0.92))}
+html.light .pk-o:hover{border-color:rgba(31,30,29,0.342)}
+html.light .pk-o .pk-l{color:#33322f}
+html.light .pk-o .pk-d.neg{color:#c20a0a}
+html.light .pk-o .pk-d.pos{color:#2e9e5b}
+html.light .pk-o.best .pk-d{color:#2e9e5b}
+html.light .pk-o.on{border-color:#c96442;background:linear-gradient(180deg,rgba(217,119,87,0.225),rgba(255,255,255,0.92));box-shadow:0 0 0 1px rgba(217,119,87,0.562)}
+html.light .pk-o.on .pk-l::after{color:#a34a29}
+html.light .pk-note{border:1px solid rgba(217,119,87,0.438);background:rgba(217,119,87,0.1)}
+html.light .sh-card{background:#f5f4f2}
+html.light .cz-b{border:1px solid rgba(31,30,29,0.199);background:rgba(255,255,255,0.8)}
+html.light .cz-b:hover:not(:disabled){color:#151514}
+html.light .cz-d{background:rgba(255,255,255,0.7)}
+html.light .cz-d.bb{border-color:rgba(53,194,110,0.562)}
+html.light .cz-d.cr{border-color:rgba(31,30,29,0.257)}
+html.light .cz-d.pl{border-color:rgba(31,30,29,0.285)}
+html.light .cz-d[aria-current="true"]{color:#f8f8f7}
+html.light .sh-big{color:#c20a0a}
+html.light .sh-bar{background:rgba(31,30,29,0.057)}
+html.light .sh-bar .b1{background:#c96442}
+html.light .sh-bar .b2{background:#413f3c}
+html.light .sh-bar .b3{background:#6c6a64}
+html.light .sh-leg .l1::before{background:#c96442}
+html.light .sh-leg .l2::before{background:#413f3c}
+html.light .sh-leg .l3::before{background:#6c6a64}
+html.light .sh-kpi>div{background:rgba(255,255,255,0.6);border:1px solid rgba(31,30,29,0.057)}
+html.light .sh-c:hover,html.light .sh-c.on{border-color:rgba(31,30,29,0.228);background:rgba(31,30,29,0.057)}
+html.light .sh-c .tr{background:rgba(31,30,29,0.067)}
+html.light .sh-c .tr i{background:linear-gradient(90deg,#807d76,#413f3c)}
+html.light .sh-tips li{background:rgba(217,119,87,0.1);border:1px solid rgba(217,119,87,0.275)}
+html.light .sh-tips li.ok{background:rgba(53,194,110,0.1);border-color:rgba(53,194,110,0.312)}
+html.light .sh-tips li.ok::before{color:#309c5b}
+html.light .sh-t td{border-top:1px solid rgba(31,30,29,0.048)}
+@media(max-width:600px){html.light .sh-t tr{border-top:1px solid rgba(31,30,29,0.057)}}
+html.light .ct{background:linear-gradient(180deg,rgba(255,255,255,0.95),rgba(255,255,255,0.97));box-shadow:inset 0 1px 0 rgba(31,30,29,0.057),0 4px 10px rgba(0,0,0,0.056)}
+html.light .ct.pl{border-top:3px solid #6c6a64}
+html.light .ct-items{border:1px solid rgba(31,30,29,0.057);background:rgba(255,255,255,0.6)}
+html.light .ct-items li{border-top:1px solid rgba(31,30,29,0.038)}
+html.light .ct-sum{border-left:3px solid #c96442;background:linear-gradient(90deg,rgba(217,119,87,0.15),rgba(217,119,87,0.025))}
+html.light .totop{border:1px solid rgba(31,30,29,0.199);background:linear-gradient(180deg,rgba(255,255,255,0.82),rgba(255,255,255,0.88));box-shadow:inset 0 1px 0 rgba(31,30,29,0.114),inset 0 -1px 0 rgba(0,0,0,0.08),0 6px 14px rgba(0,0,0,0.08)}
+html.light .totop:hover{color:#151514;border-color:rgba(31,30,29,0.427)}
+html.light fieldset.st{background:linear-gradient(180deg,rgba(255,255,255,0.9),rgba(255,255,255,0.95));box-shadow:inset 0 1px 0 rgba(31,30,29,0.057),0 4px 10px rgba(0,0,0,0.048)}
+html.light .st-f input[type=checkbox]{accent-color:#c96442}
+html.light .hp-c{background:linear-gradient(180deg,rgba(255,255,255,0.9),rgba(255,255,255,0.95))}
+html.light .hp-n{color:#f8f8f7}
+html.light .hp-t>div{background:rgba(31,30,29,0.028);border:1px solid rgba(31,30,29,0.048)}
+html.light .more-btn{border:1px dashed rgba(31,30,29,0.285);background:rgba(31,30,29,0.076)}
+html.light .more-btn:hover{background:rgba(31,30,29,0.08)}
+@supports (-moz-appearance:none){html.light body::after{background:radial-gradient(45% 40% at 92% 6%,rgba(31,30,29,0.095),transparent 70%),
+    linear-gradient(90deg,rgba(255,255,255,0.6) 0%,rgba(255,255,255,0.6) 45%,rgba(255,255,255,0.6) 75%,rgba(255,255,255,0.6) 100%),
+    linear-gradient(180deg,rgba(255,255,255,0.6) 0%,rgba(255,255,255,0.6) 10%,rgba(255,255,255,0.6) 62%,rgba(255,255,255,0.6) 100%)!important}
+html.light .panel,html.light .ct,html.light .alt-grid>div,html.light .rx-c,html.light .pod,html.light fieldset.st,html.light .hp-c,html.light .scn>div,html.light .v-stats>div,html.light .pl,html.light .fastbox,html.light .ref,html.light .foot-sec{box-shadow:0 2px 6px rgba(0,0,0,0.064)!important}}
+html.light .prices tr.pr-best td{background:rgba(53,194,110,0.075)}
+html.light .res-b p.lead2{color:#282725}
+html.light .res-b p.lead2 b{color:#1c1c1a}
+html.light .res-b li{background:rgba(31,30,29,0.033);border:1px solid rgba(31,30,29,0.048);color:#282725}
+html.light .res-b li .chip{background:rgba(31,30,29,0.085);border:1px solid rgba(31,30,29,0.199)}
+html.light .res-b li .chip.bb{background:rgba(53,194,110,0.175);color:#2e9e5b;border-color:rgba(53,194,110,0.5)}
+html.light .res-b li .chip.nl{background:rgba(217,119,87,0.175);color:#a34a29;border-color:rgba(217,119,87,0.5)}
+html.light .res-b li .chip.pl{background:rgba(31,30,29,0.08);color:#413f3c;border-color:rgba(31,30,29,0.228)}
+html.light .res-b li b{color:#1c1c1a}
+html.light .res-b li small{color:#54524d}
+html.light .res-b .time span{background:rgba(31,30,29,0.038);border:1px solid rgba(31,30,29,0.057);color:#282725}
+html.light .res-b .time b{color:#151514}
+html.light .res-b ul.why li{color:#282725}
+html.light details.panel>summary .sum{color:#413f3c}
+html.light.lite body::after{background:linear-gradient(180deg,rgba(255,255,255,0.6) 0%,rgba(255,255,255,0.6) 40%,var(--void) 100%)!important}
+html.light.lite .panel,html.light.lite .ct,html.light.lite .alt-grid>div,html.light.lite .rx-c,html.light.lite .pod,html.light.lite fieldset.st,html.light.lite .hp-c,html.light.lite .scn>div,html.light.lite .v-stats>div{background:#f5f4f2!important}
+html.light .lite-t input{accent-color:#c96442}
+html.light .hero-intro>p{color:#33322f}
+html.light .start-note{border:1px solid rgba(217,119,87,0.438);background:rgba(255,255,255,0.82);box-shadow:inset 0 1px 0 rgba(31,30,29,0.048)}
+html.light .start-note-body{color:#413f3c}
+html.light .start-note-body strong{color:#b27e1a}
+html.light .start-note-body b{color:#1c1c1a}
+html.light .start-note-actions button{border:1px solid rgba(31,30,29,0.257);background:rgba(31,30,29,0.085)}
+html.light .start-note-actions button:hover{background:rgba(31,30,29,0.103)}
+html.light .res-b .cmp2 li .cmp-label{color:#33322f}
+html.light .res-b .cmp2 li .cmp-exact{color:#54524d}
+html.light .res-b .cmp2 li .cmp-part{color:#c27b0a}
+html.light .ledger-sort:hover,html.light .ledger-sort[data-active="true"]{background:rgba(31,30,29,0.076)}
+html.light body{background:#f7f6f5}
+html.light .panel{background:#f6f5f3}
+html.light .panel .lead,html.light .v-hint,html.light .res-b p.lead2,html.light .sh-none,html.light .scn-v,html.light .rguide,html.light .pk-note,html.light .lead2,html.light .ledger-tools .lead{color:#33322f}
+html.light .note,html.light .sh-rates,html.light .st-i,html.light .st-f small,html.light small{color:#65635d}
+html.light .status.err{color:#a67526}
+html.light .pill,html.light .res-b li .chip,html.light .res-b li .chip.bb,html.light .res-b li .chip.nl,html.light .res-b li .chip.pl,html.light .v-what{background:rgba(31,30,29,0.067)!important;color:#33322f!important;border:1px solid rgba(31,30,29,0.152)!important}
+html.light .btn{color:#151514}
+html.light .btn:hover{background:#994d33}
+html.light .ghost{color:#33322f}
+html.light .ghost:hover,html.light .ghost[aria-pressed="true"]{background:rgba(31,30,29,0.057);border-color:rgba(31,30,29,0.285)}
+html.light .copy{background:#f5f4f2}
+html.light .copy:hover{background:#f3f2ef}
+html.light input,html.light select,html.light textarea{background:#f8f8f7}
+html.light input:focus,html.light select:focus,html.light textarea:focus{border-color:rgba(31,30,29,0.38);box-shadow:0 0 0 3px rgba(31,30,29,0.076)!important}
+html.light :focus-visible{outline-color:#413f3c}
+html.light .ct,html.light .sh-card,html.light .pk-o,html.light .scn>div,html.light fieldset.st,html.light .hp-c,html.light .sh-kpi>div{background:#f5f4f2}
+html.light .ct-sum{background:#f5f4f2}
+html.light .pk-o.on{background:#f3f2ef}
+html.light .cz-d[aria-current="true"]{background:#33322f;color:#f8f8f7;border-color:#33322f}
+html.light .sh-bar .b1{background:#c96442}
+html.light .sh-bar .b2{background:#6d6b64}
+html.light .sh-bar .b3{background:#a39d8b}
+html.light .sh-leg .l1::before{background:#c96442}
+html.light .sh-leg .l2::before{background:#6d6b64}
+html.light .sh-leg .l3::before{background:#a39d8b}
+html.light .sh-c .tr i{background:#6d6b64}
+html.light .sh-tips li{background:#f5f4f2}
+html.light .more-btn:hover{background:rgba(31,30,29,0.048)}
+html.light .more-btn span{color:#33322f}
+html.light .lot.open .lot-head,html.light .lot-head:hover{background:rgba(31,30,29,0.038)}
+html.light .lot-x:hover,html.light .lot-x:focus-visible{color:#a92c23;background:rgba(232,116,108,0.125)}
+html.light .undo{background:#f5f4f2;color:#33322f}
+html.light .hero>p,html.light .hero .tagline,html.light .hero p{color:#33322f}
+html.light .foot-sec{background:#f6f5f3}
+html.light .start-note{background:#f6f5f3}
+html.light body::after{background:radial-gradient(120% 95% at 50% 40%,rgba(255,255,255,0.6) 35%,rgba(255,255,255,0.6) 75%,rgba(255,255,255,0.92) 100%),
+  linear-gradient(180deg,rgba(255,255,255,0.6),rgba(255,255,255,0.6))}
+html.light .k-null,html.light .k-rNull,html.light .v-what[data-k=null],html.light .v-what[data-k=rNull],html.light .res-b li .chip.nl{background:rgba(224,168,79,0.163)!important;color:#aa7622!important;border-color:rgba(224,168,79,0.5)!important}
+html.light .k-bb,html.light .v-what[data-k=bb],html.light .res-b li .chip.bb{background:rgba(92,186,134,0.163)!important;color:#3e8e61!important;border-color:rgba(92,186,134,0.525)!important}
+html.light .k-jOrd,html.light .k-jInst,html.light .k-rJita,html.light .v-what[data-k=jOrd],html.light .v-what[data-k=jInst],html.light .v-what[data-k=rJita],html.light .res-b li .chip:not(.bb):not(.nl):not(.pl){background:rgba(122,170,224,0.163)!important;color:#2962a3!important;border-color:rgba(122,170,224,0.525)!important}
+html.light .k-disc,html.light .v-what[data-k=disc],html.light .res-b li .chip.pl{background:rgba(179,156,240,0.163)!important;color:#4921ab!important;border-color:rgba(179,156,240,0.525)!important}
+html.light .pk-note{color:#33322f}
+html.light .pl-fold{background:#f3f2ef}
+html.light .pl-fold[aria-expanded="false"]{background:#f8f8f7}
+html.light .pl-fold:hover{background:#f0efed}
+html.light .more-btn{background:#f4f3f1;border:1px solid rgba(217,119,87,0.4)}
+html.light .more-btn span{color:#33322f}
+html.light .more-btn b{color:#a64a26}
+html.light .more-btn:hover{background:rgba(217,119,87,0.112);border-color:rgba(217,119,87,0.688)}
+html.light .pk-o{background:#fafaf9!important;border:1px solid rgba(31,30,29,0.085);box-shadow:0 1px 0 rgba(31,30,29,0.038) inset,0 2px 4px rgba(0,0,0,0.072),0 8px 18px rgba(0,0,0,0.056)!important}
+html.light .pk-o:hover{border-color:rgba(31,30,29,0.209);box-shadow:0 1px 0 rgba(31,30,29,0.048) inset,0 4px 8px rgba(0,0,0,0.08),0 12px 24px rgba(0,0,0,0.064)!important}
+html.light .pk-o.on{background:#f9f9f8!important;box-shadow:0 0 0 1px var(--clay),0 2px 4px rgba(0,0,0,0.072),0 8px 18px rgba(0,0,0,0.056)!important}
+html.light .ct-f td.r .copy{background:#f5f4f2}
+html.light .ct-f td.r .copy:hover{background:#f3f2ef;border-color:rgba(31,30,29,0.285)}
+html.light body::after{background:radial-gradient(130% 100% at 50% 40%,rgba(255,255,255,0.6) 55%,rgba(255,255,255,0.6) 85%,rgba(255,255,255,0.8) 100%)}
+html.light .start-note{border:1px solid rgba(217,119,87,0.625)!important;background:linear-gradient(90deg,rgba(217,119,87,0.225),rgba(255,255,255,0.82))!important;color:#a17d2b;box-shadow:inset 0 1px 0 rgba(31,30,29,0.076),0 4px 12px rgba(0,0,0,0.064)!important}
+html.light .start-note:hover{border-color:rgba(201,100,66,0.85)!important}
+html.light .start-note>.ic{color:#c96442!important}
+html.light .start-note-body{color:#a17d2b}
+html.light .start-note-body strong{color:#fbfbfb!important;background:#c96442}
+html.light .start-note-body b{color:#a34a29}
+html.light .start-note-actions button{border:1px solid rgba(217,119,87,0.688);color:#a17d2b;background:rgba(217,119,87,0.1)}
+html.light .start-note-actions button:hover{background:rgba(217,119,87,0.25);border-color:#c96442}
+html.light .ct,html.light .sh-card,html.light .sh-kpi>div,html.light .sh-tips li,html.light .scn>div,html.light .ct-sum,html.light fieldset.st,html.light .hp-c,html.light .undo,html.light .res-b ul:not(.why):not(.cmp2)>li,html.light .res-b .time>span,html.light .ct-items,html.light .rx>div,html.light .rx-c,html.light .pod,html.light .call,html.light .paste,html.light .v-stats>div,html.light .alt-grid>div{background:#fafaf9!important;border-color:rgba(31,30,29,0.085)!important}
+html.light .ct,html.light .sh-card,html.light .scn>div,html.light fieldset.st,html.light .hp-c,html.light .res-b ul:not(.why):not(.cmp2)>li,html.light .ct-sum,html.light .paste,html.light .v-stats>div,html.light .alt-grid>div{box-shadow:0 1px 0 rgba(31,30,29,0.038) inset,0 2px 4px rgba(0,0,0,0.072),0 8px 18px rgba(0,0,0,0.048)!important}
+html.light .ct-items,html.light .sh-kpi>div,html.light .sh-tips li{background:#f9f9f7!important}
+html.light .sh-tips li{border-color:rgba(31,30,29,0.076)!important}
+html.light .route-b{background:#fafaf9;border:1px solid rgba(31,30,29,0.133);box-shadow:0 1px 0 rgba(31,30,29,0.038) inset,0 2px 4px rgba(0,0,0,0.072),0 8px 18px rgba(0,0,0,0.048)}
+html.light .route-b:hover{border-color:rgba(201,100,66,0.6)}
+html.light .route-b[aria-pressed="true"]{background:#f9f9f8;box-shadow:0 0 0 1px var(--clay),0 8px 18px rgba(0,0,0,0.048)}
+html.light .route-m{color:#33322f}
+html.light .k-fN,html.light .v-what[data-k=fN]{background:rgba(224,168,79,0.163)!important;color:#aa7622!important;border-color:rgba(224,168,79,0.5)!important}
+html.light .k-fJ,html.light .k-fJI,html.light .v-what[data-k=fJ],html.light .v-what[data-k=fJI]{background:rgba(122,170,224,0.163)!important;color:#2962a3!important;border-color:rgba(122,170,224,0.525)!important}
+html.light .fb2{background:#fafaf9;border:1px solid rgba(92,186,134,0.438);box-shadow:0 1px 0 rgba(31,30,29,0.038) inset,0 2px 4px rgba(0,0,0,0.072),0 8px 18px rgba(0,0,0,0.048)}
+html.light .fb2-big span{color:#33322f}
+html.light .fb2-l>div{background:#f9f9f7;border:1px solid rgba(31,30,29,0.076)}
+html.light .fb2 td{border-top:1px solid rgba(31,30,29,0.048)}
+@media(max-width:700px){html.light .fb2 tr{border-top:1px solid rgba(31,30,29,0.057)}}
+html.light .hero-intro>.hero-p{background:rgba(255,255,255,0.82);border:1px solid rgba(31,30,29,0.114);box-shadow:0 2px 4px rgba(0,0,0,0.072),0 8px 18px rgba(0,0,0,0.048);color:#33322f}
+html.light .hero-intro>.hero-p::before{color:#f8f8f7;background:#413f3c}
+html.light .sw{color:#33322f;background:rgba(255,255,255,0.75);border:1px solid rgba(31,30,29,0.114)}
+html.light .sw-t{background:#f3f2ef;border:1px solid rgba(31,30,29,0.19)}
+html.light .sw-t::after{background:#54524d}
+html.light .sw input:checked+.sw-t::after{background:#151514}
+html.light .sw input:focus-visible+.sw-t{outline:2px solid #413f3c}
+html.light .route-m{background:rgba(255,255,255,0.75);border:1px solid rgba(31,30,29,0.114)}
+html.light .x-close{background:#fafaf9;border:1px solid rgba(31,30,29,0.171);box-shadow:0 2px 4px rgba(0,0,0,0.072),0 6px 14px rgba(0,0,0,0.056)}
+html.light .x-close:hover{color:#151514;background:#f9f9f8}
+html.light #settings fieldset.st>legend:hover{color:#151514}
+html.light #settings fieldset.st>legend:focus-visible{outline:2px solid #413f3c}
+html.light body::after{background:radial-gradient(120% 95% at 50% 42%,rgba(0,0,0,0) 38%,rgba(0,0,0,0.08) 72%,rgba(0,0,0,0.147) 100%)!important}
+html.light .lot-head:focus-visible{outline:2px solid #413f3c}
+/* ajustes a mano del tema claro */
+html.light body{background:#faf9f5;color:#1f1e1d}
+html.light body::before{opacity:.12;filter:grayscale(.35) brightness(1.1)}
+html.light body::after{background:none!important}
+html.light *{text-shadow:none!important}
+html.light .btn,html.light .btn *{color:#fff}
+html.light .x-close:hover{color:#1f1e1d}
+html.light .pk-o.on{box-shadow:0 0 0 1px #c96442!important}
+html.light .lot-x:hover{color:#c4473a}
+html.light .cz-d[aria-current="true"]{background:#1f1e1d;color:#faf9f5;border-color:#1f1e1d}
+html.light .sw-t::after{background:#fff}
+html.light .hero h1,html.light .hero p,html.light .hero .tagline,html.light .top .brand,html.light .foot-by,html.light .route-l,html.light .sw,html.light .route-m{text-shadow:none!important}
+html.light .sw input:checked+.sw-t::after{background:#fff}
+html.light .sw-t{background:#e4e2da;border-color:rgba(31,30,29,.2)}
+html.light .sw input:checked+.sw-t{background:#c96442;border-color:#c96442}
 </style>
 <script>/* v105: Firefox pinta peor los efectos pesados → Modo ligero automático */try{if(/firefox/i.test(navigator.userAgent))document.documentElement.classList.add('lite');}catch(e){}</script>
 </head>
@@ -1101,6 +1473,66 @@ html.lite .sw-t,html.lite .sw-t::after{transition:none}
   </div>
   <!-- v104: introducción + recordatorio visible a la derecha. Los botones comparten
        los paneles Ayuda y Ajustes existentes: no se duplica ningún formulario. -->
+  <!-- v1.0.8: Ajustes y Ayuda se abren aquí, arriba, debajo del título -->
+  <div class="top-slot">
+  <section class="panel" id="settings" hidden>
+    <div class="x-wrap"><button type="button" class="x-close" data-close="settings" aria-label="Cerrar Ajustes" title="Cerrar Ajustes"></button></div>
+    <h2><span class="ic i-gear" aria-hidden="true"></span>Ajustes</h2>
+    <p class="lead">Configura las skills, impuestos y reglas de venta para reflejar tu situación en EVE. Los resultados se recalculan al cambiar un valor. Por privacidad, estos ajustes no se guardan al cerrar o recargar.</p>
+    <div class="st-tools"><button type="button" class="ghost" id="stOpenAll">Abrir todo</button><button type="button" class="ghost" id="stCloseAll">Cerrar todo</button></div>
+    <div class="st-wrap">
+      <fieldset class="st"><legend><span class="ic i-key" aria-hidden="true"></span>Tus Skills</legend><p class="st-i">Selecciona tus niveles reales. Accounting afecta el Sales Tax; Broker Relations reduce costes de órdenes; las skills de reproceso determinan cuántos materiales recuperas.</p><div class="st-g"><label class="st-f"><span class="st-l">Accounting</span><select id="skAcc"><option value="0">Nivel 0</option><option value="1">Nivel 1</option><option value="2">Nivel 2</option><option value="3">Nivel 3</option><option value="4">Nivel 4</option><option value="5" selected>Nivel 5</option></select><small>Baja el Sales Tax: 7.5% × (1 − 0.11 × nivel).</small></label><label class="st-f"><span class="st-l">Broker Relations</span><select id="skBR"><option value="0">Nivel 0</option><option value="1">Nivel 1</option><option value="2">Nivel 2</option><option value="3">Nivel 3</option><option value="4">Nivel 4</option><option value="5" selected>Nivel 5</option></select><small>Baja el Broker de Jita: 3% − 0.3% × nivel.</small></label><label class="st-f"><span class="st-l">Advanced Broker Relations</span><select id="cAbr"><option value="0" selected>Nivel 0</option><option value="1">Nivel 1</option><option value="2">Nivel 2</option><option value="3">Nivel 3</option><option value="4">Nivel 4</option><option value="5">Nivel 5</option></select><small>Abarata cada Relist (cambio de precio).</small></label><label class="st-f"><span class="st-l">Reprocessing</span><select id="skRep"><option value="0">Nivel 0</option><option value="1">Nivel 1</option><option value="2">Nivel 2</option><option value="3">Nivel 3</option><option value="4">Nivel 4</option><option value="5" selected>Nivel 5</option></select><small>+3% de rendimiento por nivel.</small></label><label class="st-f"><span class="st-l">Reprocessing Efficiency</span><select id="skRepE"><option value="0">Nivel 0</option><option value="1">Nivel 1</option><option value="2">Nivel 2</option><option value="3">Nivel 3</option><option value="4">Nivel 4</option><option value="5" selected>Nivel 5</option></select><small>+2% de rendimiento por nivel.</small></label><label class="st-f"><span class="st-l">Skill del ore o hielo</span><select id="skOre"><option value="0">Nivel 0</option><option value="1">Nivel 1</option><option value="2">Nivel 2</option><option value="3">Nivel 3</option><option value="4">Nivel 4</option><option value="5" selected>Nivel 5</option></select><small>Ice Processing, Simple Ore Processing, etc.: +2% por nivel.</small></label></div></fieldset>
+      <fieldset class="st"><legend><span class="ic i-scale" aria-hidden="true"></span>Impuestos</legend><p class="st-i">Estas tasas se descuentan de las ventas. Las skills pueden actualizarlas automáticamente, pero puedes introducir tus valores si tu personaje o estructura tienen condiciones distintas.</p><div class="st-g"><label class="st-f"><span class="st-l">Sales Tax %</span><input type="number" id="cTax" step="0.001" value="3.375"><small>Se cobra en toda venta de mercado (Null y Jita).</small></label><label class="st-f"><span class="st-l">Broker en Jita %</span><input type="number" id="cBroker" step="0.01" value="1.00"><small>Se cobra al poner una orden en Jita 4-4.</small></label><label class="st-f"><span class="st-l">Broker de tu estructura %</span><input type="number" id="cBrokerNull" step="0.01" value="1.00"><small>Lo que cobra el dueño de la estructura en Null.</small></label><label class="st-f"><span class="st-l">SCC %</span><input type="number" id="cScc" step="0.01" value="0.50"><small>Impuesto de CONCORD en estructuras (solo Null).</small></label><label class="st-f"><span class="st-l">Standing de facción (Jita)</span><input type="number" id="cStdFac" step="0.01" value="0"><small>Baja un poco el Broker de Jita (0.03% por punto).</small></label><label class="st-f"><span class="st-l">Standing de corp (Jita)</span><input type="number" id="cStdCorp" step="0.01" value="0"><small>Baja un poco el Broker de Jita (0.02% por punto).</small></label></div></fieldset>
+      <fieldset class="st"><legend><span class="ic i-target" aria-hidden="true"></span>Precios en Null</legend><p class="st-i">Define cómo estimar tus sell orders en Nullsec. Se parte de Jita Buy salvo que hayas indicado un precio local concreto para el ítem.</p><div class="st-g"><label class="st-f"><span class="st-l">Lo que no es módulo, % de Jita Buy</span><input type="number" id="cNonMod" step="1" min="0" max="200" value="90"><small>Ore, minerales, productos del hielo e isótopos, PI y demás.</small></label><label class="st-f"><span class="st-l">Módulos: margen sobre Jita Buy %</span><input type="number" id="cMargin" step="0.5" value="0"><small>0 = a Jita Buy. Súbelo solo si te pagan más.</small></label><label class="st-f"><span class="st-l">Días para vender en Null</span><input type="number" id="cNullDays" step="1" min="0" value="7"><small>Para el tiempo estimado (lo que no es hielo).</small></label><label class="st-f"><span class="st-l">Costo de producción %</span><input type="number" id="cProd" step="0.5" value="0"><small>Si fabricaste el ítem: % del valor que te costó.</small></label></div></fieldset>
+      <fieldset class="st"><legend><span class="ic i-flask" aria-hidden="true"></span>Hielo</legend><p class="st-i">Estas reglas afectan al hielo sin reprocesar. Heavy Water, Liquid Ozone, Strontium Clathrates e isótopos usan las reglas generales de productos.</p><div class="st-g"><label class="st-f st-ck"><span class="st-l"><input type="checkbox" id="iceOn" checked> Reglas especiales para hielo</span><small>Si lo apagas, el hielo se trata como lo demás.</small></label><label class="st-f"><span class="st-l">Precio en Null</span><select id="iceNull"><option value="jbuy" selected>Jita Buy menos un %</option><option value="jita">Precio de Jita, sin Margen</option><option value="margin">Con tu Margen, como lo demás</option></select><small>Cómo se calcula el precio del hielo en Null.</small></label><label class="st-f"><span class="st-l">Descuento sobre Jita Buy %</span><input type="number" id="iceDisc" step="0.5" min="0" value="2.5"><small>El Undercut típico del hielo en Null, antes de Taxes.</small></label><label class="st-f"><span class="st-l">Precio en Jita</span><select id="iceJita"><option value="under" selected>Undercut a Jita Sell</option><option value="split">Split (entre Buy y Sell)</option></select><small>A qué precio pones la orden en Jita.</small></label><label class="st-f"><span class="st-l">Días para vender en Null</span><input type="number" id="iceDays" step="1" min="0" value="14"><small>Cuánto tarda el hielo en salir allá.</small></label></div></fieldset>
+      <fieldset class="st"><legend><span class="ic i-flask" aria-hidden="true"></span>Refinería</legend><p class="st-i">Indica la estructura donde reprocesarás. El tipo de refinería, rig, seguridad e implante cambian el yield estimado.</p><div class="st-g"><label class="st-f"><span class="st-l">Nombre</span><input type="text" id="refName" value="HY-RWO - Metal Exchange"><small>Lo de antes de " - " es el sistema (HY-RWO).</small></label><label class="st-f"><span class="st-l">Estructura</span><select id="refStruct"><option value="tatara" selected>Tatara</option><option value="athanor">Athanor</option></select><small>Tatara rinde más que Athanor.</small></label><label class="st-f"><span class="st-l">Rig de reproceso</span><select id="refRig"><option value="t2" selected>T2</option><option value="t1">T1</option><option value="none">Sin Rig</option></select><small>El Rig de la estructura.</small></label><label class="st-f"><span class="st-l">Seguridad del sistema</span><select id="refSec"><option value="null" selected>Nullsec</option><option value="low">Lowsec</option><option value="high">Highsec</option></select><small>Nullsec da más rendimiento.</small></label><label class="st-f"><span class="st-l">Implante de reproceso</span><select id="refImp"><option value="0.04" selected>RX-804 (+4%)</option><option value="0.02">RX-802 (+2%)</option><option value="0.01">RX-801 (+1%)</option><option value="0">Ninguno</option></select><small>El implante que llevas puesto.</small></label></div></fieldset>
+      <fieldset class="st"><legend><span class="ic i-list" aria-hidden="true"></span>Órdenes de Venta</legend><p class="st-i">Ajusta el undercut, los relists y cuándo priorizar una venta rápida frente a una sell order.</p><div class="st-g"><label class="st-f"><span class="st-l">Undercut %</span><input type="number" id="cUnder" step="0.05" min="0" value="0.1"><small>Porcentaje de undercut aplicado cuando se usa el precio de otra orden como referencia.</small></label><label class="st-f"><span class="st-l">Relists esperados</span><input type="number" id="cRelists" step="1" min="0" value="1"><small>Cantidad de modificaciones de precio previstas. Solo se descuentan si activas «Relists» en el análisis.</small></label><label class="st-f"><span class="st-l">Orden vs venta al instante (ISK)</span><input type="number" id="cUmbral" step="100000" value="1000000"><small>Ganancia adicional mínima en ISK para preferir una sell order frente a vender a buy orders.</small></label><label class="st-f"><span class="st-l">Preferir Jita por rapidez %</span><input type="number" id="cFast" step="0.5" min="0" value="5"><small>Permite priorizar Jita cuando la diferencia neta está dentro del porcentaje indicado. 0 desactiva esta preferencia.</small></label><label class="st-f st-ck"><span class="st-l"><input type="checkbox" id="qdOn" checked> Descuento por cantidad</span><small>Más de 1,000 u. bajan el precio por tramos (no aplica al hielo).</small></label><label class="st-f"><span class="st-l">Descuento máximo %</span><input type="number" id="qdMax" step="0.5" min="0" value="5"><small>Tope del descuento (0.2% · 0.02% · 0.002% por cada 1,000 u.).</small></label><label class="st-f st-ck"><span class="st-l"><input type="checkbox" id="cTick" checked> Redondear precios a 4 cifras</span><small>Ajusta los precios al tick permitido por el mercado de EVE (4 cifras significativas).</small></label></div></fieldset>
+      <fieldset class="st"><legend><span class="ic i-ship" aria-hidden="true"></span>Envío (SIGMA Freight)</legend><p class="st-i">Los costes están fijados según SIGMA Freight y se desglosan en «Contratos y Envío». Aquí solo ajustas los días estimados por contrato.</p><div class="st-g"><label class="st-f"><span class="st-l">Días por courier (mejor caso)</span><input type="number" id="cDayMin" step="1" min="0" value="1"><small>Lo que tarda en entregar un contrato.</small></label><label class="st-f"><span class="st-l">Días por courier (peor caso)</span><input type="number" id="cDayMax" step="1" min="0" value="3"><small>Para el tiempo estimado del resumen.</small></label><label class="st-f st-w"><span class="st-l">Destinatario del courier</span><input type="text" id="cAssignee" value="SIGMA Freight" spellcheck="false"><small>A quién se asigna el contrato de envío (Private → Name).</small></label><label class="st-f st-w"><span class="st-l">Destino en Null (modo Jita → HY-RWO)</span><input type="text" id="cNullDest" value="HY-RWO: Time Is A Flat Circle" spellcheck="false"><small>Estructura donde SIGMA Freight entrega cuando importas de Jita.</small></label><label class="st-f"><span class="st-l">Margen al importar a HY-RWO %</span><input type="number" id="cImpM" step="0.5" min="0" value="15"><small>Cuánto más caro vendes en HY-RWO que en Jita Sell, neto (después de taxes). Naves: suele ser 14–20%.</small></label></div></fieldset>
+      <fieldset class="st"><legend><span class="ic i-help" aria-hidden="true"></span>Venta a Jugador</legend><p class="st-i">Permite comparar una oferta WTS a jugadores de SIGMA o Vanguardia DR. El comprador y el plazo de venta no están garantizados.</p><div class="st-g"><label class="st-f st-ck"><span class="st-l"><input type="checkbox" id="discOn" checked> Comparar esta opción</span><small>Sin Sales Tax ni envío. Solo se recomienda si no hay otra forma.</small></label><label class="st-f"><span class="st-l">Precio base</span><select id="discBase"><option value="buy" selected>Jita Buy</option><option value="split">Jita Split</option></select><small>Los jugadores en Null compran a Jita Buy.</small></label><label class="st-f"><span class="st-l">% del precio base</span><input type="number" id="discPct" step="1" min="0" value="100"><small>Lo que le pides al comprador.</small></label><label class="st-f"><span class="st-l">Días hasta que alguien compre</span><input type="number" id="discDays" step="1" min="0" value="3"><small>Para el tiempo estimado.</small></label><label class="st-f"><span class="st-l">Entrega</span><input type="text" id="discLoc" value="HY-RWO: Time Is A Flat Circle"><small>Dónde haces el contrato.</small></label></div></fieldset>
+      <fieldset class="st st-full"><legend><span class="ic i-target" aria-hidden="true"></span>Buyback de la Alianza</legend><p class="st-i">Configura las condiciones del Buyback de la alianza. La sección «Contratos y Envío» muestra los datos de cada Item Exchange.</p><div class="st-g"><label class="st-f st-ck"><span class="st-l"><input type="checkbox" id="bbOn" checked> Comparar con el Buyback</span><small>Agrega la opción Vender al Buyback.</small></label><label class="st-f"><span class="st-l">Programa</span><input type="text" id="bbName" value="MAYEM Corp Buyback"><small><button class="copy lnk" type="button" data-link="buyback">Abrir el Buyback</button> pide login en SIGMA Auth.</small></label><label class="st-f"><span class="st-l">Tax del programa %</span><input type="number" id="bbTax" step="0.5" value="5"><small>Porcentaje descontado del precio base antes de calcular lo que recibes.</small></label><label class="st-f"><span class="st-l">Precio base</span><select id="bbBase"><option value="buy" selected>Jita Buy</option><option value="split">Jita Split</option><option value="sell">Jita Sell</option></select><small>Sobre qué precio de Jita paga.</small></label><label class="st-f"><span class="st-l">Name</span><input type="text" id="bbAvail" value="Mayhem Pawn and Loan"><small>Personaje o corporación destinataria del contrato. Confírmalo en el programa de Buyback.</small></label><label class="st-f"><span class="st-l">Ubicación</span><input type="text" id="bbLoc" value="HY-RWO: Time Is A Flat Circle"><small>Dónde haces el contrato.</small></label><label class="st-f"><span class="st-l">Expiración</span><input type="text" id="bbExp" value="4 Weeks"><small>Duración del contrato.</small></label><label class="st-f"><span class="st-l">Descripción</span><input type="text" id="bbDesc" value="" placeholder="La que te da su página, ej. aa-bbp-…"><small>Copia aquí la descripción generada por la página del Buyback; no la inventes.</small></label><label class="st-f st-w"><span class="st-l">Taxes especiales</span><textarea id="bbSpecial" rows="4" spellcheck="false">Heavy Water = 75
+Liquid Ozone = 50
+Strontium Clathrates = 50
+Contraband Freight = no</textarea><small>Una regla por línea: Nombre = tax total en %, o «no» para artículos excluidos.</small></label></div></fieldset>
+    </div>
+  </section>
+  <section class="panel" id="help" hidden>
+    <div class="x-wrap"><button type="button" class="x-close" data-close="help" aria-label="Cerrar Ayuda" title="Cerrar Ayuda"></button></div>
+    <h2><span class="ic i-help" aria-hidden="true"></span>Ayuda</h2>
+    <p class="lead">Del inventario al plan: copia tus ítems, revisa precios de Jita 4-4 y compara rutas de venta con las deducciones configuradas. No hace falta iniciar sesión.</p>
+    <div class="hp">
+      <div class="hp-c"><h3><span class="hp-n">1</span>Copia tu Inventario</h3>
+        <p>En EVE abre el inventario en <b>vista de lista</b>. Necesitas al menos las columnas <b>Name</b> y <b>Quantity</b>. Si ves <b>Volume</b> y <b>Est. Price</b>, mejor: la app las usa para verificar.</p>
+        <p>Selecciona las filas que quieres analizar, usa <b>Ctrl+C</b> y pégalas arriba con <b>Ctrl+V</b>. Revisa cantidades si faltaba la columna Quantity. Puedes utilizar texto compatible copiado de otras listas.</p></div>
+      <div class="hp-c"><h3><span class="hp-n">2</span>Espera los Precios</h3>
+        <p>La app consulta ESI (API de CCP) para precios y datos del mercado de Jita 4-4. Espera a que termine de cargar: un ítem sin precio verificado puede quedar fuera de la recomendación.</p>
+        <p>Los avisos no son errores automáticos: pueden indicar volumen distinto, precio atípico o compras insuficientes. Abre ese ítem para comprobarlo antes de publicar una orden.</p></div>
+      <div class="hp-c"><h3><span class="hp-n">3</span>Lee el Plan</h3>
+        <p><b>Resultado</b> reúne lo que recibirías según los precios disponibles y los costes configurados; no necesariamente es beneficio sobre lo que pagaste por el loot. La preferencia por rapidez puede elegir Jita aunque otra ruta deje un poco más.</p>
+        <p>Abre <b>Ver el análisis</b> para entrar a <b>Qué Hacer</b>. Cada recomendación tiene sus propios filtros, búsqueda y botón para copiar ítems. En <b>Contratos y Envío</b> encontrarás cada contrato (uno a la vez, pasa con las flechas) y lo que cuesta el envío.</p></div>
+      <div class="hp-c"><h3><span class="hp-n">4</span>Ajusta a tu Medida</h3>
+        <p>En <b>Ajustes</b> configura skills, Broker, Sales Tax, precio local de Nullsec, Buyback, refinería y tiempos de courier. Los valores iniciales son ejemplos operativos: cámbialos por los tuyos.</p>
+        <p>La herramienta no guarda inventarios ni configuración en el navegador. Una recarga borra la sesión de trabajo.</p></div>
+    </div>
+    <h3 class="sub-h" style="margin-top:20px">Las Formas de Vender</h3>
+    <div class="hp-t">
+      <div><b>Vender en Null</b><span>Sell order en la estructura configurada de Nullsec. El precio se estima a partir de Jita Buy o del precio local indicado; puede aplicar una regla especial al hielo. Resta Sales Tax, Broker y SCC; no paga courier a Jita.</span></div>
+      <div><b>Vender al Buyback</b><span>Contrato Item Exchange al programa de la alianza. Calcula el pago a partir del precio base y tax configurados. No requiere courier a Jita ni Sales Tax de mercado; confirma aceptación y plazos con el Buyback.</span></div>
+      <div><b>Vender en Jita (Orden)</b><span>Mandas la carga a Jita y publicas una sell order con el precio recomendado. Se descuentan courier, Sales Tax, Broker y los relists activados.</span></div>
+      <div><b>Vender en Jita al Instante</b><span>Envías la carga a Jita y vendes a buy orders disponibles. Para grandes cantidades, el cálculo recorre el libro de compras; puede recibir menos que la mejor buy order por unidad.</span></div>
+      <div><b>Refinado en Null o en Jita</b><span>Reprocesas ore, hielo o mena lunar en la refinería configurada. Los minerales y productos resultantes se venden en Nullsec o Jita según el valor neto; se considera yield, tax y volumen real del courier.</span></div>
+      <div><b>Vender a Jugador</b><span>Oferta WTS en Discord a un precio basado en Jita Buy o Split y el porcentaje configurado. Depende de que otro jugador acepte la oferta; no es liquidez garantizada.</span></div>
+    </div>
+    <h3 class="sub-h" style="margin-top:20px">Palabras Clave</h3>
+    <div class="hp-t">
+      <div><b>Jita Buy / Split / Sell</b><span>Buy: órdenes de compra. Sell: órdenes de venta. Split: punto medio entre ambos precios. No son precios de venta garantizados para cualquier cantidad.</span></div>
+      <div><b>Undercut</b><span>Publicar o modificar una sell order a un precio algo menor que la competencia. Cada relist puede generar costes adicionales.</span></div>
+      <div><b>Relist</b><span>Modificar el precio de una orden existente. La herramienta estima una comisión de relist y la incluye si activas esa deducción.</span></div>
+      <div><b>Colateral</b><span>Valor declarado de la carga para el courier. Según la configuración SIGMA Freight de esta herramienta, se consideran base por contrato, ISK/m³ y porcentaje de colateral.</span></div>
+    </div>
+    <h3 class="sub-h" style="margin-top:20px"><span class="ic i-lock" aria-hidden="true"></span>Seguridad</h3>
+    <p class="lead">No necesitas introducir contraseña de EVE. La calculadora usa ESI de CCP para consultar datos de mercado y el servicio de imágenes de EVE para los íconos. Los enlaces a Janice, Discord, SIGMA Auth y Buyback se abren por separado. El inventario y los ajustes permanecen en memoria y se pierden al recargar.</p>
+  </section>
+  </div>
   <div class="hero-intro">
     <button type="button" class="ref" data-link="referral"><span class="ref-tag">Gratis</span><span class="ref-t">Usa mi enlace para recibir <b>1 Millón de Skill Points</b> gratis</span><span class="ref-go">↗</span></button>
     <p class="hero-p">Pega tu loot, ore o materiales. Comparamos rutas de venta con precios de Jita y costes configurados para que sepas cuántos ISK recibirías.</p>
@@ -1122,6 +1554,8 @@ html.lite .sw-t,html.lite .sw-t::after{transition:none}
     <button type="button" class="route-b" id="bFlip" aria-pressed="false" title="Invertir la ruta">
       <span class="route-from" id="rtFrom">HY-RWO</span><span class="route-ar" aria-hidden="true">→</span><span class="route-to" id="rtTo">Jita</span><span class="route-ic" aria-hidden="true"></span><span class="route-tx">Invertir</span></button>
     <label class="sw" title="Apágalo si lo llevas tú mismo"><input type="checkbox" id="shipOn" checked><span class="sw-t" aria-hidden="true"></span><span>Contar envío (SIGMA Freight)</span></label>
+    <label class="sw" title="Menos efectos visuales: más fluido en PCs lentas y en Firefox"><input type="checkbox" id="liteOn"><span class="sw-t" aria-hidden="true"></span><span>Modo ligero</span></label>
+    <label class="sw" title="Cambiar entre tema oscuro y claro"><input type="checkbox" id="themeLight"><span class="sw-t" aria-hidden="true"></span><span>Tema claro</span></label>
     <label class="route-m" id="rtM" hidden>Vender en HY-RWO a Jita Sell +<input type="number" id="fImpM" min="0" step="0.5" value="15" aria-label="Margen al importar %">% neto</label>
   </div>
 </section>
@@ -1143,6 +1577,7 @@ html.lite .sw-t,html.lite .sw-t::after{transition:none}
     <div class="undo" id="undo" hidden role="status"><span id="undoTxt"></span><button type="button" class="ghost" id="undoBtn">Deshacer</button></div>
     <div class="ledger-head" role="group" aria-label="Ordenar tus ítems">
       <button type="button" class="ledger-sort" data-lsort="n" aria-label="Ordenar por nombre">Ítem <span class="sort-arrow" aria-hidden="true"></span></button>
+      <span class="ledger-col">Precio /u</span>
       <button type="button" class="ledger-sort" data-lsort="q" aria-label="Ordenar por cantidad">Cantidad <span class="sort-arrow" aria-hidden="true"></span></button>
       <button type="button" class="ledger-sort" data-lsort="d" aria-label="Ordenar por destino de venta">Qué Hacer <span class="sort-arrow" aria-hidden="true"></span></button>
       <button type="button" class="ledger-sort" data-lsort="a" aria-label="Ordenar por ISK netos">Ganancia <span class="sort-arrow" aria-hidden="true"></span></button>
@@ -1307,62 +1742,8 @@ html.lite .sw-t,html.lite .sw-t::after{transition:none}
     </div>
   </div>
   <!-- Ajustes -->
-  <section class="panel" id="settings" hidden>
-    <h2><span class="ic i-gear" aria-hidden="true"></span>Ajustes</h2>
-    <p class="lead">Configura las skills, impuestos y reglas de venta para reflejar tu situación en EVE. Los resultados se recalculan al cambiar un valor. Por privacidad, estos ajustes no se guardan al cerrar o recargar.</p>
-    <div class="st-wrap">
-      <fieldset class="st"><legend><span class="ic i-key" aria-hidden="true"></span>Tus Skills</legend><p class="st-i">Selecciona tus niveles reales. Accounting afecta el Sales Tax; Broker Relations reduce costes de órdenes; las skills de reproceso determinan cuántos materiales recuperas.</p><div class="st-g"><label class="st-f"><span class="st-l">Accounting</span><select id="skAcc"><option value="0">Nivel 0</option><option value="1">Nivel 1</option><option value="2">Nivel 2</option><option value="3">Nivel 3</option><option value="4">Nivel 4</option><option value="5" selected>Nivel 5</option></select><small>Baja el Sales Tax: 7.5% × (1 − 0.11 × nivel).</small></label><label class="st-f"><span class="st-l">Broker Relations</span><select id="skBR"><option value="0">Nivel 0</option><option value="1">Nivel 1</option><option value="2">Nivel 2</option><option value="3">Nivel 3</option><option value="4">Nivel 4</option><option value="5" selected>Nivel 5</option></select><small>Baja el Broker de Jita: 3% − 0.3% × nivel.</small></label><label class="st-f"><span class="st-l">Advanced Broker Relations</span><select id="cAbr"><option value="0" selected>Nivel 0</option><option value="1">Nivel 1</option><option value="2">Nivel 2</option><option value="3">Nivel 3</option><option value="4">Nivel 4</option><option value="5">Nivel 5</option></select><small>Abarata cada Relist (cambio de precio).</small></label><label class="st-f"><span class="st-l">Reprocessing</span><select id="skRep"><option value="0">Nivel 0</option><option value="1">Nivel 1</option><option value="2">Nivel 2</option><option value="3">Nivel 3</option><option value="4">Nivel 4</option><option value="5" selected>Nivel 5</option></select><small>+3% de rendimiento por nivel.</small></label><label class="st-f"><span class="st-l">Reprocessing Efficiency</span><select id="skRepE"><option value="0">Nivel 0</option><option value="1">Nivel 1</option><option value="2">Nivel 2</option><option value="3">Nivel 3</option><option value="4">Nivel 4</option><option value="5" selected>Nivel 5</option></select><small>+2% de rendimiento por nivel.</small></label><label class="st-f"><span class="st-l">Skill del ore o hielo</span><select id="skOre"><option value="0">Nivel 0</option><option value="1">Nivel 1</option><option value="2">Nivel 2</option><option value="3">Nivel 3</option><option value="4">Nivel 4</option><option value="5" selected>Nivel 5</option></select><small>Ice Processing, Simple Ore Processing, etc.: +2% por nivel.</small></label></div></fieldset>
-      <fieldset class="st"><legend><span class="ic i-scale" aria-hidden="true"></span>Impuestos</legend><p class="st-i">Estas tasas se descuentan de las ventas. Las skills pueden actualizarlas automáticamente, pero puedes introducir tus valores si tu personaje o estructura tienen condiciones distintas.</p><div class="st-g"><label class="st-f"><span class="st-l">Sales Tax %</span><input type="number" id="cTax" step="0.001" value="3.375"><small>Se cobra en toda venta de mercado (Null y Jita).</small></label><label class="st-f"><span class="st-l">Broker en Jita %</span><input type="number" id="cBroker" step="0.01" value="1.00"><small>Se cobra al poner una orden en Jita 4-4.</small></label><label class="st-f"><span class="st-l">Broker de tu estructura %</span><input type="number" id="cBrokerNull" step="0.01" value="1.00"><small>Lo que cobra el dueño de la estructura en Null.</small></label><label class="st-f"><span class="st-l">SCC %</span><input type="number" id="cScc" step="0.01" value="0.50"><small>Impuesto de CONCORD en estructuras (solo Null).</small></label><label class="st-f"><span class="st-l">Standing de facción (Jita)</span><input type="number" id="cStdFac" step="0.01" value="0"><small>Baja un poco el Broker de Jita (0.03% por punto).</small></label><label class="st-f"><span class="st-l">Standing de corp (Jita)</span><input type="number" id="cStdCorp" step="0.01" value="0"><small>Baja un poco el Broker de Jita (0.02% por punto).</small></label></div></fieldset>
-      <fieldset class="st"><legend><span class="ic i-target" aria-hidden="true"></span>Precios en Null</legend><p class="st-i">Define cómo estimar tus sell orders en Nullsec. Se parte de Jita Buy salvo que hayas indicado un precio local concreto para el ítem.</p><div class="st-g"><label class="st-f"><span class="st-l">Lo que no es módulo, % de Jita Buy</span><input type="number" id="cNonMod" step="1" min="0" max="200" value="90"><small>Ore, minerales, productos del hielo e isótopos, PI y demás.</small></label><label class="st-f"><span class="st-l">Módulos: margen sobre Jita Buy %</span><input type="number" id="cMargin" step="0.5" value="0"><small>0 = a Jita Buy. Súbelo solo si te pagan más.</small></label><label class="st-f"><span class="st-l">Días para vender en Null</span><input type="number" id="cNullDays" step="1" min="0" value="7"><small>Para el tiempo estimado (lo que no es hielo).</small></label><label class="st-f"><span class="st-l">Costo de producción %</span><input type="number" id="cProd" step="0.5" value="0"><small>Si fabricaste el ítem: % del valor que te costó.</small></label></div></fieldset>
-      <fieldset class="st"><legend><span class="ic i-flask" aria-hidden="true"></span>Hielo</legend><p class="st-i">Estas reglas afectan al hielo sin reprocesar. Heavy Water, Liquid Ozone, Strontium Clathrates e isótopos usan las reglas generales de productos.</p><div class="st-g"><label class="st-f st-ck"><span class="st-l"><input type="checkbox" id="iceOn" checked> Reglas especiales para hielo</span><small>Si lo apagas, el hielo se trata como lo demás.</small></label><label class="st-f"><span class="st-l">Precio en Null</span><select id="iceNull"><option value="jbuy" selected>Jita Buy menos un %</option><option value="jita">Precio de Jita, sin Margen</option><option value="margin">Con tu Margen, como lo demás</option></select><small>Cómo se calcula el precio del hielo en Null.</small></label><label class="st-f"><span class="st-l">Descuento sobre Jita Buy %</span><input type="number" id="iceDisc" step="0.5" min="0" value="2.5"><small>El Undercut típico del hielo en Null, antes de Taxes.</small></label><label class="st-f"><span class="st-l">Precio en Jita</span><select id="iceJita"><option value="under" selected>Undercut a Jita Sell</option><option value="split">Split (entre Buy y Sell)</option></select><small>A qué precio pones la orden en Jita.</small></label><label class="st-f"><span class="st-l">Días para vender en Null</span><input type="number" id="iceDays" step="1" min="0" value="14"><small>Cuánto tarda el hielo en salir allá.</small></label></div></fieldset>
-      <fieldset class="st"><legend><span class="ic i-flask" aria-hidden="true"></span>Refinería</legend><p class="st-i">Indica la estructura donde reprocesarás. El tipo de refinería, rig, seguridad e implante cambian el yield estimado.</p><div class="st-g"><label class="st-f"><span class="st-l">Nombre</span><input type="text" id="refName" value="HY-RWO - Metal Exchange"><small>Lo de antes de " - " es el sistema (HY-RWO).</small></label><label class="st-f"><span class="st-l">Estructura</span><select id="refStruct"><option value="tatara" selected>Tatara</option><option value="athanor">Athanor</option></select><small>Tatara rinde más que Athanor.</small></label><label class="st-f"><span class="st-l">Rig de reproceso</span><select id="refRig"><option value="t2" selected>T2</option><option value="t1">T1</option><option value="none">Sin Rig</option></select><small>El Rig de la estructura.</small></label><label class="st-f"><span class="st-l">Seguridad del sistema</span><select id="refSec"><option value="null" selected>Nullsec</option><option value="low">Lowsec</option><option value="high">Highsec</option></select><small>Nullsec da más rendimiento.</small></label><label class="st-f"><span class="st-l">Implante de reproceso</span><select id="refImp"><option value="0.04" selected>RX-804 (+4%)</option><option value="0.02">RX-802 (+2%)</option><option value="0.01">RX-801 (+1%)</option><option value="0">Ninguno</option></select><small>El implante que llevas puesto.</small></label></div></fieldset>
-      <fieldset class="st"><legend><span class="ic i-list" aria-hidden="true"></span>Órdenes de Venta</legend><p class="st-i">Ajusta el undercut, los relists y cuándo priorizar una venta rápida frente a una sell order.</p><div class="st-g"><label class="st-f"><span class="st-l">Undercut %</span><input type="number" id="cUnder" step="0.05" min="0" value="0.1"><small>Porcentaje de undercut aplicado cuando se usa el precio de otra orden como referencia.</small></label><label class="st-f"><span class="st-l">Relists esperados</span><input type="number" id="cRelists" step="1" min="0" value="1"><small>Cantidad de modificaciones de precio previstas. Solo se descuentan si activas «Relists» en el análisis.</small></label><label class="st-f"><span class="st-l">Orden vs venta al instante (ISK)</span><input type="number" id="cUmbral" step="100000" value="1000000"><small>Ganancia adicional mínima en ISK para preferir una sell order frente a vender a buy orders.</small></label><label class="st-f"><span class="st-l">Preferir Jita por rapidez %</span><input type="number" id="cFast" step="0.5" min="0" value="5"><small>Permite priorizar Jita cuando la diferencia neta está dentro del porcentaje indicado. 0 desactiva esta preferencia.</small></label><label class="st-f st-ck"><span class="st-l"><input type="checkbox" id="qdOn" checked> Descuento por cantidad</span><small>Más de 1,000 u. bajan el precio por tramos (no aplica al hielo).</small></label><label class="st-f"><span class="st-l">Descuento máximo %</span><input type="number" id="qdMax" step="0.5" min="0" value="5"><small>Tope del descuento (0.2% · 0.02% · 0.002% por cada 1,000 u.).</small></label><label class="st-f st-ck"><span class="st-l"><input type="checkbox" id="cTick" checked> Redondear precios a 4 cifras</span><small>Ajusta los precios al tick permitido por el mercado de EVE (4 cifras significativas).</small></label></div></fieldset>
-      <fieldset class="st"><legend><span class="ic i-ship" aria-hidden="true"></span>Envío (SIGMA Freight)</legend><p class="st-i">Los costes están fijados según SIGMA Freight y se desglosan en «Contratos y Envío». Aquí solo ajustas los días estimados por contrato.</p><div class="st-g"><label class="st-f"><span class="st-l">Días por courier (mejor caso)</span><input type="number" id="cDayMin" step="1" min="0" value="1"><small>Lo que tarda en entregar un contrato.</small></label><label class="st-f"><span class="st-l">Días por courier (peor caso)</span><input type="number" id="cDayMax" step="1" min="0" value="3"><small>Para el tiempo estimado del resumen.</small></label><label class="st-f st-w"><span class="st-l">Destinatario del courier</span><input type="text" id="cAssignee" value="SIGMA Freight" spellcheck="false"><small>A quién se asigna el contrato de envío (Private → Name).</small></label><label class="st-f st-w"><span class="st-l">Destino en Null (modo Jita → HY-RWO)</span><input type="text" id="cNullDest" value="HY-RWO: Time Is A Flat Circle" spellcheck="false"><small>Estructura donde SIGMA Freight entrega cuando importas de Jita.</small></label><label class="st-f"><span class="st-l">Margen al importar a HY-RWO %</span><input type="number" id="cImpM" step="0.5" min="0" value="15"><small>Cuánto más caro vendes en HY-RWO que en Jita Sell, neto (después de taxes). Naves: suele ser 14–20%.</small></label></div></fieldset>
-      <fieldset class="st"><legend><span class="ic i-help" aria-hidden="true"></span>Venta a Jugador</legend><p class="st-i">Permite comparar una oferta WTS a jugadores de SIGMA o Vanguardia DR. El comprador y el plazo de venta no están garantizados.</p><div class="st-g"><label class="st-f st-ck"><span class="st-l"><input type="checkbox" id="discOn" checked> Comparar esta opción</span><small>Sin Sales Tax ni envío. Solo se recomienda si no hay otra forma.</small></label><label class="st-f"><span class="st-l">Precio base</span><select id="discBase"><option value="buy" selected>Jita Buy</option><option value="split">Jita Split</option></select><small>Los jugadores en Null compran a Jita Buy.</small></label><label class="st-f"><span class="st-l">% del precio base</span><input type="number" id="discPct" step="1" min="0" value="100"><small>Lo que le pides al comprador.</small></label><label class="st-f"><span class="st-l">Días hasta que alguien compre</span><input type="number" id="discDays" step="1" min="0" value="3"><small>Para el tiempo estimado.</small></label><label class="st-f"><span class="st-l">Entrega</span><input type="text" id="discLoc" value="HY-RWO: Time Is A Flat Circle"><small>Dónde haces el contrato.</small></label></div></fieldset>
-      <fieldset class="st st-full"><legend><span class="ic i-target" aria-hidden="true"></span>Buyback de la Alianza</legend><p class="st-i">Configura las condiciones del Buyback de la alianza. La sección «Contratos y Envío» muestra los datos de cada Item Exchange.</p><div class="st-g"><label class="st-f st-ck"><span class="st-l"><input type="checkbox" id="bbOn" checked> Comparar con el Buyback</span><small>Agrega la opción Vender al Buyback.</small></label><label class="st-f"><span class="st-l">Programa</span><input type="text" id="bbName" value="MAYEM Corp Buyback"><small><button class="copy lnk" type="button" data-link="buyback">Abrir el Buyback</button> pide login en SIGMA Auth.</small></label><label class="st-f"><span class="st-l">Tax del programa %</span><input type="number" id="bbTax" step="0.5" value="5"><small>Porcentaje descontado del precio base antes de calcular lo que recibes.</small></label><label class="st-f"><span class="st-l">Precio base</span><select id="bbBase"><option value="buy" selected>Jita Buy</option><option value="split">Jita Split</option><option value="sell">Jita Sell</option></select><small>Sobre qué precio de Jita paga.</small></label><label class="st-f"><span class="st-l">Name</span><input type="text" id="bbAvail" value="Mayhem Pawn and Loan"><small>Personaje o corporación destinataria del contrato. Confírmalo en el programa de Buyback.</small></label><label class="st-f"><span class="st-l">Ubicación</span><input type="text" id="bbLoc" value="HY-RWO: Time Is A Flat Circle"><small>Dónde haces el contrato.</small></label><label class="st-f"><span class="st-l">Expiración</span><input type="text" id="bbExp" value="4 Weeks"><small>Duración del contrato.</small></label><label class="st-f"><span class="st-l">Descripción</span><input type="text" id="bbDesc" value="" placeholder="La que te da su página, ej. aa-bbp-…"><small>Copia aquí la descripción generada por la página del Buyback; no la inventes.</small></label><label class="st-f st-w"><span class="st-l">Taxes especiales</span><textarea id="bbSpecial" rows="4" spellcheck="false">Heavy Water = 75
-Liquid Ozone = 50
-Strontium Clathrates = 50
-Contraband Freight = no</textarea><small>Una regla por línea: Nombre = tax total en %, o «no» para artículos excluidos.</small></label></div></fieldset>
-    </div>
-  </section>
 
   <!-- Ayuda -->
-  <section class="panel" id="help" hidden>
-    <h2><span class="ic i-help" aria-hidden="true"></span>Ayuda</h2>
-    <p class="lead">Del inventario al plan: copia tus ítems, revisa precios de Jita 4-4 y compara rutas de venta con las deducciones configuradas. No hace falta iniciar sesión.</p>
-    <div class="hp">
-      <div class="hp-c"><h3><span class="hp-n">1</span>Copia tu Inventario</h3>
-        <p>En EVE abre el inventario en <b>vista de lista</b>. Necesitas al menos las columnas <b>Name</b> y <b>Quantity</b>. Si ves <b>Volume</b> y <b>Est. Price</b>, mejor: la app las usa para verificar.</p>
-        <p>Selecciona las filas que quieres analizar, usa <b>Ctrl+C</b> y pégalas arriba con <b>Ctrl+V</b>. Revisa cantidades si faltaba la columna Quantity. Puedes utilizar texto compatible copiado de otras listas.</p></div>
-      <div class="hp-c"><h3><span class="hp-n">2</span>Espera los Precios</h3>
-        <p>La app consulta ESI (API de CCP) para precios y datos del mercado de Jita 4-4. Espera a que termine de cargar: un ítem sin precio verificado puede quedar fuera de la recomendación.</p>
-        <p>Los avisos no son errores automáticos: pueden indicar volumen distinto, precio atípico o compras insuficientes. Abre ese ítem para comprobarlo antes de publicar una orden.</p></div>
-      <div class="hp-c"><h3><span class="hp-n">3</span>Lee el Plan</h3>
-        <p><b>Resultado</b> reúne lo que recibirías según los precios disponibles y los costes configurados; no necesariamente es beneficio sobre lo que pagaste por el loot. La preferencia por rapidez puede elegir Jita aunque otra ruta deje un poco más.</p>
-        <p>Abre <b>Ver el análisis</b> para entrar a <b>Qué Hacer</b>. Cada recomendación tiene sus propios filtros, búsqueda y botón para copiar ítems. En <b>Contratos y Envío</b> encontrarás cada contrato (uno a la vez, pasa con las flechas) y lo que cuesta el envío.</p></div>
-      <div class="hp-c"><h3><span class="hp-n">4</span>Ajusta a tu Medida</h3>
-        <p>En <b>Ajustes</b> configura skills, Broker, Sales Tax, precio local de Nullsec, Buyback, refinería y tiempos de courier. Los valores iniciales son ejemplos operativos: cámbialos por los tuyos.</p>
-        <p>La herramienta no guarda inventarios ni configuración en el navegador. Una recarga borra la sesión de trabajo.</p></div>
-    </div>
-    <h3 class="sub-h" style="margin-top:20px">Las Formas de Vender</h3>
-    <div class="hp-t">
-      <div><b>Vender en Null</b><span>Sell order en la estructura configurada de Nullsec. El precio se estima a partir de Jita Buy o del precio local indicado; puede aplicar una regla especial al hielo. Resta Sales Tax, Broker y SCC; no paga courier a Jita.</span></div>
-      <div><b>Vender al Buyback</b><span>Contrato Item Exchange al programa de la alianza. Calcula el pago a partir del precio base y tax configurados. No requiere courier a Jita ni Sales Tax de mercado; confirma aceptación y plazos con el Buyback.</span></div>
-      <div><b>Vender en Jita (Orden)</b><span>Mandas la carga a Jita y publicas una sell order con el precio recomendado. Se descuentan courier, Sales Tax, Broker y los relists activados.</span></div>
-      <div><b>Vender en Jita al Instante</b><span>Envías la carga a Jita y vendes a buy orders disponibles. Para grandes cantidades, el cálculo recorre el libro de compras; puede recibir menos que la mejor buy order por unidad.</span></div>
-      <div><b>Refinado en Null o en Jita</b><span>Reprocesas ore, hielo o mena lunar en la refinería configurada. Los minerales y productos resultantes se venden en Nullsec o Jita según el valor neto; se considera yield, tax y volumen real del courier.</span></div>
-      <div><b>Vender a Jugador</b><span>Oferta WTS en Discord a un precio basado en Jita Buy o Split y el porcentaje configurado. Depende de que otro jugador acepte la oferta; no es liquidez garantizada.</span></div>
-    </div>
-    <h3 class="sub-h" style="margin-top:20px">Palabras Clave</h3>
-    <div class="hp-t">
-      <div><b>Jita Buy / Split / Sell</b><span>Buy: órdenes de compra. Sell: órdenes de venta. Split: punto medio entre ambos precios. No son precios de venta garantizados para cualquier cantidad.</span></div>
-      <div><b>Undercut</b><span>Publicar o modificar una sell order a un precio algo menor que la competencia. Cada relist puede generar costes adicionales.</span></div>
-      <div><b>Relist</b><span>Modificar el precio de una orden existente. La herramienta estima una comisión de relist y la incluye si activas esa deducción.</span></div>
-      <div><b>Colateral</b><span>Valor declarado de la carga para el courier. Según la configuración SIGMA Freight de esta herramienta, se consideran base por contrato, ISK/m³ y porcentaje de colateral.</span></div>
-    </div>
-    <h3 class="sub-h" style="margin-top:20px"><span class="ic i-lock" aria-hidden="true"></span>Seguridad</h3>
-    <p class="lead">No necesitas introducir contraseña de EVE. La calculadora usa ESI de CCP para consultar datos de mercado y el servicio de imágenes de EVE para los íconos. Los enlaces a Janice, Discord, SIGMA Auth y Buyback se abren por separado. El inventario y los ajustes permanecen en memoria y se pierden al recargar.</p>
-  </section>
 
   <!-- Veredicto -->
 
@@ -1379,13 +1760,13 @@ Contraband Freight = no</textarea><small>Una regla por línea: Nombre = tax tota
 <button type="button" class="totop" id="toTop" aria-label="Volver arriba" title="Volver arriba (Inicio)" hidden><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 14l6-6 6 6"/></svg></button>
 <footer class="foot">
   <div class="foot-sec"><span class="ic i-lock" aria-hidden="true"></span><div><b>Nada se guarda.</b> Al cerrar o recargar la pestaña se borra todo, incluidos tus ajustes. La app solo se conecta a los servidores oficiales de Fenris Creations.</div></div>
-  <div class="foot-by">Creado por <b>Fiko McGivert</b> · Vanguardia DR · SIGMA GRINDSET · <span class="ver">v1.0.7</span> · <label class="lite-t"><input type="checkbox" id="liteOn"> Modo ligero</label></div>
+  <div class="foot-by">Creado por <b>Fiko McGivert</b> · Vanguardia DR · SIGMA GRINDSET · <span class="ver">v1.0.8</span></div>
 </footer>
 
 <script>
 'use strict';
 /* ============================================================
-   Plan y Gestor de Ventas v1.0.7 — SIGMA GRINDSET / Vanguardia DR
+   Plan y Gestor de Ventas v1.0.8 — SIGMA GRINDSET / Vanguardia DR
    Flujo:  pegado → ítems → carga (ESI: precios, volúmenes, historial) → verificación → plan → vista
      1. Pegado      parsePaste(): parser posicional de columnas de EVE (Name · Quantity · … · Volume · Est. Price).
      2. Carga       esiItems(): trae todo lo que falta; mientras carga, refresh() NO pinta (S.loading).
@@ -1633,12 +2014,27 @@ function syncFromPaste(fromPaste){
   else if(rows.noQty)status('status',rows.length+' ítem(s) sin columna Quantity: deduzco la cantidad con el volumen y el precio si están visibles; si no, actívala en el juego (clic derecho en la cabecera).'+ign,'err');
   else status('status',rows.length+' ítem(s) leídos.'+ign,rows.ignored?'err':'ok');
   syncLots();autoRepro();
+  schedulePrune();
   // si faltan precios: pantalla de carga y se pinta todo una sola vez al final
   if(S.items.length&&needsFetch()){
     if(!S.loading)setLoading(true,'Trayendo precios de Jita…',0,S.items.some(o=>o.jita));
     scrollAfter=scrollAfter||(!had&&fromPaste);
     clearTimeout(esiT);esiT=setTimeout(()=>esiItems(false),fromPaste?0:350);
   }else{refreshNow();if(!had&&S.items.length&&fromPaste)$('pSum').scrollIntoView({behavior:'smooth',block:'start'});}
+}
+// v1.0.8: limpieza en segundo plano. Precios, íconos e imágenes de ítems que ya no están en la lista (ni en Deshacer)
+// se sueltan para que el navegador libere la memoria. Si vuelves a pegarlos, se piden de nuevo.
+let pruneT=0;
+function schedulePrune(){clearTimeout(pruneT);pruneT=setTimeout(()=>{(window.requestIdleCallback||setTimeout)(pruneCaches);},4000);}
+function pruneCaches(){
+  if(S.loading)return schedulePrune();
+  const keep=new Set();
+  const add=n=>{const k=String(n).toLowerCase();keep.add(k);const ore=resolveOre(n);if(ore)Object.keys(ore.d.out).forEach(m=>keep.add(m.toLowerCase()));};
+  S.items.forEach(o=>add(o.name));
+  undoStack.forEach(u=>u.lines.forEach(l=>{const r=parseLine(l);if(r&&!r.bad)add(r.name);}));
+  const ids=new Set();
+  Object.keys(S.api).forEach(k=>{if(keep.has(k)){if(S.api[k]&&S.api[k].id)ids.add(String(S.api[k].id));}else delete S.api[k];});
+  Object.keys(ICON).forEach(id=>{if(!ids.has(String(id))){URL.revokeObjectURL(ICON[id]);delete ICON[id];delete ICON_EL[id];delete ICON_POOL[id];}});
 }
 // ¿falta algún precio de la API (ítems o minerales de sus ores)?
 function needsFetch(){
@@ -2154,24 +2550,29 @@ function numIn(val,ph,on,label){
   const i=el('input');i.type='number';i.min='0';i.step='any';i.placeholder=ph||'';i.autocomplete='off';if(label)i.setAttribute('aria-label',label);
   if(val!=null)i.value=val;i.addEventListener('input',()=>on(i.value));return i;
 }
+// v1.0.8: delegación. Un solo par de manejadores para todas las filas (antes 3 por fila): menos memoria con lotes grandes.
+const LOT_OF=new WeakMap();
+function toggleLot(o){const ui=o.ui;if(!ui)return;const open=ui.body.hidden;
+  if(open&&!ui.detailsReady)buildLotDetails(o,ui); // una sola vez, nunca se destruye al cerrar
+  ui.body.hidden=!open;ui.lot.classList.toggle('open',open);ui.head.setAttribute('aria-expanded',String(open));
+  if(open&&ui.last)paintLot(ui.last);}
+$('lots').addEventListener('click',e=>{const lot=e.target.closest('.lot'),o=lot&&LOT_OF.get(lot);if(!o)return;
+  if(e.target.closest('.lot-x')){removeFromPaste(o.name);return;}
+  if(e.target.closest('.copy'))return;
+  if(e.target.closest('.lot-head'))toggleLot(o);});
+$('lots').addEventListener('keydown',e=>{if((e.key==='Enter'||e.key===' ')&&e.target.classList.contains('lot-head')){const o=LOT_OF.get(e.target.parentNode);if(o){e.preventDefault();toggleLot(o);}}});
 function buildLot(o){
   // v102: solo creamos la cabecera para cada ítem; los controles pesados se construyen bajo demanda.
   // Importante: o.ui.last se actualiza en paintLot() aun con el detalle cerrado.
-  const lot=el('article','lot'),head=el('button','lot-head');head.type='button';head.setAttribute('aria-expanded','false');
+  const lot=el('article','lot'),head=el('div','lot-head');head.tabIndex=0;head.setAttribute('role','button');head.setAttribute('aria-expanded','false'); // v1.0.8: div para poder llevar dentro el botón de copiar precio
   const nm=el('span','lot-name');nm.append(el('b',null,o.name));const tag=el('span','tag');nm.append(tag);
   const qty=el('span','lot-qty'),dest=el('span','lot-dest'),net=el('span','lot-net'),chev=el('span','chev','›');chev.setAttribute('aria-hidden','true');
-  head.append(nm,qty,dest,net,chev);
+  const pp=el('span','lot-pp'),ppB=copyBtn('','—');ppB.classList.add('cp-n');ppB.title='Precio por unidad sugerido: clic para copiar';pp.append(ppB);
+  head.append(nm,pp,qty,dest,net,chev);
   const body=el('div','lot-body');body.hidden=true;
-  const ui={nm,lot,head,tag,qty,dest,net,body,detailsReady:false};
+  const ui={nm,lot,head,tag,qty,dest,net,body,ppB,detailsReady:false};
   const x=el('button','lot-x');x.type='button';x.title='Quitar del lote';x.setAttribute('aria-label','Quitar '+o.name+' del lote');
-  x.addEventListener('click',()=>removeFromPaste(o.name));
-  o.ui=ui;lot.append(head,x,body);
-  head.addEventListener('click',()=>{
-    const open=body.hidden;
-    if(open&&!ui.detailsReady)buildLotDetails(o,ui); // una sola vez, nunca se destruye al cerrar
-    body.hidden=!open;lot.classList.toggle('open',open);head.setAttribute('aria-expanded',String(open));
-    if(open&&ui.last)paintLot(ui.last);
-  });
+  o.ui=ui;lot.append(head,x,body);LOT_OF.set(lot,o); // v1.0.8: sin listeners por fila; un solo manejador en #lots
   return lot;
 }
 function buildLotDetails(o,ui){
@@ -2268,6 +2669,11 @@ function syncLots(){
   else if(S.items.length)box.querySelectorAll('.empty').forEach(n=>n.remove());
   if(ledgerSort.key)applyLedgerSort(); // v103: tras pegar o actualizar, respeta el filtro actual
 }
+// v1.0.8: precio por unidad sugerido para la opción elegida (el que se pone en el juego)
+function suggUnit(r){const k=r.best,a=r.o.jita;
+  if(k==='null'||k==='fN')return r.np;if(k==='jOrd'||k==='fJ')return r.jl;
+  if(k==='jInst'||k==='fJI')return r.instAvg!=null?r.instAvg:(a&&a.buy!=null?a.buy:null);
+  if(k==='bb')return r.bbUnit;if(k==='disc')return r.discUnit;return null;}
 function paintLot(r){
   const o=r.o,u=o.ui;if(!u)return;
   if(!u.ic){const ic=iconFor(o.name);if(ic){u.nm.querySelector('b').prepend(ic);u.ic=ic;}} // ícono cuando ya se conoce el type_id
@@ -2277,6 +2683,8 @@ function paintLot(r){
   if(r.best){const l=OPTS.find(x=>x[0]===r.best)[1];setText(u.dest,l,'lot-dest pill k-'+r.best+' '+(r.best==='disc'?'p-disc':SHIPS[r.best]?'p-jita':'p-null'));}
   else setText(u.dest,'Falta Precio','lot-dest pill p-none');
   setText(u.net,r.best?fmt(r.net[r.best]):'—','lot-net '+(r.best?sgn(r.net[r.best]):''));
+  {const up=suggUnit(r),b=u.ppB;const t=up==null?'—':fmtP(up);if(b.textContent!==t)b.textContent=t;b.dataset.v=up==null?'':String(Math.round(up*100)/100);b.disabled=up==null;
+   b.title=up==null?(r.best==='rNull'||r.best==='rJita'?'Se venden los minerales: ábrelo para ver sus precios':'Sin precio'):'Precio por unidad sugerido ('+(OPTS.find(x=>x[0]===r.best)||['',''])[1]+'): clic para copiar';}
   // rendimiento: el cuerpo (opciones, guía, precios, verificación) solo se pinta si la fila está abierta
   u.last=r;if(u.body.hidden)return;
   paintGuide(u.guide,r);
@@ -2420,7 +2828,7 @@ $('vPlan').addEventListener('input',e=>{
 // Divulgación progresiva: primero el resultado; el análisis y la info extra solo si los pides
 [['bDeep','deep','Ver el análisis ▾','Ocultar el análisis ▴'],['bMore','more','Ver más ▾','Ocultar ▴']].forEach(([b,t,o,c])=>$(b).addEventListener('click',()=>{
   const open=$(t).hidden;$(t).hidden=!open;$(b).setAttribute('aria-expanded',String(open));$(b).querySelector('b').textContent=open?c:o;
-  if(open){if(lastP)paintVerdict(lastP);$(b).scrollIntoView({behavior:'smooth',block:'start'});}}));
+  if(open){if(lastP)refreshNow();$(b).scrollIntoView({behavior:'smooth',block:'start'});}}));
 $('vTabs').addEventListener('click',e=>{const b=e.target.closest('.tab');if(!b||!lastP)return;vTab=b.dataset.t;paintVerdict(lastP);});
 // nombre corto del mejor plan (sin "+ N más" ni "· por rapidez")
 const bestLabel=()=>$('vWhat').textContent.replace(/ · por rapidez$/,'').replace(/ \+ \d+ más$/,'');
@@ -2449,6 +2857,8 @@ function paintVerdict(P){
    $('vWhat').dataset.k=$('resWhat').dataset.k=ks[0]||'';
    $('vWhat').textContent=none||!ks.length?'':W(ks[0])+(ks.length>1?' + '+(ks.length-1)+(ks.length>2?' más':' más'):'');}
   {const fa=!P.mode&&P.rows.some(r=>r.fast);$('vTitle').textContent=P.mode?'Tu Plan: '+modeName(P.mode):fa?'La Mejor Opción':'La Mejor Ruta de Venta';if(fa&&$('vWhat').textContent)$('vWhat').textContent+=' · por rapidez';}
+  lastP=P;
+  if($('deep').hidden)return; // v1.0.8: el análisis (rutas, Qué Hacer, comparación) solo se pinta con la sección abierta
   // valor del lote en Jita con los 3 precios (como Janice): Buy · Split · Sell. Sin porcentajes engañosos.
   let vB=0,vS=0,ok3=true;P.rows.forEach(r=>{const a=r.o.jita;if(!a||a.buy==null||a.sell==null){ok3=false;return;}vB+=a.buy*r.q;vS+=a.sell*r.q;});
   // semáforo: el menor en rojo, el del medio en ámbar, el mayor en verde
@@ -3168,14 +3578,19 @@ function paintPicker(P){
   const box=$('pk'),bar=$('pkNote');box.textContent='';bar.textContent='';
   const opt=modeTotal(P,'auto').net,cur=P.mode||'auto';
   // ordenadas de mayor a menor total (a igual total, el óptimo primero)
-  MODES.filter(([m])=>!(m==='bb'&&!C.bb.on||m==='disc'&&!C.disc.on)&&(m==='auto'||P.rows.some(r=>r.g[m]!=null)))
-   .map(([m,l])=>({m,l,t:m==='auto'?{net:opt,n:P.rows.length}:modeTotal(P,m)}))
+  // v1.0.8: un plan que es exactamente el óptimo (mismo destino para cada ítem) no se repite como tarjeta aparte;
+  // el óptimo dice "Es: <plan>".
+  const all=MODES.filter(([m])=>!(m==='bb'&&!C.bb.on||m==='disc'&&!C.disc.on)&&(m==='auto'||P.rows.some(r=>r.g[m]!=null)))
+   .map(([m,l])=>({m,l,t:m==='auto'?{net:opt,n:P.rows.length}:modeTotal(P,m)}));
+  const same=all.filter(x=>x.m!=='auto'&&Math.round(x.t.net)===Math.round(opt)&&P.rows.every(r=>!r.auto||r.auto===x.m||r.g[x.m]==null)).map(x=>x.m);
+  const curShown=same.includes(cur)?'auto':cur;
+  all.filter(x=>!same.includes(x.m))
    .sort((a,b)=>Math.round(b.t.net)-Math.round(a.t.net)||(a.m==='auto'?-1:b.m==='auto'?1:0))
    .forEach(({m,l,t})=>{
-    const d=t.net-opt,on=m===cur;
+    const d=t.net-opt,on=m===curShown;
     const b=el('button','pk-o'+(on?' on':'')+(m==='auto'?' best':''));b.type='button';b.dataset.m=m;b.setAttribute('role','radio');b.setAttribute('aria-checked',String(on));
     b.append(el('span','pk-l',l),el('b','pk-v num',compactIsk(t.net)),
-      el('small','pk-d '+(m==='auto'||Math.round(d)===0?'':d>0?'pos':'neg'),m==='auto'?'Recomendado':Math.round(d)===0?'Igual al óptimo':d>0?'+'+compactIsk(d)+' pero más lento':'−'+compactIsk(-d)+' vs óptimo'));
+      el('small','pk-d '+(m==='auto'||Math.round(d)===0?'':d>0?'pos':'neg'),m==='auto'?(same.length?'Recomendado · es '+modeName(same[0]):'Recomendado'):Math.round(d)===0?'Igual al óptimo':d>0?'+'+compactIsk(d)+' pero más lento':'−'+compactIsk(-d)+' vs óptimo'));
     if(m!=='auto'&&t.n<P.rows.length)b.title=t.n+' de '+P.rows.length+' ítems se pueden vender así; los demás siguen el óptimo.';
     box.append(b);});
   if(P.mode){const d=opt-P.best,cant=P.rows.filter(r=>r.cant);
@@ -3184,6 +3599,7 @@ function paintPicker(P){
     if(cant.length)bar.append(document.createTextNode(' '+(cant.length===1?'1 ítem no se puede vender así y sigue':cant.length+' ítems no se pueden vender así y siguen')+' el óptimo: '+cant.slice(0,4).map(r=>r.o.name).join(', ')+(cant.length>4?' y '+(cant.length-4)+' más':'')+'.'));
     const back=el('button','ghost pk-back','Volver al óptimo');back.type='button';back.dataset.m='auto';bar.append(back);
   }else bar.hidden=true;
+  return same[0]||null;
 }
 $('pSum').addEventListener('click',e=>{const b=e.target.closest('[data-m]');if(!b)return;const m=b.dataset.m==='auto'?null:b.dataset.m;
   if(m===S.planMode)return;S.planMode=m;czIdx=0;refreshNow();});
@@ -3218,9 +3634,9 @@ function paintSummary(P){
   const nBB=hasBB?++n:0,c0=n+1;n+=cs.length;const c1=n,nPl=dr.length?++n:0;
   const li=(chip,cls,txt,sub,val,vcls)=>{const l=el('li');l.append(el('span','chip'+(cls?' '+cls:''),chip));const t=el('span');t.append(el('b',null,txt));if(sub)t.append(document.createTextNode(' · '),el('small',null,sub));l.append(t);if(val!=null)l.append(el('span','v num '+(vcls||''),val));return l;};
   const ded=['taxes','broker'];if(C.relistOn&&C.relists>0)ded.push('relists');if(P.Vs>0&&C.shipOn)ded.push('envío');
-  paintPicker(P);
+  const sameAs=paintPicker(P);
   paintFlipBuy(P);
-  A.append(el('h4',null,P.mode?'Plan Elegido · '+modeName(P.mode):'Plan Óptimo'));
+  A.append(el('h4',null,P.mode?'Plan Elegido · '+modeName(P.mode):'Plan Óptimo'+(sameAs?' · '+modeName(sameAs):'')));
   {const p0=el('p','lead2');p0.append(document.createTextNode(summaryPlanText(P,sys).replace(/^./,c=>c.toUpperCase())+'. Recibirías '+fmt(P.best)+' netos estimados, después de descontar '+ded.slice(0,-1).join(', ')+' y '+ded[ded.length-1]+'. Sigue este plan:'));A.append(p0);}
   const ul=el('ul');
   if(hasBB)ul.append(li('Contrato '+nBB,'bb','Al Buyback de la alianza',cnt(P.toBB.length),'Recibes '+fmt(P.bbGross),'pos'));
@@ -3309,10 +3725,21 @@ $('fImpM').addEventListener('input',()=>impSync('fImpM','cImpM'));$('cImpM').add
 $('cNullDest').addEventListener('input',()=>refresh());
 $('liteOn').checked=document.documentElement.classList.contains('lite');
 $('liteOn').addEventListener('change',e=>document.documentElement.classList.toggle('lite',e.target.checked));
+// v1.0.8: tema claro / oscuro (solo en memoria; empieza oscuro)
+$('themeLight').addEventListener('change',e=>document.documentElement.classList.toggle('light',e.target.checked));
 
 // ================= Ajustes y Ayuda =================
 function toggle(btn,id){const s=$(id),open=s.hidden;s.hidden=!open;btn.setAttribute('aria-pressed',String(open));if(open)s.scrollIntoView({behavior:'smooth',block:'start'});}
 $('bSettings').addEventListener('click',e=>toggle(e.currentTarget,'settings'));
+// v1.0.8: X dentro de la sección (fija al bajar): cierra igual que el botón de arriba
+document.querySelectorAll('.x-close').forEach(b=>b.addEventListener('click',()=>{$(b.dataset.close==='settings'?'bSettings':'bHelp').click();}));
+// v1.0.8: cada grupo de Ajustes es desplegable (empiezan cerrados); se abren con clic o Enter en su título
+document.querySelectorAll('#settings fieldset.st').forEach(f=>{const l=f.querySelector('legend');if(!l)return;f.classList.add('closed');
+  l.tabIndex=0;l.setAttribute('role','button');l.setAttribute('aria-expanded','false');
+  const t=()=>{const c=f.classList.toggle('closed');l.setAttribute('aria-expanded',String(!c));};
+  l.addEventListener('click',t);l.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();t();}});});
+const stAll=open=>document.querySelectorAll('#settings fieldset.st').forEach(f=>{f.classList.toggle('closed',!open);const l=f.querySelector('legend');if(l)l.setAttribute('aria-expanded',String(open));});
+$('stOpenAll').addEventListener('click',()=>stAll(true));$('stCloseAll').addEventListener('click',()=>stAll(false));
 $('bHelp').addEventListener('click',e=>toggle(e.currentTarget,'help'));
 // v104: enlaces del aviso junto al pegado. Abren los mismos paneles originales.
 // Si el panel ya está abierto, solo se desplaza: no lo cierran por accidente.
