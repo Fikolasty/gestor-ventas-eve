@@ -1062,3 +1062,14 @@ Minería: boosts
   Validado: con el core II de 2016 (+30%) da −57.13%, el máximo que publicó CCP.
 - MINE.rows suma la columna boost ('' | Porpoise | Orca | Rorqual): 864 escenarios. MINE.boosts = [{n, core, cycle, crit, residue}].
 - mining.js: S.boost; la clave de fila incluye el boost; .mn-bst explica el boost elegido; el resumen dice el boost.
+
+==================== v1.0.25 ====================
+Ruta y dónde vendes
+- S.flip = dirección del courier. C.shipOn = vender en el DESTINO (se cuenta el envío, hay contratos). El checkbox #shipOn
+  marcado = vender en el ORIGEN (C.shipOn=!checked). SELL_AT() da el mercado; computePlan deja solo las opciones de ese mercado:
+  normal+destino: jOrd, jInst, rJita · normal+origen: null, bb, disc, rNull · invertida+destino: fN · invertida+origen: fJ, fJI.
+- #ovAlt: se calcula el mismo lote en el otro mercado (computePlan con C.shipOn invertido y sin planMode, luego se restaura)
+  y se muestra la diferencia con un botón que cambia el switch.
+- unitFor cubre fN/fJ/fJI. Rótulos .route-cap «Dirección» / «En».
+- Reproceso: siempre en HY-RWO (rJita = reprocesar en HY-RWO y vender el material en Jita).
+Tasación (#appr): Precios de Jita 4-4, Volumen, Ítems | Buy, Split, Sell (paintAppraisal en cada refreshNow y en clearViews).

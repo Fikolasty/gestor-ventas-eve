@@ -69,5 +69,9 @@ html.light .ov-card,html.light .ov-kpi>div{background:linear-gradient(180deg,#f7
 html.light .ov-bar{background:#e4e1d8;box-shadow:inset 0 1px 2px rgba(0,0,0,.12)}
 html.light .ov-trk .tk{background:#5e5d59}html.light .ov-trk .me{border-color:#fff}
 html.light .ov-leg .cost b{color:#b23b32}
+/* v1.0.23: tasación en Light */
+html.light .appr{background:linear-gradient(180deg,#f7f5ef,#efece4);border-color:rgba(31,30,29,.12);box-shadow:inset 0 1px 0 #fff,0 1px 2px rgba(0,0,0,.07)}
+html.light .appr-g{background:#fff;border-color:rgba(31,30,29,.12);box-shadow:inset 0 1px 2px rgba(0,0,0,.06)}
+html.light .appr-g .t-buy dd .copy{color:#b23b32!important}html.light .appr-g .t-split dd .copy{color:#9a6a12!important}html.light .appr-g .t-sell dd .copy{color:#2f7a52!important}
 /* v1.0.23 Minería: los colores de serie en su versión para fondo claro */
 html.light .mn{--mn-t1:#2a78d6;--mn-t2:#d95926;--mn-t3:#199e70;--mn-ex:#b07600;--mn-grid:rgba(31,30,29,.12);--mn-axis:#6d6b67;--mn-mut:#a9a69e}

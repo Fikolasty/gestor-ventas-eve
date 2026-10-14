@@ -2,6 +2,31 @@
 
 Cambios por versión del Gestor de Ventas. La más nueva arriba. El detalle técnico completo está en `docs/SPEC.txt`.
 
+## 1.0.25 — Ruta y dónde vendes, tasación del lote
+*2026-10-14*
+
+**Los dos controles del menú, con su significado real**
+- **Ruta** = hacia dónde va el courier: HY-RWO → Jita o Jita → HY-RWO. Los contratos de envío siguen esa dirección.
+- **Dónde vendes** = «En HY-RWO» o «En Jita». Si vendes en el destino de la ruta, se cuenta el envío de SIGMA Freight y salen los contratos; si vendes en el origen, no hay envío.
+  - HY-RWO → Jita · En Jita: courier a Jita y venta en Jita (orden, al instante o reprocesado).
+  - HY-RWO → Jita · En HY-RWO: venta en HY-RWO (órdenes, Buyback, jugador, reproceso), sin envío.
+  - Jita → HY-RWO · En HY-RWO: courier a HY-RWO y venta con tu margen de importación.
+  - Jita → HY-RWO · En Jita: venta en Jita (orden o al instante), sin envío ni reglas del hielo.
+- Por defecto: HY-RWO → Jita, En HY-RWO.
+- Arreglado: con Jita → HY-RWO no salían los contratos hacia HY-RWO; los precios por unidad de esa ruta decían «Precio de cada mineral abajo».
+- Nuevo aviso en el resumen: cuánto dejaría vender en el otro mercado (con el costo del envío y los contratos, o sin envío) y un botón para cambiar.
+
+**Tasación del lote (como Janice)**
+- Fuera la tarjeta «Qué hace». La tasación solo aparece al pegar ítems; antes, Skill Points y «Antes de empezar» ocupan todo el ancho.
+- La tasación va a la izquierda y las tarjetas a la derecha. Como Janice: a la izquierda «Precios de: Jita 4-4», Volumen e Ítems; a la derecha Buy · Split · Sell (clic para copiar).
+
+**Reproceso solo en HY-RWO**
+- Nunca se reprocesa en Jita: la opción se llama «Reprocesar en HY-RWO → Jita» (se reprocesa en HY-RWO y se vende el material en Jita) y no aparece cuando los ítems están en Jita.
+
+**Menú**
+- Rótulos sobre los controles: «Dirección» (Direction) y «En» (At), según el idioma.
+- Fuera el **Modo Ligero** y todo su código (estilos, switch y lo guardado). El tema Dark/Light sigue igual.
+
 ## 1.0.24 — Minería: boosts de Porpoise, Orca y Rorqual
 *2026-10-14*
 
