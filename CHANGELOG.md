@@ -2,6 +2,33 @@
 
 Cambios por versión del Gestor de Ventas. La más nueva arriba. El detalle técnico completo está en `docs/SPEC.txt`.
 
+## 1.0.12 — Idioma inglés, textos y Broker de Jita
+*2026-10-14*
+
+Textos y tooltips
+- Etiquetas en Title Case: "Modo Ligero", "Abrir Todo", "Cerrar Todo".
+- Switch de envío: dice "En HY-RWO" (encendido: se cuenta el courier de SIGMA Freight) o "En Jita" (apagado: los ítems ya están en destino). Con la ruta invertida dice "En Jita" / "En HY-RWO". Función syncShipSwitch().
+- Tema: el switch solo dice "Dark" o "Light".
+- Tooltips con una explicación breve en: ruta (flip), envío, Modo Ligero, tema, Ajustes y Ayuda.
+
+Idioma
+- Nueva sección en Ajustes: "Idioma" → select #langSel (Español / English). Solo en memoria; no se guarda.
+- Traducción en tiempo de ejecución con un diccionario ES→EN embebido (I18N_EN, ~1,050 entradas).
+  Una sola regex (claves de mayor a menor largo, con límites de palabra) sobre nodos de texto y atributos title/aria-label/placeholder.
+  MutationObserver solo mientras está en English; los originales se guardan en WeakMaps para volver al español sin recargar.
+  Al volver a Español se desconecta el observer y se libera la regex. No traduce: textarea de pegado, nombres de ítems (.lot-name), nombres de EVE.
+- <html lang> cambia a es/en.
+
+Precisión (Broker de Jita)
+- Caso real: 13 ítems en sell order en Jita. El juego: 1,656,677,161 ISK; la app: 1,661,355,993 ISK.
+  Los precios coincidían exactos (bruto 1,737,365,743 ISK); la diferencia era el Broker: el juego cobró 1.27% y la app tenía 1.00% por defecto.
+- Default del Broker en Jita ahora 1.50% (Broker Relations 5 sin standings: 3% − 1.5%). Lo conservador: mejor sorprenderse con más.
+- La ayuda del campo dice que copies el "Broker's fee" que muestra el juego en la ventana de venta.
+
+Verificación
+- node --check OK; smoke, stress, leak4, pk, ce, noship, t111, tperm111 (1527/1536), tsec111 (solo hosts ESI, storage vacío), sk: sin errores.
+- English: 0 textos en español sobrantes (salvo el nombre "Español" a propósito), escritorio y móvil; volver a Español restaura todo.
+
 ## 1.0.11 — Ajuste de precios, menú lateral, Ajustes por secciones, paleta gris-negro
 *2026-10-14*
 
