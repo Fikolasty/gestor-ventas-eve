@@ -2,6 +2,15 @@
 
 Cambios por versión del Gestor de Ventas. La más nueva arriba. El detalle técnico completo está en `docs/SPEC.txt`.
 
+## 1.0.17 — Anti-cebo, undercut de 1 tick y venta rápida por spread
+*2026-10-14*
+
+- **Undercut en ticks**: la orden en Jita se publica 1 tick por debajo de la venta más barata (1 tick = el mínimo de EVE, 4 cifras). Ajustable en Ajustes → Órdenes de Venta. Si escribiste tu propio precio, se respeta tal cual.
+- **Órdenes cebo**: se revisan las 5 ventas más baratas. Si una está más de 5 ticks por debajo de la siguiente, se salta (hasta 3 en cascada), salvo que tenga mucha cantidad (más que las 3 siguientes juntas). El precio elegido se confirma con la siguiente orden; si no se confirma, es otro nivel de precio y se usa la más barata. Aviso en el ítem con las órdenes ignoradas.
+  Ejemplo real: 1,512,000 (6 u.) · 1,700,000 (13) · 1,715,000 (13) · 1,812,000 (20) · 1,813,000 (109) → se usa 1,812,000 y se publica a 1,811,000.
+- **Venta rápida por spread**: si tu precio de orden queda a 2 ticks o menos de la mejor compra, el plan vende al instante (casi el mismo ISK, sin esperar) y lo explica en la guía.
+- Ajustes nuevos: Undercut en Jita (ticks), Ignorar órdenes cebo (ticks), Vender al instante si la diferencia es ≤ (ticks). El Undercut % queda para Null y el hielo.
+
 ## 1.0.16 — Ajustes guardados e íconos en la web
 *2026-10-14*
 

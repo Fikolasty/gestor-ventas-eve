@@ -26,6 +26,8 @@ Lo más exacto es copiar los % de *Broker's fee* y *Sales tax* que muestra la ve
 - **Switch de envío**: con el courier de SIGMA Freight o con los ítems ya en el destino.
 - **Reproceso** de ore y hielo con tus skills, la estructura, el rig y el implante.
 - **Contratos** listos para copiar: Buyback (Item Exchange), courier y venta a jugadores.
+- **Anti-cebo**: ignora órdenes de venta puestas muy baratas para tirar el precio (revisa las 5 más baratas, en cascada) y publica 1 tick por debajo.
+- **Venta rápida automática** cuando la orden casi no paga más que las compras (2 ticks o menos).
 - **Ajuste de precios** (por defecto −0.16% en la venta rápida), para no prometer más de lo que paga el mercado.
 - **Español / English**, tema **Dark / Light** y **Modo Ligero** para PCs lentas o Firefox.
 
@@ -56,7 +58,7 @@ CHANGELOG.md          ← cambios por versión
 ### Generar la página
 Solo necesitas Python 3, sin dependencias:
 ```
-python3 build.py 1.0.16
+python3 build.py 1.0.17
 ```
 Eso escribe `index.html` con la versión indicada.
 

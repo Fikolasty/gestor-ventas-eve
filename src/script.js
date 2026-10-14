@@ -50,7 +50,7 @@ const FORGE=10000002,JITA44=60003760;
 const S={
   planMode:null,
   flip:false,    // v1.0.5: false = HY-RWO → Jita (normal); true = Jita → HY-RWO (importar a Null). Solo memoria. // v111: plan elegido por el usuario (null = óptimo). Solo en memoria.
-  cfg:{disc:{on:true,base:'buy',pct:1,days:3},ref:{name:'HY-RWO - Metal Exchange',struct:'tatara',rig:'t2',sec:'null',imp:.04},ice:{on:true,nullMode:'jbuy',nullDisc:.025,jitaMode:'under',nullDays:14},under:.001,nullDays:7,tax:.03375,broker:.015,brokerNull:.01,scc:.005,margin:0,prod:0,relists:1,abr:0,umbral:1000000,cDays:[1,3],fast:.05,impM:.15,shipOn:true,skew:{inst:-.0016,ord:0,nul:0},discEdge:.1,relistOn:false,nullNonMod:.9,tick:true,qd:{on:true,max:.05},stdFac:0,stdCorp:0,
+  cfg:{disc:{on:true,base:'buy',pct:1,days:3},ref:{name:'HY-RWO - Metal Exchange',struct:'tatara',rig:'t2',sec:'null',imp:.04},ice:{on:true,nullMode:'jbuy',nullDisc:.025,jitaMode:'under',nullDays:14},under:.001,underTk:1,baitTk:5,spreadTk:2,nullDays:7,tax:.03375,broker:.015,brokerNull:.01,scc:.005,margin:0,prod:0,relists:1,abr:0,umbral:1000000,cDays:[1,3],fast:.05,impM:.15,shipOn:true,skew:{inst:-.0016,ord:0,nul:0},discEdge:.1,relistOn:false,nullNonMod:.9,tick:true,qd:{on:true,max:.05},stdFac:0,stdCorp:0,
        base:10000000,perM3:653,collPct:.01,maxVol:350000,coll:null,
        bb:{on:true,tax:.05,base:'buy',special:{}}},
   items:[],      // {name,qty,srcQty,qtyCol,qtyDeduced,pasteRef,pasteTotal,pasteM3u,pasteM3tot,refMan,m3uMan,jita,ref,m3u,checks,notFound,ui}
@@ -137,12 +137,33 @@ function qdApply(p,name,q){const d=qtyDisc(name,q||0);return p==null||!d?p:tickD
 // ¿Es un módulo? Por la categoría de la API (7 = Module); si no se conoce, por la columna Category del pegado.
 function isModule(name){const a=S.api[String(name).toLowerCase()];if(a&&a.cat!=null)return a.cat===7;
   const o=itemByName(name);return !!(o&&o.pasteCat&&/^module$/i.test(o.pasteCat));}
-// Precio a listar en Jita: hielo con undercut a Jita Sell o Split; el resto, Jita Sell
-function jitaList(name,sell,buy,q){
+// v1.0.17: tamaño del tick de EVE (4 cifras significativas) y "N ticks por debajo"
+const tsz=p=>Math.pow(10,Math.floor(Math.log10(p))+1-4);
+function tickBelow(p,k){if(p==null||!(p>0)||!(k>0))return p;let x=p;for(let i=0;i<k;i++){const n=x-tsz(x*(1-1e-9));if(!(n>0))break;x=Number(n.toPrecision(4));}return x;}
+const ticksBetween=(lo,hi)=>lo>0&&hi>lo?(hi-lo)/tsz(lo):0;
+// Precio a listar en Jita: hielo con undercut a Jita Sell o Split; el resto, Jita Sell menos N ticks (v1.0.17).
+// man = precio escrito por ti: se respeta tal cual.
+function jitaList(name,sell,buy,q,man){
   if(sell==null)return null;
   if(C.ice.on&&isIce(name)){if(C.ice.jitaMode==='split'&&buy!=null)return tickDown((sell+buy)/2);return tickDown(sell*(1-C.under));}
-  return qdApply(sell,name,q);
+  return qdApply(man?sell:tickBelow(sell,C.underTk),name,q);
 }
+// v1.0.17: si tu precio de orden queda a C.spreadTk ticks o menos de la mejor compra, se prefiere vender al instante
+function tightSpread(jl,a){if(!(C.spreadTk>0)||jl==null||!a||a.buy==null||!(a.buy>0))return null;
+  const g=jl<=a.buy?0:ticksBetween(a.buy,jl);return g<=C.spreadTk+1e-9?{ticks:Math.round(g),buy:a.buy,jl}:null;}
+// v1.0.17: anti-cebo en cascada (regla de Arturo). Se miran las 5 ventas más baratas:
+//  · si la 1ª está más de C.baitTk ticks por debajo de la 2ª, se salta; igual con la 2ª frente a la 3ª y la 3ª frente a la 4ª
+//    (máx. 3 saltos). No se salta una orden "muro": si su cantidad ≥ la suma de las 3 siguientes, es real.
+//  · el precio elegido se confirma con la siguiente (a C.baitTk ticks o menos). Si no se confirma, no es un cebo sino
+//    otro nivel de precio: se usa la 1ª (vender barato pero seguro).
+function applyBait(a){if(!a)return;if(a.sell0===undefined)a.sell0=a.sell;a.sell=a.sell0;a.bait=null;a.baitLevel=null;
+  const t=a.top,N=C.baitTk;if(!t||t.length<2||!(N>0)||(a.flags||[]).some(f=>f.k==='outSell'))return;
+  const far=i=>i+1<t.length&&ticksBetween(t[i].p,t[i+1].p)>N;
+  const wall=i=>t[i].v>=t.slice(i+1,i+4).reduce((s,o)=>s+o.v,0);
+  let k=0;while(k<3&&far(k)&&!wall(k))k++;
+  if(k===0)return;
+  if(k+1>=t.length||far(k)){a.baitLevel={p:t[k].p};return;} // sin siguiente que lo confirme, u otro nivel de precio: se queda la 1ª
+  a.sell=t[k].p;a.bait={skip:t.slice(0,k).map(o=>({p:o.p,v:o.v})),p:t[k].p,next:t[k+1]?t[k+1].p:null};}
 const iceNullTxt=()=>C.ice.nullMode==='jbuy'?'Jita Buy −'+pct(C.ice.nullDisc)+'%':C.ice.nullMode==='jita'?'precio de Jita':'con tu margen';
 const nullPrice=(base,name)=>base==null||!(base>0)?null:tick(base*(1+marginFor(name))); // Jita Buy (+ margen opcional)
 const nullLabel=name=>{
@@ -380,7 +401,7 @@ async function jitaBook(id){
   if(buys.length&&buys[0].min>1&&(buy==null||buys[0].p>buy))flags.push({k:'minBuy',p:buys[0].p,min:buys[0].min});
   if(sell!=null&&sellP5&&sell<.5*sellP5){flags.push({k:'outSell',p:sell});sell=sellP5;}
   if(buy!=null&&buyP5&&buy>2*buyP5){flags.push({k:'outBuy',p:buy});buyCap=2*buyP5;buy=buyP5;}
-  return{buy,sell,buys:buys.slice(0,400),buyCap,flags};
+  return{buy,sell,buys:buys.slice(0,400),buyCap,flags,top:sells.slice(0,5).map(o=>({p:o.p,v:o.v}))};
 }
 async function history30(id){
   try{
@@ -409,7 +430,7 @@ async function fetchTypes(names,withHist){
     const id=ids[n.toLowerCase()];
     const[b,v,h]=await Promise.all([jitaBook(id),typeVolume(id),withHist(n)?history30(id):Promise.resolve(null)]);
     const cat=grpOf[id]!=null?await groupCat(grpOf[id]):null;
-    S.api[n.toLowerCase()]={...b,vol:v,alt:volAlt[id],hist:h,ccp:ccp?ccp[id]:null,id,cat};
+    S.api[n.toLowerCase()]={...b,vol:v,alt:volAlt[id],hist:h,ccp:ccp?ccp[id]:null,id,cat};applyBait(S.api[n.toLowerCase()]);
     ++done;status('esiStatus','Consultando Jita: '+done+' de '+known.length+'…');
     if(S.loading)setLoading(true,'Consultando Jita: '+done+' de '+known.length+' ítems…',done/known.length,document.body.classList.contains('is-updating'));
   });
@@ -485,6 +506,8 @@ function verify(o,allowDeduce){
     if(f.k==='outSell')ch.push(['Orden de venta anómala ignorada','warn','La venta más barata ('+fmtP(f.p)+') está muy por debajo del mercado. Se usa el promedio del 5% más barato del volumen: '+fmtP(a.sell)+'.']);
     if(f.k==='outBuy')ch.push(['Orden de compra anómala ignorada','warn','La compra más alta ('+fmtP(f.p)+') está muy por encima del resto (posible trampa). Se usa '+fmtP(a.buy)+'.']);
   });
+  if(a.bait)ch.push([a.bait.skip.length===1?'Posible orden cebo ignorada':a.bait.skip.length+' posibles órdenes cebo ignoradas','warn','Muy por debajo del resto: '+a.bait.skip.map(o=>fmtP(o.p)+' ('+fmtQ(o.v)+' u.)').join(', ')+'. Se usa '+fmtP(a.bait.p)+' como Jita Sell'+(a.bait.next?', confirmado por la siguiente ('+fmtP(a.bait.next)+')':'')+'.']);
+  if(a.baitLevel)ch.push(['Ventas muy separadas en Jita','info','Las más baratas están lejos unas de otras y ninguna se confirma con la siguiente: parece otro nivel de precio, no un cebo. Se usa la más barata ('+fmtP(a.sell)+').']);
   if(a.sell==null&&a.buy==null)ch.push(['Sin órdenes en Jita 4-4','warn','']);
   else if(a.buy!=null&&a.sell!=null){
     if(a.buy>a.sell)ch.push(['Mercado cruzado (compra mayor que venta)','warn','Datos raros: revisa el mercado en el juego.']);
@@ -560,7 +583,7 @@ function computePlan(){
     // venderlo con orden a Jita Sell + margen de importación (neto, ya con taxes y broker de la estructura).
     if(S.flip){
       if(ref!=null&&q>0){
-        const jl=skTick(jitaList(o.name,ref,a&&a.buy,q),o,'ord');row.jl=jl;row.g.fJ=jl*q*rJ;
+        const jl=skTick(jitaList(o.name,ref,a&&a.buy,q,o.refMan!=null),o,'ord');row.jl=jl;row.g.fJ=jl*q*rJ;row.tight=tightSpread(jl,a);
         if(a&&a.buy!=null){const w=a.buys?walkBuys(a,q):{filled:q,value:a.buy*q};
           if(w.filled>=q){const fi=skf(o,'inst');row.g.fJI=w.value*fi*rI;row.instAvg=w.value*fi/q;}else row.hint.fJI='Jita solo compra '+fmtQ(w.filled)+' de '+fmtQ(q);}
         else row.hint.fJI='sin compras en Jita';
@@ -570,7 +593,7 @@ function computePlan(){
     }
     if(ref!=null&&q>0){
       row.qd=qtyDisc(o.name,q);const np=skTick(nullList(o.name,ref,a&&a.buy,o.nullSeen,q),o,'nul');if(np!=null){row.g.null=np*q*rN;row.np=np;}
-      const jl=skTick(jitaList(o.name,ref,a&&a.buy,q),o,'ord');row.jl=jl;row.g.jOrd=jl*q*rJ;row.ship.jOrd={v:row.vol,c:row.coll};
+      const jl=skTick(jitaList(o.name,ref,a&&a.buy,q,o.refMan!=null),o,'ord');row.jl=jl;row.g.jOrd=jl*q*rJ;row.tight=tightSpread(jl,a);row.ship.jOrd={v:row.vol,c:row.coll};
       if(a&&a.buy!=null){
         const w=a.buys?walkBuys(a,q):{filled:q,value:a.buy*q};
         if(w.filled>=q){const fi=skf(o,'inst');row.g.jInst=w.value*fi*rI;row.ship.jInst={v:row.vol,c:row.coll};row.instAvg=w.value*fi/q;if(w.value/q<a.buy*.995)row.hint.jInst='promedio '+fmtP(w.value/q)+' al vender todo';}
@@ -619,10 +642,11 @@ function computePlan(){
     const JO=S.flip?'fJ':'jOrd',JI=S.flip?'fJI':'jInst';
     if(C.fast>0&&(best==='null'||best==='rNull'||best==='disc'||best==='fN')){
       let jk=(S.flip?['fJ','fJI']:['jOrd','jInst','rJita']).filter(k=>r.net[k]!=null).reduce((a,k)=>a==null||r.net[k]>r.net[a]?k:a,null);
-      if(jk===JO&&r.net[JI]!=null&&r.net[JO]-r.net[JI]<C.umbral)jk=JI; // misma regla de orden vs instante
+      if(jk===JO&&r.net[JI]!=null&&(r.tight||r.net[JO]-r.net[JI]<C.umbral))jk=JI; // misma regla de orden vs instante
       if(jk&&r.net[best]-r.net[jk]<=C.fast*Math.abs(r.net[best])){r.fast={from:best,to:jk,loss:r.net[best]-r.net[jk]};best=jk;}
     }
-    if(!r.fast&&best===JO&&r.net[JI]!=null&&r.net[JO]-r.net[JI]<C.umbral){
+    if(!r.fast&&best===JO&&r.net[JI]!=null&&r.tight){best=JI;r.tightPick=true;} // v1.0.17: casi igual a la compra → rapidez
+    else if(!r.fast&&best===JO&&r.net[JI]!=null&&r.net[JO]-r.net[JI]<C.umbral){
       // la orden casi no gana: no vale la pena esperar. Pero si vender al instante deja menos que otra opción
       // (Buyback, Null…), se elige esa otra.
       const oth=Object.keys(r.net).filter(k=>k!==JO&&k!=='disc'&&r.net[k]!=null).reduce((a,k)=>a==null||r.net[k]>r.net[a]?k:a,null);
@@ -743,7 +767,8 @@ function paintGuide(ol,r){
   }else if(g.k==='jInst'){
     step('Qué Hacer',(SH()?'Envíalo a Jita 4-4 y vende':'Vende en Jita 4-4')+' directamente a las buy orders disponibles, sin esperar a que se complete una sell order.');
     step('Precio Medio de Venta','Aproximadamente '+fmtP(r.instAvg)+' por unidad. Se calcula recorriendo las buy orders disponibles para la cantidad que tienes.');
-    if(r.net.jOrd!=null)step('Por Qué Venta Rápida','La sell order dejaría '+fmt(r.net.jOrd)+'. La diferencia no supera tu umbral configurado para esperar una venta.');
+    if(r.tightPick&&r.tight)step('Por Qué Venta Rápida','Tu orden sería de '+fmtP(r.tight.jl)+' y la mejor compra paga '+fmtP(r.tight.buy)+': solo '+r.tight.ticks+' tick'+(r.tight.ticks===1?'':'s')+' de diferencia. Vender al instante cobra casi lo mismo y sin esperar.');
+    else if(r.net.jOrd!=null)step('Por Qué Venta Rápida','La sell order dejaría '+fmt(r.net.jOrd)+'. La diferencia no supera tu umbral configurado para esperar una venta.');
   }else if(g.k==='disc'){
     step('Qué Hacer','Prepara una oferta WTS en Discord (SIGMA o Vanguardia DR). Adjunta una tasación de Janice para que el comprador verifique el precio.');
     step('Precio',copyBtn(r.discUnit,fmtP(r.discUnit)),' por unidad ('+pct(C.disc.pct)+'% de Jita '+({buy:'Buy',split:'Split',sell:'Sell'})[C.disc.base]+') · total '+fmt(r.g.disc)+'.');
@@ -968,7 +993,7 @@ function paintLot(r){
     priceRow(tb,'Vender en '+sys+' (Keepstar)',r.np,nullTxt+qdN+'. Paga Sales Tax, Broker y SCC.',nu('null'),r.best==='null');
     if(C.bb.on)priceRow(tb,'Buyback de la alianza',r.bbUnit,r.bbUnit!=null?pct(1-r.bbTax)+'% de Jita '+({buy:'Buy',split:'Split',sell:'Sell'})[C.bb.base]+' (tax '+pct(r.bbTax)+'%'+(C.bb.special[o.name.toLowerCase()]!=null?', especial de este ítem':'')+')'+(SH()?'. Sin Sales Tax ni envío.':'. Sin Sales Tax.'):(r.hint.bb||''),nu('bb'),r.best==='bb');
     if(C.disc.on)priceRow(tb,'Venta a jugador',r.discUnit,pct(C.disc.pct)+'% de Jita '+(C.disc.base==='split'?'Split':'Buy')+(SH()?'. Sin taxes ni envío.':'. Sin taxes.'),nu('disc'),r.best==='disc');
-    priceRow(tb,'Orden de venta en Jita',r.jl,(C.ice.on&&isIce(o.name)?(C.ice.jitaMode==='split'?'Split':'Jita Sell −'+pct(C.under)+'%'):(o.refMan!=null?'Tu precio':'Jita Sell'))+' ('+js+')'+qdN+(SH()?'. Resta envío, Sales Tax y Broker.':'. Resta Sales Tax y Broker.'),nu('jOrd'),r.best==='jOrd');
+    priceRow(tb,'Orden de venta en Jita',r.jl,(C.ice.on&&isIce(o.name)?(C.ice.jitaMode==='split'?'Split':'Jita Sell −'+pct(C.under)+'%'):(o.refMan!=null?'Tu precio':'Jita Sell'+(C.underTk>0?' −'+C.underTk+' tick'+(C.underTk===1?'':'s'):'')))+' ('+js+')'+qdN+(SH()?'. Resta envío, Sales Tax y Broker.':'. Resta Sales Tax y Broker.'),nu('jOrd'),r.best==='jOrd');
     priceRow(tb,'Venta rápida en Jita',r.instAvg!=null?r.instAvg:(a&&a.buy!=null?a.buy:null),'Jita Buy'+(r.instAvg!=null&&a&&r.instAvg<a.buy*.995?' (promedio al vender todo)':'')+(SH()?'. Resta envío y Sales Tax.':'. Resta Sales Tax.'),nu('jInst'),r.best==='jInst');
     const n=el('tr');const nt=el('td','muted pr-foot');nt.colSpan=4;nt.textContent='Clic en un precio para copiarlo. En el juego se lista por unidad: pon este precio y la cantidad ('+fmtQ(r.q)+').';n.append(nt);tb.append(n);
   }}
@@ -2052,6 +2077,11 @@ $('iceJita').addEventListener('change',e=>{C.ice.jitaMode=e.target.value;refresh
 $('iceDisc').addEventListener('input',e=>{C.ice.nullDisc=(parseFloat(e.target.value)||0)/100;refresh();});
 $('iceDays').addEventListener('input',e=>{C.ice.nullDays=parseFloat(e.target.value)||0;refresh();});
 $('cUnder').addEventListener('input',e=>{C.under=(parseFloat(e.target.value)||0)/100;refresh();});
+// v1.0.17: ticks
+$('cUnderTk').addEventListener('input',e=>{C.underTk=Math.max(0,Math.round(parseFloat(e.target.value)||0));refresh();});
+$('cSpreadTk').addEventListener('input',e=>{C.spreadTk=Math.max(0,parseFloat(e.target.value)||0);refresh();});
+$('cBaitTk').addEventListener('input',e=>{C.baitTk=Math.max(0,parseFloat(e.target.value)||0);
+  Object.values(S.api).forEach(applyBait);S.items.forEach(o=>{if(o.jita){verify(o,false);derive(o);}});refresh();});
 $('cNullDays').addEventListener('input',e=>{C.nullDays=parseFloat(e.target.value)||0;refresh();});
 function readBB(){
   C.bb.on=$('bbOn').checked;C.bb.tax=(parseFloat($('bbTax').value)||0)/100;C.bb.base=$('bbBase').value;C.bb.special={};
