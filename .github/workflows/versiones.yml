@@ -1,0 +1,42 @@
+# Crea automáticamente un tag y un Release por cada versión.
+# Busca los commits cuyo mensaje empieza con "v1.2.3 — título" y, si ese tag aún no existe,
+# crea el tag y el Release con el index.html de ese commit para descargar
+# (renombrado gestor-ventas-v1.2.3.html) y las notas de esa versión sacadas del CHANGELOG.
+name: Versiones
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  releases:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Crear tags y Releases que falten
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -e
+          git fetch --tags
+          git log --reverse --format='%H %s' main | while read -r sha subject; do
+            ver=$(echo "$subject" | grep -oE '^v[0-9]+\.[0-9]+\.[0-9]+' || true)
+            [ -z "$ver" ] && continue
+            if git rev-parse -q --verify "refs/tags/$ver" >/dev/null; then continue; fi
+            title=$(echo "$subject" | sed -E 's/^v[0-9.]+ — //')
+            n=${ver#v}
+            # notas: la sección "## n — ..." del CHANGELOG de ese commit
+            git show "$sha:CHANGELOG.md" | awk -v v="$n" '
+              $0 ~ "^## "v" " {on=1; next}
+              on && /^## / {exit}
+              on {print}' > notes.md
+            git show "$sha:index.html" > "gestor-ventas-$ver.html"
+            latest=false
+            [ "$sha" = "$(git rev-parse main)" ] && latest=true
+            gh release create "$ver" "gestor-ventas-$ver.html" \
+              --target "$sha" --title "$ver — $title" --notes-file notes.md --latest=$latest
+            echo "Creado $ver"
+          done
