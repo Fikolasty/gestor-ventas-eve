@@ -2,6 +2,14 @@
 
 Cambios por versión del Gestor de Ventas. La más nueva arriba. El detalle técnico completo está en `docs/SPEC.txt`.
 
+## 1.0.20 — Elige un Plan en filas
+*2026-10-14*
+
+- «Elige un Plan» pasa de tarjetas a filas delgadas, una debajo de otra: punto de selección, nombre, una línea que explica qué significa ese plan, barra del valor (comparada con el mejor), total en ISK y diferencia con el óptimo.
+- El óptimo lleva la etiqueta «Recomendado» y barra verde; el plan elegido se marca en arcilla.
+- Si un plan solo aplica a parte de los ítems, la explicación dice cuántos.
+- En celular, el valor y la diferencia bajan debajo de la explicación.
+
 ## 1.0.19 — Pasos para Vender
 *2026-10-14*
 

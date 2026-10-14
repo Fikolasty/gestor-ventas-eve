@@ -1905,14 +1905,32 @@ function paintPicker(P){
    .map(([m,l])=>({m,l,t:m==='auto'?{net:opt,n:P.rows.length}:modeTotal(P,m)}));
   const same=all.filter(x=>x.m!=='auto'&&Math.round(x.t.net)===Math.round(opt)&&P.rows.every(r=>!r.auto||r.auto===x.m||r.g[x.m]==null)).map(x=>x.m);
   const curShown=same.includes(cur)?'auto':cur;
+  const maxNet=Math.max(...all.map(x=>x.t.net),1);
+  const sys=(C.ref.name||'Null').split(' - ')[0].trim()||'Null',env=SH()?'Envías todo a Jita y ':'En Jita: ';
+  const PK_EXP={auto:()=>'Cada ítem va a donde más deja; si la diferencia es chica, prefiere vender rápido.',
+    fN:()=>(SH()?'Llevas todo de Jita a '+sys+' y ':'En '+sys+': ')+'lo vendes con tu margen de importación.',
+    fJ:()=>'Publicas todo en Jita con sell orders. Más ISK, se vende en días.',
+    fJI:()=>'Vendes todo en Jita a las buy orders. Cobras al instante.',
+    null:()=>'Sell orders en '+sys+' para todo. Sin envío, pero tarda días en venderse.',
+    jOrd:()=>env+'publicas sell orders. Más ISK, se vende en días.',
+    jInst:()=>env+'vendes a las buy orders. Cobras al instante.',
+    bb:()=>'Un contrato Item Exchange al Buyback de la alianza. Rápido y simple, menos ISK.',
+    rNull:()=>'Reprocesas el ore o hielo y vendes los materiales en '+sys+'.',
+    rJita:()=>'Reprocesas y llevas los materiales a Jita para venderlos allí.',
+    disc:()=>'Se lo vendes a otro jugador por Discord. Sin taxes, pero sin comprador garantizado.'};
   all.filter(x=>!same.includes(x.m))
    .sort((a,b)=>Math.round(b.t.net)-Math.round(a.t.net)||(a.m==='auto'?-1:b.m==='auto'?1:0))
    .forEach(({m,l,t})=>{
     const d=t.net-opt,on=m===curShown;
+    // v1.0.20: filas delgadas, una debajo de otra: punto de selección · nombre + qué significa · barra del valor · total · diferencia
     const b=el('button','pk-o'+(on?' on':'')+(m==='auto'?' best':''));b.type='button';b.dataset.m=m;b.setAttribute('role','radio');b.setAttribute('aria-checked',String(on));
-    b.append(el('span','pk-l',l),el('b','pk-v num',compactIsk(t.net)),
-      el('small','pk-d '+(m==='auto'||Math.round(d)===0?'':d>0?'pos':'neg'),m==='auto'?(same.length?'Recomendado · es '+modeName(same[0]):'Recomendado'):Math.round(d)===0?'Igual al óptimo':d>0?'+'+compactIsk(d)+' pero más lento':'−'+compactIsk(-d)+' vs óptimo'));
-    if(m!=='auto'&&t.n<P.rows.length)b.title=t.n+' de '+P.rows.length+' ítems se pueden vender así; los demás siguen el óptimo.';
+    const txt=el('span','pk-tx'),nm=el('span','pk-l',l);if(m==='auto')nm.append(el('em','pk-rec','Recomendado'));
+    const part=m!=='auto'&&t.n<P.rows.length?' '+t.n+' de '+P.rows.length+' ítems se venden así; los demás siguen el óptimo.':'';
+    txt.append(nm,el('small','pk-e',(PK_EXP[m]?PK_EXP[m]():'')+(m==='auto'&&same.length?' Es igual a «'+modeName(same[0])+'».':'')+part));
+    const barW=el('span','pk-bar'),bi=el('i');bi.style.width=Math.max(2,Math.min(100,maxNet>0?t.net/maxNet*100:0))+'%';barW.append(bi);
+    const dd=m==='auto'?'Óptimo':Math.round(d)===0?'Igual':d>0?'+'+compactIsk(d)+' · más lento':'−'+compactIsk(-d);
+    b.append(el('span','pk-dot'),txt,barW,el('b','pk-v num',fmt(t.net)),el('small','pk-d '+(m==='auto'||Math.round(d)===0?'':d>0?'pos':'neg'),dd));
+    if(part)b.title=part.trim();
     box.append(b);});
   if(P.mode){const d=opt-P.best,cant=P.rows.filter(r=>r.cant);
     bar.hidden=false;

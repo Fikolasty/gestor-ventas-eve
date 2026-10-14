@@ -1002,3 +1002,6 @@ Pasos para Vender (reemplaza Qué Hacer)
 - Cada paso es <section class="stp pl-section" data-sort-id="all:k"> con renderPlanTable (orden, búsqueda, "ver más" siguen funcionando).
   Tabla visible desde el inicio, vShow por defecto 5, botón .pl-moreb ancho.
 - Progreso en memoria: stepDone (Set de ids de paso), itemDone (Set de nombres). Se vacían en clearViews. No se guarda.
+
+==================== v1.0.20 ====================
+- paintPicker: cada plan es una fila (.pk-o grid): .pk-dot · .pk-tx (nombre + PK_EXP[m]) · .pk-bar (t.net/maxNet) · .pk-v (fmt) · .pk-d (diferencia). Óptimo con .pk-rec "Recomendado".

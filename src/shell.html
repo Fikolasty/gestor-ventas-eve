@@ -1323,6 +1323,31 @@ html.lite #settings .st-f.st-flash{animation:none}
 .pl-row.ck-on{opacity:.5}
 @media(max-width:700px){.stp{grid-template-columns:30px minmax(0,1fr);padding:14px 12px}.stp-a{grid-column:2;text-align:left}.stp>.stp-acts,.stp>.stp-f,.stp>.pl,.stp>.stp-icons{grid-column:1/-1}.stp-acts .stp-done{margin-left:0}}
 html.lite .stp{box-shadow:none}
+
+/* ================= v1.0.20: Elige un Plan en filas delgadas ================= */
+#pk.pk,.pk{display:flex!important;flex-direction:column;gap:6px;grid-template-columns:none!important}
+.pk .pk-o{display:grid!important;grid-template-columns:18px minmax(0,1fr) 150px 160px 120px;align-items:center;gap:6px 14px;width:100%;
+  padding:10px 14px!important;border-radius:10px!important;text-align:left;transform:none!important}
+.pk .pk-o:hover{transform:none!important;border-color:rgba(222,220,209,.24)!important}
+.pk-dot{width:16px;height:16px;border-radius:50%;border:1.5px solid rgba(222,220,209,.35);box-shadow:inset 0 1px 2px rgba(0,0,0,.6);position:relative}
+.pk-o.on .pk-dot{border-color:#d97757}.pk-o.on .pk-dot::after{content:"";position:absolute;inset:3px;border-radius:50%;background:#d97757;box-shadow:0 0 6px rgba(217,119,87,.7)}
+.pk-tx{display:flex;flex-direction:column;min-width:0}
+.pk .pk-o .pk-l{font-size:.95rem;font-weight:650;color:var(--txt);display:flex;align-items:center;gap:8px}
+.pk .pk-o.on .pk-l::after{content:none!important}
+.pk-rec{font-style:normal;font-size:.68rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#7fe0a6;border:1px solid rgba(92,186,134,.45);border-radius:5px;padding:1px 6px}
+.pk-e{font-size:.8rem;color:var(--dim);line-height:1.35;margin-top:1px}
+.pk-bar{height:6px;border-radius:4px;background:rgba(255,255,255,.05);box-shadow:inset 0 1px 2px rgba(0,0,0,.6);overflow:hidden}
+.pk-bar i{display:block;height:100%;border-radius:4px;background:linear-gradient(90deg,rgba(222,220,209,.25),rgba(222,220,209,.5))}
+.pk-o.best .pk-bar i{background:linear-gradient(90deg,#3f8f63,#5cba86)}
+.pk-o.on .pk-bar i{background:linear-gradient(90deg,#c96442,#e8a588)}
+.pk .pk-o .pk-v{font:600 1rem var(--f-num);text-align:right;white-space:nowrap}
+.pk .pk-o .pk-d{font-size:.8rem;text-align:right;white-space:nowrap;color:var(--dim)}
+.pk .pk-o .pk-d.neg{color:#ff9a9a}.pk .pk-o .pk-d.pos{color:#7fe0a6}
+.pk .pk-o.best .pk-d{color:#7fe0a6}
+.pk .pk-o.on{border-color:#d97757!important;background:linear-gradient(90deg,rgba(217,119,87,.14),rgba(21,21,21,.95) 60%)!important;box-shadow:inset 3px 0 0 #d97757,0 2px 6px rgba(0,0,0,.45)!important}
+@media(max-width:760px){.pk .pk-o{grid-template-columns:18px minmax(0,1fr) auto;gap:4px 10px;padding:10px 12px!important}
+  .pk-dot{grid-column:1;grid-row:1;align-self:start;margin-top:3px}.pk-tx{grid-column:2/4;grid-row:1}
+  .pk-bar{grid-column:2;grid-row:2;align-self:center}.pk .pk-o .pk-v{grid-column:3;grid-row:2;font-size:.92rem}.pk .pk-o .pk-d{grid-column:2/4;grid-row:3}}
 </style>
 <script>/* v1.0.16: aplica tema y Modo Ligero guardados antes de pintar (sin parpadeo). Por defecto: Dark, sin Modo Ligero. */try{var g=JSON.parse(localStorage.getItem('gestorVentas.ajustes.v1')||'null');if(g&&g.ui){if(g.ui.light)document.documentElement.classList.add('light');if(g.ui.lite)document.documentElement.classList.add('lite');}}catch(e){}</script>
 </head>
