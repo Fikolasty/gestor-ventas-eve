@@ -964,3 +964,7 @@ Campos que no aplican se apagan (con el motivo debajo)
 - Hielo: sus campos sin «Reglas especiales para hielo»; «Descuento sobre Jita Buy» solo con «Jita Buy menos un %».
 - Buyback: sin «Comparar con el Buyback». Venta a Jugador: sin «Comparar esta opción». Descuento máximo: sin «Descuento por cantidad».
 - Días por courier y destinatario: con el envío apagado. Margen al importar y Destino en Null: solo en la ruta Jita → HY-RWO.
+
+==================== v1.0.15 ====================
+- Menú lateral contraído por defecto (body class="side-c" desde el HTML, sin parpadeo). Antes se expandía en pantallas de 1300 px o más.
+- Proyecto en GitHub: github.com/Fikolasty/gestor-ventas-eve. La página pública es index.html en GitHub Pages; cada commit "vX.Y.Z — título" crea su tag y Release (workflow Versiones).

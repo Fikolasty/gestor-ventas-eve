@@ -2003,7 +2003,7 @@ $('bSettings').addEventListener('click',e=>toggle(e.currentTarget,'settings'));
 {const mob=()=>innerWidth<=900,b=document.body;
  const setC=c=>{b.classList.toggle('side-c',c);$('sideTg').setAttribute('aria-expanded',String(!c));$('sideTg').title=c?'Expandir menú':'Contraer menú';};
  const setO=o=>{b.classList.toggle('side-open',o);$('sideBd').hidden=!o;};
- setC(innerWidth<1300);
+ setC(true); // v1.0.15: siempre empieza contraído (solo íconos)
  $('sideTg').addEventListener('click',()=>{if(mob())setO(false);else setC(!b.classList.contains('side-c'));});
  $('sideFab').addEventListener('click',()=>setO(true));$('sideBd').addEventListener('click',()=>setO(false));
  document.querySelectorAll('.side-i[data-open]').forEach(x=>x.addEventListener('click',()=>{$(x.dataset.open).click();if(mob())setO(false);}));

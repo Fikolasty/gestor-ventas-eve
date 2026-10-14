@@ -2,6 +2,12 @@
 
 Cambios por versión del Gestor de Ventas. La más nueva arriba. El detalle técnico completo está en `docs/SPEC.txt`.
 
+## 1.0.15 — Menú lateral contraído por defecto
+*2026-10-14*
+
+- El menú lateral siempre empieza contraído (solo íconos), en cualquier tamaño de pantalla. Se expande con el botón de arriba.
+- Primera versión publicada en GitHub Pages: https://fikolasty.github.io/gestor-ventas-eve/
+
 ## 1.0.14 — Skills y Taxes enlazados
 *2026-10-14*
 
