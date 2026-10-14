@@ -2,6 +2,21 @@
 
 Cambios por versión del Gestor de Ventas. La más nueva arriba. El detalle técnico completo está en `docs/SPEC.txt`.
 
+## 1.0.13 — Mensaje de pegado y Ajustes con relieve
+*2026-10-14*
+
+- Texto de la caja de pegado (placeholder): "Pega aquí tus ítems con Ctrl+V" (English: "Paste your items here with Ctrl+V"). Sin ejemplos ni instrucciones largas; la guía completa sigue en Ayuda.
+- El mensaje va centrado y más grande (1.35rem; 1.1rem en móvil) solo mientras la caja está vacía (:placeholder-shown); al pegar vuelve al estilo normal alineado a la izquierda.
+Ajustes: estilo gráfico (relieve, sombras y paleta)
+- Tarjetas de cada sección con degradado sobre #151515, brillo arriba, sombra en dos capas; al pasar el mouse se aclara el borde.
+- Sección abierta: borde y franja izquierda arcilla (#d97757) con sombra más profunda; el chevron se pinta arcilla.
+- Ícono de cada sección dentro de una ficha cuadrada con relieve: arcilla suave cerrada, arcilla sólida con ícono blanco abierta.
+- Títulos de grupo (Idioma, Tu Personaje…) en arcilla con una barrita luminosa.
+- La explicación de cada sección va en una nota con borde arcilla a la izquierda.
+- Cada campo es una mini tarjeta; las cajas de texto y selects van hundidas (sombra interior, fondo #0e0e0e) y al enfocarlas se marcan en arcilla.
+- Botones Abrir Todo / Cerrar Todo con relieve y borde arcilla al pasar el mouse.
+- Versión Light equivalente (light_extra.css). En Modo Ligero se quitan las sombras y se deja solo la franja arcilla.
+
 ## 1.0.12 — Idioma inglés, textos y Broker de Jita
 *2026-10-14*
 
