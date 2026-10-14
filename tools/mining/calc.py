@@ -10,7 +10,10 @@ SHIPS = ['Procurer', 'Retriever', 'Covetor', 'Skiff', 'Mackinaw', 'Hulk']
 EXHUMERS = {'Skiff', 'Mackinaw', 'Hulk'}
 
 def skills(level, ship):
-    """Skill profile. level 4 = 'everything at IV' except hard prerequisites the ship physically needs."""
+    """Skill profile. level 4 = 'everything at IV' except hard prerequisites the ship physically needs.
+    level también puede ser un dict {skill: nivel} con las skills reales de un personaje (simulación de entrenamiento)."""
+    if isinstance(level, dict):
+        return dict(level)
     if level == 5:
         s = {k: 5 for k in ['Mining', 'Astrogeology', 'Mining Barge', 'Exhumers', 'Ice Harvesting', 'Gas Cloud Harvesting',
                             'Mining Upgrades', 'Mining Precision', 'Mining Exploitation', 'Mining Drone Operation',
@@ -39,7 +42,7 @@ def req_ok(item, sk):
             n = name(int(a[f'requiredSkill{k}'])); lvl = a[f'requiredSkill{k}Level']
             if n in ('Drones', 'Mining', 'Ice Harvesting', 'Gas Cloud Harvesting', 'Mining Upgrades', 'Mining Drone Operation',
                      'Ice Harvesting Drone Operation', 'Mining Drone Specialization', 'Ice Harvesting Drone Specialization',
-                     'Astrogeology', 'CPU Management'):
+                     'Astrogeology', 'CPU Management', 'Mining Barge', 'Exhumers'):
                 if sk.get(n, 0) < lvl: return False, f'{n} {int(lvl)}'
     return True, None
 
@@ -88,7 +91,8 @@ FITS = {
   'Faction': dict(high='ORE Gas Cloud Harvester', low=None, mid=None, rigs=[], drone=None),
  },
 }
-FALLBACK = {'Ice Harvester II': 'Ice Harvester I', 'Gas Cloud Harvester II': 'Gas Cloud Harvester I',
+FALLBACK = {'Mining Laser Upgrade II': 'Mining Laser Upgrade I', 'Ice Harvester Upgrade II': 'Ice Harvester Upgrade I',
+            'ORE Ice Harvester': 'Ice Harvester I', 'ORE Strip Miner': 'Strip Miner I', 'Ice Harvester II': 'Ice Harvester I', 'Gas Cloud Harvester II': 'Gas Cloud Harvester I',
             'ORE Gas Cloud Harvester': 'Gas Cloud Harvester I', 'Ice Harvesting Drone II': 'Ice Harvesting Drone I',
             "'Augmented' Ice Harvesting Drone": 'Ice Harvesting Drone I', 'Mining Drone II': 'Mining Drone I'}
 IMPLANTS = {'moon': ["Inherent Implants 'Highwall' Mining MX-1005", "Michi's Excavation Augmentor"],
@@ -108,12 +112,16 @@ def calc(ship, mat, tier, level, implants=True, rigs_override=None, mid_override
         if len(rigs) < sh['rigSlots'] and cal + c <= sh['upgradeCapacity']:
             rigs.append(r); cal += c
     # skill gating -> fallback
-    for k in ('high', 'drone'):
-        if fit[k]:
+    for k in ('high', 'low', 'drone'):
+        while fit[k]:
             ok, why = req_ok(fit[k], sk)
-            if not ok:
-                notes.append(f"{fit[k]} requiere {why}; se usa {FALLBACK[fit[k]]}")
-                fit[k] = FALLBACK[fit[k]]
+            if ok:
+                break
+            nxt = FALLBACK.get(fit[k])
+            notes.append(f"{fit[k]} requiere {why}; se usa {nxt or 'nada'}")
+            fit[k] = nxt
+    if not fit['high']:
+        return None  # sin skills para el módulo principal: no mina
     H = A(fit['high']); nH = int(sh['hiSlots'])
     amount = H['miningAmount']; dur = H['duration']
     lvl = lambda n: sk.get(n, 0)
@@ -125,7 +133,8 @@ def calc(ship, mat, tier, level, implants=True, rigs_override=None, mid_override
         amount *= pct(sh.get('shipRoleBonusOreMiningYield', 0))
         dur *= pct(sh.get('shipRoleBonusOreMiningDuration', 0))
         dur *= pct(sh.get('exhumersBonusOreMiningDuration', 0) * lvl('Exhumers'))
-        amount *= pct(A(fit['low'])['miningAmountBonus']) ** 3
+        if fit['low']:
+            amount *= pct(A(fit['low'])['miningAmountBonus']) ** 3
         if implants:
             for i in IMPLANTS['moon']: amount *= pct(A(i)['miningAmountBonus'])
     elif mat == 'ice':
@@ -133,7 +142,8 @@ def calc(ship, mat, tier, level, implants=True, rigs_override=None, mid_override
         dur *= pct(sh.get('miningBargeBonusIceHarvestingDuration', 0) * lvl('Mining Barge'))
         dur *= pct(sh.get('exhumersBonusIceHarvestingDuration', 0) * lvl('Exhumers'))
         dur *= pct(sh.get('shipRoleBonusIceHarvestingDuration', 0))
-        dur *= pct(A(fit['low'])['iceHarvestCycleBonus']) ** 3
+        if fit['low']:
+            dur *= pct(A(fit['low'])['iceHarvestCycleBonus']) ** 3
         for r in rigs:
             if 'Ice Harvester Accelerator' in r: dur *= pct(A(r)['iceHarvestCycleBonus'])
         if implants: dur *= pct(A(IMPLANTS['ice'][0])['iceHarvestCycleBonus'])
@@ -195,7 +205,9 @@ def calc(ship, mat, tier, level, implants=True, rigs_override=None, mid_override
                 cycle_s=round(dur / 1000, 2), per_cycle=round(amount, 1),
                 base_mph=round(base_mph), crit_p=round(crit_p * 100, 2), crit_b=round(crit_b * 100), mod_mph=round(mod_mph),
                 drone_mph=round(drone_mph), total_mph=round(total), hold=round(hold), fill_min=round(hold / total * 60, 1),
-                waste_p=round(waste_p, 1), cpu_used=round(used, 1), cpu_out=round(cpu_out, 1), fits=used <= cpu_out + 1e-6, cal=cal, notes=notes)
+                waste_p=round(waste_p, 1), cpu_used=round(used, 1), cpu_out=round(cpu_out, 1), fits=used <= cpu_out + 1e-6, cal=cal, notes=notes,
+                items=[(ship, 1), (fit['high'], nH)] + ([(fit['low'], 3)] if fit['low'] else []) + ([(fit['mid'], 1)] if fit['mid'] else [])
+                      + [(r, 1) for r in rigs] + ([(fit['drone'], nD)] if fit['drone'] and nD else []))
 
 import itertools
 RIGPOOL = {
@@ -219,6 +231,8 @@ def best(ship, mat, tier, level, implants=True, boost=None):
         if cost > sh['upgradeCapacity']: continue
         for mi, mid in enumerate(MIDPOOL[tier]):
             r = calc(ship, mat, tier, level, implants, rigs_override=list(combo), mid_override=mid, boost=boost)
+            if r is None:
+                return None
             if r['fits']:
                 cands.append((-mi, r['total_mph'], -len(r['rigs']), r))
     cands.sort(key=lambda x: x[:3], reverse=True)

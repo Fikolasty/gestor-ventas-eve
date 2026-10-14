@@ -1073,3 +1073,21 @@ Ruta y dónde vendes
 - unitFor cubre fN/fJ/fJI. Rótulos .route-cap «Dirección» / «En».
 - Reproceso: siempre en HY-RWO (rJita = reprocesar en HY-RWO y vender el material en Jita).
 Tasación (#appr): Precios de Jita 4-4, Volumen, Ítems | Buy, Split, Sell (paintAppraisal en cada refreshNow y en clearViews).
+
+==================== v1.0.26 ====================
+Comparativa Minera (antes «Minería»): plan para Omega nuevo
+- tools/mining/training.py: SP por nivel = 250 × rango × √32^(nivel−1); Omega = (primario + secundario/2) SP/min. START = skills iniciales comunes
+  (EVE University); EXPERT = skills de los Expert Systems «Mining Barge Operations» (moon/hielo) y «Gas Harvesting» (gas), 7 días.
+  plan(mat) = etapas: barge propia (Industry V, Astrogeology III, Mining Frigate III, Mining Barge I + skill del módulo) → rendimiento a IV →
+  Exhumer (Astrogeology V, Mining Barge V, Spaceship Command IV, Exhumers I). best_remap() prueba todos los repartos 17–27 (99 puntos).
+- calc.py acepta un dict de skills reales; baja módulo por módulo (altos, bajos, drones) a lo que las skills permiten y devuelve items del fit.
+- build_data.py agrega a MINE: train {opts, attrs, plan, stages, ends (hora en que termina cada paso), cyber, targets ("lv|mat|tier|ship" →
+  horas por opción de atributos), es}, sim ("mat|barge|tier|opt" → 28 m³/h diarios: días 1–7 con el Expert System, luego solo skills propias;
+  0 si no puede volar la barge), simfit (fit al día 28 con typeIDs), fits (typeIDs de cada fit de la comparativa), names.
+- mining.js: S.view ('ships' | 'plan'), S.att, S.acc (1–100), S.hrs, S.barge, S.ptier, S.plex, S.esPlex, S.omegaPlex. loadMany() pide precios
+  de a 4. Inversión = Σ Jita Sell × cantidad. Ingresos = m³/h × horas × (precio por unidad ÷ m³ por unidad); paga Omega = días 8–28 ≥ Omega en
+  PLEX × precio del PLEX; balance = 28 días − (inversión + Expert System + Omega); día de recuperación = primer día con acumulado ≥ eso. Todo ×
+  cuentas. El precio del PLEX es manual (mercado global desde julio 2025, fuera de los mercados regionales de ESI).
+- Mejor de cada clase: td.best con fondo dorado y ★.
+- Verificado: node --check; Playwright con ESI simulado (precios por typeID) en las dos vistas y las dos páginas; 1 y 100 cuentas; inglés sin
+  restos en español; móvil 390 px sin desborde; paneles Ajustes/Ayuda/Comparativa Minera y barra lateral; cero errores de consola.

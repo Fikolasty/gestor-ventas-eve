@@ -77,3 +77,90 @@ with open(out, 'w', encoding='utf-8') as f:
     f.write('// Generado por tools/mining/build_data.py desde los datos estáticos de EVE (Pyfa, build %s). No editar a mano.\n' % build)
     f.write('const MINE=' + json.dumps(data, ensure_ascii=False, separators=(',', ':')) + ';\n')
 print('OK', out, len(rows), 'escenarios,', len(mats), 'materiales,', os.path.getsize(out) // 1024, 'KB')
+
+# ================= v1.0.25: entrenamiento, inversión y plan de 28 días para un Omega nuevo =================
+import training as TR
+from calc import calc as _calc
+REL = {'moon': ['Mining', 'Astrogeology', 'Mining Barge', 'Exhumers', 'Mining Precision', 'Mining Exploitation', 'CPU Management',
+                'Mining Upgrades', 'Drones', 'Mining Drone Operation', 'Mining Drone Specialization', 'Drone Interfacing'],
+       'ice': ['Mining', 'Astrogeology', 'Mining Barge', 'Exhumers', 'Mining Precision', 'Mining Exploitation', 'CPU Management',
+               'Ice Harvesting', 'Mining Upgrades', 'Drones', 'Ice Harvesting Drone Operation', 'Ice Harvesting Drone Specialization'],
+       'gas': ['Mining', 'Astrogeology', 'Mining Barge', 'Exhumers', 'CPU Management', 'Gas Cloud Harvesting']}
+PROFILE_KEYS = sorted({k for v in REL.values() for k in v} | {'Power Grid Management', 'Drones Rigging'})
+ROMAN = ['', 'I', 'II', 'III', 'IV', 'V']
+tid = lambda n: name2id[n]
+
+def reqs_of(item):
+    a = A(item)
+    return {TR.name(int(a[f'requiredSkill{k}'])): int(a[f'requiredSkill{k}Level']) for k in range(1, 7) if f'requiredSkill{k}' in a}
+
+def merge(*ds):
+    out = {}
+    for d in ds:
+        for k, v in d.items():
+            out[k] = max(out.get(k, 0), v)
+    return out
+
+def items_ids(items):
+    return [[tid(n), q] for n, q in items]
+
+OPTS = ['base', 'remap', 'remap3', 'remap5']
+train = dict(opts=OPTS, attrs={}, plan={}, stages={}, ends={}, cyber={}, targets={}, es={}, start=TR.START)
+sim, simfit = {}, {}
+for mat in MAT:
+    steps, stg = TR.plan(mat)
+    rm = TR.best_remap(steps)
+    ats = dict(base=TR.BASE_ATTRS, remap=rm, remap3=TR.with_implants(rm, 3), remap5=TR.with_implants(rm, 5))
+    train['attrs'][mat] = ats
+    train['plan'][mat] = [[s, l] for s, l in steps]
+    train['stages'][mat] = stg
+    train['ends'][mat] = {o: [round(e, 2) for e in TR.timeline(steps, ats[o])] for o in OPTS}
+    cyb, _ = TR.steps_for([('Cybernetics', 5)], TR.START)
+    train['cyber'][mat] = {o: round(TR.hours(cyb, ats[o]), 1) for o in OPTS}
+    es_name, es_sk = TR.EXPERT[mat]
+    train['es'][mat] = [es_name, es_sk]
+    # objetivo IV / V: skills que importan para ese material + lo que piden la nave y el fit
+    for lv in (4, 5):
+        for tier in ('T1', 'T2', 'Faction'):
+            for s in SHIPS:
+                prof = skills(lv, s)
+                r = best(s, mat, tier, lv, False, None)
+                tgt = merge({k: prof.get(k, 0) for k in REL[mat]}, reqs_of(s), *[reqs_of(n) for n, _ in r['items'] if n != s])
+                need, _ = TR.steps_for(sorted(tgt.items()), TR.START)
+                train['targets'][f'{lv}|{mat}|{tier}|{s}'] = {o: round(TR.hours(need, ats[o]), 1) for o in OPTS}
+    # simulación de 28 días en barge: Expert System los días 1–7, luego solo las skills propias
+    for o in OPTS:
+        ends = train['ends'][mat][o]
+        for barge in ('Procurer', 'Retriever', 'Covetor'):
+            for tier in ('T1', 'T2', 'Faction'):
+                daily, last = [], None
+                for d in range(28):
+                    own = TR.skills_at(steps, ends, 24 * d)
+                    eff = merge(own, es_sk) if d < 7 else own
+                    prof = {k: eff.get(k, 0) for k in PROFILE_KEYS}
+                    if eff.get('Mining Barge', 0) < 1:
+                        daily.append(0); continue
+                    r = best(barge, mat, tier, prof, False, None)
+                    daily.append(r['total_mph'] if r else 0)
+                    if r: last = r
+                sim[f'{mat}|{barge}|{tier}|{o}'] = daily
+                simfit[f'{mat}|{barge}|{tier}|{o}'] = dict(items=items_ids(last['items']) if last else [],
+                                                          high=last['high'] if last else '—', low=last['low'] if last else '—',
+                                                          mid=last['mid'] if last else '—', drones=last['drone'] if last else '—')
+
+# Inversión de cada fit de la comparativa (sin boost; el fit no cambia con implantes)
+fits = {}
+for lv in (4, 5):
+    for mat in MAT:
+        for tier in ('T1', 'T2', 'Faction'):
+            for s in SHIPS:
+                fits[f'{lv}|{mat}|{tier}|{s}'] = items_ids(best(s, mat, tier, lv, True, None)['items'])
+names = {}
+for v in list(fits.values()) + [x['items'] for x in simfit.values()]:
+    for i, _ in v:
+        names[i] = TR.name(i)
+data.update(train=train, sim=sim, simfit=simfit, fits=fits, names=names)
+with open(out, 'w', encoding='utf-8') as f:
+    f.write('// Generado por tools/mining/build_data.py desde los datos estáticos de EVE (Pyfa, build %s). No editar a mano.\n' % build)
+    f.write('const MINE=' + json.dumps(data, ensure_ascii=False, separators=(',', ':')) + ';\n')
+print('OK v1.0.25', out, os.path.getsize(out) // 1024, 'KB')
