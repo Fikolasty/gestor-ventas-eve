@@ -1,0 +1,1621 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src data: blob:; connect-src https://esi.evetech.net https://images.evetech.net; base-uri 'none'; form-action 'none'; object-src 'none'">
+<meta name="referrer" content="no-referrer">
+<title>Gestor de Ventas · SIGMA GRINDSET</title>
+<link rel="icon" type="image/png" href="__SIGMA__">
+<style>
+/* ================= Gestor de Ventas v__VER__ =================
+   Paleta: azul de base, naranja = acción, verde/rojo = ganancia/pérdida.
+   Sin backdrop-filter: el vidrio se finge con rgba + bordes. */
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --sigma:url(__SIGMA__);
+  --vg:url(__VG__);
+  --void:#262624; --hull:#30302e; --hull2:#353533; --line:rgba(222,220,209,.12); --line2:rgba(222,220,209,0.132);
+  --txt:#faf9f5; --mut:#c2c0b6; --dim:#9c9a92;
+  --ion:#d6d4cb; --blue:#6b6a65; --clay:#d97757; --thrust:#e0a84f; --gain:#5cba86; --loss:#e8746c;
+  --f-num:var(--f-ui);
+  --f-ui:"Anthropic Sans",ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  --f-serif:"Anthropic Serif","Tiempos Text",Copernicus,ui-serif,Georgia,Cambria,"Times New Roman",serif;
+  --r-lg:18px; --r-md:12px; --r-sm:8px;
+}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important;animation:none!important}}
+body{background:var(--void);color:var(--txt);font:16px/1.6 var(--f-ui);min-height:100vh;font-variant-numeric:tabular-nums}
+/* Fondo FIJO: la foto se queda quieta y solo se desplaza la página. Las dos capas fijas van en su propia
+   capa de composición (translateZ + will-change), así el scroll no las vuelve a dibujar. */
+body{position:relative}
+body::before{content:"";position:fixed;inset:0;z-index:-2;transform:translateZ(0);will-change:transform;background:var(--void) url(__ATHANOR__) 0% 0/cover no-repeat}
+/* Overlay cinematográfico: la Keepstar a la izquierda, el lado del contenido más oscuro, franjas tipo cine y líneas finas de pantalla */
+body::after{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;transform:translateZ(0);will-change:transform;background:
+  repeating-linear-gradient(180deg,rgba(255,255,255,.012) 0 1px,transparent 1px 3px),
+  radial-gradient(40% 50% at 18% 45%,rgba(222,220,209,.06),transparent 70%),
+  radial-gradient(45% 40% at 92% 6%,rgba(222,220,209,.10),transparent 70%),
+  linear-gradient(90deg,rgba(36,35,33,0) 0%,rgba(36,35,33,0) 45%,rgba(36,35,33,.3) 75%,rgba(36,35,33,.5) 100%),
+  linear-gradient(180deg,rgba(36,35,33,.22) 0%,rgba(36,35,33,0) 10%,rgba(36,35,33,0) 62%,rgba(36,35,33,.45) 100%)}
+[hidden]{display:none!important}
+:focus-visible{outline:2px solid var(--ion);outline-offset:2px;border-radius:6px}
+.num{font-family:var(--f-num);font-variant-numeric:tabular-nums}
+.pos{color:var(--gain)} .neg{color:var(--loss)}
+
+/* ---------- barra superior ---------- */
+.top{display:flex;align-items:center;justify-content:space-between;gap:12px;max-width:min(1360px,94vw);margin:0 auto;padding:18px 20px}
+.brand{font:600 1.05rem var(--f-num);letter-spacing:.3px;color:var(--txt)}
+.brand small{color:var(--mut);font:400 .8rem var(--f-ui);margin-left:8px}
+.top nav{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.who{font-size:.82rem;color:var(--gain);border:1px solid rgba(53,194,110,.35);border-radius:999px;padding:5px 12px}
+
+/* ---------- botones ---------- */
+button{font:inherit;cursor:pointer;border:none;background:none;color:inherit}
+.btn{display:inline-flex;align-items:center;gap:8px;border-radius:999px;padding:10px 22px;font-weight:600;color:#fff;
+  background:linear-gradient(180deg,#d97757,#d97757);box-shadow:0 6px 14px rgba(217,119,87,.32),inset 0 1px 0 rgba(255,255,255,.45);transition:transform .1s,opacity .15s}
+.btn:active{transform:scale(.98)} .btn:disabled{opacity:.55;cursor:wait;transform:none}
+.ghost{border-radius:999px;padding:8px 16px;font-weight:600;font-size:.88rem;color:var(--mut);border:1px solid var(--line2);background:rgba(36,35,33,.6)}
+.ghost:hover,.ghost[aria-pressed="true"]{color:var(--txt);border-color:rgba(222,220,209,0.3)}
+.link{color:var(--ion);font-size:.85rem;text-decoration:underline;text-underline-offset:3px}
+.link.danger{color:var(--loss)}
+
+/* ---------- entradas ---------- */
+input,select,textarea{font:inherit;color:var(--txt);background:rgba(36,35,33,.85);border:1px solid var(--line2);border-radius:var(--r-sm);padding:8px 10px;width:100%}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--ion);box-shadow:0 0 0 3px rgba(222,220,209,0.108)}
+input::placeholder,textarea::placeholder{color:var(--dim)}
+input[type=checkbox]{width:auto;accent-color:var(--thrust)}
+label{display:block;font-size:.9rem;color:var(--mut)}
+label>input,label>select{margin-top:4px}
+
+/* ---------- héroe: el pegado ---------- */
+.hero{max-width:min(1360px,94vw);margin:0 auto;padding:40px 20px 18px}
+.hero{padding-top:56px}
+.title{display:flex;align-items:center;gap:20px}
+.sig{display:inline-block;background:var(--sigma) center/contain no-repeat}
+.vg{display:inline-block;background:var(--vg) center/contain no-repeat}
+.logo-l{flex:none;width:88px;height:88px;filter:drop-shadow(0 4px 14px rgba(0,0,0,.6)) drop-shadow(0 0 18px rgba(222,220,209,0.21))}
+.logo-s{width:30px;height:30px;vertical-align:-8px;margin-right:10px;filter:drop-shadow(0 0 8px rgba(222,220,209,0.21))}
+.hero h1{font:600 clamp(2rem,4.8vw,3.4rem)/1.05 var(--f-num);letter-spacing:2px;text-transform:uppercase;text-wrap:balance}
+.tagline{font:500 clamp(1.15rem,2.4vw,1.5rem)/1.3 var(--f-num);color:var(--ion);margin-top:6px!important;text-shadow:0 2px 10px rgba(0,0,0,.7)}
+.hero>p{text-shadow:0 1px 8px rgba(0,0,0,.8);color:#d6d4cb}
+.hero p{color:var(--mut);max-width:none;margin-top:12px}
+.paste{margin-top:24px;background:rgba(36,35,33,.92);border:1px solid var(--line2);border-radius:var(--r-lg);padding:6px;box-shadow:0 8px 14px rgba(0,0,0,.45)}
+.paste textarea{border:none;background:transparent;min-height:120px;resize:none;font-size:.92rem;line-height:1.6;scrollbar-width:none;-ms-overflow-style:none}
+.paste textarea::-webkit-scrollbar{display:none;width:0;height:0} /* v109: sin barra blanca ni agarradera; sigue bajando con la rueda */
+textarea{scrollbar-width:thin;scrollbar-color:rgba(222,220,209,0.21) transparent}
+textarea::-webkit-scrollbar{width:8px}textarea::-webkit-scrollbar-track{background:transparent}
+textarea::-webkit-scrollbar-thumb{background:rgba(222,220,209,0.18);border-radius:8px}textarea::-webkit-scrollbar-corner{background:transparent}
+textarea::-webkit-resizer{background:transparent}
+.paste textarea:focus{box-shadow:none}
+.paste textarea:placeholder-shown{text-align:center;font-size:1.35rem;font-weight:500;padding-top:40px;line-height:1.5} /* v1.0.13: mensaje centrado y grande; al pegar vuelve al estilo normal */
+.paste textarea::placeholder{color:var(--mut);opacity:1}
+@media (max-width:600px){.paste textarea:placeholder-shown{font-size:1.1rem;padding-top:44px}}
+.paste-foot{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:6px 10px 8px;flex-wrap:wrap}
+.status{font-size:.85rem;color:var(--mut)} .status.ok{color:var(--gain)} .status.err{color:var(--thrust)}
+
+/* ---------- paneles ---------- */
+main{max-width:min(1360px,94vw);margin:0 auto;padding:0 20px 40px;display:flex;flex-direction:column;gap:18px}
+.panel{background:linear-gradient(180deg,rgba(48,48,46,.94),rgba(36,35,33,.96));border:1px solid var(--line);border-radius:var(--r-lg);padding:24px;box-shadow:0 8px 14px rgba(0,0,0,.45),inset 0 1px 0 rgba(255,255,255,.05)}
+.panel h2{font:600 1.5rem var(--f-num);letter-spacing:.3px}
+.panel .lead{color:var(--mut);font-size:1rem;margin-top:4px;max-width:none}
+details.panel>summary{list-style:none;cursor:pointer;display:flex;justify-content:space-between;align-items:baseline;gap:12px}
+details.panel>summary::-webkit-details-marker{display:none}
+details.panel>summary h2::before{content:"›";display:inline-block;margin-right:10px;color:var(--ion);transition:transform .15s}
+details.panel[open]>summary h2::before{transform:rotate(90deg)}
+details.panel>summary .sum{font:600 1.05rem var(--f-num);color:var(--mut)}
+details.panel[open]>summary{margin-bottom:16px}
+
+/* ---------- veredicto: la pieza protagonista ---------- */
+.verdict{padding:28px 28px 22px}
+.v-isk{font:600 clamp(1.9rem,8.5vw,4.4rem)/1 var(--f-num);margin:10px 0 4px;letter-spacing:.5px}
+.v-isk span{font-size:.4em;color:var(--mut);margin-left:8px;letter-spacing:0}
+.v-sub{color:var(--mut);font-size:.88rem}
+.split{display:flex;height:10px;border-radius:999px;overflow:hidden;background:rgba(255,255,255,.06);margin:18px 0 8px}
+.split i{display:block;height:100%;transition:width .4s ease}
+.split .s-null{background:var(--gain)} .split .s-jita{background:var(--blue)}
+.legend{display:flex;gap:18px;flex-wrap:wrap;font-size:.8rem;color:var(--mut)}
+.legend b{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px;vertical-align:-1px}
+.v-note{font-size:.82rem;color:var(--thrust);margin-top:12px}
+
+.contract table{max-width:720px}
+.rcall{margin:0 0 14px;grid-column:1/-1}
+.rcall small.rcr{display:block;margin-top:6px;color:var(--txt);font-size:.85rem}
+.rcall b.pos{color:var(--gain)} .rcall b.neg{color:var(--loss)}
+.calls2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:4px}
+.calls2 .call{margin-top:12px}
+.rc{padding:16px 18px}
+.rc-t{font-size:1.05rem;font-weight:600;color:var(--txt)}
+.rc-t b{font-size:1.35rem;font-weight:600;display:inline-block;margin-left:2px}
+.rc-t b.pos{color:var(--gain);text-shadow:0 1px 0 rgba(0,0,0,.7),0 0 14px rgba(53,194,110,.3)}
+.rc-t b.neg{color:var(--loss);text-shadow:0 1px 0 rgba(0,0,0,.7),0 0 14px rgba(255,123,123,.25)}
+.call small.rc-cap{display:block;font-size:.78rem;color:var(--dim);margin:2px 0 12px}
+.rc-ln{display:flex;flex-direction:column;gap:4px;border-top:1px solid var(--line);padding-top:10px}
+.rc-ln div{display:flex;justify-content:space-between;gap:12px;font-size:.95rem}
+.rc-ln dt{color:var(--mut)} .rc-ln dd{color:var(--txt);font-weight:600}
+.call small.rc-miss{display:block;color:var(--thrust);font-size:.82rem;margin-top:8px}
+.call small.rc-miss:empty{display:none}
+.cmp td.bestc{background:rgba(53,194,110,.10);box-shadow:inset 0 0 0 1px rgba(53,194,110,.4);border-radius:6px}
+.cmp tr.diff td{font-weight:600;border-top:1px solid var(--line2)}
+.cmp td.muted{color:var(--dim)}
+.gwrap{grid-column:1/-1}
+.guide{list-style:none;counter-reset:g;display:flex;flex-direction:column;gap:8px;margin:0 0 6px;padding:14px 16px;border-radius:var(--r-md);
+  background:linear-gradient(180deg,rgba(222,220,209,.10),rgba(222,220,209,.04));border:1px solid rgba(222,220,209,0.132);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.06),0 6px 14px rgba(0,0,0,.3)}
+.guide li{counter-increment:g;display:grid;grid-template-columns:28px 170px minmax(0,1fr);gap:10px;align-items:baseline;font-size:.95rem}
+.guide li::before{content:counter(g);font:600 .85rem var(--f-num);color:var(--void);background:var(--ion);border-radius:999px;width:22px;height:22px;display:inline-flex;align-items:center;justify-content:center;box-shadow:0 0 10px rgba(222,220,209,0.24)}
+.guide li b{color:var(--txt);font-weight:600}
+.guide li span{color:var(--mut)}
+.guide .copy{display:inline-block;width:auto;padding:2px 8px;margin:0 2px;font-size:.9rem}
+.rguide{margin-top:12px;color:var(--txt);font-weight:600}
+.rguide:empty{display:none}
+.logo{width:34px;height:34px;vertical-align:-8px;margin-right:10px;filter:drop-shadow(0 2px 6px rgba(222,220,209,0.21))}
+details.panel>summary h2 .logo{display:inline-block}
+.msg{margin-top:14px;padding:14px 16px;border-radius:var(--r-md);background:rgba(36,35,33,.85);border:1px solid var(--line2);
+  box-shadow:inset 0 2px 6px rgba(0,0,0,.55);font:.9rem/1.55 Consolas,"Cascadia Mono",ui-monospace,monospace;color:var(--txt);white-space:pre-wrap;word-break:break-word}
+.guide li span input{margin-top:6px}
+.dests{display:flex;gap:12px;flex-wrap:wrap;margin-top:14px}
+.dest{display:flex;align-items:center;gap:12px;padding:10px 16px 10px 12px;border-radius:var(--r-md);border:1px solid var(--line2);text-align:left;
+  background:linear-gradient(180deg,rgba(48,48,46,.9),rgba(36,35,33,.95));box-shadow:inset 0 1px 0 rgba(255,255,255,.06),0 4px 10px rgba(0,0,0,.35);color:var(--mut);transition:border-color .15s}
+.dest b{display:block;color:var(--txt);font-weight:600}.dest small{font-size:.8rem}
+.dest .logo{width:38px;height:38px;margin:0}
+.dest[aria-pressed="true"]{border-color:rgba(222,220,209,0.36);box-shadow:0 0 0 3px rgba(222,220,209,.12),inset 0 1px 0 rgba(255,255,255,.08),0 6px 14px rgba(0,0,0,.4)}
+details.panel>summary h2 .logo+.logo{margin-left:-4px}
+.p-disc{color:#d6d4cb;border-color:rgba(222,220,209,0.3);background:rgba(222,220,209,.1)}
+.v-cap{font-size:1rem;color:var(--txt);font-weight:600;margin-top:2px}
+.v-sub{margin-top:2px}
+.v-h{margin:22px 0 8px}
+.v-hint{color:var(--mut);font-size:.88rem;margin:-4px 0 10px}
+.receipt{list-style:none;display:flex;flex-direction:column;border-radius:var(--r-md);overflow:hidden;border:1px solid var(--line);
+  background:rgba(36,35,33,.55);box-shadow:inset 0 2px 6px rgba(0,0,0,.45)}
+.receipt li{display:grid;grid-template-columns:168px minmax(0,1fr) auto;gap:12px;align-items:center;padding:10px 14px;border-bottom:1px solid var(--line)}
+.receipt li:last-child{border-bottom:none}
+.receipt .rw{color:var(--txt);font-size:.95rem}
+.receipt .rw small{display:block;color:var(--dim);font-size:.8rem}
+.receipt .amt{font:600 1.05rem var(--f-num);text-align:right;white-space:nowrap}
+.receipt.rep li{grid-template-columns:auto minmax(0,1fr) auto}
+.receipt li>.pill:first-child{justify-self:start}
+.legend em{font-style:normal;color:var(--txt);margin-left:4px}
+.sub-h{font:600 1.05rem var(--f-num);margin:4px 0 8px;color:var(--txt)}
+.prices{grid-column:1/-1;border-top:1px solid var(--line);padding-top:14px}
+.prices table{margin-top:4px}
+.prices td{vertical-align:middle}
+.prices .copy{width:auto;min-width:150px;text-align:right;margin:0}
+.prices .muted{color:var(--dim);font-size:.85rem}
+/* ---------- libro de lotes ---------- */
+.ledger-tools{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin:14px 0 12px}
+.ledger-head,.lot-head{display:grid;grid-template-columns:minmax(0,1fr) 150px 100px 170px 170px 22px;gap:14px;align-items:center}
+.ledger-head{font-size:.85rem;color:var(--dim);padding:0 14px 6px;border-bottom:1px solid var(--line)}
+.ledger-head span:nth-child(n+2){text-align:right}
+.lot{border-bottom:1px solid var(--line)}
+.lot-head{width:100%;text-align:left;padding:13px 14px;border-radius:var(--r-md)}
+.lot-head:hover{background:rgba(222,220,209,.06)}
+.lot-name b{font-weight:600}
+.lot-qty,.lot-net{text-align:right;font-family:var(--f-num)}
+.lot-net{font-size:1.05rem;font-weight:600}
+.lot-dest{justify-self:end}
+.chev{color:var(--dim);transition:transform .15s;text-align:center}
+.lot.open .chev{transform:rotate(90deg);color:var(--ion)}
+.lot.open .lot-head{background:rgba(222,220,209,.07)}
+.pill{display:inline-block;border-radius:999px;padding:3px 11px;font-size:.78rem;font-weight:600;white-space:nowrap;border:1px solid}
+.p-null{color:var(--gain);border-color:rgba(53,194,110,.45);background:rgba(53,194,110,.08)}
+.p-jita{color:var(--ion);border-color:rgba(222,220,209,0.33);background:rgba(222,220,209,.1)}
+.p-none{color:var(--thrust);border-color:rgba(217,119,87,.45);background:rgba(217,119,87,.08)}
+.tag{display:inline-block;font-size:.72rem;margin-left:8px;padding:1px 8px;border-radius:999px;border:1px solid}
+.tag.ok{color:var(--gain);border-color:rgba(53,194,110,.35)} .tag.warn{color:var(--thrust);border-color:rgba(217,119,87,.45)}
+.lot-body{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:22px;padding:6px 14px 20px}
+.opts{display:flex;flex-direction:column;gap:9px}
+.opt{display:grid;grid-template-columns:170px minmax(0,1fr) 150px;gap:10px;align-items:center;font-size:.95rem}
+.opt-l{color:var(--mut)}
+.opt-bar{height:8px;border-radius:999px;background:rgba(255,255,255,.05);overflow:hidden}
+.opt-bar i{display:block;height:100%;border-radius:999px;background:rgba(222,220,209,0.27);transition:width .35s ease}
+.opt-v{text-align:right;font-family:var(--f-num);font-weight:600}
+.opt-h{grid-column:2/4;font-size:.75rem;color:var(--dim);margin-top:-6px}
+.opt.best .opt-l{color:var(--txt);font-weight:600}
+.opt.best .opt-bar i{background:var(--gain)}
+.opt.best.ship .opt-bar i{background:var(--blue)}
+.opt.na{opacity:.55}
+.facts{display:grid;grid-template-columns:1fr 1fr;gap:12px 14px;align-content:start}
+.fact{font-size:.88rem;color:var(--mut)}
+.fact b{display:block;font:600 1rem var(--f-num);color:var(--txt);margin-top:4px}
+.copy{font:600 .95rem var(--f-num);color:var(--txt);border:1px solid rgba(222,220,209,0.24);background:rgba(222,220,209,.1);border-radius:var(--r-sm);padding:6px 10px;margin-top:4px;width:100%;text-align:left}
+.copy:hover{background:rgba(222,220,209,0.12)}
+.checks{grid-column:1/-1;list-style:none;display:flex;flex-direction:column;gap:6px;border-top:1px solid var(--line);padding-top:14px}
+.checks li{font-size:.9rem;color:var(--mut);padding-left:22px;position:relative}
+.checks li::before{position:absolute;left:0;font-weight:600}
+.checks li.ok::before{content:"✓";color:var(--gain)}
+.checks li.warn::before{content:"!";color:var(--thrust)}
+.checks li.info::before{content:"i";color:var(--ion);font-style:italic}
+.checks li b{color:var(--txt);font-weight:600}
+.lot-foot{grid-column:1/-1;display:flex;justify-content:flex-end}
+.empty{color:var(--mut);padding:18px 14px;font-size:.92rem}
+
+/* ---------- cuadrículas de controles ---------- */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:14px}
+.grid small{display:block;color:var(--dim);font-size:.82rem;margin-top:4px}
+fieldset{border:none}
+fieldset+fieldset{margin-top:22px;padding-top:18px;border-top:1px solid var(--line)}
+legend{font:600 1rem var(--f-num);margin-bottom:12px;color:var(--txt)}
+.stats{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:1px;background:var(--line);border-radius:var(--r-md);overflow:hidden;margin:16px 0}
+.stats div{background:rgba(36,35,33,.92);padding:12px 14px}
+.stats dt{font-size:.9rem;color:var(--mut)} .stats dd{font:600 1.15rem var(--f-num);margin-top:2px}
+.call{border-left:3px solid var(--blue);padding:10px 14px;background:rgba(222,220,209,.06);border-radius:0 var(--r-sm) var(--r-sm) 0;margin-top:12px}
+.call b{font:600 1.1rem var(--f-num);display:block}
+.call small{color:var(--mut);font-size:.82rem}
+table{width:100%;border-collapse:collapse;font-size:.95rem;margin-top:14px}
+th{text-align:left;font-weight:600;color:var(--mut);font-size:.85rem;padding:8px 10px;border-bottom:1px solid var(--line2)}
+td{padding:8px 10px;border-bottom:1px solid var(--line)}
+td.r,th.r{text-align:right} td.r{font-family:var(--f-num)}
+td input{padding:5px 8px;max-width:150px}
+.note{color:var(--dim);font-size:.85rem;margin-top:14px;max-width:none}
+footer{max-width:min(1360px,94vw);margin:0 auto;padding:10px 20px 40px;color:var(--dim);font-size:.82rem}
+
+
+/* ================= Profundidad (v45) =================
+   Sombras en capas (cercana · media · lejana) + filo de luz superior, como placas de casco.
+   Números como lecturas iluminadas de consola. Esquinas de mira solo en el veredicto. */
+.panel{position:relative;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.08),inset 0 -1px 0 rgba(0,0,0,.5),
+    0 1px 2px rgba(0,0,0,.5),0 8px 14px rgba(0,0,0,.35),0 8px 14px rgba(0,0,0,.45)}
+.panel::before{content:"";position:absolute;left:24px;right:24px;top:0;height:1px;border-radius:1px;
+  background:linear-gradient(90deg,transparent,rgba(222,220,209,0.33),rgba(222,220,209,0.21),transparent);pointer-events:none}
+.verdict{background:radial-gradient(120% 90% at 0% 0%,rgba(53,194,110,.10),transparent 55%),
+  linear-gradient(180deg,rgba(48,48,46,.96),rgba(36,35,33,.97));border-color:rgba(222,220,209,0.132)}
+.verdict::after{content:"";position:absolute;inset:10px;pointer-events:none;
+  background:
+   linear-gradient(var(--ion),var(--ion)) top left/18px 2px no-repeat,
+   linear-gradient(var(--ion),var(--ion)) top left/2px 18px no-repeat,
+   linear-gradient(var(--ion),var(--ion)) top right/18px 2px no-repeat,
+   linear-gradient(var(--ion),var(--ion)) top right/2px 18px no-repeat,
+   linear-gradient(var(--ion),var(--ion)) bottom left/18px 2px no-repeat,
+   linear-gradient(var(--ion),var(--ion)) bottom left/2px 18px no-repeat,
+   linear-gradient(var(--ion),var(--ion)) bottom right/18px 2px no-repeat,
+   linear-gradient(var(--ion),var(--ion)) bottom right/2px 18px no-repeat;opacity:.55}
+.v-isk{text-shadow:0 2px 0 rgba(0,0,0,.65),0 6px 14px rgba(0,0,0,.5)}
+.v-isk.pos{text-shadow:0 2px 0 rgba(0,0,0,.65),0 0 28px rgba(53,194,110,.35),0 0 2px rgba(53,194,110,.6)}
+.v-isk.neg{text-shadow:0 2px 0 rgba(0,0,0,.65),0 0 28px rgba(255,123,123,.35)}
+.split{box-shadow:inset 0 2px 4px rgba(0,0,0,.6),0 1px 0 rgba(255,255,255,.05)}
+.split .s-null{background:linear-gradient(180deg,#5be08f,#27a95b);box-shadow:0 0 12px rgba(53,194,110,.45)}
+.split .s-jita{background:linear-gradient(180deg,#b8b5ab,#6b6a65);box-shadow:0 0 12px rgba(222,220,209,0.27)}
+.stats{gap:12px;background:none;overflow:visible}
+.stats div{border-radius:var(--r-md);border:1px solid var(--line);
+  background:linear-gradient(180deg,rgba(48,48,46,.95),rgba(36,35,33,.97));
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.07),0 2px 4px rgba(0,0,0,.45),0 8px 14px rgba(0,0,0,.35)}
+.stats dd{text-shadow:0 1px 0 rgba(0,0,0,.7)}
+.lot-net.pos,.opt-v.pos{text-shadow:0 1px 0 rgba(0,0,0,.7),0 0 14px rgba(53,194,110,.28)}
+.lot-net.neg,.opt-v.neg{text-shadow:0 1px 0 rgba(0,0,0,.7),0 0 14px rgba(255,123,123,.25)}
+/* héroe */
+.paste{box-shadow:inset 0 1px 0 rgba(255,255,255,.06),0 2px 4px rgba(0,0,0,.5),0 8px 14px rgba(0,0,0,.45),0 8px 14px rgba(0,0,0,.35);transition:border-color .2s}
+.paste:focus-within{border-color:rgba(222,220,209,0.3);box-shadow:0 0 0 4px rgba(222,220,209,.10),0 8px 14px rgba(0,0,0,.45),0 8px 14px rgba(0,0,0,.35)}
+.hero h1{text-shadow:0 2px 0 rgba(0,0,0,.5),0 10px 30px rgba(0,0,0,.6)}
+/* libro: el ítem abierto se levanta */
+.lot{transition:background .2s,border-radius .2s}
+.lot.open{border-bottom-color:transparent;border-radius:var(--r-md);margin:8px -6px;padding:0 6px;
+  background:linear-gradient(180deg,rgba(48,48,46,.75),rgba(36,35,33,.85));
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.07),0 4px 8px rgba(0,0,0,.4),0 8px 14px rgba(0,0,0,.45)}
+.lot.open .lot-head{background:none}
+.opt-bar{box-shadow:inset 0 1px 3px rgba(0,0,0,.6)}
+.opt-bar i{background:linear-gradient(180deg,rgba(222,220,209,0.36),rgba(222,220,209,0.27))}
+.opt.best .opt-bar i{background:linear-gradient(180deg,#5be08f,#27a95b);box-shadow:0 0 10px rgba(53,194,110,.55)}
+.opt.best.ship .opt-bar i{background:linear-gradient(180deg,#b8b5ab,#6b6a65);box-shadow:0 0 10px rgba(222,220,209,0.33)}
+.pill{box-shadow:inset 0 1px 0 rgba(255,255,255,.12),0 2px 6px rgba(0,0,0,.35)}
+.copy{box-shadow:inset 0 1px 0 rgba(255,255,255,.08),0 2px 5px rgba(0,0,0,.4);transition:transform .1s,background .15s}
+
+.call{box-shadow:inset 3px 0 12px rgba(222,220,209,.12),0 4px 12px rgba(0,0,0,.3)}
+input,select,textarea{box-shadow:inset 0 2px 5px rgba(0,0,0,.55)}
+.ghost{box-shadow:inset 0 1px 0 rgba(255,255,255,.06),0 2px 6px rgba(0,0,0,.35)}
+/* ---------- móvil ---------- */
+.ic{display:inline-block;flex:none;width:1em;height:1em;vertical-align:-.14em;margin-right:.45em;background:currentColor;-webkit-mask:var(--i) center/contain no-repeat;mask:var(--i) center/contain no-repeat}
+.i-target{--i:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='9'/%3E%3Ccircle cx='12' cy='12' r='5'/%3E%3Ccircle cx='12' cy='12' r='1.2' fill='black'/%3E%3C/svg%3E")}
+.i-box{--i:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M21 8l-9-5-9 5 9 5 9-5z'/%3E%3Cpath d='M3 8v8l9 5 9-5V8'/%3E%3Cpath d='M12 13v8'/%3E%3C/svg%3E")}
+.i-flask{--i:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M9 3h6M10 3v6L4.5 19a1.5 1.5 0 0 0 1.3 2h12.4a1.5 1.5 0 0 0 1.3-2L14 9V3'/%3E%3Cpath d='M7 15h10'/%3E%3C/svg%3E")}
+.i-ship{--i:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M2 7h11v9H2zM13 10h4l4 3v3h-8z'/%3E%3Ccircle cx='6' cy='18' r='2'/%3E%3Ccircle cx='17' cy='18' r='2'/%3E%3C/svg%3E")}
+.i-gear{--i:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='3'/%3E%3Cpath d='M12 2v3M12 19v3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M2 12h3M19 12h3M4.9 19.1L7 17M17 7l2.1-2.1'/%3E%3C/svg%3E")}
+.i-help{--i:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='9'/%3E%3Cpath d='M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.7.3-1 .9-1 1.7v.5'/%3E%3Cpath d='M12 17.2v.3'/%3E%3C/svg%3E")}
+.i-x{--i:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 6l12 12M18 6L6 18'/%3E%3C/svg%3E")}
+.i-key{--i:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='8' cy='15' r='4'/%3E%3Cpath d='M11 12l9-9M17 6l3 3M15 8l2 2'/%3E%3C/svg%3E")}
+.i-sync{--i:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 11a8 8 0 0 0-14.5-4.5L3 9M4 13a8 8 0 0 0 14.5 4.5L21 15'/%3E%3Cpath d='M3 4v5h5M21 20v-5h-5'/%3E%3C/svg%3E")}
+.i-list{--i:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M9 6h11M9 12h11M9 18h11'/%3E%3Cpath d='M4 6l1 1 2-2M4 12l1 1 2-2M4 18l1 1 2-2'/%3E%3C/svg%3E")}
+.i-scale{--i:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 3v18M7 21h10M5 7h14'/%3E%3Cpath d='M5 7l-3 6a3 3 0 0 0 6 0zM19 7l-3 6a3 3 0 0 0 6 0z'/%3E%3C/svg%3E")}
+.i-bulb{--i:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M9 18h6M10 21h4'/%3E%3Cpath d='M12 3a6 6 0 0 0-3.5 10.9c.6.5 1 1.2 1 2.1h5c0-.9.4-1.6 1-2.1A6 6 0 0 0 12 3z'/%3E%3C/svg%3E")}
+h2 .ic,.sub-h .ic{color:var(--ion)}
+.receipt .rw .reco{display:block;margin-top:4px;color:var(--mut);font-size:.84rem;line-height:1.4}
+.receipt .rw .reco b{color:var(--txt);font-weight:600;margin-right:2px}
+.receipt .rw .reco .ic{color:#d97757;margin-right:.35em}
+.receipt .amt small{display:block;font:500 .72rem var(--f-ui,inherit);color:var(--dim);text-align:right}
+.btn{box-shadow:inset 0 1px 0 rgba(255,255,255,.28),0 6px 14px rgba(0,0,0,.45),0 0 18px rgba(217,119,87,.28)!important}
+.btn:hover{color:#fff}
+.ghost,.dest{box-shadow:inset 0 1px 0 rgba(255,255,255,.08),0 4px 12px rgba(0,0,0,.45)!important;transition:transform .12s,border-color .15s,color .15s}
+.ghost:hover,.dest:hover{border-color:rgba(222,220,209,0.33)}
+.ghost:active,.dest:active,.copy:active{transform:translateY(0) scale(.98)}
+.copy{box-shadow:inset 0 1px 0 rgba(255,255,255,.1),0 2px 4px rgba(0,0,0,.45)!important}
+.copy:hover{border-color:rgba(222,220,209,0.42)}
+.ship-t{max-width:900px}
+.locked input{opacity:.85;cursor:default;background:rgba(36,35,33,.55)!important;border-style:dashed!important;color:var(--mut)!important}
+.locked input:focus{outline:none;box-shadow:none}
+.i-lock{--i:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='5' y='11' width='14' height='10' rx='2'/%3E%3Cpath d='M8 11V7a4 4 0 0 1 8 0v4'/%3E%3C/svg%3E")}
+.v-stats{display:grid;grid-template-columns:auto auto minmax(0,1fr);gap:10px;margin:0 0 18px}
+.v-stats>div{padding:10px 14px;border-radius:var(--r-md);border:1px solid var(--line);background:rgba(36,35,33,.6);box-shadow:inset 0 1px 0 rgba(255,255,255,.05),0 6px 14px rgba(0,0,0,.3)}
+.v-stats dt{font-size:.78rem;color:var(--dim);text-transform:uppercase;letter-spacing:.6px}
+.v-stats dd{font:600 1.08rem var(--f-num);color:var(--txt);margin-top:2px;white-space:nowrap}
+/* v58: plan con pestañas y precio por unidad */
+.v-top{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:34px;align-items:stretch}
+.v-main,.v-side{display:flex;flex-direction:column}
+.v-main .split{margin-top:auto;padding-top:0}
+.v-main .v-sub{margin-bottom:18px}
+.v-h0{margin:4px 0 8px}
+.alt-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;flex:1}
+.alt-grid>div{display:flex;flex-direction:column;justify-content:space-between;gap:4px;padding:10px 14px;border-radius:var(--r-md);border:1px solid var(--line);
+  background:linear-gradient(180deg,rgba(48,48,46,.95),rgba(36,35,33,.97));box-shadow:inset 0 1px 0 rgba(255,255,255,.07),0 2px 4px rgba(0,0,0,.45),0 8px 14px rgba(0,0,0,.35)}
+.alt-grid dt{font-weight:600;color:var(--txt)}
+.alt-grid dt small{display:block;font-weight:400;color:var(--mut);font-size:.8rem;margin-top:2px}
+.alt-grid dd b{display:block;font:600 1.15rem var(--f-num);white-space:nowrap}
+.alt-grid dd small{display:block;font-size:.78rem;color:var(--dim)}
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 12px}
+.tab{border-radius:999px;padding:7px 15px;border:1px solid var(--line2);background:rgba(36,35,33,.7);color:var(--mut);font-weight:600;font-size:.88rem;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.06),0 3px 9px rgba(0,0,0,.4);transition:color .15s,border-color .15s,background .15s}
+.tab small{margin-left:6px;opacity:.7;font-weight:500}
+.tab:hover{color:var(--txt)}
+.tab[aria-selected="true"]{color:#fff;border-color:rgba(222,220,209,0.36);background:linear-gradient(180deg,rgba(222,220,209,0.192),rgba(222,220,209,0.084));box-shadow:inset 0 1px 0 rgba(255,255,255,.1),0 4px 12px rgba(0,0,0,.45),0 0 14px rgba(222,220,209,0.12)}
+.pl{border:1px solid var(--line);border-radius:var(--r-md);overflow:hidden;background:rgba(36,35,33,.5);box-shadow:inset 0 1px 0 rgba(255,255,255,.04),0 8px 14px rgba(0,0,0,.35)}
+.pl-head,.pl-row{display:grid;grid-template-columns:minmax(0,1fr) 120px 230px 200px;gap:16px;align-items:center;padding:10px 18px}
+.pl-head{font-size:.76rem;color:var(--dim);text-transform:uppercase;letter-spacing:.7px;border-bottom:1px solid var(--line);background:rgba(255,255,255,.02)}
+.pl-head span:not(:first-child),.pl-row>.q,.pl-row>.p,.pl-row>.a{text-align:right}
+.pl-g{display:flex;gap:12px;align-items:center;flex-wrap:wrap;padding:14px 18px 6px;border-top:1px solid var(--line)}
+.pl-head+.pl-g{border-top:none}
+.pl-g .reco{flex:1 1 380px;color:var(--mut);font-size:.86rem;line-height:1.45}
+.pl-g .reco b{color:var(--txt);font-weight:600;margin-right:3px}
+.pl-g .reco .ic{color:#d97757;margin-right:.35em}
+.pl-row .n{color:var(--txt);font-weight:600;min-width:0}
+.pl-row .n small{display:block;font-weight:400;color:var(--dim);font-size:.78rem}
+.pl-row .q{font:600 .98rem var(--f-num)}
+.pl-row .p .copy{width:auto;margin:0;text-align:right;padding:5px 10px}
+.pl-row .p small,.pl-row .a small{display:block;color:var(--dim);font:500 .74rem var(--f-ui,inherit);margin-top:3px}
+.pl-row .a{font:600 1.05rem var(--f-num);white-space:nowrap}
+.pl-row.min{padding-top:4px;padding-bottom:4px}
+.pl-row.min .n{font-weight:400;color:var(--mut);padding-left:14px}
+.pl-row.min .q{font-weight:500;color:var(--mut)}
+.pl-row.min .p .copy{font-size:.86rem;padding:3px 8px}
+.pl-row.cost,.pl-row.total{border-top:1px solid var(--line)}
+.pl-row.cost .a{color:var(--loss)}
+.pl-row.total{background:rgba(53,194,110,.07);border-top-color:var(--line2)}
+.pl-row.total .a{font-size:1.2rem}
+.pl-row.miss .n{color:var(--warn,#d97757)}
+details.thin{padding:12px 20px}
+details.thin>summary{align-items:center;flex-wrap:wrap;row-gap:4px;justify-content:flex-start}
+details.thin>summary h2{font-size:1.25rem}
+details.thin>summary .cnt{color:var(--mut);font-size:.88rem}
+details.thin>summary .status{margin-left:auto;font-size:.84rem}
+details.thin[open]{padding:18px 22px}
+details.thin[open]>summary{margin-bottom:10px}
+.ledger-tools{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.ledger-tools .lead{margin:0}
+/* rendimiento: no pintar lo que no se ve */
+
+details.panel:not([open])>:not(summary){content-visibility:hidden}
+.panel{contain:layout paint style}
+.lamp{display:inline-block;width:12px;height:12px;border-radius:50%;margin-right:9px;vertical-align:1px;background:#6b6a65;box-shadow:inset 0 -2px 3px rgba(0,0,0,.45),0 0 0 2px rgba(0,0,0,.35)}
+.lamp.pos{background:radial-gradient(circle at 35% 30%,#b9ffd3,#35c26e 55%,#1b7a43);box-shadow:0 0 10px rgba(53,194,110,.8),0 0 22px rgba(53,194,110,.45)}
+.lamp.neg{background:radial-gradient(circle at 35% 30%,#ffd0d0,#ff5f5f 55%,#a02525);box-shadow:0 0 10px rgba(255,95,95,.8),0 0 22px rgba(255,95,95,.45)}
+.call.lamp-pos{border-left-color:var(--gain)!important}.call.lamp-neg{border-left-color:var(--loss)!important}
+.verdict .v-h{font-size:1.3rem;margin:26px 0 12px;letter-spacing:.2px}
+.verdict .v-h .ic{width:1.05em;height:1.05em}
+.pl-g{padding:16px 18px 8px}
+.pl-g .reco{flex:1 1 420px;font-size:1rem;line-height:1.5;color:#e5e3da;padding:9px 14px;border-radius:var(--r-sm);
+  background:linear-gradient(90deg,rgba(217,119,87,.13),rgba(217,119,87,.03));border-left:3px solid #d97757}
+.pl-g .reco b{color:#e8a58c;font-weight:600}
+.pl-g .reco .ic{width:1.1em;height:1.1em;color:#d97757}
+.pl-g .pill{font-size:.9rem;padding:5px 12px}
+.lnk{display:inline-flex!important;align-items:center;gap:6px;width:auto!important;color:#f0eee6!important;border-color:rgba(222,220,209,0.33)!important;background:rgba(222,220,209,0.096)!important}
+.lnk::after{content:"↗";font-size:.85em;opacity:.8}
+.lnk:hover{background:rgba(222,220,209,0.168)!important}
+.lnk-note{display:block;color:var(--dim);font-size:.8rem;margin-top:4px}
+.lnk-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:6px 0 10px}.lnk-row .lnk-note{margin:0}
+.loading{display:flex;align-items:center;gap:18px;padding:18px 22px}
+.loading[hidden]{display:none}
+.spin{flex:none;width:30px;height:30px;border-radius:50%;border:3px solid rgba(222,220,209,0.12);border-top-color:var(--ion);animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.ld-body{flex:1;min-width:0}
+.ld-body b{display:block;font-size:1.05rem;color:var(--txt)}
+.ld-body small{display:block;color:var(--mut);font-size:.86rem;margin-top:2px}
+.ld-track{height:6px;border-radius:999px;background:rgba(255,255,255,.07);margin-top:10px;overflow:hidden}
+.ld-track i{display:block;height:100%;width:0;border-radius:999px;background:linear-gradient(90deg,#6b6a65,var(--ion));transition:width .25s ease}
+body.is-loading #verdict,body.is-loading #ledger,body.is-loading #pRepro,body.is-loading #pCtr,body.is-loading #pDisc{display:none!important}
+body.is-updating #verdict,body.is-updating #pRepro,body.is-updating #pCtr,body.is-updating #pDisc{opacity:.4;pointer-events:none;transition:opacity .2s}
+.receipt.rep li.rep-it{grid-template-columns:auto minmax(0,1fr) auto}
+.rep-sc{grid-column:1/-1;display:flex;flex-direction:column;gap:6px;margin-top:6px;padding-top:10px;border-top:1px dashed var(--line)}
+.rep-sc .amt{font:600 .98rem var(--f-num);white-space:nowrap}
+/* legibilidad sobre la Keepstar */
+.hero p,.hero .tagline,footer{text-shadow:0 1px 2px rgba(0,0,0,.9),0 2px 10px rgba(0,0,0,.85)}
+.hero>p,.hero .tagline{color:#e5e3da}
+.ghost{white-space:nowrap}
+.rw small.rep-no{color:#ff9a9a;font-size:.86rem}
+.rw small.rep-yes{color:#7fe0a6;font-size:.86rem}
+.summary{border-left:3px solid #d97757}
+.summary h2 .ic{color:#d97757}
+.summary p{font-size:1.02rem;line-height:1.65;color:#e5e3da;margin-top:10px;max-width:none}
+.summary p+p{color:var(--mut);font-size:.95rem}
+.v-what{display:inline-block;margin-left:12px;padding:3px 12px;border-radius:999px;font:600 .95rem var(--f-ui,inherit);vertical-align:3px;
+  color:#bff3d2;background:rgba(53,194,110,.14);border:1px solid rgba(53,194,110,.45)}
+.v-what:empty{display:none}
+.pl-row.min .a{font-size:.92rem;color:var(--mut)!important;font-weight:500}
+.v-stats dd small{display:block;font:500 .74rem var(--f-ui,inherit);color:var(--dim);white-space:normal;margin-top:2px}
+.v-stats dd.neg-soft{color:#ffb0b0}
+.tl{white-space:nowrap}.tl b{font-weight:600}
+.tl::before{content:"";display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:6px;vertical-align:1px}
+.t-red{color:#ff9a9a}.t-red::before{background:#ff5f5f;box-shadow:0 0 6px rgba(255,95,95,.8)}
+.t-amb{color:#e8a58c}.t-amb::before{background:#d97757;box-shadow:0 0 6px rgba(217,119,87,.8)}
+.t-grn{color:#7fe0a6}.t-grn::before{background:#35c26e;box-shadow:0 0 6px rgba(53,194,110,.8)}
+.rl{display:block;margin-top:6px;font-size:.8rem;color:var(--mut);cursor:pointer}
+.rl input{vertical-align:-2px;margin-right:4px;accent-color:#d97757}
+.rl span{color:#e8a58c;font-weight:600}
+.rl small{display:block;color:var(--dim);font-size:.72rem;margin-top:1px}
+.alt-grid dd b.zero{color:var(--dim);font-weight:600}
+.nc{font-weight:600;white-space:nowrap}.nc.pos{color:#5fd68e}.nc.neg{color:#ff8f8f}
+.v-stats{align-items:start}
+.v-stats .tx dt{display:flex;justify-content:space-between;align-items:baseline;gap:12px}
+.v-stats .tx dt b{font:600 1.08rem var(--f-num);letter-spacing:0;text-transform:none;white-space:nowrap}
+.v-stats .tx dd{margin-top:2px;font-size:0}
+.v-stats .tx dd small{font-size:.74rem}
+.neg-soft{color:#ffb0b0}
+img.ti{width:24px;height:24px;border-radius:5px;vertical-align:-6px;margin-right:9px;background:rgba(255,255,255,.04);box-shadow:0 0 0 1px rgba(255,255,255,.08)}
+img.ti:not([src]){visibility:hidden}
+.pl-row.min img.ti{width:20px;height:20px;vertical-align:-5px}
+/* v81: tarjetas intercambiadas: envío en los datos de la izquierda, taxes en la comparación */
+.v-stats .ship dt{font-size:.78rem;color:var(--dim);text-transform:uppercase;letter-spacing:.6px}
+.v-stats .ship dt small{display:block;text-transform:none;letter-spacing:0;color:var(--mut);font-size:.78rem;margin-top:2px}
+.v-stats .ship dd b{font:600 1.08rem var(--f-num);display:block;margin-top:2px}
+.v-stats .ship dd b.zero{color:var(--dim)}
+.v-stats .ship dd small{display:block;font:500 .74rem var(--f-ui,inherit);color:var(--dim)}
+.alt-grid .tx dt{display:flex;justify-content:space-between;align-items:baseline;gap:10px;font-weight:600;color:var(--txt)}
+.alt-grid .tx dt b{font:600 1.15rem var(--f-num);white-space:nowrap}
+.alt-grid .tx dd{font-size:.8rem;color:var(--mut)}
+.alt-grid .tx dd small{display:block;font-size:.78rem;color:var(--dim)}
+.lot-name b{display:inline-flex;align-items:flex-start;gap:0}
+.lot-name b img.ti{flex:none;margin-top:1px}
+.pl-g{flex-direction:column;align-items:flex-start;gap:8px}
+.pl-g .reco{flex:none;width:100%}
+.scn{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:8px}
+.scn>div{padding:14px 16px;border-radius:var(--r-md);border:1px solid var(--line);background:linear-gradient(180deg,rgba(48,48,46,.95),rgba(36,35,33,.97));box-shadow:inset 0 1px 0 rgba(255,255,255,.07),0 4px 10px rgba(0,0,0,.35)}
+.scn>div.win{border-color:rgba(53,194,110,.55);box-shadow:inset 0 1px 0 rgba(255,255,255,.07),0 0 0 1px rgba(53,194,110,.25),0 4px 10px rgba(0,0,0,.35)}
+.scn h4{font-size:1rem;color:var(--txt);display:flex;justify-content:space-between;gap:10px;align-items:baseline}
+.scn h4 b{font:600 1.15rem var(--f-num);white-space:nowrap}
+.scn ul{list-style:none;margin:8px 0;padding:0;font-size:.84rem;color:var(--mut)}
+.scn li{display:flex;justify-content:space-between;gap:10px;padding:2px 0;border-bottom:1px dashed rgba(255,255,255,.05)}
+.scn li span:last-child{white-space:nowrap;color:var(--txt)}
+.scn dl{display:grid;grid-template-columns:1fr auto;gap:2px 12px;font-size:.86rem;margin-top:6px}
+.scn dt{color:var(--mut)} .scn dd{text-align:right;font-weight:600;white-space:nowrap}
+.scn-v{margin-top:10px;font-size:.98rem;color:var(--txt)}
+/* v83: datos simétricos y opción rápida */
+.v-stats{grid-template-columns:repeat(3,minmax(0,1fr))!important;align-items:stretch!important}
+.v-stats>div{display:flex;flex-direction:column}
+.v-stats>div>small{display:block;font-size:.74rem;color:var(--dim);margin-top:auto;padding-top:4px;line-height:1.35}
+.v-stats .ship dt{font-size:.78rem;white-space:nowrap}
+.v-stats .ship dd b{font:600 1.08rem var(--f-num);margin-top:2px}
+.fastbox{margin:0 0 16px;padding:12px 14px;border-radius:var(--r-md);border:1px solid rgba(222,220,209,0.27);
+  background:linear-gradient(90deg,rgba(222,220,209,0.096),rgba(222,220,209,.04));box-shadow:inset 0 1px 0 rgba(255,255,255,.06),0 4px 10px rgba(0,0,0,.3)}
+.fb-h{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
+.fb-h .ic{color:#b8b5ab}.fb-h b{color:#f0eee6}
+.fb-what{color:var(--mut);font-size:.88rem}
+.fb-v{margin-left:auto;font:600 1.15rem var(--f-num)}
+.fastbox p{font-size:.86rem;color:var(--mut);margin-top:4px;max-width:none}
+.rep-tb{gap:0!important;padding-top:6px!important}
+.rt-row{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr) minmax(0,1fr) minmax(0,1.1fr);gap:12px;align-items:center;padding:9px 10px;border-bottom:1px solid rgba(255,255,255,.05)}
+.rt-row:last-child{border-bottom:none}
+.rt-h{font-size:.72rem;color:var(--dim);text-transform:uppercase;letter-spacing:.6px;padding-top:2px;padding-bottom:6px}
+.rt-h span:not(:first-child),.rt-n,.rt-d{text-align:right}
+.rt-t b{font-weight:600;color:var(--txt);font-size:.95rem}
+.rt-t small{display:block;color:var(--dim);font-size:.78rem;margin:2px 0 0 21px}
+.rt-n{color:var(--txt);font-weight:600;font-size:.92rem;white-space:nowrap}
+.rt-d{font-weight:600;font-size:.98rem;white-space:nowrap}
+/* v84: Refinado vs Sin Refinar por mercado */
+.rx{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:10px}
+.rx-c{border:1px solid var(--line);border-radius:var(--r-md);background:linear-gradient(180deg,rgba(48,48,46,.95),rgba(36,35,33,.97));padding:14px 16px;box-shadow:inset 0 1px 0 rgba(255,255,255,.06),0 4px 10px rgba(0,0,0,.35)}
+.rx-c h4{font-size:1.02rem;color:var(--txt);margin-bottom:8px}
+.rx-c table{width:100%;border-collapse:collapse;font-size:.88rem}
+.rx-c th{font-size:.72rem;color:var(--dim);text-transform:uppercase;letter-spacing:.5px;font-weight:500;text-align:right;padding:4px 0 6px}
+.rx-c th:first-child{text-align:left}
+.rx-c td{padding:5px 0;border-top:1px solid rgba(255,255,255,.05);text-align:right;white-space:nowrap}
+.rx-c td:first-child{text-align:left;color:var(--mut);white-space:normal}
+.rx-c td.ded{color:#ff9a9a}
+.rx-c tr.p td{color:var(--dim);font-size:.78rem;white-space:normal}
+.rx-c tr.net td{font-weight:600;color:var(--txt);border-top:1px solid var(--line2)}
+.rx-c tr.net td.win{color:#5fd68e}
+.rx-c .rx-v{margin-top:10px;font-size:.92rem;color:var(--txt)}
+.rx-final{margin-top:14px;padding:14px 16px;border-radius:var(--r-md);border-left:3px solid #d97757;background:linear-gradient(90deg,rgba(217,119,87,.12),rgba(217,119,87,.02))}
+.rx-final ol{margin:6px 0 0 18px;padding:0;font-size:.92rem;color:var(--mut)}
+.rx-final li{padding:2px 0}.rx-final li b{color:var(--txt)}
+.rx-final li:first-child b{color:#5fd68e}
+.rx-final p{margin-top:8px;color:var(--txt);font-size:.95rem}
+.rep-ans{margin-left:12px;font-size:.9rem;vertical-align:2px}
+.p-none.rep-ans{color:#ff9a9a;border-color:rgba(255,123,123,.5);background:rgba(255,95,95,.1)}
+.receipt.rep li.rep-it{grid-template-columns:0 minmax(0,1fr) auto!important;column-gap:0}
+#tRepro img.ti{width:22px;height:22px}
+.rx-c.yes{border-left:3px solid var(--gain)}.rx-c.no{border-left:3px solid var(--loss)}
+.rx-hd{display:flex;align-items:center;gap:10px;margin-bottom:6px}
+.rx-big{font:600 1.25rem var(--f-num);letter-spacing:.8px}
+.rx-c.yes .rx-big{color:#7fe0a6}.rx-c.no .rx-big{color:#ff9a9a}
+.rx-c h4{font-size:.9rem;color:var(--mut);font-weight:500}
+.foot{display:flex;flex-direction:column;gap:10px;padding-top:6px}
+.foot-sec{display:flex;gap:12px;align-items:flex-start;padding:14px 16px;border-radius:var(--r-md);border:1px solid rgba(53,194,110,.35);
+  background:linear-gradient(90deg,rgba(53,194,110,.12),rgba(36,35,33,.85));color:#cfe0d6;font-size:.92rem;line-height:1.5;text-shadow:none}
+.foot-sec .ic{color:#5fd68e;width:1.3em;height:1.3em;margin-top:2px}
+.foot-sec b{color:#fff}
+.foot-by{color:var(--mut);font-size:.86rem;text-align:center}.foot-by .ver{font-family:var(--f-num);color:var(--dim)}.foot-by b{color:#e8a58c}
+.ref{display:flex;align-items:center;gap:12px;width:100%;max-width:760px;margin:0 0 18px;padding:9px 14px;border-radius:999px;text-align:left;
+  border:1px solid rgba(217,119,87,.5);background:linear-gradient(90deg,rgba(217,119,87,.18),rgba(36,35,33,.7));color:#f3e6c8;font-size:.92rem;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.08),0 4px 12px rgba(0,0,0,.4)}
+.ref:hover{border-color:rgba(217,119,87,.85)}
+.ref-tag{flex:none;font-weight:600;color:#1a1206;background:#d97757;border-radius:999px;padding:2px 10px;font-size:.8rem}
+.ref-t b{color:#e8a58c}.ref-go{margin-left:auto;color:#d97757;font-weight:600}
+.rt-u{display:block;font:400 .74rem var(--f-ui,inherit);color:var(--dim);margin-top:2px;white-space:normal}
+.rx-fh{font:600 1.15rem var(--f-num);color:#e8a58c;letter-spacing:.4px;margin-bottom:10px}
+.rx-pod{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;align-items:end}
+.pod{display:flex;flex-direction:column;gap:4px;padding:12px 14px;border-radius:var(--r-md);border:1px solid var(--line);background:rgba(36,35,33,.7);opacity:.82}
+.pod:nth-child(2){opacity:.88}.pod:nth-child(3){opacity:.94}
+.pod.best{opacity:1;border:1px solid rgba(53,194,110,.7);background:linear-gradient(180deg,rgba(53,194,110,.22),rgba(36,35,33,.9));
+  box-shadow:0 0 0 1px rgba(53,194,110,.3),0 6px 16px rgba(0,0,0,.45);padding:16px 14px}
+.pod-r{font-size:.72rem;text-transform:uppercase;letter-spacing:.7px;color:var(--dim);font-weight:600}
+.pod.best .pod-r{color:#7fe0a6}
+.pod-l{font-size:.95rem;color:var(--txt)}.pod.best .pod-l{font-size:1.1rem}
+.pod-v{font:600 1.05rem var(--f-num)}.pod.best .pod-v{font-size:1.4rem}
+.pod-tr{display:block;height:6px;border-radius:999px;background:rgba(255,255,255,.06);overflow:hidden}
+.pod-bar{display:block;height:100%;border-radius:999px;background:#6b6a65}.pod.best .pod-bar{background:linear-gradient(90deg,#27a95b,#5be08f)}
+.pod-d{font-size:.76rem;color:var(--dim)}.pod.best .pod-d{color:#bff3d2}
+.rx-call{margin-top:12px;font-size:1.05rem;color:var(--txt)}.rx-call b{color:#e8a58c;margin-right:4px}.rx-call .ic{color:#d97757}
+/* v102: recomendaciones independientes, resumen compacto, búsqueda y tabla plegable.
+   No se ocultan totales ni cambian cifras: contraer solo afecta a las filas visuales.
+   .pl-search se mantiene fuera de la tabla para no perder foco durante la búsqueda. */
+.pl-g .pl-brief{display:inline-flex;align-items:center;gap:8px;color:var(--mut);font-size:.88rem;font-variant-numeric:tabular-nums}
+.pl-g .pl-brief b{color:var(--gain);font-size:.94rem}
+.pl-tools{display:flex;align-items:center;flex-wrap:wrap;gap:8px;padding:0 2px 9px}
+.pl-search{background:rgba(36,35,33,.72);color:var(--txt);border:1px solid rgba(222,220,209,0.192);border-radius:8px;padding:9px 11px;width:min(330px,100%);min-width:0;font:inherit;font-size:.9rem}
+.pl-search:focus{outline:2px solid var(--ion);outline-offset:1px}
+.pl-match{color:var(--mut);font-size:.82rem}
+.pl-fold{margin-left:auto}
+.pl-section>.pl[hidden]{display:none}
+.pl-nomatch{padding:16px;text-align:center;color:var(--mut);font-size:.91rem}
+.pl-partial{display:block;margin-top:4px;color:#e8a58c;font-size:.85rem}
+@media(max-width:600px){.pl-tools{align-items:stretch}.pl-search{width:100%;flex:1 1 100%}.pl-fold{margin-left:0}}
+/* v101: tablas independientes por recomendación y por pestaña. */
+.pl-groups{display:flex;flex-direction:column;gap:16px}
+.pl-section{min-width:0}
+.pl-section>.pl-g{border:0;padding:0 2px 10px;margin:0;display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.pl-section>.pl-g .reco{margin:0}
+.pl-section>.pl{margin:0}
+.pl-totals{margin:0}
+.pl-head .srt:focus-visible{outline:2px solid var(--ion);outline-offset:3px;border-radius:3px}
+/* v92: Qué Hacer compacto, con orden, "mostrar más" y copiar al clic (como Janice) */
+.pl-row{padding-top:6px!important;padding-bottom:6px!important}
+.pl-row .n{font-size:.92rem}.pl-row img.ti{width:22px;height:22px}
+.pl-head .srt{all:unset;cursor:pointer;font-size:.76rem;color:var(--dim);text-transform:uppercase;letter-spacing:.7px}
+.pl-head .srt:not(:first-child){text-align:right}.pl-head .srt:hover,.pl-head .srt.on{color:var(--ion)}
+.cp{position:relative;cursor:copy;border-radius:4px;padding:1px 3px;margin:-1px -3px;transition:background .12s}
+.cp:hover{background:rgba(222,220,209,0.084);box-shadow:inset 0 0 0 1px rgba(222,220,209,0.24)}
+.cp:hover::after{content:"⧉";position:absolute;right:-16px;top:50%;transform:translateY(-50%);font-size:.8rem;color:var(--ion)}
+.cp.done{background:rgba(53,194,110,.2);box-shadow:inset 0 0 0 1px rgba(53,194,110,.6)}
+.cp.done::after{content:"✓";color:#5fd68e}
+.pl-g .cp-all{width:auto!important;margin:0 0 0 auto;font-size:.82rem;padding:4px 10px}
+.pl-g{flex-direction:row!important;flex-wrap:wrap;align-items:center!important}
+.pl-g .reco{flex:1 1 100%!important;order:3}
+.pl-more{display:flex;align-items:center;gap:10px;justify-content:center;padding:8px 18px;border-top:1px dashed var(--line);font-size:.84rem;color:var(--mut)}
+.pl-more .ghost{padding:5px 12px;font-size:.82rem}
+/* v111: selector de plan */
+.pk-w{margin:6px 0 14px}
+.pk-t{font:600 .95rem var(--f-num);color:var(--txt);margin:0 0 8px}.pk-t small{font:400 .8rem inherit;color:var(--dim);margin-left:6px}
+.pk{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+@media(max-width:1000px){.pk{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.pk-o{display:flex;flex-direction:column;align-items:flex-start;gap:2px;padding:9px 12px;border-radius:var(--r-md);border:1px solid var(--line2);background:linear-gradient(180deg,rgba(48,48,46,.85),rgba(36,35,33,.92));color:var(--txt);cursor:pointer;text-align:left;width:100%;transition:border-color .12s,background .12s}
+.pk-o:hover{border-color:rgba(222,220,209,0.36)}
+.pk-o .pk-l{font-size:.84rem;color:#e5e3da;font-weight:600}.pk-o .pk-v{font:600 1.05rem var(--f-num)}
+.pk-o .pk-d{font-size:.74rem;color:var(--dim)}.pk-o .pk-d.neg{color:#ff9a9a}.pk-o .pk-d.pos{color:#7fe0a6}
+.pk-o.best .pk-d{color:#7fe0a6}
+.pk-o.on{border-color:#d97757;background:linear-gradient(180deg,rgba(217,119,87,.18),rgba(36,35,33,.92));box-shadow:0 0 0 1px rgba(217,119,87,.45)}
+.pk-o.on .pk-l::after{content:" ✓";color:#e8a58c}
+.pk-note{margin-top:10px;padding:10px 12px;border-radius:var(--r-sm);border:1px solid rgba(217,119,87,.35);background:rgba(217,119,87,.08);font-size:.9rem;line-height:1.5;display:flex;flex-wrap:wrap;align-items:center;gap:4px 6px}
+.pk-note[hidden]{display:none}
+.pk-back{margin-left:auto;padding:5px 12px;font-size:.84rem}
+@media(max-width:600px){.more-btn{flex-direction:column;align-items:flex-start;gap:6px}.pk{grid-template-columns:1fr 1fr}.pk-t small{display:block;margin:2px 0 0}.pk-back{margin-left:0}}
+html.lite .pk-o{transition:none}
+/* v110: Contratos y Envío — dos columnas; contratos en carrusel */
+.ce{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:18px;margin-top:12px;align-items:start}
+.ce-h{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:10px;min-height:36px}
+.ce-h .sub-h{margin:0}
+.ce{align-items:stretch}
+.ce-l,.ce-r{display:flex;flex-direction:column;min-width:0}
+.cz{flex:1;display:flex;flex-direction:column}.cz>.ct{flex:1}
+.sh-card{flex:1;padding:16px;border:1px solid var(--line);border-radius:var(--r-md);background:#30302e}
+.cz-ctl{display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:flex-end}
+.cz-dots{margin:0}
+.cz-nav{display:flex;align-items:center;gap:6px}
+.cz-b{width:34px;height:34px;display:grid;place-items:center;border-radius:10px;border:1px solid rgba(222,220,209,0.21);background:rgba(36,35,33,.8);color:var(--ion);font-size:1.4rem;line-height:1;cursor:pointer;padding:0}
+.cz-b:hover:not(:disabled){border-color:var(--ion);color:#fff}.cz-b:disabled{opacity:.3;cursor:default}
+.cz-pos{min-width:64px;text-align:center;font:600 .9rem var(--f-num);color:var(--mut)}
+.cz-dots{display:flex;gap:6px;flex-wrap:wrap}
+.cz-d{width:auto;min-width:26px;height:22px;padding:0 8px;border-radius:999px;border:1px solid var(--line2);background:rgba(36,35,33,.7);color:var(--mut);font:600 .74rem var(--f-num);cursor:pointer}
+.cz-d.bb{border-color:rgba(53,194,110,.45)}.cz-d.cr{border-color:rgba(222,220,209,0.27)}.cz-d.pl{border-color:rgba(222,220,209,0.3)}
+.cz-d[aria-current="true"]{background:var(--ion);color:#1f1e1d;border-color:var(--ion)}
+.cz{outline:none;touch-action:pan-y}.cz .ct{animation:czIn .18s ease-out}
+@keyframes czIn{from{opacity:.4;transform:translateX(var(--cz-dx,0))}to{opacity:1;transform:none}}
+.ce-l .ct-sum{margin-top:12px}.ce-l .ct-sum>div{min-width:120px}
+.sh-route{font-size:.8rem;color:var(--dim)}
+.sh-top{display:flex;align-items:baseline;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.sh-big{font:600 1.9rem/1.1 var(--f-num);color:#ff9a9a}.sh-sub{font-size:.86rem;color:var(--mut)}
+.sh-bar{display:flex;height:12px;border-radius:999px;overflow:hidden;margin:12px 0 6px;background:rgba(255,255,255,.06)}
+.sh-bar i{display:block;height:100%}.sh-bar .b1{background:#d97757}.sh-bar .b2{background:#d6d4cb}.sh-bar .b3{background:#9c9a92}
+.sh-leg{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;font-size:.8rem;color:var(--mut)}
+.sh-leg b{display:block;font:600 .9rem var(--f-num);color:var(--txt)}.sh-leg span::before{content:"";display:inline-block;width:8px;height:8px;border-radius:2px;margin-right:5px;vertical-align:middle}
+.sh-leg .l1::before{background:#d97757}.sh-leg .l2::before{background:#d6d4cb}.sh-leg .l3::before{background:#9c9a92}
+.sh-kpi{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:14px 0}
+.sh-kpi>div{padding:9px 11px;border-radius:var(--r-sm);background:rgba(36,35,33,.45);border:1px solid rgba(255,255,255,.06)}
+.sh-kpi span{display:block;font-size:.72rem;letter-spacing:.05em;text-transform:uppercase;color:var(--dim)}.sh-kpi b{font:600 1.05rem var(--f-num);color:var(--txt)}
+.sh-kpi small{display:block;font-size:.76rem;color:var(--mut);margin-top:2px;line-height:1.3}
+.sh-cap{display:grid;gap:6px;margin:4px 0 12px}
+.sh-c{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:8px;width:100%;padding:6px 8px;border-radius:var(--r-sm);border:1px solid transparent;background:none;color:var(--txt);font-size:.82rem;cursor:pointer;text-align:left}
+.sh-c:hover,.sh-c.on{border-color:rgba(222,220,209,0.24);background:rgba(222,220,209,.06)}
+.sh-c .tr{height:8px;border-radius:999px;background:rgba(255,255,255,.07);overflow:hidden}.sh-c .tr i{display:block;height:100%;background:linear-gradient(90deg,#8a877e,#d6d4cb)}
+.sh-c .pc{font:600 .8rem var(--f-num);color:var(--mut);white-space:nowrap}
+.sh-tips{list-style:none;margin:0 0 12px;padding:0;display:grid;gap:6px}
+.sh-tips li{position:relative;padding:8px 10px 8px 30px;border-radius:var(--r-sm);font-size:.86rem;line-height:1.45;background:rgba(217,119,87,.08);border:1px solid rgba(217,119,87,.22)}
+.sh-tips li::before{content:"💡";position:absolute;left:9px;top:8px;font-size:.85rem}
+.sh-tips li.ok{background:rgba(53,194,110,.08);border-color:rgba(53,194,110,.25)}.sh-tips li.ok::before{content:"✓";color:#5fd68e;font-weight:600}
+.sh-t{width:100%;font-size:.84rem}.sh-t th{font-size:.72rem;color:var(--dim);font-weight:600;text-transform:uppercase;letter-spacing:.04em;padding:4px 6px;text-align:left}
+.sh-t td{padding:5px 6px;border-top:1px solid rgba(255,255,255,.05)}.sh-t td.r,.sh-t th.r{text-align:right;white-space:nowrap}
+.sh-t td:first-child{max-width:0;width:44%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sh-rates{margin-top:12px;font-size:.78rem;color:var(--dim);line-height:1.45}.sh-rates b{color:var(--mut);font-weight:600}
+.sh-none{font-size:.92rem;color:var(--mut);line-height:1.5}
+@media(max-width:1000px){.ce{grid-template-columns:minmax(0,1fr)}}
+@media(max-width:600px){.sm-hide{display:none}
+ .sh-t thead{display:none}.sh-t,.sh-t tbody{display:block;width:100%}
+ .sh-t tr{display:flex;flex-wrap:wrap;gap:4px 16px;padding:8px 0;border-top:1px solid rgba(255,255,255,.06)}
+ .sh-t td{border:0;padding:0;text-align:left!important;font-size:.8rem}
+ .sh-t td:first-child{flex:1 1 100%;max-width:none;width:auto;white-space:normal;font-weight:600;font-size:.86rem}
+ .sh-t td:nth-child(2)::before{content:"Volumen";display:block;font-size:.66rem;color:var(--dim);text-transform:uppercase}
+ .sh-t td:nth-child(3)::before{content:"Envío";display:block;font-size:.66rem;color:var(--dim);text-transform:uppercase}
+ .sh-t td:nth-child(4)::before{content:"Gana extra";display:block;font-size:.66rem;color:var(--dim);text-transform:uppercase}
+ .sh-t td[colspan]{flex:1 1 100%;font-weight:400}
+ .sh-t td[colspan]::before{content:none}
+ .sh-big{font-size:1.55rem}.sh-leg{grid-template-columns:1fr}.sh-kpi{grid-template-columns:1fr 1fr}.cz-pos{min-width:52px}}
+html.lite .cz .ct{animation:none}
+/* v93: Tus Contratos */
+.ct{border:1px solid var(--line);border-radius:var(--r-md);background:linear-gradient(180deg,rgba(48,48,46,.95),rgba(36,35,33,.97));padding:14px 16px;box-shadow:inset 0 1px 0 rgba(255,255,255,.06),0 4px 10px rgba(0,0,0,.35)}
+.ct.bb{border-top:3px solid var(--gain)}.ct.cr{border-top:3px solid var(--blue)}.ct.pl{border-top:3px solid #9c9a92}
+.ct-h{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:10px}
+.ct-h b{font-size:1.02rem;color:var(--txt)}.ct-s{margin-left:auto;font:600 1.05rem var(--f-num);color:var(--txt)}
+.ct-items{border:1px solid rgba(255,255,255,.06);border-radius:var(--r-sm);padding:8px 10px;margin-bottom:10px;background:rgba(36,35,33,.4)}
+.ct-ih{display:flex;justify-content:space-between;align-items:center;font-size:.8rem;color:var(--dim);margin-bottom:6px}
+.ct-ih .copy{width:auto;margin:0;padding:3px 10px;font-size:.8rem}
+.ct-items ul{list-style:none;margin:0;padding:0}
+.ct-items li{display:flex;align-items:center;gap:8px;padding:3px 0;font-size:.86rem;border-top:1px solid rgba(255,255,255,.04)}
+.ct-items li:first-child{border-top:none}.ct-items img.ti{width:20px;height:20px;margin:0}
+.ct-n{flex:1;min-width:0;color:var(--txt);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.ct-q{color:var(--mut);white-space:nowrap}
+.ct-more{color:var(--dim);font-size:.8rem}
+.ct-f td{padding:5px 0;font-size:.86rem}.ct-f .copy{width:auto;margin:0;padding:4px 10px}
+.ct-sum{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:10px;padding:12px 14px;border-radius:var(--r-md);border-left:3px solid #d97757;background:linear-gradient(90deg,rgba(217,119,87,.12),rgba(217,119,87,.02))}
+.ct-sum>div{display:flex;flex-direction:column;min-width:150px;flex:1}
+.ct-sum span{font-size:.74rem;color:var(--dim);text-transform:uppercase;letter-spacing:.5px}.ct-sum b{font:600 1.08rem var(--f-num);color:var(--txt)}
+.totop{position:fixed;right:20px;bottom:20px;z-index:50;width:40px;height:40px;display:grid;place-items:center;border-radius:12px;color:var(--ion);
+  border:1px solid rgba(222,220,209,0.21);background:linear-gradient(180deg,rgba(48,48,46,.82),rgba(36,35,33,.88));
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.12),inset 0 -1px 0 rgba(0,0,0,.5),0 6px 14px rgba(0,0,0,.5);opacity:.85;transition:opacity .15s,border-color .15s,color .15s}
+.totop:hover{opacity:1;color:#fff;border-color:rgba(222,220,209,0.45)}
+/* v95: Ajustes simétricos */
+.st-wrap{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin-top:14px;align-items:stretch}
+fieldset.st{margin:0!important;padding:14px 16px 16px;border:1px solid var(--line);border-radius:var(--r-md);background:linear-gradient(180deg,rgba(48,48,46,.9),rgba(36,35,33,.95));box-shadow:inset 0 1px 0 rgba(255,255,255,.06),0 4px 10px rgba(0,0,0,.3)}
+fieldset.st legend{display:flex;align-items:center;gap:6px;font:600 1.02rem var(--f-num);color:var(--txt);padding:0 6px}
+fieldset.st legend .ic{color:var(--ion)}
+.st-i{font-size:.84rem;color:var(--mut);margin:0 0 10px}
+.st-g{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px 14px}
+.st-f{display:flex;flex-direction:column;gap:4px;min-width:0}
+.st-f .st-l{font-size:.84rem;color:var(--txt);font-weight:600}
+.st-f input,.st-f select,.st-f textarea{width:100%}
+.st-f input[type=checkbox]{width:18px;height:18px;flex:none;margin:0;accent-color:#d97757}
+.st-ck .st-l{font-size:.9rem}
+.st-f small{font-size:.74rem;color:var(--dim);line-height:1.35}
+.st-ck .st-l{display:flex;align-items:center;gap:6px}.st-ck{justify-content:center}
+.st-w{grid-column:1/-1}
+fieldset.st-full{grid-column:1/-1}fieldset.st-full .st-g{grid-template-columns:repeat(4,minmax(0,1fr))}
+.hp{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:12px}
+.hp-c{padding:14px 16px;border:1px solid var(--line);border-radius:var(--r-md);background:linear-gradient(180deg,rgba(48,48,46,.9),rgba(36,35,33,.95))}
+.hp-c h3{display:flex;align-items:center;gap:10px;font:600 1.02rem var(--f-num);color:var(--txt);margin-bottom:6px}
+.hp-n{display:inline-grid;place-items:center;width:26px;height:26px;border-radius:50%;background:var(--ion);color:#1f1e1d;font-weight:600;font-size:.9rem}
+.hp-c p{font-size:.9rem;color:var(--mut);margin-top:6px;max-width:none}.hp-c b{color:var(--txt)}
+.hp-t{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:8px}
+.hp-t>div{padding:10px 12px;border-radius:var(--r-sm);background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.05)}
+.hp-t b{display:block;color:var(--txt);font-size:.92rem}.hp-t span{display:block;font-size:.84rem;color:var(--mut);margin-top:2px}
+/* v96: resultado simple primero; análisis y más info a pedido */
+.deep{display:flex;flex-direction:column;gap:18px}.deep[hidden]{display:none}
+.res .res-big{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;margin:6px 0 4px}
+.res .res-big .num{font:600 clamp(1.8rem,5vw,3rem) var(--f-num);color:var(--gain);text-shadow:0 0 22px rgba(53,194,110,.3)}
+.more-btn{display:flex;align-items:center;justify-content:space-between;gap:14px;width:100%;margin-top:16px;padding:14px 18px;border-radius:var(--r-md);text-align:left;
+  border:1px dashed rgba(222,220,209,0.3);background:rgba(222,220,209,.08);color:var(--txt);font-size:1.15rem;font-weight:500}
+.more-btn b{flex:none;color:var(--ion);font-weight:600;font-size:1rem}.more-btn:hover{border-style:solid;background:rgba(222,220,209,0.084)}
+.more-btn[aria-expanded="true"] b{color:var(--mut)}
+#deep>.more-btn{margin-top:0}
+/* Firefox: pinta peor los degradados repetidos de pantalla completa, los blur grandes, los filtros y las máscaras.
+   Solo en Firefox: overlay sin líneas de pantalla, sombras cortas sin blur grande, sin filtros, y el fondo
+   fijo sin will-change (en Firefox crea una capa extra que se recompone en cada scroll). */
+@supports (-moz-appearance:none){
+  body::after{background:
+    radial-gradient(45% 40% at 92% 6%,rgba(222,220,209,.10),transparent 70%),
+    linear-gradient(90deg,rgba(36,35,33,0) 0%,rgba(36,35,33,0) 45%,rgba(36,35,33,.3) 75%,rgba(36,35,33,.5) 100%),
+    linear-gradient(180deg,rgba(36,35,33,.22) 0%,rgba(36,35,33,0) 10%,rgba(36,35,33,0) 62%,rgba(36,35,33,.45) 100%)!important}
+  body::before,body::after{will-change:auto!important;transform:none!important}
+  .panel,.ct,.alt-grid>div,.rx-c,.pod,fieldset.st,.hp-c,.scn>div,.v-stats>div,.pl,.fastbox,.ref,.foot-sec{box-shadow:0 2px 6px rgba(0,0,0,.4)!important}
+  .btn,.ghost,.dest,.copy,.tab,.totop{box-shadow:none!important}
+  *{text-shadow:none!important}
+  .logo-l,.lamp,.pod.best{filter:none!important}
+  .split .s-null,.split .s-jita{box-shadow:none!important}
+}
+.prices .pr-h th{font-size:.72rem;color:var(--dim);text-transform:uppercase;letter-spacing:.5px;font-weight:500;padding:4px 6px;text-align:left}
+.prices .pr-h th.r{text-align:right}
+.prices td b{font-weight:600;color:var(--txt)}
+.prices .pr-net{font:600 .95rem var(--f-num);white-space:nowrap}
+.prices tr.pr-best td{background:rgba(53,194,110,.06)}
+.pr-tag{margin-left:8px;font-size:.7rem;padding:1px 8px;vertical-align:1px}
+.prices .pr-foot{font-size:.78rem;padding-top:8px}
+/* v98: resultado tipo wiki (párrafo corto + listas) */
+.res-b{margin-top:14px}
+.res-b h4{font:600 .8rem var(--f-ui,inherit);color:var(--ion);text-transform:uppercase;letter-spacing:.7px;margin:0 0 6px}
+.res-b p.lead2{color:#f0eee6;font-size:1rem;margin:0 0 8px}.res-b p.lead2 b{font-weight:600;color:#faf9f5}
+.res-b ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}
+.res-b li{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;padding:8px 12px;border-radius:var(--r-sm);background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.05);color:#f0eee6;font-size:.95rem;font-weight:400}
+.res-b li .chip{flex:none;font:600 .72rem var(--f-ui,inherit);text-transform:uppercase;letter-spacing:.5px;padding:2px 8px;border-radius:999px;background:rgba(222,220,209,0.09);color:var(--ion);border:1px solid rgba(222,220,209,0.21)}
+.res-b li .chip.bb{background:rgba(53,194,110,.14);color:#7fe0a6;border-color:rgba(53,194,110,.4)}
+.res-b li .chip.nl{background:rgba(217,119,87,.14);color:#e8a58c;border-color:rgba(217,119,87,.4)}
+.res-b li .chip.pl{background:rgba(222,220,209,0.084);color:#d6d4cb;border-color:rgba(222,220,209,0.24)}
+.res-b li b{color:#faf9f5;font-weight:600}.res-b li .v{margin-left:auto;font:600 1rem var(--f-num);white-space:nowrap}
+.res-b li small{color:#c2c0b6;font-size:.86rem}
+.res-b .cmp2{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.res-b .cmp2 li{flex-direction:column;align-items:flex-start;gap:2px}.res-b .cmp2 li .v{margin-left:0}
+.res-b .time{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:8px}
+.res-b .time span{padding:6px 12px;border-radius:var(--r-sm);background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.06);color:#f0eee6}
+.res-b .time b{font:600 1.1rem var(--f-num);color:#fff;margin-left:6px}
+.res-b ul.why{gap:2px}.res-b ul.why li{background:none;border:none;padding:1px 0 1px 16px;position:relative;color:#f0eee6;font-size:.9rem}
+.res-b ul.why li::before{content:"•";position:absolute;left:2px;color:var(--ion)}
+/* títulos de los desplegables un poco más grandes y su resumen más legible */
+details.panel>summary h2{font-size:1.6rem}
+details.panel>summary .sum{font-size:1.1rem;color:#d6d4cb}
+.more-btn b{font-size:1.05rem!important}
+/* v105: Modo ligero (se activa solo en Firefox; también a mano en el pie). Quita lo que más cuesta pintar al hacer scroll:
+   fondo fijo de pantalla completa (pasa a moverse con la página), overlay en degradados, sombras, filtros y animaciones. */
+html.lite body::before,html.lite body::after{position:absolute!important;inset:auto 0 auto 0!important;top:0!important;height:max(100vh,900px)!important;will-change:auto!important;transform:none!important}
+html.lite body::after{background:linear-gradient(180deg,rgba(36,35,33,.2) 0%,rgba(36,35,33,0) 40%,var(--void) 100%)!important}
+html.lite *,html.lite *::before,html.lite *::after{box-shadow:none!important;text-shadow:none!important;filter:none!important;transition:none!important}
+html.lite .panel,html.lite .ct,html.lite .alt-grid>div,html.lite .rx-c,html.lite .pod,html.lite fieldset.st,html.lite .hp-c,html.lite .scn>div,html.lite .v-stats>div{background:#30302e!important}
+.lite-t{display:inline-flex!important;align-items:center;gap:4px;white-space:nowrap;cursor:pointer;color:var(--dim);font-size:inherit;margin:0}.lite-t input{vertical-align:-2px;margin-right:3px;accent-color:#d97757}
+@media(max-width:820px){
+  .res-b .cmp2{grid-template-columns:minmax(0,1fr)}.res-b li .v{margin-left:0;flex-basis:100%}
+  .prices .pr-h{display:none}.prices tr:not(.pr-h){display:grid;grid-template-columns:1fr auto;gap:4px 8px;padding:8px 0;border-bottom:1px solid var(--line)}.prices tr td{border:none!important}.prices tr td.muted{grid-column:1/-1}.prices td.pr-foot{grid-column:1/-1}
+  fieldset.st-full .st-g{grid-template-columns:minmax(0,1fr)}
+  .hp,.hp-t{grid-template-columns:minmax(0,1fr)}
+  .st-wrap{grid-template-columns:minmax(0,1fr)}.st-g{grid-template-columns:minmax(0,1fr)}.totop{right:12px;bottom:12px;width:36px;height:36px;border-radius:10px}}
+@media(max-width:820px){
+  .ctr{grid-template-columns:minmax(0,1fr)}.ct-f td{white-space:normal}.ct-f td:first-child{width:34%;word-break:normal;hyphens:none}.ct-f .copy{font-size:.8rem}.ct-n{white-space:normal}
+  .rx-pod{grid-template-columns:minmax(0,1fr)}.pod-v{font-size:1rem}.pod.best .pod-v{font-size:1.2rem}
+  .ref{border-radius:var(--r-md);flex-wrap:wrap;font-size:.86rem}
+  .rx-c{padding:12px 10px}.rx-c table{table-layout:fixed;font-size:.74rem}.rx-c td{white-space:normal;word-break:break-word}.rx-c th:first-child,.rx-c td:first-child{width:32%}
+  .rx{grid-template-columns:minmax(0,1fr)}
+  .rt-h{display:none}.rt-row{grid-template-columns:minmax(0,1fr) minmax(0,1fr);row-gap:4px;column-gap:14px}.rt-n{font-size:.78rem}.rt-t{grid-column:1/-1}.rt-d{grid-column:1/-1;text-align:left}
+  .rt-n{text-align:left}.rt-n::before{display:block;font-size:.68rem;color:var(--dim);font-weight:400;text-transform:uppercase;letter-spacing:.5px}
+  .rt-row .rt-n:nth-child(2)::before{content:"Reprocesado"}.rt-row .rt-n:nth-child(3)::before{content:"Sin reprocesar"}
+  .v-stats{grid-template-columns:1fr 1fr!important}.v-stats>div:last-child{grid-column:1/-1!important}.fb-v{margin-left:0;flex-basis:100%}
+  .scn{grid-template-columns:minmax(0,1fr)}
+  body::before{opacity:.7}.rep-sc .amt{text-align:left;margin-left:21px}
+  .receipt.rep li.rep-it{grid-template-areas:"pill amt" "who who" "sc sc";grid-template-columns:minmax(0,1fr) auto}.receipt.rep li.rep-it>.rep-sc{grid-area:sc}.receipt.rep li.rep-it>.amt{grid-area:amt}
+  .v-stats{grid-template-columns:1fr 1fr}.v-stats>div:last-child{grid-column:1/-1}
+  .v-top{grid-template-columns:minmax(0,1fr);gap:18px}
+  .alt-grid{grid-template-columns:minmax(0,1fr)}
+  .pl-head{display:flex!important;flex-wrap:wrap;gap:6px;padding:8px 12px!important}.pl-head .srt{padding:3px 8px;border:1px solid var(--line2);border-radius:999px;text-align:center!important;font-size:.68rem}
+  .pl-row{grid-template-columns:minmax(0,1fr) auto;grid-template-areas:"n q" "p a";row-gap:6px;padding:10px 14px}
+  .pl-row>.n{grid-area:n}.pl-row>.q{grid-area:q}.pl-row>.p{grid-area:p;text-align:left}.pl-row>.a{grid-area:a}
+  .pl-row .p .copy{text-align:left}
+  .pl-row>.q::after{content:" u.";color:var(--dim);font-weight:400}
+  .pl-row.cost,.pl-row.total,.pl-row.miss{grid-template-areas:"n a"}
+  .pl-row.cost>.q,.pl-row.cost>.p,.pl-row.total>.q,.pl-row.total>.p,.pl-row.miss>.q,.pl-row.miss>.p{display:none}
+  .pl-g{padding:12px 14px 4px}
+  .pl-g .reco{flex-basis:100%}
+  details.thin>summary .status{margin-left:0;flex-basis:100%}
+
+  .ship-t thead{display:none}
+  .ship-t tr{display:grid;grid-template-columns:minmax(0,1fr) auto;column-gap:10px;padding:8px 4px;border-bottom:1px solid var(--line)}
+  .ship-t td{border:none!important;padding:2px 6px!important;min-width:0;overflow-wrap:anywhere}
+
+  .ledger-head{display:none}
+  .lot-head{grid-template-columns:minmax(0,1fr) auto 22px;grid-template-areas:"name name chev" "qty net chev" "pp dest chev";row-gap:4px}
+  .lot-pp{grid-area:pp;justify-self:start}
+  .lot-name{grid-area:name}.lot-net{grid-area:net}.lot-qty{grid-area:qty;text-align:left;color:var(--mut);font-size:.85rem}.lot-dest{grid-area:dest}.chev{grid-area:chev}
+  .lot-body{grid-template-columns:minmax(0,1fr);padding:6px 4px 18px}
+  .opt{grid-template-columns:minmax(0,1fr) auto;row-gap:4px}
+  .opt-l{grid-row:1;grid-column:1}.opt-v{grid-row:1;grid-column:2}
+  .opt-bar{grid-row:2;grid-column:1/-1}.opt-h{grid-row:3;grid-column:1/-1;margin-top:0}
+  .facts{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+  .prices td{padding:8px 4px}.prices .copy{min-width:0;font-size:.88rem}
+  .prices tr td.muted:last-child{display:none}
+  #tRepro,#tOreVsMin,#tRcmp,#tRaw{display:block;overflow-x:auto}
+  .calls2{grid-template-columns:1fr}
+  .guide li{grid-template-columns:24px minmax(0,1fr)}.guide li span{grid-column:2}
+  td input{max-width:110px}
+  .receipt li,.receipt.rep li{grid-template-columns:minmax(0,1fr);grid-template-areas:"pill" "who" "amt";row-gap:6px}
+  .receipt li>.amt{text-align:left}.receipt li>.amt small{text-align:left;display:inline;margin-left:8px}
+  .receipt li>:nth-child(1){grid-area:pill;justify-self:start}.receipt li>:nth-child(2){grid-area:who}.receipt li>:nth-child(3){grid-area:amt}
+  .title{gap:14px}.logo-l{width:60px;height:60px}
+  .top{padding:14px 16px}.top nav{flex-wrap:nowrap;gap:6px}.top .ghost{padding:7px 12px}.brand small{display:none}.brand{font-size:.95rem}.who{display:none}
+  body::before{background-position:32% 0;background-size:auto 75vh}
+  .lot.open{margin:8px -4px;padding:0 4px}
+  .panel{padding:18px}
+}
+@media(max-width:480px){
+}
+
+/* =============== v104: comparación y aviso inicial ===============
+   Dos columnas en el héroe sin alterar el área de pegado; en móvil el aviso
+   pasa a una segunda fila. La cifra compacta es informativa: debajo se muestra
+   siempre el valor exacto, incluso con estimaciones parciales. */
+.hero-intro{display:grid;grid-template-columns:minmax(0,1fr) minmax(290px,410px);align-items:center;gap:18px;margin-top:16px}
+.hero-intro>p{margin:0;color:#e5e3da;line-height:1.65;min-width:0}
+.start-note{display:flex;align-items:flex-start;gap:10px;padding:12px 14px;border:1px solid rgba(217,119,87,.35);
+  background:rgba(48,48,46,.82);border-radius:12px;min-width:0;box-shadow:inset 0 1px 0 rgba(255,255,255,.05)}
+.start-note>.ic{color:var(--thrust);flex:none;margin-top:2px}
+.start-note-body{display:flex;flex-direction:column;gap:5px;min-width:0;font-size:.83rem;line-height:1.5;color:#d6d4cb}
+.start-note-body strong{color:#f2c775;font-size:.87rem}
+.start-note-body b{color:#faf9f5}
+.start-note-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:3px}
+.start-note-actions button{border:1px solid rgba(222,220,209,0.27);color:var(--ion);padding:5px 10px;border-radius:7px;
+  background:rgba(222,220,209,.09);font-size:.8rem;font-weight:600}
+.start-note-actions button:hover{background:rgba(222,220,209,0.108)}
+.start-note-actions button:focus-visible{outline:2px solid var(--ion);outline-offset:2px}
+.res-b .cmp2 li .cmp-label{font-size:.87rem;color:#e5e3da;font-weight:500;line-height:1.35}
+.res-b .cmp2 li .cmp-main{margin-left:0;font:600 1.07rem/1.25 var(--f-num);white-space:normal;overflow-wrap:anywhere}
+.res-b .cmp2 li .cmp-exact{color:#c2c0b6;font:.78rem/1.45 var(--f-num);overflow-wrap:anywhere}
+.res-b .cmp2 li .cmp-part{color:#ffcf83;font:.78rem/1.4 var(--f-ui,inherit)}
+@media(max-width:860px){.hero-intro{grid-template-columns:minmax(0,1fr)}.start-note{max-width:100%}}
+@media(max-width:480px){.hero-intro{gap:10px}.start-note{padding:10px}.start-note-actions button{flex:1}}
+
+/* =============== v103: Tus Ítems, Ajustes y Ayuda ===============
+   Overrides al FINAL del CSS; no cambian los estilos del motor ni los cálculos.
+   La tarjeta Buyback tenía 4 columnas forzadas dentro de un fieldset: las entradas
+   de texto se comprimían y se desbordaban. Usamos 2 columnas responsivas. */
+.ledger-head .ledger-sort{appearance:none;display:flex;align-items:center;justify-content:flex-start;gap:6px;
+  min-width:0;width:100%;font:inherit;text-align:left;color:var(--dim);background:transparent;border:0;
+  border-radius:6px;padding:7px 5px;cursor:pointer}
+.ledger-head .ledger-sort:nth-child(n+2){justify-content:flex-end;text-align:right}
+.ledger-sort:hover,.ledger-sort[data-active="true"]{color:var(--ion);background:rgba(222,220,209,.08)}
+.ledger-sort:focus-visible{outline:2px solid var(--ion);outline-offset:2px}
+.ledger-sort .sort-arrow{min-width:11px;color:var(--ion);font-weight:800}
+#settings,#help{min-width:0;max-width:100%;overflow-wrap:break-word}
+#settings .st-wrap{grid-template-columns:repeat(2,minmax(0,1fr));min-width:0}
+#settings fieldset.st{min-width:0;max-width:100%;overflow:hidden}
+#settings fieldset.st-full{grid-column:1/-1}
+#settings fieldset.st-full .st-g{grid-template-columns:repeat(2,minmax(0,1fr))}
+#settings .st-g{min-width:0}
+#settings .st-f,#settings .st-f .st-l{min-width:0;overflow-wrap:anywhere}
+#settings .st-f input:not([type=checkbox]),#settings .st-f select,#settings .st-f textarea{
+  display:block;min-width:0;max-width:100%;box-sizing:border-box}
+#settings .st-f small{overflow-wrap:break-word;line-height:1.5}
+#settings .st-f input[type=text]{text-overflow:ellipsis}
+#settings .st-f input[type=text]:focus{text-overflow:clip}
+#help .hp,#help .hp-t{min-width:0}
+#help .hp-c,#help .hp-t>div{min-width:0;overflow-wrap:break-word;line-height:1.5}
+@media(max-width:1120px){#settings .st-wrap{grid-template-columns:minmax(0,1fr)}}
+@media(max-width:660px){
+  #settings .st-wrap,#settings .st-g,#settings fieldset.st-full .st-g{grid-template-columns:minmax(0,1fr)}
+  #settings fieldset.st{padding:14px 12px 16px}
+  #help .hp,#help .hp-t{grid-template-columns:minmax(0,1fr)}
+}
+
+/* ================= v112: estilo Claude =================
+   Grises cálidos, texto casi blanco, serif para lo que se lee (títulos y explicaciones), sans para la interfaz.
+   Color solo para números (verde/rojo), alertas (ámbar) y la acción principal (arcilla). */
+body{background:#262624;color:var(--txt);-webkit-font-smoothing:antialiased}
+body::before{background:#262624 url(__ATHANOR__) 0% 0/cover no-repeat;opacity:.06;filter:grayscale(1)}
+body::after{background:none}
+*{text-shadow:none!important}
+.panel,.ct,.sh-card,.pk-o,.scn>div,fieldset.st,.hp-c,.pill,.btn,.ghost,.copy,.cz-b,.totop,.sh-kpi>div,.ct-sum,.call,.lot,.rx>div,.res-b li{box-shadow:none!important}
+.panel{background:#2b2a28;border:1px solid var(--line);border-left-width:1px!important;border-left-color:var(--line)!important}
+.panel h2,details.panel>summary h2{font:500 1.5rem/1.25 var(--f-serif);letter-spacing:0;color:var(--txt)}
+details.panel>summary h2::before{color:var(--dim)}
+details.panel>summary .sum,.cnt{font:500 .95rem var(--f-ui);color:var(--mut)}
+.sub-h,.res-b h4,.ce-h .sub-h{font:600 1rem var(--f-ui);color:var(--txt);text-transform:none;letter-spacing:0}
+h2 .ic,.sub-h .ic,.summary h2 .ic,fieldset.st legend .ic,.fb-h .ic,.rx-call .ic,.receipt .rw .reco .ic,.pl-g .reco .ic,.foot-sec .ic{color:var(--mut)}
+.panel .lead,.v-hint,.res-b p.lead2,.sh-none,.scn-v,.rguide,.pk-note,.lead2,.ledger-tools .lead{font-family:var(--f-serif);color:#e5e3da;font-size:1.03rem;line-height:1.6}
+.res-b p.lead2 b,.pk-note b{color:var(--txt);font-weight:600}
+.note,.sh-rates,.st-i,.st-f small,small{color:#b0ada4}
+.status{color:var(--mut)}.status.ok{color:var(--mut)}.status.err{color:#e0a84f}
+.pill,.res-b li .chip,.res-b li .chip.bb,.res-b li .chip.nl,.res-b li .chip.pl,.v-what{background:rgba(222,220,209,.07)!important;color:#e5e3da!important;border:1px solid rgba(222,220,209,.16)!important;font-weight:500!important;text-transform:none!important;letter-spacing:0!important}
+.btn{background:var(--clay);color:#fff;font-weight:600}.btn:hover{background:#c96442}
+.ghost{background:transparent;color:#e5e3da;border:1px solid var(--line2)}.ghost:hover,.ghost[aria-pressed="true"]{background:rgba(222,220,209,.06);color:var(--txt);border-color:rgba(222,220,209,.3)}
+.copy{background:#30302e;border:1px solid var(--line2);color:var(--txt)}.copy:hover{background:#3a3937}
+input,select,textarea{background:#1f1e1d;border:1px solid var(--line2);box-shadow:none!important}
+input:focus,select:focus,textarea:focus{border-color:rgba(222,220,209,.4);box-shadow:0 0 0 3px rgba(222,220,209,.08)!important}
+:focus-visible{outline-color:#d6d4cb}
+.ct,.sh-card,.pk-o,.scn>div,fieldset.st,.hp-c,.sh-kpi>div{background:#30302e;border:1px solid var(--line)}
+.ct.bb,.ct.cr,.ct.pl,.sh-card{border-top:1px solid var(--line)}
+.ct-sum{background:#30302e;border:1px solid var(--line);border-left:1px solid var(--line)}
+.pk-o.on{background:#3a3937;border-color:var(--clay);box-shadow:0 0 0 1px var(--clay)!important}.pk-o.on .pk-l::after{color:var(--clay)}
+.cz-d[aria-current="true"]{background:#e5e3da;color:#1f1e1d;border-color:#e5e3da}
+.sh-bar .b1{background:#d97757}.sh-bar .b2{background:#a8a59b}.sh-bar .b3{background:#6b6a65}
+.sh-leg .l1::before{background:#d97757}.sh-leg .l2::before{background:#a8a59b}.sh-leg .l3::before{background:#6b6a65}
+.sh-c .tr i{background:#a8a59b}
+.sh-tips li{background:#30302e;border-color:var(--line)}.sh-tips li::before{content:"•";color:var(--mut);font-weight:700}
+.sh-tips li.ok::before{content:"✓";color:var(--gain)}
+.more-btn{background:transparent;border:1px solid var(--line2);border-style:solid}.more-btn:hover{background:rgba(222,220,209,.05)}
+.more-btn span{font-family:var(--f-serif);color:#e5e3da;font-size:1.02rem}.more-btn b{color:var(--txt);font-weight:600}
+.lot.open .lot-head,.lot-head:hover{background:rgba(222,220,209,.04)}
+.brand{font:600 1.05rem var(--f-ui);letter-spacing:.2px}
+b,strong{font-weight:600}
+/* quitar ítem del lote */
+.lot{display:grid;grid-template-columns:minmax(0,1fr) 36px;align-items:start}
+.lot-head{grid-column:1}.lot-body{grid-column:1/-1}
+.lot-x{grid-column:2;grid-row:1;align-self:center;width:28px;height:28px;border-radius:8px;display:grid;place-items:center;color:var(--dim);opacity:.55;transition:opacity .12s,background .12s,color .12s}
+.lot-x::before{content:"";width:14px;height:14px;background:currentColor;-webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round'%3E%3Cpath d='M6 6l12 12M18 6L6 18'/%3E%3C/svg%3E") center/contain no-repeat;mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round'%3E%3Cpath d='M6 6l12 12M18 6L6 18'/%3E%3C/svg%3E") center/contain no-repeat}
+.lot:hover .lot-x{opacity:1}.lot-x:hover,.lot-x:focus-visible{opacity:1;color:#e8746c;background:rgba(232,116,108,.1)}
+.ledger-head{padding-right:50px}
+.undo{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:10px 0;padding:9px 12px;border-radius:var(--r-sm);background:#30302e;border:1px solid var(--line2);font-size:.92rem;color:#e5e3da}
+.undo .ghost{margin-left:auto;padding:5px 14px}
+@media(hover:none){.lot-x{opacity:.9}}
+@media(max-width:600px){.ledger-head{padding-right:14px}.lot-x{align-self:start;margin-top:12px}}
+html.lite body::before{opacity:0}
+.pk-t small{background:none;border:0;padding:0;color:var(--dim)}
+.hero h1{font:500 clamp(2.1rem,4.6vw,3.3rem)/1.1 var(--f-serif);letter-spacing:0;text-transform:none}
+.hero>p,.hero .tagline,.hero p{font-family:var(--f-serif);color:#e5e3da;font-size:1.1rem}
+.tag.ok{color:var(--mut);border-color:var(--line2)}
+.foot-sec{border-color:var(--line2);background:#2b2a28}.foot-sec .ic{color:var(--mut)}
+.start-note{border-color:var(--line2);background:#2b2a28}.start-note-body strong{color:var(--txt)}.start-note>.ic{color:var(--mut)}
+.v-what{vertical-align:6px}
+/* ================= 1.0.1 ================= */
+/* fondo: la imagen se ve (industria de EVE) pero apagada, con viñeta */
+body::before{opacity:.42;filter:saturate(.55) brightness(.75)}
+body::after{background:
+  radial-gradient(120% 95% at 50% 40%,rgba(20,19,18,0) 35%,rgba(20,19,18,.55) 75%,rgba(14,13,12,.92) 100%),
+  linear-gradient(180deg,rgba(38,38,36,.35),rgba(38,38,36,.55))}
+html.lite body::before{opacity:.3}
+/* números: vuelve la fuente anterior */
+:root{--f-num:"Bahnschrift","DIN Alternate","DIN 2014","Roboto Condensed","Arial Narrow",system-ui,sans-serif}
+.num,.sh-big,.pk-v,.ct-s,.v-isk,#resIsk{font-family:var(--f-num)}
+/* etiquetas de plan: con color y forma casi cuadrada (esquinas redondeadas como el cuadro de pegado) */
+.pill,.v-what,.res-b li .chip{border-radius:7px!important;font-weight:600!important}
+.k-null,.k-rNull,.v-what[data-k=null],.v-what[data-k=rNull],.res-b li .chip.nl{background:rgba(224,168,79,.13)!important;color:#ecc27e!important;border-color:rgba(224,168,79,.4)!important}
+.k-bb,.v-what[data-k=bb],.res-b li .chip.bb{background:rgba(92,186,134,.13)!important;color:#8fd3ad!important;border-color:rgba(92,186,134,.42)!important}
+.k-jOrd,.k-jInst,.k-rJita,.v-what[data-k=jOrd],.v-what[data-k=jInst],.v-what[data-k=rJita],.res-b li .chip:not(.bb):not(.nl):not(.pl){background:rgba(122,170,224,.13)!important;color:#a9c9ee!important;border-color:rgba(122,170,224,.42)!important}
+.k-disc,.v-what[data-k=disc],.res-b li .chip.pl{background:rgba(179,156,240,.13)!important;color:#cbbaf5!important;border-color:rgba(179,156,240,.42)!important}
+/* subtítulos: mismo tamaño, peso y separador en todo el Resultado */
+.pk-t,.res-b h4{display:block;font:600 1.05rem var(--f-ui)!important;color:var(--txt)!important;text-transform:none!important;letter-spacing:0!important;margin:18px 0 10px!important;padding-top:16px;border-top:1px solid var(--line)}
+.pk-t small{display:block;font:400 .86rem var(--f-ui);color:var(--mut);margin:3px 0 0}
+.pk-w{margin:0}
+.res-b p.lead2{margin-bottom:10px}
+.pk-note,.pk-note b{font-family:var(--f-ui)}.pk-note{font-size:.95rem;color:#e5e3da}
+.more-btn span{font-family:var(--f-ui);font-size:.95rem;color:var(--mut)}
+/* botón plegar tabla: flecha arriba = ocultar (abierto, más claro); flecha abajo = mostrar (cerrado, más oscuro) */
+.pl-fold{width:34px;height:34px;padding:0!important;display:inline-grid;place-items:center;border-radius:8px;border:1px solid var(--line2);background:#3a3937;color:var(--txt);transition:background .12s,color .12s}
+.pl-fold::before{content:"";width:16px;height:16px;background:currentColor;transition:transform .15s;-webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 15l6-6 6 6'/%3E%3C/svg%3E") center/contain no-repeat;mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 15l6-6 6 6'/%3E%3C/svg%3E") center/contain no-repeat}
+.pl-fold[aria-expanded="false"]{background:#1f1e1d;color:var(--dim)}
+.pl-fold[aria-expanded="false"]::before{transform:rotate(180deg)}
+.pl-fold:hover{background:#45443f;color:var(--txt)}
+html.lite .pl-fold,html.lite .pl-fold::before{transition:none}
+/* "Ver el análisis" / "Ver más": algo más visible, sin gritar */
+.more-btn{background:#33322f;border:1px solid rgba(217,119,87,.32);border-left:3px solid var(--clay)}
+.more-btn span{color:#e5e3da}
+.more-btn b{color:#eba98f}
+.more-btn:hover{background:rgba(217,119,87,.09);border-color:rgba(217,119,87,.55);border-left-color:var(--clay)}
+.more-btn[aria-expanded="true"]{background:transparent;border-color:var(--line2);border-left:1px solid var(--line2)}
+.more-btn[aria-expanded="true"] b{color:var(--mut)}
+/* tarjetas de plan con profundidad */
+.pk-o{background:#151515!important;border:1px solid rgba(222,220,209,.09);box-shadow:0 1px 0 rgba(255,255,255,.04) inset,0 2px 4px rgba(0,0,0,.45),0 8px 18px rgba(0,0,0,.35)!important;transition:transform .12s,box-shadow .12s,border-color .12s}
+.pk-o:hover{transform:translateY(-1px);border-color:rgba(222,220,209,.22);box-shadow:0 1px 0 rgba(255,255,255,.05) inset,0 4px 8px rgba(0,0,0,.5),0 12px 24px rgba(0,0,0,.4)!important}
+.pk-o.on{background:#1c1a19!important;border-color:var(--clay);box-shadow:0 0 0 1px var(--clay),0 2px 4px rgba(0,0,0,.45),0 8px 18px rgba(0,0,0,.35)!important}
+html.lite .pk-o{box-shadow:none!important;transform:none!important}
+/* contrato: todos los valores con la misma letra, tamaño y alineación (copiables o no) */
+.ct-f td{padding:6px 0;vertical-align:middle}
+.ct-f td:first-child{font:400 .9rem var(--f-ui);color:var(--mut)}
+.ct-f td.r>span,.ct-f td.r .copy{display:inline-block;font:400 .92rem/1.35 var(--f-num)!important;color:var(--txt);padding:5px 11px;margin:0;border:1px solid transparent;border-radius:var(--r-sm);text-align:right;width:auto}
+.ct-f td.r .copy{border-color:var(--line2);background:#30302e}
+.ct-f td.r .copy:hover{background:#3a3937;border-color:rgba(222,220,209,.3)}
+@media(max-width:600px){.ct-f td.r>span,.ct-f td.r .copy{font-size:.84rem!important;padding:4px 8px}.ct-n{overflow:visible;text-overflow:clip;white-space:normal}}
+/* 1.0.2: fondo al 91% y viñeta suave solo en los bordes; título en mayúsculas */
+body::before{opacity:.91;filter:none}
+body::after{background:radial-gradient(130% 100% at 50% 40%,rgba(14,13,12,0) 55%,rgba(14,13,12,.45) 85%,rgba(10,9,8,.8) 100%)}
+html.lite body::before{opacity:.91}
+.hero h1{text-transform:uppercase;letter-spacing:.04em}
+.hero h1,.hero p,.hero .tagline,.top .brand,.foot-by{text-shadow:0 1px 3px rgba(0,0,0,.95),0 2px 14px rgba(0,0,0,.75)!important}
+/* "Antes de empezar" con el mismo formato que el anuncio de Skill Points */
+.start-note{border:1px solid rgba(217,119,87,.5)!important;background:linear-gradient(90deg,rgba(217,119,87,.18),rgba(36,35,33,.82))!important;color:#f3e6c8;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.08),0 4px 12px rgba(0,0,0,.4)!important;border-radius:var(--r-md)}
+.start-note:hover{border-color:rgba(217,119,87,.85)!important}
+.start-note>.ic{color:#d97757!important}
+.start-note-body{font-size:.9rem;color:#f3e6c8}
+.start-note-body strong{align-self:flex-start;font-weight:600;color:#1a1206!important;background:#d97757;border-radius:999px;padding:1px 10px;font-size:.8rem}
+.start-note-body b{color:#e8a58c}
+.start-note-actions button{border:1px solid rgba(217,119,87,.55);color:#f3e6c8;background:rgba(217,119,87,.08)}
+.start-note-actions button:hover{background:rgba(217,119,87,.2);border-color:#d97757}
+/* 1.0.3: #151515 para las tarjetas dentro de los paneles (con la misma profundidad que las tarjetas de plan) */
+.ct,.sh-card,.sh-kpi>div,.sh-tips li,.scn>div,.ct-sum,fieldset.st,.hp-c,.undo,.res-b ul:not(.why):not(.cmp2)>li,.res-b .time>span,.ct-items,.rx>div,.rx-c,.pod,.call,.paste,.v-stats>div,.alt-grid>div{background:#151515!important;border-color:rgba(222,220,209,.09)!important}
+.ct,.sh-card,.scn>div,fieldset.st,.hp-c,.res-b ul:not(.why):not(.cmp2)>li,.ct-sum,.paste,.v-stats>div,.alt-grid>div{box-shadow:0 1px 0 rgba(255,255,255,.04) inset,0 2px 4px rgba(0,0,0,.45),0 8px 18px rgba(0,0,0,.3)!important}
+.ct-items,.sh-kpi>div,.sh-tips li{background:#1c1b1a!important}
+.sh-tips li{border-color:rgba(222,220,209,.08)!important}
+html.lite .ct,html.lite .sh-card,html.lite .scn>div,html.lite fieldset.st,html.lite .hp-c,html.lite .res-b ul:not(.why):not(.cmp2)>li,html.lite .ct-sum,html.lite .paste{box-shadow:none!important}
+/* 1.0.4: la fuente de números (Bahnschrift) solo para números; todo texto con la fuente de la interfaz */
+.brand,.tagline,legend,fieldset.st legend,.hp-c h3,.call b,.rx-fh,.scn h4,.copy,.ct-f td.r>span,.ct-f td.r .copy,.cz-pos,.pod-v,.fb-v,.rx-big,.foot-by .ver,.opt-v,.fact b,.receipt .amt,.guide li::before{font-family:var(--f-ui)!important}
+.copy.cp-n,.ct-f td.r>span.cp-n,.ct-f td.r .copy.cp-n,.scn h4 b,.lot-qty,.lot-net,td.r .num{font-family:var(--f-num)!important}
+/* v1.0.5: ruta / flip */
+.route{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:12px}
+.route-l{font-size:.9rem;color:var(--mut);text-shadow:0 1px 3px rgba(0,0,0,.9)}
+.route-b{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border-radius:10px;background:#151515;border:1px solid rgba(222,220,209,.14);color:var(--txt);font-weight:600;
+  box-shadow:0 1px 0 rgba(255,255,255,.04) inset,0 2px 4px rgba(0,0,0,.45),0 8px 18px rgba(0,0,0,.3);transition:border-color .12s,background .12s}
+.route-b:hover{border-color:rgba(217,119,87,.6)}
+.route-ar{color:var(--clay)}
+.route-ic{width:16px;height:16px;margin-left:4px;background:var(--mut);-webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M7 4L3 8l4 4M3 8h14M17 20l4-4-4-4M21 16H7'/%3E%3C/svg%3E") center/contain no-repeat;mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M7 4L3 8l4 4M3 8h14M17 20l4-4-4-4M21 16H7'/%3E%3C/svg%3E") center/contain no-repeat}
+.route-tx{font-size:.82rem;font-weight:500;color:var(--mut)}
+.route-b[aria-pressed="true"]{border-color:var(--clay);background:#1c1a19;box-shadow:0 0 0 1px var(--clay),0 8px 18px rgba(0,0,0,.3)}
+.route-m{display:inline-flex;align-items:center;gap:6px;font-size:.9rem;color:#e5e3da;text-shadow:0 1px 3px rgba(0,0,0,.9)}
+.route-m input{width:70px;padding:5px 8px;text-align:right}
+.k-fN,.v-what[data-k=fN]{background:rgba(224,168,79,.13)!important;color:#ecc27e!important;border-color:rgba(224,168,79,.4)!important}
+.k-fJ,.k-fJI,.v-what[data-k=fJ],.v-what[data-k=fJI]{background:rgba(122,170,224,.13)!important;color:#a9c9ee!important;border-color:rgba(122,170,224,.42)!important}
+/* v1.0.6: comprar en Jita al Sell y revender en HY-RWO */
+.fb2{margin:4px 0 6px;padding:16px 18px;border-radius:var(--r-md);background:#151515;border:1px solid rgba(92,186,134,.35);border-left:3px solid var(--gain);
+  box-shadow:0 1px 0 rgba(255,255,255,.04) inset,0 2px 4px rgba(0,0,0,.45),0 8px 18px rgba(0,0,0,.3)}
+.fb2 h4{font:600 1.05rem var(--f-ui);color:var(--txt);margin:0 0 4px}
+.fb2 .fb2-s{font-size:.88rem;color:var(--mut);margin:0 0 10px}
+.fb2-big{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap}
+.fb2-big b{font:700 2rem/1.1 var(--f-num)}.fb2-big span{font-size:.95rem;color:#e5e3da}
+.fb2-l{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin:12px 0}
+.fb2-l>div{padding:8px 10px;border-radius:var(--r-sm);background:#1c1b1a;border:1px solid rgba(222,220,209,.08)}
+.fb2-l span{display:block;font-size:.72rem;letter-spacing:.05em;text-transform:uppercase;color:var(--dim)}.fb2-l b{font:600 1rem var(--f-num)}
+.fb2 table{width:100%;font-size:.86rem;border-collapse:collapse}
+.fb2 th{font-size:.72rem;color:var(--dim);font-weight:600;text-transform:uppercase;letter-spacing:.04em;padding:4px 6px;text-align:left}
+.fb2 td{padding:5px 6px;border-top:1px solid rgba(255,255,255,.05)}.fb2 td.r,.fb2 th.r{text-align:right;white-space:nowrap}
+.fb2 td.r{font-family:var(--f-num)}
+.fb2 .fb2-n{font-size:.8rem;color:var(--dim);margin-top:8px}
+@media(max-width:700px){.fb2-l{grid-template-columns:1fr 1fr}.fb2 thead{display:none}.fb2 table,.fb2 tbody{display:block}
+ .fb2 tr{display:flex;flex-wrap:wrap;gap:2px 14px;padding:8px 0;border-top:1px solid rgba(255,255,255,.06)}.fb2 td{border:0;padding:0}.fb2 td:first-child{flex:1 1 100%;font-weight:600}
+ .fb2 td.r{text-align:left}.fb2 td[data-l]::before{content:attr(data-l);display:block;font-size:.66rem;color:var(--dim);text-transform:uppercase;font-family:var(--f-ui)}}
+/* v1.0.6: debajo del título, tres columnas iguales: Skill Points · qué hace la app · Antes de empezar */
+.hero-intro{grid-template-columns:repeat(3,minmax(0,1fr))!important;align-items:stretch!important;gap:14px!important;margin-top:20px!important}
+.hero-intro>.ref{max-width:none;margin:0;border-radius:var(--r-md);flex-direction:column;align-items:flex-start;justify-content:flex-start;gap:8px;padding:14px 16px;position:relative;font-size:.95rem}
+.hero-intro>.ref .ref-go{position:absolute;top:12px;right:14px;margin:0}
+.hero-intro>.hero-p{margin:0;padding:14px 16px;border-radius:var(--r-md);background:rgba(21,21,21,.82);border:1px solid rgba(222,220,209,.12);
+  box-shadow:0 2px 4px rgba(0,0,0,.45),0 8px 18px rgba(0,0,0,.3);font:400 .95rem/1.6 var(--f-ui)!important;color:#e5e3da;display:block;text-shadow:none!important}
+.hero-intro>.hero-p::before{content:"Qué hace";display:table;margin-bottom:8px;font-weight:600;font-size:.8rem;color:#1f1e1d;background:#d6d4cb;border-radius:999px;padding:1px 10px}
+.hero-intro>.paste,.hero .paste{margin-top:18px}
+.hero-intro>.start-note{max-width:none;margin:0}
+@media(max-width:980px){.hero-intro{grid-template-columns:minmax(0,1fr)!important}}
+/* v1.0.7: interruptor "Contar envío" */
+.sw{display:inline-flex;align-items:center;gap:8px;cursor:pointer;font-size:.9rem;color:#e5e3da;text-shadow:0 1px 3px rgba(0,0,0,.9);padding:6px 10px;border-radius:10px;background:rgba(21,21,21,.75);border:1px solid rgba(222,220,209,.12)}
+.sw input{position:absolute;opacity:0;width:1px;height:1px}
+.sw-t{position:relative;width:34px;height:20px;border-radius:999px;background:#3a3937;border:1px solid rgba(222,220,209,.2);transition:background .15s;flex:none}
+.sw-t::after{content:"";position:absolute;top:2px;left:2px;width:14px;height:14px;border-radius:50%;background:#c2c0b6;transition:transform .15s,background .15s}
+.sw input:checked+.sw-t{background:var(--clay);border-color:var(--clay)}
+.sw input:checked+.sw-t::after{transform:translateX(14px);background:#fff}
+.sw input:focus-visible+.sw-t{outline:2px solid #d6d4cb;outline-offset:2px}
+html.lite .sw-t,html.lite .sw-t::after{transition:none}
+.route-m{padding:4px 6px 4px 10px;border-radius:10px;background:rgba(21,21,21,.75);border:1px solid rgba(222,220,209,.12)}
+/* v1.0.8: Ajustes y Ayuda arriba, con X fija y secciones desplegables */
+.top-slot{margin-top:18px;display:grid;gap:14px}
+.top-slot>.panel{margin:0}
+.x-wrap{position:sticky;top:12px;height:0;z-index:6;display:flex;justify-content:flex-end}
+.x-close{width:36px;height:36px;margin:-10px -8px 0 0;border-radius:10px;display:grid;place-items:center;background:#151515;border:1px solid rgba(222,220,209,.18);color:var(--txt);
+  box-shadow:0 2px 4px rgba(0,0,0,.45),0 6px 14px rgba(0,0,0,.35)}
+.x-close::before{content:"";width:16px;height:16px;background:currentColor;-webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round'%3E%3Cpath d='M6 6l12 12M18 6L6 18'/%3E%3C/svg%3E") center/contain no-repeat;mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round'%3E%3Cpath d='M6 6l12 12M18 6L6 18'/%3E%3C/svg%3E") center/contain no-repeat}
+.x-close:hover{border-color:var(--clay);color:#fff;background:#1c1a19}
+#settings .st-wrap{grid-template-columns:minmax(0,1fr)!important;gap:8px!important}
+#settings fieldset.st{padding:0 16px!important}
+#settings fieldset.st>legend{float:left;width:100%;display:flex;align-items:center;gap:8px;padding:14px 0!important;margin:0;cursor:pointer;user-select:none}
+#settings fieldset.st>legend::after{content:"";margin-left:auto;width:14px;height:14px;background:var(--mut);transition:transform .15s;-webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E") center/contain no-repeat;mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E") center/contain no-repeat}
+#settings fieldset.st:not(.closed)>legend::after{transform:rotate(180deg)}
+#settings fieldset.st>legend:hover{color:#fff}
+#settings fieldset.st>legend:focus-visible{outline:2px solid #d6d4cb;outline-offset:2px;border-radius:6px}
+#settings fieldset.st>legend+*{clear:both}
+#settings fieldset.st:not(.closed){padding-bottom:16px!important}
+#settings fieldset.st.closed>*:not(legend){display:none!important}
+#settings .st-g{grid-template-columns:repeat(auto-fill,minmax(230px,1fr))!important;align-items:start}
+#settings fieldset.st-full .st-g{grid-template-columns:repeat(auto-fill,minmax(230px,1fr))!important}
+#settings .st-f.st-w{grid-column:1/-1}
+.st-tools{display:flex;gap:8px;justify-content:flex-end;margin:12px 0 4px}
+.st-tools .ghost{padding:5px 12px;font-size:.84rem}
+/* v1.0.8: viñeta negra sobre la imagen de fondo (modo normal); en Modo ligero no hay viñeta */
+body::after{background:radial-gradient(120% 95% at 50% 42%,rgba(0,0,0,0) 38%,rgba(0,0,0,.5) 72%,rgba(0,0,0,.92) 100%)!important}
+html.lite body::after{background:none!important}
+/* v1.0.8: precio por unidad en la fila (copiable) */
+.lot-head{cursor:pointer}
+.lot-head:focus-visible{outline:2px solid #d6d4cb;outline-offset:-2px}
+.lot-pp{justify-self:end}
+.lot-pp .copy{width:auto;margin:0;padding:4px 10px;font-size:.88rem;text-align:right;white-space:nowrap}
+.lot-pp .copy:disabled{opacity:.45;cursor:default}
+.ledger-col{font-size:.85rem;color:var(--dim);text-align:right;padding-right:4px}
+.res-b ul.why>li{background:none!important;border:0!important;box-shadow:none!important}
+@media(max-width:600px){.lot-head{grid-template-areas:"name name chev" "qty net chev" "dest dest chev" "pp pp chev"!important}.lot-dest{justify-self:start}.lot-pp{justify-self:start!important}.ledger-col{display:none}}
+#pCtr.no-ship .ce{grid-template-columns:minmax(0,1fr)}
+#pCtr.no-ship .ce-l{max-width:720px}
+.legend i{font-style:normal}
+/* v1.0.9: UNA sola fuente en toda la app (la de la interfaz). Números con cifras tabulares para que se alineen. */
+:root{--f-num:var(--f-ui);--f-serif:var(--f-ui)}
+html,body,body *,body *::before,body *::after{font-family:var(--f-ui)!important}
+.num,td.r,.r,.sh-big,.pk-v,#resIsk,.v-isk,.fb2-big b{font-variant-numeric:tabular-nums}
+.hero h1{font-weight:700!important;letter-spacing:.03em}
+.panel h2,details.panel>summary h2{font-weight:600!important;letter-spacing:0}
+.panel .lead,.v-hint,.res-b p.lead2,.sh-none,.scn-v,.rguide,.pk-note,.lead2,.ledger-tools .lead,.hero p,.hero-p,.more-btn span{font-size:.98rem!important;line-height:1.6}
+.res-b p.lead2 b{font-weight:600}
+/* v1.0.9: viñeta high-end: casi nada al centro, marcada en las orillas (modo normal) */
+body::after{background:
+  radial-gradient(ellipse 88% 82% at 50% 45%,rgba(0,0,0,0) 48%,rgba(0,0,0,.42) 76%,rgba(0,0,0,.88) 100%),
+  linear-gradient(90deg,rgba(0,0,0,.6) 0%,rgba(0,0,0,0) 15%,rgba(0,0,0,0) 85%,rgba(0,0,0,.6) 100%),
+  linear-gradient(180deg,rgba(0,0,0,.35) 0%,rgba(0,0,0,0) 12%,rgba(0,0,0,0) 82%,rgba(0,0,0,.55) 100%)!important}
+html.lite body::after{background:none!important}
+/* Modo ligero: la imagen no es fija; se desvanece abajo para no cortarse de golpe (oscuro y claro) */
+html.lite body::before{-webkit-mask-image:linear-gradient(to bottom,#000 0%,#000 50%,transparent 100%);mask-image:linear-gradient(to bottom,#000 0%,#000 50%,transparent 100%)}
+/* v1.0.10: barra de opciones unificada (ruta + interruptores), todo a la misma altura y con divisores */
+.route{display:inline-flex!important;flex-wrap:wrap;align-items:stretch;gap:0!important;margin-top:14px;padding:4px;border-radius:12px;
+  background:rgba(21,21,21,.88);border:1px solid rgba(222,220,209,.12);box-shadow:0 2px 4px rgba(0,0,0,.45),0 8px 18px rgba(0,0,0,.3)}
+.route>*{display:inline-flex!important;align-items:center;gap:8px;min-height:40px;padding:0 14px!important;margin:0!important;border:0!important;border-radius:8px!important;
+  background:transparent!important;box-shadow:none!important;text-shadow:none!important;font-size:.9rem!important;color:#e5e3da}
+.route>*+*{position:relative}
+.route>*+*::after{content:"";position:absolute;left:0;top:9px;bottom:9px;width:1px;background:rgba(222,220,209,.12)}
+.route>button:hover,.route>.sw:hover{background:rgba(222,220,209,.06)!important}
+.route .route-b{font-weight:600}
+.route .route-b[aria-pressed="true"]{background:rgba(217,119,87,.14)!important;color:#f3e6c8}
+.route .route-m input{width:64px;padding:4px 8px;margin:0 2px}
+@media(max-width:700px){.route{display:grid!important;grid-template-columns:1fr 1fr;width:100%}.route>*{justify-content:flex-start}
+  .route>.route-b{grid-column:1/-1}.route>*+*::after{display:none}.route>*{border-top:1px solid rgba(222,220,209,.08)!important}.route>.route-b{border-top:0!important}
+  .route>.route-m{grid-column:1/-1}}
+/* v1.0.10: los cinco controles con el mismo aspecto: ícono/interruptor a la izquierda + texto normal */
+.route>*{font-weight:500!important;gap:10px!important}
+.route .route-b{font-weight:500!important}
+.route .route-ic{margin:0;width:34px;height:20px;border-radius:999px;background:#3a3937;border:1px solid rgba(222,220,209,.2);-webkit-mask:none;mask:none;position:relative;flex:none}
+.route .route-ic::before{content:"";position:absolute;inset:2px 9px;background:#c2c0b6;-webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M7 4L3 8l4 4M3 8h14M17 20l4-4-4-4M21 16H7'/%3E%3C/svg%3E") center/contain no-repeat;mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M7 4L3 8l4 4M3 8h14M17 20l4-4-4-4M21 16H7'/%3E%3C/svg%3E") center/contain no-repeat}
+.route .route-b[aria-pressed="true"] .route-ic{background:var(--clay);border-color:var(--clay)}
+.route .route-b[aria-pressed="true"] .route-ic::before{background:#fff}
+.route .route-b[aria-pressed="true"]{background:transparent!important;color:#e5e3da}
+.route .route-ar{color:var(--mut)}
+.route .route-m{gap:6px!important}
+html.light .route .route-ic{background:#e4e2da;border-color:rgba(31,30,29,.2)}html.light .route .route-ic::before{background:#5e5d59}
+html.light .route .route-b[aria-pressed="true"] .route-ic{background:#c96442;border-color:#c96442}html.light .route .route-b[aria-pressed="true"] .route-ic::before{background:#fff}
+html.light .route .route-b[aria-pressed="true"]{color:#2a2926}
+.route>[hidden]{display:none!important}
+.route>*{white-space:nowrap}
+/* v1.0.10: pestañas de Qué Hacer: la elegida se distingue claro (como la ruta: arcilla) */
+.tabs .tab{border-radius:8px!important}
+.tabs .tab[aria-selected="true"]{background:rgba(217,119,87,.16)!important;border-color:var(--clay)!important;color:var(--txt)!important;box-shadow:0 0 0 1px var(--clay)!important}
+.tab-note{font-size:.9rem;color:var(--mut);margin:-4px 0 12px}
+.tab-note button{margin-left:8px;padding:3px 10px;font-size:.82rem}
+/* v1.0.11: ajuste de precios */
+.sk-note{display:inline-block;margin:0 0 6px;padding:3px 10px;border-radius:7px;font-size:.82rem;color:#ecc27e;background:rgba(224,168,79,.1);border:1px solid rgba(224,168,79,.35)}
+.tag.sk{color:#ecc27e;border-color:rgba(224,168,79,.4)}
+.fact-h{display:block;font-size:.74rem;color:var(--dim);margin-top:3px}
+/* v1.0.11: Ajustes por secciones */
+#settings .st-sec{margin:14px 0 2px;padding-top:12px;border-top:1px solid var(--line)}
+#settings .st-sec:first-child{border-top:0;padding-top:0;margin-top:4px}
+#settings .st-sec-t{font-size:.78rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--mut);margin:0}
+#settings .st-sec-i{font-size:.9rem;color:var(--dim);margin:2px 0 4px}
+#settings .st-tt{display:flex;flex-direction:column;gap:1px;min-width:0}
+#settings .st-sum{font-size:.82rem;font-weight:400;color:var(--dim)}
+#settings fieldset.st>legend .ic{align-self:flex-start;margin-top:3px}
+/* ================= v1.0.11: menú lateral + paleta gris-negro ================= */
+.i-panel{--i:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='4' width='18' height='16' rx='3'/%3E%3Cpath d='M9 4v16'/%3E%3C/svg%3E")}
+:root{--sw:248px;--sw-c:60px;--glass:rgba(21,21,21,.88);--glass2:rgba(255,255,255,.035);--edge:rgba(222,220,209,.12)}
+body{padding-left:var(--sw);transition:padding-left .2s ease}
+body.side-c{padding-left:var(--sw-c)}
+.side{position:fixed;left:0;top:0;bottom:0;width:var(--sw);z-index:60;display:flex;flex-direction:column;gap:6px;padding:10px 10px 16px;
+  background:var(--glass);border-right:1px solid var(--edge);box-shadow:4px 0 18px rgba(0,0,0,.35);overflow-y:auto;overflow-x:hidden;transition:width .2s ease}
+body.side-c .side{width:var(--sw-c)}
+.side-top{display:flex;align-items:center;gap:8px;min-height:40px;padding:0 2px 6px;border-bottom:1px solid var(--edge);margin-bottom:6px}
+.side-tg,.side-i,.side-fab{display:inline-grid;place-items:center;width:38px;height:38px;border-radius:9px;color:var(--mut);flex:none}
+.side-tg:hover,.side-i:hover,.side-fab:hover{background:rgba(222,220,209,.07);color:var(--txt)}
+.side-tg .ic,.side-i .ic,.side-fab .ic{margin:0;width:18px;height:18px}
+.side-t{font-weight:600;color:var(--txt);white-space:nowrap}
+.side-g{display:flex;flex-direction:column;gap:2px;margin-top:6px}
+.side-h{font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--dim);padding:6px 10px 4px;white-space:nowrap}
+.side-i{display:flex;width:100%;justify-content:flex-start;gap:12px;padding:0 10px;font-size:.92rem;color:#e5e3da;white-space:nowrap}
+.side-i[aria-pressed="true"]{background:rgba(217,119,87,.14);color:var(--txt)}
+.side .route{display:flex!important;flex-direction:column;align-items:stretch;gap:2px!important;margin:0;padding:0;background:none;border:0;box-shadow:none;border-radius:0;width:100%}
+.side .route>*{min-height:40px;padding:0 10px!important;justify-content:flex-start;width:100%;border-radius:9px!important}
+.side .route>*+*::after{display:none}
+.side .route .route-m{flex-wrap:wrap;min-height:44px;padding:4px 10px!important;color:var(--mut)}
+body.side-c .side-t,body.side-c .side-h,body.side-c .side-l,body.side-c .route .sw>span:not(.sw-t),body.side-c .route .route-b>span:not(.route-ic),body.side-c .route .route-m{display:none!important}
+body.side-c .side .route>*,body.side-c .side-i{padding:0!important;justify-content:center}
+body.side-c .side-top{justify-content:center;padding:0 0 6px}
+.side-fab{display:none}
+.side-bd{position:fixed;inset:0;z-index:55;background:rgba(0,0,0,.5)}
+/* barra de arriba: solo íconos */
+.top nav .ghost{width:40px;height:40px;padding:0;display:inline-grid;place-items:center;border-radius:10px;background:var(--glass);border:1px solid var(--edge)}
+.top nav .ghost .ic{margin:0;width:18px;height:18px}
+.top nav .tb-l{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+.top nav .ghost[aria-pressed="true"]{border-color:var(--clay);color:var(--txt)}
+/* paleta: paneles gris-negro translúcidos, bordes finos, tarjetas internas apenas más claras */
+.panel{background:var(--glass)!important;border:1px solid var(--edge)!important;border-radius:14px!important;box-shadow:0 2px 4px rgba(0,0,0,.45),0 10px 24px rgba(0,0,0,.32)!important}
+.ct,.sh-card,.sh-kpi>div,.scn>div,.ct-sum,fieldset.st,.hp-c,.undo,.res-b ul:not(.why):not(.cmp2)>li,.res-b .time>span,.rx>div,.rx-c,.pod,.call,.v-stats>div,.alt-grid>div,.pk-o,.fb2,.fb2-l>div,.ct-items{background:var(--glass2)!important;border:1px solid rgba(222,220,209,.09)!important;box-shadow:none!important}
+.pk-o:hover{background:rgba(255,255,255,.06)!important;transform:none}
+.pk-o.on{background:rgba(217,119,87,.10)!important;border-color:var(--clay)!important;box-shadow:0 0 0 1px var(--clay)!important}
+.paste,.hero-intro>.hero-p{background:var(--glass)!important;border:1px solid var(--edge)!important}
+input,select,textarea{background:rgba(0,0,0,.35)!important;border-color:rgba(222,220,209,.14)!important}
+.copy{background:rgba(255,255,255,.05)!important;border-color:rgba(222,220,209,.14)!important}
+.ghost{background:transparent}
+@media(max-width:900px){
+  body,body.side-c{padding-left:0}
+  .side{transform:translateX(-105%);transition:transform .2s ease;width:var(--sw)!important}
+  body.side-open .side{transform:none}
+  body.side-c .side-t,body.side-c .side-h,body.side-c .side-l,body.side-c .route .sw>span:not(.sw-t),body.side-c .route .route-b>span:not(.route-ic){display:revert!important}
+  body.side-c .route .route-m:not([hidden]){display:inline-flex!important}
+  body.side-c .side .route>*,body.side-c .side-i{padding:0 10px!important;justify-content:flex-start}
+  .side-fab{display:inline-grid;position:fixed;left:10px;top:10px;z-index:58;background:var(--glass);border:1px solid var(--edge)}
+  .top{padding-left:58px}
+}
+html.lite .side{box-shadow:none}html.lite body,html.lite .side{transition:none}
+.sk-note{font-size:.8rem!important;line-height:1.4!important;margin-bottom:4px!important}
+@media(max-width:900px){.side{top:0;height:100%;padding-top:12px}}
+
+/* ================= v1.0.13: Ajustes con relieve, sombras y la paleta (arcilla sobre #151515) ================= */
+#settings fieldset.st{position:relative;background:linear-gradient(180deg,#1e1e1d 0%,#161616 55%,#131313 100%)!important;border:1px solid rgba(222,220,209,.10)!important;border-radius:12px;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.06),inset 0 -1px 0 rgba(0,0,0,.5),0 2px 4px rgba(0,0,0,.5),0 10px 22px rgba(0,0,0,.35)!important;transition:border-color .15s,box-shadow .15s,transform .15s}
+#settings fieldset.st:hover{border-color:rgba(222,220,209,.18)!important}
+#settings fieldset.st:not(.closed){border-color:rgba(217,119,87,.45)!important;
+  box-shadow:inset 3px 0 0 #d97757,inset 0 1px 0 rgba(255,255,255,.07),0 2px 4px rgba(0,0,0,.55),0 14px 30px rgba(0,0,0,.45),0 0 0 1px rgba(217,119,87,.08)!important}
+#settings fieldset.st>legend{font:600 1.02rem var(--f-ui)!important;color:var(--txt)}
+#settings fieldset.st>legend .ic{width:32px;height:32px;margin:0!important;align-self:center!important;border-radius:9px;background:none;-webkit-mask:none;mask:none;position:relative;flex:none;
+  background:linear-gradient(180deg,rgba(217,119,87,.22),rgba(217,119,87,.10));border:1px solid rgba(217,119,87,.35);box-shadow:inset 0 1px 0 rgba(255,255,255,.10),0 2px 6px rgba(0,0,0,.45)}
+#settings fieldset.st>legend .ic::before{content:"";position:absolute;inset:7px;background:#e8a588;-webkit-mask:var(--i) center/contain no-repeat;mask:var(--i) center/contain no-repeat}
+#settings fieldset.st:not(.closed)>legend .ic{background:linear-gradient(180deg,#e08a6c,#c96442);border-color:#e08a6c}
+#settings fieldset.st:not(.closed)>legend .ic::before{background:#fff}
+#settings fieldset.st>legend:hover .st-tt{color:#fff}
+#settings fieldset.st:not(.closed)>legend::after{background:#d97757}
+#settings fieldset.st:not(.closed)>legend{border-bottom:1px solid rgba(222,220,209,.08);margin-bottom:12px}
+#settings .st-i{color:var(--mut);background:rgba(217,119,87,.06);border-left:2px solid rgba(217,119,87,.55);border-radius:0 8px 8px 0;padding:8px 12px;margin:0 0 14px}
+#settings .st-g{gap:12px 14px!important}
+#settings .st-f{padding:10px 12px 12px;border-radius:10px;background:linear-gradient(180deg,rgba(255,255,255,.035),rgba(255,255,255,.012));border:1px solid rgba(222,220,209,.07);box-shadow:inset 0 1px 0 rgba(255,255,255,.04)}
+#settings .st-f .st-l{color:#ecebe6}
+#settings .st-f input:not([type=checkbox]),#settings .st-f select,#settings .st-f textarea{background:#0e0e0e!important;border:1px solid rgba(222,220,209,.12)!important;border-radius:8px;
+  box-shadow:inset 0 2px 4px rgba(0,0,0,.65),0 1px 0 rgba(255,255,255,.05)!important;transition:border-color .15s,box-shadow .15s}
+#settings .st-f input:not([type=checkbox]):hover,#settings .st-f select:hover,#settings .st-f textarea:hover{border-color:rgba(222,220,209,.24)!important}
+#settings .st-f input:not([type=checkbox]):focus,#settings .st-f select:focus,#settings .st-f textarea:focus{border-color:#d97757!important;box-shadow:inset 0 2px 4px rgba(0,0,0,.65),0 0 0 3px rgba(217,119,87,.22)!important}
+#settings .st-f input[type=number]{font-variant-numeric:tabular-nums}
+#settings .st-ck .st-l{color:#ecebe6}
+#settings .st-sec{border-top:1px solid rgba(222,220,209,.08)!important;margin-top:20px!important}
+#settings .st-sec:first-child{margin-top:6px!important}
+#settings .st-sec-t{display:flex;align-items:center;gap:10px;color:#e8a588!important;font-size:.8rem!important;letter-spacing:.1em}
+#settings .st-sec-t::before{content:"";width:18px;height:3px;border-radius:2px;background:linear-gradient(90deg,#d97757,rgba(217,119,87,.25));box-shadow:0 0 8px rgba(217,119,87,.45)}
+#settings>h2 .ic{color:#d97757}
+#settings .st-tools .ghost{background:linear-gradient(180deg,#232322,#171717);border-color:rgba(222,220,209,.14);box-shadow:inset 0 1px 0 rgba(255,255,255,.06),0 2px 5px rgba(0,0,0,.45)}
+#settings .st-tools .ghost:hover{border-color:#d97757;color:#fff}
+html.lite #settings fieldset.st,html.lite #settings .st-f{box-shadow:none!important;transition:none}
+html.lite #settings fieldset.st:not(.closed){box-shadow:inset 3px 0 0 #d97757!important}
+
+/* v1.0.13: campos enlazados y campos que no aplican */
+#settings .st-calc{color:#e8a588!important;font-variant-numeric:tabular-nums}
+#settings .st-calc:empty{display:none}
+#settings .st-f.st-off{opacity:.42;filter:saturate(.4)}
+#settings .st-f.st-off input,#settings .st-f.st-off select,#settings .st-f.st-off textarea{cursor:not-allowed}
+#settings .st-f.st-off::after{content:attr(data-why);font-size:.74rem;color:#e0a84f;margin-top:2px}
+#settings .st-f.st-flash{animation:stFlash .9s ease}
+@keyframes stFlash{0%{box-shadow:0 0 0 2px rgba(217,119,87,.75)}100%{box-shadow:0 0 0 2px rgba(217,119,87,0)}}
+html.lite #settings .st-f.st-flash{animation:none}
+</style>
+<script>/* v105: Firefox pinta peor los efectos pesados → Modo ligero automático */try{if(/firefox/i.test(navigator.userAgent))document.documentElement.classList.add('lite');}catch(e){}</script>
+</head>
+<body>
+<!-- v1.0.11: menú lateral (como Claude): se expande y se contrae; opciones de cálculo, Ajustes y Ayuda -->
+<aside class="side" id="side" aria-label="Opciones">
+  <div class="side-top">
+    <button type="button" class="side-tg" id="sideTg" aria-expanded="true" aria-controls="side" title="Contraer menú"><span class="ic i-panel" aria-hidden="true"></span></button>
+    <span class="side-t">Opciones</span>
+  </div>
+  <div class="side-g"><span class="side-h">Cálculo</span>
+  <div class="route" id="route">
+    <button type="button" class="route-b" id="bFlip" aria-pressed="false" title="Ruta del lote. HY-RWO → Jita: vendes lo que tienes en Null. Jita → HY-RWO: llevas (o compras) en Jita y vendes en Null más caro. Clic para invertir.">
+      <span class="route-ic" aria-hidden="true"></span><span class="route-from" id="rtFrom">HY-RWO</span><span class="route-ar" aria-hidden="true">→</span><span class="route-to" id="rtTo">Jita</span></button>
+    <label class="sw" id="shipLab" title=""><input type="checkbox" id="shipOn" checked><span class="sw-t" aria-hidden="true"></span><span id="shipTxt">En HY-RWO</span></label>
+    <label class="sw" title="Modo Ligero: quita efectos visuales (fondo fijo, sombras, animaciones). Más fluido en PCs lentas y en Firefox."><input type="checkbox" id="liteOn"><span class="sw-t" aria-hidden="true"></span><span>Modo Ligero</span></label>
+    <label class="sw" title="Tema de la página: Dark (oscuro) o Light (claro)."><input type="checkbox" id="themeLight"><span class="sw-t" aria-hidden="true"></span><span id="themeTxt">Dark</span></label>
+    <label class="route-m" id="rtM" hidden>Margen +<input type="number" id="fImpM" min="0" step="0.5" value="15" aria-label="Margen al vender en HY-RWO, % neto sobre Jita Sell">% neto</label>
+  </div>
+  </div>
+  <div class="side-g"><span class="side-h">General</span>
+    <button type="button" class="side-i" data-open="bSettings" title="Ajustes: skills, impuestos, ajuste de precios, envío, Buyback e idioma."><span class="ic i-gear" aria-hidden="true"></span><span class="side-l">Ajustes</span></button>
+    <button type="button" class="side-i" data-open="bHelp" title="Ayuda: cómo pegar tu inventario y leer el plan."><span class="ic i-help" aria-hidden="true"></span><span class="side-l">Ayuda</span></button>
+  </div>
+</aside>
+<button type="button" class="side-fab" id="sideFab" aria-label="Abrir menú" title="Menú"><span class="ic i-panel" aria-hidden="true"></span></button>
+<div class="side-bd" id="sideBd" hidden></div>
+<header class="top">
+  <div class="brand"><span class="logo-s sig" aria-hidden="true"></span>SIGMA GRINDSET <small>EVE Online</small></div>
+  <nav>
+    <button class="ghost" id="bSettings" aria-label="Ajustes" title="Ajustes" aria-pressed="false" aria-controls="settings"><span class="ic i-gear" aria-hidden="true"></span><span class="tb-l">Ajustes</span></button>
+    <button class="ghost" id="bHelp" aria-label="Ayuda" title="Ayuda" aria-pressed="false" aria-controls="help"><span class="ic i-help" aria-hidden="true"></span><span class="tb-l">Ayuda</span></button>
+  </nav>
+</header>
+
+<section class="hero">
+  <div class="title">
+    <span class="logo-l vg" role="img" aria-label="Logo de Vanguardia DR"></span>
+    <div><h1>Plan y Gestor de Ventas</h1><p class="tagline">¿Lo vendes en Null o lo llevas a Jita?</p></div>
+  </div>
+  <!-- v104: introducción + recordatorio visible a la derecha. Los botones comparten
+       los paneles Ayuda y Ajustes existentes: no se duplica ningún formulario. -->
+  <!-- v1.0.8: Ajustes y Ayuda se abren aquí, arriba, debajo del título -->
+  <div class="top-slot">
+  <section class="panel" id="settings" hidden>
+    <div class="x-wrap"><button type="button" class="x-close" data-close="settings" aria-label="Cerrar Ajustes" title="Cerrar Ajustes"></button></div>
+    <h2><span class="ic i-gear" aria-hidden="true"></span>Ajustes</h2>
+    <p class="lead">Configura las skills, impuestos y reglas de venta para reflejar tu situación en EVE. Los resultados se recalculan al cambiar un valor. Por privacidad, estos ajustes no se guardan al cerrar o recargar.</p>
+    <div class="st-tools"><button type="button" class="ghost" id="stOpenAll">Abrir Todo</button><button type="button" class="ghost" id="stCloseAll">Cerrar Todo</button></div>
+    <div class="st-wrap">
+      <div class="st-sec"><h3 class="st-sec-t">Idioma</h3><p class="st-sec-i">Idioma de la interfaz.</p></div>
+      <fieldset class="st"><legend><span class="ic i-help" aria-hidden="true"></span><span class="st-tt">Idioma de la App<small class="st-sum">Español o English</small></span></legend><p class="st-i">Cambia el idioma de toda la app. Los nombres de ítems y sistemas de EVE no cambian.</p><div class="st-g"><label class="st-f"><span class="st-l">Idioma / Language</span><select id="langSel" title="Idioma de la interfaz: Español o English. No se guarda al cerrar."><option value="es" selected>Español</option><option value="en">English</option></select><small>No se guarda al cerrar la página.</small></label></div></fieldset>
+      <div class="st-sec"><h3 class="st-sec-t">Tu Personaje</h3><p class="st-sec-i">Lo que sabe tu piloto: baja los taxes y sube lo que recuperas al reprocesar.</p></div>
+      <fieldset class="st"><legend><span class="ic i-key" aria-hidden="true"></span><span class="st-tt">Tus Skills<small class="st-sum">Accounting, Broker Relations y reproceso de tu piloto</small></span></legend><p class="st-i">Selecciona tus niveles reales. Accounting afecta el Sales Tax; Broker Relations reduce costes de órdenes; las skills de reproceso determinan cuántos materiales recuperas.</p><div class="st-g"><label class="st-f"><span class="st-l">Accounting</span><select id="skAcc"><option value="0">Nivel 0</option><option value="1">Nivel 1</option><option value="2">Nivel 2</option><option value="3">Nivel 3</option><option value="4">Nivel 4</option><option value="5" selected>Nivel 5</option></select><small>Baja el Sales Tax: 7.5% × (1 − 0.11 × nivel). Se enlaza con Sales Tax %.</small></label><label class="st-f"><span class="st-l">Broker Relations</span><select id="skBR"><option value="0">Nivel 0</option><option value="1">Nivel 1</option><option value="2">Nivel 2</option><option value="3">Nivel 3</option><option value="4">Nivel 4</option><option value="5" selected>Nivel 5</option></select><small>Baja el Broker de Jita: 3% − 0.3% × nivel. Se enlaza con Broker en Jita % y los standings.</small></label><label class="st-f"><span class="st-l">Advanced Broker Relations</span><select id="cAbr"><option value="0" selected>Nivel 0</option><option value="1">Nivel 1</option><option value="2">Nivel 2</option><option value="3">Nivel 3</option><option value="4">Nivel 4</option><option value="5">Nivel 5</option></select><small>Abarata cada Relist (cambio de precio).</small></label><label class="st-f"><span class="st-l">Reprocessing</span><select id="skRep"><option value="0">Nivel 0</option><option value="1">Nivel 1</option><option value="2">Nivel 2</option><option value="3">Nivel 3</option><option value="4">Nivel 4</option><option value="5" selected>Nivel 5</option></select><small>+3% de rendimiento por nivel.</small></label><label class="st-f"><span class="st-l">Reprocessing Efficiency</span><select id="skRepE"><option value="0">Nivel 0</option><option value="1">Nivel 1</option><option value="2">Nivel 2</option><option value="3">Nivel 3</option><option value="4">Nivel 4</option><option value="5" selected>Nivel 5</option></select><small>+2% de rendimiento por nivel.</small></label><label class="st-f"><span class="st-l">Skill del ore o hielo</span><select id="skOre"><option value="0">Nivel 0</option><option value="1">Nivel 1</option><option value="2">Nivel 2</option><option value="3">Nivel 3</option><option value="4">Nivel 4</option><option value="5" selected>Nivel 5</option></select><small>Ice Processing, Simple Ore Processing, etc.: +2% por nivel.</small></label></div></fieldset>
+      <div class="st-sec"><h3 class="st-sec-t">Impuestos y Precios</h3><p class="st-sec-i">Lo que se descuenta en cada venta y cómo se ajustan los precios de Jita antes de calcular.</p></div>
+      <fieldset class="st"><legend><span class="ic i-scale" aria-hidden="true"></span><span class="st-tt">Impuestos<small class="st-sum">Sales Tax, Broker y SCC que se descuentan al vender</small></span></legend><p class="st-i">Estas tasas se descuentan de las ventas. Están enlazadas con Tus Skills y los standings: si cambias uno, el otro se ajusta solo. Lo más exacto es copiar los % que muestra el juego en la ventana de venta.</p><div class="st-g"><label class="st-f"><span class="st-l">Sales Tax %</span><input type="number" id="cTax" step="0.001" value="3.375"><small>Se cobra en toda venta de mercado (Null y Jita).</small></label><label class="st-f"><span class="st-l">Broker en Jita %</span><input type="number" id="cBroker" step="0.01" value="1.50"><small>Copia el «Broker's fee» que muestra el juego al vender en Jita (ej. 1.27%). Con standings es menor que 1.50%.</small><small class="st-calc" id="brkNote"></small></label><label class="st-f"><span class="st-l">Broker de tu estructura %</span><input type="number" id="cBrokerNull" step="0.01" value="1.00"><small>Lo que cobra el dueño de la estructura en Null.</small></label><label class="st-f"><span class="st-l">SCC %</span><input type="number" id="cScc" step="0.01" value="0.50"><small>Impuesto de CONCORD en estructuras (solo Null).</small></label><label class="st-f"><span class="st-l">Standing de facción (Jita)</span><input type="number" id="cStdFac" step="0.01" value="0"><small>Baja un poco el Broker de Jita (0.03% por punto).</small></label><label class="st-f"><span class="st-l">Standing de corp (Jita)</span><input type="number" id="cStdCorp" step="0.01" value="0"><small>Baja un poco el Broker de Jita (0.02% por punto).</small></label></div></fieldset>
+      <fieldset class="st"><legend><span class="ic i-scale" aria-hidden="true"></span><span class="st-tt">Ajuste de Precios<small class="st-sum">Margen de seguridad sobre los precios de Jita</small></span></legend><p class="st-i">Sube o baja los precios de Jita antes de calcular (positivo = más caro, negativo = más barato). Útil porque el mercado se mueve entre que pegas y vendes: mejor sorprenderse con más. También puedes poner un ajuste propio dentro de cada ítem; se suma a este.</p><div class="st-g"><label class="st-f"><span class="st-l">Venta rápida (Jita Buy) %</span><input type="number" id="cSkInst" step="0.01" value="-0.16"><small>Por defecto −0.16%: el juego suele pagar un poco más que lo calculado.</small></label><label class="st-f"><span class="st-l">Órdenes en Jita (Jita Sell) %</span><input type="number" id="cSkOrd" step="0.01" value="0"><small>Si sueles listar más barato para vender rápido, ponlo en negativo.</small></label><label class="st-f"><span class="st-l">Órdenes en Null %</span><input type="number" id="cSkNul" step="0.01" value="0"><small>Para el precio de venta en HY-RWO.</small></label></div></fieldset>
+      <fieldset class="st"><legend><span class="ic i-list" aria-hidden="true"></span><span class="st-tt">Órdenes de Venta<small class="st-sum">Undercut, relists y cuándo conviene vender al instante</small></span></legend><p class="st-i">Ajusta el undercut, los relists y cuándo priorizar una venta rápida frente a una sell order.</p><div class="st-g"><label class="st-f"><span class="st-l">Undercut %</span><input type="number" id="cUnder" step="0.05" min="0" value="0.1"><small>Porcentaje de undercut aplicado cuando se usa el precio de otra orden como referencia.</small></label><label class="st-f"><span class="st-l">Relists esperados</span><input type="number" id="cRelists" step="1" min="0" value="1"><small>Cantidad de modificaciones de precio previstas. Solo se descuentan si activas «Relists» en el análisis.</small></label><label class="st-f"><span class="st-l">Orden vs venta al instante (ISK)</span><input type="number" id="cUmbral" step="100000" value="1000000"><small>Ganancia adicional mínima en ISK para preferir una sell order frente a vender a buy orders.</small></label><label class="st-f"><span class="st-l">Preferir Jita por rapidez %</span><input type="number" id="cFast" step="0.5" min="0" value="5"><small>Permite priorizar Jita cuando la diferencia neta está dentro del porcentaje indicado. 0 desactiva esta preferencia.</small></label><label class="st-f st-ck"><span class="st-l"><input type="checkbox" id="qdOn" checked> Descuento por cantidad</span><small>Más de 1,000 u. bajan el precio por tramos (no aplica al hielo).</small></label><label class="st-f"><span class="st-l">Descuento máximo %</span><input type="number" id="qdMax" step="0.5" min="0" value="5"><small>Tope del descuento (0.2% · 0.02% · 0.002% por cada 1,000 u.).</small></label><label class="st-f st-ck"><span class="st-l"><input type="checkbox" id="cTick" checked> Redondear precios a 4 cifras</span><small>Ajusta los precios al tick permitido por el mercado de EVE (4 cifras significativas).</small></label></div></fieldset>
+      <div class="st-sec"><h3 class="st-sec-t">Dónde Vendes</h3><p class="st-sec-i">Las reglas de cada destino del plan: Null, hielo, Buyback y jugadores.</p></div>
+      <fieldset class="st"><legend><span class="ic i-target" aria-hidden="true"></span><span class="st-tt">Precios en Null<small class="st-sum">Cómo se calcula tu precio de venta en HY-RWO</small></span></legend><p class="st-i">Define cómo estimar tus sell orders en Nullsec. Se parte de Jita Buy salvo que hayas indicado un precio local concreto para el ítem.</p><div class="st-g"><label class="st-f"><span class="st-l">Lo que no es módulo, % de Jita Buy</span><input type="number" id="cNonMod" step="1" min="0" max="200" value="90"><small>Ore, minerales, productos del hielo e isótopos, PI y demás.</small></label><label class="st-f"><span class="st-l">Módulos: margen sobre Jita Buy %</span><input type="number" id="cMargin" step="0.5" value="0"><small>0 = a Jita Buy. Súbelo solo si te pagan más.</small></label><label class="st-f"><span class="st-l">Días para vender en Null</span><input type="number" id="cNullDays" step="1" min="0" value="7"><small>Para el tiempo estimado (lo que no es hielo).</small></label><label class="st-f"><span class="st-l">Costo de producción % (si lo fabricaste)</span><input type="number" id="cProd" step="0.5" value="0"><small>Si fabricaste el ítem: % del valor que te costó.</small></label></div></fieldset>
+      <fieldset class="st"><legend><span class="ic i-flask" aria-hidden="true"></span><span class="st-tt">Hielo<small class="st-sum">Reglas especiales para el hielo sin reprocesar</small></span></legend><p class="st-i">Estas reglas afectan al hielo sin reprocesar. Heavy Water, Liquid Ozone, Strontium Clathrates e isótopos usan las reglas generales de productos.</p><div class="st-g"><label class="st-f st-ck"><span class="st-l"><input type="checkbox" id="iceOn" checked> Reglas especiales para hielo</span><small>Si lo apagas, el hielo se trata como lo demás.</small></label><label class="st-f"><span class="st-l">Precio en Null</span><select id="iceNull"><option value="jbuy" selected>Jita Buy menos un %</option><option value="jita">Precio de Jita, sin Margen</option><option value="margin">Con tu Margen, como lo demás</option></select><small>Cómo se calcula el precio del hielo en Null.</small></label><label class="st-f"><span class="st-l">Descuento sobre Jita Buy %</span><input type="number" id="iceDisc" step="0.5" min="0" value="2.5"><small>El Undercut típico del hielo en Null, antes de Taxes.</small></label><label class="st-f"><span class="st-l">Precio en Jita</span><select id="iceJita"><option value="under" selected>Undercut a Jita Sell</option><option value="split">Split (entre Buy y Sell)</option></select><small>A qué precio pones la orden en Jita.</small></label><label class="st-f"><span class="st-l">Días para vender en Null</span><input type="number" id="iceDays" step="1" min="0" value="14"><small>Cuánto tarda el hielo en salir allá.</small></label></div></fieldset>
+      <fieldset class="st st-full"><legend><span class="ic i-target" aria-hidden="true"></span><span class="st-tt">Buyback de la Alianza<small class="st-sum">Tax del programa y datos del contrato</small></span></legend><p class="st-i">Configura las condiciones del Buyback de la alianza. La sección «Contratos y Envío» muestra los datos de cada Item Exchange.</p><div class="st-g"><label class="st-f st-ck"><span class="st-l"><input type="checkbox" id="bbOn" checked> Comparar con el Buyback</span><small>Agrega la opción Vender al Buyback.</small></label><label class="st-f"><span class="st-l">Programa</span><input type="text" id="bbName" value="MAYEM Corp Buyback"><small><button class="copy lnk" type="button" data-link="buyback">Abrir el Buyback</button> pide login en SIGMA Auth.</small></label><label class="st-f"><span class="st-l">Tax del programa %</span><input type="number" id="bbTax" step="0.5" value="5"><small>Porcentaje descontado del precio base antes de calcular lo que recibes.</small></label><label class="st-f"><span class="st-l">Precio base</span><select id="bbBase"><option value="buy" selected>Jita Buy</option><option value="split">Jita Split</option><option value="sell">Jita Sell</option></select><small>Sobre qué precio de Jita paga.</small></label><label class="st-f"><span class="st-l">Name</span><input type="text" id="bbAvail" value="Mayhem Pawn and Loan"><small>Personaje o corporación destinataria del contrato. Confírmalo en el programa de Buyback.</small></label><label class="st-f"><span class="st-l">Ubicación</span><input type="text" id="bbLoc" value="HY-RWO: Time Is A Flat Circle"><small>Dónde haces el contrato.</small></label><label class="st-f"><span class="st-l">Expiración</span><input type="text" id="bbExp" value="4 Weeks"><small>Duración del contrato.</small></label><label class="st-f"><span class="st-l">Descripción</span><input type="text" id="bbDesc" value="" placeholder="La que te da su página, ej. aa-bbp-…"><small>Copia aquí la descripción generada por la página del Buyback; no la inventes.</small></label><label class="st-f st-w"><span class="st-l">Taxes especiales</span><textarea id="bbSpecial" rows="4" spellcheck="false">Heavy Water = 75
+Liquid Ozone = 50
+Strontium Clathrates = 50
+Contraband Freight = no</textarea><small>Una regla por línea: Nombre = tax total en %, o «no» para artículos excluidos.</small></label></div></fieldset>
+      <fieldset class="st"><legend><span class="ic i-help" aria-hidden="true"></span><span class="st-tt">Venta a Jugador<small class="st-sum">Último recurso: venta por Discord</small></span></legend><p class="st-i">Permite comparar una oferta WTS a jugadores de SIGMA o Vanguardia DR. El comprador y el plazo de venta no están garantizados.</p><div class="st-g"><label class="st-f st-ck"><span class="st-l"><input type="checkbox" id="discOn" checked> Comparar esta opción</span><small>Sin Sales Tax ni envío. Solo se recomienda si no hay otra forma.</small></label><label class="st-f"><span class="st-l">Precio base</span><select id="discBase"><option value="buy" selected>Jita Buy</option><option value="split">Jita Split</option></select><small>Los jugadores en Null compran a Jita Buy.</small></label><label class="st-f"><span class="st-l">% del precio base</span><input type="number" id="discPct" step="1" min="0" value="100"><small>Lo que le pides al comprador.</small></label><label class="st-f"><span class="st-l">Días hasta que alguien compre</span><input type="number" id="discDays" step="1" min="0" value="3"><small>Para el tiempo estimado.</small></label><label class="st-f"><span class="st-l">Entrega</span><input type="text" id="discLoc" value="HY-RWO: Time Is A Flat Circle"><small>Dónde haces el contrato.</small></label></div></fieldset>
+      <div class="st-sec"><h3 class="st-sec-t">Envío y Reproceso</h3><p class="st-sec-i">Logística con SIGMA Freight y la refinería donde reprocesas.</p></div>
+      <fieldset class="st"><legend><span class="ic i-ship" aria-hidden="true"></span><span class="st-tt">Envío (SIGMA Freight)<small class="st-sum">Días por contrato, destinatario e importación a Null</small></span></legend><p class="st-i">Los costes están fijados según SIGMA Freight y se desglosan en «Contratos y Envío». Aquí solo ajustas los días estimados por contrato.</p><div class="st-g"><label class="st-f"><span class="st-l">Días por courier (mejor caso)</span><input type="number" id="cDayMin" step="1" min="0" value="1"><small>Lo que tarda en entregar un contrato.</small></label><label class="st-f"><span class="st-l">Días por courier (peor caso)</span><input type="number" id="cDayMax" step="1" min="0" value="3"><small>Para el tiempo estimado del resumen.</small></label><label class="st-f st-w"><span class="st-l">Destinatario del courier</span><input type="text" id="cAssignee" value="SIGMA Freight" spellcheck="false"><small>A quién se asigna el contrato de envío (Private → Name).</small></label><label class="st-f st-w"><span class="st-l">Destino en Null (modo Jita → HY-RWO)</span><input type="text" id="cNullDest" value="HY-RWO: Time Is A Flat Circle" spellcheck="false"><small>Estructura donde SIGMA Freight entrega cuando importas de Jita.</small></label><label class="st-f"><span class="st-l">Margen al importar a HY-RWO %</span><input type="number" id="cImpM" step="0.5" min="0" value="15"><small>Cuánto más caro vendes en HY-RWO que en Jita Sell, neto (después de taxes). Naves: suele ser 14–20%.</small></label></div></fieldset>
+      <fieldset class="st"><legend><span class="ic i-flask" aria-hidden="true"></span><span class="st-tt">Refinería<small class="st-sum">Estructura, rig e implante donde reprocesas</small></span></legend><p class="st-i">Indica la estructura donde reprocesarás. El tipo de refinería, rig, seguridad e implante cambian el yield estimado.</p><div class="st-g"><label class="st-f"><span class="st-l">Nombre</span><input type="text" id="refName" value="HY-RWO - Metal Exchange"><small>Lo de antes de " - " es el sistema (HY-RWO).</small></label><label class="st-f"><span class="st-l">Estructura</span><select id="refStruct"><option value="tatara" selected>Tatara</option><option value="athanor">Athanor</option></select><small>Tatara rinde más que Athanor.</small></label><label class="st-f"><span class="st-l">Rig de reproceso</span><select id="refRig"><option value="t2" selected>T2</option><option value="t1">T1</option><option value="none">Sin Rig</option></select><small>El Rig de la estructura.</small></label><label class="st-f"><span class="st-l">Seguridad del sistema</span><select id="refSec"><option value="null" selected>Nullsec</option><option value="low">Lowsec</option><option value="high">Highsec</option></select><small>Nullsec da más rendimiento.</small></label><label class="st-f"><span class="st-l">Implante de reproceso</span><select id="refImp"><option value="0.04" selected>RX-804 (+4%)</option><option value="0.02">RX-802 (+2%)</option><option value="0.01">RX-801 (+1%)</option><option value="0">Ninguno</option></select><small>El implante que llevas puesto.</small></label></div></fieldset>
+
+    </div>
+  </section>
+  <section class="panel" id="help" hidden>
+    <div class="x-wrap"><button type="button" class="x-close" data-close="help" aria-label="Cerrar Ayuda" title="Cerrar Ayuda"></button></div>
+    <h2><span class="ic i-help" aria-hidden="true"></span>Ayuda</h2>
+    <p class="lead">Del inventario al plan: copia tus ítems, revisa precios de Jita 4-4 y compara rutas de venta con las deducciones configuradas. No hace falta iniciar sesión.</p>
+    <div class="hp">
+      <div class="hp-c"><h3><span class="hp-n">1</span>Copia tu Inventario</h3>
+        <p>En EVE abre el inventario en <b>vista de lista</b>. Necesitas al menos las columnas <b>Name</b> y <b>Quantity</b>. Si ves <b>Volume</b> y <b>Est. Price</b>, mejor: la app las usa para verificar.</p>
+        <p>Selecciona las filas que quieres analizar, usa <b>Ctrl+C</b> y pégalas arriba con <b>Ctrl+V</b>. Revisa cantidades si faltaba la columna Quantity. Puedes utilizar texto compatible copiado de otras listas.</p></div>
+      <div class="hp-c"><h3><span class="hp-n">2</span>Espera los Precios</h3>
+        <p>La app consulta ESI (API de CCP) para precios y datos del mercado de Jita 4-4. Espera a que termine de cargar: un ítem sin precio verificado puede quedar fuera de la recomendación.</p>
+        <p>Los avisos no son errores automáticos: pueden indicar volumen distinto, precio atípico o compras insuficientes. Abre ese ítem para comprobarlo antes de publicar una orden.</p></div>
+      <div class="hp-c"><h3><span class="hp-n">3</span>Lee el Plan</h3>
+        <p><b>Resultado</b> reúne lo que recibirías según los precios disponibles y los costes configurados; no necesariamente es beneficio sobre lo que pagaste por el loot. La preferencia por rapidez puede elegir Jita aunque otra ruta deje un poco más.</p>
+        <p>Abre <b>Ver el análisis</b> para entrar a <b>Qué Hacer</b>. Cada recomendación tiene sus propios filtros, búsqueda y botón para copiar ítems. En <b>Contratos y Envío</b> encontrarás cada contrato (uno a la vez, pasa con las flechas) y lo que cuesta el envío.</p></div>
+      <div class="hp-c"><h3><span class="hp-n">4</span>Ajusta a tu Medida</h3>
+        <p>En <b>Ajustes</b> configura skills, Broker, Sales Tax, precio local de Nullsec, Buyback, refinería y tiempos de courier. Los valores iniciales son ejemplos operativos: cámbialos por los tuyos.</p>
+        <p>La herramienta no guarda inventarios ni configuración en el navegador. Una recarga borra la sesión de trabajo.</p></div>
+    </div>
+    <h3 class="sub-h" style="margin-top:20px">Las Formas de Vender</h3>
+    <div class="hp-t">
+      <div><b>Vender en Null</b><span>Sell order en la estructura configurada de Nullsec. El precio se estima a partir de Jita Buy o del precio local indicado; puede aplicar una regla especial al hielo. Resta Sales Tax, Broker y SCC; no paga courier a Jita.</span></div>
+      <div><b>Vender al Buyback</b><span>Contrato Item Exchange al programa de la alianza. Calcula el pago a partir del precio base y tax configurados. No requiere courier a Jita ni Sales Tax de mercado; confirma aceptación y plazos con el Buyback.</span></div>
+      <div><b>Vender en Jita (Orden)</b><span>Mandas la carga a Jita y publicas una sell order con el precio recomendado. Se descuentan courier, Sales Tax, Broker y los relists activados.</span></div>
+      <div><b>Vender en Jita al Instante</b><span>Envías la carga a Jita y vendes a buy orders disponibles. Para grandes cantidades, el cálculo recorre el libro de compras; puede recibir menos que la mejor buy order por unidad.</span></div>
+      <div><b>Refinado en Null o en Jita</b><span>Reprocesas ore, hielo o mena lunar en la refinería configurada. Los minerales y productos resultantes se venden en Nullsec o Jita según el valor neto; se considera yield, tax y volumen real del courier.</span></div>
+      <div><b>Vender a Jugador</b><span>Oferta WTS en Discord a un precio basado en Jita Buy o Split y el porcentaje configurado. Depende de que otro jugador acepte la oferta; no es liquidez garantizada.</span></div>
+    </div>
+    <h3 class="sub-h" style="margin-top:20px">Palabras Clave</h3>
+    <div class="hp-t">
+      <div><b>Jita Buy / Split / Sell</b><span>Buy: órdenes de compra. Sell: órdenes de venta. Split: punto medio entre ambos precios. No son precios de venta garantizados para cualquier cantidad.</span></div>
+      <div><b>Undercut</b><span>Publicar o modificar una sell order a un precio algo menor que la competencia. Cada relist puede generar costes adicionales.</span></div>
+      <div><b>Relist</b><span>Modificar el precio de una orden existente. La herramienta estima una comisión de relist y la incluye si activas esa deducción.</span></div>
+      <div><b>Colateral</b><span>Valor declarado de la carga para el courier. Según la configuración SIGMA Freight de esta herramienta, se consideran base por contrato, ISK/m³ y porcentaje de colateral.</span></div>
+    </div>
+    <h3 class="sub-h" style="margin-top:20px"><span class="ic i-lock" aria-hidden="true"></span>Seguridad</h3>
+    <p class="lead">No necesitas introducir contraseña de EVE. La calculadora usa ESI de CCP para consultar datos de mercado y el servicio de imágenes de EVE para los íconos. Los enlaces a Janice, Discord, SIGMA Auth y Buyback se abren por separado. El inventario y los ajustes permanecen en memoria y se pierden al recargar.</p>
+  </section>
+  </div>
+  <div class="hero-intro">
+    <button type="button" class="ref" data-link="referral"><span class="ref-tag">Gratis</span><span class="ref-t">Usa mi enlace para recibir <b>1 Millón de Skill Points</b> gratis</span><span class="ref-go">↗</span></button>
+    <p class="hero-p">Pega tu loot, ore o materiales. Comparamos rutas de venta con precios de Jita y costes configurados para que sepas cuántos ISK recibirías.</p>
+    <aside class="start-note" aria-label="Antes de empezar">
+      <span class="ic i-bulb" aria-hidden="true"></span>
+      <div class="start-note-body"><strong>Antes de empezar</strong>
+        <span>Lee las instrucciones de <b>Ayuda</b> y revisa tus <b>Ajustes</b> (skills, taxes y Buyback) para obtener estimaciones acordes a tu personaje.</span>
+        <div class="start-note-actions"><button type="button" id="heroHelp">Ver Ayuda</button><button type="button" id="heroSettings">Configurar Ajustes</button></div>
+      </div>
+    </aside>
+  </div>
+  <div class="paste">
+    <textarea id="paste" autocomplete="off" spellcheck="false" aria-label="Pega aquí tu inventario de EVE" placeholder="Pega aquí tus ítems con Ctrl+V"></textarea>
+    <div class="paste-foot"><span class="status" id="status" role="status"></span><button class="ghost" id="bClear"><span class="ic i-x" aria-hidden="true"></span>Limpiar</button></div>
+  </div>
+</section>
+
+<main>
+  <section class="panel loading" id="loading" hidden role="status" aria-live="polite">
+    <span class="spin" aria-hidden="true"></span>
+    <div class="ld-body"><b id="ldTxt">Trayendo precios de Jita…</b><small>Espera un momento: calculo todo cuando lleguen todos los precios.</small>
+      <div class="ld-track"><i id="ldBar"></i></div></div>
+  </section>
+  <details class="panel thin" id="ledger" hidden>
+    <summary><h2><span class="ic i-box" aria-hidden="true"></span>Tus Ítems</h2><span class="cnt" id="lCount"></span><span class="status" id="esiStatus" role="status"></span></summary>
+    <div class="ledger-tools">
+      <p class="lead">Abre un ítem para consultar la guía, comparar mercados o cambiar sus datos. Haz clic en un encabezado para ordenar la lista.</p>
+      <button class="ghost" id="bEsi"><span class="ic i-sync" aria-hidden="true"></span>Actualizar Precios</button>
+    </div>
+    <!-- v103: ordenar el ledger es independiente de los filtros por recomendación de Qué Hacer.
+         Los botones aplican orden al libro completo; nunca recalculan ISK ni cambian el plan. -->
+    <div class="undo" id="undo" hidden role="status"><span id="undoTxt"></span><button type="button" class="ghost" id="undoBtn">Deshacer</button></div>
+    <div class="ledger-head" role="group" aria-label="Ordenar tus ítems">
+      <button type="button" class="ledger-sort" data-lsort="n" aria-label="Ordenar por nombre">Ítem <span class="sort-arrow" aria-hidden="true"></span></button>
+      <span class="ledger-col">Precio /u</span>
+      <button type="button" class="ledger-sort" data-lsort="q" aria-label="Ordenar por cantidad">Cantidad <span class="sort-arrow" aria-hidden="true"></span></button>
+      <button type="button" class="ledger-sort" data-lsort="d" aria-label="Ordenar por destino de venta">Qué Hacer <span class="sort-arrow" aria-hidden="true"></span></button>
+      <button type="button" class="ledger-sort" data-lsort="a" aria-label="Ordenar por ISK netos">Ganancia <span class="sort-arrow" aria-hidden="true"></span></button>
+      <span></span>
+    </div>
+    <div id="lots"></div>
+  </details>
+  <!-- 1. Resultado simple -->
+  <section class="panel summary res" id="pSum" hidden>
+    <h2><span class="ic i-bulb" aria-hidden="true"></span>Resultado</h2>
+    <p class="sk-note" id="skNote" hidden></p>
+    <p class="res-big"><span class="num" id="resIsk">—</span><span class="v-what" id="resWhat"></span></p>
+    <div class="fb2" id="flipBuy" hidden></div>
+    <div class="pk-w"><h4 class="pk-t">Elige un Plan <small>El óptimo viene marcado. Si eliges otro, todo se ajusta a ese plan.</small></h4>
+      <div class="pk" id="pk" role="radiogroup" aria-label="Plan de venta"></div>
+      <p class="pk-note" id="pkNote" hidden></p></div>
+    <div id="sumP1" class="res-b"></div>
+    <div id="sumP2" class="res-b"></div>
+    <button type="button" class="more-btn" id="bDeep" aria-expanded="false" aria-controls="deep"><span>Revisa cada destino, sus precios y el desglose de los costes.</span><b>Ver el análisis ▾</b></button>
+  </section>
+  <!-- 2. El análisis (oculto hasta que lo pides) -->
+  <div id="deep" class="deep" hidden>
+  <section class="panel verdict" id="verdict" hidden aria-live="polite">
+    <div class="v-top">
+      <div class="v-main">
+        <h2><span class="ic i-target" aria-hidden="true"></span><span id="vTitle">La Mejor Ruta de Venta</span><span class="v-what" id="vWhat"></span></h2>
+        <p class="v-isk num" id="vIsk"></p>
+        <p class="v-cap" id="vCap">ISK estimados que recibes tras taxes, Broker y envío (según tu configuración)</p>
+        <p class="v-sub" id="vSub"></p>
+        <dl class="v-stats">
+          <div><dt>Ítems</dt><dd id="vsN">—</dd><small id="vsNs"></small></div>
+          <div><dt>Volumen Total</dt><dd id="vsV">—</dd><small id="vsVs"></small></div>
+          <div class="ship st"><dt id="aCourT">Envío a Jita</dt><dd><b id="aCourier">—</b></dd><small id="aCourS"></small><small id="aCourD" hidden></small></div>
+        </dl>
+        <div class="fastbox" id="vFast" hidden>
+          <div class="fb-h"><span class="ic i-ship" aria-hidden="true"></span><b>La Más Rápida</b><span class="fb-what" id="vFastW"></span><b class="fb-v num" id="vFastV"></b></div>
+          <p id="vFastT"></p>
+        </div>
+        <div class="split" aria-hidden="true"><i class="s-null" id="sNull"></i><i class="s-jita" id="sJita"></i></div>
+        <div class="legend"><span><b style="background:var(--gain)"></b><i id="lNullT">Se Queda en Null</i> <em id="lNull"></em></span><span><b style="background:var(--blue)"></b><i id="lJitaT">Viaja a Jita</i> <em id="lJita"></em></span></div>
+      </div>
+      <div class="v-side">
+        <h3 class="sub-h v-h0" title="Lo que ganarías haciendo todo de una sola manera."><span class="ic i-scale" aria-hidden="true"></span>Comparación con Otros Planes</h3>
+        <dl class="alt-grid">
+          <div><dt><span id="aNullT">Todo en Null</span><span class="if-ore" hidden> Sin Reproceso</span><small id="aNullS">Sin reprocesar, con tu margen.</small><small class="pl-partial" id="aNullPart" hidden></small></dt><dd><b id="aNull">—</b><small id="aNullD"></small></dd></div>
+          <div><dt><span id="aJitaT">Todo a Jita</span><span class="if-ore" hidden> Sin Reproceso</span><small id="aJitaS">Orden de venta a Jita Sell (envío incluido).</small><small class="pl-partial" id="aJitaPart" hidden></small></dt><dd><b id="aJita">—</b><small id="aJitaD"></small></dd></div>
+          <div id="aBBBox"><dt>Todo al Buyback<small id="aBBs">Contrato al programa.</small><small class="pl-partial" id="aBBPart" hidden></small></dt><dd><b id="aBB">—</b><small id="aBBD"></small></dd></div>
+          <div class="tx at"><dt><span>Taxes y Broker</span><b id="vsCn" class="neg-soft">—</b></dt><dd id="vsC"></dd><label class="rl" id="vsRelW" hidden><input type="checkbox" id="cRelistOn"> Relists: <span id="vsRel">—</span><small>Se cobra si bajas el precio (~2 semanas). Márcalo para contarlo.</small></label></div>
+        </dl>
+      </div>
+    </div>
+
+    <h3 class="sub-h v-h"><span class="ic i-list" aria-hidden="true"></span>Qué Hacer</h3>
+    <div class="tabs" id="vTabs" role="tablist" aria-label="Tipo de ítem" hidden></div>
+    <div class="pl-groups" id="vPlan"></div>
+
+    <div id="vRep" hidden>
+      <h3 class="sub-h v-h"><span class="ic i-flask" aria-hidden="true"></span>¿Reprocesar?<span id="vRepAns"></span></h3>
+      <ul class="receipt rep" id="vRepList"></ul>
+    </div>
+    <p class="v-note" id="vNote" hidden></p>
+
+    <div id="bbBox" hidden class="contract">
+      <h3 class="sub-h" style="margin-top:22px">Cómo Llenar el Contrato</h3>
+      <p class="lead" id="bbLead"></p>
+      <p class="lnk-row"><button class="copy lnk" type="button" data-link="buyback">Abrir el Buyback</button><small class="lnk-note">Pide login en SIGMA Auth. Ahí te da la descripción del contrato.</small></p>
+      <table class="prices"><tbody id="bbRows"></tbody></table>
+    </div>
+  </section>
+    <button type="button" class="more-btn" id="bMore" aria-expanded="false" aria-controls="more"><span>Consulta contratos y envío, reproceso y venta a jugadores.</span><b>Ver más ▾</b></button>
+    <!-- 3. Más info: todo plegado; abre lo que quieras -->
+    <div id="more" class="deep" hidden>
+  <!-- v110: Contratos y Envío (antes dos secciones) -->
+  <details class="panel" id="pCtr" hidden>
+    <summary><h2><span class="ic i-list" aria-hidden="true"></span><span id="ctrTitle">Contratos y Envío</span></h2><span class="sum" id="ctrSum"></span></summary>
+    <div class="ce">
+      <div class="ce-l">
+        <div class="ce-h"><h3 class="sub-h"><span class="ic i-list" aria-hidden="true"></span>Tus Contratos</h3>
+          <div class="cz-ctl"><div class="cz-dots" id="czDots" hidden></div>
+          <div class="cz-nav" id="czNav" hidden><button type="button" class="cz-b" id="czPrev" aria-label="Contrato anterior">‹</button><span class="cz-pos" id="czPos" aria-live="polite"></span><button type="button" class="cz-b" id="czNext" aria-label="Contrato siguiente">›</button></div></div></div>
+        <div class="cz" id="ctrList" tabindex="-1"></div>
+        <div class="ct-sum" id="ctrTot"></div>
+      </div>
+      <div class="ce-r" id="shipBox">
+        <div class="ce-h"><h3 class="sub-h"><span class="ic i-ship" aria-hidden="true"></span><span id="shTitle">Envío a Jita</span></h3><span class="sh-route" id="shRoute">HY-RWO → Jita 4-4 · SIGMA Freight</span></div>
+        <div class="sh-card">
+          <div id="shBody"></div>
+          <p class="sh-rates">Tarifas fijas de SIGMA Freight: <b id="fBase">10,000,000 ISK</b> por contrato + <b id="fPerM3">653 ISK</b> por m³ + <b id="fCollPct">1%</b> del colateral · máximo <b id="fMaxVol">350,000 m³</b> por contrato.</p>
+        </div>
+      </div>
+    </div>
+    <div id="fScnWrap" hidden>
+      <h3 class="sub-h" style="margin-top:22px"><span class="ic i-scale" aria-hidden="true"></span><span id="fScnT">Dos Escenarios</span></h3>
+      <p class="v-hint" id="fScnH"></p>
+      <div class="scn" id="fScn"></div>
+      <p class="scn-v" id="fScnV"></p>
+    </div>
+  </details>
+  <details class="panel" id="pRepro" hidden>
+    <summary><h2><span class="ic i-flask" aria-hidden="true"></span>Reproceso</h2><span class="sum" id="rSum"></span></summary>
+    <p class="lead">Qué minerales deja tu ore y cuánto valen.</p>
+    <div class="grid" style="margin-top:14px">
+      <label>Ore<select id="rOre"></select><small id="rSkillName"></small></label>
+      <label>Cantidad<input type="number" id="rQty" min="0" step="1" value="1000"></label>
+      <label>Skill de procesamiento<select id="rSkill"><option value="0">Nivel 0</option><option value="1">Nivel 1</option><option value="2">Nivel 2</option><option value="3">Nivel 3</option><option value="4">Nivel 4</option><option value="5" selected>Nivel 5</option></select><small id="rSkillSrc">Manual (sin login).</small></label>
+      <label>Tax de refinería %<input type="number" id="rTax" min="0" max="100" step="0.1" value="1"></label>
+      <label>Precio del ore /u<input type="number" id="rOrePrice" min="0" step="any" placeholder="0"><small>Jita Sell del ore.</small></label>
+      <label>m³ por unidad del ore<input type="number" id="rOreVol" min="0" step="any" placeholder="0"></label>
+    </div>
+    <p class="note"><b id="rRef" style="color:var(--txt);font-weight:600"></b></p>
+    <p class="note" id="rBreak" style="margin-top:4px"></p>
+    <table id="tRepro"><thead><tr><th>Mineral</th><th class="r">Cantidad neta</th><th class="r">Jita Sell /u</th><th class="r">Valor</th></tr></thead><tbody></tbody></table>
+    <div style="margin-top:10px"><button class="ghost" id="bEsiMin"><span class="ic i-sync" aria-hidden="true"></span>Traer Precios de Minerales</button></div>
+    <h3 class="sub-h" style="margin-top:22px">Valor Bruto: Refinado vs Sin Refinar</h3>
+    <p class="lead" id="rRawNote"></p>
+    <table id="tRaw" class="cmp" style="max-width:900px"><thead><tr><th>Precio</th><th class="r">Sin Refinar</th><th class="r">Refinado</th><th class="r">Diferencia</th><th class="r">Cambio</th></tr></thead><tbody></tbody></table>
+    <h3 class="sub-h" style="margin-top:22px"><span class="ic i-scale" aria-hidden="true"></span>¿Refinado o Sin Refinar?</h3>
+    <p class="lead">Primero se compara Refinado vs Sin Refinar dentro de cada mercado, con todas sus deducciones. Después se comparan los resultados entre sí.</p>
+    <div class="rx" id="rx"></div>
+    <div class="rx-final" id="rxFinal"></div>
+    <div hidden>
+    <h3 class="sub-h" style="margin-top:22px">¿Refinar o Vender el Ore?</h3>
+    <p class="lead">Importe neto estimado por opción. Las rutas a Jita incluyen courier; vender en Nullsec no lo requiere.</p>
+    <table id="tRcmp" class="cmp"><thead><tr><th>Opción</th><th class="r">Ganancia</th><th class="r">Envío</th><th class="r">Costo del Envío</th><th class="r">Con Envío</th></tr></thead><tbody></tbody></table>
+    <div class="calls2">
+      <div class="call rc">
+        <p class="rc-t"><span class="lamp" id="rV1l" aria-hidden="true"></span><span id="rV1k">Si Refinas</span>: <b class="num" id="rV1">—</b></p>
+        <small class="rc-cap">Jita Sell en orden de venta, sin envío.</small>
+        <dl class="rc-ln"><div><dt>Minerales</dt><dd class="num" id="rV1m">—</dd></div><div><dt>Ore directo</dt><dd class="num" id="rV1o">—</dd></div></dl>
+        <small class="rc-miss" id="rV1s"></small>
+      </div>
+      <div class="call rc">
+        <p class="rc-t"><span class="lamp" id="rV2l" aria-hidden="true"></span><span id="rV2k">Si Refinas + Coste del Envío</span>: <b class="num" id="rV2">—</b></p>
+        <small class="rc-cap">Jita Sell en orden de venta, con envío.</small>
+        <dl class="rc-ln"><div><dt>Minerales</dt><dd class="num" id="rV2m">—</dd></div><div><dt>Ore directo</dt><dd class="num" id="rV2o">—</dd></div></dl>
+        <small class="rc-miss" id="rV2s"></small>
+      </div>
+    </div>
+    <p class="rguide" id="rGuide"></p>
+    <div id="oreVsMin" hidden>
+      <h3 class="sub-h" style="margin-top:22px">Detalle del Envío</h3>
+      <table id="tOreVsMin"><thead><tr><th></th><th class="r" id="ovmOreName">Ore</th><th class="r">Minerales</th></tr></thead><tbody></tbody></table>
+      <div class="call"><b id="ovmVerdict">—</b><small id="ovmDetail"></small></div>
+    </div>
+    </div>
+    <p class="note">La Refinería, el Rig, la Seguridad y el Implante se cambian en Ajustes → Refinería. Reprocessing, Reprocessing Efficiency y la skill del ore se cambian en Ajustes → Tus Skills. El gas no se reprocesa.</p>
+  </details>
+  <details class="panel" id="pDisc" hidden>
+    <summary><h2><span class="logo sig" aria-hidden="true"></span><span class="logo vg" aria-hidden="true"></span>Vender a Jugadores</h2><span class="sum" id="dSum"></span></summary>
+    <p class="lead" id="dLead">Último recurso: véndelo a alguien de tu alianza o corporación por Discord.</p>
+    <div class="dests" role="group" aria-label="Dónde publicar">
+      <button type="button" class="dest" data-d="sigma" aria-pressed="true"><span class="logo sig" aria-hidden="true"></span><span><b>SIGMA GRINDSET</b><small>Alianza · #market-trade · en inglés</small></span></button>
+      <button type="button" class="dest" data-d="vg" aria-pressed="false"><span class="logo vg" aria-hidden="true"></span><span><b>Vanguardia DR</b><small>Corporación · #💰-mercado-local · en español</small></span></button>
+    </div>
+    <ol class="guide" style="margin-top:14px">
+      <li><b>Tasación en Janice</b><span>Copia tu lista, ábrela en Janice, pégala y copia el link que te da. <button class="copy" type="button" id="dCopyList">Copiar Lista</button> <button class="copy" type="button" id="dOpenJ">Abrir Janice</button></span></li>
+      <li><b>Pega el Link</b><span><input type="text" id="dLink" autocomplete="off" spellcheck="false" placeholder="https://janice.e-351.com/a/…" aria-label="Link de tu tasación en Janice"><small class="rc-miss" id="dLinkErr"></small></span></li>
+      <li><b>Publica el Mensaje</b><span><span id="dWhere">Cópialo y publícalo en SIGMA GRINDSET › trade › #market-trade.</span> <button class="copy" type="button" id="dCopyMsg">Copiar Mensaje</button> <button class="copy lnk" type="button" id="dOpenD" data-link="sigmaTrade">Abrir #market-trade</button><small class="lnk-note" id="dOpenNote"></small><span id="dTradeWrap" hidden><input type="text" id="dTrade" autocomplete="off" spellcheck="false" placeholder="https://discord.com/channels/…" aria-label="Link del canal market-trade de SIGMA"><small class="rc-miss" id="dTradeErr"></small></span></span></li>
+      <li><b>Cierra la Venta</b><span id="dClose"></span></li>
+    </ol>
+    <pre class="msg" id="dMsg"></pre>
+  </details>
+    </div>
+  </div>
+  <!-- Ajustes -->
+
+  <!-- Ayuda -->
+
+  <!-- Veredicto -->
+
+  <!-- Libro de lotes -->
+
+
+  <!-- Reproceso -->
+
+
+
+  <!-- Venta a jugador por Discord -->
+</main>
+
+<button type="button" class="totop" id="toTop" aria-label="Volver arriba" title="Volver arriba (Inicio)" hidden><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 14l6-6 6 6"/></svg></button>
+<footer class="foot">
+  <div class="foot-sec"><span class="ic i-lock" aria-hidden="true"></span><div><b>Nada se guarda.</b> Al cerrar o recargar la pestaña se borra todo, incluidos tus ajustes. La app solo se conecta a los servidores oficiales de Fenris Creations.</div></div>
+  <div class="foot-by">Creado por <b>Fiko McGivert</b> · Vanguardia DR · SIGMA GRINDSET · <span class="ver">v__VER__</span></div>
+</footer>
+
+<script>/*__SCRIPT__*/</script>
+</body>
+</html>

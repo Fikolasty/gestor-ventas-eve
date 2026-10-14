@@ -2,6 +2,25 @@
 
 Cambios por versión del Gestor de Ventas. La más nueva arriba. El detalle técnico completo está en `docs/SPEC.txt`.
 
+## 1.0.14 — Skills y Taxes enlazados
+*2026-10-14*
+
+Ajustes enlazados (en los dos sentidos)
+- Accounting ↔ Sales Tax %: tax = 7.5% × (1 − 0.11 × nivel). Si cambias el nivel, se reescribe el tax; si escribes el tax, se elige el nivel que da ese valor.
+  Si el tax no corresponde a ningún nivel, Accounting muestra «Personalizado» y se usa el valor escrito.
+- Broker Relations + standings ↔ Broker en Jita %: broker = 3% − 0.3% × BR − 0.03% × facción − 0.02% × corp.
+  Cambiar BR o un standing recalcula el Broker. Escribir el Broker ajusta BR (el más alto que no pase de lo escrito) y reparte el resto en standings
+  (facción primero, luego corp, tope 10). Ej.: 1.27% con BR 5 → facción 7.67.
+- Debajo del Broker se muestra la cuenta (= 3% − 1.5% (Broker Relations 5) − 0.23% (facción 7.67)).
+- Antes, cambiar un standing también reescribía el Sales Tax; ya no.
+- El campo que se ajustó solo destella en arcilla.
+- Días por courier: si el mejor caso pasa al peor (o al revés), la otra caja se corrige también.
+
+Campos que no aplican se apagan (con el motivo debajo)
+- Hielo: sus campos sin «Reglas especiales para hielo»; «Descuento sobre Jita Buy» solo con «Jita Buy menos un %».
+- Buyback: sin «Comparar con el Buyback». Venta a Jugador: sin «Comparar esta opción». Descuento máximo: sin «Descuento por cantidad».
+- Días por courier y destinatario: con el envío apagado. Margen al importar y Destino en Null: solo en la ruta Jita → HY-RWO.
+
 ## 1.0.13 — Mensaje de pegado y Ajustes con relieve
 *2026-10-14*
 
