@@ -2,6 +2,28 @@
 
 Cambios por versión del Gestor de Ventas. La más nueva arriba. El detalle técnico completo está en `docs/SPEC.txt`.
 
+## 1.0.9 — Sin envío = ítems ya en destino, una sola fuente, fondo
+*2026-10-14*
+
+A) ENVÍO APAGADO
+- Idea de Arturo: con "Contar envío" apagado los ítems se tratan como si ya estuvieran en Jita (o en HY-RWO en modo invertido). Llevarlos uno mismo cuesta 0, así que no se menciona el envío en ningún lado.
+- Helper SH() = C.shipOn. Con SH() falso: sin bloque "Envío a Jita" en el análisis; la sección se llama "Contratos" y oculta la columna de envío; sin "Dos Escenarios"; el resumen lista "Vender en Jita" (o "Vender en HY-RWO") como órdenes sin contrato (ya no "Lo llevas tú"); guías, recomendaciones, Precios para Listar, comparación de reproceso, Buyback, jugador, "antes del envío", "Ver más" y la barra "Viaja a Jita" (→ "Se vende en Jita") sin textos de envío/courier. En modo invertido: "Vender en HY-RWO" / "Todo en HY-RWO" y la tabla de comprar y revender sin columna de envío.
+- Verificado con un escáner de texto (todas las secciones abiertas, ruta normal e invertida): 0 menciones de envío/courier/SIGMA Freight fuera de Ajustes, Ayuda y el propio interruptor.
+
+B) UNA SOLA FUENTE
+- Toda la app usa solo la fuente de la interfaz (--f-ui: Anthropic Sans → system-ui → Segoe UI…). Se quitaron la serif y la de números (--f-num y --f-serif apuntan a --f-ui; regla global con !important). Números con cifras tabulares. Auditoría: 1 sola familia en todos los elementos visibles.
+
+C) FONDO
+- Viñeta del modo normal más marcada en las orillas y casi nula al centro (radial + laterales + arriba/abajo, hasta 88–92% negro en los bordes).
+- Modo ligero (oscuro y claro): la imagen se desvanece abajo (mask-image) para no cortarse de golpe; sin viñeta.
+- Tema claro menos brillante: fondos crema (#e6e3da página, tarjetas ~#ebe8e1, campos #f1eee6) en vez de blanco.
+
+D) VERIFICACIÓN
+- node --check; escáner de textos sin envío; auditoría de fuente; capturas oscuro/claro/ligero; motor idéntico a v105; parser 1527/1536; foco 31/31; smoke y API caída; Contratos y Envío; modo invertido; selector 8/8; quitar/deshacer; sin fugas (10 ciclos); solo hosts de ESI; nada en storage; escritorio y móvil sin desborde; cero errores.
+
+
+---
+
 ## 1.0.8 — Ajustes ordenados, tema claro, precio por unidad en la lista, optimización
 *2026-10-14*
 

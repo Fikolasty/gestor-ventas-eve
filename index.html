@@ -7,7 +7,7 @@
 <meta name="referrer" content="no-referrer">
 <title>PLAN &amp; GESTOR VENTAS</title>
 <style>
-/* ================= Gestor de Ventas v1.0.8 =================
+/* ================= Gestor de Ventas v1.0.9 =================
    Paleta: azul de base, naranja = acción, verde/rojo = ganancia/pérdida.
    Sin backdrop-filter: el vidrio se finge con rgba + bordes. */
 *{box-sizing:border-box;margin:0;padding:0}
@@ -1118,33 +1118,52 @@ html.lite body::after{background:none!important}
 .ledger-col{font-size:.85rem;color:var(--dim);text-align:right;padding-right:4px}
 .res-b ul.why>li{background:none!important;border:0!important;box-shadow:none!important}
 @media(max-width:600px){.lot-head{grid-template-areas:"name name chev" "qty net chev" "dest dest chev" "pp pp chev"!important}.lot-dest{justify-self:start}.lot-pp{justify-self:start!important}.ledger-col{display:none}}
+#pCtr.no-ship .ce{grid-template-columns:minmax(0,1fr)}
+#pCtr.no-ship .ce-l{max-width:720px}
+.legend i{font-style:normal}
+/* v1.0.9: UNA sola fuente en toda la app (la de la interfaz). Números con cifras tabulares para que se alineen. */
+:root{--f-num:var(--f-ui);--f-serif:var(--f-ui)}
+html,body,body *,body *::before,body *::after{font-family:var(--f-ui)!important}
+.num,td.r,.r,.sh-big,.pk-v,#resIsk,.v-isk,.fb2-big b{font-variant-numeric:tabular-nums}
+.hero h1{font-weight:700!important;letter-spacing:.03em}
+.panel h2,details.panel>summary h2{font-weight:600!important;letter-spacing:0}
+.panel .lead,.v-hint,.res-b p.lead2,.sh-none,.scn-v,.rguide,.pk-note,.lead2,.ledger-tools .lead,.hero p,.hero-p,.more-btn span{font-size:.98rem!important;line-height:1.6}
+.res-b p.lead2 b{font-weight:600}
+/* v1.0.9: viñeta high-end: casi nada al centro, marcada en las orillas (modo normal) */
+body::after{background:
+  radial-gradient(ellipse 88% 82% at 50% 45%,rgba(0,0,0,0) 48%,rgba(0,0,0,.42) 76%,rgba(0,0,0,.88) 100%),
+  linear-gradient(90deg,rgba(0,0,0,.6) 0%,rgba(0,0,0,0) 15%,rgba(0,0,0,0) 85%,rgba(0,0,0,.6) 100%),
+  linear-gradient(180deg,rgba(0,0,0,.35) 0%,rgba(0,0,0,0) 12%,rgba(0,0,0,0) 82%,rgba(0,0,0,.55) 100%)!important}
+html.lite body::after{background:none!important}
+/* Modo ligero: la imagen no es fija; se desvanece abajo para no cortarse de golpe (oscuro y claro) */
+html.lite body::before{-webkit-mask-image:linear-gradient(to bottom,#000 0%,#000 50%,transparent 100%);mask-image:linear-gradient(to bottom,#000 0%,#000 50%,transparent 100%)}
 /* ===== tema claro (generado desde el oscuro por light.py) ===== */
-html.light{--void:#f7f6f5;--hull:#f5f4f2;--hull2:#f4f3f0;--line:rgba(31,30,29,0.114);--line2:rgba(31,30,29,0.125);--txt:#1c1c1a;--mut:#54524d;--dim:#6c6a64;--ion:#413f3c;--blue:#a39d8b;--clay:#c96442;--thrust:#a67526;--gain:#418b62;--loss:#a92c23}
+html.light{--void:#e4e3dd;--hull:#e2e0da;--hull2:#e0ded8;--line:rgba(31,30,29,0.114);--line2:rgba(31,30,29,0.125);--txt:#1c1c1a;--mut:#54524d;--dim:#6c6a64;--ion:#413f3c;--blue:#a39d8b;--clay:#c96442;--thrust:#a67526;--gain:#418b62;--loss:#a92c23}
 html.light body::after{background:repeating-linear-gradient(180deg,rgba(31,30,29,0.011) 0 1px,transparent 1px 3px),
   radial-gradient(40% 50% at 18% 45%,rgba(31,30,29,0.057),transparent 70%),
   radial-gradient(45% 40% at 92% 6%,rgba(31,30,29,0.095),transparent 70%),
-  linear-gradient(90deg,rgba(255,255,255,0.6) 0%,rgba(255,255,255,0.6) 45%,rgba(255,255,255,0.6) 75%,rgba(255,255,255,0.6) 100%),
-  linear-gradient(180deg,rgba(255,255,255,0.6) 0%,rgba(255,255,255,0.6) 10%,rgba(255,255,255,0.6) 62%,rgba(255,255,255,0.6) 100%)}
+  linear-gradient(90deg,rgba(240,237,229,0.6) 0%,rgba(240,237,229,0.6) 45%,rgba(240,237,229,0.6) 75%,rgba(240,237,229,0.6) 100%),
+  linear-gradient(180deg,rgba(240,237,229,0.6) 0%,rgba(240,237,229,0.6) 10%,rgba(240,237,229,0.6) 62%,rgba(240,237,229,0.6) 100%)}
 html.light .who{border:1px solid rgba(53,194,110,0.438)}
 html.light .btn{color:#151514;background:linear-gradient(180deg,#c96442,#c96442);box-shadow:0 6px 14px rgba(217,119,87,0.4),inset 0 1px 0 rgba(31,30,29,0.427)}
-html.light .ghost{background:rgba(255,255,255,0.6)}
+html.light .ghost{background:rgba(240,237,229,0.6)}
 html.light .ghost:hover,html.light .ghost[aria-pressed="true"]{border-color:rgba(31,30,29,0.285)}
-html.light input,html.light select,html.light textarea{background:rgba(255,255,255,0.85)}
+html.light input,html.light select,html.light textarea{background:rgba(240,237,229,0.85)}
 html.light input:focus,html.light select:focus,html.light textarea:focus{box-shadow:0 0 0 3px rgba(31,30,29,0.103)}
 html.light .hero>p{color:#413f3c}
-html.light .paste{background:rgba(255,255,255,0.92);box-shadow:0 8px 14px rgba(0,0,0,0.072)}
+html.light .paste{background:rgba(240,237,229,0.92);box-shadow:0 8px 14px rgba(0,0,0,0.072)}
 html.light textarea{scrollbar-color:rgba(31,30,29,0.199) transparent}
 html.light textarea::-webkit-scrollbar-thumb{background:rgba(31,30,29,0.171)}
-html.light .panel{background:linear-gradient(180deg,rgba(255,255,255,0.94),rgba(255,255,255,0.96));box-shadow:0 8px 14px rgba(0,0,0,0.072),inset 0 1px 0 rgba(31,30,29,0.048)}
+html.light .panel{background:linear-gradient(180deg,rgba(240,237,229,0.94),rgba(240,237,229,0.96));box-shadow:0 8px 14px rgba(0,0,0,0.072),inset 0 1px 0 rgba(31,30,29,0.048)}
 html.light .split{background:rgba(31,30,29,0.057)}
 html.light .cmp td.bestc{background:rgba(53,194,110,0.125);box-shadow:inset 0 0 0 1px rgba(53,194,110,0.5)}
 html.light .guide{background:linear-gradient(180deg,rgba(31,30,29,0.095),rgba(31,30,29,0.038));border:1px solid rgba(31,30,29,0.125);box-shadow:inset 0 1px 0 rgba(31,30,29,0.057),0 6px 14px rgba(0,0,0,0.048)}
 html.light .guide li::before{box-shadow:0 0 10px rgba(31,30,29,0.228)}
-html.light .msg{background:rgba(255,255,255,0.85);box-shadow:inset 0 2px 6px rgba(0,0,0,0.088)}
-html.light .dest{background:linear-gradient(180deg,rgba(255,255,255,0.9),rgba(255,255,255,0.95));box-shadow:inset 0 1px 0 rgba(31,30,29,0.057),0 4px 10px rgba(0,0,0,0.056)}
+html.light .msg{background:rgba(240,237,229,0.85);box-shadow:inset 0 2px 6px rgba(0,0,0,0.088)}
+html.light .dest{background:linear-gradient(180deg,rgba(240,237,229,0.9),rgba(240,237,229,0.95));box-shadow:inset 0 1px 0 rgba(31,30,29,0.057),0 4px 10px rgba(0,0,0,0.056)}
 html.light .dest[aria-pressed="true"]{border-color:rgba(31,30,29,0.342);box-shadow:0 0 0 3px rgba(31,30,29,0.114),inset 0 1px 0 rgba(31,30,29,0.076),0 6px 14px rgba(0,0,0,0.064)}
 html.light .p-disc{color:#413f3c;border-color:rgba(31,30,29,0.285);background:rgba(31,30,29,0.095)}
-html.light .receipt{background:rgba(255,255,255,0.6);box-shadow:inset 0 2px 6px rgba(0,0,0,0.072)}
+html.light .receipt{background:rgba(240,237,229,0.6);box-shadow:inset 0 2px 6px rgba(0,0,0,0.072)}
 html.light .lot-head:hover{background:rgba(31,30,29,0.057)}
 html.light .lot.open .lot-head{background:rgba(31,30,29,0.067)}
 html.light .p-null{border-color:rgba(53,194,110,0.562);background:rgba(53,194,110,0.1)}
@@ -1156,20 +1175,20 @@ html.light .opt-bar{background:rgba(31,30,29,0.048)}
 html.light .opt-bar i{background:rgba(31,30,29,0.257)}
 html.light .copy{border:1px solid rgba(31,30,29,0.228);background:rgba(31,30,29,0.095)}
 html.light .copy:hover{background:rgba(31,30,29,0.114)}
-html.light .stats div{background:rgba(255,255,255,0.92)}
+html.light .stats div{background:rgba(240,237,229,0.92)}
 html.light .call{background:rgba(31,30,29,0.057)}
 html.light .panel{box-shadow:inset 0 1px 0 rgba(31,30,29,0.076),inset 0 -1px 0 rgba(0,0,0,0.08),
     0 1px 2px rgba(0,0,0,0.08),0 8px 14px rgba(0,0,0,0.056),0 8px 14px rgba(0,0,0,0.072)}
 html.light .panel::before{background:linear-gradient(90deg,transparent,rgba(31,30,29,0.314),rgba(31,30,29,0.199),transparent)}
 html.light .verdict{background:radial-gradient(120% 90% at 0% 0%,rgba(53,194,110,0.125),transparent 55%),
-  linear-gradient(180deg,rgba(255,255,255,0.96),rgba(255,255,255,0.97));border-color:rgba(31,30,29,0.125)}
+  linear-gradient(180deg,rgba(240,237,229,0.96),rgba(240,237,229,0.97));border-color:rgba(31,30,29,0.125)}
 html.light .split{box-shadow:inset 0 2px 4px rgba(0,0,0,0.096),0 1px 0 rgba(31,30,29,0.048)}
 html.light .split .s-null{background:linear-gradient(180deg,#27a558,#27a95b);box-shadow:0 0 12px rgba(53,194,110,0.562)}
 html.light .split .s-jita{background:linear-gradient(180deg,#5e5c57,#a39d8b);box-shadow:0 0 12px rgba(31,30,29,0.257)}
-html.light .stats div{background:linear-gradient(180deg,rgba(255,255,255,0.95),rgba(255,255,255,0.97));box-shadow:inset 0 1px 0 rgba(31,30,29,0.067),0 2px 4px rgba(0,0,0,0.072),0 8px 14px rgba(0,0,0,0.056)}
+html.light .stats div{background:linear-gradient(180deg,rgba(240,237,229,0.95),rgba(240,237,229,0.97));box-shadow:inset 0 1px 0 rgba(31,30,29,0.067),0 2px 4px rgba(0,0,0,0.072),0 8px 14px rgba(0,0,0,0.056)}
 html.light .paste{box-shadow:inset 0 1px 0 rgba(31,30,29,0.057),0 2px 4px rgba(0,0,0,0.08),0 8px 14px rgba(0,0,0,0.072),0 8px 14px rgba(0,0,0,0.056)}
 html.light .paste:focus-within{border-color:rgba(31,30,29,0.285);box-shadow:0 0 0 4px rgba(31,30,29,0.095),0 8px 14px rgba(0,0,0,0.072),0 8px 14px rgba(0,0,0,0.056)}
-html.light .lot.open{background:linear-gradient(180deg,rgba(255,255,255,0.75),rgba(255,255,255,0.85));box-shadow:inset 0 1px 0 rgba(31,30,29,0.067),0 4px 8px rgba(0,0,0,0.064),0 8px 14px rgba(0,0,0,0.072)}
+html.light .lot.open{background:linear-gradient(180deg,rgba(240,237,229,0.75),rgba(240,237,229,0.85));box-shadow:inset 0 1px 0 rgba(31,30,29,0.067),0 4px 8px rgba(0,0,0,0.064),0 8px 14px rgba(0,0,0,0.072)}
 html.light .opt-bar{box-shadow:inset 0 1px 3px rgba(0,0,0,0.096)}
 html.light .opt-bar i{background:linear-gradient(180deg,rgba(31,30,29,0.342),rgba(31,30,29,0.257))}
 html.light .opt.best .opt-bar i{background:linear-gradient(180deg,#27a558,#27a95b);box-shadow:0 0 10px rgba(53,194,110,0.688)}
@@ -1186,12 +1205,12 @@ html.light .ghost,html.light .dest{box-shadow:inset 0 1px 0 rgba(31,30,29,0.076)
 html.light .ghost:hover,html.light .dest:hover{border-color:rgba(31,30,29,0.314)}
 html.light .copy{box-shadow:inset 0 1px 0 rgba(31,30,29,0.095),0 2px 4px rgba(0,0,0,0.072)!important}
 html.light .copy:hover{border-color:rgba(31,30,29,0.399)}
-html.light .locked input{background:rgba(255,255,255,0.6)!important}
-html.light .v-stats>div{background:rgba(255,255,255,0.6);box-shadow:inset 0 1px 0 rgba(31,30,29,0.048),0 6px 14px rgba(0,0,0,0.048)}
-html.light .alt-grid>div{background:linear-gradient(180deg,rgba(255,255,255,0.95),rgba(255,255,255,0.97));box-shadow:inset 0 1px 0 rgba(31,30,29,0.067),0 2px 4px rgba(0,0,0,0.072),0 8px 14px rgba(0,0,0,0.056)}
-html.light .tab{background:rgba(255,255,255,0.7);box-shadow:inset 0 1px 0 rgba(31,30,29,0.057),0 3px 9px rgba(0,0,0,0.064)}
+html.light .locked input{background:rgba(240,237,229,0.6)!important}
+html.light .v-stats>div{background:rgba(240,237,229,0.6);box-shadow:inset 0 1px 0 rgba(31,30,29,0.048),0 6px 14px rgba(0,0,0,0.048)}
+html.light .alt-grid>div{background:linear-gradient(180deg,rgba(240,237,229,0.95),rgba(240,237,229,0.97));box-shadow:inset 0 1px 0 rgba(31,30,29,0.067),0 2px 4px rgba(0,0,0,0.072),0 8px 14px rgba(0,0,0,0.056)}
+html.light .tab{background:rgba(240,237,229,0.7);box-shadow:inset 0 1px 0 rgba(31,30,29,0.057),0 3px 9px rgba(0,0,0,0.064)}
 html.light .tab[aria-selected="true"]{color:#151514;border-color:rgba(31,30,29,0.342);background:linear-gradient(180deg,rgba(31,30,29,0.182),rgba(31,30,29,0.08));box-shadow:inset 0 1px 0 rgba(31,30,29,0.095),0 4px 12px rgba(0,0,0,0.072),0 0 14px rgba(31,30,29,0.114)}
-html.light .pl{background:rgba(255,255,255,0.6);box-shadow:inset 0 1px 0 rgba(31,30,29,0.038),0 8px 14px rgba(0,0,0,0.056)}
+html.light .pl{background:rgba(240,237,229,0.6);box-shadow:inset 0 1px 0 rgba(31,30,29,0.038),0 8px 14px rgba(0,0,0,0.056)}
 html.light .pl-head{background:rgba(31,30,29,0.019)}
 html.light .pl-g .reco .ic{color:#c96442}
 html.light .pl-row.total{background:rgba(53,194,110,0.088)}
@@ -1227,14 +1246,14 @@ html.light .nc.pos{color:#309c5b}
 html.light .nc.neg{color:#c20a0a}
 html.light .neg-soft{color:#c20a0a}
 html.light img.ti{background:rgba(31,30,29,0.038);box-shadow:0 0 0 1px rgba(31,30,29,0.076)}
-html.light .scn>div{background:linear-gradient(180deg,rgba(255,255,255,0.95),rgba(255,255,255,0.97));box-shadow:inset 0 1px 0 rgba(31,30,29,0.067),0 4px 10px rgba(0,0,0,0.056)}
+html.light .scn>div{background:linear-gradient(180deg,rgba(240,237,229,0.95),rgba(240,237,229,0.97));box-shadow:inset 0 1px 0 rgba(31,30,29,0.067),0 4px 10px rgba(0,0,0,0.056)}
 html.light .scn>div.win{border-color:rgba(53,194,110,0.688);box-shadow:inset 0 1px 0 rgba(31,30,29,0.067),0 0 0 1px rgba(53,194,110,0.312),0 4px 10px rgba(0,0,0,0.056)}
 html.light .scn li{border-bottom:1px dashed rgba(31,30,29,0.048)}
 html.light .fastbox{border:1px solid rgba(31,30,29,0.257);background:linear-gradient(90deg,rgba(31,30,29,0.091),rgba(31,30,29,0.038));box-shadow:inset 0 1px 0 rgba(31,30,29,0.057),0 4px 10px rgba(0,0,0,0.048)}
 html.light .fb-h .ic{color:#5e5c57}
 html.light .fb-h b{color:#282725}
 html.light .rt-row{border-bottom:1px solid rgba(31,30,29,0.048)}
-html.light .rx-c{background:linear-gradient(180deg,rgba(255,255,255,0.95),rgba(255,255,255,0.97));box-shadow:inset 0 1px 0 rgba(31,30,29,0.057),0 4px 10px rgba(0,0,0,0.056)}
+html.light .rx-c{background:linear-gradient(180deg,rgba(240,237,229,0.95),rgba(240,237,229,0.97));box-shadow:inset 0 1px 0 rgba(31,30,29,0.057),0 4px 10px rgba(0,0,0,0.056)}
 html.light .rx-c td{border-top:1px solid rgba(31,30,29,0.048)}
 html.light .rx-c td.ded{color:#c20a0a}
 html.light .rx-c tr.net td.win{color:#309c5b}
@@ -1243,18 +1262,18 @@ html.light .rx-final li:first-child b{color:#309c5b}
 html.light .p-none.rep-ans{color:#c20a0a;border-color:rgba(255,123,123,0.625);background:rgba(255,95,95,0.125)}
 html.light .rx-c.yes .rx-big{color:#2e9e5b}
 html.light .rx-c.no .rx-big{color:#c20a0a}
-html.light .foot-sec{border:1px solid rgba(53,194,110,0.438);background:linear-gradient(90deg,rgba(53,194,110,0.15),rgba(255,255,255,0.85));color:#3a3936}
+html.light .foot-sec{border:1px solid rgba(53,194,110,0.438);background:linear-gradient(90deg,rgba(53,194,110,0.15),rgba(240,237,229,0.85));color:#3a3936}
 html.light .foot-sec .ic{color:#309c5b}
 html.light .foot-sec b{color:#151514}
 html.light .foot-by b{color:#a34a29}
-html.light .ref{border:1px solid rgba(217,119,87,0.625);background:linear-gradient(90deg,rgba(217,119,87,0.225),rgba(255,255,255,0.7));color:#a17d2b;box-shadow:inset 0 1px 0 rgba(31,30,29,0.076),0 4px 12px rgba(0,0,0,0.064)}
+html.light .ref{border:1px solid rgba(217,119,87,0.625);background:linear-gradient(90deg,rgba(217,119,87,0.225),rgba(240,237,229,0.7));color:#a17d2b;box-shadow:inset 0 1px 0 rgba(31,30,29,0.076),0 4px 12px rgba(0,0,0,0.064)}
 html.light .ref:hover{border-color:rgba(201,100,66,0.85)}
-html.light .ref-tag{color:#fbfbfb;background:#c96442}
+html.light .ref-tag{color:#eae9e4;background:#c96442}
 html.light .ref-t b{color:#a34a29}
 html.light .ref-go{color:#c96442}
 html.light .rx-fh{color:#a34a29}
-html.light .pod{background:rgba(255,255,255,0.7)}
-html.light .pod.best{border:1px solid rgba(53,194,110,0.7);background:linear-gradient(180deg,rgba(53,194,110,0.275),rgba(255,255,255,0.9));box-shadow:0 0 0 1px rgba(53,194,110,0.375),0 6px 16px rgba(0,0,0,0.072)}
+html.light .pod{background:rgba(240,237,229,0.7)}
+html.light .pod.best{border:1px solid rgba(53,194,110,0.7);background:linear-gradient(180deg,rgba(53,194,110,0.275),rgba(240,237,229,0.9));box-shadow:0 0 0 1px rgba(53,194,110,0.375),0 6px 16px rgba(0,0,0,0.072)}
 html.light .pod.best .pod-r{color:#2e9e5b}
 html.light .pod-tr{background:rgba(31,30,29,0.057)}
 html.light .pod-bar{background:#a39d8b}
@@ -1262,28 +1281,28 @@ html.light .pod.best .pod-bar{background:linear-gradient(90deg,#27a95b,#27a558)}
 html.light .pod.best .pod-d{color:#27a555}
 html.light .rx-call b{color:#a34a29}
 html.light .rx-call .ic{color:#c96442}
-html.light .pl-search{background:rgba(255,255,255,0.72);border:1px solid rgba(31,30,29,0.182)}
+html.light .pl-search{background:rgba(240,237,229,0.72);border:1px solid rgba(31,30,29,0.182)}
 html.light .pl-partial{color:#a34a29}
 html.light .cp:hover{background:rgba(31,30,29,0.08);box-shadow:inset 0 0 0 1px rgba(31,30,29,0.228)}
 html.light .cp.done{background:rgba(53,194,110,0.25);box-shadow:inset 0 0 0 1px rgba(53,194,110,0.6)}
 html.light .cp.done::after{color:#309c5b}
-html.light .pk-o{background:linear-gradient(180deg,rgba(255,255,255,0.85),rgba(255,255,255,0.92))}
+html.light .pk-o{background:linear-gradient(180deg,rgba(240,237,229,0.85),rgba(240,237,229,0.92))}
 html.light .pk-o:hover{border-color:rgba(31,30,29,0.342)}
 html.light .pk-o .pk-l{color:#33322f}
 html.light .pk-o .pk-d.neg{color:#c20a0a}
 html.light .pk-o .pk-d.pos{color:#2e9e5b}
 html.light .pk-o.best .pk-d{color:#2e9e5b}
-html.light .pk-o.on{border-color:#c96442;background:linear-gradient(180deg,rgba(217,119,87,0.225),rgba(255,255,255,0.92));box-shadow:0 0 0 1px rgba(217,119,87,0.562)}
+html.light .pk-o.on{border-color:#c96442;background:linear-gradient(180deg,rgba(217,119,87,0.225),rgba(240,237,229,0.92));box-shadow:0 0 0 1px rgba(217,119,87,0.562)}
 html.light .pk-o.on .pk-l::after{color:#a34a29}
 html.light .pk-note{border:1px solid rgba(217,119,87,0.438);background:rgba(217,119,87,0.1)}
-html.light .sh-card{background:#f5f4f2}
-html.light .cz-b{border:1px solid rgba(31,30,29,0.199);background:rgba(255,255,255,0.8)}
+html.light .sh-card{background:#e2e0da}
+html.light .cz-b{border:1px solid rgba(31,30,29,0.199);background:rgba(240,237,229,0.8)}
 html.light .cz-b:hover:not(:disabled){color:#151514}
-html.light .cz-d{background:rgba(255,255,255,0.7)}
+html.light .cz-d{background:rgba(240,237,229,0.7)}
 html.light .cz-d.bb{border-color:rgba(53,194,110,0.562)}
 html.light .cz-d.cr{border-color:rgba(31,30,29,0.257)}
 html.light .cz-d.pl{border-color:rgba(31,30,29,0.285)}
-html.light .cz-d[aria-current="true"]{color:#f8f8f7}
+html.light .cz-d[aria-current="true"]{color:#e6e5e0}
 html.light .sh-big{color:#c20a0a}
 html.light .sh-bar{background:rgba(31,30,29,0.057)}
 html.light .sh-bar .b1{background:#c96442}
@@ -1292,7 +1311,7 @@ html.light .sh-bar .b3{background:#6c6a64}
 html.light .sh-leg .l1::before{background:#c96442}
 html.light .sh-leg .l2::before{background:#413f3c}
 html.light .sh-leg .l3::before{background:#6c6a64}
-html.light .sh-kpi>div{background:rgba(255,255,255,0.6);border:1px solid rgba(31,30,29,0.057)}
+html.light .sh-kpi>div{background:rgba(240,237,229,0.6);border:1px solid rgba(31,30,29,0.057)}
 html.light .sh-c:hover,html.light .sh-c.on{border-color:rgba(31,30,29,0.228);background:rgba(31,30,29,0.057)}
 html.light .sh-c .tr{background:rgba(31,30,29,0.067)}
 html.light .sh-c .tr i{background:linear-gradient(90deg,#807d76,#413f3c)}
@@ -1301,23 +1320,23 @@ html.light .sh-tips li.ok{background:rgba(53,194,110,0.1);border-color:rgba(53,1
 html.light .sh-tips li.ok::before{color:#309c5b}
 html.light .sh-t td{border-top:1px solid rgba(31,30,29,0.048)}
 @media(max-width:600px){html.light .sh-t tr{border-top:1px solid rgba(31,30,29,0.057)}}
-html.light .ct{background:linear-gradient(180deg,rgba(255,255,255,0.95),rgba(255,255,255,0.97));box-shadow:inset 0 1px 0 rgba(31,30,29,0.057),0 4px 10px rgba(0,0,0,0.056)}
+html.light .ct{background:linear-gradient(180deg,rgba(240,237,229,0.95),rgba(240,237,229,0.97));box-shadow:inset 0 1px 0 rgba(31,30,29,0.057),0 4px 10px rgba(0,0,0,0.056)}
 html.light .ct.pl{border-top:3px solid #6c6a64}
-html.light .ct-items{border:1px solid rgba(31,30,29,0.057);background:rgba(255,255,255,0.6)}
+html.light .ct-items{border:1px solid rgba(31,30,29,0.057);background:rgba(240,237,229,0.6)}
 html.light .ct-items li{border-top:1px solid rgba(31,30,29,0.038)}
 html.light .ct-sum{border-left:3px solid #c96442;background:linear-gradient(90deg,rgba(217,119,87,0.15),rgba(217,119,87,0.025))}
-html.light .totop{border:1px solid rgba(31,30,29,0.199);background:linear-gradient(180deg,rgba(255,255,255,0.82),rgba(255,255,255,0.88));box-shadow:inset 0 1px 0 rgba(31,30,29,0.114),inset 0 -1px 0 rgba(0,0,0,0.08),0 6px 14px rgba(0,0,0,0.08)}
+html.light .totop{border:1px solid rgba(31,30,29,0.199);background:linear-gradient(180deg,rgba(240,237,229,0.82),rgba(240,237,229,0.88));box-shadow:inset 0 1px 0 rgba(31,30,29,0.114),inset 0 -1px 0 rgba(0,0,0,0.08),0 6px 14px rgba(0,0,0,0.08)}
 html.light .totop:hover{color:#151514;border-color:rgba(31,30,29,0.427)}
-html.light fieldset.st{background:linear-gradient(180deg,rgba(255,255,255,0.9),rgba(255,255,255,0.95));box-shadow:inset 0 1px 0 rgba(31,30,29,0.057),0 4px 10px rgba(0,0,0,0.048)}
+html.light fieldset.st{background:linear-gradient(180deg,rgba(240,237,229,0.9),rgba(240,237,229,0.95));box-shadow:inset 0 1px 0 rgba(31,30,29,0.057),0 4px 10px rgba(0,0,0,0.048)}
 html.light .st-f input[type=checkbox]{accent-color:#c96442}
-html.light .hp-c{background:linear-gradient(180deg,rgba(255,255,255,0.9),rgba(255,255,255,0.95))}
-html.light .hp-n{color:#f8f8f7}
+html.light .hp-c{background:linear-gradient(180deg,rgba(240,237,229,0.9),rgba(240,237,229,0.95))}
+html.light .hp-n{color:#e6e5e0}
 html.light .hp-t>div{background:rgba(31,30,29,0.028);border:1px solid rgba(31,30,29,0.048)}
 html.light .more-btn{border:1px dashed rgba(31,30,29,0.285);background:rgba(31,30,29,0.076)}
 html.light .more-btn:hover{background:rgba(31,30,29,0.08)}
 @supports (-moz-appearance:none){html.light body::after{background:radial-gradient(45% 40% at 92% 6%,rgba(31,30,29,0.095),transparent 70%),
-    linear-gradient(90deg,rgba(255,255,255,0.6) 0%,rgba(255,255,255,0.6) 45%,rgba(255,255,255,0.6) 75%,rgba(255,255,255,0.6) 100%),
-    linear-gradient(180deg,rgba(255,255,255,0.6) 0%,rgba(255,255,255,0.6) 10%,rgba(255,255,255,0.6) 62%,rgba(255,255,255,0.6) 100%)!important}
+    linear-gradient(90deg,rgba(240,237,229,0.6) 0%,rgba(240,237,229,0.6) 45%,rgba(240,237,229,0.6) 75%,rgba(240,237,229,0.6) 100%),
+    linear-gradient(180deg,rgba(240,237,229,0.6) 0%,rgba(240,237,229,0.6) 10%,rgba(240,237,229,0.6) 62%,rgba(240,237,229,0.6) 100%)!important}
 html.light .panel,html.light .ct,html.light .alt-grid>div,html.light .rx-c,html.light .pod,html.light fieldset.st,html.light .hp-c,html.light .scn>div,html.light .v-stats>div,html.light .pl,html.light .fastbox,html.light .ref,html.light .foot-sec{box-shadow:0 2px 6px rgba(0,0,0,0.064)!important}}
 html.light .prices tr.pr-best td{background:rgba(53,194,110,0.075)}
 html.light .res-b p.lead2{color:#282725}
@@ -1333,11 +1352,11 @@ html.light .res-b .time span{background:rgba(31,30,29,0.038);border:1px solid rg
 html.light .res-b .time b{color:#151514}
 html.light .res-b ul.why li{color:#282725}
 html.light details.panel>summary .sum{color:#413f3c}
-html.light.lite body::after{background:linear-gradient(180deg,rgba(255,255,255,0.6) 0%,rgba(255,255,255,0.6) 40%,var(--void) 100%)!important}
-html.light.lite .panel,html.light.lite .ct,html.light.lite .alt-grid>div,html.light.lite .rx-c,html.light.lite .pod,html.light.lite fieldset.st,html.light.lite .hp-c,html.light.lite .scn>div,html.light.lite .v-stats>div{background:#f5f4f2!important}
+html.light.lite body::after{background:linear-gradient(180deg,rgba(240,237,229,0.6) 0%,rgba(240,237,229,0.6) 40%,var(--void) 100%)!important}
+html.light.lite .panel,html.light.lite .ct,html.light.lite .alt-grid>div,html.light.lite .rx-c,html.light.lite .pod,html.light.lite fieldset.st,html.light.lite .hp-c,html.light.lite .scn>div,html.light.lite .v-stats>div{background:#e2e0da!important}
 html.light .lite-t input{accent-color:#c96442}
 html.light .hero-intro>p{color:#33322f}
-html.light .start-note{border:1px solid rgba(217,119,87,0.438);background:rgba(255,255,255,0.82);box-shadow:inset 0 1px 0 rgba(31,30,29,0.048)}
+html.light .start-note{border:1px solid rgba(217,119,87,0.438);background:rgba(240,237,229,0.82);box-shadow:inset 0 1px 0 rgba(31,30,29,0.048)}
 html.light .start-note-body{color:#413f3c}
 html.light .start-note-body strong{color:#b27e1a}
 html.light .start-note-body b{color:#1c1c1a}
@@ -1347,8 +1366,8 @@ html.light .res-b .cmp2 li .cmp-label{color:#33322f}
 html.light .res-b .cmp2 li .cmp-exact{color:#54524d}
 html.light .res-b .cmp2 li .cmp-part{color:#c27b0a}
 html.light .ledger-sort:hover,html.light .ledger-sort[data-active="true"]{background:rgba(31,30,29,0.076)}
-html.light body{background:#f7f6f5}
-html.light .panel{background:#f6f5f3}
+html.light body{background:#e4e3dd}
+html.light .panel{background:#e3e1dc}
 html.light .panel .lead,html.light .v-hint,html.light .res-b p.lead2,html.light .sh-none,html.light .scn-v,html.light .rguide,html.light .pk-note,html.light .lead2,html.light .ledger-tools .lead{color:#33322f}
 html.light .note,html.light .sh-rates,html.light .st-i,html.light .st-f small,html.light small{color:#65635d}
 html.light .status.err{color:#a67526}
@@ -1357,15 +1376,15 @@ html.light .btn{color:#151514}
 html.light .btn:hover{background:#994d33}
 html.light .ghost{color:#33322f}
 html.light .ghost:hover,html.light .ghost[aria-pressed="true"]{background:rgba(31,30,29,0.057);border-color:rgba(31,30,29,0.285)}
-html.light .copy{background:#f5f4f2}
-html.light .copy:hover{background:#f3f2ef}
-html.light input,html.light select,html.light textarea{background:#f8f8f7}
+html.light .copy{background:#e2e0da}
+html.light .copy:hover{background:#dfddd7}
+html.light input,html.light select,html.light textarea{background:#e6e5e0}
 html.light input:focus,html.light select:focus,html.light textarea:focus{border-color:rgba(31,30,29,0.38);box-shadow:0 0 0 3px rgba(31,30,29,0.076)!important}
 html.light :focus-visible{outline-color:#413f3c}
-html.light .ct,html.light .sh-card,html.light .pk-o,html.light .scn>div,html.light fieldset.st,html.light .hp-c,html.light .sh-kpi>div{background:#f5f4f2}
-html.light .ct-sum{background:#f5f4f2}
-html.light .pk-o.on{background:#f3f2ef}
-html.light .cz-d[aria-current="true"]{background:#33322f;color:#f8f8f7;border-color:#33322f}
+html.light .ct,html.light .sh-card,html.light .pk-o,html.light .scn>div,html.light fieldset.st,html.light .hp-c,html.light .sh-kpi>div{background:#e2e0da}
+html.light .ct-sum{background:#e2e0da}
+html.light .pk-o.on{background:#dfddd7}
+html.light .cz-d[aria-current="true"]{background:#33322f;color:#e6e5e0;border-color:#33322f}
 html.light .sh-bar .b1{background:#c96442}
 html.light .sh-bar .b2{background:#6d6b64}
 html.light .sh-bar .b3{background:#a39d8b}
@@ -1373,74 +1392,77 @@ html.light .sh-leg .l1::before{background:#c96442}
 html.light .sh-leg .l2::before{background:#6d6b64}
 html.light .sh-leg .l3::before{background:#a39d8b}
 html.light .sh-c .tr i{background:#6d6b64}
-html.light .sh-tips li{background:#f5f4f2}
+html.light .sh-tips li{background:#e2e0da}
 html.light .more-btn:hover{background:rgba(31,30,29,0.048)}
 html.light .more-btn span{color:#33322f}
 html.light .lot.open .lot-head,html.light .lot-head:hover{background:rgba(31,30,29,0.038)}
 html.light .lot-x:hover,html.light .lot-x:focus-visible{color:#a92c23;background:rgba(232,116,108,0.125)}
-html.light .undo{background:#f5f4f2;color:#33322f}
+html.light .undo{background:#e2e0da;color:#33322f}
 html.light .hero>p,html.light .hero .tagline,html.light .hero p{color:#33322f}
-html.light .foot-sec{background:#f6f5f3}
-html.light .start-note{background:#f6f5f3}
-html.light body::after{background:radial-gradient(120% 95% at 50% 40%,rgba(255,255,255,0.6) 35%,rgba(255,255,255,0.6) 75%,rgba(255,255,255,0.92) 100%),
-  linear-gradient(180deg,rgba(255,255,255,0.6),rgba(255,255,255,0.6))}
+html.light .foot-sec{background:#e3e1dc}
+html.light .start-note{background:#e3e1dc}
+html.light body::after{background:radial-gradient(120% 95% at 50% 40%,rgba(240,237,229,0.6) 35%,rgba(240,237,229,0.6) 75%,rgba(240,237,229,0.92) 100%),
+  linear-gradient(180deg,rgba(240,237,229,0.6),rgba(240,237,229,0.6))}
 html.light .k-null,html.light .k-rNull,html.light .v-what[data-k=null],html.light .v-what[data-k=rNull],html.light .res-b li .chip.nl{background:rgba(224,168,79,0.163)!important;color:#aa7622!important;border-color:rgba(224,168,79,0.5)!important}
 html.light .k-bb,html.light .v-what[data-k=bb],html.light .res-b li .chip.bb{background:rgba(92,186,134,0.163)!important;color:#3e8e61!important;border-color:rgba(92,186,134,0.525)!important}
 html.light .k-jOrd,html.light .k-jInst,html.light .k-rJita,html.light .v-what[data-k=jOrd],html.light .v-what[data-k=jInst],html.light .v-what[data-k=rJita],html.light .res-b li .chip:not(.bb):not(.nl):not(.pl){background:rgba(122,170,224,0.163)!important;color:#2962a3!important;border-color:rgba(122,170,224,0.525)!important}
 html.light .k-disc,html.light .v-what[data-k=disc],html.light .res-b li .chip.pl{background:rgba(179,156,240,0.163)!important;color:#4921ab!important;border-color:rgba(179,156,240,0.525)!important}
 html.light .pk-note{color:#33322f}
-html.light .pl-fold{background:#f3f2ef}
-html.light .pl-fold[aria-expanded="false"]{background:#f8f8f7}
-html.light .pl-fold:hover{background:#f0efed}
-html.light .more-btn{background:#f4f3f1;border:1px solid rgba(217,119,87,0.4)}
+html.light .pl-fold{background:#dfddd7}
+html.light .pl-fold[aria-expanded="false"]{background:#e6e5e0}
+html.light .pl-fold:hover{background:#dddad3}
+html.light .more-btn{background:#e1dfd9;border:1px solid rgba(217,119,87,0.4)}
 html.light .more-btn span{color:#33322f}
 html.light .more-btn b{color:#a64a26}
 html.light .more-btn:hover{background:rgba(217,119,87,0.112);border-color:rgba(217,119,87,0.688)}
-html.light .pk-o{background:#fafaf9!important;border:1px solid rgba(31,30,29,0.085);box-shadow:0 1px 0 rgba(31,30,29,0.038) inset,0 2px 4px rgba(0,0,0,0.072),0 8px 18px rgba(0,0,0,0.056)!important}
+html.light .pk-o{background:#e9e7e3!important;border:1px solid rgba(31,30,29,0.085);box-shadow:0 1px 0 rgba(31,30,29,0.038) inset,0 2px 4px rgba(0,0,0,0.072),0 8px 18px rgba(0,0,0,0.056)!important}
 html.light .pk-o:hover{border-color:rgba(31,30,29,0.209);box-shadow:0 1px 0 rgba(31,30,29,0.048) inset,0 4px 8px rgba(0,0,0,0.08),0 12px 24px rgba(0,0,0,0.064)!important}
-html.light .pk-o.on{background:#f9f9f8!important;box-shadow:0 0 0 1px var(--clay),0 2px 4px rgba(0,0,0,0.072),0 8px 18px rgba(0,0,0,0.056)!important}
-html.light .ct-f td.r .copy{background:#f5f4f2}
-html.light .ct-f td.r .copy:hover{background:#f3f2ef;border-color:rgba(31,30,29,0.285)}
-html.light body::after{background:radial-gradient(130% 100% at 50% 40%,rgba(255,255,255,0.6) 55%,rgba(255,255,255,0.6) 85%,rgba(255,255,255,0.8) 100%)}
-html.light .start-note{border:1px solid rgba(217,119,87,0.625)!important;background:linear-gradient(90deg,rgba(217,119,87,0.225),rgba(255,255,255,0.82))!important;color:#a17d2b;box-shadow:inset 0 1px 0 rgba(31,30,29,0.076),0 4px 12px rgba(0,0,0,0.064)!important}
+html.light .pk-o.on{background:#e7e6e1!important;box-shadow:0 0 0 1px var(--clay),0 2px 4px rgba(0,0,0,0.072),0 8px 18px rgba(0,0,0,0.056)!important}
+html.light .ct-f td.r .copy{background:#e2e0da}
+html.light .ct-f td.r .copy:hover{background:#dfddd7;border-color:rgba(31,30,29,0.285)}
+html.light body::after{background:radial-gradient(130% 100% at 50% 40%,rgba(240,237,229,0.6) 55%,rgba(240,237,229,0.6) 85%,rgba(240,237,229,0.8) 100%)}
+html.light .start-note{border:1px solid rgba(217,119,87,0.625)!important;background:linear-gradient(90deg,rgba(217,119,87,0.225),rgba(240,237,229,0.82))!important;color:#a17d2b;box-shadow:inset 0 1px 0 rgba(31,30,29,0.076),0 4px 12px rgba(0,0,0,0.064)!important}
 html.light .start-note:hover{border-color:rgba(201,100,66,0.85)!important}
 html.light .start-note>.ic{color:#c96442!important}
 html.light .start-note-body{color:#a17d2b}
-html.light .start-note-body strong{color:#fbfbfb!important;background:#c96442}
+html.light .start-note-body strong{color:#eae9e4!important;background:#c96442}
 html.light .start-note-body b{color:#a34a29}
 html.light .start-note-actions button{border:1px solid rgba(217,119,87,0.688);color:#a17d2b;background:rgba(217,119,87,0.1)}
 html.light .start-note-actions button:hover{background:rgba(217,119,87,0.25);border-color:#c96442}
-html.light .ct,html.light .sh-card,html.light .sh-kpi>div,html.light .sh-tips li,html.light .scn>div,html.light .ct-sum,html.light fieldset.st,html.light .hp-c,html.light .undo,html.light .res-b ul:not(.why):not(.cmp2)>li,html.light .res-b .time>span,html.light .ct-items,html.light .rx>div,html.light .rx-c,html.light .pod,html.light .call,html.light .paste,html.light .v-stats>div,html.light .alt-grid>div{background:#fafaf9!important;border-color:rgba(31,30,29,0.085)!important}
+html.light .ct,html.light .sh-card,html.light .sh-kpi>div,html.light .sh-tips li,html.light .scn>div,html.light .ct-sum,html.light fieldset.st,html.light .hp-c,html.light .undo,html.light .res-b ul:not(.why):not(.cmp2)>li,html.light .res-b .time>span,html.light .ct-items,html.light .rx>div,html.light .rx-c,html.light .pod,html.light .call,html.light .paste,html.light .v-stats>div,html.light .alt-grid>div{background:#e9e7e3!important;border-color:rgba(31,30,29,0.085)!important}
 html.light .ct,html.light .sh-card,html.light .scn>div,html.light fieldset.st,html.light .hp-c,html.light .res-b ul:not(.why):not(.cmp2)>li,html.light .ct-sum,html.light .paste,html.light .v-stats>div,html.light .alt-grid>div{box-shadow:0 1px 0 rgba(31,30,29,0.038) inset,0 2px 4px rgba(0,0,0,0.072),0 8px 18px rgba(0,0,0,0.048)!important}
-html.light .ct-items,html.light .sh-kpi>div,html.light .sh-tips li{background:#f9f9f7!important}
+html.light .ct-items,html.light .sh-kpi>div,html.light .sh-tips li{background:#e7e5e1!important}
 html.light .sh-tips li{border-color:rgba(31,30,29,0.076)!important}
-html.light .route-b{background:#fafaf9;border:1px solid rgba(31,30,29,0.133);box-shadow:0 1px 0 rgba(31,30,29,0.038) inset,0 2px 4px rgba(0,0,0,0.072),0 8px 18px rgba(0,0,0,0.048)}
+html.light .route-b{background:#e9e7e3;border:1px solid rgba(31,30,29,0.133);box-shadow:0 1px 0 rgba(31,30,29,0.038) inset,0 2px 4px rgba(0,0,0,0.072),0 8px 18px rgba(0,0,0,0.048)}
 html.light .route-b:hover{border-color:rgba(201,100,66,0.6)}
-html.light .route-b[aria-pressed="true"]{background:#f9f9f8;box-shadow:0 0 0 1px var(--clay),0 8px 18px rgba(0,0,0,0.048)}
+html.light .route-b[aria-pressed="true"]{background:#e7e6e1;box-shadow:0 0 0 1px var(--clay),0 8px 18px rgba(0,0,0,0.048)}
 html.light .route-m{color:#33322f}
 html.light .k-fN,html.light .v-what[data-k=fN]{background:rgba(224,168,79,0.163)!important;color:#aa7622!important;border-color:rgba(224,168,79,0.5)!important}
 html.light .k-fJ,html.light .k-fJI,html.light .v-what[data-k=fJ],html.light .v-what[data-k=fJI]{background:rgba(122,170,224,0.163)!important;color:#2962a3!important;border-color:rgba(122,170,224,0.525)!important}
-html.light .fb2{background:#fafaf9;border:1px solid rgba(92,186,134,0.438);box-shadow:0 1px 0 rgba(31,30,29,0.038) inset,0 2px 4px rgba(0,0,0,0.072),0 8px 18px rgba(0,0,0,0.048)}
+html.light .fb2{background:#e9e7e3;border:1px solid rgba(92,186,134,0.438);box-shadow:0 1px 0 rgba(31,30,29,0.038) inset,0 2px 4px rgba(0,0,0,0.072),0 8px 18px rgba(0,0,0,0.048)}
 html.light .fb2-big span{color:#33322f}
-html.light .fb2-l>div{background:#f9f9f7;border:1px solid rgba(31,30,29,0.076)}
+html.light .fb2-l>div{background:#e7e5e1;border:1px solid rgba(31,30,29,0.076)}
 html.light .fb2 td{border-top:1px solid rgba(31,30,29,0.048)}
 @media(max-width:700px){html.light .fb2 tr{border-top:1px solid rgba(31,30,29,0.057)}}
-html.light .hero-intro>.hero-p{background:rgba(255,255,255,0.82);border:1px solid rgba(31,30,29,0.114);box-shadow:0 2px 4px rgba(0,0,0,0.072),0 8px 18px rgba(0,0,0,0.048);color:#33322f}
-html.light .hero-intro>.hero-p::before{color:#f8f8f7;background:#413f3c}
-html.light .sw{color:#33322f;background:rgba(255,255,255,0.75);border:1px solid rgba(31,30,29,0.114)}
-html.light .sw-t{background:#f3f2ef;border:1px solid rgba(31,30,29,0.19)}
+html.light .hero-intro>.hero-p{background:rgba(240,237,229,0.82);border:1px solid rgba(31,30,29,0.114);box-shadow:0 2px 4px rgba(0,0,0,0.072),0 8px 18px rgba(0,0,0,0.048);color:#33322f}
+html.light .hero-intro>.hero-p::before{color:#e6e5e0;background:#413f3c}
+html.light .sw{color:#33322f;background:rgba(240,237,229,0.75);border:1px solid rgba(31,30,29,0.114)}
+html.light .sw-t{background:#dfddd7;border:1px solid rgba(31,30,29,0.19)}
 html.light .sw-t::after{background:#54524d}
 html.light .sw input:checked+.sw-t::after{background:#151514}
 html.light .sw input:focus-visible+.sw-t{outline:2px solid #413f3c}
-html.light .route-m{background:rgba(255,255,255,0.75);border:1px solid rgba(31,30,29,0.114)}
-html.light .x-close{background:#fafaf9;border:1px solid rgba(31,30,29,0.171);box-shadow:0 2px 4px rgba(0,0,0,0.072),0 6px 14px rgba(0,0,0,0.056)}
-html.light .x-close:hover{color:#151514;background:#f9f9f8}
+html.light .route-m{background:rgba(240,237,229,0.75);border:1px solid rgba(31,30,29,0.114)}
+html.light .x-close{background:#e9e7e3;border:1px solid rgba(31,30,29,0.171);box-shadow:0 2px 4px rgba(0,0,0,0.072),0 6px 14px rgba(0,0,0,0.056)}
+html.light .x-close:hover{color:#151514;background:#e7e6e1}
 html.light #settings fieldset.st>legend:hover{color:#151514}
 html.light #settings fieldset.st>legend:focus-visible{outline:2px solid #413f3c}
 html.light body::after{background:radial-gradient(120% 95% at 50% 42%,rgba(0,0,0,0) 38%,rgba(0,0,0,0.08) 72%,rgba(0,0,0,0.147) 100%)!important}
 html.light .lot-head:focus-visible{outline:2px solid #413f3c}
+html.light body::after{background:radial-gradient(ellipse 88% 82% at 50% 45%,rgba(0,0,0,0) 48%,rgba(0,0,0,0.067) 76%,rgba(0,0,0,0.141) 100%),
+  linear-gradient(90deg,rgba(0,0,0,0.096) 0%,rgba(0,0,0,0) 15%,rgba(0,0,0,0) 85%,rgba(0,0,0,0.096) 100%),
+  linear-gradient(180deg,rgba(0,0,0,0.056) 0%,rgba(0,0,0,0) 12%,rgba(0,0,0,0) 82%,rgba(0,0,0,0.088) 100%)!important}
 /* ajustes a mano del tema claro */
-html.light body{background:#faf9f5;color:#1f1e1d}
+html.light body{background:#e6e3da;color:#1f1e1d}
 html.light body::before{opacity:.12;filter:grayscale(.35) brightness(1.1)}
 html.light body::after{background:none!important}
 html.light *{text-shadow:none!important}
@@ -1454,6 +1476,7 @@ html.light .hero h1,html.light .hero p,html.light .hero .tagline,html.light .top
 html.light .sw input:checked+.sw-t::after{background:#fff}
 html.light .sw-t{background:#e4e2da;border-color:rgba(31,30,29,.2)}
 html.light .sw input:checked+.sw-t{background:#c96442;border-color:#c96442}
+html.light input,html.light select,html.light textarea{background:#f1eee6}
 </style>
 <script>/* v105: Firefox pinta peor los efectos pesados → Modo ligero automático */try{if(/firefox/i.test(navigator.userAgent))document.documentElement.classList.add('lite');}catch(e){}</script>
 </head>
@@ -1616,7 +1639,7 @@ Contraband Freight = no</textarea><small>Una regla por línea: Nombre = tax tota
           <p id="vFastT"></p>
         </div>
         <div class="split" aria-hidden="true"><i class="s-null" id="sNull"></i><i class="s-jita" id="sJita"></i></div>
-        <div class="legend"><span><b style="background:var(--gain)"></b>Se Queda en Null <em id="lNull"></em></span><span><b style="background:var(--blue)"></b>Viaja a Jita <em id="lJita"></em></span></div>
+        <div class="legend"><span><b style="background:var(--gain)"></b><i id="lNullT">Se Queda en Null</i> <em id="lNull"></em></span><span><b style="background:var(--blue)"></b><i id="lJitaT">Viaja a Jita</i> <em id="lJita"></em></span></div>
       </div>
       <div class="v-side">
         <h3 class="sub-h v-h0" title="Lo que ganarías haciendo todo de una sola manera."><span class="ic i-scale" aria-hidden="true"></span>Comparación con Otros Planes</h3>
@@ -1651,7 +1674,7 @@ Contraband Freight = no</textarea><small>Una regla por línea: Nombre = tax tota
     <div id="more" class="deep" hidden>
   <!-- v110: Contratos y Envío (antes dos secciones) -->
   <details class="panel" id="pCtr" hidden>
-    <summary><h2><span class="ic i-list" aria-hidden="true"></span>Contratos y Envío</h2><span class="sum" id="ctrSum"></span></summary>
+    <summary><h2><span class="ic i-list" aria-hidden="true"></span><span id="ctrTitle">Contratos y Envío</span></h2><span class="sum" id="ctrSum"></span></summary>
     <div class="ce">
       <div class="ce-l">
         <div class="ce-h"><h3 class="sub-h"><span class="ic i-list" aria-hidden="true"></span>Tus Contratos</h3>
@@ -1760,13 +1783,13 @@ Contraband Freight = no</textarea><small>Una regla por línea: Nombre = tax tota
 <button type="button" class="totop" id="toTop" aria-label="Volver arriba" title="Volver arriba (Inicio)" hidden><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 14l6-6 6 6"/></svg></button>
 <footer class="foot">
   <div class="foot-sec"><span class="ic i-lock" aria-hidden="true"></span><div><b>Nada se guarda.</b> Al cerrar o recargar la pestaña se borra todo, incluidos tus ajustes. La app solo se conecta a los servidores oficiales de Fenris Creations.</div></div>
-  <div class="foot-by">Creado por <b>Fiko McGivert</b> · Vanguardia DR · SIGMA GRINDSET · <span class="ver">v1.0.8</span></div>
+  <div class="foot-by">Creado por <b>Fiko McGivert</b> · Vanguardia DR · SIGMA GRINDSET · <span class="ver">v1.0.9</span></div>
 </footer>
 
 <script>
 'use strict';
 /* ============================================================
-   Plan y Gestor de Ventas v1.0.8 — SIGMA GRINDSET / Vanguardia DR
+   Plan y Gestor de Ventas v1.0.9 — SIGMA GRINDSET / Vanguardia DR
    Flujo:  pegado → ítems → carga (ESI: precios, volúmenes, historial) → verificación → plan → vista
      1. Pegado      parsePaste(): parser posicional de columnas de EVE (Name · Quantity · … · Volume · Est. Price).
      2. Carga       esiItems(): trae todo lo que falta; mientras carga, refresh() NO pinta (S.loading).
@@ -1917,6 +1940,7 @@ const nullBaseTxt=name=>isModule(name)?'Jita Buy'+(marginFor(name)>0?' +'+pct(ma
 const jitaLabel=name=>C.ice.on&&isIce(name)?(C.ice.jitaMode==='split'?'Orden en Jita (Split)':'Orden en Jita (Undercut)'):'Orden en Jita';
 const trips=v=>v>0&&C.maxVol>0?Math.ceil(v/C.maxVol):0;
 // v1.0.7: "Contar envío" (C.shipOn). Apagado = lo llevas tú: el courier no se descuenta ni se arman contratos de envío.
+const SH=()=>C.shipOn; // v1.0.9: con el envío apagado los ítems se tratan como si ya estuvieran en el destino
 const courierRaw=(v,c)=>trips(v)*C.base+C.perM3*v+C.collPct*(c||0);
 const courierCost=(v,c)=>C.shipOn?courierRaw(v,c):0;
 const courierShare=(v,c,V)=>C.shipOn?C.perM3*v+C.collPct*(c||0)+(V>0?trips(V)*C.base*v/V:0):0;
@@ -2476,9 +2500,9 @@ function paintGuide(ol,r){
   const altLab=g.alt?(g.alt==='null'?nullLabel(o.name):g.alt==='jOrd'?jitaLabel(o.name):OPTS.find(x=>x[0]===g.alt)[1]):null;
   if(g.k==='fN'||g.k==='fJ'||g.k==='fJI'){ // modo Jita → HY-RWO
     const isN=g.k==='fN';
-    if(g.k==='fJI'){step('Qué Hacer','Véndelo en Jita 4-4 directamente a las buy orders. No necesitas courier.');
+    if(g.k==='fJI'){step('Qué Hacer','Véndelo en Jita 4-4 directamente a las buy orders.');
       step('Precio Medio de Venta','Aproximadamente '+fmtP(r.instAvg)+' por unidad, recorriendo las buy orders para tu cantidad.');return;}
-    step('Qué Hacer',isN?'Mándalo de Jita a HY-RWO con SIGMA Freight y publica una sell order allí. El envío ya está restado.':'Publica una sell order en Jita 4-4. No necesitas courier.');
+    step('Qué Hacer',isN?(SH()?'Mándalo de Jita a HY-RWO con SIGMA Freight y publica una sell order allí. El envío ya está restado.':'Publica una sell order en HY-RWO.'):'Publica una sell order en Jita 4-4.');
     step('Cómo Listarlo',copyBtn(g.unit,fmtP(g.unit)),' por unidad (haz clic para copiar). Publica '+fmtQ(r.q)+' unidades; valor de la orden: '+fmt(g.unit*r.q)+'.'+(isN?' Es Jita Sell +'+pct(C.impM)+'% neto, ya con Sales Tax, Broker y SCC.':''));
     step('Cuándo Revisar',cadence(g.days,isN));
     if(g.floor!=null&&g.unit>g.floor)step('Precio Mínimo Recomendado','Evita bajar de ',copyBtn(g.floor,fmtP(g.floor)),' por unidad. Más abajo, '+altLab+' deja más ISK.');
@@ -2486,7 +2510,7 @@ function paintGuide(ol,r){
   }
   if(g.k==='null'||g.k==='jOrd'){
     const isN=g.k==='null';
-    step('Qué Hacer',isN?'Publica una sell order en tu estructura de Nullsec. No necesitas courier a Jita.':'Manda el ítem a Jita 4-4 mediante courier y crea una sell order. El envío está incluido en la comparación.');
+    step('Qué Hacer',isN?'Publica una sell order en tu estructura de Nullsec.'+(SH()?' No necesitas courier a Jita.':''):(SH()?'Manda el ítem a Jita 4-4 mediante courier y crea una sell order. El envío está incluido en la comparación.':'Publica una sell order en Jita 4-4.'));
     step('Cómo Listarlo',copyBtn(g.unit,fmtP(g.unit)),' por unidad (haz clic para copiar). Publica '+fmtQ(r.q)+' unidades; valor de la orden: '+fmt(g.unit*r.q)+'. Duración sugerida: 3 meses'+
       (isN&&o.nullSeen?' · Undercut de '+pct(C.under)+'% al precio que ves':'')+
       (!isN&&C.ice.on&&isIce(o.name)?(C.ice.jitaMode==='split'?' · precio Split':' · Undercut de '+pct(C.under)+'% a Jita Sell'):'')+
@@ -2500,7 +2524,7 @@ function paintGuide(ol,r){
     }else if(altLab)step('Cuándo Cancelar',(g.days!=null?'Si pasan ~'+Math.max(1,Math.round(g.days*1.5))+' días sin vender, ':'Si no se vende, ')+'cancela y '+ACT[g.alt]+'.');
     step('Costo de un Relist','Aproximadamente '+fmt(g.relistFee)+' por modificar el precio de esta orden, según tu configuración. Antes de hacer undercut, comprueba que el cambio compense.');
   }else if(g.k==='jInst'){
-    step('Qué Hacer','Envíalo a Jita 4-4 y vende directamente a las buy orders disponibles, sin esperar a que se complete una sell order.');
+    step('Qué Hacer',(SH()?'Envíalo a Jita 4-4 y vende':'Vende en Jita 4-4')+' directamente a las buy orders disponibles, sin esperar a que se complete una sell order.');
     step('Precio Medio de Venta','Aproximadamente '+fmtP(r.instAvg)+' por unidad. Se calcula recorriendo las buy orders disponibles para la cantidad que tienes.');
     if(r.net.jOrd!=null)step('Por Qué Venta Rápida','La sell order dejaría '+fmt(r.net.jOrd)+'. La diferencia no supera tu umbral configurado para esperar una venta.');
   }else if(g.k==='disc'){
@@ -2514,7 +2538,7 @@ function paintGuide(ol,r){
     step('Cómo Crear el Contrato','Consulta «Tus Contratos» y copia los datos indicados. Verifica que el Buyback acepte el ítem antes de enviarlo.');
   }else{
     const toJ=g.k==='rJita';
-    step('Qué Hacer','Reprocesa el ítem en '+refName()+'. Después '+(toJ?'envía los materiales resultantes a Jita para venderlos con órdenes.':'vende los materiales resultantes con órdenes en tu estructura de Nullsec.'));
+    step('Qué Hacer','Reprocesa el ítem en '+refName()+'. Después '+(toJ?(SH()?'envía los materiales resultantes a Jita para venderlos con órdenes.':'vende los materiales resultantes en Jita con órdenes.'):'vende los materiales resultantes con órdenes en tu estructura de Nullsec.'));
     step('Precios de los Productos','Consulta «Precios para Listar» y el desglose de reproceso. Pon una sell order por cada material; duración sugerida: 3 meses.');
     if(g.tol!=null)step('Margen de Seguridad',g.tol>0?'Los productos pueden perder hasta '+pct(g.tol)+'% de valor antes de que la alternativa '+altLab+' iguale el resultado estimado.':'La diferencia es pequeña. Si bajan los precios de los materiales, vuelve a comparar con '+altLab+'.');
   }
@@ -2717,16 +2741,16 @@ function paintLot(r){
     const hd=el('tr','pr-h');['Dónde','Precio por unidad','Cómo se calcula','Te queda /u'].forEach((t,i)=>hd.append(el('th',i===1||i===3?'r':'',t)));tb.append(hd);
     const nullTxt=o.nullSeen?'Undercut de '+pct(C.under)+'% al precio que ves':(C.ice.on&&isIce(o.name)?iceNullTxt()+' (Jita Buy '+jb+')':nullBaseTxt(o.name)+' (Jita Buy '+jb+')');
     if(S.flip){
-      priceRow(tb,'Vender en '+sys+' (importado)',r.np,'Jita Sell ('+js+') +'+pct(C.impM)+'% neto. Paga Sales Tax, Broker y SCC; resta su parte del envío.',nu('fN'),r.best==='fN');
-      priceRow(tb,'Orden de venta en Jita',r.jl,'Jita Sell ('+js+')'+qdN+'. Sin envío.',nu('fJ'),r.best==='fJ');
-      priceRow(tb,'Venta rápida en Jita',r.instAvg!=null?r.instAvg:(a&&a.buy!=null?a.buy:null),'Jita Buy. Sin envío.',nu('fJI'),r.best==='fJI');
+      priceRow(tb,'Vender en '+sys+' (importado)',r.np,'Jita Sell ('+js+') +'+pct(C.impM)+'% neto. Paga Sales Tax, Broker y SCC'+(SH()?'; resta su parte del envío.':'.'),nu('fN'),r.best==='fN');
+      priceRow(tb,'Orden de venta en Jita',r.jl,'Jita Sell ('+js+')'+qdN+'.',nu('fJ'),r.best==='fJ');
+      priceRow(tb,'Venta rápida en Jita',r.instAvg!=null?r.instAvg:(a&&a.buy!=null?a.buy:null),'Jita Buy.',nu('fJI'),r.best==='fJI');
       const n=el('tr');const nt=el('td','muted pr-foot');nt.colSpan=4;nt.textContent='Clic en un precio para copiarlo. En el juego se lista por unidad: pon este precio y la cantidad ('+fmtQ(r.q)+').';n.append(nt);tb.append(n);
     }else{
-    priceRow(tb,'Vender en '+sys+' (Keepstar)',r.np,nullTxt+qdN+'. Paga Sales Tax, Broker y SCC; sin envío.',nu('null'),r.best==='null');
-    if(C.bb.on)priceRow(tb,'Buyback de la alianza',r.bbUnit,r.bbUnit!=null?pct(1-r.bbTax)+'% de Jita '+({buy:'Buy',split:'Split',sell:'Sell'})[C.bb.base]+' (tax '+pct(r.bbTax)+'%'+(C.bb.special[o.name.toLowerCase()]!=null?', especial de este ítem':'')+'). Sin Sales Tax ni envío.':(r.hint.bb||''),nu('bb'),r.best==='bb');
-    if(C.disc.on)priceRow(tb,'Venta a jugador',r.discUnit,pct(C.disc.pct)+'% de Jita '+(C.disc.base==='split'?'Split':'Buy')+'. Sin taxes ni envío.',nu('disc'),r.best==='disc');
-    priceRow(tb,'Orden de venta en Jita',r.jl,(C.ice.on&&isIce(o.name)?(C.ice.jitaMode==='split'?'Split':'Jita Sell −'+pct(C.under)+'%'):(o.refMan!=null?'Tu precio':'Jita Sell'))+' ('+js+')'+qdN+'. Resta envío, Sales Tax y Broker.',nu('jOrd'),r.best==='jOrd');
-    priceRow(tb,'Venta rápida en Jita',r.instAvg!=null?r.instAvg:(a&&a.buy!=null?a.buy:null),'Jita Buy'+(r.instAvg!=null&&a&&r.instAvg<a.buy*.995?' (promedio al vender todo)':'')+'. Resta envío y Sales Tax.',nu('jInst'),r.best==='jInst');
+    priceRow(tb,'Vender en '+sys+' (Keepstar)',r.np,nullTxt+qdN+'. Paga Sales Tax, Broker y SCC.',nu('null'),r.best==='null');
+    if(C.bb.on)priceRow(tb,'Buyback de la alianza',r.bbUnit,r.bbUnit!=null?pct(1-r.bbTax)+'% de Jita '+({buy:'Buy',split:'Split',sell:'Sell'})[C.bb.base]+' (tax '+pct(r.bbTax)+'%'+(C.bb.special[o.name.toLowerCase()]!=null?', especial de este ítem':'')+')'+(SH()?'. Sin Sales Tax ni envío.':'. Sin Sales Tax.'):(r.hint.bb||''),nu('bb'),r.best==='bb');
+    if(C.disc.on)priceRow(tb,'Venta a jugador',r.discUnit,pct(C.disc.pct)+'% de Jita '+(C.disc.base==='split'?'Split':'Buy')+(SH()?'. Sin taxes ni envío.':'. Sin taxes.'),nu('disc'),r.best==='disc');
+    priceRow(tb,'Orden de venta en Jita',r.jl,(C.ice.on&&isIce(o.name)?(C.ice.jitaMode==='split'?'Split':'Jita Sell −'+pct(C.under)+'%'):(o.refMan!=null?'Tu precio':'Jita Sell'))+' ('+js+')'+qdN+(SH()?'. Resta envío, Sales Tax y Broker.':'. Resta Sales Tax y Broker.'),nu('jOrd'),r.best==='jOrd');
+    priceRow(tb,'Venta rápida en Jita',r.instAvg!=null?r.instAvg:(a&&a.buy!=null?a.buy:null),'Jita Buy'+(r.instAvg!=null&&a&&r.instAvg<a.buy*.995?' (promedio al vender todo)':'')+(SH()?'. Resta envío y Sales Tax.':'. Resta Sales Tax.'),nu('jInst'),r.best==='jInst');
     const n=el('tr');const nt=el('td','muted pr-foot');nt.colSpan=4;nt.textContent='Clic en un precio para copiarlo. En el juego se lista por unidad: pon este precio y la cantidad ('+fmtQ(r.q)+').';n.append(nt);tb.append(n);
   }}
   if(r.mins&&r.mins.length){
@@ -2759,15 +2783,15 @@ function recoFor(k,g){
   // No prometemos ventas instantáneas ni usamos «ganancia» como beneficio de fabricación.
   const many=g.length>1,items=many?'estos '+g.length+' ítems':'este ítem';
   const T={
-    fN:['Importar a HY-RWO:','Manda '+items+' de Jita a HY-RWO con SIGMA Freight y publica órdenes de venta allí a Jita Sell +'+pct(C.impM)+'% neto. El cálculo ya resta el envío, Sales Tax, Broker y SCC.'],
-    fJ:['Sell order en Jita:','Publica '+items+' en Jita 4-4. Sin courier.'],
-    fJI:['Venta rápida en Jita:','Vende '+items+' a las buy orders de Jita. Sin courier.'],
-    null:['Orden de venta en Nullsec:','Publica '+items+' en '+sys+' usando los precios de la tabla. La comparación ya descuenta Sales Tax, Broker'+(C.relistOn?' y Relists':'')+'. No hace falta courier a Jita.'],
+    fN:[SH()?'Importar a HY-RWO:':'Vender en HY-RWO:',(SH()?'Manda '+items+' de Jita a HY-RWO con SIGMA Freight y publica':'Publica '+items+' en HY-RWO con')+' órdenes de venta'+(SH()?' allí':'')+' a Jita Sell +'+pct(C.impM)+'% neto. El cálculo ya resta '+(SH()?'el envío, ':'')+'Sales Tax, Broker y SCC.'],
+    fJ:['Sell order en Jita:','Publica '+items+' en Jita 4-4.'],
+    fJI:['Venta rápida en Jita:','Vende '+items+' a las buy orders de Jita.'],
+    null:['Orden de venta en Nullsec:','Publica '+items+' en '+sys+' usando los precios de la tabla. La comparación ya descuenta Sales Tax, Broker'+(C.relistOn?' y Relists':'')+(SH()?'. No hace falta courier a Jita.':'.')],
     bb:['Buyback de la alianza:','Agrupa '+items+' en un contrato Item Exchange. El valor estimado ya descuenta el tax configurado del programa; verifica la aceptación y la información del contrato.'],
-    jOrd:['Sell order en Jita:','Envía '+items+' a Jita 4-4 y publica órdenes de venta. El cálculo incluye impuestos, Broker y su parte del courier.'],
-    jInst:['Venta rápida en Jita:','Envía '+items+' a Jita 4-4 y véndelos a las buy orders disponibles. La estimación considera el volumen de compra y los costes de envío y Sales Tax.'],
+    jOrd:['Sell order en Jita:',SH()?'Envía '+items+' a Jita 4-4 y publica órdenes de venta. El cálculo incluye impuestos, Broker y su parte del courier.':'Publica '+items+' en Jita 4-4 con órdenes de venta. El cálculo incluye impuestos y Broker.'],
+    jInst:['Venta rápida en Jita:',SH()?'Envía '+items+' a Jita 4-4 y véndelos a las buy orders disponibles. La estimación considera el volumen de compra y los costes de envío y Sales Tax.':'Vende '+items+' a las buy orders de Jita. La estimación considera el volumen de compra y el Sales Tax.'],
     rNull:['Reprocesar y vender en Nullsec:','Reprocesa '+(ice?'el hielo':ore?'el ore':items)+' en '+refName()+' y publica los materiales resultantes en '+sys+'. El rendimiento y los gastos están incorporados en el cálculo.'],
-    rJita:['Reprocesar y enviar a Jita:','Reprocesa '+(ice?'el hielo':ore?'el ore':items)+' en '+refName()+', envía los materiales resultantes a Jita y véndelos allí. Se incluyen rendimiento, tasas y courier.'],
+    rJita:[SH()?'Reprocesar y enviar a Jita:':'Reprocesar y vender en Jita:','Reprocesa '+(ice?'el hielo':ore?'el ore':items)+' en '+refName()+(SH()?', envía los materiales resultantes a Jita y véndelos allí.':' y vende los materiales resultantes en Jita.')+' Se incluyen rendimiento, tasas'+(SH()?' y courier':'')+'.'],
     disc:['Oferta a otros jugadores:','Ofrece '+items+' por Discord con su tasación de Janice. Depende de encontrar comprador; úsala como alternativa a las órdenes de mercado.']};
   const t=T[k];if(!t)return null;
   const fast=g.filter(r=>r.fast);
@@ -2851,7 +2875,7 @@ function paintVerdict(P){
   $('vCap').textContent=none?'Esperando precios de Jita…':'Recibes netos luego de deducciones ('+ded.join(', ')+')';
   // cuál es el plan, en una etiqueta: la acción que más aporta (y cuántas más hay)
   {const W=k=>{const g=P.rows.filter(r=>r.best===k),kind=g.every(r=>isIce(r.o.name))?' Hielo':g.every(r=>resolveOre(r.o.name))?' Ore':'';
-     return({fN:'Llevar a HY-RWO',fJ:'Vender en Jita'+kind,fJI:'Vender en Jita'+kind+' al Instante',null:'Vender en null',rNull:'Vender en null reprocesado',jOrd:'Vender en Jita'+kind,jInst:'Vender en Jita'+kind+' al Instante',rJita:'Vender en Jita Reprocesado',bb:'Vender al Buyback',disc:'Vender a Jugador'})[k];};
+     return({fN:PLAN_L.fN,fJ:'Vender en Jita'+kind,fJI:'Vender en Jita'+kind+' al Instante',null:'Vender en null',rNull:'Vender en null reprocesado',jOrd:'Vender en Jita'+kind,jInst:'Vender en Jita'+kind+' al Instante',rJita:'Vender en Jita Reprocesado',bb:'Vender al Buyback',disc:'Vender a Jugador'})[k];};
    const sums={};P.rows.forEach(r=>{if(r.best)sums[r.best]=(sums[r.best]||0)+r.g[r.best]-r.prod;});
    const ks=Object.keys(sums).sort((a,b)=>sums[b]-sums[a]);
    $('vWhat').dataset.k=$('resWhat').dataset.k=ks[0]||'';
@@ -2869,7 +2893,7 @@ function paintVerdict(P){
   $('vsN').textContent=String(S.items.length);$('vsV').textContent=fmtV(Math.round(vTot*10)/10);
   {const u=P.rows.reduce((a,r)=>a+(r.q||0),0),n=vTot>0?trips(vTot):0;
    $('vsNs').textContent=fmtQ(u)+(u===1?' unidad':' unidades');
-   $('vsVs').textContent=n?'Si lo envías todo: '+n+(n>1?' contratos':' contrato'):'';}
+   $('vsVs').textContent=n&&SH()?'Si lo envías todo: '+n+(n>1?' contratos':' contrato'):'';}
   // La Más Rápida: llevar todo a Jita sin reprocesar (orden). Cuánto deja vs la más lucrativa y cuánto tarda.
   {const bx=$('vFast'),best=bestLabel();
    const fastIsBest=P.rows.length&&P.rows.every(r=>!r.best||SHIPS[r.best]&&r.best!=='rJita');
@@ -2878,7 +2902,7 @@ function paintVerdict(P){
      const dJ=Math.max(0,...P.rows.map(r=>{const h=r.o.jita&&r.o.jita.hist;return h&&h.daily>0?r.q/h.daily:0;}));
      const dN=P.rows.some(r=>isIce(r.o.name))&&C.ice.on?C.ice.nullDays:C.nullDays,d=P.allJita-P.best;
      $('vFastW').textContent='Todo a Jita sin reprocesar';$('vFastV').textContent=fmt(P.allJita);$('vFastV').className='fb-v num '+sgn(P.allJita);
-     $('vFastT').textContent=(d<0?'Deja '+fmt(-d)+' menos que '+best:'Deja '+fmt(d)+' más que '+best)+', con el envío ya restado. '+
+     $('vFastT').textContent=(d<0?'Deja '+fmt(-d)+' menos que '+best:'Deja '+fmt(d)+' más que '+best)+(SH()?', con el envío ya restado. ':'. ')+
        'En Jita se vende en '+(dJ>0?(dJ<=1?'un día o menos':'unos '+Math.ceil(dJ)+' días'):'pocos días')+' (por lo que mueve The Forge); en '+
        ((C.ref.name||'Null').split(' - ')[0].trim()||'Null')+' esta cantidad puede tardar '+dN+' días o más.';}}{// lo que pagas en taxes, broker y relists con tu plan (según Ajustes): valor de lista × cada %
    let Gn=0,Gj=0,Gi=0;
@@ -2932,7 +2956,7 @@ function paintVerdict(P){
     vis.forEach(r=>{
       const u=unitFor(r,k),qdTxt=r.qd>=.0001&&(k==='null'||k==='jOrd')?'Con −'+pctQ(r.qd)+'% por cantidad':null;
       const fT=r.fast?'Por rapidez: '+(r.fast.from==='disc'?'a un jugador':'en Null')+' ganarías '+fmt(Math.max(0,r.fast.loss))+' más, pero tarda más.':null;
-      prow('',r.o.name,[qdTxt,fT].filter(Boolean).join(' · ')||null,r.q,u.p,u.l,r.g[k]-r.prod,SHIPS[k]?'antes del envío':null);
+      prow('',r.o.name,[qdTxt,fT].filter(Boolean).join(' · ')||null,r.q,u.p,u.l,r.g[k]-r.prod,SHIPS[k]&&SH()?'antes del envío':null);
       if((k==='rNull'||k==='rJita')&&r.mins){
         const pr=x=>k==='rNull'?x.np:x.p,rt=k==='rNull'?rateNull():rateJita();
         const keyMin=x=>sort.k==='n'?x.m.toLowerCase():sort.k==='q'?x.n:
@@ -2961,7 +2985,7 @@ function paintVerdict(P){
     const lab=PLAN_L[k]||l,gh=el('div','pl-g'),id=vTab+':'+k;
     gh.append(el('span','pill k-'+k+' '+(k==='disc'?'p-disc':SHIPS[k]?'p-jita':'p-null'),lab));
     const groupGross=g.reduce((a,r)=>a+r.g[k]-r.prod,0);
-    const brief=el('span','pl-brief');brief.append(el('span',null,g.length+(g.length===1?' ítem':' ítems')+' · '),el('b',null,fmt(groupGross)),el('span',null,SHIPS[k]?'antes del envío':'netos'));gh.append(brief);
+    const brief=el('span','pl-brief');brief.append(el('span',null,g.length+(g.length===1?' ítem':' ítems')+' · '),el('b',null,fmt(groupGross)),el('span',null,SHIPS[k]&&SH()?'antes del envío':'netos'));gh.append(brief);
     const rc=recoFor(k,g);if(rc){const r=el('p','reco');r.append(el('span','ic i-bulb'),el('b',null,rc.t),document.createTextNode(' '+rc.d));gh.append(r);}
     // Copia siempre el grupo COMPLETO, aunque esté filtrado o contraído.
     const cb=copyBtn(g.map(r=>r.o.name+'\t'+Math.round(r.q)).join('\n'),'Copiar '+g.length+(g.length>1?' ítems':' ítem'));cb.classList.add('cp-all');gh.append(cb);
@@ -3008,10 +3032,10 @@ function paintVerdict(P){
     const pP=pb==='split'&&r.raw&&r.raw.sell&&r.raw.buy?(r.raw.sell.prod+r.raw.buy.prod)/2:raw?raw.prod:null;
     const pO=pb==='split'&&r.raw&&r.raw.sell&&r.raw.buy?(r.raw.sell.ore+r.raw.buy.ore)/2:raw?raw.ore:null;
     const sc=[
-      ['Si lo envías a Jita',[[prodW+' a Jita (orden, con envío)',n.rJita],[rawW+' a Jita ('+kJ+', con envío)',nJ]],dJ],
+      ['Si lo envías a Jita',[[prodW+' a Jita (orden'+(SH()?', con envío':'')+')',n.rJita],[rawW+' a Jita ('+kJ+(SH()?', con envío':'')+')',nJ]],dJ],
       ['Si lo vendes en '+sys+' (Null)',[[prodW+' en '+sys+' a '+pct(C.nullNonMod)+'% de Jita Buy',n.rNull],[rawW+' en '+sys+(ice?' a '+iceNullTxt():' a '+nullBaseTxt(r.o.name)),n.null]],dN],
       ['Si se lo vendes a un jugador',[[prodW+' a '+BN[pb]+(k!==1?' × '+pct(k)+'%':''),pP!=null?pP*k:null],[rawW+' a '+BN[pb]+(k!==1?' × '+pct(k)+'%':''),pO!=null?pO*k:null]],dP2,
-        alt[1]!=null?'A '+alt[0]+': '+(alt[1]>=0?'ganas +':'pierdes −')+fmt(Math.abs(alt[1]*k))+'. Sin taxes ni envío.':'Sin Taxes ni envío.']];
+        alt[1]!=null?'A '+alt[0]+': '+(alt[1]>=0?'ganas +':'pierdes −')+fmt(Math.abs(alt[1]*k))+(SH()?'. Sin taxes ni envío.':'. Sin taxes.'):'Sin Taxes ni envío.']];
     const y=r.rep.diff>0,li=el('li','rep-it');
     const dest=['en Jita','en '+sys,'a un jugador'];
     const yes=sc.map((s,i)=>s[2]!=null&&s[2]>0?dest[i]:null).filter(Boolean),no=sc.map((s,i)=>s[2]!=null&&s[2]<=0?dest[i]:null).filter(Boolean);
@@ -3029,7 +3053,7 @@ function paintVerdict(P){
       const iceJ=C.ice.on&&ice?(C.ice.jitaMode==='split'?'Split':'Jita Sell −'+pct(C.under)+'%'):'Jita Sell';
       const prJ=C.ice.on&&r.mins&&r.mins.some(x=>isIce(x.m))?'Jita Sell −'+pct(C.under)+'%':'Jita Sell';
       const UNDER=[[prJ,iceJ],[pct(C.nullNonMod)+'% de Jita Buy',ice&&C.ice.on?iceNullTxt():nullBaseTxt(r.o.name)],[bp,bp]][idx];
-      const SUB=['Orden de venta en Jita, con el envío restado.','Orden de venta en '+sys+', sin envío.','Sin Taxes ni envío.'+(alt[1]!=null?' A '+alt[0]+' la diferencia sería '+(alt[1]>=0?'+':'−')+fmt(Math.abs(alt[1]*C.disc.pct))+'.':'')][idx];
+      const SUB=[SH()?'Orden de venta en Jita, con el envío restado.':'Orden de venta en Jita.','Orden de venta en '+sys+(SH()?', sin envío.':'.'),SH()?'Sin Taxes ni envío.':'Sin Taxes.'+(alt[1]!=null?' A '+alt[0]+' la diferencia sería '+(alt[1]>=0?'+':'−')+fmt(Math.abs(alt[1]*C.disc.pct))+'.':'')][idx];
       c0.append(el('small',null,SUB));
       const num=(x,u)=>{const s2=el('span','rt-n num',x==null?'—':fmt(x));s2.append(el('small','rt-u',u));return s2;};
       row.append(c0,num(lines[0][1],UNDER[0]),num(lines[1][1],UNDER[1]),el('span','rt-d num '+s,v==null?'—':(v>0?'Ganas +':'Pierdes −')+fmt(Math.abs(v))));box.append(row);});
@@ -3059,9 +3083,9 @@ function paintVerdict(P){
   $('aNull').textContent=fmt(P.allNull);$('aNull').className=sgn(P.allNull);delta('aNullD',coverage.null===totalRows?P.allNull:null);partial('aNullPart','null');
   $('aNullS').textContent=[ice.length?names(ice)+' '+iN+'.':'',rest.length?names(rest)+' '+mN+'.':''].filter(Boolean).join(' ');
   $('aJita').textContent=fmt(P.allJita);$('aJita').className=sgn(P.allJita);delta('aJitaD',coverage.jita===totalRows?P.allJita:null);partial('aJitaPart','jita');
-  $('aJitaS').textContent=[ice.length?names(ice)+' '+iJ+'.':'',rest.length?names(rest)+' en orden a Jita Sell.':''].filter(Boolean).join(' ')+' Envío incluido.';
+  $('aJitaS').textContent=[ice.length?names(ice)+' '+iJ+'.':'',rest.length?names(rest)+' en orden a Jita Sell.':''].filter(Boolean).join(' ')+(SH()?' Envío incluido.':'');
   $('aBB').textContent=C.bb.on?fmt(P.allBB):'Apagado';$('aBB').className=sgn(P.allBB);delta('aBBD',C.bb.on&&coverage.bb===totalRows?P.allBB:null);partial('aBBPart','bb');
-  $('aBBs').textContent=C.bb.on?names(S.items)+' por contrato a Jita '+({buy:'Buy',split:'Split',sell:'Sell'})[C.bb.base]+' −'+pct(C.bb.tax)+'% (sin envío ni Sales Tax).'+(P.nBBno?' '+P.nBBno+(P.nBBno>1?' ítems no aceptados.':' ítem no aceptado.'):''):'Actívalo en Ajustes.';
+  $('aBBs').textContent=C.bb.on?names(S.items)+' por contrato a Jita '+({buy:'Buy',split:'Split',sell:'Sell'})[C.bb.base]+' −'+pct(C.bb.tax)+'%'+(SH()?' (sin envío ni Sales Tax).':' (sin Sales Tax).')+(P.nBBno?' '+P.nBBno+(P.nBBno>1?' ítems no aceptados.':' ítem no aceptado.'):''):'Actívalo en Ajustes.';
   // courier del plan
   const sh=P.rows.filter(r=>r.best&&SHIPS[r.best]);
   // llevar a Jita: lo que deja lo que viaja, ya menos el envío; el coste va abajo
@@ -3076,9 +3100,11 @@ function paintVerdict(P){
   else $('aCourD').textContent='';
   $('aCourD').hidden=!(P.Vs>0);
   $('vNote').hidden=true;
+  $('aCourT').parentNode.hidden=!SH();$('bMore').querySelector('span').textContent=SH()?'Consulta contratos y envío, reproceso y venta a jugadores.':'Consulta contratos, reproceso y venta a jugadores.'; // sin envío no hay bloque de envío
+  $('lJitaT').textContent=SH()?'Viaja a Jita':'Se vende en Jita';$('lNullT').textContent=SH()?'Se Queda en Null':'Se vende en Null';
   // v1.0.5: textos del modo Jita → HY-RWO
   $('aCourT').textContent='Envío a '+DEST();$('aNullT').textContent=S.flip?'Todo a HY-RWO':'Todo en Null';$('aJitaT').textContent=S.flip?'Todo en Jita':'Todo a Jita';$('aBBBox').hidden=S.flip;
-  if(S.flip){$('aNullS').textContent='Tu lote a Jita Sell +'+pct(C.impM)+'% neto en HY-RWO. Envío incluido.';$('aJitaS').textContent='Tu lote en orden a Jita Sell. Sin envío.';
+  if(S.flip){$('aNullS').textContent='Tu lote a Jita Sell +'+pct(C.impM)+'% neto en HY-RWO.'+(SH()?' Envío incluido.':'');$('aJitaS').textContent='Tu lote en orden a Jita Sell.';
     if(P.Vs>0)$('aCourS').textContent=$('aCourS').textContent.replace(/^Llevar a Jita:/,'Llevar a HY-RWO:');else $('aCourS').textContent='Tu plan no envía nada a HY-RWO.';}
   // contrato del buyback para los ítems que conviene venderle
   const box=$('bbBox');box.hidden=true; // ahora en "Tus Contratos"
@@ -3146,6 +3172,7 @@ $('pCtr').addEventListener('keydown',e=>{if(e.target.closest('input,textarea,sel
  z.addEventListener('pointercancel',()=>{x0=null;},{passive:true});}
 function paintContracts(P){
   const sec=$('pCtr');sec.hidden=!S.items.length;
+  $('ctrTitle').textContent=SH()?'Contratos y Envío':'Contratos';$('shipBox').hidden=!SH();sec.classList.toggle('no-ship',!SH());
   const cs=packCouriers(P),dr=P.rows.filter(r=>r.best==='disc');lastCs=cs;
   const nC=(P.toBB.length?1:0)+cs.length+(dr.length?1:0),shipR=cs.reduce((a,k)=>a+k.reward,0);
   {const sm=$('ctrSum');sm.textContent=nC?nC+(nC>1?' contratos':' contrato'):'Sin contratos';if(cs.length)sm.append(el('span','sm-hide',' · envío −'+fmt(shipR)));}
@@ -3247,7 +3274,7 @@ function paintShip(P,cs){
 }
 function paintCourier(P){
   const w=$('fScnWrap');
-  const anyOre=!S.flip&&P.rows.some(r=>r.g.rJita!=null);w.hidden=!anyOre||!$('pCtr').open;
+  const anyOre=!S.flip&&SH()&&P.rows.some(r=>r.g.rJita!=null);w.hidden=!anyOre||!$('pCtr').open;
   if(!w.hidden)paintScenarios(P);
 }
 
@@ -3374,14 +3401,14 @@ function paintRefCmp(r,q,nets){
       row('− Broker de la estructura ('+pct(C.brokerNull)+'%)','−'+fmt(sh(A.bk)),'−'+fmt(sh(B.bk)));
       row('− SCC ('+pct(C.scc)+'%)','−'+fmt(sc(A.bk)),'−'+fmt(sc(B.bk)));}
     if(C.relistOn&&C.relists>0)row('− Relists','−'+fmt(A.rl),'−'+fmt(B.rl));
-    if(hasShip)row('− Envío a Jita','−'+fmt(A.ship),'−'+fmt(B.ship));
+    if(hasShip&&SH())row('− Envío a Jita','−'+fmt(A.ship),'−'+fmt(B.ship));
     const tr=el('tr','net'),w=B.net>A.net;tr.append(el('td',null,'Te queda'),el('td',w?'':'win',fmt(A.net)),el('td',w?'win':'',fmt(B.net)));t.append(tr);
     d.append(t);const dif=B.net-A.net;
     d.append(el('p','rx-v',(dif>0?'Aquí conviene Refinado: deja '+fmt(dif)+' más.':'Aquí conviene Sin Refinar: deja '+fmt(-dif)+' más.')));
     box.append(d);};
   const iceN=isIce(r.key)&&C.ice.on;
   card('En '+sys+' (Null)',(iceN?iceNullTxt():nullBaseTxt(r.key)),pct(C.nullNonMod)+'% de Jita Buy',nNo,nRe,false,'vendes en '+sys);
-  card('En Jita (orden de venta)',(iceN&&C.ice.jitaMode==='split'?'Split':'Jita Sell'+(iceN?' −'+pct(C.under)+'%':'')),'Jita Sell'+(P.some(x=>isIce(x.m))&&C.ice.on?' −'+pct(C.under)+'%':''),jNo,jRe,true,'envías a Jita');
+  card('En Jita (orden de venta)',(iceN&&C.ice.jitaMode==='split'?'Split':'Jita Sell'+(iceN?' −'+pct(C.under)+'%':'')),'Jita Sell'+(P.some(x=>isIce(x.m))&&C.ice.on?' −'+pct(C.under)+'%':''),jNo,jRe,true,SH()?'envías a Jita':'vendes en Jita');
   // resultado final: las 4 opciones ordenadas
   const all=[['Refinado en '+sys,nRe.net],['Sin Refinar en '+sys,nNo.net],['Refinado a Jita',jRe.net],['Sin Refinar a Jita',jNo.net]].sort((a,b)=>b[1]-a[1]);
   // conclusión: 4 tarjetas de la peor a la mejor (la última es la ganadora), con barra proporcional
@@ -3457,7 +3484,7 @@ function paintRepro(){
       else tr.append(el('td','r',fmt(w.ore)),el('td','r',fmt(w.prod)),el('td','r '+sgn(w.diff),(w.diff>=0?'+':'')+fmt(w.diff)),el('td','r '+sgn(w.diff),(w.pct>=0?'+':'')+pct(w.pct)+'%'));
       tb.append(tr);
     });
-    $('rRawNote').textContent='Solo resta el rendimiento ('+yieldOf(r).y.toFixed(1)+'%) y el '+(tax*100).toFixed(1)+'% de tax de '+refName()+'. Sin ventas, sin taxes de mercado y sin envío.';
+    $('rRawNote').textContent='Solo resta el rendimiento ('+yieldOf(r).y.toFixed(1)+'%) y el '+(tax*100).toFixed(1)+'% de tax de '+refName()+(SH()?'. Sin ventas, sin taxes de mercado y sin envío.':'. Sin ventas ni taxes de mercado.');
   }
   paintRefCmp(r,q,nets);
   // ---- ¿Refinar o vender el ore? Sin y con courier ----
@@ -3546,7 +3573,7 @@ function summaryAction(k,g,sys){
   const raw=ice||ore?obj+' sin reprocesar':obj;
   const loc='nullsec'+(sys&&sys.toLowerCase()!=='nullsec'?' ('+sys+')':'');
   switch(k){
-    case 'fN': return 'llevar '+obj+' de Jita a HY-RWO y vender'+(g.length===1?'lo':'los')+' allí con órdenes de venta (+'+pct(C.impM)+'% neto sobre Jita Sell)';
+    case 'fN': return (SH()?'llevar '+obj+' de Jita a HY-RWO y vender'+(g.length===1?'lo':'los')+' allí':'vender '+obj+' en HY-RWO')+' con órdenes de venta (+'+pct(C.impM)+'% neto sobre Jita Sell)';
     case 'fJ': return 'vender '+obj+' en Jita con órdenes de venta';
     case 'fJI': return 'vender '+obj+' directamente a las órdenes de compra de Jita';
     case 'null': return 'vender '+raw+' en '+loc+' mediante órdenes de venta';
@@ -3612,18 +3639,18 @@ function paintFlipBuy(P){
   const V=rows.reduce((a,r)=>a+r.ship.fN.v,0),Cc=rows.reduce((a,r)=>a+r.ship.fN.c,0),ship=V>0?courierCost(V,C.coll!=null?C.coll:Cc):0;
   const it=rows.map(r=>{const buy=r.o.ref*r.q,sh=courierShare(r.ship.fN.v,r.ship.fN.c,V),sell=r.g.fN-r.prod;return{r,buy,sh,sell,p:sell-sh-buy};});
   const buy=it.reduce((a,x)=>a+x.buy,0),sell=it.reduce((a,x)=>a+x.sell,0),profit=sell-ship-buy,roi=buy>0?profit/buy:0;
-  box.append(el('h4',null,'Comprar en Jita y Vender en HY-RWO'),el('p','fb2-s','Si compras '+(rows.length===1?'este ítem':'estos '+rows.length+' ítems')+' en Jita al Sell, los llevas con SIGMA Freight y los vendes en HY-RWO a Jita Sell +'+pct(C.impM)+'% neto.'));
+  box.append(el('h4',null,'Comprar en Jita y Vender en HY-RWO'),el('p','fb2-s','Si compras '+(rows.length===1?'este ítem':'estos '+rows.length+' ítems')+' en Jita al Sell'+(SH()?', los llevas con SIGMA Freight':'')+' y los vendes en HY-RWO a Jita Sell +'+pct(C.impM)+'% neto.'));
   const big=el('div','fb2-big');big.append(el('b','num '+sgn(profit),(profit>=0?'+':'−')+fmt(Math.abs(profit))),el('span',null,(profit>=0?'de ganancia':'de pérdida')+' · '+(roi>=0?'+':'−')+pct(Math.abs(roi))+'% sobre lo invertido'));box.append(big);
   const l=el('div','fb2-l'),L=(t,v,c)=>{const d=el('div');d.append(el('span',null,t),el('b','num '+(c||''),v));l.append(d);};
-  L('Compras en Jita','−'+fmt(buy),'neg');L(C.shipOn?'Envío a HY-RWO':'Envío (lo llevas tú)',C.shipOn?'−'+fmt(ship):'0 ISK',C.shipOn?'neg':'');L('Vendes en HY-RWO (neto)',fmt(sell),'pos');L('Ganancia',(profit>=0?'+':'−')+fmt(Math.abs(profit)),sgn(profit));box.append(l);
-  const t=el('table'),th=el('thead'),hr=el('tr');[['Ítem',''],['Compras a /u','r'],['Vendes a /u','r'],['Envío','r'],['Ganancia','r'],['Margen','r']].forEach(([x,c])=>hr.append(el('th',c||null,x)));th.append(hr);t.append(th);
+  L('Compras en Jita','−'+fmt(buy),'neg');if(SH())L('Envío a HY-RWO','−'+fmt(ship),'neg');L('Vendes en HY-RWO (neto)',fmt(sell),'pos');L('Ganancia',(profit>=0?'+':'−')+fmt(Math.abs(profit)),sgn(profit));box.append(l);
+  const t=el('table'),th=el('thead'),hr=el('tr');[['Ítem',''],['Compras a /u','r'],['Vendes a /u','r'],['Envío','r'],['Ganancia','r'],['Margen','r']].filter(x=>SH()||x[0]!=='Envío').forEach(([x,c])=>hr.append(el('th',c||null,x)));th.append(hr);t.append(th);
   const tb=el('tbody');
   it.sort((a,b)=>b.p-a.p).slice(0,10).forEach(x=>{const tr=el('tr');
     const c=[el('td',null,x.r.o.name),el('td','r',fmtP(x.r.o.ref)),el('td','r',fmtP(x.r.np)),el('td','r','−'+fmt(x.sh)),el('td','r '+sgn(x.p),(x.p>=0?'+':'−')+fmt(Math.abs(x.p))),el('td','r '+sgn(x.p),(x.p>=0?'+':'−')+pct(Math.abs(x.buy>0?x.p/x.buy:0))+'%')];
-    ['','Compras a /u','Vendes a /u','Envío','Ganancia','Margen'].forEach((d,i)=>{if(d)c[i].dataset.l=d;});tr.append(...c);tb.append(tr);});
+    ['','Compras a /u','Vendes a /u','Envío','Ganancia','Margen'].forEach((d,i)=>{if(d)c[i].dataset.l=d;});if(!SH())c.splice(3,1);tr.append(...c);tb.append(tr);});
   if(it.length>10){const tr=el('tr'),td=el('td','muted','y '+(it.length-10)+' ítems más');td.colSpan=6;tr.append(td);tb.append(tr);}
   t.append(tb);box.append(t);
-  box.append(el('p','fb2-n','Compra = Jita Sell × cantidad (comprando de las órdenes de venta, sin broker). Venta = el precio de lista en HY-RWO ya con Sales Tax, Broker y SCC. El envío es un solo cálculo para todo el lote. El margen se cambia junto al botón de la ruta.'));
+  box.append(el('p','fb2-n','Compra = Jita Sell × cantidad (comprando de las órdenes de venta, sin broker). Venta = el precio de lista en HY-RWO ya con Sales Tax, Broker y SCC.'+(SH()?' El envío es un solo cálculo para todo el lote.':'')+' El margen se cambia junto al botón de la ruta.'));
 }
 function paintSummary(P){
   const box=$('pSum'),none=!P.rows.length||P.missing.length===P.rows.length;box.hidden=none||!S.items.length;if(box.hidden)return;
@@ -3645,8 +3672,9 @@ function paintSummary(P){
   else if(cs.length){const jo=by('jOrd').length,ji=by('jInst').length,rj=by('rJita').length;
     const what=[jo?jo+' en orden de venta':'',ji?ji+' directo a las compras':'',rj?rj+' refinados':''].filter(Boolean).join(', ').replace(/, ([^,]*)$/,' y $1');
     ul.append(li(cs.length>1?'Contratos '+c0+'–'+c1:'Contrato '+c0,'','Envío a Jita',cnt(jo+ji+rj)+', '+NF0.format(Math.round(P.Vs))+' m³ (máx. '+NF0.format(C.maxVol)+' por contrato). Allá: '+what,'Envío −'+fmt(P.shipCost),'neg'));}
-  if(!C.shipOn&&P.Vs>0){const sh=P.rows.filter(r=>r.best&&SHIPS[r.best]);
-    ul.append(li('Tú','','Lo llevas tú a '+DEST(),cnt(sh.length)+', '+NF0.format(Math.round(P.Vs))+' m³. Sin courier: el envío no se descuenta',null));}
+  if(!SH()&&!S.flip){const jo=by('jOrd').length,ji=by('jInst').length,rj=by('rJita').length,n=jo+ji+rj;
+    if(n)ul.append(li('Órdenes','','Vender en Jita',[jo?jo+' en órdenes de venta':'',ji?ji+' a las buy orders':'',rj?rj+' reprocesados':''].filter(Boolean).join(', ')+' (sin contrato)',null));}
+  if(!SH()&&S.flip&&by('fN').length)ul.append(li('Órdenes','','Vender en HY-RWO',cnt(by('fN').length)+' en órdenes de venta (sin contrato)',null));
   if(S.flip){const fj=by('fJ').length+by('fJI').length;if(fj)ul.append(li('Órdenes','','Vender en Jita',cnt(fj)+(by('fJI').length?' (órdenes y venta rápida, sin contrato)':' en órdenes de venta (sin contrato)'),null));}
   const nn=by('null').length+by('rNull').length+by('fN').length;if(nn&&!S.flip)ul.append(li('Órdenes','nl','Vender en '+sys,cnt(nn)+' en órdenes de venta (sin contrato)',null));
   if(dr.length)ul.append(li('Contrato '+nPl,'pl','A un jugador por Discord',cnt(dr.length),null));
@@ -3711,6 +3739,7 @@ function refreshNow(){
 // v105: Modo ligero (pie de página). Automático en Firefox; se puede activar o quitar a mano. No se guarda.
 $('cAssignee').addEventListener('input',()=>refresh());
 // v1.0.5: invertir la ruta (flip). HY-RWO → Jita (normal) / Jita → HY-RWO (importar). Solo en memoria.
+function syncShipLabels(){const t=SH()?'Llevar a HY-RWO':'Vender en HY-RWO';OPTS.find(x=>x[0]==='fN')[1]=t;PLAN_L.fN=t;MODES.find(x=>x[0]==='fN')[1]=SH()?'Todo a HY-RWO':'Todo en HY-RWO';ACT.fN=SH()?'llévalo a HY-RWO y véndelo allí':'véndelo en HY-RWO';}
 function setFlip(on){
   S.flip=!!on;S.planMode=null;czIdx=0;
   SHIPS=S.flip?{fN:1}:{jOrd:1,jInst:1,rJita:1};
@@ -3719,7 +3748,7 @@ function setFlip(on){
   if(S.items.length)refreshNow();
 }
 $('bFlip').addEventListener('click',()=>setFlip(!S.flip));
-$('shipOn').addEventListener('change',e=>{C.shipOn=e.target.checked;S.planMode=null;czIdx=0;if(S.items.length)refreshNow();});
+$('shipOn').addEventListener('change',e=>{C.shipOn=e.target.checked;syncShipLabels();S.planMode=null;czIdx=0;if(S.items.length)refreshNow();});
 const impSync=(src,dst)=>{const v=parseFloat($(src).value);if(!(v>=0))return;C.impM=v/100;$(dst).value=String(v);refresh();};
 $('fImpM').addEventListener('input',()=>impSync('fImpM','cImpM'));$('cImpM').addEventListener('input',()=>impSync('cImpM','fImpM'));
 $('cNullDest').addEventListener('input',()=>refresh());
