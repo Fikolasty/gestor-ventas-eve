@@ -1016,3 +1016,15 @@ Elige un Plan con columnas y filtros
 Limpieza
 - Eliminados: vTab/CAT_L/CAT_T/tab-note/#vTabs, vFold/foldC/handler de plegado, recoFor, shipShare, CSS de .pl-g/.pl-fold/.tabs/.tab-note/.pl-brief/.pl-tools y tarjetas viejas .pk-o.
 - Verificado: node --check, smoke (55 controles), stress (155 ítems), leak4 (DOM y listeners estables), pk, ce, noship (0 menciones), tperm 1527/1536, tsec (solo hosts ESI), sk, persistencia, pasos, anti-cebo, inglés.
+
+==================== v1.0.22 ====================
+Ítems ya en el destino
+- IN_JITA() = ruta normal y envío apagado. computePlan deja solo jOrd/jInst (sin null, bb, disc, rNull, rJita; row.ship={}),
+  jitaList no usa la regla del hielo, body.in-jita oculta reproceso, contratos/jugadores y «Ver más».
+- Ruta invertida con envío apagado (ítems ya en HY-RWO): solo fN.
+Resumen del plan (overview), reemplaza v-top
+- #ovFlow: valor de venta = neto + Sales Tax + Broker(+SCC) + Relists + Envío + Producción (barra apilada con leyenda).
+  Gn/Gj/Gi incluyen fJ/fJI; fN ya es neto.
+- KPI: Ítems, Volumen, Envío (#ovShip, solo con envío), Taxes y Broker (con Relists).
+- #ovMkt: Buy/Split/Sell del lote y marcador del neto del plan. #ovDest: parte del ISK por acción (PLAN_L).
+- Eliminados: La Más Rápida (#vFast), Comparación con Otros Planes (alt-grid), barra Null/Jita, bloque muerto del Buyback.

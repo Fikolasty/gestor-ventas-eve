@@ -2,6 +2,21 @@
 
 Cambios por versión del Gestor de Ventas. La más nueva arriba. El detalle técnico completo está en `docs/SPEC.txt`.
 
+## 1.0.22 — Ítems ya en Jita y nuevo resumen del plan
+*2026-10-14*
+
+- **Ítems ya en Jita** (ruta HY-RWO → Jita con el switch en «En Jita»): solo se considera venderlos en Jita, con orden o al instante, usando tus Ajustes y el anti-cebo. Ya no aparecen Null, Buyback, venta a jugador, reproceso ni las reglas del hielo; tampoco la barra Null/Jita, «Ver más» ni las tarjetas de Null y Buyback.
+- Con la ruta invertida y el switch en «En HY-RWO» (ítems ya en HY-RWO), solo se considera venderlos en HY-RWO.
+- Elige un Plan: la cabecera ya no se encima con el subtítulo cuando no hay filtros.
+- **Resumen del plan rediseñado** (arriba del análisis):
+  - Total grande y qué plan es.
+  - «De Dónde Sale tu ISK»: barra del valor de venta repartido en lo que te queda, Sales Tax, Broker (y SCC), Relists, Envío y Producción, con montos y %.
+  - Tarjetas: Ítems, Volumen, Envío (solo si hay envío) y Taxes y Broker (con Relists).
+  - «Tu Lote en Jita»: Buy · Split · Sell en una línea y un punto con lo que te deja tu plan (% del valor a Jita Sell).
+  - «Dónde se Vende»: barra con la parte del ISK de cada acción del plan.
+  - Fuera «La Más Rápida» y «Comparación con Otros Planes»: ya están en Elige un Plan (columna Rapidez y diferencia vs óptimo).
+- Limpieza: fuera el bloque muerto del contrato del Buyback y referencias a elementos que ya no existen.
+
 ## 1.0.21 — Elige un Plan con columnas y filtros; limpieza del código
 *2026-10-14*
 

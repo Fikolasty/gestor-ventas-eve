@@ -1303,6 +1303,7 @@ html.lite .pk .pk-o{box-shadow:none;transition:none}
 .pk .pk-o.best{margin-bottom:4px}
 .pk .pk-o.on{border-color:#d97757!important;background:linear-gradient(90deg,rgba(217,119,87,.14),rgba(21,21,21,.95) 60%)!important;box-shadow:inset 3px 0 0 #d97757,0 2px 6px rgba(0,0,0,.45)!important}
 .pk-tools{display:flex;justify-content:flex-end;margin:-28px 0 8px}
+.pk-tools:empty{display:none}
 .pk-flt{display:inline-flex;gap:4px;padding:3px;border-radius:10px;background:#0f0f0f;border:1px solid rgba(222,220,209,.10);box-shadow:inset 0 1px 3px rgba(0,0,0,.6)}
 .pk-fb{border:0;background:none;color:var(--mut);font-size:.82rem;font-weight:600;padding:5px 10px;border-radius:7px;cursor:pointer;white-space:nowrap}
 .pk-fb small{margin-left:5px;color:var(--dim);font-weight:500}
@@ -1315,6 +1316,45 @@ html.lite .pk .pk-o{box-shadow:none;transition:none}
   .pk-dot{grid-column:1;grid-row:1;align-self:start;margin-top:3px}.pk-tx{grid-column:2/4;grid-row:1}
   .pk-sp{grid-column:2;grid-row:3}.pk-sh{display:none}
   .pk-bar{grid-column:2;grid-row:2;align-self:center}.pk .pk-o .pk-v{grid-column:3;grid-row:2;font-size:.92rem}.pk .pk-o .pk-d{grid-column:3;grid-row:3}}
+
+/* v1.0.22: ítems ya en Jita (ruta normal, envío apagado): sin reproceso, contratos ni jugadores */
+body.in-jita #bMore,body.in-jita #more,body.in-jita #vRep,body.in-jita .if-ore{display:none!important}
+
+/* ================= v1.0.22: resumen del plan (overview) ================= */
+.ov{display:flex;flex-direction:column;gap:12px;margin-bottom:18px}
+.ov-hd{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap}
+.ov-hd h2{margin:0}.ov-hd .v-cap{margin:4px 0 0}
+.ov-hd .v-isk{margin:0;font-size:clamp(2.2rem,5vw,3.6rem);line-height:1}
+.ov-card{padding:14px 16px;border-radius:12px;border:1px solid rgba(222,220,209,.10);background:linear-gradient(180deg,#1e1e1d,#151515);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.05),0 2px 4px rgba(0,0,0,.45),0 8px 18px rgba(0,0,0,.3);min-width:0}
+.ov-card h4{margin:0 0 10px;font:600 .78rem var(--f-ui);letter-spacing:.08em;text-transform:uppercase;color:var(--dim)}
+.ov-bar{display:flex;height:14px;border-radius:7px;overflow:hidden;background:#0f0f0f;box-shadow:inset 0 1px 3px rgba(0,0,0,.7)}
+.ov-bar i{display:block;height:100%;min-width:2px}
+.ov-bar i+i{box-shadow:-1px 0 0 rgba(0,0,0,.6)}
+.ov-leg{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px 16px;margin-top:10px}
+.ov-leg>div{display:grid;grid-template-columns:10px minmax(0,1fr);gap:0 8px;align-items:center;min-width:0}
+.ov-leg .ov-sw{width:10px;height:10px;border-radius:3px;grid-row:1/3;display:block}
+.ov-leg b{font:600 .95rem var(--f-num);white-space:nowrap}.ov-leg small{color:var(--dim);font-size:.76rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ov-leg .net b{color:var(--gain)}.ov-leg .cost b{color:#ff9a9a}
+.ov-sum{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;color:var(--mut);font-size:.84rem;margin-bottom:8px}.ov-sum b{color:var(--txt);font-family:var(--f-num)}
+.ov-kpi{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;margin:0}
+.ov-kpi>div{padding:12px 14px;border-radius:12px;border:1px solid rgba(222,220,209,.10);background:linear-gradient(180deg,#1e1e1d,#151515);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.05),0 2px 4px rgba(0,0,0,.45);min-width:0}
+.ov-kpi dt{font-size:.74rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--dim)}
+.ov-kpi dd{margin:4px 0 2px;font:600 1.25rem var(--f-num);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ov-kpi small{display:block;color:var(--dim);font-size:.78rem;line-height:1.35}
+.ov-kpi .rl{display:block;margin-top:6px;font-size:.8rem;color:var(--mut)}.ov-kpi .rl small{font-size:.72rem}
+.ov-row{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:10px}
+.ov-trk{position:relative;height:40px;margin:2px 6px 0}
+.ov-trk .ln{position:absolute;left:0;right:0;top:15px;height:6px;border-radius:3px;background:linear-gradient(90deg,#e8746c,#e0a84f,#5cba86);opacity:.55}
+.ov-trk .tk{position:absolute;top:10px;width:2px;height:16px;background:#d6d4cb;transform:translateX(-1px)}
+.ov-trk .tk span{position:absolute;top:20px;left:50%;transform:translateX(-50%);font-size:.72rem;color:var(--dim);white-space:nowrap}
+.ov-trk .me{position:absolute;top:6px;width:14px;height:14px;border-radius:50%;background:#d97757;border:2px solid #fff;transform:translateX(-7px);box-shadow:0 0 8px rgba(217,119,87,.8)}
+.ov-mk-l{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:8px;font-size:.8rem;color:var(--dim)}.ov-mk-l b{display:block;color:var(--txt);font:600 .9rem var(--f-num)}
+.ov-mk-n{margin-top:8px;font-size:.86rem;color:var(--mut)}.ov-mk-n b{color:#e8a588}
+@media(max-width:900px){.ov-row{grid-template-columns:minmax(0,1fr)}}
+@media(max-width:520px){.ov-hd{flex-direction:column;align-items:flex-start}.ov-hd .v-isk{font-size:2rem}.ov-kpi{grid-template-columns:minmax(0,1fr)}.ov-mk-l b{font-size:.8rem}.ov-card{padding:12px}}
+html.lite .ov-card,html.lite .ov-kpi>div{box-shadow:none}
 </style>
 <script>/* v1.0.16: aplica tema y Modo Ligero guardados antes de pintar (sin parpadeo). Por defecto: Dark, sin Modo Ligero. */try{var g=JSON.parse(localStorage.getItem('gestorVentas.ajustes.v1')||'null');if(g&&g.ui){if(g.ui.light)document.documentElement.classList.add('light');if(g.ui.lite)document.documentElement.classList.add('lite');}}catch(e){}</script>
 </head>
@@ -1484,32 +1524,23 @@ Contraband Freight = no</textarea><small>Una regla por línea: Nombre = tax tota
   <!-- 2. El análisis (oculto hasta que lo pides) -->
   <div id="deep" class="deep" hidden>
   <section class="panel verdict" id="verdict" hidden aria-live="polite">
-    <div class="v-top">
-      <div class="v-main">
-        <h2><span class="ic i-target" aria-hidden="true"></span><span id="vTitle">La Mejor Ruta de Venta</span><span class="v-what" id="vWhat"></span></h2>
+    <!-- v1.0.22: resumen del plan (overview): total, a dónde va el ISK, datos clave, tu lote en Jita y dónde se vende -->
+    <div class="ov">
+      <div class="ov-hd">
+        <div class="ov-ttl"><h2><span class="ic i-target" aria-hidden="true"></span><span id="vTitle">La Mejor Ruta de Venta</span><span class="v-what" id="vWhat"></span></h2>
+          <p class="v-cap" id="vCap">ISK estimados que recibes tras taxes, Broker y envío (según tu configuración)</p></div>
         <p class="v-isk num" id="vIsk"></p>
-        <p class="v-cap" id="vCap">ISK estimados que recibes tras taxes, Broker y envío (según tu configuración)</p>
-        <p class="v-sub" id="vSub"></p>
-        <dl class="v-stats">
-          <div><dt>Ítems</dt><dd id="vsN">—</dd><small id="vsNs"></small></div>
-          <div><dt>Volumen Total</dt><dd id="vsV">—</dd><small id="vsVs"></small></div>
-          <div class="ship st"><dt id="aCourT">Envío a Jita</dt><dd><b id="aCourier">—</b></dd><small id="aCourS"></small><small id="aCourD" hidden></small></div>
-        </dl>
-        <div class="fastbox" id="vFast" hidden>
-          <div class="fb-h"><span class="ic i-ship" aria-hidden="true"></span><b>La Más Rápida</b><span class="fb-what" id="vFastW"></span><b class="fb-v num" id="vFastV"></b></div>
-          <p id="vFastT"></p>
-        </div>
-        <div class="split" aria-hidden="true"><i class="s-null" id="sNull"></i><i class="s-jita" id="sJita"></i></div>
-        <div class="legend"><span><b style="background:var(--gain)"></b><i id="lNullT">Se Queda en Null</i> <em id="lNull"></em></span><span><b style="background:var(--blue)"></b><i id="lJitaT">Viaja a Jita</i> <em id="lJita"></em></span></div>
       </div>
-      <div class="v-side">
-        <h3 class="sub-h v-h0" title="Lo que ganarías haciendo todo de una sola manera."><span class="ic i-scale" aria-hidden="true"></span>Comparación con Otros Planes</h3>
-        <dl class="alt-grid">
-          <div><dt><span id="aNullT">Todo en Null</span><span class="if-ore" hidden> Sin Reproceso</span><small id="aNullS">Sin reprocesar, con tu margen.</small><small class="pl-partial" id="aNullPart" hidden></small></dt><dd><b id="aNull">—</b><small id="aNullD"></small></dd></div>
-          <div><dt><span id="aJitaT">Todo a Jita</span><span class="if-ore" hidden> Sin Reproceso</span><small id="aJitaS">Orden de venta a Jita Sell (envío incluido).</small><small class="pl-partial" id="aJitaPart" hidden></small></dt><dd><b id="aJita">—</b><small id="aJitaD"></small></dd></div>
-          <div id="aBBBox"><dt>Todo al Buyback<small id="aBBs">Contrato al programa.</small><small class="pl-partial" id="aBBPart" hidden></small></dt><dd><b id="aBB">—</b><small id="aBBD"></small></dd></div>
-          <div class="tx at"><dt><span>Taxes y Broker</span><b id="vsCn" class="neg-soft">—</b></dt><dd id="vsC"></dd><label class="rl" id="vsRelW" hidden><input type="checkbox" id="cRelistOn"> Relists: <span id="vsRel">—</span><small>Se cobra si bajas el precio (~2 semanas). Márcalo para contarlo.</small></label></div>
-        </dl>
+      <div class="ov-card ov-flow"><h4>De Dónde Sale tu ISK</h4><div id="ovFlow"></div></div>
+      <dl class="ov-kpi">
+        <div><dt>Ítems</dt><dd id="vsN">—</dd><small id="vsNs"></small></div>
+        <div><dt>Volumen Total</dt><dd id="vsV">—</dd><small id="vsVs"></small></div>
+        <div id="ovShip"><dt id="aCourT">Envío a Jita</dt><dd id="aCourier">—</dd><small id="aCourS"></small></div>
+        <div class="tx"><dt>Taxes y Broker</dt><dd id="vsCn" class="neg-soft">—</dd><small id="vsC"></small><label class="rl" id="vsRelW" hidden><input type="checkbox" id="cRelistOn"> Relists: <span id="vsRel">—</span><small>Se cobra si bajas el precio (~2 semanas). Márcalo para contarlo.</small></label></div>
+      </dl>
+      <div class="ov-row">
+        <div class="ov-card" id="ovMktW"><h4>Tu Lote en Jita</h4><div id="ovMkt"></div></div>
+        <div class="ov-card" id="ovDestW"><h4>Dónde se Vende</h4><div id="ovDest"></div></div>
       </div>
     </div>
 
