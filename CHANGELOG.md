@@ -2,6 +2,25 @@
 
 Cambios por versión del Gestor de Ventas. La más nueva arriba. El detalle técnico completo está en `docs/SPEC.txt`.
 
+## 1.0.26 — Comparativa Minera: plan para Omega nuevo, inversión y entrenamiento
+*2026-10-14*
+
+- **Nuevo nombre**: el tab y la página aparte se llaman **Comparativa Minera** (la dirección `mineria.html` no cambia).
+- **Dos vistas**: «Rendimiento por Nave» (la comparativa de siempre) y **«Plan para Omega Nuevo»**.
+- **Plan para Omega Nuevo**, separado por material (moon ore, hielo y gas):
+  - Personaje nuevo que pasa a Omega y compra el **Expert System** de barge (7 días, 15 PLEX editable): mina mientras entrena para volar la barge sin él.
+  - Simulación de 28 días, día por día, con la barge (Procurer, Retriever o Covetor) y el fit elegidos; lo que las skills aún no permiten se baja al módulo que sí se puede usar.
+  - **¿Paga el siguiente Omega?** Ingresos de los días 8 a 28 frente a 500 PLEX (editable); balance a 28 días y día en que se recupera todo (nave, fit, Expert System y Omega).
+  - **Inversión**: nave + fit al precio de venta en Jita 4-4 (ESI). Precio del PLEX manual (mercado global).
+  - **De 1 a 100 cuentas**: todo se multiplica solo.
+  - Hitos: día en que vuela la barge sin el Expert System (y días sin minar si no llega), skills de rendimiento a IV y Exhumer.
+  - Atributos: base 20/20, remap óptimo para el plan, y remap con implantes +3 o +5.
+  - Gráfico de ISK acumulado contra la inversión y el siguiente Omega; plan de entrenamiento recomendado paso a paso.
+- **Entrenamiento: Todo a IV vs Todo a V**: días desde un personaje nuevo para cada nave y escalón (con prerequisitos).
+- **Inversión** de cada fit en la tabla de detalle.
+- La **mejor nave de cada clase** se marca con ★ y fondo dorado.
+- Español / English completos.
+
 ## 1.0.25 — Ruta y dónde vendes, tasación del lote
 *2026-10-14*
 

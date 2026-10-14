@@ -68,3 +68,34 @@
 .mn-src{font-size:.78rem;color:var(--dim)}
 @media (max-width:720px){.mn-kpi{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media (max-width:460px){.mn-kpi{grid-template-columns:minmax(0,1fr)}}
+
+/* v1.0.25: mejor de su clase, vistas, plan para Omega nuevo */
+.mn td.cell.best{background:rgba(237,161,0,.13);box-shadow:inset 0 0 0 1px rgba(237,161,0,.5);border-radius:6px}
+.mn td.cell.best span{color:var(--txt)}
+.mn .mn-star{color:var(--mn-ex);font-weight:700}
+.mn-views{display:flex}
+.mn-views .pk-fb{font-size:.9rem;padding:7px 14px}
+.mn-ctl input[type=number]{width:6.5rem;padding:5px 8px;margin:0}
+.mn-ctl input[type=range]{width:9rem;margin:0 0 0 8px;padding:0;border:0;background:none;accent-color:var(--thrust)}
+.mn-price input{margin-top:4px;padding:6px 8px;font-size:.88rem;min-width:9rem}
+.mn tr.tot td{color:var(--mut)}
+.mn td.pos{color:var(--gain)} .mn td.neg{color:var(--loss)}
+.mn-grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,22rem),1fr));gap:14px}
+.mn-ml{display:block;font-size:.78rem;color:var(--mut);margin:4px 0 6px}
+.mn-ml select{margin-top:4px;padding:6px 8px;font-size:.88rem}
+.mn-kpi2{grid-template-columns:repeat(2,minmax(0,1fr))!important;margin:6px 0 10px}
+.mn-kpi2>div{min-height:5.6rem}
+.mn-kpi2>div.okb{border-color:rgba(92,186,134,.45)} .mn-kpi2>div.badb{border-color:rgba(232,116,108,.45)}
+.mn-kpi2>div.okb .v{color:var(--gain)} .mn-kpi2>div.badb .v{color:var(--loss)}
+.mn-ms{list-style:none;padding:0;margin:8px 0 0;font-size:.84rem;color:var(--mut);display:grid;gap:4px}
+.mn-ms li::before{content:"› ";color:var(--ion)}
+.mn-ms li.warn{color:var(--thrust)}
+.mn .cumln{fill:none;stroke:var(--mn-t3);stroke-width:2;stroke-linejoin:round;stroke-linecap:round}
+.mn .gl1{stroke:var(--mn-t1);stroke-dasharray:4 3}
+.mn .gl2{stroke:var(--mn-t2);stroke-dasharray:4 3}
+.mn .esb{fill:rgba(237,161,0,.08)}
+.mn-plan-l ol{padding-left:22px;columns:2 18rem;font-size:.86rem}
+.mn-plan-l li{break-inside:avoid}
+.mn>*{min-width:0}
+.mn-v-ships,.mn-v-plan{display:grid;gap:16px;min-width:0}
+.mn-v-ships[hidden],.mn-v-plan[hidden]{display:none}
