@@ -1028,3 +1028,27 @@ Resumen del plan (overview), reemplaza v-top
 - KPI: Ítems, Volumen, Envío (#ovShip, solo con envío), Taxes y Broker (con Relists).
 - #ovMkt: Buy/Split/Sell del lote y marcador del neto del plan. #ovDest: parte del ISK por acción (PLAN_L).
 - Eliminados: La Más Rápida (#vFast), Comparación con Otros Planes (alt-grid), barra Null/Jita, bloque muerto del Buyback.
+
+==================== v1.0.23 ====================
+Minería: Barges y Exhumers (tab y página aparte)
+- Datos: src/mining_data.js = const MINE={build, cols, rows, ships, mats}. rows: 216 escenarios (nivel 4/5 × implantes 1/0 × moon/ice/gas ×
+  T1/T2/Faction × 6 naves) con el fit elegido, ciclo, m³/ciclo, crítico (prob % y bono %), m³/h de módulos y drones, total, bodega,
+  minutos hasta llenar, residuo %, CPU y notas. mats: moon ore (R4–R64 con variantes), hielo y gas con typeID, typeID comprimido y m³/u.
+  Lo genera tools/mining/build_data.py (calc.py + sde.py) desde staticdata de Pyfa; replica la fórmula de Pyfa (eos):
+  bonos multiplicativos; MLU/IHU/rigs/implantes sin penalización; m³/h = n × amount / ciclo × 3600 × (1 + pCrit × bonoCrit).
+- Fits: moon sin residuo (Strip Miner I / ORE Strip Miner, MLU, chipset, Drone Mining Augmentor, Mining Drone I); hielo (harvester, IHU,
+  chipset, 1 Ice Harvester Accelerator + 1 DMA, 1 drone de hielo); gas (solo harvester). best() busca la mejor combinación de rigs
+  (DMA, CPU rig) y chipset que entra en CPU y calibración, prefiriendo el chipset del escalón.
+- Perfil IV: todo a IV salvo Mining Barge V y Astrogeology V en exhumers; Exploitation, Mining Drone Spec., Ice Drone Spec. y Drone
+  Interfacing = 0. Módulos que piden V se sustituyen por el mejor disponible y se anotan ("requiere …; se usa …") → ⚠ en la tabla.
+- src/mining.js: MineUI = {mount(el), shown()}. Independiente del motor (no toca S ni C). Estado en memoria {mat,lv,imp,met,tier,item,base,cmp}.
+  ISK/h = total m³/h ÷ m³ por unidad × precio (Jita 4-4: mejor compra con min_volume ≤ 1 o mejor venta), del comprimido o sin comprimir.
+  Precios en memoria 5 min (PRICE por typeID). Gráficos SVG propios (sin librerías); se dibujan al abrir el panel y con ResizeObserver.
+  Colores de serie: T1 #3987e5, T2 #eb6834, Facción #1baf7a, exhumer #eda100 (tema claro en light_extra.css).
+- shell.html: botón #bMine (arriba) y .side-i data-open="bMine"; panel #mining en .top-slot con .x-close data-close="mining".
+  script.js monta MineUI la primera vez que se abre. build.py inyecta mining.css en el <style> (antes del tema claro) y mining_data.js +
+  mining.js en /*__MINING__*/.
+- mineria.html: src/mineria_shell.html + src/mineria_glue.js con el mismo CSS (incluido el tema claro), i18n propio con el mismo
+  diccionario y lectura (solo lectura) de «gestorVentas.ajustes.v1» para tema e idioma. CSP: connect-src solo esi.evetech.net.
+- Verificado: node --check, Playwright/Chromium con ESI simulado (m³/h, ISK/h, error de ESI), escritorio 1400 px y móvil 390 px sin desborde,
+  tema claro, inglés, abrir/cerrar paneles (Ajustes, Ayuda, Minería) y el botón de la barra lateral; cero errores de consola.

@@ -17,6 +17,7 @@
            (vSort/vShow/vQuery, pkView, stepDone/itemDone) y clearViews() las vacía junto con las referencias al DOM.
    MEMORIA: íconos = <img> directos (sin blobs); pruneCaches() suelta S.api de ítems que ya no están; las tablas
             reutilizan <img> (ICON_POOL); un solo listener delegado por contenedor (sin closures por fila).
+   MINERÍA (v1.0.23): MineUI (src/mining.js + src/mining_data.js) compara Barges/Exhumers; independiente del motor.
    SEGURIDAD: el inventario nunca se guarda; solo los Ajustes (localStorage «gestorVentas.ajustes.v1», v1.0.16).
               La app solo se conecta a esi.evetech.net e images.evetech.net (CSP). Sin login.
    RENDIMIENTO: rAF agrupa cambios; detalles del ledger perezosos; ordenar/buscar/filtrar repinta solo su bloque.
@@ -2027,9 +2028,14 @@ $('liteOn').addEventListener('change',e=>document.documentElement.classList.togg
 // v1.0.8: tema claro / oscuro (solo en memoria; empieza oscuro)
 $('themeLight').addEventListener('change',e=>{document.documentElement.classList.toggle('light',e.target.checked);$('themeTxt').textContent=e.target.checked?'Light':'Dark';});
 
+// ================= Minería (v1.0.23): módulo aparte, ver src/mining.js =================
+/*__MINING__*/
+
 // ================= Ajustes y Ayuda =================
 function toggle(btn,id){const s=$(id),open=s.hidden;s.hidden=!open;btn.setAttribute('aria-pressed',String(open));if(open)s.scrollIntoView({behavior:'smooth',block:'start'});}
 $('bSettings').addEventListener('click',e=>toggle(e.currentTarget,'settings'));
+// v1.0.23: Minería se monta la primera vez que se abre (no pesa en el arranque)
+$('bMine').addEventListener('click',e=>{toggle(e.currentTarget,'mining');if(!$('mining').hidden){MineUI.mount($('mnRoot'));MineUI.shown();}});
 // v1.0.11: menú lateral. Escritorio: se contrae a íconos. Móvil: se abre encima con fondo oscuro. Solo en memoria.
 {const mob=()=>innerWidth<=900,b=document.body;
  const setC=c=>{b.classList.toggle('side-c',c);$('sideTg').setAttribute('aria-expanded',String(!c));$('sideTg').title=c?'Expandir menú':'Contraer menú';};
@@ -2039,9 +2045,9 @@ $('bSettings').addEventListener('click',e=>toggle(e.currentTarget,'settings'));
  $('sideFab').addEventListener('click',()=>setO(true));$('sideBd').addEventListener('click',()=>setO(false));
  document.querySelectorAll('.side-i[data-open]').forEach(x=>x.addEventListener('click',()=>{$(x.dataset.open).click();if(mob())setO(false);}));
  const sync=()=>document.querySelectorAll('.side-i[data-open]').forEach(x=>x.setAttribute('aria-pressed',$(x.dataset.open).getAttribute('aria-pressed')||'false'));
- new MutationObserver(sync).observe($('bSettings'),{attributes:true,attributeFilter:['aria-pressed']});new MutationObserver(sync).observe($('bHelp'),{attributes:true,attributeFilter:['aria-pressed']});}
+ ['bSettings','bHelp','bMine'].forEach(id=>new MutationObserver(sync).observe($(id),{attributes:true,attributeFilter:['aria-pressed']}));}
 // v1.0.8: X dentro de la sección (fija al bajar): cierra igual que el botón de arriba
-document.querySelectorAll('.x-close').forEach(b=>b.addEventListener('click',()=>{$(b.dataset.close==='settings'?'bSettings':'bHelp').click();}));
+document.querySelectorAll('.x-close').forEach(b=>b.addEventListener('click',()=>{$({settings:'bSettings',help:'bHelp',mining:'bMine'}[b.dataset.close]).click();}));
 // v1.0.8: cada grupo de Ajustes es desplegable (empiezan cerrados); se abren con clic o Enter en su título
 document.querySelectorAll('#settings fieldset.st').forEach(f=>{const l=f.querySelector('legend');if(!l)return;f.classList.add('closed');
   l.tabIndex=0;l.setAttribute('role','button');l.setAttribute('aria-expanded','false');

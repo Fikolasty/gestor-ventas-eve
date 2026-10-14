@@ -2,6 +2,21 @@
 
 Cambios por versión del Gestor de Ventas. La más nueva arriba. El detalle técnico completo está en `docs/SPEC.txt`.
 
+## 1.0.23 — Minería: Barges y Exhumers
+*2026-10-14*
+
+- **Nuevo tab «Minería»** (barra lateral y barra de arriba): compara Procurer, Retriever, Covetor, Skiff, Mackinaw y Hulk en **moon ore, hielo y gas**.
+  - Tres escalones de fit: **Full T1**, **Full T2** y **Facción** (máximo, mezcla facción y T2).
+  - Skills **todo a IV** o **todo a V** (a IV respeta lo obligatorio: Mining Barge V y Astrogeology V para exhumers) y **con o sin implantes de +5%**.
+  - Cuenta strip miners/harvesters, mejoras, Mining Survey Chipset, rigs, **drones**, **implantes** y los **críticos de minería** de Catalyst.
+  - **Bodega y autonomía**: minutos hasta llenarla con cada fit.
+  - **m³/h o ISK/h**: eliges qué minas (cada moon ore, hielo y gas) y el precio de Jita 4-4 (Buy o Sell, comprimido o sin comprimir; la compresión es 1:1 en unidades).
+  - Regla de moon ore: nada que desperdicie mineral (fuera Modulated Strip Miner II y drones T2/facción/Augmented).
+  - Fit y detalle por nave, ganadora por escalón, gráficos de producción y de autonomía, «Qué Nave Recomendar» y «Cómo se Calculó».
+- **Página aparte**: `mineria.html` con la misma comparativa, estilo, tema claro e idioma (lee, sin escribir, el tema e idioma guardados por el Gestor).
+- Datos generados desde los datos estáticos de EVE (los de Pyfa) con `tools/mining/build_data.py`; se regeneran tras cada parche de CCP.
+- Español / English y tema claro incluidos. Solo memoria; solo se conecta a ESI.
+
 ## 1.0.22 — Ítems ya en Jita y nuevo resumen del plan
 *2026-10-14*
 
