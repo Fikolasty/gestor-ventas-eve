@@ -2,6 +2,30 @@
 
 Cambios por versión del Gestor de Ventas. La más nueva arriba. El detalle técnico completo está en `docs/SPEC.txt`.
 
+## 1.0.11 — Ajuste de precios, menú lateral, Ajustes por secciones, paleta gris-negro
+*2026-10-14*
+
+A) AJUSTE DE PRECIOS (skew)
+- Motivo: la venta rápida real en el juego salió 0.14% por encima de lo calculado (642,876,190 vs 641,950,282); Arturo prefiere que la app calcule un poco a la baja: "mejor sorprenderse con más".
+- Ajustes → Impuestos y Precios → Ajuste de Precios: Venta rápida (Jita Buy) −0.16% por defecto · Órdenes en Jita 0 · Órdenes en Null 0. Además, dentro de cada ítem: "Ajuste de precio %" que se suma al general (ej. −2).
+- Motor: factor = 1 + ajuste general del tipo de venta + ajuste del ítem. Venta rápida: valor del recorrido de buy orders × factor (y su promedio). Órdenes en Jita / Null / importado: precio de lista × factor, redondeado al tick. Buyback y jugador no cambian (pagan por su base).
+- Avisos: "Precios ajustados: venta rápida −0.16% · N ítems con ajuste propio" sobre el total; etiqueta "ajuste −2%" en la fila del ítem.
+- Verificado: con todo en 0 el resultado es idéntico a 1.0.10; con −0.16% cada venta rápida = ×0.9984; ajuste de ítem −2% baja su orden en Jita ~2%.
+
+B) MENÚ LATERAL (estilo Claude)
+- Barra lateral fija a la izquierda: "Cálculo" (ruta HY-RWO ⇄ Jita, Contar envío, Modo ligero, Tema claro, y el margen de importación con la ruta invertida) y "General" (Ajustes, Ayuda). Botón ▯ para contraer a solo íconos (60 px) o expandir (248 px). Empieza expandido en pantallas ≥1300 px y contraído en las menores. En móvil (≤900 px) se oculta y se abre encima con un botón flotante; tocar fuera lo cierra. Solo en memoria.
+- La barra de opciones de debajo del pegado se movió al menú. Los botones Ajustes/Ayuda de arriba quedan solo con ícono (con nombre accesible y tooltip). El menú marca Ajustes/Ayuda cuando están abiertos.
+
+C) AJUSTES POR SECCIONES
+- Cuatro secciones con título e introducción: Tu Personaje (Skills) · Impuestos y Precios (Impuestos, Ajuste de Precios, Órdenes de Venta) · Dónde Vendes (Precios en Null, Hielo, Buyback, Venta a Jugador) · Envío y Reproceso (Envío, Refinería). Cada grupo muestra una frase-resumen bajo su título aun cerrado. "Costo de producción %" ahora dice "(si lo fabricaste)".
+
+D) PALETA GRIS-NEGRO (la de la barra que le gustó a Arturo)
+- Paneles: rgba(21,21,21,.88) translúcido sobre la imagen, borde fino rgba(222,220,209,.12), esquinas 14 px, sombra suave. Tarjetas internas apenas más claras (blanco 3.5%) con borde fino, sin sombras. Campos oscuros translúcidos. Plan elegido en arcilla. El tema claro se genera igual desde estos colores (crema).
+
+E) VERIFICACIÓN
+- node --check; skew (cero = 1.0.10; −0.16% exacto); menú en 1440/1200/390 px (expandir, contraer, abrir Ajustes desde el menú, interruptores funcionando, móvil con fondo); tema claro; motor; parser 1527/1536; foco 31/31; smoke; Contratos y Envío; modo invertido; escáner sin envío; selector 8/8; quitar/deshacer; sin fugas; solo hosts de ESI; nada en storage; sin desborde; cero errores.
+- Pestaña del navegador: título "Gestor de Ventas · SIGMA GRINDSET"; con resultado, "1,8 B ISK · Gestor de Ventas" (vuelve al título base al limpiar). Ícono de la pestaña: el logo de SIGMA GRINDSET, incrustado en el archivo (data:), sin pedir nada a internet. El navegador alinea el título a la izquierda; no se puede centrar desde la página.
+
 ## 1.0.10 — Barra de opciones armónica
 *2026-10-14*
 
