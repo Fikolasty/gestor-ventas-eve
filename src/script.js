@@ -2016,11 +2016,11 @@ function paintAppraisal(){
   // v1.0.25: la tasación solo aparece con ítems pegados; sin ítems, las tarjetas ocupan todo el ancho
   box.hidden=!its.length;box.parentNode.classList.toggle('no-appr',!its.length);if(!its.length)return;
   let vB=0,vS=0,vol=0,u=0;its.forEach(o=>{vol+=(o.m3u||0)*o.qty;u+=o.qty;});priced.forEach(o=>{vB+=o.jita.buy*o.qty;vS+=o.jita.sell*o.qty;});
-  const g=el('dl','appr-g'),cell=(k,v,c)=>{const d=el('div',c||null);d.append(el('dt',null,k));const dd=el('dd','num');if(typeof v==='number'){dd.append(copyBtn(String(Math.round(v)),fmt(v)));}else dd.textContent=v;d.append(dd);g.append(d);};
+  const g=el('dl','appr-g'),cell=(k,v,c,cp)=>{const d=el('div',c||null);d.append(el('dt',null,k));const dd=el('dd','num');if(typeof v==='number'){dd.append(copyBtn(String(Math.round(v)),fmt(v)));}else if(cp!=null){dd.append(copyBtn(cp,v));}else dd.textContent=v;d.append(dd);g.append(d);};
   const ok=priced.length>0;
   // filas como Janice: dato a la izquierda · valor del lote a la derecha
   cell('Precios de','Jita 4-4','meta');cell('Buy',ok?vB:'—','t-buy');
-  cell('Volumen',fmtV(Math.round(vol*100)/100),'meta');cell('Split',ok?(vB+vS)/2:'—','t-split');
+  cell('Volumen',fmtV(Math.round(vol*100)/100),'meta',String(Math.round(vol*100)/100)); // v1.0.26: clic copia el número (m³)cell('Split',ok?(vB+vS)/2:'—','t-split');
   cell('Ítems',its.length+(its.length===1?' ítem · ':' ítems · ')+fmtQ(u)+' u.'+(priced.length<its.length?' ('+priced.length+' con precio)':'')+(S.loading?' · cargando…':''),'meta');cell('Sell',ok?vS:'—','t-sell');
   box.append(el('span','appr-tag','Tasación'),g);
 }

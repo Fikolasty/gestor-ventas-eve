@@ -2,6 +2,11 @@
 
 Cambios por versión del Gestor de Ventas. La más nueva arriba. El detalle técnico completo está en `docs/SPEC.txt`.
 
+## 1.0.27 — Volumen copiable en la tasación
+*2026-10-14*
+
+- Tasación: el **Volumen** también se copia con un clic (copia el número en m³).
+
 ## 1.0.26 — Comparativa Minera: plan para Omega nuevo, inversión y entrenamiento
 *2026-10-14*
 
