@@ -2,6 +2,11 @@
 
 Cambios por versión del Gestor de Ventas. La más nueva arriba. El detalle técnico completo está en `docs/SPEC.txt`.
 
+## 1.0.38 — Nota Covetor: compresión en el espacio, nadie recoge mineral
+*2026-10-14*
+
+- La nota de Covetor ya no dice que alguien te recoja el mineral (Orca, Porpoise o hauler): nadie recoge mineral. El booster comprime en el espacio 10 a 1 (1000 m³ se vuelven 100 m³), así que minas hasta que se acabe el material sin ir a la estación. Los números no cambian: el cálculo con boost ya asumía esto (sin viajes). Español / English.
+
 ## 1.0.37 — Etiqueta del grupo de naves encima (corrige envoltura)
 *2026-10-14*
 
