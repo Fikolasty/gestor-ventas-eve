@@ -843,7 +843,7 @@ function numIn(val,ph,on,label){
 const LOT_OF=new WeakMap();
 function toggleLot(o){const ui=o.ui;if(!ui)return;const open=ui.body.hidden;
   if(open&&!ui.detailsReady)buildLotDetails(o,ui); // una sola vez, nunca se destruye al cerrar
-  ui.body.hidden=!open;ui.lot.classList.toggle('open',open);ui.head.setAttribute('aria-expanded',String(open));
+  slide(ui.body,open,open?340:280);ui.lot.classList.toggle('open',open); // v1.0.50: suaveui.head.setAttribute('aria-expanded',String(open));
   if(open&&ui.last)paintLot(ui.last);}
 $('lots').addEventListener('click',e=>{const lot=e.target.closest('.lot'),o=lot&&LOT_OF.get(lot);if(!o)return;
   if(e.target.closest('.lot-x')){removeFromPaste(o.name);return;}
@@ -1078,16 +1078,54 @@ $('vPlan').addEventListener('input',e=>{
   vShow[section.dataset.sortId]=5; // buscar siempre empieza por los primeros resultados
   repaintPlanGroup(section);
 });
+// ================= v1.0.50: movimiento suave =================
+// Abrir y cerrar con curva «ease in-out» (lenta al empezar, rápida al medio, lenta al terminar), como un zoom
+// en edición de video. Solo altura + opacidad (Web Animations API). Con «reducir movimiento» del sistema, sin animación.
+const EASE='cubic-bezier(.65,0,.35,1)',MOTION=()=>!(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)&&!!Element.prototype.animate;
+const ANIM=new WeakMap();
+function slide(node,show,ms){
+  if(!node)return;const dur=ms||380,prev=ANIM.get(node);if(prev)prev.cancel();
+  if(!MOTION()){node.hidden=!show;return;}
+  if(show){node.hidden=false;const h=node.scrollHeight;
+    const a=node.animate([{height:'0px',opacity:0,overflow:'hidden'},{height:h+'px',opacity:1,overflow:'hidden'}],{duration:dur,easing:EASE});
+    ANIM.set(node,a);a.onfinish=a.oncancel=()=>ANIM.delete(node);}
+  else{if(node.hidden)return;const h=node.offsetHeight;
+    const a=node.animate([{height:h+'px',opacity:1,overflow:'hidden'},{height:'0px',opacity:0,overflow:'hidden'}],{duration:dur,easing:EASE,fill:'forwards'});
+    ANIM.set(node,a);a.onfinish=()=>{node.hidden=true;a.cancel();ANIM.delete(node);};}
+}
+// cambia el alto de un bloque que se repinta (p. ej. «Ver más planes») de forma suave: mide antes y después
+function morph(node,paint,ms){
+  if(!node||!MOTION()){paint();return;}
+  const h0=node.offsetHeight;paint();const h1=node.offsetHeight;if(Math.abs(h1-h0)<2)return;
+  node.animate([{height:h0+'px',overflow:'hidden'},{height:h1+'px',overflow:'hidden'}],{duration:ms||380,easing:EASE});
+}
+// <details>: abre y cierra con la misma curva (el evento toggle sigue funcionando igual)
+document.addEventListener('click',e=>{
+  const sm=e.target.closest('details>summary');if(!sm||!MOTION()||e.defaultPrevented)return;
+  const d=sm.parentElement;if(d.dataset.anim==='1')return;
+  const body=[...d.children].filter(c=>c!==sm);if(!body.length)return;
+  e.preventDefault();d.dataset.anim='1';
+  if(!d.open){d.open=true;const h0=sm.offsetHeight,h1=d.offsetHeight;
+    const a=d.animate([{height:h0+'px',overflow:'hidden'},{height:h1+'px',overflow:'hidden'}],{duration:360,easing:EASE});a.onfinish=a.oncancel=()=>delete d.dataset.anim;}
+  else{const h0=d.offsetHeight,h1=sm.offsetHeight;
+    const a=d.animate([{height:h0+'px',overflow:'hidden'},{height:h1+'px',overflow:'hidden'}],{duration:320,easing:EASE,fill:'forwards'});
+    a.onfinish=()=>{d.open=false;a.cancel();delete d.dataset.anim;};}
+});
 // Divulgación progresiva: primero el resultado; el análisis y la info extra solo si los pides
-[['bDeep','deep','Ver el análisis ▾','Ocultar el análisis ▴'],['bMore','more','Ver más ▾','Ocultar ▴']].forEach(([b,t,o,c])=>$(b).addEventListener('click',()=>{
-  const open=$(t).hidden;$(t).hidden=!open;$(b).setAttribute('aria-expanded',String(open));$(b).querySelector('b').textContent=open?c:o;
-  if(open){if(lastP)refreshNow();$(b).scrollIntoView({behavior:'smooth',block:'start'});}}));
+[['bDeep','deep','Ver el desglose ▾','Volver a los planes ▴'],['bMore','more','Ver más ▾','Ocultar ▴']].forEach(([b,t,o,c])=>$(b).addEventListener('click',()=>{
+  const open=$(t).hidden;$(b).setAttribute('aria-expanded',String(open));$(b).querySelector('b').textContent=open?c:o;
+  if(b==='bDeep'){ // v1.0.50: con el desglose abierto se pliegan los planes (con la misma curva)
+    const pw=document.querySelector('#pSum .pk-w');
+    if(open){if(pw&&MOTION()){slide(pw,false,320);setTimeout(()=>{$('pSum').classList.add('res-min');pw.hidden=false;},330);}else $('pSum').classList.add('res-min');}
+    else{$('pSum').classList.remove('res-min');if(pw){pw.hidden=true;slide(pw,true);}}}
+  if(open){$(t).hidden=false;if(lastP)refreshNow();$(t).hidden=true;slide($(t),true,460);}else slide($(t),false,320);
+  if(open)setTimeout(()=>$(b).scrollIntoView({behavior:'smooth',block:'start'}),b==='bDeep'?340:0);}));
 // nombre corto del mejor plan (sin "+ N más" ni "· por rapidez")
 const bestLabel=()=>$('vWhat').textContent.replace(/ · por rapidez$/,'').replace(/ \+ \d+ más$/,'');
 // Sin ítems: vacía todo lo pintado y suelta referencias (así el navegador libera la memoria de lotes grandes)
 function clearViews(){
   document.title='Gestor de Ventas · SIGMA GRINDSET';
-  ['vPlan','vRepList','ctrList','czDots','ctrTot','shBody','fScn','rx','rxFinal','dMsg','sumP1','sumP2'].forEach(id=>{const e=$(id);if(e)e.textContent='';});
+  ['vPlan','vRepList','ctrList','czDots','ctrTot','shBody','fScn','rx','rxFinal','dMsg'].forEach(id=>{const e=$(id);if(e)e.textContent='';});
   ['pCtr','pSum'].forEach(id=>{const e=$(id);if(e)e.hidden=true;});
   lastP=null;repaintPlanGroup=null;S.pricedAt=null;paintAppraisal();discRows=[];czCards=[];lastCs=[];czIdx=0;S.planMode=null;ICON_POOL={};
   vShow=Object.create(null);vSort=Object.create(null);vQuery=Object.create(null);stepDone=new Set();pkView={sort:'net',dir:-1,filter:'all',open:false};itemDone=new Set();if($('stepHead'))$('stepHead').textContent='';
@@ -1781,26 +1819,6 @@ $('bEsiMin').addEventListener('click',async()=>{
 });
 
 // Resume la ACCIÓN del plan, no solo su ganancia. Usa las decisiones ya calculadas en computePlan().
-function summaryAction(k,g,sys){
-  const ice=g.every(r=>isIce(r.o.name));
-  const ore=g.every(r=>{const x=resolveOre(r.o.name);return x&&x.d.cat!=='ice';});
-  const obj=ice?'el hielo':ore?'el ore':g.length===1?'este ítem':g.length+' ítems';
-  const raw=ice||ore?obj+' sin reprocesar':obj;
-  const loc='nullsec'+(sys&&sys.toLowerCase()!=='nullsec'?' ('+sys+')':'');
-  switch(k){
-    case 'fN': return (SH()?'llevar '+obj+' de Jita a HY-RWO y vender'+(g.length===1?'lo':'los')+' allí':'vender '+obj+' en HY-RWO')+' con órdenes de venta (+'+pct(C.impM)+'% neto sobre Jita Sell)';
-    case 'fJ': return 'vender '+obj+' en Jita con órdenes de venta';
-    case 'fJI': return 'vender '+obj+' directamente a las órdenes de compra de Jita';
-    case 'null': return 'vender '+raw+' en '+loc+' mediante órdenes de venta';
-    case 'rNull': return 'reprocesar '+obj+' y vender '+(ice?'sus productos':ore?'sus minerales':'sus materiales')+' en '+loc;
-    case 'jOrd': return 'vender '+raw+' en Jita con órdenes de venta';
-    case 'jInst': return 'vender '+raw+' directamente a las órdenes de compra de Jita';
-    case 'rJita': return 'reprocesar '+obj+' y vender '+(ice?'sus productos':ore?'sus minerales':'sus materiales')+' en Jita';
-    case 'bb': return 'vender '+obj+' al Buyback de la alianza mediante contrato';
-    case 'disc': return 'vender '+obj+' a otro jugador por Discord';
-    default: return '';
-  }
-}
 // ================= Vista: resumen final (el estudio en palabras) =================
 // ================= Elige un Plan (v111 → v1.0.21) =================
 // Una fila por plan con columnas (Plan · Rapidez · Envío · Valor · Total · vs Óptimo), orden por columna y filtros.
@@ -1886,11 +1904,10 @@ function paintPicker(P){
     if(cant.length)bar.append(document.createTextNode(' '+(cant.length===1?'1 ítem no se puede vender así y sigue':cant.length+' ítems no se pueden vender así y siguen')+' el óptimo: '+cant.slice(0,4).map(r=>r.o.name).join(', ')+(cant.length>4?' y '+(cant.length-4)+' más':'')+'.'));
     const back=el('button','ghost pk-back','Volver al óptimo');back.type='button';back.dataset.m='auto';bar.append(back);
   }else bar.hidden=true;
-  return same[0]||null;
 }
 // orden y filtro: solo repintan el selector (no recalculan el plan)
 $('pkTools').addEventListener('click',e=>{const b=e.target.closest('[data-pkf]');if(!b||!lastP)return;pkView.filter=b.dataset.pkf;paintPicker(lastP);});
-$('pk').addEventListener('click',e=>{const mo=e.target.closest('[data-pkmore]');if(mo&&lastP){e.stopPropagation();pkView.open=!pkView.open;paintPicker(lastP);return;}
+$('pk').addEventListener('click',e=>{const mo=e.target.closest('[data-pkmore]');if(mo&&lastP){e.stopPropagation();pkView.open=!pkView.open;morph($('pk'),()=>paintPicker(lastP));return;}
   const b=e.target.closest('[data-pks]');if(!b||!lastP)return;e.stopPropagation();const k=b.dataset.pks;
   pkView=pkView.sort===k?{...pkView,dir:-pkView.dir}:{...pkView,sort:k,dir:k==='name'||k==='speed'||k==='ship'?1:-1};paintPicker(lastP);});
 $('pSum').addEventListener('click',e=>{const b=e.target.closest('[data-m]');if(!b)return;const m=b.dataset.m==='auto'?null:b.dataset.m;
@@ -1924,55 +1941,11 @@ function paintSkewNote(){const b=$('skNote'),parts=[];
   b.hidden=!parts.length;b.textContent=parts.length?'Precios ajustados: '+parts.join(' · '):'';}
 function paintSummary(P){
   const box=$('pSum'),none=!P.rows.length||P.missing.length===P.rows.length;box.hidden=none||!S.items.length;if(box.hidden)return;
-  const sys=(C.ref.name||'Null').split(' - ')[0].trim()||'Null',cnt=n=>n+(n===1?' ítem':' ítems'),by=k=>P.rows.filter(r=>r.best===k);
-  const A=$('sumP1'),B=$('sumP2');A.textContent='';B.textContent='';
-  // contratos en el mismo orden que "Tus Contratos": Buyback, couriers, jugador
-  const cs=packCouriers(P),hasBB=P.toBB.length>0,dr=by('disc');let n=0;
-  const nBB=hasBB?++n:0,c0=n+1;n+=cs.length;const c1=n,nPl=dr.length?++n:0;
-  const li=(chip,cls,txt,sub,val,vcls)=>{const l=el('li');l.append(el('span','chip'+(cls?' '+cls:''),chip));const t=el('span');t.append(el('b',null,txt));if(sub)t.append(document.createTextNode(' · '),el('small',null,sub));l.append(t);if(val!=null)l.append(el('span','v num '+(vcls||''),val));return l;};
-  const ded=['taxes','broker'];if(C.relistOn&&C.relists>0)ded.push('relists');if(P.Vs>0&&C.shipOn)ded.push('envío');
-  const sameAs=paintPicker(P);
+  const sys=(C.ref.name||'Null').split(' - ')[0].trim()||'Null';
+  paintPicker(P);
   document.title=compactIsk(P.best)+' ISK · Gestor de Ventas'; // v1.0.11: el total en la pestaña
   paintSkewNote();
   paintFlipBuy(P);
-  A.append(el('h4',null,P.mode?'Plan Elegido · '+modeName(P.mode):'Plan Óptimo'+(sameAs?' · '+modeName(sameAs):'')));
-  // v1.0.49: texto corto; el detalle de cada paso está en la lista de abajo
-  {const p0=el('p','lead2');p0.append(document.createTextNode('Recibirías '+fmt(P.best)+' netos, ya sin '+ded.slice(0,-1).join(', ')+' y '+ded[ded.length-1]+'. Sigue estos pasos:'));A.append(p0);}
-  const ul=el('ul');
-  if(hasBB)ul.append(li('Contrato '+nBB,'bb','Al Buyback de la alianza',cnt(P.toBB.length),'Recibes '+fmt(P.bbGross),'pos'));
-  if(cs.length&&S.flip){const fn=by('fN').length;
-    ul.append(li(cs.length>1?'Contratos '+c0+'–'+c1:'Contrato '+c0,'','Envío a HY-RWO',cnt(fn)+', '+NF0.format(Math.round(P.Vs))+' m³ (máx. '+NF0.format(C.maxVol)+' por contrato). Allá: '+fn+' en orden de venta','Envío −'+fmt(P.shipCost),'neg'));}
-  else if(cs.length){const jo=by('jOrd').length,ji=by('jInst').length,rj=by('rJita').length;
-    const what=[jo?jo+' en orden de venta':'',ji?ji+' directo a las compras':'',rj?rj+' refinados':''].filter(Boolean).join(', ').replace(/, ([^,]*)$/,' y $1');
-    ul.append(li(cs.length>1?'Contratos '+c0+'–'+c1:'Contrato '+c0,'','Envío a Jita',cnt(jo+ji+rj)+', '+NF0.format(Math.round(P.Vs))+' m³ (máx. '+NF0.format(C.maxVol)+' por contrato). Allá: '+what,'Envío −'+fmt(P.shipCost),'neg'));}
-  if(!SH()&&!S.flip){const jo=by('jOrd').length,ji=by('jInst').length,rj=by('rJita').length,n=jo+ji+rj;
-    if(n)ul.append(li('Órdenes','','Vender en Jita',[jo?jo+' en órdenes de venta':'',ji?ji+' a las buy orders':'',rj?rj+' reprocesados':''].filter(Boolean).join(', ')+' (sin contrato)',null));}
-  if(!SH()&&S.flip&&by('fN').length)ul.append(li('Órdenes','','Vender en HY-RWO',cnt(by('fN').length)+' en órdenes de venta (sin contrato)',null));
-  if(S.flip){const fj=by('fJ').length+by('fJI').length;if(fj)ul.append(li('Órdenes','','Vender en Jita',cnt(fj)+(by('fJI').length?' (órdenes y venta rápida, sin contrato)':' en órdenes de venta (sin contrato)'),null));}
-  const nn=by('null').length+by('rNull').length+by('fN').length;if(nn&&!S.flip)ul.append(li('Órdenes','nl','Vender en '+sys,cnt(nn)+' en órdenes de venta (sin contrato)',null));
-  if(dr.length)ul.append(li('Contrato '+nPl,'pl','A un jugador por Discord',cnt(dr.length),null));
-  // v1.0.49: el Tiempo Estimado va dentro del plan, como un paso más de la lista (antes era un bloque aparte)
-  const dMin=C.cDays[0],dMax=C.cDays[1],shipMin=cs.length*dMin,shipMax=cs.length*dMax;
-  const jRows=P.rows.filter(r=>r.best==='jOrd'||r.best==='rJita'||r.best==='fJ');
-  const jDays=Math.max(0,...jRows.map(r=>{const h=r.o.jita&&r.o.jita.hist;return h&&h.daily>0?r.q/h.daily:0;}));
-  const nDays=nn?(P.rows.some(r=>(r.best==='null'||r.best==='rNull'||r.best==='fN')&&isIce(r.o.name))&&C.ice.on?C.ice.nullDays:C.nullDays):0;
-  const bbD=hasBB?[1,3]:[0,0],plD=dr.length?[1,C.disc.days]:[0,0];
-  const best=Math.ceil(Math.max(shipMin+(jRows.length?Math.max(1,jDays*0.5):0),bbD[0],plD[0],nn?nDays*0.5:0));
-  const worst=Math.ceil(Math.max(shipMax+(jRows.length?Math.max(2,jDays*1.5):0),bbD[1],plD[1],nn?nDays*1.5:0));
-  const why=[];
-  if(cs.length)why.push('envío '+dMin+'–'+dMax+(dMax>1?' días':' día')+(cs.length>1?' × '+cs.length+' contratos':''));
-  if(jRows.length)why.push('Jita '+(jDays<=1?'≤1 día':'~'+Math.ceil(jDays)+' días'));
-  if(nn)why.push(sys+' ~'+nDays+' días');
-  if(hasBB)why.push('Buyback 1–3 días');
-  if(dr.length)why.push('jugador 1–'+C.disc.days+' días');
-  const dTxt=best===worst?best+(best===1?' día':' días'):best+' a '+worst+' días';
-  ul.append(li('Tiempo','tm',dTxt,why.join(' · ')||null,null));
-  A.append(ul);
-  const notes=[];
-  if(worst>14&&C.bb.on&&P.allBB!=null&&P.rows.every(r=>r.g.bb!=null))notes.push('Plan largo: si necesitas el ISK antes, todo al Buyback ('+fmt(P.allBB)+') se cobra en pocos días.');
-  if(P.missing.length)notes.push('Sin precio (no entran en el total): '+cnt(P.missing.length)+'.');
-  if(notes.length){const why2=el('ul','why');notes.forEach(t=>why2.append(el('li',null,t)));A.append(why2);}
-  B.hidden=true;
   $('resIsk').textContent=fmt(P.best);$('resWhat').textContent=$('vWhat').textContent;
   paintResGain(P,sys);
 }
@@ -2047,7 +2020,7 @@ function refreshNow(){
   if(!S.repro.dirty&&!$('pRepro').hidden)fillFromItem();
   const P=computePlan();
   paintAppraisal();P.rows.forEach(paintLot);paintVerdict(P);paintContracts(P);paintCourier(P);paintDisc(P);paintRepro();paintSummary(P);
-  document.querySelectorAll('#fScnV,#sumP1 .lead2,#vRep .rw,.pl-row .n small').forEach(colorNums);
+  document.querySelectorAll('#fScnV,#vRep .rw,.pl-row .n small').forEach(colorNums);
   document.querySelectorAll('.margPct').forEach(e=>e.textContent=pct(C.margin));
 }
 
@@ -2084,7 +2057,7 @@ $('liteOn').addEventListener('change',e=>document.documentElement.classList.togg
 $('themeLight').addEventListener('change',e=>{document.documentElement.classList.toggle('light',e.target.checked);$('themeTxt').textContent=e.target.checked?'Light':'Dark';});
 
 // ================= Ajustes y Ayuda =================
-function toggle(btn,id){const s=$(id),open=s.hidden;s.hidden=!open;btn.setAttribute('aria-pressed',String(open));if(open)s.scrollIntoView({behavior:'smooth',block:'start'});}
+function toggle(btn,id){const s=$(id),open=s.hidden;slide(s,open,open?420:300);btn.setAttribute('aria-pressed',String(open));if(open)s.scrollIntoView({behavior:'smooth',block:'start'});} // v1.0.50: Ajustes/Ayuda con la curva suave
 $('bSettings').addEventListener('click',e=>toggle(e.currentTarget,'settings'));
 // v1.0.11: menú lateral. Escritorio: se contrae a íconos. Móvil: se abre encima con fondo oscuro. Solo en memoria.
 {const mob=()=>innerWidth<=900,b=document.body;

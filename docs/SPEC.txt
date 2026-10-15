@@ -1163,3 +1163,11 @@ Comparativa Minera: plan para Omega nuevo
 - .more-btn (#bDeep) con el estilo de .pk-o.on. Light en light_extra.css.
 - build: --athanor:url(fondo) en :root y var(--athanor) en body::before (normal y Light); favicon creado en JS desde --sigma. index.html 1,28 MB.
 - ESI_POOL=8.
+
+==================== v1.0.50 ====================
+- Fuera #sumP1/#sumP2, summaryAction y el bloque del plan en paintSummary (ahora: picker, título, skew, flipBuy, resIsk/resWhat, paintResGain).
+- #bDeep debajo de .pk-w; abrir → #pSum.res-min (oculta .pk-w y #flipBuy), texto «Volver a los planes ▴».
+- Movimiento: EASE=cubic-bezier(.65,0,.35,1); slide(node,show,ms) (altura+opacidad con Web Animations); morph(node,paint) para repintados
+  (#pk al abrir/cerrar planes); <details> por delegación de clic en summary; toggle() de Ajustes/Ayuda y toggleLot usan slide.
+  MOTION() = sin prefers-reduced-motion y con Element.animate.
+- CSS sin uso quitado (.res-b, .lead2, .cmp2, .cmp-*, .why, .hero-p, .hero-intro>p/.ref/.start-note/.paste).

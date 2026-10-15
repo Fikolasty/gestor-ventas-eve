@@ -2,6 +2,20 @@
 
 Cambios por versión del Gestor de Ventas. La más nueva arriba. El detalle técnico completo está en `docs/SPEC.txt`.
 
+## 1.0.50 — El desglose como protagonista y movimiento suave
+*2026-10-15*
+
+**Resultado**
+- Fuera el bloque «Plan Óptimo» (contratos, órdenes y Tiempo): repetía lo que muestra el desglose.
+- **Ver el desglose** queda justo debajo de «Ver más planes». Al abrirlo, los planes se pliegan y el desglose pasa a ser lo principal; el botón cambia a **Volver a los planes**.
+
+**Movimiento suave**
+- Abrir y cerrar con curva *ease in-out* (lenta al empezar, rápida en el medio, lenta al terminar): el desglose, «Ver más planes», Ajustes, Ayuda, cada ítem de Tus Ítems y las secciones desplegables.
+- Si el sistema tiene activado «reducir movimiento», se abre al instante como antes.
+
+**Limpieza**
+- Fuera el código y los estilos que ya no usaba nada: el bloque del plan y su texto, y estilos de «Qué hace» y de tarjetas que ya no existen (50+ reglas). Mismo aspecto, archivo más chico.
+
 ## 1.0.49 — Planes plegados, plan más corto y página más liviana
 *2026-10-15*
 
