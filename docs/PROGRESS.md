@@ -17,10 +17,10 @@
 
 ## Acuerdo de entrega y staging (15-10-2026)
 
-- **Cada trabajo terminado:** commit y push a \`develop\`; reportar el enlace y el resultado de las pruebas.
-- **Cada entrega:** mantener \`SPEC.md\` y \`PROGRESS.md\` actualizados. Con versión publicada, completar \`CHANGELOG.md\`.
+- **Cada trabajo terminado:** commit y push a `develop`; reportar el enlace y el resultado de las pruebas.
+- **Cada entrega:** mantener `SPEC.md` y `PROGRESS.md` actualizados. Con versión publicada, completar `CHANGELOG.md`.
 - **Vista previa:** alojar una versión alterna visitable desde un enlace que se actualice con los pushes de develop; enviar el enlace tras comprobar despliegue correcto.
-- **Protección:** https://fikolasty.github.io/gestor-ventas-eve/ debe continuar sirviendo solo \`main\` hasta aprobación para publicar; no tocar configuración de Pages a ciegas.
+- **Protección:** https://fikolasty.github.io/gestor-ventas-eve/ debe continuar sirviendo solo `main` hasta aprobación para publicar; no tocar configuración de Pages a ciegas.
 - **Bloqueo externo pendiente:** seleccionar y autorizar hosting separado. GitHub Pages de este repositorio no ofrece simultáneamente dos fuentes de publicación independientes. Propuesta: Cloudflare Pages conectado a este mismo repositorio con previsualizaciones automáticas de rama, sin cambiar GitHub Pages de producción. Requiere una única configuración por el usuario; **no se ha desplegado aún una vista previa**.
 
 ## 2. Insumos recibidos
