@@ -1156,3 +1156,7 @@ Desplegables de Minería con estilo de tarjeta
 - `.mn details` en mining.css: mismo tratamiento que `.mn-card` (fondo #151515, borde, radio, padding 14px 16px);
   summary a 1.02rem y con margen abajo al abrir. El tema claro sale de light.py como las demás tarjetas.
 - Verificado: Playwright con ESI simulado (details abiertos, estilo de tarjeta, inglés sin restos), móvil 390 px, cero errores.
+==================== Publicación ====================
+2026-10-14: v1.0.32–v1.0.34 publicados por subida web en el navegador
+(5 commits directos a main, en tandas por directorio), tras dos 401 de la
+ruta API con token guardado. Detalle en custom.github/CONNECTOR.md.
