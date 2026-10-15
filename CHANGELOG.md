@@ -2,6 +2,13 @@
 
 Cambios por versión del Gestor de Ventas. La más nueva arriba. El detalle técnico completo está en `docs/SPEC.txt`.
 
+## 1.0.60 — Recuadro Extras y medidas iguales
+*2026-10-15*
+
+- **EXTRAS**: Reproceso y Vender a Jugadores van dentro de un recuadro con título e ícono, como el del Resultado. Se oculta si no hay nada que mostrar (por ejemplo, con la ruta Jita → HY-RWO).
+- «Ver el desglose» y las filas de Extras tienen la misma medida (ancho y alto) que la fila del plan elegido.
+- Arreglo: al cambiar a Jita → HY-RWO, Reproceso ya no se queda visible (solo se reprocesa en HY-RWO).
+
 ## 1.0.59 — Pasos para Vender en dos columnas y secciones plegables
 *2026-10-15*
 

@@ -1442,6 +1442,8 @@ function ctItems(list,withC){const w=el('div','ct-items'),hd=el('div','ct-ih');
 // Casillas negras (etiqueta arriba, valor abajo; clic copia). cls: 'slots-2' = dos columnas (los valores largos ocupan la fila).
 function slots(fields,cls){const w=el('div','slots'+(cls?' '+cls:''));
   fields.forEach(([k,v,cp])=>{const d=el('div','slot'+(String(v).length>22?' wide':''));d.append(el('span','slot-k',k));d.append(cp!=null?copyBtn(cp,v):el('span','slot-v'+(isNumTxt(v)?' cp-n':''),v));w.append(d);});return w;}
+// v1.0.60: el recuadro Extras se ve solo si tiene alguna sección visible
+const syncExtras=()=>{$('pRepro').hidden=S.flip||!S.items.some(o=>resolveOre(o.name));$('pExtra').hidden=$('pRepro').hidden&&$('pDisc').hidden;}; // reproceso solo en HY-RWO
 function paintContracts(P){
   const sec=$('pCtr');sec.hidden=!S.items.length;
   $('ctrTitle').textContent=SH()?'Contratos y Envío':'Contratos';$('shipBox').hidden=!SH();sec.classList.toggle('no-ship',!SH());
@@ -1540,7 +1542,7 @@ function paintCourier(P){
 const JANICE='https://janice.e-351.com/';
 let discRows=[];
 function paintDisc(P){
-  const box=$('pDisc');box.hidden=!S.items.length||!C.disc.on||S.flip;if(box.hidden)return;
+  const box=$('pDisc');box.hidden=!S.items.length||!C.disc.on||S.flip;syncExtras();if(box.hidden)return;
   const chosen=P.rows.filter(r=>r.best==='disc');
   discRows=chosen.length?chosen:P.rows.filter(r=>r.g.disc!=null);
   const tot=discRows.reduce((a,r)=>a+(r.g.disc||0),0);
@@ -1701,7 +1703,7 @@ function fillFromItem(clear){
   $('rQty').value=it.qty;$('rOrePrice').value=it.ref!=null?it.ref:'';$('rOreVol').value=it.m3u!=null?it.m3u:'';
 }
 function autoRepro(){
-  const ores=S.flip?[]:S.items.filter(o=>resolveOre(o.name));$('pRepro').hidden=!ores.length;if(!ores.length)return;
+  const ores=S.flip?[]:S.items.filter(o=>resolveOre(o.name));$('pRepro').hidden=!ores.length;syncExtras();if(!ores.length)return;
   if(!itemByName($('rOre').value))$('rOre').value=resolveOre(ores[0].name).key;
   S.repro.dirty=false;fillFromItem();
 }
@@ -2032,7 +2034,7 @@ function refreshNow(){
   document.body.classList.toggle('in-jita',IN_JITA()); // v1.0.22: oculta lo que no aplica con los items ya en Jita
   if(!S.repro.dirty&&!$('pRepro').hidden)fillFromItem();
   const P=computePlan();
-  paintAppraisal();P.rows.forEach(paintLot);paintVerdict(P);paintContracts(P);paintCourier(P);paintDisc(P);paintRepro();paintSummary(P);
+  syncExtras();paintAppraisal();P.rows.forEach(paintLot);paintVerdict(P);paintContracts(P);paintCourier(P);paintDisc(P);paintRepro();paintSummary(P);
   document.querySelectorAll('#fScnV,#vRep .rw,.pl-row .n small').forEach(colorNums);
   document.querySelectorAll('.margPct').forEach(e=>e.textContent=pct(C.margin));
 }

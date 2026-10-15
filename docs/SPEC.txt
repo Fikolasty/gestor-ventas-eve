@@ -1231,3 +1231,7 @@ Comparativa Minera: plan para Omega nuevo
 - Pasos: section.stp > button.stp-h[data-stp] (n · título/sub · monto · chevron) + .stp-b (.stp-main | aside.stp-ct con slots). stepOpen (Set, por defecto
   el primer paso; se reinicia al limpiar). Clic en .stp-h: alterna con slide() y centra. renderPlanTable inserta la tabla en .stp-main.
 - Fuera: .ct-f, .stp-f/.stp-fi, .stp-icons/iconStrip, .stp-acts .copy.p, #bMore/#more.
+
+==================== v1.0.60 ====================
+- section.panel.extras#pExtra con h2 «Extras» envuelve #pRepro y #pDisc. syncExtras() (en refreshNow, autoRepro y paintDisc): #pRepro oculto con S.flip o sin ore;
+  #pExtra oculto si ambos lo están. Filas de Extras y #bDeep: min-height 65 px, mismo ancho que .pk-o.
