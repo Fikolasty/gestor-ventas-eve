@@ -3,8 +3,8 @@
 **Actualizado:** 2026-10-15
 **Repositorio autorizado:** Fikolasty/gestor-ventas-eve; no operar con la cuenta Geiner.
 **Base de código auditada inicialmente:** main, v1.0.66, commit 2df3197c02ea156f8c56c772a9a49972a2ea966f.
-**Rama de documentación:** docs/spec-progress-20261015.
-**Estado de publicación:** SPEC.md y PROGRESS.md creados en rama; main sin modificar por este trabajo.
+**Rama activa para entregas:** develop (creada a partir de docs/spec-progress-20261015). La rama inicial se conserva como referencia documental.
+**Estado de publicación:** documentación versionada y copiada a develop; main sin modificar. **Vista previa online de develop aún NO configurada**.
 **Fuente de requisitos activos:** [SPEC.md](SPEC.md). Historial técnico: [SPEC.txt](SPEC.txt). Versiones: [CHANGELOG.md](../CHANGELOG.md).
 
 ## 1. Objetivo de la colaboración
@@ -14,6 +14,14 @@
 - Auditar íntegramente el código, malas prácticas, errores, rendimiento, memoria, documentación y API.
 - Proteger **todas** las funcionalidades actuales y **todas** las fórmulas económicas; no infringir límites de ESI/Fenris.
 - Pedir permiso ante cambios de alcance o riesgos. No hacer push/merge a **main** sin autorización específica.
+
+## Acuerdo de entrega y staging (15-10-2026)
+
+- **Cada trabajo terminado:** commit y push a \`develop\`; reportar el enlace y el resultado de las pruebas.
+- **Cada entrega:** mantener \`SPEC.md\` y \`PROGRESS.md\` actualizados. Con versión publicada, completar \`CHANGELOG.md\`.
+- **Vista previa:** alojar una versión alterna visitable desde un enlace que se actualice con los pushes de develop; enviar el enlace tras comprobar despliegue correcto.
+- **Protección:** https://fikolasty.github.io/gestor-ventas-eve/ debe continuar sirviendo solo \`main\` hasta aprobación para publicar; no tocar configuración de Pages a ciegas.
+- **Bloqueo externo pendiente:** seleccionar y autorizar hosting separado. GitHub Pages de este repositorio no ofrece simultáneamente dos fuentes de publicación independientes. Propuesta: Cloudflare Pages conectado a este mismo repositorio con previsualizaciones automáticas de rama, sin cambiar GitHub Pages de producción. Requiere una única configuración por el usuario; **no se ha desplegado aún una vista previa**.
 
 ## 2. Insumos recibidos
 
@@ -61,6 +69,7 @@ Los hallazgos proceden de lectura de fuentes, **no equivalen a bugs reproducidos
 | Fase | Estado | Actividad |
 |---|---|---|
 | 0. Base y persistencia de contexto | **Completada** | Crear SPEC.md + PROGRESS.md en rama; conservar SPEC.txt |
+| 0b. Staging en línea | **Bloqueado por configuración externa** | Elegir hosting y conectar `develop` para previsualización automática sin alterar producción |
 | 1. Pendientes de Claude | Por hacer | Confirmar P-01 según UI vigente; ejecutar y probar P-02 |
 | 2. Test harness/regresión | Por hacer | Capturar snapshots de fórmulas con ESI simulado, casos límite y build |
 | 3. Auditoría funcional | Por hacer | Parser, estado, motor, reproceso, enlaces de UI y traducción |
@@ -86,4 +95,4 @@ Este commit de documentación **no debe cambiar ningún archivo fuente, fórmula
 
 ### Próximo paso
 
-Documentos creados y diferencia frente a main comprobada (únicamente docs/SPEC.md y docs/PROGRESS.md; cero cambios de fuente). Acordar el detalle visual de P-01 a partir de la web actual y empezar P-02 de forma aislada, preservando casos contractuales.
+Configurar staging independiente para `develop` con aprobación del usuario, verificar que la URL está realmente desplegada y automatizar publicación en cada push. En paralelo, acordar el detalle visual de P-01 y empezar P-02 de forma aislada, preservando casos contractuales.
