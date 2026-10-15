@@ -1160,3 +1160,12 @@ Desplegables de Minería con estilo de tarjeta
 2026-10-14: v1.0.32–v1.0.34 publicados por subida web en el navegador
 (5 commits directos a main, en tandas por directorio), tras dos 401 de la
 ruta API con token guardado. Detalle en custom.github/CONNECTOR.md.
+==================== v1.0.35 ====================
+Selector de naves del plan en dos grupos
+- Dos SEG con la misma clave 'barge' (seg() marca activo en ambos; el clic
+  escribe S.barge): Barge (Procurer, Retriever, Covetor) y Exhumer (Skiff,
+  Mackinaw, Hulk). Fila .pl-shiprow con etiqueta .pl-sl de ancho fijo para
+  alinear los dos grupos. Pista .pl-bh en una frase corta por nave; la nota
+  del primer mes quedó junto al grupo Exhumer. en.json: 7 claves viejas
+  fuera, 5 nuevas.
+- Pendiente verificar en vivo tras publicar (selector, clics, inglés, móvil).
