@@ -56,10 +56,11 @@
   background:#1e1d1c;border:1px solid rgba(222,220,209,.18);box-shadow:0 6px 16px rgba(0,0,0,.45);color:var(--txt)}
 .mn-tt .h{color:var(--mut);margin-bottom:2px}
 .mn-empty{color:var(--mut);font-size:.88rem;padding:24px 0;text-align:center}
-.mn details{border-top:1px solid rgba(222,220,209,.09);padding-top:10px}
-.mn details>summary{cursor:pointer;font:600 1rem var(--f-ui);color:var(--txt);list-style:none}
+.mn details{border:1px solid rgba(222,220,209,.09);border-radius:var(--r-md);background:#151515;padding:14px 16px}
+.mn details>summary{cursor:pointer;font:600 1.02rem var(--f-ui);color:var(--txt);list-style:none}
 .mn details>summary::-webkit-details-marker{display:none}
 .mn details>summary::before{content:"›";display:inline-block;margin-right:10px;color:var(--ion);transition:transform .15s}
+.mn details[open]>summary{margin-bottom:10px}
 .mn details[open]>summary::before{transform:rotate(90deg)}
 .mn-prose{font-size:.92rem;line-height:1.6;color:#e5e3da;max-width:70rem}
 .mn-prose h4{font:600 .95rem var(--f-ui);color:var(--txt);margin:14px 0 4px}

@@ -13,9 +13,12 @@ const MineUI=(()=>{
   const SHIPS=MINE.ships.map(s=>s.n),EX=new Set(MINE.ships.filter(s=>s.ex).map(s=>s.n));
   const TIERS=['T1','T2','Faction'],TL={T1:'Full T1',T2:'Full T2',Faction:'Facción'};
   const MATL={moon:'Moon ore',ice:'Hielo',gas:'Gas'};
-  const DEF={moon:'Zeolites',ice:'Blue Ice',gas:'Fullerite-C50'};
+  const DEF={moon:'Zeolites',ice:'Blue Ice',gas:'Lime Cytoserocin'};
   const S={view:'ships',mat:'moon',lv:5,imp:1,boost:'',met:'m3',tier:'Faction',item:{...DEF},base:'buy',cmp:true,
-    att:'base',patt:'base',acc:1,accq:'1',hrs:3,barge:'Retriever',ptier:'T1',plexManual:null,esPlex:15,omegaPlex:500,cmpv:'1'};
+    att:'base',patt:'base',acc:1,accq:'1',hrs:3,barge:'Retriever',ptier:'T1',plexManual:null,esPlex:15,omegaPlex:500,cmpv:'1',boost2:''};
+  // Exhumers en el plan: el primer mes se mina con la barge equivalente mientras se entrena Exhumers
+  const BARGE_OF={Hulk:'Covetor',Mackinaw:'Retriever',Skiff:'Procurer'};
+  const simShip=s=>BARGE_OF[s]||s;
   const BOOST=new Map((MINE.boosts||[]).map(b=>[b.n,b]));
   const PRICE={}; // por typeID: {buy,sell,at} — solo en memoria
   const NF0=new Intl.NumberFormat('en-US',{maximumFractionDigits:0}),NF1=new Intl.NumberFormat('en-US',{minimumFractionDigits:1,maximumFractionDigits:1}),
@@ -31,8 +34,8 @@ const MineUI=(()=>{
   const item=()=>matByName.get(S.item[S.mat]);
   const priceId=()=>{const m=item();return m?(S.cmp&&m.cid?m.cid:m.id):null;};
   const unitPrice=()=>{const p=PRICE[priceId()];return p?p[S.base]:null;};
-  const iskh=r=>{const m=item(),p=unitPrice();return m&&p!=null?r.tot/m.vol*p:null;};
-  const val=r=>S.met==='isk'?iskh(r):r.tot;
+  const iskh=r=>{const m=item(),p=unitPrice();return m&&p!=null?r.eff/m.vol*p:null;};
+  const val=r=>S.met==='isk'?iskh(r):r.eff;
   const fmtV=v=>v==null?'—':(S.met==='isk'?cmpISK(v)+' ISK/h':NF0.format(v)+' m³/h');
   const fmtAx=v=>S.met==='isk'?cmpISK(v):(v>=1000?NF0.format(v/1000)+'k':NF0.format(v));
 
@@ -109,8 +112,8 @@ const MineUI=(()=>{
    '<div class="mn-card"><h3>Autonomía: Minutos hasta Llenar la Bodega</h3><p class="mn-note">Con el fit del escalón elegido arriba. Más alto = más tiempo minando sin ir a descargar.</p><div class="mn-chart sm mn-hold"></div></div>'+
    '<details class="mn-reco"><summary>Qué Nave Recomendar</summary><div class="mn-prose">'+
      '<h4>Jugador Nuevo (Barges)</h4><ul>'+
-     '<li><b>Procurer</b> para empezar en highsec: es la barge más dura. Rinde menos, pero no la pierdes en un gank.</li>'+
-     '<li><b>Retriever</b> si minas solo y semi-AFK: la bodega más grande de las barges, la que menos viajes a estación pide.</li>'+
+     '<li><b>Procurer</b> para empezar: es la barge más dura. Rinde menos, pero es la que más aguanta si te cae una gang encima.</li>'+
+     '<li><b>Retriever</b> si minas solo y semi-AFK: la bodega más grande de las barges, la que menos viajes a descargar pide.</li>'+
      '<li><b>Covetor</b> solo en flota con alguien que te recoja el mineral (Orca, Porpoise o hauler): la que más saca entre barges, pero se llena en minutos y es frágil.</li>'+
      '<li>Hielo sin Ice Harvesting V: el <b>ORE Ice Harvester</b> solo pide Ice Harvesting I y cicla igual que el T2, sin residuo.</li>'+
      '<li>Moon ore: el <b>ORE Strip Miner</b> rinde bastante más que el Strip Miner I y no desperdicia mineral.</li>'+
@@ -118,19 +121,21 @@ const MineUI=(()=>{
      '<h4>Veterano (Exhumers)</h4><ul>'+
      '<li><b>Hulk</b> es la que más rinde en los tres materiales, pero solo en flota con alguien que le vacíe la bodega.</li>'+
      '<li><b>Mackinaw</b> para minar solo: algo menos que la Hulk, pero con la mejor autonomía por mucho.</li>'+
-     '<li><b>Skiff</b> cuando hay riesgo (highsec bajo, lowsec, gas en wormholes o null): menos rendimiento a cambio del mejor tanque.</li>'+
-     '<li>Con <b>boosts</b>, Hulk y Covetor son las que más ganan: el ciclo baja y su bodega pequeña deja de importar porque la Orca o la Rorqual recogen el mineral. La Rorqual da el boost más fuerte, pero no entra en highsec.</li>'+
+     '<li><b>Skiff</b> cuando hay riesgo (roamings, sistemas calientes): menos rendimiento a cambio del mejor tanque.</li>'+
+     '<li>Con <b>boosts</b>, Hulk y Covetor son las que más ganan: el ciclo baja y la bodega pequeña deja de importar porque el booster comprime el mineral en el mismo grid, sin viajes a descargar. La Rorqual da el boost más fuerte.</li>'+
      '<li>En hielo, Hulk y Covetor tienen un bono de rol de ciclo muy fuerte. En gas, T2 y ORE rinden igual; el ORE no deja residuo y gasta menos CPU.</li></ul>'+
    '</div></details>'+
    '<details class="mn-how"><summary>Cómo se Calculó</summary><div class="mn-prose">'+
      '<ul><li>Todos los atributos salen de los datos estáticos de EVE (los mismos que usa Pyfa), ya con los cambios de Catalyst: ciclos nuevos, críticos de minería, Mining Survey Chipset y las skills Mining Precision y Mining Exploitation. La fórmula es la de Pyfa: los bonos se multiplican y las mejoras de minería, rigs e implantes no tienen penalización por apilamiento.</li>'+
-     '<li><b>Todo a IV</b>: todo a IV salvo lo obligatorio. Para pilotar un exhumer hace falta Mining Barge V y Exhumers pide Astrogeology V. A IV no se pueden entrenar Mining Exploitation, Mining Drone Specialization, Ice Harvesting Drone Specialization ni Drone Interfacing. Tampoco se pueden usar Ice Harvester II, Gas Cloud Harvester II, ORE Gas Cloud Harvester, drones de hielo II o Augmented ni Mining Drone II: se usa lo mejor disponible y se marca con ⚠.</li>'+
+     '<li><b>Escenario nullsec</b>: moon ore R4–R64, los 12 hielos y gas Mykoserocin/Cytoserocin. Fullerite es solo de wormholes y no se incluye.</li>'+
+     '<li><b>Todo a IV</b>: todo a IV salvo lo obligatorio. Para pilotar un exhumer hace falta Mining Barge V y Exhumers pide Astrogeology V. A IV no se pueden entrenar Mining Exploitation, Mining Drone Specialization, Ice Harvesting Drone Specialization ni Drone Interfacing. Tampoco se pueden usar Ice Harvester II, Gas Cloud Harvester II, ORE Gas Cloud Harvester, drones de hielo II ni Mining Drone II: se usa lo mejor disponible y se marca con ⚠.</li>'+
      '<li><b>Moon ore</b>, regla: nada que desperdicie mineral. Los Modulated Strip Miner II dejan residuo incluso con cristal Type A, igual que los drones T2, de facción y Augmented. Por eso Full T2 usa Strip Miner I con mejoras, chipset y rigs T2, y Facción usa el ORE Strip Miner. Drones: Mining Drone I en los tres.</li>'+
      '<li><b>Hielo</b>: 2 harvesters, 3 Ice Harvester Upgrades, Mining Survey Chipset, 1 Ice Harvester Accelerator (solo existe T1 y la calibración solo deja uno), 1 Drone Mining Augmentor y 1 drone de hielo.</li>'+
      '<li><b>Gas</b>: solo cuentan el harvester, las skills, la nave y el implante. No hay mejoras, rigs ni drones para gas.</li>'+
      '<li>Implantes de +5%: Highwall MX-1005 y Michi\'s Excavation Augmentor (moon), Yeti IH-1005 (hielo), Alchemist GH-805 (gas). Piden Cybernetics V.</li>'+
      '<li><b>Boost</b> al máximo: Mining Foreman Burst II con Mining Laser Optimization (menos ciclo en strip miners, ice y gas harvesters) y Mining Laser Efficiency (más crítico y menos residuo), Mining Director V, Mining Foreman Mindlink, la skill de la nave a V y su Industrial Core II (Medium en Porpoise, Large en Orca, Capital en Rorqual). La fórmula reproduce el máximo que publicó CCP para la Rorqual con los valores del core de entonces. Los drones no reciben boost.</li>'+
-     '<li>m³/h incluye los críticos promediados (probabilidad × bono), como Pyfa. El residuo no se descuenta: se pierde de la roca, no de tu bodega. Sin módulos de tanque y sin tiempo de vuelo de los drones.</li>'+
+     '<li><b>Rendimiento efectivo</b>: las cifras de m³/h e ISK/h ya descuentan el tiempo de descargar. Sin boost, cada bodega llena cuesta 2 min de viaje a la estructura (warp + dock + descargar + undock + vuelta). Con boost de Porpoise, Orca o Rorqual, el booster comprime en el mismo grid y no hay viajes: el efectivo es el bruto.</li>'+
+     '<li>El bruto incluye los críticos promediados (probabilidad × bono), como Pyfa. El residuo no se descuenta: se pierde de la roca, no de tu bodega. Sin módulos de tanque y sin tiempo de vuelo de los drones.</li>'+
      '<li>ISK/h = m³/h ÷ volumen de una unidad × precio en Jita 4-4. Comprimir no cambia las unidades, solo el volumen.</li></ul>'+
      '<p class="mn-src">Datos estáticos del cliente build <span class="mn-build"></span>.</p>'+
    '</div></details>'+
@@ -151,7 +156,7 @@ const MineUI=(()=>{
      '<div class="pl-grid">'+
        '<div class="pl-f pl-wide"><span class="pl-l">Cuentas</span><div class="pl-row">'+'<div class="pl-stp" data-k="acc" data-min="1" data-max="100" data-st="1"><button type="button" data-d="-1" aria-label="Menos">−</button><input type="text" inputmode="decimal" class="pl-in" aria-label="acc"><span class="pl-suf"></span><button type="button" data-d="1" aria-label="Más">+</button></div>'+SEG('accq',[['1','1'],['5','5'],['10','10'],['25','25'],['50','50'],['100','100']])+'</div><small>Todo se multiplica por tus cuentas.</small></div>'+
        '<div class="pl-f"><span class="pl-l">Horas de minado al día</span>'+'<div class="pl-stp" data-k="hrs" data-min="0.5" data-max="24" data-st="0.5"><button type="button" data-d="-1" aria-label="Menos">−</button><input type="text" inputmode="decimal" class="pl-in" aria-label="hrs"><span class="pl-suf">h</span><button type="button" data-d="1" aria-label="Más">+</button></div>'+'<small>Por cuenta.</small></div>'+
-       '<div class="pl-f"><span class="pl-l">Barge</span>'+SEG('barge',[['Procurer','Procurer'],['Retriever','Retriever'],['Covetor','Covetor']])+'<small class="pl-bh"></small></div>'+
+       '<div class="pl-f"><span class="pl-l">Nave</span>'+SEG('barge',[['Procurer','Procurer'],['Retriever','Retriever'],['Covetor','Covetor'],['Skiff','Skiff'],['Mackinaw','Mackinaw'],['Hulk','Hulk']])+'<small class="pl-bh"></small><small>Con una Exhumer, el primer mes minas con la barge equivalente mientras entrenas Exhumers.</small></div>'+
        '<div class="pl-f"><span class="pl-l">Fit</span>'+SEG('ptier',[['T1','Full T1'],['T2','Full T2'],['Faction','Facción']])+'<small>Lo que tus skills aún no permiten se usa en su versión menor.</small></div>'+
        '<div class="pl-f"><span class="pl-l">Atributos</span>'+SEG('patt',[['base','Base 20/20'],['remap','Remap'],['remap3','Remap + implantes']])+'<small class="pl-ah"></small></div>'+
      '</div>'+
@@ -169,6 +174,10 @@ const MineUI=(()=>{
    '</div>'+
    '<div class="pl-vh"><h3 class="pl-vt"></h3><p class="mn-take pl-take"></p></div>'+
    '<div class="pl-tiles"></div>'+
+   '<div class="mn-card pl-steady"><h3>Mes 2 en adelante: profit mensual</h3>'+
+     '<p class="mn-note">Con skills a IV, sin implantes (lo que tienes al terminar el plan de entrenamiento). La Omega es un costo de operación: lo que queda después de pagarla es profit. Con boost, el booster comprime en el mismo grid y no hay viajes a descargar.</p>'+
+     '<div class="mn-ctl" style="margin-bottom:10px"><div><span class="mn-lbl">Boost</span>'+SEG('boost2',[['','Sin boost'],['Porpoise','Porpoise'],['Orca','Orca'],['Rorqual','Rorqual']])+'</div></div>'+
+     '<div class="pl-tiles pl-st-tiles"></div></div>'+
    '<div class="pl-dets"></div>'+
    '<details class="mn-plan-d"><summary>Plan de Entrenamiento Paso a Paso</summary><div class="mn-prose mn-plan-l"></div></details>'+
    '<details class="mn-plan-how"><summary>Cómo se Calcula</summary><div class="mn-prose"><ul>'+
@@ -176,9 +185,10 @@ const MineUI=(()=>{
      '<li><b>Remap</b>: el reparto de atributos (de 17 a 27 cada uno) que termina antes el plan de ese material. Con «implantes +3» se suman cuatro implantes Basic (Int, Mem, Per, Will); solo piden Cybernetics I y su precio entra en la inversión. Los +5 piden Cybernetics V (unas dos semanas), así que no sirven para un personaje recién creado.</li>'+
      '<li><b>Días 1 a 7</b>: el Expert System presta sus skills («Mining Barge Operations» para moon e hielo, «Gas Harvesting» para gas). Cada día se usa lo mejor entre eso y lo que ya entrenaste.</li>'+
      '<li><b>Desde el día 8</b> solo cuentan tus skills. Si aún no tienes Mining Barge I (pide Industry V), ese día no minas.</li>'+
-     '<li>Cada día se mina con las skills que tienes al empezarlo. Sin implantes de minería ni boosts de flota.</li>'+
+     '<li>Cada día se mina con las skills que tienes al empezarlo. Sin implantes de minería ni boosts de flota. Sin boost, el rendimiento efectivo descuenta 2 min por viaje a descargar cada vez que se llena la bodega.</li>'+
      '<li><b>Precios</b>: todo sale de la API oficial de EVE (ESI). Naves, módulos, implantes y minerales, de Jita 4-4; el PLEX, del mercado global de PLEX (la orden de venta más barata). El Expert System y el Omega se compran con PLEX en la tienda del juego.</li>'+
-     '<li><b>Inversión</b>: la barge y el fit que usas el día 28, más los implantes si los elegiste. El primer mes de Omega se paga con dinero real.</li>'+
+     '<li><b>Inversión</b>: la nave y el fit que usas el día 28, más los implantes si los elegiste. El primer mes de Omega se paga con dinero real. Si eliges una Exhumer, el primer mes minas con la barge equivalente (Hulk → Covetor, Mackinaw → Retriever, Skiff → Procurer) mientras entrenas Exhumers, y la inversión es la Exhumer con su fit.</li>'+
+     '<li><b>Mes 2 en adelante</b>: ritmo estable con skills a IV, sin implantes. Ingreso mensual = ISK/h × horas al día × 30 días, menos el Omega de ese mes. La Omega es un costo de operación: lo que queda después de pagarla es profit. Todo se multiplica por tus cuentas.</li>'+
      '<li><b>Varias cuentas</b>: todo se multiplica. En la práctica, muchas cuentas juntas vacían antes las rocas, la nube o el anillo de hielo, y vender mucho volumen en Jita puede bajar el precio.</li>'+
    '</ul></div></details>'+
    '</div>';
@@ -215,8 +225,7 @@ const MineUI=(()=>{
     const pc=v=>(v>0?'+':'−')+NF1.format(Math.abs(v))+'%';
     p.replaceChildren(h('b','',b.n+' al máximo'),document.createTextNode(' (Mining Foreman Burst II, Mining Director V, mindlink, skill de la nave V y '+b.core+'): '),
       document.createTextNode('ciclo '+pc(b.cycle)+' · probabilidad de crítico '+pc(b.crit)+' · residuo '+pc(b.residue)+'. '),
-      document.createTextNode('Los drones no se benefician.'));
-    if(b.n==='Rorqual')p.appendChild(document.createTextNode(' La Rorqual no entra en highsec: solo lowsec, null o wormholes.'));}
+      document.createTextNode('Los drones no se benefician.'));}
   function best(tier,ex,key){let b=null;SHIPS.filter(s=>EX.has(s)===ex).forEach(s=>{const r=row(s,tier);if(!r)return;const v=key(r);if(v==null)return;if(!b||v>b.v)b={s,r,v};});return b;}
   function paintTake(){const p=$q('.mn-take');p.replaceChildren();
     const bx=best('Faction',true,val),bb=best('Faction',false,val),au=best('Faction',true,r=>r.fill);if(!bx||!bb)return;
@@ -264,7 +273,7 @@ const MineUI=(()=>{
         hit.addEventListener('mousemove',ev=>tt.show(ev,d.s+' · '+TL[TIERS[i]],[fmtV(tot),'Módulos '+NF0.format(r.mod)+' m³/h · Drones '+NF0.format(r.dr)+' m³/h','Bodega llena en '+NF1.format(r.fill)+' min']));
         hit.addEventListener('mouseleave',()=>tt.hide());svg.appendChild(hit);});});
     box.appendChild(svg);}
-  function paintDetail(){const tb=$q('.mn-dt tbody');tb.replaceChildren();$q('.mn-vh').textContent=S.met==='isk'?'ISK/h':'Total m³/h';
+  function paintDetail(){const tb=$q('.mn-dt tbody');tb.replaceChildren();$q('.mn-vh').textContent=S.met==='isk'?'ISK/h':'Efectivo m³/h';
     SHIPS.forEach(s=>{const r=row(s,S.tier);if(!r)return;const tr=tb.insertRow();if(EX.has(s))tr.className='ex';
       const v=val(r);
       [[s],[r.high],[r.low],[r.mid],[r.rigs],[r.drones],[NF2.format(r.cyc),1],[NF1.format(r.amt),1],[NF0.format(r.mod),1],[NF0.format(r.dr),1],
@@ -279,7 +288,7 @@ const MineUI=(()=>{
     const tt=tip(box);
     rows.forEach((r,i)=>{const cx=mL+bw*i+bw/2,ex=EX.has(r.ship);
       const rc=el('rect',{x:cx-b/2,width:b,y:y(r.fill),height:Math.max(0,y(0)-y(r.fill)),rx:4,class:ex?'fx':'fm'});
-      rc.addEventListener('mousemove',ev=>tt.show(ev,r.ship,[NF1.format(r.fill)+' min hasta llenar','Bodega '+NF0.format(r.hold)+' m³ · '+NF0.format(r.tot)+' m³/h']));
+      rc.addEventListener('mousemove',ev=>tt.show(ev,r.ship,[NF1.format(r.fill)+' min hasta llenar','Bodega '+NF0.format(r.hold)+' m³ · '+NF0.format(r.eff)+' m³/h efectivo']));
       rc.addEventListener('mouseleave',()=>tt.hide());svg.appendChild(rc);
       svg.appendChild(el('text',{x:cx,y:y(r.fill)-5,'text-anchor':'middle',class:'vl'},r.fill>=100?NF0.format(r.fill):NF1.format(r.fill)));
       svg.appendChild(el('text',{x:cx,y:H-8,'text-anchor':'middle',class:'lb'+(ex?' ex':''),style:bw<62?'font-size:10px':''},r.ship));});
@@ -311,7 +320,20 @@ const MineUI=(()=>{
   const plexISK=()=>S.plexManual!=null?S.plexManual:(PLEX.sell!=null?PLEX.sell:(PLEX.avg!=null?PLEX.avg:null));
   const PATTL={base:'atributos base',remap:'remap',remap3:'remap + implantes +3'};
   function implCost(){if(S.patt!=='remap3')return 0;return fitCost(MINE.attrImpl['3'].map(id=>[id,1]));}
-  function planCalc(m){const k=[m,S.barge,S.ptier,S.patt].join('|'),daily=MINE.sim[k],fit=MINE.simfit[k],ipm=iskPerM3(m),px=plexISK();
+  // Fit del plan: barge → el del día 28 (simfit); Exhumer → el fit completo de la Exhumer (todo a V, sin implantes)
+  function planFit(m){
+    if(BARGE_OF[S.barge]){
+      const rr=idx.get(['',5,0,m,S.ptier,S.barge].join('|'));
+      return rr?{items:(MINE.fits[['5',m,S.ptier,S.barge].join('|')]||[]),high:rr.high,low:rr.low,mid:rr.mid,drones:rr.drones}:null;
+    }
+    return MINE.simfit[[m,S.barge,S.ptier,S.patt].join('|')]||null;
+  }
+  // Mes 2 en adelante: ritmo estable con skills a IV, sin implantes. La Omega es costo de operación.
+  function steadyCalc(m){const rr=idx.get([S.boost2,4,0,m,S.ptier,S.barge].join('|')),ipm=iskPerM3(m),px=plexISK();
+    if(!rr||ipm==null||px==null)return{rr,ipm,omega:null};
+    const iskh=rr.eff*ipm,monthly=iskh*S.hrs*30,omega=S.omegaPlex*px;
+    return{rr,ipm,iskh,monthly,omega,profit:monthly-omega};}
+  function planCalc(m){const k=[m,simShip(S.barge),S.ptier,S.patt].join('|'),daily=MINE.sim[k],fit=planFit(m)||{items:[],high:'—',low:'—',mid:'—',drones:'—'},ipm=iskPerM3(m),px=plexISK();
     const T=MINE.train,st=T.stages[m],ends=T.ends[m][S.patt];
     const r={daily,fit,ipm,ship:fitCost(fit.items),impl:implCost(),es:px!=null?S.esPlex*px:null,omega:px!=null?S.omegaPlex*px:null,
       bargeDay:days(ends[st.barge-1]),yieldDay:days(ends[st.yield_-1]),exhDay:days(ends[st.exhumer-1]),gap:daily.filter(v=>v===0).length};
@@ -329,7 +351,7 @@ const MineUI=(()=>{
   function paintSetup(){S.cmpv=S.cmp?'1':'0';
     root.querySelectorAll('.pl-stp').forEach(st=>{const i=st.querySelector('.pl-in');if(i!==document.activeElement)i.value=fmtN(S[st.dataset.k]);});
     S.accq=String(S.acc);
-    $q('.pl-bh').textContent={Procurer:'La más dura: aguanta ganks en highsec.',Retriever:'La bodega más grande: menos viajes a estación.',Covetor:'La que más mina, pero frágil y con bodega chica.'}[S.barge];
+    $q('.pl-bh').textContent={Procurer:'La más dura: aguanta mejor los ataques.',Retriever:'La bodega más grande: menos viajes a descargar.',Covetor:'La que más mina, pero frágil y con bodega chica.',Skiff:'La más dura de las Exhumers. El primer mes minas con Procurer.',Mackinaw:'La mejor autonomía. El primer mes minas con Retriever.',Hulk:'La que más mina. El primer mes minas con Covetor.'}[S.barge];
     $q('.pl-ah').textContent={base:'Como sale un personaje nuevo.',remap:'Atributos repartidos para entrenar este plan lo más rápido posible.',remap3:'Remap + 4 implantes +3 (su precio entra en la inversión).'}[S.patt];
     const px=plexISK(),pv=$q('.pl-plexv'),ps=$q('.pl-plexs');pv.textContent=px!=null?cmpISK(px)+' ISK':'—';
     ps.textContent=S.plexManual!=null?'Precio que escribiste':(PLEX.src==='global'?'Mercado global de PLEX · orden de venta más barata':(PLEX.src==='avg'?'Precio promedio de CCP (ESI)':(bulkBusy?'Consultando ESI…':'Sin respuesta de ESI: escribe el precio')));
@@ -344,9 +366,17 @@ const MineUI=(()=>{
     const vt=$q('.pl-vt'),tk=$q('.pl-take');vt.textContent=N>1?'Resultado para tus '+N+' cuentas':'Resultado para 1 cuenta';tk.replaceChildren();
     let best=null;if(ready.length){best=ready.reduce((a,b)=>R[b].balance>R[a].balance?b:a);const r=R[best];
       tk.append(document.createTextNode('Con '+S.barge+' en '+TL[S.ptier]+', '+fmtN(S.hrs)+' h de minado al día y '+PATTL[S.patt]+', lo que más deja es '),h('b','',MATL[best]+' ('+S.item[best]+')'),document.createTextNode('. '));
-      if(r.balance>=0)tk.append(document.createTextNode('En 28 días te quedan '),h('b','',signISK(r.balance*N)),document.createTextNode(' después de pagar '+(N>1?'las barges, los Expert Systems y los '+N+' próximos Omegas.':'la barge, el Expert System y el próximo Omega.')));
-      else tk.append(document.createTextNode('Aun así, en 28 días te faltan '),h('b','',isk(-r.balance*N)),document.createTextNode(' para cubrir todo. Prueba con más horas al día, otra barge u otro mineral más caro.'));}
+      if(r.balance>=0)tk.append(document.createTextNode('En 28 días te quedan '),h('b','',signISK(r.balance*N)),document.createTextNode(' después de pagar '+(N>1?(BARGE_OF[S.barge]?'las exhumers, los Expert Systems y los '+N+' próximos Omegas.':'las barges, los Expert Systems y los '+N+' próximos Omegas.'):(BARGE_OF[S.barge]?'la exhumer, el Expert System y el próximo Omega.':'la barge, el Expert System y el próximo Omega.'))));
+      else tk.append(document.createTextNode('Aun así, en 28 días te faltan '),h('b','',isk(-r.balance*N)),document.createTextNode(' para cubrir todo. Prueba con más horas al día, otra nave u otro mineral más caro.'));}
     else tk.textContent=bulkBusy?'Consultando precios…':'Sin precios no se puede calcular. Revisa la conexión con la API de EVE.';
+    // mes 2 en adelante: profit mensual
+    const stt=$q('.pl-st-tiles');stt.replaceChildren();
+    MS.forEach(m=>{const s=steadyCalc(m),c=h('div','pl-vc');stt.appendChild(c);
+      const hd=h('div','pl-vch');hd.appendChild(h('span','pl-vcn',MATL[m]));c.appendChild(hd);
+      const big=h('div','pl-big '+(s.profit==null?'':(s.profit>=0?'pos':'neg')),s.profit==null?'—':signISK(s.profit*N));c.appendChild(big);
+      c.appendChild(h('div','pl-bigl',s.profit==null?'Faltan precios':'profit mensual'+(N>1?', de tus '+N+' cuentas':'')+', ya pagada la Omega'));
+      if(s.monthly!=null)c.appendChild(h('small','pl-iskh','Ingreso '+isk(s.monthly)+' · Omega '+isk(s.omega)+' · Profit '+isk(s.profit)+' por cuenta'));
+      if(s.iskh!=null)c.appendChild(h('small','pl-iskh','≈ '+cmpISK(s.iskh)+' ISK/h · '+S.barge+' · '+TL[S.ptier]+(S.boost2?' · boost de '+S.boost2:'')));});
     // tarjetas de veredicto
     const tl=$q('.pl-tiles');tl.replaceChildren();
     MS.forEach(m=>{const r=R[m],c=h('div','pl-vc'+(m===best?' best':''));tl.appendChild(c);
@@ -374,7 +404,7 @@ const MineUI=(()=>{
       const ln=(lab,v,sign,cls)=>{const tr=tb.insertRow();if(cls)tr.className=cls;tr.insertCell().textContent=lab;
         [v,v!=null?v*N:null].slice(0,N>1?2:1).forEach(x=>{const td=tr.insertCell();td.className='r';td.textContent=x==null?'—':(sign+cmpISK(x)+' ISK');});};
       ln('Minado días 1 a 7 (con Expert System)',r.inc7,'+ ','in');ln('Minado días 8 a 28',r.inc21,'+ ','in');
-      ln('Barge y fit',r.ship,'− ','out');if(S.patt==='remap3')ln('Implantes +3',r.impl,'− ','out');ln('Expert System ('+fmtN(S.esPlex)+' PLEX)',r.es,'− ','out');ln('Próximo Omega ('+fmtN(S.omegaPlex)+' PLEX)',r.omega,'− ','out');
+      ln((BARGE_OF[S.barge]?'Exhumer':'Barge')+' y fit',r.ship,'− ','out');if(S.patt==='remap3')ln('Implantes +3',r.impl,'− ','out');ln('Expert System ('+fmtN(S.esPlex)+' PLEX)',r.es,'− ','out');ln('Próximo Omega ('+fmtN(S.omegaPlex)+' PLEX)',r.omega,'− ','out');
       const tr=tb.insertRow();tr.className='tot';tr.insertCell().textContent='Te queda';[r.balance,r.balance!=null?r.balance*N:null].slice(0,N>1?2:1).forEach(x=>{const td=tr.insertCell();td.className='r '+(x==null?'':(x>=0?'pos':'neg'));td.textContent=signISK(x);});
       const sc=h('div','mn-scroll');sc.appendChild(t);c.appendChild(sc);
       // línea de tiempo
@@ -382,7 +412,7 @@ const MineUI=(()=>{
       // acumulado
       c.appendChild(h('h4','pl-sub',N>1?'ISK Juntado por tus '+N+' Cuentas':'ISK Juntado'));
       const ch=h('div','mn-chart sm mn-cum');ch.dataset.m=m;c.appendChild(ch);
-      c.appendChild(h('p','mn-note pl-fit','Fit del día 28: '+[r.fit.high,r.fit.low,r.fit.mid,r.fit.drones].filter(x=>x&&x!=='—').join(' · ')));});
+      c.appendChild(h('p','mn-note pl-fit',(BARGE_OF[S.barge]?'Fit de la Exhumer (la compras para el mes 2): ':'Fit del día 28: ')+[r.fit.high,r.fit.low,r.fit.mid,r.fit.drones].filter(x=>x&&x!=='—').join(' · ')));});
     // plan de entrenamiento
     const pl=$q('.mn-plan-l');pl.replaceChildren();const T=MINE.train;
     MS.forEach(m=>{pl.appendChild(h('h4','',MATL[m]+' · '+PATTL[S.patt]));const at=T.attrs[m][S.patt];
@@ -428,7 +458,7 @@ const MineUI=(()=>{
     if(S.view==='plan'){paintPlan();return;}
     paintBoost();paintPrice();paintTake();paintKpi();paintPivot();paintDetail();paintInvestNote();paintTraining();drawCharts();}
   function needPrices(){let ids;
-    if(S.view==='plan'){ids=[...['moon','ice','gas'].flatMap(m=>[matPriceId(m),...(MINE.simfit[[m,S.barge,S.ptier,S.patt].join('|')].items||[]).map(x=>x[0])]),...MINE.attrImpl['3']];
+    if(S.view==='plan'){ids=[...['moon','ice','gas'].flatMap(m=>[matPriceId(m),...(planFit(m)||{items:[]}).items.map(x=>x[0])]),...MINE.attrImpl['3']];
       if(!PLEX.at){bulkBusy++;loadPlex().finally(()=>{bulkBusy--;paint();});}}
     else ids=[...shipFitIds(),...(S.imp?MINE.impl[S.mat]:[])];
     loadMany(ids,()=>paint());if(ids.some(id=>!PRICE[id]))paint();}
