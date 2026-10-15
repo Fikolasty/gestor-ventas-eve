@@ -2,6 +2,11 @@
 
 Cambios por versión del Gestor de Ventas. La más nueva arriba. El detalle técnico completo está en `docs/SPEC.txt`.
 
+## 1.0.63 — Contratos dentro de Extras
+*2026-10-15*
+
+- **Contratos y Envío** pasa al recuadro **EXTRAS**, junto a Reproceso y Vender a Jugadores, con la misma medida que las demás filas. Extras se oculta solo cuando no queda ninguna sección que mostrar.
+
 ## 1.0.62 — Ticker de Skill Points, aviso de inicio y Tasación junto al pegado
 *2026-10-15*
 

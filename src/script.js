@@ -1443,7 +1443,7 @@ function ctItems(list,withC){const w=el('div','ct-items'),hd=el('div','ct-ih');
 function slots(fields,cls){const w=el('div','slots'+(cls?' '+cls:''));
   fields.forEach(([k,v,cp])=>{const d=el('div','slot'+(String(v).length>22?' wide':''));d.append(el('span','slot-k',k));d.append(cp!=null?copyBtn(cp,v):el('span','slot-v'+(isNumTxt(v)?' cp-n':''),v));w.append(d);});return w;}
 // v1.0.60: el recuadro Extras se ve solo si tiene alguna sección visible
-const syncExtras=()=>{$('pRepro').hidden=S.flip||!S.items.some(o=>resolveOre(o.name));$('pExtra').hidden=$('pRepro').hidden&&$('pDisc').hidden;}; // reproceso solo en HY-RWO
+const syncExtras=()=>{$('pRepro').hidden=S.flip||!S.items.some(o=>resolveOre(o.name));$('pExtra').hidden=!S.items.length||($('pRepro').hidden&&$('pDisc').hidden&&IN_JITA());}; // Contratos se oculta en Jita sin courier // reproceso solo en HY-RWO
 function paintContracts(P){
   const sec=$('pCtr');sec.hidden=!S.items.length;
   $('ctrTitle').textContent=SH()?'Contratos y Envío':'Contratos';$('shipBox').hidden=!SH();sec.classList.toggle('no-ship',!SH());

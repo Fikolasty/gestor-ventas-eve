@@ -7,7 +7,7 @@
 <meta name="referrer" content="no-referrer">
 <title>Market Moves+ · SIGMA GRINDSET</title>
 <style>
-/* ================= Market Moves+ v1.0.62 =================
+/* ================= Market Moves+ v1.0.63 =================
    Paleta: azul de base, naranja = acción, verde/rojo = ganancia/pérdida.
    Sin backdrop-filter: el vidrio se finge con rgba + bordes. */
 *{box-sizing:border-box;margin:0;padding:0}
@@ -2000,7 +2000,9 @@ Contraband Freight = no</textarea><small>Una regla por línea: Nombre = tax tota
     </div>
   </section>
   </div>
-  <!-- v1.0.59: Contratos y Envío, Reproceso y Vender a Jugadores: fuera del desglose, plegadas como el Listado -->
+  <!-- v1.0.63: Extras = Contratos y Envío, Reproceso y Vender a Jugadores, dentro de un recuadro como el del Resultado -->
+  <section class="panel extras" id="pExtra" hidden>
+    <h2 class="h-caps"><span class="ic i-box" aria-hidden="true"></span>Extras</h2>
   <details class="panel thin fold" id="pCtr" hidden>
     <summary><h2><span class="ic i-list" aria-hidden="true"></span><span id="ctrTitle">Contratos y Envío</span></h2><span class="sum" id="ctrSum"></span><span class="fold-cta" aria-hidden="true"><span class="fc-o">Ver ▾</span><span class="fc-c">Ocultar ▴</span></span></summary>
     <div class="ce">
@@ -2026,9 +2028,6 @@ Contraband Freight = no</textarea><small>Una regla por línea: Nombre = tax tota
       <p class="scn-v" id="fScnV"></p>
     </div>
   </details>
-  <!-- v1.0.60: Extras = Reproceso y Vender a Jugadores, dentro de un recuadro como el del Resultado -->
-  <section class="panel extras" id="pExtra" hidden>
-    <h2 class="h-caps"><span class="ic i-box" aria-hidden="true"></span>Extras</h2>
   <details class="panel thin fold" id="pRepro" hidden>
     <summary><h2><span class="ic i-flask" aria-hidden="true"></span>Reproceso</h2><span class="sum" id="rSum"></span><span class="fold-cta" aria-hidden="true"><span class="fc-o">Ver ▾</span><span class="fc-c">Ocultar ▴</span></span></summary>
     <p class="lead">Qué minerales deja tu ore y cuánto valen.</p>
@@ -2113,13 +2112,13 @@ Contraband Freight = no</textarea><small>Una regla por línea: Nombre = tax tota
 <button type="button" class="totop" id="toTop" aria-label="Volver arriba" title="Volver arriba (Inicio)" hidden><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 14l6-6 6 6"/></svg></button>
 <footer class="foot">
   <p class="foot-sec"><span class="ic i-lock" aria-hidden="true"></span>Tu inventario no se guarda: al cerrar o recargar se borra. Solo tus Ajustes quedan en este navegador.</p>
-  <div class="foot-by">Creado por <b>Fiko McGivert</b> · Vanguardia DR · SIGMA GRINDSET · <span class="ver">v1.0.62</span></div>
+  <div class="foot-by">Creado por <b>Fiko McGivert</b> · Vanguardia DR · SIGMA GRINDSET · <span class="ver">v1.0.63</span></div>
 </footer>
 
 <script>
 'use strict';
 /* ============================================================
-   Market Moves+ v1.0.62 — SIGMA GRINDSET / Vanguardia DR
+   Market Moves+ v1.0.63 — SIGMA GRINDSET / Vanguardia DR
    Flujo:  pegado → items → carga (ESI: precios, volúmenes, historial) → verificación → plan → vista
      1. Pegado      parsePaste(): parser posicional de columnas de EVE (Name · Quantity · … · Volume · Est. Price).
      2. Carga       esiItems(): trae todo lo que falta; mientras carga, refresh() NO pinta (S.loading).
@@ -3561,7 +3560,7 @@ function ctItems(list,withC){const w=el('div','ct-items'),hd=el('div','ct-ih');
 function slots(fields,cls){const w=el('div','slots'+(cls?' '+cls:''));
   fields.forEach(([k,v,cp])=>{const d=el('div','slot'+(String(v).length>22?' wide':''));d.append(el('span','slot-k',k));d.append(cp!=null?copyBtn(cp,v):el('span','slot-v'+(isNumTxt(v)?' cp-n':''),v));w.append(d);});return w;}
 // v1.0.60: el recuadro Extras se ve solo si tiene alguna sección visible
-const syncExtras=()=>{$('pRepro').hidden=S.flip||!S.items.some(o=>resolveOre(o.name));$('pExtra').hidden=$('pRepro').hidden&&$('pDisc').hidden;}; // reproceso solo en HY-RWO
+const syncExtras=()=>{$('pRepro').hidden=S.flip||!S.items.some(o=>resolveOre(o.name));$('pExtra').hidden=!S.items.length||($('pRepro').hidden&&$('pDisc').hidden&&IN_JITA());}; // Contratos se oculta en Jita sin courier // reproceso solo en HY-RWO
 function paintContracts(P){
   const sec=$('pCtr');sec.hidden=!S.items.length;
   $('ctrTitle').textContent=SH()?'Contratos y Envío':'Contratos';$('shipBox').hidden=!SH();sec.classList.toggle('no-ship',!SH());
