@@ -16,6 +16,7 @@ const MineUI=(()=>{
   const DEF={moon:'Zeolites',ice:'Blue Ice',gas:'Lime Cytoserocin'};
   const S={view:'ships',mat:'moon',lv:5,imp:1,boost:'',met:'m3',tier:'Faction',item:{...DEF},base:'buy',cmp:true,
     att:'base',patt:'base',acc:1,accq:'1',hrs:3,barge:'Retriever',ptier:'T1',plexManual:null,esPlex:15,omegaPlex:500,cmpv:'1',boost2:''};
+  let esSaved=null; // PLEX de Expert System guardado al pasar a Exhumer (que pone esPlex en 0)
   // Exhumers en el plan: el primer mes se mina con la barge equivalente mientras se entrena Exhumers
   const BARGE_OF={Hulk:'Covetor',Mackinaw:'Retriever',Skiff:'Procurer'};
   const simShip=s=>BARGE_OF[s]||s;
@@ -468,16 +469,20 @@ const MineUI=(()=>{
   function mount(r){if(root)return;root=r;root.classList.add('mn');root.innerHTML=HTML;$q=s=>root.querySelector(s);
     $q('.mn-build').textContent=String(MINE.build);
     root.addEventListener('click',e=>{const b=e.target.closest('.pk-fb');if(!b)return;const k=b.closest('.pk-flt').dataset.k,v=b.dataset.v;
+      const prevBarge=k==='barge'?S.barge:null;
       if(k==='accq'){S.acc=Number(v);}else if(k==='cmpv'){S.cmp=v==='1';S.cmpv=v;}else S[k]=(k==='lv'||k==='imp')?Number(v):v;
+      if(k==='barge'&&prevBarge!==v){const wasEx=!!BARGE_OF[prevBarge],isEx=!!BARGE_OF[v];
+        if(isEx&&!wasEx){esSaved=S.esPlex;S.esPlex=0;}
+        else if(!isEx&&wasEx&&esSaved!=null){S.esPlex=esSaved;esSaved=null;}}
       if(k==='mat')fillItems();
       paint();if(S.met==='isk'&&(k==='mat'||k==='met'))loadPrice();
       if(['view','mat','lv','tier','imp','barge','ptier','patt','cmpv'].includes(k))needPrices();});
     // pasos − / + y campos de texto
     root.addEventListener('click',e=>{const b=e.target.closest('.pl-stp button');if(!b)return;const st=b.closest('.pl-stp'),k=st.dataset.k;
-      const v=Math.round((S[k]+Number(b.dataset.d)*Number(st.dataset.st))*10)/10;S[k]=Math.max(Number(st.dataset.min),Math.min(Number(st.dataset.max),v));paint();});
+      const v=Math.round((S[k]+Number(b.dataset.d)*Number(st.dataset.st))*10)/10,v2=Math.max(Number(st.dataset.min),Math.min(Number(st.dataset.max),v));if(k==='esPlex'&&v2!==S.esPlex)esSaved=null;S[k]=v2;paint();});
     root.addEventListener('change',e=>{const i=e.target.closest('.pl-stp .pl-in');if(!i)return;const st=i.closest('.pl-stp'),k=st.dataset.k;
       let v=parseFloat(String(i.value).replace(/[^0-9.]/g,''));if(!isFinite(v)){paint();return;}if(k==='acc')v=Math.round(v);
-      S[k]=Math.max(Number(st.dataset.min),Math.min(Number(st.dataset.max),v));paint();});
+      const v2=Math.max(Number(st.dataset.min),Math.min(Number(st.dataset.max),v));if(k==='esPlex'&&v2!==S.esPlex)esSaved=null;S[k]=v2;paint();});
     root.addEventListener('keydown',e=>{if(e.key==='Enter'&&e.target.closest('.pl-in,.pl-plexin'))e.target.blur();});
     $q('.pl-plexed').addEventListener('click',()=>{if(S.plexManual!=null){S.plexManual=null;paint();return;}const b=$q('.pl-plexe');b.hidden=false;const i=$q('.pl-plexin');i.value=plexISK()!=null?String(Math.round(plexISK())):'';i.focus();});
     const plexSet=()=>{const v=parseFloat(String($q('.pl-plexin').value).replace(/[^0-9.]/g,''));$q('.pl-plexe').hidden=true;if(isFinite(v)&&v>0)S.plexManual=v;paint();};

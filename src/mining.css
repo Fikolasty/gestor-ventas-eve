@@ -118,6 +118,9 @@
 .pl-l{font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;color:var(--dim)}
 .pl-shiprow{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
 .pl-shiprow .pl-sl{font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;color:var(--dim);min-width:3.6rem}
+.pl-shiprow .pk-flt{flex:1}
+.pl-shiprow .pk-fb{flex:1 1 0;text-align:center}
+.pl-shiprow small{width:100%}
 .pl-f small,.pl-tile small{font-size:.78rem;color:var(--mut);line-height:1.4}
 .pl-row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
 .pl-stp{display:inline-flex;align-items:stretch;border-radius:10px;background:#0f0f0f;border:1px solid rgba(222,220,209,.12);overflow:hidden;width:max-content}
