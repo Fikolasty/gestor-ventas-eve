@@ -2,6 +2,13 @@
 
 Cambios por versión del Gestor de Ventas. La más nueva arriba. El detalle técnico completo está en `docs/SPEC.txt`.
 
+## 1.0.65 — Ajustes con el estilo de la Guía y títulos divisores
+*2026-10-15*
+
+- **Ajustes**: las tarjetas y campos usan el negro de la Guía de Uso (fondo #0b0b0b con sombra interior, campos más oscuros). Mismo funcionamiento, íconos y títulos.
+- **Títulos divisores**: el estilo de «IMPUESTOS Y PRECIOS» (mayúsculas en arcilla con una rayita) se usa ahora en todos los subtítulos: Guía de Uso (Las Formas de Vender, Palabras Clave, Seguridad), Pasos para Vender, ¿Reprocesar?, Tus Contratos, Envío, Dos Escenarios y Reproceso.
+- Tema claro incluido.
+
 ## 1.0.64 — Simetría en los Pasos y casillas copiables
 *2026-10-15*
 

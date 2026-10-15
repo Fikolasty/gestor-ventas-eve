@@ -100,3 +100,9 @@ html.light .ticker{background:linear-gradient(90deg,rgba(217,119,87,.18),#f7f5ef
 html.light .tk-i b{color:#b5532f}
 html.light .sn-x{background:#fff;color:#7a3a1f}
 html.light .tk-i .ref-tag{color:#fff}
+/* v1.0.65 */
+html.light #settings fieldset.st{background:#efece4!important;box-shadow:inset 0 1px 3px rgba(0,0,0,.08)!important}
+html.light #settings fieldset.st:not(.closed){box-shadow:inset 3px 0 0 #d97757,inset 0 1px 3px rgba(0,0,0,.08)!important}
+html.light #settings .st-f{background:#f7f5ef}
+html.light #settings .st-f input:not([type=checkbox]),html.light #settings .st-f select,html.light #settings .st-f textarea{background:#fff!important}
+html.light .sub-h{color:#b5532f!important}
