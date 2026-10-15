@@ -367,7 +367,7 @@ const MineUI=(()=>{
   function planCalc(m){const k=[m,simShip(S.barge),S.ptier,S.patt].join('|'),noEs=!(S.esPlex>0),sim=(noEs?MINE.simx:MINE.sim)[k],daily=sim?Array.from({length:28},(_,i)=>sim[Math.min(27,Math.floor(i+bonusDays()))]):[],fit=planFit(m)||{items:[],high:'—',low:'—',mid:'—',drones:'—'},ipm=iskPerM3(m),px=plexISK();
     const T=MINE.train,st=T.stages[m],ends=T.ends[m][S.patt],yieldDay=Math.max(0,days(ends[st.yield_-1])-bonusDays()),cyb=S.pimp==='1'?cybDays(m):0;
     const r={daily,noEs,fit,ipm,ship:fitCost(fit.items),impl:implCost(),es:px!=null?S.esPlex*px:null,omega:px!=null?S.omegaPlex*px:null,
-      bargeDay:Math.max(0,days(ends[st.barge-1])-bonusDays()),yieldDay,implDay:cyb?yieldDay+cyb:null,exhDay:Math.max(0,days(ends[st.exhumer-1])-bonusDays())+cyb,gap:daily.filter(v=>v===0).length};
+      bargeDay:Math.max(0,days(ends[st.barge-1])-bonusDays()),yieldDay,implDay:cyb?Math.max(0,days(ends[st.exhumer-1])-bonusDays())+cyb:null,exhDay:Math.max(0,days(ends[st.exhumer-1])-bonusDays()),gap:daily.filter(v=>v===0).length};
     r.invest=(r.ship!=null&&r.impl!=null&&r.es!=null)?r.ship+r.impl+r.es:null;
     if(ipm==null)return r;
     const inc=daily.map(v=>v*S.hrs*ipm);r.inc=inc;r.inc7=inc.slice(0,7).reduce((a,b)=>a+b,0);r.inc21=inc.slice(7).reduce((a,b)=>a+b,0);
@@ -407,9 +407,9 @@ const MineUI=(()=>{
       tk.append(document.createTextNode('Con '+S.barge+' en '+TL[S.ptier]+', '+fmtN(S.hrs)+' h de minado al día y '+PATTL[S.patt]+', lo que más deja es '),h('b','',MATL[best]+' ('+S.item[best]+')'),document.createTextNode('. '));
       if(r.balance>=0)tk.append(document.createTextNode('En 28 días te quedan '),h('b','',signISK(r.balance*N)),document.createTextNode(' después de pagar '+(N>1?(BARGE_OF[S.barge]?(r.noEs?'las exhumers y los ':'las exhumers, los Expert Systems y los ')+N+' próximos Omegas.':(r.noEs?'las barges y los ':'las barges, los Expert Systems y los ')+N+' próximos Omegas.'):(BARGE_OF[S.barge]?(r.noEs?'la exhumer y el próximo Omega.':'la exhumer, el Expert System y el próximo Omega.'):(r.noEs?'la barge y el próximo Omega.':'la barge, el Expert System y el próximo Omega.')))));
       else tk.append(document.createTextNode('Aun así, en 28 días te faltan '),h('b','',isk(-r.balance*N)),document.createTextNode(' para cubrir todo. Prueba con más horas al día, otra nave u otro mineral más caro.'));
-      if(s.profit!=null)tk.append(document.createTextNode(' Desde el mes 2: '),h('b','',signISK(s.profit*N)),document.createTextNode(' al mes.'));}
+      if(s.profit!=null)tk.append(document.createTextNode(' Referencia fija IV (sin progresión): '),h('b','',signISK(s.profit*N)),document.createTextNode(' al mes.'));}
     else tk.textContent=bulkBusy?'Consultando precios…':'Sin precios no se puede calcular. Revisa la conexión con la API de EVE.';
-    // una tarjeta por material: mes 1 y mes 2 en adelante
+    // una tarjeta por material: primer mes y referencia fija de IV para comparar
     const tl=$q('.pl-tiles');tl.replaceChildren();
     MS.forEach(m=>{const r=R[m],s=ST[m],c=h('div','pl-vc'+(m===best?' best':''));tl.appendChild(c);
       const hd=h('div','pl-vch');hd.appendChild(h('span','pl-vcn',MATL[m]));if(m===best)hd.appendChild(h('span','pl-badge','★ Más rentable'));c.appendChild(hd);
@@ -425,8 +425,8 @@ const MineUI=(()=>{
       pay.textContent=r.pays==null?'—':(r.pays?'✓ Las semanas 2 a 4 pagan el próximo Omega':'✗ Las semanas 2 a 4 no alcanzan para el Omega');c.appendChild(pay);
       if(r.cover!=null){const bar=h('div','pl-bar'),fill=h('i',r.pays?'ok':'no');fill.style.width=Math.min(100,r.cover*100)+'%';bar.appendChild(fill);c.appendChild(bar);
         c.appendChild(h('small','pl-barl',(r.cover>=10?'Juntas '+NF0.format(r.cover)+' veces el Omega':'Juntas el '+NF0.format(r.cover*100)+'% del Omega')+' · '+isk(r.inc21)+' de '+isk(r.omega)+' por cuenta'));}
-      // mes 2 en adelante
-      c.appendChild(h('div','pl-ph pl-ph2','Mes 2 en adelante · cada mes'));
+      // referencia IV sin aplicar progresión
+      c.appendChild(h('div','pl-ph pl-ph2','Escenario de referencia IV · 30 días'));
       c.appendChild(h('div','pl-big2 '+(s.profit==null?'':(s.profit>=0?'pos':'neg')),s.profit==null?'—':signISK(s.profit*N)));
       c.appendChild(h('div','pl-bigl',s.profit==null?'Faltan precios':'profit mensual'+(N>1?' de tus '+N+' cuentas':'')+', ya pagada la Omega'));
       if(s.iskh!=null)c.appendChild(h('small','pl-iskh','≈ '+cmpISK(s.iskh)+' ISK/h por cuenta · skills a IV'+(S.pimp==='1'?' · implantes +5%':'')+(S.boost2?' · boost de '+S.boost2:'')));
@@ -527,32 +527,82 @@ const MineUI=(()=>{
     host.append(costly);
   }
   // ----- Trayectoria mensual honesta, con hitos calculados del entrenamiento -----
+
+  // Modelo auxiliar puro: curva estimativa entre los dos hitos medidos por Pyfa (IV, V).
+  // Las skills se completan individualmente; esta interpolación NO equivale a una cola real de EVE.
+  function miningRateAt(day,shipUnlock,shipIV,shipV,rateBarge,rateIV,rateV){
+    if(![day,shipUnlock,shipIV,shipV,rateBarge,rateIV,rateV].every(Number.isFinite))return null;
+    if(day<shipUnlock)return rateBarge;
+    if(day<shipIV)return rateBarge+(rateIV-rateBarge)*Math.min(1,(day-shipUnlock)/Math.max(1,shipIV-shipUnlock));
+    if(day<shipV)return rateIV+(rateV-rateIV)*Math.min(1,(day-shipIV)/Math.max(1,shipV-shipIV));
+    return rateV;
+  }
+  const EXHUMER_OF={Procurer:'Skiff',Retriever:'Mackinaw',Covetor:'Hulk'};
   function paintMonths(){
     const pane=$q('.mn-v-plan');
     let box=pane.querySelector('.pl-months');
     if(!box){box=h('section','mn-card pl-months');pane.append(box);}
-    box.replaceChildren(h('h3','', 'Progresión Omega · mes a mes'),
-      h('p','mn-note','12 meses por '+NF0.format(S.acc)+' cuenta(s), '+NF1.format(S.hrs)+' h/día. '+(S.freeSP?'Incluye 1M SP referidos como adelanto aproximado de '+NF1.format(bonusDays())+' días de entrenamiento. ':'')+'Mes 1 usa la simulación diaria. Del mes 2 en adelante, skills IV estimadas; la fecha de acceso a Exhumers viene del plan de entrenamiento. No confundir esta proyección con las cifras V de «Nave Maxiada».'));
-    const m=S.dmat,r=planCalc(m),price=iskPerM3(m),omega=plexISK()!=null?plexISK()*S.omegaPlex:null;
-    box.append(h('p','mn-note', 'Actividad: '+MATL[m]+' · '+S.item[m]+' · nave objetivo: '+S.barge+'.'));
+    const mat=S.dmat,r=planCalc(mat),ipm=iskPerM3(mat),px=plexISK();
+    const omega=px!=null?px*S.omegaPlex:null;
+    const startingBarge=simShip(S.barge),exhumer=EXHUMER_OF[S.barge]||S.barge;
+    const target=MINE.train.targets;
+    const targetDays=(lv)=>{const obj=target[[lv,mat,S.ptier,exhumer].join('|')];
+      return obj&&Number.isFinite(obj[S.patt])?Math.max(0,obj[S.patt]/24-bonusDays()+(S.pimp==='1'?cybDays(mat):0)):null;};
+    const exDay=r.exhDay,ivDay=targetDays(4),vDay=targetDays(5);
+    const daysLabel=d=>d==null?'sin datos':'día '+NF0.format(Math.ceil(d));
+    const info=[
+      '12 meses para '+NF0.format(S.acc)+' cuenta(s), '+NF1.format(S.hrs)+' h/día.',
+      S.freeSP?' 1M SP de referido incluido como adelanto aproximado de '+NF1.format(bonusDays())+' días.':' No se aplica el bono opcional de 1M SP.',
+      ' Mes 1: simulación histórica de 28 días. Meses 2–12: proyección por hitos Pyfa IV/V, interpolada entre ambos; no representa cada skill entrenada individualmente.'
+    ].join('');
+    box.replaceChildren(h('h3','', 'Progresión Omega · mes a mes'),h('p','mn-note',info));
+    box.append(h('p','mn-note','Evolución prevista: '+startingBarge+' → '+exhumer+' ('+daysLabel(exDay)+
+       ' para Exhumers I). Referencia IV: '+daysLabel(ivDay)+' · habilidades V del fit: '+daysLabel(vDay)+
+       '. Fechas aproximadas: se prioriza Exhumers I antes de Cybernetics V; si activas implantes, el entrenamiento de Cybernetics desplaza los hitos IV/V.'));
+    box.append(h('p','mn-note','Actividad: '+MATL[mat]+' · '+S.item[mat]+' · fit '+TL[S.ptier]+
+       ' · boost '+(S.boost2||'ninguno')+'. El ingreso es valor bruto de mercado, no ISK líquido después de impuestos.'));
     const tbl=h('table','mn-month-table'),hdr=tbl.createTHead().insertRow();
-    ['Mes','Nave / etapa','ISK/h por cuenta','Ingreso de flota','Omega de flota','Neto de flota'].forEach(t=>hdr.append(h('th','',t)));
-    const tb=tbl.createTBody(),exh=BARGE_OF[S.barge],pr=price,exDay=r.exhDay;
-    const bargeShip=simShip(S.barge);
-    const base4=idx.get([S.boost2,4,Number(S.pimp),m,S.ptier,bargeShip].join('|'));
-    const exh4=idx.get([S.boost2,4,Number(S.pimp),m,S.ptier,S.barge].join('|'));
+    ['Mes','Nave / etapa estimada','ISK/h medio estimado','Ingreso bruto de flota','Omega de flota','Saldo estimado'].forEach(t=>hdr.append(h('th','',t)));
+    const tb=tbl.createTBody();
     for(let month=1;month<=12;month++){
-      const tr=tb.insertRow(),start=(month-1)*30,end=month*30;
-      const part=exh?Math.max(0,Math.min(30,end-Math.max(start,exDay)))/30:0;
-      let mh=null,phase='';
-      if(month===1){mh=r.daily?.length?r.daily.reduce((a,b)=>a+b,0)/r.daily.length:null;phase='Entrenamiento inicial · 28 días';}
-      else{mh=exh&&exh4&&base4?base4.eff*(1-part)+exh4.eff*part:(exh4?.eff??base4?.eff??null);phase=exh?(part===0?bargeShip+' (IV)':part===1?S.barge+' (IV)':bargeShip+' → '+S.barge):S.barge+' (IV)';}
-      const revenue=mh!=null&&pr!=null?mh*pr*S.hrs*(month===1?28:30)*S.acc:null,
-            cost=omega!=null?omega*S.acc:null,net=revenue!=null&&cost!=null?revenue-cost:null;
-      [String(month),phase,mh!=null&&pr!=null?cmpISK(mh*pr)+' ISK/h':'—',
-       revenue!=null?cmpISK(revenue)+' ISK':'—',cost!=null?cmpISK(cost)+' ISK':'—',net!=null?cmpISK(net)+' ISK':'—'].forEach(t=>tr.append(h('td','',t)));
+      // Mes 1 cubre 28 días históricos; los meses siguientes son de 30 días, consecutivos.
+      const start=month===1?0:28+(month-2)*30,period=month===1?28:30,end=start+period;
+      let effective=null,phase='';
+      if(month===1){effective=r.daily?.length?r.daily.reduce((a,b)=>a+b,0)/r.daily.length:null;
+        phase=exDay!=null&&exDay<28?startingBarge+' → '+exhumer+' (referencia histórica)':'Entrenamiento · '+startingBarge;}
+      else{
+        let sum=0,good=true;
+        for(let t=0;t<period;t++){
+          const day=start+t+0.5;
+          const implanted=S.pimp==='1'&&r.implDay!=null&&day>=r.implDay?1:0;
+          const find=(lv,ship)=>idx.get([S.boost2,lv,implanted,mat,S.ptier,ship].join('|'));
+          const barg=find(4,startingBarge),exIV=find(4,exhumer),exV=find(5,exhumer);
+          const val=miningRateAt(day,exDay,ivDay,vDay,barg?.eff,exIV?.eff,exV?.eff);
+          if(val==null){good=false;break;}sum+=val;
+        }
+        effective=good?sum/period:null;
+        if([exDay,ivDay,vDay].some(d=>d==null)){phase='Datos de entrenamiento incompletos';}
+        else if(end<=exDay){phase=startingBarge+' · preparación';}
+        else if(start<exDay){phase=startingBarge+' → '+exhumer+' ('+daysLabel(exDay)+')';}
+        else if(end<=ivDay){phase=exhumer+' · I–IV (aprox.)';}
+        else if(start<ivDay){phase=exhumer+' · rumbo a IV';}
+        else if(end<=vDay){phase=exhumer+' · IV→V (aprox.)';}
+        else if(start<vDay){phase=exhumer+' · llega a V ('+daysLabel(vDay)+')';}
+        else{phase=exhumer+' · referencia V';}
+      }
+      const perAccount=effective!=null&&ipm!=null?effective*ipm:null,
+           income=perAccount!=null?perAccount*S.hrs*period*S.acc:null,
+           recurrent=omega!=null?omega*S.acc:null,
+           balance=income!=null&&recurrent!=null?income-recurrent:null;
+      const tr=tb.insertRow();
+      [String(month),phase,perAccount!=null?cmpISK(perAccount)+' ISK/h':'—',
+       income!=null?cmpISK(income)+' ISK':'—',recurrent!=null?cmpISK(recurrent)+' ISK':'—',
+       balance!=null?cmpISK(balance)+' ISK':'—'].forEach(t=>tr.append(h('td','',t)));
     }
-    box.append(tbl,h('p','mn-note','Único gasto recurrente modelado: Omega por cuenta. Naves, fits e implantes son inversión inicial y se explican en el detalle. No se suponen impuestos de venta, pérdidas, escasez de roca, cambios de precio ni gestión de 100–1000 clientes. El adelanto de SP es una aproximación sobre los 28 días históricos; la distribución óptima por skill y el entrenamiento a V completo requieren una simulación adicional. No se inventa una fecha de maxeo.'));
+    box.append(tbl,h('p','mn-note',
+      'Único gasto mensual restado: Omega por cuenta. No se descuentan impuestos, costes de venta, pérdidas, traslados extras o acceso limitado a luna. '+
+      'La primera etapa usa un dataset histórico de 28 días; después se interpola entre rendimientos IV y V. '+
+      'El cambio de nave requiere comprarla y poder volar sus módulos. El millón de SP no se distribuye skill por skill: fechas y saldos son escenarios orientativos, no resultados garantizados.'));
   }
 
   function paint(){if(!root)return;seg();$q('.mn-v-ships').hidden=S.view!=='ships';$q('.mn-v-plan').hidden=S.view!=='plan';$q('.mn-v-max').hidden=S.view!=='max';

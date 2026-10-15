@@ -58,3 +58,23 @@ La fuente de precios en la interfaz es **CCP/Fenris ESI**, no números estático
 6. Regenerar dataset cuando CCP cambie atributos/skills/boosts usando las herramientas históricas `tools/mining` y un SDE reciente; hasta entonces marcarlo como referencia Pyfa build 3579973.
 
 **Criterio de publicación:** no ocultar los elementos no validados. El motor de ventas queda intacto, y cualquier error o limitación de la minería se registra en `docs/PROGRESS.md`.
+
+
+## Corrección de progresión v1.0.70 (15-10-2026)
+
+**Error reproducido por captura de usuario:** v1.0.69 repite idéntico rendimiento de skills IV del mes 2 al 12 cuando se elige Retriever (o cualquier barge). La evolución hacia Exhumer solo se intentaba si se seleccionaba manualmente Skiff/Mackinaw/Hulk. Esto NO representaba el entrenamiento.
+
+**Regla corregida:** selección Procurer, Retriever o Covetor mantiene la barge como inicio y asigna automáticamente la Skiff, Mackinaw o Hulk correspondiente como nave futura. Seleccionar directamente una Exhumer inicia con su barge correspondiente. El acceso al Exhumer se indica explícitamente con `MINE.train.ends[material][atributos][stages.exhumer-1]` / 24 menos el adelanto aproximado del bono SP.
+
+**Ejemplo de la captura, moon/Monazite, atributos base y 1M SP opcional:**
+- Exhumers I al día aproximado `1414.47 / 24 - 1_000_000 / (30×60×24) = 35.79`, es decir, en el mes 2 para Retriever → Mackinaw.
+- Escenario IV completo de Mackinaw en `MINE.train.targets['4|moon|T1|Mackinaw'].base / 24 - bono ≈ 60.6` días.
+- Referencia de habilidades V del fit en `MINE.train.targets['5|moon|T1|Mackinaw'].base / 24 - bono ≈ 213.9` días (aprox. mes 8). Esta meta histórica incluye el conjunto seleccionado de skills; el día exacto puede variar según distribución real de SP, implantes y cambios de CCP.
+
+**Orden de entrenamiento simulado:** se prioriza primero el acceso a Exhumers I y después Cybernetics V para implantes. El hito de Exhumers I es independiente de Cybernetics; al activar implantes, la preparación de IV y V se retrasa por el tiempo de Cybernetics V (≈17,8 días para atributos base), pues una cuenta solo entrena una skill a la vez. Sin implantes, el hito V del ejemplo es día 214; con implantes, alrededor del día 232 (ambos aproximados).
+
+**Modelo de ISK/h**: el mes 1 sigue usando las 28 muestras históricas; los meses 2–12 promedian diariamente la tasa m³/h con la barge al inicio y la Exhumer tras Exhumers I. Entre el desbloqueo, referencia IV y referencia V, se **interpola linealmente** entre rendimientos del dataset Pyfa (no son ticks reales de cada skill). El implante +5% entra a partir de `r.implDay` estimado. Las ganancias son ingreso bruto al precio ESI constante en la consulta actual; solo se descuenta Omega mensual, multiplicado por cuentas. La interpolación suaviza la curva y NO equivale a un simulador verificable de niveles individuales.
+
+**Calidad:** un segundo test en `tests/mining-smoke.cjs` comprueba hitos, evolución de yield, correspondencia Retriever→Mackinaw, multiplicación de cuentas y periodo mensual consecutivo. La caja de escenario fijo IV existente se mantiene identificada como **referencia fija, no progresión**.
+
+**Pendiente para simulación exacta:** integrar entrenamiento granular skill por skill con distribución específica de 1M SP, requisitos de módulos/fits, transiciones de implantes en cada día, niveles I–V de Exhumers, y regeneración Pyfa/SDE actualizada. No presentar el modelo interpolado como beneficio garantizado. No afecta ninguna fórmula del gestor de ventas.

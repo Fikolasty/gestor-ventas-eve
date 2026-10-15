@@ -59,7 +59,7 @@ CHANGELOG.md          ← cambios por versión
 ### Generar la página
 Solo necesitas Python 3, sin dependencias:
 ```
-python3 build.py 1.0.69
+python3 build.py 1.0.70
 ```
 Eso escribe `index.html` con la versión indicada.
 
@@ -83,3 +83,6 @@ El botón **Minería** del menú y la barra superior abre la comparativa de **Pr
 Los datos precalculados de rendimiento se recuperaron del histórico Pyfa (build 3579973) y deben actualizarse si cambian las mecánicas del juego. No hay simulación verificada de todas las skills V mes a mes; las cifras futuras son proyecciones identificadas como tales.
 
 Fuente de verdad de la minería: [`docs/MINING.md`](docs/MINING.md). El código está en `src/mining.js`, `src/mining_data.js`, `src/mining.css`; los generadores originales se conservan en `tools/mining/`.
+
+
+**Progresión Omega (v1.0.70):** seleccionar una barge ahora implica su Exhumer equivalente desde el día de desbloqueo estimado. El rendimiento se proyecta entre referencias IV y V del dataset Pyfa con una interpolación declarada como aproximación, no como entrenamiento real habilidad por habilidad. Para las diferencias entre proyección y valores V de «Nave Maxiada», consultar [MINING.md](docs/MINING.md).

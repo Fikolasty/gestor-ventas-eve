@@ -2,6 +2,15 @@
 
 Cambios por versión del Gestor de Ventas. La más nueva arriba. El detalle técnico completo está en `docs/SPEC.txt`.
 
+## 1.0.70 — [ChatGPT] Corregir escalado del plan Omega y transición a Exhumer
+*2026-10-15*
+
+- Corrige los meses 2–12 que permanecían congelados en skills IV, y la barge que nunca ascendía a Exhumer.
+- Las rutas Procurer→Skiff, Retriever→Mackinaw y Covetor→Hulk cambian al estimarse Exhumers I en la cola histórica.
+- Nueva proyección diaria aproximada hacia los hitos IV y V usando tiempos Pyfa y rendimiento interpolado; escenario IV estático diferenciado.
+- La tabla indica el día aproximado de acceso y finalización V. Ingresos brutos y Omega mensual por 1–1000 cuentas, con intervalos de 28 y luego 30 días consecutivos.
+- Añade pruebas de progresión, meseta V y escalado. Datos Pyfa históricos, ESI y fórmulas del gestor de ventas no se modifican.
+
 ## 1.0.69 — [ChatGPT] Comparativa minera con pestaña Omega y endgame
 *2026-10-15*
 

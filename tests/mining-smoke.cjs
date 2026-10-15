@@ -26,4 +26,33 @@ for(const value of ["MOON_ORDER=['Exceptional (R64)','Rare (R32)'","freeSP:10000
 assert(sales.includes('function computePlan()'),'se ha perdido el motor del gestor');
 assert(sales.includes('/*__MINING__*/'),'falta montaje del módulo');
 assert(html.includes('id="mnRoot"')&&html.includes('data-panel="mining"'),'falta UI');
-console.log('OK — dataset, cero waste moon, R64, 1000 cuentas, PLEX, módulo separado.');
+
+// v1.0.70: el plan debe mostrar Retriever → Mackinaw y aumento IV → V,
+// y no dejar la misma rentabilidad constante todos los meses.
+const code=source.match(/  function miningRateAt\(day,[\s\S]*?\n  \}/);
+assert(code,'falta motor puro de proyección mensual');
+const rate=vm.runInNewContext(code[0]+'\nminingRateAt;');
+const path={unlock:36,iv:61,max:214,barge:100,exhIV:150,exhV:250};
+const calc=d=>rate(d,path.unlock,path.iv,path.max,path.barge,path.exhIV,path.exhV);
+assert.equal(calc(20),100,'antes de Exhumers debe minar la barge');
+assert.equal(calc(36),100,'no inventar salto instantáneo a Exhumers IV');
+assert(calc(49)>100&&calc(49)<150,'subida estimada rumbo a IV');
+assert.equal(calc(61),150,'hito IV corresponde al dataset');
+assert(calc(130)>150&&calc(130)<250,'subida de IV a V entre meses');
+assert.equal(calc(214),250,'hito V corresponde al dataset');
+assert.equal(calc(260),250,'la ganancia se estabiliza al completar V');
+assert.equal(calc(130)*3,calc(130)*3*1,'escala lineal por cantidad de cuentas');
+assert.equal(calc(130)*20,calc(130)*4*5,'escala de flota modular');
+assert(source.includes("Procurer:'Skiff',Retriever:'Mackinaw',Covetor:'Hulk'"),'evolución automática de las tres ramas');
+
+const T=M.train,st=T.stages.moon;
+const withoutBonus=T.ends.moon.base[st.exhumer-1]/24;
+const bonus=1_000_000/(30*60*24);
+const unlock=withoutBonus-bonus;
+const targetV=T.targets['5|moon|T1|Mackinaw'].base/24-bonus;
+assert(unlock>34&&unlock<38,'Mackinaw se desbloquea alrededor del día 36 con 1M SP estimado');
+assert(targetV>209&&targetV<217,'V se aproxima a mes 8 según datos históricos');
+assert(source.includes("28+(month-2)*30"),'mes 2 debe empezar al terminar día 28, sin hueco de días');
+assert(source.includes('S.acc'), 'ingresos escalables por cuentas');
+
+console.log('OK — dataset, cero waste moon, R64, 1000 cuentas, PLEX, progresión Exhumer IV–V y módulo separado.');

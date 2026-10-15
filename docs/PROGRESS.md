@@ -146,3 +146,17 @@ Verificar el tag del primer commit marcado `[ChatGPT]` en `main`, comprobar la p
 **Limitaciones visibles:** 1M SP depende de referido, bono modelado como desplazamiento aproximado, meses 2–12 no incluyen progresión de todas las skills V, y Faction del dataset Pyfa no incluye upgrades storyline ultra caros; se reporta así, sin afirmaciones engañosas.
 
 **Próxima revisión:** comprobar desplegado desde GitHub Pages, iniciar tab en móvil/escritorio Firefox, comprobar que las nuevas cadenas inglesas se traducen, cargar ESI/PLEX e identificar cualquier fricción visual. Regenerar Pyfa para incorporar Aoede/Ingenii y entrenamiento exacto a nivel V antes de dar cifras definitivas de maxeo.
+
+## 12. Incidencia detectada por usuario y corregida v1.0.70
+
+**Captura:** el plan para Retriever y Monazite repetía 167,4 M ISK/h en meses 2–12, sin transición a Mackinaw; saldo permanecía 12,6 B. La captura confirma el problema de UX y lógica.
+
+**Causa:** `paintMonths()` de v1.0.69 consultaba siempre `idx` con `S.barge` y skills IV; solo convertía la nave cuando `BARGE_OF[S.barge]` existía, lo cual excluía a las barges T1. Después no entrenaba hacia V en la proyección.
+
+**Corrección:** las tres rutas de barge ascienden automáticamente a Exhumer. Se registran tres hitos (acceso I, referencia IV, referencia V) y se estima producción diaria entre ellos mediante interpolación del rendimiento Pyfa de la nave y fit seleccionado. Omega, número de cuentas y precio ESI aplican a todos los meses; primer mes son 28 días, siguientes 30 sin hueco de dos días.
+
+**Ejemplo verificable de la captura:** Retriever → Mackinaw, Exhumers I aprox día 36, skills V del fit aprox día 214 sin implantes o día 232 si se entrena Cybernetics V (mes 8), con atributos base y bono de 1M SP estimado. No son resultados exactos de una skill queue: falta simulación granular y SDE actualizado.
+
+**Cobertura:** pruebas unitarias añadidas para curva, etapas, fechas y escalado, más GitHub Actions. Módulo de ventas sin cambios funcionales. Las tarjetas de rendimiento IV se distinguen como referencia estática. Pruebas reales de UI, Firefox, ESI y distribución exacta de SP todavía pendientes.
+
+**Siguiente revisión:** contrastar screenshot del usuario después de v1.0.70, comprobar que la tabla muestra Retriever→Mackinaw y que el rendimiento sube entre meses 2–8 y alcanza meseta al llegar V.

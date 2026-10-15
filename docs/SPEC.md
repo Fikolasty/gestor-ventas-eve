@@ -156,3 +156,12 @@ La pestaña **Minería** se agregó a la misma página de Market Moves+. Es inde
 **Restricciones:** mantener R64 primero; gas solo del entorno Guristas de Nullsec; moon ore sin residuo; PLEX global ESI sin valores fingidos; un único gasto mensual recurrente Omega por cuenta; slider 1–100, número 1–1000; separación explícita entre progresión Omega y Nave Maxiada. Los valores del dataset Pyfa histórico no incluyen Aoede/Ingenii dentro del cálculo de yield y NO se presentan como máximo teórico absolutamente verificado.
 
 **Límites de precisión:** la ayuda del 1M SP se modela con una aproximación de 30 SP/min; la simulación histórica cubre 28 días y la proyección posterior usa skills IV/hitos Exhumer, sin determinar exactamente el mes de todas las V. Mantener visibles estas advertencias hasta que se disponga de datos nuevos y una simulación skill por skill.
+
+
+## 13. Progresión mensual corregida (v1.0.70)
+
+La rama de barge del plan Omega evoluciona automáticamente a Exhumer equivalente: Procurer → Skiff, Retriever → Mackinaw, Covetor → Hulk. El hito de Exhumers I se obtiene de la cola histórica. Para el tramo IV→V se usan los tiempos de entrenamiento y rendimientos del dataset guardado (build 3579973), con **interpolación aproximada de yield**: no se representa como una cola granular de habilidades.
+
+La vista mensual debe informar días de Exhumer I, IV y V, y el mes en que cambia de nave. Desde V en adelante se estabilizan los rendimientos si precios y circunstancias no cambian. El mes 1 tiene 28 días, los siguientes intervalos contiguos de 30 días; se multiplica por cuenta antes de restar únicamente Omega mensual por cuenta. Nunca suponer que el precio Jita y el sitio lunar permanecerán constantes en la realidad. La sección **Referencia IV fija** del plan se etiqueta explícitamente para no confundirse con la tabla progresiva. Más detalles y fórmula: [MINING.md](MINING.md).
+
+Orden simplificado de progresión: Exhumers I antes de Cybernetics V. Cybernetics V no es requisito para pilotar Exhumer; solo añade tiempo de entrenamiento cuando se opta por implantes +5%, y desplaza los hitos de IV y V en la simulación.
