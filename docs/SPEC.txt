@@ -1104,3 +1104,14 @@ Comparativa Minera (antes «Minería»): plan para Omega nuevo
 - packCouriers: reward = base + perM3 × volumen(2 decimales) + collPct × ceil(colateral). Copia: reward y colateral al ISK, volumen 2 decimales.
 - «Cálculo» del contrato con cada parte y su resultado; el paso Courier usa packCouriers (mismos números que el contrato).
 - El plan sigue con precios protegidos (buy que acepta tu cantidad, sin trampas; sell sin cebos).
+
+==================== v1.0.30 ====================
+- ovMkt («Tu Lote en Jita»): valores crudos (topBuy/topSell, igual que la Tasación); marcas «Buy|Split|Sell + compactIsk»; sin fila de valores repetida;
+  marcador top:18px + translate(-50%,-50%) + box-sizing; neto del plan copiable.
+- Resultado: .res-top = .res-big + #resPf (Ganancia/Pérdida, % sobre lo invertido, precio de compra elegido). .res-chips = #skNote + #mgNote
+  (margen de importación, solo con S.flip).
+- paintFlipBuy: S.fbBase ('buy'|'split'|'sell', defecto sell). unitBuy = topBuy | (topBuy+topSell)/2 | rawSell; Buy/Split × (1 + C.broker).
+  Selector .fb2-seg [data-fb] en .fb2-hd; solo visible con Jita → HY-RWO vendiendo en HY-RWO (fN). Sin la línea grande fb2-big.
+- Margen: un solo control #fImpM (menú lateral); fuera cImpM/impSync de Ajustes. #fImpM entra en stFields (se guarda en gestorVentas.ajustes.v1).
+  Input sin spinner (appearance:textfield), fondo oscuro.
+- Fuera la tarjeta #ovShip del resumen (el envío sigue en De Dónde Sale tu ISK, paso Courier y Contratos).

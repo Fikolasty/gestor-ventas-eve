@@ -1112,7 +1112,7 @@ function paintVerdict(P){
   lastP=P;
   if($('deep').hidden)return; // v1.0.8: el análisis (rutas, Qué Hacer, comparación) solo se pinta con la sección abierta
   // valor del lote en Jita con los 3 precios (como Janice): Buy · Split · Sell. Sin porcentajes engañosos.
-  let vB=0,vS=0,ok3=true;P.rows.forEach(r=>{const a=r.o.jita;if(!a||a.buy==null||a.sell==null){ok3=false;return;}vB+=a.buy*r.q;vS+=a.sell*r.q;});
+  let vB=0,vS=0,ok3=true;P.rows.forEach(r=>{const a=r.o.jita;const b=a&&(a.topBuy!=null?a.topBuy:a.buy),sl=a&&(a.topSell!=null?a.topSell:a.sell);if(b==null||sl==null){ok3=false;return;}vB+=b*r.q;vS+=sl*r.q;}); // v1.0.30: mismos valores que la Tasación
   // v1.0.23: la otra opción de mercado. Se calcula el mismo lote vendiéndolo en el otro mercado (con o sin envío)
   // para que veas cuánto costaría mandarlo o cuánto ahorras vendiéndolo donde está. No cambia tu plan.
   {const box=$('ovAlt');box.textContent='';box.hidden=none;
@@ -1131,11 +1131,10 @@ function paintVerdict(P){
   {const box=$('ovMkt');box.textContent='';$('ovMktW').hidden=none||!ok3||!(vS>0);
    if(!$('ovMktW').hidden){const net=P.best,lo=Math.min(vB,net),hi=Math.max(vS,net),span=hi-lo||1,x=v=>((v-lo)/span*100).toFixed(2)+'%';
      const trk=el('div','ov-trk');trk.append(el('i','ln'));
-     [['Buy',vB],['Split',(vB+vS)/2],['Sell',vS]].forEach(([k,v])=>{const t=el('i','tk');t.style.left=x(v);t.append(el('span',null,k));trk.append(t);});
+     [['Buy',vB],['Split',(vB+vS)/2],['Sell',vS]].forEach(([k,v])=>{const t=el('i','tk');t.style.left=x(v);t.append(el('span',null,k+' '+compactIsk(v)));trk.append(t);});
      const me=el('i','me');me.style.left=x(net);me.title='Tu plan: '+fmt(net);trk.append(me);
-     const l=el('div','ov-mk-l');[['Jita Buy',vB],['Split',(vB+vS)/2],['Jita Sell',vS]].forEach(([k,v])=>{const d=el('div',null,k);d.append(el('b',null,fmt(v)));l.append(d);});
-     const n=el('p','ov-mk-n');n.append('Tu plan deja ',el('b',null,fmt(net)),' neto: '+pct(net/vS)+'% del valor a Jita Sell.');
-     box.append(trk,l,n);}}
+     const n=el('p','ov-mk-n');{const b=el('b');b.append(copyBtn(String(Math.round(net)),fmt(net)));n.append('Tu plan deja ',b,' neto: '+pct(net/vS)+'% del valor a Jita Sell.');}
+     box.append(trk,n);}}
   const vTot=P.rows.reduce((a,r)=>a+r.vol,0),cTot=P.rows.reduce((a,r)=>a+r.coll,0);
   $('vsN').textContent=String(S.items.length);$('vsV').textContent=fmtV(Math.round(vTot*10)/10);
   {const u=P.rows.reduce((a,r)=>a+(r.q||0),0),n=vTot>0?trips(vTot):0;
@@ -1339,11 +1338,7 @@ function paintVerdict(P){
       const num=(x,u)=>{const s2=el('span','rt-n num',x==null?'—':fmt(x));s2.append(el('small','rt-u',u));return s2;};
       row.append(c0,num(lines[0][1],UNDER[0]),num(lines[1][1],UNDER[1]),el('span','rt-d num '+s,v==null?'—':(v>0?'Ganas +':'Pierdes −')+fmt(Math.abs(v))));box.append(row);});
     li.append(box);rl.append(li);});
-  // v1.0.22: la comparación con otros planes vive en «Elige un Plan». Aquí solo la tarjeta del envío.
-  {const sh=P.rows.filter(r=>r.best&&SHIPS[r.best]),n=trips(P.Vs);
-   $('ovShip').hidden=!SH();$('aCourT').textContent='Envío a '+DEST();
-   $('aCourier').textContent=P.Vs>0?'−'+fmt(P.shipCost):'0 ISK';$('aCourier').className=P.Vs>0?'neg':'zero';
-   $('aCourS').textContent=P.Vs>0?fmtV(Math.round(P.Vs))+' · '+n+(n>1?' contratos':' contrato')+' · '+sh.length+(sh.length===1?' ítem':' ítems'):'Tu plan no envía nada.';}
+  // v1.0.22: la comparación con otros planes vive en «Elige un Plan»; el envío, en «De Dónde Sale tu ISK» y en los pasos.
   $('vNote').hidden=true;
   $('bMore').querySelector('span').textContent=SH()?'Consulta contratos y envío, reproceso y venta a jugadores.':'Consulta contratos, reproceso y venta a jugadores.';
   // contrato del buyback para los ítems que conviene venderle
@@ -1922,25 +1917,40 @@ $('pSum').addEventListener('click',e=>{const b=e.target.closest('[data-m]');if(!
 // v1.0.6 (modo Jita → HY-RWO): si compras el lote en Jita al Sell, lo llevas a HY-RWO y lo vendes a Jita Sell + margen
 // (neto, ya con taxes): ganancia = venta neta − compra − envío. Todo el lote viaja (un solo cálculo de courier).
 function paintFlipBuy(P){
-  const box=$('flipBuy');box.textContent='';box.hidden=!S.flip;if(!S.flip)return;
+  const box=$('flipBuy');box.textContent='';box.hidden=!S.flip;
+  // v1.0.30: ganancia a la derecha del total y el margen de importación como etiqueta
+  const pf=$('resPf'),mg=$('mgNote');pf.hidden=true;pf.textContent='';
+  mg.hidden=!S.flip;if(S.flip)mg.textContent='Margen de importación: +'+pctS(C.impM)+'% neto sobre Jita Sell';
+  if(!S.flip)return;
   const rows=P.rows.filter(r=>r.g.fN!=null&&r.o.ref!=null&&r.q>0);
   if(!rows.length){box.hidden=true;return;}
   const V=rows.reduce((a,r)=>a+r.ship.fN.v,0),Cc=rows.reduce((a,r)=>a+r.ship.fN.c,0),ship=V>0?courierCost(V,C.coll!=null?C.coll:Cc):0;
-  const it=rows.map(r=>{const buy=r.o.ref*r.q,sh=courierShare(r.ship.fN.v,r.ship.fN.c,V),sell=r.g.fN-r.prod;return{r,buy,sh,sell,p:sell-sh-buy};});
+  // v1.0.30: a qué precio compras en Jita. Sell = tomas las órdenes de venta (sin broker). Buy o Split = pones una
+  // buy order a ese precio y pagas el Broker de Jita. Precios crudos de Jita 4-4 (como Janice).
+  const FB=S.fbBase||'sell',unitBuy=r=>{const a=r.o.jita||{},b=a.topBuy!=null?a.topBuy:a.buy,sl=rawSell(r.o.name,a,r.o.ref);
+    const p=FB==='buy'?b:FB==='split'?(b!=null&&sl!=null?(b+sl)/2:null):sl;return p==null?r.o.ref:(FB==='sell'?p:p*(1+C.broker));};
+  const it=rows.map(r=>{const ub=unitBuy(r),buy=ub*r.q,sh=courierShare(r.ship.fN.v,r.ship.fN.c,V),sell=r.g.fN-r.prod;return{r,ub,buy,sh,sell,p:sell-sh-buy};});
   const buy=it.reduce((a,x)=>a+x.buy,0),sell=it.reduce((a,x)=>a+x.sell,0),profit=sell-ship-buy,roi=buy>0?profit/buy:0;
-  box.append(el('h4',null,'Comprar en Jita y Vender en HY-RWO'),el('p','fb2-s','Si compras '+(rows.length===1?'este ítem':'estos '+rows.length+' ítems')+' en Jita al Sell'+(SH()?', los llevas con SIGMA Freight':'')+' y los vendes en HY-RWO a Jita Sell +'+pct(C.impM)+'% neto.'));
-  const big=el('div','fb2-big');big.append(el('b','num '+sgn(profit),(profit>=0?'+':'−')+fmt(Math.abs(profit))),el('span',null,(profit>=0?'de ganancia':'de pérdida')+' · '+(roi>=0?'+':'−')+pct(Math.abs(roi))+'% sobre lo invertido'));box.append(big);
+  {pf.hidden=false;pf.classList.toggle('neg',profit<0);
+   pf.append(el('small',null,profit>=0?'Ganancia':'Pérdida'),el('b','num',(profit>=0?'+':'−')+fmt(Math.abs(profit))),el('span',null,(roi>=0?'+':'−')+pct(Math.abs(roi))+'% sobre lo invertido · comprando a Jita '+({buy:'Buy',split:'Split',sell:'Sell'})[FB]));}
+  {const hd=el('div','fb2-hd');hd.append(el('h4',null,'Comprar en Jita y Vender en HY-RWO'));
+   const sg=el('div','fb2-seg');sg.setAttribute('role','group');sg.setAttribute('aria-label','Precio de compra en Jita');sg.append(el('span',null,'Compras a'));
+   [['buy','Buy'],['split','Split'],['sell','Sell']].forEach(([k,t])=>{const b=el('button','pk-fb'+(FB===k?' on':''),t);b.type='button';b.dataset.fb=k;b.setAttribute('aria-pressed',String(FB===k));
+     b.title=k==='sell'?'Compras de las órdenes de venta, al instante y sin broker.':'Pones una buy order a '+t+' en Jita y pagas el Broker ('+pct(C.broker)+'%). Tarda más.';sg.append(b);});
+   hd.append(sg);box.append(hd);}
+  box.append(el('p','fb2-s','Si compras '+(rows.length===1?'este ítem':'estos '+rows.length+' ítems')+' en Jita a '+({buy:'Jita Buy',split:'Jita Split',sell:'Jita Sell'})[FB]+(SH()?', los llevas con SIGMA Freight':'')+' y los vendes en HY-RWO a Jita Sell +'+pct(C.impM)+'% neto.'));
   const l=el('div','fb2-l'),L=(t,v,c)=>{const d=el('div');d.append(el('span',null,t),el('b','num '+(c||''),v));l.append(d);};
   L('Compras en Jita','−'+fmt(buy),'neg');if(SH())L('Envío a HY-RWO','−'+fmt(ship),'neg');L('Vendes en HY-RWO (neto)',fmt(sell),'pos');L('Ganancia',(profit>=0?'+':'−')+fmt(Math.abs(profit)),sgn(profit));box.append(l);
   const t=el('table'),th=el('thead'),hr=el('tr');[['Ítem',''],['Compras a /u','r'],['Vendes a /u','r'],['Envío','r'],['Ganancia','r'],['Margen','r']].filter(x=>SH()||x[0]!=='Envío').forEach(([x,c])=>hr.append(el('th',c||null,x)));th.append(hr);t.append(th);
   const tb=el('tbody');
   it.sort((a,b)=>b.p-a.p).slice(0,10).forEach(x=>{const tr=el('tr');
-    const c=[el('td',null,x.r.o.name),el('td','r',fmtP(x.r.o.ref)),el('td','r',fmtP(x.r.np)),el('td','r','−'+fmt(x.sh)),el('td','r '+sgn(x.p),(x.p>=0?'+':'−')+fmt(Math.abs(x.p))),el('td','r '+sgn(x.p),(x.p>=0?'+':'−')+pct(Math.abs(x.buy>0?x.p/x.buy:0))+'%')];
+    const c=[el('td',null,x.r.o.name),el('td','r',fmtP(x.ub)),el('td','r',fmtP(x.r.np)),el('td','r','−'+fmt(x.sh)),el('td','r '+sgn(x.p),(x.p>=0?'+':'−')+fmt(Math.abs(x.p))),el('td','r '+sgn(x.p),(x.p>=0?'+':'−')+pct(Math.abs(x.buy>0?x.p/x.buy:0))+'%')];
     ['','Compras a /u','Vendes a /u','Envío','Ganancia','Margen'].forEach((d,i)=>{if(d)c[i].dataset.l=d;});if(!SH())c.splice(3,1);tr.append(...c);tb.append(tr);});
   if(it.length>10){const tr=el('tr'),td=el('td','muted','y '+(it.length-10)+' ítems más');td.colSpan=6;tr.append(td);tb.append(tr);}
   t.append(tb);box.append(t);
-  box.append(el('p','fb2-n','Compra = Jita Sell × cantidad (comprando de las órdenes de venta, sin broker). Venta = el precio de lista en HY-RWO ya con Sales Tax, Broker y SCC.'+(SH()?' El envío es un solo cálculo para todo el lote.':'')+' El margen se cambia junto al botón de la ruta.'));
+  box.append(el('p','fb2-n',(FB==='sell'?'Compra = Jita Sell × cantidad (comprando de las órdenes de venta, sin broker). ':'Compra = Jita '+(FB==='buy'?'Buy':'Split')+' × cantidad con una buy order, más el Broker de Jita ('+pct(C.broker)+'%). ')+'Venta = el precio de lista en HY-RWO ya con Sales Tax, Broker y SCC.'+(SH()?' El envío es un solo cálculo para todo el lote.':'')+' El margen se cambia junto al botón de la ruta.'));
 }
+$('flipBuy').addEventListener('click',e=>{const b=e.target.closest('[data-fb]');if(!b||!lastP)return;S.fbBase=b.dataset.fb;paintFlipBuy(lastP);});
 function paintSkewNote(){const b=$('skNote'),parts=[];
   const f=(v,t)=>{if(v)parts.push(t+' '+(v>0?'+':'−')+pctS(Math.abs(v))+'%');};
   f(C.skew.inst,'venta rápida');f(C.skew.ord,'órdenes en Jita');f(C.skew.nul,'órdenes en Null');
@@ -2072,8 +2082,7 @@ function setFlip(on){
 $('bFlip').addEventListener('click',()=>setFlip(!S.flip));
 $('shipOn').addEventListener('change',e=>{C.shipOn=!e.target.checked; // v1.0.23: marcado = vendes en el origen (sin envío)
   syncShipLabels();S.planMode=null;czIdx=0;if(S.items.length)refreshNow();});
-const impSync=(src,dst)=>{const v=parseFloat($(src).value);if(!(v>=0))return;C.impM=v/100;$(dst).value=String(v);refresh();};
-$('fImpM').addEventListener('input',()=>impSync('fImpM','cImpM'));$('cImpM').addEventListener('input',()=>impSync('cImpM','fImpM'));
+$('fImpM').addEventListener('input',()=>{const v=parseFloat($('fImpM').value);if(!(v>=0))return;C.impM=v/100;refresh();stSave();}); // v1.0.30: un solo control del margen
 $('cNullDest').addEventListener('input',()=>refresh());
 $('themeLight').checked=document.documentElement.classList.contains('light');$('themeTxt').textContent=$('themeLight').checked?'Light':'Dark';
 syncShipSwitch();
@@ -2204,7 +2213,7 @@ const DEPS=[
   [['discBase','discPct','discDays','discLoc'],()=>!$('discOn').checked,'Activa «Comparar esta opción».'],
   [['qdMax'],()=>!$('qdOn').checked,'Activa «Descuento por cantidad».'],
   [['cDayMin','cDayMax','cAssignee'],()=>!C.shipOn,'Vendes sin envío (switch del menú).'],
-  [['cImpM','cNullDest'],()=>!S.flip,'Solo en la ruta Jita → HY-RWO.'],
+  [['cNullDest'],()=>!S.flip,'Solo en la ruta Jita → HY-RWO.'],
 ];
 function syncDeps(){const off=new Map();
   DEPS.forEach(([ids,f,why])=>{if(f())ids.forEach(id=>{if(!off.has(id))off.set(id,why);});});
@@ -2271,7 +2280,7 @@ window.addEventListener('pageshow',e=>{if(e.persisted)location.reload();});
 // Solo se guarda lo del panel Ajustes + tema (localStorage, en esta PC). El inventario pegado,
 // los precios, la ruta y el switch de envío NO se guardan: cada visita empieza limpia.
 const ST_KEY='gestorVentas.ajustes.v1';let stBusy=false,stT=0;
-const stFields=()=>[...document.querySelectorAll('#settings input,#settings select,#settings textarea')].filter(e=>e.id);
+const stFields=()=>[...document.querySelectorAll('#settings input,#settings select,#settings textarea,#fImpM')].filter(e=>e.id); // + margen del menú
 function stSaveNow(){if(stBusy)return;const o={v:1,f:{},ui:{light:$('themeLight').checked}};
   stFields().forEach(e=>{o.f[e.id]=e.type==='checkbox'?e.checked:e.value;});
   try{localStorage.setItem(ST_KEY,JSON.stringify(o));}catch(e){}}

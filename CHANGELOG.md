@@ -2,6 +2,19 @@
 
 Cambios por versión del Gestor de Ventas. La más nueva arriba. El detalle técnico completo está en `docs/SPEC.txt`.
 
+## 1.0.30 — Ganancia a la derecha y compras al Buy, Split o Sell
+*2026-10-14*
+
+- «Tu Lote en Jita»: el punto de tu plan queda centrado sobre la línea y no se corta en el borde; usa los mismos valores que la Tasación (Buy · Split · Sell en las marcas) y lo que deja tu plan se copia con un clic.
+- **Resultado**: con la ruta Jita → HY-RWO, la ganancia (y el % sobre lo invertido) va a la derecha del total, y una etiqueta muestra el margen de importación que tienes en el menú.
+- **Comprar en Jita al Buy, Split o Sell** (solo con la ruta Jita → HY-RWO vendiendo en HY-RWO): Sell = tomas las órdenes de venta, sin broker; Buy o Split = pones una buy order y pagas el Broker de Jita. La ganancia, la tabla y el resumen se recalculan.
+- Casilla del margen del menú sin flechas blancas, con el estilo oscuro de la app.
+
+**Sin redundancias**
+- El margen de importación ya no está repetido en Ajustes: queda solo en el menú lateral y se guarda con tus Ajustes.
+- Fuera la tarjeta «Envío» del resumen (el envío ya está en «De Dónde Sale tu ISK», en el paso Courier y en Contratos).
+- Fuera los números repetidos de «Tu Lote en Jita» (ya están en la Tasación) y el número grande de la tarjeta de compra (ya está a la derecha del Resultado).
+
 ## 1.0.29 — Tasación como Janice y contratos exactos para SIGMA Freight
 *2026-10-14*
 

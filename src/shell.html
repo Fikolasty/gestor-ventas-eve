@@ -1334,15 +1334,15 @@ body.in-jita #bMore,body.in-jita #more,body.in-jita #vRep,body.in-jita .if-ore{d
 .ov-kpi small{display:block;color:var(--dim);font-size:.78rem;line-height:1.35}
 .ov-kpi .rl{display:block;margin-top:6px;font-size:.8rem;color:var(--mut)}.ov-kpi .rl small{font-size:.72rem}
 .ov-row{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:10px}
-.ov-trk{position:relative;height:40px;margin:2px 6px 0}
+.ov-trk{position:relative;height:40px;margin:2px 10px 0}
 .ov-trk .ln{position:absolute;left:0;right:0;top:15px;height:6px;border-radius:3px;background:linear-gradient(90deg,#e8746c,#e0a84f,#5cba86);opacity:.55}
 .ov-trk .tk{position:absolute;top:10px;width:2px;height:16px;background:#d6d4cb;transform:translateX(-1px)}
 .ov-trk .tk span{position:absolute;top:20px;left:50%;transform:translateX(-50%);font-size:.72rem;color:var(--dim);white-space:nowrap}
-.ov-trk .me{position:absolute;top:6px;width:14px;height:14px;border-radius:50%;background:#d97757;border:2px solid #fff;transform:translateX(-7px);box-shadow:0 0 8px rgba(217,119,87,.8)}
-.ov-mk-l{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:8px;font-size:.8rem;color:var(--dim)}.ov-mk-l b{display:block;color:var(--txt);font:600 .9rem var(--f-num)}
+.ov-trk .me{position:absolute;top:18px;width:14px;height:14px;box-sizing:border-box;border-radius:50%;background:#d97757;border:2px solid #fff;transform:translate(-50%,-50%);box-shadow:0 0 8px rgba(217,119,87,.8)}
+.ov-mk-n b .copy{margin:0;padding:0;border:0;background:none!important;box-shadow:none!important;font:inherit;color:inherit;text-align:left;width:auto}
 .ov-mk-n{margin-top:8px;font-size:.86rem;color:var(--mut)}.ov-mk-n b{color:#e8a588}
 @media(max-width:900px){.ov-row{grid-template-columns:minmax(0,1fr)}}
-@media(max-width:520px){.ov-hd{flex-direction:column;align-items:flex-start}.ov-hd .v-isk{font-size:2rem}.ov-kpi{grid-template-columns:minmax(0,1fr)}.ov-mk-l b{font-size:.8rem}.ov-card{padding:12px}}
+@media(max-width:520px){.ov-hd{flex-direction:column;align-items:flex-start}.ov-hd .v-isk{font-size:2rem}.ov-kpi{grid-template-columns:minmax(0,1fr)}.ov-card{padding:12px}}
 
 /* v1.0.23: la otra opción de mercado (vender en el origen o mandarlo al destino) */
 .ov-alt{display:flex;align-items:center;gap:14px;flex-wrap:wrap;padding:12px 16px;border-left:3px solid #6aa8d8}
@@ -1381,6 +1381,31 @@ body.side-c .route>.route-cap{display:none!important}
 .hero-intro.no-appr .hero-left{flex-direction:row}
 .hero-intro.no-appr .hero-left>*{flex:1 1 0;min-width:0}
 @media(max-width:980px){.hero-intro.no-appr .hero-left{flex-direction:column}}
+
+/* v1.0.30: Resultado con la ganancia a la derecha y el margen visible */
+.res-chips{display:flex;gap:8px;flex-wrap:wrap}
+.res-chips .sk-note{margin:0 0 6px}
+.mg-note{color:#e8a588!important;background:rgba(217,119,87,.10)!important;border-color:rgba(217,119,87,.45)!important}
+.res-top{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap}
+.res-top .res-big{margin:6px 0 4px}
+.res-pf{text-align:right;padding:10px 16px;border-radius:12px;border:1px solid rgba(92,186,134,.35);background:linear-gradient(180deg,rgba(92,186,134,.12),rgba(92,186,134,.04));
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.05),0 2px 6px rgba(0,0,0,.4)}
+.res-pf.neg{border-color:rgba(232,116,108,.45);background:linear-gradient(180deg,rgba(232,116,108,.12),rgba(232,116,108,.04))}
+.res-pf small{display:block;font-size:.72rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--dim)}
+.res-pf b{display:block;font:600 clamp(1.3rem,3vw,1.9rem) var(--f-num);color:var(--gain)}
+.res-pf.neg b{color:#ff9a9a}
+.res-pf span{display:block;font-size:.82rem;color:var(--mut)}
+@media(max-width:600px){.res-pf{text-align:left;width:100%}}
+
+/* v1.0.30: comprar en Jita al Buy / Split / Sell; casilla del margen sin flechas blancas */
+.fb2-hd{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.fb2-hd h4{margin:0}
+.fb2-seg{display:inline-flex;align-items:center;gap:4px;padding:3px;border-radius:10px;background:#0f0f0f;border:1px solid rgba(222,220,209,.10);box-shadow:inset 0 1px 3px rgba(0,0,0,.6)}
+.fb2-seg>span{font-size:.78rem;color:var(--dim);padding:0 6px}
+.route .route-m input{-moz-appearance:textfield;appearance:textfield;background:#0f0f0f!important;color:var(--txt)!important;border:1px solid rgba(222,220,209,.16)!important;border-radius:8px!important;
+  box-shadow:inset 0 1px 3px rgba(0,0,0,.6)!important;text-align:center;font:600 .92rem var(--f-num)}
+.route .route-m input::-webkit-inner-spin-button,.route .route-m input::-webkit-outer-spin-button{-webkit-appearance:none;margin:0}
+.route .route-m input:focus{border-color:#d97757!important;box-shadow:0 0 0 2px rgba(217,119,87,.25)!important;outline:none}
 </style>
 <script>/* v1.0.16: aplica el tema guardado antes de pintar (sin parpadeo). Por defecto: Dark. */try{var g=JSON.parse(localStorage.getItem('gestorVentas.ajustes.v1')||'null');if(g&&g.ui&&g.ui.light)document.documentElement.classList.add('light');}catch(e){}</script>
 </head>
@@ -1399,7 +1424,7 @@ body.side-c .route>.route-cap{display:none!important}
     <span class="route-cap" aria-hidden="true">En</span>
     <label class="sw" id="shipLab" title=""><input type="checkbox" id="shipOn" checked><span class="sw-t" aria-hidden="true"></span><span id="shipTxt">HY-RWO</span></label>
     <label class="sw" title="Tema de la página: Dark (oscuro) o Light (claro)."><input type="checkbox" id="themeLight"><span class="sw-t" aria-hidden="true"></span><span id="themeTxt">Dark</span></label>
-    <label class="route-m" id="rtM" hidden>Margen +<input type="number" id="fImpM" min="0" step="0.5" value="15" aria-label="Margen al vender en HY-RWO, % neto sobre Jita Sell">% neto</label>
+    <label class="route-m" id="rtM" hidden>Margen +<input type="number" id="fImpM" min="0" step="0.5" value="15" aria-label="Margen al vender en HY-RWO, % neto sobre Jita Sell" title="Cuánto más caro vendes en HY-RWO que en Jita Sell, neto (después de taxes). Naves: suele ser 14–20%. Se guarda con tus Ajustes.">% neto</label>
   </div>
   </div>
   <div class="side-g"><span class="side-h">General</span>
@@ -1451,7 +1476,7 @@ Strontium Clathrates = 50
 Contraband Freight = no</textarea><small>Una regla por línea: Nombre = tax total en %, o «no» para artículos excluidos.</small></label></div></fieldset>
       <fieldset class="st"><legend><span class="ic i-help" aria-hidden="true"></span><span class="st-tt">Venta a Jugador<small class="st-sum">Último recurso: venta por Discord</small></span></legend><p class="st-i">Permite comparar una oferta WTS a jugadores de SIGMA o Vanguardia DR. El comprador y el plazo de venta no están garantizados.</p><div class="st-g"><label class="st-f st-ck"><span class="st-l"><input type="checkbox" id="discOn" checked> Comparar esta opción</span><small>Sin Sales Tax ni envío. Solo se recomienda si no hay otra forma.</small></label><label class="st-f"><span class="st-l">Precio base</span><select id="discBase"><option value="buy" selected>Jita Buy</option><option value="split">Jita Split</option></select><small>Los jugadores en Null compran a Jita Buy.</small></label><label class="st-f"><span class="st-l">% del precio base</span><input type="number" id="discPct" step="1" min="0" value="100"><small>Lo que le pides al comprador.</small></label><label class="st-f"><span class="st-l">Días hasta que alguien compre</span><input type="number" id="discDays" step="1" min="0" value="3"><small>Para el tiempo estimado.</small></label><label class="st-f"><span class="st-l">Entrega</span><input type="text" id="discLoc" value="HY-RWO: Time Is A Flat Circle"><small>Dónde haces el contrato.</small></label></div></fieldset>
       <div class="st-sec"><h3 class="st-sec-t">Envío y Reproceso</h3><p class="st-sec-i">Logística con SIGMA Freight y la refinería donde reprocesas.</p></div>
-      <fieldset class="st"><legend><span class="ic i-ship" aria-hidden="true"></span><span class="st-tt">Envío (SIGMA Freight)<small class="st-sum">Días por contrato, destinatario e importación a Null</small></span></legend><p class="st-i">Los costes están fijados según SIGMA Freight y se desglosan en «Contratos y Envío». Aquí solo ajustas los días estimados por contrato.</p><div class="st-g"><label class="st-f"><span class="st-l">Días por courier (mejor caso)</span><input type="number" id="cDayMin" step="1" min="0" value="1"><small>Lo que tarda en entregar un contrato.</small></label><label class="st-f"><span class="st-l">Días por courier (peor caso)</span><input type="number" id="cDayMax" step="1" min="0" value="3"><small>Para el tiempo estimado del resumen.</small></label><label class="st-f st-w"><span class="st-l">Destinatario del courier</span><input type="text" id="cAssignee" value="SIGMA Freight" spellcheck="false"><small>A quién se asigna el contrato de envío (Private → Name).</small></label><label class="st-f st-w"><span class="st-l">Destino en Null (modo Jita → HY-RWO)</span><input type="text" id="cNullDest" value="HY-RWO: Time Is A Flat Circle" spellcheck="false"><small>Estructura donde SIGMA Freight entrega cuando importas de Jita.</small></label><label class="st-f"><span class="st-l">Margen al importar a HY-RWO %</span><input type="number" id="cImpM" step="0.5" min="0" value="15"><small>Cuánto más caro vendes en HY-RWO que en Jita Sell, neto (después de taxes). Naves: suele ser 14–20%.</small></label></div></fieldset>
+      <fieldset class="st"><legend><span class="ic i-ship" aria-hidden="true"></span><span class="st-tt">Envío (SIGMA Freight)<small class="st-sum">Días por contrato, destinatario e importación a Null</small></span></legend><p class="st-i">Los costes están fijados según SIGMA Freight y se desglosan en «Contratos y Envío». Aquí solo ajustas los días estimados por contrato.</p><div class="st-g"><label class="st-f"><span class="st-l">Días por courier (mejor caso)</span><input type="number" id="cDayMin" step="1" min="0" value="1"><small>Lo que tarda en entregar un contrato.</small></label><label class="st-f"><span class="st-l">Días por courier (peor caso)</span><input type="number" id="cDayMax" step="1" min="0" value="3"><small>Para el tiempo estimado del resumen.</small></label><label class="st-f st-w"><span class="st-l">Destinatario del courier</span><input type="text" id="cAssignee" value="SIGMA Freight" spellcheck="false"><small>A quién se asigna el contrato de envío (Private → Name).</small></label><label class="st-f st-w"><span class="st-l">Destino en Null (modo Jita → HY-RWO)</span><input type="text" id="cNullDest" value="HY-RWO: Time Is A Flat Circle" spellcheck="false"><small>Estructura donde SIGMA Freight entrega cuando importas de Jita.</small></label></div></fieldset>
       <fieldset class="st"><legend><span class="ic i-flask" aria-hidden="true"></span><span class="st-tt">Refinería<small class="st-sum">Estructura, rig e implante donde reprocesas</small></span></legend><p class="st-i">Indica la estructura donde reprocesarás. El tipo de refinería, rig, seguridad e implante cambian el yield estimado.</p><div class="st-g"><label class="st-f"><span class="st-l">Nombre</span><input type="text" id="refName" value="HY-RWO - Metal Exchange"><small>Lo de antes de " - " es el sistema (HY-RWO).</small></label><label class="st-f"><span class="st-l">Estructura</span><select id="refStruct"><option value="tatara" selected>Tatara</option><option value="athanor">Athanor</option></select><small>Tatara rinde más que Athanor.</small></label><label class="st-f"><span class="st-l">Rig de reproceso</span><select id="refRig"><option value="t2" selected>T2</option><option value="t1">T1</option><option value="none">Sin Rig</option></select><small>El Rig de la estructura.</small></label><label class="st-f"><span class="st-l">Seguridad del sistema</span><select id="refSec"><option value="null" selected>Nullsec</option><option value="low">Lowsec</option><option value="high">Highsec</option></select><small>Nullsec da más rendimiento.</small></label><label class="st-f"><span class="st-l">Implante de reproceso</span><select id="refImp"><option value="0.04" selected>RX-804 (+4%)</option><option value="0.02">RX-802 (+2%)</option><option value="0.01">RX-801 (+1%)</option><option value="0">Ninguno</option></select><small>El implante que llevas puesto.</small></label></div></fieldset>
 
     </div>
@@ -1547,8 +1572,9 @@ Contraband Freight = no</textarea><small>Una regla por línea: Nombre = tax tota
   <!-- 1. Resultado simple -->
   <section class="panel summary res" id="pSum" hidden>
     <h2><span class="ic i-bulb" aria-hidden="true"></span>Resultado</h2>
-    <p class="sk-note" id="skNote" hidden></p>
-    <p class="res-big"><span class="num" id="resIsk">—</span><span class="v-what" id="resWhat"></span></p>
+    <div class="res-chips"><p class="sk-note" id="skNote" hidden></p><p class="sk-note mg-note" id="mgNote" hidden></p></div>
+    <div class="res-top"><p class="res-big"><span class="num" id="resIsk">—</span><span class="v-what" id="resWhat"></span></p>
+      <div class="res-pf" id="resPf" hidden></div></div>
     <div class="fb2" id="flipBuy" hidden></div>
     <div class="pk-w"><h4 class="pk-t">Elige un Plan <small>El óptimo viene marcado. Si eliges otro, todo se ajusta a ese plan.</small></h4>
       <div class="pk-tools" id="pkTools"></div>
@@ -1573,7 +1599,6 @@ Contraband Freight = no</textarea><small>Una regla por línea: Nombre = tax tota
       <dl class="ov-kpi">
         <div><dt>Ítems</dt><dd id="vsN">—</dd><small id="vsNs"></small></div>
         <div><dt>Volumen Total</dt><dd id="vsV">—</dd><small id="vsVs"></small></div>
-        <div id="ovShip"><dt id="aCourT">Envío a Jita</dt><dd id="aCourier">—</dd><small id="aCourS"></small></div>
         <div class="tx"><dt>Taxes y Broker</dt><dd id="vsCn" class="neg-soft">—</dd><small id="vsC"></small><label class="rl" id="vsRelW" hidden><input type="checkbox" id="cRelistOn"> Relists: <span id="vsRel">—</span><small>Se cobra si bajas el precio (~2 semanas). Márcalo para contarlo.</small></label></div>
       </dl>
       <div class="ov-row">
