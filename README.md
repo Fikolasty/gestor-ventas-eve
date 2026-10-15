@@ -1,7 +1,7 @@
 # Market Moves+ · EVE Online
 
 **Market Moves+**: herramienta para gestionar tus planes de mercado, para pilotos de **SIGMA GRINDSET** y **Vanguardia DR**.
-Pegas tu inventario de EVE y la página te dice, ítem por ítem, dónde ganas más ISK. Las opciones que compara son:
+Pegas tu inventario de EVE y la página te dice, item por item, dónde ganas más ISK. Las opciones que compara son:
 vender en Null (HY-RWO), poner una orden en Jita, vender al instante en Jita, el Buyback de la alianza, reprocesar o vender a otro jugador.
 Descuenta los taxes, el Broker y el envío con SIGMA Freight.
 
@@ -24,7 +24,7 @@ Lo más exacto es copiar los % de *Broker's fee* y *Sales tax* que muestra la ve
 - **Elige un Plan**: el óptimo arriba y los demás en filas con rapidez, envío, valor y diferencia; se pueden ordenar y filtrar.
 - **Pasos para Vender**: el plan en pasos numerados, en orden, con íconos, precios para copiar, datos del courier y casillas de progreso.
 - **Ruta invertible**: HY-RWO → Jita (vendes lo que tienes en Null) o Jita → HY-RWO (compras en Jita y vendes más caro en Null, con tu margen).
-- **Switch de envío**: con el courier de SIGMA Freight o con los ítems ya en el destino.
+- **Switch de envío**: con el courier de SIGMA Freight o con los items ya en el destino.
 - **Reproceso** de ore y hielo con tus skills, la estructura, el rig y el implante.
 - **Contratos** listos para copiar: Buyback (Item Exchange), courier y venta a jugadores.
 - **Anti-cebo**: ignora órdenes de venta puestas muy baratas para tirar el precio (revisa las 5 más baratas, en cascada) y publica 1 tick por debajo.
@@ -59,7 +59,7 @@ CHANGELOG.md          ← cambios por versión
 ### Generar la página
 Solo necesitas Python 3, sin dependencias:
 ```
-python3 build.py 1.0.55
+python3 build.py 1.0.56
 ```
 Eso escribe `index.html` con la versión indicada.
 

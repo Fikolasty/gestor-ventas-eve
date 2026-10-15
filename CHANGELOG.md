@@ -2,18 +2,35 @@
 
 Cambios por versión del Gestor de Ventas. La más nueva arriba. El detalle técnico completo está en `docs/SPEC.txt`.
 
+## 1.0.56 — Limpieza, sin Modo Ligero y textos
+*2026-10-15*
+
+**Textos**
+- «Ítem/Ítems» sin acento en toda la app (Item, Items, ITEMS).
+- «Tus Ítems» → **Listado de Items Registrados**.
+- En «Ganas de más / Dejas de ganar», el % y el monto de la alternativa van con color (verde positivo, rojo negativo).
+- El texto pequeño del Resultado («RECIBES CON ESTE PLAN», «DEJAS DE GANAR») alineado con el título RESULTADO; en móvil el número grande cabe en una línea.
+
+**Fuera el Modo Ligero** y todo su código (interruptor, guardado, estilos `html.lite`).
+
+**Revisión de código, memoria y fórmulas**
+- Memoria: 10 ciclos de pegar 155 items / limpiar / pegar pocos, abriendo desglose, planes, rutas, items y Ajustes: los nodos y listeners vuelven siempre al mismo número y la memoria se mantiene estable (~2,5 MB). Sin fugas.
+- Rendimiento: recalcular 6–9 ms, abrir el desglose ~65 ms, cambiar de plan ~40 ms.
+- Fórmulas: 2.000+ comprobaciones en las tres rutas (HY-RWO → Jita, Jita → HY-RWO con y sin Courier) y con relists: total = suma de cada item − envío; envío = courier del volumen y colateral; contratos suman lo mismo que el envío; precios de Jita, Null, Buyback e importación con sus tasas; Tasación igual a la suma de Jita Buy/Sell. Todo cuadra.
+- Fuera variables y ~90 reglas CSS que ya no usaba nada; mismo aspecto (comparado píxel a píxel).
+
 ## 1.0.55 — Interruptor Courier On/Off y pasos sin casillas
 *2026-10-15*
 
 **Courier On/Off** (reemplaza «En Jita / En HY-RWO»)
 - Ruta **HY-RWO → Jita**: el courier siempre se cuenta cuando el plan envía algo a Jita; el interruptor no aparece.
 - Ruta **Jita → HY-RWO**: aparece **Courier On/Off** (al elegir la ruta empieza en On).
-  - **On**: los ítems están en Jita y los llevas a HY-RWO con SIGMA Freight; se cuenta el courier y el plan compara vender en Jita o en HY-RWO.
+  - **On**: los items están en Jita y los llevas a HY-RWO con SIGMA Freight; se cuenta el courier y el plan compara vender en Jita o en HY-RWO.
   - **Off**: los trajiste a Jita para venderlos allí; sin courier, solo vender en Jita (orden o al instante).
 - Al cambiar de ruta, el Courier vuelve a On.
 
 **Pasos para Vender**
-- Fuera las casillas de cada ítem, el botón «✓ Marcar hecho» y el contador «N de M pasos hechos».
+- Fuera las casillas de cada item, el botón «✓ Marcar hecho» y el contador «N de M pasos hechos».
 
 **Arreglo**
 - En «¿Reprocesar?» (venta a jugador) se mostraba una diferencia extra que no correspondía.
@@ -24,7 +41,7 @@ Cambios por versión del Gestor de Ventas. La más nueva arriba. El detalle téc
 ## 1.0.54 — Modo foco
 *2026-10-15*
 
-- Al abrir una sección principal —los planes (clic en el Plan Óptimo), el desglose, Tus Ítems, Ajustes o la Guía de Uso— las demás se pliegan solas y la vista se mueve a la que abriste.
+- Al abrir una sección principal —los planes (clic en el Plan Óptimo), el desglose, Tus Items, Ajustes o la Guía de Uso— las demás se pliegan solas y la vista se mueve a la que abriste.
 
 ## 1.0.53 — Inicio más limpio y Guía de Uso
 *2026-10-15*
@@ -53,17 +70,17 @@ Cambios por versión del Gestor de Ventas. La más nueva arriba. El detalle téc
 **Textos**
 - «Vender en null» / «Vender en Null» → **Vender en HY-RWO** en toda la app (también «Reprocesar y Vender en HY-RWO»).
 - «/u» y «Precio por Unidad» en etiquetas y columnas → **Precio Unidad** (Precio Unidad Neto, Precio Unidad Compra/Venta, Precio Unidad del ore…).
-- **RESULTADO** y **TUS ÍTEMS** en mayúsculas.
+- **RESULTADO** y **TUS ITEMS** en mayúsculas.
 
-**Tus Ítems**
-- Plegado se ve como el plan elegido y «Ver el desglose» (borde y franja arcilla). A la derecha dice **Ver los N ítems ▾** / **Ocultar los ítems ▴** en vez de la hora y los avisos (los avisos siguen en cada ítem). La cantidad queda centrada con el título.
+**Tus Items**
+- Plegado se ve como el plan elegido y «Ver el desglose» (borde y franja arcilla). A la derecha dice **Ver los N items ▾** / **Ocultar los items ▴** en vez de la hora y los avisos (los avisos siguen en cada item). La cantidad queda centrada con el título.
 
 **Desglose**
 - Fuera la fila «Total del plan» (el total ya está arriba) y las esquinas de mira del recuadro.
 
 **Movimiento**
 - Más ágil: 0,22 s al abrir y 0,14 s al cerrar, solo opacidad y un leve desplazamiento (lo hace la tarjeta gráfica). Antes se animaba la altura y con mucho contenido se sentía lento.
-- Arreglo: al abrir un ítem de Tus Ítems, «aria-expanded» se volvía a actualizar (se había perdido en 1.0.50).
+- Arreglo: al abrir un item de Tus Items, «aria-expanded» se volvía a actualizar (se había perdido en 1.0.50).
 
 ## 1.0.50 — El desglose como protagonista y movimiento suave
 *2026-10-15*
@@ -73,7 +90,7 @@ Cambios por versión del Gestor de Ventas. La más nueva arriba. El detalle téc
 - **Ver el desglose** queda justo debajo de «Ver más planes». Al abrirlo, los planes se pliegan y el desglose pasa a ser lo principal; el botón cambia a **Volver a los planes**.
 
 **Movimiento suave**
-- Abrir y cerrar con curva *ease in-out* (lenta al empezar, rápida en el medio, lenta al terminar): el desglose, «Ver más planes», Ajustes, Ayuda, cada ítem de Tus Ítems y las secciones desplegables.
+- Abrir y cerrar con curva *ease in-out* (lenta al empezar, rápida en el medio, lenta al terminar): el desglose, «Ver más planes», Ajustes, Ayuda, cada item de Tus Items y las secciones desplegables.
 - Si el sistema tiene activado «reducir movimiento», se abre al instante como antes.
 
 **Limpieza**
@@ -92,7 +109,7 @@ Cambios por versión del Gestor de Ventas. La más nueva arriba. El detalle téc
 
 **Optimización (sin quitar nada)**
 - La imagen de fondo y el logo iban dos veces dentro del archivo: ahora una sola. La página pasa de 2,04 MB a 1,28 MB (−37 %), carga más rápido.
-- Consultas a ESI: 8 ítems a la vez (con los reintentos de 1.0.46), casi el doble de rápido que con 4.
+- Consultas a ESI: 8 items a la vez (con los reintentos de 1.0.46), casi el doble de rápido que con 4.
 - Fuera código que ya no se usaba (el texto largo del plan).
 
 ## 1.0.48 — Resultado en dos mitades
@@ -115,20 +132,20 @@ Cambios por versión del Gestor de Ventas. La más nueva arriba. El detalle téc
 ## 1.0.46 — Pegado con espacios en vez de tabs
 *2026-10-15*
 
-- Si al copiar del juego las columnas llegan separadas por espacios en vez de tabs, la página tomaba toda la línea como nombre («Platinum 13,320 Moon Materials Material»): la cantidad quedaba en 1 y la API no encontraba el ítem, así que la Tasación y el plan salían vacíos. Ahora 2 o más espacios se leen como columnas, y con un solo espacio el nombre llega hasta el primer número suelto.
+- Si al copiar del juego las columnas llegan separadas por espacios en vez de tabs, la página tomaba toda la línea como nombre («Platinum 13,320 Moon Materials Material»): la cantidad quedaba en 1 y la API no encontraba el item, así que la Tasación y el plan salían vacíos. Ahora 2 o más espacios se leen como columnas, y con un solo espacio el nombre llega hasta el primer número suelto.
 - Conexión con ESI más estable: hasta 3 reintentos con espera si la API corta o pide esperar, y 4 consultas a la vez en vez de 10.
 
 ## 1.0.45 — Tasación del lote como Janice
 *2026-10-15*
 
-- Al pegar los ítems aparece la **Tasación** (la de v1.0.29) donde estaba «Qué hace»: Precios de (Jita 4-4 y la hora) · Volumen · Ítems | Buy · Split · Sell. Usa la mejor compra y la venta más barata de Jita 4-4 tal cual, igual que Janice. Volumen con 2 decimales; los valores se copian con un clic.
-- «Gratis» y «Antes de empezar» más compactos a la derecha. Sin ítems, la Tasación no se muestra y las dos tarjetas ocupan todo el ancho.
+- Al pegar los items aparece la **Tasación** (la de v1.0.29) donde estaba «Qué hace»: Precios de (Jita 4-4 y la hora) · Volumen · Items | Buy · Split · Sell. Usa la mejor compra y la venta más barata de Jita 4-4 tal cual, igual que Janice. Volumen con 2 decimales; los valores se copian con un clic.
+- «Gratis» y «Antes de empezar» más compactos a la derecha. Sin items, la Tasación no se muestra y las dos tarjetas ocupan todo el ancho.
 - Fuera la tarjeta «Qué hace».
 
-## 1.0.44 — Vuelta a v1.0.22 (pegar ítems vuelve a mostrar todo)
+## 1.0.44 — Vuelta a v1.0.22 (pegar items vuelve a mostrar todo)
 *2026-10-15*
 
-- Desde v1.0.23 la página no mostraba nada al pegar los ítems en el navegador del usuario; v1.0.22 sí funciona. Se vuelve a v1.0.22 como base para seguir desarrollando.
+- Desde v1.0.23 la página no mostraba nada al pegar los items en el navegador del usuario; v1.0.22 sí funciona. Se vuelve a v1.0.22 como base para seguir desarrollando.
 - Quedan fuera v1.0.23–v1.0.43: Comparativa Minera y mineria.html, ruta/dónde vendes, Tasación, contratos con números crudos, sin Modo Ligero, ganancia a la derecha y compras al Buy/Split/Sell.
 - Todo ese trabajo queda guardado en la rama `respaldo-v1.0.43` para traerlo de vuelta por partes.
 - Se conserva el workflow de Releases.
@@ -173,14 +190,14 @@ Cambios por versión del Gestor de Ventas. La más nueva arriba. El detalle téc
 *2026-10-14*
 
 - Tasación con los mismos valores que Janice: la mejor compra y la venta más barata de Jita 4-4 tal cual. El plan sigue usando sus precios protegidos (compras que aceptan tu cantidad, sin trampas ni cebos).
-- **Contratos de courier con los números crudos que verifica SIGMA Freight**: el colateral es la Jita Sell tal cual de cada ítem (como Janice: sin anti-cebo, undercut ni ajuste de precios); el volumen va con 2 decimales y el reward = base + ISK/m³ × volumen + % × colateral, redondeado al ISK.
+- **Contratos de courier con los números crudos que verifica SIGMA Freight**: el colateral es la Jita Sell tal cual de cada item (como Janice: sin anti-cebo, undercut ni ajuste de precios); el volumen va con 2 decimales y el reward = base + ISK/m³ × volumen + % × colateral, redondeado al ISK.
 - «Cálculo» del contrato muestra cada parte con sus decimales y el total, para comprobarlo a mano.
 - El paso «Courier» de Pasos para Vender usa exactamente los mismos números que el contrato (reward, colateral y volumen).
 
 ## 1.0.28 — Tasación con los precios juntos
 *2026-10-14*
 
-- Tasación en dos columnas fijas, como Janice: a la izquierda Precios de (Jita 4-4), Volumen e Ítems; a la derecha los tres precios juntos: Buy, Split y Sell.
+- Tasación en dos columnas fijas, como Janice: a la izquierda Precios de (Jita 4-4), Volumen e Items; a la derecha los tres precios juntos: Buy, Split y Sell.
 - Arreglado: en la 1.0.27 el Split no aparecía y los precios salían mezclados con los datos.
 
 ## 1.0.27 — Volumen copiable en la tasación
@@ -222,11 +239,11 @@ Cambios por versión del Gestor de Ventas. La más nueva arriba. El detalle téc
 - Nuevo aviso en el resumen: cuánto dejaría vender en el otro mercado (con el costo del envío y los contratos, o sin envío) y un botón para cambiar.
 
 **Tasación del lote (como Janice)**
-- Fuera la tarjeta «Qué hace». La tasación solo aparece al pegar ítems; antes, Skill Points y «Antes de empezar» ocupan todo el ancho.
-- La tasación va a la izquierda y las tarjetas a la derecha. Como Janice: a la izquierda «Precios de: Jita 4-4», Volumen e Ítems; a la derecha Buy · Split · Sell (clic para copiar).
+- Fuera la tarjeta «Qué hace». La tasación solo aparece al pegar items; antes, Skill Points y «Antes de empezar» ocupan todo el ancho.
+- La tasación va a la izquierda y las tarjetas a la derecha. Como Janice: a la izquierda «Precios de: Jita 4-4», Volumen e Items; a la derecha Buy · Split · Sell (clic para copiar).
 
 **Reproceso solo en HY-RWO**
-- Nunca se reprocesa en Jita: la opción se llama «Reprocesar en HY-RWO → Jita» (se reprocesa en HY-RWO y se vende el material en Jita) y no aparece cuando los ítems están en Jita.
+- Nunca se reprocesa en Jita: la opción se llama «Reprocesar en HY-RWO → Jita» (se reprocesa en HY-RWO y se vende el material en Jita) y no aparece cuando los items están en Jita.
 
 **Menú**
 - Rótulos sobre los controles: «Dirección» (Direction) y «En» (At), según el idioma.
@@ -259,16 +276,16 @@ Cambios por versión del Gestor de Ventas. La más nueva arriba. El detalle téc
 - Datos generados desde los datos estáticos de EVE (los de Pyfa) con `tools/mining/build_data.py`; se regeneran tras cada parche de CCP.
 - Español / English y tema claro incluidos. Solo memoria; solo se conecta a ESI.
 
-## 1.0.22 — Ítems ya en Jita y nuevo resumen del plan
+## 1.0.22 — Items ya en Jita y nuevo resumen del plan
 *2026-10-14*
 
-- **Ítems ya en Jita** (ruta HY-RWO → Jita con el switch en «En Jita»): solo se considera venderlos en Jita, con orden o al instante, usando tus Ajustes y el anti-cebo. Ya no aparecen Null, Buyback, venta a jugador, reproceso ni las reglas del hielo; tampoco la barra Null/Jita, «Ver más» ni las tarjetas de Null y Buyback.
-- Con la ruta invertida y el switch en «En HY-RWO» (ítems ya en HY-RWO), solo se considera venderlos en HY-RWO.
+- **Items ya en Jita** (ruta HY-RWO → Jita con el switch en «En Jita»): solo se considera venderlos en Jita, con orden o al instante, usando tus Ajustes y el anti-cebo. Ya no aparecen Null, Buyback, venta a jugador, reproceso ni las reglas del hielo; tampoco la barra Null/Jita, «Ver más» ni las tarjetas de Null y Buyback.
+- Con la ruta invertida y el switch en «En HY-RWO» (items ya en HY-RWO), solo se considera venderlos en HY-RWO.
 - Elige un Plan: la cabecera ya no se encima con el subtítulo cuando no hay filtros.
 - **Resumen del plan rediseñado** (arriba del análisis):
   - Total grande y qué plan es.
   - «De Dónde Sale tu ISK»: barra del valor de venta repartido en lo que te queda, Sales Tax, Broker (y SCC), Relists, Envío y Producción, con montos y %.
-  - Tarjetas: Ítems, Volumen, Envío (solo si hay envío) y Taxes y Broker (con Relists).
+  - Tarjetas: Items, Volumen, Envío (solo si hay envío) y Taxes y Broker (con Relists).
   - «Tu Lote en Jita»: Buy · Split · Sell en una línea y un punto con lo que te deja tu plan (% del valor a Jita Sell).
   - «Dónde se Vende»: barra con la parte del ISK de cada acción del plan.
   - Fuera «La Más Rápida» y «Comparación con Otros Planes»: ya están en Elige un Plan (columna Rapidez y diferencia vs óptimo).
@@ -297,29 +314,29 @@ Cambios por versión del Gestor de Ventas. La más nueva arriba. El detalle téc
 
 - «Elige un Plan» pasa de tarjetas a filas delgadas, una debajo de otra: punto de selección, nombre, una línea que explica qué significa ese plan, barra del valor (comparada con el mejor), total en ISK y diferencia con el óptimo.
 - El óptimo lleva la etiqueta «Recomendado» y barra verde; el plan elegido se marca en arcilla.
-- Si un plan solo aplica a parte de los ítems, la explicación dice cuántos.
+- Si un plan solo aplica a parte de los items, la explicación dice cuántos.
 - En celular, el valor y la diferencia bajan debajo de la explicación.
 
 ## 1.0.19 — Pasos para Vender
 *2026-10-14*
 
-- «Qué Hacer» ahora es **Pasos para Vender**: un paso numerado por acción, en el orden en que se hacen (primero lo que se hace donde están los ítems, luego el courier y al final lo que se hace al llegar).
-- Cada paso dice qué hacer y dónde (En HY-RWO / Envío / En Jita), cuánto ISK deja o cuesta, y muestra su tabla de ítems con íconos desde el inicio (primeros 5; botón ancho «Ver los N ítems restantes»).
-- Nuevo paso **Courier**: íconos de lo que viaja, destinatario, destino, reward y colateral para copiar, y botón para copiar los ítems.
-- Progreso: casilla por ítem, «Marcar hecho» por paso y barra «N de M pasos hechos» (solo en memoria; se reinicia al recargar).
-- Sin pestañas Todo / Ore / Loot; el buscador solo aparece en pasos con más de 8 ítems.
+- «Qué Hacer» ahora es **Pasos para Vender**: un paso numerado por acción, en el orden en que se hacen (primero lo que se hace donde están los items, luego el courier y al final lo que se hace al llegar).
+- Cada paso dice qué hacer y dónde (En HY-RWO / Envío / En Jita), cuánto ISK deja o cuesta, y muestra su tabla de items con íconos desde el inicio (primeros 5; botón ancho «Ver los N items restantes»).
+- Nuevo paso **Courier**: íconos de lo que viaja, destinatario, destino, reward y colateral para copiar, y botón para copiar los items.
+- Progreso: casilla por item, «Marcar hecho» por paso y barra «N de M pasos hechos» (solo en memoria; se reinicia al recargar).
+- Sin pestañas Todo / Ore / Loot; el buscador solo aparece en pasos con más de 8 items.
 
 ## 1.0.18 — Sin descuento por cantidad en Jita
 *2026-10-14*
 
-- El descuento por cantidad ya no se aplica a las órdenes en Jita (ni al vender ítems que ya están en Jita): es un mercado grande y no hace falta bajar el precio. Solo queda para vender en Null.
+- El descuento por cantidad ya no se aplica a las órdenes en Jita (ni al vender items que ya están en Jita): es un mercado grande y no hace falta bajar el precio. Solo queda para vender en Null.
 - El texto «Con −X% por cantidad» solo aparece en las ventas en Null.
 
 ## 1.0.17 — Anti-cebo, undercut de 1 tick y venta rápida por spread
 *2026-10-14*
 
 - **Undercut en ticks**: la orden en Jita se publica 1 tick por debajo de la venta más barata (1 tick = el mínimo de EVE, 4 cifras). Ajustable en Ajustes → Órdenes de Venta. Si escribiste tu propio precio, se respeta tal cual.
-- **Órdenes cebo**: se revisan las 5 ventas más baratas. Si una está más de 5 ticks por debajo de la siguiente, se salta (hasta 3 en cascada), salvo que tenga mucha cantidad (más que las 3 siguientes juntas). El precio elegido se confirma con la siguiente orden; si no se confirma, es otro nivel de precio y se usa la más barata. Aviso en el ítem con las órdenes ignoradas.
+- **Órdenes cebo**: se revisan las 5 ventas más baratas. Si una está más de 5 ticks por debajo de la siguiente, se salta (hasta 3 en cascada), salvo que tenga mucha cantidad (más que las 3 siguientes juntas). El precio elegido se confirma con la siguiente orden; si no se confirma, es otro nivel de precio y se usa la más barata. Aviso en el item con las órdenes ignoradas.
   Ejemplo real: 1,512,000 (6 u.) · 1,700,000 (13) · 1,715,000 (13) · 1,812,000 (20) · 1,813,000 (109) → se usa 1,812,000 y se publica a 1,811,000.
 - **Venta rápida por spread**: si tu precio de orden queda a 2 ticks o menos de la mejor compra, el plan vende al instante (casi el mismo ISK, sin esperar) y lo explica en la guía.
 - Ajustes nuevos: Undercut en Jita (ticks), Ignorar órdenes cebo (ticks), Vender al instante si la diferencia es ≤ (ticks). El Undercut % queda para Null y el hielo.
@@ -331,7 +348,7 @@ Cambios por versión del Gestor de Ventas. La más nueva arriba. El detalle téc
 - Nuevo botón **Restablecer** en Ajustes: borra lo guardado y vuelve a los valores de fábrica.
 - Lo demás se reinicia en cada visita: inventario pegado, precios, ruta (HY-RWO → Jita), switch de envío (En HY-RWO) y menú contraído.
 - Modo Ligero ya no se activa solo en Firefox. Por defecto: Dark y sin Modo Ligero.
-- **Íconos de los ítems**: no salían en GitHub Pages porque se descargaban con fetch. Ahora se muestran directo desde images.evetech.net (CSP: img-src incluye ese host). Si un ícono no carga, se oculta.
+- **Íconos de los items**: no salían en GitHub Pages porque se descargaban con fetch. Ahora se muestran directo desde images.evetech.net (CSP: img-src incluye ese host). Si un ícono no carga, se oculta.
 
 ## 1.0.15 — Menú lateral contraído por defecto
 *2026-10-14*
@@ -361,7 +378,7 @@ Campos que no aplican se apagan (con el motivo debajo)
 ## 1.0.13 — Mensaje de pegado y Ajustes con relieve
 *2026-10-14*
 
-- Texto de la caja de pegado (placeholder): "Pega aquí tus ítems con Ctrl+V" (English: "Paste your items here with Ctrl+V"). Sin ejemplos ni instrucciones largas; la guía completa sigue en Ayuda.
+- Texto de la caja de pegado (placeholder): "Pega aquí tus items con Ctrl+V" (English: "Paste your items here with Ctrl+V"). Sin ejemplos ni instrucciones largas; la guía completa sigue en Ayuda.
 - El mensaje va centrado y más grande (1.35rem; 1.1rem en móvil) solo mientras la caja está vacía (:placeholder-shown); al pegar vuelve al estilo normal alineado a la izquierda.
 Ajustes: estilo gráfico (relieve, sombras y paleta)
 - Tarjetas de cada sección con degradado sobre #151515, brillo arriba, sombra en dos capas; al pasar el mouse se aclara el borde.
@@ -378,7 +395,7 @@ Ajustes: estilo gráfico (relieve, sombras y paleta)
 
 Textos y tooltips
 - Etiquetas en Title Case: "Modo Ligero", "Abrir Todo", "Cerrar Todo".
-- Switch de envío: dice "En HY-RWO" (encendido: se cuenta el courier de SIGMA Freight) o "En Jita" (apagado: los ítems ya están en destino). Con la ruta invertida dice "En Jita" / "En HY-RWO". Función syncShipSwitch().
+- Switch de envío: dice "En HY-RWO" (encendido: se cuenta el courier de SIGMA Freight) o "En Jita" (apagado: los items ya están en destino). Con la ruta invertida dice "En Jita" / "En HY-RWO". Función syncShipSwitch().
 - Tema: el switch solo dice "Dark" o "Light".
 - Tooltips con una explicación breve en: ruta (flip), envío, Modo Ligero, tema, Ajustes y Ayuda.
 
@@ -387,11 +404,11 @@ Idioma
 - Traducción en tiempo de ejecución con un diccionario ES→EN embebido (I18N_EN, ~1,050 entradas).
   Una sola regex (claves de mayor a menor largo, con límites de palabra) sobre nodos de texto y atributos title/aria-label/placeholder.
   MutationObserver solo mientras está en English; los originales se guardan en WeakMaps para volver al español sin recargar.
-  Al volver a Español se desconecta el observer y se libera la regex. No traduce: textarea de pegado, nombres de ítems (.lot-name), nombres de EVE.
+  Al volver a Español se desconecta el observer y se libera la regex. No traduce: textarea de pegado, nombres de items (.lot-name), nombres de EVE.
 - <html lang> cambia a es/en.
 
 Precisión (Broker de Jita)
-- Caso real: 13 ítems en sell order en Jita. El juego: 1,656,677,161 ISK; la app: 1,661,355,993 ISK.
+- Caso real: 13 items en sell order en Jita. El juego: 1,656,677,161 ISK; la app: 1,661,355,993 ISK.
   Los precios coincidían exactos (bruto 1,737,365,743 ISK); la diferencia era el Broker: el juego cobró 1.27% y la app tenía 1.00% por defecto.
 - Default del Broker en Jita ahora 1.50% (Broker Relations 5 sin standings: 3% − 1.5%). Lo conservador: mejor sorprenderse con más.
 - La ayuda del campo dice que copies el "Broker's fee" que muestra el juego en la ventana de venta.
@@ -405,10 +422,10 @@ Verificación
 
 A) AJUSTE DE PRECIOS (skew)
 - Motivo: la venta rápida real en el juego salió 0.14% por encima de lo calculado (642,876,190 vs 641,950,282); Arturo prefiere que la app calcule un poco a la baja: "mejor sorprenderse con más".
-- Ajustes → Impuestos y Precios → Ajuste de Precios: Venta rápida (Jita Buy) −0.16% por defecto · Órdenes en Jita 0 · Órdenes en Null 0. Además, dentro de cada ítem: "Ajuste de precio %" que se suma al general (ej. −2).
-- Motor: factor = 1 + ajuste general del tipo de venta + ajuste del ítem. Venta rápida: valor del recorrido de buy orders × factor (y su promedio). Órdenes en Jita / Null / importado: precio de lista × factor, redondeado al tick. Buyback y jugador no cambian (pagan por su base).
-- Avisos: "Precios ajustados: venta rápida −0.16% · N ítems con ajuste propio" sobre el total; etiqueta "ajuste −2%" en la fila del ítem.
-- Verificado: con todo en 0 el resultado es idéntico a 1.0.10; con −0.16% cada venta rápida = ×0.9984; ajuste de ítem −2% baja su orden en Jita ~2%.
+- Ajustes → Impuestos y Precios → Ajuste de Precios: Venta rápida (Jita Buy) −0.16% por defecto · Órdenes en Jita 0 · Órdenes en Null 0. Además, dentro de cada item: "Ajuste de precio %" que se suma al general (ej. −2).
+- Motor: factor = 1 + ajuste general del tipo de venta + ajuste del item. Venta rápida: valor del recorrido de buy orders × factor (y su promedio). Órdenes en Jita / Null / importado: precio de lista × factor, redondeado al tick. Buyback y jugador no cambian (pagan por su base).
+- Avisos: "Precios ajustados: venta rápida −0.16% · N items con ajuste propio" sobre el total; etiqueta "ajuste −2%" en la fila del item.
+- Verificado: con todo en 0 el resultado es idéntico a 1.0.10; con −0.16% cada venta rápida = ×0.9984; ajuste de item −2% baja su orden en Jita ~2%.
 
 B) MENÚ LATERAL (estilo Claude)
 - Barra lateral fija a la izquierda: "Cálculo" (ruta HY-RWO ⇄ Jita, Contar envío, Modo ligero, Tema claro, y el margen de importación con la ruta invertida) y "General" (Ajustes, Ayuda). Botón ▯ para contraer a solo íconos (60 px) o expandir (248 px). Empieza expandido en pantallas ≥1300 px y contraído en las menores. En móvil (≤900 px) se oculta y se abre encima con un botón flotante; tocar fuera lo cierra. Solo en memoria.
@@ -432,18 +449,18 @@ E) VERIFICACIÓN
 - Textos cortos: "Contar envío"; margen de importación "Margen + [15] % neto" (solo visible con la ruta invertida).
 - Tema claro: barra crema con texto oscuro. Móvil: rejilla de 2 columnas (ruta y margen a lo ancho).
 - Verificado: node --check; capturas oscuro/claro/invertido/móvil; smoke; modo invertido (margen 20%); escáner sin envío; motor idéntico a v105; cero errores; sin desborde.
-- Qué Hacer: la pestaña elegida (Todo / Hielo / Ore y Minerales / Loot y Otros) se marca en arcilla. Si no es "Todo", aparece "Mostrando solo X: n de N ítems. El plan completo está en «Todo». [Ver todo]" — explica por qué el desglose no coincide con el texto del Plan Óptimo (que siempre habla de todo el lote).
+- Qué Hacer: la pestaña elegida (Todo / Hielo / Ore y Minerales / Loot y Otros) se marca en arcilla. Si no es "Todo", aparece "Mostrando solo X: n de N items. El plan completo está en «Todo». [Ver todo]" — explica por qué el desglose no coincide con el texto del Plan Óptimo (que siempre habla de todo el lote).
 - Comparación con Otros Planes: si una alternativa deja más que el plan (porque el óptimo eligió rapidez), dice "Ganas +X vs <plan>, pero se vende más lento (el plan óptimo prefiere vender rápido cuando la diferencia es pequeña)".
 - Corregido "ISK ISK" en la recomendación "Elegido por rapidez".
 
 
 ---
 
-## 1.0.9 — Sin envío = ítems ya en destino, una sola fuente, fondo
+## 1.0.9 — Sin envío = items ya en destino, una sola fuente, fondo
 *2026-10-14*
 
 A) ENVÍO APAGADO
-- Idea de Arturo: con "Contar envío" apagado los ítems se tratan como si ya estuvieran en Jita (o en HY-RWO en modo invertido). Llevarlos uno mismo cuesta 0, así que no se menciona el envío en ningún lado.
+- Idea de Arturo: con "Contar envío" apagado los items se tratan como si ya estuvieran en Jita (o en HY-RWO en modo invertido). Llevarlos uno mismo cuesta 0, así que no se menciona el envío en ningún lado.
 - Helper SH() = C.shipOn. Con SH() falso: sin bloque "Envío a Jita" en el análisis; la sección se llama "Contratos" y oculta la columna de envío; sin "Dos Escenarios"; el resumen lista "Vender en Jita" (o "Vender en HY-RWO") como órdenes sin contrato (ya no "Lo llevas tú"); guías, recomendaciones, Precios para Listar, comparación de reproceso, Buyback, jugador, "antes del envío", "Ver más" y la barra "Viaja a Jita" (→ "Se vende en Jita") sin textos de envío/courier. En modo invertido: "Vender en HY-RWO" / "Todo en HY-RWO" y la tabla de comprar y revender sin columna de envío.
 - Verificado con un escáner de texto (todas las secciones abiertas, ruta normal e invertida): 0 menciones de envío/courier/SIGMA Freight fuera de Ajustes, Ayuda y el propio interruptor.
 
@@ -465,7 +482,7 @@ D) VERIFICACIÓN
 *2026-10-14*
 
 A) ELIGE UN PLAN
-- Si un plan es exactamente el óptimo (mismo destino para cada ítem y mismo total), no se muestra como tarjeta aparte: la tarjeta del óptimo dice "Recomendado · es Todo a Jita (Orden)" y el subtítulo "Plan Óptimo · Todo a Jita (Orden)".
+- Si un plan es exactamente el óptimo (mismo destino para cada item y mismo total), no se muestra como tarjeta aparte: la tarjeta del óptimo dice "Recomendado · es Todo a Jita (Orden)" y el subtítulo "Plan Óptimo · Todo a Jita (Orden)".
 
 B) AJUSTES Y AYUDA
 - Se abren arriba del todo, debajo del título (contenedor .top-slot), y la página baja hasta ellos.
@@ -477,14 +494,14 @@ C) INTERRUPTORES (debajo del pegado, junto a la ruta)
 - Tema claro: generado automáticamente desde el CSS oscuro por light.py (en build.py): cada regla con colores se repite bajo html.light con colores convertidos (fondos oscuros → casi blanco cálido, texto claro → oscuro, colores vivos oscurecidos para leerse en claro, sombras suaves, arcilla #c96442). Ajustes a mano en light_extra.css (sin sombras de texto, imagen de fondo al 12%, sin viñeta, interruptores).
 - Viñeta negra sobre la imagen de fondo en modo normal (oscuro): transparente al centro → negro 92% en los bordes. Modo ligero sin viñeta.
 
-D) TUS ÍTEMS
-- Nueva columna "Precio /u": precio por unidad sugerido para la opción elegida, visible sin abrir el ítem y copiable con clic (Null/importado: precio de lista; Jita orden: precio de orden; venta rápida: promedio de buy orders; Buyback/Jugador: lo que pagan por unidad; reproceso: "—", se ven los minerales al abrir). Copiar no abre la fila. En móvil va en su propia línea.
+D) TUS ITEMS
+- Nueva columna "Precio /u": precio por unidad sugerido para la opción elegida, visible sin abrir el item y copiable con clic (Null/importado: precio de lista; Jita orden: precio de orden; venta rápida: promedio de buy orders; Buyback/Jugador: lo que pagan por unidad; reproceso: "—", se ven los minerales al abrir). Copiar no abre la fila. En móvil va en su propia línea.
 - La cabecera de cada fila ahora es un elemento con role="button" (Enter/Espacio abren) para poder contener el botón de copiar.
 
 E) RENDIMIENTO Y MEMORIA
-- El análisis (rutas, Qué Hacer, comparación) solo se pinta con la sección abierta; al abrirla se recalcula una vez. Recálculo con 155 ítems: ~10 ms → ~6.5 ms.
-- Filas de Tus Ítems sin listeners propios: un solo manejador de clic y teclado en #lots (WeakMap fila → ítem). Lote de 155 ítems: 592 → 129 listeners.
-- Limpieza automática en segundo plano (4 s después de cambiar la lista, en tiempo ocioso): precios de la API e íconos (URL.revokeObjectURL) de ítems que ya no están ni en Deshacer se sueltan. Lista vacía → 0 precios y 0 íconos en memoria.
+- El análisis (rutas, Qué Hacer, comparación) solo se pinta con la sección abierta; al abrirla se recalcula una vez. Recálculo con 155 items: ~10 ms → ~6.5 ms.
+- Filas de Tus Items sin listeners propios: un solo manejador de clic y teclado en #lots (WeakMap fila → item). Lote de 155 items: 592 → 129 listeners.
+- Limpieza automática en segundo plano (4 s después de cambiar la lista, en tiempo ocioso): precios de la API e íconos (URL.revokeObjectURL) de items que ya no están ni en Deshacer se sueltan. Lista vacía → 0 precios y 0 íconos en memoria.
 - 10 ciclos de pegar/limpiar: DOM, nodos y listeners constantes; heap estable (~2 MB). Nada se pide a la red hasta pegar.
 
 F) VERIFICACIÓN
@@ -500,7 +517,7 @@ Pedido de Arturo: poder apagar el envío en el cálculo, para cuando lleva las c
 
 - Interruptor "Contar envío (SIGMA Freight)" junto al botón de la ruta (encendido por defecto; solo en memoria). Funciona en las dos direcciones.
 - C.shipOn=false: courierCost y courierShare valen 0 (courierRaw guarda la fórmula para mostrar lo que costaría); packCouriers no arma contratos de courier; el motor elige sin restar envío (lo que viaja puede cambiar).
-- Textos con envío apagado: resumen "Lo llevas tú a Jita/HY-RWO · N ítems, m³. Sin courier"; deducciones sin "envío"; panel de envío "El envío está apagado: lo llevas tú…" + volumen, valor y lo que costaría con SIGMA Freight; análisis "Lo llevas tú (sin courier)"; en Comprar en Jita y Vender en HY-RWO, "Envío (lo llevas tú) 0 ISK".
+- Textos con envío apagado: resumen "Lo llevas tú a Jita/HY-RWO · N items, m³. Sin courier"; deducciones sin "envío"; panel de envío "El envío está apagado: lo llevas tú…" + volumen, valor y lo que costaría con SIGMA Freight; análisis "Lo llevas tú (sin courier)"; en Comprar en Jita y Vender en HY-RWO, "Envío (lo llevas tú) 0 ISK".
 - Al cambiar el interruptor se vuelve al plan óptimo.
 - Verificado: apagado = suma exacta de las ventas sin envío (2,136,370,896 en el lote de prueba); encender de nuevo devuelve el total original exacto; en modo invertido la ganancia de comprar y revender sube de 237.8 M a 335.5 M; motor con envío encendido idéntico a v105; smoke; selector 8/8; foco 31/31; escritorio y móvil sin desborde; cero errores.
 
@@ -514,8 +531,8 @@ Pedido de Arturo: con la ruta invertida, mostrar cuánto ganas si COMPRAS el lot
 
 - Bloque "Comprar en Jita y Vender en HY-RWO" en Resultado, debajo del total, solo en modo Jita → HY-RWO (#flipBuy, paintFlipBuy).
 - Ganancia grande en verde (o pérdida en rojo) + % sobre lo invertido; 4 datos: Compras en Jita · Envío a HY-RWO · Vendes en HY-RWO (neto) · Ganancia.
-- Tabla por ítem (máx. 10, ordenada por ganancia): Compras a /u (Jita Sell) · Vendes a /u (precio de lista en HY-RWO) · su parte del envío · ganancia · margen. En móvil, tarjetas.
-- Fórmulas: compra = Jita Sell (referencia del ítem, editable) × cantidad, comprando de sell orders (sin broker). Venta neta = g.fN − producción = Jita Sell × (1 + margen) × cantidad. Envío = courierCost de todo el lote (todo viaja); por ítem con courierShare. Ganancia = venta neta − compra − envío.
+- Tabla por item (máx. 10, ordenada por ganancia): Compras a /u (Jita Sell) · Vendes a /u (precio de lista en HY-RWO) · su parte del envío · ganancia · margen. En móvil, tarjetas.
+- Fórmulas: compra = Jita Sell (referencia del item, editable) × cantidad, comprando de sell orders (sin broker). Venta neta = g.fN − producción = Jita Sell × (1 + margen) × cantidad. Envío = courierCost de todo el lote (todo viaja); por item con courierShare. Ganancia = venta neta − compra − envío.
 - El margen es el mismo campo junto al botón de la ruta (y Ajustes → Envío).
 - Verificado: total del bloque = cálculo independiente al ISK (237,766,717 con 15%; 349,816,357 con 20%); se oculta en la ruta normal; escritorio y móvil sin desborde; motor normal idéntico a v105; smoke; selector 8/8; cero errores.
 - Encabezado: debajo del título y "¿Lo vendes en Null o lo llevas a Jita?", tres columnas iguales alineadas arriba: anuncio de Skill Points (ahora tarjeta, misma altura) · "Qué hace" (texto de la app en tarjeta oscura con etiqueta) · "Antes de empezar". En pantallas de menos de 980 px se apilan.
@@ -544,14 +561,14 @@ B) MOTOR (computePlan con S.flip)
 
 C) TEXTOS QUE CAMBIAN CON LA RUTA
 - Selector de plan: Todo a HY-RWO · Todo en Jita (Orden) · Todo en Jita al Instante. Etiquetas: Llevar a HY-RWO (ámbar), Orden/Venta Rápida en Jita (azul).
-- Resumen ("Envío a HY-RWO", "Vender en Jita" sin contrato), guía por ítem, Precios para Listar (importado / Jita orden / Jita rápida), recomendaciones por grupo.
+- Resumen ("Envío a HY-RWO", "Vender en Jita" sin contrato), guía por item, Precios para Listar (importado / Jita orden / Jita rápida), recomendaciones por grupo.
 - Contratos y Envío: "Courier a HY-RWO", Destino = Destino en Null, ruta "Jita 4-4 → HY-RWO", ganancia extra frente a venderlo en Jita.
 - Análisis: "Envío a HY-RWO", "Todo a HY-RWO", "Todo en Jita".
 - Se ocultan Reproceso, Dos Escenarios y Vender a Jugadores.
 
 D) VERIFICACIÓN
 - Lote de prueba (2 Paladin, 20 Heavy Pulse Laser II, 600 Kerr Sequencer): normal 2,038 M → invertido 2,472 M (todo a HY-RWO, 1 contrato de 97.7 M); margen 20% → 2,584 M; volver a la ruta normal da exactamente el total original; selector en modo invertido 4/4 exacto.
-- Regresión: motor normal idéntico a v105; parser 1527/1536; foco 31/31; smoke y API caída; Contratos y Envío; selector 8/8; quitar/deshacer; 155 ítems; sin fugas; solo hosts de ESI; escritorio y móvil sin desborde; cero errores.
+- Regresión: motor normal idéntico a v105; parser 1527/1536; foco 31/31; smoke y API caída; Contratos y Envío; selector 8/8; quitar/deshacer; 155 items; sin fugas; solo hosts de ESI; escritorio y móvil sin desborde; cero errores.
 
 
 ---
@@ -572,7 +589,7 @@ D) VERIFICACIÓN
 
 - El aviso "Antes de empezar" usa el mismo formato que el anuncio de Skill Points: borde arcilla, degradado arcilla → oscuro, sombra, título como etiqueta arcilla (igual que "Gratis"), palabras clave en arcilla claro, botones con borde arcilla. Sigue siendo caja (no píldora) porque tiene texto y botones.
 - Verificado: node --check; smoke completo; escritorio y móvil sin desborde ni errores.
-- Color #151515 (pedido de Arturo) en las tarjetas dentro de los paneles: contratos, envío, escenarios, lista del plan, tiempo estimado, cuadro de pegado, ajustes, ayuda, aviso de deshacer; con la misma sombra/profundidad que las tarjetas de plan. Sub-bloques internos (ítems del contrato, datos del envío, consejos) un tono más claro (#1c1b1a). La lista de "Tiempo Estimado" queda como viñetas simples.
+- Color #151515 (pedido de Arturo) en las tarjetas dentro de los paneles: contratos, envío, escenarios, lista del plan, tiempo estimado, cuadro de pegado, ajustes, ayuda, aviso de deshacer; con la misma sombra/profundidad que las tarjetas de plan. Sub-bloques internos (items del contrato, datos del envío, consejos) un tono más claro (#1c1b1a). La lista de "Tiempo Estimado" queda como viñetas simples.
 - Contratos: la fila "Disponibilidad" se llama "Name" (como en el juego: Private → Name) en Buyback, Courier y Jugador; también en Ajustes.
 
 
@@ -582,7 +599,7 @@ D) VERIFICACIÓN
 *2026-10-13*
 
 - Tarjetas de contrato (Buyback, Courier, Jugador): todos los valores con la misma letra (la de números), mismo tamaño (.92rem), peso normal (400) y alineados a la derecha con el mismo relleno, sean copiables (con borde) o no (sin borde). Etiquetas de la izquierda en gris, peso normal.
-- Móvil: el nombre de los ítems del contrato ya no se corta con "…".
+- Móvil: el nombre de los items del contrato ya no se corta con "…".
 - Verificado: node --check; smoke completo; Contratos y Envío en escritorio y móvil sin desborde ni errores.
 - Fondo: imagen de EVE al 91% de visibilidad, sin desaturar; viñeta suave solo en los bordes. En Modo ligero también 91% (es estática).
 - Título principal otra vez en MAYÚSCULAS (serif, espaciado .04em). Sombra de texto en el título, textos del héroe, marca y pie para que se lean sobre la imagen.
@@ -609,14 +626,14 @@ Verificación: node --check; selector 8/8 exacto y ordenado; plegado por defecto
 
 ---
 
-## 1.0.0 — Estilo Claude, quitar ítems, Contratos y Envío alineado
+## 1.0.0 — Estilo Claude, quitar items, Contratos y Envío alineado
 *2026-10-13*
 
 NUMERACIÓN: por pedido de Arturo esta versión es la 1.0.0 (antes v112). La siguiente es 1.0.1. Archivo: calculadora-ventas-jita-v1.0.0.html. El pie muestra "v1.0.0". build.py se llama con "1.0.0".
 
-A) QUITAR ÍTEMS DE "TUS ÍTEMS"
-- Cada fila tiene una × a la derecha (tenue; se marca en rojo al pasar el mouse; visible siempre en táctil). Quita las líneas de ese ítem del pegado y todo se recalcula: plan, totales, contratos, envío, resumen.
-- Barra "Quitaste X. Todo se recalculó sin ese ítem. [Deshacer]": devuelve las líneas al pegado. Pila de hasta 20 en memoria; se borra al Limpiar y al cerrar (pagehide). "Quitar del lote" dentro del ítem usa lo mismo.
+A) QUITAR ITEMS DE "TUS ITEMS"
+- Cada fila tiene una × a la derecha (tenue; se marca en rojo al pasar el mouse; visible siempre en táctil). Quita las líneas de ese item del pegado y todo se recalcula: plan, totales, contratos, envío, resumen.
+- Barra "Quitaste X. Todo se recalculó sin ese item. [Deshacer]": devuelve las líneas al pegado. Pila de hasta 20 en memoria; se borra al Limpiar y al cerrar (pagehide). "Quitar del lote" dentro del item usa lo mismo.
 
 B) CONTRATOS Y ENVÍO ALINEADO
 - Las dos columnas tienen el encabezado en la misma fila (puntos + flechas del carrusel a la derecha de "Tus Contratos"; ruta a la derecha de "Envío a Jita"). Las tarjetas empiezan a la misma altura y terminan a la misma altura (la del contrato se estira; el resumen queda abajo a la izquierda).
@@ -629,7 +646,7 @@ C) ESTILO CLAUDE (pedido: menos azul, más gris, lectura más clara, íconos min
 
 D) VERIFICACIÓN
 - node --check; quitar y deshacer (total vuelve exacto); selector de plan 8/8 exacto; Contratos y Envío (carrusel, barras, 4/2/0 contratos); escritorio 1400 y móvil 390 sin desborde; cero errores.
-- Regresión: motor idéntico a v105; parser 1527/1536; foco 31/31; smoke completo y API caída; 155 ítems; 10 ciclos sin fugas; solo hosts de ESI; nada en storage.
+- Regresión: motor idéntico a v105; parser 1527/1536; foco 31/31; smoke completo y API caída; 155 items; 10 ciclos sin fugas; solo hosts de ESI; nada en storage.
 
 
 ---

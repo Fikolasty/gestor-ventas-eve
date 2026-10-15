@@ -9,7 +9,7 @@ html.light .pk-o.on{box-shadow:0 0 0 1px #c96442!important}
 html.light .lot-x:hover{color:#c4473a}
 html.light .cz-d[aria-current="true"]{background:#1f1e1d;color:#faf9f5;border-color:#1f1e1d}
 html.light .sw-t::after{background:#fff}
-html.light .hero h1,html.light .hero p,html.light .hero .tagline,html.light .top .brand,html.light .foot-by,html.light .route-l,html.light .sw,html.light .route-m{text-shadow:none!important}
+html.light .hero h1,html.light .hero p,html.light .hero .tagline,html.light .top .brand,html.light .foot-by,html.light .sw,html.light .route-m{text-shadow:none!important}
 html.light .sw input:checked+.sw-t::after{background:#fff}
 html.light .sw-t{background:#e4e2da;border-color:rgba(31,30,29,.2)}
 html.light .sw input:checked+.sw-t{background:#c96442;border-color:#c96442}
@@ -80,7 +80,7 @@ html.light .appr-c .t-buy dd{color:#b23b32}html.light .appr-c .t-split dd{color:
 html.light .more-btn b{color:#b5532f!important}
 html.light .more-btn{background:linear-gradient(90deg,rgba(217,119,87,.16),#f7f5ef 60%)!important;color:#1f1e1d!important;box-shadow:inset 3px 0 0 #d97757,0 1px 2px rgba(0,0,0,.08)!important}
 
-/* v1.0.51: «Tus Ítems» plegado en Light */
+/* v1.0.51: «Listado de Items Registrados» plegado en Light */
 html.light #ledger:not([open]){background:linear-gradient(90deg,rgba(217,119,87,.16),#f7f5ef 60%)!important;box-shadow:inset 3px 0 0 #d97757,0 1px 2px rgba(0,0,0,.08)!important}
 html.light #esiStatus.cta{color:#b5532f}
 html.light .pk-x{color:#b5532f;background:rgba(217,119,87,.1)}

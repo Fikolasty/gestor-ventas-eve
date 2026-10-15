@@ -2,10 +2,10 @@
 'use strict';
 /* ============================================================
    Market Moves+ v__VER__ — SIGMA GRINDSET / Vanguardia DR
-   Flujo:  pegado → ítems → carga (ESI: precios, volúmenes, historial) → verificación → plan → vista
+   Flujo:  pegado → items → carga (ESI: precios, volúmenes, historial) → verificación → plan → vista
      1. Pegado      parsePaste(): parser posicional de columnas de EVE (Name · Quantity · … · Volume · Est. Price).
      2. Carga       esiItems(): trae todo lo que falta; mientras carga, refresh() NO pinta (S.loading).
-     3. Motor       computePlan(): puro, sin DOM. Por ítem calcula 7 opciones (Null, Buyback, Orden Jita,
+     3. Motor       computePlan(): puro, sin DOM. Por item calcula 7 opciones (Null, Buyback, Orden Jita,
                     Venta Rápida, Reprocesar→Null, Reprocesar→Jita, Jugador) con taxes, broker, relists,
                     producción y su parte del envío; elige la mejor y suma el plan.
      4. Vista       paintVerdict (resultado + Pasos para Vender) · paintPicker (Elige un Plan) · paintLot ·
@@ -13,9 +13,9 @@
    Secciones: Datos · Estado · Formato · Mercado (ticks, anti-cebo, spread) · Pegado · API · Verificación ·
               Reproceso · Motor · Vista (filas, pasos, selector de plan, jugador, envío, reproceso) · Recalcular ·
               Ajustes (enlaces Skills↔Taxes, campos que no aplican) · Tus Skills · Idioma · Persistencia · Seguridad.
-   ESTADO: S (ítems, API, ruta, plan elegido) y C (configuración). La vista guarda solo preferencias en memoria
+   ESTADO: S (items, API, ruta, plan elegido) y C (configuración). La vista guarda solo preferencias en memoria
            (vSort/vShow/vQuery, pkView) y clearViews() las vacía junto con las referencias al DOM.
-   MEMORIA: íconos = <img> directos (sin blobs); pruneCaches() suelta S.api de ítems que ya no están; las tablas
+   MEMORIA: íconos = <img> directos (sin blobs); pruneCaches() suelta S.api de items que ya no están; las tablas
             reutilizan <img> (ICON_POOL); un solo listener delegado por contenedor (sin closures por fila).
    SEGURIDAD: el inventario nunca se guarda; solo los Ajustes (localStorage «gestorVentas.ajustes.v1», v1.0.16).
               La app solo se conecta a esi.evetech.net e images.evetech.net (CSP). Sin login.
@@ -92,8 +92,8 @@ const pctS=v=>{const x=v*100;return (Math.round(x*100)/100).toLocaleString('en-U
 const sgn=v=>v==null||isNaN(v)?'':v>0?'pos':v<0?'neg':'';
 function setText(el,t,cls){el.textContent=t;if(cls!==undefined)el.className=cls;}
 function status(id,msg,cls){const s=$(id);s.textContent=msg;s.className='status'+(cls?' '+cls:'');}
-// v1.0.51: el resumen de «Tus Ítems» funciona como botón: «Ver los N ítems ▾» / «Ocultar los ítems ▴»
-function ledgerCta(){const n=S.items.length;if(!n)return;status('esiStatus',$('ledger').open?'Ocultar los ítems ▴':'Ver los '+n+(n===1?' ítem ▾':' ítems ▾'),'cta');}
+// v1.0.51: el resumen de «Listado de Items Registrados» funciona como botón: «Ver los N items ▾» / «Ocultar los items ▴»
+function ledgerCta(){const n=S.items.length;if(!n)return;status('esiStatus',$('ledger').open?'Ocultar los items ▴':'Ver los '+n+(n===1?' item ▾':' items ▾'),'cta');}
 
 // ================= Mercado: tasas =================
 // Relist (bajar precio) = (1 − (0.5 + 0.06×ABR)) × broker% sobre el valor de la orden — EVE University
@@ -180,15 +180,15 @@ const nullBaseTxt=name=>isModule(name)?'Jita Buy'+(marginFor(name)>0?' +'+pct(ma
 const jitaLabel=name=>C.ice.on&&isIce(name)?(C.ice.jitaMode==='split'?'Orden en Jita (Split)':'Orden en Jita (Undercut)'):'Orden en Jita';
 const trips=v=>v>0&&C.maxVol>0?Math.ceil(v/C.maxVol):0;
 // v1.0.7: "Contar envío" (C.shipOn). Apagado = lo llevas tú: el courier no se descuenta ni se arman contratos de envío.
-// v1.0.11: ajuste de precios (skew). General por tipo de venta + ajuste por ítem (o.skew); se suman.
+// v1.0.11: ajuste de precios (skew). General por tipo de venta + ajuste por item (o.skew); se suman.
 // Se aplica al precio antes de taxes. Por defecto la venta rápida va −0.16% (mejor sorprenderse con más).
 const skf=(o,kind)=>1+(C.skew[kind]||0)+(o&&o.skew||0);
 const skTick=(p,o,kind)=>{const f=skf(o,kind);return p==null||f===1?p:tick(p*f);};
 const SH=()=>C.shipOn;
-// v1.0.22: ruta normal con el envío apagado = los ítems ya están en Jita (llevados por ti, sin costo). Solo se
+// v1.0.22: ruta normal con el envío apagado = los items ya están en Jita (llevados por ti, sin costo). Solo se
 // considera venderlos en Jita (orden o al instante) con tus Ajustes y el anti-cebo: sin Null, Buyback, jugador,
 // reproceso ni reglas del hielo.
-const IN_JITA=()=>S.flip&&!C.shipOn; // v1.0.55: Jita → HY-RWO con Courier en Off = los ítems se venden en Jita, sin envío
+const IN_JITA=()=>S.flip&&!C.shipOn; // v1.0.55: Jita → HY-RWO con Courier en Off = los items se venden en Jita, sin envío
 const courierRaw=(v,c)=>trips(v)*C.base+C.perM3*v+C.collPct*(c||0);
 const courierCost=(v,c)=>C.shipOn?courierRaw(v,c):0;
 const courierShare=(v,c,V)=>C.shipOn?C.perM3*v+C.collPct*(c||0)+(V>0?trips(V)*C.base*v/V:0):0;
@@ -286,9 +286,9 @@ function syncFromPaste(fromPaste){
   });
   const ign=rows.ignored?' '+rows.ignored+' línea(s) ignorada(s): no se reconoció el formato.':'';
   if(!txt.trim())status('status',had?'Lista vacía.':'');
-  else if(!rows.length)status('status','No reconocí ningún ítem.'+ign+' Copia del juego con Ctrl+C y pega de nuevo.','err');
-  else if(rows.noQty)status('status',rows.length+' ítem(s) sin columna Quantity: deduzco la cantidad con el volumen y el precio si están visibles; si no, actívala en el juego (clic derecho en la cabecera).'+ign,'err');
-  else status('status',rows.length+' ítem(s) leídos.'+ign,rows.ignored?'err':'ok');
+  else if(!rows.length)status('status','No reconocí ningún item.'+ign+' Copia del juego con Ctrl+C y pega de nuevo.','err');
+  else if(rows.noQty)status('status',rows.length+' item(s) sin columna Quantity: deduzco la cantidad con el volumen y el precio si están visibles; si no, actívala en el juego (clic derecho en la cabecera).'+ign,'err');
+  else status('status',rows.length+' item(s) leídos.'+ign,rows.ignored?'err':'ok');
   syncLots();autoRepro();
   schedulePrune();
   // si faltan precios: pantalla de carga y se pinta todo una sola vez al final
@@ -298,7 +298,7 @@ function syncFromPaste(fromPaste){
     clearTimeout(esiT);esiT=setTimeout(()=>esiItems(false),fromPaste?0:350);
   }else{refreshNow();if(!had&&S.items.length&&fromPaste)$('pSum').scrollIntoView({behavior:'smooth',block:'start'});}
 }
-// v1.0.8: limpieza en segundo plano. Precios, íconos e imágenes de ítems que ya no están en la lista (ni en Deshacer)
+// v1.0.8: limpieza en segundo plano. Precios, íconos e imágenes de items que ya no están en la lista (ni en Deshacer)
 // se sueltan para que el navegador libere la memoria. Si vuelves a pegarlos, se piden de nuevo.
 let pruneT=0;
 function schedulePrune(){clearTimeout(pruneT);pruneT=setTimeout(()=>{(window.requestIdleCallback||setTimeout)(pruneCaches);},4000);}
@@ -312,7 +312,7 @@ function pruneCaches(){
   Object.keys(S.api).forEach(k=>{if(keep.has(k)){if(S.api[k]&&S.api[k].id)ids.add(String(S.api[k].id));}else delete S.api[k];});
   Object.keys(ICON).forEach(id=>{if(!ids.has(String(id))){URL.revokeObjectURL(ICON[id]);delete ICON[id];delete ICON_EL[id];delete ICON_POOL[id];}});
 }
-// ¿falta algún precio de la API (ítems o minerales de sus ores)?
+// ¿falta algún precio de la API (items o minerales de sus ores)?
 function needsFetch(){
   return S.items.some(o=>!o.jita&&!o.notFound)||S.items.some(o=>{const r=resolveOre(o.name);return r&&Object.keys(r.d.out).some(m=>!S.api[m.toLowerCase()]);});
 }
@@ -328,7 +328,7 @@ let pasteT=null,esiT=null;
 $('paste').addEventListener('paste',()=>{clearTimeout(pasteT);pasteT=setTimeout(()=>syncFromPaste(true),80);});
 $('paste').addEventListener('input',()=>{clearTimeout(pasteT);pasteT=setTimeout(()=>syncFromPaste(false),500);});
 $('bClear').addEventListener('click',()=>{$('paste').value='';clearUndo();syncFromPaste(false);$('paste').focus();});
-// v112: quitar un ítem del lote = quitar sus líneas del pegado y recalcular todo (plan, contratos, envío, totales).
+// v112: quitar un item del lote = quitar sus líneas del pegado y recalcular todo (plan, contratos, envío, totales).
 // Se puede deshacer (las líneas quitadas quedan solo en memoria, se borran al limpiar o cerrar).
 let undoStack=[];
 function removeFromPaste(name){
@@ -338,7 +338,7 @@ function removeFromPaste(name){
   paintUndo();syncFromPaste(false);
 }
 function paintUndo(){const u=undoStack[undoStack.length-1],bar=$('undo');bar.hidden=!u;
-  if(u)$('undoTxt').textContent='Quitaste '+u.name+(undoStack.length>1?' (y '+(undoStack.length-1)+' más)':'')+'. Todo se recalculó sin ese ítem.';}
+  if(u)$('undoTxt').textContent='Quitaste '+u.name+(undoStack.length>1?' (y '+(undoStack.length-1)+' más)':'')+'. Todo se recalculó sin ese item.';}
 $('undoBtn').addEventListener('click',()=>{const u=undoStack.pop();if(!u)return;
   const v=$('paste').value.replace(/\s+$/,'');$('paste').value=(v?v+'\n':'')+u.lines.join('\n');paintUndo();syncFromPaste(false);});
 function clearUndo(){undoStack=[];paintUndo();}
@@ -369,9 +369,9 @@ async function esiFetch(path,opt){
   }
   throw last||new Error('sin respuesta');
 }
-// v105: hasta 10 ítems a la vez (cada uno pide libro, tipo e historial en paralelo). ESI usa HTTP/2,
+// v105: hasta 10 items a la vez (cada uno pide libro, tipo e historial en paralelo). ESI usa HTTP/2,
 // así que muchas peticiones comparten una sola conexión; si ESI pide esperar (420/429) se avisa igual que antes.
-const ESI_POOL=8; // v1.0.49: 8 ítems a la vez (cada uno pide 3 cosas en paralelo); con los reintentos de v1.0.46 es estable y casi el doble de rápido que 4
+const ESI_POOL=8; // v1.0.49: 8 items a la vez (cada uno pide 3 cosas en paralelo); con los reintentos de v1.0.46 es estable y casi el doble de rápido que 4
 async function pool(list,n,fn){let i=0;await Promise.all(Array.from({length:Math.min(n,list.length)},async()=>{while(i<list.length){const k=i++;await fn(list[k],k);}}));}
 async function resolveIds(names){
   const miss=names.filter(n=>idCache[n.toLowerCase()]===undefined);
@@ -391,8 +391,8 @@ async function typeVolume(id){
   if(typeof t.group_id==='number')grpOf[id]=t.group_id;
   return volCache[id]=v;
 }
-// Categoría del ítem (7 = Module). Un pedido por grupo, en caché de la sesión.
-// v105: se guarda la PROMESA, así varios ítems del mismo grupo pedidos a la vez comparten una sola petición
+// Categoría del item (7 = Module). Un pedido por grupo, en caché de la sesión.
+// v105: se guarda la PROMESA, así varios items del mismo grupo pedidos a la vez comparten una sola petición
 const catWait={};
 function groupCat(gid){
   if(catCache[gid]!==undefined)return Promise.resolve(catCache[gid]);
@@ -456,7 +456,7 @@ async function fetchTypes(names,withHist){
     const cat=grpOf[id]!=null?await groupCat(grpOf[id]):null;
     S.api[n.toLowerCase()]={...b,vol:v,alt:volAlt[id],hist:h,ccp:ccp?ccp[id]:null,id,cat};applyBait(S.api[n.toLowerCase()]);
     ++done;status('esiStatus','Consultando Jita: '+done+' de '+known.length+'…');
-    if(S.loading)setLoading(true,'Consultando Jita: '+done+' de '+known.length+' ítems…',done/known.length,document.body.classList.contains('is-updating'));
+    if(S.loading)setLoading(true,'Consultando Jita: '+done+' de '+known.length+' items…',done/known.length,document.body.classList.contains('is-updating'));
   });
   return names.filter(n=>!ids[n.toLowerCase()]);
 }
@@ -470,14 +470,12 @@ async function esiItems(all){
     S.items.forEach(o=>{if(all||!o.jita)names.add(o.name);});
     S.items.forEach(o=>{const r=resolveOre(o.name);if(r)Object.keys(r.d.out).forEach(m=>{if(all||!S.api[m.toLowerCase()])names.add(m);});});
     if(!names.size){status('esiStatus','Precios al día.','ok');return;}
-    status('esiStatus','Buscando '+names.size+' ítem(s) en la API de EVE…');
-    if(S.loading)setLoading(true,'Buscando '+names.size+' ítem(s) en la API de EVE…',.05,document.body.classList.contains('is-updating'));
+    status('esiStatus','Buscando '+names.size+' item(s) en la API de EVE…');
+    if(S.loading)setLoading(true,'Buscando '+names.size+' item(s) en la API de EVE…',.05,document.body.classList.contains('is-updating'));
     const unknown=(await fetchTypes([...names],n=>!!itemByName(n))).filter(n=>itemByName(n));
     S.items.forEach(o=>{o.notFound=unknown.includes(o.name);const a=S.api[o.name.toLowerCase()];if(a)o.jita=a;verify(o,true);derive(o);});
     syncLots();
-    const nWarn=S.items.filter(o=>(o.checks||[]).some(c=>c[1]==='warn')).length;
-    const hora=new Date().toLocaleTimeString('es',{hour:'2-digit',minute:'2-digit'});S.pricedAt=hora;
-    ledgerCta(); // v1.0.51: «Ver los N ítems» (los avisos se ven en cada ítem)
+    ledgerCta(); // v1.0.51: «Ver los N items» (los avisos se ven en cada item)
   }catch(e){status('esiStatus','No se pudo conectar con la API de EVE ('+e.message+').','err');}
   finally{
     esiBusy=false;$('bEsi').disabled=false;
@@ -512,7 +510,7 @@ function verify(o,allowDeduce){
     if(k==='both')ch.push(['Cantidad confirmada por volumen y precio','ok','No venía la columna Quantity: el volumen y el Est. Price dan la misma cantidad.']);
     else if(k==='price')ch.push(['Cantidad deducida del Est. Price','info','Est. Price total ÷ precio promedio de Fenris.']);
     else if(k==='vol')ch.push(q===1?['Volumen correcto'+(asm?' (nave armada)':''),'ok',asm?'El envío usa el volumen empaquetado.':'']:['Cantidad deducida del volumen','info','Volumen pegado ÷ volumen por unidad de la API.']);
-    else if(k==='approx')ch.push(['Cantidad aproximada (±'+qvR+')','warn','El ítem es tan pequeño que el volumen redondeado no da el número exacto. Activa la columna Quantity.']);
+    else if(k==='approx')ch.push(['Cantidad aproximada (±'+qvR+')','warn','El item es tan pequeño que el volumen redondeado no da el número exacto. Activa la columna Quantity.']);
     else if(k==='conflict')ch.push(['Volumen y precio no coinciden en la cantidad','warn','Revisa la cantidad a mano.']);
     else if(tot>0||ptot>0)ch.push(['No pude deducir la cantidad','warn','Activa la columna Quantity en el juego.']);
   }else{
@@ -651,7 +649,7 @@ function computePlan(){
     }
     return row;
   });
-  // 1ª pasada: courier repartido como si todo viajara; elige la mejor opción por ítem
+  // 1ª pasada: courier repartido como si todo viajara; elige la mejor opción por item
   const Vall=rows.reduce((a,r)=>a+r.vol,0),Call=rows.reduce((a,r)=>a+r.coll,0);
   rows.forEach(r=>{
     r.net={};
@@ -699,7 +697,7 @@ function computePlan(){
        else sh.forEach(r=>{if(r.fast)r.fast.loss=Math.max(0,quedarse-viaJita)*(r.ship[r.best].v/V);});}
    }}
   // v111: plan elegido. r.auto = lo que elige el plan óptimo. Si el usuario elige un plan (p. ej. todo a Jita),
-  // cada ítem que admite esa opción la toma; el que no puede (sin precio, el Buyback no lo acepta…) sigue el óptimo.
+  // cada item que admite esa opción la toma; el que no puede (sin precio, el Buyback no lo acepta…) sigue el óptimo.
   const M=S.planMode;
   rows.forEach(r=>{r.auto=r.best;r.forced=false;r.cant=false;
     if(!M||!r.best)return;
@@ -727,8 +725,8 @@ function computePlan(){
     nShip:rows.filter(r=>r.best&&SHIPS[r.best]).length,nStay:rows.filter(r=>r.best&&!SHIPS[r.best]).length,missing:rows.filter(r=>!r.best)};
 }
 
-// v111: total neto exacto de cada plan a partir del plan calculado (barato: una suma por ítem, sin pintar).
-// m='auto' = óptimo. Los ítems que no admiten m siguen el óptimo (igual que computePlan con S.planMode=m).
+// v111: total neto exacto de cada plan a partir del plan calculado (barato: una suma por item, sin pintar).
+// m='auto' = óptimo. Los items que no admiten m siguen el óptimo (igual que computePlan con S.planMode=m).
 function modeTotal(P,m){let g=0,V=0,Cc=0,n=0;
   P.rows.forEach(r=>{const k=m==='auto'?r.auto:(r.g[m]!=null?(n++,m):r.auto);if(!k)return;g+=r.g[k]-r.prod;const s=r.ship[k];if(s){V+=s.v;Cc+=s.c;}});
   return{net:g-(V>0?courierCost(V,C.coll!=null?C.coll:Cc):0),n};}
@@ -776,7 +774,7 @@ function paintGuide(ol,r){
   }
   if(g.k==='null'||g.k==='jOrd'){
     const isN=g.k==='null';
-    step('Qué Hacer',isN?'Publica una sell order en tu estructura de Nullsec. No necesitas courier a Jita.':'Manda el ítem a Jita 4-4 mediante courier y crea una sell order. El envío está incluido en la comparación.');
+    step('Qué Hacer',isN?'Publica una sell order en tu estructura de Nullsec. No necesitas courier a Jita.':'Manda el item a Jita 4-4 mediante courier y crea una sell order. El envío está incluido en la comparación.');
     step('Cómo Listarlo',copyBtn(g.unit,fmtP(g.unit)),' por unidad (haz clic para copiar). Publica '+fmtQ(r.q)+' unidades; valor de la orden: '+fmt(g.unit*r.q)+'. Duración sugerida: 3 meses'+
       (isN&&o.nullSeen?' · Undercut de '+pct(C.under)+'% al precio que ves':'')+
       (!isN&&C.ice.on&&isIce(o.name)?(C.ice.jitaMode==='split'?' · precio Split':' · Undercut de '+pct(C.under)+'% a Jita Sell'):'')+
@@ -802,16 +800,16 @@ function paintGuide(ol,r){
   }else if(g.k==='bb'){
     step('Qué Hacer','Usa el Buyback de tu alianza. Crea un contrato Item Exchange con el destinatario y la ubicación definidos en Ajustes.');
     step('Pago del Buyback',copyBtn(r.bbUnit,fmtP(r.bbUnit)),' por unidad, con el tax del programa ('+pct(r.bbTax)+'%) ya descontado. Esta ruta no incluye courier ni Sales Tax de mercado.');
-    step('Cómo Crear el Contrato','Consulta «Tus Contratos» y copia los datos indicados. Verifica que el Buyback acepte el ítem antes de enviarlo.');
+    step('Cómo Crear el Contrato','Consulta «Tus Contratos» y copia los datos indicados. Verifica que el Buyback acepte el item antes de enviarlo.');
   }else{
     const toJ=g.k==='rJita';
-    step('Qué Hacer','Reprocesa el ítem en '+refName()+'. Después '+(toJ?'envía los materiales resultantes a Jita para venderlos con órdenes.':'vende los materiales resultantes con órdenes en tu estructura de Nullsec.'));
+    step('Qué Hacer','Reprocesa el item en '+refName()+'. Después '+(toJ?'envía los materiales resultantes a Jita para venderlos con órdenes.':'vende los materiales resultantes con órdenes en tu estructura de Nullsec.'));
     step('Precios de los Productos','Consulta «Precios para Listar» y el desglose de reproceso. Pon una sell order por cada material; duración sugerida: 3 meses.');
     if(g.tol!=null)step('Margen de Seguridad',g.tol>0?'Los productos pueden perder hasta '+pct(g.tol)+'% de valor antes de que la alternativa '+altLab+' iguale el resultado estimado.':'La diferencia es pequeña. Si bajan los precios de los materiales, vuelve a comparar con '+altLab+'.');
   }
 }
 
-// ================= Íconos de ítems (servidor de imágenes de CCP) =================
+// ================= Íconos de items (servidor de imágenes de CCP) =================
 // images.evetech.net/types/{id}/icon. Se bajan con fetch sin caché (cache:'no-store') y se muestran como blob:
 // así no queda nada guardado en el navegador. Se guardan solo en memoria y se liberan al cerrar.
 const ICON={},ICON_WAIT={};
@@ -852,7 +850,7 @@ $('lots').addEventListener('click',e=>{const lot=e.target.closest('.lot'),o=lot&
   if(e.target.closest('.lot-head'))toggleLot(o);});
 $('lots').addEventListener('keydown',e=>{if((e.key==='Enter'||e.key===' ')&&e.target.classList.contains('lot-head')){const o=LOT_OF.get(e.target.parentNode);if(o){e.preventDefault();toggleLot(o);}}});
 function buildLot(o){
-  // v102: solo creamos la cabecera para cada ítem; los controles pesados se construyen bajo demanda.
+  // v102: solo creamos la cabecera para cada item; los controles pesados se construyen bajo demanda.
   // Importante: o.ui.last se actualiza en paintLot() aun con el detalle cerrado.
   const lot=el('article','lot'),head=el('div','lot-head');head.tabIndex=0;head.setAttribute('role','button');head.setAttribute('aria-expanded','false'); // v1.0.8: div para poder llevar dentro el botón de copiar precio
   const nm=el('span','lot-name');nm.append(el('b',null,o.name));const tag=el('span','tag');nm.append(tag);
@@ -866,11 +864,11 @@ function buildLot(o){
   return lot;
 }
 function buildLotDetails(o,ui){
-  // No crea ni añade listeners hasta que el usuario abre este ítem.
+  // No crea ni añade listeners hasta que el usuario abre este item.
   // Los inputs se preservan durante paintLot para que escribir no pierda foco.
   const body=ui.body;
   const rcall=el('div','call rcall'),rcB=el('b'),rcS=el('small'),rcR=el('small','rcr');rcall.append(rcB,rcS,rcR);rcall.hidden=true;
-  const gwrap=el('div','gwrap'),guide=el('ol','guide');gwrap.append(el('h3','sub-h','Guía para vender este ítem'),guide);
+  const gwrap=el('div','gwrap'),guide=el('ol','guide');gwrap.append(el('h3','sub-h','Guía para vender este item'),guide);
   const opts=el('div','opts');Object.assign(ui,{opt:{},rcall,rcB,rcS,rcR,guide});
   OPTS.forEach(([k,l])=>{
     const r=el('div','opt'),lab=el('span','opt-l',k==='null'?'':l),bar=el('span','opt-bar'),fill=el('i'),v=el('span','opt-v'),h=el('span','opt-h');
@@ -885,7 +883,7 @@ function buildLotDetails(o,ui){
   const iM3=numIn(o.m3uMan,'',v=>{const x=parseFloat(v);o.m3uMan=isNaN(x)?null:x;derive(o);refresh();},'m³ por unidad');
   const fM3=el('label','fact','m³ por unidad');fM3.append(iM3);
   const fVol=el('div','fact','Volumen total'),bVol=el('b');fVol.append(bVol);
-  const fSk=el('label','fact','Ajuste de precio %');fSk.append(numIn(o.skew!=null&&o.skew!==0?Math.round(o.skew*1e4)/100:null,'0',v=>{const x=parseFloat(v);o.skew=isNaN(x)?0:x/100;refresh();},'Ajuste de precio de este ítem, % (se suma al general)'));
+  const fSk=el('label','fact','Ajuste de precio %');fSk.append(numIn(o.skew!=null&&o.skew!==0?Math.round(o.skew*1e4)/100:null,'0',v=>{const x=parseFloat(v);o.skew=isNaN(x)?0:x/100;refresh();},'Ajuste de precio de este item, % (se suma al general)'));
   fSk.append(el('small','fact-h','Se suma al ajuste general. Ej.: −2 = lo vendes 2% más barato.'));
   facts.append(fQty,fRef,fBuy,fSeen,fM3,fVol,fSk);
   const prices=el('div','prices'),pBody=el('tbody'),pt=el('table');pt.append(pBody);
@@ -911,7 +909,7 @@ function priceRow(tb,where,unit,note,net,best){
   const tn=el('td','r pr-net '+sgn(net),net==null?'—':fmtP(net));
   tr.append(td,el('td','muted',note||''),tn);tb.append(tr);
 }
-/* ================= v103: ordenación independiente de Tus Ítems =================
+/* ================= v103: ordenación independiente de Listado de Items Registrados =================
    El encabezado anterior no era interactivo. Ahora sus 4 columnas funcionan:
    1er clic: nombre ascendente / cifras descendentes; 2º clic: al contrario; 3er clic: orden pegado.
    Se ordenan SOLO los nodos del ledger, usando o.ui.last (último cálculo ya disponible).
@@ -1016,7 +1014,7 @@ function paintLot(r){
       const n=el('tr');const nt=el('td','muted pr-foot');nt.colSpan=4;nt.textContent='Clic en un precio para copiarlo. En el juego se lista por unidad: pon este precio y la cantidad ('+fmtQ(r.q)+').';n.append(nt);tb.append(n);
     }else{
     priceRow(tb,'Vender en '+sys+' (Keepstar)',r.np,nullTxt+qdN+'. Paga Sales Tax, Broker y SCC.',nu('null'),r.best==='null');
-    if(C.bb.on)priceRow(tb,'Buyback de la alianza',r.bbUnit,r.bbUnit!=null?pct(1-r.bbTax)+'% de Jita '+({buy:'Buy',split:'Split',sell:'Sell'})[C.bb.base]+' (tax '+pct(r.bbTax)+'%'+(C.bb.special[o.name.toLowerCase()]!=null?', especial de este ítem':'')+'). Sin Sales Tax ni envío.':(r.hint.bb||''),nu('bb'),r.best==='bb');
+    if(C.bb.on)priceRow(tb,'Buyback de la alianza',r.bbUnit,r.bbUnit!=null?pct(1-r.bbTax)+'% de Jita '+({buy:'Buy',split:'Split',sell:'Sell'})[C.bb.base]+' (tax '+pct(r.bbTax)+'%'+(C.bb.special[o.name.toLowerCase()]!=null?', especial de este item':'')+'). Sin Sales Tax ni envío.':(r.hint.bb||''),nu('bb'),r.best==='bb');
     if(C.disc.on)priceRow(tb,'Venta a jugador',r.discUnit,pct(C.disc.pct)+'% de Jita '+(C.disc.base==='split'?'Split':'Buy')+'. Sin taxes ni envío.',nu('disc'),r.best==='disc');
     priceRow(tb,'Orden de venta en Jita',r.jl,(C.ice.on&&isIce(o.name)?(C.ice.jitaMode==='split'?'Split':'Jita Sell −'+pct(C.under)+'%'):(o.refMan!=null?'Tu precio':'Jita Sell'+(C.underTk>0?' −'+C.underTk+' tick'+(C.underTk===1?'':'s'):'')))+' ('+js+'). Resta envío, Sales Tax y Broker.',nu('jOrd'),r.best==='jOrd');
     priceRow(tb,'Venta rápida en Jita',r.instAvg!=null?r.instAvg:(a&&a.buy!=null?a.buy:null),'Jita Buy'+(r.instAvg!=null&&a&&r.instAvg<a.buy*.995?' (promedio al vender todo)':'')+'. Resta envío y Sales Tax.',nu('jInst'),r.best==='jInst');
@@ -1043,7 +1041,7 @@ const PLAN_L={fN:'Llevar a HY-RWO',fJ:'Vender en Jita (Orden)',fJI:'Vender en Ji
 let lastP=null;
 const ORE_PRODUCTS=new Set();Object.values(REFINE).forEach(d=>{if(d.cat!=='ice')Object.keys(d.out).forEach(m=>ORE_PRODUCTS.add(m.toLowerCase()));});
 function catOf(name){if(isIce(name))return 'ice';if(resolveOre(name)||ORE_PRODUCTS.has(String(name).toLowerCase()))return 'ore';return 'loot';}
-// parte del envío de un ítem: su m³ y su colateral, más su parte del precio base
+// parte del envío de un item: su m³ y su colateral, más su parte del precio base
 // precio por unidad de cada acción
 function unitFor(r,k){const a=r.o.jita;
   return k==='null'?{p:r.np,l:'Lístalo en Null a este Precio'}:k==='jOrd'?{p:r.jl,l:'Lístalo en Jita a este Precio'}:k==='jInst'?{p:r.instAvg!=null?r.instAvg:(a&&a.buy),l:'Te pagan (promedio)'}:
@@ -1106,7 +1104,7 @@ function setSect(t,open){const [b,o,c]=SECT[t];if($(t).hidden===!open)return;
   if(open){$(t).hidden=false;if(lastP)refreshNow();$(t).hidden=true;slide($(t),true);}else $(t).hidden=true;}
 Object.keys(SECT).forEach(t=>$(SECT[t][0]).addEventListener('click',()=>{const open=$(t).hidden;
   if(open&&t==='deep')focusOnly('deep');setSect(t,open);if(open)$(SECT[t][0]).scrollIntoView({behavior:'smooth',block:'start'});}));
-// v1.0.54: modo foco. Al abrir una sección principal (planes, desglose, Tus Ítems, Ajustes o Guía de Uso),
+// v1.0.54: modo foco. Al abrir una sección principal (planes, desglose, Listado de Items Registrados, Ajustes o Guía de Uso),
 // las demás se pliegan y la vista va a la que abriste.
 function focusOnly(k){
   if(k!=='plans'&&pkView.open){pkView.open=false;if(lastP)paintPicker(lastP);}
@@ -1116,16 +1114,16 @@ function focusOnly(k){
 }
 // nombre corto del mejor plan (sin "+ N más" ni "· por rapidez")
 const bestLabel=()=>$('vWhat').textContent.replace(/ · por rapidez$/,'').replace(/ \+ \d+ más$/,'');
-// Sin ítems: vacía todo lo pintado y suelta referencias (así el navegador libera la memoria de lotes grandes)
+// Sin items: vacía todo lo pintado y suelta referencias (así el navegador libera la memoria de lotes grandes)
 function clearViews(){
   document.title='Market Moves+ · SIGMA GRINDSET';
   ['vPlan','vRepList','ctrList','czDots','ctrTot','shBody','fScn','rx','rxFinal','dMsg'].forEach(id=>{const e=$(id);if(e)e.textContent='';});
   ['pCtr','pSum'].forEach(id=>{const e=$(id);if(e)e.hidden=true;});
-  lastP=null;repaintPlanGroup=null;S.pricedAt=null;paintAppraisal();discRows=[];czCards=[];lastCs=[];czIdx=0;S.planMode=null;ICON_POOL={};
+  lastP=null;repaintPlanGroup=null;paintAppraisal();discRows=[];czCards=[];lastCs=[];czIdx=0;S.planMode=null;ICON_POOL={};
   vShow=Object.create(null);vSort=Object.create(null);vQuery=Object.create(null);pkView={sort:'net',dir:-1,filter:'all',open:false};if($('stepHead'))$('stepHead').textContent='';
 }
 function paintVerdict(P){
-  const has=S.items.length>0;$('verdict').hidden=!has;$('ledger').hidden=!has;$('lCount').textContent=has?'· '+S.items.length+(S.items.length>1?' ítems':' ítem'):'';
+  const has=S.items.length>0;$('verdict').hidden=!has;$('ledger').hidden=!has;$('lCount').textContent=has?'· '+S.items.length+(S.items.length>1?' items':' item'):'';
   if(!has){clearViews();return;}
   const none=P.missing.length===P.rows.length,v=none?null:P.best;
   $('vIsk').textContent='';$('vIsk').append(document.createTextNode(v==null?'—':Math.round(v).toLocaleString('en-US')),el('span',null,'ISK'));
@@ -1180,10 +1178,10 @@ function paintVerdict(P){
      fb.append(hd,bar,lg);}}
   // v1.0.19: sin pestañas por tipo; los pasos cubren el plan completo
   const rowsIn=P.rows;
-  // plan: por acción, la recomendación y luego cada ítem con su precio por unidad
+  // plan: por acción, la recomendación y luego cada item con su precio por unidad
   const pl=$('vPlan');poolIcons(pl);pl.textContent='';
-  // Botones de orden repetidos por grupo, siempre encima de sus ítems.
-  const mkHead=sort=>{const hd=el('div','pl-head');[['n','Ítem'],['q','Cantidad'],['p','Precio Unidad'],['a','Ganancia']].forEach(([k,t])=>{
+  // Botones de orden repetidos por grupo, siempre encima de sus items.
+  const mkHead=sort=>{const hd=el('div','pl-head');[['n','Item'],['q','Cantidad'],['p','Precio Unidad'],['a','Ganancia']].forEach(([k,t])=>{
     const active=sort.k===k,b=el('button','srt'+(active?' on':''),t+(active?(sort.d>0?' ▲':' ▼'):''));
     b.type='button';b.dataset.s=k;b.title='Ordenar por '+t.toLowerCase()+(active?' (clic para cambiar orden)':'');
     b.setAttribute('aria-label',b.title);b.setAttribute('aria-pressed',String(active));hd.append(b);});return hd;};
@@ -1208,7 +1206,7 @@ function paintVerdict(P){
     const groupTable=el('div','pl');groupTable.append(mkHead(sort));tableTarget=groupTable;
     const query=(vQuery[id]||'').trim().toLocaleLowerCase();
     const filtered=query?g.filter(r=>r.o.name.toLocaleLowerCase().includes(query)||(r.mins||[]).some(m=>m.m.toLocaleLowerCase().includes(query))):g;
-    const count=section.querySelector('.pl-match');if(count)count.textContent=query?filtered.length+' de '+g.length+' ítems':' ';
+    const count=section.querySelector('.pl-match');if(count)count.textContent=query?filtered.length+' de '+g.length+' items':' ';
     // Orden y “mostrar más” solo aplican al listado filtrado, nunca al total financiero.
     const key=x=>sort.k==='n'?x.o.name.toLowerCase():sort.k==='q'?x.q:sort.k==='p'?(unitFor(x,k).p||0):(x.g[k]-x.prod);
     const gs=sort.k?[...filtered].sort((a,b)=>{const A=key(a),B=key(b);return (A<B?-1:A>B?1:0)*sort.d;}):filtered;
@@ -1225,9 +1223,9 @@ function paintVerdict(P){
         mins.forEach(x=>{const p=pr(x);
           prow('min','↳ '+x.m,x.qd>=.0001&&k==='rNull'?'Con −'+pctQ(x.qd)+'% por cantidad':null,x.n,p,k==='rNull'?'Orden en Null':'Orden en Jita',p!=null?x.n*p*rt:null,'neto de este '+(isIce(r.o.name)?'producto':'mineral'));});}
     });
-    if(!gs.length)groupTable.append(el('div','pl-nomatch',query?'No hay ítems con ese nombre en esta recomendación.':'No hay ítems.'));
+    if(!gs.length)groupTable.append(el('div','pl-nomatch',query?'No hay items con ese nombre en esta recomendación.':'No hay items.'));
     if(gs.length>lim){const hid=gs.slice(lim),sum=hid.reduce((a,r)=>a+r.g[k]-r.prod,0);
-      const b=el('button','pl-moreb','Ver '+(hid.length===1?'el ítem restante':'los '+hid.length+' ítems restantes')+' · '+fmt(sum)+' ▾');b.type='button';b.dataset.more=id;b.dataset.n='99999';groupTable.append(b);}
+      const b=el('button','pl-moreb','Ver '+(hid.length===1?'el item restante':'los '+hid.length+' items restantes')+' · '+fmt(sum)+' ▾');b.type='button';b.dataset.more=id;b.dataset.n='99999';groupTable.append(b);}
     else if(lim>5&&gs.length>5){const b=el('button','pl-moreb','Mostrar menos ▴');b.type='button';b.dataset.more=id;b.dataset.n='5';groupTable.append(b);}
     if(oldTable)oldTable.replaceWith(groupTable);else section.append(groupTable);
   }
@@ -1238,8 +1236,8 @@ function paintVerdict(P){
     renderPlanTable(section,k,g);
   };
   // v1.0.19: «Pasos para Vender». Un paso por acción, en el orden en que se hacen: primero lo que se hace donde
-  // están los ítems, luego el courier (si hay envío) y al final lo que se hace al llegar. Cada paso: número,
-  // verbo, dónde se hace, ISK, y su tabla de ítems (con íconos) visible desde el inicio.
+  // están los items, luego el courier (si hay envío) y al final lo que se hace al llegar. Cada paso: número,
+  // verbo, dónde se hace, ISK, y su tabla de items (con íconos) visible desde el inicio.
   const sys=(C.ref.name||'Null').split(' - ')[0].trim()||'Null',orig=S.flip?'Jita':sys,dest=S.flip?sys:'Jita',arr='Cuando llegue: ';
   const ORDER=S.flip?['fJ','fJI','fN']:['bb','disc','null','rNull','rJita','jOrd','jInst'];
   const tk=C.underTk>0?' − '+C.underTk+' tick'+(C.underTk===1?'':'s'):'';
@@ -1261,7 +1259,7 @@ function paintVerdict(P){
   const before=seq.filter(k=>k!=='ship'&&(!SHIPS[k]||k==='rJita')),after=seq.filter(k=>k!=='ship'&&SHIPS[k]&&k!=='rJita');
   const steps=[...before,...(shipRows.length?['ship']:[]),...after];
   const hd=$('stepHead');hd.textContent='';
-  if(steps.length){const t=el('div','stp-top');t.append(el('span','stp-plan',(P.mode?modeName(P.mode):'Plan Óptimo')+' · '+rowsIn.length+(rowsIn.length===1?' ítem':' ítems')));hd.append(t);}
+  if(steps.length){const t=el('div','stp-top');t.append(el('span','stp-plan',(P.mode?modeName(P.mode):'Plan Óptimo')+' · '+rowsIn.length+(rowsIn.length===1?' item':' items')));hd.append(t);}
   const iconStrip=g=>{const d=el('div','stp-icons');g.slice(0,14).forEach(r=>{const ic=iconFor(r.o.name);if(ic){ic.title=r.o.name;d.append(ic);}});if(g.length>14)d.append(el('small',null,'+'+(g.length-14)));return d;};
   const stepBox=(id,num,title,where,sub,amt,amtNote)=>{
     const box=el('section','stp');box.dataset.step=id;
@@ -1273,10 +1271,10 @@ function paintVerdict(P){
   steps.forEach((k,i)=>{
     if(k==='ship'){
       const vol=shipRows.reduce((a,r)=>a+(r.ship[r.best]?r.ship[r.best].v:0),0),col=shipRows.reduce((a,r)=>a+(r.ship[r.best]?r.ship[r.best].c:0),0),n=trips(vol);
-      const box=stepBox('ship',i+1,'Courier a '+dest+' con SIGMA Freight','Envío',shipRows.length+(shipRows.length===1?' ítem':' ítems')+' · '+fmtV(Math.round(vol))+' · '+n+(n===1?' contrato':' contratos')+' · llega en '+C.cDays[0]+'–'+C.cDays[1]+' días',-(P.shipCost||0),'costo del envío');
+      const box=stepBox('ship',i+1,'Courier a '+dest+' con SIGMA Freight','Envío',shipRows.length+(shipRows.length===1?' item':' items')+' · '+fmtV(Math.round(vol))+' · '+n+(n===1?' contrato':' contratos')+' · llega en '+C.cDays[0]+'–'+C.cDays[1]+' días',-(P.shipCost||0),'costo del envío');
       const f=el('div','stp-f');[['Destinatario',$('cAssignee').value||'SIGMA Freight'],['Destino',destStation()],['Reward'+(n>1?' (total)':''),Math.round(P.shipCost||0)],['Colateral'+(n>1?' (total)':''),Math.round(col)]].forEach(([l,v])=>{
         const c=el('div','stp-fi');c.append(el('span',null,l));const b=copyBtn(String(v),typeof v==='number'?fmtQ(v):v);c.append(b);f.append(c);});
-      const acts=el('div','stp-acts');const cb=copyBtn(shipRows.map(r=>r.o.name+'\t'+Math.round(r.q)).join('\n'),'Copiar '+shipRows.length+(shipRows.length>1?' ítems':' ítem'));cb.classList.add('cp-all','p');
+      const acts=el('div','stp-acts');const cb=copyBtn(shipRows.map(r=>r.o.name+'\t'+Math.round(r.q)).join('\n'),'Copiar '+shipRows.length+(shipRows.length>1?' items':' item'));cb.classList.add('cp-all','p');
       acts.append(cb);if(n>1){const go=el('button','ghost','Ver los '+n+' contratos');go.type='button';go.addEventListener('click',()=>{const p=$('pCtr');if(p&&p.hidden&&$('bCtr'))$('bCtr').click();p&&p.scrollIntoView({behavior:'smooth',block:'start'});});acts.append(go);}
       box.append(iconStrip(shipRows),f,acts);pl.append(box);return;}
     const g=rowsIn.filter(r=>r.best===k),[title,where,sub]=STEP[k]||[PLAN_L[k]||k,'',''];
@@ -1284,13 +1282,13 @@ function paintVerdict(P){
     const box=stepBox(k,i+1,title,where,sub,groupGross,SHIPS[k]?'antes del envío':'netos, ya con taxes');
     box.classList.add('pl-section');box.dataset.sortId='all:'+k;box.dataset.action=k;
     const acts=el('div','stp-acts');
-    const cb=copyBtn(g.map(r=>r.o.name+'\t'+Math.round(r.q)).join('\n'),'Copiar '+g.length+(g.length>1?' ítems':' ítem'));cb.classList.add('cp-all');acts.append(cb);
-    if(g.length>8){const search=el('input','pl-search');search.type='search';search.autocomplete='off';search.placeholder='Buscar ítem';
-      search.value=vQuery['all:'+k]||'';search.setAttribute('aria-label','Buscar ítem en '+title);acts.append(search,el('span','pl-match'));}
+    const cb=copyBtn(g.map(r=>r.o.name+'\t'+Math.round(r.q)).join('\n'),'Copiar '+g.length+(g.length>1?' items':' item'));cb.classList.add('cp-all');acts.append(cb);
+    if(g.length>8){const search=el('input','pl-search');search.type='search';search.autocomplete='off';search.placeholder='Buscar item';
+      search.value=vQuery['all:'+k]||'';search.setAttribute('aria-label','Buscar item en '+title);acts.append(search,el('span','pl-match'));}
     box.append(acts);pl.append(box);
     renderPlanTable(box,k,g);
   });
-  // Pie: solo los ítems sin precio (no pertenecen a ningún grupo)
+  // Pie: solo los items sin precio (no pertenecen a ningún grupo)
   const miss=rowsIn.filter(r=>!r.best);
   if(miss.length){tableTarget=el('div','pl pl-totals');pl.append(tableTarget);prow('miss','Falta precio: '+miss.map(r=>r.o.name).join(', '),'No entran en el total.',null,null,null,null);}
   // v1.0.22: dónde se vende (parte del ISK de cada acción del plan)
@@ -1301,12 +1299,12 @@ function paintVerdict(P){
    if(tot>0){const bar=el('div','ov-bar'),lg=el('div','ov-leg');
      ks.forEach(k=>{const v=sums[k],i=el('i');i.style.width=(v/tot*100)+'%';i.style.background=DC[k]||'#9c9a92';i.title=(PLAN_L[k]||k)+': '+fmt(v);bar.append(i);
        const n=rowsIn.filter(r=>r.best===k).length,d=el('div'),sw=el('span','ov-sw');sw.style.background=DC[k]||'#9c9a92';
-       d.append(sw,el('b',null,v/tot>0&&v/tot<.005?'<1%':pct(v/tot)+'%'),el('small',null,(PLAN_L[k]||k)+' · '+n+(n===1?' ítem':' ítems')));lg.append(d);});
+       d.append(sw,el('b',null,v/tot>0&&v/tot<.005?'<1%':pct(v/tot)+'%'),el('small',null,(PLAN_L[k]||k)+' · '+n+(n===1?' item':' items')));lg.append(d);});
      box.append(bar,lg);}}
-  // ¿reprocesar? por ítem
+  // ¿reprocesar? por item
   const reps=rowsIn.filter(r=>r.rep&&!r.rep.missing),rl=$('vRepList');rl.textContent='';$('vRep').hidden=!reps.length;
   {const ys=reps.filter(r=>r.rep.diff>0).length,a=$('vRepAns');
-   a.textContent=!reps.length?'':ys===reps.length?'Sí':ys===0?'No':'Depende del ítem';a.className='pill rep-ans '+(ys===reps.length?'p-null':ys===0?'p-none':'p-jita');}
+   a.textContent=!reps.length?'':ys===reps.length?'Sí':ys===0?'No':'Depende del item';a.className='pill rep-ans '+(ys===reps.length?'p-null':ys===0?'p-none':'p-jita');}
   // por escenario: enviarlo a Jita, venderlo en Null, o a un jugador a precio de Jita (sin taxes ni envío)
   reps.forEach(r=>{const n=r.net,ice=catOf(r.o.name)==='ice',noun=ice?'el hielo':'el ore';
     const best=(...ks)=>ks.map(k=>n[k]).filter(v=>v!=null).reduce((a,v)=>a==null||v>a?v:a,null);
@@ -1355,16 +1353,16 @@ function paintVerdict(P){
   {const sh=P.rows.filter(r=>r.best&&SHIPS[r.best]),n=trips(P.Vs);
    $('ovShip').hidden=!SH();$('aCourT').textContent='Envío a '+DEST();
    $('aCourier').textContent=P.Vs>0?'−'+fmt(P.shipCost):'0 ISK';$('aCourier').className=P.Vs>0?'neg':'zero';
-   $('aCourS').textContent=P.Vs>0?fmtV(Math.round(P.Vs))+' · '+n+(n>1?' contratos':' contrato')+' · '+sh.length+(sh.length===1?' ítem':' ítems'):'Tu plan no envía nada.';}
+   $('aCourS').textContent=P.Vs>0?fmtV(Math.round(P.Vs))+' · '+n+(n>1?' contratos':' contrato')+' · '+sh.length+(sh.length===1?' item':' items'):'Tu plan no envía nada.';}
   $('vNote').hidden=true;
   $('bMore').querySelector('span').textContent='Consulta contratos y envío, reproceso y venta a jugadores.';
-  // contrato del buyback para los ítems que conviene venderle
+  // contrato del buyback para los items que conviene venderle
   $('bbBox').hidden=true; // el contrato del Buyback está en «Contratos y Envío»
 }
 
-// ================= Vista: Tus Contratos (uno por contrato, con sus ítems) =================
+// ================= Vista: Tus Contratos (uno por contrato, con sus items) =================
 // Buyback: un Item Exchange. Envío a Jita: lo que viaja se reparte en contratos de hasta C.maxVol m³
-// (los ítems grandes primero; una pila se divide si no cabe). Cada courier: recompensa = base + ISK/m³ × vol + % × colateral.
+// (los items grandes primero; una pila se divide si no cabe). Cada courier: recompensa = base + ISK/m³ × vol + % × colateral.
 // Jugador: un Item Exchange por lo que se vende por Discord (solo si el plan lo elige).
 function packCouriers(P){
   if(!C.shipOn)return [];
@@ -1379,7 +1377,7 @@ function packCouriers(P){
     while(left>0){
       if(!cur)open();
       let fit=e.u>0?Math.floor((cap-cur.v)/e.u+1e-9):left;
-      if(fit<=0){if(cur.items.length){open();continue;}fit=1;} // un solo ítem más grande que el contrato
+      if(fit<=0){if(cur.items.length){open();continue;}fit=1;} // un solo item más grande que el contrato
       const t=Math.min(left,fit);cur.items.push({n:e.n,q:t,v:t*e.u,c:t*e.c});cur.v+=t*e.u;cur.c+=t*e.c;left-=t;
       if(left>0)open();}});
   out.forEach(k=>k.reward=C.base+C.perM3*k.v+C.collPct*k.c);
@@ -1421,7 +1419,7 @@ function paintContracts(P){
   const cards=[];let cn=0;
   const fields=(rows)=>{const t=el('table','prices ct-f'),tb=el('tbody');rows.forEach(([k,v,cp])=>{const tr=el('tr');tr.append(el('td',null,k));const td=el('td','r');td.append(cp?copyBtn(cp,v):el('span',isNumTxt(v)?'cp-n':null,v));tr.append(td);tb.append(tr);});t.append(tb);return t;};
   const items=(list,withC)=>{const w=el('div','ct-items'),hd=el('div','ct-ih');
-    hd.append(el('span',null,list.length+(list.length>1?' ítems':' ítem')),copyBtn(list.map(x=>x.n+'\t'+Math.round(x.q)).join('\n'),'Copiar ítems'));w.append(hd);
+    hd.append(el('span',null,list.length+(list.length>1?' items':' item')),copyBtn(list.map(x=>x.n+'\t'+Math.round(x.q)).join('\n'),'Copiar items'));w.append(hd);
     const ul=el('ul');list.slice(0,8).forEach(x=>{const li=el('li');const ic=iconFor(x.n);if(ic)li.append(ic);li.append(el('span','ct-n',x.n),el('span','ct-q num',fmtQ(x.q)+(withC?' · '+fmtV(Math.round(x.v*100)/100):'')));ul.append(li);});
     if(list.length>8){const li=el('li','ct-more');li.append(el('span',null,'y '+(list.length-8)+' más (incluidos al copiar)'));ul.append(li);}
     w.append(ul);return w;};
@@ -1509,7 +1507,7 @@ function paintShip(P,cs){
   const tb=el('tbody');
   ship.sort((a,b)=>b.cost-a.cost).slice(0,8).forEach(x=>{const tr=el('tr'),nm=(x.r.best==='rJita'?(isIce(x.r.o.name)?'Productos de ':'Minerales de '):'')+x.r.o.name,td=el('td',null,nm);td.title=nm;
     tr.append(td,el('td','r',fmtV(Math.round(x.s.v*100)/100)),el('td','r','−'+fmt(x.cost)),el('td','r '+sgn(x.extra),x.extra==null?'—':(x.extra>=0?'+':'−')+fmt(Math.abs(x.extra))));tb.append(tr);});
-  if(ship.length>8){const tr=el('tr'),td=el('td','muted','y '+(ship.length-8)+' ítems más');td.colSpan=4;tr.append(td);tb.append(tr);}
+  if(ship.length>8){const tr=el('tr'),td=el('td','muted','y '+(ship.length-8)+' items más');td.colSpan=4;tr.append(td);tb.append(tr);}
   t.append(tb);b.append(t);
   b.append(el('small','sh-rates',S.flip?'Gana extra = lo que deja en HY-RWO, ya con taxes y su parte del envío, menos lo que dejaría vendido en Jita.':'Gana extra = lo que deja en Jita, ya con taxes y su parte del envío, menos lo que dejaría sin viajar (Null o Buyback).'));
 }
@@ -1539,7 +1537,7 @@ function paintDisc(P){
   $('dTradeWrap').hidden=es||hasS;
   $('dOpenNote').textContent=es?'Pide login en Discord. Te lleva al servidor de la corporación.':(hasS?'Pide login en Discord. Te lleva directo al canal #market-trade de SIGMA.':'Pega abajo el link del canal #market-trade (clic derecho en el canal → Copiar enlace).');
   $('dWhere').textContent=es?'Cópialo y publícalo en Vanguardia DR › Actividades › #💰-mercado-local.':'Cópialo y publícalo en SIGMA GRINDSET › trade › #market-trade.';
-  // mensaje corto: los ítems ya están en el link de Janice; la entrega es por contrato (inmediata)
+  // mensaje corto: los items ya están en el link de Janice; la entrega es por contrato (inmediata)
   const lines=[es?'VENDO':'WTS'];
   lines.push((es?'Precio: ':'Price: ')+Math.round(tot).toLocaleString('en-US')+' ISK ('+pct(C.disc.pct)+'% '+base+')');
   lines.push('Janice: '+(okLink?link:(es?'<pega aquí tu link de Janice>':'<paste your Janice link>')));
@@ -1562,7 +1560,7 @@ document.querySelectorAll('.dest').forEach(b=>b.addEventListener('click',()=>{
   discDest=b.dataset.d;document.querySelectorAll('.dest').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));refresh();
 }));
 $('dLink').addEventListener('input',refresh);
-// Envío: dos escenarios completos para TODO el lote. A = sin reprocesar (cada ítem en orden en Jita).
+// Envío: dos escenarios completos para TODO el lote. A = sin reprocesar (cada item en orden en Jita).
 // B = reprocesado: lo que se puede reprocesar viaja como material; lo demás viaja como está.
 function paintScenarios(P){
   const box=$('fScn');box.textContent='';
@@ -1776,7 +1774,7 @@ function paintRepro(){
   card(2,opts[3].b,opts[1].b,m1||(!(oreVol>0)?'Pon el m³ por unidad del ore para contar el envío.':null));
   const gb=b2||b1,rg=$('rGuide');
   rg.textContent=!gb?'':'Qué hacer: '+({oN:'vende el ore en tu estructura de Null.',oJ:'lleva el ore a Jita y pon orden.',mN:'reprocésalo en '+refName()+' y vende los minerales en Null.',mJ:'reprocésalo en '+refName()+' y lleva los minerales a Jita.'})[gb.k]+
-    (gb.k[0]==='m'?' Lista cada mineral con los precios de "Minerales al Reprocesar" del ítem.':'');
+    (gb.k[0]==='m'?' Lista cada mineral con los precios de "Minerales al Reprocesar" del item.':'');
   paintOreVsMin(r,q,nets);
 }
 function paintOreVsMin(r,q,nets){
@@ -1832,16 +1830,16 @@ const PK_COLS=[['name','Plan'],['speed','Rapidez'],['ship','Envío'],['net','Val
 function paintPicker(P){
   const box=$('pk'),bar=$('pkNote'),tools=$('pkTools');box.textContent='';bar.textContent='';tools.textContent='';
   const opt=modeTotal(P,'auto').net,cur=P.mode||'auto';
-  // planes posibles con los Ajustes actuales (Buyback/Jugador apagados no salen; los que no aplican a ningún ítem tampoco)
+  // planes posibles con los Ajustes actuales (Buyback/Jugador apagados no salen; los que no aplican a ningún item tampoco)
   const all=MODES.filter(([m])=>!(m==='bb'&&!C.bb.on||m==='disc'&&!C.disc.on)&&(m==='auto'||P.rows.some(r=>r.g[m]!=null)))
    .map(([m,l])=>({m,l,t:m==='auto'?{net:opt,n:P.rows.length}:modeTotal(P,m)}));
-  // v1.0.8: un plan idéntico al óptimo (mismo destino para cada ítem) no se repite
+  // v1.0.8: un plan idéntico al óptimo (mismo destino para cada item) no se repite
   const same=all.filter(x=>x.m!=='auto'&&Math.round(x.t.net)===Math.round(opt)&&P.rows.every(r=>!r.auto||r.auto===x.m||r.g[x.m]==null)).map(x=>x.m);
   const curShown=same.includes(cur)?'auto':cur;
   const list=all.filter(x=>!same.includes(x.m));
   const maxNet=Math.max(...list.map(x=>x.t.net),1);
   const sys=(C.ref.name||'Null').split(' - ')[0].trim()||'Null',env='Envías todo a Jita y ';
-  const PK_EXP={auto:'Cada ítem va a donde más deja; si la diferencia es chica, prefiere vender rápido.',
+  const PK_EXP={auto:'Cada item va a donde más deja; si la diferencia es chica, prefiere vender rápido.',
     fN:'Llevas todo de Jita a '+sys+' y lo vendes con tu margen de importación.',
     fJ:'Publicas todo en Jita con sell orders. Más ISK, se vende en días.',
     fJI:'Vendes todo en Jita a las buy orders. Cobras al instante.',
@@ -1878,7 +1876,7 @@ function paintPicker(P){
     const b=el('button','pk-o'+(on?' on':'')+(m==='auto'?' best':''));b.type='button';b.dataset.m=m;b.setAttribute('role','radio');b.setAttribute('aria-checked',String(on));
     const txt=el('span','pk-tx'),nm=el('span','pk-l',l);if(m==='auto')nm.append(el('em','pk-rec','Recomendado'));
     if(on&&moreN>0){nm.append(el('em','pk-x',pkView.open?'Ocultar planes ▴':'+'+moreN+(moreN===1?' plan ▾':' planes ▾')));b.setAttribute('aria-expanded',String(pkView.open));}
-    const part=m!=='auto'&&t.n<P.rows.length?' '+t.n+' de '+P.rows.length+' ítems se venden así; los demás siguen el óptimo.':'';
+    const part=m!=='auto'&&t.n<P.rows.length?' '+t.n+' de '+P.rows.length+' items se venden así; los demás siguen el óptimo.':'';
     txt.append(nm,el('small','pk-e',(PK_EXP[m]||'')+part));
     const sp=el('span','pk-sp',pkSpeed(m,P)),sh=el('span','pk-sh'+(pkShips(m,P)?' y':''),pkShips(m,P)?'Sí':'No');
     const barW=el('span','pk-bar'),bi=el('i');bi.style.width=Math.max(2,Math.min(100,t.net/maxNet*100))+'%';barW.append(bi);
@@ -1890,7 +1888,7 @@ function paintPicker(P){
   if(P.mode){const d=opt-P.best,cant=P.rows.filter(r=>r.cant);
     bar.hidden=false;
     bar.append(el('b',null,'Elegiste: '+modeName(P.mode)+'. '),document.createTextNode(Math.round(d)>0?'Deja '+fmt(d)+' menos que el plan óptimo.':Math.round(d)<0?'Deja '+fmt(-d)+' más que el plan óptimo, pero se vende más lento (el óptimo prefiere vender rápido cuando la diferencia es pequeña).':'Deja lo mismo que el plan óptimo.'));
-    if(cant.length)bar.append(document.createTextNode(' '+(cant.length===1?'1 ítem no se puede vender así y sigue':cant.length+' ítems no se pueden vender así y siguen')+' el óptimo: '+cant.slice(0,4).map(r=>r.o.name).join(', ')+(cant.length>4?' y '+(cant.length-4)+' más':'')+'.'));
+    if(cant.length)bar.append(document.createTextNode(' '+(cant.length===1?'1 item no se puede vender así y sigue':cant.length+' items no se pueden vender así y siguen')+' el óptimo: '+cant.slice(0,4).map(r=>r.o.name).join(', ')+(cant.length>4?' y '+(cant.length-4)+' más':'')+'.'));
     const back=el('button','ghost pk-back','Volver al óptimo');back.type='button';back.dataset.m='auto';bar.append(back);
   }else bar.hidden=true;
 }
@@ -1913,23 +1911,23 @@ function paintFlipBuy(P){
   const V=rows.reduce((a,r)=>a+r.ship.fN.v,0),Cc=rows.reduce((a,r)=>a+r.ship.fN.c,0),ship=V>0?courierCost(V,C.coll!=null?C.coll:Cc):0;
   const it=rows.map(r=>{const buy=r.o.ref*r.q,sh=courierShare(r.ship.fN.v,r.ship.fN.c,V),sell=r.g.fN-r.prod;return{r,buy,sh,sell,p:sell-sh-buy};});
   const buy=it.reduce((a,x)=>a+x.buy,0),sell=it.reduce((a,x)=>a+x.sell,0),profit=sell-ship-buy,roi=buy>0?profit/buy:0;
-  box.append(el('h4',null,'Comprar en Jita y Vender en HY-RWO'),el('p','fb2-s','Si compras '+(rows.length===1?'este ítem':'estos '+rows.length+' ítems')+' en Jita al Sell, los llevas con SIGMA Freight y los vendes en HY-RWO a Jita Sell +'+pct(C.impM)+'% neto.'));
+  box.append(el('h4',null,'Comprar en Jita y Vender en HY-RWO'),el('p','fb2-s','Si compras '+(rows.length===1?'este item':'estos '+rows.length+' items')+' en Jita al Sell, los llevas con SIGMA Freight y los vendes en HY-RWO a Jita Sell +'+pct(C.impM)+'% neto.'));
   const big=el('div','fb2-big');big.append(el('b','num '+sgn(profit),(profit>=0?'+':'−')+fmt(Math.abs(profit))),el('span',null,(profit>=0?'de ganancia':'de pérdida')+' · '+(roi>=0?'+':'−')+pct(Math.abs(roi))+'% sobre lo invertido'));box.append(big);
   const l=el('div','fb2-l'),L=(t,v,c)=>{const d=el('div');d.append(el('span',null,t),el('b','num '+(c||''),v));l.append(d);};
   L('Compras en Jita','−'+fmt(buy),'neg');L('Envío a HY-RWO','−'+fmt(ship),'neg');L('Vendes en HY-RWO (neto)',fmt(sell),'pos');L('Ganancia',(profit>=0?'+':'−')+fmt(Math.abs(profit)),sgn(profit));box.append(l);
-  const t=el('table'),th=el('thead'),hr=el('tr');[['Ítem',''],['Precio Unidad Compra','r'],['Precio Unidad Venta','r'],['Envío','r'],['Ganancia','r'],['Margen','r']].forEach(([x,c])=>hr.append(el('th',c||null,x)));th.append(hr);t.append(th);
+  const t=el('table'),th=el('thead'),hr=el('tr');[['Item',''],['Precio Unidad Compra','r'],['Precio Unidad Venta','r'],['Envío','r'],['Ganancia','r'],['Margen','r']].forEach(([x,c])=>hr.append(el('th',c||null,x)));th.append(hr);t.append(th);
   const tb=el('tbody');
   it.sort((a,b)=>b.p-a.p).slice(0,10).forEach(x=>{const tr=el('tr');
     const c=[el('td',null,x.r.o.name),el('td','r',fmtP(x.r.o.ref)),el('td','r',fmtP(x.r.np)),el('td','r','−'+fmt(x.sh)),el('td','r '+sgn(x.p),(x.p>=0?'+':'−')+fmt(Math.abs(x.p))),el('td','r '+sgn(x.p),(x.p>=0?'+':'−')+pct(Math.abs(x.buy>0?x.p/x.buy:0))+'%')];
     ['','Precio Unidad Compra','Precio Unidad Venta','Envío','Ganancia','Margen'].forEach((d,i)=>{if(d)c[i].dataset.l=d;});tr.append(...c);tb.append(tr);});
-  if(it.length>10){const tr=el('tr'),td=el('td','muted','y '+(it.length-10)+' ítems más');td.colSpan=6;tr.append(td);tb.append(tr);}
+  if(it.length>10){const tr=el('tr'),td=el('td','muted','y '+(it.length-10)+' items más');td.colSpan=6;tr.append(td);tb.append(tr);}
   t.append(tb);box.append(t);
   box.append(el('p','fb2-n','Compra = Jita Sell × cantidad (comprando de las órdenes de venta, sin broker). Venta = el precio de lista en HY-RWO ya con Sales Tax, Broker y SCC. El envío es un solo cálculo para todo el lote. El margen se cambia junto al botón de la ruta.'));
 }
 function paintSkewNote(){const b=$('skNote'),parts=[];
   const f=(v,t)=>{if(v)parts.push(t+' '+(v>0?'+':'−')+pctS(Math.abs(v))+'%');};
   f(C.skew.inst,'venta rápida');f(C.skew.ord,'órdenes en Jita');f(C.skew.nul,'órdenes en Null');
-  const n=S.items.filter(o=>o.skew).length;if(n)parts.push(n+(n>1?' ítems con ajuste propio':' ítem con ajuste propio'));
+  const n=S.items.filter(o=>o.skew).length;if(n)parts.push(n+(n>1?' items con ajuste propio':' item con ajuste propio'));
   b.hidden=!parts.length;b.textContent=parts.length?'Precios ajustados: '+parts.join(' · '):'';}
 function paintSummary(P){
   const box=$('pSum'),none=!P.rows.length||P.missing.length===P.rows.length;box.hidden=none||!S.items.length;if(box.hidden)return;
@@ -1942,28 +1940,31 @@ function paintSummary(P){
   paintResGain(P,sys);
 }
 // v1.0.48: número de la derecha del Resultado = cuánto más deja este plan frente a la alternativa simple.
-// Si el plan envía algo: frente a no enviar nada (cada ítem a su mejor opción sin viajar, como en computePlan).
+// Si el plan envía algo: frente a no enviar nada (cada item a su mejor opción sin viajar, como en computePlan).
 // Si no envía nada: frente a llevarlo todo al destino (con su courier). Se oculta si no hay con qué comparar.
 function paintResGain(P,sys){
   const box=$('resGain'),org=S.flip?'Jita':sys,dst=S.flip?'HY-RWO':'Jita';
   const stayK=r=>{const ks=(S.flip?['fJ','fJI']:['null','bb','rNull']).filter(k=>r.g[k]!=null);
     return ks.length?ks.reduce((a,b)=>r.g[b]>r.g[a]?b:a):(r.g.disc!=null?'disc':null);};
-  const live=P.rows.filter(r=>r.best);let base=null,k='',sub='';
+  const live=P.rows.filter(r=>r.best);let base=null,k='',sub='',tail='';
   if(P.Vs>0){
     if(live.some(r=>SHIPS[r.best]&&!stayK(r))){box.hidden=true;return;}
     base=live.reduce((a,r)=>a+(SHIPS[r.best]?r.g[stayK(r)]:r.g[r.best])-r.prod,0);
-    k='Ganas de más';sub='frente a vender todo en '+org+' sin enviar nada ('+fmt(base)+').';
+    k='Ganas de más';sub='frente a vender todo en '+org+' sin enviar nada';
   }else{
     const all=S.flip?P.allNull:P.allJita;if(all==null){box.hidden=true;return;}
-    base=all;k='Ganas de más';sub='frente a llevar todo a '+dst+' con courier ('+fmt(base)+').';
+    base=all;k='Ganas de más';sub='frente a llevar todo a '+dst+' con courier';
   }
   const d=P.best-base;
   if(!(Math.abs(d)>=1)){box.hidden=true;return;}
   if(d<0)k='Dejas de ganar';
   box.hidden=false;box.classList.toggle('up',d>0);box.classList.toggle('dn',d<0);
   $('resGainK').textContent=k;$('resGainN').textContent=(d>0?'+':'−')+fmt(Math.abs(d));
-  if(d<0&&live.some(r=>r.fast))sub=sub.replace(/\.$/,'')+', a cambio de vender más rápido.';
-  $('resGainS').textContent=(base>0?(d>0?'+':'−')+pctS(Math.abs(d)/base)+'% ':'')+sub;
+  tail=d<0&&live.some(r=>r.fast)?', a cambio de vender más rápido.':'.';
+  // v1.0.56: el % y el monto de la alternativa con color (verde positivo, rojo negativo)
+  const gs=$('resGainS');gs.textContent='';
+  if(base>0)gs.append(el('b',d>0?'pos':'neg',(d>0?'+':'−')+pctS(Math.abs(d)/base)+'%'),' ');
+  gs.append(sub+' (',el('b',base<0?'neg':'pos',(base<0?'−':'')+fmt(Math.abs(base))),')'+tail);
 }
 
 // ================= Recalcular =================
@@ -1987,8 +1988,8 @@ function colorNums(root){
 // varios ajustes no se recalcula en cada tecla). refreshNow() pinta al instante.
 let refQ=0;
 function refresh(){if(refQ)return;refQ=requestAnimationFrame(()=>{refQ=0;refreshNow();});}
-// v1.0.45: Tasación del lote como Janice: Precios de · Volumen · Ítems | Buy · Split · Sell.
-// Valores crudos (mejor compra y venta más barata de Jita 4-4), sin los filtros del plan. Solo con ítems pegados.
+// v1.0.45: Tasación del lote como Janice: Precios de · Volumen · Items | Buy · Split · Sell.
+// Valores crudos (mejor compra y venta más barata de Jita 4-4), sin los filtros del plan. Solo con items pegados.
 function paintAppraisal(){
   const box=$('appr');if(!box)return;box.textContent='';
   const tb=o=>o.jita&&(o.jita.topBuy!=null?o.jita.topBuy:o.jita.buy),ts=o=>o.jita&&(o.jita.topSell!=null?o.jita.topSell:o.jita.sell);
@@ -2001,14 +2002,14 @@ function paintAppraisal(){
   const ok=priced.length>0,v2=Math.round(vol*100)/100;
   cell(colL,'Precios de','Jita 4-4');
   cell(colL,'Volumen',NF2.format(v2)+' m³',null,String(v2)); // 2 decimales, como Janice; clic copia el número
-  cell(colL,'Ítems',its.length+(its.length===1?' ítem · ':' ítems · ')+fmtQ(u)+' u.'+(priced.length<its.length?' ('+priced.length+' con precio)':''));
+  cell(colL,'Items',its.length+(its.length===1?' item · ':' items · ')+fmtQ(u)+' u.'+(priced.length<its.length?' ('+priced.length+' con precio)':''));
   cell(colR,'Buy',ok?vB:'—','t-buy');cell(colR,'Split',ok?(vB+vS)/2:'—','t-split');cell(colR,'Sell',ok?vS:'—','t-sell');
   g.append(colL,colR);box.append(el('span','appr-tag','Tasación'),g);
 }
 function refreshNow(){
   if(refQ){cancelAnimationFrame(refQ);refQ=0;}
   if(S.loading)return; // se pinta al terminar la carga
-  document.body.classList.toggle('in-jita',IN_JITA()); // v1.0.22: oculta lo que no aplica con los ítems ya en Jita
+  document.body.classList.toggle('in-jita',IN_JITA()); // v1.0.22: oculta lo que no aplica con los items ya en Jita
   if(!S.repro.dirty&&!$('pRepro').hidden)fillFromItem();
   const P=computePlan();
   paintAppraisal();P.rows.forEach(paintLot);paintVerdict(P);paintContracts(P);paintCourier(P);paintDisc(P);paintRepro();paintSummary(P);
@@ -2024,7 +2025,7 @@ function refreshNow(){
 // v105: Modo ligero. v1.0.16: ya no es automático en Firefox; se guarda con los Ajustes.
 $('cAssignee').addEventListener('input',()=>refresh());
 // v1.0.5: invertir la ruta (flip). HY-RWO → Jita (normal) / Jita → HY-RWO (importar). Solo en memoria.
-// v1.0.55: interruptor «Courier» (solo con la ruta Jita → HY-RWO). On: los ítems están en Jita y los llevas a HY-RWO
+// v1.0.55: interruptor «Courier» (solo con la ruta Jita → HY-RWO). On: los items están en Jita y los llevas a HY-RWO
 // con SIGMA Freight (se cuenta el courier). Off: los trajiste a Jita para venderlos allí, sin ningún courier.
 // Con la ruta HY-RWO → Jita el courier siempre se cuenta y el interruptor no se muestra.
 function syncShipSwitch(){$('shipTxt').textContent='Courier '+(SH()?'On':'Off');$('shipLab').hidden=!S.flip;}
@@ -2040,9 +2041,8 @@ $('shipOn').addEventListener('change',e=>{C.shipOn=e.target.checked;syncShipSwit
 const impSync=(src,dst)=>{const v=parseFloat($(src).value);if(!(v>=0))return;C.impM=v/100;$(dst).value=String(v);refresh();};
 $('fImpM').addEventListener('input',()=>impSync('fImpM','cImpM'));$('cImpM').addEventListener('input',()=>impSync('cImpM','fImpM'));
 $('cNullDest').addEventListener('input',()=>refresh());
-$('liteOn').checked=document.documentElement.classList.contains('lite');$('themeLight').checked=document.documentElement.classList.contains('light');$('themeTxt').textContent=$('themeLight').checked?'Light':'Dark';
+$('themeLight').checked=document.documentElement.classList.contains('light');$('themeTxt').textContent=$('themeLight').checked?'Light':'Dark';
 syncShipSwitch();
-$('liteOn').addEventListener('change',e=>document.documentElement.classList.toggle('lite',e.target.checked));
 // v1.0.8: tema claro / oscuro (solo en memoria; empieza oscuro)
 $('themeLight').addEventListener('change',e=>{document.documentElement.classList.toggle('light',e.target.checked);$('themeTxt').textContent=e.target.checked?'Light':'Dark';});
 
@@ -2229,11 +2229,11 @@ window.addEventListener('pageshow',e=>{if(e.persisted)location.reload();});
 
 
 // ================= v1.0.16: los Ajustes se guardan en este navegador =================
-// Solo se guarda lo del panel Ajustes + tema + Modo Ligero (localStorage, en esta PC). El inventario pegado,
+// Solo se guarda lo del panel Ajustes + tema (localStorage, en esta PC). El inventario pegado,
 // los precios, la ruta y el switch de envío NO se guardan: cada visita empieza limpia.
 const ST_KEY='gestorVentas.ajustes.v1';let stBusy=false,stT=0;
 const stFields=()=>[...document.querySelectorAll('#settings input,#settings select,#settings textarea')].filter(e=>e.id);
-function stSaveNow(){if(stBusy)return;const o={v:1,f:{},ui:{light:$('themeLight').checked,lite:$('liteOn').checked}};
+function stSaveNow(){if(stBusy)return;const o={v:1,f:{},ui:{light:$('themeLight').checked}};
   stFields().forEach(e=>{o.f[e.id]=e.type==='checkbox'?e.checked:e.value;});
   try{localStorage.setItem(ST_KEY,JSON.stringify(o));}catch(e){}}
 function stSave(){clearTimeout(stT);stT=setTimeout(stSaveNow,250);}
@@ -2245,7 +2245,7 @@ function stRestore(){let o=null;try{o=JSON.parse(localStorage.getItem(ST_KEY)||'
       e.dispatchEvent(new Event(e.tagName==='SELECT'?'change':'input',{bubbles:true}));}});}
   finally{stBusy=false;}}
 $('settings').addEventListener('input',stSave);$('settings').addEventListener('change',stSave);
-['themeLight','liteOn'].forEach(id=>$(id).addEventListener('change',stSave));
+$('themeLight').addEventListener('change',stSave);
 $('stReset').addEventListener('click',()=>{if(!confirm('¿Volver todos los Ajustes a los valores de fábrica?'))return;
   try{localStorage.removeItem(ST_KEY);}catch(e){}stBusy=true;location.reload();});
 addEventListener('pagehide',()=>{if(stT){clearTimeout(stT);stSaveNow();}});

@@ -46,7 +46,6 @@ body::after{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;tra
 .top{display:flex;align-items:center;justify-content:space-between;gap:12px;max-width:min(1360px,94vw);margin:0 auto;padding:18px 20px}
 .brand{font:600 1.05rem var(--f-num);letter-spacing:.3px;color:var(--txt)}
 .brand small{color:var(--mut);font:400 .8rem var(--f-ui);margin-left:8px}
-.who{font-size:.82rem;color:var(--gain);border:1px solid rgba(53,194,110,.35);border-radius:999px;padding:5px 12px}
 
 /* ---------- botones ---------- */
 button{font:inherit;cursor:pointer;border:none;background:none;color:inherit}
@@ -108,10 +107,8 @@ details.panel[open]>summary{margin-bottom:16px}
 .verdict{padding:28px 28px 22px}
 .v-isk{font:600 clamp(1.9rem,8.5vw,4.4rem)/1 var(--f-num);margin:10px 0 4px;letter-spacing:.5px}
 .v-isk span{font-size:.4em;color:var(--mut);margin-left:8px;letter-spacing:0}
-.v-sub{color:var(--mut);font-size:.88rem}
 .split{display:flex;height:10px;border-radius:999px;overflow:hidden;background:rgba(255,255,255,.06);margin:18px 0 8px}
 .split i{display:block;height:100%;transition:width .4s ease}
-.split .s-null{background:var(--gain)} .split .s-jita{background:var(--blue)}
 .legend{display:flex;gap:18px;flex-wrap:wrap;font-size:.8rem;color:var(--mut)}
 .legend b{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px;vertical-align:-1px}
 .v-note{font-size:.82rem;color:var(--thrust);margin-top:12px}
@@ -161,7 +158,6 @@ details.panel>summary h2 .logo{display:inline-block}
 details.panel>summary h2 .logo+.logo{margin-left:-4px}
 .p-disc{color:#d6d4cb;border-color:rgba(222,220,209,0.3);background:rgba(222,220,209,.1)}
 .v-cap{font-size:1rem;color:var(--txt);font-weight:600;margin-top:2px}
-.v-sub{margin-top:2px}
 .v-h{margin:22px 0 8px}
 .v-hint{color:var(--mut);font-size:.88rem;margin:-4px 0 10px}
 .receipt{list-style:none;display:flex;flex-direction:column;border-radius:var(--r-md);overflow:hidden;border:1px solid var(--line);
@@ -234,9 +230,6 @@ details.panel>summary h2 .logo+.logo{margin-left:-4px}
 fieldset{border:none}
 fieldset+fieldset{margin-top:22px;padding-top:18px;border-top:1px solid var(--line)}
 legend{font:600 1rem var(--f-num);margin-bottom:12px;color:var(--txt)}
-.stats{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:1px;background:var(--line);border-radius:var(--r-md);overflow:hidden;margin:16px 0}
-.stats div{background:rgba(36,35,33,.92);padding:12px 14px}
-.stats dt{font-size:.9rem;color:var(--mut)} .stats dd{font:600 1.15rem var(--f-num);margin-top:2px}
 .call{border-left:3px solid var(--blue);padding:10px 14px;background:rgba(222,220,209,.06);border-radius:0 var(--r-sm) var(--r-sm) 0;margin-top:12px}
 .call b{font:600 1.1rem var(--f-num);display:block}
 .call small{color:var(--mut);font-size:.82rem}
@@ -263,20 +256,13 @@ footer{max-width:min(1360px,94vw);margin:0 auto;padding:10px 20px 40px;color:var
 .v-isk.pos{text-shadow:0 2px 0 rgba(0,0,0,.65),0 0 28px rgba(53,194,110,.35),0 0 2px rgba(53,194,110,.6)}
 .v-isk.neg{text-shadow:0 2px 0 rgba(0,0,0,.65),0 0 28px rgba(255,123,123,.35)}
 .split{box-shadow:inset 0 2px 4px rgba(0,0,0,.6),0 1px 0 rgba(255,255,255,.05)}
-.split .s-null{background:linear-gradient(180deg,#5be08f,#27a95b);box-shadow:0 0 12px rgba(53,194,110,.45)}
-.split .s-jita{background:linear-gradient(180deg,#b8b5ab,#6b6a65);box-shadow:0 0 12px rgba(222,220,209,0.27)}
-.stats{gap:12px;background:none;overflow:visible}
-.stats div{border-radius:var(--r-md);border:1px solid var(--line);
-  background:linear-gradient(180deg,rgba(48,48,46,.95),rgba(36,35,33,.97));
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.07),0 2px 4px rgba(0,0,0,.45),0 8px 14px rgba(0,0,0,.35)}
-.stats dd{text-shadow:0 1px 0 rgba(0,0,0,.7)}
 .lot-net.pos,.opt-v.pos{text-shadow:0 1px 0 rgba(0,0,0,.7),0 0 14px rgba(53,194,110,.28)}
 .lot-net.neg,.opt-v.neg{text-shadow:0 1px 0 rgba(0,0,0,.7),0 0 14px rgba(255,123,123,.25)}
 /* héroe */
 .paste{box-shadow:inset 0 1px 0 rgba(255,255,255,.06),0 2px 4px rgba(0,0,0,.5),0 8px 14px rgba(0,0,0,.45),0 8px 14px rgba(0,0,0,.35);transition:border-color .2s}
 .paste:focus-within{border-color:rgba(222,220,209,0.3);box-shadow:0 0 0 4px rgba(222,220,209,.10),0 8px 14px rgba(0,0,0,.45),0 8px 14px rgba(0,0,0,.35)}
 .hero h1{text-shadow:0 2px 0 rgba(0,0,0,.5),0 10px 30px rgba(0,0,0,.6)}
-/* libro: el ítem abierto se levanta */
+/* libro: el item abierto se levanta */
 .lot{transition:background .2s,border-radius .2s}
 .lot.open{border-bottom-color:transparent;border-radius:var(--r-md);margin:8px -6px;padding:0 6px;
   background:linear-gradient(180deg,rgba(48,48,46,.75),rgba(36,35,33,.85));
@@ -318,27 +304,8 @@ h2 .ic,.sub-h .ic{color:var(--ion)}
 .ghost:active,.dest:active,.copy:active{transform:translateY(0) scale(.98)}
 .copy{box-shadow:inset 0 1px 0 rgba(255,255,255,.1),0 2px 4px rgba(0,0,0,.45)!important}
 .copy:hover{border-color:rgba(222,220,209,0.42)}
-.ship-t{max-width:900px}
-.locked input{opacity:.85;cursor:default;background:rgba(36,35,33,.55)!important;border-style:dashed!important;color:var(--mut)!important}
-.locked input:focus{outline:none;box-shadow:none}
 .i-lock{--i:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='5' y='11' width='14' height='10' rx='2'/%3E%3Cpath d='M8 11V7a4 4 0 0 1 8 0v4'/%3E%3C/svg%3E")}
-.v-stats{display:grid;grid-template-columns:auto auto minmax(0,1fr);gap:10px;margin:0 0 18px}
-.v-stats>div{padding:10px 14px;border-radius:var(--r-md);border:1px solid var(--line);background:rgba(36,35,33,.6);box-shadow:inset 0 1px 0 rgba(255,255,255,.05),0 6px 14px rgba(0,0,0,.3)}
-.v-stats dt{font-size:.78rem;color:var(--dim);text-transform:uppercase;letter-spacing:.6px}
-.v-stats dd{font:600 1.08rem var(--f-num);color:var(--txt);margin-top:2px;white-space:nowrap}
 /* v58: plan con pestañas y precio por unidad */
-.v-top{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:34px;align-items:stretch}
-.v-main,.v-side{display:flex;flex-direction:column}
-.v-main .split{margin-top:auto;padding-top:0}
-.v-main .v-sub{margin-bottom:18px}
-.v-h0{margin:4px 0 8px}
-.alt-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;flex:1}
-.alt-grid>div{display:flex;flex-direction:column;justify-content:space-between;gap:4px;padding:10px 14px;border-radius:var(--r-md);border:1px solid var(--line);
-  background:linear-gradient(180deg,rgba(48,48,46,.95),rgba(36,35,33,.97));box-shadow:inset 0 1px 0 rgba(255,255,255,.07),0 2px 4px rgba(0,0,0,.45),0 8px 14px rgba(0,0,0,.35)}
-.alt-grid dt{font-weight:600;color:var(--txt)}
-.alt-grid dt small{display:block;font-weight:400;color:var(--mut);font-size:.8rem;margin-top:2px}
-.alt-grid dd b{display:block;font:600 1.15rem var(--f-num);white-space:nowrap}
-.alt-grid dd small{display:block;font-size:.78rem;color:var(--dim)}
 .tab{border-radius:999px;padding:7px 15px;border:1px solid var(--line2);background:rgba(36,35,33,.7);color:var(--mut);font-weight:600;font-size:.88rem;
   box-shadow:inset 0 1px 0 rgba(255,255,255,.06),0 3px 9px rgba(0,0,0,.4);transition:color .15s,border-color .15s,background .15s}
 .tab small{margin-left:6px;opacity:.7;font-weight:500}
@@ -413,38 +380,18 @@ body.is-updating #verdict,body.is-updating #pRepro,body.is-updating #pCtr,body.i
   color:#bff3d2;background:rgba(53,194,110,.14);border:1px solid rgba(53,194,110,.45)}
 .v-what:empty{display:none}
 .pl-row.min .a{font-size:.92rem;color:var(--mut)!important;font-weight:500}
-.v-stats dd small{display:block;font:500 .74rem var(--f-ui,inherit);color:var(--dim);white-space:normal;margin-top:2px}
-.v-stats dd.neg-soft{color:#ffb0b0}
 .tl{white-space:nowrap}.tl b{font-weight:600}
 .tl::before{content:"";display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:6px;vertical-align:1px}
-.t-red{color:#ff9a9a}.t-red::before{background:#ff5f5f;box-shadow:0 0 6px rgba(255,95,95,.8)}
-.t-amb{color:#e8a58c}.t-amb::before{background:#d97757;box-shadow:0 0 6px rgba(217,119,87,.8)}
-.t-grn{color:#7fe0a6}.t-grn::before{background:#35c26e;box-shadow:0 0 6px rgba(53,194,110,.8)}
 .rl{display:block;margin-top:6px;font-size:.8rem;color:var(--mut);cursor:pointer}
 .rl input{vertical-align:-2px;margin-right:4px;accent-color:#d97757}
 .rl span{color:#e8a58c;font-weight:600}
 .rl small{display:block;color:var(--dim);font-size:.72rem;margin-top:1px}
-.alt-grid dd b.zero{color:var(--dim);font-weight:600}
 .nc{font-weight:600;white-space:nowrap}.nc.pos{color:#5fd68e}.nc.neg{color:#ff8f8f}
-.v-stats{align-items:start}
-.v-stats .tx dt{display:flex;justify-content:space-between;align-items:baseline;gap:12px}
-.v-stats .tx dt b{font:600 1.08rem var(--f-num);letter-spacing:0;text-transform:none;white-space:nowrap}
-.v-stats .tx dd{margin-top:2px;font-size:0}
-.v-stats .tx dd small{font-size:.74rem}
 .neg-soft{color:#ffb0b0}
 img.ti{width:24px;height:24px;border-radius:5px;vertical-align:-6px;margin-right:9px;background:rgba(255,255,255,.04);box-shadow:0 0 0 1px rgba(255,255,255,.08)}
 img.ti:not([src]){visibility:hidden}
 .pl-row.min img.ti{width:20px;height:20px;vertical-align:-5px}
 /* v81: tarjetas intercambiadas: envío en los datos de la izquierda, taxes en la comparación */
-.v-stats .ship dt{font-size:.78rem;color:var(--dim);text-transform:uppercase;letter-spacing:.6px}
-.v-stats .ship dt small{display:block;text-transform:none;letter-spacing:0;color:var(--mut);font-size:.78rem;margin-top:2px}
-.v-stats .ship dd b{font:600 1.08rem var(--f-num);display:block;margin-top:2px}
-.v-stats .ship dd b.zero{color:var(--dim)}
-.v-stats .ship dd small{display:block;font:500 .74rem var(--f-ui,inherit);color:var(--dim)}
-.alt-grid .tx dt{display:flex;justify-content:space-between;align-items:baseline;gap:10px;font-weight:600;color:var(--txt)}
-.alt-grid .tx dt b{font:600 1.15rem var(--f-num);white-space:nowrap}
-.alt-grid .tx dd{font-size:.8rem;color:var(--mut)}
-.alt-grid .tx dd small{display:block;font-size:.78rem;color:var(--dim)}
 .lot-name b{display:inline-flex;align-items:flex-start;gap:0}
 .lot-name b img.ti{flex:none;margin-top:1px}
 .scn{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:8px}
@@ -459,18 +406,6 @@ img.ti:not([src]){visibility:hidden}
 .scn dt{color:var(--mut)} .scn dd{text-align:right;font-weight:600;white-space:nowrap}
 .scn-v{margin-top:10px;font-size:.98rem;color:var(--txt)}
 /* v83: datos simétricos y opción rápida */
-.v-stats{grid-template-columns:repeat(3,minmax(0,1fr))!important;align-items:stretch!important}
-.v-stats>div{display:flex;flex-direction:column}
-.v-stats>div>small{display:block;font-size:.74rem;color:var(--dim);margin-top:auto;padding-top:4px;line-height:1.35}
-.v-stats .ship dt{font-size:.78rem;white-space:nowrap}
-.v-stats .ship dd b{font:600 1.08rem var(--f-num);margin-top:2px}
-.fastbox{margin:0 0 16px;padding:12px 14px;border-radius:var(--r-md);border:1px solid rgba(222,220,209,0.27);
-  background:linear-gradient(90deg,rgba(222,220,209,0.096),rgba(222,220,209,.04));box-shadow:inset 0 1px 0 rgba(255,255,255,.06),0 4px 10px rgba(0,0,0,.3)}
-.fb-h{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
-.fb-h .ic{color:#b8b5ab}.fb-h b{color:#f0eee6}
-.fb-what{color:var(--mut);font-size:.88rem}
-.fb-v{margin-left:auto;font:600 1.15rem var(--f-num)}
-.fastbox p{font-size:.86rem;color:var(--mut);margin-top:4px;max-width:none}
 .rep-tb{gap:0!important;padding-top:6px!important}
 .rt-row{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr) minmax(0,1fr) minmax(0,1.1fr);gap:12px;align-items:center;padding:9px 10px;border-bottom:1px solid rgba(255,255,255,.05)}
 .rt-row:last-child{border-bottom:none}
@@ -539,7 +474,6 @@ img.ti:not([src]){visibility:hidden}
 .pl-match{color:var(--mut);font-size:.82rem}
 .pl-section>.pl[hidden]{display:none}
 .pl-nomatch{padding:16px;text-align:center;color:var(--mut);font-size:.91rem}
-.pl-partial{display:block;margin-top:4px;color:#e8a58c;font-size:.85rem}
 /* v101: tablas independientes por recomendación y por pestaña. */
 .pl-groups{display:flex;flex-direction:column;gap:16px}
 .pl-section{min-width:0}
@@ -624,7 +558,6 @@ img.ti:not([src]){visibility:hidden}
  .sh-t td[colspan]{flex:1 1 100%;font-weight:400}
  .sh-t td[colspan]::before{content:none}
  .sh-big{font-size:1.55rem}.sh-leg{grid-template-columns:1fr}.sh-kpi{grid-template-columns:1fr 1fr}.cz-pos{min-width:52px}}
-html.lite .cz .ct{animation:none}
 /* v93: Tus Contratos */
 .ct{border:1px solid var(--line);border-radius:var(--r-md);background:linear-gradient(180deg,rgba(48,48,46,.95),rgba(36,35,33,.97));padding:14px 16px;box-shadow:inset 0 1px 0 rgba(255,255,255,.06),0 4px 10px rgba(0,0,0,.35)}
 .ct.bb{border-top:3px solid var(--gain)}.ct.cr{border-top:3px solid var(--blue)}.ct.pl{border-top:3px solid #9c9a92}
@@ -688,11 +621,10 @@ fieldset.st-full{grid-column:1/-1}fieldset.st-full .st-g{grid-template-columns:r
     linear-gradient(90deg,rgba(36,35,33,0) 0%,rgba(36,35,33,0) 45%,rgba(36,35,33,.3) 75%,rgba(36,35,33,.5) 100%),
     linear-gradient(180deg,rgba(36,35,33,.22) 0%,rgba(36,35,33,0) 10%,rgba(36,35,33,0) 62%,rgba(36,35,33,.45) 100%)!important}
   body::before,body::after{will-change:auto!important;transform:none!important}
-  .panel,.ct,.alt-grid>div,.rx-c,.pod,fieldset.st,.hp-c,.scn>div,.v-stats>div,.pl,.fastbox,.ref{box-shadow:0 2px 6px rgba(0,0,0,.4)!important}
+  .panel,.ct,.rx-c,.pod,fieldset.st,.hp-c,.scn>div,.pl,.ref{box-shadow:0 2px 6px rgba(0,0,0,.4)!important}
   .btn,.ghost,.dest,.copy,.tab,.totop{box-shadow:none!important}
   *{text-shadow:none!important}
   .logo-l,.lamp,.pod.best{filter:none!important}
-  .split .s-null,.split .s-jita{box-shadow:none!important}
 }
 .prices .pr-h th{font-size:.72rem;color:var(--dim);text-transform:uppercase;letter-spacing:.5px;font-weight:500;padding:4px 6px;text-align:left}
 .prices .pr-h th.r{text-align:right}
@@ -708,11 +640,6 @@ details.panel>summary .sum{font-size:1.1rem;color:#d6d4cb}
 .more-btn b{font-size:1.05rem!important}
 /* v105: Modo ligero (se activa solo en Firefox; también a mano en el pie). Quita lo que más cuesta pintar al hacer scroll:
    fondo fijo de pantalla completa (pasa a moverse con la página), overlay en degradados, sombras, filtros y animaciones. */
-html.lite body::before,html.lite body::after{position:absolute!important;inset:auto 0 auto 0!important;top:0!important;height:max(100vh,900px)!important;will-change:auto!important;transform:none!important}
-html.lite body::after{background:linear-gradient(180deg,rgba(36,35,33,.2) 0%,rgba(36,35,33,0) 40%,var(--void) 100%)!important}
-html.lite *,html.lite *::before,html.lite *::after{box-shadow:none!important;text-shadow:none!important;filter:none!important;transition:none!important}
-html.lite .panel,html.lite .ct,html.lite .alt-grid>div,html.lite .rx-c,html.lite .pod,html.lite fieldset.st,html.lite .hp-c,html.lite .scn>div,html.lite .v-stats>div{background:#30302e!important}
-.lite-t{display:inline-flex!important;align-items:center;gap:4px;white-space:nowrap;cursor:pointer;color:var(--dim);font-size:inherit;margin:0}.lite-t input{vertical-align:-2px;margin-right:3px;accent-color:#d97757}
 @media(max-width:820px){
   .prices .pr-h{display:none}.prices tr:not(.pr-h){display:grid;grid-template-columns:1fr auto;gap:4px 8px;padding:8px 0;border-bottom:1px solid var(--line)}.prices tr td{border:none!important}.prices tr td.muted{grid-column:1/-1}.prices td.pr-foot{grid-column:1/-1}
   fieldset.st-full .st-g{grid-template-columns:minmax(0,1fr)}
@@ -727,13 +654,9 @@ html.lite .panel,html.lite .ct,html.lite .alt-grid>div,html.lite .rx-c,html.lite
   .rt-h{display:none}.rt-row{grid-template-columns:minmax(0,1fr) minmax(0,1fr);row-gap:4px;column-gap:14px}.rt-n{font-size:.78rem}.rt-t{grid-column:1/-1}.rt-d{grid-column:1/-1;text-align:left}
   .rt-n{text-align:left}.rt-n::before{display:block;font-size:.68rem;color:var(--dim);font-weight:400;text-transform:uppercase;letter-spacing:.5px}
   .rt-row .rt-n:nth-child(2)::before{content:"Reprocesado"}.rt-row .rt-n:nth-child(3)::before{content:"Sin reprocesar"}
-  .v-stats{grid-template-columns:1fr 1fr!important}.v-stats>div:last-child{grid-column:1/-1!important}.fb-v{margin-left:0;flex-basis:100%}
   .scn{grid-template-columns:minmax(0,1fr)}
   body::before{opacity:.7}.rep-sc .amt{text-align:left;margin-left:21px}
   .receipt.rep li.rep-it{grid-template-areas:"pill amt" "who who" "sc sc";grid-template-columns:minmax(0,1fr) auto}.receipt.rep li.rep-it>.rep-sc{grid-area:sc}.receipt.rep li.rep-it>.amt{grid-area:amt}
-  .v-stats{grid-template-columns:1fr 1fr}.v-stats>div:last-child{grid-column:1/-1}
-  .v-top{grid-template-columns:minmax(0,1fr);gap:18px}
-  .alt-grid{grid-template-columns:minmax(0,1fr)}
   .pl-head{display:flex!important;flex-wrap:wrap;gap:6px;padding:8px 12px!important}.pl-head .srt{padding:3px 8px;border:1px solid var(--line2);border-radius:999px;text-align:center!important;font-size:.68rem}
   .pl-row{grid-template-columns:minmax(0,1fr) auto;grid-template-areas:"n q" "p a";row-gap:6px;padding:10px 14px}
   .pl-row>.n{grid-area:n}.pl-row>.q{grid-area:q}.pl-row>.p{grid-area:p;text-align:left}.pl-row>.a{grid-area:a}
@@ -742,10 +665,6 @@ html.lite .panel,html.lite .ct,html.lite .alt-grid>div,html.lite .rx-c,html.lite
   .pl-row.cost,.pl-row.miss{grid-template-areas:"n a"}
   .pl-row.cost>.q,.pl-row.cost>.p,.pl-row.miss>.q,.pl-row.miss>.p{display:none}
   details.thin>summary .status{margin-left:0;flex-basis:100%}
-
-  .ship-t thead{display:none}
-  .ship-t tr{display:grid;grid-template-columns:minmax(0,1fr) auto;column-gap:10px;padding:8px 4px;border-bottom:1px solid var(--line)}
-  .ship-t td{border:none!important;padding:2px 6px!important;min-width:0;overflow-wrap:anywhere}
 
   .ledger-head{display:none}
   .lot-head{grid-template-columns:minmax(0,1fr) auto 22px;grid-template-areas:"name name chev" "qty net chev" "pp dest chev";row-gap:4px}
@@ -766,7 +685,7 @@ html.lite .panel,html.lite .ct,html.lite .alt-grid>div,html.lite .rx-c,html.lite
   .receipt li>.amt{text-align:left}.receipt li>.amt small{text-align:left;display:inline;margin-left:8px}
   .receipt li>:nth-child(1){grid-area:pill;justify-self:start}.receipt li>:nth-child(2){grid-area:who}.receipt li>:nth-child(3){grid-area:amt}
   .title{gap:14px}.logo-l{width:60px;height:60px}
-  .top{padding:14px 16px}.brand small{display:none}.brand{font-size:.95rem}.who{display:none}
+  .top{padding:14px 16px}.brand small{display:none}.brand{font-size:.95rem}
   body::before{background-position:32% 0;background-size:auto 75vh}
   .lot.open{margin:8px -4px;padding:0 4px}
   .panel{padding:18px}
@@ -790,7 +709,7 @@ html.lite .panel,html.lite .ct,html.lite .alt-grid>div,html.lite .rx-c,html.lite
 @media(max-width:860px){.hero-intro{grid-template-columns:minmax(0,1fr)}.start-note{max-width:100%}}
 @media(max-width:480px){.hero-intro{gap:10px}.start-note{padding:10px}.start-note-actions button{flex:1}}
 
-/* =============== v103: Tus Ítems, Ajustes y Guía de Uso ===============
+/* =============== v103: Listado de Items Registrados, Ajustes y Guía de Uso ===============
    Overrides al FINAL del CSS; no cambian los estilos del motor ni los cálculos.
    La tarjeta Buyback tenía 4 columnas forzadas dentro de un fieldset: las entradas
    de texto se comprimían y se desbordaban. Usamos 2 columnas responsivas. */
@@ -835,7 +754,7 @@ body::after{background:none}
 details.panel>summary h2::before{color:var(--dim)}
 details.panel>summary .sum,.cnt{font:500 .95rem var(--f-ui);color:var(--mut)}
 .sub-h,.ce-h .sub-h{font:600 1rem var(--f-ui);color:var(--txt);text-transform:none;letter-spacing:0}
-h2 .ic,.sub-h .ic,.summary h2 .ic,fieldset.st legend .ic,.fb-h .ic,.rx-call .ic,.receipt .rw .reco .ic{color:var(--mut)}
+h2 .ic,.sub-h .ic,.summary h2 .ic,fieldset.st legend .ic,.rx-call .ic,.receipt .rw .reco .ic{color:var(--mut)}
 .panel .lead,.v-hint,.sh-none,.scn-v,.rguide,.pk-note,.ledger-tools .lead{font-family:var(--f-serif);color:#e5e3da;font-size:1.03rem;line-height:1.6}
 .pk-note b{color:var(--txt);font-weight:600}
 .note,.sh-rates,.st-i,.st-f small,small{color:#b0ada4}
@@ -861,7 +780,7 @@ input:focus,select:focus,textarea:focus{border-color:rgba(222,220,209,.4);box-sh
 .lot.open .lot-head,.lot-head:hover{background:rgba(222,220,209,.04)}
 .brand{font:600 1.05rem var(--f-ui);letter-spacing:.2px}
 b,strong{font-weight:600}
-/* quitar ítem del lote */
+/* quitar item del lote */
 .lot{display:grid;grid-template-columns:minmax(0,1fr) 36px;align-items:start}
 .lot-head{grid-column:1}.lot-body{grid-column:1/-1}
 .lot-x{grid-column:2;grid-row:1;align-self:center;width:28px;height:28px;border-radius:8px;display:grid;place-items:center;color:var(--dim);opacity:.55;transition:opacity .12s,background .12s,color .12s}
@@ -872,7 +791,6 @@ b,strong{font-weight:600}
 .undo .ghost{margin-left:auto;padding:5px 14px}
 @media(hover:none){.lot-x{opacity:.9}}
 @media(max-width:600px){.ledger-head{padding-right:14px}.lot-x{align-self:start;margin-top:12px}}
-html.lite body::before{opacity:0}
 .pk-t small{background:none;border:0;padding:0;color:var(--dim)}
 .hero h1{font:500 clamp(2.1rem,4.6vw,3.3rem)/1.1 var(--f-serif);letter-spacing:0;text-transform:none}
 .hero>p,.hero .tagline,.hero p{font-family:var(--f-serif);color:#e5e3da;font-size:1.1rem}
@@ -885,7 +803,6 @@ body::before{opacity:.42;filter:saturate(.55) brightness(.75)}
 body::after{background:
   radial-gradient(120% 95% at 50% 40%,rgba(20,19,18,0) 35%,rgba(20,19,18,.55) 75%,rgba(14,13,12,.92) 100%),
   linear-gradient(180deg,rgba(38,38,36,.35),rgba(38,38,36,.55))}
-html.lite body::before{opacity:.3}
 /* números: vuelve la fuente anterior */
 :root{--f-num:"Bahnschrift","DIN Alternate","DIN 2014","Roboto Condensed","Arial Narrow",system-ui,sans-serif}
 .num,.sh-big,.pk-v,.ct-s,.v-isk,#resIsk{font-family:var(--f-num)}
@@ -920,7 +837,6 @@ html.lite body::before{opacity:.3}
 /* 1.0.2: fondo al 91% y viñeta suave solo en los bordes; título en mayúsculas */
 body::before{opacity:.91;filter:none}
 body::after{background:radial-gradient(130% 100% at 50% 40%,rgba(14,13,12,0) 55%,rgba(14,13,12,.45) 85%,rgba(10,9,8,.8) 100%)}
-html.lite body::before{opacity:.91}
 .hero h1{text-transform:uppercase;letter-spacing:.04em}
 .hero h1,.hero p,.hero .tagline,.top .brand,.foot-by{text-shadow:0 1px 3px rgba(0,0,0,.95),0 2px 14px rgba(0,0,0,.75)!important}
 /* "Antes de empezar" con el mismo formato que el anuncio de Skill Points */
@@ -933,23 +849,20 @@ html.lite body::before{opacity:.91}
 .start-note-actions button{border:1px solid rgba(217,119,87,.55);color:#f3e6c8;background:rgba(217,119,87,.08)}
 .start-note-actions button:hover{background:rgba(217,119,87,.2);border-color:#d97757}
 /* 1.0.3: #151515 para las tarjetas dentro de los paneles (con la misma profundidad que las tarjetas de plan) */
-.ct,.sh-card,.sh-kpi>div,.sh-tips li,.scn>div,.ct-sum,fieldset.st,.hp-c,.undo,.ct-items,.rx>div,.rx-c,.pod,.call,.paste,.v-stats>div,.alt-grid>div{background:#151515!important;border-color:rgba(222,220,209,.09)!important}
-.ct,.sh-card,.scn>div,fieldset.st,.hp-c,.ct-sum,.paste,.v-stats>div,.alt-grid>div{box-shadow:0 1px 0 rgba(255,255,255,.04) inset,0 2px 4px rgba(0,0,0,.45),0 8px 18px rgba(0,0,0,.3)!important}
+.ct,.sh-card,.sh-kpi>div,.sh-tips li,.scn>div,.ct-sum,fieldset.st,.hp-c,.undo,.ct-items,.rx>div,.rx-c,.pod,.call,.paste{background:#151515!important;border-color:rgba(222,220,209,.09)!important}
+.ct,.sh-card,.scn>div,fieldset.st,.hp-c,.ct-sum,.paste{box-shadow:0 1px 0 rgba(255,255,255,.04) inset,0 2px 4px rgba(0,0,0,.45),0 8px 18px rgba(0,0,0,.3)!important}
 .ct-items,.sh-kpi>div,.sh-tips li{background:#1c1b1a!important}
 .sh-tips li{border-color:rgba(222,220,209,.08)!important}
-html.lite .ct,html.lite .sh-card,html.lite .scn>div,html.lite fieldset.st,html.lite .hp-c,html.lite .ct-sum,html.lite .paste{box-shadow:none!important}
 /* 1.0.4: la fuente de números (Bahnschrift) solo para números; todo texto con la fuente de la interfaz */
-.brand,.tagline,legend,fieldset.st legend,.hp-c h3,.call b,.rx-fh,.scn h4,.copy,.ct-f td.r>span,.ct-f td.r .copy,.cz-pos,.pod-v,.fb-v,.rx-big,.foot-by .ver,.opt-v,.fact b,.receipt .amt,.guide li::before{font-family:var(--f-ui)!important}
+.brand,.tagline,legend,fieldset.st legend,.hp-c h3,.call b,.rx-fh,.scn h4,.copy,.ct-f td.r>span,.ct-f td.r .copy,.cz-pos,.pod-v,.rx-big,.foot-by .ver,.opt-v,.fact b,.receipt .amt,.guide li::before{font-family:var(--f-ui)!important}
 .copy.cp-n,.ct-f td.r>span.cp-n,.ct-f td.r .copy.cp-n,.scn h4 b,.lot-qty,.lot-net,td.r .num{font-family:var(--f-num)!important}
 /* v1.0.5: ruta / flip */
 .route{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:12px}
-.route-l{font-size:.9rem;color:var(--mut);text-shadow:0 1px 3px rgba(0,0,0,.9)}
 .route-b{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border-radius:10px;background:#151515;border:1px solid rgba(222,220,209,.14);color:var(--txt);font-weight:600;
   box-shadow:0 1px 0 rgba(255,255,255,.04) inset,0 2px 4px rgba(0,0,0,.45),0 8px 18px rgba(0,0,0,.3);transition:border-color .12s,background .12s}
 .route-b:hover{border-color:rgba(217,119,87,.6)}
 .route-ar{color:var(--clay)}
 .route-ic{width:16px;height:16px;margin-left:4px;background:var(--mut);-webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M7 4L3 8l4 4M3 8h14M17 20l4-4-4-4M21 16H7'/%3E%3C/svg%3E") center/contain no-repeat;mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M7 4L3 8l4 4M3 8h14M17 20l4-4-4-4M21 16H7'/%3E%3C/svg%3E") center/contain no-repeat}
-.route-tx{font-size:.82rem;font-weight:500;color:var(--mut)}
 .route-b[aria-pressed="true"]{border-color:var(--clay);background:#1c1a19;box-shadow:0 0 0 1px var(--clay),0 8px 18px rgba(0,0,0,.3)}
 .route-m{display:inline-flex;align-items:center;gap:6px;font-size:.9rem;color:#e5e3da;text-shadow:0 1px 3px rgba(0,0,0,.9)}
 .route-m input{width:70px;padding:5px 8px;text-align:right}
@@ -978,7 +891,7 @@ html.lite .ct,html.lite .sh-card,html.lite .scn>div,html.lite fieldset.st,html.l
 .hero .paste{margin-top:18px}
 @media(max-width:980px){.hero-intro{grid-template-columns:minmax(0,1fr)!important}}
 /* v1.0.45: Tasación a la izquierda (como Janice) y Skill Points + Antes de empezar compactos a la derecha. Sin «Qué hace».
-   Sin ítems pegados la Tasación se oculta y las dos tarjetas ocupan todo el ancho. */
+   Sin items pegados la Tasación se oculta y las dos tarjetas ocupan todo el ancho. */
 .hero-intro{grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important} /* v1.0.47: mitad y mitad */
 .hero-intro.no-appr{grid-template-columns:minmax(0,1fr)!important}
 /* v1.0.53: «Gratis» y «Antes de empezar» en una sola tarjeta (separadas por una línea) */
@@ -1028,7 +941,7 @@ html.lite .ct,html.lite .sh-card,html.lite .scn>div,html.lite fieldset.st,html.l
 /* v1.0.50: desglose abierto = el Resultado queda en su cabecera (números) y el botón; los planes se pliegan */
 #pSum .more-btn{margin-top:8px}
 #pSum.res-min .pk-w,#pSum.res-min #flipBuy{display:none!important}
-/* v1.0.51: títulos en mayúsculas; «Tus Ítems» plegado con el estilo del plan elegido y «Ver el desglose» */
+/* v1.0.51: títulos en mayúsculas; «Listado de Items Registrados» plegado con el estilo del plan elegido y «Ver el desglose» */
 .h-caps{text-transform:uppercase;letter-spacing:.05em}
 #ledger>summary{align-items:center}
 #ledger>summary h2{margin:0;line-height:1.2}
@@ -1052,6 +965,9 @@ html.lite .ct,html.lite .sh-card,html.lite .scn>div,html.lite fieldset.st,html.l
 .hero-side>.ref .ref-t{font:500 1.22rem/1.35 var(--f-ui);color:#f6d9c8;text-shadow:0 0 18px rgba(217,119,87,.25)}
 .hero-side>.ref .ref-t b{color:#ffb48f;font-weight:700}
 .hero-side>.ref:hover .ref-t{text-decoration:underline;text-decoration-color:rgba(255,180,143,.5);text-underline-offset:3px}
+/* v1.0.56: el texto pequeño del Resultado alineado con el título (después del ícono) */
+#pSum .res-top{padding-left:35px}
+@media(max-width:600px){#pSum .res-top .res-big .num{font-size:1.5rem}}
 /* interruptores del menú (Courier, tema) */
 .sw{display:inline-flex;align-items:center;gap:8px;cursor:pointer;font-size:.9rem;color:#e5e3da;text-shadow:0 1px 3px rgba(0,0,0,.9);padding:6px 10px;border-radius:10px;background:rgba(21,21,21,.75);border:1px solid rgba(222,220,209,.12)}
 .sw input{position:absolute;opacity:0;width:1px;height:1px}
@@ -1060,7 +976,6 @@ html.lite .ct,html.lite .sh-card,html.lite .scn>div,html.lite fieldset.st,html.l
 .sw input:checked+.sw-t{background:var(--clay);border-color:var(--clay)}
 .sw input:checked+.sw-t::after{transform:translateX(14px);background:#fff}
 .sw input:focus-visible+.sw-t{outline:2px solid #d6d4cb;outline-offset:2px}
-html.lite .sw-t,html.lite .sw-t::after{transition:none}
 .route-m{padding:4px 6px 4px 10px;border-radius:10px;background:rgba(21,21,21,.75);border:1px solid rgba(222,220,209,.12)}
 /* v1.0.8: Ajustes y Guía de Uso arriba, con X fija y secciones desplegables */
 .top-slot{margin-top:18px;display:grid;gap:14px}
@@ -1087,7 +1002,6 @@ html.lite .sw-t,html.lite .sw-t::after{transition:none}
 .st-tools .ghost{padding:5px 12px;font-size:.84rem}
 /* v1.0.8: viñeta negra sobre la imagen de fondo (modo normal); en Modo ligero no hay viñeta */
 body::after{background:radial-gradient(120% 95% at 50% 42%,rgba(0,0,0,0) 38%,rgba(0,0,0,.5) 72%,rgba(0,0,0,.92) 100%)!important}
-html.lite body::after{background:none!important}
 /* v1.0.8: precio por unidad en la fila (copiable) */
 .lot-head{cursor:pointer}
 .lot-head:focus-visible{outline:2px solid #d6d4cb;outline-offset:-2px}
@@ -1111,9 +1025,7 @@ body::after{background:
   radial-gradient(ellipse 88% 82% at 50% 45%,rgba(0,0,0,0) 48%,rgba(0,0,0,.42) 76%,rgba(0,0,0,.88) 100%),
   linear-gradient(90deg,rgba(0,0,0,.6) 0%,rgba(0,0,0,0) 15%,rgba(0,0,0,0) 85%,rgba(0,0,0,.6) 100%),
   linear-gradient(180deg,rgba(0,0,0,.35) 0%,rgba(0,0,0,0) 12%,rgba(0,0,0,0) 82%,rgba(0,0,0,.55) 100%)!important}
-html.lite body::after{background:none!important}
 /* Modo ligero: la imagen no es fija; se desvanece abajo para no cortarse de golpe (oscuro y claro) */
-html.lite body::before{-webkit-mask-image:linear-gradient(to bottom,#000 0%,#000 50%,transparent 100%);mask-image:linear-gradient(to bottom,#000 0%,#000 50%,transparent 100%)}
 /* v1.0.10: barra de opciones unificada (ruta + interruptores), todo a la misma altura y con divisores */
 .route{display:inline-flex!important;flex-wrap:wrap;align-items:stretch;gap:0!important;margin-top:14px;padding:4px;border-radius:12px;
   background:rgba(21,21,21,.88);border:1px solid rgba(222,220,209,.12);box-shadow:0 2px 4px rgba(0,0,0,.45),0 8px 18px rgba(0,0,0,.3)}
@@ -1185,7 +1097,7 @@ body.side-c .side-top{justify-content:center;padding:0 0 6px}
 /* barra de arriba: solo íconos */
 /* paleta: paneles gris-negro translúcidos, bordes finos, tarjetas internas apenas más claras */
 .panel{background:var(--glass)!important;border:1px solid var(--edge)!important;border-radius:14px!important;box-shadow:0 2px 4px rgba(0,0,0,.45),0 10px 24px rgba(0,0,0,.32)!important}
-.ct,.sh-card,.sh-kpi>div,.scn>div,.ct-sum,fieldset.st,.hp-c,.undo,.rx>div,.rx-c,.pod,.call,.v-stats>div,.alt-grid>div,.pk-o,.fb2,.fb2-l>div,.ct-items{background:var(--glass2)!important;border:1px solid rgba(222,220,209,.09)!important;box-shadow:none!important}
+.ct,.sh-card,.sh-kpi>div,.scn>div,.ct-sum,fieldset.st,.hp-c,.undo,.rx>div,.rx-c,.pod,.call,.pk-o,.fb2,.fb2-l>div,.ct-items{background:var(--glass2)!important;border:1px solid rgba(222,220,209,.09)!important;box-shadow:none!important}
 .paste{background:var(--glass)!important;border:1px solid var(--edge)!important}
 input,select,textarea{background:rgba(0,0,0,.35)!important;border-color:rgba(222,220,209,.14)!important}
 .copy{background:rgba(255,255,255,.05)!important;border-color:rgba(222,220,209,.14)!important}
@@ -1200,7 +1112,6 @@ input,select,textarea{background:rgba(0,0,0,.35)!important;border-color:rgba(222
   .side-fab{display:inline-grid;position:fixed;left:10px;top:10px;z-index:58;background:var(--glass);border:1px solid var(--edge)}
   .top{padding-left:58px}
 }
-html.lite .side{box-shadow:none}html.lite body,html.lite .side{transition:none}
 .sk-note{font-size:.8rem!important;line-height:1.4!important;margin-bottom:4px!important}
 @media(max-width:900px){.side{top:0;height:100%;padding-top:12px}}
 
@@ -1236,8 +1147,6 @@ html.lite .side{box-shadow:none}html.lite body,html.lite .side{transition:none}
 #settings>h2 .ic{color:#d97757}
 #settings .st-tools .ghost{background:linear-gradient(180deg,#232322,#171717);border-color:rgba(222,220,209,.14);box-shadow:inset 0 1px 0 rgba(255,255,255,.06),0 2px 5px rgba(0,0,0,.45)}
 #settings .st-tools .ghost:hover{border-color:#d97757;color:#fff}
-html.lite #settings fieldset.st,html.lite #settings .st-f{box-shadow:none!important;transition:none}
-html.lite #settings fieldset.st:not(.closed){box-shadow:inset 3px 0 0 #d97757!important}
 
 /* v1.0.13: campos enlazados y campos que no aplican */
 #settings .st-calc{color:#e8a588!important;font-variant-numeric:tabular-nums}
@@ -1247,7 +1156,6 @@ html.lite #settings fieldset.st:not(.closed){box-shadow:inset 3px 0 0 #d97757!im
 #settings .st-f.st-off::after{content:attr(data-why);font-size:.74rem;color:#e0a84f;margin-top:2px}
 #settings .st-f.st-flash{animation:stFlash .9s ease}
 @keyframes stFlash{0%{box-shadow:0 0 0 2px rgba(217,119,87,.75)}100%{box-shadow:0 0 0 2px rgba(217,119,87,0)}}
-html.lite #settings .st-f.st-flash{animation:none}
 
 /* ================= v1.0.19: Pasos para Vender ================= */
 #stepHead .stp-top{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap;color:var(--dim);font-size:.9rem}
@@ -1276,7 +1184,6 @@ html.lite #settings .st-f.st-flash{animation:none}
 .pl-moreb{display:block;width:100%;padding:10px;border:0;border-top:1px dashed rgba(222,220,209,.18);background:rgba(255,255,255,.02);color:var(--mut);font-weight:600;font-size:.88rem;cursor:pointer}
 .pl-moreb:hover{background:rgba(217,119,87,.08);color:#fff}
 @media(max-width:700px){.stp{grid-template-columns:30px minmax(0,1fr);padding:14px 12px}.stp-a{grid-column:2;text-align:left}.stp>.stp-acts,.stp>.stp-f,.stp>.pl,.stp>.stp-icons{grid-column:1/-1}}
-html.lite .stp{box-shadow:none}
 
 /* ================= v1.0.20/21: Elige un Plan en filas, con columnas y filtros ================= */
 #pk.pk,.pk{display:flex!important;flex-direction:column;gap:6px;grid-template-columns:none!important}
@@ -1288,7 +1195,6 @@ html.lite .stp{box-shadow:none}
 .pk-hc.c0{grid-column:1/3}.pk-hc.c4,.pk-hc.c5{text-align:right}
 .pk .pk-o{width:100%;padding:10px 14px!important;border-radius:10px!important;text-align:left;transform:none!important;color:inherit;font:inherit;cursor:pointer;
   background:linear-gradient(180deg,#1b1b1a,#141414);border:1px solid rgba(222,220,209,.09);box-shadow:inset 0 1px 0 rgba(255,255,255,.04),0 2px 4px rgba(0,0,0,.4);transition:border-color .15s,background .15s}
-html.lite .pk .pk-o{box-shadow:none;transition:none}
 .pk .pk-o:hover{transform:none!important;border-color:rgba(222,220,209,.24)!important}
 .pk-dot{width:16px;height:16px;border-radius:50%;border:1.5px solid rgba(222,220,209,.35);box-shadow:inset 0 1px 2px rgba(0,0,0,.6);position:relative}
 .pk-o.on .pk-dot{border-color:#d97757}.pk-o.on .pk-dot::after{content:"";position:absolute;inset:3px;border-radius:50%;background:#d97757;box-shadow:0 0 6px rgba(217,119,87,.7)}
@@ -1324,7 +1230,7 @@ html.lite .pk .pk-o{box-shadow:none;transition:none}
   .pk-sp{grid-column:2;grid-row:3}.pk-sh{display:none}
   .pk-bar{grid-column:2;grid-row:2;align-self:center}.pk .pk-o .pk-v{grid-column:3;grid-row:2;font-size:.92rem}.pk .pk-o .pk-d{grid-column:3;grid-row:3}}
 
-/* v1.0.22: ítems ya en Jita (ruta normal, envío apagado): sin reproceso, contratos ni jugadores */
+/* v1.0.22: items ya en Jita (ruta normal, envío apagado): sin reproceso, contratos ni jugadores */
 body.in-jita #bMore,body.in-jita #more,body.in-jita #vRep,body.in-jita .if-ore{display:none!important}
 
 /* ================= v1.0.22: resumen del plan (overview) ================= */
@@ -1361,9 +1267,8 @@ body.in-jita #bMore,body.in-jita #more,body.in-jita #vRep,body.in-jita .if-ore{d
 .ov-mk-n{margin-top:8px;font-size:.86rem;color:var(--mut)}.ov-mk-n b{color:#e8a588}
 @media(max-width:900px){.ov-row{grid-template-columns:minmax(0,1fr)}}
 @media(max-width:520px){.ov-hd{flex-direction:column;align-items:flex-start}.ov-hd .v-isk{font-size:2rem}.ov-kpi{grid-template-columns:minmax(0,1fr)}.ov-mk-l b{font-size:.8rem}.ov-card{padding:12px}}
-html.lite .ov-card,html.lite .ov-kpi>div{box-shadow:none}
 </style>
-<script>/* v1.0.16: aplica tema y Modo Ligero guardados antes de pintar (sin parpadeo). Por defecto: Dark, sin Modo Ligero. */try{var g=JSON.parse(localStorage.getItem('gestorVentas.ajustes.v1')||'null');if(g&&g.ui){if(g.ui.light)document.documentElement.classList.add('light');if(g.ui.lite)document.documentElement.classList.add('lite');}}catch(e){}</script>
+<script>/* v1.0.16: aplica el tema guardado antes de pintar (sin parpadeo). Por defecto: Dark. */try{var g=JSON.parse(localStorage.getItem('gestorVentas.ajustes.v1')||'null');if(g&&g.ui){if(g.ui.light)document.documentElement.classList.add('light');}}catch(e){}</script>
 </head>
 <body class="side-c">
 <!-- v1.0.11: menú lateral (como Claude): se expande y se contrae; opciones de cálculo, Ajustes y Guía de Uso -->
@@ -1376,8 +1281,7 @@ html.lite .ov-card,html.lite .ov-kpi>div{box-shadow:none}
   <div class="route" id="route">
     <button type="button" class="route-b" id="bFlip" aria-pressed="false" title="Ruta del lote. HY-RWO → Jita: vendes lo que tienes en Null. Jita → HY-RWO: llevas (o compras) en Jita y vendes en Null más caro. Clic para invertir.">
       <span class="route-ic" aria-hidden="true"></span><span class="route-from" id="rtFrom">HY-RWO</span><span class="route-ar" aria-hidden="true">→</span><span class="route-to" id="rtTo">Jita</span></button>
-    <label class="sw" id="shipLab" hidden title="Solo con la ruta Jita → HY-RWO. On: llevas los ítems de Jita a HY-RWO con SIGMA Freight y se cuenta el courier. Off: los trajiste a Jita para venderlos allí, sin courier."><input type="checkbox" id="shipOn" checked><span class="sw-t" aria-hidden="true"></span><span id="shipTxt">Courier On</span></label>
-    <label class="sw" title="Modo Ligero: quita efectos visuales (fondo fijo, sombras, animaciones). Más fluido en PCs lentas y en Firefox."><input type="checkbox" id="liteOn"><span class="sw-t" aria-hidden="true"></span><span>Modo Ligero</span></label>
+    <label class="sw" id="shipLab" hidden title="Solo con la ruta Jita → HY-RWO. On: llevas los items de Jita a HY-RWO con SIGMA Freight y se cuenta el courier. Off: los trajiste a Jita para venderlos allí, sin courier."><input type="checkbox" id="shipOn" checked><span class="sw-t" aria-hidden="true"></span><span id="shipTxt">Courier On</span></label>
     <label class="sw" title="Tema de la página: Dark (oscuro) o Light (claro)."><input type="checkbox" id="themeLight"><span class="sw-t" aria-hidden="true"></span><span id="themeTxt">Dark</span></label>
     <label class="route-m" id="rtM" hidden>Margen +<input type="number" id="fImpM" min="0" step="0.5" value="15" aria-label="Margen al vender en HY-RWO, % neto sobre Jita Sell">% neto</label>
   </div>
@@ -1409,15 +1313,15 @@ html.lite .ov-card,html.lite .ov-kpi>div{box-shadow:none}
     <div class="st-tools"><button type="button" class="ghost" id="stOpenAll">Abrir Todo</button><button type="button" class="ghost" id="stCloseAll">Cerrar Todo</button><button type="button" class="ghost" id="stReset" title="Borra los Ajustes guardados en este navegador y vuelve a los valores de fábrica.">Restablecer</button></div>
     <div class="st-wrap">
       <div class="st-sec"><h3 class="st-sec-t">Idioma</h3><p class="st-sec-i">Idioma de la interfaz.</p></div>
-      <fieldset class="st"><legend><span class="ic i-help" aria-hidden="true"></span><span class="st-tt">Idioma de la App<small class="st-sum">Español o English</small></span></legend><p class="st-i">Cambia el idioma de toda la app. Los nombres de ítems y sistemas de EVE no cambian.</p><div class="st-g"><label class="st-f"><span class="st-l">Idioma / Language</span><select id="langSel" title="Idioma de la interfaz: Español o English."><option value="es" selected>Español</option><option value="en">English</option></select><small>Se guarda con tus Ajustes.</small></label></div></fieldset>
+      <fieldset class="st"><legend><span class="ic i-help" aria-hidden="true"></span><span class="st-tt">Idioma de la App<small class="st-sum">Español o English</small></span></legend><p class="st-i">Cambia el idioma de toda la app. Los nombres de items y sistemas de EVE no cambian.</p><div class="st-g"><label class="st-f"><span class="st-l">Idioma / Language</span><select id="langSel" title="Idioma de la interfaz: Español o English."><option value="es" selected>Español</option><option value="en">English</option></select><small>Se guarda con tus Ajustes.</small></label></div></fieldset>
       <div class="st-sec"><h3 class="st-sec-t">Tu Personaje</h3><p class="st-sec-i">Lo que sabe tu piloto: baja los taxes y sube lo que recuperas al reprocesar.</p></div>
       <fieldset class="st"><legend><span class="ic i-key" aria-hidden="true"></span><span class="st-tt">Tus Skills<small class="st-sum">Accounting, Broker Relations y reproceso de tu piloto</small></span></legend><p class="st-i">Selecciona tus niveles reales. Accounting afecta el Sales Tax; Broker Relations reduce costes de órdenes; las skills de reproceso determinan cuántos materiales recuperas.</p><div class="st-g"><label class="st-f"><span class="st-l">Accounting</span><select id="skAcc"><option value="0">Nivel 0</option><option value="1">Nivel 1</option><option value="2">Nivel 2</option><option value="3">Nivel 3</option><option value="4">Nivel 4</option><option value="5" selected>Nivel 5</option></select><small>Baja el Sales Tax: 7.5% × (1 − 0.11 × nivel). Se enlaza con Sales Tax %.</small></label><label class="st-f"><span class="st-l">Broker Relations</span><select id="skBR"><option value="0">Nivel 0</option><option value="1">Nivel 1</option><option value="2">Nivel 2</option><option value="3">Nivel 3</option><option value="4">Nivel 4</option><option value="5" selected>Nivel 5</option></select><small>Baja el Broker de Jita: 3% − 0.3% × nivel. Se enlaza con Broker en Jita % y los standings.</small></label><label class="st-f"><span class="st-l">Advanced Broker Relations</span><select id="cAbr"><option value="0" selected>Nivel 0</option><option value="1">Nivel 1</option><option value="2">Nivel 2</option><option value="3">Nivel 3</option><option value="4">Nivel 4</option><option value="5">Nivel 5</option></select><small>Abarata cada Relist (cambio de precio).</small></label><label class="st-f"><span class="st-l">Reprocessing</span><select id="skRep"><option value="0">Nivel 0</option><option value="1">Nivel 1</option><option value="2">Nivel 2</option><option value="3">Nivel 3</option><option value="4">Nivel 4</option><option value="5" selected>Nivel 5</option></select><small>+3% de rendimiento por nivel.</small></label><label class="st-f"><span class="st-l">Reprocessing Efficiency</span><select id="skRepE"><option value="0">Nivel 0</option><option value="1">Nivel 1</option><option value="2">Nivel 2</option><option value="3">Nivel 3</option><option value="4">Nivel 4</option><option value="5" selected>Nivel 5</option></select><small>+2% de rendimiento por nivel.</small></label><label class="st-f"><span class="st-l">Skill del ore o hielo</span><select id="skOre"><option value="0">Nivel 0</option><option value="1">Nivel 1</option><option value="2">Nivel 2</option><option value="3">Nivel 3</option><option value="4">Nivel 4</option><option value="5" selected>Nivel 5</option></select><small>Ice Processing, Simple Ore Processing, etc.: +2% por nivel.</small></label></div></fieldset>
       <div class="st-sec"><h3 class="st-sec-t">Impuestos y Precios</h3><p class="st-sec-i">Lo que se descuenta en cada venta y cómo se ajustan los precios de Jita antes de calcular.</p></div>
       <fieldset class="st"><legend><span class="ic i-scale" aria-hidden="true"></span><span class="st-tt">Impuestos<small class="st-sum">Sales Tax, Broker y SCC que se descuentan al vender</small></span></legend><p class="st-i">Estas tasas se descuentan de las ventas. Están enlazadas con Tus Skills y los standings: si cambias uno, el otro se ajusta solo. Lo más exacto es copiar los % que muestra el juego en la ventana de venta.</p><div class="st-g"><label class="st-f"><span class="st-l">Sales Tax %</span><input type="number" id="cTax" step="0.001" value="3.375"><small>Se cobra en toda venta de mercado (Null y Jita).</small></label><label class="st-f"><span class="st-l">Broker en Jita %</span><input type="number" id="cBroker" step="0.01" value="1.50"><small>Copia el «Broker's fee» que muestra el juego al vender en Jita (ej. 1.27%). Con standings es menor que 1.50%.</small><small class="st-calc" id="brkNote"></small></label><label class="st-f"><span class="st-l">Broker de tu estructura %</span><input type="number" id="cBrokerNull" step="0.01" value="1.00"><small>Lo que cobra el dueño de la estructura en Null.</small></label><label class="st-f"><span class="st-l">SCC %</span><input type="number" id="cScc" step="0.01" value="0.50"><small>Impuesto de CONCORD en estructuras (solo Null).</small></label><label class="st-f"><span class="st-l">Standing de facción (Jita)</span><input type="number" id="cStdFac" step="0.01" value="0"><small>Baja un poco el Broker de Jita (0.03% por punto).</small></label><label class="st-f"><span class="st-l">Standing de corp (Jita)</span><input type="number" id="cStdCorp" step="0.01" value="0"><small>Baja un poco el Broker de Jita (0.02% por punto).</small></label></div></fieldset>
-      <fieldset class="st"><legend><span class="ic i-scale" aria-hidden="true"></span><span class="st-tt">Ajuste de Precios<small class="st-sum">Margen de seguridad sobre los precios de Jita</small></span></legend><p class="st-i">Sube o baja los precios de Jita antes de calcular (positivo = más caro, negativo = más barato). Útil porque el mercado se mueve entre que pegas y vendes: mejor sorprenderse con más. También puedes poner un ajuste propio dentro de cada ítem; se suma a este.</p><div class="st-g"><label class="st-f"><span class="st-l">Venta rápida (Jita Buy) %</span><input type="number" id="cSkInst" step="0.01" value="-0.16"><small>Por defecto −0.16%: el juego suele pagar un poco más que lo calculado.</small></label><label class="st-f"><span class="st-l">Órdenes en Jita (Jita Sell) %</span><input type="number" id="cSkOrd" step="0.01" value="0"><small>Si sueles listar más barato para vender rápido, ponlo en negativo.</small></label><label class="st-f"><span class="st-l">Órdenes en Null %</span><input type="number" id="cSkNul" step="0.01" value="0"><small>Para el precio de venta en HY-RWO.</small></label></div></fieldset>
+      <fieldset class="st"><legend><span class="ic i-scale" aria-hidden="true"></span><span class="st-tt">Ajuste de Precios<small class="st-sum">Margen de seguridad sobre los precios de Jita</small></span></legend><p class="st-i">Sube o baja los precios de Jita antes de calcular (positivo = más caro, negativo = más barato). Útil porque el mercado se mueve entre que pegas y vendes: mejor sorprenderse con más. También puedes poner un ajuste propio dentro de cada item; se suma a este.</p><div class="st-g"><label class="st-f"><span class="st-l">Venta rápida (Jita Buy) %</span><input type="number" id="cSkInst" step="0.01" value="-0.16"><small>Por defecto −0.16%: el juego suele pagar un poco más que lo calculado.</small></label><label class="st-f"><span class="st-l">Órdenes en Jita (Jita Sell) %</span><input type="number" id="cSkOrd" step="0.01" value="0"><small>Si sueles listar más barato para vender rápido, ponlo en negativo.</small></label><label class="st-f"><span class="st-l">Órdenes en Null %</span><input type="number" id="cSkNul" step="0.01" value="0"><small>Para el precio de venta en HY-RWO.</small></label></div></fieldset>
       <fieldset class="st"><legend><span class="ic i-list" aria-hidden="true"></span><span class="st-tt">Órdenes de Venta<small class="st-sum">Undercut, relists y cuándo conviene vender al instante</small></span></legend><p class="st-i">Ajusta el undercut, los relists y cuándo priorizar una venta rápida frente a una sell order.</p><div class="st-g"><label class="st-f"><span class="st-l">Undercut en Jita (ticks)</span><input type="number" id="cUnderTk" step="1" min="0" value="1"><small>Tu orden queda este número de ticks por debajo de la venta más barata. 1 tick = el mínimo que EVE deja bajar (4 cifras).</small></label><label class="st-f"><span class="st-l">Ignorar órdenes cebo (ticks)</span><input type="number" id="cBaitTk" step="1" min="0" value="5"><small>Revisa las 5 ventas más baratas: salta hasta 3 que estén más de estos ticks debajo de la siguiente (menos las de mucha cantidad) y confirma el precio con la siguiente. Si no se confirma, usa la más barata. 0 lo apaga.</small></label><label class="st-f"><span class="st-l">Vender al instante si la diferencia es ≤ (ticks)</span><input type="number" id="cSpreadTk" step="1" min="0" value="2"><small>Si tu precio de orden queda a estos ticks o menos de la mejor compra, el plan vende al instante: casi el mismo ISK, sin esperar. 0 lo apaga.</small></label><label class="st-f"><span class="st-l">Undercut % (Null y hielo)</span><input type="number" id="cUnder" step="0.05" min="0" value="0.1"><small>Para el precio que ves en Null y la orden de hielo en Jita.</small></label><label class="st-f"><span class="st-l">Relists esperados</span><input type="number" id="cRelists" step="1" min="0" value="1"><small>Cantidad de modificaciones de precio previstas. Solo se descuentan si activas «Relists» en el análisis.</small></label><label class="st-f"><span class="st-l">Orden vs venta al instante (ISK)</span><input type="number" id="cUmbral" step="100000" value="1000000"><small>Ganancia adicional mínima en ISK para preferir una sell order frente a vender a buy orders.</small></label><label class="st-f"><span class="st-l">Preferir Jita por rapidez %</span><input type="number" id="cFast" step="0.5" min="0" value="5"><small>Permite priorizar Jita cuando la diferencia neta está dentro del porcentaje indicado. 0 desactiva esta preferencia.</small></label><label class="st-f st-ck"><span class="st-l"><input type="checkbox" id="qdOn" checked> Descuento por cantidad</span><small>Solo para vender en Null: más de 1,000 u. bajan el precio por tramos (no aplica al hielo). En Jita no se aplica.</small></label><label class="st-f"><span class="st-l">Descuento máximo %</span><input type="number" id="qdMax" step="0.5" min="0" value="5"><small>Tope del descuento (0.2% · 0.02% · 0.002% por cada 1,000 u.).</small></label><label class="st-f st-ck"><span class="st-l"><input type="checkbox" id="cTick" checked> Redondear precios a 4 cifras</span><small>Ajusta los precios al tick permitido por el mercado de EVE (4 cifras significativas).</small></label></div></fieldset>
       <div class="st-sec"><h3 class="st-sec-t">Dónde Vendes</h3><p class="st-sec-i">Las reglas de cada destino del plan: Null, hielo, Buyback y jugadores.</p></div>
-      <fieldset class="st"><legend><span class="ic i-target" aria-hidden="true"></span><span class="st-tt">Precios en Null<small class="st-sum">Cómo se calcula tu precio de venta en HY-RWO</small></span></legend><p class="st-i">Define cómo estimar tus sell orders en Nullsec. Se parte de Jita Buy salvo que hayas indicado un precio local concreto para el ítem.</p><div class="st-g"><label class="st-f"><span class="st-l">Lo que no es módulo, % de Jita Buy</span><input type="number" id="cNonMod" step="1" min="0" max="200" value="90"><small>Ore, minerales, productos del hielo e isótopos, PI y demás.</small></label><label class="st-f"><span class="st-l">Módulos: margen sobre Jita Buy %</span><input type="number" id="cMargin" step="0.5" value="0"><small>0 = a Jita Buy. Súbelo solo si te pagan más.</small></label><label class="st-f"><span class="st-l">Días para vender en Null</span><input type="number" id="cNullDays" step="1" min="0" value="7"><small>Para el tiempo estimado (lo que no es hielo).</small></label><label class="st-f"><span class="st-l">Costo de producción % (si lo fabricaste)</span><input type="number" id="cProd" step="0.5" value="0"><small>Si fabricaste el ítem: % del valor que te costó.</small></label></div></fieldset>
+      <fieldset class="st"><legend><span class="ic i-target" aria-hidden="true"></span><span class="st-tt">Precios en Null<small class="st-sum">Cómo se calcula tu precio de venta en HY-RWO</small></span></legend><p class="st-i">Define cómo estimar tus sell orders en Nullsec. Se parte de Jita Buy salvo que hayas indicado un precio local concreto para el item.</p><div class="st-g"><label class="st-f"><span class="st-l">Lo que no es módulo, % de Jita Buy</span><input type="number" id="cNonMod" step="1" min="0" max="200" value="90"><small>Ore, minerales, productos del hielo e isótopos, PI y demás.</small></label><label class="st-f"><span class="st-l">Módulos: margen sobre Jita Buy %</span><input type="number" id="cMargin" step="0.5" value="0"><small>0 = a Jita Buy. Súbelo solo si te pagan más.</small></label><label class="st-f"><span class="st-l">Días para vender en Null</span><input type="number" id="cNullDays" step="1" min="0" value="7"><small>Para el tiempo estimado (lo que no es hielo).</small></label><label class="st-f"><span class="st-l">Costo de producción % (si lo fabricaste)</span><input type="number" id="cProd" step="0.5" value="0"><small>Si fabricaste el item: % del valor que te costó.</small></label></div></fieldset>
       <fieldset class="st"><legend><span class="ic i-flask" aria-hidden="true"></span><span class="st-tt">Hielo<small class="st-sum">Reglas especiales para el hielo sin reprocesar</small></span></legend><p class="st-i">Estas reglas afectan al hielo sin reprocesar. Heavy Water, Liquid Ozone, Strontium Clathrates e isótopos usan las reglas generales de productos.</p><div class="st-g"><label class="st-f st-ck"><span class="st-l"><input type="checkbox" id="iceOn" checked> Reglas especiales para hielo</span><small>Si lo apagas, el hielo se trata como lo demás.</small></label><label class="st-f"><span class="st-l">Precio en Null</span><select id="iceNull"><option value="jbuy" selected>Jita Buy menos un %</option><option value="jita">Precio de Jita, sin Margen</option><option value="margin">Con tu Margen, como lo demás</option></select><small>Cómo se calcula el precio del hielo en Null.</small></label><label class="st-f"><span class="st-l">Descuento sobre Jita Buy %</span><input type="number" id="iceDisc" step="0.5" min="0" value="2.5"><small>El Undercut típico del hielo en Null, antes de Taxes.</small></label><label class="st-f"><span class="st-l">Precio en Jita</span><select id="iceJita"><option value="under" selected>Undercut a Jita Sell</option><option value="split">Split (entre Buy y Sell)</option></select><small>A qué precio pones la orden en Jita.</small></label><label class="st-f"><span class="st-l">Días para vender en Null</span><input type="number" id="iceDays" step="1" min="0" value="14"><small>Cuánto tarda el hielo en salir allá.</small></label></div></fieldset>
       <fieldset class="st st-full"><legend><span class="ic i-target" aria-hidden="true"></span><span class="st-tt">Buyback de la Alianza<small class="st-sum">Tax del programa y datos del contrato</small></span></legend><p class="st-i">Configura las condiciones del Buyback de la alianza. La sección «Contratos y Envío» muestra los datos de cada Item Exchange.</p><div class="st-g"><label class="st-f st-ck"><span class="st-l"><input type="checkbox" id="bbOn" checked> Comparar con el Buyback</span><small>Agrega la opción Vender al Buyback.</small></label><label class="st-f"><span class="st-l">Programa</span><input type="text" id="bbName" value="MAYEM Corp Buyback"><small><button class="copy lnk" type="button" data-link="buyback">Abrir el Buyback</button> pide login en SIGMA Auth.</small></label><label class="st-f"><span class="st-l">Tax del programa %</span><input type="number" id="bbTax" step="0.5" value="5"><small>Porcentaje descontado del precio base antes de calcular lo que recibes.</small></label><label class="st-f"><span class="st-l">Precio base</span><select id="bbBase"><option value="buy" selected>Jita Buy</option><option value="split">Jita Split</option><option value="sell">Jita Sell</option></select><small>Sobre qué precio de Jita paga.</small></label><label class="st-f"><span class="st-l">Name</span><input type="text" id="bbAvail" value="Mayhem Pawn and Loan"><small>Personaje o corporación destinataria del contrato. Confírmalo en el programa de Buyback.</small></label><label class="st-f"><span class="st-l">Ubicación</span><input type="text" id="bbLoc" value="HY-RWO: Time Is A Flat Circle"><small>Dónde haces el contrato.</small></label><label class="st-f"><span class="st-l">Expiración</span><input type="text" id="bbExp" value="4 Weeks"><small>Duración del contrato.</small></label><label class="st-f"><span class="st-l">Descripción</span><input type="text" id="bbDesc" value="" placeholder="La que te da su página, ej. aa-bbp-…"><small>Copia aquí la descripción generada por la página del Buyback; no la inventes.</small></label><label class="st-f st-w"><span class="st-l">Taxes especiales</span><textarea id="bbSpecial" rows="4" spellcheck="false">Heavy Water = 75
 Liquid Ozone = 50
@@ -1433,17 +1337,17 @@ Contraband Freight = no</textarea><small>Una regla por línea: Nombre = tax tota
   <section class="panel" id="help" hidden>
     <div class="x-wrap"><button type="button" class="x-close" data-close="help" aria-label="Cerrar Guía de Uso" title="Cerrar Guía de Uso"></button></div>
     <h2><span class="ic i-help" aria-hidden="true"></span>Guía de Uso</h2>
-    <p class="lead">Del inventario al plan: copia tus ítems, revisa precios de Jita 4-4 y compara rutas de venta con las deducciones configuradas. No hace falta iniciar sesión.</p>
+    <p class="lead">Del inventario al plan: copia tus items, revisa precios de Jita 4-4 y compara rutas de venta con las deducciones configuradas. No hace falta iniciar sesión.</p>
     <div class="hp">
       <div class="hp-c"><h3><span class="hp-n">1</span>Copia tu Inventario</h3>
         <p>En EVE abre el inventario en <b>vista de lista</b>. Necesitas al menos las columnas <b>Name</b> y <b>Quantity</b>. Si ves <b>Volume</b> y <b>Est. Price</b>, mejor: la app las usa para verificar.</p>
         <p>Selecciona las filas que quieres analizar, usa <b>Ctrl+C</b> y pégalas arriba con <b>Ctrl+V</b>. Revisa cantidades si faltaba la columna Quantity. Puedes utilizar texto compatible copiado de otras listas.</p></div>
       <div class="hp-c"><h3><span class="hp-n">2</span>Espera los Precios</h3>
-        <p>La app consulta ESI (API de CCP) para precios y datos del mercado de Jita 4-4. Espera a que termine de cargar: un ítem sin precio verificado puede quedar fuera de la recomendación.</p>
-        <p>Los avisos no son errores automáticos: pueden indicar volumen distinto, precio atípico o compras insuficientes. Abre ese ítem para comprobarlo antes de publicar una orden.</p></div>
+        <p>La app consulta ESI (API de CCP) para precios y datos del mercado de Jita 4-4. Espera a que termine de cargar: un item sin precio verificado puede quedar fuera de la recomendación.</p>
+        <p>Los avisos no son errores automáticos: pueden indicar volumen distinto, precio atípico o compras insuficientes. Abre ese item para comprobarlo antes de publicar una orden.</p></div>
       <div class="hp-c"><h3><span class="hp-n">3</span>Lee el Plan</h3>
         <p><b>Resultado</b> reúne lo que recibirías según los precios disponibles y los costes configurados; no necesariamente es beneficio sobre lo que pagaste por el loot. La preferencia por rapidez puede elegir Jita aunque otra ruta deje un poco más.</p>
-        <p>Abre <b>Ver el desglose</b> para ver los <b>Pasos para Vender</b>: cada paso dice qué hacer y dónde, en orden, con sus ítems y precios para copiar. En <b>Contratos y Envío</b> encontrarás cada contrato (uno a la vez, pasa con las flechas) y lo que cuesta el envío.</p></div>
+        <p>Abre <b>Ver el desglose</b> para ver los <b>Pasos para Vender</b>: cada paso dice qué hacer y dónde, en orden, con sus items y precios para copiar. En <b>Contratos y Envío</b> encontrarás cada contrato (uno a la vez, pasa con las flechas) y lo que cuesta el envío.</p></div>
       <div class="hp-c"><h3><span class="hp-n">4</span>Ajusta a tu Medida</h3>
         <p>En <b>Ajustes</b> configura skills, Broker, Sales Tax, precio local de Nullsec, Buyback, refinería y tiempos de courier. Los valores iniciales son ejemplos operativos: cámbialos por los tuyos.</p>
         <p>La herramienta guarda solo tus Ajustes en este navegador; los inventarios pegados nunca se guardan. Una recarga borra la sesión de trabajo.</p></div>
@@ -1481,7 +1385,7 @@ Contraband Freight = no</textarea><small>Una regla por línea: Nombre = tax tota
     </div>
   </div>
   <div class="paste">
-    <textarea id="paste" autocomplete="off" spellcheck="false" aria-label="Pega aquí tu inventario de EVE" placeholder="Pega aquí tus ítems con Ctrl+V"></textarea>
+    <textarea id="paste" autocomplete="off" spellcheck="false" aria-label="Pega aquí tu inventario de EVE" placeholder="Pega aquí tus items con Ctrl+V"></textarea>
     <div class="paste-foot"><span class="status" id="status" role="status"></span><button class="ghost" id="bClear"><span class="ic i-x" aria-hidden="true"></span>Limpiar</button></div>
   </div>
 </section>
@@ -1493,16 +1397,16 @@ Contraband Freight = no</textarea><small>Una regla por línea: Nombre = tax tota
       <div class="ld-track"><i id="ldBar"></i></div></div>
   </section>
   <details class="panel thin" id="ledger" hidden>
-    <summary><h2 class="h-caps"><span class="ic i-box" aria-hidden="true"></span>Tus Ítems</h2><span class="cnt" id="lCount"></span><span class="status" id="esiStatus" role="status"></span></summary>
+    <summary><h2><span class="ic i-box" aria-hidden="true"></span>Listado de Items Registrados</h2><span class="cnt" id="lCount"></span><span class="status" id="esiStatus" role="status"></span></summary>
     <div class="ledger-tools">
-      <p class="lead">Abre un ítem para consultar la guía, comparar mercados o cambiar sus datos. Haz clic en un encabezado para ordenar la lista.</p>
+      <p class="lead">Abre un item para consultar la guía, comparar mercados o cambiar sus datos. Haz clic en un encabezado para ordenar la lista.</p>
       <button class="ghost" id="bEsi"><span class="ic i-sync" aria-hidden="true"></span>Actualizar Precios</button>
     </div>
     <!-- v103: ordenar el ledger es independiente de los filtros por recomendación de Qué Hacer.
          Los botones aplican orden al libro completo; nunca recalculan ISK ni cambian el plan. -->
     <div class="undo" id="undo" hidden role="status"><span id="undoTxt"></span><button type="button" class="ghost" id="undoBtn">Deshacer</button></div>
-    <div class="ledger-head" role="group" aria-label="Ordenar tus ítems">
-      <button type="button" class="ledger-sort" data-lsort="n" aria-label="Ordenar por nombre">Ítem <span class="sort-arrow" aria-hidden="true"></span></button>
+    <div class="ledger-head" role="group" aria-label="Ordenar tus items">
+      <button type="button" class="ledger-sort" data-lsort="n" aria-label="Ordenar por nombre">Item <span class="sort-arrow" aria-hidden="true"></span></button>
       <span class="ledger-col">Precio Unidad</span>
       <button type="button" class="ledger-sort" data-lsort="q" aria-label="Ordenar por cantidad">Cantidad <span class="sort-arrow" aria-hidden="true"></span></button>
       <button type="button" class="ledger-sort" data-lsort="d" aria-label="Ordenar por destino de venta">Qué Hacer <span class="sort-arrow" aria-hidden="true"></span></button>
@@ -1543,7 +1447,7 @@ Contraband Freight = no</textarea><small>Una regla por línea: Nombre = tax tota
       </div>
       <div class="ov-card ov-flow"><h4>De Dónde Sale tu ISK</h4><div id="ovFlow"></div></div>
       <dl class="ov-kpi">
-        <div><dt>Ítems</dt><dd id="vsN">—</dd><small id="vsNs"></small></div>
+        <div><dt>Items</dt><dd id="vsN">—</dd><small id="vsNs"></small></div>
         <div><dt>Volumen Total</dt><dd id="vsV">—</dd><small id="vsVs"></small></div>
         <div id="ovShip"><dt id="aCourT">Envío a Jita</dt><dd id="aCourier">—</dd><small id="aCourS"></small></div>
         <div class="tx"><dt>Taxes y Broker</dt><dd id="vsCn" class="neg-soft">—</dd><small id="vsC"></small><label class="rl" id="vsRelW" hidden><input type="checkbox" id="cRelistOn"> Relists: <span id="vsRel">—</span><small>Se cobra si bajas el precio (~2 semanas). Márcalo para contarlo.</small></label></div>
