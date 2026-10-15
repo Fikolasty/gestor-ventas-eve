@@ -1150,3 +1150,9 @@ Comparativa Minera: plan para Omega nuevo
 ==================== v1.0.47 ====================
 - .hero-intro 1fr 1fr. .appr flex columna; .appr-c grid de 3 filas iguales; valores sin copia en <span class="appr-v"> con la misma caja que .copy.
 - «Precios de» = «Jita 4-4» (sin S.pricedAt en la Tasación).
+
+==================== v1.0.48 ====================
+- #pSum .res-top: .res-main (#resIsk, .res-chips = #resWhat + #skNote) | .res-side#resGain (#resGainK, #resGainN, #resGainS).
+- paintResGain(P,sys): P.Vs>0 → base = Σ filas: SHIPS[best] ? g[stayK] : g[best] − prod (stayK = mejor opción sin viajar, igual que computePlan);
+  si alguna fila enviada no tiene opción sin viajar, se oculta. P.Vs=0 → base = allNull (flip) / allJita, solo con SH().
+  d = P.best − base; d>0 «Ganas de más» (verde), d<0 «Dejas de ganar» (ámbar, + «a cambio de vender más rápido» si hay r.fast).

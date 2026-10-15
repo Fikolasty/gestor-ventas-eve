@@ -1975,6 +1975,31 @@ function paintSummary(P){
   if(P.missing.length)w('Sin precio (no entran en el total): '+cnt(P.missing.length)+'.');
   B.append(why);
   $('resIsk').textContent=fmt(P.best);$('resWhat').textContent=$('vWhat').textContent;
+  paintResGain(P,sys);
+}
+// v1.0.48: número de la derecha del Resultado = cuánto más deja este plan frente a la alternativa simple.
+// Si el plan envía algo: frente a no enviar nada (cada ítem a su mejor opción sin viajar, como en computePlan).
+// Si no envía nada: frente a llevarlo todo al destino (con su courier). Se oculta si no hay con qué comparar.
+function paintResGain(P,sys){
+  const box=$('resGain'),org=S.flip?'Jita':sys,dst=S.flip?'HY-RWO':'Jita';
+  const stayK=r=>{const ks=(S.flip?['fJ','fJI']:['null','bb','rNull']).filter(k=>r.g[k]!=null);
+    return ks.length?ks.reduce((a,b)=>r.g[b]>r.g[a]?b:a):(r.g.disc!=null?'disc':null);};
+  const live=P.rows.filter(r=>r.best);let base=null,k='',sub='';
+  if(P.Vs>0){
+    if(live.some(r=>SHIPS[r.best]&&!stayK(r))){box.hidden=true;return;}
+    base=live.reduce((a,r)=>a+(SHIPS[r.best]?r.g[stayK(r)]:r.g[r.best])-r.prod,0);
+    k='Ganas de más';sub='frente a vender todo en '+org+' sin enviar nada ('+fmt(base)+').';
+  }else{
+    const all=S.flip?P.allNull:P.allJita;if(all==null||!SH()){box.hidden=true;return;}
+    base=all;k='Ganas de más';sub='frente a llevar todo a '+dst+' con courier ('+fmt(base)+').';
+  }
+  const d=P.best-base;
+  if(!(Math.abs(d)>=1)){box.hidden=true;return;}
+  if(d<0)k='Dejas de ganar';
+  box.hidden=false;box.classList.toggle('up',d>0);box.classList.toggle('dn',d<0);
+  $('resGainK').textContent=k;$('resGainN').textContent=(d>0?'+':'−')+fmt(Math.abs(d));
+  if(d<0&&live.some(r=>r.fast))sub=sub.replace(/\.$/,'')+', a cambio de vender más rápido.';
+  $('resGainS').textContent=(base>0?(d>0?'+':'−')+pctS(Math.abs(d)/base)+'% ':'')+sub;
 }
 
 // ================= Recalcular =================

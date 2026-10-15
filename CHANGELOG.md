@@ -2,6 +2,16 @@
 
 Cambios por versión del Gestor de Ventas. La más nueva arriba. El detalle técnico completo está en `docs/SPEC.txt`.
 
+## 1.0.48 — Resultado en dos mitades
+*2026-10-15*
+
+- Izquierda: **Recibes con este plan** (el número grande) y, debajo, el plan elegido y «Precios ajustados».
+- Derecha: **Ganas de más**, otro número grande con cuánto más deja el plan y el %:
+  - si el plan envía algo, frente a vender todo en el origen sin enviar nada;
+  - si no envía nada, frente a llevarlo todo al destino con courier.
+- Si el plan deja menos (por ejemplo, elegido por rapidez) dice **Dejas de ganar** en ámbar y lo explica. Si no hay con qué comparar, no se muestra.
+- En móvil va uno debajo del otro.
+
 ## 1.0.47 — Tasación mitad y mitad
 *2026-10-15*
 

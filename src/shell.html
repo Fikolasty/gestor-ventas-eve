@@ -1057,6 +1057,19 @@ html.lite .ct,html.lite .sh-card,html.lite .scn>div,html.lite fieldset.st,html.l
 .appr-c .t-buy dd{color:#e58a8a}.appr-c .t-split dd{color:#e7c27a}.appr-c .t-sell dd{color:#7fd19b}
 @media(max-width:980px){.hero-intro,.hero-intro.no-appr{grid-template-columns:minmax(0,1fr)!important}.hero-intro.no-appr .hero-side,.hero-side{grid-template-columns:1fr}}
 @media(max-width:600px){.appr-g{grid-template-columns:1fr}.appr-c+.appr-c{border-left:0;border-top:1px solid rgba(222,220,209,.1)}}
+/* v1.0.48: cabecera del Resultado en dos mitades */
+.res-top{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:18px;margin:6px 0 4px;align-items:start}
+.res-k{display:block;font-size:.78rem;letter-spacing:.06em;text-transform:uppercase;color:var(--dim)}
+.res-top .res-big{margin:2px 0 8px!important}
+.res-chips{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.res-chips .v-what{margin:0!important;vertical-align:0!important}
+.res-chips .sk-note{margin:0!important}
+.res-side{padding-left:18px;border-left:1px solid rgba(222,220,209,.1);min-width:0}
+.res-side .num{color:#e5e3da!important;text-shadow:none!important}
+.res-side.dn .num{color:#ecc27e!important}
+.res-side.up .num{color:var(--gain)!important;text-shadow:0 0 22px rgba(53,194,110,.2)!important}
+.res-gs{display:block;font-size:.88rem;color:var(--mut);line-height:1.45}
+@media(max-width:760px){.res-top{grid-template-columns:minmax(0,1fr)}.res-side{padding:12px 0 0;border-left:0;border-top:1px solid rgba(222,220,209,.1)}}
 /* v1.0.7: interruptor "Contar envío" */
 .sw{display:inline-flex;align-items:center;gap:8px;cursor:pointer;font-size:.9rem;color:#e5e3da;text-shadow:0 1px 3px rgba(0,0,0,.9);padding:6px 10px;border-radius:10px;background:rgba(21,21,21,.75);border:1px solid rgba(222,220,209,.12)}
 .sw input{position:absolute;opacity:0;width:1px;height:1px}
@@ -1539,8 +1552,15 @@ Contraband Freight = no</textarea><small>Una regla por línea: Nombre = tax tota
   <!-- 1. Resultado simple -->
   <section class="panel summary res" id="pSum" hidden>
     <h2><span class="ic i-bulb" aria-hidden="true"></span>Resultado</h2>
-    <p class="sk-note" id="skNote" hidden></p>
-    <p class="res-big"><span class="num" id="resIsk">—</span><span class="v-what" id="resWhat"></span></p>
+    <!-- v1.0.48: arriba, lo que recibes (izquierda) y cuánto más deja frente a la alternativa simple (derecha) -->
+    <div class="res-top">
+      <div class="res-main"><span class="res-k">Recibes con este plan</span>
+        <p class="res-big"><span class="num" id="resIsk">—</span></p>
+        <div class="res-chips"><span class="v-what" id="resWhat"></span><p class="sk-note" id="skNote" hidden></p></div></div>
+      <div class="res-side" id="resGain" hidden><span class="res-k" id="resGainK"></span>
+        <p class="res-big"><span class="num" id="resGainN"></span></p>
+        <span class="res-gs" id="resGainS"></span></div>
+    </div>
     <div class="fb2" id="flipBuy" hidden></div>
     <div class="pk-w"><h4 class="pk-t">Elige un Plan <small>El óptimo viene marcado. Si eliges otro, todo se ajusta a ese plan.</small></h4>
       <div class="pk-tools" id="pkTools"></div>
