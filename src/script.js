@@ -774,7 +774,7 @@ function paintGuide(ol,r){
   }
   if(g.k==='null'||g.k==='jOrd'){
     const isN=g.k==='null';
-    step('Qué Hacer',isN?'Publica una sell order en tu estructura de Nullsec. No necesitas courier a Jita.':'Manda el item a Jita 4-4 mediante courier y crea una sell order. El envío está incluido en la comparación.');
+    step('Qué Hacer',isN?'Publica una sell order en tu estructura de Nullsec. No necesitas envío a Jita.':'Manda el item a Jita 4-4 mediante un envío y crea una sell order. El envío está incluido en la comparación.');
     step('Cómo Listarlo',copyBtn(g.unit,fmtP(g.unit)),' por unidad (haz clic para copiar). Publica '+fmtQ(r.q)+' unidades; valor de la orden: '+fmt(g.unit*r.q)+'. Duración sugerida: 3 meses'+
       (isN&&o.nullSeen?' · Undercut de '+pct(C.under)+'% al precio que ves':'')+
       (!isN&&C.ice.on&&isIce(o.name)?(C.ice.jitaMode==='split'?' · precio Split':' · Undercut de '+pct(C.under)+'% a Jita Sell'):'')+
@@ -799,7 +799,7 @@ function paintGuide(ol,r){
     if(g.alt)step('Si Nadie Compra','Si en ~'+C.disc.days+' días nadie lo toma, '+ACT[g.alt]+'.');
   }else if(g.k==='bb'){
     step('Qué Hacer','Usa el Buyback de tu alianza. Crea un contrato Item Exchange con el destinatario y la ubicación definidos en Ajustes.');
-    step('Pago del Buyback',copyBtn(r.bbUnit,fmtP(r.bbUnit)),' por unidad, con el tax del programa ('+pct(r.bbTax)+'%) ya descontado. Esta ruta no incluye courier ni Sales Tax de mercado.');
+    step('Pago del Buyback',copyBtn(r.bbUnit,fmtP(r.bbUnit)),' por unidad, con el tax del programa ('+pct(r.bbTax)+'%) ya descontado. Esta ruta no incluye envío ni Sales Tax de mercado.');
     step('Cómo Crear el Contrato','Copia los datos del contrato que salen en este paso o en Contratos y Envío. Verifica que el Buyback acepte el item antes de enviarlo.');
   }else{
     const toJ=g.k==='rJita';
@@ -1250,7 +1250,7 @@ function paintVerdict(P){
     disc:['Vender a un jugador','En '+sys,'Publica la oferta WTS en Discord; los pasos están en Extras, Vender a Jugadores.'],
     null:['Publicar órdenes en '+sys,'En '+sys,'Precio por unidad para tu sell order. Clic en el precio para copiarlo.'],
     rNull:['Reprocesar y vender en '+sys,'En '+sys,'Reprocesa en '+refName()+' y publica cada material al precio indicado.'],
-    rJita:['Reprocesar para llevar a Jita','En '+sys,'Reprocesa en '+refName()+'; los materiales van en el courier y se venden en Jita.'],
+    rJita:['Reprocesar para llevar a Jita','En '+sys,'Reprocesa en '+refName()+'; los materiales se envían y se venden en Jita.'],
     jOrd:[arr+'Publicar órdenes en Jita','En Jita','Precio = la venta más barata'+tk+'. Clic en el precio para copiarlo.'],
     jInst:[arr+'Vender al instante en Jita','En Jita','Vende a las buy orders; el precio es el promedio que recibirías.'],
     fJ:['Publicar órdenes en Jita','En Jita','Precio = la venta más barata'+tk+'. Clic en el precio para copiarlo.'],
@@ -1284,7 +1284,7 @@ function paintVerdict(P){
   steps.forEach((k,i)=>{
     if(k==='ship'){
       const vol=shipRows.reduce((a,r)=>a+(r.ship[r.best]?r.ship[r.best].v:0),0),n=trips(vol);
-      const {box,main}=stepBox('ship',i+1,'Courier a '+dest+' con SIGMA Freight','Envío',shipRows.length+(shipRows.length===1?' item':' items')+' · '+fmtV(Math.round(vol))+' · '+n+(n===1?' contrato':' contratos')+' · llega en '+C.cDays[0]+'–'+C.cDays[1]+' días',-(P.shipCost||0),'costo del envío');
+      const {box,main}=stepBox('ship',i+1,'Envío a '+dest+' con SIGMA Freight','Envío',shipRows.length+(shipRows.length===1?' item':' items')+' · '+fmtV(Math.round(vol))+' · '+n+(n===1?' contrato':' contratos')+' · llega en '+C.cDays[0]+'–'+C.cDays[1]+' días',-(P.shipCost||0),'costo del envío');
       main.append(ctItems(shipRows.map(r=>({n:r.o.name,q:r.q,v:r.ship[r.best]?r.ship[r.best].v:0})),true));pl.append(box);return;}
     const g=rowsIn.filter(r=>r.best===k),[title,where,sub]=STEP[k]||[PLAN_L[k]||k,'',''];
     const groupGross=g.reduce((a,r)=>a+r.g[k]-r.prod,0);
@@ -1476,7 +1476,7 @@ function paintShip(P,cs){
   $('fBase').textContent=fmt(C.base);$('fPerM3').textContent=C.perM3.toLocaleString('en-US')+' ISK';$('fCollPct').textContent=pct(C.collPct)+'%';$('fMaxVol').textContent=fmtV(C.maxVol);
   if(!C.shipOn){
     const sh=P.rows.filter(r=>r.best&&SHIPS[r.best]&&r.ship[r.best]),V=sh.reduce((a,r)=>a+r.ship[r.best].v,0),Cc=sh.reduce((a,r)=>a+r.ship[r.best].c,0);
-    b.append(el('p','sh-none','El envío está apagado: lo llevas tú, así que no se descuenta courier ni se arman contratos de envío.'));
+    b.append(el('p','sh-none','El envío está apagado: lo llevas tú, así que no se descuenta el coste del envío ni se arman contratos de envío.'));
     if(V>0){const n=trips(V);b.append(el('p','sh-none','Tu plan lleva '+fmtV(Math.round(V))+' a '+DEST()+' (valor '+fmt(Cc)+'). Con SIGMA Freight costaría −'+fmt(courierRaw(V,Cc))+' ('+n+(n>1?' contratos':' contrato')+').'));}
     return;}
   if(!cs.length){
@@ -1975,7 +1975,7 @@ function paintResGain(P,sys){
     k='Ganas de más';sub='frente a vender todo en '+org+' sin enviar nada';
   }else{
     const all=S.flip?P.allNull:P.allJita;if(all==null){box.hidden=true;return;}
-    base=all;k='Ganas de más';sub='frente a llevar todo a '+dst+' con courier';
+    base=all;k='Ganas de más';sub='frente a llevar todo a '+dst+' con envío';
   }
   const d=P.best-base;
   if(!(Math.abs(d)>=1)){box.hidden=true;return;}
@@ -2050,7 +2050,7 @@ $('cAssignee').addEventListener('input',()=>refresh());
 // v1.0.55: interruptor «Courier» (solo con la ruta Jita → HY-RWO). On: los items están en Jita y los llevas a HY-RWO
 // con SIGMA Freight (se cuenta el courier). Off: los trajiste a Jita para venderlos allí, sin ningún courier.
 // Con la ruta HY-RWO → Jita el courier siempre se cuenta y el interruptor no se muestra.
-function syncShipSwitch(){$('shipTxt').textContent='Courier '+(SH()?'On':'Off');$('shipLab').hidden=!S.flip;}
+function syncShipSwitch(){$('shipTxt').textContent='Envío '+(SH()?'On':'Off');$('shipLab').hidden=!S.flip;}
 function setFlip(on){
   S.flip=!!on;S.planMode=null;czIdx=0;C.shipOn=true;$('shipOn').checked=true; // cambiar de ruta vuelve a contar el courier
   SHIPS=S.flip?{fN:1}:{jOrd:1,jInst:1,rJita:1};

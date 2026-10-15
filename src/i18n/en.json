@@ -1328,5 +1328,22 @@
 "− Broker de Jita (": "− Jita Broker (",
 "− Broker de la estructura (": "− Structure Broker (",
 "− Envío a Jita": "− Shipping to Jita",
-"− Tarifa de refinería (": "− Refinery fee ("
+"− Tarifa de refinería (": "− Refinery fee (",
+" No necesitas envío a Jita.": " You don't need a courier to Jita.",
+" a Jita 4-4 y publica órdenes de venta. El cálculo incluye impuestos, Broker y su parte del envío.": " to Jita 4-4 and post sell orders. The calculation includes taxes, Broker and its share of the courier.",
+" con envío (": " by courier (",
+" y envío": " and courier",
+"%) ya descontado. Esta ruta no incluye envío ni Sales Tax de mercado.": "%) already deducted. This route has no courier and no market Sales Tax.",
+"; los materiales se envían y se venden en Jita.": "; the materials go in the courier and are sold in Jita.",
+"Contrato Item Exchange al programa de la alianza: precio base menos su tax. Sin envío ni Sales Tax; confirma que acepten el item.": "Item Exchange contract to the alliance program: base price minus its tax. No courier or Sales Tax; check that they accept the item.",
+"El envío está apagado: lo llevas tú, así que no se descuenta el coste del envío ni se arman contratos de envío.": "Shipping is off: you carry it yourself, so no courier is deducted and no shipping contracts are built.",
+"En el menú lateral eliges la ruta (HY-RWO → Jita o Jita → HY-RWO), el envío y el margen. En": "In the side menu you pick the route (HY-RWO → Jita or Jita → HY-RWO), the Courier and the margin. In",
+"Importe neto estimado por opción. Las rutas a Jita incluyen envío; vender en Nullsec no lo requiere.": "Estimated net amount per option. Routes to Jita include courier; selling in Nullsec doesn't need it.",
+"Manda el item a Jita 4-4 mediante un envío y crea una sell order. El envío está incluido en la comparación.": "Send the item to Jita 4-4 by courier and create a sell order. Shipping is included in the comparison.",
+"Mandas la carga a Jita con SIGMA Freight y publicas una sell order un tick por debajo de la más barata. Resta envío, Sales Tax, Broker y los relists si los activas.": "You ship the cargo to Jita with SIGMA Freight and post a sell order one tick below the cheapest. Deducts courier, Sales Tax, Broker and relists if enabled.",
+"Sell order en tu estructura de Nullsec. El precio parte de Jita Buy o del precio local que indiques; el hielo puede tener su propia regla. Resta Sales Tax, Broker y SCC; sin envío.": "Sell order in your Nullsec structure. The price starts from Jita Buy or the local price you enter; ice can have its own rule. Deducts Sales Tax, Broker and SCC; no courier.",
+"Solo con la ruta Jita → HY-RWO. On: llevas los items de Jita a HY-RWO con SIGMA Freight y se cuenta el envío. Off: los trajiste a Jita para venderlos allí, sin envío.": "Only with the Jita → HY-RWO route. On: you take the items from Jita to HY-RWO with SIGMA Freight and the courier is counted. Off: you brought them to Jita to sell there, no courier.",
+"Valor declarado de la carga en el envío (Jita Sell). SIGMA Freight cobra base por contrato + ISK por m³ + % del colateral.": "Declared value of the cargo in the courier (Jita Sell). SIGMA Freight charges a base per contract + ISK per m³ + % of the collateral.",
+"Envío On": "Shipping On",
+"Envío Off": "Shipping Off"
 }

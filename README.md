@@ -22,15 +22,15 @@ Lo más exacto es copiar los % de *Broker's fee* y *Sales tax* que muestra la ve
 
 ### Funciones principales
 - **Elige un Plan**: el óptimo arriba y los demás en filas con rapidez, envío, valor y diferencia; se pueden ordenar y filtrar.
-- **Pasos para Vender**: el plan en pasos numerados, en orden, con íconos, precios para copiar, datos del courier y casillas de progreso.
+- **Pasos para Vender**: el plan en pasos numerados, en orden, con íconos, precios para copiar y datos de envío y contratos.
 - **Ruta invertible**: HY-RWO → Jita (vendes lo que tienes en Null) o Jita → HY-RWO (compras en Jita y vendes más caro en Null, con tu margen).
-- **Switch de envío**: con el courier de SIGMA Freight o con los items ya en el destino.
+- **Switch de envío**: con envío de SIGMA Freight o con los items ya en el destino.
 - **Reproceso** de ore y hielo con tus skills, la estructura, el rig y el implante.
 - **Contratos** listos para copiar: Buyback (Item Exchange), courier y venta a jugadores.
 - **Anti-cebo**: ignora órdenes de venta puestas muy baratas para tirar el precio (revisa las 5 más baratas, en cascada) y publica 1 tick por debajo.
 - **Venta rápida automática** cuando la orden casi no paga más que las compras (2 ticks o menos).
 - **Ajuste de precios** (por defecto −0.16% en la venta rápida), para no prometer más de lo que paga el mercado.
-- **Español / English**, tema **Dark / Light** y **Modo Ligero** para PCs lentas o Firefox.
+- **Español / English**, tema **Dark / Light** (el Modo Ligero fue eliminado en v1.0.56).
 
 ## Seguridad y privacidad
 
@@ -59,7 +59,7 @@ CHANGELOG.md          ← cambios por versión
 ### Generar la página
 Solo necesitas Python 3, sin dependencias:
 ```
-python3 build.py 1.0.66
+python3 build.py 1.0.67
 ```
 Eso escribe `index.html` con la versión indicada.
 

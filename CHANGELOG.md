@@ -2,6 +2,15 @@
 
 Cambios por versión del Gestor de Ventas. La más nueva arriba. El detalle técnico completo está en `docs/SPEC.txt`.
 
+## 1.0.67 — [ChatGPT] Terminología de envío fuera de contratos
+*2026-10-15*
+
+- En los textos de ayuda, pasos, guía y menú se usa «envío» en lugar de «courier»; el contrato de tipo **Courier** y su terminología contractual se mantienen.
+- Actualización de traducciones al inglés para los textos y el interruptor Envío On/Off.
+- README: se actualizan los textos de envío, los pasos y la referencia al Modo Ligero, eliminado en v1.0.56.
+- **Sin cambios** en cálculos, parámetros, API ESI/Fenris, reglas de mercado o datos de reproceso. Cambios limitados a textos, documentación e index.html compilado.
+- Identificación de autor: commit con `[ChatGPT]` y tag de recuperación `chatgpt-<sha12>` creado por GitHub Actions.
+
 ## 1.0.66 — Textos de Ajustes sin comillas
 *2026-10-15*
 

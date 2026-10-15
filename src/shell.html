@@ -1346,7 +1346,7 @@ body.in-jita #pCtr,body.in-jita #pExtra,body.in-jita #vRep,body.in-jita .if-ore{
   <div class="route" id="route">
     <button type="button" class="route-b" id="bFlip" aria-pressed="false" title="Ruta del lote. HY-RWO → Jita: vendes lo que tienes en Null. Jita → HY-RWO: llevas (o compras) en Jita y vendes en Null más caro. Clic para invertir.">
       <span class="route-ic" aria-hidden="true"></span><span class="route-from" id="rtFrom">HY-RWO</span><span class="route-ar" aria-hidden="true">→</span><span class="route-to" id="rtTo">Jita</span></button>
-    <label class="sw" id="shipLab" hidden title="Solo con la ruta Jita → HY-RWO. On: llevas los items de Jita a HY-RWO con SIGMA Freight y se cuenta el courier. Off: los trajiste a Jita para venderlos allí, sin courier."><input type="checkbox" id="shipOn" checked><span class="sw-t" aria-hidden="true"></span><span id="shipTxt">Courier On</span></label>
+    <label class="sw" id="shipLab" hidden title="Solo con la ruta Jita → HY-RWO. On: llevas los items de Jita a HY-RWO con SIGMA Freight y se cuenta el envío. Off: los trajiste a Jita para venderlos allí, sin envío."><input type="checkbox" id="shipOn" checked><span class="sw-t" aria-hidden="true"></span><span id="shipTxt">Envío On</span></label>
     <label class="route-m" id="rtM" hidden title="Margen de importación: cuánto más que Jita Sell cobras en HY-RWO (neto, ya con taxes)."><span class="rm-l">Margen</span><span class="rm-f"><span class="rm-s">+</span><input type="number" id="fImpM" min="0" step="0.5" value="15" inputmode="decimal" aria-label="Margen al vender en HY-RWO, % neto sobre Jita Sell"><span class="rm-s">%</span></span></label>
   </div>
   </div>
@@ -1416,14 +1416,14 @@ Contraband Freight = no</textarea><small>Una regla por línea: Nombre = tax tota
         <p><b>Resultado</b> muestra lo que recibirías con el plan elegido y cuánto más (o menos) deja frente a la alternativa simple. Clic en el Plan Óptimo para ver los demás planes.</p>
         <p><b>Ver el desglose</b> abre los Pasos para Vender: cada paso dice qué hacer y dónde, con sus items, precios para copiar y, si hay contrato, cómo llenarlo.</p></div>
       <div class="hp-c"><h3><span class="hp-n">4</span>Ajusta a tu Medida</h3>
-        <p>En el menú lateral eliges la ruta (HY-RWO → Jita o Jita → HY-RWO), el Courier y el margen. En <b>Ajustes</b> pon tus skills, taxes, Buyback, refinería y tiempos de envío.</p>
+        <p>En el menú lateral eliges la ruta (HY-RWO → Jita o Jita → HY-RWO), el envío y el margen. En <b>Ajustes</b> pon tus skills, taxes, Buyback, refinería y tiempos de envío.</p>
         <p>Solo tus Ajustes y el tema se guardan en este navegador; lo que pegas nunca se guarda y se borra al recargar.</p></div>
     </div>
     <h3 class="sub-h" style="margin-top:20px">Las Formas de Vender</h3>
     <div class="hp-t">
-      <div><b>Vender en HY-RWO</b><span>Sell order en tu estructura de Nullsec. El precio parte de Jita Buy o del precio local que indiques; el hielo puede tener su propia regla. Resta Sales Tax, Broker y SCC; sin courier.</span></div>
-      <div><b>Vender al Buyback</b><span>Contrato Item Exchange al programa de la alianza: precio base menos su tax. Sin courier ni Sales Tax; confirma que acepten el item.</span></div>
-      <div><b>Vender en Jita (Orden)</b><span>Mandas la carga a Jita con SIGMA Freight y publicas una sell order un tick por debajo de la más barata. Resta courier, Sales Tax, Broker y los relists si los activas.</span></div>
+      <div><b>Vender en HY-RWO</b><span>Sell order en tu estructura de Nullsec. El precio parte de Jita Buy o del precio local que indiques; el hielo puede tener su propia regla. Resta Sales Tax, Broker y SCC; sin envío.</span></div>
+      <div><b>Vender al Buyback</b><span>Contrato Item Exchange al programa de la alianza: precio base menos su tax. Sin envío ni Sales Tax; confirma que acepten el item.</span></div>
+      <div><b>Vender en Jita (Orden)</b><span>Mandas la carga a Jita con SIGMA Freight y publicas una sell order un tick por debajo de la más barata. Resta envío, Sales Tax, Broker y los relists si los activas.</span></div>
       <div><b>Vender en Jita al Instante</b><span>Mandas la carga a Jita y vendes a las buy orders. Con mucha cantidad se recorre el libro de compras, así que el promedio puede ser menor que la mejor compra.</span></div>
       <div><b>Reprocesar</b><span>Ore, hielo o mena lunar se reprocesan en tu refinería de HY-RWO y los materiales se venden en HY-RWO o en Jita, lo que deje más. Cuenta rendimiento, tax y volumen real.</span></div>
       <div><b>Vender a Jugador</b><span>Oferta WTS en Discord a un % de Jita Buy o Split. Depende de que alguien la acepte; no es venta garantizada.</span></div>
@@ -1433,7 +1433,7 @@ Contraband Freight = no</textarea><small>Una regla por línea: Nombre = tax tota
       <div><b>Jita Buy / Split / Sell</b><span>Buy: la mejor orden de compra. Sell: la venta más barata. Split: el punto medio. No garantizan vender cualquier cantidad a ese precio.</span></div>
       <div><b>Undercut</b><span>Poner tu sell order un poco más barata que la competencia.</span></div>
       <div><b>Relist</b><span>Cambiar el precio de una orden. Tiene costo; la app lo suma si activas la casilla de relists.</span></div>
-      <div><b>Colateral</b><span>Valor declarado de la carga en el courier (Jita Sell). SIGMA Freight cobra base por contrato + ISK por m³ + % del colateral.</span></div>
+      <div><b>Colateral</b><span>Valor declarado de la carga en el envío (Jita Sell). SIGMA Freight cobra base por contrato + ISK por m³ + % del colateral.</span></div>
     </div>
     <h3 class="sub-h" style="margin-top:20px"><span class="ic i-lock" aria-hidden="true"></span>Seguridad</h3>
     <p class="lead">No pide tu contraseña de EVE ni inicio de sesión. Solo se conecta a la API oficial de EVE (ESI) para precios y al servidor de imágenes de EVE para los íconos. Janice, Discord y el Buyback se abren aparte, en tu navegador.</p>
@@ -1595,7 +1595,7 @@ Contraband Freight = no</textarea><small>Una regla por línea: Nombre = tax tota
     <div class="rx-final" id="rxFinal"></div>
     <div hidden>
     <h3 class="sub-h" style="margin-top:22px">¿Refinar o Vender el Ore?</h3>
-    <p class="lead">Importe neto estimado por opción. Las rutas a Jita incluyen courier; vender en Nullsec no lo requiere.</p>
+    <p class="lead">Importe neto estimado por opción. Las rutas a Jita incluyen envío; vender en Nullsec no lo requiere.</p>
     <table id="tRcmp" class="cmp"><thead><tr><th>Opción</th><th class="r">Ganancia</th><th class="r">Envío</th><th class="r">Costo del Envío</th><th class="r">Con Envío</th></tr></thead><tbody></tbody></table>
     <div class="calls2">
       <div class="call rc">

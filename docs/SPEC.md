@@ -100,7 +100,7 @@ Inspeccionar, instrumentar y corregir únicamente comportamientos demostrados:
 - Evitar elementos que parezcan pills donde se pidió un diseño más rectangular con esquinas suavemente redondeadas, sin cambiar tamaño/funcionalidad arbitrariamente.
 - Conservar apariencia industrial de EVE y la imagen del fondo perceptible, sin sacrificar contraste del texto.
 - Revisar consistencia de términos **resultado / plan óptimo / secciones**; evitar formulaciones posesivas no deseadas como «Tu Resultado» cuando el usuario ya las rechazó.
-- Regla específica confirmada por la conversación aportada: **fuera del contenido relativo a contratos, usar «envío» en los textos para usuarios en lugar de «courier»**. Dentro de campos/tipos contractuales donde la palabra sea un valor preciso, conservar «Courier». Se debe verificar cada cadena y su traducción inglesa, evitando cambiar nombres técnicos o contratos.
+- Regla específica confirmada por la conversación aportada: **fuera del contenido relativo a contratos, usar «envío» en los textos para usuarios en lugar de «courier»**. Aplicada en v1.0.67. Dentro de campos/tipos contractuales donde la palabra sea un valor preciso, conservar «Courier». Se debe verificar cada cadena y su traducción inglesa, evitando cambiar nombres técnicos o contratos.
 - Etiquetas y pasos de la interfaz deben mantener la versión inglesa coherente con las decisiones idiomáticas, sin traducciones mecánicas que pierdan sentido.
 
 ## 8. Validaciones obligatorias antes de integrar
