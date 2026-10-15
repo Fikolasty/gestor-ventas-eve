@@ -1050,7 +1050,11 @@ function unitFor(r,k){const a=r.o.jita;
 // v102: pestaña:acción es la clave en todas las preferencias de vista (sin persistencia).
 let vSort=Object.create(null),vShow=Object.create(null),vQuery=Object.create(null);
 let repaintPlanGroup=null; // solo pinta una tabla; no ejecuta computePlan() ni el resto de la pantalla.
+let stepOpen=null; // v1.0.59: pasos abiertos (null = aún no se pintó: abre el primero)
 $('vPlan').addEventListener('click',e=>{
+  const sh=e.target.closest('.stp-h');if(sh&&stepOpen){const id=sh.dataset.stp,box=sh.parentElement,body=box.querySelector('.stp-b'),open=body.hidden;
+    if(open)stepOpen.add(id);else stepOpen.delete(id);box.classList.toggle('open',open);sh.setAttribute('aria-expanded',String(open));slide(body,open);
+    if(open)setTimeout(()=>box.scrollIntoView({behavior:'smooth',block:'center'}),30);return;}
   const s=e.target.closest('.srt');if(s&&lastP){
     const section=s.closest('.pl-section'),id=section&&section.dataset.sortId;if(!id)return;
     const k=s.dataset.s,first=k==='n'?1:-1,old=vSort[id]||{k:null,d:1};
@@ -1095,7 +1099,7 @@ function fadeIn(list){if(!MOTION())return;list.forEach((n,i)=>n.animate([{opacit
 document.addEventListener('toggle',e=>{const d=e.target;if(!(d instanceof HTMLDetailsElement)||!d.open||!MOTION())return;
   [...d.children].filter(c=>c.tagName!=='SUMMARY'&&!c.hidden).forEach(c=>c.animate([{opacity:0,transform:'translateY(-6px)'},{opacity:1,transform:'none'}],{duration:220,easing:EASE}));},true);
 // Divulgación progresiva: primero el resultado; el análisis y la info extra solo si los pides
-const SECT={deep:['bDeep','Ver el desglose ▾','Volver a los planes ▴'],more:['bMore','Ver más ▾','Ocultar ▴']};
+const SECT={deep:['bDeep','Ver el desglose ▾','Volver a los planes ▴']};
 function setSect(t,open){const [b,o,c]=SECT[t];if($(t).hidden===!open)return;
   $(b).setAttribute('aria-expanded',String(open));$(b).querySelector('b').textContent=open?c:o;
   if(t==='deep'){ // v1.0.50: con el desglose abierto se pliegan los planes
@@ -1104,12 +1108,12 @@ function setSect(t,open){const [b,o,c]=SECT[t];if($(t).hidden===!open)return;
   if(open){$(t).hidden=false;if(lastP)refreshNow();$(t).hidden=true;slide($(t),true);}else $(t).hidden=true;}
 Object.keys(SECT).forEach(t=>$(SECT[t][0]).addEventListener('click',()=>{const open=$(t).hidden;
   if(open&&t==='deep')focusOnly('deep');setSect(t,open);if(open)$(SECT[t][0]).scrollIntoView({behavior:'smooth',block:'start'});}));
-// v1.0.54: modo foco. Al abrir una sección principal (planes, desglose, Listado de Items Registrados, Ajustes o Guía de Uso),
+// v1.0.54: modo foco. Al abrir una sección principal (planes, desglose, Listado, Contratos, Reproceso, Jugadores, Ajustes o Guía de Uso),
 // las demás se pliegan y la vista va a la que abriste.
 function focusOnly(k){
   if(k!=='plans'&&pkView.open){pkView.open=false;if(lastP)paintPicker(lastP);}
   if(k!=='deep')setSect('deep',false);
-  if(k!=='ledger'&&$('ledger').open)$('ledger').open=false;
+  ['ledger','pCtr','pRepro','pDisc'].forEach(id=>{if(k!==id&&$(id).open)$(id).open=false;});
   ['settings','help'].forEach(id=>{if(k!==id&&!$(id).hidden)togglePanel(id,false);});
 }
 // nombre corto del mejor plan (sin "+ N más" ni "· por rapidez")
@@ -1120,7 +1124,7 @@ function clearViews(){
   ['vPlan','vRepList','ctrList','czDots','ctrTot','shBody','fScn','rx','rxFinal','dMsg'].forEach(id=>{const e=$(id);if(e)e.textContent='';});
   ['pCtr','pSum'].forEach(id=>{const e=$(id);if(e)e.hidden=true;});
   lastP=null;repaintPlanGroup=null;paintAppraisal();discRows=[];czCards=[];lastCs=[];czIdx=0;S.planMode=null;ICON_POOL={};
-  vShow=Object.create(null);vSort=Object.create(null);vQuery=Object.create(null);pkView={sort:'net',dir:-1,filter:'all',open:false};if($('stepHead'))$('stepHead').textContent='';
+  stepOpen=null;vShow=Object.create(null);vSort=Object.create(null);vQuery=Object.create(null);pkView={sort:'net',dir:-1,filter:'all',open:false};if($('stepHead'))$('stepHead').textContent='';
 }
 function paintVerdict(P){
   const has=S.items.length>0;$('verdict').hidden=!has;$('ledger').hidden=!has;$('lCount').textContent=has?'· '+S.items.length+(S.items.length>1?' items':' item'):'';
@@ -1227,7 +1231,7 @@ function paintVerdict(P){
     if(gs.length>lim){const hid=gs.slice(lim),sum=hid.reduce((a,r)=>a+r.g[k]-r.prod,0);
       const b=el('button','pl-moreb','Ver '+(hid.length===1?'el item restante':'los '+hid.length+' items restantes')+' · '+fmt(sum)+' ▾');b.type='button';b.dataset.more=id;b.dataset.n='99999';groupTable.append(b);}
     else if(lim>5&&gs.length>5){const b=el('button','pl-moreb','Mostrar menos ▴');b.type='button';b.dataset.more=id;b.dataset.n='5';groupTable.append(b);}
-    if(oldTable)oldTable.replaceWith(groupTable);else section.append(groupTable);
+    if(oldTable)oldTable.replaceWith(groupTable);else (section.querySelector('.stp-main')||section).append(groupTable);
   }
   // Cierre sobre la pestaña actual: una interacción no recalcula ni repinta el resto del análisis.
   repaintPlanGroup=section=>{
@@ -1260,32 +1264,37 @@ function paintVerdict(P){
   const steps=[...before,...(shipRows.length?['ship']:[]),...after];
   const hd=$('stepHead');hd.textContent='';
   if(steps.length){const t=el('div','stp-top');t.append(el('span','stp-plan',(P.mode?modeName(P.mode):'Plan Óptimo')+' · '+rowsIn.length+(rowsIn.length===1?' item':' items')));hd.append(t);}
-  const iconStrip=g=>{const d=el('div','stp-icons');g.slice(0,14).forEach(r=>{const ic=iconFor(r.o.name);if(ic){ic.title=r.o.name;d.append(ic);}});if(g.length>14)d.append(el('small',null,'+'+(g.length-14)));return d;};
+  // v1.0.59: cada paso se pliega. Por defecto solo el primero está abierto; abrir uno no cierra los demás y lo centra.
+  // Los pasos con contrato tienen dos columnas: a la izquierda lo que haces, a la derecha cómo llenar el contrato.
+  if(!stepOpen)stepOpen=new Set(steps.slice(0,1));
+  const specs=ctrSpecs(P,packCouriers(P),rowsIn.filter(r=>r.best==='disc'));
+  const ctrFor=k=>specs.filter(c=>k==='ship'?c.cls==='cr':k==='bb'?c.cls==='bb':k==='disc'?c.cls==='pl':false);
   const stepBox=(id,num,title,where,sub,amt,amtNote)=>{
-    const box=el('section','stp');box.dataset.step=id;
-    const n=el('span','stp-n',String(num));
-    const mid=el('div','stp-m'),t=el('div','stp-t',title);t.append(el('span','stp-w w-'+(where==='Envío'?'s':where==='En Jita'?'j':'n'),where));
-    mid.append(t,el('div','stp-s',sub));
-    const am=el('div','stp-a');if(amt!=null){am.append(el('b',amt<0?'neg':'pos',(amt<0?'−':'')+fmt(Math.abs(amt))));if(amtNote)am.append(el('small',null,amtNote));}
-    box.append(n,mid,am);return box;};
+    const open=stepOpen.has(id),box=el('section','stp'+(open?' open':''));box.dataset.step=id;
+    const hd=el('button','stp-h');hd.type='button';hd.dataset.stp=id;hd.setAttribute('aria-expanded',String(open));
+    const mid=el('span','stp-m'),t=el('span','stp-t',title);t.append(el('span','stp-w w-'+(where==='Envío'?'s':where==='En Jita'?'j':'n'),where));
+    mid.append(t,el('span','stp-s',sub));
+    const am=el('span','stp-a');if(amt!=null){am.append(el('b',amt<0?'neg':'pos',(amt<0?'−':'')+fmt(Math.abs(amt))));if(amtNote)am.append(el('small',null,amtNote));}
+    hd.append(el('span','stp-n',String(num)),mid,am,el('span','stp-chev'));
+    const body=el('div','stp-b'),main=el('div','stp-main');body.hidden=!open;body.append(main);
+    const cts=ctrFor(id);
+    if(cts.length){body.classList.add('two');const as=el('aside','stp-ct');as.append(el('h5',null,cts.length>1?'Cómo llenar los contratos':'Cómo llenar el contrato'));
+      cts.forEach(c=>{if(cts.length>1)as.append(el('div','stp-ct-t',c.title));as.append(slots(c.fields,'slots-2'));});body.append(as);}
+    box.append(hd,body);return{box,main};};
   steps.forEach((k,i)=>{
     if(k==='ship'){
-      const vol=shipRows.reduce((a,r)=>a+(r.ship[r.best]?r.ship[r.best].v:0),0),col=shipRows.reduce((a,r)=>a+(r.ship[r.best]?r.ship[r.best].c:0),0),n=trips(vol);
-      const box=stepBox('ship',i+1,'Courier a '+dest+' con SIGMA Freight','Envío',shipRows.length+(shipRows.length===1?' item':' items')+' · '+fmtV(Math.round(vol))+' · '+n+(n===1?' contrato':' contratos')+' · llega en '+C.cDays[0]+'–'+C.cDays[1]+' días',-(P.shipCost||0),'costo del envío');
-      const f=el('div','stp-f');[['Destinatario',$('cAssignee').value||'SIGMA Freight'],['Destino',destStation()],['Reward'+(n>1?' (total)':''),Math.round(P.shipCost||0)],['Colateral'+(n>1?' (total)':''),Math.round(col)]].forEach(([l,v])=>{
-        const c=el('div','stp-fi');c.append(el('span',null,l));const b=copyBtn(String(v),typeof v==='number'?fmtQ(v):v);c.append(b);f.append(c);});
-      const acts=el('div','stp-acts');const cb=copyBtn(shipRows.map(r=>r.o.name+'\t'+Math.round(r.q)).join('\n'),'Copiar '+shipRows.length+(shipRows.length>1?' items':' item'));cb.classList.add('cp-all','p');
-      acts.append(cb);if(n>1){const go=el('button','ghost','Ver los '+n+' contratos');go.type='button';go.addEventListener('click',()=>{const p=$('pCtr');if(p&&p.hidden&&$('bCtr'))$('bCtr').click();p&&p.scrollIntoView({behavior:'smooth',block:'start'});});acts.append(go);}
-      box.append(iconStrip(shipRows),f,acts);pl.append(box);return;}
+      const vol=shipRows.reduce((a,r)=>a+(r.ship[r.best]?r.ship[r.best].v:0),0),n=trips(vol);
+      const {box,main}=stepBox('ship',i+1,'Courier a '+dest+' con SIGMA Freight','Envío',shipRows.length+(shipRows.length===1?' item':' items')+' · '+fmtV(Math.round(vol))+' · '+n+(n===1?' contrato':' contratos')+' · llega en '+C.cDays[0]+'–'+C.cDays[1]+' días',-(P.shipCost||0),'costo del envío');
+      main.append(ctItems(shipRows.map(r=>({n:r.o.name,q:r.q,v:r.ship[r.best]?r.ship[r.best].v:0})),true));pl.append(box);return;}
     const g=rowsIn.filter(r=>r.best===k),[title,where,sub]=STEP[k]||[PLAN_L[k]||k,'',''];
     const groupGross=g.reduce((a,r)=>a+r.g[k]-r.prod,0);
-    const box=stepBox(k,i+1,title,where,sub,groupGross,SHIPS[k]?'antes del envío':'netos, ya con taxes');
+    const {box,main}=stepBox(k,i+1,title,where,sub,groupGross,SHIPS[k]?'antes del envío':'netos, ya con taxes');
     box.classList.add('pl-section');box.dataset.sortId='all:'+k;box.dataset.action=k;
     const acts=el('div','stp-acts');
     const cb=copyBtn(g.map(r=>r.o.name+'\t'+Math.round(r.q)).join('\n'),'Copiar '+g.length+(g.length>1?' items':' item'));cb.classList.add('cp-all');acts.append(cb);
     if(g.length>8){const search=el('input','pl-search');search.type='search';search.autocomplete='off';search.placeholder='Buscar item';
       search.value=vQuery['all:'+k]||'';search.setAttribute('aria-label','Buscar item en '+title);acts.append(search,el('span','pl-match'));}
-    box.append(acts);pl.append(box);
+    main.append(acts);pl.append(box);
     renderPlanTable(box,k,g);
   });
   // Pie: solo los items sin precio (no pertenecen a ningún grupo)
@@ -1355,7 +1364,6 @@ function paintVerdict(P){
    $('aCourier').textContent=P.Vs>0?'−'+fmt(P.shipCost):'0 ISK';$('aCourier').className=P.Vs>0?'neg':'zero';
    $('aCourS').textContent=P.Vs>0?fmtV(Math.round(P.Vs))+' · '+n+(n>1?' contratos':' contrato')+' · '+sh.length+(sh.length===1?' item':' items'):'Tu plan no envía nada.';}
   $('vNote').hidden=true;
-  $('bMore').querySelector('span').textContent='Consulta contratos y envío, reproceso y venta a jugadores.';
   // contrato del buyback para los items que conviene venderle
   $('bbBox').hidden=true; // el contrato del Buyback está en «Contratos y Envío»
 }
@@ -1409,6 +1417,31 @@ $('pCtr').addEventListener('keydown',e=>{if(e.target.closest('input,textarea,sel
  z.addEventListener('pointerup',e=>{if(x0==null)return;const dx=e.clientX-x0,dy=e.clientY-y0;x0=null;
    if(Math.abs(dx)>50&&Math.abs(dx)>Math.abs(dy)*1.5)czShow(czIdx+(dx<0?1:-1),dx<0?1:-1);},{passive:true});
  z.addEventListener('pointercancel',()=>{x0=null;},{passive:true});}
+// v1.0.59: datos de cada contrato, compartidos por «Contratos y Envío» y los Pasos para Vender (una sola fuente).
+function ctrSpecs(P,cs,dr){
+  const out=[];let cn=0;
+  if(P.toBB.length)out.push({cls:'bb',tag:['p-null k-bb','Buyback'],lab:'Buyback',title:'Contrato '+(++cn)+' · Al Buyback',amt:fmt(P.bbGross),
+    items:P.toBB.map(r=>({n:r.o.name,q:r.q})),fields:[['Tipo de contrato','Item Exchange'],['Ubicación',$('bbLoc').value],['Name',$('bbAvail').value,$('bbAvail').value],
+      ['Recibiré (ISK)',fmt(P.bbGross),(Math.round(P.bbGross*100)/100).toFixed(2)],['Expiración',$('bbExp').value],['Descripción',$('bbDesc').value.trim()||'La que te dé la página del Buyback',$('bbDesc').value.trim()||null]]});
+  cs.forEach((k,i)=>out.push({cls:'cr',tag:['p-jita k-jOrd','Envío'],lab:'Courier'+(cs.length>1?' '+(i+1):''),courier:i,withC:true,
+    title:'Contrato '+(++cn)+' · Courier a '+DEST()+(cs.length>1?' ('+(i+1)+' de '+cs.length+')':''),amt:fmt(k.reward),items:k.items,
+    fields:[['Tipo de contrato','Courier'],['Name',($('cAssignee').value.trim()||'SIGMA Freight'),($('cAssignee').value.trim()||'SIGMA Freight')],['Destino',destStation(),destStation()],
+      ['Recompensa (Reward)',fmt(k.reward),String(Math.ceil(k.reward))],['Colateral',fmt(k.c),String(Math.ceil(k.c))],['Volumen',fmtV(Math.round(k.v*100)/100),String(Math.ceil(k.v))],
+      ['Cálculo',fmt(C.base)+' + '+C.perM3+' ISK × '+NF0.format(Math.round(k.v))+' m³ + '+pct(C.collPct)+'% del colateral']]}));
+  if(dr.length){const tot=dr.reduce((a,r)=>a+(r.g.disc||0),0);
+    out.push({cls:'pl',tag:['p-disc k-disc','Jugador'],lab:'Jugador',title:'Contrato '+(++cn)+' · A un Jugador',amt:fmt(tot),items:dr.map(r=>({n:r.o.name,q:r.q})),
+      fields:[['Tipo de contrato','Item Exchange'],['Name','Al jugador que acepte en Discord'],['Ubicación',$('discLoc').value],['Recibiré (ISK)',fmt(tot),(Math.round(tot*100)/100).toFixed(2)]]});}
+  return out;
+}
+// Lista de items de un contrato (con copiar). withC: muestra también el volumen.
+function ctItems(list,withC){const w=el('div','ct-items'),hd=el('div','ct-ih');
+  hd.append(el('span',null,list.length+(list.length>1?' items':' item')),copyBtn(list.map(x=>x.n+'\t'+Math.round(x.q)).join('\n'),'Copiar items'));w.append(hd);
+  const ul=el('ul');list.slice(0,8).forEach(x=>{const li=el('li');const ic=iconFor(x.n);if(ic)li.append(ic);li.append(el('span','ct-n',x.n),el('span','ct-q num',fmtQ(x.q)+(withC?' · '+fmtV(Math.round(x.v*100)/100):'')));ul.append(li);});
+  if(list.length>8){const li=el('li','ct-more');li.append(el('span',null,'y '+(list.length-8)+' más (incluidos al copiar)'));ul.append(li);}
+  w.append(ul);return w;}
+// Casillas negras (etiqueta arriba, valor abajo; clic copia). cls: 'slots-2' = dos columnas (los valores largos ocupan la fila).
+function slots(fields,cls){const w=el('div','slots'+(cls?' '+cls:''));
+  fields.forEach(([k,v,cp])=>{const d=el('div','slot'+(String(v).length>22?' wide':''));d.append(el('span','slot-k',k));d.append(cp!=null?copyBtn(cp,v):el('span','slot-v'+(isNumTxt(v)?' cp-n':''),v));w.append(d);});return w;}
 function paintContracts(P){
   const sec=$('pCtr');sec.hidden=!S.items.length;
   $('ctrTitle').textContent=SH()?'Contratos y Envío':'Contratos';$('shipBox').hidden=!SH();sec.classList.toggle('no-ship',!SH());
@@ -1416,23 +1449,9 @@ function paintContracts(P){
   const nC=(P.toBB.length?1:0)+cs.length+(dr.length?1:0),shipR=cs.reduce((a,k)=>a+k.reward,0);
   {const sm=$('ctrSum');sm.textContent=nC?nC+(nC>1?' contratos':' contrato'):'Sin contratos';if(cs.length)sm.append(el('span','sm-hide',' · envío −'+fmt(shipR)));}
   if(!sec.open)return; // cerrada: solo el resumen del encabezado
-  const cards=[];let cn=0;
-  const fields=(rows)=>{const t=el('table','prices ct-f'),tb=el('tbody');rows.forEach(([k,v,cp])=>{const tr=el('tr');tr.append(el('td',null,k));const td=el('td','r');td.append(cp?copyBtn(cp,v):el('span',isNumTxt(v)?'cp-n':null,v));tr.append(td);tb.append(tr);});t.append(tb);return t;};
-  const items=(list,withC)=>{const w=el('div','ct-items'),hd=el('div','ct-ih');
-    hd.append(el('span',null,list.length+(list.length>1?' items':' item')),copyBtn(list.map(x=>x.n+'\t'+Math.round(x.q)).join('\n'),'Copiar items'));w.append(hd);
-    const ul=el('ul');list.slice(0,8).forEach(x=>{const li=el('li');const ic=iconFor(x.n);if(ic)li.append(ic);li.append(el('span','ct-n',x.n),el('span','ct-q num',fmtQ(x.q)+(withC?' · '+fmtV(Math.round(x.v*100)/100):'')));ul.append(li);});
-    if(list.length>8){const li=el('li','ct-more');li.append(el('span',null,'y '+(list.length-8)+' más (incluidos al copiar)'));ul.append(li);}
-    w.append(ul);return w;};
-  const card=(cls,tag,title,sub,body,meta)=>{const c=el('div','ct '+cls),h=el('div','ct-h');h.append(el('span','pill '+tag[0],tag[1]),el('b',null,title));if(sub)h.append(el('span','ct-s num',sub));c.append(h);body.forEach(b=>c.append(b));cards.push(Object.assign({node:c,cls},meta));};
-  if(P.toBB.length){const L=P.toBB.map(r=>({n:r.o.name,q:r.q}));
-    card('bb',['p-null k-bb','Buyback'],'Contrato '+(++cn)+' · Al Buyback',fmt(P.bbGross),[items(L),fields([['Tipo de contrato','Item Exchange'],['Ubicación',$('bbLoc').value],['Name',$('bbAvail').value,$('bbAvail').value],
-      ['Recibiré (ISK)',fmt(P.bbGross),(Math.round(P.bbGross*100)/100).toFixed(2)],['Expiración',$('bbExp').value],['Descripción',$('bbDesc').value.trim()||'La que te dé la página del Buyback',$('bbDesc').value.trim()||null]])],{lab:'Buyback'});}
-  cs.forEach((k,i)=>{
-    card('cr',['p-jita k-jOrd','Envío'],'Contrato '+(++cn)+' · Courier a '+DEST()+(cs.length>1?' ('+(i+1)+' de '+cs.length+')':''),fmt(k.reward),[items(k.items,true),fields([['Tipo de contrato','Courier'],['Name',($('cAssignee').value.trim()||'SIGMA Freight'),($('cAssignee').value.trim()||'SIGMA Freight')],['Destino',destStation(),destStation()],
-      ['Recompensa (Reward)',fmt(k.reward),String(Math.ceil(k.reward))],['Colateral',fmt(k.c),String(Math.ceil(k.c))],['Volumen',fmtV(Math.round(k.v*100)/100),String(Math.ceil(k.v))],
-      ['Cálculo',fmt(C.base)+' + '+C.perM3+' ISK × '+NF0.format(Math.round(k.v))+' m³ + '+pct(C.collPct)+'% del colateral']])],{lab:'Courier'+(cs.length>1?' '+(i+1):''),courier:i});});
-  if(dr.length){const tot=dr.reduce((a,r)=>a+(r.g.disc||0),0);
-    card('pl',['p-disc k-disc','Jugador'],'Contrato '+(++cn)+' · A un Jugador',fmt(tot),[items(dr.map(r=>({n:r.o.name,q:r.q}))),fields([['Tipo de contrato','Item Exchange'],['Name','Al jugador que acepte en Discord'],['Ubicación',$('discLoc').value],['Recibiré (ISK)',fmt(tot),(Math.round(tot*100)/100).toFixed(2)]])],{lab:'Jugador'});}
+  const cards=[];
+  ctrSpecs(P,cs,dr).forEach(c=>{const n=el('div','ct '+c.cls),h=el('div','ct-h');h.append(el('span','pill '+c.tag[0],c.tag[1]),el('b',null,c.title));h.append(el('span','ct-s num',c.amt));
+    n.append(h,ctItems(c.items,c.withC),slots(c.fields,'slots-2'));cards.push({node:n,cls:c.cls,lab:c.lab,courier:c.courier});});
   czCards=cards;
   const dots=$('czDots');dots.textContent='';
   cards.forEach((c,i)=>{const d=el('button','cz-d '+c.cls,String(i+1));d.type='button';d.dataset.i=i;d.title='Contrato '+(i+1)+' · '+c.lab;d.setAttribute('aria-label',d.title);dots.append(d);});
@@ -1595,8 +1614,9 @@ function paintScenarios(P){
     ' (lo Refinado ocupa '+fmtV(Math.round(B.V))+' contra '+fmtV(Math.round(A.V))+' Sin Refinar). '+
     (()=>{const w=Math.max(A.net,B.net);return w>=P.best-1?'Es tu mejor opción.':'Aun así, tu mejor plan ('+bestLabel()+') deja '+fmt(P.best-w)+' más que llevarlo todo a Jita.';})();
 }
-$('ledger').addEventListener('toggle',()=>{if($('esiStatus').classList.contains('cta'))ledgerCta();
-  if($('ledger').open){focusOnly('ledger');$('ledger').scrollIntoView({behavior:'smooth',block:'start'});}});
+$('ledger').addEventListener('toggle',()=>{if($('esiStatus').classList.contains('cta'))ledgerCta();});
+// v1.0.59: secciones plegables (Listado, Contratos, Reproceso, Jugadores): al abrir una, las demás se pliegan y la vista va a ella
+['ledger','pCtr','pRepro','pDisc'].forEach(id=>$(id).addEventListener('toggle',()=>{if($(id).open){focusOnly(id);$(id).scrollIntoView({behavior:'smooth',block:'start'});}}));
 $('pCtr').addEventListener('toggle',()=>{if($('pCtr').open&&lastP){paintContracts(lastP);paintCourier(lastP);colorNums($('fScnV'));}});
 
 // ================= Reproceso: Refinado vs Sin Refinar (por mercado) =================

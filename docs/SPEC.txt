@@ -1222,3 +1222,12 @@ Comparativa Minera: plan para Omega nuevo
   Lanczos 1920→2560×1440 + UnsharpMask(1.6, 55 %), JPEG q86 progresivo (~390 KB).
 - #themeLight dentro de <header class="top"> (.top-theme, margin-left:auto); fuera del menú lateral.
 - #rtM: .rm-l + .rm-f(+ input %); input sin spinner (appearance:textfield), fondo #151515, :focus-within arcilla. Reglas viejas de .route-m unificadas.
+
+==================== v1.0.59 ====================
+- #pCtr, #pRepro, #pDisc fuera de #deep (y sin #more/#bMore): details.panel.thin.fold con .fold-cta. CSS de #ledger generalizado a details.fold.
+  focusOnly pliega ledger/pCtr/pRepro/pDisc; listener toggle común (abrir → focusOnly + scroll).
+- ctrSpecs(P,cs,dr) → [{cls,tag,lab,title,amt,items,fields,courier,withC}] para Contratos y Pasos. ctItems(list,withC). slots(fields,'slots-2') = casillas .slot
+  (valores > 22 caracteres ocupan la fila; grid-auto-flow dense).
+- Pasos: section.stp > button.stp-h[data-stp] (n · título/sub · monto · chevron) + .stp-b (.stp-main | aside.stp-ct con slots). stepOpen (Set, por defecto
+  el primer paso; se reinicia al limpiar). Clic en .stp-h: alterna con slide() y centra. renderPlanTable inserta la tabla en .stp-main.
+- Fuera: .ct-f, .stp-f/.stp-fi, .stp-icons/iconStrip, .stp-acts .copy.p, #bMore/#more.

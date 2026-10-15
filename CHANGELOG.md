@@ -2,6 +2,22 @@
 
 Cambios por versión del Gestor de Ventas. La más nueva arriba. El detalle técnico completo está en `docs/SPEC.txt`.
 
+## 1.0.59 — Pasos para Vender en dos columnas y secciones plegables
+*2026-10-15*
+
+**Contratos y Envío, Reproceso y Vender a Jugadores**
+- Fuera del desglose y de «Ver más»: siempre visibles debajo del Resultado, plegadas con el mismo aspecto que «Listado de Items Registrados» (borde arcilla, «Ver ▾ / Ocultar ▴» a la derecha). Al abrir una, las demás se pliegan.
+- Los datos de cada contrato usan casillas negras (etiqueta arriba, valor abajo, clic para copiar), en dos columnas.
+
+**Pasos para Vender, rediseñados**
+- Cada paso se pliega con clic en su cabecera; el paso 1 empieza abierto. Abrir uno no cierra los demás y lo centra en pantalla.
+- Pasos con contrato (Buyback, Courier, Jugador) en dos columnas: a la izquierda los items, a la derecha **Cómo llenar el contrato** con las casillas negras (mismos datos que «Contratos y Envío»).
+- Tablas y listas dentro de los pasos con el mismo fondo negro de las casillas.
+- El paso del Courier muestra la lista de items con su volumen y «Copiar items».
+
+**Limpieza**
+- Una sola fuente para los datos de contratos (ctrSpecs) y para la lista de items (ctItems); fuera la tabla vieja de campos, la tira de íconos, el botón «Ver más» y sus estilos.
+
 ## 1.0.58 — Fondo limpio en alta resolución, tema arriba y margen más claro
 *2026-10-15*
 
