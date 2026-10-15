@@ -115,7 +115,7 @@ const MineUI=(()=>{
      '<h4>Jugador Nuevo (Barges)</h4><ul>'+
      '<li><b>Procurer</b> para empezar: es la barge más dura. Rinde menos, pero es la que más aguanta si te cae una gang encima.</li>'+
      '<li><b>Retriever</b> si minas solo y semi-AFK: la bodega más grande de las barges, la que menos viajes a descargar pide.</li>'+
-     '<li><b>Covetor</b> solo en flota con alguien que te recoja el mineral (Orca, Porpoise o hauler): la que más saca entre barges, pero se llena en minutos y es frágil.</li>'+
+     '<li><b>Covetor</b> solo en flota con un booster que comprima en el espacio (Orca, Porpoise o Rorqual): la que más saca entre barges, pero se llena en minutos y es frágil. Nadie recoge el mineral: el booster comprime 10 a 1 (1000 m³ se vuelven 100 m³), así que minas hasta que se acabe el material sin ir a la estación.</li>'+
      '<li>Hielo sin Ice Harvesting V: el <b>ORE Ice Harvester</b> solo pide Ice Harvesting I y cicla igual que el T2, sin residuo.</li>'+
      '<li>Moon ore: el <b>ORE Strip Miner</b> rinde bastante más que el Strip Miner I y no desperdicia mineral.</li>'+
      '<li>Gas: con Gas Cloud Harvesting IV solo puedes usar el harvester T1. Subirla a V es el salto más grande de todo el análisis.</li></ul>'+
