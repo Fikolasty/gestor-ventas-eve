@@ -1126,3 +1126,33 @@ Comparativa Minera: plan para Omega nuevo
 - .pl-tl: línea de tiempo en HTML (segmentos Expert System / sin minar / con tus skills; marcas barge, día 28, Exhumer; leyenda abajo).
 - Verificado: Playwright con ESI simulado (Jita y región 19000001), 1, 10 y 11 cuentas, botones − / +, campos de texto, inglés sin restos,
   móvil 390 px sin desborde, cero errores.
+==================== v1.0.32 ====================
+Comparativa Minera: escenario nullsec, rendimiento efectivo y drones de hielo Tech II
+- Todo nullsec: moon ore R4–R64, los 12 hielos, gas Mykoserocin/Cytoserocin. Fullerite es solo de wormholes y se
+  excluye de los materiales (build_data.py). Default de gas: Lime Cytoserocin (hay nebulosas de Lime en Catch).
+- Rendimiento efectivo (columna 'eff' en mining_data.js; calc.py TRIP_MIN = 2.0 min): sin boost, cada bodega llena
+  descuenta 2 min de viaje a descargar en la estructura (warp + dock + descargar + undock + vuelta). Con boost de
+  Porpoise/Orca/Rorqual el booster comprime en el mismo grid y no hay viajes: eff = bruto. La interfaz y el plan
+  muestran el efectivo (m³/h e ISK/h); el bruto queda en los datos. best() ordena por eff (monótono en el bruto).
+- Hielo Facción: drone Ice Harvesting Drone II en vez de 'Augmented' Ice Harvesting Drone (los drones de facción
+  Augmented son peores opción que T2 aquí); FALLBACK sin la entrada Augmented. SDE verificado con Pyfa fresco
+  (client build 3579973, el mismo que v1.0.31: los números base no cambiaron).
+- Textos: sin menciones a highsec/estación en la comparativa (ganks → ataques, estación → descargar, Rorqual sin
+  nota de highsec). en.json actualizado con las claves nuevas.
+- Verificado: Playwright con ESI simulado, español e inglés, móvil 390 px, cero errores.
+==================== v1.0.33 ====================
+Plan para Omega Nuevo: Exhumers y profit mensual desde el mes 2
+- S.barge acepta las 6 naves (Barges + Skiff/Mackinaw/Hulk). BARGE_OF = {Hulk: Covetor, Mackinaw: Retriever, Skiff: Procurer}.
+  La sim de 28 días usa simShip(S.barge) (la barge equivalente); planFit(m) devuelve simfit para barges y, para Exhumers,
+  items de MINE.fits['5|mat|tier|Exhumer'] + textos de la fila ['',5,0,mat,tier,Exhumer]. needPrices usa planFit.
+- .pl-steady (después de .pl-tiles): steadyCalc(m) = fila [S.boost2,4,0,mat,ptier,barge] (Todo a IV, sin implantes) →
+  ISK/h = eff × ISK/m³; ingreso mensual = ISK/h × S.hrs × 30; Omega = S.omegaPlex × precio PLEX; profit = ingreso − Omega.
+  Big = profit × N cuentas; líneas por cuenta (ingreso / Omega / profit) y ISK/h · nave · tier · boost. SEG boost2.
+- Textos: «Nave» en vez de «Barge»; hints por nave; «Fit de la Exhumer (la compras para el mes 2)»; «Exhumer y fit»;
+  titular con «las exhumers / la exhumer». Bullets nuevos en «Cómo se Calcula». en.json con las claves nuevas.
+- Verificado: Playwright con ESI simulado (Hulk, 5 cuentas, boost Orca, inglés sin restos), móvil 390 px, cero errores.
+==================== v1.0.34 ====================
+Desplegables de Minería con estilo de tarjeta
+- `.mn details` en mining.css: mismo tratamiento que `.mn-card` (fondo #151515, borde, radio, padding 14px 16px);
+  summary a 1.02rem y con margen abajo al abrir. El tema claro sale de light.py como las demás tarjetas.
+- Verificado: Playwright con ESI simulado (details abiertos, estilo de tarjeta, inglés sin restos), móvil 390 px, cero errores.
