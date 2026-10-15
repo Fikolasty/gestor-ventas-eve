@@ -114,16 +114,16 @@ const MineUI=(()=>{
    '<details class="mn-reco"><summary>Qué Nave Recomendar</summary><div class="mn-prose">'+
      '<h4>Jugador Nuevo (Barges)</h4><ul>'+
      '<li><b>Procurer</b> para empezar: es la barge más dura. Rinde menos, pero es la que más aguanta si te cae una gang encima.</li>'+
-     '<li><b>Retriever</b> si minas solo y semi-AFK: la bodega más grande de las barges, la que menos viajes a descargar pide.</li>'+
-     '<li><b>Covetor</b> solo en flota con un booster que comprima en el espacio (Orca, Porpoise o Rorqual): la que más saca entre barges, pero se llena en minutos y es frágil. Nadie recoge el mineral: el booster comprime 10 a 1 (1000 m³ se vuelven 100 m³), así que minas hasta que se acabe el material sin ir a la estación.</li>'+
+     '<li><b>Retriever</b> si minas solo y semi-AFK: la bodega más grande de las barges.</li>'+
+     '<li><b>Covetor</b> solo en flota con un booster que brinde compresion en el espacio (Orca o Rorqual): la que más saca entre barges.</li>'+
      '<li>Hielo sin Ice Harvesting V: el <b>ORE Ice Harvester</b> solo pide Ice Harvesting I y cicla igual que el T2, sin residuo.</li>'+
      '<li>Moon ore: el <b>ORE Strip Miner</b> rinde bastante más que el Strip Miner I y no desperdicia mineral.</li>'+
      '<li>Gas: con Gas Cloud Harvesting IV solo puedes usar el harvester T1. Subirla a V es el salto más grande de todo el análisis.</li></ul>'+
      '<h4>Veterano (Exhumers)</h4><ul>'+
-     '<li><b>Hulk</b> es la que más rinde en los tres materiales, pero solo en flota con alguien que le vacíe la bodega.</li>'+
+     '<li><b>Hulk</b> solo en flota con un booster que brinde compresion en el espacio (Orca o Rorqual): la que más saca entre Exhumers.</li>'+
      '<li><b>Mackinaw</b> para minar solo: algo menos que la Hulk, pero con la mejor autonomía por mucho.</li>'+
      '<li><b>Skiff</b> cuando hay riesgo (roamings, sistemas calientes): menos rendimiento a cambio del mejor tanque.</li>'+
-     '<li>Con <b>boosts</b>, Hulk y Covetor son las que más ganan: el ciclo baja y la bodega pequeña deja de importar porque el booster comprime el mineral en el mismo grid, sin viajes a descargar. La Rorqual da el boost más fuerte.</li>'+
+     '<li>Con <b>boosts</b>, Hulk y Covetor son las que más ganan: el ciclo baja. Con compresión de Orca o Rorqual, el booster comprime el mineral en el mismo grid, sin viajes a descargar. La Rorqual da el boost más fuerte.</li>'+
      '<li>En hielo, Hulk y Covetor tienen un bono de rol de ciclo muy fuerte. En gas, T2 y ORE rinden igual; el ORE no deja residuo y gasta menos CPU.</li></ul>'+
    '</div></details>'+
    '<details class="mn-how"><summary>Cómo se Calculó</summary><div class="mn-prose">'+
@@ -135,7 +135,7 @@ const MineUI=(()=>{
      '<li><b>Gas</b>: solo cuentan el harvester, las skills, la nave y el implante. No hay mejoras, rigs ni drones para gas.</li>'+
      '<li>Implantes de +5%: Highwall MX-1005 y Michi\'s Excavation Augmentor (moon), Yeti IH-1005 (hielo), Alchemist GH-805 (gas). Piden Cybernetics V.</li>'+
      '<li><b>Boost</b> al máximo: Mining Foreman Burst II con Mining Laser Optimization (menos ciclo en strip miners, ice y gas harvesters) y Mining Laser Efficiency (más crítico y menos residuo), Mining Director V, Mining Foreman Mindlink, la skill de la nave a V y su Industrial Core II (Medium en Porpoise, Large en Orca, Capital en Rorqual). La fórmula reproduce el máximo que publicó CCP para la Rorqual con los valores del core de entonces. Los drones no reciben boost.</li>'+
-     '<li><b>Rendimiento efectivo</b>: las cifras de m³/h e ISK/h ya descuentan el tiempo de descargar. Sin boost, cada bodega llena cuesta 2 min de viaje a la estructura (warp + dock + descargar + undock + vuelta). Con boost de Porpoise, Orca o Rorqual, el booster comprime en el mismo grid y no hay viajes: el efectivo es el bruto.</li>'+
+     '<li><b>Rendimiento efectivo</b>: las cifras de m³/h e ISK/h ya descuentan el tiempo de descargar. Sin boost, cada bodega llena cuesta 2 min de viaje a la estructura (warp + dock + descargar + undock + vuelta). Con compresión de Orca o Rorqual, el booster comprime en el mismo grid y no hay viajes: el efectivo es el bruto. Con boost de Porpoise (sin compresión), cada bodega llena cuesta 2 min de viaje, igual que sin boost.</li>'+
      '<li>El bruto incluye los críticos promediados (probabilidad × bono), como Pyfa. El residuo no se descuenta: se pierde de la roca, no de tu bodega. Sin módulos de tanque y sin tiempo de vuelo de los drones.</li>'+
      '<li>ISK/h = m³/h ÷ volumen de una unidad × precio en Jita 4-4. Comprimir no cambia las unidades, solo el volumen.</li></ul>'+
      '<p class="mn-src">Datos estáticos del cliente build <span class="mn-build"></span>.</p>'+
@@ -176,7 +176,7 @@ const MineUI=(()=>{
    '<div class="pl-vh"><h3 class="pl-vt"></h3><p class="mn-take pl-take"></p></div>'+
    '<div class="pl-tiles"></div>'+
    '<div class="mn-card pl-steady"><h3>Mes 2 en adelante: profit mensual</h3>'+
-     '<p class="mn-note">Con skills a IV, sin implantes (lo que tienes al terminar el plan de entrenamiento). La Omega es un costo de operación: lo que queda después de pagarla es profit. Con boost, el booster comprime en el mismo grid y no hay viajes a descargar.</p>'+
+     '<p class="mn-note">Con skills a IV, sin implantes (lo que tienes al terminar el plan de entrenamiento). La Omega es un costo de operación: lo que queda después de pagarla es profit. Con compresión de Orca o Rorqual, el booster comprime en el mismo grid y no hay viajes a descargar.</p>'+
      '<div class="mn-ctl" style="margin-bottom:10px"><div><span class="mn-lbl">Boost</span>'+SEG('boost2',[['','Sin boost'],['Porpoise','Porpoise'],['Orca','Orca'],['Rorqual','Rorqual']])+'</div></div>'+
      '<div class="pl-tiles pl-st-tiles"></div></div>'+
    '<div class="pl-dets"></div>'+
