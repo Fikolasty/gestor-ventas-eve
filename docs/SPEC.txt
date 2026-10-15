@@ -1198,3 +1198,10 @@ Comparativa Minera: plan para Omega nuevo
 - focusOnly(k) con k ∈ plans | deep | ledger | settings | help: pliega los demás (pkView.open=false + paintPicker, setSect('deep',false),
   #ledger.open=false, togglePanel(id,false)). Se llama al abrir los planes, el desglose, Tus Ítems (evento toggle) y togglePanel.
 - SECT/setSect(t,open) reemplazan el forEach de #bDeep/#bMore (mismo comportamiento; #more vive dentro de #deep).
+
+==================== v1.0.55 ====================
+- C.shipOn = «Courier». Ruta normal (S.flip=false): siempre true (setFlip lo repone) y #shipLab oculto. Ruta Jita → HY-RWO: #shipLab visible.
+  IN_JITA()=S.flip&&!C.shipOn: en computePlan (rama flip) se quitan fN y ship.fN → solo fJ/fJI. body.in-jita oculta reproceso/más.
+- syncShipSwitch(): «Courier On/Off» y hidden=!S.flip. Fuera syncShipLabels (fN ya solo existe con courier: etiquetas fijas).
+- Simplificadas las ternarias SH() en contextos donde siempre es true (ruta normal, fN, paintFlipBuy, reproceso) y SHIPS[k]&&SH() → SHIPS[k].
+- Fuera stepDone/itemDone, .pl-ck, doneBtn, .stp-prog/.stp-bar y su CSS/traducciones.

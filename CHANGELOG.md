@@ -2,6 +2,25 @@
 
 Cambios por versión del Gestor de Ventas. La más nueva arriba. El detalle técnico completo está en `docs/SPEC.txt`.
 
+## 1.0.55 — Interruptor Courier On/Off y pasos sin casillas
+*2026-10-15*
+
+**Courier On/Off** (reemplaza «En Jita / En HY-RWO»)
+- Ruta **HY-RWO → Jita**: el courier siempre se cuenta cuando el plan envía algo a Jita; el interruptor no aparece.
+- Ruta **Jita → HY-RWO**: aparece **Courier On/Off** (al elegir la ruta empieza en On).
+  - **On**: los ítems están en Jita y los llevas a HY-RWO con SIGMA Freight; se cuenta el courier y el plan compara vender en Jita o en HY-RWO.
+  - **Off**: los trajiste a Jita para venderlos allí; sin courier, solo vender en Jita (orden o al instante).
+- Al cambiar de ruta, el Courier vuelve a On.
+
+**Pasos para Vender**
+- Fuera las casillas de cada ítem, el botón «✓ Marcar hecho» y el contador «N de M pasos hechos».
+
+**Arreglo**
+- En «¿Reprocesar?» (venta a jugador) se mostraba una diferencia extra que no correspondía.
+
+**Limpieza**
+- Fuera las ramas de código que ya no pueden ocurrir con el nuevo interruptor (textos «sin envío» de la ruta normal, etiquetas que cambiaban con el switch) y el código/estilos de las casillas.
+
 ## 1.0.54 — Modo foco
 *2026-10-15*
 
