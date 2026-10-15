@@ -1097,3 +1097,10 @@ Comparativa Minera (antes «Minería»): plan para Omega nuevo
 
 ==================== v1.0.28 ====================
 - paintAppraisal: #appr .appr-g con dos <dl class="appr-c">: datos (Precios de, Volumen, Ítems) | precios (Buy, Split, Sell). En móvil una columna.
+
+==================== v1.0.29 ====================
+- jitaBook guarda topBuy/topSell (mejor compra y venta más barata tal cual). paintAppraisal los usa (valores como Janice).
+- rawSell(name,a,fallback): Jita Sell cruda (topSell > sell0 > sell > fallback). row.coll = rawSell × q; en rJita, la de cada mineral.
+- packCouriers: reward = base + perM3 × volumen(2 decimales) + collPct × ceil(colateral). Copia: reward y colateral al ISK, volumen 2 decimales.
+- «Cálculo» del contrato con cada parte y su resultado; el paso Courier usa packCouriers (mismos números que el contrato).
+- El plan sigue con precios protegidos (buy que acepta tu cantidad, sin trampas; sell sin cebos).

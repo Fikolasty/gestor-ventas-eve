@@ -415,7 +415,9 @@ async function jitaBook(id){
   if(buys.length&&buys[0].min>1&&(buy==null||buys[0].p>buy))flags.push({k:'minBuy',p:buys[0].p,min:buys[0].min});
   if(sell!=null&&sellP5&&sell<.5*sellP5){flags.push({k:'outSell',p:sell});sell=sellP5;}
   if(buy!=null&&buyP5&&buy>2*buyP5){flags.push({k:'outBuy',p:buy});buyCap=2*buyP5;buy=buyP5;}
-  return{buy,sell,buys:buys.slice(0,400),buyCap,flags,top:sells.slice(0,5).map(o=>({p:o.p,v:o.v}))};
+  // v1.0.29: topBuy/topSell = la mejor compra y la venta más barata tal cual (como Janice), solo para la Tasación.
+  // El plan sigue usando buy/sell (compra que acepta tu cantidad, sin trampas; venta sin cebos).
+  return{buy,sell,buys:buys.slice(0,400),buyCap,flags,top:sells.slice(0,5).map(o=>({p:o.p,v:o.v})),topBuy:buys.length?buys[0].p:null,topSell:sells.length?sells[0].p:null};
 }
 async function history30(id){
   try{
@@ -592,7 +594,8 @@ function computePlan(){
   const rJ=rateJita(),rN=rateNull(),rI=rateInst();
   const rows=S.items.map(o=>{
     const q=o.qty||0,ref=o.ref,a=o.jita;
-    const row={o,q,vol:(o.m3u||0)*q,coll:ref!=null?ref*q:0,prod:ref!=null?C.prod*ref*q:0,g:{},ship:{},hint:{}};
+    const cs=rawSell(o.name,a,ref); // v1.0.29: colateral del courier = Jita Sell tal cual (como Janice / SIGMA Freight)
+    const row={o,q,vol:(o.m3u||0)*q,coll:cs!=null?cs*q:0,prod:ref!=null?C.prod*ref*q:0,g:{},ship:{},hint:{}};
     // v1.0.5 modo Jita → HY-RWO: el lote está en Jita. Venderlo ahí (orden o al instante) o llevarlo a HY-RWO y
     // venderlo con orden a Jita Sell + margen de importación (neto, ya con taxes y broker de la estructura).
     if(S.flip){
@@ -1255,8 +1258,9 @@ function paintVerdict(P){
     if(k==='ship'){
       const vol=shipRows.reduce((a,r)=>a+(r.ship[r.best]?r.ship[r.best].v:0),0),col=shipRows.reduce((a,r)=>a+(r.ship[r.best]?r.ship[r.best].c:0),0),n=trips(vol);
       const box=stepBox('ship',i+1,'Courier a '+dest+' con SIGMA Freight','Envío',shipRows.length+(shipRows.length===1?' ítem':' ítems')+' · '+fmtV(Math.round(vol))+' · '+n+(n===1?' contrato':' contratos')+' · llega en '+C.cDays[0]+'–'+C.cDays[1]+' días',-(P.shipCost||0),'costo del envío');
-      const f=el('div','stp-f');[['Destinatario',$('cAssignee').value||'SIGMA Freight'],['Destino',destStation()],['Reward'+(n>1?' (total)':''),Math.round(P.shipCost||0)],['Colateral'+(n>1?' (total)':''),Math.round(col)]].forEach(([l,v])=>{
-        const c=el('div','stp-fi');c.append(el('span',null,l));const b=copyBtn(String(v),typeof v==='number'?fmtQ(v):v);c.append(b);f.append(c);});
+      const pkC=packCouriers(P); // mismos números que «Contratos y Envío» (lo que verifica SIGMA Freight)
+      const f=el('div','stp-f');[['Destinatario',$('cAssignee').value||'SIGMA Freight'],['Destino',destStation()],['Reward'+(n>1?' (total)':''),pkC.reduce((x,k)=>x+Math.ceil(k.reward),0)],['Colateral'+(n>1?' (total)':''),pkC.reduce((x,k)=>x+Math.ceil(k.c),0)],['Volumen'+(n>1?' (total)':''),Math.round(vol*100)/100]].forEach(([l,v])=>{
+        const c=el('div','stp-fi');c.append(el('span',null,l));const b=copyBtn(String(v),typeof v==='number'?(l.startsWith('Volumen')?fmtV(v):fmtQ(v)):v);c.append(b);f.append(c);});
       const acts=el('div','stp-acts');const cb=copyBtn(shipRows.map(r=>r.o.name+'\t'+Math.round(r.q)).join('\n'),'Copiar '+shipRows.length+(shipRows.length>1?' ítems':' ítem'));cb.classList.add('cp-all','p');
       acts.append(cb);if(n>1){const go=el('button','ghost','Ver los '+n+' contratos');go.type='button';go.addEventListener('click',()=>{const p=$('pCtr');if(p&&p.hidden&&$('bCtr'))$('bCtr').click();p&&p.scrollIntoView({behavior:'smooth',block:'start'});});acts.append(go);}
       acts.append(doneBtn('ship'));
@@ -1350,11 +1354,14 @@ function paintVerdict(P){
 // Buyback: un Item Exchange. Envío a Jita: lo que viaja se reparte en contratos de hasta C.maxVol m³
 // (los ítems grandes primero; una pila se divide si no cabe). Cada courier: recompensa = base + ISK/m³ × vol + % × colateral.
 // Jugador: un Item Exchange por lo que se vende por Discord (solo si el plan lo elige).
+// v1.0.29: precio crudo de Jita Sell (la venta más barata tal cual, como Janice). Es la base del colateral que pide
+// SIGMA Freight; no lleva anti-cebo, undercut ni ajuste de precios. Si no hay datos de la API, usa el precio dado.
+function rawSell(name,a,fallback){return a&&a.topSell!=null?a.topSell:(a&&a.sell0!=null?a.sell0:(a&&a.sell!=null?a.sell:(fallback!=null?fallback:null)));}
 function packCouriers(P){
   if(!C.shipOn)return [];
   const ent=[];
   P.rows.forEach(r=>{const k=r.best;if(!k||!SHIPS[k]||!r.ship[k])return;
-    if(k==='rJita'&&r.mins)r.mins.forEach(x=>{const u=prodVol(x.m);if(x.n>0)ent.push({n:x.m,q:x.n,u,c:(x.p||0)});});
+    if(k==='rJita'&&r.mins)r.mins.forEach(x=>{const u=prodVol(x.m);if(x.n>0)ent.push({n:x.m,q:x.n,u,c:(rawSell(x.m,S.api[x.m.toLowerCase()],x.p)||0)});});
     else{const q=r.q;if(q>0)ent.push({n:r.o.name,q,u:r.ship[k].v/q,c:r.ship[k].c/q});}});
   ent.sort((a,b)=>b.u*b.q-a.u*a.q);
   const cap=C.maxVol>0?C.maxVol:Infinity,out=[];let cur=null;
@@ -1366,7 +1373,8 @@ function packCouriers(P){
       if(fit<=0){if(cur.items.length){open();continue;}fit=1;} // un solo ítem más grande que el contrato
       const t=Math.min(left,fit);cur.items.push({n:e.n,q:t,v:t*e.u,c:t*e.c});cur.v+=t*e.u;cur.c+=t*e.c;left-=t;
       if(left>0)open();}});
-  out.forEach(k=>k.reward=C.base+C.perM3*k.v+C.collPct*k.c);
+  // reward exacto como lo verifica SIGMA Freight: volumen a 2 decimales y colateral redondeado al ISK
+  out.forEach(k=>k.reward=C.base+C.perM3*(Math.round(k.v*100)/100)+C.collPct*Math.ceil(k.c));
   return out;
 }
 const DEST=()=>S.flip?'HY-RWO':'Jita';
@@ -1415,8 +1423,9 @@ function paintContracts(P){
       ['Recibiré (ISK)',fmt(P.bbGross),(Math.round(P.bbGross*100)/100).toFixed(2)],['Expiración',$('bbExp').value],['Descripción',$('bbDesc').value.trim()||'La que te dé la página del Buyback',$('bbDesc').value.trim()||null]])],{lab:'Buyback'});}
   cs.forEach((k,i)=>{
     card('cr',['p-jita k-jOrd','Envío'],'Contrato '+(++cn)+' · Courier a '+DEST()+(cs.length>1?' ('+(i+1)+' de '+cs.length+')':''),fmt(k.reward),[items(k.items,true),fields([['Tipo de contrato','Courier'],['Name',($('cAssignee').value.trim()||'SIGMA Freight'),($('cAssignee').value.trim()||'SIGMA Freight')],['Destino',destStation(),destStation()],
-      ['Recompensa (Reward)',fmt(k.reward),String(Math.ceil(k.reward))],['Colateral',fmt(k.c),String(Math.ceil(k.c))],['Volumen',fmtV(Math.round(k.v*100)/100),String(Math.ceil(k.v))],
-      ['Cálculo',fmt(C.base)+' + '+C.perM3+' ISK × '+NF0.format(Math.round(k.v))+' m³ + '+pct(C.collPct)+'% del colateral']])],{lab:'Courier'+(cs.length>1?' '+(i+1):''),courier:i});});
+      ['Recompensa (Reward)',fmt(Math.ceil(k.reward)),String(Math.ceil(k.reward))],['Colateral',fmt(Math.ceil(k.c)),String(Math.ceil(k.c))],['Volumen',fmtV(Math.round(k.v*100)/100),String(Math.round(k.v*100)/100)],
+      ['Cálculo',(()=>{const N2=new Intl.NumberFormat('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}),v2=Math.round(k.v*100)/100,c0=Math.ceil(k.c);
+        return 'Base '+fmt(C.base)+' + '+C.perM3+' ISK × '+N2.format(v2)+' m³ ('+N2.format(C.perM3*v2)+') + '+pct(C.collPct)+'% de '+NF0.format(c0)+' ('+N2.format(C.collPct*c0)+') = '+NF0.format(Math.ceil(C.base+C.perM3*v2+C.collPct*c0))+' ISK';})()]])],{lab:'Courier'+(cs.length>1?' '+(i+1):''),courier:i});});
   if(dr.length){const tot=dr.reduce((a,r)=>a+(r.g.disc||0),0);
     card('pl',['p-disc k-disc','Jugador'],'Contrato '+(++cn)+' · A un Jugador',fmt(tot),[items(dr.map(r=>({n:r.o.name,q:r.q}))),fields([['Tipo de contrato','Item Exchange'],['Name','Al jugador que acepte en Discord'],['Ubicación',$('discLoc').value],['Recibiré (ISK)',fmt(tot),(Math.round(tot*100)/100).toFixed(2)]])],{lab:'Jugador'});}
   czCards=cards;
@@ -2012,10 +2021,12 @@ function refresh(){if(refQ)return;refQ=requestAnimationFrame(()=>{refQ=0;refresh
 // Usa los mismos precios que el resto (Jita Sell ya sin órdenes cebo). Sin ítems vuelve al mensaje de inicio.
 function paintAppraisal(){
   const box=$('appr');if(!box)return;box.textContent='';
-  const its=S.items.filter(o=>o.qty>0),priced=its.filter(o=>o.jita&&o.jita.buy!=null&&o.jita.sell!=null);
+  // v1.0.29: valores como Janice: mejor compra y venta más barata de Jita 4-4 tal cual, sin los filtros del plan
+  const tb=o=>o.jita&&(o.jita.topBuy!=null?o.jita.topBuy:o.jita.buy),ts=o=>o.jita&&(o.jita.topSell!=null?o.jita.topSell:o.jita.sell);
+  const its=S.items.filter(o=>o.qty>0),priced=its.filter(o=>tb(o)!=null||ts(o)!=null);
   // v1.0.25: la tasación solo aparece con ítems pegados; sin ítems, las tarjetas ocupan todo el ancho
   box.hidden=!its.length;box.parentNode.classList.toggle('no-appr',!its.length);if(!its.length)return;
-  let vB=0,vS=0,vol=0,u=0;its.forEach(o=>{vol+=(o.m3u||0)*o.qty;u+=o.qty;});priced.forEach(o=>{vB+=o.jita.buy*o.qty;vS+=o.jita.sell*o.qty;});
+  let vB=0,vS=0,vol=0,u=0;its.forEach(o=>{vol+=(o.m3u||0)*o.qty;u+=o.qty;});priced.forEach(o=>{vB+=(tb(o)||0)*o.qty;vS+=(ts(o)||0)*o.qty;});
   // v1.0.28: dos columnas fijas, como Janice: datos del lote a la izquierda y los tres precios juntos a la derecha
   const g=el('div','appr-g'),colL=el('dl','appr-c'),colR=el('dl','appr-c appr-p');
   const cell=(col,k,v,c,cp)=>{const d=el('div',c||null);d.append(el('dt',null,k));const dd=el('dd','num');

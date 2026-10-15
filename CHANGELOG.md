@@ -2,6 +2,14 @@
 
 Cambios por versión del Gestor de Ventas. La más nueva arriba. El detalle técnico completo está en `docs/SPEC.txt`.
 
+## 1.0.29 — Tasación como Janice y contratos exactos para SIGMA Freight
+*2026-10-14*
+
+- Tasación con los mismos valores que Janice: la mejor compra y la venta más barata de Jita 4-4 tal cual. El plan sigue usando sus precios protegidos (compras que aceptan tu cantidad, sin trampas ni cebos).
+- **Contratos de courier con los números crudos que verifica SIGMA Freight**: el colateral es la Jita Sell tal cual de cada ítem (como Janice: sin anti-cebo, undercut ni ajuste de precios); el volumen va con 2 decimales y el reward = base + ISK/m³ × volumen + % × colateral, redondeado al ISK.
+- «Cálculo» del contrato muestra cada parte con sus decimales y el total, para comprobarlo a mano.
+- El paso «Courier» de Pasos para Vender usa exactamente los mismos números que el contrato (reward, colateral y volumen).
+
 ## 1.0.28 — Tasación con los precios juntos
 *2026-10-14*
 
