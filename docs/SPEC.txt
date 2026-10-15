@@ -1235,3 +1235,6 @@ Comparativa Minera: plan para Omega nuevo
 ==================== v1.0.60 ====================
 - section.panel.extras#pExtra con h2 «Extras» envuelve #pRepro y #pDisc. syncExtras() (en refreshNow, autoRepro y paintDisc): #pRepro oculto con S.flip o sin ore;
   #pExtra oculto si ambos lo están. Filas de Extras y #bDeep: min-height 65 px, mismo ancho que .pk-o.
+
+==================== v1.0.61 ====================
+- #help reescrito (textos y traducciones). #help .hp-c/.hp-t>div con fondo #0b0b0b inset; .hp-n con gradiente arcilla. Comentarios «CCP» → «EVE».

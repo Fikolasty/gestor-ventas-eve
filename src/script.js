@@ -809,7 +809,7 @@ function paintGuide(ol,r){
   }
 }
 
-// ================= Íconos de items (servidor de imágenes de CCP) =================
+// ================= Íconos de items (servidor de imágenes de EVE) =================
 // images.evetech.net/types/{id}/icon. Se bajan con fetch sin caché (cache:'no-store') y se muestran como blob:
 // así no queda nada guardado en el navegador. Se guardan solo en memoria y se liberan al cerrar.
 const ICON={},ICON_WAIT={};
@@ -826,7 +826,7 @@ let ICON_POOL={};
 document.addEventListener('error',e=>{const t=e.target;if(t&&t.classList&&t.classList.contains('ti'))t.style.visibility='hidden';},true); // ícono que no carga: se oculta
 // Antes de vaciar un contenedor: guarda sus íconos para reusarlos al volver a pintarlo
 function poolIcons(root){ICON_POOL={};root.querySelectorAll('img.ti').forEach(i=>{const k=i.dataset.tid;(ICON_POOL[k]=ICON_POOL[k]||[]).push(i);});}
-function loadIcon(id){ // v1.0.16: <img> directo al servidor de imágenes de CCP (antes fetch+blob, que fallaba en GitHub Pages)
+function loadIcon(id){ // v1.0.16: <img> directo al servidor de imágenes de EVE (antes fetch+blob, que fallaba en GitHub Pages)
   if(ICON_WAIT[id])return;ICON_WAIT[id]=1;
   ICON[id]='https://images.evetech.net/types/'+id+'/icon?size=64';
   if(ICON_EL[id])ICON_EL[id].src=ICON[id];document.querySelectorAll('img.ti[data-tid="'+id+'"]').forEach(i=>i.src=ICON[id]);

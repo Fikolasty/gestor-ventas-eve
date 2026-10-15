@@ -2,6 +2,12 @@
 
 Cambios por versión del Gestor de Ventas. La más nueva arriba. El detalle técnico completo está en `docs/SPEC.txt`.
 
+## 1.0.61 — Guía de Uso actualizada
+*2026-10-15*
+
+- Textos de la Guía de Uso al día: Fenris Creations en lugar de CCP, «pégalos en el recuadro de inicio», Tasación, Plan Óptimo desplegable, Pasos con contrato, menú lateral (ruta, Courier, margen), Listado de Items Registrados y la seguridad tal como funciona hoy. También en inglés.
+- Estilo: los cuadros de texto usan el negro de las casillas para que el texto resalte; los números 1–4 en arcilla, como los de los Pasos; los títulos de «Formas de Vender» y «Palabras Clave» en arcilla.
+
 ## 1.0.60 — Recuadro Extras y medidas iguales
 *2026-10-15*
 

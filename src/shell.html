@@ -1010,6 +1010,11 @@ details.fold>summary h2 .logo{width:24px;height:24px;margin:0 2px 0 0}
 .extras>details.fold:not([open])>summary{min-height:63px;box-sizing:border-box}
 .extras>details.fold:not([open]){padding:0 14px 0 18px!important}
 .extras>details.fold>summary h2{font-size:1.1rem}
+/* v1.0.61: Guía de Uso con más contraste: cuadros en el negro de las casillas y números en arcilla */
+#help .hp-c,#help .hp-t>div{background:#0b0b0b!important;border:1px solid rgba(222,220,209,.08)!important;box-shadow:inset 0 1px 4px rgba(0,0,0,.6)!important}
+#help .hp-c p,#help .hp-t span{color:#d6d4cb}
+#help .hp-n{width:28px;height:28px;color:#fff;font-weight:700;background:linear-gradient(180deg,#e08a6c,#c96442);box-shadow:inset 0 1px 0 rgba(255,255,255,.2),0 2px 6px rgba(0,0,0,.5)}
+#help .hp-t b{color:#e8a588}
 /* interruptores del menú (Courier, tema) */
 .sw{display:inline-flex;align-items:center;gap:8px;cursor:pointer;font-size:.9rem;color:#e5e3da;text-shadow:0 1px 3px rgba(0,0,0,.9);padding:6px 10px;border-radius:10px;background:rgba(21,21,21,.75);border:1px solid rgba(222,220,209,.12)}
 .sw input{position:absolute;opacity:0;width:1px;height:1px}
@@ -1366,39 +1371,39 @@ Contraband Freight = no</textarea><small>Una regla por línea: Nombre = tax tota
   <section class="panel" id="help" hidden>
     <div class="x-wrap"><button type="button" class="x-close" data-close="help" aria-label="Cerrar Guía de Uso" title="Cerrar Guía de Uso"></button></div>
     <h2><span class="ic i-help" aria-hidden="true"></span>Guía de Uso</h2>
-    <p class="lead">Del inventario al plan: copia tus items, revisa precios de Jita 4-4 y compara rutas de venta con las deducciones configuradas. No hace falta iniciar sesión.</p>
+    <p class="lead">Pega tus items, espera los precios de Jita 4-4 y Market Moves+ te dice dónde venderlos, cuánto recibirías y cómo hacerlo paso a paso. No necesitas iniciar sesión.</p>
     <div class="hp">
       <div class="hp-c"><h3><span class="hp-n">1</span>Copia tu Inventario</h3>
-        <p>En EVE abre el inventario en <b>vista de lista</b>. Necesitas al menos las columnas <b>Name</b> y <b>Quantity</b>. Si ves <b>Volume</b> y <b>Est. Price</b>, mejor: la app las usa para verificar.</p>
-        <p>Selecciona las filas que quieres analizar, usa <b>Ctrl+C</b> y pégalas arriba con <b>Ctrl+V</b>. Revisa cantidades si faltaba la columna Quantity. Puedes utilizar texto compatible copiado de otras listas.</p></div>
+        <p>En EVE abre el inventario en vista de lista con al menos las columnas <b>Name</b> y <b>Quantity</b>. Si también ves <b>Volume</b> y <b>Est. Price</b>, mejor: se usan para verificar.</p>
+        <p>Selecciona los items, copia con <b>Ctrl+C</b> y pégalos en el recuadro de inicio con <b>Ctrl+V</b>. Al pegar aparece la Tasación (Buy, Split y Sell de Jita, como Janice).</p></div>
       <div class="hp-c"><h3><span class="hp-n">2</span>Espera los Precios</h3>
-        <p>La app consulta ESI (API de CCP) para precios y datos del mercado de Jita 4-4. Espera a que termine de cargar: un item sin precio verificado puede quedar fuera de la recomendación.</p>
-        <p>Los avisos no son errores automáticos: pueden indicar volumen distinto, precio atípico o compras insuficientes. Abre ese item para comprobarlo antes de publicar una orden.</p></div>
+        <p>Los precios salen de la API oficial de EVE (ESI, de Fenris Creations). Espera a que termine de cargar: un item sin precio no entra en el total.</p>
+        <p>Si un item tiene avisos (volumen distinto, precio atípico, pocas compras), ábrelo en el <b>Listado de Items Registrados</b> para revisarlo antes de publicar.</p></div>
       <div class="hp-c"><h3><span class="hp-n">3</span>Lee el Plan</h3>
-        <p><b>Resultado</b> reúne lo que recibirías según los precios disponibles y los costes configurados; no necesariamente es beneficio sobre lo que pagaste por el loot. La preferencia por rapidez puede elegir Jita aunque otra ruta deje un poco más.</p>
-        <p>Abre <b>Ver el desglose</b> para ver los <b>Pasos para Vender</b>: cada paso dice qué hacer y dónde, en orden, con sus items y precios para copiar. En <b>Contratos y Envío</b> encontrarás cada contrato (uno a la vez, pasa con las flechas) y lo que cuesta el envío.</p></div>
+        <p><b>Resultado</b> muestra lo que recibirías con el plan elegido y cuánto más (o menos) deja frente a la alternativa simple. Clic en el Plan Óptimo para ver los demás planes.</p>
+        <p><b>Ver el desglose</b> abre los Pasos para Vender: cada paso dice qué hacer y dónde, con sus items, precios para copiar y, si hay contrato, cómo llenarlo.</p></div>
       <div class="hp-c"><h3><span class="hp-n">4</span>Ajusta a tu Medida</h3>
-        <p>En <b>Ajustes</b> configura skills, Broker, Sales Tax, precio local de Nullsec, Buyback, refinería y tiempos de courier. Los valores iniciales son ejemplos operativos: cámbialos por los tuyos.</p>
-        <p>La herramienta guarda solo tus Ajustes en este navegador; los inventarios pegados nunca se guardan. Una recarga borra la sesión de trabajo.</p></div>
+        <p>En el menú lateral eliges la ruta (HY-RWO → Jita o Jita → HY-RWO), el Courier y el margen. En <b>Ajustes</b> pon tus skills, taxes, Buyback, refinería y tiempos de envío.</p>
+        <p>Solo tus Ajustes y el tema se guardan en este navegador; lo que pegas nunca se guarda y se borra al recargar.</p></div>
     </div>
     <h3 class="sub-h" style="margin-top:20px">Las Formas de Vender</h3>
     <div class="hp-t">
-      <div><b>Vender en HY-RWO</b><span>Sell order en la estructura configurada de Nullsec. El precio se estima a partir de Jita Buy o del precio local indicado; puede aplicar una regla especial al hielo. Resta Sales Tax, Broker y SCC; no paga courier a Jita.</span></div>
-      <div><b>Vender al Buyback</b><span>Contrato Item Exchange al programa de la alianza. Calcula el pago a partir del precio base y tax configurados. No requiere courier a Jita ni Sales Tax de mercado; confirma aceptación y plazos con el Buyback.</span></div>
-      <div><b>Vender en Jita (Orden)</b><span>Mandas la carga a Jita y publicas una sell order con el precio recomendado. Se descuentan courier, Sales Tax, Broker y los relists activados.</span></div>
-      <div><b>Vender en Jita al Instante</b><span>Envías la carga a Jita y vendes a buy orders disponibles. Para grandes cantidades, el cálculo recorre el libro de compras; puede recibir menos que la mejor buy order por unidad.</span></div>
-      <div><b>Refinado en Null o en Jita</b><span>Reprocesas ore, hielo o mena lunar en la refinería configurada. Los minerales y productos resultantes se venden en Nullsec o Jita según el valor neto; se considera yield, tax y volumen real del courier.</span></div>
-      <div><b>Vender a Jugador</b><span>Oferta WTS en Discord a un precio basado en Jita Buy o Split y el porcentaje configurado. Depende de que otro jugador acepte la oferta; no es liquidez garantizada.</span></div>
+      <div><b>Vender en HY-RWO</b><span>Sell order en tu estructura de Nullsec. El precio parte de Jita Buy o del precio local que indiques; el hielo puede tener su propia regla. Resta Sales Tax, Broker y SCC; sin courier.</span></div>
+      <div><b>Vender al Buyback</b><span>Contrato Item Exchange al programa de la alianza: precio base menos su tax. Sin courier ni Sales Tax; confirma que acepten el item.</span></div>
+      <div><b>Vender en Jita (Orden)</b><span>Mandas la carga a Jita con SIGMA Freight y publicas una sell order un tick por debajo de la más barata. Resta courier, Sales Tax, Broker y los relists si los activas.</span></div>
+      <div><b>Vender en Jita al Instante</b><span>Mandas la carga a Jita y vendes a las buy orders. Con mucha cantidad se recorre el libro de compras, así que el promedio puede ser menor que la mejor compra.</span></div>
+      <div><b>Reprocesar</b><span>Ore, hielo o mena lunar se reprocesan en tu refinería de HY-RWO y los materiales se venden en HY-RWO o en Jita, lo que deje más. Cuenta rendimiento, tax y volumen real.</span></div>
+      <div><b>Vender a Jugador</b><span>Oferta WTS en Discord a un % de Jita Buy o Split. Depende de que alguien la acepte; no es venta garantizada.</span></div>
     </div>
     <h3 class="sub-h" style="margin-top:20px">Palabras Clave</h3>
     <div class="hp-t">
-      <div><b>Jita Buy / Split / Sell</b><span>Buy: órdenes de compra. Sell: órdenes de venta. Split: punto medio entre ambos precios. No son precios de venta garantizados para cualquier cantidad.</span></div>
-      <div><b>Undercut</b><span>Publicar o modificar una sell order a un precio algo menor que la competencia. Cada relist puede generar costes adicionales.</span></div>
-      <div><b>Relist</b><span>Modificar el precio de una orden existente. La herramienta estima una comisión de relist y la incluye si activas esa deducción.</span></div>
-      <div><b>Colateral</b><span>Valor declarado de la carga para el courier. Según la configuración SIGMA Freight de esta herramienta, se consideran base por contrato, ISK/m³ y porcentaje de colateral.</span></div>
+      <div><b>Jita Buy / Split / Sell</b><span>Buy: la mejor orden de compra. Sell: la venta más barata. Split: el punto medio. No garantizan vender cualquier cantidad a ese precio.</span></div>
+      <div><b>Undercut</b><span>Poner tu sell order un poco más barata que la competencia.</span></div>
+      <div><b>Relist</b><span>Cambiar el precio de una orden. Tiene costo; la app lo suma si activas la casilla de relists.</span></div>
+      <div><b>Colateral</b><span>Valor declarado de la carga en el courier (Jita Sell). SIGMA Freight cobra base por contrato + ISK por m³ + % del colateral.</span></div>
     </div>
     <h3 class="sub-h" style="margin-top:20px"><span class="ic i-lock" aria-hidden="true"></span>Seguridad</h3>
-    <p class="lead">No necesitas introducir contraseña de EVE. La calculadora usa ESI de CCP para consultar datos de mercado y el servicio de imágenes de EVE para los íconos. Los enlaces a Janice, Discord, SIGMA Auth y Buyback se abren por separado. El inventario y los ajustes permanecen en memoria y se pierden al recargar.</p>
+    <p class="lead">No pide tu contraseña de EVE ni inicio de sesión. Solo se conecta a la API oficial de EVE (ESI) para precios y al servidor de imágenes de EVE para los íconos. Janice, Discord y el Buyback se abren aparte, en tu navegador.</p>
   </section>
   </div>
   <div class="hero-intro no-appr">
