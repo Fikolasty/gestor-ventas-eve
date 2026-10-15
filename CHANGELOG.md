@@ -2,6 +2,26 @@
 
 Cambios por versión del Gestor de Ventas. La más nueva arriba. El detalle técnico completo está en `docs/SPEC.txt`.
 
+## 1.0.34 — Desplegables de Minería con estilo de tarjeta
+*2026-10-14*
+
+- «Plan de Entrenamiento Paso a Paso», «Cómo se Calcula» (plan y comparativa) y «Qué Nave Recomendar» ahora son tarjetas como el resto de la página (fondo, borde, radio y padding), no secciones peladas con solo una línea arriba. Español / English.
+
+## 1.0.33 — Plan para Omega Nuevo: Exhumers y profit mensual desde el mes 2
+*2026-10-14*
+
+- **Exhumers en el selector de naves del plan**: Skiff, Mackinaw y Hulk. El primer mes minas con la barge equivalente (Skiff → Procurer, Mackinaw → Retriever, Hulk → Covetor) mientras entrenas Exhumers, y la inversión es la Exhumer con su fit.
+- **Mes 2 en adelante: profit mensual**: ritmo estable con skills a IV, sin implantes. Ingreso mensual = ISK/h × horas al día × 30 días, menos el Omega de ese mes. La Omega es un costo de operación: lo que queda después de pagarla es profit. Con selector de boost (Sin / Porpoise / Orca / Rorqual). Todo se multiplica por tus cuentas.
+- Español / English.
+
+## 1.0.32 — Comparativa Minera: todo nullsec, rendimiento efectivo y drones de hielo Tech II
+*2026-10-14*
+
+- **Todo el escenario es nullsec**: moon ore R4–R64, los 12 hielos y gas Mykoserocin/Cytoserocin. Fullerite es solo de wormholes y ya no aparece. El gas por defecto es Lime Cytoserocin (hay nebulosas de Lime en Catch).
+- **Rendimiento efectivo**: las cifras de m³/h e ISK/h ya descuentan el tiempo de descargar. Sin boost, cada bodega llena cuesta 2 min de viaje a la estructura. Con boost de Porpoise, Orca o Rorqual, el booster comprime en el mismo grid y no hay viajes: el efectivo es el bruto. El Plan para Omega Nuevo también usa el efectivo.
+- **Hielo Facción con drones Tech II**: el escalón Facción de hielo usa Ice Harvesting Drone II en vez del 'Augmented' (dron de facción). Datos reconstruidos con Pyfa fresco (mismo build de cliente, los números base no cambiaron).
+- Textos sin menciones a highsec ni a la estación en la comparativa. Español / English.
+
 ## 1.0.31 — Comparativa Minera: plan para Omega nuevo más claro y con precios de ESI
 *2026-10-14*
 
