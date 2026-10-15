@@ -2,6 +2,11 @@
 
 Cambios por versión del Gestor de Ventas. La más nueva arriba. El detalle técnico completo está en `docs/SPEC.txt`.
 
+## 1.0.37 — Etiqueta del grupo de naves encima (corrige envoltura)
+*2026-10-14*
+
+- La etiqueta Barge/Exhumer va encima de su grupo, no al lado: cada SEG tiene todo el ancho de la fila y los 3 botones caben en una línea en tercios iguales. En v1.0.36 el grupo Barge se partía en 2+1 porque sus etiquetas son más largas y la etiqueta lateral le robaba ancho. Español / English.
+
 ## 1.0.36 — Grupos de naves del mismo tamaño y Expert System en 0 para Exhumers
 *2026-10-14*
 
