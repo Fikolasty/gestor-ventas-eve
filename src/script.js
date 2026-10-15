@@ -409,7 +409,8 @@ async function jitaBook(id){
   if(buys.length&&buys[0].min>1&&(buy==null||buys[0].p>buy))flags.push({k:'minBuy',p:buys[0].p,min:buys[0].min});
   if(sell!=null&&sellP5&&sell<.5*sellP5){flags.push({k:'outSell',p:sell});sell=sellP5;}
   if(buy!=null&&buyP5&&buy>2*buyP5){flags.push({k:'outBuy',p:buy});buyCap=2*buyP5;buy=buyP5;}
-  return{buy,sell,buys:buys.slice(0,400),buyCap,flags,top:sells.slice(0,5).map(o=>({p:o.p,v:o.v}))};
+  // v1.0.45: topBuy/topSell = mejor compra y venta más barata de Jita 4-4 tal cual (como Janice), solo para la Tasación.
+  return{buy,sell,buys:buys.slice(0,400),buyCap,flags,top:sells.slice(0,5).map(o=>({p:o.p,v:o.v})),topBuy:buys.length?buys[0].p:null,topSell:sells.length?sells[0].p:null};
 }
 async function history30(id){
   try{
@@ -460,7 +461,7 @@ async function esiItems(all){
     S.items.forEach(o=>{o.notFound=unknown.includes(o.name);const a=S.api[o.name.toLowerCase()];if(a)o.jita=a;verify(o,true);derive(o);});
     syncLots();
     const nWarn=S.items.filter(o=>(o.checks||[]).some(c=>c[1]==='warn')).length;
-    const hora=new Date().toLocaleTimeString('es',{hour:'2-digit',minute:'2-digit'});
+    const hora=new Date().toLocaleTimeString('es',{hour:'2-digit',minute:'2-digit'});S.pricedAt=hora;
     status('esiStatus','Precios de Jita 4-4 de las '+hora+'. '+(nWarn?nWarn+' ítem(s) con avisos: ábrelos para ver qué revisar.':'Todo verificado contra la API.'),nWarn?'err':'ok');
   }catch(e){status('esiStatus','No se pudo conectar con la API de EVE ('+e.message+').','err');}
   finally{
@@ -1075,7 +1076,7 @@ function clearViews(){
   document.title='Gestor de Ventas · SIGMA GRINDSET';
   ['vPlan','vRepList','ctrList','czDots','ctrTot','shBody','fScn','rx','rxFinal','dMsg','sumP1','sumP2'].forEach(id=>{const e=$(id);if(e)e.textContent='';});
   ['pCtr','pSum'].forEach(id=>{const e=$(id);if(e)e.hidden=true;});
-  lastP=null;repaintPlanGroup=null;discRows=[];czCards=[];lastCs=[];czIdx=0;S.planMode=null;ICON_POOL={};
+  lastP=null;repaintPlanGroup=null;S.pricedAt=null;paintAppraisal();discRows=[];czCards=[];lastCs=[];czIdx=0;S.planMode=null;ICON_POOL={};
   vShow=Object.create(null);vSort=Object.create(null);vQuery=Object.create(null);stepDone=new Set();pkView={sort:'net',dir:-1,filter:'all'};itemDone=new Set();if($('stepHead'))$('stepHead').textContent='';
 }
 function paintVerdict(P){
@@ -1984,13 +1985,31 @@ function colorNums(root){
 // varios ajustes no se recalcula en cada tecla). refreshNow() pinta al instante.
 let refQ=0;
 function refresh(){if(refQ)return;refQ=requestAnimationFrame(()=>{refQ=0;refreshNow();});}
+// v1.0.45: Tasación del lote como Janice: Precios de · Volumen · Ítems | Buy · Split · Sell.
+// Valores crudos (mejor compra y venta más barata de Jita 4-4), sin los filtros del plan. Solo con ítems pegados.
+function paintAppraisal(){
+  const box=$('appr');if(!box)return;box.textContent='';
+  const tb=o=>o.jita&&(o.jita.topBuy!=null?o.jita.topBuy:o.jita.buy),ts=o=>o.jita&&(o.jita.topSell!=null?o.jita.topSell:o.jita.sell);
+  const its=S.items.filter(o=>o.qty>0),priced=its.filter(o=>tb(o)!=null||ts(o)!=null);
+  box.hidden=!its.length;box.parentNode.classList.toggle('no-appr',!its.length);if(!its.length)return;
+  let vB=0,vS=0,vol=0,u=0;its.forEach(o=>{vol+=(o.m3u||0)*o.qty;u+=o.qty;});priced.forEach(o=>{vB+=(tb(o)||0)*o.qty;vS+=(ts(o)||0)*o.qty;});
+  const g=el('div','appr-g'),colL=el('dl','appr-c'),colR=el('dl','appr-c appr-p');
+  const cell=(col,k,v,c,cp)=>{const d=el('div',c||null);d.append(el('dt',null,k));const dd=el('dd','num');
+    if(typeof v==='number')dd.append(copyBtn(Math.round(v),fmt(v)));else if(cp!=null)dd.append(copyBtn(cp,v));else dd.textContent=v;d.append(dd);col.append(d);};
+  const ok=priced.length>0,v2=Math.round(vol*100)/100;
+  cell(colL,'Precios de','Jita 4-4'+(S.pricedAt?' · '+S.pricedAt:''));
+  cell(colL,'Volumen',NF2.format(v2)+' m³',null,String(v2)); // 2 decimales, como Janice; clic copia el número
+  cell(colL,'Ítems',its.length+(its.length===1?' ítem · ':' ítems · ')+fmtQ(u)+' u.'+(priced.length<its.length?' ('+priced.length+' con precio)':''));
+  cell(colR,'Buy',ok?vB:'—','t-buy');cell(colR,'Split',ok?(vB+vS)/2:'—','t-split');cell(colR,'Sell',ok?vS:'—','t-sell');
+  g.append(colL,colR);box.append(el('span','appr-tag','Tasación'),g);
+}
 function refreshNow(){
   if(refQ){cancelAnimationFrame(refQ);refQ=0;}
   if(S.loading)return; // se pinta al terminar la carga
   document.body.classList.toggle('in-jita',IN_JITA()); // v1.0.22: oculta lo que no aplica con los ítems ya en Jita
   if(!S.repro.dirty&&!$('pRepro').hidden)fillFromItem();
   const P=computePlan();
-  P.rows.forEach(paintLot);paintVerdict(P);paintContracts(P);paintCourier(P);paintDisc(P);paintRepro();paintSummary(P);
+  paintAppraisal();P.rows.forEach(paintLot);paintVerdict(P);paintContracts(P);paintCourier(P);paintDisc(P);paintRepro();paintSummary(P);
   document.querySelectorAll('#fScnV,#sumP1 .lead2,#vRep .rw,.pl-row .n small').forEach(colorNums);
   document.querySelectorAll('.margPct').forEach(e=>e.textContent=pct(C.margin));
 }

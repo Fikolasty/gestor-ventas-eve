@@ -1135,3 +1135,9 @@ Comparativa Minera: plan para Omega nuevo
 - Árbol restaurado a v1.0.22 (11d7b6f). Fuera src/mining*, src/mineria_*, mineria.html y tools/mining (estaban desde v1.0.23).
 - Rama respaldo-v1.0.43 = estado completo antes del roll-back (v1.0.23–v1.0.43).
 - Se mantiene .github/workflows/versiones.yml.
+
+==================== v1.0.45 ====================
+- jitaBook devuelve topBuy/topSell (mejor compra y venta más barata tal cual). S.pricedAt = hora de la última carga.
+- paintAppraisal() (de v1.0.29): #appr dentro de .hero-intro; .appr-g con dos <dl class="appr-c">; copyBtn en Volumen (2 decimales) y Buy/Split/Sell.
+  Oculto sin ítems (.hero-intro.no-appr). Se llama en refreshNow y al limpiar.
+- .hero-side agrupa .ref y .start-note a la derecha (340 px máx.); sin .hero-p («Qué hace»).

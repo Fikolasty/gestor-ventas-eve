@@ -2,6 +2,13 @@
 
 Cambios por versión del Gestor de Ventas. La más nueva arriba. El detalle técnico completo está en `docs/SPEC.txt`.
 
+## 1.0.45 — Tasación del lote como Janice
+*2026-10-15*
+
+- Al pegar los ítems aparece la **Tasación** (la de v1.0.29) donde estaba «Qué hace»: Precios de (Jita 4-4 y la hora) · Volumen · Ítems | Buy · Split · Sell. Usa la mejor compra y la venta más barata de Jita 4-4 tal cual, igual que Janice. Volumen con 2 decimales; los valores se copian con un clic.
+- «Gratis» y «Antes de empezar» más compactos a la derecha. Sin ítems, la Tasación no se muestra y las dos tarjetas ocupan todo el ancho.
+- Fuera la tarjeta «Qué hace».
+
 ## 1.0.44 — Vuelta a v1.0.22 (pegar ítems vuelve a mostrar todo)
 *2026-10-15*
 

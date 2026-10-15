@@ -1030,6 +1030,31 @@ html.lite .ct,html.lite .sh-card,html.lite .scn>div,html.lite fieldset.st,html.l
 .hero-intro>.paste,.hero .paste{margin-top:18px}
 .hero-intro>.start-note{max-width:none;margin:0}
 @media(max-width:980px){.hero-intro{grid-template-columns:minmax(0,1fr)!important}}
+/* v1.0.45: Tasación a la izquierda (como Janice) y Skill Points + Antes de empezar compactos a la derecha. Sin «Qué hace».
+   Sin ítems pegados la Tasación se oculta y las dos tarjetas ocupan todo el ancho. */
+.hero-intro{grid-template-columns:minmax(0,1fr) minmax(260px,340px)!important}
+.hero-intro.no-appr{grid-template-columns:minmax(0,1fr)!important}
+.hero-side{display:grid;gap:10px;align-content:start;min-width:0}
+.hero-intro.no-appr .hero-side{grid-template-columns:1fr 1fr;gap:14px}
+.hero-side>.ref{max-width:none;margin:0;border-radius:var(--r-md);flex-direction:column;align-items:flex-start;justify-content:flex-start;gap:6px;padding:10px 14px;position:relative;font-size:.88rem}
+.hero-side>.ref .ref-go{position:absolute;top:10px;right:12px;margin:0}
+.hero-side>.start-note{max-width:none;margin:0;padding:10px 14px}
+.hero-intro:not(.no-appr) .hero-side .start-note-body{font-size:.84rem}
+.hero-intro:not(.no-appr) .hero-side .start-note-actions button{padding:4px 10px;font-size:.8rem}
+.appr{min-width:0;padding:14px 16px;border-radius:var(--r-md);background:rgba(21,21,21,.86);border:1px solid rgba(222,220,209,.12);box-shadow:0 2px 4px rgba(0,0,0,.45),0 8px 18px rgba(0,0,0,.3)}
+.appr-tag{display:table;margin-bottom:10px;font-weight:600;font-size:.8rem;color:#1f1e1d;background:#d6d4cb;border-radius:999px;padding:1px 10px}
+.appr-g{display:grid;grid-template-columns:1fr 1fr;border:1px solid rgba(222,220,209,.12);border-radius:var(--r-sm);overflow:hidden;background:#151515}
+.appr-c{margin:0}
+.appr-c+.appr-c{border-left:1px solid rgba(222,220,209,.12)}
+.appr-c>div{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:9px 14px;min-height:42px}
+.appr-c>div+div{border-top:1px solid rgba(222,220,209,.1)}
+.appr-c dt{color:var(--mut);font-size:.9rem}
+.appr-c dd{margin:0;text-align:right;font:500 .95rem var(--f-num);color:var(--txt)}
+.appr-c dd .copy{font:600 .95rem var(--f-num)!important;padding:2px 8px;border:1px solid transparent;background:transparent;border-radius:var(--r-sm);color:inherit}
+.appr-c dd .copy:hover{border-color:var(--line2);background:#30302e}
+.appr-c .t-buy dd{color:#e58a8a}.appr-c .t-split dd{color:#e7c27a}.appr-c .t-sell dd{color:#7fd19b}
+@media(max-width:980px){.hero-intro,.hero-intro.no-appr{grid-template-columns:minmax(0,1fr)!important}.hero-intro.no-appr .hero-side,.hero-side{grid-template-columns:1fr}}
+@media(max-width:600px){.appr-g{grid-template-columns:1fr}.appr-c+.appr-c{border-left:0;border-top:1px solid rgba(222,220,209,.1)}}
 /* v1.0.7: interruptor "Contar envío" */
 .sw{display:inline-flex;align-items:center;gap:8px;cursor:pointer;font-size:.9rem;color:#e5e3da;text-shadow:0 1px 3px rgba(0,0,0,.9);padding:6px 10px;border-radius:10px;background:rgba(21,21,21,.75);border:1px solid rgba(222,220,209,.12)}
 .sw input{position:absolute;opacity:0;width:1px;height:1px}
@@ -1465,9 +1490,10 @@ Contraband Freight = no</textarea><small>Una regla por línea: Nombre = tax tota
     <p class="lead">No necesitas introducir contraseña de EVE. La calculadora usa ESI de CCP para consultar datos de mercado y el servicio de imágenes de EVE para los íconos. Los enlaces a Janice, Discord, SIGMA Auth y Buyback se abren por separado. El inventario y los ajustes permanecen en memoria y se pierden al recargar.</p>
   </section>
   </div>
-  <div class="hero-intro">
+  <div class="hero-intro no-appr">
+    <div class="appr" id="appr" hidden aria-live="polite"></div>
+    <div class="hero-side">
     <button type="button" class="ref" data-link="referral"><span class="ref-tag">Gratis</span><span class="ref-t">Usa mi enlace para recibir <b>1 Millón de Skill Points</b> gratis</span><span class="ref-go">↗</span></button>
-    <p class="hero-p">Pega tu loot, ore o materiales. Comparamos rutas de venta con precios de Jita y costes configurados para que sepas cuántos ISK recibirías.</p>
     <aside class="start-note" aria-label="Antes de empezar">
       <span class="ic i-bulb" aria-hidden="true"></span>
       <div class="start-note-body"><strong>Antes de empezar</strong>
@@ -1475,6 +1501,7 @@ Contraband Freight = no</textarea><small>Una regla por línea: Nombre = tax tota
         <div class="start-note-actions"><button type="button" id="heroHelp">Ver Ayuda</button><button type="button" id="heroSettings">Configurar Ajustes</button></div>
       </div>
     </aside>
+    </div>
   </div>
   <div class="paste">
     <textarea id="paste" autocomplete="off" spellcheck="false" aria-label="Pega aquí tu inventario de EVE" placeholder="Pega aquí tus ítems con Ctrl+V"></textarea>
