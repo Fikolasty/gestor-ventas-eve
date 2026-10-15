@@ -2,6 +2,12 @@
 
 Cambios por versión del Gestor de Ventas. La más nueva arriba. El detalle técnico completo está en `docs/SPEC.txt`.
 
+## 1.0.36 — Grupos de naves del mismo tamaño y Expert System en 0 para Exhumers
+*2026-10-14*
+
+- Los dos grupos del selector de nave ahora miden exactamente lo mismo: cada grupo ocupa todo el ancho de la fila y sus 3 botones reparten tercios iguales. La nota del primer mes quedó debajo del grupo Exhumer.
+- Al elegir una Exhumer, el Expert System pasa a 0 PLEX y la inversión, el desglose, el balance y el veredicto recalculan. Al volver a una Barge, vuelve al valor que tenía (si lo cambiaste a mano, manda tu valor). Español / English.
+
 ## 1.0.35 — Selector de naves del plan en dos grupos
 *2026-10-14*
 
