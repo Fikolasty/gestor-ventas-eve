@@ -1184,7 +1184,9 @@ Etiqueta del grupo de naves encima (corrige envoltura)
 - .pl-shiprow en columna (etiqueta encima, SEG a width:100%, botones
   flex:1 1 0). En v1.0.36 la etiqueta lateral restaba 58 px y el grupo
   Barge (etiquetas más largas) se partía 2+1 en vivo.
-- Pendiente verificar en vivo tras publicar.
+- Verificado en vivo 2026-10-14: footer v1.0.37, etiquetas encima, ambas
+  filas 3 en una línea simétricas, Hulk -> Expert System 0, Retriever ->
+  15, inglés correcto.
 ==================== v1.0.38 ====================
 Nota Covetor: compresion en el espacio, nadie recoge mineral
 - La nota de Covetor ya no dice que alguien te recoja el mineral: nadie
@@ -1192,4 +1194,17 @@ Nota Covetor: compresion en el espacio, nadie recoge mineral
   vuelven 100 m3), asi que minas hasta que se acabe el material sin ir
   a la estacion. Los numeros no cambian: el calculo con boost ya
   asumia esto (sin viajes).
+- Verificado en vivo 2026-10-14: footer v1.0.38, nota Covetor correcta en
+  espanol e ingles (nadie recoge mineral, compresion 10 a 1, sin hauler).
+==================== v1.0.39 ====================
+Porpoise sin compresion + textos sin bodega como problema
+- Porpoise da boost SIN compresion: su rendimiento efectivo ahora
+  descuenta 2 min de viaje por bodega llena, igual que sin boost.
+  Solo Orca y Rorqual comprimen en el espacio (efectivo = bruto).
+  Datos reconstruidos con Pyfa (build 3579973, el mismo):
+  864 escenarios, 88 materiales.
+- Textos: Covetor y Hulk con el texto exacto — solo en flota con un
+  booster que brinde compresion en el espacio (Orca o Rorqual). Fuera
+  toda mencion de la bodega como problema (se llena en minutos,
+  bodega pequena, alguien que vacie la bodega, menos viajes).
 - Pendiente verificar en vivo tras publicar.
