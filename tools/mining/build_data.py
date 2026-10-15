@@ -32,10 +32,10 @@ for bo in BOOSTS:
                                  short(r['mid']) if r['mid'] != '—' else '—',
                                  ', '.join(f'{n}x {k}' for k, n in rigs.items()) or '—', r['drone'],
                                  r['cycle_s'], r['per_cycle'], r['crit_p'], r['crit_b'], r['mod_mph'], r['drone_mph'],
-                                 r['total_mph'], r['hold'], r['fill_min'], r['waste_p'], f"{r['cpu_used']:.1f} / {r['cpu_out']:.1f}",
+                                 r['total_mph'], r['eff_mph'], r['hold'], r['fill_min'], r['waste_p'], f"{r['cpu_used']:.1f} / {r['cpu_out']:.1f}",
                                  r['notes']])
 COLS = ['boost', 'lv', 'imp', 'mat', 'tier', 'ship', 'high', 'low', 'mid', 'rigs', 'drones', 'cyc', 'amt', 'critP', 'critB',
-        'mod', 'dr', 'tot', 'hold', 'fill', 'waste', 'cpu', 'notes']
+        'mod', 'dr', 'tot', 'eff', 'hold', 'fill', 'waste', 'cpu', 'notes']
 
 ships = []
 for s in SHIPS:
@@ -62,6 +62,8 @@ for k, t in types.items():
     if c is not None and not types[str(c)].get('published'):
         c = None
     cat, sub = GRP[g]
+    if cat == 'gas' and n.startswith('Fullerite'):
+        continue  # Fullerite es solo de wormholes; el escenario es nullsec (Mykoserocin + Cytoserocin)
     if c is None:  # sin versión comprimida en el mercado (gas de evento): fuera
         continue
     if cat == 'gas':
@@ -141,7 +143,7 @@ for mat in MAT:
                     if eff.get('Mining Barge', 0) < 1:
                         daily.append(0); continue
                     r = best(barge, mat, tier, prof, False, None)
-                    daily.append(r['total_mph'] if r else 0)
+                    daily.append(r['eff_mph'] if r else 0)
                     if r: last = r
                 sim[f'{mat}|{barge}|{tier}|{o}'] = daily
                 simfit[f'{mat}|{barge}|{tier}|{o}'] = dict(items=items_ids(last['items']) if last else [],
