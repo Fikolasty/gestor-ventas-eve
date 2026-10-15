@@ -1181,3 +1181,7 @@ Comparativa Minera: plan para Omega nuevo
 - Fuera prow('total') y .pl-row.total; el pie .pl-totals solo con ítems sin precio. Fuera .verdict::after (esquinas).
 - Movimiento: slide() = opacidad + translateY (220 ms abrir / 140 ms cerrar, ease-out-cubic); <details> anima el contenido en el evento toggle;
   fadeIn(lista) escalonado. Fuera morph(). Arreglo de ui.head aria-expanded en toggleLot.
+
+==================== v1.0.52 ====================
+- Nombre Market Moves+: <title>, h1, document.title (con y sin total), cabeceras de src/shell.html y src/script.js, README.
+- Tagline nueva con su traducción; fuera las traducciones del nombre y tagline anteriores.

@@ -1,6 +1,6 @@
-# Gestor de Ventas · EVE Online
+# Market Moves+ · EVE Online
 
-**Plan y Gestor de Ventas** para pilotos de **SIGMA GRINDSET** y **Vanguardia DR**.
+**Market Moves+**: herramienta para gestionar tus planes de mercado, para pilotos de **SIGMA GRINDSET** y **Vanguardia DR**.
 Pegas tu inventario de EVE y la página te dice, ítem por ítem, dónde ganas más ISK. Las opciones que compara son:
 vender en Null (HY-RWO), poner una orden en Jita, vender al instante en Jita, el Buyback de la alianza, reprocesar o vender a otro jugador.
 Descuenta los taxes, el Broker y el envío con SIGMA Freight.
@@ -59,7 +59,7 @@ CHANGELOG.md          ← cambios por versión
 ### Generar la página
 Solo necesitas Python 3, sin dependencias:
 ```
-python3 build.py 1.0.51
+python3 build.py 1.0.52
 ```
 Eso escribe `index.html` con la versión indicada.
 

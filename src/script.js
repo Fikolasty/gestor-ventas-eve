@@ -1,7 +1,7 @@
 
 'use strict';
 /* ============================================================
-   Plan y Gestor de Ventas v__VER__ — SIGMA GRINDSET / Vanguardia DR
+   Market Moves+ v__VER__ — SIGMA GRINDSET / Vanguardia DR
    Flujo:  pegado → ítems → carga (ESI: precios, volúmenes, historial) → verificación → plan → vista
      1. Pegado      parsePaste(): parser posicional de columnas de EVE (Name · Quantity · … · Volume · Est. Price).
      2. Carga       esiItems(): trae todo lo que falta; mientras carga, refresh() NO pinta (S.loading).
@@ -1113,7 +1113,7 @@ document.addEventListener('toggle',e=>{const d=e.target;if(!(d instanceof HTMLDe
 const bestLabel=()=>$('vWhat').textContent.replace(/ · por rapidez$/,'').replace(/ \+ \d+ más$/,'');
 // Sin ítems: vacía todo lo pintado y suelta referencias (así el navegador libera la memoria de lotes grandes)
 function clearViews(){
-  document.title='Gestor de Ventas · SIGMA GRINDSET';
+  document.title='Market Moves+ · SIGMA GRINDSET';
   ['vPlan','vRepList','ctrList','czDots','ctrTot','shBody','fScn','rx','rxFinal','dMsg'].forEach(id=>{const e=$(id);if(e)e.textContent='';});
   ['pCtr','pSum'].forEach(id=>{const e=$(id);if(e)e.hidden=true;});
   lastP=null;repaintPlanGroup=null;S.pricedAt=null;paintAppraisal();discRows=[];czCards=[];lastCs=[];czIdx=0;S.planMode=null;ICON_POOL={};
@@ -1932,7 +1932,7 @@ function paintSummary(P){
   const box=$('pSum'),none=!P.rows.length||P.missing.length===P.rows.length;box.hidden=none||!S.items.length;if(box.hidden)return;
   const sys=(C.ref.name||'Null').split(' - ')[0].trim()||'Null';
   paintPicker(P);
-  document.title=compactIsk(P.best)+' ISK · Gestor de Ventas'; // v1.0.11: el total en la pestaña
+  document.title=compactIsk(P.best)+' ISK · Market Moves+'; // v1.0.11: el total en la pestaña
   paintSkewNote();
   paintFlipBuy(P);
   $('resIsk').textContent=fmt(P.best);$('resWhat').textContent=$('vWhat').textContent;

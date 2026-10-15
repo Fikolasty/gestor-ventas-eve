@@ -2,6 +2,12 @@
 
 Cambios por versión del Gestor de Ventas. La más nueva arriba. El detalle técnico completo está en `docs/SPEC.txt`.
 
+## 1.0.52 — Market Moves+
+*2026-10-15*
+
+- Nuevo nombre: **MARKET MOVES+** (título, pestaña del navegador y README).
+- Subtítulo: «Herramienta para gestionar tus planes de mercado.» / en inglés «A tool to manage your market plans.»
+
 ## 1.0.51 — Planes desde el plan elegido, textos y movimiento más ágil
 *2026-10-15*
 
