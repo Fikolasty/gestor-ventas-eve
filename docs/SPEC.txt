@@ -1169,3 +1169,13 @@ Selector de naves del plan en dos grupos
   del primer mes quedó junto al grupo Exhumer. en.json: 7 claves viejas
   fuera, 5 nuevas.
 - Pendiente verificar en vivo tras publicar (selector, clics, inglés, móvil).
+==================== v1.0.36 ====================
+Grupos de naves del mismo tamaño; Expert System 0 para Exhumers
+- .pl-shiprow .pk-flt{flex:1}, .pk-fb{flex:1 1 0} (tercios iguales),
+  small{width:100%} (nota debajo del grupo Exhumer).
+- Al pasar Barge→Exhumer: esSaved=esPlex, esPlex=0. Al volver
+  Exhumer→Barge: restaura esSaved. Editar esPlex a mano borra esSaved
+  (manda el valor manual). Inversión, desglose, balance y veredicto usan
+  S.esPlex, así que recalculan solos. Simulación de minado y textos del
+  héroe sin cambios (siguen asumiendo Expert System días 1 a 7).
+- Pendiente verificar en vivo tras publicar.
