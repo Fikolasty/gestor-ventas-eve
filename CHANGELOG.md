@@ -2,6 +2,11 @@
 
 Cambios por versión del Gestor de Ventas. La más nueva arriba. El detalle técnico completo está en `docs/SPEC.txt`.
 
+## 1.0.54 — Modo foco
+*2026-10-15*
+
+- Al abrir una sección principal —los planes (clic en el Plan Óptimo), el desglose, Tus Ítems, Ajustes o la Guía de Uso— las demás se pliegan solas y la vista se mueve a la que abriste.
+
 ## 1.0.53 — Inicio más limpio y Guía de Uso
 *2026-10-15*
 

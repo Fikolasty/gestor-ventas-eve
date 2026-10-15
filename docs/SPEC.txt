@@ -1193,3 +1193,8 @@ Comparativa Minera: plan para Omega nuevo
   .ref-go absoluto arriba a la derecha. .ref-t 1.22rem #f6d9c8, b #ffb48f. Sin .ic de .start-note.
 - .title centrado; h1 clamp(2.6rem,6.4vw,4.8rem).
 - «Ayuda» → «Guía de Uso» (textos y traducciones). .foot-sec reescrito: línea .82rem centrada, var(--dim); fuera reglas viejas.
+
+==================== v1.0.54 ====================
+- focusOnly(k) con k ∈ plans | deep | ledger | settings | help: pliega los demás (pkView.open=false + paintPicker, setSect('deep',false),
+  #ledger.open=false, togglePanel(id,false)). Se llama al abrir los planes, el desglose, Tus Ítems (evento toggle) y togglePanel.
+- SECT/setSect(t,open) reemplazan el forEach de #bDeep/#bMore (mismo comportamiento; #more vive dentro de #deep).

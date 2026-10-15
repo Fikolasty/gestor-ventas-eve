@@ -1102,13 +1102,23 @@ function fadeIn(list){if(!MOTION())return;list.forEach((n,i)=>n.animate([{opacit
 document.addEventListener('toggle',e=>{const d=e.target;if(!(d instanceof HTMLDetailsElement)||!d.open||!MOTION())return;
   [...d.children].filter(c=>c.tagName!=='SUMMARY'&&!c.hidden).forEach(c=>c.animate([{opacity:0,transform:'translateY(-6px)'},{opacity:1,transform:'none'}],{duration:220,easing:EASE}));},true);
 // Divulgación progresiva: primero el resultado; el análisis y la info extra solo si los pides
-[['bDeep','deep','Ver el desglose ▾','Volver a los planes ▴'],['bMore','more','Ver más ▾','Ocultar ▴']].forEach(([b,t,o,c])=>$(b).addEventListener('click',()=>{
-  const open=$(t).hidden;$(b).setAttribute('aria-expanded',String(open));$(b).querySelector('b').textContent=open?c:o;
-  if(b==='bDeep'){ // v1.0.50: con el desglose abierto se pliegan los planes (con la misma curva)
+const SECT={deep:['bDeep','Ver el desglose ▾','Volver a los planes ▴'],more:['bMore','Ver más ▾','Ocultar ▴']};
+function setSect(t,open){const [b,o,c]=SECT[t];if($(t).hidden===!open)return;
+  $(b).setAttribute('aria-expanded',String(open));$(b).querySelector('b').textContent=open?c:o;
+  if(t==='deep'){ // v1.0.50: con el desglose abierto se pliegan los planes
     const pw=document.querySelector('#pSum .pk-w');
     $('pSum').classList.toggle('res-min',open);if(!open&&pw)slide(pw,true);}
-  if(open){$(t).hidden=false;if(lastP)refreshNow();$(t).hidden=true;slide($(t),true);}else $(t).hidden=true;
-  if(open)$(b).scrollIntoView({behavior:'smooth',block:'start'});}));
+  if(open){$(t).hidden=false;if(lastP)refreshNow();$(t).hidden=true;slide($(t),true);}else $(t).hidden=true;}
+Object.keys(SECT).forEach(t=>$(SECT[t][0]).addEventListener('click',()=>{const open=$(t).hidden;
+  if(open&&t==='deep')focusOnly('deep');setSect(t,open);if(open)$(SECT[t][0]).scrollIntoView({behavior:'smooth',block:'start'});}));
+// v1.0.54: modo foco. Al abrir una sección principal (planes, desglose, Tus Ítems, Ajustes o Guía de Uso),
+// las demás se pliegan y la vista va a la que abriste.
+function focusOnly(k){
+  if(k!=='plans'&&pkView.open){pkView.open=false;if(lastP)paintPicker(lastP);}
+  if(k!=='deep')setSect('deep',false);
+  if(k!=='ledger'&&$('ledger').open)$('ledger').open=false;
+  ['settings','help'].forEach(id=>{if(k!==id&&!$(id).hidden)togglePanel(id,false);});
+}
 // nombre corto del mejor plan (sin "+ N más" ni "· por rapidez")
 const bestLabel=()=>$('vWhat').textContent.replace(/ · por rapidez$/,'').replace(/ \+ \d+ más$/,'');
 // Sin ítems: vacía todo lo pintado y suelta referencias (así el navegador libera la memoria de lotes grandes)
@@ -1596,7 +1606,8 @@ function paintScenarios(P){
     ' (lo Refinado ocupa '+fmtV(Math.round(B.V))+' contra '+fmtV(Math.round(A.V))+' Sin Refinar). '+
     (()=>{const w=Math.max(A.net,B.net);return w>=P.best-1?'Es tu mejor opción.':'Aun así, tu mejor plan ('+bestLabel()+') deja '+fmt(P.best-w)+' más que llevarlo todo a Jita.';})();
 }
-$('ledger').addEventListener('toggle',()=>{if($('esiStatus').classList.contains('cta'))ledgerCta();});
+$('ledger').addEventListener('toggle',()=>{if($('esiStatus').classList.contains('cta'))ledgerCta();
+  if($('ledger').open){focusOnly('ledger');$('ledger').scrollIntoView({behavior:'smooth',block:'start'});}});
 $('pCtr').addEventListener('toggle',()=>{if($('pCtr').open&&lastP){paintContracts(lastP);paintCourier(lastP);colorNums($('fScnV'));}});
 
 // ================= Reproceso: Refinado vs Sin Refinar (por mercado) =================
@@ -1898,7 +1909,8 @@ $('pk').addEventListener('click',e=>{const b=e.target.closest('[data-pks]');if(!
   pkView=pkView.sort===k?{...pkView,dir:-pkView.dir}:{...pkView,sort:k,dir:k==='name'||k==='speed'||k==='ship'?1:-1};paintPicker(lastP);});
 $('pSum').addEventListener('click',e=>{const b=e.target.closest('[data-m]');if(!b)return;const m=b.dataset.m==='auto'?null:b.dataset.m;
   if(m===S.planMode){ // v1.0.51: clic en el plan elegido = mostrar u ocultar los demás planes
-    if(b.classList.contains('pk-o')&&lastP){pkView.open=!pkView.open;paintPicker(lastP);if(pkView.open)fadeIn([...$('pk').querySelectorAll('.pk-o:not(.on):not(.best)')]);}
+    if(b.classList.contains('pk-o')&&lastP){pkView.open=!pkView.open;if(pkView.open)focusOnly('plans');paintPicker(lastP);
+      if(pkView.open){fadeIn([...$('pk').querySelectorAll('.pk-o:not(.on):not(.best)')]);document.querySelector('#pSum .pk-w').scrollIntoView({behavior:'smooth',block:'start'});}}
     return;}
   S.planMode=m;pkView.open=false;czIdx=0;refreshNow();});
 // v1.0.6 (modo Jita → HY-RWO): si compras el lote en Jita al Sell, lo llevas a HY-RWO y lo vendes a Jita Sell + margen
@@ -2050,7 +2062,7 @@ $('themeLight').addEventListener('change',e=>{document.documentElement.classList
 // force=true abre (o solo desplaza si ya está abierto); force=false cierra; sin force alterna.
 function togglePanel(id,force){const s=$(id),open=force!=null?force:s.hidden;
   if(open&&!s.hidden){s.scrollIntoView({behavior:'smooth',block:'start'});return;}
-  if(open)slide(s,true);else s.hidden=true;
+  if(open){focusOnly(id);slide(s,true);}else s.hidden=true;
   document.querySelectorAll('.side-i[data-panel="'+id+'"]').forEach(x=>x.setAttribute('aria-pressed',String(open)));
   if(open)s.scrollIntoView({behavior:'smooth',block:'start'});}
 // v1.0.11: menú lateral. Escritorio: se contrae a íconos. Móvil: se abre encima con fondo oscuro. Solo en memoria.
