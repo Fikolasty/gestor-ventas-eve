@@ -134,3 +134,14 @@ La prueba del código o navegación real **no se da por hecha** solo por escribi
 **docs/SPEC.txt se conserva íntegra en el repositorio**, incluido su historial cronológico y las fórmulas/decisiones de versiones anteriores. Este documento resume la línea base activa; para una decisión antigua específica, contrastar siempre con el código v1.0.66 y los cambios posteriores.
 
 **Enlaces:** [historial técnico anterior](SPEC.txt) · [trabajo activo](PROGRESS.md) · [versiones publicadas](../CHANGELOG.md) · [README](../README.md).
+
+## 11. Flujo de entregas y vista previa en línea (acuerdo del 15-10-2026)
+
+- **Producción:** rama \`main\`, publicada en https://fikolasty.github.io/gestor-ventas-eve/. No modificar ni desplegar cambios experimentales allí sin aprobación.
+- **Versión alterna de desarrollo:** rama persistente \`develop\`. Cada tarea concluida se guarda con commit y **push a \`develop\`**, sin mezclar cambios no probados ni hacer merge automático a \`main\`.
+- Con **cada entrega de código**, actualizar en el mismo conjunto de commits \`docs/SPEC.md\` cuando cambien requisitos/arquitectura/decisiones y **siempre** \`docs/PROGRESS.md\` con estado, alcance, pruebas, riesgo, commit y siguientes tareas. Actualizar \`CHANGELOG.md\` cuando se publique una versión numerada; no falsear versiones.
+- Después de cada push entregar al usuario: resumen, enlaces al commit y a la **vista previa funcional**, pruebas pasadas/no ejecutadas y posibles limitaciones. Verificar que la URL es pública y muestra la versión correcta antes de presentarla como desplegada.
+- **Vista previa automática pendiente de configurar:** la web normal de GitHub Pages ofrece una sola fuente de publicación por proyecto; no apuntarla a \`develop\`, pues reemplazaría la producción. Preparar un **hosting de staging independiente** (preferencia técnica: Cloudflare Pages, integrado con GitHub y previsualizaciones por rama) o un repositorio GitHub Pages separado, siempre con aprobación explícita del usuario para la configuración externa. No inventar URL hasta confirmar despliegue real.
+- La vista previa debe preservar la CSP, no enviar el inventario a terceros, no añadir scripts de terceros, y seguir respetando límites y fallos de ESI/Fenris. Documentar cualquier diferencia de dominio/origen, privacidad o caché.
+- El push de documentación y código en \`develop\` **no significa publicación online exitosa** mientras el hosting de staging esté pendiente. Informarlo con claridad.
+
