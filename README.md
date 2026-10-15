@@ -6,7 +6,6 @@ vender en Null (HY-RWO), poner una orden en Jita, vender al instante en Jita, el
 Descuenta los taxes, el Broker y el envío con SIGMA Freight.
 
 👉 **Usarla:** https://fikolasty.github.io/gestor-ventas-eve/
-⛏️ **Comparativa Minera (Barges y Exhumers):** https://fikolasty.github.io/gestor-ventas-eve/mineria.html — también está como tab «Comparativa Minera» dentro del Gestor.
 (también puedes descargar `index.html` y abrirlo con doble clic: funciona igual, sin instalar nada).
 
 ---
@@ -31,8 +30,7 @@ Lo más exacto es copiar los % de *Broker's fee* y *Sales tax* que muestra la ve
 - **Anti-cebo**: ignora órdenes de venta puestas muy baratas para tirar el precio (revisa las 5 más baratas, en cascada) y publica 1 tick por debajo.
 - **Venta rápida automática** cuando la orden casi no paga más que las compras (2 ticks o menos).
 - **Ajuste de precios** (por defecto −0.16% en la venta rápida), para no prometer más de lo que paga el mercado.
-- **Comparativa Minera**: qué Barge o Exhumer rinde más en moon ore, hielo y gas (Full T1, Full T2, Facción; skills a IV o V; con o sin implantes; sin boost o con Porpoise, Orca o Rorqual al máximo), en m³/h o ISK/h con precios de Jita, con bodega, drones y autonomía. Incluye el **Plan para Omega Nuevo** (Expert System de 7 días, entrenamiento, inversión y si alcanza para el siguiente Omega, de 1 a 100 cuentas) y el tiempo de entrenamiento IV vs V.
-- **Español / English** y tema **Dark / Light**.
+- **Español / English**, tema **Dark / Light** y **Modo Ligero** para PCs lentas o Firefox.
 
 ## Seguridad y privacidad
 
@@ -46,7 +44,6 @@ Lo más exacto es copiar los % de *Broker's fee* y *Sales tax* que muestra la ve
 
 ```
 index.html            ← la página lista para usar (la genera build.py)
-mineria.html          ← la comparativa de Minería sola (también la genera build.py)
 build.py              ← arma index.html a partir de src/
 src/shell.html        ← HTML + CSS (tema oscuro)
 src/script.js         ← toda la lógica (motor de cálculo, pegado, ESI, interfaz)
@@ -54,11 +51,6 @@ src/light.py          ← genera el tema claro a partir del CSS oscuro
 src/light_extra.css   ← retoques manuales del tema claro
 src/i18n/en.json      ← diccionario español → inglés
 src/refine.js         ← datos de reproceso (ore, hielo, lunas)
-src/mining.js         ← tab Minería (interfaz y cálculo de ISK/h)
-src/mining.css        ← estilos del tab Minería
-src/mining_data.js    ← datos de Minería (generado, no editar a mano)
-src/mineria_shell.html, src/mineria_glue.js ← la página aparte mineria.html
-tools/mining/         ← genera mining_data.js desde los datos estáticos de EVE (Pyfa)
 src/assets/*.b64      ← imágenes (fondo, logos) en base64
 docs/SPEC.txt         ← especificación técnica e historial detallado
 CHANGELOG.md          ← cambios por versión
@@ -67,16 +59,9 @@ CHANGELOG.md          ← cambios por versión
 ### Generar la página
 Solo necesitas Python 3, sin dependencias:
 ```
-python3 build.py 1.0.43
+python3 build.py 1.0.44
 ```
-Eso escribe `index.html` y `mineria.html` con la versión indicada.
-
-### Actualizar los datos de Minería (tras un parche de CCP)
-```
-git clone --depth 1 https://github.com/pyfa-org/Pyfa ../pyfa
-PYFA_STATICDATA=../pyfa/staticdata python3 tools/mining/build_data.py
-python3 build.py 1.0.43x
-```
+Eso escribe `index.html` con la versión indicada.
 
 ## Versiones
 Se usa versionado semántico (`1.0.x`). Cada versión tiene su **tag** y su **Release** con el HTML para descargar.

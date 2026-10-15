@@ -249,6 +249,7 @@ td input{padding:5px 8px;max-width:150px}
 .note{color:var(--dim);font-size:.85rem;margin-top:14px;max-width:none}
 footer{max-width:min(1360px,94vw);margin:0 auto;padding:10px 20px 40px;color:var(--dim);font-size:.82rem}
 
+
 /* ================= Profundidad (v45) =================
    Sombras en capas (cercana · media · lejana) + filo de luz superior, como placas de casco.
    Números como lecturas iluminadas de consola. Esquinas de mira solo en el veredicto. */
@@ -640,7 +641,7 @@ img.ti:not([src]){visibility:hidden}
  .sh-t td[colspan]{flex:1 1 100%;font-weight:400}
  .sh-t td[colspan]::before{content:none}
  .sh-big{font-size:1.55rem}.sh-leg{grid-template-columns:1fr}.sh-kpi{grid-template-columns:1fr 1fr}.cz-pos{min-width:52px}}
-
+html.lite .cz .ct{animation:none}
 /* v93: Tus Contratos */
 .ct{border:1px solid var(--line);border-radius:var(--r-md);background:linear-gradient(180deg,rgba(48,48,46,.95),rgba(36,35,33,.97));padding:14px 16px;box-shadow:inset 0 1px 0 rgba(255,255,255,.06),0 4px 10px rgba(0,0,0,.35)}
 .ct.bb{border-top:3px solid var(--gain)}.ct.cr{border-top:3px solid var(--blue)}.ct.pl{border-top:3px solid #9c9a92}
@@ -742,7 +743,11 @@ details.panel>summary .sum{font-size:1.1rem;color:#d6d4cb}
 .more-btn b{font-size:1.05rem!important}
 /* v105: Modo ligero (se activa solo en Firefox; también a mano en el pie). Quita lo que más cuesta pintar al hacer scroll:
    fondo fijo de pantalla completa (pasa a moverse con la página), overlay en degradados, sombras, filtros y animaciones. */
-
+html.lite body::before,html.lite body::after{position:absolute!important;inset:auto 0 auto 0!important;top:0!important;height:max(100vh,900px)!important;will-change:auto!important;transform:none!important}
+html.lite body::after{background:linear-gradient(180deg,rgba(36,35,33,.2) 0%,rgba(36,35,33,0) 40%,var(--void) 100%)!important}
+html.lite *,html.lite *::before,html.lite *::after{box-shadow:none!important;text-shadow:none!important;filter:none!important;transition:none!important}
+html.lite .panel,html.lite .ct,html.lite .alt-grid>div,html.lite .rx-c,html.lite .pod,html.lite fieldset.st,html.lite .hp-c,html.lite .scn>div,html.lite .v-stats>div{background:#30302e!important}
+.lite-t{display:inline-flex!important;align-items:center;gap:4px;white-space:nowrap;cursor:pointer;color:var(--dim);font-size:inherit;margin:0}.lite-t input{vertical-align:-2px;margin-right:3px;accent-color:#d97757}
 @media(max-width:820px){
   .res-b .cmp2{grid-template-columns:minmax(0,1fr)}.res-b li .v{margin-left:0;flex-basis:100%}
   .prices .pr-h{display:none}.prices tr:not(.pr-h){display:grid;grid-template-columns:1fr auto;gap:4px 8px;padding:8px 0;border-bottom:1px solid var(--line)}.prices tr td{border:none!important}.prices tr td.muted{grid-column:1/-1}.prices td.pr-foot{grid-column:1/-1}
@@ -801,6 +806,8 @@ details.panel>summary .sum{font-size:1.1rem;color:#d6d4cb}
   body::before{background-position:32% 0;background-size:auto 75vh}
   .lot.open{margin:8px -4px;padding:0 4px}
   .panel{padding:18px}
+}
+@media(max-width:480px){
 }
 
 /* =============== v104: comparación y aviso inicial ===============
@@ -909,7 +916,7 @@ b,strong{font-weight:600}
 .undo .ghost{margin-left:auto;padding:5px 14px}
 @media(hover:none){.lot-x{opacity:.9}}
 @media(max-width:600px){.ledger-head{padding-right:14px}.lot-x{align-self:start;margin-top:12px}}
-
+html.lite body::before{opacity:0}
 .pk-t small{background:none;border:0;padding:0;color:var(--dim)}
 .hero h1{font:500 clamp(2.1rem,4.6vw,3.3rem)/1.1 var(--f-serif);letter-spacing:0;text-transform:none}
 .hero>p,.hero .tagline,.hero p{font-family:var(--f-serif);color:#e5e3da;font-size:1.1rem}
@@ -923,7 +930,7 @@ body::before{opacity:.42;filter:saturate(.55) brightness(.75)}
 body::after{background:
   radial-gradient(120% 95% at 50% 40%,rgba(20,19,18,0) 35%,rgba(20,19,18,.55) 75%,rgba(14,13,12,.92) 100%),
   linear-gradient(180deg,rgba(38,38,36,.35),rgba(38,38,36,.55))}
-
+html.lite body::before{opacity:.3}
 /* números: vuelve la fuente anterior */
 :root{--f-num:"Bahnschrift","DIN Alternate","DIN 2014","Roboto Condensed","Arial Narrow",system-ui,sans-serif}
 .num,.sh-big,.pk-v,.ct-s,.v-isk,#resIsk{font-family:var(--f-num)}
@@ -959,7 +966,7 @@ body::after{background:
 /* 1.0.2: fondo al 91% y viñeta suave solo en los bordes; título en mayúsculas */
 body::before{opacity:.91;filter:none}
 body::after{background:radial-gradient(130% 100% at 50% 40%,rgba(14,13,12,0) 55%,rgba(14,13,12,.45) 85%,rgba(10,9,8,.8) 100%)}
-
+html.lite body::before{opacity:.91}
 .hero h1{text-transform:uppercase;letter-spacing:.04em}
 .hero h1,.hero p,.hero .tagline,.top .brand,.foot-by{text-shadow:0 1px 3px rgba(0,0,0,.95),0 2px 14px rgba(0,0,0,.75)!important}
 /* "Antes de empezar" con el mismo formato que el anuncio de Skill Points */
@@ -977,7 +984,7 @@ body::after{background:radial-gradient(130% 100% at 50% 40%,rgba(14,13,12,0) 55%
 .ct,.sh-card,.scn>div,fieldset.st,.hp-c,.res-b ul:not(.why):not(.cmp2)>li,.ct-sum,.paste,.v-stats>div,.alt-grid>div{box-shadow:0 1px 0 rgba(255,255,255,.04) inset,0 2px 4px rgba(0,0,0,.45),0 8px 18px rgba(0,0,0,.3)!important}
 .ct-items,.sh-kpi>div,.sh-tips li{background:#1c1b1a!important}
 .sh-tips li{border-color:rgba(222,220,209,.08)!important}
-
+html.lite .ct,html.lite .sh-card,html.lite .scn>div,html.lite fieldset.st,html.lite .hp-c,html.lite .res-b ul:not(.why):not(.cmp2)>li,html.lite .ct-sum,html.lite .paste{box-shadow:none!important}
 /* 1.0.4: la fuente de números (Bahnschrift) solo para números; todo texto con la fuente de la interfaz */
 .brand,.tagline,legend,fieldset.st legend,.hp-c h3,.call b,.rx-fh,.scn h4,.copy,.ct-f td.r>span,.ct-f td.r .copy,.cz-pos,.pod-v,.fb-v,.rx-big,.foot-by .ver,.opt-v,.fact b,.receipt .amt,.guide li::before{font-family:var(--f-ui)!important}
 .copy.cp-n,.ct-f td.r>span.cp-n,.ct-f td.r .copy.cp-n,.scn h4 b,.lot-qty,.lot-net,td.r .num{font-family:var(--f-num)!important}
@@ -1031,7 +1038,7 @@ body::after{background:radial-gradient(130% 100% at 50% 40%,rgba(14,13,12,0) 55%
 .sw input:checked+.sw-t{background:var(--clay);border-color:var(--clay)}
 .sw input:checked+.sw-t::after{transform:translateX(14px);background:#fff}
 .sw input:focus-visible+.sw-t{outline:2px solid #d6d4cb;outline-offset:2px}
-
+html.lite .sw-t,html.lite .sw-t::after{transition:none}
 .route-m{padding:4px 6px 4px 10px;border-radius:10px;background:rgba(21,21,21,.75);border:1px solid rgba(222,220,209,.12)}
 /* v1.0.8: Ajustes y Ayuda arriba, con X fija y secciones desplegables */
 .top-slot{margin-top:18px;display:grid;gap:14px}
@@ -1058,7 +1065,7 @@ body::after{background:radial-gradient(130% 100% at 50% 40%,rgba(14,13,12,0) 55%
 .st-tools .ghost{padding:5px 12px;font-size:.84rem}
 /* v1.0.8: viñeta negra sobre la imagen de fondo (modo normal); en Modo ligero no hay viñeta */
 body::after{background:radial-gradient(120% 95% at 50% 42%,rgba(0,0,0,0) 38%,rgba(0,0,0,.5) 72%,rgba(0,0,0,.92) 100%)!important}
-
+html.lite body::after{background:none!important}
 /* v1.0.8: precio por unidad en la fila (copiable) */
 .lot-head{cursor:pointer}
 .lot-head:focus-visible{outline:2px solid #d6d4cb;outline-offset:-2px}
@@ -1084,9 +1091,9 @@ body::after{background:
   radial-gradient(ellipse 88% 82% at 50% 45%,rgba(0,0,0,0) 48%,rgba(0,0,0,.42) 76%,rgba(0,0,0,.88) 100%),
   linear-gradient(90deg,rgba(0,0,0,.6) 0%,rgba(0,0,0,0) 15%,rgba(0,0,0,0) 85%,rgba(0,0,0,.6) 100%),
   linear-gradient(180deg,rgba(0,0,0,.35) 0%,rgba(0,0,0,0) 12%,rgba(0,0,0,0) 82%,rgba(0,0,0,.55) 100%)!important}
-
+html.lite body::after{background:none!important}
 /* Modo ligero: la imagen no es fija; se desvanece abajo para no cortarse de golpe (oscuro y claro) */
-
+html.lite body::before{-webkit-mask-image:linear-gradient(to bottom,#000 0%,#000 50%,transparent 100%);mask-image:linear-gradient(to bottom,#000 0%,#000 50%,transparent 100%)}
 /* v1.0.10: barra de opciones unificada (ruta + interruptores), todo a la misma altura y con divisores */
 .route{display:inline-flex!important;flex-wrap:wrap;align-items:stretch;gap:0!important;margin-top:14px;padding:4px;border-radius:12px;
   background:rgba(21,21,21,.88);border:1px solid rgba(222,220,209,.12);box-shadow:0 2px 4px rgba(0,0,0,.45),0 8px 18px rgba(0,0,0,.3)}
@@ -1177,7 +1184,7 @@ input,select,textarea{background:rgba(0,0,0,.35)!important;border-color:rgba(222
   .side-fab{display:inline-grid;position:fixed;left:10px;top:10px;z-index:58;background:var(--glass);border:1px solid var(--edge)}
   .top{padding-left:58px}
 }
-
+html.lite .side{box-shadow:none}html.lite body,html.lite .side{transition:none}
 .sk-note{font-size:.8rem!important;line-height:1.4!important;margin-bottom:4px!important}
 @media(max-width:900px){.side{top:0;height:100%;padding-top:12px}}
 
@@ -1213,6 +1220,8 @@ input,select,textarea{background:rgba(0,0,0,.35)!important;border-color:rgba(222
 #settings>h2 .ic{color:#d97757}
 #settings .st-tools .ghost{background:linear-gradient(180deg,#232322,#171717);border-color:rgba(222,220,209,.14);box-shadow:inset 0 1px 0 rgba(255,255,255,.06),0 2px 5px rgba(0,0,0,.45)}
 #settings .st-tools .ghost:hover{border-color:#d97757;color:#fff}
+html.lite #settings fieldset.st,html.lite #settings .st-f{box-shadow:none!important;transition:none}
+html.lite #settings fieldset.st:not(.closed){box-shadow:inset 3px 0 0 #d97757!important}
 
 /* v1.0.13: campos enlazados y campos que no aplican */
 #settings .st-calc{color:#e8a588!important;font-variant-numeric:tabular-nums}
@@ -1222,6 +1231,7 @@ input,select,textarea{background:rgba(0,0,0,.35)!important;border-color:rgba(222
 #settings .st-f.st-off::after{content:attr(data-why);font-size:.74rem;color:#e0a84f;margin-top:2px}
 #settings .st-f.st-flash{animation:stFlash .9s ease}
 @keyframes stFlash{0%{box-shadow:0 0 0 2px rgba(217,119,87,.75)}100%{box-shadow:0 0 0 2px rgba(217,119,87,0)}}
+html.lite #settings .st-f.st-flash{animation:none}
 
 /* ================= v1.0.19: Pasos para Vender ================= */
 #stepHead .stp-top{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap;color:var(--dim);font-size:.9rem}
@@ -1259,6 +1269,7 @@ input,select,textarea{background:rgba(0,0,0,.35)!important;border-color:rgba(222
 .pl-ck.on{background:var(--gain);border-color:var(--gain)}.pl-ck.on::after{content:"✓";color:#0d0d0d;font-size:.72rem;font-weight:800}
 .pl-row.ck-on{opacity:.5}
 @media(max-width:700px){.stp{grid-template-columns:30px minmax(0,1fr);padding:14px 12px}.stp-a{grid-column:2;text-align:left}.stp>.stp-acts,.stp>.stp-f,.stp>.pl,.stp>.stp-icons{grid-column:1/-1}.stp-acts .stp-done{margin-left:0}}
+html.lite .stp{box-shadow:none}
 
 /* ================= v1.0.20/21: Elige un Plan en filas, con columnas y filtros ================= */
 #pk.pk,.pk{display:flex!important;flex-direction:column;gap:6px;grid-template-columns:none!important}
@@ -1270,7 +1281,7 @@ input,select,textarea{background:rgba(0,0,0,.35)!important;border-color:rgba(222
 .pk-hc.c0{grid-column:1/3}.pk-hc.c4,.pk-hc.c5{text-align:right}
 .pk .pk-o{width:100%;padding:10px 14px!important;border-radius:10px!important;text-align:left;transform:none!important;color:inherit;font:inherit;cursor:pointer;
   background:linear-gradient(180deg,#1b1b1a,#141414);border:1px solid rgba(222,220,209,.09);box-shadow:inset 0 1px 0 rgba(255,255,255,.04),0 2px 4px rgba(0,0,0,.4);transition:border-color .15s,background .15s}
-
+html.lite .pk .pk-o{box-shadow:none;transition:none}
 .pk .pk-o:hover{transform:none!important;border-color:rgba(222,220,209,.24)!important}
 .pk-dot{width:16px;height:16px;border-radius:50%;border:1.5px solid rgba(222,220,209,.35);box-shadow:inset 0 1px 2px rgba(0,0,0,.6);position:relative}
 .pk-o.on .pk-dot{border-color:#d97757}.pk-o.on .pk-dot::after{content:"";position:absolute;inset:3px;border-radius:50%;background:#d97757;box-shadow:0 0 6px rgba(217,119,87,.7)}
@@ -1334,80 +1345,18 @@ body.in-jita #bMore,body.in-jita #more,body.in-jita #vRep,body.in-jita .if-ore{d
 .ov-kpi small{display:block;color:var(--dim);font-size:.78rem;line-height:1.35}
 .ov-kpi .rl{display:block;margin-top:6px;font-size:.8rem;color:var(--mut)}.ov-kpi .rl small{font-size:.72rem}
 .ov-row{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:10px}
-.ov-trk{position:relative;height:40px;margin:2px 10px 0}
+.ov-trk{position:relative;height:40px;margin:2px 6px 0}
 .ov-trk .ln{position:absolute;left:0;right:0;top:15px;height:6px;border-radius:3px;background:linear-gradient(90deg,#e8746c,#e0a84f,#5cba86);opacity:.55}
 .ov-trk .tk{position:absolute;top:10px;width:2px;height:16px;background:#d6d4cb;transform:translateX(-1px)}
 .ov-trk .tk span{position:absolute;top:20px;left:50%;transform:translateX(-50%);font-size:.72rem;color:var(--dim);white-space:nowrap}
-.ov-trk .me{position:absolute;top:18px;width:14px;height:14px;box-sizing:border-box;border-radius:50%;background:#d97757;border:2px solid #fff;transform:translate(-50%,-50%);box-shadow:0 0 8px rgba(217,119,87,.8)}
-.ov-mk-n b .copy{margin:0;padding:0;border:0;background:none!important;box-shadow:none!important;font:inherit;color:inherit;text-align:left;width:auto}
+.ov-trk .me{position:absolute;top:6px;width:14px;height:14px;border-radius:50%;background:#d97757;border:2px solid #fff;transform:translateX(-7px);box-shadow:0 0 8px rgba(217,119,87,.8)}
+.ov-mk-l{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:8px;font-size:.8rem;color:var(--dim)}.ov-mk-l b{display:block;color:var(--txt);font:600 .9rem var(--f-num)}
 .ov-mk-n{margin-top:8px;font-size:.86rem;color:var(--mut)}.ov-mk-n b{color:#e8a588}
 @media(max-width:900px){.ov-row{grid-template-columns:minmax(0,1fr)}}
-@media(max-width:520px){.ov-hd{flex-direction:column;align-items:flex-start}.ov-hd .v-isk{font-size:2rem}.ov-kpi{grid-template-columns:minmax(0,1fr)}.ov-card{padding:12px}}
-
-/* v1.0.23: la otra opción de mercado (vender en el origen o mandarlo al destino) */
-.ov-alt{display:flex;align-items:center;gap:14px;flex-wrap:wrap;padding:12px 16px;border-left:3px solid #6aa8d8}
-.ov-alt .oa-t{flex:1 1 320px;min-width:0;color:var(--mut);font-size:.9rem}
-.ov-alt .oa-t b{color:var(--txt)}.ov-alt .oa-t .pos{color:var(--gain)}.ov-alt .oa-t .neg{color:#ff9a9a}
-.ov-alt .oa-v{font:600 1.15rem var(--f-num);white-space:nowrap}
-
-/* v1.0.23: hero en dos columnas: Skill Points + Antes de empezar | Tasación del lote (como Janice) */
-.hero-intro{grid-template-columns:minmax(0,1.6fr) minmax(0,1fr)!important}
-.hero-left{display:flex;flex-direction:column;gap:12px;min-width:0}
-.hero-left>.ref{max-width:none;margin:0;border-radius:var(--r-md);flex-direction:column;align-items:flex-start;justify-content:flex-start;gap:8px;padding:14px 16px;position:relative;font-size:.95rem}
-.hero-left>.ref .ref-go{position:absolute;top:12px;right:14px;margin:0}
-.hero-left>.start-note{max-width:none;margin:0;flex:1}
-.appr{padding:14px 16px;border-radius:var(--r-md);background:linear-gradient(180deg,rgba(30,30,29,.92),rgba(21,21,21,.92));border:1px solid rgba(222,220,209,.12);
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.05),0 2px 4px rgba(0,0,0,.45),0 8px 18px rgba(0,0,0,.3);min-width:0;display:flex;flex-direction:column;gap:10px}
-.appr-tag{display:inline-block;align-self:flex-start;font-weight:600;font-size:.8rem;color:#1f1e1d;background:#d6d4cb;border-radius:999px;padding:1px 10px}
-.appr-g{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));border:1px solid rgba(222,220,209,.10);border-radius:10px;overflow:hidden;background:#0f0f0f;box-shadow:inset 0 1px 3px rgba(0,0,0,.6)}
-.appr-c{margin:0;min-width:0}
-.appr-c+.appr-c{border-left:1px solid rgba(222,220,209,.07)}
-.appr-c>div{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:9px 12px;border-bottom:1px solid rgba(222,220,209,.07);min-width:0}
-.appr-c>div:last-child{border-bottom:0}
-.appr-g dt{color:var(--mut);font-size:.86rem;white-space:nowrap}
-.appr-g dd{margin:0;font:600 .95rem var(--f-num);text-align:right;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--txt)}
-.appr-g dd .copy{margin:0;padding:2px 8px;font:inherit;background:none!important;border:0;box-shadow:none!important}
-.appr-g .t-buy dd,.appr-g .t-buy dd .copy{color:#ff9a9a!important}.appr-g .t-split dd,.appr-g .t-split dd .copy{color:#ecc27e!important}.appr-g .t-sell dd,.appr-g .t-sell dd .copy{color:#7fe0a6!important}
-@media(max-width:980px){.hero-intro{grid-template-columns:minmax(0,1fr)!important}}
-@media(max-width:520px){.appr-g{grid-template-columns:minmax(0,1fr)}.appr-c+.appr-c{border-left:0;border-top:1px solid rgba(222,220,209,.07)}}
-
-/* v1.0.23: rótulos de los controles del menú (Dirección / En) */
-.route>.route-cap{display:block!important;font-size:.62rem!important;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);margin:4px 0 -4px 6px!important;padding:0!important;background:none!important;border:0!important;box-shadow:none!important;min-height:0!important;height:auto!important}
-body.side-c .route>.route-cap{display:none!important}
-/*__MINING_CSS__*/
-
-/* v1.0.25: sin ítems no hay tasación: las dos tarjetas lado a lado */
-.hero-intro.no-appr{grid-template-columns:minmax(0,1fr)!important}
-.hero-intro.no-appr .hero-left{flex-direction:row}
-.hero-intro.no-appr .hero-left>*{flex:1 1 0;min-width:0}
-@media(max-width:980px){.hero-intro.no-appr .hero-left{flex-direction:column}}
-
-/* v1.0.30: Resultado con la ganancia a la derecha y el margen visible */
-.res-chips{display:flex;gap:8px;flex-wrap:wrap}
-.res-chips .sk-note{margin:0 0 6px}
-.mg-note{color:#e8a588!important;background:rgba(217,119,87,.10)!important;border-color:rgba(217,119,87,.45)!important}
-.res-top{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap}
-.res-top .res-big{margin:6px 0 4px}
-.res-pf{text-align:right;padding:10px 16px;border-radius:12px;border:1px solid rgba(92,186,134,.35);background:linear-gradient(180deg,rgba(92,186,134,.12),rgba(92,186,134,.04));
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.05),0 2px 6px rgba(0,0,0,.4)}
-.res-pf.neg{border-color:rgba(232,116,108,.45);background:linear-gradient(180deg,rgba(232,116,108,.12),rgba(232,116,108,.04))}
-.res-pf small{display:block;font-size:.72rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--dim)}
-.res-pf b{display:block;font:600 clamp(1.3rem,3vw,1.9rem) var(--f-num);color:var(--gain)}
-.res-pf.neg b{color:#ff9a9a}
-.res-pf span{display:block;font-size:.82rem;color:var(--mut)}
-@media(max-width:600px){.res-pf{text-align:left;width:100%}}
-
-/* v1.0.30: comprar en Jita al Buy / Split / Sell; casilla del margen sin flechas blancas */
-.fb2-hd{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
-.fb2-hd h4{margin:0}
-.fb2-seg{display:inline-flex;align-items:center;gap:4px;padding:3px;border-radius:10px;background:#0f0f0f;border:1px solid rgba(222,220,209,.10);box-shadow:inset 0 1px 3px rgba(0,0,0,.6)}
-.fb2-seg>span{font-size:.78rem;color:var(--dim);padding:0 6px}
-.route .route-m input{-moz-appearance:textfield;appearance:textfield;background:#0f0f0f!important;color:var(--txt)!important;border:1px solid rgba(222,220,209,.16)!important;border-radius:8px!important;
-  box-shadow:inset 0 1px 3px rgba(0,0,0,.6)!important;text-align:center;font:600 .92rem var(--f-num)}
-.route .route-m input::-webkit-inner-spin-button,.route .route-m input::-webkit-outer-spin-button{-webkit-appearance:none;margin:0}
-.route .route-m input:focus{border-color:#d97757!important;box-shadow:0 0 0 2px rgba(217,119,87,.25)!important;outline:none}
+@media(max-width:520px){.ov-hd{flex-direction:column;align-items:flex-start}.ov-hd .v-isk{font-size:2rem}.ov-kpi{grid-template-columns:minmax(0,1fr)}.ov-mk-l b{font-size:.8rem}.ov-card{padding:12px}}
+html.lite .ov-card,html.lite .ov-kpi>div{box-shadow:none}
 </style>
-<script>/* v1.0.16: aplica el tema guardado antes de pintar (sin parpadeo). Por defecto: Dark. */try{var g=JSON.parse(localStorage.getItem('gestorVentas.ajustes.v1')||'null');if(g&&g.ui&&g.ui.light)document.documentElement.classList.add('light');}catch(e){}</script>
+<script>/* v1.0.16: aplica tema y Modo Ligero guardados antes de pintar (sin parpadeo). Por defecto: Dark, sin Modo Ligero. */try{var g=JSON.parse(localStorage.getItem('gestorVentas.ajustes.v1')||'null');if(g&&g.ui){if(g.ui.light)document.documentElement.classList.add('light');if(g.ui.lite)document.documentElement.classList.add('lite');}}catch(e){}</script>
 </head>
 <body class="side-c">
 <!-- v1.0.11: menú lateral (como Claude): se expande y se contrae; opciones de cálculo, Ajustes y Ayuda -->
@@ -1418,19 +1367,17 @@ body.side-c .route>.route-cap{display:none!important}
   </div>
   <div class="side-g"><span class="side-h">Cálculo</span>
   <div class="route" id="route">
-    <span class="route-cap" aria-hidden="true">Dirección</span>
     <button type="button" class="route-b" id="bFlip" aria-pressed="false" title="Ruta del lote. HY-RWO → Jita: vendes lo que tienes en Null. Jita → HY-RWO: llevas (o compras) en Jita y vendes en Null más caro. Clic para invertir.">
       <span class="route-ic" aria-hidden="true"></span><span class="route-from" id="rtFrom">HY-RWO</span><span class="route-ar" aria-hidden="true">→</span><span class="route-to" id="rtTo">Jita</span></button>
-    <span class="route-cap" aria-hidden="true">En</span>
-    <label class="sw" id="shipLab" title=""><input type="checkbox" id="shipOn" checked><span class="sw-t" aria-hidden="true"></span><span id="shipTxt">HY-RWO</span></label>
+    <label class="sw" id="shipLab" title=""><input type="checkbox" id="shipOn" checked><span class="sw-t" aria-hidden="true"></span><span id="shipTxt">En HY-RWO</span></label>
+    <label class="sw" title="Modo Ligero: quita efectos visuales (fondo fijo, sombras, animaciones). Más fluido en PCs lentas y en Firefox."><input type="checkbox" id="liteOn"><span class="sw-t" aria-hidden="true"></span><span>Modo Ligero</span></label>
     <label class="sw" title="Tema de la página: Dark (oscuro) o Light (claro)."><input type="checkbox" id="themeLight"><span class="sw-t" aria-hidden="true"></span><span id="themeTxt">Dark</span></label>
-    <label class="route-m" id="rtM" hidden>Margen +<input type="number" id="fImpM" min="0" step="0.5" value="15" aria-label="Margen al vender en HY-RWO, % neto sobre Jita Sell" title="Cuánto más caro vendes en HY-RWO que en Jita Sell, neto (después de taxes). Naves: suele ser 14–20%. Se guarda con tus Ajustes.">% neto</label>
+    <label class="route-m" id="rtM" hidden>Margen +<input type="number" id="fImpM" min="0" step="0.5" value="15" aria-label="Margen al vender en HY-RWO, % neto sobre Jita Sell">% neto</label>
   </div>
   </div>
   <div class="side-g"><span class="side-h">General</span>
     <button type="button" class="side-i" data-open="bSettings" title="Ajustes: skills, impuestos, ajuste de precios, envío, Buyback e idioma."><span class="ic i-gear" aria-hidden="true"></span><span class="side-l">Ajustes</span></button>
     <button type="button" class="side-i" data-open="bHelp" title="Ayuda: cómo pegar tu inventario y leer el plan."><span class="ic i-help" aria-hidden="true"></span><span class="side-l">Ayuda</span></button>
-    <button type="button" class="side-i" data-open="bMine" title="Comparativa Minera: qué Barge o Exhumer rinde más en moon ore, hielo y gas, y el plan para un Omega nuevo."><span class="ic i-rock" aria-hidden="true"></span><span class="side-l">Comparativa Minera</span></button>
   </div>
 </aside>
 <button type="button" class="side-fab" id="sideFab" aria-label="Abrir menú" title="Menú"><span class="ic i-panel" aria-hidden="true"></span></button>
@@ -1439,7 +1386,6 @@ body.side-c .route>.route-cap{display:none!important}
   <div class="brand"><span class="logo-s sig" aria-hidden="true"></span>SIGMA GRINDSET <small>EVE Online</small></div>
   <nav>
     <button class="ghost" id="bSettings" aria-label="Ajustes" title="Ajustes" aria-pressed="false" aria-controls="settings"><span class="ic i-gear" aria-hidden="true"></span><span class="tb-l">Ajustes</span></button>
-    <button class="ghost" id="bMine" aria-label="Comparativa Minera" title="Comparativa Minera" aria-pressed="false" aria-controls="mining"><span class="ic i-rock" aria-hidden="true"></span><span class="tb-l">Comparativa Minera</span></button>
     <button class="ghost" id="bHelp" aria-label="Ayuda" title="Ayuda" aria-pressed="false" aria-controls="help"><span class="ic i-help" aria-hidden="true"></span><span class="tb-l">Ayuda</span></button>
   </nav>
 </header>
@@ -1476,7 +1422,7 @@ Strontium Clathrates = 50
 Contraband Freight = no</textarea><small>Una regla por línea: Nombre = tax total en %, o «no» para artículos excluidos.</small></label></div></fieldset>
       <fieldset class="st"><legend><span class="ic i-help" aria-hidden="true"></span><span class="st-tt">Venta a Jugador<small class="st-sum">Último recurso: venta por Discord</small></span></legend><p class="st-i">Permite comparar una oferta WTS a jugadores de SIGMA o Vanguardia DR. El comprador y el plazo de venta no están garantizados.</p><div class="st-g"><label class="st-f st-ck"><span class="st-l"><input type="checkbox" id="discOn" checked> Comparar esta opción</span><small>Sin Sales Tax ni envío. Solo se recomienda si no hay otra forma.</small></label><label class="st-f"><span class="st-l">Precio base</span><select id="discBase"><option value="buy" selected>Jita Buy</option><option value="split">Jita Split</option></select><small>Los jugadores en Null compran a Jita Buy.</small></label><label class="st-f"><span class="st-l">% del precio base</span><input type="number" id="discPct" step="1" min="0" value="100"><small>Lo que le pides al comprador.</small></label><label class="st-f"><span class="st-l">Días hasta que alguien compre</span><input type="number" id="discDays" step="1" min="0" value="3"><small>Para el tiempo estimado.</small></label><label class="st-f"><span class="st-l">Entrega</span><input type="text" id="discLoc" value="HY-RWO: Time Is A Flat Circle"><small>Dónde haces el contrato.</small></label></div></fieldset>
       <div class="st-sec"><h3 class="st-sec-t">Envío y Reproceso</h3><p class="st-sec-i">Logística con SIGMA Freight y la refinería donde reprocesas.</p></div>
-      <fieldset class="st"><legend><span class="ic i-ship" aria-hidden="true"></span><span class="st-tt">Envío (SIGMA Freight)<small class="st-sum">Días por contrato, destinatario e importación a Null</small></span></legend><p class="st-i">Los costes están fijados según SIGMA Freight y se desglosan en «Contratos y Envío». Aquí solo ajustas los días estimados por contrato.</p><div class="st-g"><label class="st-f"><span class="st-l">Días por courier (mejor caso)</span><input type="number" id="cDayMin" step="1" min="0" value="1"><small>Lo que tarda en entregar un contrato.</small></label><label class="st-f"><span class="st-l">Días por courier (peor caso)</span><input type="number" id="cDayMax" step="1" min="0" value="3"><small>Para el tiempo estimado del resumen.</small></label><label class="st-f st-w"><span class="st-l">Destinatario del courier</span><input type="text" id="cAssignee" value="SIGMA Freight" spellcheck="false"><small>A quién se asigna el contrato de envío (Private → Name).</small></label><label class="st-f st-w"><span class="st-l">Destino en Null (modo Jita → HY-RWO)</span><input type="text" id="cNullDest" value="HY-RWO: Time Is A Flat Circle" spellcheck="false"><small>Estructura donde SIGMA Freight entrega cuando importas de Jita.</small></label></div></fieldset>
+      <fieldset class="st"><legend><span class="ic i-ship" aria-hidden="true"></span><span class="st-tt">Envío (SIGMA Freight)<small class="st-sum">Días por contrato, destinatario e importación a Null</small></span></legend><p class="st-i">Los costes están fijados según SIGMA Freight y se desglosan en «Contratos y Envío». Aquí solo ajustas los días estimados por contrato.</p><div class="st-g"><label class="st-f"><span class="st-l">Días por courier (mejor caso)</span><input type="number" id="cDayMin" step="1" min="0" value="1"><small>Lo que tarda en entregar un contrato.</small></label><label class="st-f"><span class="st-l">Días por courier (peor caso)</span><input type="number" id="cDayMax" step="1" min="0" value="3"><small>Para el tiempo estimado del resumen.</small></label><label class="st-f st-w"><span class="st-l">Destinatario del courier</span><input type="text" id="cAssignee" value="SIGMA Freight" spellcheck="false"><small>A quién se asigna el contrato de envío (Private → Name).</small></label><label class="st-f st-w"><span class="st-l">Destino en Null (modo Jita → HY-RWO)</span><input type="text" id="cNullDest" value="HY-RWO: Time Is A Flat Circle" spellcheck="false"><small>Estructura donde SIGMA Freight entrega cuando importas de Jita.</small></label><label class="st-f"><span class="st-l">Margen al importar a HY-RWO %</span><input type="number" id="cImpM" step="0.5" min="0" value="15"><small>Cuánto más caro vendes en HY-RWO que en Jita Sell, neto (después de taxes). Naves: suele ser 14–20%.</small></label></div></fieldset>
       <fieldset class="st"><legend><span class="ic i-flask" aria-hidden="true"></span><span class="st-tt">Refinería<small class="st-sum">Estructura, rig e implante donde reprocesas</small></span></legend><p class="st-i">Indica la estructura donde reprocesarás. El tipo de refinería, rig, seguridad e implante cambian el yield estimado.</p><div class="st-g"><label class="st-f"><span class="st-l">Nombre</span><input type="text" id="refName" value="HY-RWO - Metal Exchange"><small>Lo de antes de " - " es el sistema (HY-RWO).</small></label><label class="st-f"><span class="st-l">Estructura</span><select id="refStruct"><option value="tatara" selected>Tatara</option><option value="athanor">Athanor</option></select><small>Tatara rinde más que Athanor.</small></label><label class="st-f"><span class="st-l">Rig de reproceso</span><select id="refRig"><option value="t2" selected>T2</option><option value="t1">T1</option><option value="none">Sin Rig</option></select><small>El Rig de la estructura.</small></label><label class="st-f"><span class="st-l">Seguridad del sistema</span><select id="refSec"><option value="null" selected>Nullsec</option><option value="low">Lowsec</option><option value="high">Highsec</option></select><small>Nullsec da más rendimiento.</small></label><label class="st-f"><span class="st-l">Implante de reproceso</span><select id="refImp"><option value="0.04" selected>RX-804 (+4%)</option><option value="0.02">RX-802 (+2%)</option><option value="0.01">RX-801 (+1%)</option><option value="0">Ninguno</option></select><small>El implante que llevas puesto.</small></label></div></fieldset>
 
     </div>
@@ -1518,17 +1464,10 @@ Contraband Freight = no</textarea><small>Una regla por línea: Nombre = tax tota
     <h3 class="sub-h" style="margin-top:20px"><span class="ic i-lock" aria-hidden="true"></span>Seguridad</h3>
     <p class="lead">No necesitas introducir contraseña de EVE. La calculadora usa ESI de CCP para consultar datos de mercado y el servicio de imágenes de EVE para los íconos. Los enlaces a Janice, Discord, SIGMA Auth y Buyback se abren por separado. El inventario y los ajustes permanecen en memoria y se pierden al recargar.</p>
   </section>
-  <section class="panel" id="mining" hidden>
-    <div class="x-wrap"><button type="button" class="x-close" data-close="mining" aria-label="Cerrar Comparativa Minera" title="Cerrar Comparativa Minera"></button></div>
-    <h2><span class="ic i-rock" aria-hidden="true"></span>Comparativa Minera: Barges y Exhumers</h2>
-    <p class="lead">Qué nave saca más moon ore, hielo o gas en cada escalón: Full T1, Full T2 y Facción, con skills a IV o a V. Cuenta módulos, drones, implantes, boosts y cuánto tarda en llenarse la bodega. En ISK/h usa el precio de Jita 4-4. El Plan para Omega Nuevo calcula entrenamiento, inversión y si alcanza para el siguiente Omega.</p>
-    <div id="mnRoot"></div>
-  </section>
   </div>
-  <div class="hero-intro no-appr">
-    <section class="appr" id="appr" aria-live="polite" hidden></section>
-    <div class="hero-left">
+  <div class="hero-intro">
     <button type="button" class="ref" data-link="referral"><span class="ref-tag">Gratis</span><span class="ref-t">Usa mi enlace para recibir <b>1 Millón de Skill Points</b> gratis</span><span class="ref-go">↗</span></button>
+    <p class="hero-p">Pega tu loot, ore o materiales. Comparamos rutas de venta con precios de Jita y costes configurados para que sepas cuántos ISK recibirías.</p>
     <aside class="start-note" aria-label="Antes de empezar">
       <span class="ic i-bulb" aria-hidden="true"></span>
       <div class="start-note-body"><strong>Antes de empezar</strong>
@@ -1536,7 +1475,6 @@ Contraband Freight = no</textarea><small>Una regla por línea: Nombre = tax tota
         <div class="start-note-actions"><button type="button" id="heroHelp">Ver Ayuda</button><button type="button" id="heroSettings">Configurar Ajustes</button></div>
       </div>
     </aside>
-    </div>
   </div>
   <div class="paste">
     <textarea id="paste" autocomplete="off" spellcheck="false" aria-label="Pega aquí tu inventario de EVE" placeholder="Pega aquí tus ítems con Ctrl+V"></textarea>
@@ -1572,9 +1510,8 @@ Contraband Freight = no</textarea><small>Una regla por línea: Nombre = tax tota
   <!-- 1. Resultado simple -->
   <section class="panel summary res" id="pSum" hidden>
     <h2><span class="ic i-bulb" aria-hidden="true"></span>Resultado</h2>
-    <div class="res-chips"><p class="sk-note" id="skNote" hidden></p><p class="sk-note mg-note" id="mgNote" hidden></p></div>
-    <div class="res-top"><p class="res-big"><span class="num" id="resIsk">—</span><span class="v-what" id="resWhat"></span></p>
-      <div class="res-pf" id="resPf" hidden></div></div>
+    <p class="sk-note" id="skNote" hidden></p>
+    <p class="res-big"><span class="num" id="resIsk">—</span><span class="v-what" id="resWhat"></span></p>
     <div class="fb2" id="flipBuy" hidden></div>
     <div class="pk-w"><h4 class="pk-t">Elige un Plan <small>El óptimo viene marcado. Si eliges otro, todo se ajusta a ese plan.</small></h4>
       <div class="pk-tools" id="pkTools"></div>
@@ -1595,10 +1532,10 @@ Contraband Freight = no</textarea><small>Una regla por línea: Nombre = tax tota
         <p class="v-isk num" id="vIsk"></p>
       </div>
       <div class="ov-card ov-flow"><h4>De Dónde Sale tu ISK</h4><div id="ovFlow"></div></div>
-      <div class="ov-card ov-alt" id="ovAlt" hidden></div>
       <dl class="ov-kpi">
         <div><dt>Ítems</dt><dd id="vsN">—</dd><small id="vsNs"></small></div>
         <div><dt>Volumen Total</dt><dd id="vsV">—</dd><small id="vsVs"></small></div>
+        <div id="ovShip"><dt id="aCourT">Envío a Jita</dt><dd id="aCourier">—</dd><small id="aCourS"></small></div>
         <div class="tx"><dt>Taxes y Broker</dt><dd id="vsCn" class="neg-soft">—</dd><small id="vsC"></small><label class="rl" id="vsRelW" hidden><input type="checkbox" id="cRelistOn"> Relists: <span id="vsRel">—</span><small>Se cobra si bajas el precio (~2 semanas). Márcalo para contarlo.</small></label></div>
       </dl>
       <div class="ov-row">
@@ -1727,7 +1664,10 @@ Contraband Freight = no</textarea><small>Una regla por línea: Nombre = tax tota
 
   <!-- Libro de lotes -->
 
+
   <!-- Reproceso -->
+
+
 
   <!-- Venta a jugador por Discord -->
 </main>

@@ -1130,3 +1130,8 @@ Comparativa Minera: plan para Omega nuevo
 ==================== v1.0.43 ====================
 - Árbol restaurado a v1.0.31 (68c0e1a): fuera v1.0.32–v1.0.39 (subidas por la web, Codex) y v1.0.40/v1.0.42 (dependían de ellas).
 - Se mantiene .github/workflows/versiones.yml de v1.0.41 (Releases para commits «Publicar vX.Y.Z: …»).
+
+==================== v1.0.44 ====================
+- Árbol restaurado a v1.0.22 (11d7b6f). Fuera src/mining*, src/mineria_*, mineria.html y tools/mining (estaban desde v1.0.23).
+- Rama respaldo-v1.0.43 = estado completo antes del roll-back (v1.0.23–v1.0.43).
+- Se mantiene .github/workflows/versiones.yml.

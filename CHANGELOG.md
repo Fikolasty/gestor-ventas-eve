@@ -2,6 +2,14 @@
 
 Cambios por versión del Gestor de Ventas. La más nueva arriba. El detalle técnico completo está en `docs/SPEC.txt`.
 
+## 1.0.44 — Vuelta a v1.0.22 (pegar ítems vuelve a mostrar todo)
+*2026-10-15*
+
+- Desde v1.0.23 la página no mostraba nada al pegar los ítems en el navegador del usuario; v1.0.22 sí funciona. Se vuelve a v1.0.22 como base para seguir desarrollando.
+- Quedan fuera v1.0.23–v1.0.43: Comparativa Minera y mineria.html, ruta/dónde vendes, Tasación, contratos con números crudos, sin Modo Ligero, ganancia a la derecha y compras al Buy/Split/Sell.
+- Todo ese trabajo queda guardado en la rama `respaldo-v1.0.43` para traerlo de vuelta por partes.
+- Se conserva el workflow de Releases.
+
 ## 1.0.43 — Vuelta a v1.0.31 (sin los cambios de Codex)
 *2026-10-15*
 
