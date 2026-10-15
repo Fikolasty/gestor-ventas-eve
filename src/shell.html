@@ -252,7 +252,7 @@ footer{max-width:min(1360px,94vw);margin:0 auto;padding:10px 20px 40px;color:var
 
 /* ================= Profundidad (v45) =================
    Sombras en capas (cercana · media · lejana) + filo de luz superior, como placas de casco.
-   Números como lecturas iluminadas de consola. Esquinas de mira solo en el veredicto. */
+   Números como lecturas iluminadas de consola. */
 .panel{position:relative;
   box-shadow:inset 0 1px 0 rgba(255,255,255,.08),inset 0 -1px 0 rgba(0,0,0,.5),
     0 1px 2px rgba(0,0,0,.5),0 8px 14px rgba(0,0,0,.35),0 8px 14px rgba(0,0,0,.45)}
@@ -260,16 +260,6 @@ footer{max-width:min(1360px,94vw);margin:0 auto;padding:10px 20px 40px;color:var
   background:linear-gradient(90deg,transparent,rgba(222,220,209,0.33),rgba(222,220,209,0.21),transparent);pointer-events:none}
 .verdict{background:radial-gradient(120% 90% at 0% 0%,rgba(53,194,110,.10),transparent 55%),
   linear-gradient(180deg,rgba(48,48,46,.96),rgba(36,35,33,.97));border-color:rgba(222,220,209,0.132)}
-.verdict::after{content:"";position:absolute;inset:10px;pointer-events:none;
-  background:
-   linear-gradient(var(--ion),var(--ion)) top left/18px 2px no-repeat,
-   linear-gradient(var(--ion),var(--ion)) top left/2px 18px no-repeat,
-   linear-gradient(var(--ion),var(--ion)) top right/18px 2px no-repeat,
-   linear-gradient(var(--ion),var(--ion)) top right/2px 18px no-repeat,
-   linear-gradient(var(--ion),var(--ion)) bottom left/18px 2px no-repeat,
-   linear-gradient(var(--ion),var(--ion)) bottom left/2px 18px no-repeat,
-   linear-gradient(var(--ion),var(--ion)) bottom right/18px 2px no-repeat,
-   linear-gradient(var(--ion),var(--ion)) bottom right/2px 18px no-repeat;opacity:.55}
 .v-isk{text-shadow:0 2px 0 rgba(0,0,0,.65),0 6px 14px rgba(0,0,0,.5)}
 .v-isk.pos{text-shadow:0 2px 0 rgba(0,0,0,.65),0 0 28px rgba(53,194,110,.35),0 0 2px rgba(53,194,110,.6)}
 .v-isk.neg{text-shadow:0 2px 0 rgba(0,0,0,.65),0 0 28px rgba(255,123,123,.35)}
@@ -369,10 +359,8 @@ h2 .ic,.sub-h .ic{color:var(--ion)}
 .pl-row.min .n{font-weight:400;color:var(--mut);padding-left:14px}
 .pl-row.min .q{font-weight:500;color:var(--mut)}
 .pl-row.min .p .copy{font-size:.86rem;padding:3px 8px}
-.pl-row.cost,.pl-row.total{border-top:1px solid var(--line)}
+.pl-row.cost{border-top:1px solid var(--line)}
 .pl-row.cost .a{color:var(--loss)}
-.pl-row.total{background:rgba(53,194,110,.07);border-top-color:var(--line2)}
-.pl-row.total .a{font-size:1.2rem}
 .pl-row.miss .n{color:var(--warn,#d97757)}
 details.thin{padding:12px 20px}
 details.thin>summary{align-items:center;flex-wrap:wrap;row-gap:4px;justify-content:flex-start}
@@ -756,8 +744,8 @@ html.lite .panel,html.lite .ct,html.lite .alt-grid>div,html.lite .rx-c,html.lite
   .pl-row>.n{grid-area:n}.pl-row>.q{grid-area:q}.pl-row>.p{grid-area:p;text-align:left}.pl-row>.a{grid-area:a}
   .pl-row .p .copy{text-align:left}
   .pl-row>.q::after{content:" u.";color:var(--dim);font-weight:400}
-  .pl-row.cost,.pl-row.total,.pl-row.miss{grid-template-areas:"n a"}
-  .pl-row.cost>.q,.pl-row.cost>.p,.pl-row.total>.q,.pl-row.total>.p,.pl-row.miss>.q,.pl-row.miss>.p{display:none}
+  .pl-row.cost,.pl-row.miss{grid-template-areas:"n a"}
+  .pl-row.cost>.q,.pl-row.cost>.p,.pl-row.miss>.q,.pl-row.miss>.p{display:none}
   details.thin>summary .status{margin-left:0;flex-basis:100%}
 
   .ship-t thead{display:none}
@@ -1038,10 +1026,6 @@ html.lite .ct,html.lite .sh-card,html.lite .scn>div,html.lite fieldset.st,html.l
 .res-gs{display:block;font-size:.88rem;color:var(--mut);line-height:1.45}
 @media(max-width:760px){.res-top{grid-template-columns:minmax(0,1fr)}.res-side{padding:12px 0 0;border-left:0;border-top:1px solid rgba(222,220,209,.1)}}
 /* v1.0.49: «Ver más planes» y botón del análisis con el mismo estilo que el plan elegido (simetría visual) */
-.pk .pk-more{display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%;margin-top:6px;padding:10px 14px 10px 44px;border-radius:10px;
-  border:1px dashed rgba(222,220,209,.24);background:rgba(21,21,21,.6);color:#e5e3da;font:500 .95rem var(--f-ui);cursor:pointer;text-align:left}
-.pk .pk-more b{font:600 .9rem var(--f-ui);color:#e8a588}
-.pk .pk-more:hover{border-style:solid;border-color:rgba(217,119,87,.6);background:#1c1a19}
 .more-btn{border:1px solid #d97757!important;border-radius:10px!important;background:linear-gradient(90deg,rgba(217,119,87,.14),rgba(21,21,21,.95) 60%)!important;
   box-shadow:inset 3px 0 0 #d97757,0 2px 6px rgba(0,0,0,.45)!important;padding:12px 14px 12px 18px!important;font-size:1rem!important;color:#f0eee6!important}
 .more-btn b{color:#e8a588!important}
@@ -1050,6 +1034,18 @@ html.lite .ct,html.lite .sh-card,html.lite .scn>div,html.lite fieldset.st,html.l
 /* v1.0.50: desglose abierto = el Resultado queda en su cabecera (números) y el botón; los planes se pliegan */
 #pSum .more-btn{margin-top:8px}
 #pSum.res-min .pk-w,#pSum.res-min #flipBuy{display:none!important}
+/* v1.0.51: títulos en mayúsculas; «Tus Ítems» plegado con el estilo del plan elegido y «Ver el desglose» */
+.h-caps{text-transform:uppercase;letter-spacing:.05em}
+#ledger>summary{align-items:center}
+#ledger>summary h2{margin:0;line-height:1.2}
+#ledger>summary .cnt{align-self:center;line-height:1.2}
+#ledger:not([open]){border:1px solid #d97757!important;border-radius:10px!important;background:linear-gradient(90deg,rgba(217,119,87,.14),rgba(21,21,21,.95) 60%)!important;
+  box-shadow:inset 3px 0 0 #d97757,0 2px 6px rgba(0,0,0,.45)!important}
+#ledger:not([open]):hover{background:linear-gradient(90deg,rgba(217,119,87,.22),rgba(28,26,25,.95) 60%)!important}
+#esiStatus.cta{color:#e8a588;font:600 1rem var(--f-ui)}
+/* v1.0.51: en el plan elegido, «+N planes ▾» indica que se despliega al hacer clic */
+.pk-x{display:inline-block;margin-left:8px;padding:1px 8px;border-radius:999px;font:600 .72rem var(--f-ui);font-style:normal;color:#e8a588;border:1px solid rgba(217,119,87,.45);background:rgba(217,119,87,.1);vertical-align:1px}
+.pk-o.on:hover .pk-x{background:rgba(217,119,87,.2)}
 /* v1.0.7: interruptor "Contar envío" */
 .sw{display:inline-flex;align-items:center;gap:8px;cursor:pointer;font-size:.9rem;color:#e5e3da;text-shadow:0 1px 3px rgba(0,0,0,.9);padding:6px 10px;border-radius:10px;background:rgba(21,21,21,.75);border:1px solid rgba(222,220,209,.12)}
 .sw input{position:absolute;opacity:0;width:1px;height:1px}
@@ -1465,7 +1461,7 @@ Contraband Freight = no</textarea><small>Una regla por línea: Nombre = tax tota
     </div>
     <h3 class="sub-h" style="margin-top:20px">Las Formas de Vender</h3>
     <div class="hp-t">
-      <div><b>Vender en Null</b><span>Sell order en la estructura configurada de Nullsec. El precio se estima a partir de Jita Buy o del precio local indicado; puede aplicar una regla especial al hielo. Resta Sales Tax, Broker y SCC; no paga courier a Jita.</span></div>
+      <div><b>Vender en HY-RWO</b><span>Sell order en la estructura configurada de Nullsec. El precio se estima a partir de Jita Buy o del precio local indicado; puede aplicar una regla especial al hielo. Resta Sales Tax, Broker y SCC; no paga courier a Jita.</span></div>
       <div><b>Vender al Buyback</b><span>Contrato Item Exchange al programa de la alianza. Calcula el pago a partir del precio base y tax configurados. No requiere courier a Jita ni Sales Tax de mercado; confirma aceptación y plazos con el Buyback.</span></div>
       <div><b>Vender en Jita (Orden)</b><span>Mandas la carga a Jita y publicas una sell order con el precio recomendado. Se descuentan courier, Sales Tax, Broker y los relists activados.</span></div>
       <div><b>Vender en Jita al Instante</b><span>Envías la carga a Jita y vendes a buy orders disponibles. Para grandes cantidades, el cálculo recorre el libro de compras; puede recibir menos que la mejor buy order por unidad.</span></div>
@@ -1509,7 +1505,7 @@ Contraband Freight = no</textarea><small>Una regla por línea: Nombre = tax tota
       <div class="ld-track"><i id="ldBar"></i></div></div>
   </section>
   <details class="panel thin" id="ledger" hidden>
-    <summary><h2><span class="ic i-box" aria-hidden="true"></span>Tus Ítems</h2><span class="cnt" id="lCount"></span><span class="status" id="esiStatus" role="status"></span></summary>
+    <summary><h2 class="h-caps"><span class="ic i-box" aria-hidden="true"></span>Tus Ítems</h2><span class="cnt" id="lCount"></span><span class="status" id="esiStatus" role="status"></span></summary>
     <div class="ledger-tools">
       <p class="lead">Abre un ítem para consultar la guía, comparar mercados o cambiar sus datos. Haz clic en un encabezado para ordenar la lista.</p>
       <button class="ghost" id="bEsi"><span class="ic i-sync" aria-hidden="true"></span>Actualizar Precios</button>
@@ -1519,7 +1515,7 @@ Contraband Freight = no</textarea><small>Una regla por línea: Nombre = tax tota
     <div class="undo" id="undo" hidden role="status"><span id="undoTxt"></span><button type="button" class="ghost" id="undoBtn">Deshacer</button></div>
     <div class="ledger-head" role="group" aria-label="Ordenar tus ítems">
       <button type="button" class="ledger-sort" data-lsort="n" aria-label="Ordenar por nombre">Ítem <span class="sort-arrow" aria-hidden="true"></span></button>
-      <span class="ledger-col">Precio /u</span>
+      <span class="ledger-col">Precio Unidad</span>
       <button type="button" class="ledger-sort" data-lsort="q" aria-label="Ordenar por cantidad">Cantidad <span class="sort-arrow" aria-hidden="true"></span></button>
       <button type="button" class="ledger-sort" data-lsort="d" aria-label="Ordenar por destino de venta">Qué Hacer <span class="sort-arrow" aria-hidden="true"></span></button>
       <button type="button" class="ledger-sort" data-lsort="a" aria-label="Ordenar por ISK netos">Ganancia <span class="sort-arrow" aria-hidden="true"></span></button>
@@ -1529,7 +1525,7 @@ Contraband Freight = no</textarea><small>Una regla por línea: Nombre = tax tota
   </details>
   <!-- 1. Resultado simple -->
   <section class="panel summary res" id="pSum" hidden>
-    <h2><span class="ic i-bulb" aria-hidden="true"></span>Resultado</h2>
+    <h2 class="h-caps"><span class="ic i-bulb" aria-hidden="true"></span>Resultado</h2>
     <!-- v1.0.48: arriba, lo que recibes (izquierda) y cuánto más deja frente a la alternativa simple (derecha) -->
     <div class="res-top">
       <div class="res-main"><span class="res-k">Recibes con este plan</span>
@@ -1624,12 +1620,12 @@ Contraband Freight = no</textarea><small>Una regla por línea: Nombre = tax tota
       <label>Cantidad<input type="number" id="rQty" min="0" step="1" value="1000"></label>
       <label>Skill de procesamiento<select id="rSkill"><option value="0">Nivel 0</option><option value="1">Nivel 1</option><option value="2">Nivel 2</option><option value="3">Nivel 3</option><option value="4">Nivel 4</option><option value="5" selected>Nivel 5</option></select><small id="rSkillSrc">Manual (sin login).</small></label>
       <label>Tax de refinería %<input type="number" id="rTax" min="0" max="100" step="0.1" value="1"></label>
-      <label>Precio del ore /u<input type="number" id="rOrePrice" min="0" step="any" placeholder="0"><small>Jita Sell del ore.</small></label>
+      <label>Precio Unidad del ore<input type="number" id="rOrePrice" min="0" step="any" placeholder="0"><small>Jita Sell del ore.</small></label>
       <label>m³ por unidad del ore<input type="number" id="rOreVol" min="0" step="any" placeholder="0"></label>
     </div>
     <p class="note"><b id="rRef" style="color:var(--txt);font-weight:600"></b></p>
     <p class="note" id="rBreak" style="margin-top:4px"></p>
-    <table id="tRepro"><thead><tr><th>Mineral</th><th class="r">Cantidad neta</th><th class="r">Jita Sell /u</th><th class="r">Valor</th></tr></thead><tbody></tbody></table>
+    <table id="tRepro"><thead><tr><th>Mineral</th><th class="r">Cantidad neta</th><th class="r">Precio Unidad Jita Sell</th><th class="r">Valor</th></tr></thead><tbody></tbody></table>
     <div style="margin-top:10px"><button class="ghost" id="bEsiMin"><span class="ic i-sync" aria-hidden="true"></span>Traer Precios de Minerales</button></div>
     <h3 class="sub-h" style="margin-top:22px">Valor Bruto: Refinado vs Sin Refinar</h3>
     <p class="lead" id="rRawNote"></p>

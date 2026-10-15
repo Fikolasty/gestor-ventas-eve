@@ -2,6 +2,29 @@
 
 Cambios por versión del Gestor de Ventas. La más nueva arriba. El detalle técnico completo está en `docs/SPEC.txt`.
 
+## 1.0.51 — Planes desde el plan elegido, textos y movimiento más ágil
+*2026-10-15*
+
+**Elige un Plan**
+- Clic en el plan elegido (Plan Óptimo u otro) despliega o pliega los demás; la etiqueta «+N planes ▾» lo indica. Fuera el botón «Ver más planes».
+- Al elegir otro plan, la lista se vuelve a plegar.
+- Fuera el «Es igual a «…»» del Plan Óptimo.
+
+**Textos**
+- «Vender en null» / «Vender en Null» → **Vender en HY-RWO** en toda la app (también «Reprocesar y Vender en HY-RWO»).
+- «/u» y «Precio por Unidad» en etiquetas y columnas → **Precio Unidad** (Precio Unidad Neto, Precio Unidad Compra/Venta, Precio Unidad del ore…).
+- **RESULTADO** y **TUS ÍTEMS** en mayúsculas.
+
+**Tus Ítems**
+- Plegado se ve como el plan elegido y «Ver el desglose» (borde y franja arcilla). A la derecha dice **Ver los N ítems ▾** / **Ocultar los ítems ▴** en vez de la hora y los avisos (los avisos siguen en cada ítem). La cantidad queda centrada con el título.
+
+**Desglose**
+- Fuera la fila «Total del plan» (el total ya está arriba) y las esquinas de mira del recuadro.
+
+**Movimiento**
+- Más ágil: 0,22 s al abrir y 0,14 s al cerrar, solo opacidad y un leve desplazamiento (lo hace la tarjeta gráfica). Antes se animaba la altura y con mucho contenido se sentía lento.
+- Arreglo: al abrir un ítem de Tus Ítems, «aria-expanded» se volvía a actualizar (se había perdido en 1.0.50).
+
 ## 1.0.50 — El desglose como protagonista y movimiento suave
 *2026-10-15*
 

@@ -59,7 +59,7 @@ CHANGELOG.md          ← cambios por versión
 ### Generar la página
 Solo necesitas Python 3, sin dependencias:
 ```
-python3 build.py 1.0.50
+python3 build.py 1.0.51
 ```
 Eso escribe `index.html` con la versión indicada.
 

@@ -1171,3 +1171,13 @@ Comparativa Minera: plan para Omega nuevo
   (#pk al abrir/cerrar planes); <details> por delegación de clic en summary; toggle() de Ajustes/Ayuda y toggleLot usan slide.
   MOTION() = sin prefers-reduced-motion y con Element.animate.
 - CSS sin uso quitado (.res-b, .lead2, .cmp2, .cmp-*, .why, .hero-p, .hero-intro>p/.ref/.start-note/.paste).
+
+==================== v1.0.51 ====================
+- paintPicker: sin .pk-more; en la fila .on, <em class="pk-x"> «+N planes ▾» / «Ocultar planes ▴» y aria-expanded. Clic en #pSum [data-m] igual al plan actual →
+  pkView.open alterna (fadeIn de filas nuevas); elegir otro plan → pkView.open=false. Sin «Es igual a».
+- Etiquetas: Vender en HY-RWO (OPTS/PLAN_L/nullLabel/ayuda), Precio Unidad (columnas y campos).
+- .h-caps (mayúsculas) en RESULTADO y TUS ÍTEMS. ledgerCta(): #esiStatus.cta «Ver los N ítems ▾» / «Ocultar los ítems ▴» (toggle de #ledger).
+  #ledger:not([open]) con el estilo de .pk-o.on.
+- Fuera prow('total') y .pl-row.total; el pie .pl-totals solo con ítems sin precio. Fuera .verdict::after (esquinas).
+- Movimiento: slide() = opacidad + translateY (220 ms abrir / 140 ms cerrar, ease-out-cubic); <details> anima el contenido en el evento toggle;
+  fadeIn(lista) escalonado. Fuera morph(). Arreglo de ui.head aria-expanded en toggleLot.

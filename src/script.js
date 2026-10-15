@@ -92,6 +92,8 @@ const pctS=v=>{const x=v*100;return (Math.round(x*100)/100).toLocaleString('en-U
 const sgn=v=>v==null||isNaN(v)?'':v>0?'pos':v<0?'neg':'';
 function setText(el,t,cls){el.textContent=t;if(cls!==undefined)el.className=cls;}
 function status(id,msg,cls){const s=$(id);s.textContent=msg;s.className='status'+(cls?' '+cls:'');}
+// v1.0.51: el resumen de «Tus Ítems» funciona como botón: «Ver los N ítems ▾» / «Ocultar los ítems ▴»
+function ledgerCta(){const n=S.items.length;if(!n)return;status('esiStatus',$('ledger').open?'Ocultar los ítems ▴':'Ver los '+n+(n===1?' ítem ▾':' ítems ▾'),'cta');}
 
 // ================= Mercado: tasas =================
 // Relist (bajar precio) = (1 − (0.5 + 0.06×ABR)) × broker% sobre el valor de la orden — EVE University
@@ -171,8 +173,8 @@ function applyBait(a){if(!a)return;if(a.sell0===undefined)a.sell0=a.sell;a.sell=
 const iceNullTxt=()=>C.ice.nullMode==='jbuy'?'Jita Buy −'+pct(C.ice.nullDisc)+'%':C.ice.nullMode==='jita'?'precio de Jita':'con tu margen';
 const nullPrice=(base,name)=>base==null||!(base>0)?null:tick(base*(1+marginFor(name))); // Jita Buy (+ margen opcional)
 const nullLabel=name=>{
-  if(C.ice.on&&isIce(name)&&C.ice.nullMode!=='margin')return 'Vender en Null ('+(C.ice.nullMode==='jbuy'?'Jita Buy −'+pct(C.ice.nullDisc)+'%':'sin margen')+')';
-  return 'Vender en Null ('+nullBaseTxt(name)+')';};
+  if(C.ice.on&&isIce(name)&&C.ice.nullMode!=='margin')return 'Vender en HY-RWO ('+(C.ice.nullMode==='jbuy'?'Jita Buy −'+pct(C.ice.nullDisc)+'%':'sin margen')+')';
+  return 'Vender en HY-RWO ('+nullBaseTxt(name)+')';};
 // precio de Null en palabras: módulo = Jita Buy (+ margen); el resto = 90% de Jita Buy
 const nullBaseTxt=name=>isModule(name)?'Jita Buy'+(marginFor(name)>0?' +'+pct(marginFor(name))+'%':''):pct(C.nullNonMod)+'% de Jita Buy';
 const jitaLabel=name=>C.ice.on&&isIce(name)?(C.ice.jitaMode==='split'?'Orden en Jita (Split)':'Orden en Jita (Undercut)'):'Orden en Jita';
@@ -475,7 +477,7 @@ async function esiItems(all){
     syncLots();
     const nWarn=S.items.filter(o=>(o.checks||[]).some(c=>c[1]==='warn')).length;
     const hora=new Date().toLocaleTimeString('es',{hour:'2-digit',minute:'2-digit'});S.pricedAt=hora;
-    status('esiStatus','Precios de Jita 4-4 de las '+hora+'. '+(nWarn?nWarn+' ítem(s) con avisos: ábrelos para ver qué revisar.':'Todo verificado contra la API.'),nWarn?'err':'ok');
+    ledgerCta(); // v1.0.51: «Ver los N ítems» (los avisos se ven en cada ítem)
   }catch(e){status('esiStatus','No se pudo conectar con la API de EVE ('+e.message+').','err');}
   finally{
     esiBusy=false;$('bEsi').disabled=false;
@@ -592,7 +594,7 @@ function minPrice(m){
 }
 
 // ================= Motor: ¿dónde vendo? (puro) =================
-const OPTS=[['null','Vender en null'],['bb','Venderle al Buyback'],['jOrd','Orden en Jita'],['jInst','Venta Rápida en Jita'],['rNull','Reprocesar → Null'],['rJita','Reprocesar → Jita'],['disc','Venta a Jugador'],
+const OPTS=[['null','Vender en HY-RWO'],['bb','Venderle al Buyback'],['jOrd','Orden en Jita'],['jInst','Venta Rápida en Jita'],['rNull','Reprocesar → Null'],['rJita','Reprocesar → Jita'],['disc','Venta a Jugador'],
   ['fN','Llevar a HY-RWO'],['fJ','Orden en Jita'],['fJI','Venta Rápida en Jita']]; // f* = modo Jita → HY-RWO
 const FLIPK={fN:1,fJ:1,fJI:1};
 let SHIPS={jOrd:1,jInst:1,rJita:1}; // qué opciones viajan en courier (cambia con la dirección)
@@ -731,7 +733,7 @@ function computePlan(){
 function modeTotal(P,m){let g=0,V=0,Cc=0,n=0;
   P.rows.forEach(r=>{const k=m==='auto'?r.auto:(r.g[m]!=null?(n++,m):r.auto);if(!k)return;g+=r.g[k]-r.prod;const s=r.ship[k];if(s){V+=s.v;Cc+=s.c;}});
   return{net:g-(V>0?courierCost(V,C.coll!=null?C.coll:Cc):0),n};}
-const MODES=[['auto','Plan Óptimo'],['fN','Todo a HY-RWO'],['fJ','Todo en Jita (Orden)'],['fJI','Todo en Jita al Instante'],['null','Todo en Null'],['jOrd','Todo a Jita (Orden)'],['jInst','Todo a Jita al Instante'],['bb','Todo al Buyback'],['rNull','Reprocesar y Vender en Null'],['rJita','Reprocesar y Llevar a Jita'],['disc','Todo a un Jugador']];
+const MODES=[['auto','Plan Óptimo'],['fN','Todo a HY-RWO'],['fJ','Todo en Jita (Orden)'],['fJI','Todo en Jita al Instante'],['null','Todo en Null'],['jOrd','Todo a Jita (Orden)'],['jInst','Todo a Jita al Instante'],['bb','Todo al Buyback'],['rNull','Reprocesar y Vender en HY-RWO'],['rJita','Reprocesar y Llevar a Jita'],['disc','Todo a un Jugador']];
 const modeName=m=>(MODES.find(x=>x[0]===(m||'auto'))||MODES[0])[1];
 // ================= Guía práctica (puro) =================
 // Piso = precio por unidad en el que esta opción gana lo mismo que la siguiente mejor opción.
@@ -843,7 +845,7 @@ function numIn(val,ph,on,label){
 const LOT_OF=new WeakMap();
 function toggleLot(o){const ui=o.ui;if(!ui)return;const open=ui.body.hidden;
   if(open&&!ui.detailsReady)buildLotDetails(o,ui); // una sola vez, nunca se destruye al cerrar
-  slide(ui.body,open,open?340:280);ui.lot.classList.toggle('open',open); // v1.0.50: suaveui.head.setAttribute('aria-expanded',String(open));
+  slide(ui.body,open);ui.lot.classList.toggle('open',open);ui.head.setAttribute('aria-expanded',String(open));
   if(open&&ui.last)paintLot(ui.last);}
 $('lots').addEventListener('click',e=>{const lot=e.target.closest('.lot'),o=lot&&LOT_OF.get(lot);if(!o)return;
   if(e.target.closest('.lot-x')){removeFromPaste(o.name);return;}
@@ -880,7 +882,7 @@ function buildLotDetails(o,ui){
   const iRef=numIn(o.refMan,'',v=>{const x=parseFloat(v);o.refMan=isNaN(x)?null:x;derive(o);refresh();},'Jita Sell por unidad');
   const fRef=el('label','fact','Jita Sell por unidad');fRef.append(iRef);
   const fBuy=el('div','fact','Jita Buy por unidad'),bBuy=el('b');fBuy.append(bBuy);
-  const fSeen=el('label','fact','Precio que ves en Null /u');fSeen.append(numIn(o.nullSeen,'Opcional',v=>{const x=parseFloat(v);o.nullSeen=isNaN(x)||x<=0?null:x;refresh();},'Precio que ves listado en Null'));
+  const fSeen=el('label','fact','Precio Unidad que ves en Null');fSeen.append(numIn(o.nullSeen,'Opcional',v=>{const x=parseFloat(v);o.nullSeen=isNaN(x)||x<=0?null:x;refresh();},'Precio que ves listado en Null'));
   const iM3=numIn(o.m3uMan,'',v=>{const x=parseFloat(v);o.m3uMan=isNaN(x)?null:x;derive(o);refresh();},'m³ por unidad');
   const fM3=el('label','fact','m³ por unidad');fM3.append(iM3);
   const fVol=el('div','fact','Volumen total'),bVol=el('b');fVol.append(bVol);
@@ -1006,7 +1008,7 @@ function paintLot(r){
   const qdN=r.qd>=.0001?' · −'+pctQ(r.qd)+'% por cantidad':'';
   { // por unidad; "Te queda" = neto por unidad ya con taxes, broker y (en Jita) su parte del envío
     const q=r.q||1,nu=k=>r.net[k]!=null?r.net[k]/q:null,jb=a&&a.buy!=null?fmtP(a.buy):'—',js=a&&a.sell!=null?fmtP(a.sell):'—',sys=(C.ref.name||'Null').split(' - ')[0].trim()||'Null';
-    const hd=el('tr','pr-h');['Dónde','Precio por unidad','Cómo se calcula','Te queda /u'].forEach((t,i)=>hd.append(el('th',i===1||i===3?'r':'',t)));tb.append(hd);
+    const hd=el('tr','pr-h');['Dónde','Precio Unidad','Cómo se calcula','Precio Unidad Neto'].forEach((t,i)=>hd.append(el('th',i===1||i===3?'r':'',t)));tb.append(hd);
     const nullTxt=o.nullSeen?'Undercut de '+pct(C.under)+'% al precio que ves':(C.ice.on&&isIce(o.name)?iceNullTxt()+' (Jita Buy '+jb+')':nullBaseTxt(o.name)+' (Jita Buy '+jb+')');
     if(S.flip){
       priceRow(tb,'Vender en '+sys+' (importado)',r.np,'Jita Sell ('+js+') +'+pct(C.impM)+'% neto. Paga Sales Tax, Broker y SCC'+(SH()?'; resta su parte del envío.':'.'),nu('fN'),r.best==='fN');
@@ -1038,7 +1040,7 @@ function paintLot(r){
 
 // ================= Vista: veredicto =================
 // nombres de cada acción del plan (iguales a la etiqueta junto a "Tu Mejor Plan")
-const PLAN_L={fN:'Llevar a HY-RWO',fJ:'Vender en Jita (Orden)',fJI:'Vender en Jita al Instante',null:'Vender en null',rNull:'Vender en null reprocesado',jOrd:'Vender en Jita (Orden)',jInst:'Vender en Jita al Instante',rJita:'Vender en Jita Reprocesado',bb:'Vender al Buyback',disc:'Vender a Jugador'};
+const PLAN_L={fN:'Llevar a HY-RWO',fJ:'Vender en Jita (Orden)',fJI:'Vender en Jita al Instante',null:'Vender en HY-RWO',rNull:'Vender en HY-RWO reprocesado',jOrd:'Vender en Jita (Orden)',jInst:'Vender en Jita al Instante',rJita:'Vender en Jita Reprocesado',bb:'Vender al Buyback',disc:'Vender a Jugador'};
 let lastP=null;
 const ORE_PRODUCTS=new Set();Object.values(REFINE).forEach(d=>{if(d.cat!=='ice')Object.keys(d.out).forEach(m=>ORE_PRODUCTS.add(m.toLowerCase()));});
 function catOf(name){if(isIce(name))return 'ice';if(resolveOre(name)||ORE_PRODUCTS.has(String(name).toLowerCase()))return 'ore';return 'loot';}
@@ -1078,48 +1080,35 @@ $('vPlan').addEventListener('input',e=>{
   vShow[section.dataset.sortId]=5; // buscar siempre empieza por los primeros resultados
   repaintPlanGroup(section);
 });
-// ================= v1.0.50: movimiento suave =================
-// Abrir y cerrar con curva «ease in-out» (lenta al empezar, rápida al medio, lenta al terminar), como un zoom
-// en edición de video. Solo altura + opacidad (Web Animations API). Con «reducir movimiento» del sistema, sin animación.
-const EASE='cubic-bezier(.65,0,.35,1)',MOTION=()=>!(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)&&!!Element.prototype.animate;
+// ================= Movimiento suave (v1.0.50, más ligero en v1.0.51) =================
+// Curva ease-out-cubic corta: arranca rápido y frena suave al final. Solo opacidad + desplazamiento (transform),
+// que el navegador anima en la GPU sin recalcular la página en cada cuadro (animar la altura se sentía lento).
+// Con «reducir movimiento» del sistema, sin animación.
+const EASE='cubic-bezier(.22,.61,.36,1)',MOTION=()=>!(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)&&!!Element.prototype.animate;
 const ANIM=new WeakMap();
-function slide(node,show,ms){
-  if(!node)return;const dur=ms||380,prev=ANIM.get(node);if(prev)prev.cancel();
+function slide(node,show){
+  if(!node)return;const prev=ANIM.get(node);if(prev)prev.cancel();
   if(!MOTION()){node.hidden=!show;return;}
-  if(show){node.hidden=false;const h=node.scrollHeight;
-    const a=node.animate([{height:'0px',opacity:0,overflow:'hidden'},{height:h+'px',opacity:1,overflow:'hidden'}],{duration:dur,easing:EASE});
+  if(show){node.hidden=false;
+    const a=node.animate([{opacity:0,transform:'translateY(-6px)'},{opacity:1,transform:'none'}],{duration:220,easing:EASE});
     ANIM.set(node,a);a.onfinish=a.oncancel=()=>ANIM.delete(node);}
-  else{if(node.hidden)return;const h=node.offsetHeight;
-    const a=node.animate([{height:h+'px',opacity:1,overflow:'hidden'},{height:'0px',opacity:0,overflow:'hidden'}],{duration:dur,easing:EASE,fill:'forwards'});
+  else{if(node.hidden)return;
+    const a=node.animate([{opacity:1,transform:'none'},{opacity:0,transform:'translateY(-4px)'}],{duration:140,easing:EASE,fill:'forwards'});
     ANIM.set(node,a);a.onfinish=()=>{node.hidden=true;a.cancel();ANIM.delete(node);};}
 }
-// cambia el alto de un bloque que se repinta (p. ej. «Ver más planes») de forma suave: mide antes y después
-function morph(node,paint,ms){
-  if(!node||!MOTION()){paint();return;}
-  const h0=node.offsetHeight;paint();const h1=node.offsetHeight;if(Math.abs(h1-h0)<2)return;
-  node.animate([{height:h0+'px',overflow:'hidden'},{height:h1+'px',overflow:'hidden'}],{duration:ms||380,easing:EASE});
-}
-// <details>: abre y cierra con la misma curva (el evento toggle sigue funcionando igual)
-document.addEventListener('click',e=>{
-  const sm=e.target.closest('details>summary');if(!sm||!MOTION()||e.defaultPrevented)return;
-  const d=sm.parentElement;if(d.dataset.anim==='1')return;
-  const body=[...d.children].filter(c=>c!==sm);if(!body.length)return;
-  e.preventDefault();d.dataset.anim='1';
-  if(!d.open){d.open=true;const h0=sm.offsetHeight,h1=d.offsetHeight;
-    const a=d.animate([{height:h0+'px',overflow:'hidden'},{height:h1+'px',overflow:'hidden'}],{duration:360,easing:EASE});a.onfinish=a.oncancel=()=>delete d.dataset.anim;}
-  else{const h0=d.offsetHeight,h1=sm.offsetHeight;
-    const a=d.animate([{height:h0+'px',overflow:'hidden'},{height:h1+'px',overflow:'hidden'}],{duration:320,easing:EASE,fill:'forwards'});
-    a.onfinish=()=>{d.open=false;a.cancel();delete d.dataset.anim;};}
-});
+// filas nuevas que aparecen (p. ej. al desplegar los planes): entran con un leve escalonado
+function fadeIn(list){if(!MOTION())return;list.forEach((n,i)=>n.animate([{opacity:0,transform:'translateY(-4px)'},{opacity:1,transform:'none'}],{duration:200,delay:Math.min(i,8)*18,easing:EASE,fill:'backwards'}));}
+// <details>: el contenido aparece con la misma curva; al cerrar, se cierra al instante (sin esperar)
+document.addEventListener('toggle',e=>{const d=e.target;if(!(d instanceof HTMLDetailsElement)||!d.open||!MOTION())return;
+  [...d.children].filter(c=>c.tagName!=='SUMMARY'&&!c.hidden).forEach(c=>c.animate([{opacity:0,transform:'translateY(-6px)'},{opacity:1,transform:'none'}],{duration:220,easing:EASE}));},true);
 // Divulgación progresiva: primero el resultado; el análisis y la info extra solo si los pides
 [['bDeep','deep','Ver el desglose ▾','Volver a los planes ▴'],['bMore','more','Ver más ▾','Ocultar ▴']].forEach(([b,t,o,c])=>$(b).addEventListener('click',()=>{
   const open=$(t).hidden;$(b).setAttribute('aria-expanded',String(open));$(b).querySelector('b').textContent=open?c:o;
   if(b==='bDeep'){ // v1.0.50: con el desglose abierto se pliegan los planes (con la misma curva)
     const pw=document.querySelector('#pSum .pk-w');
-    if(open){if(pw&&MOTION()){slide(pw,false,320);setTimeout(()=>{$('pSum').classList.add('res-min');pw.hidden=false;},330);}else $('pSum').classList.add('res-min');}
-    else{$('pSum').classList.remove('res-min');if(pw){pw.hidden=true;slide(pw,true);}}}
-  if(open){$(t).hidden=false;if(lastP)refreshNow();$(t).hidden=true;slide($(t),true,460);}else slide($(t),false,320);
-  if(open)setTimeout(()=>$(b).scrollIntoView({behavior:'smooth',block:'start'}),b==='bDeep'?340:0);}));
+    $('pSum').classList.toggle('res-min',open);if(!open&&pw)slide(pw,true);}
+  if(open){$(t).hidden=false;if(lastP)refreshNow();$(t).hidden=true;slide($(t),true);}else $(t).hidden=true;
+  if(open)$(b).scrollIntoView({behavior:'smooth',block:'start'});}));
 // nombre corto del mejor plan (sin "+ N más" ni "· por rapidez")
 const bestLabel=()=>$('vWhat').textContent.replace(/ · por rapidez$/,'').replace(/ \+ \d+ más$/,'');
 // Sin ítems: vacía todo lo pintado y suelta referencias (así el navegador libera la memoria de lotes grandes)
@@ -1142,7 +1131,7 @@ function paintVerdict(P){
   $('vCap').textContent=none?'Esperando precios de Jita…':'Recibes netos luego de deducciones ('+ded.join(', ')+')';
   // cuál es el plan, en una etiqueta: la acción que más aporta (y cuántas más hay)
   {const W=k=>{const g=P.rows.filter(r=>r.best===k),kind=IN_JITA()?'':g.every(r=>isIce(r.o.name))?' Hielo':g.every(r=>resolveOre(r.o.name))?' Ore':'';
-     return({fN:PLAN_L.fN,fJ:'Vender en Jita'+kind,fJI:'Vender en Jita'+kind+' al Instante',null:'Vender en null',rNull:'Vender en null reprocesado',jOrd:'Vender en Jita'+kind,jInst:'Vender en Jita'+kind+' al Instante',rJita:'Vender en Jita Reprocesado',bb:'Vender al Buyback',disc:'Vender a Jugador'})[k];};
+     return({fN:PLAN_L.fN,fJ:'Vender en Jita'+kind,fJI:'Vender en Jita'+kind+' al Instante',null:'Vender en HY-RWO',rNull:'Vender en HY-RWO reprocesado',jOrd:'Vender en Jita'+kind,jInst:'Vender en Jita'+kind+' al Instante',rJita:'Vender en Jita Reprocesado',bb:'Vender al Buyback',disc:'Vender a Jugador'})[k];};
    const sums={};P.rows.forEach(r=>{if(r.best)sums[r.best]=(sums[r.best]||0)+r.g[r.best]-r.prod;});
    const ks=Object.keys(sums).sort((a,b)=>sums[b]-sums[a]);
    $('vWhat').dataset.k=$('resWhat').dataset.k=ks[0]||'';
@@ -1189,7 +1178,7 @@ function paintVerdict(P){
   // plan: por acción, la recomendación y luego cada ítem con su precio por unidad
   const pl=$('vPlan');poolIcons(pl);pl.textContent='';
   // Botones de orden repetidos por grupo, siempre encima de sus ítems.
-  const mkHead=sort=>{const hd=el('div','pl-head');[['n','Ítem'],['q','Cantidad'],['p','Precio por Unidad'],['a','Ganancia']].forEach(([k,t])=>{
+  const mkHead=sort=>{const hd=el('div','pl-head');[['n','Ítem'],['q','Cantidad'],['p','Precio Unidad'],['a','Ganancia']].forEach(([k,t])=>{
     const active=sort.k===k,b=el('button','srt'+(active?' on':''),t+(active?(sort.d>0?' ▲':' ▼'):''));
     b.type='button';b.dataset.s=k;b.title='Ordenar por '+t.toLowerCase()+(active?' (clic para cambiar orden)':'');
     b.setAttribute('aria-label',b.title);b.setAttribute('aria-pressed',String(active));hd.append(b);});return hd;};
@@ -1300,11 +1289,9 @@ function paintVerdict(P){
     acts.append(doneBtn(k));box.append(acts);pl.append(box);
     renderPlanTable(box,k,g);
   });
-  // El pie (envío y total) no pertenece a ningún grupo de ítems.
-  tableTarget=el('div','pl pl-totals');pl.append(tableTarget);
+  // Pie: solo los ítems sin precio (no pertenecen a ningún grupo)
   const miss=rowsIn.filter(r=>!r.best);
-  if(miss.length)prow('miss','Falta precio: '+miss.map(r=>r.o.name).join(', '),'No entran en el total.',null,null,null,null);
-  if(!none)prow('total','Total del plan',null,null,null,null,P.best); // ya descuenta taxes y envío
+  if(miss.length){tableTarget=el('div','pl pl-totals');pl.append(tableTarget);prow('miss','Falta precio: '+miss.map(r=>r.o.name).join(', '),'No entran en el total.',null,null,null,null);}
   // v1.0.22: dónde se vende (parte del ISK de cada acción del plan)
   {const DC={null:'#5cba86',rNull:'#3f8f63',fN:'#5cba86',bb:'#7fc4b8',disc:'#9c9a92',jOrd:'#d97757',fJ:'#d97757',jInst:'#e0a84f',fJI:'#e0a84f',rJita:'#b5583a'};
    const sums={};rowsIn.forEach(r=>{if(r.best)sums[r.best]=(sums[r.best]||0)+Math.max(0,r.g[r.best]-r.prod);});
@@ -1609,6 +1596,7 @@ function paintScenarios(P){
     ' (lo Refinado ocupa '+fmtV(Math.round(B.V))+' contra '+fmtV(Math.round(A.V))+' Sin Refinar). '+
     (()=>{const w=Math.max(A.net,B.net);return w>=P.best-1?'Es tu mejor opción.':'Aun así, tu mejor plan ('+bestLabel()+') deja '+fmt(P.best-w)+' más que llevarlo todo a Jita.';})();
 }
+$('ledger').addEventListener('toggle',()=>{if($('esiStatus').classList.contains('cta'))ledgerCta();});
 $('pCtr').addEventListener('toggle',()=>{if($('pCtr').open&&lastP){paintContracts(lastP);paintCourier(lastP);colorNums($('fScnV'));}});
 
 // ================= Reproceso: Refinado vs Sin Refinar (por mercado) =================
@@ -1747,9 +1735,9 @@ function paintRepro(){
   const oreIt=itemByName(r.key),oreA=S.api[r.key.toLowerCase()],oreBuy=oreIt&&oreIt.jita?oreIt.jita.buy:(oreA?oreA.buy:null);
   const npOre=orePr>0?nullList(r.key,orePr,oreBuy,oreIt?oreIt.nullSeen:null,q):null;
   const opts=[ // [nombre, sin courier, costo courier (null = no viaja)]
-    {k:'oN',l:nullLabel(r.key).replace('Vender en Null','Vender ore en Null'),a:npOre!=null?q*npOre*rateNull():null,c:0},
+    {k:'oN',l:nullLabel(r.key).replace('Vender en HY-RWO','Vender ore en HY-RWO'),a:npOre!=null?q*npOre*rateNull():null,c:0},
     {k:'oJ',l:jitaLabel(r.key).replace('Orden en Jita','Ore a Jita'),a:orePr>0?q*jitaList(r.key,orePr,oreBuy,q)*rateJita():null,c:cOre,ship:1},
-    {k:'mN',l:nullLabel(Object.keys(nets)[0]).replace('Vender en Null','Minerales en Null'),a:ok&&total>0?nul:null,c:0},
+    {k:'mN',l:nullLabel(Object.keys(nets)[0]).replace('Vender en HY-RWO','Minerales en HY-RWO'),a:ok&&total>0?nul:null,c:0},
     {k:'mJ',l:jitaLabel(Object.keys(nets)[0]).replace('Orden en Jita','Minerales a Jita'),a:ok&&total>0?totJ*rateJita():null,c:cMin,ship:1}];
   opts.forEach(o=>{o.b=o.a==null?null:(o.ship?(o.c==null?null:o.a-o.c):o.a);});
   const best=key=>opts.filter(o=>o[key]!=null).reduce((x,o)=>x==null||o[key]>x[key]?o:x,null);
@@ -1845,7 +1833,7 @@ function paintPicker(P){
   // planes posibles con los Ajustes actuales (Buyback/Jugador apagados no salen; los que no aplican a ningún ítem tampoco)
   const all=MODES.filter(([m])=>!(m==='bb'&&!C.bb.on||m==='disc'&&!C.disc.on)&&(m==='auto'||P.rows.some(r=>r.g[m]!=null)))
    .map(([m,l])=>({m,l,t:m==='auto'?{net:opt,n:P.rows.length}:modeTotal(P,m)}));
-  // v1.0.8: un plan idéntico al óptimo (mismo destino para cada ítem) no se repite; el óptimo dice "Es igual a …"
+  // v1.0.8: un plan idéntico al óptimo (mismo destino para cada ítem) no se repite
   const same=all.filter(x=>x.m!=='auto'&&Math.round(x.t.net)===Math.round(opt)&&P.rows.every(r=>!r.auto||r.auto===x.m||r.g[x.m]==null)).map(x=>x.m);
   const curShown=same.includes(cur)?'auto':cur;
   const list=all.filter(x=>!same.includes(x.m));
@@ -1880,15 +1868,16 @@ function paintPicker(P){
   const rest=list.filter(x=>x.m!=='auto'&&pass[pkView.filter](x))
     .sort((a,b)=>{const A=key[pkView.sort](a),B=key[pkView.sort](b);return (A<B?-1:A>B?1:0)*pkView.dir||b.t.net-a.t.net;});
   const rows=[list.find(x=>x.m==='auto'),...rest].filter(Boolean);
-  // v1.0.49: cerrado, solo se ven el óptimo y el plan elegido; el resto con «Ver más planes»
-  const hiddenN=rows.filter(x=>x.m!=='auto'&&x.m!==curShown).length,allN=list.filter(x=>x.m!=='auto'&&x.m!==curShown).length;
+  // v1.0.51: cerrado, solo se ven el óptimo y el plan elegido; clic en el plan elegido despliega los demás
+  const moreN=list.filter(x=>x.m!=='auto'&&x.m!==curShown).length;
   rows.forEach(({m,l,t})=>{
     if(!pkView.open&&m!=='auto'&&m!==curShown)return;
     const d=t.net-opt,on=m===curShown;
     const b=el('button','pk-o'+(on?' on':'')+(m==='auto'?' best':''));b.type='button';b.dataset.m=m;b.setAttribute('role','radio');b.setAttribute('aria-checked',String(on));
     const txt=el('span','pk-tx'),nm=el('span','pk-l',l);if(m==='auto')nm.append(el('em','pk-rec','Recomendado'));
+    if(on&&moreN>0){nm.append(el('em','pk-x',pkView.open?'Ocultar planes ▴':'+'+moreN+(moreN===1?' plan ▾':' planes ▾')));b.setAttribute('aria-expanded',String(pkView.open));}
     const part=m!=='auto'&&t.n<P.rows.length?' '+t.n+' de '+P.rows.length+' ítems se venden así; los demás siguen el óptimo.':'';
-    txt.append(nm,el('small','pk-e',(PK_EXP[m]||'')+(m==='auto'&&same.length?' Es igual a «'+modeName(same[0])+'».':'')+part));
+    txt.append(nm,el('small','pk-e',(PK_EXP[m]||'')+part));
     const sp=el('span','pk-sp',pkSpeed(m,P)),sh=el('span','pk-sh'+(pkShips(m,P)?' y':''),pkShips(m,P)?'Sí':'No');
     const barW=el('span','pk-bar'),bi=el('i');bi.style.width=Math.max(2,Math.min(100,t.net/maxNet*100))+'%';barW.append(bi);
     const dd=m==='auto'?'Óptimo':Math.round(d)===0?'Igual':d>0?'+'+compactIsk(d)+' · más lento':'−'+compactIsk(-d);
@@ -1896,8 +1885,6 @@ function paintPicker(P){
     if(part)b.title=part.trim();
     box.append(b);});
   if(pkView.open&&rows.length===1&&pkView.filter!=='all')box.append(el('p','pk-empty','Ningún otro plan cumple este filtro.'));
-  if(allN>0){const mb=el('button','pk-more');mb.type='button';mb.dataset.pkmore='1';mb.setAttribute('aria-expanded',String(pkView.open));
-    mb.append(el('span',null,pkView.open?'Ocultar los demás planes':'Ver más planes'),el('b',null,pkView.open?'▴':(pkView.filter==='all'?allN:hiddenN)+' ▾'));box.append(mb);}
   if(P.mode){const d=opt-P.best,cant=P.rows.filter(r=>r.cant);
     bar.hidden=false;
     bar.append(el('b',null,'Elegiste: '+modeName(P.mode)+'. '),document.createTextNode(Math.round(d)>0?'Deja '+fmt(d)+' menos que el plan óptimo.':Math.round(d)<0?'Deja '+fmt(-d)+' más que el plan óptimo, pero se vende más lento (el óptimo prefiere vender rápido cuando la diferencia es pequeña).':'Deja lo mismo que el plan óptimo.'));
@@ -1907,11 +1894,13 @@ function paintPicker(P){
 }
 // orden y filtro: solo repintan el selector (no recalculan el plan)
 $('pkTools').addEventListener('click',e=>{const b=e.target.closest('[data-pkf]');if(!b||!lastP)return;pkView.filter=b.dataset.pkf;paintPicker(lastP);});
-$('pk').addEventListener('click',e=>{const mo=e.target.closest('[data-pkmore]');if(mo&&lastP){e.stopPropagation();pkView.open=!pkView.open;morph($('pk'),()=>paintPicker(lastP));return;}
-  const b=e.target.closest('[data-pks]');if(!b||!lastP)return;e.stopPropagation();const k=b.dataset.pks;
+$('pk').addEventListener('click',e=>{const b=e.target.closest('[data-pks]');if(!b||!lastP)return;e.stopPropagation();const k=b.dataset.pks;
   pkView=pkView.sort===k?{...pkView,dir:-pkView.dir}:{...pkView,sort:k,dir:k==='name'||k==='speed'||k==='ship'?1:-1};paintPicker(lastP);});
 $('pSum').addEventListener('click',e=>{const b=e.target.closest('[data-m]');if(!b)return;const m=b.dataset.m==='auto'?null:b.dataset.m;
-  if(m===S.planMode)return;S.planMode=m;czIdx=0;refreshNow();});
+  if(m===S.planMode){ // v1.0.51: clic en el plan elegido = mostrar u ocultar los demás planes
+    if(b.classList.contains('pk-o')&&lastP){pkView.open=!pkView.open;paintPicker(lastP);if(pkView.open)fadeIn([...$('pk').querySelectorAll('.pk-o:not(.on):not(.best)')]);}
+    return;}
+  S.planMode=m;pkView.open=false;czIdx=0;refreshNow();});
 // v1.0.6 (modo Jita → HY-RWO): si compras el lote en Jita al Sell, lo llevas a HY-RWO y lo vendes a Jita Sell + margen
 // (neto, ya con taxes): ganancia = venta neta − compra − envío. Todo el lote viaja (un solo cálculo de courier).
 function paintFlipBuy(P){
@@ -1925,11 +1914,11 @@ function paintFlipBuy(P){
   const big=el('div','fb2-big');big.append(el('b','num '+sgn(profit),(profit>=0?'+':'−')+fmt(Math.abs(profit))),el('span',null,(profit>=0?'de ganancia':'de pérdida')+' · '+(roi>=0?'+':'−')+pct(Math.abs(roi))+'% sobre lo invertido'));box.append(big);
   const l=el('div','fb2-l'),L=(t,v,c)=>{const d=el('div');d.append(el('span',null,t),el('b','num '+(c||''),v));l.append(d);};
   L('Compras en Jita','−'+fmt(buy),'neg');if(SH())L('Envío a HY-RWO','−'+fmt(ship),'neg');L('Vendes en HY-RWO (neto)',fmt(sell),'pos');L('Ganancia',(profit>=0?'+':'−')+fmt(Math.abs(profit)),sgn(profit));box.append(l);
-  const t=el('table'),th=el('thead'),hr=el('tr');[['Ítem',''],['Compras a /u','r'],['Vendes a /u','r'],['Envío','r'],['Ganancia','r'],['Margen','r']].filter(x=>SH()||x[0]!=='Envío').forEach(([x,c])=>hr.append(el('th',c||null,x)));th.append(hr);t.append(th);
+  const t=el('table'),th=el('thead'),hr=el('tr');[['Ítem',''],['Precio Unidad Compra','r'],['Precio Unidad Venta','r'],['Envío','r'],['Ganancia','r'],['Margen','r']].filter(x=>SH()||x[0]!=='Envío').forEach(([x,c])=>hr.append(el('th',c||null,x)));th.append(hr);t.append(th);
   const tb=el('tbody');
   it.sort((a,b)=>b.p-a.p).slice(0,10).forEach(x=>{const tr=el('tr');
     const c=[el('td',null,x.r.o.name),el('td','r',fmtP(x.r.o.ref)),el('td','r',fmtP(x.r.np)),el('td','r','−'+fmt(x.sh)),el('td','r '+sgn(x.p),(x.p>=0?'+':'−')+fmt(Math.abs(x.p))),el('td','r '+sgn(x.p),(x.p>=0?'+':'−')+pct(Math.abs(x.buy>0?x.p/x.buy:0))+'%')];
-    ['','Compras a /u','Vendes a /u','Envío','Ganancia','Margen'].forEach((d,i)=>{if(d)c[i].dataset.l=d;});if(!SH())c.splice(3,1);tr.append(...c);tb.append(tr);});
+    ['','Precio Unidad Compra','Precio Unidad Venta','Envío','Ganancia','Margen'].forEach((d,i)=>{if(d)c[i].dataset.l=d;});if(!SH())c.splice(3,1);tr.append(...c);tb.append(tr);});
   if(it.length>10){const tr=el('tr'),td=el('td','muted','y '+(it.length-10)+' ítems más');td.colSpan=6;tr.append(td);tb.append(tr);}
   t.append(tb);box.append(t);
   box.append(el('p','fb2-n','Compra = Jita Sell × cantidad (comprando de las órdenes de venta, sin broker). Venta = el precio de lista en HY-RWO ya con Sales Tax, Broker y SCC.'+(SH()?' El envío es un solo cálculo para todo el lote.':'')+' El margen se cambia junto al botón de la ruta.'));
@@ -2057,7 +2046,7 @@ $('liteOn').addEventListener('change',e=>document.documentElement.classList.togg
 $('themeLight').addEventListener('change',e=>{document.documentElement.classList.toggle('light',e.target.checked);$('themeTxt').textContent=e.target.checked?'Light':'Dark';});
 
 // ================= Ajustes y Ayuda =================
-function toggle(btn,id){const s=$(id),open=s.hidden;slide(s,open,open?420:300);btn.setAttribute('aria-pressed',String(open));if(open)s.scrollIntoView({behavior:'smooth',block:'start'});} // v1.0.50: Ajustes/Ayuda con la curva suave
+function toggle(btn,id){const s=$(id),open=s.hidden;if(open)slide(s,true);else s.hidden=true;btn.setAttribute('aria-pressed',String(open));if(open)s.scrollIntoView({behavior:'smooth',block:'start'});}
 $('bSettings').addEventListener('click',e=>toggle(e.currentTarget,'settings'));
 // v1.0.11: menú lateral. Escritorio: se contrae a íconos. Móvil: se abre encima con fondo oscuro. Solo en memoria.
 {const mob=()=>innerWidth<=900,b=document.body;
