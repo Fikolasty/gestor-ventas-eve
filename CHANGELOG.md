@@ -2,6 +2,14 @@
 
 Cambios por versión del Gestor de Ventas. La más nueva arriba. El detalle técnico completo está en `docs/SPEC.txt`.
 
+## 1.0.39 — Revisión de v1.0.32–v1.0.38: compresión correcta y documentación al día
+*2026-10-14*
+
+- **Nota de la Covetor corregida**: decía que el booster comprime «10 a 1» para todo. Según los datos del juego, el moon ore ocupa **100 veces menos** comprimido (10 m³ → 0.1 m³ por unidad) y el hielo y el gas, 10 veces menos. También decía «sin ir a la estación»; ahora dice «sin ir a descargar», como el resto del escenario nullsec. Español / English.
+- **Verificado** lo que el SPEC dejaba pendiente de v1.0.35 a v1.0.38: los dos grupos de naves miden lo mismo y no se parten (escritorio y móvil), el Expert System pasa a 0 con una Exhumer y vuelve a su valor con una Barge, inglés sin restos, cero errores.
+- **Releases que faltaban**: v1.0.32 a v1.0.38 se subieron con mensajes «Publicar v…», que el workflow no reconoce, así que no tenían tag ni Release. Se crearon a mano con el index.html de cada versión.
+- README y SPEC al día con lo agregado desde v1.0.32.
+
 ## 1.0.38 — Nota Covetor: compresión en el espacio, nadie recoge mineral
 *2026-10-14*
 

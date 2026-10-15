@@ -207,7 +207,7 @@
 " sin reprocesar": " unrefined",
 " sin reprocesar.": " unrefined.",
 " solo cuentan tus skills. Si aún no tienes Mining Barge I (pide Industry V), ese día no minas.": " only your skills count. If you do not have Mining Barge I yet (it needs Industry V), you do not mine that day.",
-" solo en flota con un booster que comprima en el espacio (Orca, Porpoise o Rorqual): la que más saca entre barges, pero se llena en minutos y es frágil. Nadie recoge el mineral: el booster comprime 10 a 1 (1000 m³ se vuelven 100 m³), así que minas hasta que se acabe el material sin ir a la estación.": " only in a fleet with a booster compressing in space (Orca, Porpoise or Rorqual): the top barge for output, but it fills in minutes and is fragile. Nobody hauls your ore: the booster compresses 10 to 1 (1000 m³ become 100 m³), so you mine until the material runs out without going to station.",
+" solo en flota con un booster que comprima en el espacio (Orca, Porpoise o Rorqual): la que más saca entre barges, pero se llena en minutos y es frágil. Nadie recoge el mineral: el booster lo comprime ahí mismo (el moon ore ocupa 100 veces menos; el hielo y el gas, 10 veces menos), así que minas hasta que se acabe el material sin ir a descargar.": " only in a fleet with a booster compressing in space (Orca, Porpoise or Rorqual): the top barge for output, but it fills in minutes and is fragile. Nobody collects the ore: the booster compresses it right there (moon ore takes 100 times less space; ice and gas, 10 times less), so you mine until the material runs out without going to unload.",
 " solo pide Ice Harvesting I y cicla igual que el T2, sin residuo.": " only needs Ice Harvesting I and cycles as fast as the T2, with no residue.",
 " tick": " tick",
 " ticks": " ticks",

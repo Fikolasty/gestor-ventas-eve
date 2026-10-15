@@ -1157,9 +1157,10 @@ Desplegables de Minería con estilo de tarjeta
   summary a 1.02rem y con margen abajo al abrir. El tema claro sale de light.py como las demás tarjetas.
 - Verificado: Playwright con ESI simulado (details abiertos, estilo de tarjeta, inglés sin restos), móvil 390 px, cero errores.
 ==================== Publicación ====================
-2026-10-14: v1.0.32–v1.0.34 publicados por subida web en el navegador
-(5 commits directos a main, en tandas por directorio), tras dos 401 de la
-ruta API con token guardado. Detalle en custom.github/CONNECTOR.md.
+2026-10-14: v1.0.32–v1.0.38 se publicaron por subida web en el navegador (varios commits por versión, en tandas por
+directorio, con mensajes «Publicar vX.Y.Z: …»). El workflow «Versiones» solo crea tag y Release cuando el mensaje
+EMPIEZA con «vX.Y.Z — título», así que esas versiones quedaron sin Release; en v1.0.39 se crearon a mano.
+Regla: cada versión en UN commit cuyo mensaje empiece con «vX.Y.Z — » y con su sección «## X.Y.Z — » en el CHANGELOG.
 ==================== v1.0.35 ====================
 Selector de naves del plan en dos grupos
 - Dos SEG con la misma clave 'barge' (seg() marca activo en ambos; el clic
@@ -1168,7 +1169,7 @@ Selector de naves del plan en dos grupos
   alinear los dos grupos. Pista .pl-bh en una frase corta por nave; la nota
   del primer mes quedó junto al grupo Exhumer. en.json: 7 claves viejas
   fuera, 5 nuevas.
-- Pendiente verificar en vivo tras publicar (selector, clics, inglés, móvil).
+- Verificado en v1.0.39 (Playwright, ESI simulado): selector, clics, inglés, móvil.
 ==================== v1.0.36 ====================
 Grupos de naves del mismo tamaño; Expert System 0 para Exhumers
 - .pl-shiprow .pk-flt{flex:1}, .pk-fb{flex:1 1 0} (tercios iguales),
@@ -1178,13 +1179,13 @@ Grupos de naves del mismo tamaño; Expert System 0 para Exhumers
   (manda el valor manual). Inversión, desglose, balance y veredicto usan
   S.esPlex, así que recalculan solos. Simulación de minado y textos del
   héroe sin cambios (siguen asumiendo Expert System días 1 a 7).
-- Pendiente verificar en vivo tras publicar.
+- Verificado en v1.0.39 (Playwright, ESI simulado).
 ==================== v1.0.37 ====================
 Etiqueta del grupo de naves encima (corrige envoltura)
 - .pl-shiprow en columna (etiqueta encima, SEG a width:100%, botones
   flex:1 1 0). En v1.0.36 la etiqueta lateral restaba 58 px y el grupo
   Barge (etiquetas más largas) se partía 2+1 en vivo.
-- Pendiente verificar en vivo tras publicar.
+- Verificado en v1.0.39 (Playwright, ESI simulado).
 ==================== v1.0.38 ====================
 Nota Covetor: compresion en el espacio, nadie recoge mineral
 - La nota de Covetor ya no dice que alguien te recoja el mineral: nadie
@@ -1192,4 +1193,20 @@ Nota Covetor: compresion en el espacio, nadie recoge mineral
   vuelven 100 m3), asi que minas hasta que se acabe el material sin ir
   a la estacion. Los numeros no cambian: el calculo con boost ya
   asumia esto (sin viajes).
-- Pendiente verificar en vivo tras publicar.
+- Verificado en v1.0.39 (Playwright, ESI simulado).
+
+==================== v1.0.39 ====================
+Revisión de v1.0.32–v1.0.38 (otra sesión, subida web)
+- Fuentes vs. publicado: `python3 build.py 1.0.38` reproduce byte a byte index.html y mineria.html de main, y
+  tools/mining/build_data.py reproduce src/mining_data.js (mismo build de cliente 3579973). Nada editado a mano.
+- Verificado en vivo lo pendiente de v1.0.35–v1.0.38: .pl-shiprow con dos .pk-flt de igual ancho y 3 botones en una fila
+  (1400 px y 390 px); S.barge Retriever→Hulk pone esPlex 0 y Hulk→Retriever restaura 15; inglés sin restos; sin
+  desborde en móvil; cero errores de consola. En las dos páginas (index.html y mineria.html).
+- Corrección de datos en la nota de la Covetor: la compresión NO es 10:1 para todo. SDE: Zeolites 10 m³ → Compressed
+  0.1 m³ (100:1); Blue Ice 1000 → 100 (10:1); Lime Cytoserocin 10 → 1 (10:1). Texto y clave de en.json actualizados;
+  «la estación» → «descargar» (escenario nullsec).
+- Ojo (decisión de diseño abierta): con una Exhumer elegida, esPlex pasa a 0 pero la simulación de 28 días sigue usando
+  el Expert System los días 1–7 (lo dice v1.0.36). Es decir, se cuentan los ingresos de esa semana sin su costo.
+  Si la cuenta es nueva, necesita el Expert System igual; si no, habría que quitar esos 7 días de la simulación.
+- Releases v1.0.32–v1.0.38 creados a mano (tag en el último commit de cada versión, asset gestor-ventas-vX.Y.Z.html
+  de ese commit, notas de su sección del CHANGELOG).
