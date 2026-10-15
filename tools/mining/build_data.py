@@ -32,10 +32,10 @@ for bo in BOOSTS:
                                  short(r['mid']) if r['mid'] != '—' else '—',
                                  ', '.join(f'{n}x {k}' for k, n in rigs.items()) or '—', r['drone'],
                                  r['cycle_s'], r['per_cycle'], r['crit_p'], r['crit_b'], r['mod_mph'], r['drone_mph'],
-                                 r['total_mph'], r['eff_mph'], r['hold'], r['fill_min'], r['waste_p'], f"{r['cpu_used']:.1f} / {r['cpu_out']:.1f}",
+                                 r['total_mph'], r['hold'], r['fill_min'], r['waste_p'], f"{r['cpu_used']:.1f} / {r['cpu_out']:.1f}",
                                  r['notes']])
 COLS = ['boost', 'lv', 'imp', 'mat', 'tier', 'ship', 'high', 'low', 'mid', 'rigs', 'drones', 'cyc', 'amt', 'critP', 'critB',
-        'mod', 'dr', 'tot', 'eff', 'hold', 'fill', 'waste', 'cpu', 'notes']
+        'mod', 'dr', 'tot', 'hold', 'fill', 'waste', 'cpu', 'notes']
 
 ships = []
 for s in SHIPS:
@@ -62,8 +62,6 @@ for k, t in types.items():
     if c is not None and not types[str(c)].get('published'):
         c = None
     cat, sub = GRP[g]
-    if cat == 'gas' and n.startswith('Fullerite'):
-        continue  # Fullerite es solo de wormholes; el escenario es nullsec (Mykoserocin + Cytoserocin)
     if c is None:  # sin versión comprimida en el mercado (gas de evento): fuera
         continue
     if cat == 'gas':
@@ -108,7 +106,7 @@ def items_ids(items):
 
 OPTS = ['base', 'remap', 'remap3', 'remap5']
 train = dict(opts=OPTS, attrs={}, plan={}, stages={}, ends={}, cyber={}, targets={}, es={}, start=TR.START)
-sim, simx, simfit = {}, {}, {}
+sim, simfit = {}, {}
 for mat in MAT:
     steps, stg = TR.plan(mat)
     rm = TR.best_remap(steps)
@@ -130,31 +128,22 @@ for mat in MAT:
                 tgt = merge({k: prof.get(k, 0) for k in REL[mat]}, reqs_of(s), *[reqs_of(n) for n, _ in r['items'] if n != s])
                 need, _ = TR.steps_for(sorted(tgt.items()), TR.START)
                 train['targets'][f'{lv}|{mat}|{tier}|{s}'] = {o: round(TR.hours(need, ats[o]), 1) for o in OPTS}
-    # simulación de 28 días en barge: Expert System los días 1–7, luego solo las skills propias.
-    # simx: lo mismo sin Expert System (Expert System en 0 PLEX): solo skills propias desde el día 1.
-    memo = {}
-    def mine(barge, tier, eff):
-        prof = {k: eff.get(k, 0) for k in PROFILE_KEYS}
-        if eff.get('Mining Barge', 0) < 1:
-            return None
-        key = (barge, tier, tuple(sorted(prof.items())))
-        if key not in memo:
-            memo[key] = best(barge, mat, tier, prof, False, None)
-        return memo[key]
+    # simulación de 28 días en barge: Expert System los días 1–7, luego solo las skills propias
     for o in OPTS:
         ends = train['ends'][mat][o]
         for barge in ('Procurer', 'Retriever', 'Covetor'):
             for tier in ('T1', 'T2', 'Faction'):
-                daily, dailyx, last = [], [], None
+                daily, last = [], None
                 for d in range(28):
                     own = TR.skills_at(steps, ends, 24 * d)
-                    r = mine(barge, tier, merge(own, es_sk) if d < 7 else own)
-                    daily.append(r['eff_mph'] if r else 0)
+                    eff = merge(own, es_sk) if d < 7 else own
+                    prof = {k: eff.get(k, 0) for k in PROFILE_KEYS}
+                    if eff.get('Mining Barge', 0) < 1:
+                        daily.append(0); continue
+                    r = best(barge, mat, tier, prof, False, None)
+                    daily.append(r['total_mph'] if r else 0)
                     if r: last = r
-                    rx = mine(barge, tier, own)
-                    dailyx.append(rx['eff_mph'] if rx else 0)
                 sim[f'{mat}|{barge}|{tier}|{o}'] = daily
-                simx[f'{mat}|{barge}|{tier}|{o}'] = dailyx
                 simfit[f'{mat}|{barge}|{tier}|{o}'] = dict(items=items_ids(last['items']) if last else [],
                                                           high=last['high'] if last else '—', low=last['low'] if last else '—',
                                                           mid=last['mid'] if last else '—', drones=last['drone'] if last else '—')
@@ -178,7 +167,7 @@ attr_impl = {'3': [tid(n) for n in ['Cybernetic Subprocessor - Basic', 'Memory A
 for v in list(impl.values()) + list(attr_impl.values()):
     for i in v:
         names[i] = TR.name(i)
-data.update(train=train, sim=sim, simx=simx, simfit=simfit, fits=fits, names=names, impl=impl, attrImpl=attr_impl, plex=44992)
+data.update(train=train, sim=sim, simfit=simfit, fits=fits, names=names, impl=impl, attrImpl=attr_impl, plex=44992)
 with open(out, 'w', encoding='utf-8') as f:
     f.write('// Generado por tools/mining/build_data.py desde los datos estáticos de EVE (Pyfa, build %s). No editar a mano.\n' % build)
     f.write('const MINE=' + json.dumps(data, ensure_ascii=False, separators=(',', ':')) + ';\n')

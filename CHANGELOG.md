@@ -2,78 +2,12 @@
 
 Cambios por versión del Gestor de Ventas. La más nueva arriba. El detalle técnico completo está en `docs/SPEC.txt`.
 
-## 1.0.42 — Plan para Omega Nuevo: implantes de minería y sección más clara
+## 1.0.43 — Vuelta a v1.0.31 (sin los cambios de Codex)
 *2026-10-15*
 
-- **Implantes de minería +5% por defecto**: Highwall MX-1005 y Michi's (moon), Yeti IH-1005 (hielo), Alchemist GH-805 (gas). Piden Cybernetics V (unos 18 días), así que el plan la entrena justo después de las skills a IV y los implantes entran en el **mes 2** (hacia el día 38–42). El mes 1 sigue sin ellos porque todavía no se pueden usar. Su precio sale aparte (una vez) con en cuántos días se pagan. Se pueden quitar con «Implantes de minería +5%: No».
-- «Remap + implantes» ahora se llama **«Remap + atributos +3»**: son implantes de atributos para entrenar más rápido, no de minería.
-- **Precio del PLEX editable en el mismo número**: haces clic en el precio y escribes (acepta «4900000», «4,900,000» o «4.9m»). «Volver al precio de ESI» aparece solo si lo cambiaste.
-- **Sección reordenada**: una tarjeta por material con el **Mes 1** (lo que te queda a los 28 días) y el **Mes 2 en adelante** (profit mensual) juntos; un solo **Detalle** con pestañas Moon ore / Hielo / Gas (cuentas, línea de tiempo y gráfico más anchos), en vez de tres columnas apretadas. El boost del mes 2 pasó a «Tu Escenario». Pasos del encabezado al día (5 pasos, incluido el mes 2).
-- Línea de tiempo con el día de los implantes; la Exhumer se corre por Cybernetics V. «Juntas el 281,419% del Omega» ahora dice «Juntas 2,814 veces el Omega». Las etiquetas «Inversión» e «Inversión + próximo Omega» del gráfico ya no se enciman.
-- Español / English (también arregla «… para cubrir todo. Prueba con más horas…», que salía en español). Tema claro y móvil revisados.
-
-## 1.0.41 — Releases de las versiones subidas por la web
-*2026-10-15*
-
-- El workflow «Versiones» ahora también reconoce los commits «Publicar vX.Y.Z: …» y «Publicar vA.B.C - vX.Y.Z: …» (subidas por la web, varios commits por versión). Crea el tag en el **último** commit de cada versión, con las notas de todas las secciones del rango y sin marcarla como Latest.
-- Con eso aparecen los Releases que faltaban: **v1.0.34** (trae 1.0.32, 1.0.33 y 1.0.34, que salieron juntas) y **v1.0.35 a v1.0.39**.
-- La página no cambia (solo el número de versión).
-
-## 1.0.40 — Revisión de v1.0.32–v1.0.39: Porpoise comprime gas y Expert System coherente
-*2026-10-15*
-
-- **Porpoise y gas**: según los datos del juego, la Porpoise sí tiene compresor de gas (Medium Gas Compressor I), pero no de moon ore ni de hielo. Ahora, con boost de Porpoise, el gas no descuenta viajes (efectivo = bruto); moon ore y hielo siguen descontando 2 min por bodega llena, como en v1.0.39. Solo cambian las 72 filas de Porpoise + gas.
-- **Expert System en 0 = sin Expert System**: al elegir una Exhumer el Expert System pasa a 0 PLEX (v1.0.36), pero la simulación seguía minando los días 1 a 7 con sus skills: contaba el ingreso sin el costo. Ahora, con 0 PLEX, la simulación usa solo tus skills desde el día 1 (no minas hasta tener Mining Barge I); si vuelves a poner el precio, vuelve a usarlo. Cuentas claras, titular, línea de tiempo y aviso cambian con eso. Español / English.
-- Textos: «compresion» → «compresión» en las notas de Covetor y Hulk (el texto no cambia).
-- **Releases que faltaban**: v1.0.32 a v1.0.39 se subieron con mensajes «Publicar v…», que el workflow no reconoce, así que no tenían tag ni Release. Se resuelve en 1.0.41.
-- Verificado lo que quedaba pendiente de v1.0.35, v1.0.36 y v1.0.39. README y SPEC al día.
-
-## 1.0.39 — Porpoise sin compresión + textos sin bodega como problema
-*2026-10-14*
-
-- Porpoise da boost SIN compresión: su rendimiento efectivo ahora descuenta 2 min de viaje por bodega llena, igual que sin boost. Solo Orca y Rorqual comprimen en el espacio (efectivo = bruto). Datos reconstruidos con Pyfa (build 3579973, el mismo).
-- Textos: Covetor y Hulk con el texto exacto — solo en flota con un booster que brinde compresión en el espacio (Orca o Rorqual). Fuera toda mención de la bodega como problema (se llena en minutos, bodega pequeña, alguien que vacíe la bodega, menos viajes). Español / English.
-
-## 1.0.38 — Nota Covetor: compresión en el espacio, nadie recoge mineral
-*2026-10-14*
-
-- La nota de Covetor ya no dice que alguien te recoja el mineral (Orca, Porpoise o hauler): nadie recoge mineral. El booster comprime en el espacio 10 a 1 (1000 m³ se vuelven 100 m³), así que minas hasta que se acabe el material sin ir a la estación. Los números no cambian: el cálculo con boost ya asumía esto (sin viajes). Español / English.
-
-## 1.0.37 — Etiqueta del grupo de naves encima (corrige envoltura)
-*2026-10-14*
-
-- La etiqueta Barge/Exhumer va encima de su grupo, no al lado: cada SEG tiene todo el ancho de la fila y los 3 botones caben en una línea en tercios iguales. En v1.0.36 el grupo Barge se partía en 2+1 porque sus etiquetas son más largas y la etiqueta lateral le robaba ancho. Español / English.
-
-## 1.0.36 — Grupos de naves del mismo tamaño y Expert System en 0 para Exhumers
-*2026-10-14*
-
-- Los dos grupos del selector de nave ahora miden exactamente lo mismo: cada grupo ocupa todo el ancho de la fila y sus 3 botones reparten tercios iguales. La nota del primer mes quedó debajo del grupo Exhumer.
-- Al elegir una Exhumer, el Expert System pasa a 0 PLEX y la inversión, el desglose, el balance y el veredicto recalculan. Al volver a una Barge, vuelve al valor que tenía (si lo cambiaste a mano, manda tu valor). Español / English.
-
-## 1.0.35 — Selector de naves del plan en dos grupos
-*2026-10-14*
-
-- El selector de nave del plan ahora tiene dos grupos simétricos de 3 botones: Barge (Procurer, Retriever, Covetor) y Exhumer (Skiff, Mackinaw, Hulk), en vez de un solo grupo de 6 desbalanceado. La pista debajo quedó en una frase corta por nave y la nota del primer mes quedó junto al grupo Exhumer. Español / English.
-
-## 1.0.34 — Desplegables de Minería con estilo de tarjeta
-*2026-10-14*
-
-- «Plan de Entrenamiento Paso a Paso», «Cómo se Calcula» (plan y comparativa) y «Qué Nave Recomendar» ahora son tarjetas como el resto de la página (fondo, borde, radio y padding), no secciones peladas con solo una línea arriba. Español / English.
-
-## 1.0.33 — Plan para Omega Nuevo: Exhumers y profit mensual desde el mes 2
-*2026-10-14*
-
-- **Exhumers en el selector de naves del plan**: Skiff, Mackinaw y Hulk. El primer mes minas con la barge equivalente (Skiff → Procurer, Mackinaw → Retriever, Hulk → Covetor) mientras entrenas Exhumers, y la inversión es la Exhumer con su fit.
-- **Mes 2 en adelante: profit mensual**: ritmo estable con skills a IV, sin implantes. Ingreso mensual = ISK/h × horas al día × 30 días, menos el Omega de ese mes. La Omega es un costo de operación: lo que queda después de pagarla es profit. Con selector de boost (Sin / Porpoise / Orca / Rorqual). Todo se multiplica por tus cuentas.
-- Español / English.
-
-## 1.0.32 — Comparativa Minera: todo nullsec, rendimiento efectivo y drones de hielo Tech II
-*2026-10-14*
-
-- **Todo el escenario es nullsec**: moon ore R4–R64, los 12 hielos y gas Mykoserocin/Cytoserocin. Fullerite es solo de wormholes y ya no aparece. El gas por defecto es Lime Cytoserocin (hay nebulosas de Lime en Catch).
-- **Rendimiento efectivo**: las cifras de m³/h e ISK/h ya descuentan el tiempo de descargar. Sin boost, cada bodega llena cuesta 2 min de viaje a la estructura. Con boost de Porpoise, Orca o Rorqual, el booster comprime en el mismo grid y no hay viajes: el efectivo es el bruto. El Plan para Omega Nuevo también usa el efectivo.
-- **Hielo Facción con drones Tech II**: el escalón Facción de hielo usa Ice Harvesting Drone II en vez del 'Augmented' (dron de facción). Datos reconstruidos con Pyfa fresco (mismo build de cliente, los números base no cambiaron).
-- Textos sin menciones a highsec ni a la estación en la comparativa. Español / English.
+- Se deshacen los cambios subidos por la web de v1.0.32 a v1.0.39 (hechos con Codex) y las revisiones que dependían de ellos (v1.0.40 y v1.0.42).
+- La Comparativa Minera y el plan para Omega nuevo quedan como en v1.0.31; el resto de la app no cambia (esos cambios no lo tocaban).
+- Se conserva el workflow de v1.0.41, que crea los Releases de las versiones subidas por la web.
 
 ## 1.0.31 — Comparativa Minera: plan para Omega nuevo más claro y con precios de ESI
 *2026-10-14*

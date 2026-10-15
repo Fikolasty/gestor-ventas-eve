@@ -48,13 +48,6 @@ def req_ok(item, sk):
 
 pct = lambda x: 1 + x / 100.0
 
-# Escenario nullsec: sin boost, cada vez que se llena la bodega se descuentan TRIP_MIN minutos de viaje
-# a descargar en la estructura (warp + dock + unload + undock + warp de vuelta). Con compresion de
-# Orca/Rorqual el booster comprime en el mismo grid y no hay viajes. La Porpoise solo tiene compresores
-# Medium de asteroid ore y de gas (no de moon ore ni de hielo): comprime el gas, pero en moon y hielo
-# el minero sigue viajando a descargar como sin boost.
-TRIP_MIN = 2.0
-
 # ---------------------------------------------------------------- boosts (Mining Foreman Burst)
 # Al máximo: Mining Foreman Burst II, Mining Director V, Mining Foreman Mindlink, bono de casco con su skill a V y
 # el Industrial Core II de cada nave. Igual que Pyfa: el valor del buff = base de la carga × módulo × mindlink ×
@@ -90,7 +83,7 @@ FITS = {
  'ice': {
   'T1':      dict(high='Ice Harvester I',   low='Ice Harvester Upgrade I',  mid='Mining Survey Chipset I', rigs=['Medium Ice Harvester Accelerator I', 'Medium Drone Mining Augmentor I'], drone='Ice Harvesting Drone I'),
   'T2':      dict(high='Ice Harvester II',  low='Ice Harvester Upgrade II', mid='Mining Survey Chipset II', rigs=['Medium Ice Harvester Accelerator I', 'Medium Drone Mining Augmentor II'], drone='Ice Harvesting Drone II'),
-  'Faction': dict(high='ORE Ice Harvester', low='Ice Harvester Upgrade II', mid='Republic Fleet Mining Survey Chipset', rigs=['Medium Ice Harvester Accelerator I', 'Medium Drone Mining Augmentor II'], drone='Ice Harvesting Drone II'),
+  'Faction': dict(high='ORE Ice Harvester', low='Ice Harvester Upgrade II', mid='Republic Fleet Mining Survey Chipset', rigs=['Medium Ice Harvester Accelerator I', 'Medium Drone Mining Augmentor II'], drone="'Augmented' Ice Harvesting Drone"),
  },
  'gas': {
   'T1':      dict(high='Gas Cloud Harvester I',   low=None, mid=None, rigs=[], drone=None),
@@ -101,7 +94,7 @@ FITS = {
 FALLBACK = {'Mining Laser Upgrade II': 'Mining Laser Upgrade I', 'Ice Harvester Upgrade II': 'Ice Harvester Upgrade I',
             'ORE Ice Harvester': 'Ice Harvester I', 'ORE Strip Miner': 'Strip Miner I', 'Ice Harvester II': 'Ice Harvester I', 'Gas Cloud Harvester II': 'Gas Cloud Harvester I',
             'ORE Gas Cloud Harvester': 'Gas Cloud Harvester I', 'Ice Harvesting Drone II': 'Ice Harvesting Drone I',
-            'Mining Drone II': 'Mining Drone I'}
+            "'Augmented' Ice Harvesting Drone": 'Ice Harvesting Drone I', 'Mining Drone II': 'Mining Drone I'}
 IMPLANTS = {'moon': ["Inherent Implants 'Highwall' Mining MX-1005", "Michi's Excavation Augmentor"],
             'ice': ["Inherent Implants 'Yeti' Ice Harvesting IH-1005"],
             'gas': ["Eifyr and Co. 'Alchemist' Gas Harvesting GH-805"]}
@@ -195,9 +188,6 @@ def calc(ship, mat, tier, level, implants=True, rigs_override=None, mid_override
     hold = sh['generalMiningHoldCapacity'] * pct(sh.get('miningBargeBonusGeneralMiningHoldCapacity', 0) * lvl('Mining Barge')) \
            * pct(sh.get('exhumersBonusGeneralMiningHoldCapacity', 0) * lvl('Exhumers'))
     total = mod_mph + drone_mph
-    fill_min = hold / total * 60 if total > 0 else 0
-    compress = boost in ('Orca', 'Rorqual') or (boost == 'Porpoise' and mat == 'gas')  # Porpoise: Medium Gas Compressor I
-    eff = total if compress else (total * fill_min / (fill_min + TRIP_MIN) if fill_min > 0 else 0)
     # fitting check (CPU)
     cpu_out = sh['cpuOutput'] * pct(5 * lvl('CPU Management'))
     for r in rigs:
@@ -214,7 +204,7 @@ def calc(ship, mat, tier, level, implants=True, rigs_override=None, mid_override
                 rigs=rigs, drone=(f"{nD}x {fit['drone']}" if fit['drone'] else '—'),
                 cycle_s=round(dur / 1000, 2), per_cycle=round(amount, 1),
                 base_mph=round(base_mph), crit_p=round(crit_p * 100, 2), crit_b=round(crit_b * 100), mod_mph=round(mod_mph),
-                drone_mph=round(drone_mph), total_mph=round(total), eff_mph=round(eff), hold=round(hold), fill_min=round(fill_min, 1),
+                drone_mph=round(drone_mph), total_mph=round(total), hold=round(hold), fill_min=round(hold / total * 60, 1),
                 waste_p=round(waste_p, 1), cpu_used=round(used, 1), cpu_out=round(cpu_out, 1), fits=used <= cpu_out + 1e-6, cal=cal, notes=notes,
                 items=[(ship, 1), (fit['high'], nH)] + ([(fit['low'], 3)] if fit['low'] else []) + ([(fit['mid'], 1)] if fit['mid'] else [])
                       + [(r, 1) for r in rigs] + ([(fit['drone'], nD)] if fit['drone'] and nD else []))
@@ -244,7 +234,7 @@ def best(ship, mat, tier, level, implants=True, boost=None):
             if r is None:
                 return None
             if r['fits']:
-                cands.append((-mi, r['eff_mph'], -len(r['rigs']), r))
+                cands.append((-mi, r['total_mph'], -len(r['rigs']), r))
     cands.sort(key=lambda x: x[:3], reverse=True)
     r = cands[0][3]
     want = FITS[mat][tier]['mid']
