@@ -160,3 +160,13 @@ Verificar el tag del primer commit marcado `[ChatGPT]` en `main`, comprobar la p
 **Cobertura:** pruebas unitarias añadidas para curva, etapas, fechas y escalado, más GitHub Actions. Módulo de ventas sin cambios funcionales. Las tarjetas de rendimiento IV se distinguen como referencia estática. Pruebas reales de UI, Firefox, ESI y distribución exacta de SP todavía pendientes.
 
 **Siguiente revisión:** contrastar screenshot del usuario después de v1.0.70, comprobar que la tabla muestra Retriever→Mackinaw y que el rendimiento sube entre meses 2–8 y alcanza meseta al llegar V.
+
+## 13. Ajuste de toolbar del Plan Omega (v1.0.71)
+
+**Encargo aprobado:** mover el enorme botón del 1M SP a la barra de tabs, transformarlo en switch con estado y agregar un CTA «FREE 1 Million SP! ↗» en la derecha; responsive en móvil.
+
+**Fuentes:** `src/mining.js`, `src/mining.css`, `src/i18n/en.json` y `index.html` compilado. Documentación en SPEC/MINING/PROGRESS, README/CHANGELOG; prueba adicional en mining-smoke y workflow actualizado al build 1.0.71.
+
+**Comportamiento:** checkbox accesible que mantiene el estado numérico `S.freeSP` 0/1.000.000, visible únicamente en vista plan, reflejo al repintar. Enlace oficial al programa de referidos de EVE, no un enlace de regalo directo; obtener la recompensa requiere una invitación válida.
+
+**Regresión prevista:** JS compilado y fuente parseables, marcadores antiguos ausentes, coincidencia de CSS, check de Actions, Pages actualizado, SHA de main y tag ChatGPT. Revisión visual y Firefox por el usuario si no hay navegador real disponible. **Sin cambios en motor de venta, ESI ni cálculos de minería.**

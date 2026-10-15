@@ -96,7 +96,17 @@ const MineUI=(()=>{
   // ---------- esqueleto ----------
   const SEG=(k,opts)=>'<span class="pk-flt" data-k="'+k+'">'+opts.map(([v,t])=>'<button type="button" class="pk-fb" data-v="'+v+'">'+t+'</button>').join('')+'</span>';
   const HTML=
-   '<div class="mn-views">'+SEG('view',[['ships','Rendimiento por Nave'],['plan','Plan para Omega Nuevo'],['max','Nave Maxiada']])+'</div>'+
+   '<div class="mn-toolbar">'+
+  '<div class="mn-views">'+SEG('view',[['ships','Rendimiento por Nave'],['plan','Plan para Omega Nuevo'],['max','Nave Maxiada']])+'</div>'+
+  '<div class="mn-omega-tools" hidden>'+
+    '<label class="mn-sp-toggle" for="mnFreeSpSwitch" title="Se necesita un enlace de invitación válido para reclamar los SP">'+
+      '<input type="checkbox" id="mnFreeSpSwitch" class="mn-sp-checkbox" checked>'+
+      '<span class="mn-sp-track" aria-hidden="true"></span>'+
+      '<span class="mn-sp-name">Usar 1M SP (referido)</span>'+
+    '</label>'+
+    '<a class="mn-sp-cta" href="https://www.eveonline.com/recruit" target="_blank" rel="noopener noreferrer" title="Programa oficial de EVE. Reclamar el bono requiere una invitación válida.">FREE 1 Million SP! <span aria-hidden="true">↗</span></a>'+
+  '</div>'+
+'</div>'+
    '<div class="mn-v-max" hidden><div class="mn-card"><h3>Nave Maxiada · Comparación Pura</h3>'+
     '<p class="mn-note">Skills V · implantes +5% · Full Facción. Sin Omega, compras ni inversión. Se muestran m³/h efectivos y, cuando ESI ofrece precios, ISK/h. El ajuste de boost viene del comparador de naves.</p>'+
     '<p class="mn-note">Referencia Pyfa del build '+String(MINE.build)+'. Los upgrades ultra caros Aoede / Ingenii se muestran aparte porque necesitan validar el fit/CPU contra un SDE actualizado; no inflamos los números.</p>'+
@@ -381,7 +391,7 @@ const MineUI=(()=>{
   const fmtN=v=>Number.isInteger(v)?NF0.format(v):NF1.format(v);
   function paintSetup(){S.cmpv=S.cmp?'1':'0';
     root.querySelectorAll('.pl-stp').forEach(st=>{const i=st.querySelector('.pl-in');if(i!==document.activeElement)i.value=fmtN(S[st.dataset.k]);});
-    S.accq=String(S.acc);const sp=$q('.mn-sp-bonus');if(sp){sp.textContent=S.freeSP?'✓ Incluye 1 millón SP (referido)':'Incluir 1 millón SP (referido)';sp.setAttribute('aria-pressed',String(!!S.freeSP));}const rng=$q('.pl-acc-range');if(rng)rng.value=String(Math.min(100,S.acc));
+    S.accq=String(S.acc);const sw=$q('#mnFreeSpSwitch');if(sw)sw.checked=!!S.freeSP;const rng=$q('.pl-acc-range');if(rng)rng.value=String(Math.min(100,S.acc));
     const ex=BARGE_OF[S.barge];
     $q('.pl-bh').textContent={Procurer:'La más dura.',Retriever:'La bodega más grande.',Covetor:'La que más mina.',Skiff:'La más dura.',Mackinaw:'La mejor autonomía.',Hulk:'La que más mina.'}[S.barge]+(ex?' El primer mes minas con la '+ex+' mientras entrenas Exhumers.':'');
     $q('.pl-ah').textContent={base:'Como sale un personaje nuevo.',remap:'Atributos repartidos para entrenar este plan lo más rápido posible.',remap3:'Remap + 4 implantes de atributos +3 para entrenar más rápido (no son de minería; su precio entra en la inversión).'}[S.patt];
@@ -605,7 +615,7 @@ const MineUI=(()=>{
       'El cambio de nave requiere comprarla y poder volar sus módulos. El millón de SP no se distribuye skill por skill: fechas y saldos son escenarios orientativos, no resultados garantizados.'));
   }
 
-  function paint(){if(!root)return;seg();$q('.mn-v-ships').hidden=S.view!=='ships';$q('.mn-v-plan').hidden=S.view!=='plan';$q('.mn-v-max').hidden=S.view!=='max';
+  function paint(){if(!root)return;seg();$q('.mn-omega-tools').hidden=S.view!=='plan';$q('.mn-v-ships').hidden=S.view!=='ships';$q('.mn-v-plan').hidden=S.view!=='plan';$q('.mn-v-max').hidden=S.view!=='max';
     if(S.view==='plan'){paintPlan();paintMonths();return;}if(S.view==='max'){paintMax();return;}
     paintBoost();paintPrice();paintTake();paintKpi();paintPivot();paintDetail();paintInvestNote();paintTraining();drawCharts();}
   function needPrices(){let ids;
@@ -618,10 +628,8 @@ const MineUI=(()=>{
 
   // ---------- montaje ----------
   function mount(r){if(root)return;root=r;root.classList.add('mn');root.innerHTML=HTML;$q=s=>root.querySelector(s);
-    const plan=$q('.mn-v-plan');
-    const bonusButton=document.createElement('button');bonusButton.type='button';bonusButton.className='ghost mn-sp-bonus';
-    bonusButton.addEventListener('click',()=>{S.freeSP=S.freeSP?0:1000000;paint();});
-    plan.prepend(bonusButton);
+    const bonusSwitch=$q('#mnFreeSpSwitch');
+    bonusSwitch.addEventListener('change',()=>{S.freeSP=bonusSwitch.checked?1000000:0;paint();});
     const accField=$q('.pl-stp[data-k="acc"]');
     if(accField){const slider=document.createElement('input');slider.type='range';slider.min='1';slider.max='100';slider.step='1';slider.value='1';slider.className='pl-acc-range';slider.setAttribute('aria-label','Cuentas: desliza hasta 100, o escribe hasta 1000');accField.after(slider);
       const note=h('small','pl-acc-note','Deslizador: 1–100 · Número manual: 1–1.000 (solo simulación; no equivale a jugar simultáneamente).');slider.after(note);

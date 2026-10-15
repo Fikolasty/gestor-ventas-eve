@@ -59,7 +59,7 @@ CHANGELOG.md          ← cambios por versión
 ### Generar la página
 Solo necesitas Python 3, sin dependencias:
 ```
-python3 build.py 1.0.70
+python3 build.py 1.0.71
 ```
 Eso escribe `index.html` con la versión indicada.
 
@@ -86,3 +86,5 @@ Fuente de verdad de la minería: [`docs/MINING.md`](docs/MINING.md). El código 
 
 
 **Progresión Omega (v1.0.70):** seleccionar una barge ahora implica su Exhumer equivalente desde el día de desbloqueo estimado. El rendimiento se proyecta entre referencias IV y V del dataset Pyfa con una interpolación declarada como aproximación, no como entrenamiento real habilidad por habilidad. Para las diferencias entre proyección y valores V de «Nave Maxiada», consultar [MINING.md](docs/MINING.md).
+
+**Enlace de referido (v1.0.71):** dentro del plan Omega, el switch «Usar 1M SP (referido)» comparte fila con las pestañas y mantiene el cálculo SP opcional. El enlace «FREE 1 Million SP! ↗» abre el [programa oficial de referidos](https://www.eveonline.com/recruit); se requiere una invitación válida para obtener la bonificación, ya que la página general no es un enlace personalizado.

@@ -21,4 +21,4 @@ jobs:
       - name: Regresión estática de minería
         run: node tests/mining-smoke.cjs
       - name: Verificar generación de HTML
-        run: python3 build.py 1.0.70
+        run: python3 build.py 1.0.71

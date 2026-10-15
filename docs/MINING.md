@@ -78,3 +78,7 @@ La fuente de precios en la interfaz es **CCP/Fenris ESI**, no números estático
 **Calidad:** un segundo test en `tests/mining-smoke.cjs` comprueba hitos, evolución de yield, correspondencia Retriever→Mackinaw, multiplicación de cuentas y periodo mensual consecutivo. La caja de escenario fijo IV existente se mantiene identificada como **referencia fija, no progresión**.
 
 **Pendiente para simulación exacta:** integrar entrenamiento granular skill por skill con distribución específica de 1M SP, requisitos de módulos/fits, transiciones de implantes en cada día, niveles I–V de Exhumers, y regeneración Pyfa/SDE actualizada. No presentar el modelo interpolado como beneficio garantizado. No afecta ninguna fórmula del gestor de ventas.
+
+## Controles del bono referido v1.0.71
+
+El Plan Omega tiene una barra compartida con las tres vistas. En el lado derecho de escritorio aparece un switch «Usar 1M SP (referido)» (0/1.000.000 en `S.freeSP`) y un enlace al **programa oficial** `https://www.eveonline.com/recruit` («FREE 1 Million SP! ↗»), que se abre en pestaña nueva. En móvil los controles pasan a la fila inferior. Se requiere un enlace de invitación elegible para obtener el millón de SP; esta URL informativa no los concede automáticamente. No se modifican valores de entrenamiento ni cálculos existentes.

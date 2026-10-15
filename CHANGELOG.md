@@ -2,6 +2,15 @@
 
 Cambios por versión del Gestor de Ventas. La más nueva arriba. El detalle técnico completo está en `docs/SPEC.txt`.
 
+## 1.0.71 — [ChatGPT] Switch de 1M SP en la barra de pestañas
+*2026-10-15*
+
+- El botón ancho de 1M SP se sustituye por un switch compacto situado junto a los tres tabs de Minería, visible solo en Plan para Omega Nuevo.
+- Nuevo enlace «FREE 1 Million SP! ↗» al programa oficial de EVE Online (requiere invitación elegible; el enlace informativo por sí solo no otorga SP).
+- Estilos adaptables en escritorio y móvil, foco de teclado y enlace externo seguro. Se mantiene la traducción al inglés.
+- No se modifican cálculos de entrenamiento, precios, API, fórmulas de venta ni el rendimiento de las naves.
+- Pruebas estáticas de existencia, comportamiento del switch y URL, más SPEC/PROGRESS/MINING.
+
 ## 1.0.70 — [ChatGPT] Corregir escalado del plan Omega y transición a Exhumer
 *2026-10-15*
 

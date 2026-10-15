@@ -55,4 +55,12 @@ assert(targetV>209&&targetV<217,'V se aproxima a mes 8 según datos históricos'
 assert(source.includes("28+(month-2)*30"),'mes 2 debe empezar al terminar día 28, sin hueco de días');
 assert(source.includes('S.acc'), 'ingresos escalables por cuentas');
 
-console.log('OK — dataset, cero waste moon, R64, 1000 cuentas, PLEX, progresión Exhumer IV–V y módulo separado.');
+assert(source.includes('class="mn-toolbar"'),'falta la barra de tabs con controles compactos');
+assert(source.includes('id="mnFreeSpSwitch"'),'falta checkbox SP accesible');
+assert(source.includes("bonusSwitch.addEventListener('change'"),'el switch no esta conectado al estado');
+assert(source.includes('S.freeSP=bonusSwitch.checked?1000000:0'),'toggle debe conservar exactamente los valores de SP');
+assert(source.includes(".mn-omega-tools').hidden=S.view!=='plan'"),'mostrar SP solo en tab Plan Omega');
+assert(source.includes('href="https://www.eveonline.com/recruit"'),'falta enlace al sitio oficial');
+assert(source.includes('rel="noopener noreferrer"'),'enlace externo no esta protegido');
+assert(!source.includes('plan.prepend(bonusButton)'),'sigue el antiguo boton ancho de SP');
+console.log('OK — minería, referencia SP con switch, enlace oficial y progresión Exhumer IV–V.');

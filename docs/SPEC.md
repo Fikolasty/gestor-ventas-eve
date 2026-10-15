@@ -165,3 +165,8 @@ La rama de barge del plan Omega evoluciona automáticamente a Exhumer equivalent
 La vista mensual debe informar días de Exhumer I, IV y V, y el mes en que cambia de nave. Desde V en adelante se estabilizan los rendimientos si precios y circunstancias no cambian. El mes 1 tiene 28 días, los siguientes intervalos contiguos de 30 días; se multiplica por cuenta antes de restar únicamente Omega mensual por cuenta. Nunca suponer que el precio Jita y el sitio lunar permanecerán constantes en la realidad. La sección **Referencia IV fija** del plan se etiqueta explícitamente para no confundirse con la tabla progresiva. Más detalles y fórmula: [MINING.md](MINING.md).
 
 Orden simplificado de progresión: Exhumers I antes de Cybernetics V. Cybernetics V no es requisito para pilotar Exhumer; solo añade tiempo de entrenamiento cuando se opta por implantes +5%, y desplaza los hitos de IV y V en la simulación.
+
+
+## 14. Barra de navegación de SP (v1.0.71)
+
+Dentro de «Plan para Omega Nuevo», el interruptor `#mnFreeSpSwitch` se presenta en la misma barra de navegación que las tres vistas, junto a un enlace compacto «FREE 1 Million SP! ↗» que abre en nueva pestaña el programa oficial `https://www.eveonline.com/recruit` con `rel="noopener noreferrer"`. El switch mantiene exactamente la semántica anterior de `S.freeSP` (0 o 1.000.000); aparece solo para `view='plan'` y se redistribuye debajo de los tabs en pantallas estrechas. El enlace **no es una invitación personalizada**: el bono depende de obtener y utilizar un referral válido. Accesibilidad mediante checkbox/label, foco visible y texto inglés. No modificar fórmulas económicas ni módulos de venta.
