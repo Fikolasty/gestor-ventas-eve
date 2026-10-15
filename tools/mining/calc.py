@@ -50,7 +50,8 @@ pct = lambda x: 1 + x / 100.0
 
 # Escenario nullsec: sin boost, cada vez que se llena la bodega se descuentan TRIP_MIN minutos de viaje
 # a descargar en la estructura (warp + dock + unload + undock + warp de vuelta). Con compresion de
-# Orca/Rorqual el booster comprime en el mismo grid y no hay viajes. Porpoise da boost sin compresion:
+# Orca/Rorqual el booster comprime en el mismo grid y no hay viajes. La Porpoise solo tiene compresores
+# Medium de asteroid ore y de gas (no de moon ore ni de hielo): comprime el gas, pero en moon y hielo
 # el minero sigue viajando a descargar como sin boost.
 TRIP_MIN = 2.0
 
@@ -195,7 +196,7 @@ def calc(ship, mat, tier, level, implants=True, rigs_override=None, mid_override
            * pct(sh.get('exhumersBonusGeneralMiningHoldCapacity', 0) * lvl('Exhumers'))
     total = mod_mph + drone_mph
     fill_min = hold / total * 60 if total > 0 else 0
-    compress = boost in ('Orca', 'Rorqual')  # solo Orca/Rorqual comprimen en el espacio; Porpoise da boost sin compresion
+    compress = boost in ('Orca', 'Rorqual') or (boost == 'Porpoise' and mat == 'gas')  # Porpoise: Medium Gas Compressor I
     eff = total if compress else (total * fill_min / (fill_min + TRIP_MIN) if fill_min > 0 else 0)
     # fitting check (CPU)
     cpu_out = sh['cpuOutput'] * pct(5 * lvl('CPU Management'))

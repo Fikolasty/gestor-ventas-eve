@@ -31,7 +31,7 @@ Lo más exacto es copiar los % de *Broker's fee* y *Sales tax* que muestra la ve
 - **Anti-cebo**: ignora órdenes de venta puestas muy baratas para tirar el precio (revisa las 5 más baratas, en cascada) y publica 1 tick por debajo.
 - **Venta rápida automática** cuando la orden casi no paga más que las compras (2 ticks o menos).
 - **Ajuste de precios** (por defecto −0.16% en la venta rápida), para no prometer más de lo que paga el mercado.
-- **Comparativa Minera**: qué Barge o Exhumer rinde más en moon ore, hielo y gas (Full T1, Full T2, Facción; skills a IV o V; con o sin implantes; sin boost o con Porpoise, Orca o Rorqual al máximo), en m³/h o ISK/h con precios de Jita, con bodega, drones y autonomía. Incluye el **Plan para Omega Nuevo** (Expert System de 7 días, entrenamiento, inversión y si alcanza para el siguiente Omega, de 1 a 100 cuentas) y el tiempo de entrenamiento IV vs V.
+- **Comparativa Minera**: qué Barge o Exhumer rinde más en moon ore, hielo y gas (Full T1, Full T2, Facción; skills a IV o V; con o sin implantes; sin boost o con Porpoise, Orca o Rorqual al máximo), en m³/h o ISK/h con precios de Jita, con bodega, drones y autonomía. Escenario nullsec (moon ore R4–R64, los 12 hielos y gas Mykoserocin/Cytoserocin) con rendimiento efectivo: descuenta los viajes a descargar salvo cuando el booster comprime (Orca y Rorqual; la Porpoise solo gas). Incluye el **Plan para Omega Nuevo** (Barges o Exhumers, Expert System de 7 días, entrenamiento, inversión, si alcanza para el siguiente Omega y el profit mensual desde el mes 2, de 1 a 100 cuentas) y el tiempo de entrenamiento IV vs V.
 - **Español / English** y tema **Dark / Light**.
 
 ## Seguridad y privacidad
@@ -80,6 +80,7 @@ python3 build.py 1.0.x
 
 ## Versiones
 Se usa versionado semántico (`1.0.x`). Cada versión tiene su **tag** y su **Release** con el HTML para descargar.
+El workflow los crea solo si el mensaje del commit **empieza** con `v1.0.x — título` (con raya «—») y el CHANGELOG tiene la sección `## 1.0.x — título`. Un mensaje como «Publicar v1.0.x…» no crea Release.
 Lo que cambió en cada una está en [CHANGELOG.md](CHANGELOG.md).
 
 ---
