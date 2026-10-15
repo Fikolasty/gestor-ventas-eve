@@ -1212,3 +1212,7 @@ Comparativa Minera: plan para Omega nuevo
 - #pSum .res-top padding-left:35px (alinea con el texto del h2); móvil: .num 1.5rem.
 - Fuera Modo Ligero: #liteOn, ui.lite en localStorage y script de cabecera, reglas html.lite.
 - Fuera nWarn, S.pricedAt y CSS sin uso (.alt-grid, .fastbox, .fb-*, .stats, .v-*, .who, .ship-t, .route-l/tx, .s-*, .t-amb/grn/red, .locked, .pl-partial).
+
+==================== v1.0.57 ====================
+- src/assets/background.b64: JPEG 1920×1080 (q88, progresivo). «CITADEL» borrado con inpainting (OpenCV TELEA) y «SIGMA» compuesto:
+  I y A recortadas del original (alfa por diferencia con el fondo limpio); S, G y M dibujadas a 4× (trazo 6 px, alto 55 px, espacio 27 px), centradas en x=958.

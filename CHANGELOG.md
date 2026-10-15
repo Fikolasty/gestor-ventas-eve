@@ -2,6 +2,12 @@
 
 Cambios por versión del Gestor de Ventas. La más nueva arriba. El detalle técnico completo está en `docs/SPEC.txt`.
 
+## 1.0.57 — Nueva imagen de fondo
+*2026-10-15*
+
+- Imagen de fondo nueva (arte de EVE Online: Citadel) con **SIGMA** en lugar de «CITADEL», con el mismo estilo de letra: la I y la A son las letras originales; la S, la G y la M se dibujaron con el mismo grosor de trazo, altura y espaciado.
+- La imagen pesa menos: la página pasa de 1,25 MB a 0,94 MB.
+
 ## 1.0.56 — Limpieza, sin Modo Ligero y textos
 *2026-10-15*
 
