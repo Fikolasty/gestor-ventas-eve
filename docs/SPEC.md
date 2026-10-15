@@ -141,7 +141,7 @@ El usuario canceló el hosting separado y la entrega en `develop`; la rama anter
 
 - Al completar y comprobar una tarea, hacer commit y push directamente a `main` (GitHub Pages: https://fikolasty.github.io/gestor-ventas-eve/). No hacer force push.
 - Identificar **cada commit propio** con `[ChatGPT]` en el asunto, por ejemplo: `v1.0.67 — [ChatGPT] Mejoras de textos de envío`.
-- `.github/workflows/versiones.yml` crea automáticamente un **tag Git** `chatgpt-<primeros 12 caracteres del SHA>` apuntando a cada commit marcado `[ChatGPT]`, de modo que Claude pueda localizarlo. Solo afirmar que existe después de comprobar GitHub Actions.
+- `.github/workflows/versiones.yml` crea automáticamente un **tag Git** `chatgpt-<primeros 12 caracteres del SHA>` en el **commit actual de cada push a main** si está marcado `[ChatGPT]`. No recorre ni reetiqueta commits históricos. Solo afirmar que existe después de comprobar GitHub Actions.
 - Conservar el mecanismo existente de tags y releases `vX.Y.Z` para las entregas numeradas. Asegurar coherencia de número de versión en HTML, CHANGELOG y README. No emitir release nuevo por un cambio exclusivamente documental.
 - Para revertir, preferir `git revert <SHA>` y un nuevo commit, sin eliminar el historial ni hacer `reset --hard`. Antes de revertir revisar los commits posteriores y sus dependencias.
 - Cada tarea debe registrar modificaciones, pruebas, riesgos y recuperación en `docs/PROGRESS.md`. Actualizar `docs/SPEC.md` si cambian requisitos/arquitectura; actualizar CHANGELOG en las versiones publicadas.

@@ -18,7 +18,7 @@
 ## Acuerdo vigente: entregas directas a main (15-10-2026)
 
 - **Cada trabajo finalizado y verificado:** commit y push a `main`, desde la cuenta `Fikolasty`.
-- Cada commit de ChatGPT lleva `[ChatGPT]` en el asunto. El workflow crea un tag de recuperación `chatgpt-<SHA corto>`; comprobar su existencia antes de reportarlo.
+- Cada commit de ChatGPT lleva `[ChatGPT]` en el asunto. El workflow intenta crear un tag de recuperación `chatgpt-<SHA corto>` **solo para el commit actual del push**; comprobar su existencia y que Actions termine correctamente antes de reportarlo.
 - Actualizar siempre PROGRESS; mantener SPEC al día y CHANGELOG para las versiones nuevas.
 - Revisar las condiciones de despliegue y compartir la misma URL pública: https://fikolasty.github.io/gestor-ventas-eve/.
 - Otro asistente puede recuperar/revertir una entrega identificada usando `git revert` sobre su SHA, evitando `git reset` y force push.
@@ -105,3 +105,10 @@ Verificar el tag del primer commit marcado `[ChatGPT]` en `main`, comprobar la p
 **Esta entrega:** añade SPEC.md y PROGRESS.md a main y extiende el workflow de versiones con tags `chatgpt-<SHA corto>` para commits `[ChatGPT]`. No modifica JS, HTML, datos de reproceso, fórmulas ni endpoints.
 
 **Pruebas pendientes de verificación en GitHub:** commit/main, tag creado por Actions, cambios limitados a tres archivos. No se atribuyen a esta entrega pruebas funcionales de UI, rendimiento o ESI.
+
+### Incidencia resuelta durante el establecimiento del workflow
+
+- Primer commit documental `[ChatGPT]`: `a0a59aa068c95e1dd105411e512a41b0d9c6233b`. El bloque de Actions quedó mal formado; no tocó la aplicación. Marcado como **no apto para recuperar por sí solo**.
+- Primera corrección: `f87de91adc3412990dd26fea2002dac9dd2dfa27`. YAML restaurado y tag `chatgpt-f87de91adc34` confirmado, pero Actions devolvió 403 al intentar también etiquetar retrospectivamente el commit anterior.
+- **Corrección de esta entrega:** etiquetar únicamente el commit que desencadena el push, idempotente en reintentos. Mantiene el workflow de tags/releases existentes intacto. Verificar Actions tras publicar.
+- Para revertir esta serie inicial no revertir aisladamente una corrección hacia el workflow anterior defectuoso: revisar la secuencia completa y dependencias.
