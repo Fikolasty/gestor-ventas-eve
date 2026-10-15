@@ -46,7 +46,6 @@ body::after{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;tra
 .top{display:flex;align-items:center;justify-content:space-between;gap:12px;max-width:min(1360px,94vw);margin:0 auto;padding:18px 20px}
 .brand{font:600 1.05rem var(--f-num);letter-spacing:.3px;color:var(--txt)}
 .brand small{color:var(--mut);font:400 .8rem var(--f-ui);margin-left:8px}
-.top nav{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
 .who{font-size:.82rem;color:var(--gain);border:1px solid rgba(53,194,110,.35);border-radius:999px;padding:5px 12px}
 
 /* ---------- botones ---------- */
@@ -70,7 +69,7 @@ label>input,label>select{margin-top:4px}
 /* ---------- héroe: el pegado ---------- */
 .hero{max-width:min(1360px,94vw);margin:0 auto;padding:40px 20px 18px}
 .hero{padding-top:56px}
-.title{display:flex;align-items:center;gap:20px}
+.title{display:flex;align-items:center;justify-content:center;gap:20px}
 .sig{display:inline-block;background:var(--sigma) center/contain no-repeat}
 .vg{display:inline-block;background:var(--vg) center/contain no-repeat}
 .logo-l{flex:none;width:88px;height:88px;filter:drop-shadow(0 4px 14px rgba(0,0,0,.6)) drop-shadow(0 0 18px rgba(222,220,209,0.21))}
@@ -510,10 +509,6 @@ img.ti:not([src]){visibility:hidden}
 .rx-c.yes .rx-big{color:#7fe0a6}.rx-c.no .rx-big{color:#ff9a9a}
 .rx-c h4{font-size:.9rem;color:var(--mut);font-weight:500}
 .foot{display:flex;flex-direction:column;gap:10px;padding-top:6px}
-.foot-sec{display:flex;gap:12px;align-items:flex-start;padding:14px 16px;border-radius:var(--r-md);border:1px solid rgba(53,194,110,.35);
-  background:linear-gradient(90deg,rgba(53,194,110,.12),rgba(36,35,33,.85));color:#cfe0d6;font-size:.92rem;line-height:1.5;text-shadow:none}
-.foot-sec .ic{color:#5fd68e;width:1.3em;height:1.3em;margin-top:2px}
-.foot-sec b{color:#fff}
 .foot-by{color:var(--mut);font-size:.86rem;text-align:center}.foot-by .ver{font-family:var(--f-num);color:var(--dim)}.foot-by b{color:#e8a58c}
 .ref{display:flex;align-items:center;gap:12px;width:100%;max-width:760px;margin:0 0 18px;padding:9px 14px;border-radius:999px;text-align:left;
   border:1px solid rgba(217,119,87,.5);background:linear-gradient(90deg,rgba(217,119,87,.18),rgba(36,35,33,.7));color:#f3e6c8;font-size:.92rem;
@@ -693,7 +688,7 @@ fieldset.st-full{grid-column:1/-1}fieldset.st-full .st-g{grid-template-columns:r
     linear-gradient(90deg,rgba(36,35,33,0) 0%,rgba(36,35,33,0) 45%,rgba(36,35,33,.3) 75%,rgba(36,35,33,.5) 100%),
     linear-gradient(180deg,rgba(36,35,33,.22) 0%,rgba(36,35,33,0) 10%,rgba(36,35,33,0) 62%,rgba(36,35,33,.45) 100%)!important}
   body::before,body::after{will-change:auto!important;transform:none!important}
-  .panel,.ct,.alt-grid>div,.rx-c,.pod,fieldset.st,.hp-c,.scn>div,.v-stats>div,.pl,.fastbox,.ref,.foot-sec{box-shadow:0 2px 6px rgba(0,0,0,.4)!important}
+  .panel,.ct,.alt-grid>div,.rx-c,.pod,fieldset.st,.hp-c,.scn>div,.v-stats>div,.pl,.fastbox,.ref{box-shadow:0 2px 6px rgba(0,0,0,.4)!important}
   .btn,.ghost,.dest,.copy,.tab,.totop{box-shadow:none!important}
   *{text-shadow:none!important}
   .logo-l,.lamp,.pod.best{filter:none!important}
@@ -771,7 +766,7 @@ html.lite .panel,html.lite .ct,html.lite .alt-grid>div,html.lite .rx-c,html.lite
   .receipt li>.amt{text-align:left}.receipt li>.amt small{text-align:left;display:inline;margin-left:8px}
   .receipt li>:nth-child(1){grid-area:pill;justify-self:start}.receipt li>:nth-child(2){grid-area:who}.receipt li>:nth-child(3){grid-area:amt}
   .title{gap:14px}.logo-l{width:60px;height:60px}
-  .top{padding:14px 16px}.top nav{flex-wrap:nowrap;gap:6px}.top .ghost{padding:7px 12px}.brand small{display:none}.brand{font-size:.95rem}.who{display:none}
+  .top{padding:14px 16px}.brand small{display:none}.brand{font-size:.95rem}.who{display:none}
   body::before{background-position:32% 0;background-size:auto 75vh}
   .lot.open{margin:8px -4px;padding:0 4px}
   .panel{padding:18px}
@@ -784,7 +779,6 @@ html.lite .panel,html.lite .ct,html.lite .alt-grid>div,html.lite .rx-c,html.lite
 .hero-intro{display:grid;grid-template-columns:minmax(0,1fr) minmax(290px,410px);align-items:center;gap:18px;margin-top:16px}
 .start-note{display:flex;align-items:flex-start;gap:10px;padding:12px 14px;border:1px solid rgba(217,119,87,.35);
   background:rgba(48,48,46,.82);border-radius:12px;min-width:0;box-shadow:inset 0 1px 0 rgba(255,255,255,.05)}
-.start-note>.ic{color:var(--thrust);flex:none;margin-top:2px}
 .start-note-body{display:flex;flex-direction:column;gap:5px;min-width:0;font-size:.83rem;line-height:1.5;color:#d6d4cb}
 .start-note-body strong{color:#f2c775;font-size:.87rem}
 .start-note-body b{color:#faf9f5}
@@ -796,7 +790,7 @@ html.lite .panel,html.lite .ct,html.lite .alt-grid>div,html.lite .rx-c,html.lite
 @media(max-width:860px){.hero-intro{grid-template-columns:minmax(0,1fr)}.start-note{max-width:100%}}
 @media(max-width:480px){.hero-intro{gap:10px}.start-note{padding:10px}.start-note-actions button{flex:1}}
 
-/* =============== v103: Tus Ítems, Ajustes y Ayuda ===============
+/* =============== v103: Tus Ítems, Ajustes y Guía de Uso ===============
    Overrides al FINAL del CSS; no cambian los estilos del motor ni los cálculos.
    La tarjeta Buyback tenía 4 columnas forzadas dentro de un fieldset: las entradas
    de texto se comprimían y se desbordaban. Usamos 2 columnas responsivas. */
@@ -841,7 +835,7 @@ body::after{background:none}
 details.panel>summary h2::before{color:var(--dim)}
 details.panel>summary .sum,.cnt{font:500 .95rem var(--f-ui);color:var(--mut)}
 .sub-h,.ce-h .sub-h{font:600 1rem var(--f-ui);color:var(--txt);text-transform:none;letter-spacing:0}
-h2 .ic,.sub-h .ic,.summary h2 .ic,fieldset.st legend .ic,.fb-h .ic,.rx-call .ic,.receipt .rw .reco .ic,.foot-sec .ic{color:var(--mut)}
+h2 .ic,.sub-h .ic,.summary h2 .ic,fieldset.st legend .ic,.fb-h .ic,.rx-call .ic,.receipt .rw .reco .ic{color:var(--mut)}
 .panel .lead,.v-hint,.sh-none,.scn-v,.rguide,.pk-note,.ledger-tools .lead{font-family:var(--f-serif);color:#e5e3da;font-size:1.03rem;line-height:1.6}
 .pk-note b{color:var(--txt);font-weight:600}
 .note,.sh-rates,.st-i,.st-f small,small{color:#b0ada4}
@@ -883,8 +877,7 @@ html.lite body::before{opacity:0}
 .hero h1{font:500 clamp(2.1rem,4.6vw,3.3rem)/1.1 var(--f-serif);letter-spacing:0;text-transform:none}
 .hero>p,.hero .tagline,.hero p{font-family:var(--f-serif);color:#e5e3da;font-size:1.1rem}
 .tag.ok{color:var(--mut);border-color:var(--line2)}
-.foot-sec{border-color:var(--line2);background:#2b2a28}.foot-sec .ic{color:var(--mut)}
-.start-note{border-color:var(--line2);background:#2b2a28}.start-note-body strong{color:var(--txt)}.start-note>.ic{color:var(--mut)}
+.start-note{border-color:var(--line2);background:#2b2a28}.start-note-body strong{color:var(--txt)}
 .v-what{vertical-align:6px}
 /* ================= 1.0.1 ================= */
 /* fondo: la imagen se ve (industria de EVE) pero apagada, con viñeta */
@@ -934,7 +927,6 @@ html.lite body::before{opacity:.91}
 .start-note{border:1px solid rgba(217,119,87,.5)!important;background:linear-gradient(90deg,rgba(217,119,87,.18),rgba(36,35,33,.82))!important;color:#f3e6c8;
   box-shadow:inset 0 1px 0 rgba(255,255,255,.08),0 4px 12px rgba(0,0,0,.4)!important;border-radius:var(--r-md)}
 .start-note:hover{border-color:rgba(217,119,87,.85)!important}
-.start-note>.ic{color:#d97757!important}
 .start-note-body{font-size:.9rem;color:#f3e6c8}
 .start-note-body strong{align-self:flex-start;font-weight:600;color:#1a1206!important;background:#d97757;border-radius:999px;padding:1px 10px;font-size:.8rem}
 .start-note-body b{color:#e8a58c}
@@ -989,13 +981,15 @@ html.lite .ct,html.lite .sh-card,html.lite .scn>div,html.lite fieldset.st,html.l
    Sin ítems pegados la Tasación se oculta y las dos tarjetas ocupan todo el ancho. */
 .hero-intro{grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important} /* v1.0.47: mitad y mitad */
 .hero-intro.no-appr{grid-template-columns:minmax(0,1fr)!important}
-.hero-side{display:grid;gap:10px;align-content:stretch;min-width:0}
-.hero-intro.no-appr .hero-side{grid-template-columns:1fr 1fr;gap:14px}
-.hero-side>.ref{max-width:none;margin:0;border-radius:var(--r-md);flex-direction:column;align-items:flex-start;justify-content:flex-start;gap:6px;padding:10px 14px;position:relative;font-size:.88rem}
-.hero-side>.ref .ref-go{position:absolute;top:10px;right:12px;margin:0}
-.hero-side>.start-note{max-width:none;margin:0;padding:10px 14px}
-.hero-intro:not(.no-appr) .hero-side .start-note-body{font-size:.84rem}
-.hero-intro:not(.no-appr) .hero-side .start-note-actions button{padding:4px 10px;font-size:.8rem}
+/* v1.0.53: «Gratis» y «Antes de empezar» en una sola tarjeta (separadas por una línea) */
+.hero-side{display:flex;flex-direction:column;min-width:0;border:1px solid rgba(217,119,87,.5);border-radius:var(--r-md);
+  background:linear-gradient(90deg,rgba(217,119,87,.18),rgba(36,35,33,.82));box-shadow:inset 0 1px 0 rgba(255,255,255,.08),0 4px 12px rgba(0,0,0,.4)}
+.hero-side>.ref,.hero-side>.start-note{border:0!important;background:none!important;box-shadow:none!important;border-radius:0!important;margin:0!important;max-width:none!important}
+.hero-side>.ref{position:relative;flex-direction:column;align-items:flex-start;padding:14px 38px 14px 16px;gap:6px;font-size:1.05rem} /* etiqueta arriba, igual que «Antes de empezar» */
+.hero-side>.ref .ref-go{position:absolute;top:14px;right:14px;margin:0}
+.hero-side>.ref .ref-t b{font-weight:700}
+.hero-side>.start-note{padding:12px 16px 14px;border-top:1px solid rgba(217,119,87,.3)!important}
+.hero-side:hover{border-color:rgba(217,119,87,.85)}
 .appr{min-width:0;display:flex;flex-direction:column;padding:14px 16px;border-radius:var(--r-md);background:rgba(21,21,21,.86);border:1px solid rgba(222,220,209,.12);box-shadow:0 2px 4px rgba(0,0,0,.45),0 8px 18px rgba(0,0,0,.3)}
 .appr-tag{display:table;align-self:flex-start;margin-bottom:10px;font-weight:600;font-size:.8rem;color:#1f1e1d;background:#d6d4cb;border-radius:999px;padding:1px 10px}
 .appr-g{display:grid;grid-template-columns:1fr 1fr;border:1px solid rgba(222,220,209,.12);border-radius:var(--r-sm);overflow:hidden;background:#151515}
@@ -1010,7 +1004,7 @@ html.lite .ct,html.lite .sh-card,html.lite .scn>div,html.lite fieldset.st,html.l
 .appr-c dd .appr-v{font-family:var(--f-ui)!important}
 .appr-c dd .copy:hover{border-color:var(--line2);background:#30302e}
 .appr-c .t-buy dd{color:#e58a8a}.appr-c .t-split dd{color:#e7c27a}.appr-c .t-sell dd{color:#7fd19b}
-@media(max-width:980px){.hero-intro,.hero-intro.no-appr{grid-template-columns:minmax(0,1fr)!important}.hero-intro.no-appr .hero-side,.hero-side{grid-template-columns:1fr}}
+@media(max-width:980px){.hero-intro,.hero-intro.no-appr{grid-template-columns:minmax(0,1fr)!important}}
 @media(max-width:600px){.appr-g{grid-template-columns:1fr}.appr-c+.appr-c{border-left:0;border-top:1px solid rgba(222,220,209,.1)}}
 /* v1.0.48: cabecera del Resultado en dos mitades */
 .res-top{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:18px;margin:6px 0 4px;align-items:start}
@@ -1046,6 +1040,18 @@ html.lite .ct,html.lite .sh-card,html.lite .scn>div,html.lite fieldset.st,html.l
 /* v1.0.51: en el plan elegido, «+N planes ▾» indica que se despliega al hacer clic */
 .pk-x{display:inline-block;margin-left:8px;padding:1px 8px;border-radius:999px;font:600 .72rem var(--f-ui);font-style:normal;color:#e8a588;border:1px solid rgba(217,119,87,.45);background:rgba(217,119,87,.1);vertical-align:1px}
 .pk-o.on:hover .pk-x{background:rgba(217,119,87,.2)}
+/* v1.0.53: título más grande y centrado (logo + texto como un solo bloque, al centro de las tarjetas de abajo) */
+.hero .title{justify-content:center}
+.hero .title>div{text-align:center}
+.hero h1{font-size:clamp(2.6rem,6.4vw,4.8rem)!important;line-height:1.02!important}
+/* v1.0.53: aviso de privacidad discreto: una línea pequeña y centrada, sin recuadro */
+/* v1.0.53: aviso de privacidad discreto: una línea pequeña y centrada, sin recuadro */
+.foot-sec{display:flex;justify-content:center;align-items:center;gap:6px;margin:0;color:var(--dim);font-size:.82rem;text-align:center}
+.foot-sec .ic{width:1em;height:1em;margin:0;color:var(--dim)}
+/* v1.0.53: el enlace de Skill Points destaca más (más grande y en tono arcilla claro), dentro de la paleta */
+.hero-side>.ref .ref-t{font:500 1.22rem/1.35 var(--f-ui);color:#f6d9c8;text-shadow:0 0 18px rgba(217,119,87,.25)}
+.hero-side>.ref .ref-t b{color:#ffb48f;font-weight:700}
+.hero-side>.ref:hover .ref-t{text-decoration:underline;text-decoration-color:rgba(255,180,143,.5);text-underline-offset:3px}
 /* v1.0.7: interruptor "Contar envío" */
 .sw{display:inline-flex;align-items:center;gap:8px;cursor:pointer;font-size:.9rem;color:#e5e3da;text-shadow:0 1px 3px rgba(0,0,0,.9);padding:6px 10px;border-radius:10px;background:rgba(21,21,21,.75);border:1px solid rgba(222,220,209,.12)}
 .sw input{position:absolute;opacity:0;width:1px;height:1px}
@@ -1056,7 +1062,7 @@ html.lite .ct,html.lite .sh-card,html.lite .scn>div,html.lite fieldset.st,html.l
 .sw input:focus-visible+.sw-t{outline:2px solid #d6d4cb;outline-offset:2px}
 html.lite .sw-t,html.lite .sw-t::after{transition:none}
 .route-m{padding:4px 6px 4px 10px;border-radius:10px;background:rgba(21,21,21,.75);border:1px solid rgba(222,220,209,.12)}
-/* v1.0.8: Ajustes y Ayuda arriba, con X fija y secciones desplegables */
+/* v1.0.8: Ajustes y Guía de Uso arriba, con X fija y secciones desplegables */
 .top-slot{margin-top:18px;display:grid;gap:14px}
 .top-slot>.panel{margin:0}
 .x-wrap{position:sticky;top:12px;height:0;z-index:6;display:flex;justify-content:flex-end}
@@ -1177,10 +1183,6 @@ body.side-c .side-top{justify-content:center;padding:0 0 6px}
 .side-fab{display:none}
 .side-bd{position:fixed;inset:0;z-index:55;background:rgba(0,0,0,.5)}
 /* barra de arriba: solo íconos */
-.top nav .ghost{width:40px;height:40px;padding:0;display:inline-grid;place-items:center;border-radius:10px;background:var(--glass);border:1px solid var(--edge)}
-.top nav .ghost .ic{margin:0;width:18px;height:18px}
-.top nav .tb-l{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
-.top nav .ghost[aria-pressed="true"]{border-color:var(--clay);color:var(--txt)}
 /* paleta: paneles gris-negro translúcidos, bordes finos, tarjetas internas apenas más claras */
 .panel{background:var(--glass)!important;border:1px solid var(--edge)!important;border-radius:14px!important;box-shadow:0 2px 4px rgba(0,0,0,.45),0 10px 24px rgba(0,0,0,.32)!important}
 .ct,.sh-card,.sh-kpi>div,.scn>div,.ct-sum,fieldset.st,.hp-c,.undo,.rx>div,.rx-c,.pod,.call,.v-stats>div,.alt-grid>div,.pk-o,.fb2,.fb2-l>div,.ct-items{background:var(--glass2)!important;border:1px solid rgba(222,220,209,.09)!important;box-shadow:none!important}
@@ -1373,7 +1375,7 @@ html.lite .ov-card,html.lite .ov-kpi>div{box-shadow:none}
 <script>/* v1.0.16: aplica tema y Modo Ligero guardados antes de pintar (sin parpadeo). Por defecto: Dark, sin Modo Ligero. */try{var g=JSON.parse(localStorage.getItem('gestorVentas.ajustes.v1')||'null');if(g&&g.ui){if(g.ui.light)document.documentElement.classList.add('light');if(g.ui.lite)document.documentElement.classList.add('lite');}}catch(e){}</script>
 </head>
 <body class="side-c">
-<!-- v1.0.11: menú lateral (como Claude): se expande y se contrae; opciones de cálculo, Ajustes y Ayuda -->
+<!-- v1.0.11: menú lateral (como Claude): se expande y se contrae; opciones de cálculo, Ajustes y Guía de Uso -->
 <aside class="side" id="side" aria-label="Opciones">
   <div class="side-top">
     <button type="button" class="side-tg" id="sideTg" aria-expanded="true" aria-controls="side" title="Contraer menú"><span class="ic i-panel" aria-hidden="true"></span></button>
@@ -1390,18 +1392,14 @@ html.lite .ov-card,html.lite .ov-kpi>div{box-shadow:none}
   </div>
   </div>
   <div class="side-g"><span class="side-h">General</span>
-    <button type="button" class="side-i" data-open="bSettings" title="Ajustes: skills, impuestos, ajuste de precios, envío, Buyback e idioma."><span class="ic i-gear" aria-hidden="true"></span><span class="side-l">Ajustes</span></button>
-    <button type="button" class="side-i" data-open="bHelp" title="Ayuda: cómo pegar tu inventario y leer el plan."><span class="ic i-help" aria-hidden="true"></span><span class="side-l">Ayuda</span></button>
+    <button type="button" class="side-i" data-panel="settings" title="Ajustes: skills, impuestos, ajuste de precios, envío, Buyback e idioma."><span class="ic i-gear" aria-hidden="true"></span><span class="side-l">Ajustes</span></button>
+    <button type="button" class="side-i" data-panel="help" title="Guía de Uso: cómo pegar tu inventario y leer el plan."><span class="ic i-help" aria-hidden="true"></span><span class="side-l">Guía de Uso</span></button>
   </div>
 </aside>
 <button type="button" class="side-fab" id="sideFab" aria-label="Abrir menú" title="Menú"><span class="ic i-panel" aria-hidden="true"></span></button>
 <div class="side-bd" id="sideBd" hidden></div>
 <header class="top">
   <div class="brand"><span class="logo-s sig" aria-hidden="true"></span>SIGMA GRINDSET <small>EVE Online</small></div>
-  <nav>
-    <button class="ghost" id="bSettings" aria-label="Ajustes" title="Ajustes" aria-pressed="false" aria-controls="settings"><span class="ic i-gear" aria-hidden="true"></span><span class="tb-l">Ajustes</span></button>
-    <button class="ghost" id="bHelp" aria-label="Ayuda" title="Ayuda" aria-pressed="false" aria-controls="help"><span class="ic i-help" aria-hidden="true"></span><span class="tb-l">Ayuda</span></button>
-  </nav>
 </header>
 
 <section class="hero">
@@ -1410,8 +1408,8 @@ html.lite .ov-card,html.lite .ov-kpi>div{box-shadow:none}
     <div><h1>Market Moves+</h1><p class="tagline">Herramienta para gestionar tus planes de mercado.</p></div>
   </div>
   <!-- v104: introducción + recordatorio visible a la derecha. Los botones comparten
-       los paneles Ayuda y Ajustes existentes: no se duplica ningún formulario. -->
-  <!-- v1.0.8: Ajustes y Ayuda se abren aquí, arriba, debajo del título -->
+       los paneles Guía de Uso y Ajustes existentes: no se duplica ningún formulario. -->
+  <!-- v1.0.8: Ajustes y Guía de Uso se abren aquí, arriba, debajo del título -->
   <div class="top-slot">
   <section class="panel" id="settings" hidden>
     <div class="x-wrap"><button type="button" class="x-close" data-close="settings" aria-label="Cerrar Ajustes" title="Cerrar Ajustes"></button></div>
@@ -1442,8 +1440,8 @@ Contraband Freight = no</textarea><small>Una regla por línea: Nombre = tax tota
     </div>
   </section>
   <section class="panel" id="help" hidden>
-    <div class="x-wrap"><button type="button" class="x-close" data-close="help" aria-label="Cerrar Ayuda" title="Cerrar Ayuda"></button></div>
-    <h2><span class="ic i-help" aria-hidden="true"></span>Ayuda</h2>
+    <div class="x-wrap"><button type="button" class="x-close" data-close="help" aria-label="Cerrar Guía de Uso" title="Cerrar Guía de Uso"></button></div>
+    <h2><span class="ic i-help" aria-hidden="true"></span>Guía de Uso</h2>
     <p class="lead">Del inventario al plan: copia tus ítems, revisa precios de Jita 4-4 y compara rutas de venta con las deducciones configuradas. No hace falta iniciar sesión.</p>
     <div class="hp">
       <div class="hp-c"><h3><span class="hp-n">1</span>Copia tu Inventario</h3>
@@ -1484,10 +1482,9 @@ Contraband Freight = no</textarea><small>Una regla por línea: Nombre = tax tota
     <div class="hero-side">
     <button type="button" class="ref" data-link="referral"><span class="ref-tag">Gratis</span><span class="ref-t">Usa mi enlace para recibir <b>1 Millón de Skill Points</b> gratis</span><span class="ref-go">↗</span></button>
     <aside class="start-note" aria-label="Antes de empezar">
-      <span class="ic i-bulb" aria-hidden="true"></span>
       <div class="start-note-body"><strong>Antes de empezar</strong>
-        <span>Lee las instrucciones de <b>Ayuda</b> y revisa tus <b>Ajustes</b> (skills, taxes y Buyback) para obtener estimaciones acordes a tu personaje.</span>
-        <div class="start-note-actions"><button type="button" id="heroHelp">Ver Ayuda</button><button type="button" id="heroSettings">Configurar Ajustes</button></div>
+        <span>Lee la <b>Guía de Uso</b> y revisa tus <b>Ajustes</b> (skills, taxes y Buyback) para obtener estimaciones acordes a tu personaje.</span>
+        <div class="start-note-actions"><button type="button" id="heroHelp">Ver Guía de Uso</button><button type="button" id="heroSettings">Configurar Ajustes</button></div>
       </div>
     </aside>
     </div>
@@ -1680,7 +1677,7 @@ Contraband Freight = no</textarea><small>Una regla por línea: Nombre = tax tota
   </div>
   <!-- Ajustes -->
 
-  <!-- Ayuda -->
+  <!-- Guía de Uso -->
 
   <!-- Veredicto -->
 
@@ -1696,7 +1693,7 @@ Contraband Freight = no</textarea><small>Una regla por línea: Nombre = tax tota
 
 <button type="button" class="totop" id="toTop" aria-label="Volver arriba" title="Volver arriba (Inicio)" hidden><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 14l6-6 6 6"/></svg></button>
 <footer class="foot">
-  <div class="foot-sec"><span class="ic i-lock" aria-hidden="true"></span><div><b>Tu inventario no se guarda.</b> Al cerrar o recargar se borra lo pegado; solo tus Ajustes quedan en este navegador. La app solo se conecta a los servidores oficiales de Fenris Creations.</div></div>
+  <p class="foot-sec"><span class="ic i-lock" aria-hidden="true"></span>Tu inventario no se guarda: al cerrar o recargar se borra. Solo tus Ajustes quedan en este navegador.</p>
   <div class="foot-by">Creado por <b>Fiko McGivert</b> · Vanguardia DR · SIGMA GRINDSET · <span class="ver">v__VER__</span></div>
 </footer>
 

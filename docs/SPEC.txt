@@ -1185,3 +1185,11 @@ Comparativa Minera: plan para Omega nuevo
 ==================== v1.0.52 ====================
 - Nombre Market Moves+: <title>, h1, document.title (con y sin total), cabeceras de src/shell.html y src/script.js, README.
 - Tagline nueva con su traducción; fuera las traducciones del nombre y tagline anteriores.
+
+==================== v1.0.53 ====================
+- Fuera <nav> con #bSettings/#bHelp. togglePanel(id,force): side-i[data-panel] (alterna, aria-pressed), #heroHelp/#heroSettings (force=true: abre o desplaza),
+  .x-close[data-close] (force=false). Fuera toggle(), MutationObserver de sincronía y CSS .top nav/.top .ghost/.tb-l.
+- .hero-side = tarjeta única (borde/gradiente arcilla); .ref y .start-note sin borde propio, separados por border-top. .ref en columna (etiqueta arriba),
+  .ref-go absoluto arriba a la derecha. .ref-t 1.22rem #f6d9c8, b #ffb48f. Sin .ic de .start-note.
+- .title centrado; h1 clamp(2.6rem,6.4vw,4.8rem).
+- «Ayuda» → «Guía de Uso» (textos y traducciones). .foot-sec reescrito: línea .82rem centrada, var(--dim); fuera reglas viejas.

@@ -2,6 +2,16 @@
 
 Cambios por versión del Gestor de Ventas. La más nueva arriba. El detalle técnico completo está en `docs/SPEC.txt`.
 
+## 1.0.53 — Inicio más limpio y Guía de Uso
+*2026-10-15*
+
+- **Título** más grande y centrado: logo + MARKET MOVES+ + subtítulo como un solo bloque, al centro de las tarjetas de abajo.
+- **Una sola tarjeta** para «Gratis» y «Antes de empezar», separadas por una línea; las dos etiquetas arriba y alineadas (sin la bombilla).
+- El texto «Usa mi enlace para recibir **1 Millón de Skill Points** gratis» más grande y en arcilla clara para que destaque (la tarjeta queda igual).
+- Fuera los botones de arriba (Ajustes y Ayuda): se abren desde el menú lateral, desde «Antes de empezar» o se cierran con su X.
+- **Ayuda → Guía de Uso** en toda la app («Ver Guía de Uso», «Cerrar Guía de Uso», «Lee la Guía de Uso…»).
+- Aviso de privacidad discreto: una línea pequeña y centrada al pie, sin recuadro.
+
 ## 1.0.52 — Market Moves+
 *2026-10-15*
 

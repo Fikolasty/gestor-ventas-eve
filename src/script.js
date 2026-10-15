@@ -2045,9 +2045,14 @@ $('liteOn').addEventListener('change',e=>document.documentElement.classList.togg
 // v1.0.8: tema claro / oscuro (solo en memoria; empieza oscuro)
 $('themeLight').addEventListener('change',e=>{document.documentElement.classList.toggle('light',e.target.checked);$('themeTxt').textContent=e.target.checked?'Light':'Dark';});
 
-// ================= Ajustes y Ayuda =================
-function toggle(btn,id){const s=$(id),open=s.hidden;if(open)slide(s,true);else s.hidden=true;btn.setAttribute('aria-pressed',String(open));if(open)s.scrollIntoView({behavior:'smooth',block:'start'});}
-$('bSettings').addEventListener('click',e=>toggle(e.currentTarget,'settings'));
+// ================= Ajustes y Guía de Uso =================
+// v1.0.53: se abren desde el menú lateral, los botones de «Antes de empezar» y se cierran con su X.
+// force=true abre (o solo desplaza si ya está abierto); force=false cierra; sin force alterna.
+function togglePanel(id,force){const s=$(id),open=force!=null?force:s.hidden;
+  if(open&&!s.hidden){s.scrollIntoView({behavior:'smooth',block:'start'});return;}
+  if(open)slide(s,true);else s.hidden=true;
+  document.querySelectorAll('.side-i[data-panel="'+id+'"]').forEach(x=>x.setAttribute('aria-pressed',String(open)));
+  if(open)s.scrollIntoView({behavior:'smooth',block:'start'});}
 // v1.0.11: menú lateral. Escritorio: se contrae a íconos. Móvil: se abre encima con fondo oscuro. Solo en memoria.
 {const mob=()=>innerWidth<=900,b=document.body;
  const setC=c=>{b.classList.toggle('side-c',c);$('sideTg').setAttribute('aria-expanded',String(!c));$('sideTg').title=c?'Expandir menú':'Contraer menú';};
@@ -2055,11 +2060,10 @@ $('bSettings').addEventListener('click',e=>toggle(e.currentTarget,'settings'));
  setC(true); // v1.0.15: siempre empieza contraído (solo íconos)
  $('sideTg').addEventListener('click',()=>{if(mob())setO(false);else setC(!b.classList.contains('side-c'));});
  $('sideFab').addEventListener('click',()=>setO(true));$('sideBd').addEventListener('click',()=>setO(false));
- document.querySelectorAll('.side-i[data-open]').forEach(x=>x.addEventListener('click',()=>{$(x.dataset.open).click();if(mob())setO(false);}));
- const sync=()=>document.querySelectorAll('.side-i[data-open]').forEach(x=>x.setAttribute('aria-pressed',$(x.dataset.open).getAttribute('aria-pressed')||'false'));
- new MutationObserver(sync).observe($('bSettings'),{attributes:true,attributeFilter:['aria-pressed']});new MutationObserver(sync).observe($('bHelp'),{attributes:true,attributeFilter:['aria-pressed']});}
-// v1.0.8: X dentro de la sección (fija al bajar): cierra igual que el botón de arriba
-document.querySelectorAll('.x-close').forEach(b=>b.addEventListener('click',()=>{$(b.dataset.close==='settings'?'bSettings':'bHelp').click();}));
+ document.querySelectorAll('.side-i[data-panel]').forEach(x=>{x.setAttribute('aria-pressed','false');x.setAttribute('aria-controls',x.dataset.panel);
+   x.addEventListener('click',()=>{togglePanel(x.dataset.panel);if(mob())setO(false);});});}
+// v1.0.8: X dentro de la sección (fija al bajar)
+document.querySelectorAll('.x-close').forEach(b=>b.addEventListener('click',()=>togglePanel(b.dataset.close,false)));
 // v1.0.8: cada grupo de Ajustes es desplegable (empiezan cerrados); se abren con clic o Enter en su título
 document.querySelectorAll('#settings fieldset.st').forEach(f=>{const l=f.querySelector('legend');if(!l)return;f.classList.add('closed');
   l.tabIndex=0;l.setAttribute('role','button');l.setAttribute('aria-expanded','false');
@@ -2067,15 +2071,8 @@ document.querySelectorAll('#settings fieldset.st').forEach(f=>{const l=f.querySe
   l.addEventListener('click',t);l.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();t();}});});
 const stAll=open=>document.querySelectorAll('#settings fieldset.st').forEach(f=>{f.classList.toggle('closed',!open);const l=f.querySelector('legend');if(l)l.setAttribute('aria-expanded',String(open));});
 $('stOpenAll').addEventListener('click',()=>stAll(true));$('stCloseAll').addEventListener('click',()=>stAll(false));
-$('bHelp').addEventListener('click',e=>toggle(e.currentTarget,'help'));
-// v104: enlaces del aviso junto al pegado. Abren los mismos paneles originales.
-// Si el panel ya está abierto, solo se desplaza: no lo cierran por accidente.
-[['heroHelp','bHelp','help'],['heroSettings','bSettings','settings']].forEach(([btn,nav,section])=>{
-  $(btn).addEventListener('click',()=>{
-    if($(section).hidden)$(nav).click();
-    else $(section).scrollIntoView({behavior:'smooth',block:'start'});
-  });
-});
+// v104: botones de «Antes de empezar»: abren el panel; si ya está abierto, solo se desplaza (no lo cierran)
+$('heroHelp').addEventListener('click',()=>togglePanel('help',true));$('heroSettings').addEventListener('click',()=>togglePanel('settings',true));
 [['cTax','tax'],['cBroker','broker'],['cBrokerNull','brokerNull'],['cScc','scc'],['cMargin','margin'],['cProd','prod']].forEach(([id,k])=>
   $(id).addEventListener('input',e=>{C[k]=(parseFloat(e.target.value)||0)/100;refresh();}));
 [['cSkInst','inst'],['cSkOrd','ord'],['cSkNul','nul']].forEach(([id,k])=>$(id).addEventListener('input',e=>{C.skew[k]=(parseFloat(e.target.value)||0)/100;refresh();}));
