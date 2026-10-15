@@ -369,7 +369,7 @@ async function esiFetch(path,opt){
 }
 // v105: hasta 10 ítems a la vez (cada uno pide libro, tipo e historial en paralelo). ESI usa HTTP/2,
 // así que muchas peticiones comparten una sola conexión; si ESI pide esperar (420/429) se avisa igual que antes.
-const ESI_POOL=4; // v1.0.46: 4 a la vez (antes 10) para no saturar ESI
+const ESI_POOL=8; // v1.0.49: 8 ítems a la vez (cada uno pide 3 cosas en paralelo); con los reintentos de v1.0.46 es estable y casi el doble de rápido que 4
 async function pool(list,n,fn){let i=0;await Promise.all(Array.from({length:Math.min(n,list.length)},async()=>{while(i<list.length){const k=i++;await fn(list[k],k);}}));}
 async function resolveIds(names){
   const miss=names.filter(n=>idCache[n.toLowerCase()]===undefined);
@@ -1090,7 +1090,7 @@ function clearViews(){
   ['vPlan','vRepList','ctrList','czDots','ctrTot','shBody','fScn','rx','rxFinal','dMsg','sumP1','sumP2'].forEach(id=>{const e=$(id);if(e)e.textContent='';});
   ['pCtr','pSum'].forEach(id=>{const e=$(id);if(e)e.hidden=true;});
   lastP=null;repaintPlanGroup=null;S.pricedAt=null;paintAppraisal();discRows=[];czCards=[];lastCs=[];czIdx=0;S.planMode=null;ICON_POOL={};
-  vShow=Object.create(null);vSort=Object.create(null);vQuery=Object.create(null);stepDone=new Set();pkView={sort:'net',dir:-1,filter:'all'};itemDone=new Set();if($('stepHead'))$('stepHead').textContent='';
+  vShow=Object.create(null);vSort=Object.create(null);vQuery=Object.create(null);stepDone=new Set();pkView={sort:'net',dir:-1,filter:'all',open:false};itemDone=new Set();if($('stepHead'))$('stepHead').textContent='';
 }
 function paintVerdict(P){
   const has=S.items.length>0;$('verdict').hidden=!has;$('ledger').hidden=!has;$('lCount').textContent=has?'· '+S.items.length+(S.items.length>1?' ítems':' ítem'):'';
@@ -1801,24 +1801,13 @@ function summaryAction(k,g,sys){
     default: return '';
   }
 }
-function summaryPlanText(P,sys){
-  const ks=['fN','fJ','fJI','null','rNull','jOrd','jInst','rJita','bb','disc'];
-  // Ordena por lo que aporta cada acción, igual que la etiqueta principal del resultado.
-  const groups=ks.map(k=>({k,g:P.rows.filter(r=>r.best===k)})).filter(x=>x.g.length);
-  groups.sort((a,b)=>b.g.reduce((n,r)=>n+r.g[b.k]-r.prod,0)-a.g.reduce((n,r)=>n+r.g[a.k]-r.prod,0));
-  const phrases=groups.map(x=>summaryAction(x.k,x.g,sys)).filter(Boolean);
-  if(!phrases.length)return 'revisar los ítems con precio disponible';
-  if(phrases.length===1)return phrases[0];
-  if(phrases.length===2)return phrases.join(' y ');
-  return phrases.slice(0,-1).join('; ')+'; y '+phrases[phrases.length-1];
-}
 // ================= Vista: resumen final (el estudio en palabras) =================
 // ================= Elige un Plan (v111 → v1.0.21) =================
 // Una fila por plan con columnas (Plan · Rapidez · Envío · Valor · Total · vs Óptimo), orden por columna y filtros.
 // El óptimo va SIEMPRE primero; los demás de mejor a peor por defecto. Todo sale de modeTotal() con los Ajustes,
 // la ruta (flip) y el switch de envío actuales: aquí no se calcula nada nuevo, solo se ordena y se pinta.
 // Elegir un plan recalcula (S.planMode → refreshNow). Orden y filtro viven en memoria (pkView) y se vacían al limpiar.
-let pkView={sort:'net',dir:-1,filter:'all'};
+let pkView={sort:'net',dir:-1,filter:'all',open:false}; // v1.0.49: open = mostrar todos los planes
 const PK_FAST=new Set(['jInst','fJI','bb']);                 // cobras el mismo día (sin contar el envío)
 const PK_REP=new Set(['rNull','rJita']);
 function pkSpeed(m,P){const ship=pkShips(m,P),cd=C.cDays[0]+'–'+C.cDays[1]+' d';
@@ -1860,7 +1849,7 @@ function paintPicker(P){
   const fl=PK_FILTERS.filter(([f])=>f==='all'||(f!=='noship'||SH())&&list.some(x=>x.m!=='auto'&&pass[f](x)));
   box.classList.toggle('pk-noship',!SH()); // sin envío: la columna Envío no aporta nada
   if(!fl.some(([f])=>f===pkView.filter))pkView.filter='all';
-  if(fl.length>2){const g=el('div','pk-flt');g.setAttribute('role','group');g.setAttribute('aria-label','Filtrar planes');
+  if(fl.length>2&&pkView.open){const g=el('div','pk-flt');g.setAttribute('role','group');g.setAttribute('aria-label','Filtrar planes');
     fl.forEach(([f,t])=>{const n=f==='all'?list.length-1:list.filter(x=>x.m!=='auto'&&pass[f](x)).length;
       const b=el('button','pk-fb'+(pkView.filter===f?' on':''),t);b.type='button';b.dataset.pkf=f;b.setAttribute('aria-pressed',String(pkView.filter===f));b.append(el('small',null,String(n)));g.append(b);});
     tools.append(g);}
@@ -1873,7 +1862,10 @@ function paintPicker(P){
   const rest=list.filter(x=>x.m!=='auto'&&pass[pkView.filter](x))
     .sort((a,b)=>{const A=key[pkView.sort](a),B=key[pkView.sort](b);return (A<B?-1:A>B?1:0)*pkView.dir||b.t.net-a.t.net;});
   const rows=[list.find(x=>x.m==='auto'),...rest].filter(Boolean);
+  // v1.0.49: cerrado, solo se ven el óptimo y el plan elegido; el resto con «Ver más planes»
+  const hiddenN=rows.filter(x=>x.m!=='auto'&&x.m!==curShown).length,allN=list.filter(x=>x.m!=='auto'&&x.m!==curShown).length;
   rows.forEach(({m,l,t})=>{
+    if(!pkView.open&&m!=='auto'&&m!==curShown)return;
     const d=t.net-opt,on=m===curShown;
     const b=el('button','pk-o'+(on?' on':'')+(m==='auto'?' best':''));b.type='button';b.dataset.m=m;b.setAttribute('role','radio');b.setAttribute('aria-checked',String(on));
     const txt=el('span','pk-tx'),nm=el('span','pk-l',l);if(m==='auto')nm.append(el('em','pk-rec','Recomendado'));
@@ -1885,7 +1877,9 @@ function paintPicker(P){
     b.append(el('span','pk-dot'),txt,sp,sh,barW,el('b','pk-v num',fmt(t.net)),el('small','pk-d '+(m==='auto'||Math.round(d)===0?'':d>0?'pos':'neg'),dd));
     if(part)b.title=part.trim();
     box.append(b);});
-  if(rows.length===1&&pkView.filter!=='all')box.append(el('p','pk-empty','Ningún otro plan cumple este filtro.'));
+  if(pkView.open&&rows.length===1&&pkView.filter!=='all')box.append(el('p','pk-empty','Ningún otro plan cumple este filtro.'));
+  if(allN>0){const mb=el('button','pk-more');mb.type='button';mb.dataset.pkmore='1';mb.setAttribute('aria-expanded',String(pkView.open));
+    mb.append(el('span',null,pkView.open?'Ocultar los demás planes':'Ver más planes'),el('b',null,pkView.open?'▴':(pkView.filter==='all'?allN:hiddenN)+' ▾'));box.append(mb);}
   if(P.mode){const d=opt-P.best,cant=P.rows.filter(r=>r.cant);
     bar.hidden=false;
     bar.append(el('b',null,'Elegiste: '+modeName(P.mode)+'. '),document.createTextNode(Math.round(d)>0?'Deja '+fmt(d)+' menos que el plan óptimo.':Math.round(d)<0?'Deja '+fmt(-d)+' más que el plan óptimo, pero se vende más lento (el óptimo prefiere vender rápido cuando la diferencia es pequeña).':'Deja lo mismo que el plan óptimo.'));
@@ -1896,7 +1890,8 @@ function paintPicker(P){
 }
 // orden y filtro: solo repintan el selector (no recalculan el plan)
 $('pkTools').addEventListener('click',e=>{const b=e.target.closest('[data-pkf]');if(!b||!lastP)return;pkView.filter=b.dataset.pkf;paintPicker(lastP);});
-$('pk').addEventListener('click',e=>{const b=e.target.closest('[data-pks]');if(!b||!lastP)return;e.stopPropagation();const k=b.dataset.pks;
+$('pk').addEventListener('click',e=>{const mo=e.target.closest('[data-pkmore]');if(mo&&lastP){e.stopPropagation();pkView.open=!pkView.open;paintPicker(lastP);return;}
+  const b=e.target.closest('[data-pks]');if(!b||!lastP)return;e.stopPropagation();const k=b.dataset.pks;
   pkView=pkView.sort===k?{...pkView,dir:-pkView.dir}:{...pkView,sort:k,dir:k==='name'||k==='speed'||k==='ship'?1:-1};paintPicker(lastP);});
 $('pSum').addEventListener('click',e=>{const b=e.target.closest('[data-m]');if(!b)return;const m=b.dataset.m==='auto'?null:b.dataset.m;
   if(m===S.planMode)return;S.planMode=m;czIdx=0;refreshNow();});
@@ -1941,7 +1936,8 @@ function paintSummary(P){
   paintSkewNote();
   paintFlipBuy(P);
   A.append(el('h4',null,P.mode?'Plan Elegido · '+modeName(P.mode):'Plan Óptimo'+(sameAs?' · '+modeName(sameAs):'')));
-  {const p0=el('p','lead2');p0.append(document.createTextNode(summaryPlanText(P,sys).replace(/^./,c=>c.toUpperCase())+'. Recibirías '+fmt(P.best)+' netos estimados, después de descontar '+ded.slice(0,-1).join(', ')+' y '+ded[ded.length-1]+'. Sigue este plan:'));A.append(p0);}
+  // v1.0.49: texto corto; el detalle de cada paso está en la lista de abajo
+  {const p0=el('p','lead2');p0.append(document.createTextNode('Recibirías '+fmt(P.best)+' netos, ya sin '+ded.slice(0,-1).join(', ')+' y '+ded[ded.length-1]+'. Sigue estos pasos:'));A.append(p0);}
   const ul=el('ul');
   if(hasBB)ul.append(li('Contrato '+nBB,'bb','Al Buyback de la alianza',cnt(P.toBB.length),'Recibes '+fmt(P.bbGross),'pos'));
   if(cs.length&&S.flip){const fn=by('fN').length;
@@ -1955,8 +1951,7 @@ function paintSummary(P){
   if(S.flip){const fj=by('fJ').length+by('fJI').length;if(fj)ul.append(li('Órdenes','','Vender en Jita',cnt(fj)+(by('fJI').length?' (órdenes y venta rápida, sin contrato)':' en órdenes de venta (sin contrato)'),null));}
   const nn=by('null').length+by('rNull').length+by('fN').length;if(nn&&!S.flip)ul.append(li('Órdenes','nl','Vender en '+sys,cnt(nn)+' en órdenes de venta (sin contrato)',null));
   if(dr.length)ul.append(li('Contrato '+nPl,'pl','A un jugador por Discord',cnt(dr.length),null));
-  A.append(ul);
-  // tiempo estimado
+  // v1.0.49: el Tiempo Estimado va dentro del plan, como un paso más de la lista (antes era un bloque aparte)
   const dMin=C.cDays[0],dMax=C.cDays[1],shipMin=cs.length*dMin,shipMax=cs.length*dMax;
   const jRows=P.rows.filter(r=>r.best==='jOrd'||r.best==='rJita'||r.best==='fJ');
   const jDays=Math.max(0,...jRows.map(r=>{const h=r.o.jita&&r.o.jita.hist;return h&&h.daily>0?r.q/h.daily:0;}));
@@ -1964,16 +1959,20 @@ function paintSummary(P){
   const bbD=hasBB?[1,3]:[0,0],plD=dr.length?[1,C.disc.days]:[0,0];
   const best=Math.ceil(Math.max(shipMin+(jRows.length?Math.max(1,jDays*0.5):0),bbD[0],plD[0],nn?nDays*0.5:0));
   const worst=Math.ceil(Math.max(shipMax+(jRows.length?Math.max(2,jDays*1.5):0),bbD[1],plD[1],nn?nDays*1.5:0));
-  B.append(el('h4',null,'Tiempo Estimado'));
-  const tm=el('div','time');const t1=el('span',null,'Mejor escenario');t1.append(el('b',null,best+(best===1?' día':' días')));const t2=el('span',null,'Peor escenario');t2.append(el('b',null,worst+(worst===1?' día':' días')));tm.append(t1,t2);B.append(tm);
-  const why=el('ul','why'),w=t=>why.append(el('li',null,t));
-  if(cs.length)w('Envío: '+dMin+' a '+dMax+(dMax>1?' días':' día')+' por contrato'+(cs.length>1?'; '+cs.length+' contratos uno tras otro = '+shipMin+' a '+shipMax+' días.':'.'));
-  if(jRows.length)w('Venta en Jita: '+(jDays<=1?'un día o menos':'unos '+Math.ceil(jDays)+' días')+' (por lo que mueve The Forge).');
-  if(nn)w('Órdenes en '+sys+': unos '+nDays+' días.');
-  if(hasBB)w('Buyback: paga cuando aceptan el contrato (1 a 3 días).');
-  if(worst>14&&C.bb.on&&P.allBB!=null&&P.rows.every(r=>r.g.bb!=null))w('Plan largo: si necesitas el ISK antes, todo al Buyback ('+fmt(P.allBB)+') se cobra en pocos días.');
-  if(P.missing.length)w('Sin precio (no entran en el total): '+cnt(P.missing.length)+'.');
-  B.append(why);
+  const why=[];
+  if(cs.length)why.push('envío '+dMin+'–'+dMax+(dMax>1?' días':' día')+(cs.length>1?' × '+cs.length+' contratos':''));
+  if(jRows.length)why.push('Jita '+(jDays<=1?'≤1 día':'~'+Math.ceil(jDays)+' días'));
+  if(nn)why.push(sys+' ~'+nDays+' días');
+  if(hasBB)why.push('Buyback 1–3 días');
+  if(dr.length)why.push('jugador 1–'+C.disc.days+' días');
+  const dTxt=best===worst?best+(best===1?' día':' días'):best+' a '+worst+' días';
+  ul.append(li('Tiempo','tm',dTxt,why.join(' · ')||null,null));
+  A.append(ul);
+  const notes=[];
+  if(worst>14&&C.bb.on&&P.allBB!=null&&P.rows.every(r=>r.g.bb!=null))notes.push('Plan largo: si necesitas el ISK antes, todo al Buyback ('+fmt(P.allBB)+') se cobra en pocos días.');
+  if(P.missing.length)notes.push('Sin precio (no entran en el total): '+cnt(P.missing.length)+'.');
+  if(notes.length){const why2=el('ul','why');notes.forEach(t=>why2.append(el('li',null,t)));A.append(why2);}
+  B.hidden=true;
   $('resIsk').textContent=fmt(P.best);$('resWhat').textContent=$('vWhat').textContent;
   paintResGain(P,sys);
 }
@@ -2217,6 +2216,9 @@ function stFlash(id){const l=$(id)&&$(id).closest('.st-f');if(!l)return;l.classL
 // ================= Idioma (v1.0.12) =================
 // Traducción en memoria: solo se activa al elegir English. Guarda los textos originales en WeakMaps
 // para volver al español sin recargar. Nada se guarda.
+// v1.0.49: el favicon toma la imagen de --sigma (así el PNG va una sola vez en el archivo)
+try{const v=getComputedStyle(document.documentElement).getPropertyValue('--sigma').trim().match(/^url\(["']?(.*?)["']?\)$/);
+  if(v){const l=document.createElement('link');l.rel='icon';l.type='image/png';l.href=v[1];document.head.append(l);}}catch(e){}
 const I18N_EN=/*__I18N__*/{};
 let I18N_RE=null,i18nObs=null,i18nBusy=false,TXT0=new WeakMap(),ATT0=new WeakMap();
 const I18N_ATTR=['title','aria-label','placeholder'];

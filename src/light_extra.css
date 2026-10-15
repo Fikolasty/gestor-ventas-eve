@@ -77,3 +77,9 @@ html.light .appr-c+.appr-c,html.light .appr-c>div+div{border-color:rgba(31,30,29
 html.light .appr-c dt{color:#5e5d59}html.light .appr-c dd{color:#1f1e1d}
 html.light .appr-c dd .copy:hover{background:#ebe8df;border-color:rgba(31,30,29,.18)}
 html.light .appr-c .t-buy dd{color:#b23b32}html.light .appr-c .t-split dd{color:#9a6a12}html.light .appr-c .t-sell dd{color:#2f7d4f}
+
+/* v1.0.49: Ver más planes y botón del análisis en Light */
+html.light .pk .pk-more{background:#f7f5ef;border-color:rgba(31,30,29,.2);color:#3d3c39}
+html.light .pk .pk-more b,html.light .more-btn b{color:#b5532f!important}
+html.light .more-btn{background:linear-gradient(90deg,rgba(217,119,87,.16),#f7f5ef 60%)!important;color:#1f1e1d!important;box-shadow:inset 3px 0 0 #d97757,0 1px 2px rgba(0,0,0,.08)!important}
+html.light .res-b li .chip.tm{background:rgba(70,120,180,.12);color:#2f5f93;border-color:rgba(70,120,180,.35)}

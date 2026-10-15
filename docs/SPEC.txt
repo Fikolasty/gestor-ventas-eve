@@ -1156,3 +1156,10 @@ Comparativa Minera: plan para Omega nuevo
 - paintResGain(P,sys): P.Vs>0 → base = Σ filas: SHIPS[best] ? g[stayK] : g[best] − prod (stayK = mejor opción sin viajar, igual que computePlan);
   si alguna fila enviada no tiene opción sin viajar, se oculta. P.Vs=0 → base = allNull (flip) / allJita, solo con SH().
   d = P.best − base; d>0 «Ganas de más» (verde), d<0 «Dejas de ganar» (ámbar, + «a cambio de vender más rápido» si hay r.fast).
+
+==================== v1.0.49 ====================
+- paintPicker: pkView.open (false al limpiar). Cerrado: solo filas 'auto' y el plan elegido; botón .pk-more[data-pkmore] «Ver más planes (N)» / «Ocultar los demás planes». Filtros solo abiertos.
+- paintSummary: lead2 corto; Tiempo como <li> con chip .tm (mejor a peor días · motivos cortos); avisos en ul.why; #sumP2 oculto. Fuera summaryPlanText.
+- .more-btn (#bDeep) con el estilo de .pk-o.on. Light en light_extra.css.
+- build: --athanor:url(fondo) en :root y var(--athanor) en body::before (normal y Light); favicon creado en JS desde --sigma. index.html 1,28 MB.
+- ESI_POOL=8.

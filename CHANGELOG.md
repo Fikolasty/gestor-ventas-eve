@@ -2,6 +2,22 @@
 
 Cambios por versión del Gestor de Ventas. La más nueva arriba. El detalle técnico completo está en `docs/SPEC.txt`.
 
+## 1.0.49 — Planes plegados, plan más corto y página más liviana
+*2026-10-15*
+
+**Elige un Plan**
+- Solo se ven el Plan Óptimo y el plan que elijas. Los demás aparecen con **Ver más planes (N)**; los filtros Todos / Rápidos / Sin envío salen al abrirlos.
+
+**Plan Óptimo**
+- Texto corto: «Recibirías X netos, ya sin taxes, broker y envío. Sigue estos pasos:». El detalle está en la lista.
+- **Tiempo Estimado** va dentro del plan, como una fila más («Tiempo · 7 a 21 días · envío 1–3 días · Jita ≤1 día…»). Los avisos (plan largo, sin precio) siguen debajo si aplican.
+- «Revisa cada destino… Ver el análisis» con el mismo estilo que el plan elegido (borde y franja arcilla), igual que «Ver más planes».
+
+**Optimización (sin quitar nada)**
+- La imagen de fondo y el logo iban dos veces dentro del archivo: ahora una sola. La página pasa de 2,04 MB a 1,28 MB (−37 %), carga más rápido.
+- Consultas a ESI: 8 ítems a la vez (con los reintentos de 1.0.46), casi el doble de rápido que con 4.
+- Fuera código que ya no se usaba (el texto largo del plan).
+
 ## 1.0.48 — Resultado en dos mitades
 *2026-10-15*
 

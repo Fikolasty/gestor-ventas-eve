@@ -6,7 +6,6 @@
 <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src data: blob: https://images.evetech.net; connect-src https://esi.evetech.net https://images.evetech.net; base-uri 'none'; form-action 'none'; object-src 'none'">
 <meta name="referrer" content="no-referrer">
 <title>Gestor de Ventas · SIGMA GRINDSET</title>
-<link rel="icon" type="image/png" href="__SIGMA__">
 <style>
 /* ================= Gestor de Ventas v__VER__ =================
    Paleta: azul de base, naranja = acción, verde/rojo = ganancia/pérdida.
@@ -14,6 +13,7 @@
 *{box-sizing:border-box;margin:0;padding:0}
 :root{
   --sigma:url(__SIGMA__);
+  --athanor:url(__ATHANOR__); /* v1.0.49: el fondo va una sola vez; se usa con var(--athanor) */
   --vg:url(__VG__);
   --void:#262624; --hull:#30302e; --hull2:#353533; --line:rgba(222,220,209,.12); --line2:rgba(222,220,209,0.132);
   --txt:#faf9f5; --mut:#c2c0b6; --dim:#9c9a92;
@@ -29,7 +29,7 @@ body{background:var(--void);color:var(--txt);font:16px/1.6 var(--f-ui);min-heigh
 /* Fondo FIJO: la foto se queda quieta y solo se desplaza la página. Las dos capas fijas van en su propia
    capa de composición (translateZ + will-change), así el scroll no las vuelve a dibujar. */
 body{position:relative}
-body::before{content:"";position:fixed;inset:0;z-index:-2;transform:translateZ(0);will-change:transform;background:var(--void) url(__ATHANOR__) 0% 0/cover no-repeat}
+body::before{content:"";position:fixed;inset:0;z-index:-2;transform:translateZ(0);will-change:transform;background:var(--void) var(--athanor) 0% 0/cover no-repeat}
 /* Overlay cinematográfico: la Keepstar a la izquierda, el lado del contenido más oscuro, franjas tipo cine y líneas finas de pantalla */
 body::after{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;transform:translateZ(0);will-change:transform;background:
   repeating-linear-gradient(180deg,rgba(255,255,255,.012) 0 1px,transparent 1px 3px),
@@ -870,7 +870,7 @@ html.lite .panel,html.lite .ct,html.lite .alt-grid>div,html.lite .rx-c,html.lite
    Grises cálidos, texto casi blanco, serif para lo que se lee (títulos y explicaciones), sans para la interfaz.
    Color solo para números (verde/rojo), alertas (ámbar) y la acción principal (arcilla). */
 body{background:#262624;color:var(--txt);-webkit-font-smoothing:antialiased}
-body::before{background:#262624 url(__ATHANOR__) 0% 0/cover no-repeat;opacity:.06;filter:grayscale(1)}
+body::before{background:#262624 var(--athanor) 0% 0/cover no-repeat;opacity:.06;filter:grayscale(1)}
 body::after{background:none}
 *{text-shadow:none!important}
 .panel,.ct,.sh-card,.scn>div,fieldset.st,.hp-c,.pill,.btn,.ghost,.copy,.cz-b,.totop,.sh-kpi>div,.ct-sum,.call,.lot,.rx>div,.res-b li{box-shadow:none!important}
@@ -1070,6 +1070,17 @@ html.lite .ct,html.lite .sh-card,html.lite .scn>div,html.lite fieldset.st,html.l
 .res-side.up .num{color:var(--gain)!important;text-shadow:0 0 22px rgba(53,194,110,.2)!important}
 .res-gs{display:block;font-size:.88rem;color:var(--mut);line-height:1.45}
 @media(max-width:760px){.res-top{grid-template-columns:minmax(0,1fr)}.res-side{padding:12px 0 0;border-left:0;border-top:1px solid rgba(222,220,209,.1)}}
+/* v1.0.49: «Ver más planes» y botón del análisis con el mismo estilo que el plan elegido (simetría visual) */
+.pk .pk-more{display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%;margin-top:6px;padding:10px 14px 10px 44px;border-radius:10px;
+  border:1px dashed rgba(222,220,209,.24);background:rgba(21,21,21,.6);color:#e5e3da;font:500 .95rem var(--f-ui);cursor:pointer;text-align:left}
+.pk .pk-more b{font:600 .9rem var(--f-ui);color:#e8a588}
+.pk .pk-more:hover{border-style:solid;border-color:rgba(217,119,87,.6);background:#1c1a19}
+.more-btn{border:1px solid #d97757!important;border-radius:10px!important;background:linear-gradient(90deg,rgba(217,119,87,.14),rgba(21,21,21,.95) 60%)!important;
+  box-shadow:inset 3px 0 0 #d97757,0 2px 6px rgba(0,0,0,.45)!important;padding:12px 14px 12px 18px!important;font-size:1rem!important;color:#f0eee6!important}
+.more-btn b{color:#e8a588!important}
+.more-btn:hover{background:linear-gradient(90deg,rgba(217,119,87,.22),rgba(28,26,25,.95) 60%)!important}
+.more-btn[aria-expanded="true"] b{color:#c2c0b6!important}
+.res-b li .chip.tm{background:rgba(122,170,224,.13);color:#a9c9ee;border-color:rgba(122,170,224,.42)}
 /* v1.0.7: interruptor "Contar envío" */
 .sw{display:inline-flex;align-items:center;gap:8px;cursor:pointer;font-size:.9rem;color:#e5e3da;text-shadow:0 1px 3px rgba(0,0,0,.9);padding:6px 10px;border-radius:10px;background:rgba(21,21,21,.75);border:1px solid rgba(222,220,209,.12)}
 .sw input{position:absolute;opacity:0;width:1px;height:1px}
