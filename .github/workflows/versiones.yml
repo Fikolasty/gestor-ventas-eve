@@ -41,3 +41,23 @@ jobs:
               --target "$sha" --title "$ver — $title" --notes-file notes.md
             echo "Creado $ver"
           done
+          # Versiones subidas por la web como «Publicar vX.Y.Z: …» o «Publicar vA.B.C - vX.Y.Z: …»
+          # (varios commits por versión): tag en el ÚLTIMO commit de cada una, notas de todas las secciones
+          # del rango en el CHANGELOG, y sin marcarla como Latest (son versiones viejas).
+          git log --format='%H %s' main | while read -r sha subject; do
+            rng=$(echo "$subject" | sed -nE 's/^Publicar (v[0-9]+\.[0-9]+\.[0-9]+)( - (v[0-9]+\.[0-9]+\.[0-9]+))?[: ].*/\1 \3/p')
+            [ -z "$rng" ] && continue
+            lo=$(echo $rng | cut -d' ' -f1); ver=$(echo $rng | cut -s -d' ' -f2); [ -z "$ver" ] && ver=$lo
+            if git rev-parse -q --verify "refs/tags/$ver" >/dev/null; then continue; fi
+            n=${ver#v}; l=${lo#v}
+            git show "$sha:CHANGELOG.md" | awk -v lo="$l" -v hi="$n" '
+              function num(v,  a){split(v,a,".");return a[1]*1000000+a[2]*1000+a[3]}
+              /^## [0-9]+\.[0-9]+\.[0-9]+ / {on=(num($2)>=num(lo)&&num($2)<=num(hi))}
+              on {print}' > notes.md
+            title=$(git show "$sha:CHANGELOG.md" | grep -m1 "^## $n — " | sed "s/^## $n — //")
+            git show "$sha:index.html" > "gestor-ventas-$ver.html"
+            gh release create "$ver" "gestor-ventas-$ver.html" \
+              --target "$sha" --title "$ver — $title" --notes-file notes.md --latest=false
+            git tag "$ver" "$sha"
+            echo "Creado $ver (subida web)"
+          done

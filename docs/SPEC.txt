@@ -1234,5 +1234,17 @@ Revisión de v1.0.32–v1.0.39 (otra sesión, subida web) y correcciones
 - Verificado (Playwright, ESI simulado, index.html y mineria.html, 1400 px y 390 px): Retriever -> Expert System
   15 y días 1–7 con ingreso; Hulk -> 0, días 1–7 en 0 ISK, 8 días sin minar, sin fila de Expert System; Covetor
   -> vuelve a 15; inglés sin restos; sin desborde; cero errores de consola.
-- Releases v1.0.32–v1.0.39 creados a mano por la API REST (tag en el último commit de cada versión, asset
-  gestor-ventas-vX.Y.Z.html de ese commit, notas de su sección del CHANGELOG).
+- Releases v1.0.32–v1.0.39: la sesión no puede crear Releases por la API (403), así que se resuelven con el
+  workflow en v1.0.41.
+==================== v1.0.41 ====================
+Releases de las versiones subidas por la web
+- .github/workflows/versiones.yml: segundo bucle tras el normal. Recorre main del más nuevo al más viejo y
+  toma los asuntos «Publicar vX.Y.Z[: ]…» o «Publicar vA.B.C - vX.Y.Z[: ]…» (sed -nE). Versión = la más alta del
+  rango. Si el tag no existe: notas = todas las secciones «## n » del CHANGELOG de ese commit con
+  A.B.C <= n <= X.Y.Z (awk, comparación numérica), título = su sección «## X.Y.Z — », asset = index.html de
+  ese commit, `gh release create … --latest=false`, y `git tag` local para que los commits más viejos de la
+  misma versión se salten (así gana el ÚLTIMO commit de cada versión).
+- Probado en seco contra main: v1.0.39 (7860516), v1.0.38 (b6e61a7), v1.0.37 (6560afc), v1.0.36 (98f1dd4),
+  v1.0.35 (f350a10), v1.0.34 (6c86776, notas de 1.0.34 + 1.0.33 + 1.0.32). v1.0.32 y v1.0.33 no tienen
+  Release propio: se publicaron juntas en v1.0.34 y no existe un index.html de cada una.
+- La regla sigue: cada versión en UN commit «vX.Y.Z — título». El bucle nuevo es solo red de seguridad.
