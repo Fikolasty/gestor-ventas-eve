@@ -2,6 +2,14 @@
 
 Cambios por versión del Gestor de Ventas. La más nueva arriba. El detalle técnico completo está en `docs/SPEC.txt`.
 
+## 1.0.62 — Ticker de Skill Points, aviso de inicio y Tasación junto al pegado
+*2026-10-15*
+
+- **Ticker**: el anuncio «Gratis · 1 Millón de Skill Points» corre en bucle en el encabezado, entre SIGMA GRINDSET y Dark/Light (se pausa al pasar el mouse; clic abre el enlace). En móvil va en su propia fila. Con «reducir movimiento» queda quieto.
+- **Antes de empezar**: aviso de ancho completo arriba de la Tasación, con «Ver Guía de Uso», «Configurar Ajustes» y una **X**. Al cerrarlo no vuelve a salir en este navegador («Restablecer» en Ajustes lo vuelve a mostrar).
+- **Tasación | Pegar**: la Tasación a la izquierda y el recuadro para pegar a la derecha, misma altura. Sin items, el recuadro ocupa todo el ancho.
+- Fuera la tarjeta vieja «Gratis / Antes de empezar» y sus estilos.
+
 ## 1.0.61 — Guía de Uso actualizada
 *2026-10-15*
 

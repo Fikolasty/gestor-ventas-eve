@@ -1238,3 +1238,8 @@ Comparativa Minera: plan para Omega nuevo
 
 ==================== v1.0.61 ====================
 - #help reescrito (textos y traducciones). #help .hp-c/.hp-t>div con fondo #0b0b0b inset; .hp-n con gradiente arcilla. Comentarios «CCP» → «EVE».
+
+==================== v1.0.62 ====================
+- header .top: .brand | button.ticker[data-link=referral] (.tk-track con 4 copias, animación tk 28 s, pausa en hover) | .top-theme. Móvil: ticker en fila propia.
+- aside#startNote (fuera de .hero-intro): oculto si localStorage «gestorVentas.aviso.v1»="1"; #startNoteX lo guarda. stReset también lo borra.
+- .hero-intro = #appr | .paste (antes .paste iba debajo). Fuera .hero-side, .ref y su CSS.

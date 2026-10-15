@@ -2094,6 +2094,10 @@ document.querySelectorAll('#settings fieldset.st').forEach(f=>{const l=f.querySe
   l.addEventListener('click',t);l.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();t();}});});
 const stAll=open=>document.querySelectorAll('#settings fieldset.st').forEach(f=>{f.classList.toggle('closed',!open);const l=f.querySelector('legend');if(l)l.setAttribute('aria-expanded',String(open));});
 $('stOpenAll').addEventListener('click',()=>stAll(true));$('stCloseAll').addEventListener('click',()=>stAll(false));
+// v1.0.62: «Antes de empezar» sale solo hasta que lo cierras (se recuerda en este navegador, junto a los Ajustes)
+const SN_KEY='gestorVentas.aviso.v1';
+try{$('startNote').hidden=localStorage.getItem(SN_KEY)==='1';}catch(e){$('startNote').hidden=false;}
+$('startNoteX').addEventListener('click',()=>{slide($('startNote'),false);try{localStorage.setItem(SN_KEY,'1');}catch(e){}});
 // v104: botones de «Antes de empezar»: abren el panel; si ya está abierto, solo se desplaza (no lo cierran)
 $('heroHelp').addEventListener('click',()=>togglePanel('help',true));$('heroSettings').addEventListener('click',()=>togglePanel('settings',true));
 [['cTax','tax'],['cBroker','broker'],['cBrokerNull','brokerNull'],['cScc','scc'],['cMargin','margin'],['cProd','prod']].forEach(([id,k])=>
@@ -2269,7 +2273,7 @@ function stRestore(){let o=null;try{o=JSON.parse(localStorage.getItem(ST_KEY)||'
 $('settings').addEventListener('input',stSave);$('settings').addEventListener('change',stSave);
 $('themeLight').addEventListener('change',stSave);
 $('stReset').addEventListener('click',()=>{if(!confirm('¿Volver todos los Ajustes a los valores de fábrica?'))return;
-  try{localStorage.removeItem(ST_KEY);}catch(e){}stBusy=true;location.reload();});
+  try{localStorage.removeItem(ST_KEY);localStorage.removeItem(SN_KEY);}catch(e){}stBusy=true;location.reload();});
 addEventListener('pagehide',()=>{if(stT){clearTimeout(stT);stSaveNow();}});
 
 // arranque
