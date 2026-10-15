@@ -2,6 +2,13 @@
 
 Cambios por versión del Gestor de Ventas. La más nueva arriba. El detalle técnico completo está en `docs/SPEC.txt`.
 
+## 1.0.47 — Tasación mitad y mitad
+*2026-10-15*
+
+- La Tasación y las tarjetas de la derecha ocupan la mitad cada una.
+- Las filas de las dos columnas tienen la misma altura: las líneas divisoras quedan alineadas.
+- «Precios de» dice solo «Jita 4-4», sin la hora.
+
 ## 1.0.46 — Pegado con espacios en vez de tabs
 *2026-10-15*
 

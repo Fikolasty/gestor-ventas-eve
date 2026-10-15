@@ -2008,9 +2008,9 @@ function paintAppraisal(){
   let vB=0,vS=0,vol=0,u=0;its.forEach(o=>{vol+=(o.m3u||0)*o.qty;u+=o.qty;});priced.forEach(o=>{vB+=(tb(o)||0)*o.qty;vS+=(ts(o)||0)*o.qty;});
   const g=el('div','appr-g'),colL=el('dl','appr-c'),colR=el('dl','appr-c appr-p');
   const cell=(col,k,v,c,cp)=>{const d=el('div',c||null);d.append(el('dt',null,k));const dd=el('dd','num');
-    if(typeof v==='number')dd.append(copyBtn(Math.round(v),fmt(v)));else if(cp!=null)dd.append(copyBtn(cp,v));else dd.textContent=v;d.append(dd);col.append(d);};
+    if(typeof v==='number')dd.append(copyBtn(Math.round(v),fmt(v)));else if(cp!=null)dd.append(copyBtn(cp,v));else dd.append(el('span','appr-v',v));d.append(dd);col.append(d);}; // v1.0.47: misma caja en todas las filas
   const ok=priced.length>0,v2=Math.round(vol*100)/100;
-  cell(colL,'Precios de','Jita 4-4'+(S.pricedAt?' · '+S.pricedAt:''));
+  cell(colL,'Precios de','Jita 4-4');
   cell(colL,'Volumen',NF2.format(v2)+' m³',null,String(v2)); // 2 decimales, como Janice; clic copia el número
   cell(colL,'Ítems',its.length+(its.length===1?' ítem · ':' ítems · ')+fmtQ(u)+' u.'+(priced.length<its.length?' ('+priced.length+' con precio)':''));
   cell(colR,'Buy',ok?vB:'—','t-buy');cell(colR,'Split',ok?(vB+vS)/2:'—','t-split');cell(colR,'Sell',ok?vS:'—','t-sell');
