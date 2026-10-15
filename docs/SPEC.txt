@@ -1185,3 +1185,11 @@ Etiqueta del grupo de naves encima (corrige envoltura)
   flex:1 1 0). En v1.0.36 la etiqueta lateral restaba 58 px y el grupo
   Barge (etiquetas más largas) se partía 2+1 en vivo.
 - Pendiente verificar en vivo tras publicar.
+==================== v1.0.38 ====================
+Nota Covetor: compresion en el espacio, nadie recoge mineral
+- La nota de Covetor ya no dice que alguien te recoja el mineral: nadie
+  recoge mineral. El booster comprime en el espacio 10 a 1 (1000 m3 se
+  vuelven 100 m3), asi que minas hasta que se acabe el material sin ir
+  a la estacion. Los numeros no cambian: el calculo con boost ya
+  asumia esto (sin viajes).
+- Pendiente verificar en vivo tras publicar.
