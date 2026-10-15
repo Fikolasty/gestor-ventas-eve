@@ -48,7 +48,7 @@ La copia incluye pedidos de: reducir la capa gris sobre la imagen, mantenerla vi
 
 Último pedido de la copia: «En todas las secciones menos en contratos la palabra courier debe de ser envio.»
 
-**Estado:** **implementado en v1.0.67 con verificación estática**. Revisar visualmente producción después del despliegue y reportar cualquier texto residual en contexto. En src/script.js de v1.0.66 quedan cadenas visibles como «Manda el item ... mediante courier», «... va en el courier», «... sin descontar courier», «... con courier», y el interruptor «Courier On/Off». También hay términos «Courier» legítimos para tipos/campos de contratos. Recorrrer UI y traducciones con cuidado.
+**Estado:** **implementado en v1.0.67 y completado en Ajustes en v1.0.68**. Comprobación estática; pendiente revisión visual en Firefox. En src/script.js de v1.0.66 quedan cadenas visibles como «Manda el item ... mediante courier», «... va en el courier», «... sin descontar courier», «... con courier», y el interruptor «Courier On/Off». También hay términos «Courier» legítimos para tipos/campos de contratos. Recorrrer UI y traducciones con cuidado.
 
 **Aceptación prevista:** en español se lee «envío» fuera de contratos, mientras que las denominaciones contractuales precisas conservan «Courier»; mantener funcionamiento, fórmulas e inglés semánticamente correctos.
 
@@ -122,3 +122,11 @@ Verificar el tag del primer commit marcado `[ChatGPT]` en `main`, comprobar la p
 - **Verificaciones estáticas previas al push:** coincidencia exacta del JavaScript compilado anterior contra index.html, sustitución puntual con comprobación de ocurrencias, reconstrucción de JS integrado con REFINE e I18N, verificación del número de versión y del mecanismo de tags.
 - **No ejecutado:** Playwright/Firefox, benchmark de memoria ni ESI en vivo; este cambio no toca cálculo ni peticiones, pero se requiere confirmación visual tras deploy.
 - **Riesgo y reversión:** revertir el commit v1.0.67 por SHA/tag después de comprobar dependencias; no reescribir el historial.
+
+## 10. Corrección v1.0.68 — [ChatGPT] Textos de Ajustes
+
+- Se corrigieron los tres textos visibles restantes con la palabra courier en Ajustes (Días por envío mejor/peor caso y Destinatario del envío).
+- Se conservaron IDs DOM, nombres internos y contratos de tipo Courier; se añadieron traducciones específicas al inglés.
+- Se verificaron las tres apariciones antiguas en shell y el HTML compilado y se actualizaron el diccionario, index.html, CHANGELOG, README, SPEC y PROGRESS.
+- Compilación fuente y HTML: se conserva el bloque JS existente, solo cambia el número de versión; los estilos CSS y cálculos no se modificaron.
+- Pendiente: validación de despliegue, navegador real y pruebas de regresión automatizadas posteriores.

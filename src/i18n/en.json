@@ -1345,5 +1345,8 @@
 "Solo con la ruta Jita → HY-RWO. On: llevas los items de Jita a HY-RWO con SIGMA Freight y se cuenta el envío. Off: los trajiste a Jita para venderlos allí, sin envío.": "Only with the Jita → HY-RWO route. On: you take the items from Jita to HY-RWO with SIGMA Freight and the courier is counted. Off: you brought them to Jita to sell there, no courier.",
 "Valor declarado de la carga en el envío (Jita Sell). SIGMA Freight cobra base por contrato + ISK por m³ + % del colateral.": "Declared value of the cargo in the courier (Jita Sell). SIGMA Freight charges a base per contract + ISK per m³ + % of the collateral.",
 "Envío On": "Shipping On",
-"Envío Off": "Shipping Off"
+"Envío Off": "Shipping Off",
+"Días por envío (mejor caso)": "Days per shipment (best case)",
+"Días por envío (peor caso)": "Days per shipment (worst case)",
+"Destinatario del envío": "Shipping recipient"
 }

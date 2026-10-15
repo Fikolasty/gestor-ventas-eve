@@ -2,6 +2,12 @@
 
 Cambios por versión del Gestor de Ventas. La más nueva arriba. El detalle técnico completo está en `docs/SPEC.txt`.
 
+## 1.0.68 — [ChatGPT] Completar terminología de envío en Ajustes
+*2026-10-15*
+
+- Las etiquetas Días por courier (mejor/peor caso) y Destinatario del courier pasan a Días por envío y Destinatario del envío.
+- Se actualizan los equivalentes en inglés y se mantienen las entradas antiguas del diccionario para compatibilidad.
+- Sin cambios en identificadores del DOM, contratos Courier, cálculos, API, datos de reproceso o funciones; se regenera index.html.
 ## 1.0.67 — [ChatGPT] Terminología de envío fuera de contratos
 *2026-10-15*
 
