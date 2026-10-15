@@ -116,9 +116,9 @@
 .pl-f{display:flex;flex-direction:column;gap:6px;min-width:0}
 .pl-f.pl-wide{grid-column:1/-1}
 .pl-l{font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;color:var(--dim)}
-.pl-shiprow{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
-.pl-shiprow .pl-sl{font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;color:var(--dim);min-width:3.6rem}
-.pl-shiprow .pk-flt{flex:1}
+.pl-shiprow{display:flex;flex-direction:column;gap:4px}
+.pl-shiprow .pl-sl{font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;color:var(--dim)}
+.pl-shiprow .pk-flt{width:100%}
 .pl-shiprow .pk-fb{flex:1 1 0;text-align:center}
 .pl-shiprow small{width:100%}
 .pl-f small,.pl-tile small{font-size:.78rem;color:var(--mut);line-height:1.4}
