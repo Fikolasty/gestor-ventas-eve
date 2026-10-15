@@ -2,6 +2,12 @@
 
 Cambios por versión del Gestor de Ventas. La más nueva arriba. El detalle técnico completo está en `docs/SPEC.txt`.
 
+## 1.0.39 — Porpoise sin compresión + textos sin bodega como problema
+*2026-10-14*
+
+- Porpoise da boost SIN compresión: su rendimiento efectivo ahora descuenta 2 min de viaje por bodega llena, igual que sin boost. Solo Orca y Rorqual comprimen en el espacio (efectivo = bruto). Datos reconstruidos con Pyfa (build 3579973, el mismo).
+- Textos: Covetor y Hulk con el texto exacto — solo en flota con un booster que brinde compresión en el espacio (Orca o Rorqual). Fuera toda mención de la bodega como problema (se llena en minutos, bodega pequeña, alguien que vacíe la bodega, menos viajes). Español / English.
+
 ## 1.0.38 — Nota Covetor: compresión en el espacio, nadie recoge mineral
 *2026-10-14*
 
