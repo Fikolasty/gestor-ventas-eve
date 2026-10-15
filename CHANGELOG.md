@@ -2,13 +2,20 @@
 
 Cambios por versión del Gestor de Ventas. La más nueva arriba. El detalle técnico completo está en `docs/SPEC.txt`.
 
+## 1.0.41 — Releases de las versiones subidas por la web
+*2026-10-15*
+
+- El workflow «Versiones» ahora también reconoce los commits «Publicar vX.Y.Z: …» y «Publicar vA.B.C - vX.Y.Z: …» (subidas por la web, varios commits por versión). Crea el tag en el **último** commit de cada versión, con las notas de todas las secciones del rango y sin marcarla como Latest.
+- Con eso aparecen los Releases que faltaban: **v1.0.34** (trae 1.0.32, 1.0.33 y 1.0.34, que salieron juntas) y **v1.0.35 a v1.0.39**.
+- La página no cambia (solo el número de versión).
+
 ## 1.0.40 — Revisión de v1.0.32–v1.0.39: Porpoise comprime gas y Expert System coherente
 *2026-10-15*
 
 - **Porpoise y gas**: según los datos del juego, la Porpoise sí tiene compresor de gas (Medium Gas Compressor I), pero no de moon ore ni de hielo. Ahora, con boost de Porpoise, el gas no descuenta viajes (efectivo = bruto); moon ore y hielo siguen descontando 2 min por bodega llena, como en v1.0.39. Solo cambian las 72 filas de Porpoise + gas.
 - **Expert System en 0 = sin Expert System**: al elegir una Exhumer el Expert System pasa a 0 PLEX (v1.0.36), pero la simulación seguía minando los días 1 a 7 con sus skills: contaba el ingreso sin el costo. Ahora, con 0 PLEX, la simulación usa solo tus skills desde el día 1 (no minas hasta tener Mining Barge I); si vuelves a poner el precio, vuelve a usarlo. Cuentas claras, titular, línea de tiempo y aviso cambian con eso. Español / English.
 - Textos: «compresion» → «compresión» en las notas de Covetor y Hulk (el texto no cambia).
-- **Releases que faltaban**: v1.0.32 a v1.0.39 se subieron con mensajes «Publicar v…», que el workflow no reconoce, así que no tenían tag ni Release. Se crearon a mano.
+- **Releases que faltaban**: v1.0.32 a v1.0.39 se subieron con mensajes «Publicar v…», que el workflow no reconoce, así que no tenían tag ni Release. Se resuelve en 1.0.41.
 - Verificado lo que quedaba pendiente de v1.0.35, v1.0.36 y v1.0.39. README y SPEC al día.
 
 ## 1.0.39 — Porpoise sin compresión + textos sin bodega como problema
