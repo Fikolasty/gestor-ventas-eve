@@ -2,6 +2,16 @@
 
 Cambios por versión del Gestor de Ventas. La más nueva arriba. El detalle técnico completo está en `docs/SPEC.txt`.
 
+## 1.0.42 — Plan para Omega Nuevo: implantes de minería y sección más clara
+*2026-10-15*
+
+- **Implantes de minería +5% por defecto**: Highwall MX-1005 y Michi's (moon), Yeti IH-1005 (hielo), Alchemist GH-805 (gas). Piden Cybernetics V (unos 18 días), así que el plan la entrena justo después de las skills a IV y los implantes entran en el **mes 2** (hacia el día 38–42). El mes 1 sigue sin ellos porque todavía no se pueden usar. Su precio sale aparte (una vez) con en cuántos días se pagan. Se pueden quitar con «Implantes de minería +5%: No».
+- «Remap + implantes» ahora se llama **«Remap + atributos +3»**: son implantes de atributos para entrenar más rápido, no de minería.
+- **Precio del PLEX editable en el mismo número**: haces clic en el precio y escribes (acepta «4900000», «4,900,000» o «4.9m»). «Volver al precio de ESI» aparece solo si lo cambiaste.
+- **Sección reordenada**: una tarjeta por material con el **Mes 1** (lo que te queda a los 28 días) y el **Mes 2 en adelante** (profit mensual) juntos; un solo **Detalle** con pestañas Moon ore / Hielo / Gas (cuentas, línea de tiempo y gráfico más anchos), en vez de tres columnas apretadas. El boost del mes 2 pasó a «Tu Escenario». Pasos del encabezado al día (5 pasos, incluido el mes 2).
+- Línea de tiempo con el día de los implantes; la Exhumer se corre por Cybernetics V. «Juntas el 281,419% del Omega» ahora dice «Juntas 2,814 veces el Omega». Las etiquetas «Inversión» e «Inversión + próximo Omega» del gráfico ya no se enciman.
+- Español / English (también arregla «… para cubrir todo. Prueba con más horas…», que salía en español). Tema claro y móvil revisados.
+
 ## 1.0.41 — Releases de las versiones subidas por la web
 *2026-10-15*
 

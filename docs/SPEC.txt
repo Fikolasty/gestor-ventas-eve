@@ -1248,3 +1248,30 @@ Releases de las versiones subidas por la web
   v1.0.35 (f350a10), v1.0.34 (6c86776, notas de 1.0.34 + 1.0.33 + 1.0.32). v1.0.32 y v1.0.33 no tienen
   Release propio: se publicaron juntas en v1.0.34 y no existe un index.html de cada una.
 - La regla sigue: cada versión en UN commit «vX.Y.Z — título». El bucle nuevo es solo red de seguridad.
+==================== v1.0.42 ====================
+Plan para Omega Nuevo: implantes de minería y sección más clara (pedido del usuario)
+- Implantes de minería: S.pimp ('1' por defecto | '0'). SDE: los +5% (MX-1005, Michi's, IH-1005, GH-805) piden
+  Cybernetics V; Cybernetics V desde cero = MINE.train.cyber[mat][patt] horas (~17–18 días). Orden del plan:
+  barge -> rendimiento a IV -> Cybernetics V -> Exhumer (Cybernetics va después de las skills a IV porque antes
+  retrasaría todo el rendimiento del mes 1). Sin cambio de datos: en la UI implDay = yieldDay + cyb,
+  exhDay += cyb (si pimp), y la lista paso a paso inserta «Cybernetics I → V — día X ← implantes +5%» y corre
+  los días siguientes. Mes 1 (MINE.sim/simx) sigue sin implantes (no se pueden usar antes de ~día 38).
+  Mes 2: steadyCalc usa la fila [boost2, 4, pimp, mat, ptier, barge]; costo de implantes = fitCost(MINE.impl[m])
+  (sell Jita, una vez) y días para pagarlos = costo / (ISK/h × horas). needPrices del plan incluye MINE.impl.
+- patt 'remap3' se rotula «Remap + atributos +3» (antes «Remap + implantes»: se confundía con los de minería).
+- PLEX: .pl-plexw con <input class=pl-plexin> como valor grande (field-sizing:content). focus -> número crudo
+  seleccionado; change -> parseISK (acepta 4900000 / 4,900,000 / 4.9m / 4,9 M / 4.9kk / 4.9b) -> S.plexManual
+  si difiere; Escape cancela; .pl-plexrs «Volver al precio de ESI» visible solo con precio manual. Fuera
+  .pl-plexv/.pl-plexe/.pl-plexok/.pl-plexed.
+- Layout: «Tu Escenario» en 3 bloques (cuenta y nave · entrenamiento, implantes y boost · precios). Boost del
+  mes 2 (S.boost2) movido aquí. Tarjeta por material (.pl-vc): «Mes 1 · a los 28 días» (balance, pago del
+  Omega, barra) + «Mes 2 en adelante · cada mes» (.pl-big2 profit, ISK/h, implantes) + botón .pl-more.
+  Fuera .pl-steady y .pl-dets; nuevo .pl-det con SEG('dmat') y .pl-detg en 2 columnas (cuentas + fit |
+  línea de tiempo + ISK juntado). drawCum: si Inversión e Inversión + Omega quedan a <16 px solo se rotula
+  la segunda. Barra: cover >= 10 -> «Juntas N veces el Omega». Hero: 5 pasos (5.º color #8b78e6).
+- en.json: +66 claves, -25 huérfanas de este cambio; arreglada la frase «… para cubrir todo. Prueba con más
+  horas al día, otra nave …» (la clave decía «otra barge»). light_extra.css: .pl-plexin transparente.
+- Verificado (Playwright, ESI simulado; index.html y mineria.html; 1400 y 390 px; oscuro y claro): edición
+  del PLEX (5.5m -> 5,500,000, «Precio que escribiste», vuelve a ESI), pestañas del detalle, implantes Sí/No,
+  Hulk sin Expert System, 1 y 5 cuentas en inglés sin restos (con los desplegables abiertos), sin desborde,
+  cero errores de consola.
