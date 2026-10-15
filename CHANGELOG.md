@@ -2,6 +2,12 @@
 
 Cambios por versión del Gestor de Ventas. La más nueva arriba. El detalle técnico completo está en `docs/SPEC.txt`.
 
+## 1.0.46 — Pegado con espacios en vez de tabs
+*2026-10-15*
+
+- Si al copiar del juego las columnas llegan separadas por espacios en vez de tabs, la página tomaba toda la línea como nombre («Platinum 13,320 Moon Materials Material»): la cantidad quedaba en 1 y la API no encontraba el ítem, así que la Tasación y el plan salían vacíos. Ahora 2 o más espacios se leen como columnas, y con un solo espacio el nombre llega hasta el primer número suelto.
+- Conexión con ESI más estable: hasta 3 reintentos con espera si la API corta o pide esperar, y 4 consultas a la vez en vez de 10.
+
 ## 1.0.45 — Tasación del lote como Janice
 *2026-10-15*
 

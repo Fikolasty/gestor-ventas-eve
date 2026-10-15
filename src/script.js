@@ -238,12 +238,16 @@ function parseSpaceLine(raw){ // escrito a mano o pegado con espacios
   name=cells[0];
   if((m=name.match(/^(.+?)\s+x?\s*(\d[\d.,]*)$/i))){name=m[1].trim();qty=num(m[2]);}
   else if((m=name.match(/^(\d[\d.,]*)\s*x?\s+(.+)$/i))){name=m[2].trim();qty=num(m[1]);}
+  // v1.0.46: «Platinum 13,320 Moon Materials Material» con espacios simples: nombre hasta el primer número suelto
+  else if((m=name.match(/^(.*?[a-z].*?)\s+(\d[\d.,]*)\s+(.*[a-z].*)$/i))){name=m[1].trim();qty=num(m[2]);}
   if(qty==null&&(total!=null||m3!=null))qty=1;
   return{name,qty,total,m3,qtyCol:qty!=null};
 }
 function parseLine(raw){
   const line=String(raw);if(!line.trim())return null;
-  const r=line.includes('\t')?parseTabLine(line):parseSpaceLine(line);
+  // v1.0.46: si el portapapeles cambió los tabs por espacios (2 o más seguidos), se tratan como columnas
+  const cols=line.includes('\t')?line:(/\S[ \u00a0\u202f]{2,}\S/.test(line)?line.replace(/[ \u00a0\u202f]{2,}/g,'\t'):null);
+  const r=cols!=null?parseTabLine(cols):parseSpaceLine(line);
   if(r.bad)return r;
   r.name=(r.name||'').trim();
   if(!r.name||r.name.length>120||!/[a-z]/i.test(r.name)||!(r.qty>0))return{bad:true};
@@ -341,22 +345,31 @@ function clearUndo(){undoStack=[];paintUndo();}
 const ESI_BASES=['https://esi.evetech.net/latest','https://esi.evetech.net'];
 let esiBase=null;
 const idCache={},volCache={},volAlt={},grpOf={},catCache={};
+// v1.0.46: reintentos. Firefox muestra «NetworkError» cuando ESI corta o responde sin cabeceras CORS
+// (p. ej. límite de peticiones o un error pasajero). Se reintenta con espera (0,8 s → 1,6 s → 3,2 s) antes de rendirse.
+// Sin cache:'no-store' (no añade cabeceras extra; ESI ya cachea 5 min).
+const sleep=ms=>new Promise(r=>setTimeout(r,ms));
 async function esiFetch(path,opt){
   let last=null;
-  for(const b of (esiBase?[esiBase]:ESI_BASES)){
-    try{
-      const r=await fetch(b+path,Object.assign({credentials:'omit',referrerPolicy:'no-referrer',cache:'no-store'},opt||{}));
-      if(r.ok){esiBase=b;return r;}
-      if(r.status===420||r.status===429)throw new Error('la API pidió esperar (límite de peticiones); prueba en un minuto');
-      if(r.status===401||r.status===403)throw new Error('acceso denegado ('+r.status+')');
-      last=new Error('respondió '+r.status);
-    }catch(e){if(/límite|denegado/.test(e.message))throw e;last=e;}
+  for(let tryN=0;tryN<4;tryN++){
+    if(tryN)await sleep(800*Math.pow(2,tryN-1));
+    for(const b of (esiBase?[esiBase]:ESI_BASES)){
+      try{
+        const r=await fetch(b+path,Object.assign({credentials:'omit',referrerPolicy:'no-referrer'},opt||{}));
+        if(r.ok){esiBase=b;return r;}
+        if(r.status===401||r.status===403)throw new Error('acceso denegado ('+r.status+')');
+        if(r.status===420||r.status===429){last=new Error('la API pidió esperar (límite de peticiones); prueba en un minuto');break;}
+        last=new Error('respondió '+r.status);
+        if(r.status===404||r.status===400)continue; // otra base
+      }catch(e){if(/denegado/.test(e.message))throw e;last=e;}
+    }
+    if(last&&/respondió 40[04]/.test(last.message)&&!esiBase)break; // ruta inexistente en todas las bases: no insistir
   }
   throw last||new Error('sin respuesta');
 }
 // v105: hasta 10 ítems a la vez (cada uno pide libro, tipo e historial en paralelo). ESI usa HTTP/2,
 // así que muchas peticiones comparten una sola conexión; si ESI pide esperar (420/429) se avisa igual que antes.
-const ESI_POOL=10;
+const ESI_POOL=4; // v1.0.46: 4 a la vez (antes 10) para no saturar ESI
 async function pool(list,n,fn){let i=0;await Promise.all(Array.from({length:Math.min(n,list.length)},async()=>{while(i<list.length){const k=i++;await fn(list[k],k);}}));}
 async function resolveIds(names){
   const miss=names.filter(n=>idCache[n.toLowerCase()]===undefined);

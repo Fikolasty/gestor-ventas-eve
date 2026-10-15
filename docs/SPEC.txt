@@ -1141,3 +1141,8 @@ Comparativa Minera: plan para Omega nuevo
 - paintAppraisal() (de v1.0.29): #appr dentro de .hero-intro; .appr-g con dos <dl class="appr-c">; copyBtn en Volumen (2 decimales) y Buy/Split/Sell.
   Oculto sin ítems (.hero-intro.no-appr). Se llama en refreshNow y al limpiar.
 - .hero-side agrupa .ref y .start-note a la derecha (340 px máx.); sin .hero-p («Qué hace»).
+
+==================== v1.0.46 ====================
+- parseLine: sin tabs, 2+ espacios (incluye NBSP y NNBSP) se convierten en tab y la línea pasa por parseTabLine.
+- parseSpaceLine: nuevo caso «Nombre cantidad Grupo Categoría»: nombre = texto hasta el primer número suelto seguido de más texto.
+- esiFetch: 4 intentos (espera 0,8/1,6/3,2 s) ante error de red, 5xx o 420/429; 400/404 prueba la otra base sin insistir. Sin cache:'no-store'. ESI_POOL=4.
