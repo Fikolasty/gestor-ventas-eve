@@ -1253,3 +1253,6 @@ Comparativa Minera: plan para Omega nuevo
 
 ==================== v1.0.65 ====================
 - #settings fieldset.st y .st-f con el negro de la Guía. .sub-h global con el estilo de #settings .st-sec-t (rayita ::before, mayúsculas arcilla; .ic oculta).
+
+==================== v1.0.66 ====================
+- Copy de #settings, DEPS y pasos sin « »; referencias a secciones actuales. en.json actualizado.

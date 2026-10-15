@@ -2,6 +2,13 @@
 
 Cambios por versión del Gestor de Ventas. La más nueva arriba. El detalle técnico completo está en `docs/SPEC.txt`.
 
+## 1.0.66 — Textos de Ajustes sin comillas
+*2026-10-15*
+
+- Ajustes y Pasos sin «comillas»: «Restablecer» → el botón Restablecer; «Relists» → la casilla Relists del desglose; «Contratos y Envío», «Broker's fee», «no», «Activa …» sin comillas; el nombre de la refinería explica «la parte antes del guion».
+- Textos que apuntaban a secciones viejas («Tus Contratos», «Precios para Listar») ahora apuntan a donde está cada cosa hoy (este paso, Contratos y Envío, Extras).
+- Traducciones al inglés actualizadas.
+
 ## 1.0.65 — Ajustes con el estilo de la Guía y títulos divisores
 *2026-10-15*
 

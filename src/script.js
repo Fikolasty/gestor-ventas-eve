@@ -800,11 +800,11 @@ function paintGuide(ol,r){
   }else if(g.k==='bb'){
     step('Qué Hacer','Usa el Buyback de tu alianza. Crea un contrato Item Exchange con el destinatario y la ubicación definidos en Ajustes.');
     step('Pago del Buyback',copyBtn(r.bbUnit,fmtP(r.bbUnit)),' por unidad, con el tax del programa ('+pct(r.bbTax)+'%) ya descontado. Esta ruta no incluye courier ni Sales Tax de mercado.');
-    step('Cómo Crear el Contrato','Consulta «Tus Contratos» y copia los datos indicados. Verifica que el Buyback acepte el item antes de enviarlo.');
+    step('Cómo Crear el Contrato','Copia los datos del contrato que salen en este paso o en Contratos y Envío. Verifica que el Buyback acepte el item antes de enviarlo.');
   }else{
     const toJ=g.k==='rJita';
     step('Qué Hacer','Reprocesa el item en '+refName()+'. Después '+(toJ?'envía los materiales resultantes a Jita para venderlos con órdenes.':'vende los materiales resultantes con órdenes en tu estructura de Nullsec.'));
-    step('Precios de los Productos','Consulta «Precios para Listar» y el desglose de reproceso. Pon una sell order por cada material; duración sugerida: 3 meses.');
+    step('Precios de los Productos','Los precios de cada material están en el desglose de reproceso. Pon una sell order por cada material; duración sugerida: 3 meses.');
     if(g.tol!=null)step('Margen de Seguridad',g.tol>0?'Los productos pueden perder hasta '+pct(g.tol)+'% de valor antes de que la alternativa '+altLab+' iguale el resultado estimado.':'La diferencia es pequeña. Si bajan los precios de los materiales, vuelve a comparar con '+altLab+'.');
   }
 }
@@ -1247,7 +1247,7 @@ function paintVerdict(P){
   const tk=C.underTk>0?' − '+C.underTk+' tick'+(C.underTk===1?'':'s'):'';
   const STEP={
     bb:['Contrato al Buyback','En '+sys,'Item Exchange a '+($('bbAvail').value||'el programa')+' en '+($('bbLoc').value||sys)+'.'],
-    disc:['Vender a un jugador','En '+sys,'Publica la oferta WTS en Discord; el detalle está en «Vender a Jugadores».'],
+    disc:['Vender a un jugador','En '+sys,'Publica la oferta WTS en Discord; los pasos están en Extras, Vender a Jugadores.'],
     null:['Publicar órdenes en '+sys,'En '+sys,'Precio por unidad para tu sell order. Clic en el precio para copiarlo.'],
     rNull:['Reprocesar y vender en '+sys,'En '+sys,'Reprocesa en '+refName()+' y publica cada material al precio indicado.'],
     rJita:['Reprocesar para llevar a Jita','En '+sys,'Reprocesa en '+refName()+'; los materiales van en el courier y se venden en Jita.'],
@@ -2182,11 +2182,11 @@ readSkills(false); // al abrir: niveles por defecto, sin tocar los Taxes ya escr
 
 // v1.0.13: campos que no aplican se apagan (con el motivo) según lo que esté activo
 const DEPS=[
-  [['iceNull','iceDisc','iceJita','iceDays'],()=>!$('iceOn').checked,'Activa «Reglas especiales para hielo».'],
-  [['iceDisc'],()=>$('iceOn').checked&&$('iceNull').value!=='jbuy','Solo con «Jita Buy menos un %».'],
-  [['bbName','bbTax','bbBase','bbAvail','bbLoc','bbExp','bbDesc','bbSpecial'],()=>!$('bbOn').checked,'Activa «Comparar con el Buyback».'],
-  [['discBase','discPct','discDays','discLoc'],()=>!$('discOn').checked,'Activa «Comparar esta opción».'],
-  [['qdMax'],()=>!$('qdOn').checked,'Activa «Descuento por cantidad».'],
+  [['iceNull','iceDisc','iceJita','iceDays'],()=>!$('iceOn').checked,'Activa Reglas especiales para hielo.'],
+  [['iceDisc'],()=>$('iceOn').checked&&$('iceNull').value!=='jbuy','Solo con Jita Buy menos un %.'],
+  [['bbName','bbTax','bbBase','bbAvail','bbLoc','bbExp','bbDesc','bbSpecial'],()=>!$('bbOn').checked,'Activa Comparar con el Buyback.'],
+  [['discBase','discPct','discDays','discLoc'],()=>!$('discOn').checked,'Activa Comparar esta opción.'],
+  [['qdMax'],()=>!$('qdOn').checked,'Activa Descuento por cantidad.'],
   [['cDayMin','cDayMax','cAssignee'],()=>!C.shipOn,'El envío está apagado (switch del menú).'],
   [['cImpM','cNullDest'],()=>!S.flip,'Solo en la ruta Jita → HY-RWO.'],
 ];
