@@ -148,3 +148,11 @@ El usuario canceló el hosting separado y la entrega en `develop`; la rama anter
 - Comprobar el SHA de `main` antes de cada push; conciliar los cambios de cualquier colaborador. No sobrescribir trabajo ajeno.
 - Después del push, comprobar commit, tag, Actions/Pages y URL de producción antes de afirmar que el despliegue está listo.
 - No modificar fórmulas, funcionalidades ni límites de ESI/Fenris sin autorización y pruebas, conforme a esta SPEC.
+
+## 12. Comparativa Minera — incorporación v1.0.69
+
+La pestaña **Minería** se agregó a la misma página de Market Moves+. Es independiente del motor `computePlan`, se monta la primera vez que se abre y usa sus propios datos y precios ESI en memoria. La fuente de especificación del módulo y sus limitaciones es [`docs/MINING.md`](MINING.md).
+
+**Restricciones:** mantener R64 primero; gas solo del entorno Guristas de Nullsec; moon ore sin residuo; PLEX global ESI sin valores fingidos; un único gasto mensual recurrente Omega por cuenta; slider 1–100, número 1–1000; separación explícita entre progresión Omega y Nave Maxiada. Los valores del dataset Pyfa histórico no incluyen Aoede/Ingenii dentro del cálculo de yield y NO se presentan como máximo teórico absolutamente verificado.
+
+**Límites de precisión:** la ayuda del 1M SP se modela con una aproximación de 30 SP/min; la simulación histórica cubre 28 días y la proyección posterior usa skills IV/hitos Exhumer, sin determinar exactamente el mes de todas las V. Mantener visibles estas advertencias hasta que se disponga de datos nuevos y una simulación skill por skill.

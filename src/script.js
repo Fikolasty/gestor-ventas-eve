@@ -1114,7 +1114,7 @@ function focusOnly(k){
   if(k!=='plans'&&pkView.open){pkView.open=false;if(lastP)paintPicker(lastP);}
   if(k!=='deep')setSect('deep',false);
   ['ledger','pCtr','pRepro','pDisc'].forEach(id=>{if(k!==id&&$(id).open)$(id).open=false;});
-  ['settings','help'].forEach(id=>{if(k!==id&&!$(id).hidden)togglePanel(id,false);});
+  ['settings','help','mining'].forEach(id=>{if(k!==id&&!$(id).hidden)togglePanel(id,false);});
 }
 // nombre corto del mejor plan (sin "+ N más" ni "· por rapidez")
 const bestLabel=()=>$('vWhat').textContent.replace(/ · por rapidez$/,'').replace(/ \+ \d+ más$/,'');
@@ -2068,13 +2068,17 @@ syncShipSwitch();
 // v1.0.8: tema claro / oscuro (solo en memoria; empieza oscuro)
 $('themeLight').addEventListener('change',e=>{document.documentElement.classList.toggle('light',e.target.checked);$('themeTxt').textContent=e.target.checked?'Light':'Dark';});
 
+// ================= Comparativa Minera, aislada del motor del Gestor =================
+/*__MINING__*/
+
 // ================= Ajustes y Guía de Uso =================
 // v1.0.53: se abren desde el menú lateral, los botones de «Antes de empezar» y se cierran con su X.
 // force=true abre (o solo desplaza si ya está abierto); force=false cierra; sin force alterna.
 function togglePanel(id,force){const s=$(id),open=force!=null?force:s.hidden;
   if(open&&!s.hidden){s.scrollIntoView({behavior:'smooth',block:'start'});return;}
-  if(open){focusOnly(id);slide(s,true);}else s.hidden=true;
+  if(open){focusOnly(id);slide(s,true);if(id==='mining'){MineUI.mount($('mnRoot'));MineUI.shown();}}else s.hidden=true;
   document.querySelectorAll('.side-i[data-panel="'+id+'"]').forEach(x=>x.setAttribute('aria-pressed',String(open)));
+  if(id==='mining')$('mineTab').setAttribute('aria-pressed',String(open));
   if(open)s.scrollIntoView({behavior:'smooth',block:'start'});}
 // v1.0.11: menú lateral. Escritorio: se contrae a íconos. Móvil: se abre encima con fondo oscuro. Solo en memoria.
 {const mob=()=>innerWidth<=900,b=document.body;
@@ -2087,6 +2091,7 @@ function togglePanel(id,force){const s=$(id),open=force!=null?force:s.hidden;
    x.addEventListener('click',()=>{togglePanel(x.dataset.panel);if(mob())setO(false);});});}
 // v1.0.8: X dentro de la sección (fija al bajar)
 document.querySelectorAll('.x-close').forEach(b=>b.addEventListener('click',()=>togglePanel(b.dataset.close,false)));
+$('mineTab').addEventListener('click',()=>togglePanel('mining'));
 // v1.0.8: cada grupo de Ajustes es desplegable (empiezan cerrados); se abren con clic o Enter en su título
 document.querySelectorAll('#settings fieldset.st').forEach(f=>{const l=f.querySelector('legend');if(!l)return;f.classList.add('closed');
   l.tabIndex=0;l.setAttribute('role','button');l.setAttribute('aria-expanded','false');

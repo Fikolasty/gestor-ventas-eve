@@ -1,0 +1,24 @@
+name: Verificacion minera
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Sintaxis de scripts
+        run: |
+          node --check src/mining.js
+          node --check src/mining_data.js
+          node --check src/script.js
+      - name: Regresión estática de minería
+        run: node tests/mining-smoke.cjs
+      - name: Verificar generación de HTML
+        run: python3 build.py 1.0.69

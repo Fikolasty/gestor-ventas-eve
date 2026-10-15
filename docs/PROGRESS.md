@@ -130,3 +130,19 @@ Verificar el tag del primer commit marcado `[ChatGPT]` en `main`, comprobar la p
 - Se verificaron las tres apariciones antiguas en shell y el HTML compilado y se actualizaron el diccionario, index.html, CHANGELOG, README, SPEC y PROGRESS.
 - Compilación fuente y HTML: se conserva el bloque JS existente, solo cambia el número de versión; los estilos CSS y cálculos no se modificaron.
 - Pendiente: validación de despliegue, navegador real y pruebas de regresión automatizadas posteriores.
+
+## 11. Nueva entrega: v1.0.69 Comparativa Minera
+
+**Solicitud:** módulo adicional en el mismo proyecto, sin hosting independiente, estilo del gestor, R64 arriba, gas Guristas/Nullsec, PLEX ESI y Omega por cuenta; 1M SP referido y 12 meses; Nave Maxiada independiente.
+
+**Base recuperada:** tag v1.0.42 con `src/mining.js`, `src/mining_data.js`, CSS y generadores `tools/mining` (Pyfa/SDE build 3579973). Se han recuperado 864 filas de comparación y la simulación de formación anterior; no se han inventado yields.
+
+**Código de la entrega:** agregar 3 archivos `src/mining*`, 4 generadores históricos, `docs/MINING.md`; editar `src/shell.html` (navegación y panel), `src/script.js` (montaje/foco), `build.py` (compilación), `src/i18n/en.json` (traducciones), `index.html` (publicación), README/CHANGELOG/SPEC/PROGRESS.
+
+**Regresión:** el motor `computePlan` y configuración económica del gestor no se alteran; CSS nuevo aislado con `@scope (#mining)` y CSP sin hosts añadidos. Se validó sintaxis JavaScript del módulo y del script incrustado; la prueba con navegador real, ESI en vivo, costo/CPU de Aoede/Ingenii y simulación completa de skills V sigue pendiente.
+
+**Seguridad y API:** caché 5min, 2 trabajadores mineros como máximo para consultar precios de modules, 420/429 con pausa, sin borrar ni modificar los controles de la tasación anterior.
+
+**Limitaciones visibles:** 1M SP depende de referido, bono modelado como desplazamiento aproximado, meses 2–12 no incluyen progresión de todas las skills V, y Faction del dataset Pyfa no incluye upgrades storyline ultra caros; se reporta así, sin afirmaciones engañosas.
+
+**Próxima revisión:** comprobar desplegado desde GitHub Pages, iniciar tab en móvil/escritorio Firefox, comprobar que las nuevas cadenas inglesas se traducen, cargar ESI/PLEX e identificar cualquier fricción visual. Regenerar Pyfa para incorporar Aoede/Ingenii y entrenamiento exacto a nivel V antes de dar cifras definitivas de maxeo.

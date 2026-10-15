@@ -2,6 +2,16 @@
 
 Cambios por versión del Gestor de Ventas. La más nueva arriba. El detalle técnico completo está en `docs/SPEC.txt`.
 
+## 1.0.69 — [ChatGPT] Comparativa minera con pestaña Omega y endgame
+*2026-10-15*
+
+- Se reincorpora desde el tag histórico v1.0.42 la **Comparativa Minera** con sus datos Pyfa, seis barges/exhumers, boosts, fits, cargo, drones e implantes.
+- Tab en el menú y barra superior, integrado al tema del Gestor de Ventas; CSS aislado y JS independiente del cálculo de ventas.
+- Moon ore en orden R64, R32, R16, R8, R4. Gas restringido al escenario del norte Guristas; selección inicial Monazite / Krystallos / Golden Cytoserocin.
+- Plan para Omega Nuevo con 1 millón de SP opcional/condicional (aproximación), 12 meses de proyección declarada, Omega calculado con precio ESI de PLEX y escala 1–1000 cuentas (slider 1–100).
+- Vista **Nave Maxiada** separada: cifras de comparación al V, sin Omega ni inversión. Se muestran precios ESI de Aoede/Ingenii con advertencia de que no están simulados en el fit Faction histórico.
+- Sin cambios en `computePlan`, tasas, fórmulas de ventas ni transporte; ESI minero mantiene máximo dos trabajadores y enfriamiento de 420/429.
+- Documentación minera y generadores históricos conservados. Validación estática de sintaxis del JS integrado; pruebas de navegador y regeneración reproducible de Pyfa pendientes.
 ## 1.0.68 — [ChatGPT] Completar terminología de envío en Ajustes
 *2026-10-15*
 

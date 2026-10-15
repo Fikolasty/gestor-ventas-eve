@@ -1332,6 +1332,7 @@ body.in-jita #pCtr,body.in-jita #pExtra,body.in-jita #vRep,body.in-jita .if-ore{
 .ov-mk-n{margin-top:8px;font-size:.86rem;color:var(--mut)}.ov-mk-n b{color:#e8a588}
 @media(max-width:900px){.ov-row{grid-template-columns:minmax(0,1fr)}}
 @media(max-width:520px){.ov-hd{flex-direction:column;align-items:flex-start}.ov-hd .v-isk{font-size:2rem}.ov-kpi{grid-template-columns:minmax(0,1fr)}.ov-mk-l b{font-size:.8rem}.ov-card{padding:12px}}
+/*__MINING_CSS__*/
 </style>
 <script>/* v1.0.16: aplica el tema guardado antes de pintar (sin parpadeo). Por defecto: Dark. */try{var g=JSON.parse(localStorage.getItem('gestorVentas.ajustes.v1')||'null');if(g&&g.ui){if(g.ui.light)document.documentElement.classList.add('light');}}catch(e){}</script>
 </head>
@@ -1352,7 +1353,8 @@ body.in-jita #pCtr,body.in-jita #pExtra,body.in-jita #vRep,body.in-jita .if-ore{
   </div>
   <div class="side-g"><span class="side-h">General</span>
     <button type="button" class="side-i" data-panel="settings" title="Ajustes: skills, impuestos, ajuste de precios, envío, Buyback e idioma."><span class="ic i-gear" aria-hidden="true"></span><span class="side-l">Ajustes</span></button>
-    <button type="button" class="side-i" data-panel="help" title="Guía de Uso: cómo pegar tu inventario y leer el plan."><span class="ic i-help" aria-hidden="true"></span><span class="side-l">Guía de Uso</span></button>
+    <button type="button" class="side-i" data-panel="mining" title="Comparativa de minería: naves, progresión Omega, endgame y PLEX."><span class="ic i-rock" aria-hidden="true"></span><span class="side-l">Minería</span></button>
+<button type="button" class="side-i" data-panel="help" title="Guía de Uso: cómo pegar tu inventario y leer el plan."><span class="ic i-help" aria-hidden="true"></span><span class="side-l">Guía de Uso</span></button>
   </div>
 </aside>
 <button type="button" class="side-fab" id="sideFab" aria-label="Abrir menú" title="Menú"><span class="ic i-panel" aria-hidden="true"></span></button>
@@ -1361,7 +1363,8 @@ body.in-jita #pCtr,body.in-jita #pExtra,body.in-jita #vRep,body.in-jita .if-ore{
   <div class="brand"><span class="logo-s sig" aria-hidden="true"></span>SIGMA GRINDSET <small>EVE Online</small></div>
   <!-- v1.0.62: anuncio tipo ticker (Skill Points gratis), en bucle; clic abre el enlace -->
   <button type="button" class="ticker" data-link="referral" aria-label="Gratis: usa mi enlace para recibir 1 Millón de Skill Points"><span class="tk-track"><span class="tk-i"><span class="ref-tag">Gratis</span>Usa mi enlace para recibir <b>1 Millón de Skill Points</b> gratis ↗</span><span class="tk-i" aria-hidden="true"><span class="ref-tag">Gratis</span>Usa mi enlace para recibir <b>1 Millón de Skill Points</b> gratis ↗</span><span class="tk-i" aria-hidden="true"><span class="ref-tag">Gratis</span>Usa mi enlace para recibir <b>1 Millón de Skill Points</b> gratis ↗</span><span class="tk-i" aria-hidden="true"><span class="ref-tag">Gratis</span>Usa mi enlace para recibir <b>1 Millón de Skill Points</b> gratis ↗</span></span></button>
-  <label class="sw top-theme" title="Tema de la página: Dark (oscuro) o Light (claro)."><input type="checkbox" id="themeLight"><span class="sw-t" aria-hidden="true"></span><span id="themeTxt">Dark</span></label>
+  <button type="button" class="ghost mine-tab" id="mineTab" aria-pressed="false" aria-controls="mining"><span class="ic i-rock" aria-hidden="true"></span> Minería</button>
+<label class="sw top-theme" title="Tema de la página: Dark (oscuro) o Light (claro)."><input type="checkbox" id="themeLight"><span class="sw-t" aria-hidden="true"></span><span id="themeTxt">Dark</span></label>
 </header>
 
 <section class="hero">
@@ -1401,7 +1404,13 @@ Contraband Freight = no</textarea><small>Una regla por línea: Nombre = tax tota
 
     </div>
   </section>
-  <section class="panel" id="help" hidden>
+    <section class="panel" id="mining" hidden>
+    <div class="x-wrap"><button type="button" class="x-close" data-close="mining" aria-label="Cerrar Comparativa Minera" title="Cerrar Comparativa Minera"></button></div>
+    <h2><span class="ic i-rock" aria-hidden="true"></span>Comparativa Minera · Omega y Nave Maxiada</h2>
+    <p class="lead">Compara Barges y Exhumers en luna, hielo y gas del territorio Guristas, calcula ISK por hora con ESI y planifica la productividad de tus cuentas Omega.</p>
+    <div id="mnRoot"></div>
+  </section>
+<section class="panel" id="help" hidden>
     <div class="x-wrap"><button type="button" class="x-close" data-close="help" aria-label="Cerrar Guía de Uso" title="Cerrar Guía de Uso"></button></div>
     <h2><span class="ic i-help" aria-hidden="true"></span>Guía de Uso</h2>
     <p class="lead">Pega tus items, espera los precios de Jita 4-4 y Market Moves+ te dice dónde venderlos, cuánto recibirías y cómo hacerlo paso a paso. No necesitas iniciar sesión.</p>

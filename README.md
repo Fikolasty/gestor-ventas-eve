@@ -59,7 +59,7 @@ CHANGELOG.md          ← cambios por versión
 ### Generar la página
 Solo necesitas Python 3, sin dependencias:
 ```
-python3 build.py 1.0.68
+python3 build.py 1.0.69
 ```
 Eso escribe `index.html` con la versión indicada.
 
@@ -70,3 +70,16 @@ Lo que cambió en cada una está en [CHANGELOG.md](CHANGELOG.md).
 ---
 Creado por **Fiko McGivert** · Vanguardia DR · SIGMA GRINDSET.
 EVE Online y todo lo relacionado son marcas de CCP hf. Esta herramienta no está afiliada ni respaldada por CCP.
+
+## Comparativa Minera
+
+El botón **Minería** del menú y la barra superior abre la comparativa de **Procurer / Retriever / Covetor** y **Skiff / Mackinaw / Hulk**, sin abandonar el Gestor de Ventas.
+
+- **Rendimiento por Nave:** luna, hielo y gases de Nullsec Guristas; fits T1/T2/Facción, skills IV/V, implantes, boosts, rendimiento, bodega y precios Jita Buy/Sell de ESI.
+- **Plan para Omega Nuevo:** arranque con 1M SP de referido si corresponde, progreso de entrenamiento, 28 días iniciales y proyección mensual; slider de 1–100 cuentas y campo manual hasta 1000, cálculo modular de Omega/mes.
+- **Nave Maxiada:** tabla V/Facción con producción pura por nave y actividad sin Omega ni inversión. Los módulos carísimos Aoede/Ingenii se cotizan por ESI pero requieren recálculo de su fit para integrarlos en cifras máximas: se indica expresamente.
+- **PLEX:** mercado global ESI (región 19000001, typeID 44992), editable manualmente, 500 PLEX/Omega por defecto.
+
+Los datos precalculados de rendimiento se recuperaron del histórico Pyfa (build 3579973) y deben actualizarse si cambian las mecánicas del juego. No hay simulación verificada de todas las skills V mes a mes; las cifras futuras son proyecciones identificadas como tales.
+
+Fuente de verdad de la minería: [`docs/MINING.md`](docs/MINING.md). El código está en `src/mining.js`, `src/mining_data.js`, `src/mining.css`; los generadores originales se conservan en `tools/mining/`.
