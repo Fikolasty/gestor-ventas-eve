@@ -15,7 +15,7 @@ const MineUI=(()=>{
   const MATL={moon:'Moon ore',ice:'Hielo',gas:'Gas'};
   const DEF={moon:'Zeolites',ice:'Blue Ice',gas:'Fullerite-C50'};
   const S={view:'ships',mat:'moon',lv:5,imp:1,boost:'',met:'m3',tier:'Faction',item:{...DEF},base:'buy',cmp:true,
-    att:'base',acc:1,hrs:3,barge:'Retriever',ptier:'T1',plex:4500000,esPlex:15,omegaPlex:500};
+    att:'base',patt:'base',acc:1,accq:'1',hrs:3,barge:'Retriever',ptier:'T1',plexManual:null,esPlex:15,omegaPlex:500,cmpv:'1'};
   const BOOST=new Map((MINE.boosts||[]).map(b=>[b.n,b]));
   const PRICE={}; // por typeID: {buy,sell,at} — solo en memoria
   const NF0=new Intl.NumberFormat('en-US',{maximumFractionDigits:0}),NF1=new Intl.NumberFormat('en-US',{minimumFractionDigits:1,maximumFractionDigits:1}),
@@ -137,34 +137,49 @@ const MineUI=(()=>{
    '</div>'+
    // ---------- vista: plan para Omega nuevo ----------
    '<div class="mn-v-plan" hidden>'+
-   '<p class="mn-take">Un personaje nuevo pasa a Omega, compra el Expert System de barge (7 días) y mina mientras entrena para volar la barge por su cuenta. La pregunta: con lo que gana en las 3 semanas siguientes, ¿le alcanza para pagar con PLEX su siguiente mes de Omega mientras sigue entrenando para Exhumer? Todo se calcula por cuenta y para todas tus cuentas.</p>'+
-   '<div class="mn-ctl">'+
-     '<div><span class="mn-lbl">Cuentas</span><input type="number" class="mn-acc" min="1" max="100" step="1" value="1" aria-label="Cuentas"><input type="range" class="mn-accr" min="1" max="100" step="1" value="1" aria-label="Cuentas"></div>'+
-     '<div><span class="mn-lbl">Horas por día</span><input type="number" class="mn-hrs" min="0.5" max="24" step="0.5" value="3" aria-label="Horas de minado por día"></div>'+
-     '<div><span class="mn-lbl">Barge</span>'+SEG('barge',[['Procurer','Procurer'],['Retriever','Retriever'],['Covetor','Covetor']])+'</div>'+
-     '<div><span class="mn-lbl">Fit</span>'+SEG('ptier',[['T1','Full T1'],['T2','Full T2'],['Faction','Facción']])+'</div>'+
-     '<div><span class="mn-lbl">Atributos</span>'+SEG('att',[['base','Base 20/20'],['remap','Remap'],['remap3','Remap +3'],['remap5','Remap +5']])+'</div>'+
+   '<div class="pl-hero">'+
+     '<h3>¿Una cuenta nueva se paga sola el segundo mes?</h3>'+
+     '<p>Pasas a Omega, compras el Expert System de barge y empiezas a minar el mismo día. Mientras minas, entrenas para volar la barge con tus propias skills. Aquí ves si lo que juntas en las semanas 2 a 4 alcanza para pagar el siguiente mes con PLEX, y qué material conviene.</p>'+
+     '<ol class="pl-steps">'+
+       '<li><span class="pl-sn">1</span><b>Día 1</b><span>Pasas a Omega y compras el Expert System. Te presta las skills de barge por 7 días.</span></li>'+
+       '<li><span class="pl-sn">2</span><b>Días 1 a 7</b><span>Minas con las skills prestadas mientras entrenas Industry V y Mining Barge I.</span></li>'+
+       '<li><span class="pl-sn">3</span><b>Día 8</b><span>Vence el Expert System. Desde aquí minas solo con lo que entrenaste.</span></li>'+
+       '<li><span class="pl-sn">4</span><b>Días 8 a 28</b><span>Juntas ISK para el siguiente Omega mientras entrenas hacia la Exhumer.</span></li>'+
+     '</ol>'+
    '</div>'+
-   '<div class="mn-price mn-pplex">'+
-     '<label>Precio del PLEX (ISK)<input type="number" class="mn-plex" min="0" step="10000" value="4500000"></label>'+
-     '<label>Expert System (PLEX)<input type="number" class="mn-es" min="0" step="1" value="15"></label>'+
-     '<label>Omega 30 días (PLEX)<input type="number" class="mn-om" min="0" step="10" value="500"></label>'+
-     '<label>Vender en Jita 4-4<select class="mn-base2"><option value="buy">Jita Buy (vender al instante)</option><option value="sell">Jita Sell (con orden)</option></select></label>'+
-     '<label>Valorar como<select class="mn-cmp2"><option value="1">Comprimido (1:1 en unidades)</option><option value="0">Sin comprimir</option></select></label>'+
-     '<p class="mn-pst mn-pst2">El PLEX se vende en el mercado global del juego: copia aquí su precio actual. Los fits y minerales se consultan en Jita 4-4.</p>'+
+   '<div class="mn-card pl-setup"><h3>Tu Escenario</h3>'+
+     '<div class="pl-grid">'+
+       '<div class="pl-f pl-wide"><span class="pl-l">Cuentas</span><div class="pl-row">'+'<div class="pl-stp" data-k="acc" data-min="1" data-max="100" data-st="1"><button type="button" data-d="-1" aria-label="Menos">−</button><input type="text" inputmode="decimal" class="pl-in" aria-label="acc"><span class="pl-suf"></span><button type="button" data-d="1" aria-label="Más">+</button></div>'+SEG('accq',[['1','1'],['5','5'],['10','10'],['25','25'],['50','50'],['100','100']])+'</div><small>Todo se multiplica por tus cuentas.</small></div>'+
+       '<div class="pl-f"><span class="pl-l">Horas de minado al día</span>'+'<div class="pl-stp" data-k="hrs" data-min="0.5" data-max="24" data-st="0.5"><button type="button" data-d="-1" aria-label="Menos">−</button><input type="text" inputmode="decimal" class="pl-in" aria-label="hrs"><span class="pl-suf">h</span><button type="button" data-d="1" aria-label="Más">+</button></div>'+'<small>Por cuenta.</small></div>'+
+       '<div class="pl-f"><span class="pl-l">Barge</span>'+SEG('barge',[['Procurer','Procurer'],['Retriever','Retriever'],['Covetor','Covetor']])+'<small class="pl-bh"></small></div>'+
+       '<div class="pl-f"><span class="pl-l">Fit</span>'+SEG('ptier',[['T1','Full T1'],['T2','Full T2'],['Faction','Facción']])+'<small>Lo que tus skills aún no permiten se usa en su versión menor.</small></div>'+
+       '<div class="pl-f"><span class="pl-l">Atributos</span>'+SEG('patt',[['base','Base 20/20'],['remap','Remap'],['remap3','Remap + implantes']])+'<small class="pl-ah"></small></div>'+
+     '</div>'+
+     '<h4 class="pl-sub">Precios</h4>'+
+     '<div class="pl-prices">'+
+       '<div class="pl-tile"><span class="pl-l">PLEX</span><b class="pl-plexv">—</b><small class="pl-plexs"></small>'+
+         '<div class="pl-plexe" hidden><input type="text" inputmode="decimal" class="pl-plexin" aria-label="Precio del PLEX en ISK"><button type="button" class="pl-btn pl-plexok">Usar</button></div>'+
+         '<button type="button" class="pl-link pl-plexed">Escribir otro precio</button></div>'+
+       '<div class="pl-tile"><span class="pl-l">Expert System</span>'+'<div class="pl-stp" data-k="esPlex" data-min="0" data-max="1000" data-st="1"><button type="button" data-d="-1" aria-label="Menos">−</button><input type="text" inputmode="decimal" class="pl-in" aria-label="esPlex"><span class="pl-suf">PLEX</span><button type="button" data-d="1" aria-label="Más">+</button></div>'+'<small class="pl-esi"></small></div>'+
+       '<div class="pl-tile"><span class="pl-l">Omega de 30 días</span>'+'<div class="pl-stp" data-k="omegaPlex" data-min="0" data-max="5000" data-st="10"><button type="button" data-d="-1" aria-label="Menos">−</button><input type="text" inputmode="decimal" class="pl-in" aria-label="omegaPlex"><span class="pl-suf">PLEX</span><button type="button" data-d="1" aria-label="Más">+</button></div>'+'<small class="pl-omi"></small></div>'+
+       '<div class="pl-tile"><span class="pl-l">Vendes el mineral</span>'+SEG('base',[['buy','Jita Buy'],['sell','Jita Sell']])+
+         SEG('cmpv',[['1','Comprimido'],['0','Sin comprimir']])+'<small>Jita Buy: vendes al instante. Jita Sell: pones una orden y esperas.</small></div>'+
+     '</div>'+
+     '<p class="pl-status"></p>'+
    '</div>'+
-   '<p class="mn-take mn-ptake"></p>'+
-   '<div class="mn-card"><h3>Resumen por Material</h3><p class="mn-note">Por cuenta; abajo, el total de todas tus cuentas. «Paga el Omega» = lo que ganas en los días 8 a 28 alcanza para el siguiente mes en PLEX. «Balance» = todo lo ganado en 28 días menos nave y fit, Expert System y el siguiente Omega.</p>'+
-     '<div class="mn-scroll"><table class="mn-sum"></table></div></div>'+
-   '<div class="mn-mats"></div>'+
-   '<details class="mn-plan-d"><summary>Plan de Entrenamiento Recomendado</summary><div class="mn-prose mn-plan-l"></div></details>'+
-   '<details class="mn-plan-how"><summary>Cómo se Calculó el Plan</summary><div class="mn-prose"><ul>'+
-     '<li>Personaje nuevo: atributos 20/20/20/20/19 y las skills iniciales de todas las razas (Mining III, Science IV, CPU Management IV, Industry I, Mining Frigate I, Spaceship Command III, Drones I…). Entrena como Omega: atributo primario + la mitad del secundario por minuto.</li>'+
-     '<li><b>Remap</b>: el reparto de atributos (17 a 27 cada uno) que termina antes todo el plan de ese material. «+3» y «+5» suman implantes de atributos a ese remap (su costo no está incluido).</li>'+
-     '<li><b>Días 1 a 7</b>: el Expert System da sus skills (Mining Barge Operations para moon e hielo, Gas Harvesting para gas) y se usa lo mejor entre eso y lo que ya entrenaste. Desde el día 8 solo cuentan tus skills: si todavía no tienes Mining Barge I (pide Industry V), ese día no minas.</li>'+
-     '<li>Cada día se mina con las skills que tienes al empezarlo y con el fit elegido; lo que tus skills aún no permiten se baja al módulo que sí puedes usar. Sin implantes de minería y sin boosts.</li>'+
-     '<li><b>Inversión</b>: nave + fit al precio de venta en Jita 4-4 (el fit que usas al final; lo que todavía no puedes usar lo compras cuando lo desbloqueas). El primer mes de Omega se asume pagado con dinero real.</li>'+
-     '<li>Varias cuentas: todo se multiplica por el número de cuentas. En la práctica, muchas cuentas en el mismo sitio agotan antes las rocas, la nube o el anillo de hielo, y venden más volumen en Jita (el precio puede bajar).</li>'+
+   '<div class="pl-vh"><h3 class="pl-vt"></h3><p class="mn-take pl-take"></p></div>'+
+   '<div class="pl-tiles"></div>'+
+   '<div class="pl-dets"></div>'+
+   '<details class="mn-plan-d"><summary>Plan de Entrenamiento Paso a Paso</summary><div class="mn-prose mn-plan-l"></div></details>'+
+   '<details class="mn-plan-how"><summary>Cómo se Calcula</summary><div class="mn-prose"><ul>'+
+     '<li><b>Personaje nuevo</b>: atributos 20/20/20/20/19 y las skills con que empiezan todas las razas (Mining III, Science IV, CPU Management IV, Industry I, Mining Frigate I, Spaceship Command III, Drones I…). Entrena como Omega: atributo principal + la mitad del secundario, por minuto.</li>'+
+     '<li><b>Remap</b>: el reparto de atributos (de 17 a 27 cada uno) que termina antes el plan de ese material. Con «implantes +3» se suman cuatro implantes Basic (Int, Mem, Per, Will); solo piden Cybernetics I y su precio entra en la inversión. Los +5 piden Cybernetics V (unas dos semanas), así que no sirven para un personaje recién creado.</li>'+
+     '<li><b>Días 1 a 7</b>: el Expert System presta sus skills («Mining Barge Operations» para moon e hielo, «Gas Harvesting» para gas). Cada día se usa lo mejor entre eso y lo que ya entrenaste.</li>'+
+     '<li><b>Desde el día 8</b> solo cuentan tus skills. Si aún no tienes Mining Barge I (pide Industry V), ese día no minas.</li>'+
+     '<li>Cada día se mina con las skills que tienes al empezarlo. Sin implantes de minería ni boosts de flota.</li>'+
+     '<li><b>Precios</b>: todo sale de la API oficial de EVE (ESI). Naves, módulos, implantes y minerales, de Jita 4-4; el PLEX, del mercado global de PLEX (la orden de venta más barata). El Expert System y el Omega se compran con PLEX en la tienda del juego.</li>'+
+     '<li><b>Inversión</b>: la barge y el fit que usas el día 28, más los implantes si los elegiste. El primer mes de Omega se paga con dinero real.</li>'+
+     '<li><b>Varias cuentas</b>: todo se multiplica. En la práctica, muchas cuentas juntas vacían antes las rocas, la nube o el anillo de hielo, y vender mucho volumen en Jita puede bajar el precio.</li>'+
    '</ul></div></details>'+
    '</div>';
 
@@ -254,7 +269,7 @@ const MineUI=(()=>{
       const v=val(r);
       [[s],[r.high],[r.low],[r.mid],[r.rigs],[r.drones],[NF2.format(r.cyc),1],[NF1.format(r.amt),1],[NF0.format(r.mod),1],[NF0.format(r.dr),1],
        [v==null?'—':(S.met==='isk'?cmpISK(v):NF0.format(v)),1],[NF0.format(r.hold),1],[NF1.format(r.fill)+' min',1],
-       [r.critP>0?NF2.format(r.critP)+'% × '+NF0.format(r.critB)+'%':'—',1],[r.waste>0?NF1.format(r.waste)+'%':'0%',1],[r.cpu],[cmpISK(fitCost(MINE.fits[[S.lv,S.mat,S.tier,s].join('|')]))+' ISK',1],[r.notes.join(' · ')||'—']]
+       [r.critP>0?NF2.format(r.critP)+'% × '+NF0.format(r.critB)+'%':'—',1],[r.waste>0?NF1.format(r.waste)+'%':'0%',1],[r.cpu],[(()=>{const f=fitCost(MINE.fits[[S.lv,S.mat,S.tier,s].join('|')]),i=S.imp?fitCost(MINE.impl[S.mat].map(id=>[id,1])):0;return f!=null&&i!=null?cmpISK(f+i)+' ISK':'—';})(),1],[r.notes.join(' · ')||'—']]
       .forEach(([t,num])=>{const td=tr.insertCell();td.textContent=t;if(num)td.className='r';});});}
   function paintHold(){const box=$q('.mn-hold');box.querySelectorAll('svg').forEach(n=>n.remove());const W=box.clientWidth;if(W<50)return;
     const rows=SHIPS.map(s=>row(s,S.tier)).filter(Boolean),H=220,mL=40,mR=6,mT=18,mB=26;
@@ -270,8 +285,8 @@ const MineUI=(()=>{
       svg.appendChild(el('text',{x:cx,y:H-8,'text-anchor':'middle',class:'lb'+(ex?' ex':''),style:bw<62?'font-size:10px':''},r.ship));});
     box.appendChild(svg);}
   function shipFitIds(){return SHIPS.flatMap(s=>(MINE.fits[[S.lv,S.mat,S.tier,s].join('|')]||[]).map(x=>x[0]));}
-  function paintInvestNote(){const n=$q('.mn-invst'),ids=shipFitIds(),miss=ids.filter(id=>!PRICE[id]).length;
-    n.textContent=miss?(bulkBusy?'Consultando precios de nave y fit en Jita 4-4…':'Inversión: nave + fit al precio de venta (Jita Sell) en Jita 4-4. Sin conexión a ESI no se puede calcular.'):'Inversión: nave + fit al precio de venta (Jita Sell) en Jita 4-4, sin implantes ni boosts.';}
+  function paintInvestNote(){const n=$q('.mn-invst'),ids=[...shipFitIds(),...(S.imp?MINE.impl[S.mat]:[])],miss=ids.filter(id=>!PRICE[id]).length;
+    n.textContent=miss?(bulkBusy?'Consultando precios de nave y fit en la API de EVE…':'Sin respuesta de la API de EVE: no se puede calcular la inversión.'):(S.imp?'Inversión: nave + fit + implantes de minería, al precio de venta en Jita 4-4 (API de EVE).':'Inversión: nave + fit al precio de venta en Jita 4-4 (API de EVE).');}
   function paintTraining(){const t=$q('.mn-tr');t.replaceChildren();const T=MINE.train;
     const hr=t.createTHead().insertRow();['Nave','Todo a IV','Todo a V','Diferencia'].forEach((x,i)=>hr.appendChild(h('th',i?'r':'',x)));
     const tb=t.createTBody();
@@ -280,111 +295,164 @@ const MineUI=(()=>{
       [days(a[S.att]),days(b[S.att]),days(b[S.att]-a[S.att])].forEach((v,i)=>{const td=tr.insertCell();td.className='r';td.textContent=(i===2?'+':'')+fmtD(v);});});
     $q('.mn-trn').textContent='Fit '+TL[S.tier]+', '+MATL[S.mat]+', atributos: '+ATTL[S.att]+'. Los implantes de +5% de minería piden además Cybernetics V: +'+fmtD(days(T.cyber[S.mat][S.att]))+'.';}
   // ---------- plan para Omega nuevo ----------
-  function planCalc(m){const k=[m,S.barge,S.ptier,S.att].join('|'),daily=MINE.sim[k],fit=MINE.simfit[k],ipm=iskPerM3(m);
-    const T=MINE.train,st=T.stages[m],ends=T.ends[m][S.att];
-    const r={daily,fit,ipm,invest:fitCost(fit.items),es:S.esPlex*S.plex,omega:S.omegaPlex*S.plex,
+  const PLEX={sell:null,buy:null,avg:null,src:null,at:0};
+  async function loadPlex(){
+    if(PLEX.at&&Date.now()-PLEX.at<5*60e3)return;
+    try{ // mercado global de PLEX: región 19000001 (desde julio 2025)
+      const r=await fetch(ESI+'/markets/19000001/orders/?order_type=all&type_id='+MINE.plex+'&page=1',{credentials:'omit',referrerPolicy:'no-referrer',cache:'no-store'});
+      if(r.ok){const a=await r.json();let sell=null,buy=null;(Array.isArray(a)?a:[]).forEach(o=>{if(!(o.volume_remain>0))return;
+        if(o.is_buy_order){if(buy==null||o.price>buy)buy=o.price;}else if(sell==null||o.price<sell)sell=o.price;});
+        if(sell!=null||buy!=null){Object.assign(PLEX,{sell,buy,src:'global',at:Date.now()});return;}}
+    }catch(e){}
+    try{const r=await fetch(ESI+'/markets/prices/',{credentials:'omit',referrerPolicy:'no-referrer',cache:'no-store'});
+      if(r.ok){const a=await r.json();const x=(Array.isArray(a)?a:[]).find(o=>o.type_id===MINE.plex);
+        if(x&&x.average_price){Object.assign(PLEX,{avg:x.average_price,src:'avg',at:Date.now()});}}}catch(e){}
+  }
+  const plexISK=()=>S.plexManual!=null?S.plexManual:(PLEX.sell!=null?PLEX.sell:(PLEX.avg!=null?PLEX.avg:null));
+  const PATTL={base:'atributos base',remap:'remap',remap3:'remap + implantes +3'};
+  function implCost(){if(S.patt!=='remap3')return 0;return fitCost(MINE.attrImpl['3'].map(id=>[id,1]));}
+  function planCalc(m){const k=[m,S.barge,S.ptier,S.patt].join('|'),daily=MINE.sim[k],fit=MINE.simfit[k],ipm=iskPerM3(m),px=plexISK();
+    const T=MINE.train,st=T.stages[m],ends=T.ends[m][S.patt];
+    const r={daily,fit,ipm,ship:fitCost(fit.items),impl:implCost(),es:px!=null?S.esPlex*px:null,omega:px!=null?S.omegaPlex*px:null,
       bargeDay:days(ends[st.barge-1]),yieldDay:days(ends[st.yield_-1]),exhDay:days(ends[st.exhumer-1]),gap:daily.filter(v=>v===0).length};
+    r.invest=(r.ship!=null&&r.impl!=null&&r.es!=null)?r.ship+r.impl+r.es:null;
     if(ipm==null)return r;
     const inc=daily.map(v=>v*S.hrs*ipm);r.inc=inc;r.inc7=inc.slice(0,7).reduce((a,b)=>a+b,0);r.inc21=inc.slice(7).reduce((a,b)=>a+b,0);
-    r.pays=r.inc21>=r.omega;
-    if(r.invest!=null){r.balance=r.inc7+r.inc21-r.invest-r.es-r.omega;let c=0;r.payback=null;
-      for(let d=0;d<28;d++){c+=inc[d];if(c>=r.invest+r.es+r.omega){r.payback=d+1;break;}}}
+    r.iskh=daily[27]*ipm;
+    if(r.omega!=null){r.cover=r.omega>0?r.inc21/r.omega:null;r.pays=r.inc21>=r.omega;}
+    if(r.invest!=null&&r.omega!=null){r.balance=r.inc7+r.inc21-r.invest-r.omega;let c=0;r.payback=null;
+      for(let d=0;d<28;d++){c+=inc[d];if(c>=r.invest+r.omega){r.payback=d+1;break;}}}
     return r;}
   const signISK=v=>v==null?'—':(v<0?'−':'+')+cmpISK(Math.abs(v))+' ISK';
-  function paintPlan(){$q('.mn-acc').value=S.acc;$q('.mn-accr').value=S.acc;$q('.mn-hrs').value=S.hrs;$q('.mn-plex').value=S.plex;$q('.mn-es').value=S.esPlex;$q('.mn-om').value=S.omegaPlex;
-    $q('.mn-base2').value=S.base;$q('.mn-cmp2').value=S.cmp?'1':'0';
-    const R={moon:planCalc('moon'),ice:planCalc('ice'),gas:planCalc('gas')},N=S.acc;
-    // resumen
-    const t=$q('.mn-sum');t.replaceChildren();
-    const hr=t.createTHead().insertRow();['Material','Qué minas','Inversión','Días 1–7','Días 8–28','Siguiente Omega','¿Paga el Omega?','Balance 28 días','Se recupera el día'].forEach((x,i)=>hr.appendChild(h('th',i>1?'r':'',x)));
-    const tb=t.createTBody();
-    const line=(label,f,cls)=>{const tr=tb.insertRow();if(cls)tr.className=cls;tr.insertCell().textContent=label;f(tr);};
-    ['moon','ice','gas'].forEach(m=>{const r=R[m];
-      line(MATL[m],tr=>{const c=tr.insertCell();c.textContent=S.item[m];c.className='no-tr';
-        [cmpISK(r.invest!=null?r.invest+r.es:null),cmpISK(r.inc7),cmpISK(r.inc21),cmpISK(r.omega)].forEach(v=>{const td=tr.insertCell();td.className='r';td.textContent=v;});
-        const p=tr.insertCell();p.className='r '+(r.pays==null?'':(r.pays?'pos':'neg'));p.textContent=r.pays==null?'—':(r.pays?'Sí':'No');
-        const b=tr.insertCell();b.className='r '+(r.balance==null?'':(r.balance>=0?'pos':'neg'));b.textContent=signISK(r.balance);
-        const d=tr.insertCell();d.className='r';d.textContent=r.payback?('Día '+r.payback):(r.inc?'Después del día 28':'—');});});
-    if(N>1){const g=tb.insertRow();g.className='mn-g';const c=g.insertCell();c.colSpan=9;c.textContent='Total de '+N+' cuentas';
-      ['moon','ice','gas'].forEach(m=>{const r=R[m];line(MATL[m],tr=>{tr.insertCell();
-        [r.invest!=null?(r.invest+r.es)*N:null,r.inc7!=null?r.inc7*N:null,r.inc21!=null?r.inc21*N:null,r.omega*N].forEach(v=>{const td=tr.insertCell();td.className='r';td.textContent=cmpISK(v);});
-        const p=tr.insertCell();p.className='r';p.textContent=r.pays==null?'—':(r.pays?'Sí':'No');
-        const b=tr.insertCell();b.className='r '+(r.balance==null?'':(r.balance>=0?'pos':'neg'));b.textContent=signISK(r.balance!=null?r.balance*N:null);
-        const d=tr.insertCell();d.className='r';d.textContent=r.payback?('Día '+r.payback):'—';},'tot');});}
-    // conclusión
-    const ok=['moon','ice','gas'].filter(m=>R[m].balance!=null),pt=$q('.mn-ptake');pt.replaceChildren();
-    if(!ok.length){pt.textContent=bulkBusy?'Consultando precios en Jita 4-4…':'Faltan precios de Jita para hacer el análisis (revisa la conexión a ESI).';}
-    else{const best=ok.reduce((a,b)=>R[b].balance>R[a].balance?b:a),r=R[best];
-      pt.append(document.createTextNode('Con '+S.barge+', fit '+TL[S.ptier]+', '+NF1.format(S.hrs)+' h por día y atributos '+ATTL[S.att]+': lo más rentable es '),h('b','',MATL[best]+' ('+S.item[best]+')'),
-        document.createTextNode('. '+(r.pays?'Lo ganado en los días 8 a 28 paga el siguiente Omega':'Lo ganado en los días 8 a 28 no alcanza para el siguiente Omega')+' y a los 28 días el balance es '),h('b','',signISK(r.balance)),
-        document.createTextNode(N>1?' por cuenta ('+signISK(r.balance*N)+' en '+N+' cuentas).':' por cuenta.'),
-        document.createTextNode(' La barge propia llega el día '+NF1.format(r.bargeDay)+' y la Exhumer el día '+NF1.format(r.exhDay)+(r.exhDay>28?': después de este primer mes.':'.')));}
-    // tarjetas por material
-    const box=$q('.mn-mats');box.replaceChildren();const grid=h('div','mn-grid3');box.appendChild(grid);
-    ['moon','ice','gas'].forEach(m=>{const r=R[m],c=h('div','mn-card mn-mc');grid.appendChild(c);
-      c.appendChild(h('h3','',MATL[m]));
-      const sel=document.createElement('select');sel.className='mn-mitem';sel.dataset.m=m;const groups={};
+  const isk=v=>v==null?'—':cmpISK(v)+' ISK';
+  const fmtN=v=>Number.isInteger(v)?NF0.format(v):NF1.format(v);
+  function paintSetup(){S.cmpv=S.cmp?'1':'0';
+    root.querySelectorAll('.pl-stp').forEach(st=>{const i=st.querySelector('.pl-in');if(i!==document.activeElement)i.value=fmtN(S[st.dataset.k]);});
+    S.accq=String(S.acc);
+    $q('.pl-bh').textContent={Procurer:'La más dura: aguanta ganks en highsec.',Retriever:'La bodega más grande: menos viajes a estación.',Covetor:'La que más mina, pero frágil y con bodega chica.'}[S.barge];
+    $q('.pl-ah').textContent={base:'Como sale un personaje nuevo.',remap:'Atributos repartidos para entrenar este plan lo más rápido posible.',remap3:'Remap + 4 implantes +3 (su precio entra en la inversión).'}[S.patt];
+    const px=plexISK(),pv=$q('.pl-plexv'),ps=$q('.pl-plexs');pv.textContent=px!=null?cmpISK(px)+' ISK':'—';
+    ps.textContent=S.plexManual!=null?'Precio que escribiste':(PLEX.src==='global'?'Mercado global de PLEX · orden de venta más barata':(PLEX.src==='avg'?'Precio promedio de CCP (ESI)':(bulkBusy?'Consultando ESI…':'Sin respuesta de ESI: escribe el precio')));
+    $q('.pl-plexed').textContent=S.plexManual!=null?'Volver al precio de ESI':'Escribir otro precio';
+    $q('.pl-esi').textContent=px!=null?'= '+cmpISK(S.esPlex*px)+' ISK por cuenta':'';
+    $q('.pl-omi').textContent=px!=null?'= '+cmpISK(S.omegaPlex*px)+' ISK por cuenta':'';}
+  function paintPlan(){paintSetup();seg();
+    const R={moon:planCalc('moon'),ice:planCalc('ice'),gas:planCalc('gas')},N=S.acc,MS=['moon','ice','gas'];
+    const ready=MS.filter(m=>R[m].balance!=null);
+    const st=$q('.pl-status');st.textContent=bulkBusy?'Consultando precios en la API de EVE (ESI)…':(ready.length<3?'Faltan algunos precios de ESI; esos materiales salen con «—».':'Precios de la API de EVE (ESI) · se actualizan cada 5 minutos.');
+    // titular
+    const vt=$q('.pl-vt'),tk=$q('.pl-take');vt.textContent=N>1?'Resultado para tus '+N+' cuentas':'Resultado para 1 cuenta';tk.replaceChildren();
+    let best=null;if(ready.length){best=ready.reduce((a,b)=>R[b].balance>R[a].balance?b:a);const r=R[best];
+      tk.append(document.createTextNode('Con '+S.barge+' en '+TL[S.ptier]+', '+fmtN(S.hrs)+' h de minado al día y '+PATTL[S.patt]+', lo que más deja es '),h('b','',MATL[best]+' ('+S.item[best]+')'),document.createTextNode('. '));
+      if(r.balance>=0)tk.append(document.createTextNode('En 28 días te quedan '),h('b','',signISK(r.balance*N)),document.createTextNode(' después de pagar '+(N>1?'las barges, los Expert Systems y los '+N+' próximos Omegas.':'la barge, el Expert System y el próximo Omega.')));
+      else tk.append(document.createTextNode('Aun así, en 28 días te faltan '),h('b','',isk(-r.balance*N)),document.createTextNode(' para cubrir todo. Prueba con más horas al día, otra barge u otro mineral más caro.'));}
+    else tk.textContent=bulkBusy?'Consultando precios…':'Sin precios no se puede calcular. Revisa la conexión con la API de EVE.';
+    // tarjetas de veredicto
+    const tl=$q('.pl-tiles');tl.replaceChildren();
+    MS.forEach(m=>{const r=R[m],c=h('div','pl-vc'+(m===best?' best':''));tl.appendChild(c);
+      const hd=h('div','pl-vch');hd.appendChild(h('span','pl-vcn',MATL[m]));if(m===best)hd.appendChild(h('span','pl-badge','★ Más rentable'));c.appendChild(hd);
+      const sel=document.createElement('select');sel.className='mn-mitem';sel.dataset.m=m;sel.setAttribute('aria-label','Qué minas');const groups={};
       MATS.filter(x=>x.cat===m).forEach(x=>{(groups[x.grp]||(groups[x.grp]=[])).push(x);});
       Object.keys(groups).forEach(g=>{const og=document.createElement('optgroup');og.label=g;groups[g].forEach(x=>{const o=new Option(x.n,x.n);o.className='no-tr';og.appendChild(o);});sel.appendChild(og);});
-      sel.value=S.item[m];const lab=h('label','mn-ml','Qué minas');lab.appendChild(sel);c.appendChild(lab);
-      const p=PRICE[matPriceId(m)],v=p?p[S.base]:null;
-      c.appendChild(h('p','mn-note',v!=null?(NF2.format(v)+' ISK por unidad · '+NF0.format(r.ipm)+' ISK por m³'):(bulkBusy?'Consultando Jita 4-4…':'Sin precio en Jita 4-4.')));
-      const k=h('div','mn-kpi mn-kpi2');c.appendChild(k);
-      const kp=(lab,val,sub,cls)=>{const d=h('div',cls||'');d.append(h('span','',lab),h('div','v',val));if(sub)d.appendChild(h('small','',sub));k.appendChild(d);};
-      kp('Inversión inicial',cmpISK(r.invest!=null?r.invest+r.es:null)+' ISK','Nave y fit '+cmpISK(r.invest)+' + Expert System '+cmpISK(r.es));
-      kp('Ingresos días 1–7',cmpISK(r.inc7)+' ISK','Con el Expert System');
-      kp('Ingresos días 8–28',cmpISK(r.inc21)+' ISK','Siguiente Omega: '+cmpISK(r.omega)+' ISK',r.pays==null?'':(r.pays?'okb':'badb'));
-      kp('Balance a 28 días',signISK(r.balance),N>1?(signISK(r.balance!=null?r.balance*N:null)+' en '+N+' cuentas'):'Ya pagado el siguiente Omega',r.balance==null?'':(r.balance>=0?'okb':'badb'));
+      sel.value=S.item[m];c.appendChild(sel);
+      const big=h('div','pl-big '+(r.balance==null?'':(r.balance>=0?'pos':'neg')),r.balance==null?'—':signISK(r.balance*N));c.appendChild(big);
+      c.appendChild(h('div','pl-bigl',r.balance==null?'Faltan precios':(r.balance>=0?'te quedan a los 28 días, ya pagado todo':'te faltan a los 28 días para cubrir todo')));
+      const pay=h('div','pl-pay '+(r.pays==null?'':(r.pays?'ok':'no')));
+      pay.textContent=r.pays==null?'—':(r.pays?'✓ Las semanas 2 a 4 pagan el próximo Omega':'✗ Las semanas 2 a 4 no alcanzan para el Omega');c.appendChild(pay);
+      if(r.cover!=null){const bar=h('div','pl-bar'),fill=h('i',r.pays?'ok':'no');fill.style.width=Math.min(100,r.cover*100)+'%';bar.appendChild(fill);c.appendChild(bar);
+        c.appendChild(h('small','pl-barl','Juntas el '+NF0.format(r.cover*100)+'% del Omega · '+isk(r.inc21)+' de '+isk(r.omega)+' por cuenta'));}
+      c.appendChild(h('small','pl-iskh',r.iskh!=null?'≈ '+cmpISK(r.iskh)+' ISK por hora y cuenta al final del mes':''));});
+    // detalle por material
+    const dt=$q('.pl-dets');dt.replaceChildren();
+    MS.forEach(m=>{const r=R[m],c=h('div','mn-card pl-det');dt.appendChild(c);
+      c.appendChild(h('h3','',MATL[m]+' en Detalle'));
+      const p=PRICE[matPriceId(m)],v=p?p[S.base]:null,mi=matItem(m);
+      c.appendChild(h('p','mn-note',v!=null?(S.item[m]+(S.cmp&&mi&&mi.cid?' comprimido':'')+': '+NF2.format(v)+' ISK por unidad ('+NF0.format(r.ipm)+' ISK por m³ minado)'):'Sin precio de Jita para '+S.item[m]+'.'));
+      // cuentas claras
+      const t=h('table','pl-led');const hd=t.createTHead().insertRow();['',N>1?'Por cuenta':'Monto',...(N>1?['Tus '+N+' cuentas']:[])].forEach((x,i)=>hd.appendChild(h('th',i?'r':'',x)));
+      const tb=t.createTBody();
+      const ln=(lab,v,sign,cls)=>{const tr=tb.insertRow();if(cls)tr.className=cls;tr.insertCell().textContent=lab;
+        [v,v!=null?v*N:null].slice(0,N>1?2:1).forEach(x=>{const td=tr.insertCell();td.className='r';td.textContent=x==null?'—':(sign+cmpISK(x)+' ISK');});};
+      ln('Minado días 1 a 7 (con Expert System)',r.inc7,'+ ','in');ln('Minado días 8 a 28',r.inc21,'+ ','in');
+      ln('Barge y fit',r.ship,'− ','out');if(S.patt==='remap3')ln('Implantes +3',r.impl,'− ','out');ln('Expert System ('+fmtN(S.esPlex)+' PLEX)',r.es,'− ','out');ln('Próximo Omega ('+fmtN(S.omegaPlex)+' PLEX)',r.omega,'− ','out');
+      const tr=tb.insertRow();tr.className='tot';tr.insertCell().textContent='Te queda';[r.balance,r.balance!=null?r.balance*N:null].slice(0,N>1?2:1).forEach(x=>{const td=tr.insertCell();td.className='r '+(x==null?'':(x>=0?'pos':'neg'));td.textContent=signISK(x);});
+      const sc=h('div','mn-scroll');sc.appendChild(t);c.appendChild(sc);
+      // línea de tiempo
+      c.appendChild(h('h4','pl-sub','Línea de Tiempo'));c.appendChild(timeline(r));
+      // acumulado
+      c.appendChild(h('h4','pl-sub',N>1?'ISK Juntado por tus '+N+' Cuentas':'ISK Juntado'));
       const ch=h('div','mn-chart sm mn-cum');ch.dataset.m=m;c.appendChild(ch);
-      const ul=h('ul','mn-ms');
-      const li=(t,cls)=>{const x=h('li',cls||'',t);ul.appendChild(x);};
-      li('Vuela la barge sin el Expert System: día '+NF1.format(r.bargeDay)+(r.gap?' · '+r.gap+(r.gap===1?' día sin minar':' días sin minar'):''),r.gap?'warn':'');
-      li('Skills de rendimiento a IV: día '+NF1.format(r.yieldDay));
-      li('Puede volar una Exhumer: día '+NF1.format(r.exhDay)+(r.exhDay>28?' (después del día 28)':''));
-      li('Fit al día 28: '+[r.fit.high,r.fit.low,r.fit.mid,r.fit.drones].filter(x=>x&&x!=='—').join(' · '));
-      c.appendChild(ul);});
+      c.appendChild(h('p','mn-note pl-fit','Fit del día 28: '+[r.fit.high,r.fit.low,r.fit.mid,r.fit.drones].filter(x=>x&&x!=='—').join(' · ')));});
     // plan de entrenamiento
     const pl=$q('.mn-plan-l');pl.replaceChildren();const T=MINE.train;
-    ['moon','ice','gas'].forEach(m=>{pl.appendChild(h('h4','',MATL[m]+' · atributos '+ATTL[S.att]));const at=T.attrs[m][S.att];
+    MS.forEach(m=>{pl.appendChild(h('h4','',MATL[m]+' · '+PATTL[S.patt]));const at=T.attrs[m][S.patt];
       pl.appendChild(h('p','mn-src','Int '+at.int+' · Mem '+at.mem+' · Per '+at.per+' · Will '+at.wil+' · Cha '+at.cha));
-      const ol=document.createElement('ol');const ends=T.ends[m][S.att],stg=T.stages[m];
+      const ol=document.createElement('ol');const ends=T.ends[m][S.patt],stg=T.stages[m];
       T.plan[m].forEach(([sk,lv],i)=>{const li=h('li','',sk+' '+['','I','II','III','IV','V'][lv]+' — día '+NF1.format(days(ends[i])));
         if(i===stg.barge-1||i===stg.yield_-1||i===stg.exhumer-1)li.appendChild(h('b','',i===stg.barge-1?'  ← barge propia':i===stg.yield_-1?'  ← rendimiento a IV':'  ← Exhumer'));ol.appendChild(li);});
       pl.appendChild(ol);});
     drawCum(R);}
-  function drawCum(R){root.querySelectorAll('.mn-cum').forEach(box=>{const m=box.dataset.m,r=R[m];box.querySelectorAll('svg,.mn-empty').forEach(n=>n.remove());
+  function timeline(r){const end=Math.max(60,Math.ceil((r.exhDay+4)/10)*10),pc=d=>Math.min(100,d/end*100)+'%',w=h('div','pl-tl');
+    const bar=h('div','pl-tlb');w.appendChild(bar);
+    const seg2=(from,to,cls,tt)=>{const x=h('i',cls);x.style.left=pc(from);x.style.width='calc('+pc(to)+' - '+pc(from)+')';x.title=tt;bar.appendChild(x);};
+    seg2(0,7,'es','Expert System: días 1 a 7');if(r.gap)seg2(7,r.bargeDay,'gap','Sin minar hasta tener Mining Barge I');seg2(Math.max(7,r.bargeDay),28,'own','Minas con tus skills');
+    const mk=(d,cls,tt)=>{const x=h('span','pl-mk '+cls);x.style.left=pc(d);x.title=tt;w.appendChild(x);};
+    mk(r.bargeDay,'b','Barge propia');mk(28,'d','Día 28');mk(r.exhDay,'x','Exhumer');
+    const sc=h('div','pl-tls');[0,end/2,end].forEach(d=>{const t=h('span','','día '+NF0.format(d));sc.appendChild(t);});w.appendChild(sc);
+    const lg=h('div','pl-tll');
+    [['es','Expert System (días 1 a 7)'],['gap','Sin minar'],['own','Minas con tus skills']].forEach(([c,t])=>{if(c==='gap'&&!r.gap)return;const s=h('span');s.append(h('i',c),document.createTextNode(t));lg.appendChild(s);});
+    [['b','Barge propia: día '+NF1.format(r.bargeDay)],['d','Día 28: pagas el Omega'],['x','Exhumer: día '+NF1.format(r.exhDay)]].forEach(([c,t])=>{const s=h('span');s.append(h('b','pl-mki '+c),document.createTextNode(t));lg.appendChild(s);});
+    w.appendChild(lg);
+    if(r.gap)w.appendChild(h('p','pl-warn','Vence el Expert System antes de que termines Mining Barge I: '+r.gap+(r.gap===1?' día':' días')+' sin minar. Con «Remap + implantes» llegas a tiempo.'));
+    return w;}
+  function drawCum(R){root.querySelectorAll('.mn-cum').forEach(box=>{const m=box.dataset.m,r=R[m],N=S.acc;box.querySelectorAll('svg,.mn-empty').forEach(n=>n.remove());
     const W=box.clientWidth;if(W<50)return;if(!r.inc){box.appendChild(h('div','mn-empty','Sin precio todavía.'));return;}
-    let c=0;const cum=r.inc.map(v=>c+=v),goal1=r.invest!=null?r.invest+r.es:null,goal2=goal1!=null?goal1+r.omega:null;
-    const H=200,mL=46,mR=8,mT=12,mB=22,max=Math.max(1,cum[27],goal2||0),tk=ticks(max,4),top=tk[tk.length-1];
+    let c=0;const cum=r.inc.map(v=>c+=v*N),goal1=r.invest!=null?r.invest*N:null,goal2=goal1!=null&&r.omega!=null?goal1+r.omega*N:null;
+    const H=200,mL=50,mR=8,mT=14,mB=22,max=Math.max(1,cum[27],goal2||0),tk=ticks(max,4),top=tk[tk.length-1];
     const x=d=>mL+(W-mL-mR)*d/28,y=v=>H-mB-(H-mB-mT)*v/top;
-    const svg=el('svg',{viewBox:'0 0 '+W+' '+H,role:'img','aria-label':'ISK acumulado en 28 días'});
+    const svg=el('svg',{viewBox:'0 0 '+W+' '+H,role:'img','aria-label':'ISK juntado en 28 días'});
     tk.forEach(v=>{svg.appendChild(el('line',{x1:mL,x2:W-mR,y1:y(v),y2:y(v),class:'gl'}));svg.appendChild(el('text',{x:mL-6,y:y(v),dy:'.35em','text-anchor':'end',class:'tk'},cmpISK(v)));});
-    [0,7,14,21,28].forEach(d=>svg.appendChild(el('text',{x:x(d),y:H-6,'text-anchor':'middle',class:'tk'},'d'+d)));
+    [0,7,14,21,28].forEach(d=>svg.appendChild(el('text',{x:x(d),y:H-6,'text-anchor':'middle',class:'tk'},'día '+d)));
     svg.appendChild(el('rect',{x:x(0),y:mT,width:x(7)-x(0),height:H-mB-mT,class:'esb'}));
-    const ln=(v,cls,lab)=>{if(v==null)return;svg.appendChild(el('line',{x1:mL,x2:W-mR,y1:y(v),y2:y(v),class:cls}));svg.appendChild(el('text',{x:W-mR,y:y(v)-4,'text-anchor':'end',class:'vl'},lab));};
-    ln(goal1,'gl1','Nave + fit + Expert System');ln(goal2,'gl2','+ siguiente Omega');
-    svg.appendChild(el('path',{d:'M'+x(0)+','+y(0)+cum.map((v,i)=>'L'+x(i+1)+','+y(v)).join(''),class:'cumln'}));
+    const ln=(v,cls,lab)=>{if(v==null)return;svg.appendChild(el('line',{x1:mL,x2:W-mR,y1:y(v),y2:y(v),class:cls}));svg.appendChild(el('text',{x:W-mR,y:y(v)-5,'text-anchor':'end',class:'vl'},lab));};
+    ln(goal1,'gl1','Inversión');ln(goal2,'gl2','Inversión + próximo Omega');
+    const pts=[[0,0],...cum.map((v,i)=>[i+1,v])];
+    svg.appendChild(el('path',{d:'M'+x(0)+','+y(0)+' '+pts.map(([d,v])=>'L'+x(d)+','+y(v)).join(' ')+' L'+x(28)+','+y(0)+' Z',class:'cumar'}));
+    svg.appendChild(el('path',{d:'M'+pts.map(([d,v])=>x(d)+','+y(v)).join(' L'),class:'cumln'}));
+    const tt=tip(box),hit=el('rect',{x:mL,y:mT,width:W-mL-mR,height:H-mB-mT,fill:'transparent'});
+    hit.addEventListener('mousemove',ev=>{const bx=box.getBoundingClientRect(),d=Math.max(1,Math.min(28,Math.round((ev.clientX-bx.left-mL)/(W-mL-mR)*28)));
+      tt.show(ev,'Día '+d,['Juntado: '+isk(cum[d-1]),'Ese día: '+isk(r.inc[d-1]*N)]);});
+    hit.addEventListener('mouseleave',()=>tt.hide());svg.appendChild(hit);
     box.appendChild(svg);});}
   function paint(){if(!root)return;seg();$q('.mn-v-ships').hidden=S.view!=='ships';$q('.mn-v-plan').hidden=S.view!=='plan';
     if(S.view==='plan'){paintPlan();return;}
     paintBoost();paintPrice();paintTake();paintKpi();paintPivot();paintDetail();paintInvestNote();paintTraining();drawCharts();}
-  function needPrices(){const ids=S.view==='plan'?[...['moon','ice','gas'].flatMap(m=>[matPriceId(m),...(MINE.simfit[[m,S.barge,S.ptier,S.att].join('|')].items||[]).map(x=>x[0])])]:shipFitIds();
+  function needPrices(){let ids;
+    if(S.view==='plan'){ids=[...['moon','ice','gas'].flatMap(m=>[matPriceId(m),...(MINE.simfit[[m,S.barge,S.ptier,S.patt].join('|')].items||[]).map(x=>x[0])]),...MINE.attrImpl['3']];
+      if(!PLEX.at){bulkBusy++;loadPlex().finally(()=>{bulkBusy--;paint();});}}
+    else ids=[...shipFitIds(),...(S.imp?MINE.impl[S.mat]:[])];
     loadMany(ids,()=>paint());if(ids.some(id=>!PRICE[id]))paint();}
-  function drawCharts(){if(!root||!root.offsetParent)return;lastW=root.clientWidth;if(S.view==='plan'){paintPlan();return;}paintBars();paintHold();drawn=true;}
+  function drawCharts(){if(!root||!root.offsetParent)return;lastW=root.clientWidth;if(S.view==='plan'){drawCum({moon:planCalc('moon'),ice:planCalc('ice'),gas:planCalc('gas')});return;}paintBars();paintHold();drawn=true;}
 
   // ---------- montaje ----------
   function mount(r){if(root)return;root=r;root.classList.add('mn');root.innerHTML=HTML;$q=s=>root.querySelector(s);
     $q('.mn-build').textContent=String(MINE.build);
     root.addEventListener('click',e=>{const b=e.target.closest('.pk-fb');if(!b)return;const k=b.closest('.pk-flt').dataset.k,v=b.dataset.v;
-      S[k]=(k==='lv'||k==='imp')?Number(v):v;
+      if(k==='accq'){S.acc=Number(v);}else if(k==='cmpv'){S.cmp=v==='1';S.cmpv=v;}else S[k]=(k==='lv'||k==='imp')?Number(v):v;
       if(k==='mat')fillItems();
       paint();if(S.met==='isk'&&(k==='mat'||k==='met'))loadPrice();
-      if(['view','mat','lv','tier','barge','ptier','att'].includes(k))needPrices();});
-    const num=(sel,k,min,max,fl)=>$q(sel).addEventListener('input',e=>{let v=parseFloat(e.target.value);if(!isFinite(v))return;v=Math.max(min,Math.min(max,fl?v:Math.round(v)));S[k]=v;paint();});
-    num('.mn-acc','acc',1,100);num('.mn-accr','acc',1,100);num('.mn-hrs','hrs',.5,24,1);num('.mn-plex','plex',0,1e10,1);num('.mn-es','esPlex',0,1e5,1);num('.mn-om','omegaPlex',0,1e5,1);
-    $q('.mn-base2').addEventListener('change',e=>{S.base=e.target.value;paint();});
-    $q('.mn-cmp2').addEventListener('change',e=>{S.cmp=e.target.value==='1';paint();needPrices();});
-    $q('.mn-mats').addEventListener('change',e=>{const s=e.target.closest('.mn-mitem');if(!s)return;S.item[s.dataset.m]=s.value;paint();needPrices();});
+      if(['view','mat','lv','tier','imp','barge','ptier','patt','cmpv'].includes(k))needPrices();});
+    // pasos − / + y campos de texto
+    root.addEventListener('click',e=>{const b=e.target.closest('.pl-stp button');if(!b)return;const st=b.closest('.pl-stp'),k=st.dataset.k;
+      const v=Math.round((S[k]+Number(b.dataset.d)*Number(st.dataset.st))*10)/10;S[k]=Math.max(Number(st.dataset.min),Math.min(Number(st.dataset.max),v));paint();});
+    root.addEventListener('change',e=>{const i=e.target.closest('.pl-stp .pl-in');if(!i)return;const st=i.closest('.pl-stp'),k=st.dataset.k;
+      let v=parseFloat(String(i.value).replace(/[^0-9.]/g,''));if(!isFinite(v)){paint();return;}if(k==='acc')v=Math.round(v);
+      S[k]=Math.max(Number(st.dataset.min),Math.min(Number(st.dataset.max),v));paint();});
+    root.addEventListener('keydown',e=>{if(e.key==='Enter'&&e.target.closest('.pl-in,.pl-plexin'))e.target.blur();});
+    $q('.pl-plexed').addEventListener('click',()=>{if(S.plexManual!=null){S.plexManual=null;paint();return;}const b=$q('.pl-plexe');b.hidden=false;const i=$q('.pl-plexin');i.value=plexISK()!=null?String(Math.round(plexISK())):'';i.focus();});
+    const plexSet=()=>{const v=parseFloat(String($q('.pl-plexin').value).replace(/[^0-9.]/g,''));$q('.pl-plexe').hidden=true;if(isFinite(v)&&v>0)S.plexManual=v;paint();};
+    $q('.pl-plexok').addEventListener('click',plexSet);$q('.pl-plexin').addEventListener('change',plexSet);
+    root.addEventListener('change',e=>{const s=e.target.closest('.mn-mitem');if(!s)return;S.item[s.dataset.m]=s.value;paint();needPrices();});
     $q('.mn-item').addEventListener('change',e=>{S.item[S.mat]=e.target.value;paint();loadPrice();});
     $q('.mn-base').addEventListener('change',e=>{S.base=e.target.value;paint();});
     $q('.mn-cmp').addEventListener('change',e=>{S.cmp=e.target.value==='1';paint();loadPrice();});

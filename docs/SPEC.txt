@@ -1115,3 +1115,14 @@ Comparativa Minera (antes «Minería»): plan para Omega nuevo
 - Margen: un solo control #fImpM (menú lateral); fuera cImpM/impSync de Ajustes. #fImpM entra en stFields (se guarda en gestorVentas.ajustes.v1).
   Input sin spinner (appearance:textfield), fondo oscuro.
 - Fuera la tarjeta #ovShip del resumen (el envío sigue en De Dónde Sale tu ISK, paso Courier y Contratos).
+
+==================== v1.0.31 ====================
+Comparativa Minera: plan para Omega nuevo
+- PLEX: loadPlex() pide /markets/19000001/orders/?type_id=44992 (mercado global de PLEX desde julio 2025; cualquier location_id) y usa
+  la venta más barata; si falla, /markets/prices/ (average_price). S.plexManual sobreescribe (botón «Escribir otro precio»).
+- MINE.impl (implantes de minería por material) y MINE.attrImpl {'3': Basic, '5': Improved} (Int/Mem/Per/Will). El plan usa S.patt
+  (base | remap | remap3); remap3 suma 4 implantes Basic a la inversión. Remap +5 solo queda en la tarjeta de entrenamiento (pide Cybernetics V).
+- Cifras principales × S.acc (cuentas); por cuenta en la tabla «cuentas claras». Controles .pl-stp (− / + y texto) y chips 1–100.
+- .pl-tl: línea de tiempo en HTML (segmentos Expert System / sin minar / con tus skills; marcas barge, día 28, Exhumer; leyenda abajo).
+- Verificado: Playwright con ESI simulado (Jita y región 19000001), 1, 10 y 11 cuentas, botones − / +, campos de texto, inglés sin restos,
+  móvil 390 px sin desborde, cero errores.
