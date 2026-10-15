@@ -2,6 +2,22 @@
 
 Cambios por versión del Gestor de Ventas. La más nueva arriba. El detalle técnico completo está en `docs/SPEC.txt`.
 
+## 1.0.31 — Comparativa Minera: plan para Omega nuevo más claro y con precios de ESI
+*2026-10-14*
+
+- **Cuentas**: con 2 o más cuentas, las cifras grandes ahora muestran el total de tus cuentas (antes mostraban solo una y parecía que no cambiaba nada).
+- **Precios de la API de EVE para todo**:
+  - PLEX del **mercado global de PLEX** (región 19000001 de ESI, la orden de venta más barata; si no responde, el promedio de CCP). Se puede escribir otro precio y volver al de ESI.
+  - Implantes de atributos +3 y de minería, naves, módulos y minerales desde Jita 4-4.
+  - El Expert System y el Omega se calculan en PLEX × el precio del PLEX.
+- **Implantes en la inversión**: «Remap + implantes» suma 4 implantes +3 (Int, Mem, Per, Will). Los +5 salen del plan porque piden Cybernetics V (unas dos semanas). En «Rendimiento por Nave», con implantes, la inversión suma los implantes de minería.
+- **Vista rediseñada**:
+  - Introducción en 4 pasos (día 1, días 1–7, día 8, días 8–28).
+  - «Tu Escenario» con botones − / + y accesos rápidos de cuentas (1, 5, 10, 25, 50, 100) en vez de los controles del navegador.
+  - Tarjetas de resultado por material: lo que te queda (o te falta) a los 28 días, si las semanas 2 a 4 pagan el Omega y una barra de cuánto cubren.
+  - Detalle por material: cuentas claras (ingresos y gastos, por cuenta y de todas tus cuentas), línea de tiempo (Expert System, días sin minar, barge propia, día 28 y Exhumer) y gráfico del ISK juntado.
+- Textos reescritos, más simples y en segunda persona. Español / English.
+
 ## 1.0.30 — Ganancia a la derecha y compras al Buy, Split o Sell
 *2026-10-14*
 

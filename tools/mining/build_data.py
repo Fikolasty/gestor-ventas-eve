@@ -159,7 +159,15 @@ names = {}
 for v in list(fits.values()) + [x['items'] for x in simfit.values()]:
     for i, _ in v:
         names[i] = TR.name(i)
-data.update(train=train, sim=sim, simfit=simfit, fits=fits, names=names)
+# Implantes: de minería (+5%, por material) y de atributos (+3 Basic, +5 Improved; Int/Mem/Per/Will)
+from calc import IMPLANTS
+impl = {m: [tid(n) for n in IMPLANTS[m]] for m in MAT}
+attr_impl = {'3': [tid(n) for n in ['Cybernetic Subprocessor - Basic', 'Memory Augmentation - Basic', 'Ocular Filter - Basic', 'Neural Boost - Basic']],
+             '5': [tid(n) for n in ['Cybernetic Subprocessor - Improved', 'Memory Augmentation - Improved', 'Ocular Filter - Improved', 'Neural Boost - Improved']]}
+for v in list(impl.values()) + list(attr_impl.values()):
+    for i in v:
+        names[i] = TR.name(i)
+data.update(train=train, sim=sim, simfit=simfit, fits=fits, names=names, impl=impl, attrImpl=attr_impl, plex=44992)
 with open(out, 'w', encoding='utf-8') as f:
     f.write('// Generado por tools/mining/build_data.py desde los datos estáticos de EVE (Pyfa, build %s). No editar a mano.\n' % build)
     f.write('const MINE=' + json.dumps(data, ensure_ascii=False, separators=(',', ':')) + ';\n')
