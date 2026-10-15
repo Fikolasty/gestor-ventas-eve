@@ -4,7 +4,7 @@
 **Repositorio autorizado:** Fikolasty/gestor-ventas-eve; no operar con la cuenta Geiner.
 **Base de código auditada inicialmente:** main, v1.0.66, commit 2df3197c02ea156f8c56c772a9a49972a2ea966f.
 **Rama de documentación:** docs/spec-progress-20261015.
-**Estado de publicación:** cambios de documentación en rama; main sin modificar por este trabajo.
+**Estado de publicación:** SPEC.md y PROGRESS.md creados en rama; main sin modificar por este trabajo.
 **Fuente de requisitos activos:** [SPEC.md](SPEC.md). Historial técnico: [SPEC.txt](SPEC.txt). Versiones: [CHANGELOG.md](../CHANGELOG.md).
 
 ## 1. Objetivo de la colaboración
@@ -60,7 +60,7 @@ Los hallazgos proceden de lectura de fuentes, **no equivalen a bugs reproducidos
 
 | Fase | Estado | Actividad |
 |---|---|---|
-| 0. Base y persistencia de contexto | **En curso** | Crear SPEC.md + PROGRESS.md en rama; conservar SPEC.txt |
+| 0. Base y persistencia de contexto | **Completada** | Crear SPEC.md + PROGRESS.md en rama; conservar SPEC.txt |
 | 1. Pendientes de Claude | Por hacer | Confirmar P-01 según UI vigente; ejecutar y probar P-02 |
 | 2. Test harness/regresión | Por hacer | Capturar snapshots de fórmulas con ESI simulado, casos límite y build |
 | 3. Auditoría funcional | Por hacer | Parser, estado, motor, reproceso, enlaces de UI y traducción |
@@ -71,7 +71,7 @@ Los hallazgos proceden de lectura de fuentes, **no equivalen a bugs reproducidos
 
 ## 6. Registro de pruebas
 
-**Aún no ejecutadas para esta rama:** build, ESI simulado, pruebas visuales en navegador, Firefox, regresión de cálculos y pruebas de memoria.
+**No necesarias para el commit exclusivo de documentación, y aún no ejecutadas para cambios de código:** build, ESI simulado, pruebas visuales en navegador, Firefox, regresión de cálculos y pruebas de memoria.
 
 Este commit de documentación **no debe cambiar ningún archivo fuente, fórmula, API, traducción ni index.html**. El primer punto verificable es que los dos documentos existen en la rama y que main sigue apuntando al commit de partida.
 
@@ -86,4 +86,4 @@ Este commit de documentación **no debe cambiar ningún archivo fuente, fórmula
 
 ### Próximo paso
 
-Verificar los dos archivos creados; luego acordar el detalle visual de P-01 a partir de la web actual y empezar P-02 de forma aislada, preservando casos contractuales.
+Documentos creados y diferencia frente a main comprobada (únicamente docs/SPEC.md y docs/PROGRESS.md; dos commits, cero cambios de fuente). luego acordar el detalle visual de P-01 a partir de la web actual y empezar P-02 de forma aislada, preservando casos contractuales.
