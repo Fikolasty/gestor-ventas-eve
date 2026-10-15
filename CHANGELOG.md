@@ -2,6 +2,13 @@
 
 Cambios por versión del Gestor de Ventas. La más nueva arriba. El detalle técnico completo está en `docs/SPEC.txt`.
 
+## 1.0.58 — Fondo limpio en alta resolución, tema arriba y margen más claro
+*2026-10-15*
+
+- **Fondo**: la imagen de Citadel sin ningún texto (fuera «A CITY MADE OF DREAMS…», el logo de EVE Online, «CITADEL»/«SIGMA» y «SPRING 2016»), ampliada a 2560 × 1440 con nitidez extra para pantallas grandes.
+- **Dark / Light** pasa a la esquina superior derecha (sale del menú lateral).
+- **Margen** de la ruta Jita → HY-RWO rediseñado: campo oscuro con «+» y «%» dentro, sin las flechas blancas, con borde arcilla al escribir.
+
 ## 1.0.57 — Nueva imagen de fondo
 *2026-10-15*
 

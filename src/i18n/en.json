@@ -699,6 +699,7 @@
 "Margen al importar a HY-RWO %": "Margin when importing to HY-RWO %",
 "Margen al vender en HY-RWO, % neto sobre Jita Sell": "Margin when selling in HY-RWO, net % over Jita Sell",
 "Margen de Seguridad": "Safety Margin",
+"Margen de importación: cuánto más que Jita Sell cobras en HY-RWO (neto, ya con taxes).": "Import margin: how much above Jita Sell you charge in HY-RWO (net, after taxes).",
 "Margen de seguridad sobre los precios de Jita": "Safety margin on Jita prices",
 "Mejor ": "Best ",
 "Mejor escenario": "Best case",

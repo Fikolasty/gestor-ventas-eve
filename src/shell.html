@@ -864,8 +864,6 @@ body::after{background:radial-gradient(130% 100% at 50% 40%,rgba(14,13,12,0) 55%
 .route-ar{color:var(--clay)}
 .route-ic{width:16px;height:16px;margin-left:4px;background:var(--mut);-webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M7 4L3 8l4 4M3 8h14M17 20l4-4-4-4M21 16H7'/%3E%3C/svg%3E") center/contain no-repeat;mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M7 4L3 8l4 4M3 8h14M17 20l4-4-4-4M21 16H7'/%3E%3C/svg%3E") center/contain no-repeat}
 .route-b[aria-pressed="true"]{border-color:var(--clay);background:#1c1a19;box-shadow:0 0 0 1px var(--clay),0 8px 18px rgba(0,0,0,.3)}
-.route-m{display:inline-flex;align-items:center;gap:6px;font-size:.9rem;color:#e5e3da;text-shadow:0 1px 3px rgba(0,0,0,.9)}
-.route-m input{width:70px;padding:5px 8px;text-align:right}
 .k-fN,.v-what[data-k=fN]{background:rgba(224,168,79,.13)!important;color:#ecc27e!important;border-color:rgba(224,168,79,.4)!important}
 .k-fJ,.k-fJI,.v-what[data-k=fJ],.v-what[data-k=fJI]{background:rgba(122,170,224,.13)!important;color:#a9c9ee!important;border-color:rgba(122,170,224,.42)!important}
 /* v1.0.6: comprar en Jita al Sell y revender en HY-RWO */
@@ -968,6 +966,14 @@ body::after{background:radial-gradient(130% 100% at 50% 40%,rgba(14,13,12,0) 55%
 /* v1.0.56: el texto pequeño del Resultado alineado con el título (después del ícono) */
 #pSum .res-top{padding-left:35px}
 @media(max-width:600px){#pSum .res-top .res-big .num{font-size:1.5rem}}
+/* v1.0.57: margen de importación como campo limpio (sin flechas blancas), con + y % dentro; tema arriba a la derecha */
+.route-m{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:6px 10px;border-radius:10px;background:rgba(21,21,21,.75);border:1px solid rgba(222,220,209,.12);color:var(--mut);font-size:.88rem}
+.route-m .rm-f{display:inline-flex;align-items:center;gap:2px;padding:3px 8px;border-radius:8px;background:#151515;border:1px solid rgba(222,220,209,.18);transition:border-color .12s}
+.route-m .rm-f:focus-within{border-color:var(--clay);box-shadow:0 0 0 1px var(--clay)}
+.route-m .rm-s{color:var(--dim);font:500 .85rem var(--f-num)}
+.route-m input{width:2.4em;padding:0;margin:0;border:0!important;background:transparent!important;box-shadow:none!important;color:var(--txt);font:600 .95rem var(--f-num);text-align:center;appearance:textfield;-moz-appearance:textfield;outline:none}
+.route-m input::-webkit-outer-spin-button,.route-m input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+.top .top-theme{margin-left:auto}
 /* interruptores del menú (Courier, tema) */
 .sw{display:inline-flex;align-items:center;gap:8px;cursor:pointer;font-size:.9rem;color:#e5e3da;text-shadow:0 1px 3px rgba(0,0,0,.9);padding:6px 10px;border-radius:10px;background:rgba(21,21,21,.75);border:1px solid rgba(222,220,209,.12)}
 .sw input{position:absolute;opacity:0;width:1px;height:1px}
@@ -976,7 +982,6 @@ body::after{background:radial-gradient(130% 100% at 50% 40%,rgba(14,13,12,0) 55%
 .sw input:checked+.sw-t{background:var(--clay);border-color:var(--clay)}
 .sw input:checked+.sw-t::after{transform:translateX(14px);background:#fff}
 .sw input:focus-visible+.sw-t{outline:2px solid #d6d4cb;outline-offset:2px}
-.route-m{padding:4px 6px 4px 10px;border-radius:10px;background:rgba(21,21,21,.75);border:1px solid rgba(222,220,209,.12)}
 /* v1.0.8: Ajustes y Guía de Uso arriba, con X fija y secciones desplegables */
 .top-slot{margin-top:18px;display:grid;gap:14px}
 .top-slot>.panel{margin:0}
@@ -1036,7 +1041,6 @@ body::after{background:
 .route>button:hover,.route>.sw:hover{background:rgba(222,220,209,.06)!important}
 .route .route-b{font-weight:600}
 .route .route-b[aria-pressed="true"]{background:rgba(217,119,87,.14)!important;color:#f3e6c8}
-.route .route-m input{width:64px;padding:4px 8px;margin:0 2px}
 @media(max-width:700px){.route{display:grid!important;grid-template-columns:1fr 1fr;width:100%}.route>*{justify-content:flex-start}
   .route>.route-b{grid-column:1/-1}.route>*+*::after{display:none}.route>*{border-top:1px solid rgba(222,220,209,.08)!important}.route>.route-b{border-top:0!important}
   .route>.route-m{grid-column:1/-1}}
@@ -1049,7 +1053,6 @@ body::after{background:
 .route .route-b[aria-pressed="true"] .route-ic::before{background:#fff}
 .route .route-b[aria-pressed="true"]{background:transparent!important;color:#e5e3da}
 .route .route-ar{color:var(--mut)}
-.route .route-m{gap:6px!important}
 html.light .route .route-ic{background:#e4e2da;border-color:rgba(31,30,29,.2)}html.light .route .route-ic::before{background:#5e5d59}
 html.light .route .route-b[aria-pressed="true"] .route-ic{background:#c96442;border-color:#c96442}html.light .route .route-b[aria-pressed="true"] .route-ic::before{background:#fff}
 html.light .route .route-b[aria-pressed="true"]{color:#2a2926}
@@ -1088,7 +1091,6 @@ body.side-c .side{width:var(--sw-c)}
 .side .route{display:flex!important;flex-direction:column;align-items:stretch;gap:2px!important;margin:0;padding:0;background:none;border:0;box-shadow:none;border-radius:0;width:100%}
 .side .route>*{min-height:40px;padding:0 10px!important;justify-content:flex-start;width:100%;border-radius:9px!important}
 .side .route>*+*::after{display:none}
-.side .route .route-m{flex-wrap:wrap;min-height:44px;padding:4px 10px!important;color:var(--mut)}
 body.side-c .side-t,body.side-c .side-h,body.side-c .side-l,body.side-c .route .sw>span:not(.sw-t),body.side-c .route .route-b>span:not(.route-ic),body.side-c .route .route-m{display:none!important}
 body.side-c .side .route>*,body.side-c .side-i{padding:0!important;justify-content:center}
 body.side-c .side-top{justify-content:center;padding:0 0 6px}
@@ -1282,8 +1284,7 @@ body.in-jita #bMore,body.in-jita #more,body.in-jita #vRep,body.in-jita .if-ore{d
     <button type="button" class="route-b" id="bFlip" aria-pressed="false" title="Ruta del lote. HY-RWO → Jita: vendes lo que tienes en Null. Jita → HY-RWO: llevas (o compras) en Jita y vendes en Null más caro. Clic para invertir.">
       <span class="route-ic" aria-hidden="true"></span><span class="route-from" id="rtFrom">HY-RWO</span><span class="route-ar" aria-hidden="true">→</span><span class="route-to" id="rtTo">Jita</span></button>
     <label class="sw" id="shipLab" hidden title="Solo con la ruta Jita → HY-RWO. On: llevas los items de Jita a HY-RWO con SIGMA Freight y se cuenta el courier. Off: los trajiste a Jita para venderlos allí, sin courier."><input type="checkbox" id="shipOn" checked><span class="sw-t" aria-hidden="true"></span><span id="shipTxt">Courier On</span></label>
-    <label class="sw" title="Tema de la página: Dark (oscuro) o Light (claro)."><input type="checkbox" id="themeLight"><span class="sw-t" aria-hidden="true"></span><span id="themeTxt">Dark</span></label>
-    <label class="route-m" id="rtM" hidden>Margen +<input type="number" id="fImpM" min="0" step="0.5" value="15" aria-label="Margen al vender en HY-RWO, % neto sobre Jita Sell">% neto</label>
+    <label class="route-m" id="rtM" hidden title="Margen de importación: cuánto más que Jita Sell cobras en HY-RWO (neto, ya con taxes)."><span class="rm-l">Margen</span><span class="rm-f"><span class="rm-s">+</span><input type="number" id="fImpM" min="0" step="0.5" value="15" inputmode="decimal" aria-label="Margen al vender en HY-RWO, % neto sobre Jita Sell"><span class="rm-s">%</span></span></label>
   </div>
   </div>
   <div class="side-g"><span class="side-h">General</span>
@@ -1295,6 +1296,7 @@ body.in-jita #bMore,body.in-jita #more,body.in-jita #vRep,body.in-jita .if-ore{d
 <div class="side-bd" id="sideBd" hidden></div>
 <header class="top">
   <div class="brand"><span class="logo-s sig" aria-hidden="true"></span>SIGMA GRINDSET <small>EVE Online</small></div>
+  <label class="sw top-theme" title="Tema de la página: Dark (oscuro) o Light (claro)."><input type="checkbox" id="themeLight"><span class="sw-t" aria-hidden="true"></span><span id="themeTxt">Dark</span></label>
 </header>
 
 <section class="hero">

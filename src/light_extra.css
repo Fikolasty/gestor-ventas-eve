@@ -88,3 +88,6 @@ html.light .pk-x{color:#b5532f;background:rgba(217,119,87,.1)}
 html.light .hero-side>.ref .ref-t{color:#7a3a1f;text-shadow:none}
 html.light .hero-side>.ref .ref-t b{color:#b5532f}
 html.light .hero-side>.start-note,html.light .hero-side>.ref{background:none!important;border-color:rgba(217,119,87,.3)!important}
+/* v1.0.57: margen en Light */
+html.light .route-m{background:#f7f5ef;border-color:rgba(31,30,29,.14)}
+html.light .route-m .rm-f{background:#fff;border-color:rgba(31,30,29,.2)}
