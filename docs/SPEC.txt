@@ -1179,3 +1179,9 @@ Grupos de naves del mismo tamaño; Expert System 0 para Exhumers
   S.esPlex, así que recalculan solos. Simulación de minado y textos del
   héroe sin cambios (siguen asumiendo Expert System días 1 a 7).
 - Pendiente verificar en vivo tras publicar.
+==================== v1.0.37 ====================
+Etiqueta del grupo de naves encima (corrige envoltura)
+- .pl-shiprow en columna (etiqueta encima, SEG a width:100%, botones
+  flex:1 1 0). En v1.0.36 la etiqueta lateral restaba 58 px y el grupo
+  Barge (etiquetas más largas) se partía 2+1 en vivo.
+- Pendiente verificar en vivo tras publicar.
