@@ -1439,9 +1439,9 @@ function ctItems(list,withC){const w=el('div','ct-items'),hd=el('div','ct-ih');
   const ul=el('ul');list.slice(0,8).forEach(x=>{const li=el('li');const ic=iconFor(x.n);if(ic)li.append(ic);li.append(el('span','ct-n',x.n),el('span','ct-q num',fmtQ(x.q)+(withC?' · '+fmtV(Math.round(x.v*100)/100):'')));ul.append(li);});
   if(list.length>8){const li=el('li','ct-more');li.append(el('span',null,'y '+(list.length-8)+' más (incluidos al copiar)'));ul.append(li);}
   w.append(ul);return w;}
-// Casillas negras (etiqueta arriba, valor abajo; clic copia). cls: 'slots-2' = dos columnas (los valores largos ocupan la fila).
+// Casillas negras (etiqueta arriba, valor abajo; clic copia el valor exacto del contrato). cls: 'slots-2' = dos columnas (los valores largos ocupan la fila).
 function slots(fields,cls){const w=el('div','slots'+(cls?' '+cls:''));
-  fields.forEach(([k,v,cp])=>{const d=el('div','slot'+(String(v).length>22?' wide':''));d.append(el('span','slot-k',k));d.append(cp!=null?copyBtn(cp,v):el('span','slot-v'+(isNumTxt(v)?' cp-n':''),v));w.append(d);});return w;}
+  fields.forEach(([k,v,cp])=>{const d=el('div','slot'+(String(v).length>22?' wide':''));d.append(el('span','slot-k',k));d.append(copyBtn(cp!=null?cp:v,v)); /* v1.0.64: todas se copian */w.append(d);});return w;}
 // v1.0.60: el recuadro Extras se ve solo si tiene alguna sección visible
 const syncExtras=()=>{$('pRepro').hidden=S.flip||!S.items.some(o=>resolveOre(o.name));$('pExtra').hidden=!S.items.length||($('pRepro').hidden&&$('pDisc').hidden&&IN_JITA());}; // Contratos se oculta en Jita sin courier // reproceso solo en HY-RWO
 function paintContracts(P){

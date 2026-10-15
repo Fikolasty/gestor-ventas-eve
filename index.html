@@ -7,7 +7,7 @@
 <meta name="referrer" content="no-referrer">
 <title>Market Moves+ · SIGMA GRINDSET</title>
 <style>
-/* ================= Market Moves+ v1.0.63 =================
+/* ================= Market Moves+ v1.0.64 =================
    Paleta: azul de base, naranja = acción, verde/rojo = ganancia/pérdida.
    Sin backdrop-filter: el vidrio se finge con rgba + bordes. */
 *{box-sizing:border-box;margin:0;padding:0}
@@ -974,8 +974,8 @@ details.fold>summary h2 .logo{width:24px;height:24px;margin:0 2px 0 0}
 .slots-2 .slot.wide{grid-column:1/-1}
 .slot{background:#0f0f0f;border:1px solid rgba(222,220,209,.10);border-radius:9px;padding:7px 10px;box-shadow:inset 0 1px 3px rgba(0,0,0,.6);min-width:0}
 .slot-k{display:block;color:var(--dim);font-size:.72rem}
-.slot .copy,.slot .slot-v{display:block;margin:2px 0 0!important;padding:0!important;border:0!important;background:none!important;box-shadow:none!important;text-align:left;width:100%;overflow-wrap:anywhere;font:600 .92rem var(--f-ui);color:var(--txt)}
-.slot .copy.cp-n,.slot .slot-v.cp-n{font-family:var(--f-num)!important}
+.slot .copy{display:block;margin:2px 0 0!important;padding:0!important;border:0!important;background:none!important;box-shadow:none!important;text-align:left;width:100%;overflow-wrap:anywhere;font:600 .92rem var(--f-ui);color:var(--txt)}
+.slot .copy.cp-n{font-family:var(--f-num)!important}
 .slot .copy:hover{color:#fff;text-decoration:underline;text-decoration-color:rgba(222,220,209,.35)}
 @media(max-width:900px){.stp-b.two{grid-template-columns:minmax(0,1fr)}}
 @media(max-width:700px){.stp-h{grid-template-columns:30px minmax(0,1fr) 14px;padding:12px}.stp-n{grid-column:1;grid-row:1;align-self:start}.stp-m{grid-column:2;grid-row:1}.stp-a{grid-column:2;grid-row:2;text-align:left}.stp-chev{grid-column:3;grid-row:1}.stp-b{padding:0 12px 14px}.slots-2{grid-template-columns:minmax(0,1fr)}}
@@ -1020,6 +1020,22 @@ details.fold>summary h2 .logo{width:24px;height:24px;margin:0 2px 0 0}
 .hero-intro>.paste{margin:0!important;display:flex;flex-direction:column;min-width:0}
 .hero-intro>.paste textarea{flex:1}
 @media(max-width:760px){.start-note{flex-direction:column;align-items:flex-start}.top{flex-wrap:wrap;row-gap:10px}.top .brand{margin-right:auto}.ticker{order:3;flex:1 1 100%;height:36px}.top-theme #themeTxt{display:none}.top{column-gap:10px}.tk-i{font-size:.86rem;padding:0 28px}}
+/* v1.0.64: simetría del paso abierto: mismos márgenes a ambos lados y abajo; las dos columnas arrancan y terminan a la misma altura */
+.stp-b{padding:0 20px 20px 20px}
+.stp-b.two{align-items:stretch;grid-template-columns:minmax(0,1fr) 340px;gap:20px}
+.stp-main{display:flex;flex-direction:column;gap:12px}
+.stp-main>.stp-acts{margin:0;min-height:36px}
+.stp-main>.pl{margin:0!important;flex:1}
+.stp-ct{display:flex;flex-direction:column;padding:12px}
+.stp-ct h5{min-height:36px;display:flex;align-items:center;margin:-12px -12px 12px;padding:0 12px;border-bottom:1px solid rgba(222,220,209,.08)}
+.stp-ct>.slots{flex:1;align-content:start}
+@media(max-width:700px){.stp-b{padding:0 12px 14px}}
+/* v1.0.64: en pasos de dos columnas la tabla es más angosta: columnas proporcionales, nombre con su ícono en una línea */
+.stp-b.two .pl-head,.stp-b.two .pl-row{grid-template-columns:minmax(0,1.6fr) minmax(70px,.6fr) minmax(110px,1fr) minmax(110px,1fr);gap:12px}
+.stp-main .pl-row>.n{display:flex;align-items:center;gap:8px}
+.stp-main .pl-row>.n>.cp{min-width:0;overflow-wrap:anywhere}
+.stp-main>.stp-acts{min-height:42px}
+.stp-ct h5{min-height:42px}
 /* interruptores del menú (Courier, tema) */
 .sw{display:inline-flex;align-items:center;gap:8px;cursor:pointer;font-size:.9rem;color:#e5e3da;text-shadow:0 1px 3px rgba(0,0,0,.9);padding:6px 10px;border-radius:10px;background:rgba(21,21,21,.75);border:1px solid rgba(222,220,209,.12)}
 .sw input{position:absolute;opacity:0;width:1px;height:1px}
@@ -1586,6 +1602,7 @@ html.light .tk-i b{color:#c2470a}
 html.light .tk-i .ref-tag{color:#eae9e4;background:#c96442}
 html.light .sn-x{border:1px solid rgba(217,119,87,0.562);background:rgba(240,237,229,0.6);color:#a17d2b}
 html.light .sn-x:hover{border-color:#c96442;background:rgba(217,119,87,0.25)}
+html.light .stp-ct h5{border-bottom:1px solid rgba(31,30,29,0.076)}
 html.light .sw{color:#33322f;background:rgba(240,237,229,0.75);border:1px solid rgba(31,30,29,0.114)}
 html.light .sw-t{background:#dfddd7;border:1px solid rgba(31,30,29,0.19)}
 html.light .sw-t::after{background:#54524d}
@@ -2112,13 +2129,13 @@ Contraband Freight = no</textarea><small>Una regla por línea: Nombre = tax tota
 <button type="button" class="totop" id="toTop" aria-label="Volver arriba" title="Volver arriba (Inicio)" hidden><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 14l6-6 6 6"/></svg></button>
 <footer class="foot">
   <p class="foot-sec"><span class="ic i-lock" aria-hidden="true"></span>Tu inventario no se guarda: al cerrar o recargar se borra. Solo tus Ajustes quedan en este navegador.</p>
-  <div class="foot-by">Creado por <b>Fiko McGivert</b> · Vanguardia DR · SIGMA GRINDSET · <span class="ver">v1.0.63</span></div>
+  <div class="foot-by">Creado por <b>Fiko McGivert</b> · Vanguardia DR · SIGMA GRINDSET · <span class="ver">v1.0.64</span></div>
 </footer>
 
 <script>
 'use strict';
 /* ============================================================
-   Market Moves+ v1.0.63 — SIGMA GRINDSET / Vanguardia DR
+   Market Moves+ v1.0.64 — SIGMA GRINDSET / Vanguardia DR
    Flujo:  pegado → items → carga (ESI: precios, volúmenes, historial) → verificación → plan → vista
      1. Pegado      parsePaste(): parser posicional de columnas de EVE (Name · Quantity · … · Volume · Est. Price).
      2. Carga       esiItems(): trae todo lo que falta; mientras carga, refresh() NO pinta (S.loading).
@@ -3556,9 +3573,9 @@ function ctItems(list,withC){const w=el('div','ct-items'),hd=el('div','ct-ih');
   const ul=el('ul');list.slice(0,8).forEach(x=>{const li=el('li');const ic=iconFor(x.n);if(ic)li.append(ic);li.append(el('span','ct-n',x.n),el('span','ct-q num',fmtQ(x.q)+(withC?' · '+fmtV(Math.round(x.v*100)/100):'')));ul.append(li);});
   if(list.length>8){const li=el('li','ct-more');li.append(el('span',null,'y '+(list.length-8)+' más (incluidos al copiar)'));ul.append(li);}
   w.append(ul);return w;}
-// Casillas negras (etiqueta arriba, valor abajo; clic copia). cls: 'slots-2' = dos columnas (los valores largos ocupan la fila).
+// Casillas negras (etiqueta arriba, valor abajo; clic copia el valor exacto del contrato). cls: 'slots-2' = dos columnas (los valores largos ocupan la fila).
 function slots(fields,cls){const w=el('div','slots'+(cls?' '+cls:''));
-  fields.forEach(([k,v,cp])=>{const d=el('div','slot'+(String(v).length>22?' wide':''));d.append(el('span','slot-k',k));d.append(cp!=null?copyBtn(cp,v):el('span','slot-v'+(isNumTxt(v)?' cp-n':''),v));w.append(d);});return w;}
+  fields.forEach(([k,v,cp])=>{const d=el('div','slot'+(String(v).length>22?' wide':''));d.append(el('span','slot-k',k));d.append(copyBtn(cp!=null?cp:v,v)); /* v1.0.64: todas se copian */w.append(d);});return w;}
 // v1.0.60: el recuadro Extras se ve solo si tiene alguna sección visible
 const syncExtras=()=>{$('pRepro').hidden=S.flip||!S.items.some(o=>resolveOre(o.name));$('pExtra').hidden=!S.items.length||($('pRepro').hidden&&$('pDisc').hidden&&IN_JITA());}; // Contratos se oculta en Jita sin courier // reproceso solo en HY-RWO
 function paintContracts(P){

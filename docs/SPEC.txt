@@ -1246,3 +1246,7 @@ Comparativa Minera: plan para Omega nuevo
 
 ==================== v1.0.63 ====================
 - #pCtr dentro de #pExtra (antes de #pRepro). syncExtras: #pExtra oculto sin items o cuando Contratos (IN_JITA), Reproceso y Jugadores están ocultos.
+
+==================== v1.0.64 ====================
+- .stp-b padding 0 20px 20px; .stp-b.two stretch; .stp-main flex columna; .stp-ct h5 y .stp-acts con min-height 42 px.
+- Tabla en pasos de dos columnas: 1.6fr / .6fr / 1fr / 1fr. slots(): toda casilla es copyBtn (cp o el valor visible). Fuera .slot-v.

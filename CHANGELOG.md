@@ -2,6 +2,13 @@
 
 Cambios por versión del Gestor de Ventas. La más nueva arriba. El detalle técnico completo está en `docs/SPEC.txt`.
 
+## 1.0.64 — Simetría en los Pasos y casillas copiables
+*2026-10-15*
+
+- Paso abierto simétrico: el mismo margen a la izquierda, a la derecha y abajo (20 px); la tabla de items y «Cómo llenar el contrato» empiezan y terminan a la misma altura, con la fila «Copiar items» al nivel del título del contrato.
+- En pasos con contrato, la tabla usa columnas proporcionales: el nombre del item queda en una línea con su ícono.
+- Todas las casillas del contrato se copian con un clic (también Tipo de contrato, Ubicación, Expiración, Cálculo…), en los Pasos y en Contratos y Envío.
+
 ## 1.0.63 — Contratos dentro de Extras
 *2026-10-15*
 
