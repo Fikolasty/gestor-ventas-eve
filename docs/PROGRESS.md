@@ -86,4 +86,4 @@ Este commit de documentación **no debe cambiar ningún archivo fuente, fórmula
 
 ### Próximo paso
 
-Documentos creados y diferencia frente a main comprobada (únicamente docs/SPEC.md y docs/PROGRESS.md; dos commits, cero cambios de fuente). luego acordar el detalle visual de P-01 a partir de la web actual y empezar P-02 de forma aislada, preservando casos contractuales.
+Documentos creados y diferencia frente a main comprobada (únicamente docs/SPEC.md y docs/PROGRESS.md; cero cambios de fuente). Acordar el detalle visual de P-01 a partir de la web actual y empezar P-02 de forma aislada, preservando casos contractuales.
