@@ -2,6 +2,11 @@
 
 Cambios por versión del Gestor de Ventas. La más nueva arriba. El detalle técnico completo está en `docs/SPEC.txt`.
 
+## 1.0.35 — Selector de naves del plan en dos grupos
+*2026-10-14*
+
+- El selector de nave del plan ahora tiene dos grupos simétricos de 3 botones: Barge (Procurer, Retriever, Covetor) y Exhumer (Skiff, Mackinaw, Hulk), en vez de un solo grupo de 6 desbalanceado. La pista debajo quedó en una frase corta por nave y la nota del primer mes quedó junto al grupo Exhumer. Español / English.
+
 ## 1.0.34 — Desplegables de Minería con estilo de tarjeta
 *2026-10-14*
 
