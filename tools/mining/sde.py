@@ -1,6 +1,22 @@
-import json, glob, pickle, os
+import json, glob, pickle, os, hashlib
 D = os.path.join(os.environ.get('PYFA_STATICDATA', '../pyfa/staticdata'), '')
-CACHE = os.path.join(os.environ.get('TMPDIR', '/tmp'), 'mining_sde.pkl')
+# Evitar reutilizar el pickle de una expansión anterior: sello por directorio,
+# build Pyfa y tamaños/mtime de los JSON de SDE. Nunca asumir que nombres/stats son fijos.
+fingerprint_files = sorted(
+    p for kind in ('fsd_built/types.*.json','fsd_built/typedogma.*.json',
+                   'fsd_built/dogmaeffects.*.json','fsd_built/dogmaattributes.*.json',
+                   'fsd_built/groups.*.json','fsd_built/metagroups.*.json',
+                   'phobos/traits.0.json','phobos/metadata.0.json')
+    for p in glob.glob(os.path.join(D, kind))
+)
+if not fingerprint_files:
+    raise FileNotFoundError('No se encontró SDE de Pyfa; configura PYFA_STATICDATA')
+fingerprint = hashlib.sha256(
+    (os.path.realpath(D)+'|'+ '|'.join(
+        f'{p}:{os.stat(p).st_size}:{os.stat(p).st_mtime_ns}' for p in fingerprint_files
+    )).encode('utf-8')
+).hexdigest()[:20]
+CACHE = os.path.join(os.environ.get('TMPDIR', '/tmp'), f'mining_sde_{fingerprint}.pkl')
 
 def _load(prefix):
     out = {}

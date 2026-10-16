@@ -84,8 +84,8 @@ def stack(mults):
 FITS = {
  'moon': {
   'T1':      dict(high='Strip Miner I',   low='Mining Laser Upgrade I',  mid='Mining Survey Chipset I', rigs=['Medium Drone Mining Augmentor I'] * 3, drone='Mining Drone I'),
-  'T2':      dict(high='Strip Miner I',   low='Mining Laser Upgrade II', mid='Mining Survey Chipset II', rigs=['Medium Drone Mining Augmentor II', 'Medium Drone Mining Augmentor II', 'Medium Drone Mining Augmentor I'], drone='Mining Drone I'),
-  'Faction': dict(high='ORE Strip Miner', low='Mining Laser Upgrade II', mid='Republic Fleet Mining Survey Chipset', rigs=['Medium Drone Mining Augmentor II', 'Medium Drone Mining Augmentor II', 'Medium Drone Mining Augmentor I'], drone='Mining Drone I'),
+  'T2':      dict(high='Strip Miner I',   low='Mining Laser Upgrade II', mid='Mining Survey Chipset II', rigs=['Medium Drone Mining Augmentor II', 'Medium Drone Mining Augmentor II', 'Medium Drone Mining Augmentor I'], drone='Mining Drone II'),
+  'Faction': dict(high='ORE Strip Miner', low='Mining Laser Upgrade II', mid='Republic Fleet Mining Survey Chipset', rigs=['Medium Drone Mining Augmentor II', 'Medium Drone Mining Augmentor II', 'Medium Drone Mining Augmentor I'], drone="'Augmented' Mining Drone"),
  },
  'ice': {
   'T1':      dict(high='Ice Harvester I',   low='Ice Harvester Upgrade I',  mid='Mining Survey Chipset I', rigs=['Medium Ice Harvester Accelerator I', 'Medium Drone Mining Augmentor I'], drone='Ice Harvesting Drone I'),
@@ -175,14 +175,20 @@ def calc(ship, mat, tier, level, implants=True, rigs_override=None, mid_override
     mod_mph = base_mph * (1 + crit_p * crit_b)
     # drones
     drone_mph = 0; nD = 0
+    drone_waste = 0
     if fit['drone']:
         from sde import types
         D = A(fit['drone']); bw = sh['droneBandwidth']; vol = types[str(name2id[fit['drone']])]['volume']
         nD = int(min(lvl('Drones'), bw // D['droneBandwidthUsed'], sh['droneCapacity'] // vol))
         damt = D['miningAmount']; ddur = D['duration']
+        drone_waste = D.get('miningWasteProbability', 0)
         if mat == 'moon':
             damt *= pct(A('Mining Drone Operation')['miningAmountBonus'] * lvl('Mining Drone Operation'))
             damt *= pct(A('Drone Interfacing')['miningAmountBonus'] * lvl('Drone Interfacing'))
+            # Solo los drones avanzados que requieren Mining Drone Specialization
+            # reciben el +2% por nivel. Mining Drone I nunca hereda ese bonus.
+            if fit['drone'] in ('Mining Drone II', "'Augmented' Mining Drone"):
+                damt *= pct(2 * lvl('Mining Drone Specialization'))
             for r in rigs: damt *= pct(A(r).get('miningAmountBonus', 0))
         else:
             ddur *= pct(A('Ice Harvesting Drone Operation')['rofBonus'] * lvl('Ice Harvesting Drone Operation'))
@@ -215,7 +221,7 @@ def calc(ship, mat, tier, level, implants=True, rigs_override=None, mid_override
                 cycle_s=round(dur / 1000, 2), per_cycle=round(amount, 1),
                 base_mph=round(base_mph), crit_p=round(crit_p * 100, 2), crit_b=round(crit_b * 100), mod_mph=round(mod_mph),
                 drone_mph=round(drone_mph), total_mph=round(total), eff_mph=round(eff), hold=round(hold), fill_min=round(fill_min, 1),
-                waste_p=round(waste_p, 1), cpu_used=round(used, 1), cpu_out=round(cpu_out, 1), fits=used <= cpu_out + 1e-6, cal=cal, notes=notes,
+                waste_p=round(waste_p, 1), drone_waste_p=round(drone_waste, 1), cpu_used=round(used, 1), cpu_out=round(cpu_out, 1), fits=used <= cpu_out + 1e-6, cal=cal, notes=notes,
                 items=[(ship, 1), (fit['high'], nH)] + ([(fit['low'], 3)] if fit['low'] else []) + ([(fit['mid'], 1)] if fit['mid'] else [])
                       + [(r, 1) for r in rigs] + ([(fit['drone'], nD)] if fit['drone'] and nD else []))
 

@@ -2,6 +2,17 @@
 
 Cambios por versión del Gestor de Ventas. La más nueva arriba. El detalle técnico completo está en `docs/SPEC.txt`.
 
+## 1.0.77 — [ChatGPT] Tooltips estilo EVE y drones actualizados
+*2026-10-16*
+
+- Botones ⓘ con información flotante al pasar el mouse, hacer clic o usar teclado, en precios, descargas, filtros y componentes de fit. Cada componente enlaza a su ficha por Type ID en EVE Ref.
+- Se distribuyen precios y tiempo muerto en dos columnas; filtros de escenario a la izquierda y resumen/ayudas a la derecha. En móvil se apilan.
+- Auditoría de drones moon: T1 conserva Mining Drone I (10246); T2 incorpora Mining Drone II (10250); Facción usa 'Augmented' Mining Drone (43694) cuando se cumplen las skills avanzadas. Skills IV usa fallback T1.
+- Stats verificadas octubre 2026: I 25 m³/ciclo 60 s, 0% de residuo; II 33 m³/ciclo y 34% de residuo; Augmented 37 m³/ciclo y 40% de residuo. Se aplica +2%/nivel por Mining Drone Specialization solo a los avanzados.
+- Dataset derivado actualizado: 96 escenarios moon de Skills V y 12 presupuestos por Type ID, afectando dr/tot/eff/fill e ISK/h; se incorpora la columna droneWaste (también 34% para Ice Harvesting Drone II). Generador Pyfa sincronizado para la próxima regeneración.
+- Caché del generador SDE aislada por directorio, archivos y build para evitar nombres/atributos antiguos. Test adicional comprueba 864 escenarios y asignaciones exactas.
+- Sin cambios a Buyback, contratos, impuestos, configuraciones guardadas ni límites de ESI. Sigue pendiente la validación visual manual y la regeneración desde un snapshot Pyfa más reciente cuando esté disponible.
+
 ## 1.0.76 — [ChatGPT] Minería: guía visual de configuración y resultados
 *2026-10-16*
 

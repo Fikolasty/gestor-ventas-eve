@@ -33,9 +33,9 @@ for bo in BOOSTS:
                                  ', '.join(f'{n}x {k}' for k, n in rigs.items()) or '—', r['drone'],
                                  r['cycle_s'], r['per_cycle'], r['crit_p'], r['crit_b'], r['mod_mph'], r['drone_mph'],
                                  r['total_mph'], r['eff_mph'], r['hold'], r['fill_min'], r['waste_p'], f"{r['cpu_used']:.1f} / {r['cpu_out']:.1f}",
-                                 r['notes']])
+                                 r['notes'], r['drone_waste_p']])
 COLS = ['boost', 'lv', 'imp', 'mat', 'tier', 'ship', 'high', 'low', 'mid', 'rigs', 'drones', 'cyc', 'amt', 'critP', 'critB',
-        'mod', 'dr', 'tot', 'eff', 'hold', 'fill', 'waste', 'cpu', 'notes']
+        'mod', 'dr', 'tot', 'eff', 'hold', 'fill', 'waste', 'cpu', 'notes', 'droneWaste']
 
 ships = []
 for s in SHIPS:

@@ -247,6 +247,21 @@ const MineUI=(()=>{
 
   // ---------- esqueleto ----------
   const SEG=(k,opts)=>'<span class="pk-flt" data-k="'+k+'">'+opts.map(([v,t])=>'<button type="button" class="pk-fb" data-v="'+v+'">'+t+'</button>').join('')+'</span>';
+
+  // Ventanas ⓘ en estilo EVE: hover, clic y teclado sin timers ni listeners globales.
+  const HINTS={
+    shared:'Edita aquí las cotizaciones del mercado y el tiempo de descarga. Estos valores alimentan el comparador, el plan Omega y la nave maximizada, sin borrar los ajustes guardados.',
+    travel:'Tiempo aproximado tras llenar una bodega: alinear 10 s, warp 5 s, descargar sin atracar 30 s, volver a alinear 10 s, warp de vuelta 5 s y margen 5 s. Total 65 s. Con compresión en sitio no se descuentan viajes.',
+    shipClass:'Barges muestra Procurer, Retriever y Covetor. Exhumers muestra Skiff, Mackinaw y Hulk. Se calcula el mejor rendimiento efectivo de cada clase.',
+    mat:'Moon ore, hielo o gas. Cambia módulos, rigs, drones y precios de referencia, no solo el nombre de la materia.',
+    tier:'Full T1: equipo básico. Full T2: upgrades tecnológicos cuando tus skills lo permiten. Facción: elementos ORE y de facción. Algunos componentes hacen fallback a T1 si no cumples sus requisitos.',
+    lv:'Skills III son aproximadas, calculadas desde los datos IV/V. Skills IV y V utilizan los escenarios históricos basados en Pyfa. Los componentes avanzados pueden requerir entrenamiento adicional.',
+    imp:'Sin, +4% o +5% de rendimiento de minería. El escenario +4% se interpola; +5% y Sin tienen datos base verificables. No son los implantes de atributos del entrenamiento.',
+    boost:'Porpoise, Orca y Rorqual aportan bonificaciones de flota. Si existe compresión de ese material en el sitio, se elimina el tiempo de descarga.',
+    met:'m³/h mide volumen extraído. ISK/h multiplica por el precio de venta elegido en Jita o la ruta de hielo.',
+    gear:'El fit muestra el nombre, Type ID, cantidad y precio Jita. Pulsa ⓘ junto a un componente para ver su función y abrir su ficha del juego.'
+  };
+  const INFO=(key)=>'<details class="mn-info"><summary aria-label="Información: '+key+'" title="Información · pasar el mouse o pulsar">ⓘ</summary><div class="mn-info-popup" role="note">'+HINTS[key]+'</div></details>';
   const HTML=
    '<header class="mn-module-intro">'+
      '<span class="mn-module-eyebrow">Market Moves+ / Minería</span>'+
@@ -264,7 +279,8 @@ const MineUI=(()=>{
     '<a class="mn-sp-cta" href="https://www.eveonline.com/recruit" target="_blank" rel="noopener noreferrer" title="Programa oficial de EVE. Reclamar el bono requiere una invitación válida.">FREE 1 Million SP! <span aria-hidden="true">↗</span></a>'+
   '</div>'+
 '</div>'+
-   '<div class="mn-shared-intro"><div><span>Ajustes compartidos</span><p>Precios y tiempo de traslado para tus comparaciones y planes. Puedes modificarlos cuando lo necesites.</p></div></div>'+
+   '<div class="mn-shared-intro"><strong>Ajustes compartidos</strong>'+INFO('shared')+'</div>'+
+   '<div class="mn-shared-layout">'+
    '<div class="mn-ice-settings" hidden><label for="mnIceMarket">Hielo · valor según Ajustes</label>'+
      '<select id="mnIceMarket" class="mn-ice-market"><option value="jita">Jita según precio elegido</option><option value="hy">Venta en HY-RWO</option><option value="bb">Contrato Buyback Mayhem</option><option value="refine">Reprocesar en HY y vender productos</option></select>'+
      '<small class="mn-ice-note"></small></div>'+
@@ -288,10 +304,11 @@ const MineUI=(()=>{
        '<p class="mn-edit-footnote">La actualización ESI no borra tus precios manuales. El presupuesto utiliza los módulos, cantidades y el precio Jita Sell del fit seleccionado.</p>'+
      '</div>'+
    '</details>'+
-   '<div class="mn-turnaround"><label for="mnUnloadSec">Tiempo muerto por descarga</label>'+
-     '<div class="mn-turnaround-input"><input id="mnUnloadSec" type="number" min="0" max="900" step="5" value="65" inputmode="numeric" aria-describedby="mnUnloadExplain"><span>segundos</span>'+
+   '<div class="mn-turnaround"><div class="mn-turnaround-heading"><label for="mnUnloadSec">Tiempo muerto por descarga</label>'+INFO('travel')+'</div>'+
+     '<div class="mn-turnaround-input"><input id="mnUnloadSec" type="number" min="0" max="900" step="5" value="65" inputmode="numeric"><span>segundos</span>'+
        '<button type="button" class="mn-unload-default" title="Restaurar 65 segundos">Restablecer</button></div>'+
-     '<small id="mnUnloadExplain">Por vuelta: alinear 10 s + warp 5 s + depositar sin dock 30 s + alinear 10 s + warp 5 s + margen 5 s = 65 s. Sin viajes al comprimir en el sitio. Afecta a las tres vistas.</small></div>'+
+     '<small id="mnUnloadExplain">Incluye traslado, descarga y regreso. ⓘ para ver el desglose.</small></div>'+
+   '</div>'+
    '<div class="mn-v-max" hidden><div class="mn-card"><h3>Nave Maxiada · Comparación Pura</h3>'+
     '<p class="mn-note">Skills V · implantes +5% · Full Facción. Sin Omega, compras ni inversión. Se muestran m³/h efectivos y, cuando ESI ofrece precios, ISK/h. El ajuste de boost viene del comparador de naves.</p>'+
     '<p class="mn-note">Referencia Pyfa del build '+String(MINE.build)+'. Los upgrades ultra caros Aoede / Ingenii se muestran aparte porque necesitan validar el fit/CPU contra un SDE actualizado; no inflamos los números.</p>'+
@@ -303,33 +320,40 @@ const MineUI=(()=>{
        '<div class="mn-guide-copy"><h2 id="mnScenarioTitle">Configura tu escenario</h2>'+
          '<p>Elige las condiciones de minería. Cada cambio actualiza automáticamente las recomendaciones y los resultados de abajo.</p></div>'+
      '</div>'+
+     '<div class="mn-config-groups">'+
      '<div class="mn-config-group">'+
-       '<div class="mn-config-group-intro"><h3>Contexto</h3><p>Qué vas a minar y qué equipamiento comparar.</p></div>'+
+       '<div class="mn-config-group-intro"><h3>Contexto</h3></div>'+
        '<div class="mn-ctl">'+
-         '<div class="mn-config-field"><span class="mn-lbl">Tipo de nave</span>'+SEG('shipClass',[['barge','Barges'],['exhumer','Exhumers']])+'</div>'+
-         '<div class="mn-config-field"><span class="mn-lbl">Material</span>'+SEG('mat',[['moon','Moon ore'],['ice','Hielo'],['gas','Gas']])+'</div>'+
-         '<div class="mn-config-field"><span class="mn-lbl">Fit</span>'+SEG('tier',[['T1','Full T1'],['T2','Full T2'],['Faction','Facción']])+'</div>'+
+         '<div class="mn-config-field"><div class="mn-field-title"><span class="mn-lbl">Tipo de nave</span>'+INFO('shipClass')+'</div>'+SEG('shipClass',[['barge','Barges'],['exhumer','Exhumers']])+'</div>'+
+         '<div class="mn-config-field"><div class="mn-field-title"><span class="mn-lbl">Material</span>'+INFO('mat')+'</div>'+SEG('mat',[['moon','Moon ore'],['ice','Hielo'],['gas','Gas']])+'</div>'+
+         '<div class="mn-config-field"><div class="mn-field-title"><span class="mn-lbl">Fit</span>'+INFO('tier')+'</div>'+SEG('tier',[['T1','Full T1'],['T2','Full T2'],['Faction','Facción']])+'</div>'+
        '</div>'+
      '</div>'+
      '<div class="mn-config-group">'+
-       '<div class="mn-config-group-intro"><h3>Personaje</h3><p>Habilidades e implantes que lleva tu piloto.</p></div>'+
+       '<div class="mn-config-group-intro"><h3>Personaje</h3></div>'+
        '<div class="mn-ctl">'+
-         '<div class="mn-config-field"><span class="mn-lbl">Skills</span>'+SEG('lv',[['3','III · estimado'],['4','IV'],['5','V']])+'</div>'+
-         '<div class="mn-config-field"><span class="mn-lbl">Implantes de minería</span>'+SEG('imp',[['0','Sin'],['4','4%'],['5','5%']])+'</div>'+
+         '<div class="mn-config-field"><div class="mn-field-title"><span class="mn-lbl">Skills</span>'+INFO('lv')+'</div>'+SEG('lv',[['3','III · estimado'],['4','IV'],['5','V']])+'</div>'+
+         '<div class="mn-config-field"><div class="mn-field-title"><span class="mn-lbl">Implantes de minería</span>'+INFO('imp')+'</div>'+SEG('imp',[['0','Sin'],['4','4%'],['5','5%']])+'</div>'+
        '</div>'+
      '</div>'+
      '<div class="mn-config-group">'+
-       '<div class="mn-config-group-intro"><h3>Apoyo y valoración</h3><p>Bonificaciones de flota y unidad de medida.</p></div>'+
+       '<div class="mn-config-group-intro"><h3>Apoyo y valoración</h3></div>'+
        '<div class="mn-ctl">'+
-         '<div class="mn-config-field"><span class="mn-lbl">Boost</span>'+SEG('boost',[['','Sin boost'],['Porpoise','Porpoise'],['Orca','Orca'],['Rorqual','Rorqual']])+'</div>'+
-         '<div class="mn-config-field"><span class="mn-lbl">Mostrar en</span>'+SEG('met',[['m3','m³/h'],['isk','ISK/h']])+'</div>'+
+         '<div class="mn-config-field"><div class="mn-field-title"><span class="mn-lbl">Boost</span>'+INFO('boost')+'</div>'+SEG('boost',[['','Sin boost'],['Porpoise','Porpoise'],['Orca','Orca'],['Rorqual','Rorqual']])+'</div>'+
+         '<div class="mn-config-field"><div class="mn-field-title"><span class="mn-lbl">Mostrar en</span>'+INFO('met')+'</div>'+SEG('met',[['m3','m³/h'],['isk','ISK/h']])+'</div>'+
        '</div>'+
      '</div>'+
-     '<div class="mn-guidance" aria-live="polite">'+
+     '</div>'+
+     '<aside class="mn-context-aside" aria-label="Guía y escenario seleccionado">'+
+       '<div class="mn-context-aside-head"><span>Vista actual</span>'+INFO('gear')+'</div>'+
+       '<p class="mn-scenario-now"></p>'+
+       '<p class="mn-context-hint">Elige una opción a la izquierda y revisa los resultados en el siguiente paso. Usa ⓘ para ver qué modifica cada ajuste.</p>'+
+       '<div class="mn-guidance" aria-live="polite">'+
        '<p class="mn-iii-estimate" hidden><span class="mn-guidance-symbol" aria-hidden="true">i</span><span><strong>Skills III · escenario estimado.</strong> Los datos IV/V se extrapolan y algunos módulos podrían requerir skills mayores; los implantes están desactivados.</span></p>'+
        '<p class="mn-imp-estimate" hidden><span class="mn-guidance-symbol" aria-hidden="true">i</span><span><strong>Implantes 4% · estimación.</strong> Los datos de origen solo incluyen Sin y 5%; el coste del implante 4% no forma parte de la inversión.</span></p>'+
      '</div>'+
      '<p class="mn-bst" hidden></p>'+
+     '</aside>'+
    '</section>'+
    '<div class="mn-price" hidden>'+
      '<label>Qué minas<select class="mn-item"></select></label>'+
@@ -580,6 +604,23 @@ const MineUI=(()=>{
     const k=[Math.max(4,S.lv),S.mat,S.tier,ship].join('|');
     return MINE.fits[k]||[];
   }
+  function itemHelp(id,name){
+    const descriptions={
+      10246:'Mining Drone I (Tech I): 25 m³ por ciclo de 60 s, sin residuo minero. Requisitos básicos de Mining y Mining Drone Operation.',
+      10250:'Mining Drone II (Tech II): 33 m³ por ciclo de 60 s, residuo del 34%. Requiere Mining Drone Operation V y Mining Drone Specialization I.',
+      43694:"'Augmented' Mining Drone (Facción): 37 m³ por ciclo de 60 s y residuo del 40%. Requiere habilidades avanzadas de drones de minería.",
+      43699:'Ice Harvesting Drone I: dron dedicado al hielo, con ancho de banda de 50 Mbit/s.',
+      43700:'Ice Harvesting Drone II: dron de hielo avanzado, 34% de residuo. Requiere Ice Harvesting Drone Operation V y especialización.',
+    };
+    const details=h('details','mn-info mn-type-info'),summary=h('summary','','ⓘ');
+    summary.title='Información del objeto';summary.setAttribute('aria-label','Información sobre '+name);
+    const bubble=h('div','mn-info-popup');
+    bubble.append(h('strong','',name),h('p','',descriptions[id]||'Componente del equipamiento seleccionado. Consulta su ficha para ver requisitos y estadísticas oficiales del objeto.'));
+    const link=h('a','','Ver ficha del objeto ↗');
+    link.href='https://everef.net/types/'+Number(id);
+    link.target='_blank';link.rel='noopener noreferrer';
+    bubble.append(link);details.append(summary,bubble);return details;
+  }
   function paintDetail(){
     const host=$q('.mn-fit-cards');host.replaceChildren();
     const addText=(container,k,v)=>{const line=h('div','mn-fit-attr');line.append(h('span','',k),h('strong','',v));container.append(line);};
@@ -592,7 +633,7 @@ const MineUI=(()=>{
       [['Altos',r.high],['Bajos',r.low],['Medios',r.mid],['Rigs',r.rigs],['Drones',r.drones],
        ['Ciclo',NF2.format(r.cyc)+' s'],['Módulos',NF0.format(r.mod)+' m³/h'],['Drones m³/h',NF0.format(r.dr)+' m³/h'],
        ['Bodega',NF0.format(r.hold)+' m³'],['Se llena',NF1.format(r.fill)+' min'],
-       ['Crítico',NF2.format(r.critP)+'%'],['Residuo',NF1.format(r.waste)+'%'],['CPU',r.cpu]]
+       ['Crítico',NF2.format(r.critP)+'%'],['Residuo de módulos',NF1.format(r.waste)+'%'],['Residuo de drones',NF1.format(r.droneWaste||0)+'%'],['CPU',r.cpu]]
       .forEach(([k,v])=>addText(info,k,v));
       card.append(info);
       const fit=fitRows(ship),table=h('table','mn-fit-budget'),thead=table.createTHead().insertRow();
@@ -600,7 +641,9 @@ const MineUI=(()=>{
       const body=table.createTBody();let sum=0,complete=true;
       for(const [id,q] of fit){
         const p=sellOf(id),tr=body.insertRow();
-        tr.append(h('td','',MINE.names[id]||MINE.ships.find(x=>x.id===id)?.n||('Tipo '+id)),
+        const name=MINE.names[id]||MINE.ships.find(x=>x.id===id)?.n||('Tipo '+id),itemCell=h('td','mn-fit-item-name');
+        itemCell.append(h('span','',name),itemHelp(id,name));
+        tr.append(itemCell,
           h('td','',NF0.format(q)),h('td','',p==null?'Sin precio':cmpISK(p)+' ISK'),
           h('td','',p==null?'—':cmpISK(p*q)+' ISK'));
         if(p==null)complete=false;else sum+=p*q;
@@ -608,8 +651,9 @@ const MineUI=(()=>{
       }
       if(S.imp===5&&S.lv!==3)for(const id of MINE.impl[S.mat]){
         const p=sellOf(id),tr=body.insertRow();
-        tr.append(h('td','',(MINE.names[id]||'Implante')+' · minería'),
-          h('td','','1'),h('td','',p==null?'Sin precio':cmpISK(p)+' ISK'),
+        const implantName=MINE.names[id]||'Implante',cell=h('td','mn-fit-item-name');
+        cell.append(h('span','',implantName+' · minería'),itemHelp(id,implantName));
+        tr.append(cell,h('td','','1'),h('td','',p==null?'Sin precio':cmpISK(p)+' ISK'),
           h('td','',p==null?'—':cmpISK(p)+' ISK'));
         if(p==null)complete=false;else sum+=p;
         if(manualQuote(id,'sell')!=null)tr.classList.add('mn-fit-manual');
@@ -1118,7 +1162,10 @@ const MineUI=(()=>{
     $q('.mn-ice-note').textContent=note;
   }
 
-  function paint(){if(!root)return;scheduleMiningSave();S.cmpv=S.cmp?'1':'0';seg();paintPriceEditor();paintIceSettings();$q('.mn-omega-tools').hidden=S.view!=='plan';$q('.mn-v-ships').hidden=S.view!=='ships';$q('.mn-v-plan').hidden=S.view!=='plan';$q('.mn-v-max').hidden=S.view!=='max';
+  function paint(){if(!root)return;scheduleMiningSave();S.cmpv=S.cmp?'1':'0';seg();paintPriceEditor();paintIceSettings();const scenario=$q('.mn-scenario-now');if(scenario)scenario.textContent=
+      (S.shipClass==='exhumer'?'Exhumers':'Barges')+' · '+MATL[S.mat]+' · '+TL[S.tier]+' · Skills '+['','I','II','III','IV','V'][S.lv]+
+      ' · Implantes '+(S.lv===3?'Sin':S.imp?S.imp+'%':'Sin')+' · '+(S.boost||'Sin boost')+' · '+(S.met==='isk'?'ISK/h':'m³/h');
+    $q('.mn-omega-tools').hidden=S.view!=='plan';$q('.mn-v-ships').hidden=S.view!=='ships';$q('.mn-v-plan').hidden=S.view!=='plan';$q('.mn-v-max').hidden=S.view!=='max';
     if(S.view==='plan'){paintPlan();paintMonths();return;}if(S.view==='max'){paintMax();return;}
     $q('.mn-iii-estimate').hidden=S.lv!==3;
     $q('.mn-imp-estimate').hidden=S.lv===3||S.imp!==4;

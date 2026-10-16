@@ -220,3 +220,11 @@ Verificar regresiones de isótopos, Mayhem independiente, cortes de envío caros
 - Las advertencias para Skills III e implante 4% se muestran únicamente cuando corresponde en un panel ligero. El texto mantiene las limitaciones de extrapolación e inversión de v1.0.75.
 - Sección 02 «Resultados de tu escenario»: resumen dinámico paintTake en tarjeta de lectura rápida; después mejores naves por escalón, fichas, gráfica, inversión por fit y entrenamiento. Ningún cálculo de producción, precio, skills, viaje, bono, persistencia o API se modifica.
 - CSS aislado bajo #mining; layout adaptable a 900px/620px y tarjetas a 1050px, sin desbordamientos horizontales intencionales y con foco visible, estados de opción activa y prefers-reduced-motion.
+
+
+## 20. Tooltips EVE y canon de drones (v1.0.77)
+- Icono ⓘ con details/summary nativo: hover revela información, clic o teclado abre/cierra; sin listeners globales, con foco visible. En componentes se muestra nombre, explicación y vínculo externo a EVE Ref por Type ID con noopener noreferrer. Nada se consulta por ESI al pasar el mouse.
+- Interfaz desktop: precio y tiempo muerto comparten dos columnas; filtros a la izquierda y contexto dinámico a la derecha. En <=820 px se apilan. El resumen se deriva de S desde paint, sin estado duplicado ni cambios a fórmulas.
+- Drones moon según Type ID SDE: T1=10246 Mining Drone I, T2=10250 Mining Drone II y Facción=43694 'Augmented' Mining Drone en Skills V. T2/Facción vuelven a I cuando no se cumplen requisitos (Mining Drone Operation V y Mining Drone Specialization I). Precio de fit por ID.
+- EVE Ref octubre 2026: Drone I 25 m³/60s sin residuos, Drone II 33 m³/60s con 34% residuo, Augmented 37 m³/60s con 40% residuo. Solo los avanzados reciben +2% yield por nivel de Mining Drone Specialization. Ice Harvesting Drone II: 34% residuo. Separar campo droneWaste del residuo de módulos.
+- Las 864 filas siguen representando escenarios Pyfa: 96 moon Skills V T2/Facción recalculan drones, totales, horas efectivas y autonomía; 12 listas de fit cambian el typeID. Generador Pyfa y script de cache sincronizados. Se necesitará regeneración integral cuando CCP modifique los atributos, y no se declara revisión de la totalidad de módulos más allá de los IDs comprobados.

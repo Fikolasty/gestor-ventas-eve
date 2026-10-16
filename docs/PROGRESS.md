@@ -217,3 +217,10 @@ Regresión agregada: minería recalculada 0/4/5, clases filtradas, fichas, persi
 Base: ac087e7220c686155502f7e027c6c69fa8e4fb6a (v1.0.75).
 La cuadrícula auto-fit de filtros reservaba columnas sobredimensionadas y forzaba saltos extraños. Se sustituye por secciones compactas Contexto / Personaje / Apoyo y valoración, sin modificar SEG, listener de eventos ni S. Los avisos de interpolación se integran en paneles informativos; la página se divide en configuración y resultados con un resumen claro. Se mejora también el encabezado general, precios/logística compartidos, jerarquía de tarjetas y responsive.
 Sin cambios en fórmulas de mining, dataset Pyfa 864 escenarios, editor ESI, Buyback Mayhem, Plan Omega o persistencia. Nueva regresión de bindings únicos, estructura y vistas. Pendiente completar CI y Pages en el commit publicado; QA visual manual móvil/escritorio recomendado.
+
+
+## 19. v1.0.77 — [ChatGPT] ⓘ y corrección de drones
+Base: b5086072ae382e1430da09abda2c8336e25c2d87.
+En las 864 filas Pyfa comprobamos que T1 moon sí llevaba Mining Drone I; el problema estaba en T2 y Facción al tener Skills V, que seguían utilizando el I. Contrastados por Type ID con EVE Ref: 10246 I 25m³ y 0% residuo, 10250 II 33m³ y 34%, 43694 Augmented 37m³ y 40%. Se corrigen 96 filas del dataset moon, 12 fits, yield, autonomía, +2% por nivel de Specialization y se añade droneWaste (Ice II 34%). El código generador se actualizó igual. Cambio de cache SDE para no reutilizar versiones previas.
+Interfaz: iconos ⓘ hover/clic/teclado y enlaces por Type ID. Precio/tiempo muerto y filtros/ayuda del escenario en dos columnas desktop y una móvil; sin tocar estado ni APIs.
+Pruebas adicionales de drones, typeIDs, requisitos, 864 filas, diseño y compatibilidad. Validar Actions y Pages tras push, más QA visual en Firefox/móvil. Dataset sigue basado en Pyfa build 3579973, sin afirmar auditoría de todas las estadísticas actuales.

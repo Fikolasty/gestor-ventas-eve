@@ -59,7 +59,7 @@ CHANGELOG.md          ← cambios por versión
 ### Generar la página
 Solo necesitas Python 3, sin dependencias:
 ```
-python3 build.py 1.0.76
+python3 build.py 1.0.77
 ```
 Eso escribe `index.html` con la versión indicada.
 
@@ -99,3 +99,5 @@ Fuente de verdad de la minería: [`docs/MINING.md`](docs/MINING.md). El código 
 **v1.0.75:** en Minería se comparan Barges o Exhumers por separado, con selectores de skills III/IV/V (III estimado), implantes Sin/4% (estimado)/5%, 65 s de tiempo muerto ajustable y datos de autonomía por nave. «Fit y Detalle» muestra un presupuesto real por componentes y cantidades usando Jita Sell ESI o precio manual. El plan minero se guarda entre sesiones en localStorage. Training incluye etapas, prioridades y skillbooks Jita Sell. En Pasos para vender: clic en un precio de refinado copia, doble clic o F2 edita para Null/Jita sin tocar Buyback. Sidebar: Enviar / No enviar.
 
 **v1.0.76:** La sección de Minería organiza los escenarios como una guía de dos pasos («Configura» y «Resultados»). Los filtros mantienen los mismos cálculos y configuraciones, con chips compactos y una presentación responsive más clara.
+
+**v1.0.77:** tooltips ⓘ estilo EVE con hover/clic/teclado; dos columnas para ajustes compartidos y escenario. Drone moon: T1 Mining Drone I, T2 Mining Drone II y Facción 'Augmented' Mining Drone cuando las skills lo permiten. Los Type ID, precios y rendimientos reflejan esta selección; nuevas pruebas detectan regresiones.
