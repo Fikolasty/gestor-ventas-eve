@@ -58,3 +58,34 @@ for(const row of M.rows){
   if(name.endsWith('Ice Harvesting Drone I'))
     assert.equal(row[ix.droneWaste],0,'ice I no hereda residuo de ice II');
 }
+
+
+// v1.0.79 — el ⓘ de cada ítem del presupuesto muestra una explicación útil
+// y enlaza a su Type ID; se aclara el fallback por skills IV sin alterar el dataset.
+const matchHelp=js.match(/const ITEM_HELP=(\{[\s\S]*?\});/);
+assert(matchHelp,'falta el catálogo de descripciones ligadas a IDs');
+const help=JSON.parse(matchHelp[1]);
+for(const [key,items] of Object.entries(M.fits)){
+ for(const [id] of items)assert(help[id]&&help[id].length>25,
+   'falta descripción del tipo '+id+' en '+key);
+ if(key.includes('|T1|')){
+   for(const [id] of items){
+     assert(![10250,43694,43700].includes(id),
+       'un fit T1 está usando dron Tech II o de facción: '+key+' '+id);
+   }
+ }
+}
+for(const [key,fit] of Object.entries(M.simfit))
+ for(const [id] of fit.items)assert(help[id],
+   'un fit simulado no tiene tooltip para '+id+' en '+key);
+for(const types of Object.values(M.impl))
+ for(const id of types)assert(help[id],'un implante no tiene tooltip: '+id);
+for(const [id,v] of [[10246,'25 m³'],[10250,'33 m³'],[43694,'37 m³'],[43699,'360 s'],[43700,'300 s']])
+ assert(help[id].includes(v),'valor base del dron no verificado: '+id);
+assert(js.includes('function fittedTierNotice(r)'),'sin aviso de fallback de drones');
+assert(js.includes('const fallback=fittedTierNotice(r)'),'el aviso no aparece junto al fit');
+assert(js.includes('Type ID '+''),'se ha perdido el Type ID de la ventana informativa');
+assert(js.includes('https://everef.net/types/'),'cada ficha debe enlazar a sus stats');
+assert(!js.includes('Drones: Mining Drone I en los tres.'),
+  'la ayuda todavía afirma erróneamente drones T1 en todos los escalones');
+console.log('OK — 35 ayudas por Type ID; T1 sin drones T2/facción y avisos de fallback IV.');
