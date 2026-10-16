@@ -2,6 +2,16 @@
 
 Cambios por versión del Gestor de Ventas. La más nueva arriba. El detalle técnico completo está en `docs/SPEC.txt`.
 
+## 1.0.79 — [ChatGPT] Fichas ⓘ por Type ID y coherencia de drones T1/T2
+*2026-10-16*
+
+- Descripciones específicas para los 35 Type IDs presentes en los fits y presupuestos: naves, módulos, rigs, drones e implantes. Las fichas muestran Type ID, build del SDE usado y enlace a EVE Ref.
+- Confirma que Full T1 equipa Mining Drone I (10246), mientras Full T2 usa Mining Drone II (10250) cuando las skills lo permiten. La facción usa 'Augmented' Mining Drone (43694), sin confundirlo con T1.
+- Avisa expresamente cuando Skills III/IV fuerzan el uso del dron básico en un escenario T2 o Facción; sin cambiar el rendimiento ni inventar skills.
+- Corrige la explicación de moon ore: los strip miners de los escenarios no generan residuo, pero los drones T2 sí (34%) y Augmented también (40%). Sigue mostrándose el residuo de drones por separado.
+- Actualiza el HTML distribuible, los estilos de los tooltips y las regresiones. El dataset histórico de 864 escenarios, los precios ESI y el motor de ventas no se modifican.
+- Referencia estática: los nombres y typeIDs provienen del SDE build 3579973; para cambios posteriores a ese build es necesario regenerar el dataset.
+
 ## 1.0.78 — [ChatGPT] Hotfix del residuo de Ice Harvesting Drone II
 *2026-10-16*
 
