@@ -211,3 +211,9 @@ UI: sidebar «Enviar/No enviar»; en los productos refinados de Pasos para Vende
 ESI: botón de cotizaciones para los materiales/nave/fit seleccionados, con override intacto, cache 5 min y dedupe por ID; ruta de entrenamiento con etapas, prioridad y coste de libros Jita Sell obtenido por universe/ids cuando hay datos. Persistencia de plan minero en localStorage separada de los Settings y loot; restauración validada y guardado en pagehide.
 Limitación visible: III y 4% estimados desde IV/V y Sin/+5%; no prometer fit realmente usable en III ni coste de implante +4%. Exhumer exige prerequisitos reales. Skillbooks sin órdenes en Jita quedan sin cotización.
 Regresión agregada: minería recalculada 0/4/5, clases filtradas, fichas, persistencia, ESI y editor de productos; confirmar tests Actions y Pages después del push. Revisar visualmente Firefox/móvil; no disponible browser GUI integrado en esta ejecución.
+
+
+## 18. v1.0.76 — [ChatGPT] Rediseño UI de Minería
+Base: ac087e7220c686155502f7e027c6c69fa8e4fb6a (v1.0.75).
+La cuadrícula auto-fit de filtros reservaba columnas sobredimensionadas y forzaba saltos extraños. Se sustituye por secciones compactas Contexto / Personaje / Apoyo y valoración, sin modificar SEG, listener de eventos ni S. Los avisos de interpolación se integran en paneles informativos; la página se divide en configuración y resultados con un resumen claro. Se mejora también el encabezado general, precios/logística compartidos, jerarquía de tarjetas y responsive.
+Sin cambios en fórmulas de mining, dataset Pyfa 864 escenarios, editor ESI, Buyback Mayhem, Plan Omega o persistencia. Nueva regresión de bindings únicos, estructura y vistas. Pendiente completar CI y Pages en el commit publicado; QA visual manual móvil/escritorio recomendado.

@@ -248,6 +248,11 @@ const MineUI=(()=>{
   // ---------- esqueleto ----------
   const SEG=(k,opts)=>'<span class="pk-flt" data-k="'+k+'">'+opts.map(([v,t])=>'<button type="button" class="pk-fb" data-v="'+v+'">'+t+'</button>').join('')+'</span>';
   const HTML=
+   '<header class="mn-module-intro">'+
+     '<span class="mn-module-eyebrow">Market Moves+ / Minería</span>'+
+     '<h2>Planifica tu minería con números claros</h2>'+
+     '<p>Prepara un escenario, compara el rendimiento real de tus naves y calcula el coste del fit antes de decidir.</p>'+
+   '</header>'+
    '<div class="mn-toolbar">'+
   '<div class="mn-views">'+SEG('view',[['ships','Rendimiento por Nave'],['plan','Plan para Omega Nuevo'],['max','Nave Maxiada']])+'</div>'+
   '<div class="mn-omega-tools" hidden>'+
@@ -258,7 +263,8 @@ const MineUI=(()=>{
     '</label>'+
     '<a class="mn-sp-cta" href="https://www.eveonline.com/recruit" target="_blank" rel="noopener noreferrer" title="Programa oficial de EVE. Reclamar el bono requiere una invitación válida.">FREE 1 Million SP! <span aria-hidden="true">↗</span></a>'+
   '</div>'+
-'</div>'+ 
+'</div>'+
+   '<div class="mn-shared-intro"><div><span>Ajustes compartidos</span><p>Precios y tiempo de traslado para tus comparaciones y planes. Puedes modificarlos cuando lo necesites.</p></div></div>'+
    '<div class="mn-ice-settings" hidden><label for="mnIceMarket">Hielo · valor según Ajustes</label>'+
      '<select id="mnIceMarket" class="mn-ice-market"><option value="jita">Jita según precio elegido</option><option value="hy">Venta en HY-RWO</option><option value="bb">Contrato Buyback Mayhem</option><option value="refine">Reprocesar en HY y vender productos</option></select>'+
      '<small class="mn-ice-note"></small></div>'+
@@ -291,31 +297,58 @@ const MineUI=(()=>{
     '<p class="mn-note">Referencia Pyfa del build '+String(MINE.build)+'. Los upgrades ultra caros Aoede / Ingenii se muestran aparte porque necesitan validar el fit/CPU contra un SDE actualizado; no inflamos los números.</p>'+
     '<div class="mn-maxbody"></div></div></div>'+
     '<div class="mn-v-ships">'+
-   '<section class="mn-controls-unified" aria-label="Configurar minería">'+
-     '<div class="mn-ctl">'+
-       '<div><span class="mn-lbl">Comparar</span>'+SEG('shipClass',[['barge','Barges'],['exhumer','Exhumers']])+'</div>'+
-       '<div><span class="mn-lbl">Material</span>'+SEG('mat',[['moon','Moon ore'],['ice','Hielo'],['gas','Gas']])+'</div>'+
-       '<div><span class="mn-lbl">Skills</span>'+SEG('lv',[['3','III · estimado'],['4','IV'],['5','V']])+'</div>'+
-       '<div><span class="mn-lbl">Implantes de minería</span>'+SEG('imp',[['0','Sin'],['4','4%'],['5','5%']])+'</div>'+
-       '<div><span class="mn-lbl">Boost</span>'+SEG('boost',[['','Sin boost'],['Porpoise','Porpoise'],['Orca','Orca'],['Rorqual','Rorqual']])+'</div>'+
-       '<div><span class="mn-lbl">Valor</span>'+SEG('met',[['m3','m³/h'],['isk','ISK/h']])+'</div>'+
-       '<div><span class="mn-lbl">Fit</span>'+SEG('tier',[['T1','Full T1'],['T2','Full T2'],['Faction','Facción']])+'</div>'+
+   '<section class="mn-controls-unified" aria-labelledby="mnScenarioTitle">'+
+     '<div class="mn-guide-heading">'+
+       '<span class="mn-guide-number" aria-hidden="true">01</span>'+
+       '<div class="mn-guide-copy"><h2 id="mnScenarioTitle">Configura tu escenario</h2>'+
+         '<p>Elige las condiciones de minería. Cada cambio actualiza automáticamente las recomendaciones y los resultados de abajo.</p></div>'+
      '</div>'+
-     '<p class="mn-iii-estimate" hidden>Skills III: resultado aproximado extrapolado desde IV/V. Los módulos del fit de referencia IV podrían requerir skills superiores; los implantes se desactivan en este escenario.</p>'+
-     '<p class="mn-imp-estimate" hidden>Implante 4%: rendimiento aproximado. El dataset original ofrece Sin y 5%; el coste del implante de 4% no está incluido en la inversión.</p>'+
+     '<div class="mn-config-group">'+
+       '<div class="mn-config-group-intro"><h3>Contexto</h3><p>Qué vas a minar y qué equipamiento comparar.</p></div>'+
+       '<div class="mn-ctl">'+
+         '<div class="mn-config-field"><span class="mn-lbl">Tipo de nave</span>'+SEG('shipClass',[['barge','Barges'],['exhumer','Exhumers']])+'</div>'+
+         '<div class="mn-config-field"><span class="mn-lbl">Material</span>'+SEG('mat',[['moon','Moon ore'],['ice','Hielo'],['gas','Gas']])+'</div>'+
+         '<div class="mn-config-field"><span class="mn-lbl">Fit</span>'+SEG('tier',[['T1','Full T1'],['T2','Full T2'],['Faction','Facción']])+'</div>'+
+       '</div>'+
+     '</div>'+
+     '<div class="mn-config-group">'+
+       '<div class="mn-config-group-intro"><h3>Personaje</h3><p>Habilidades e implantes que lleva tu piloto.</p></div>'+
+       '<div class="mn-ctl">'+
+         '<div class="mn-config-field"><span class="mn-lbl">Skills</span>'+SEG('lv',[['3','III · estimado'],['4','IV'],['5','V']])+'</div>'+
+         '<div class="mn-config-field"><span class="mn-lbl">Implantes de minería</span>'+SEG('imp',[['0','Sin'],['4','4%'],['5','5%']])+'</div>'+
+       '</div>'+
+     '</div>'+
+     '<div class="mn-config-group">'+
+       '<div class="mn-config-group-intro"><h3>Apoyo y valoración</h3><p>Bonificaciones de flota y unidad de medida.</p></div>'+
+       '<div class="mn-ctl">'+
+         '<div class="mn-config-field"><span class="mn-lbl">Boost</span>'+SEG('boost',[['','Sin boost'],['Porpoise','Porpoise'],['Orca','Orca'],['Rorqual','Rorqual']])+'</div>'+
+         '<div class="mn-config-field"><span class="mn-lbl">Mostrar en</span>'+SEG('met',[['m3','m³/h'],['isk','ISK/h']])+'</div>'+
+       '</div>'+
+     '</div>'+
+     '<div class="mn-guidance" aria-live="polite">'+
+       '<p class="mn-iii-estimate" hidden><span class="mn-guidance-symbol" aria-hidden="true">i</span><span><strong>Skills III · escenario estimado.</strong> Los datos IV/V se extrapolan y algunos módulos podrían requerir skills mayores; los implantes están desactivados.</span></p>'+
+       '<p class="mn-imp-estimate" hidden><span class="mn-guidance-symbol" aria-hidden="true">i</span><span><strong>Implantes 4% · estimación.</strong> Los datos de origen solo incluyen Sin y 5%; el coste del implante 4% no forma parte de la inversión.</span></p>'+
+     '</div>'+
+     '<p class="mn-bst" hidden></p>'+
    '</section>'+
-   '<p class="mn-bst" hidden></p>'+
    '<div class="mn-price" hidden>'+
      '<label>Qué minas<select class="mn-item"></select></label>'+
      '<label>Precio en Jita 4-4<select class="mn-base"><option value="buy">Jita Buy (vender al instante)</option><option value="sell">Jita Sell (con orden)</option></select></label>'+
      '<label>Valorar como<select class="mn-cmp"><option value="1">Comprimido (1:1 en unidades)</option><option value="0">Sin comprimir</option></select></label>'+
      '<p class="mn-pst"></p>'+
    '</div>'+
-   '<p class="mn-take"></p>'+
-   '<p class="mn-sec">Mejor Nave por Escalón</p>'+
+   '<section class="mn-results-header" aria-labelledby="mnResultsTitle">'+
+     '<div class="mn-guide-heading"><span class="mn-guide-number" aria-hidden="true">02</span>'+
+       '<div class="mn-guide-copy"><h2 id="mnResultsTitle">Resultados de tu escenario</h2>'+
+         '<p>Compara producción efectiva, autonomía e inversión. Todo responde a la configuración de arriba.</p></div></div>'+
+   '</section>'+
+   '<section class="mn-results-recap" aria-label="Resumen del escenario">'+
+     '<div class="mn-results-recap-top"><span>Lectura rápida</span><small><span aria-hidden="true">●</span> Escenario actualizado</small></div>'+
+     '<p class="mn-take"></p>'+
+   '</section>'+
+   '<div class="mn-result-title"><div><h3>Mejores naves por escalón</h3><p>La ganadora se calcula con las condiciones y tiempos de viaje elegidos.</p></div></div>'+
    '<div class="mn-kpi"></div>'+
-   '<div class="mn-all-head"><p class="mn-sec">Comparación de naves · Rendimiento y Bonos</p></div>'+
-   '<p class="mn-all-note">Extracción, bodega, viajes y bonos para las naves de la clase elegida.</p>'+
+   '<div class="mn-result-title"><div><h3>Comparación de naves</h3><p>Producción, bodega, viajes y bonos de la clase seleccionada.</p></div></div>'+
    '<div class="mn-all-ships"></div>'+
    '<div class="mn-card"><h3>Comparativa visual</h3><p class="mn-note">Producción efectiva de las naves seleccionadas y sus tres escalones de fit.</p><div class="mn-leg"></div><div class="mn-chart mn-bars"></div></div>'+
    '<div class="mn-card"><h3>Fit y Detalle · Inversión por Nave</h3><p class="mn-note">Componentes reales del fit elegido, con cantidad, precio unitario y subtotal. La inversión se recalcula al actualizar ESI o cambiar un precio manual.</p>'+

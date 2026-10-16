@@ -7,7 +7,7 @@
 <meta name="referrer" content="no-referrer">
 <title>Market Moves+ · SIGMA GRINDSET</title>
 <style>
-/* ================= Market Moves+ v1.0.75 =================
+/* ================= Market Moves+ v1.0.76 =================
    Paleta: azul de base, naranja = acción, verde/rojo = ganancia/pérdida.
    Sin backdrop-filter: el vidrio se finge con rgba + bordes. */
 *{box-sizing:border-box;margin:0;padding:0}
@@ -2041,7 +2041,7 @@ html.light .sub-h{color:#b5532f!important}
 .pl-tile .pk-flt+.pk-flt{margin-top:2px}
 
 
-/* v1.0.75 [ChatGPT]: adaptación del módulo histórico al gestor actual */
+/* v1.0.76 [ChatGPT]: adaptación del módulo histórico al gestor actual */
 .mn .mn-v-max,.mn .mn-v-ships,.mn .mn-v-plan{min-width:0}
 .mn .mn-v-max[hidden],.mn .mn-v-ships[hidden],.mn .mn-v-plan[hidden]{display:none!important}
 .mn-maxbody{display:grid;gap:14px;margin-top:14px}
@@ -2063,7 +2063,7 @@ html.light .sub-h{color:#b5532f!important}
 @media(prefers-reduced-motion:reduce){.mn *{scroll-behavior:auto!important}}
 
 
-/* v1.0.75 — switch de SP y enlace oficial junto a los tabs */
+/* v1.0.76 — switch de SP y enlace oficial junto a los tabs */
 .mn-toolbar{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px 16px;min-width:0}
 .mn-toolbar .mn-views{flex:0 1 auto;min-width:0}
 .mn-omega-tools{display:flex;align-items:center;justify-content:flex-end;flex-wrap:wrap;gap:9px 12px;min-width:0;margin-left:auto}
@@ -2084,7 +2084,7 @@ html.light .sub-h{color:#b5532f!important}
 @media(prefers-reduced-motion:reduce){.mn-sp-track,.mn-sp-track::after,.mn-sp-cta{transition:none}}
 
 
-/* v1.0.75 — Precios personalizados, seguros y compartidos por vistas */
+/* v1.0.76 — Precios personalizados, seguros y compartidos por vistas */
 .mn-price-editor{display:block;padding:0!important;margin:0;border:1px solid rgba(222,220,209,.12)!important;border-radius:var(--r-md)!important;background:rgba(20,21,24,.58)!important}
 .mn-price-editor>summary{display:flex;align-items:center;flex-wrap:wrap;gap:9px;padding:11px 14px;cursor:pointer;list-style:none;color:var(--txt);font:600 .89rem var(--f-ui)}
 .mn-price-editor>summary::-webkit-details-marker{display:none}
@@ -2118,7 +2118,7 @@ html.light .sub-h{color:#b5532f!important}
 @media(max-width:470px){.mn-edit-mats{grid-template-columns:minmax(0,1fr)}.mn-edit-value>input{min-width:7ch}}
 
 
-/* v1.0.75 — enlace de Ajustes de hielo y días de minado desde el mes 2 */
+/* v1.0.76 — enlace de Ajustes de hielo y días de minado desde el mes 2 */
 .mn-ice-settings{display:flex;align-items:center;flex-wrap:wrap;gap:8px 12px;margin:12px 0 10px;padding:10px 12px;border:1px solid rgba(220,186,117,.25);border-radius:9px;background:rgba(240,178,42,.045);min-width:0}
 .mn-ice-settings[hidden]{display:none!important}
 .mn-ice-settings>label{color:var(--txt);font-size:.84rem;font-weight:650}
@@ -2144,7 +2144,7 @@ html.light #mining .mn-price-overridden .mn-edit-source{color:#8e5a06}
 
 
 
-/* v1.0.75: tiempo de viaje y seis tarjetas comparativas. */
+/* v1.0.76: tiempo de viaje y seis tarjetas comparativas. */
 #mining .mn-turnaround{display:flex;align-items:center;flex-wrap:wrap;gap:9px 14px;padding:12px 14px;background:rgba(231,175,93,.045);border:1px solid rgba(231,175,93,.22);border-radius:10px}
 #mining .mn-turnaround label{font-weight:650;font-size:.9rem;color:var(--txt)}
 #mining .mn-turnaround-input{display:flex;align-items:center;gap:7px;flex-wrap:wrap}
@@ -2184,7 +2184,7 @@ html.light #mining .mn-kpi .mn-kpi-winner{background:rgba(224,170,79,.12)}
 @media(prefers-reduced-motion:reduce){#mining .mn-ship-card{transition:none}}
 
 
-/* v1.0.75 — controles consistentes, fichas verticales, entrenamiento y presupuestos. */
+/* v1.0.76 — controles consistentes, fichas verticales, entrenamiento y presupuestos. */
 #mining .mn-controls-unified{padding:16px;border:1px solid rgba(222,220,209,.14);background:rgba(21,23,27,.76);border-radius:12px}
 #mining .mn-controls-unified .mn-ctl{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,12rem),1fr));gap:14px}
 #mining .mn-controls-unified .mn-ctl>div{display:flex;flex-direction:column;align-items:flex-start;gap:7px;max-width:100%}
@@ -2248,6 +2248,78 @@ html.light #mining .mn-controls-unified,html.light #mining .mn-fit-card,html.lig
 html.light #mining .mn-price .mn-pst{background:rgba(255,255,255,.74);border-color:rgba(30,34,40,.14)}
 @media(max-width:1150px){#mining .mn-price{grid-template-columns:repeat(2,minmax(0,1fr))}#mining .mn-price .mn-pst{grid-column:1/-1}}
 @media(max-width:680px){#mining .mn-price{grid-template-columns:1fr}#mining .mn-price .mn-pst{grid-column:auto}#mining .mn-fit-attributes{grid-template-columns:1fr}#mining .mn-tr-steps{grid-template-columns:1fr}#mining .mn-edit-cost{grid-template-columns:1fr}}
+
+
+/* v1.0.76 — Guía de escenarios: controles compactos, simetría y lectura por etapas. */
+#mining .mn-module-intro{padding:20px 24px 18px;border:1px solid rgba(222,220,209,.12);border-radius:12px;background:linear-gradient(115deg,rgba(107,145,177,.09),rgba(25,26,29,.28) 55%,rgba(237,161,0,.035))}
+#mining .mn-module-eyebrow{display:block;font:650 .72rem/1.3 var(--f-ui);letter-spacing:.11em;text-transform:uppercase;color:var(--ion);margin-bottom:8px}
+#mining .mn-module-intro h2{margin:0 0 6px;color:var(--txt);font:650 clamp(1.23rem,2vw,1.55rem)/1.24 var(--f-serif)}
+#mining .mn-module-intro p{font-size:.91rem;line-height:1.6;color:var(--mut);margin:0;max-width:64rem}
+#mining .mn-toolbar{border:1px solid rgba(222,220,209,.1);border-radius:11px;padding:8px 10px;background:rgba(20,21,23,.58);gap:14px}
+#mining .mn-views .pk-flt{max-width:100%}
+#mining .mn-views .pk-fb{min-height:36px;padding:8px 12px}
+#mining .mn-shared-intro{padding:0 2px}
+#mining .mn-shared-intro>div{display:flex;gap:9px 18px;align-items:baseline;flex-wrap:wrap}
+#mining .mn-shared-intro span{font:650 .85rem var(--f-ui);color:var(--txt)}
+#mining .mn-shared-intro p{margin:0;font-size:.8rem;line-height:1.5;color:var(--mut)}
+#mining .mn-price-editor,#mining .mn-turnaround{border-radius:12px}
+#mining .mn-turnaround{gap:10px 16px}
+#mining .mn-controls-unified{padding:22px 24px;border:1px solid rgba(222,220,209,.15);border-radius:13px;background:linear-gradient(155deg,rgba(33,34,37,.88),rgba(18,19,21,.88))}
+#mining .mn-guide-heading{display:flex;align-items:flex-start;gap:14px;min-width:0}
+#mining .mn-guide-number{flex:none;display:grid;place-items:center;width:39px;height:39px;border-radius:10px;border:1px solid rgba(226,171,96,.35);background:rgba(226,171,96,.07);font:700 .85rem var(--f-num);color:var(--ion)}
+#mining .mn-guide-copy{min-width:0;flex:1}
+#mining .mn-guide-copy h2{font:650 clamp(1.13rem,1.6vw,1.35rem)/1.25 var(--f-serif);margin:0 0 5px;color:var(--txt);letter-spacing:0}
+#mining .mn-guide-copy p{font:.87rem/1.55 var(--f-ui);color:var(--mut);margin:0;max-width:64rem}
+#mining .mn-config-group{display:grid;grid-template-columns:155px minmax(0,1fr);gap:18px;align-items:center;padding:18px 0;border-bottom:1px solid rgba(222,220,209,.1)}
+#mining .mn-config-group:first-of-type{margin-top:10px}
+#mining .mn-config-group:last-of-type{border-bottom:0;padding-bottom:3px}
+#mining .mn-config-group-intro{min-width:0}
+#mining .mn-config-group-intro h3{font:650 .92rem/1.3 var(--f-ui);color:var(--txt);margin:0 0 4px}
+#mining .mn-config-group-intro p{font:.75rem/1.5 var(--f-ui);color:var(--mut);margin:0}
+#mining .mn-controls-unified .mn-ctl{display:flex;flex-flow:row wrap;align-items:flex-start;justify-content:flex-start;gap:14px 22px;min-width:0}
+#mining .mn-controls-unified .mn-ctl>div,#mining .mn-controls-unified .mn-ctl>.mn-config-field{display:inline-flex;flex:0 0 auto;flex-direction:column;align-items:flex-start;gap:7px;width:max-content;max-width:100%;min-width:0}
+#mining .mn-controls-unified .mn-lbl{display:block;font:.78rem/1.35 var(--f-ui);font-weight:600;color:var(--mut);letter-spacing:0;text-transform:none;margin:0}
+#mining .mn-controls-unified .pk-flt{display:inline-flex;flex:0 1 auto;flex-flow:row nowrap;align-items:stretch;justify-content:flex-start;gap:3px;padding:3px;width:max-content;max-width:100%;border:1px solid rgba(222,220,209,.16);border-radius:10px;background:rgba(8,9,11,.6);box-shadow:none}
+#mining .mn-controls-unified .pk-fb{display:inline-flex;align-items:center;justify-content:center;flex:0 0 auto;min-height:37px;width:auto;min-width:0;padding:8px 12px;border-radius:7px;font:650 .84rem/1.25 var(--f-ui);white-space:nowrap;transition:background-color .15s,border-color .15s,color .15s}
+#mining .mn-controls-unified .pk-fb:not(.on):hover{background:rgba(222,220,209,.075);color:var(--txt)}
+#mining .mn-controls-unified .pk-fb:focus-visible{outline:2px solid var(--ion);outline-offset:2px}
+#mining .mn-guidance:empty{display:none}
+#mining .mn-guidance .mn-iii-estimate,#mining .mn-guidance .mn-imp-estimate{display:flex;align-items:flex-start;gap:10px;margin:14px 0 0;padding:11px 13px;color:var(--mut);border:1px solid rgba(206,164,97,.25);border-radius:9px;background:rgba(206,164,97,.055);font-size:.81rem;line-height:1.6}
+#mining .mn-guidance .mn-iii-estimate[hidden],#mining .mn-guidance .mn-imp-estimate[hidden]{display:none}
+#mining .mn-guidance strong{color:var(--txt);font-weight:650}
+#mining .mn-guidance-symbol{display:grid;place-items:center;flex:none;width:18px;height:18px;border-radius:50%;background:rgba(206,164,97,.18);color:var(--ion);font:700 .76rem var(--f-ui);margin-top:1px}
+#mining .mn-controls-unified .mn-bst{margin:14px 0 0;padding:11px 13px;border-radius:9px;background:rgba(100,160,200,.05)}
+#mining .mn-price{margin:0;border-color:rgba(222,220,209,.13)}
+#mining .mn-results-header{padding:14px 2px 0;margin-top:3px}
+#mining .mn-results-recap{border:1px solid rgba(222,220,209,.15);border-left:3px solid rgba(226,171,96,.6);border-radius:12px;background:linear-gradient(125deg,rgba(226,171,96,.075),rgba(20,21,23,.55) 65%);padding:16px 19px}
+#mining .mn-results-recap-top{display:flex;align-items:center;justify-content:space-between;gap:8px 16px;flex-wrap:wrap;margin-bottom:8px}
+#mining .mn-results-recap-top>span{font:650 .78rem var(--f-ui);letter-spacing:.055em;text-transform:uppercase;color:var(--mut)}
+#mining .mn-results-recap-top small{font-size:.76rem;color:var(--mut)}
+#mining .mn-results-recap-top small span{color:var(--gain);font-size:.7rem;margin-right:5px}
+#mining .mn-results-recap .mn-take{font:450 .96rem/1.65 var(--f-ui);color:var(--txt);margin:0}
+#mining .mn-results-recap .mn-take b{font-weight:700;color:var(--ion)}
+#mining .mn-result-title{display:flex;align-items:flex-end;gap:12px;min-width:0;margin-top:7px}
+#mining .mn-result-title h3{font:650 1.06rem/1.32 var(--f-serif);margin:0 0 3px;color:var(--txt)}
+#mining .mn-result-title p{font:.81rem/1.5 var(--f-ui);color:var(--mut);margin:0}
+#mining .mn-kpi{gap:12px}
+#mining .mn-kpi>div{padding:14px 15px;min-height:0;border-radius:10px}
+#mining .mn-kpi span{font-size:.74rem}
+#mining .mn-kpi b{font-size:1.18rem;margin-top:7px}
+#mining .mn-all-ships{grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+#mining .mn-ship-card{border-radius:11px;padding:16px}
+#mining .mn-card{border-radius:11px;padding:18px}
+#mining .mn-card>h3{font-size:1.06rem;line-height:1.4}
+#mining .mn-card>.mn-note{margin:5px 0 14px;line-height:1.55}
+html.light #mining .mn-module-intro{background:rgba(247,247,248,.8);border-color:rgba(30,34,40,.12)}
+html.light #mining .mn-toolbar,html.light #mining .mn-controls-unified{background:rgba(255,255,255,.9);border-color:rgba(30,34,40,.15)}
+html.light #mining .mn-controls-unified .pk-flt{background:rgba(227,229,232,.52);border-color:rgba(30,34,40,.17)}
+html.light #mining .mn-results-recap{background:rgba(255,251,243,.85);border-color:rgba(173,128,69,.25);border-left-color:rgba(173,128,69,.6)}
+html.light #mining .mn-results-recap .mn-take b{color:#87521d}
+html.light #mining .mn-guidance .mn-iii-estimate,html.light #mining .mn-guidance .mn-imp-estimate{background:rgba(235,200,150,.13);border-color:rgba(173,128,69,.3)}
+@media(max-width:1050px){#mining .mn-all-ships{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:900px){#mining .mn-config-group{grid-template-columns:1fr;gap:10px}#mining .mn-config-group-intro p{max-width:100%}#mining .mn-config-group:first-of-type{margin-top:6px}}
+@media(max-width:620px){#mining .mn-module-intro{padding:17px}#mining .mn-controls-unified{padding:17px}#mining .mn-guide-heading{gap:10px}#mining .mn-guide-number{width:34px;height:34px}#mining .mn-controls-unified .mn-ctl{gap:14px 18px}#mining .mn-controls-unified .pk-flt{flex-wrap:wrap;width:auto}#mining .mn-controls-unified .pk-fb{min-height:36px;padding:7px 10px}#mining .mn-all-ships{grid-template-columns:minmax(0,1fr)}#mining .mn-result-title{margin-top:4px}#mining .mn-results-recap{padding:14px}}
+@media(prefers-reduced-motion:reduce){#mining .mn-controls-unified .pk-fb{transition:none}}
 </style>
 <script>/* v1.0.16: aplica el tema guardado antes de pintar (sin parpadeo). Por defecto: Dark. */try{var g=JSON.parse(localStorage.getItem('gestorVentas.ajustes.v1')||'null');if(g&&g.ui){if(g.ui.light)document.documentElement.classList.add('light');}}catch(e){}</script>
 </head>
@@ -2580,13 +2652,13 @@ Contraband Freight = no</textarea><small>Una regla por línea: Nombre = tax tota
 <button type="button" class="totop" id="toTop" aria-label="Volver arriba" title="Volver arriba (Inicio)" hidden><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 14l6-6 6 6"/></svg></button>
 <footer class="foot">
   <p class="foot-sec"><span class="ic i-lock" aria-hidden="true"></span>Tu inventario no se guarda: al cerrar o recargar se borra. Solo tus Ajustes quedan en este navegador.</p>
-  <div class="foot-by">Creado por <b>Fiko McGivert</b> · Vanguardia DR · SIGMA GRINDSET · <span class="ver">v1.0.75</span></div>
+  <div class="foot-by">Creado por <b>Fiko McGivert</b> · Vanguardia DR · SIGMA GRINDSET · <span class="ver">v1.0.76</span></div>
 </footer>
 
 <script>
 'use strict';
 /* ============================================================
-   Market Moves+ v1.0.75 — SIGMA GRINDSET / Vanguardia DR
+   Market Moves+ v1.0.76 — SIGMA GRINDSET / Vanguardia DR
    Flujo:  pegado → items → carga (ESI: precios, volúmenes, historial) → verificación → plan → vista
      1. Pegado      parsePaste(): parser posicional de columnas de EVE (Name · Quantity · … · Volume · Est. Price).
      2. Carga       esiItems(): trae todo lo que falta; mientras carga, refresh() NO pinta (S.loading).
@@ -5035,6 +5107,11 @@ const MineUI=(()=>{
   // ---------- esqueleto ----------
   const SEG=(k,opts)=>'<span class="pk-flt" data-k="'+k+'">'+opts.map(([v,t])=>'<button type="button" class="pk-fb" data-v="'+v+'">'+t+'</button>').join('')+'</span>';
   const HTML=
+   '<header class="mn-module-intro">'+
+     '<span class="mn-module-eyebrow">Market Moves+ / Minería</span>'+
+     '<h2>Planifica tu minería con números claros</h2>'+
+     '<p>Prepara un escenario, compara el rendimiento real de tus naves y calcula el coste del fit antes de decidir.</p>'+
+   '</header>'+
    '<div class="mn-toolbar">'+
   '<div class="mn-views">'+SEG('view',[['ships','Rendimiento por Nave'],['plan','Plan para Omega Nuevo'],['max','Nave Maxiada']])+'</div>'+
   '<div class="mn-omega-tools" hidden>'+
@@ -5045,7 +5122,8 @@ const MineUI=(()=>{
     '</label>'+
     '<a class="mn-sp-cta" href="https://www.eveonline.com/recruit" target="_blank" rel="noopener noreferrer" title="Programa oficial de EVE. Reclamar el bono requiere una invitación válida.">FREE 1 Million SP! <span aria-hidden="true">↗</span></a>'+
   '</div>'+
-'</div>'+ 
+'</div>'+
+   '<div class="mn-shared-intro"><div><span>Ajustes compartidos</span><p>Precios y tiempo de traslado para tus comparaciones y planes. Puedes modificarlos cuando lo necesites.</p></div></div>'+
    '<div class="mn-ice-settings" hidden><label for="mnIceMarket">Hielo · valor según Ajustes</label>'+
      '<select id="mnIceMarket" class="mn-ice-market"><option value="jita">Jita según precio elegido</option><option value="hy">Venta en HY-RWO</option><option value="bb">Contrato Buyback Mayhem</option><option value="refine">Reprocesar en HY y vender productos</option></select>'+
      '<small class="mn-ice-note"></small></div>'+
@@ -5078,31 +5156,58 @@ const MineUI=(()=>{
     '<p class="mn-note">Referencia Pyfa del build '+String(MINE.build)+'. Los upgrades ultra caros Aoede / Ingenii se muestran aparte porque necesitan validar el fit/CPU contra un SDE actualizado; no inflamos los números.</p>'+
     '<div class="mn-maxbody"></div></div></div>'+
     '<div class="mn-v-ships">'+
-   '<section class="mn-controls-unified" aria-label="Configurar minería">'+
-     '<div class="mn-ctl">'+
-       '<div><span class="mn-lbl">Comparar</span>'+SEG('shipClass',[['barge','Barges'],['exhumer','Exhumers']])+'</div>'+
-       '<div><span class="mn-lbl">Material</span>'+SEG('mat',[['moon','Moon ore'],['ice','Hielo'],['gas','Gas']])+'</div>'+
-       '<div><span class="mn-lbl">Skills</span>'+SEG('lv',[['3','III · estimado'],['4','IV'],['5','V']])+'</div>'+
-       '<div><span class="mn-lbl">Implantes de minería</span>'+SEG('imp',[['0','Sin'],['4','4%'],['5','5%']])+'</div>'+
-       '<div><span class="mn-lbl">Boost</span>'+SEG('boost',[['','Sin boost'],['Porpoise','Porpoise'],['Orca','Orca'],['Rorqual','Rorqual']])+'</div>'+
-       '<div><span class="mn-lbl">Valor</span>'+SEG('met',[['m3','m³/h'],['isk','ISK/h']])+'</div>'+
-       '<div><span class="mn-lbl">Fit</span>'+SEG('tier',[['T1','Full T1'],['T2','Full T2'],['Faction','Facción']])+'</div>'+
+   '<section class="mn-controls-unified" aria-labelledby="mnScenarioTitle">'+
+     '<div class="mn-guide-heading">'+
+       '<span class="mn-guide-number" aria-hidden="true">01</span>'+
+       '<div class="mn-guide-copy"><h2 id="mnScenarioTitle">Configura tu escenario</h2>'+
+         '<p>Elige las condiciones de minería. Cada cambio actualiza automáticamente las recomendaciones y los resultados de abajo.</p></div>'+
      '</div>'+
-     '<p class="mn-iii-estimate" hidden>Skills III: resultado aproximado extrapolado desde IV/V. Los módulos del fit de referencia IV podrían requerir skills superiores; los implantes se desactivan en este escenario.</p>'+
-     '<p class="mn-imp-estimate" hidden>Implante 4%: rendimiento aproximado. El dataset original ofrece Sin y 5%; el coste del implante de 4% no está incluido en la inversión.</p>'+
+     '<div class="mn-config-group">'+
+       '<div class="mn-config-group-intro"><h3>Contexto</h3><p>Qué vas a minar y qué equipamiento comparar.</p></div>'+
+       '<div class="mn-ctl">'+
+         '<div class="mn-config-field"><span class="mn-lbl">Tipo de nave</span>'+SEG('shipClass',[['barge','Barges'],['exhumer','Exhumers']])+'</div>'+
+         '<div class="mn-config-field"><span class="mn-lbl">Material</span>'+SEG('mat',[['moon','Moon ore'],['ice','Hielo'],['gas','Gas']])+'</div>'+
+         '<div class="mn-config-field"><span class="mn-lbl">Fit</span>'+SEG('tier',[['T1','Full T1'],['T2','Full T2'],['Faction','Facción']])+'</div>'+
+       '</div>'+
+     '</div>'+
+     '<div class="mn-config-group">'+
+       '<div class="mn-config-group-intro"><h3>Personaje</h3><p>Habilidades e implantes que lleva tu piloto.</p></div>'+
+       '<div class="mn-ctl">'+
+         '<div class="mn-config-field"><span class="mn-lbl">Skills</span>'+SEG('lv',[['3','III · estimado'],['4','IV'],['5','V']])+'</div>'+
+         '<div class="mn-config-field"><span class="mn-lbl">Implantes de minería</span>'+SEG('imp',[['0','Sin'],['4','4%'],['5','5%']])+'</div>'+
+       '</div>'+
+     '</div>'+
+     '<div class="mn-config-group">'+
+       '<div class="mn-config-group-intro"><h3>Apoyo y valoración</h3><p>Bonificaciones de flota y unidad de medida.</p></div>'+
+       '<div class="mn-ctl">'+
+         '<div class="mn-config-field"><span class="mn-lbl">Boost</span>'+SEG('boost',[['','Sin boost'],['Porpoise','Porpoise'],['Orca','Orca'],['Rorqual','Rorqual']])+'</div>'+
+         '<div class="mn-config-field"><span class="mn-lbl">Mostrar en</span>'+SEG('met',[['m3','m³/h'],['isk','ISK/h']])+'</div>'+
+       '</div>'+
+     '</div>'+
+     '<div class="mn-guidance" aria-live="polite">'+
+       '<p class="mn-iii-estimate" hidden><span class="mn-guidance-symbol" aria-hidden="true">i</span><span><strong>Skills III · escenario estimado.</strong> Los datos IV/V se extrapolan y algunos módulos podrían requerir skills mayores; los implantes están desactivados.</span></p>'+
+       '<p class="mn-imp-estimate" hidden><span class="mn-guidance-symbol" aria-hidden="true">i</span><span><strong>Implantes 4% · estimación.</strong> Los datos de origen solo incluyen Sin y 5%; el coste del implante 4% no forma parte de la inversión.</span></p>'+
+     '</div>'+
+     '<p class="mn-bst" hidden></p>'+
    '</section>'+
-   '<p class="mn-bst" hidden></p>'+
    '<div class="mn-price" hidden>'+
      '<label>Qué minas<select class="mn-item"></select></label>'+
      '<label>Precio en Jita 4-4<select class="mn-base"><option value="buy">Jita Buy (vender al instante)</option><option value="sell">Jita Sell (con orden)</option></select></label>'+
      '<label>Valorar como<select class="mn-cmp"><option value="1">Comprimido (1:1 en unidades)</option><option value="0">Sin comprimir</option></select></label>'+
      '<p class="mn-pst"></p>'+
    '</div>'+
-   '<p class="mn-take"></p>'+
-   '<p class="mn-sec">Mejor Nave por Escalón</p>'+
+   '<section class="mn-results-header" aria-labelledby="mnResultsTitle">'+
+     '<div class="mn-guide-heading"><span class="mn-guide-number" aria-hidden="true">02</span>'+
+       '<div class="mn-guide-copy"><h2 id="mnResultsTitle">Resultados de tu escenario</h2>'+
+         '<p>Compara producción efectiva, autonomía e inversión. Todo responde a la configuración de arriba.</p></div></div>'+
+   '</section>'+
+   '<section class="mn-results-recap" aria-label="Resumen del escenario">'+
+     '<div class="mn-results-recap-top"><span>Lectura rápida</span><small><span aria-hidden="true">●</span> Escenario actualizado</small></div>'+
+     '<p class="mn-take"></p>'+
+   '</section>'+
+   '<div class="mn-result-title"><div><h3>Mejores naves por escalón</h3><p>La ganadora se calcula con las condiciones y tiempos de viaje elegidos.</p></div></div>'+
    '<div class="mn-kpi"></div>'+
-   '<div class="mn-all-head"><p class="mn-sec">Comparación de naves · Rendimiento y Bonos</p></div>'+
-   '<p class="mn-all-note">Extracción, bodega, viajes y bonos para las naves de la clase elegida.</p>'+
+   '<div class="mn-result-title"><div><h3>Comparación de naves</h3><p>Producción, bodega, viajes y bonos de la clase seleccionada.</p></div></div>'+
    '<div class="mn-all-ships"></div>'+
    '<div class="mn-card"><h3>Comparativa visual</h3><p class="mn-note">Producción efectiva de las naves seleccionadas y sus tres escalones de fit.</p><div class="mn-leg"></div><div class="mn-chart mn-bars"></div></div>'+
    '<div class="mn-card"><h3>Fit y Detalle · Inversión por Nave</h3><p class="mn-note">Componentes reales del fit elegido, con cantidad, precio unitario y subtotal. La inversión se recalcula al actualizar ESI o cambiar un precio manual.</p>'+

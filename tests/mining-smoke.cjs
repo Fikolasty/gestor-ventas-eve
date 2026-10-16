@@ -171,3 +171,23 @@ assert(source.includes("savedKeys=['mat'")&&!source.includes("savedKeys=['items'
 assert(source.includes('function miningSaveNow()')&&source.includes("pagehide',miningSaveNow"),
   'el plan minero debe guardarse al cambiar y salir');
 console.log('OK — comparador dinámico, 3 clases por vista, IV/V, III estimado, implantes 0/4/5, fit y persistencia.');
+
+
+// v1.0.76 — la guía usa los mismos bindings del cálculo, sin duplicar controles.
+const stageStart=source.indexOf('<section class="mn-controls-unified"');
+const stageEnd=source.indexOf('<section class="mn-results-header"');
+assert(stageStart>=0&&stageEnd>stageStart,'Configuración y Resultados deben estar separados y ordenados');
+const stage=source.slice(stageStart,stageEnd);
+for(const title of ['Configura tu escenario','Contexto','Personaje','Apoyo y valoración'])
+  assert(stage.includes(title),'falta el grupo de configuración '+title);
+for(const binding of ["SEG('shipClass'","SEG('mat'","SEG('tier'","SEG('lv'","SEG('imp'","SEG('boost'","SEG('met'"]){
+  assert.equal(stage.split(binding).length-1,1,'filtro duplicado o ausente: '+binding);
+}
+assert(source.includes('id="mnResultsTitle"'),'falta el encabezado de resultados');
+assert(source.includes('class="mn-results-recap"'),'resumen sin bloque de lectura rápida');
+assert(source.includes('class="mn-guidance"'),'estimaciones sin aviso contextual');
+assert(source.includes('class="mn-module-intro"'),'sin introducción de la sección');
+assert(source.includes("if(S.view==='plan'){paintPlan();paintMonths();return;}"),'no modificar la vista Omega');
+assert(source.includes("if(S.view==='max'){paintMax();return;}"),'no modificar Nave Maxiada');
+assert(source.includes("e.target.closest('.pk-fb')"),'los filtros de la guía deben conservar delegación de eventos');
+console.log('OK — guía visual sin duplicar filtros ni alterar rutas de cálculo.');

@@ -2,6 +2,15 @@
 
 Cambios por versión del Gestor de Ventas. La más nueva arriba. El detalle técnico completo está en `docs/SPEC.txt`.
 
+## 1.0.76 — [ChatGPT] Minería: guía visual de configuración y resultados
+*2026-10-16*
+
+- Se reorganiza el comparador en un flujo explícito «01 Configura tu escenario» y «02 Resultados de tu escenario».
+- Los filtros se agrupan en Contexto (clase, material, fit), Personaje (skills, implantes) y Apoyo y valoración (boost, unidad). Los botones se ajustan al contenido, con altura uniforme, sin columnas vacías ni cambios a los bindings originales.
+- Notas de Skills III e implante +4% ahora se integran en avisos discretos; resumen del escenario en una tarjeta de lectura rápida; se mejora el orden de títulos y espaciados de tarjetas, gráfica y presupuesto.
+- Se añade un encabezado de módulo y una explicación de ajustes compartidos (precios, tiempos de traslado), también visibles en las otras vistas. Diseño adaptable a desktop/tablet/móvil con estados accesibles y soporte de tema claro/oscuro.
+- No se modifica motor de minería, reglas ESI, listas Pyfa, Plan Omega, persistencia, Buyback o fórmula de rendimiento. Regresión nueva que verifica grupos, filtros únicos, orden y referencias de las vistas.
+
 ## 1.0.75 — [ChatGPT] Minería por clase, precio de fits y entrenamiento por etapas
 *2026-10-16*
 
