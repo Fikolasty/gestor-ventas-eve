@@ -124,3 +124,50 @@ assert(po.eff<po.tot,'Porpoise no comprime hielo en el sitio');
 const prev=getRow('Covetor');
 assert.equal(f.rebaseHistoricalEff(prev.eff,prev.hold,120),prev.eff);
 assert(f.rebaseHistoricalEff(prev.eff,prev.hold,65)>prev.eff);
+
+
+// v1.0.75 — coherencia del comparador, niveles e inversión del fit.
+for(const str of [
+  "SEG('shipClass'", "['3','III · estimado']", "['0','Sin'],['4','4%'],['5','5%']",
+  'function estimateIII(', 'function calcRow(', 'const selectedShips=()=>',
+  'function fitRows(ship)', 'function paintDetail()', 'mn-fit-budget',
+  'function paintTraining()', 'mn-tr-stage', "ESI+'/universe/ids/'",
+  'function loadSkillBooks(force=false)', 'function refreshEditorEsi()',
+  'priceInflight=new Map()', 'marketMoves.miningPlan.v1',
+  'function restoreMiningPlan()', 'window.addEventListener'
+])assert(source.includes(str),'falta feature del comparador: '+str);
+assert(!source.includes('Producción por Nave y Escalón'),'tabla redundante sigue visible');
+assert(!source.includes('Autonomía: Minutos hasta Llenar la Bodega'),'gráfica redundante sigue visible');
+assert(!source.includes('function paintPivot()')&&!source.includes('function paintHold()'),'lógica visual sin uso');
+const labels=source.indexOf("['0','Sin'],['4','4%'],['5','5%']");
+assert(labels>=0,'selector de implantes no está en orden ascendente');
+assert(source.includes("S.shipClass==='exhumer'")&&source.includes('for(const ship of selectedShips())'),
+  'las tarjetas no siguen Barges / Exhumers');
+assert(source.includes('S.costShip')&&source.includes('MINE.fits[k]||[]'),
+  'el presupuesto no depende de nave/material/tier/skills');
+const sampleFit=M.fits['5|moon|Faction|Covetor'];
+assert(sampleFit.some(([id,q])=>id===17476&&q===1),'el fit incluye casco');
+assert(sampleFit.some(([id,q])=>q>1),'el fit incluye cantidades reales');
+const ROWS=M.rows.map(r=>Object.fromEntries(M.cols.map((k,i)=>[k,r[i]])));
+const exships=new Set(M.ships.filter(x=>x.ex).map(x=>x.n));
+const state={unloadSec:65,boost:'',lv:4,imp:0,mat:'moon',tier:'T1',shipClass:'barge'};
+const from=source.indexOf('  const idx=new Map('),to=source.indexOf('  // Guristas / norte Nullsec:',from);
+assert(from>0&&to>from,'motor de minería no extraíble para pruebas');
+const engine=vm.runInNewContext(source.slice(from,to)+'\n({calcRow,selectedShips});',
+  {ROWS,S:state,EX:exships,SHIPS:M.ships.map(x=>x.n)});
+assert.equal(engine.selectedShips().length,3,'solo tres barges');
+state.shipClass='exhumer';
+assert(engine.selectedShips().includes('Hulk')&&!engine.selectedShips().includes('Covetor'));
+for(const ship of ['Retriever','Covetor','Hulk']){
+  const a=engine.calcRow('',4,0,'moon','T1',ship).eff;
+  const b=engine.calcRow('',4,4,'moon','T1',ship).eff;
+  const c=engine.calcRow('',4,5,'moon','T1',ship).eff;
+  assert(a<=b&&b<=c,'yield 4% no está entre Sin y 5% para '+ship);
+  const third=engine.calcRow('',3,0,'moon','T1',ship);
+  assert(third.estimated&&third.eff>0,'Skills III no estimadas para '+ship);
+}
+assert(source.includes("savedKeys=['mat'")&&!source.includes("savedKeys=['items'"),
+  'persistencia debe limitarse a Minería, nunca inventario');
+assert(source.includes('function miningSaveNow()')&&source.includes("pagehide',miningSaveNow"),
+  'el plan minero debe guardarse al cambiar y salir');
+console.log('OK — comparador dinámico, 3 clases por vista, IV/V, III estimado, implantes 0/4/5, fit y persistencia.');

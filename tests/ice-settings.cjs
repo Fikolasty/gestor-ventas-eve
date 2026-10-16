@@ -19,6 +19,7 @@ const nullEnd=js.indexOf('\n}',nullStart);
 assert(nullStart>=0&&nullEnd>nullStart,'falta regla de precio local');
 const nullBody=js.slice(nullStart,nullEnd+2);
 const ctx={
+  S:{refinedMan:{null:Object.create(null),jita:Object.create(null)}},
   ICE_PRODUCTS:new Set(['heavy water','liquid ozone','strontium clathrates','helium isotopes','hydrogen isotopes','oxygen isotopes','nitrogen isotopes']),
   C:{ice:{on:true,nullMode:'jbuy',nullDisc:.025,refLoss:.55},tick:false,
     nullNonMod:.9,margin:0,qd:{on:false},under:.001},
@@ -76,3 +77,42 @@ for(const name of ['Blue Ice','Heavy Water','Helium Isotopes']){
 skewSettings.skew.inst=-.5;
 near(skewFn({name:'Blue Ice',skew:0},'nul'),1,'cambiar Jita instantáneo nunca modifica Null');
 near(skewFn({name:'Blue Ice',skew:0},'inst'),.5,'cambiar Jita instantáneo sí modifica Jita');
+
+
+// v1.0.75 — Los importes de productos reprocesados se pueden reemplazar por destino.
+assert(js.includes('cp-refined-price')&&js.includes('function openRefinedPriceEditor(b)'),
+  'doble clic sobre precio del refinado sin implementación');
+assert(js.includes("e.key==='F2'")&&js.includes("e.key==='Escape'")&&js.includes("e.key==='Enter'"),
+  'accesos de teclado para guardar/cancelar edición ausentes');
+assert(js.includes("refinedCopyTimer=setTimeout"),'copiar debe diferir brevemente para permitir doble clic');
+assert(js.includes("priceEdit.name")&&js.includes("route:k==='rNull'?'null':'jita'"),
+  'filas reprocesadas no enlazan el precio por destino');
+ctx.C.ice.on=true;ctx.C.ice.refLoss=.55;
+near(local('Heavy Water',500,100,null,149414.7),45,'valor local predeterminado antes de editar');
+ctx.S.refinedMan.null['heavy water']=80.25;
+near(local('Heavy Water',500,100,null,149414.7),80.25,'precio manual Null reemplaza al 55%');
+near(local('Heavy Water',500,100,83,1),80.25,'manual local supera el precio visto en Null');
+near(local('Liquid Ozone',500,100,null,1),45,'otros productos mantienen la regla automática');
+const jitaStart=js.indexOf('function jitaList(name,sell,buy,q,man){');
+const jitaEnd=js.indexOf('\n}',jitaStart);
+assert(jitaStart>=0&&jitaEnd>jitaStart,'jitaList ausente');
+const jitaBody=js.slice(jitaStart,jitaEnd+2);
+ctx.IN_JITA=()=>false;ctx.tickBelow=p=>p;ctx.C.under=0.001;
+ctx.C.ice.jitaMode='under';
+const jita=vm.runInNewContext(jitaBody+'\njitaList;',{
+  ...ctx,
+  isIce:name=>['Heavy Water','Liquid Ozone','Strontium Clathrates'].includes(name),
+  isIceIsotope:()=>false
+});
+near(jita('Heavy Water',500,100,10),499.5,'Null override no contamina orden Jita');
+ctx.S.refinedMan.jita['heavy water']=634.75;
+near(jita('Heavy Water',500,100,10),634.75,'Jita manual independiente');
+near(local('Heavy Water',500,100,null,1),80.25,'Jita manual no afecta Null');
+delete ctx.S.refinedMan.null['heavy water'];
+near(local('Heavy Water',500,100,null,1),45,'volver a automático restaura regla del 55%');
+near(jita('Heavy Water',500,100,10),634.75,'reset de Null conserva manual Jita');
+delete ctx.S.refinedMan.jita['heavy water'];
+near(jita('Heavy Water',500,100,10),499.5,'reset de Jita restaura precio automático');
+const noBb=js.slice(js.indexOf('if(C.bb.on&&q>0){'),js.indexOf('// Venta a jugador por Discord'));
+assert(!noBb.includes('refinedMan'),'Buyback debe continuar independiente');
+console.log('OK — doble clic, edición contextual, precio automático y rutas Null/Jita independientes.');

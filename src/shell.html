@@ -1334,6 +1334,21 @@ body.in-jita #pCtr,body.in-jita #pExtra,body.in-jita #vRep,body.in-jita .if-ore{
 @media(max-width:900px){.ov-row{grid-template-columns:minmax(0,1fr)}}
 @media(max-width:520px){.ov-hd{flex-direction:column;align-items:flex-start}.ov-hd .v-isk{font-size:2rem}.ov-kpi{grid-template-columns:minmax(0,1fr)}.ov-mk-l b{font-size:.8rem}.ov-card{padding:12px}}
 /*__MINING_CSS__*/
+
+/* v1.0.75 — precio de producto refinado: clic copia, doble clic / F2 edita. */
+.pl-row.min .p .cp-refined-price{cursor:copy;position:relative;outline-offset:3px}
+.pl-row.min .p .cp-refined-price:hover,.pl-row.min .p .cp-refined-price:focus-visible{border-color:rgba(226,173,97,.6)!important;background:rgba(226,173,97,.1)!important}
+.pl-row.min .p .cp-refined-price.cp-manual-price{border-color:rgba(118,191,154,.53)!important;background:rgba(91,163,126,.12)!important}
+.pl-row.min .p .cp-refined-price.cp-manual-price::after{content:"✎";margin-left:5px;font-size:.76em;opacity:.86}
+.pl-row.min .p .pr-inline-editor{display:inline-flex;align-items:center;justify-content:flex-end;gap:3px;max-width:100%;flex-wrap:wrap;padding:2px;border-radius:7px;background:rgba(225,172,91,.06);border:1px solid rgba(225,172,91,.37)}
+.pl-row.min .p .pr-inline-input{font:600 .86rem var(--f-num);width:99px;min-width:55px;max-width:100%;padding:6px;border-radius:5px;border:1px solid rgba(226,173,97,.5);color:var(--txt);background:var(--input,#151515);text-align:right}
+.pl-row.min .p .pr-inline-editor button{font:600 .76rem var(--f-ui);border:1px solid rgba(222,220,209,.2);border-radius:5px;background:rgba(222,220,209,.07);color:var(--txt);padding:5px 7px;min-height:28px;cursor:pointer}
+.pl-row.min .p .pr-inline-editor button:hover{background:rgba(222,220,209,.16)}
+.pl-row.min .p .pr-edit-save{color:var(--gain,#5cba86)!important}
+.pl-row.min .p .pr-edit-cancel{color:var(--loss,#e8746c)!important}
+html.light .pl-row.min .p .pr-inline-editor{background:rgba(184,123,45,.08);border-color:rgba(150,101,32,.36)}
+html.light .pl-row.min .p .pr-inline-input{background:#fff;color:#262626}
+@media(max-width:640px){.pl-row.min .p .pr-inline-editor{justify-content:flex-start}.pl-row.min .p .pr-inline-input{width:92px}}
 </style>
 <script>/* v1.0.16: aplica el tema guardado antes de pintar (sin parpadeo). Por defecto: Dark. */try{var g=JSON.parse(localStorage.getItem('gestorVentas.ajustes.v1')||'null');if(g&&g.ui){if(g.ui.light)document.documentElement.classList.add('light');}}catch(e){}</script>
 </head>
@@ -1348,7 +1363,7 @@ body.in-jita #pCtr,body.in-jita #pExtra,body.in-jita #vRep,body.in-jita .if-ore{
   <div class="route" id="route">
     <button type="button" class="route-b" id="bFlip" aria-pressed="false" title="Ruta del lote. HY-RWO → Jita: vendes lo que tienes en Null. Jita → HY-RWO: llevas (o compras) en Jita y vendes en Null más caro. Clic para invertir.">
       <span class="route-ic" aria-hidden="true"></span><span class="route-from" id="rtFrom">HY-RWO</span><span class="route-ar" aria-hidden="true">→</span><span class="route-to" id="rtTo">Jita</span></button>
-    <label class="sw" id="shipLab" hidden title="Solo con la ruta Jita → HY-RWO. On: llevas los items de Jita a HY-RWO con SIGMA Freight y se cuenta el envío. Off: los trajiste a Jita para venderlos allí, sin envío."><input type="checkbox" id="shipOn" checked><span class="sw-t" aria-hidden="true"></span><span id="shipTxt">Envío On</span></label>
+    <label class="sw" id="shipLab" hidden title="Enviar: utiliza SIGMA Freight para llevar los items a HY-RWO. No enviar: venderás los items en Jita sin contabilizar transporte."><input type="checkbox" id="shipOn" checked><span class="sw-t" aria-hidden="true"></span><span id="shipTxt">Enviar</span></label>
     <label class="route-m" id="rtM" hidden title="Margen de importación: cuánto más que Jita Sell cobras en HY-RWO (neto, ya con taxes)."><span class="rm-l">Margen</span><span class="rm-f"><span class="rm-s">+</span><input type="number" id="fImpM" min="0" step="0.5" value="15" inputmode="decimal" aria-label="Margen al vender en HY-RWO, % neto sobre Jita Sell"><span class="rm-s">%</span></span></label>
   </div>
   </div>

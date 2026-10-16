@@ -347,3 +347,69 @@ html.light #mining .mn-kpi .mn-kpi-winner{background:rgba(224,170,79,.12)}
 @media(max-width:1050px){#mining .mn-all-ships{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:640px){#mining .mn-all-ships{grid-template-columns:minmax(0,1fr)}#mining .mn-ship-stats{grid-template-columns:repeat(2,minmax(0,1fr))}#mining .mn-turnaround{align-items:flex-start}}
 @media(prefers-reduced-motion:reduce){#mining .mn-ship-card{transition:none}}
+
+
+/* v1.0.75 — controles consistentes, fichas verticales, entrenamiento y presupuestos. */
+#mining .mn-controls-unified{padding:16px;border:1px solid rgba(222,220,209,.14);background:rgba(21,23,27,.76);border-radius:12px}
+#mining .mn-controls-unified .mn-ctl{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,12rem),1fr));gap:14px}
+#mining .mn-controls-unified .mn-ctl>div{display:flex;flex-direction:column;align-items:flex-start;gap:7px;max-width:100%}
+#mining .mn-controls-unified .mn-lbl{font-size:.91rem;letter-spacing:0;text-transform:none;font-weight:650;color:var(--txt);margin:0}
+#mining .mn-controls-unified .pk-flt{display:flex;max-width:100%;gap:2px}
+#mining .mn-controls-unified .pk-fb{font-size:.83rem;min-height:34px;padding:7px 10px;white-space:nowrap}
+#mining .mn-iii-estimate,#mining .mn-imp-estimate{font-size:.82rem;line-height:1.5;margin:12px 0 0;color:var(--warn,#dfa84f)}
+#mining .mn-iii-estimate[hidden],#mining .mn-imp-estimate[hidden]{display:none}
+#mining .mn-price{display:grid;grid-template-columns:repeat(3,minmax(0,1fr)) minmax(240px,1.25fr);gap:14px;align-items:stretch;padding:14px}
+#mining .mn-price label{font-size:.94rem;font-weight:650;color:var(--txt);display:flex;flex-direction:column;min-width:0;gap:6px}
+#mining .mn-price select{width:100%;min-width:0;max-width:100%;margin:0;font-size:.98rem;line-height:1.35;padding:10px}
+#mining .mn-price .mn-pst{min-width:0;display:flex;flex-direction:column;justify-content:center;gap:6px;padding:10px 14px;border:1px solid rgba(222,220,209,.13);border-radius:9px;background:rgba(255,255,255,.035);font-size:.86rem;line-height:1.5}
+#mining .mn-pst-title{font-size:.78rem;font-weight:650;letter-spacing:.02em;color:var(--mut)}
+#mining .mn-pst-main{font:700 1.34rem/1.18 var(--f-num);color:var(--txt);font-variant-numeric:tabular-nums}
+#mining .mn-pst-meta{font-size:.76rem;line-height:1.45;color:var(--mut);overflow-wrap:anywhere}
+#mining .mn-fit-cards{display:grid;grid-template-columns:1fr;gap:15px}
+#mining .mn-fit-card{min-width:0;padding:16px;border:1px solid rgba(222,220,209,.14);border-radius:12px;background:rgba(255,255,255,.025)}
+#mining .mn-fit-head{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap;border-bottom:1px solid rgba(222,220,209,.12);padding-bottom:10px;margin-bottom:14px}
+#mining .mn-fit-head h4{font:600 1.13rem var(--f-serif);margin:0;color:var(--txt)}
+#mining .mn-fit-head>b{font:700 1rem var(--f-num);color:var(--ion)}
+#mining .mn-fit-attributes{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px 20px;margin-bottom:14px}
+#mining .mn-fit-attr{display:flex;align-items:baseline;justify-content:space-between;gap:8px;padding:7px 0;border-bottom:1px solid rgba(222,220,209,.07);min-width:0}
+#mining .mn-fit-attr>span{font-size:.83rem;color:var(--mut)}
+#mining .mn-fit-attr>strong{font-size:.85rem;color:var(--txt);text-align:right;overflow-wrap:anywhere}
+#mining .mn-fit-budget,#mining .mn-editor-budget-table,#mining .mn-books-table{width:100%;border-collapse:collapse;margin:6px 0;table-layout:fixed}
+#mining .mn-fit-budget th,#mining .mn-editor-budget-table th,#mining .mn-books-table th{text-align:left;font-weight:650;color:var(--mut);font-size:.77rem;padding:8px 6px;border-bottom:1px solid rgba(222,220,209,.18)}
+#mining .mn-fit-budget td,#mining .mn-editor-budget-table td,#mining .mn-books-table td{font-size:.84rem;padding:8px 6px;border-bottom:1px solid rgba(222,220,209,.08);overflow-wrap:anywhere}
+#mining .mn-fit-budget td:not(:first-child),#mining .mn-editor-budget-table td:not(:first-child),#mining .mn-books-table td:last-child{text-align:right;font-variant-numeric:tabular-nums}
+#mining .mn-fit-budget th:not(:first-child),#mining .mn-editor-budget-table th:not(:first-child),#mining .mn-books-table th:last-child{text-align:right}
+#mining .mn-fit-budget th:first-child,#mining .mn-editor-budget-table th:first-child{width:46%}
+#mining .mn-fit-manual td:first-child{color:var(--ion)}
+#mining .mn-fit-total,#mining .mn-edit-budget-total{display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-top:10px;padding:12px 14px;border:1px solid rgba(222,220,209,.12);border-radius:8px;background:rgba(255,255,255,.025);font-weight:650;color:var(--txt)}
+#mining .mn-fit-total strong{font:700 1.15rem var(--f-num);color:var(--gain)}
+#mining .mn-price-editor .mn-edit-controls label,#mining .mn-price-editor .mn-edit-cost label{font-size:.9rem;font-weight:650;color:var(--txt)}
+#mining .mn-price-editor .mn-edit-title{font-size:.94rem}
+#mining .mn-price-editor .mn-edit-material,#mining .mn-price-editor .mn-edit-controls select,#mining .mn-price-editor .mn-edit-cost select{font-size:.92rem;min-height:36px}
+#mining .mn-edit-cost{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+#mining .mn-edit-cost label{min-width:0}
+#mining .mn-edit-budget{overflow:auto;margin-top:12px}
+#mining .mn-edit-budget-title{font-size:.87rem;font-weight:650;margin:8px 0;color:var(--txt)}
+#mining .mn-esi-toolbar{display:flex;align-items:center;flex-wrap:wrap;gap:9px 14px;margin-top:12px}
+#mining .mn-refresh-esi,#mining .mn-skills-reload{padding:9px 13px;border:1px solid rgba(226,173,97,.43);border-radius:8px;background:rgba(226,173,97,.10);color:var(--txt);font-size:.85rem;font-weight:650;cursor:pointer}
+#mining .mn-refresh-esi:disabled,#mining .mn-skills-reload:disabled{opacity:.58;cursor:wait}
+#mining .mn-esi-status{font-size:.78rem;color:var(--mut);line-height:1.5}
+#mining .mn-training-controls{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:center;margin:12px 0}
+#mining .mn-training .mn-lbl{font-size:.88rem;font-weight:650;color:var(--txt)}
+#mining .mn-tr-path{display:flex;flex-direction:column;gap:12px}
+#mining .mn-tr-stage{padding:14px;border:1px solid rgba(222,220,209,.12);border-radius:10px;background:rgba(255,255,255,.025)}
+#mining .mn-tr-stage-head{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px}
+#mining .mn-tr-stage h4{font:600 1.03rem var(--f-serif);margin:0;color:var(--txt)}
+#mining .mn-tr-days{font:600 .87rem var(--f-num);color:var(--ion)}
+#mining .mn-tr-why{font-size:.85rem;color:var(--mut);line-height:1.55;margin:9px 0}
+#mining .mn-tr-steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,14rem),1fr));gap:6px 18px;margin:0;padding-left:22px}
+#mining .mn-tr-steps li{font-size:.85rem;line-height:1.5;padding:3px 0;color:var(--txt)}
+#mining .mn-tr-steps li small{display:block;color:var(--mut);font-size:.74rem}
+#mining .mn-tr-target{font-size:.91rem;padding:10px 12px;border-radius:9px;background:rgba(100,159,218,.08);border:1px solid rgba(100,159,218,.2);color:var(--txt)}
+#mining .mn-books{margin-top:18px}
+#mining .mn-books h4{font:600 1.06rem var(--f-serif);color:var(--txt)}
+#mining .mn-books-total{font:650 .96rem var(--f-num);color:var(--txt)}
+html.light #mining .mn-controls-unified,html.light #mining .mn-fit-card,html.light #mining .mn-tr-stage{background:rgba(255,255,255,.76);border-color:rgba(30,34,40,.14)}
+html.light #mining .mn-price .mn-pst{background:rgba(255,255,255,.74);border-color:rgba(30,34,40,.14)}
+@media(max-width:1150px){#mining .mn-price{grid-template-columns:repeat(2,minmax(0,1fr))}#mining .mn-price .mn-pst{grid-column:1/-1}}
+@media(max-width:680px){#mining .mn-price{grid-template-columns:1fr}#mining .mn-price .mn-pst{grid-column:auto}#mining .mn-fit-attributes{grid-template-columns:1fr}#mining .mn-tr-steps{grid-template-columns:1fr}#mining .mn-edit-cost{grid-template-columns:1fr}}

@@ -2,6 +2,18 @@
 
 Cambios por versión del Gestor de Ventas. La más nueva arriba. El detalle técnico completo está en `docs/SPEC.txt`.
 
+## 1.0.75 — [ChatGPT] Minería por clase, precio de fits y entrenamiento por etapas
+*2026-10-16*
+
+- En Pasos para vender, un clic copia cada precio del producto reprocesado y doble clic (o F2) permite sustituirlo; Enter guarda, Esc cancela, Auto restaura el valor. Override por producto y destino Null/Jita, sin alterar ESI, Buyback ni descuentos físicos/comerciales.
+- Sidebar: «Enviar / No enviar» en lugar de «Envío On / Off».
+- Minería: controles agrupados y clase Barges/Exhumers; Skills III (estimación explícita), IV y V; implantes ordenados Sin (por defecto), 4% (estimado), 5%; material, boosts, fit T1/T2/Facción y valoración. Resumen, ganador, tarjetas, comparativas, entrenamiento y presupuesto responden al escenario seleccionado.
+- Eliminadas la tabla duplicada «Producción por Nave y Escalón» y la gráfica redundante de autonomía. «Fit y Detalle» pasa a fichas verticales con los componentes exactos del fit (nave, módulos, rigs y drones), cantidades, precios Jita Sell y subtotales; los implantes +5% se incluyen cuando corresponde.
+- Editor de precios con botón «Actualizar cotizaciones ESI», selección de nave y componentes del fit y presupuesto, sin borrar overrides manuales. Se deduplican consultas concurrentes por typeID; 2 solicitudes simultáneas como máximo por lote, cooldown ESI y cache de cotizaciones de 5 min.
+- Ruta de entrenamiento por etapas, prioridades de yield, prerequisitos, días acumulados, objetivo IV/V y skillbooks a Jita Sell cuando existen órdenes; no se inventan precios ni calendario III. La trayectoria histórica IV/V es aproximada, no optimizador exhaustivo.
+- Minería persiste el plan y la configuración local en el navegador de forma independiente de los Settings de ventas y del inventario temporal. Se retiran funciones de gráficos huérfanas y se actualizan documentación, pruebas y ajustes de estilo responsive.
+- Skills III y bonus de implantes +4% son estimaciones sobre dataset Pyfa IV/V y Sin/+5%, expresamente marcadas. Los costes de implantes +4% no se incorporan sin precios y typeIDs validados; el fit de referencia III puede no ser equipable.
+
 ## 1.0.74 — [ChatGPT] Tiempo muerto editable y comparación de barges
 *2026-10-16*
 

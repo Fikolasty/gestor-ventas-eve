@@ -23,4 +23,4 @@ jobs:
           node tests/mining-smoke.cjs
           node tests/ice-settings.cjs
       - name: Verificar generación de HTML
-        run: python3 build.py 1.0.74
+        run: python3 build.py 1.0.75

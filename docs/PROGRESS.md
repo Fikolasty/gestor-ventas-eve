@@ -203,3 +203,11 @@ Hallazgo 1: «Precios ajustados: venta rápida −0.16%» era una etiqueta globa
 Hallazgo 2: las filas de rendimiento Pyfa histórico descuentan 120 s por bodega. Con 65 s en Moon/IV/implantes/T1 sin boost, la Covetor pasa de ~59.8k a ~66.6k m³/h efectivo y la Retriever de ~61.7k a ~63.5k. No se debe fijar una ganadora: depende de los parámetros.
 Cambios: 65 s configurable, método efectivo por tiempo de llenado y parada, exenciones de compresión, seis tarjetas por fit con bonos SDE por nivel, estrella al ganador, resultados trasladados a Max y Plan; el mes 1 se reescala con bodega IV (aproximación), etapas posteriores usan rendimiento recalculado.
 Pruebas añadidas para 65/120 s, 0 s, 900 s, compresión Orca/Rorqual/Porpoise, comparación Covetor/Retriever y excepción del ajuste de Jita. Pendiente: test CI posterior a push y revisión visual Firefox/móvil.
+
+
+## 17. v1.0.75 — [ChatGPT] Comparador y precios del fit, entrenamiento y sesión
+Base: 429adcba8c45d11d5c6196773cd602444d82d80c. Se preserva el SDE MINE original con 864 registros, src/refine.js, lógica ESI/Mayhem y el factor hielo. No se modifican importes de contrato ni tax.
+UI: sidebar «Enviar/No enviar»; en los productos refinados de Pasos para Vender, clic copia y doble clic/F2 edita con reset independiente por destino. UI Minería agrupada y más legible, tres naves por clase, skills III/IV/V, implantes Sin/4/5, ganador y resumen sincronizados; tablas redundantes retiradas, fichas verticales de fit e inversión por componentes.
+ESI: botón de cotizaciones para los materiales/nave/fit seleccionados, con override intacto, cache 5 min y dedupe por ID; ruta de entrenamiento con etapas, prioridad y coste de libros Jita Sell obtenido por universe/ids cuando hay datos. Persistencia de plan minero en localStorage separada de los Settings y loot; restauración validada y guardado en pagehide.
+Limitación visible: III y 4% estimados desde IV/V y Sin/+5%; no prometer fit realmente usable en III ni coste de implante +4%. Exhumer exige prerequisitos reales. Skillbooks sin órdenes en Jita quedan sin cotización.
+Regresión agregada: minería recalculada 0/4/5, clases filtradas, fichas, persistencia, ESI y editor de productos; confirmar tests Actions y Pages después del push. Revisar visualmente Firefox/móvil; no disponible browser GUI integrado en esta ejecución.

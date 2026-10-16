@@ -59,7 +59,7 @@ CHANGELOG.md          ← cambios por versión
 ### Generar la página
 Solo necesitas Python 3, sin dependencias:
 ```
-python3 build.py 1.0.74
+python3 build.py 1.0.75
 ```
 Eso escribe `index.html` con la versión indicada.
 
@@ -94,3 +94,6 @@ Fuente de verdad de la minería: [`docs/MINING.md`](docs/MINING.md). El código 
 **v1.0.73:** HOME en sidebar, hielo enlazado a Settings (55% de reducción comercial editable para productos refinados salvo isótopos), contrato Buyback Mayhem independiente, venta local frente a envío según ISK netos y escenarios mineros de 1-30 días trabajados al mes después del primero. Ver docs/SPEC.md y docs/MINING.md.
 
 **v1.0.74:** tiempo de viaje configurable en Minería (65 s iniciales), tarjetas de las seis barges/exhumers con bonos, bodega y viajes/h, y ganador según producción efectiva. El aviso de precio rápido solo se muestra cuando corresponde a ventas Jita.
+
+
+**v1.0.75:** en Minería se comparan Barges o Exhumers por separado, con selectores de skills III/IV/V (III estimado), implantes Sin/4% (estimado)/5%, 65 s de tiempo muerto ajustable y datos de autonomía por nave. «Fit y Detalle» muestra un presupuesto real por componentes y cantidades usando Jita Sell ESI o precio manual. El plan minero se guarda entre sesiones en localStorage. Training incluye etapas, prioridades y skillbooks Jita Sell. En Pasos para vender: clic en un precio de refinado copia, doble clic o F2 edita para Null/Jita sin tocar Buyback. Sidebar: Enviar / No enviar.

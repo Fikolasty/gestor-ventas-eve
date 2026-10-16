@@ -60,7 +60,8 @@ const S={
   items:[],      // {name,qty,srcQty,qtyCol,qtyDeduced,pasteRef,pasteTotal,pasteM3u,pasteM3tot,refMan,m3uMan,jita,ref,m3u,checks,notFound,ui}
   sk:null,       // skills del personaje
   api:{},        // por nombre en minúsculas: {buy,sell,buys,buyCap,flags,vol,alt,hist,ccp,id}
-  minMan:{},     // precios de minerales escritos a mano
+  minMan:{},     // precios base de productos escritos a mano en Reproceso
+  refinedMan:{null:Object.create(null),jita:Object.create(null)}, // precio final del producto por destino; solo memoria
   repro:{dirty:false,key:null,rows:{}}
 };
 const C=S.cfg;
@@ -125,6 +126,10 @@ function tickDown(p){
 }
 // Precio a listar en Null: precio que ves (undercut) > regla de hielo (Jita Buy − %) > Jita Buy (+ margen opcional). Nunca Jita Sell.
 function nullList(name,sell,buy,seen,q){
+  // Un precio final escrito desde Pasos para Vender manda sobre descuentos locales.
+  // Se mantiene aislado de Jita, Buyback y el precio original de ESI.
+  const custom=S.refinedMan.null[String(name||'').toLowerCase()];
+  if(custom!=null)return custom;
   if(seen!=null&&seen>0)return qdApply(tickDown(seen*(1-C.under)),name,q);
   // regla del hielo solo para el hielo SIN refinar; sus productos (Heavy Water, Ozone…) van con lo que no es módulo (90%)
   const iceRaw=(()=>{const x=resolveOre(name);return !!(x&&x.d.cat==='ice');})();
@@ -162,6 +167,9 @@ const ticksBetween=(lo,hi)=>lo>0&&hi>lo?(hi-lo)/tsz(lo):0;
 // Precio a listar en Jita: hielo con undercut a Jita Sell o Split; el resto, Jita Sell menos N ticks (v1.0.17).
 // man = precio escrito por ti: se respeta tal cual.
 function jitaList(name,sell,buy,q,man){
+  // Precio final manual de la orden de un producto reprocesado en Jita.
+  const custom=S.refinedMan.jita[String(name||'').toLowerCase()];
+  if(custom!=null)return custom;
   if(sell==null)return null;
   if(C.ice.on&&isIce(name)&&!isIceIsotope(name)&&!IN_JITA()){if(C.ice.jitaMode==='split'&&buy!=null)return tickDown((sell+buy)/2);return tickDown(sell*(1-C.under));}
   return man?sell:tickBelow(sell,C.underTk); // v1.0.18: sin descuento por cantidad en Jita (mercado grande)
@@ -936,10 +944,73 @@ function buildLotDetails(o,ui){
 // copia el valor limpio: números con máx. 2 decimales y sin "ISK" (listo para pegar en el juego)
 const isNumTxt=t=>/^[−+\-]?\s*[\d][\d,.\s]*(\s*(ISK|m³|m3|%|días?|u))?$/i.test(String(t).trim());
 function copyBtn(v,label){const b=el('button','copy'+(isNumTxt(label)?' cp-n':''),label);b.type='button';b.dataset.v=typeof v==='number'?String(Math.round(v*100)/100):String(v);b.title='Clic para copiar';return b;}
+// Los precios editables esperan brevemente para distinguir clic (copiar) de doble clic (editar).
+// Los demás botones de copiar conservan su comportamiento inmediato.
+let refinedCopyTimer=0;
+function copyPriceValue(b){
+  const v=b.dataset.v,done=()=>{if(!b.isConnected)return;const t=b.textContent;
+    b.textContent='Copiado';setTimeout(()=>{if(b.isConnected)b.textContent=t;},900);};
+  if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(v).then(done,()=>prompt('Copia:',v));else prompt('Copia:',v);
+}
 document.addEventListener('click',e=>{
   const b=e.target.closest('button.copy');if(!b||!b.dataset.v)return;
-  const v=b.dataset.v,done=()=>{const t=b.textContent;b.textContent='Copiado';setTimeout(()=>b.textContent=t,900);};
-  if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(v).then(done,()=>prompt('Copia:',v));else prompt('Copia:',v);
+  if(b.classList.contains('cp-refined-price')){
+    clearTimeout(refinedCopyTimer);
+    if(e.detail>1)return; // doble clic: el listener de edición lo procesa
+    refinedCopyTimer=setTimeout(()=>{refinedCopyTimer=0;if(b.isConnected)copyPriceValue(b);},380);
+    return;
+  }
+  copyPriceValue(b);
+});
+// Editar la cotización final, no el precio base Jita: así el 55% de HY no se descuenta otra vez.
+function openRefinedPriceEditor(b){
+  if(!b||!b.isConnected)return;
+  const route=b.dataset.priceRoute,name=b.dataset.priceProduct,key=name.toLowerCase();
+  if(!['null','jita'].includes(route)||!name)return;
+  const host=b.parentElement;
+  if(host.querySelector('.pr-inline-editor'))return;
+  const wrap=el('span','pr-inline-editor'),inp=el('input','pr-inline-input');
+  inp.type='text';inp.inputMode='decimal';inp.autocomplete='off';inp.spellcheck=false;
+  inp.value=b.dataset.v;inp.setAttribute('aria-label','Precio manual de '+name+' en '+(route==='null'?'Null':'Jita'));
+  const save=el('button','pr-edit-save','✓'),reset=el('button','pr-edit-reset','Auto ↺');
+  const cancel=el('button','pr-edit-cancel','×');
+  [save,reset,cancel].forEach(x=>x.type='button');
+  save.title='Guardar precio';reset.title='Volver al precio automático';cancel.title='Cancelar edición';
+  wrap.append(inp,save,reset,cancel);b.replaceWith(wrap);
+  let finished=false;
+  function finish(action){
+    if(finished)return;
+    if(action==='cancel'){finished=true;wrap.replaceWith(b);b.focus();return;}
+    if(action==='save'){
+      const raw=inp.value.trim(),text=raw.replace(/\s*ISK$/i,'').trim();
+      const value=/^\d[\d.,\s]*$/.test(text)?num(text):null;
+      if(value==null||!Number.isFinite(value)||value<=0||value>1e15){
+        inp.setCustomValidity('Introduce un precio positivo en ISK.');inp.reportValidity();inp.focus();return;
+      }
+      S.refinedMan[route][key]=value;
+    }else if(action==='reset')delete S.refinedMan[route][key];
+    finished=true;refreshNow();
+  }
+  inp.addEventListener('input',()=>inp.setCustomValidity(''));
+  inp.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();finish('save');}
+    else if(e.key==='Escape'){e.preventDefault();finish('cancel');}});
+  save.addEventListener('click',()=>finish('save'));
+  reset.addEventListener('click',()=>finish('reset'));
+  cancel.addEventListener('click',()=>finish('cancel'));
+  // Un clic fuera guarda; los tres controles propios no producen guardado anticipado.
+  wrap.addEventListener('focusout',()=>setTimeout(()=>{
+    if(!finished&&wrap.isConnected&&!wrap.contains(document.activeElement))finish('save');
+  },0));
+  inp.focus();inp.select();
+}
+document.addEventListener('dblclick',e=>{
+  const b=e.target.closest('button.copy.cp-refined-price');if(!b)return;
+  e.preventDefault();clearTimeout(refinedCopyTimer);refinedCopyTimer=0;
+  openRefinedPriceEditor(b);
+});
+document.addEventListener('keydown',e=>{
+  const b=e.target.closest('button.copy.cp-refined-price');
+  if(b&&e.key==='F2'){e.preventDefault();clearTimeout(refinedCopyTimer);openRefinedPriceEditor(b);}
 });
 // fila de precios: Dónde · precio por unidad (copiable) · nota
 // fila: dónde · precio por unidad (copiable) · cómo se calcula · lo que te queda por unidad (neto)
@@ -1230,12 +1301,24 @@ function paintVerdict(P){
     b.type='button';b.dataset.s=k;b.title='Ordenar por '+t.toLowerCase()+(active?' (clic para cambiar orden)':'');
     b.setAttribute('aria-label',b.title);b.setAttribute('aria-pressed',String(active));hd.append(b);});return hd;};
   let tableTarget=null;
-  const prow=(cls,n,sub,q,p,pl2,amt,note)=>{const d=el('div','pl-row'+(cls?' '+cls:''));
+  const prow=(cls,n,sub,q,p,pl2,amt,note,priceEdit=null)=>{const d=el('div','pl-row'+(cls?' '+cls:''));
     const nn=el('span','n');
     if(!cls||cls==='min'){const ic=iconFor(n.replace(/^↳ /,''));if(ic)nn.append(ic);}
     if(!cls||cls==='min'){const c=el('span','cp',n);c.dataset.v=n.replace(/^↳ /,'');c.title='Copiar';nn.append(c);}else nn.append(n);
     if(sub)nn.append(el('small',null,sub));
-    const pp=el('span','p');if(p!=null)pp.append(copyBtn(p,fmtP(p)));if(pl2)pp.append(el('small',null,pl2));
+    const pp=el('span','p');
+    if(p!=null){const b=copyBtn(p,fmtP(p));
+      if(cls==='min'&&priceEdit){
+        b.classList.add('cp-refined-price');
+        b.dataset.priceProduct=priceEdit.name;b.dataset.priceRoute=priceEdit.route;
+        const hasOwn=Object.hasOwn(S.refinedMan[priceEdit.route],priceEdit.name.toLowerCase());
+        if(hasOwn)b.classList.add('cp-manual-price');
+        b.title='Clic: copiar · Doble clic o F2: editar'+(hasOwn?' · Precio manual':'');
+        b.setAttribute('aria-label','Precio de '+priceEdit.name+' · clic para copiar · doble clic o F2 para editar');
+      }
+      pp.append(b);
+    }
+    if(pl2)pp.append(el('small',null,pl2));
     const aa=el('span','a '+(cls==='cost'||cls==='miss'?'':sgn(amt)),amt==null?(cls==='min'?'':'—'):(cls==='cost'?'−'+fmt(Math.abs(amt)):(amt<0?'−':'')+fmt(Math.abs(amt))));if(note)aa.append(el('small',null,note));
     const qq=el('span','q');if(q!=null){const c=el('span','cp',fmtQ(q));c.dataset.v=String(Math.round(q*10)/10);c.title='Copiar';qq.append(c);}
     if(amt!=null&&(!cls||cls==='min')){const c=aa.firstChild;const w=el('span','cp');w.dataset.v=String(Math.round(amt));w.title='Copiar';aa.insertBefore(w,c);w.append(c);}
@@ -1265,7 +1348,7 @@ function paintVerdict(P){
           sort.k==='p'?(pr(x)??-Infinity):sort.k==='a'?(pr(x)!=null?x.n*pr(x)*rt:-Infinity):0;
         const mins=sort.k?[...r.mins].sort((a,b)=>{const A=keyMin(a),B=keyMin(b);return (A<B?-1:A>B?1:0)*sort.d;}):r.mins;
         mins.forEach(x=>{const p=pr(x);
-          prow('min','↳ '+x.m,x.qd>=.0001&&k==='rNull'?'Con −'+pctQ(x.qd)+'% por cantidad':null,x.n,p,k==='rNull'?'Orden en Null':'Orden en Jita',p!=null?x.n*p*rt:null,'neto de este '+(isIce(r.o.name)?'producto':'mineral'));});}
+          prow('min','↳ '+x.m,x.qd>=.0001&&k==='rNull'?'Con −'+pctQ(x.qd)+'% por cantidad':null,x.n,p,k==='rNull'?'Orden en Null':'Orden en Jita',p!=null?x.n*p*rt:null,'neto de este '+(isIce(r.o.name)?'producto':'mineral'),{route:k==='rNull'?'null':'jita',name:x.m});});}
     });
     if(!gs.length)groupTable.append(el('div','pl-nomatch',query?'No hay items con ese nombre en esta recomendación.':'No hay items.'));
     if(gs.length>lim){const hid=gs.slice(lim),sum=hid.reduce((a,r)=>a+r.g[k]-r.prod,0);
@@ -1289,8 +1372,8 @@ function paintVerdict(P){
     bb:['Contrato al Buyback','En '+sys,'Item Exchange a '+($('bbAvail').value||'el programa')+' en '+($('bbLoc').value||sys)+'.'],
     disc:['Vender a un jugador','En '+sys,'Publica la oferta WTS en Discord; los pasos están en Extras, Vender a Jugadores.'],
     null:['Publicar órdenes en '+sys,'En '+sys,'Precio por unidad para tu sell order. Clic en el precio para copiarlo.'],
-    rNull:['Reprocesar y vender en '+sys,'En '+sys,'Reprocesa en '+refName()+' y publica cada material al precio indicado.'],
-    rJita:['Reprocesar para llevar a Jita','En '+sys,'Reprocesa en '+refName()+'; los materiales se envían y se venden en Jita.'],
+    rNull:['Reprocesar y vender en '+sys,'En '+sys,'Reprocesa en '+refName()+' y publica cada material al precio indicado. Doble clic para editar los precios.'],
+    rJita:['Reprocesar para llevar a Jita','En '+sys,'Reprocesa en '+refName()+'; los materiales se envían y se venden en Jita. Doble clic para editar los precios.'],
     jOrd:[arr+'Publicar órdenes en Jita','En Jita','Precio = la venta más barata'+tk+'. Clic en el precio para copiarlo.'],
     jInst:[arr+'Vender al instante en Jita','En Jita','Vende a las buy orders; el precio es el promedio que recibirías.'],
     fJ:['Publicar órdenes en Jita','En Jita','Precio = la venta más barata'+tk+'. Clic en el precio para copiarlo.'],
@@ -2096,7 +2179,7 @@ $('cAssignee').addEventListener('input',()=>refresh());
 // v1.0.55: interruptor «Courier» (solo con la ruta Jita → HY-RWO). On: los items están en Jita y los llevas a HY-RWO
 // con SIGMA Freight (se cuenta el courier). Off: los trajiste a Jita para venderlos allí, sin ningún courier.
 // Con la ruta HY-RWO → Jita el courier siempre se cuenta y el interruptor no se muestra.
-function syncShipSwitch(){$('shipTxt').textContent='Envío '+(SH()?'On':'Off');$('shipLab').hidden=!S.flip;}
+function syncShipSwitch(){$('shipTxt').textContent=SH()?'Enviar':'No enviar';$('shipLab').hidden=!S.flip;}
 function setFlip(on){
   S.flip=!!on;S.planMode=null;czIdx=0;C.shipOn=true;$('shipOn').checked=true; // cambiar de ruta vuelve a contar el courier
   SHIPS=S.flip?{fN:1}:{jOrd:1,jInst:1,rJita:1};
