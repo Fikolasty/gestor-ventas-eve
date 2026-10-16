@@ -48,3 +48,13 @@ assert(js.includes('INFO(\'shared\')')&&js.includes('INFO(\'travel\')'));
 for(const tag of ["shipClass","mat","tier","lv","imp","boost","met"])
  assert(js.includes("INFO('"+tag+"')"),'falta el ⓘ de '+tag);
 console.log('OK: 864 combinaciones, 5 typeIDs de drones, T1/T2/Facción, bonuses/residuos, tooltip y generador.');
+
+
+// Hotfix v1.0.78: prefijo "Ice Harvesting Drone I" también aparece en "II".
+for(const row of M.rows){
+  const name=row[ix.drones];
+  if(name.includes('Ice Harvesting Drone II'))
+    assert.equal(row[ix.droneWaste],34,'ice II: 34% de residuo en todos los boosts/implantes');
+  if(name.endsWith('Ice Harvesting Drone I'))
+    assert.equal(row[ix.droneWaste],0,'ice I no hereda residuo de ice II');
+}

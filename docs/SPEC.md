@@ -228,3 +228,7 @@ Verificar regresiones de isótopos, Mayhem independiente, cortes de envío caros
 - Drones moon según Type ID SDE: T1=10246 Mining Drone I, T2=10250 Mining Drone II y Facción=43694 'Augmented' Mining Drone en Skills V. T2/Facción vuelven a I cuando no se cumplen requisitos (Mining Drone Operation V y Mining Drone Specialization I). Precio de fit por ID.
 - EVE Ref octubre 2026: Drone I 25 m³/60s sin residuos, Drone II 33 m³/60s con 34% residuo, Augmented 37 m³/60s con 40% residuo. Solo los avanzados reciben +2% yield por nivel de Mining Drone Specialization. Ice Harvesting Drone II: 34% residuo. Separar campo droneWaste del residuo de módulos.
 - Las 864 filas siguen representando escenarios Pyfa: 96 moon Skills V T2/Facción recalculan drones, totales, horas efectivas y autonomía; 12 listas de fit cambian el typeID. Generador Pyfa y script de cache sincronizados. Se necesitará regeneración integral cuando CCP modifique los atributos, y no se declara revisión de la totalidad de módulos más allá de los IDs comprobados.
+
+
+## 21. Hotfix de Type IDs y residuos (v1.0.78)
+La denominación Ice Harvesting Drone I es prefijo de Ice Harvesting Drone II. Al llenar droneWaste nunca se deben usar coincidencias de prefijos que puedan asignar el 0% de I al II. El canon verificado es II: 34%, I: 0% (96 escenarios II con todos los boosts/implantes). Test exhaustivo de la columna para todas las filas.

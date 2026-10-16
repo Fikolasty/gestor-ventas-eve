@@ -2,6 +2,12 @@
 
 Cambios por versión del Gestor de Ventas. La más nueva arriba. El detalle técnico completo está en `docs/SPEC.txt`.
 
+## 1.0.78 — [ChatGPT] Hotfix del residuo de Ice Harvesting Drone II
+*2026-10-16*
+
+- Corrige el error de prefijos del nombre del dron: Ice Harvesting Drone I y II no se deben comparar con includes('Drone I') sin verificar el tipo completo. El residuo de Ice Harvesting Drone II se establece en 34% en 96 escenarios (todos los boosts/implantes correspondientes).
+- Refuerza las pruebas sobre los 864 casos, incluyendo validación por fila de la columna droneWaste. Sin cambios adicionales a UI, rendimiento bruto, refinado, ESI o persistencia.
+
 ## 1.0.77 — [ChatGPT] Tooltips estilo EVE y drones actualizados
 *2026-10-16*
 

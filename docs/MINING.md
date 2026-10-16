@@ -124,3 +124,7 @@ Botones ⓘ estilo EVE para filtros, tiempos, precios y componentes. Al pasar el
 Moon ore: con Skills V, T1 Mining Drone I (10246, 25 m³ por 60s, sin residuo), T2 Mining Drone II (10250, 33 m³/60s, 34% residuo) y Facción 'Augmented' Mining Drone (43694, 37 m³/60s, 40% residuo). Estos dos últimos requieren Mining Drone Operation V y Mining Drone Specialization I. En Skills IV se usa fallback a Mining Drone I. El skill Mining Drone Specialization suma +2%/nivel de extracción solo a los avanzados; el precio del fit cambia con el Type ID real.
 Los 96 casos moon Skills V T2/Facción del dataset recalculan dr/tot/eff/fill para los boosts e implantes originales. El residuo del dron se guarda aparte como droneWaste; Ice Harvesting Drone II muestra 34%. No se suman residuos al rendimiento efectivo: son mineral perdido en la roca, no una penalización de lo recibido. El tiempo muerto editable sigue intacto.
 Actualizar el SDE Pyfa usando tools/mining/build_data.py; tools/mining/sde.py vincula el caché a la versión de datos para no usar atributos desactualizados. EVE Ref se consultó el 16-10-2026 sobre los drones referidos; el conjunto de otros módulos mantiene el snapshot Pyfa build 3579973, que puede requerir revisión cuando CCP cambie algo.
+
+
+## v1.0.78 — Corrección de residuo Ice II
+Ice Harvesting Drone I tiene 0% y Ice Harvesting Drone II tiene 34% de residuo. Un comparador por prefijos puede confundir ambos nombres; corregido en todas las filas de Ice II, sin cambiar el yield recibido ni el coste del fit. El test evita la regresión en todos los escenarios.
