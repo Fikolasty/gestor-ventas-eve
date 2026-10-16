@@ -175,3 +175,18 @@ Dentro de «Plan para Omega Nuevo», el interruptor `#mnFreeSpSwitch` se present
 ## 15. Precios editables de Minería (v1.0.72)
 
 El editor «✎ Editar precios», colapsado por defecto y visible desde las tres vistas del módulo, permite editar por material/ID y por lado del libro Jita (Buy/Sell), preservando la diferencia entre producto comprimido y sin comprimir. Los imports se interpretan como ISK por **unidad**, nunca por m³, y los resultados aplican el mismo `m³/u` del dataset. Opciones de selección lunar, hielo y gas. Editor avanzado para un costo Jita Sell de cada artículo del fit/nave/implante elegido; el motor de inversión utiliza la cotización manual si está presente. Cada precio ofrece restauración independiente desde la cotización ESI guardada. El PLEX manual ya existía y se conserva en Plan Omega. No alterar `PRICE` al establecer manuales; usar un diccionario de overrides temporal por `typeID:side` con lectura centralizada de precios. Cambios en memoria hasta recarga (no persistir inventario ni precios). Ajustar y marcar adecuadamente los estados manual / ESI y faltantes. Rendimiento de m³/h y fórmulas de compra/venta del gestor fuera de alcance. Tests de formatos numéricos y cálculo de cotizaciones en las tres vistas.
+
+## 16. HOME, ajustes de hielo, Mayhem y calendario mensual (v1.0.73)
+
+Requisitos confirmados por el usuario: botón HOME del sidebar; minería de hielo enlazada a Ajustes; Buyback exclusivamente según contrato Mayhem; planes sugeridos con coste de envío real; escenario de días trabajados después del mes 1.
+
+- HOME vuelve al principio del gestor y cierra paneles, sin borrar inventario ni ajustes.
+- Hielo sin refinar HY: precio según Hielo (activado, modo, descuento) más tasas de mercado de Null. Si las reglas de hielo están apagadas usa reglas generales.
+- Productos refinados en HY: se interpreta la reducción solicitada del 55% como una **penalización del precio local de venta**, configurable como Reducción local sobre hielo refinado en HY-RWO %. Heavy Water, Liquid Ozone y Strontium retienen por defecto el 45% de Jita Buy antes de tasas locales. Los cuatro isótopos mantienen Jita Buy estándar. No se modifica el rendimiento físico de la refinería ni el número de unidades producido. El usuario podrá aclarar si se refería a rendimiento físico.
+- Buyback MAYEM Corp Buyback / Mayhem Pawn and Loan: cotización por base Jita Buy/Split/Sell, tax general o especial de contrato, regla no acepta, ubicación y destinatario existentes. Nunca se aplica la penalización del 55% de Hielo, impuestos de mercado o coste de envío al valor del contrato Buyback.
+- Plan automático: comprobación por item de hielo del coste compartido real del envío; si la mejor venta local (Buyback, Null o reprocesar) produce más ISK netos que Jita tras envío, se queda en HY. Respetar los planes forzados del usuario.
+- Minería: selector económico para hielo con cuatro escenarios Jita, vender en HY, contrato Buyback Mayhem, reprocesar y vender productos en HY. El refino utiliza el mismo cálculo de refinería y skills del gestor, y ESI Buy/Sell para los productos (2 workers; caché existente); ausencia de cotización se marca sin fingir ceros.
+- Días después del primer mes: valor 1-30, valor inicial 30, presets 7/14/21/30. Mes 1 conserva 28 días originales; meses posteriores avanzan 30 días de entrenamiento, pero ingreso mensual se calcula por días trabajados, horas al día, yield medio y cantidad de cuentas. Omega de 30 días siempre se paga completo.
+- No cambiar cálculos de venta de loot ajeno al hielo, yields de Pyfa ni API ESI global.
+
+Verificar regresiones de isótopos, Mayhem independiente, cortes de envío caros, inputs de días, versión compilada y Pages.

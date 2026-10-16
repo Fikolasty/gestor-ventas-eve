@@ -54,7 +54,7 @@ const FORGE=10000002,JITA44=60003760;
 const S={
   planMode:null,
   flip:false,    // v1.0.5: false = HY-RWO → Jita (normal); true = Jita → HY-RWO (importar a Null). Solo memoria. // v111: plan elegido por el usuario (null = óptimo). Solo en memoria.
-  cfg:{disc:{on:true,base:'buy',pct:1,days:3},ref:{name:'HY-RWO - Metal Exchange',struct:'tatara',rig:'t2',sec:'null',imp:.04},ice:{on:true,nullMode:'jbuy',nullDisc:.025,jitaMode:'under',nullDays:14},under:.001,underTk:1,baitTk:5,spreadTk:2,nullDays:7,tax:.03375,broker:.015,brokerNull:.01,scc:.005,margin:0,prod:0,relists:1,abr:0,umbral:1000000,cDays:[1,3],fast:.05,impM:.15,shipOn:true,skew:{inst:-.0016,ord:0,nul:0},discEdge:.1,relistOn:false,nullNonMod:.9,tick:true,qd:{on:true,max:.05},stdFac:0,stdCorp:0,
+  cfg:{disc:{on:true,base:'buy',pct:1,days:3},ref:{name:'HY-RWO - Metal Exchange',struct:'tatara',rig:'t2',sec:'null',imp:.04},ice:{on:true,nullMode:'jbuy',nullDisc:.025,jitaMode:'under',nullDays:14,refLoss:.55},under:.001,underTk:1,baitTk:5,spreadTk:2,nullDays:7,tax:.03375,broker:.015,brokerNull:.01,scc:.005,margin:0,prod:0,relists:1,abr:0,umbral:1000000,cDays:[1,3],fast:.05,impM:.15,shipOn:true,skew:{inst:-.0016,ord:0,nul:0},discEdge:.1,relistOn:false,nullNonMod:.9,tick:true,qd:{on:true,max:.05},stdFac:0,stdCorp:0,
        base:10000000,perM3:653,collPct:.01,maxVol:350000,coll:null,
        bb:{on:true,tax:.05,base:'buy',special:{}}},
   items:[],      // {name,qty,srcQty,qtyCol,qtyDeduced,pasteRef,pasteTotal,pasteM3u,pasteM3tot,refMan,m3uMan,jita,ref,m3u,checks,notFound,ui}
@@ -112,6 +112,9 @@ function tick(p){
 }
 // Hielo y sus productos se venden en Null SIN margen (pedido de Arturo); el resto con tu margen
 const ICE_PRODUCTS=new Set();Object.values(REFINE).forEach(d=>{if(d.cat==='ice')Object.keys(d.out).forEach(m=>ICE_PRODUCTS.add(m.toLowerCase()));});
+const ICE_ISOTOPES=new Set(['helium isotopes','hydrogen isotopes','oxygen isotopes','nitrogen isotopes']);
+const isIceIsotope=name=>ICE_ISOTOPES.has(String(name||'').toLowerCase());
+const isIceRefinedNonIsotope=name=>ICE_PRODUCTS.has(String(name||'').toLowerCase())&&!isIceIsotope(name);
 function isIce(name){const r=resolveOre(name);return (r&&r.d.cat==='ice')||ICE_PRODUCTS.has(String(name||'').toLowerCase());}
 const marginFor=name=>C.ice.on&&isIce(name)?(C.ice.nullMode==='margin'?C.margin:0):C.margin;
 // Redondeo HACIA ABAJO a 4 cifras (para undercuts: quedar por debajo del otro)
@@ -125,7 +128,16 @@ function nullList(name,sell,buy,seen,q){
   if(seen!=null&&seen>0)return qdApply(tickDown(seen*(1-C.under)),name,q);
   // regla del hielo solo para el hielo SIN refinar; sus productos (Heavy Water, Ozone…) van con lo que no es módulo (90%)
   const iceRaw=(()=>{const x=resolveOre(name);return !!(x&&x.d.cat==='ice');})();
-  if(C.ice.on&&iceRaw&&C.ice.nullMode==='jbuy')return buy!=null?tickDown(buy*(1-C.ice.nullDisc)):null;
+  if(C.ice.on&&iceRaw){
+    if(buy==null)return null;
+    if(C.ice.nullMode==='jbuy')return tickDown(buy*(1-C.ice.nullDisc));
+    if(C.ice.nullMode==='jita')return tickDown(buy);
+    if(C.ice.nullMode==='margin')return tickDown(buy*(1+C.margin));
+  }
+  // HY-RWO: penalización comercial configurada de productos del hielo refinado.
+  // Isótopos mantienen Jita Buy; ni el rendimiento de reproceso ni el contrato Mayhem cambian.
+  if(C.ice.on&&buy!=null&&isIceIsotope(name))return tickDown(buy);
+  if(C.ice.on&&buy!=null&&isIceRefinedNonIsotope(name))return tickDown(buy*(1-C.ice.refLoss));
   // en Null nunca se vende a Jita Sell. Módulos: Jita Buy (+ margen). Todo lo demás (ore, minerales, productos,
   // commodities…): un % de Jita Buy (90% por defecto), que es lo que normalmente pagan en Null.
   if(buy!=null&&!isModule(name))return qdApply(tickDown(buy*C.nullNonMod),name,q);
@@ -151,7 +163,7 @@ const ticksBetween=(lo,hi)=>lo>0&&hi>lo?(hi-lo)/tsz(lo):0;
 // man = precio escrito por ti: se respeta tal cual.
 function jitaList(name,sell,buy,q,man){
   if(sell==null)return null;
-  if(C.ice.on&&isIce(name)&&!IN_JITA()){if(C.ice.jitaMode==='split'&&buy!=null)return tickDown((sell+buy)/2);return tickDown(sell*(1-C.under));}
+  if(C.ice.on&&isIce(name)&&!isIceIsotope(name)&&!IN_JITA()){if(C.ice.jitaMode==='split'&&buy!=null)return tickDown((sell+buy)/2);return tickDown(sell*(1-C.under));}
   return man?sell:tickBelow(sell,C.underTk); // v1.0.18: sin descuento por cantidad en Jita (mercado grande)
 }
 // v1.0.17: si tu precio de orden queda a C.spreadTk ticks o menos de la mejor compra, se prefiere vender al instante
@@ -173,11 +185,13 @@ function applyBait(a){if(!a)return;if(a.sell0===undefined)a.sell0=a.sell;a.sell=
 const iceNullTxt=()=>C.ice.nullMode==='jbuy'?'Jita Buy −'+pct(C.ice.nullDisc)+'%':C.ice.nullMode==='jita'?'precio de Jita':'con tu margen';
 const nullPrice=(base,name)=>base==null||!(base>0)?null:tick(base*(1+marginFor(name))); // Jita Buy (+ margen opcional)
 const nullLabel=name=>{
+  if(C.ice.on&&isIceIsotope(name))return 'Vender en HY-RWO (isótopos a Jita Buy)';
+  if(C.ice.on&&isIceRefinedNonIsotope(name))return 'Vender en HY-RWO (refinado −'+pct(C.ice.refLoss)+'%)';
   if(C.ice.on&&isIce(name)&&C.ice.nullMode!=='margin')return 'Vender en HY-RWO ('+(C.ice.nullMode==='jbuy'?'Jita Buy −'+pct(C.ice.nullDisc)+'%':'sin margen')+')';
   return 'Vender en HY-RWO ('+nullBaseTxt(name)+')';};
 // precio de Null en palabras: módulo = Jita Buy (+ margen); el resto = 90% de Jita Buy
 const nullBaseTxt=name=>isModule(name)?'Jita Buy'+(marginFor(name)>0?' +'+pct(marginFor(name))+'%':''):pct(C.nullNonMod)+'% de Jita Buy';
-const jitaLabel=name=>C.ice.on&&isIce(name)?(C.ice.jitaMode==='split'?'Orden en Jita (Split)':'Orden en Jita (Undercut)'):'Orden en Jita';
+const jitaLabel=name=>C.ice.on&&isIce(name)&&!isIceIsotope(name)?(C.ice.jitaMode==='split'?'Orden en Jita (Split)':'Orden en Jita (Undercut)'):'Orden en Jita';
 const trips=v=>v>0&&C.maxVol>0?Math.ceil(v/C.maxVol):0;
 // v1.0.7: "Contar envío" (C.shipOn). Apagado = lo llevas tú: el courier no se descuenta ni se arman contratos de envío.
 // v1.0.11: ajuste de precios (skew). General por tipo de venta + ajuste por item (o.skew); se suman.
@@ -623,6 +637,8 @@ function computePlan(){
         else row.hint.jInst='Jita solo compra '+fmtQ(w.filled)+' de '+fmtQ(q);
       }else row.hint.jInst='sin compras en Jita';
     }
+    // Mayhem Buyback: exclusivamente C.bb.base / C.bb.tax / C.bb.special.
+    // Ignora sin excepción los ajustes C.ice y la penalización comercial del refino local.
     // Buyback de la alianza: precio base de Jita menos su tax (o tax especial); en Null, sin courier ni sales tax
     if(C.bb.on&&q>0){
       const sp=C.bb.special[o.name.toLowerCase()];
@@ -696,6 +712,30 @@ function computePlan(){
        if(quedarse-viaJita>tol)sh.forEach((r,i)=>{r.noShip=true;r.fast=null;r.best=alt[i];r.guide=guideFor(r,Vall);});
        else sh.forEach(r=>{if(r.fast)r.fast.loss=Math.max(0,quedarse-viaJita)*(r.ship[r.best].v/V);});}
    }}
+  // Para hielo, comprobar el coste de envío real con los artículos que efectivamente viajan.
+  // Si el envío hace que Mayhem/otra alternativa local deje más ISK, quedarse en HY-RWO.
+  // No cambia rutas impuestas manualmente: se revisa solo el plan óptimo.
+  if(!S.flip&&!S.planMode){
+    for(let pass=0;pass<3;pass++){
+      const moving=rows.filter(r=>r.best&&r.ship[r.best]);
+      const totalV=moving.reduce((v,r)=>v+r.ship[r.best].v,0);
+      if(!moving.length||!totalV)break;
+      let changed=false;
+      moving.forEach(r=>{
+        if(!isIce(r.o.name))return;
+        const choices=['bb','null','rNull'].filter(k=>r.g[k]!=null);
+        if(!choices.length)return;
+        const alt=choices.reduce((a,b)=>r.g[b]>r.g[a]?b:a);
+        const travelling=r.ship[r.best];
+        const afterCost=r.g[r.best]-courierShare(travelling.v,travelling.c,totalV);
+        if(r.g[alt]>afterCost+0.01){
+          r.best=alt;r.noShip=true;r.fast=null;r.guide=guideFor(r,Vall);changed=true;
+          r.hint.iceShip='El envío a Jita es más caro que '+(alt==='bb'?'el contrato de Buyback Mayhem':'la mejor venta local')+'.';
+        }
+      });
+      if(!changed)break;
+    }
+  }
   // v111: plan elegido. r.auto = lo que elige el plan óptimo. Si el usuario elige un plan (p. ej. todo a Jita),
   // cada item que admite esa opción la toma; el que no puede (sin precio, el Buyback no lo acepta…) sigue el óptimo.
   const M=S.planMode;
@@ -2092,6 +2132,11 @@ function togglePanel(id,force){const s=$(id),open=force!=null?force:s.hidden;
 // v1.0.8: X dentro de la sección (fija al bajar)
 document.querySelectorAll('.x-close').forEach(b=>b.addEventListener('click',()=>togglePanel(b.dataset.close,false)));
 $('mineTab').addEventListener('click',()=>togglePanel('mining'));
+$('sideHome').addEventListener('click',()=>{
+  focusOnly('home'); // Cierra los paneles sin borrar datos ni preferencias.
+  window.scrollTo({top:0,behavior:MOTION()?'smooth':'auto'});
+  if(innerWidth<=900){document.body.classList.remove('side-open');$('sideBd').hidden=true;}
+});
 // v1.0.8: cada grupo de Ajustes es desplegable (empiezan cerrados); se abren con clic o Enter en su título
 document.querySelectorAll('#settings fieldset.st').forEach(f=>{const l=f.querySelector('legend');if(!l)return;f.classList.add('closed');
   l.tabIndex=0;l.setAttribute('role','button');l.setAttribute('aria-expanded','false');
@@ -2130,6 +2175,7 @@ $('iceNull').addEventListener('change',e=>{C.ice.nullMode=e.target.value;refresh
 $('iceJita').addEventListener('change',e=>{C.ice.jitaMode=e.target.value;refresh();});
 $('iceDisc').addEventListener('input',e=>{C.ice.nullDisc=(parseFloat(e.target.value)||0)/100;refresh();});
 $('iceDays').addEventListener('input',e=>{C.ice.nullDays=parseFloat(e.target.value)||0;refresh();});
+$('iceRefLoss').addEventListener('input',e=>{C.ice.refLoss=Math.max(0,Math.min(1,(parseFloat(e.target.value)||0)/100));refresh();});
 $('cUnder').addEventListener('input',e=>{C.under=(parseFloat(e.target.value)||0)/100;refresh();});
 // v1.0.17: ticks
 $('cUnderTk').addEventListener('input',e=>{C.underTk=Math.max(0,Math.round(parseFloat(e.target.value)||0));refresh();});
@@ -2187,7 +2233,7 @@ readSkills(false); // al abrir: niveles por defecto, sin tocar los Taxes ya escr
 
 // v1.0.13: campos que no aplican se apagan (con el motivo) según lo que esté activo
 const DEPS=[
-  [['iceNull','iceDisc','iceJita','iceDays'],()=>!$('iceOn').checked,'Activa Reglas especiales para hielo.'],
+  [['iceNull','iceDisc','iceJita','iceDays','iceRefLoss'],()=>!$('iceOn').checked,'Activa Reglas especiales para hielo.'],
   [['iceDisc'],()=>$('iceOn').checked&&$('iceNull').value!=='jbuy','Solo con Jita Buy menos un %.'],
   [['bbName','bbTax','bbBase','bbAvail','bbLoc','bbExp','bbDesc','bbSpecial'],()=>!$('bbOn').checked,'Activa Comparar con el Buyback.'],
   [['discBase','discPct','discDays','discLoc'],()=>!$('discOn').checked,'Activa Comparar esta opción.'],

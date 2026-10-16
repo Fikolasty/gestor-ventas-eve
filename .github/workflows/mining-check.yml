@@ -19,6 +19,8 @@ jobs:
           node --check src/mining_data.js
           node --check src/script.js
       - name: Regresión estática de minería
-        run: node tests/mining-smoke.cjs
+        run: |
+          node tests/mining-smoke.cjs
+          node tests/ice-settings.cjs
       - name: Verificar generación de HTML
-        run: python3 build.py 1.0.72
+        run: python3 build.py 1.0.73

@@ -2,6 +2,16 @@
 
 Cambios por versión del Gestor de Ventas. La más nueva arriba. El detalle técnico completo está en `docs/SPEC.txt`.
 
+## 1.0.73 — [ChatGPT] HOME, valor del hielo y días minados
+*2026-10-16*
+
+- HOME en el sidebar, sin vaciar inventario ni ajustes.
+- Hielo sin refinar usa Hielo/Null de Ajustes; productos refinados Heavy Water, Liquid Ozone y Strontium tienen reducción comercial en HY del 55% por defecto editable. Isótopos conservan Jita Buy.
+- Buyback Mayhem se rige exclusivamente por su contrato, precios base y tax general/especial, incluso en los planes de hielo.
+- Los planes sugeridos cotejan el coste del envío del hielo frente a su mejor salida local para no recomendar envíos ruinosos.
+- Minería integra escenarios Jita/HY/Mayhem/reprocesado HY y días trabajados de 1 a 30 después del mes 1, sin prorratear Omega.
+- Refine físico, tasas generales, lógica de venta de otros items y endpoints ESI no cambiados. Nuevas pruebas de humo.
+
 ## 1.0.72 — [ChatGPT] Precios manuales de minería con restablecimiento ESI
 *2026-10-16*
 

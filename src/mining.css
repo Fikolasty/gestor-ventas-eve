@@ -283,6 +283,18 @@
 @media(max-width:740px){.mn-edit-mats{grid-template-columns:repeat(2,minmax(0,1fr))}.mn-edit-cost{grid-template-columns:minmax(0,1fr)}}
 @media(max-width:470px){.mn-edit-mats{grid-template-columns:minmax(0,1fr)}.mn-edit-value>input{min-width:7ch}}
 
+
+/* v1.0.73 — enlace de Ajustes de hielo y días de minado desde el mes 2 */
+.mn-ice-settings{display:flex;align-items:center;flex-wrap:wrap;gap:8px 12px;margin:12px 0 10px;padding:10px 12px;border:1px solid rgba(220,186,117,.25);border-radius:9px;background:rgba(240,178,42,.045);min-width:0}
+.mn-ice-settings[hidden]{display:none!important}
+.mn-ice-settings>label{color:var(--txt);font-size:.84rem;font-weight:650}
+.mn-ice-market{min-width:190px;max-width:100%;font-size:.83rem;padding:7px 10px;border-radius:8px}
+.mn-ice-note{width:100%;color:var(--mut);font-size:.75rem;line-height:1.45}
+.mn .pl-stp[data-k="daysAfter"]{min-width:124px}
+.mn .pl-stp[data-k="daysAfter"] .pl-suf{white-space:nowrap}
+html.light #mining .mn-ice-settings{background:rgba(190,132,25,.055);border-color:rgba(150,105,12,.25)}
+@media(max-width:620px){.mn-ice-market{width:100%;flex:1 1 100%}.mn-ice-settings>label{width:100%}.mn .pl-stp[data-k="daysAfter"]{min-width:110px}}
+
 }
 .mine-tab{white-space:nowrap}
 html.light #mining .mn{--mn-t1:#2a78d6;--mn-t2:#d95926;--mn-t3:#199e70;--mn-ex:#b07600;--mn-grid:rgba(31,30,29,.12);--mn-axis:#6d6b67;--mn-mut:#a9a69e}

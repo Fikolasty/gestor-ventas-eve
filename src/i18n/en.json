@@ -1679,5 +1679,16 @@
 "Upgrades endgame (precio de mercado)": "Endgame upgrades (market price)",
 "Deslizador: 1–100 · Número manual: 1–1.000 (solo simulación; no equivale a jugar simultáneamente).": "Slider: 1–100 · Manual entry: 1–1,000 (simulation only).",
 "Skills V · implantes +5% · Full Facción. Sin Omega, compras ni inversión. Se muestran m³/h efectivos y, cuando ESI ofrece precios, ISK/h. El ajuste de boost viene del comparador de naves.": "Level V skills, +5% implants, full faction. No Omega or investment costs. Shows effective m³/h and ISK/h when ESI prices are available.",
-"Usar 1M SP (referido)": "Use 1M SP (referral)"
+"Usar 1M SP (referido)": "Use 1M SP (referral)",
+"HOME": "HOME",
+"Días que minas por mes, después del mes 1": "Days mined per month after month one",
+"7 días": "7 days",
+"7 días = una semana de minería por mes. Las habilidades se entrenan los 30 días y el Omega mensual se paga completo.": "7 days means one week of mining monthly. Skills still train all 30 days and the full Omega month is paid.",
+"Hielo · valor según Ajustes": "Ice · pricing from Settings",
+"Jita según precio elegido": "Jita at selected price",
+"Venta en HY-RWO": "Sell in HY-RWO",
+"Contrato Buyback Mayhem": "Mayhem Buyback contract",
+"Reprocesar en HY y vender productos": "Reprocess in HY and sell outputs",
+"Reducción local sobre hielo refinado en HY-RWO %": "Local reduction on refined ice prices in HY-RWO %",
+"55% menos sobre el precio de Heavy Water, Liquid Ozone y Strontium vendidos en HY (queda 45%). Los isótopos mantienen Jita Buy estándar, y el Buyback Mayhem usa solo sus propias reglas. No altera la cantidad física producida en refinería.": "55% less sale value on Heavy Water, Liquid Ozone and Strontium sold in HY (45% retained). Isotopes retain standard Jita Buy prices, Mayhem uses contract settings only. Physical refining output stays unchanged."
 }

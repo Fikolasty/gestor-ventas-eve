@@ -15,7 +15,7 @@ const MineUI=(()=>{
   const MATL={moon:'Moon ore',ice:'Hielo',gas:'Gas'};
   const DEF={moon:'Monazite',ice:'Krystallos',gas:'Golden Cytoserocin'};
   const S={view:'ships',mat:'moon',lv:5,imp:1,boost:'',met:'m3',tier:'Faction',item:{...DEF},base:'buy',cmp:true,
-    att:'base',patt:'base',acc:1,accq:'1',hrs:3,barge:'Retriever',ptier:'T1',plexManual:null,esPlex:15,omegaPlex:500,cmpv:'1',boost2:'',pimp:'1',dmat:'moon',freeSP:1000000};
+    att:'base',patt:'base',acc:1,accq:'1',hrs:3,barge:'Retriever',ptier:'T1',plexManual:null,esPlex:15,omegaPlex:500,cmpv:'1',boost2:'',pimp:'1',dmat:'moon',freeSP:1000000,daysAfter:30,iceLoc:'jita'};
   let esSaved=null; // PLEX de Expert System guardado al pasar a Exhumer (que pone esPlex en 0)
   // Exhumers en el plan: el primer mes se mina con la barge equivalente mientras se entrena Exhumers
   const BARGE_OF={Hulk:'Covetor',Mackinaw:'Retriever',Skiff:'Procurer'};
@@ -62,7 +62,7 @@ const MineUI=(()=>{
   // ---------- precio y métrica ----------
   const item=()=>matByName.get(S.item[S.mat]);
   const priceId=()=>{const m=item();return m?(S.cmp&&m.cid?m.cid:m.id):null;};
-  const unitPrice=()=>quote(priceId(),S.base);
+  const unitPrice=()=>S.mat==='ice'?iceUnitPrice():quote(priceId(),S.base);
   const iskh=r=>{const m=item(),p=unitPrice();return m&&p!=null?r.eff/m.vol*p:null;};
   const val=r=>S.met==='isk'?iskh(r):r.eff;
   const fmtV=v=>v==null?'—':(S.met==='isk'?cmpISK(v)+' ISK/h':NF0.format(v)+' m³/h');
@@ -107,7 +107,40 @@ const MineUI=(()=>{
   const fitCost=items=>{if(!items||!items.length)return null;let t=0;for(const [id,q] of items){const v=sellOf(id);if(v==null)return null;t+=v*q;}return t;};
   const matItem=m=>matByName.get(S.item[m]);
   const matPriceId=m=>{const x=matItem(m);return x?(S.cmp&&x.cid?x.cid:x.id):null;};
-  const iskPerM3=m=>{const x=matItem(m),v=quote(matPriceId(m),S.base);return x&&v!=null?v/x.vol:null;};
+  // Precios locales enlazados a Settings de Market Moves+. No se cambian C ni sus fórmulas.
+  const ICE_PROD_ID={'Heavy Water':16272,'Liquid Ozone':16273,'Strontium Clathrates':16275,
+    'Helium Isotopes':16274,'Hydrogen Isotopes':17889,'Oxygen Isotopes':17887,'Nitrogen Isotopes':17888};
+  function iceUnitPrice(){
+    const m=matItem('ice');if(!m)return null;
+    if(S.iceLoc==='jita')return quote(matPriceId('ice'),S.base);
+    const buy=quote(matPriceId('ice'),'buy'),sell=quote(matPriceId('ice'),'sell');
+    if(S.iceLoc==='bb'){
+      if(!C.bb.on)return null;
+      const sp=C.bb.special[m.n.toLowerCase()];
+      if(sp==='no')return null;
+      const base=C.bb.base==='sell'?sell:C.bb.base==='split'?(buy!=null&&sell!=null?(buy+sell)/2:null):buy;
+      return base!=null?base*(1-(sp!=null?sp:C.bb.tax)):null;
+    }
+    if(S.iceLoc==='hy'){
+      const p=nullList(m.n,sell,buy,null,1);
+      return p==null?null:p*rateNull();
+    }
+    if(S.iceLoc==='refine'){
+      // Reprocesa una unidad según las skills/refinería del gestor; el 55% no duplica el yield.
+      const ore=resolveOre(m.n);if(!ore)return null;
+      const products=reproNets(ore,1);let total=0;
+      for(const [name,count] of Object.entries(products)){
+        const pid=ICE_PROD_ID[name];if(!pid)return null;
+        const local=nullList(name,quote(pid,'sell'),quote(pid,'buy'),null,count);
+        if(local==null)return null;
+        total+=count*local;
+      }
+      return total*rateNull();
+    }
+    return null;
+  }
+  const iskPerM3=m=>{const x=matItem(m),v=m==='ice'?iceUnitPrice():quote(matPriceId(m),S.base);
+    return x&&v!=null?v/x.vol:null;};
   const ATTL={base:'Base 20/20',remap:'Remap',remap3:'Remap + implantes +3',remap5:'Remap + implantes +5'};
   // El 1M SP de referido es OPCIONAL: referencia aproximada a 30 SP/min.
   // No confundir una equivalencia de horas con simulación exacta de un fit Pyfa por día.
@@ -129,6 +162,9 @@ const MineUI=(()=>{
     '<a class="mn-sp-cta" href="https://www.eveonline.com/recruit" target="_blank" rel="noopener noreferrer" title="Programa oficial de EVE. Reclamar el bono requiere una invitación válida.">FREE 1 Million SP! <span aria-hidden="true">↗</span></a>'+
   '</div>'+
 '</div>'+ 
+   '<div class="mn-ice-settings" hidden><label for="mnIceMarket">Hielo · valor según Ajustes</label>'+
+     '<select id="mnIceMarket" class="mn-ice-market"><option value="jita">Jita según precio elegido</option><option value="hy">Venta en HY-RWO</option><option value="bb">Contrato Buyback Mayhem</option><option value="refine">Reprocesar en HY y vender productos</option></select>'+
+     '<small class="mn-ice-note"></small></div>'+
    '<details class="mn-price-editor">'+
      '<summary>✎ Editar precios <span class="mn-edit-hint">Minerales, naves y módulos · manual / ESI</span></summary>'+
      '<div class="mn-edit-content">'+
@@ -226,7 +262,10 @@ const MineUI=(()=>{
    '<div class="mn-card pl-setup"><h3>Tu Escenario</h3>'+
      '<div class="pl-grid">'+
        '<div class="pl-f pl-wide"><span class="pl-l">Cuentas</span><div class="pl-row">'+'<div class="pl-stp" data-k="acc" data-min="1" data-max="1000" data-st="1"><button type="button" data-d="-1" aria-label="Menos">−</button><input type="text" inputmode="decimal" class="pl-in" aria-label="acc"><span class="pl-suf"></span><button type="button" data-d="1" aria-label="Más">+</button></div>'+SEG('accq',[['1','1'],['5','5'],['10','10'],['25','25'],['50','50'],['100','100']])+'</div><small>Todo se multiplica por tus cuentas.</small></div>'+
-       '<div class="pl-f"><span class="pl-l">Horas de minado al día</span>'+'<div class="pl-stp" data-k="hrs" data-min="0.5" data-max="24" data-st="0.5"><button type="button" data-d="-1" aria-label="Menos">−</button><input type="text" inputmode="decimal" class="pl-in" aria-label="hrs"><span class="pl-suf">h</span><button type="button" data-d="1" aria-label="Más">+</button></div>'+'<small>Por cuenta.</small></div>'+
+       '<div class="pl-f"><span class="pl-l">Horas de minado al día</span>'+'<div class="pl-stp" data-k="hrs" data-min="0.5" data-max="24" data-st="0.5"><button type="button" data-d="-1" aria-label="Menos">−</button><input type="text" inputmode="decimal" class="pl-in" aria-label="hrs"><span class="pl-suf">h</span><button type="button" data-d="1" aria-label="Más">+</button></div>'+'<small>Por cuenta.</small></div>'+'<div class="pl-f pl-wide"><span class="pl-l">Días que minas por mes, después del mes 1</span>'+
+  '<div class="pl-row"><div class="pl-stp" data-k="daysAfter" data-min="1" data-max="30" data-st="1"><button type="button" data-d="-1" aria-label="Menos">−</button><input type="text" inputmode="numeric" class="pl-in" aria-label="Días de minado cada mes desde el mes 2"><span class="pl-suf">días</span><button type="button" data-d="1" aria-label="Más">+</button></div>'+
+  SEG('daysAfter',[['7','7 días'],['14','14'],['21','21'],['30','30']])+'</div>'+
+  '<small>7 días = una semana de minería por mes. Las habilidades se entrenan los 30 días y el Omega mensual se paga completo.</small></div>'+
        '<div class="pl-f"><span class="pl-l">Nave</span><div class="pl-shiprow"><span class="pl-sl">Barge</span>'+SEG('barge',[['Procurer','Procurer'],['Retriever','Retriever'],['Covetor','Covetor']])+'</div><div class="pl-shiprow"><span class="pl-sl">Exhumer</span>'+SEG('barge',[['Skiff','Skiff'],['Mackinaw','Mackinaw'],['Hulk','Hulk']])+'</div><small class="pl-bh"></small></div>'+
        '<div class="pl-f"><span class="pl-l">Fit</span>'+SEG('ptier',[['T1','Full T1'],['T2','Full T2'],['Faction','Facción']])+'<small>Lo que tus skills aún no permiten se usa en su versión menor.</small></div>'+
      '</div>'+
@@ -288,6 +327,13 @@ const MineUI=(()=>{
   function paintPrice(){const box=$q('.mn-price');box.hidden=S.met!=='isk';if(box.hidden)return;
     $q('.mn-base').value=S.base;$q('.mn-cmp').value=S.cmp?'1':'0';
     const m=item(),p=PRICE[priceId()],st=$q('.mn-pst');st.classList.remove('err');
+    if(S.mat==='ice'&&S.iceLoc!=='jita'){
+      const val=iceUnitPrice();
+      st.textContent=val==null?'Faltan precios para el escenario de hielo; revisa ESI o introduce precios manuales.':
+        'Escenario '+({hy:'Venta en HY',bb:'Buyback Mayhem',refine:'Refinado vendido en HY'}[S.iceLoc]||'')+
+        ': '+NF2.format(val)+' ISK netos por unidad de hielo minada.';
+      st.classList.toggle('err',val==null);return;
+    }
     const v=unitPrice();if(v==null&&!p){st.replaceChildren(document.createTextNode('Consultando Jita 4-4…'));return;}
     if(v==null){st.classList.add('err');st.replaceChildren(document.createTextNode('No hay órdenes de ese lado en Jita 4-4 para este ítem. Prueba el otro precio o «Sin comprimir».'));return;}
     const b=h('b','',NF2.format(v)+' ISK');
@@ -411,7 +457,7 @@ const MineUI=(()=>{
   function steadyCalc(m){const imp=Number(S.pimp),rr=idx.get([S.boost2,4,imp,m,S.ptier,S.barge].join('|')),ipm=iskPerM3(m),px=plexISK();
     const ic=imp?mineImplCost(m):0;
     if(!rr||ipm==null||px==null)return{rr,ipm,omega:null,ic};
-    const iskh=rr.eff*ipm,monthly=iskh*S.hrs*30,omega=S.omegaPlex*px,daily=iskh*S.hrs;
+    const iskh=rr.eff*ipm,monthly=iskh*S.hrs*S.daysAfter,omega=S.omegaPlex*px,daily=iskh*S.hrs;
     return{rr,ipm,iskh,monthly,omega,profit:monthly-omega,ic,icDays:ic!=null&&daily>0?ic/daily:null};}
   function planCalc(m){const k=[m,simShip(S.barge),S.ptier,S.patt].join('|'),noEs=!(S.esPlex>0),sim=(noEs?MINE.simx:MINE.sim)[k],daily=sim?Array.from({length:28},(_,i)=>sim[Math.min(27,Math.floor(i+bonusDays()))]):[],fit=planFit(m)||{items:[],high:'—',low:'—',mid:'—',drones:'—'},ipm=iskPerM3(m),px=plexISK();
     const T=MINE.train,st=T.stages[m],ends=T.ends[m][S.patt],yieldDay=Math.max(0,days(ends[st.yield_-1])-bonusDays()),cyb=S.pimp==='1'?cybDays(m):0;
@@ -475,7 +521,7 @@ const MineUI=(()=>{
       if(r.cover!=null){const bar=h('div','pl-bar'),fill=h('i',r.pays?'ok':'no');fill.style.width=Math.min(100,r.cover*100)+'%';bar.appendChild(fill);c.appendChild(bar);
         c.appendChild(h('small','pl-barl',(r.cover>=10?'Juntas '+NF0.format(r.cover)+' veces el Omega':'Juntas el '+NF0.format(r.cover*100)+'% del Omega')+' · '+isk(r.inc21)+' de '+isk(r.omega)+' por cuenta'));}
       // referencia IV sin aplicar progresión
-      c.appendChild(h('div','pl-ph pl-ph2','Escenario de referencia IV · 30 días'));
+      c.appendChild(h('div','pl-ph pl-ph2','Escenario IV · '+S.daysAfter+' días minados / 30'));
       c.appendChild(h('div','pl-big2 '+(s.profit==null?'':(s.profit>=0?'pos':'neg')),s.profit==null?'—':signISK(s.profit*N)));
       c.appendChild(h('div','pl-bigl',s.profit==null?'Faltan precios':'profit mensual'+(N>1?' de tus '+N+' cuentas':'')+', ya pagada la Omega'));
       if(s.iskh!=null)c.appendChild(h('small','pl-iskh','≈ '+cmpISK(s.iskh)+' ISK/h por cuenta · skills a IV'+(S.pimp==='1'?' · implantes +5%':'')+(S.boost2?' · boost de '+S.boost2:'')));
@@ -493,7 +539,7 @@ const MineUI=(()=>{
       pl.appendChild(ol);});
     drawCum(R);}
   function paintDet(r,m){const b=$q('.pl-detb'),N=S.acc;b.replaceChildren();
-    const v=quote(matPriceId(m),S.base),mi=matItem(m);
+    const v=m==='ice'?iceUnitPrice():quote(matPriceId(m),S.base),mi=matItem(m);
     b.appendChild(h('p','mn-note',v!=null?(S.item[m]+(S.cmp&&mi&&mi.cid?' comprimido':'')+': '+NF2.format(v)+' ISK por unidad ('+NF0.format(r.ipm)+' ISK por m³ minado) · '+S.barge+' · '+TL[S.ptier]+' · '+PATTL[S.patt]):'Sin precio de Jita para '+S.item[m]+'.'));
     const g=h('div','pl-detg'),L=h('div','pl-detc'),Rc=h('div','pl-detc');g.append(L,Rc);b.appendChild(g);
     // cuentas claras del mes 1
@@ -600,9 +646,9 @@ const MineUI=(()=>{
     const exDay=r.exhDay,ivDay=targetDays(4),vDay=targetDays(5);
     const daysLabel=d=>d==null?'sin datos':'día '+NF0.format(Math.ceil(d));
     const info=[
-      '12 meses para '+NF0.format(S.acc)+' cuenta(s), '+NF1.format(S.hrs)+' h/día.',
+      '12 meses para '+NF0.format(S.acc)+' cuenta(s), '+NF1.format(S.hrs)+' h/día, minando '+NF0.format(S.daysAfter)+' días por mes a partir del segundo.',
       S.freeSP?' 1M SP de referido incluido como adelanto aproximado de '+NF1.format(bonusDays())+' días.':' No se aplica el bono opcional de 1M SP.',
-      ' Mes 1: simulación histórica de 28 días. Meses 2–12: proyección por hitos Pyfa IV/V, interpolada entre ambos; no representa cada skill entrenada individualmente.'
+      ' Mes 1: simulación histórica de 28 días. Meses 2–12: entrenas durante los 30 días naturales y minas los días elegidos; proyección interpolada entre skills IV/V.'
     ].join('');
     box.replaceChildren(h('h3','', 'Progresión Omega · mes a mes'),h('p','mn-note',info));
     box.append(h('p','mn-note','Evolución prevista: '+startingBarge+' → '+exhumer+' ('+daysLabel(exDay)+
@@ -640,7 +686,7 @@ const MineUI=(()=>{
         else{phase=exhumer+' · referencia V';}
       }
       const perAccount=effective!=null&&ipm!=null?effective*ipm:null,
-           income=perAccount!=null?perAccount*S.hrs*period*S.acc:null,
+           income=perAccount!=null?perAccount*S.hrs*(month===1?28:S.daysAfter)*S.acc:null,
            recurrent=omega!=null?omega*S.acc:null,
            balance=income!=null&&recurrent!=null?income-recurrent:null;
       const tr=tb.insertRow();
@@ -649,7 +695,7 @@ const MineUI=(()=>{
        balance!=null?cmpISK(balance)+' ISK':'—'].forEach(t=>tr.append(h('td','',t)));
     }
     box.append(tbl,h('p','mn-note',
-      'Único gasto mensual restado: Omega por cuenta. No se descuentan impuestos, costes de venta, pérdidas, traslados extras o acceso limitado a luna. '+
+      'Único gasto mensual restado: Omega por cuenta, 30 días completos aunque mines solo '+S.daysAfter+' días. No se descuentan impuestos de venta adicionales, pérdidas, traslados extras o acceso limitado a luna. '+
       'La primera etapa usa un dataset histórico de 28 días; después se interpola entre rendimientos IV y V. '+
       'El cambio de nave requiere comprarla y poder volar sus módulos. El millón de SP no se distribuye skill por skill: fechas y saldos son escenarios orientativos, no resultados garantizados.'));
   }
@@ -707,7 +753,19 @@ const MineUI=(()=>{
     $q('.mn-edit-cost-source').textContent=custom!=null?'✎ Precio manual; también se aplica al presupuesto de inversión.':v!=null?'Cotización ESI o Jita Buy si falta Sell.':'No hay cotización de ESI; introduce el coste manual.';
   }
 
-  function paint(){if(!root)return;S.cmpv=S.cmp?'1':'0';seg();paintPriceEditor();$q('.mn-omega-tools').hidden=S.view!=='plan';$q('.mn-v-ships').hidden=S.view!=='ships';$q('.mn-v-plan').hidden=S.view!=='plan';$q('.mn-v-max').hidden=S.view!=='max';
+  function paintIceSettings(){
+    const box=$q('.mn-ice-settings');if(!box)return;
+    box.hidden=S.view==='ships'&&S.mat!=='ice';
+    $q('.mn-ice-market').value=S.iceLoc;
+    const p=C.ice;
+    const note=S.iceLoc==='hy'?'Hielo en HY '+(p.on?'según Ajustes: '+(p.nullMode==='jbuy'?'Jita Buy −'+NF1.format(p.nullDisc*100)+'%':p.nullMode==='jita'?'Jita Buy':'+ margen'):'según precio local general')+', menos tasas locales.'
+      :S.iceLoc==='bb'?'Buyback Mayhem: solo base, tax y especiales del contrato; nunca usa reducción de Hielo.'
+      :S.iceLoc==='refine'?'Refinado en HY: '+(p.on?'productos no isotópicos al '+NF0.format((1-p.refLoss)*100)+'% de Jita Buy':'reglas generales de productos')+'; isótopos con Jita Buy estándar cuando Hielo está activo, menos tasas locales.'
+      :'Precio seleccionado en Jita. Las reglas locales no se aplican.';
+    $q('.mn-ice-note').textContent=note;
+  }
+
+  function paint(){if(!root)return;S.cmpv=S.cmp?'1':'0';seg();paintPriceEditor();paintIceSettings();$q('.mn-omega-tools').hidden=S.view!=='plan';$q('.mn-v-ships').hidden=S.view!=='ships';$q('.mn-v-plan').hidden=S.view!=='plan';$q('.mn-v-max').hidden=S.view!=='max';
     if(S.view==='plan'){paintPlan();paintMonths();return;}if(S.view==='max'){paintMax();return;}
     paintBoost();paintPrice();paintTake();paintKpi();paintPivot();paintDetail();paintInvestNote();paintTraining();drawCharts();}
   function needPrices(){let ids;
@@ -715,6 +773,7 @@ const MineUI=(()=>{
     else if(S.view==='plan'){ids=[...['moon','ice','gas'].flatMap(m=>[matPriceId(m),...(planFit(m)||{items:[]}).items.map(x=>x[0]),...MINE.impl[m]]),...MINE.attrImpl['3']];
       if(!PLEX.at){bulkBusy++;loadPlex().finally(()=>{bulkBusy--;paint();});}}
     else ids=[...shipFitIds(),...(S.imp?MINE.impl[S.mat]:[])];
+    if(S.iceLoc==='refine'&&((S.view==='ships'&&S.mat==='ice')||S.view==='plan'||S.view==='max'))ids.push(...iceProducts());
     loadMany(ids,()=>paint());if(ids.some(id=>!PRICE[id]))paint();}
   function drawCharts(){if(!root||!root.offsetParent)return;lastW=root.clientWidth;if(S.view==='plan'){drawCum({moon:planCalc('moon'),ice:planCalc('ice'),gas:planCalc('gas')});return;}if(S.view==='max')return;paintBars();paintHold();drawn=true;}
 
@@ -752,10 +811,11 @@ const MineUI=(()=>{
       if(!id)return;setManual(id,mat?S.base:'sell',null);paint();
     });
 
+    $q('.mn-ice-market').addEventListener('change',e=>{S.iceLoc=e.target.value;paint();needPrices();});
     $q('.mn-build').textContent=String(MINE.build);
     root.addEventListener('click',e=>{const b=e.target.closest('.pk-fb');if(!b)return;const k=b.closest('.pk-flt').dataset.k,v=b.dataset.v;
       const prevBarge=k==='barge'?S.barge:null;
-      if(k==='accq'){S.acc=Number(v);}else if(k==='cmpv'){S.cmp=v==='1';S.cmpv=v;}else S[k]=(k==='lv'||k==='imp')?Number(v):v;
+      if(k==='accq'){S.acc=Number(v);}else if(k==='daysAfter'){S.daysAfter=Number(v);}else if(k==='cmpv'){S.cmp=v==='1';S.cmpv=v;}else S[k]=(k==='lv'||k==='imp')?Number(v):v;
       if(k==='barge'&&prevBarge!==v){const wasEx=!!BARGE_OF[prevBarge],isEx=!!BARGE_OF[v];
         if(isEx&&!wasEx){esSaved=S.esPlex;S.esPlex=0;}
         else if(!isEx&&wasEx&&esSaved!=null){S.esPlex=esSaved;esSaved=null;}}
@@ -766,7 +826,7 @@ const MineUI=(()=>{
     root.addEventListener('click',e=>{const b=e.target.closest('.pl-stp button');if(!b)return;const st=b.closest('.pl-stp'),k=st.dataset.k;
       const v=Math.round((S[k]+Number(b.dataset.d)*Number(st.dataset.st))*10)/10,v2=Math.max(Number(st.dataset.min),Math.min(Number(st.dataset.max),v));if(k==='esPlex'&&v2!==S.esPlex)esSaved=null;S[k]=v2;paint();});
     root.addEventListener('change',e=>{const i=e.target.closest('.pl-stp .pl-in');if(!i)return;const st=i.closest('.pl-stp'),k=st.dataset.k;
-      let v=parseFloat(String(i.value).replace(/[^0-9.]/g,''));if(!isFinite(v)){paint();return;}if(k==='acc')v=Math.round(v);
+      let v=parseFloat(String(i.value).replace(/[^0-9.]/g,''));if(!isFinite(v)){paint();return;}if(k==='acc'||k==='daysAfter')v=Math.round(v);
       const v2=Math.max(Number(st.dataset.min),Math.min(Number(st.dataset.max),v));if(k==='esPlex'&&v2!==S.esPlex)esSaved=null;S[k]=v2;paint();});
     root.addEventListener('keydown',e=>{if(e.key==='Enter'&&e.target.closest('.pl-in,.pl-plexin'))e.target.blur();if(e.key==='Escape'&&e.target.closest('.pl-plexin')){e.target.value='';e.target.blur();}});
     const pin=$q('.pl-plexin');
@@ -782,5 +842,5 @@ const MineUI=(()=>{
     fillItems();paint();needPrices();
     if('ResizeObserver' in window)new ResizeObserver(()=>{if(root.offsetParent&&root.clientWidth!==lastW)drawCharts();}).observe(root);}
   // el panel empieza oculto: al abrirlo se dibujan los gráficos con su ancho real
-  return{mount,shown(){if(root)requestAnimationFrame(drawCharts);}};
+  return{mount,shown(){if(root){paint();requestAnimationFrame(drawCharts);}}};
 })();

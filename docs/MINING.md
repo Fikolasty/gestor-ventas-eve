@@ -86,3 +86,11 @@ El Plan Omega tiene una barra compartida con las tres vistas. En el lado derecho
 ## Editor de precios manuales v1.0.72
 
 En «✎ Editar precios» se pueden seleccionar moon ore (R64 primero), hielo y gas Guristas, y editar precios por unidad del mercado Jita Buy o Jita Sell en forma cruda o comprimida. Los importes se calculan a través de una función de cotización que primero consulta el override por `typeID:buy/sell` y luego recurre a la caché de ESI. La cotización original de ESI no se altera y cada entrada tiene botón para volver al precio consultado; las actualizaciones se reflejan en las tres vistas. Incluye un editor avanzado de costes de nave y fits por typeID seleccionado, que afecta al cálculo de inversión. PLEX tiene editor independiente en Plan Omega. No se almacenan precios manuales fuera de la memoria de la pestaña, para evitar proyecciones obsoletas al recargar.
+
+## v1.0.73: Hielo, Mayhem y días por mes
+
+Se añadieron cuatro escenarios de valoración del hielo: Jita (como antes), venta de hielo en HY-RWO (Settings de Hielo + tasas de Null), contrato Buyback Mayhem (su tax/base/especiales, sin ajustes de Hielo), o reprocesar y vender productos en HY (reproNets con skill/refinería y productos ICE via Jita ESI).
+Los productos Heavy Water, Liquid Ozone y Strontium vendidos en HY se valoran por defecto al 45% de Jita Buy (55% de reducción comercial editable); isótopos de Helio, Hidrógeno, Oxígeno y Nitrógeno mantienen Jita Buy sin ese descuento. Esto no afecta el yield físico ni las unidades producidas.
+Los meses desde el segundo se pueden simular minando 1-30 días, con atajos 7/14/21/30. Las skills avanzan por 30 días naturales y Omega se resta entero, no proporcional a los días trabajados. Mes 1 sigue basándose en 28 días históricos.
+Sin cotizaciones ESI para todos los productos, la rentabilidad refinada se presenta como no disponible; no se sustituye un precio ausente por cero.
+

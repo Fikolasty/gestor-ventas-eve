@@ -59,7 +59,7 @@ CHANGELOG.md          ← cambios por versión
 ### Generar la página
 Solo necesitas Python 3, sin dependencias:
 ```
-python3 build.py 1.0.72
+python3 build.py 1.0.73
 ```
 Eso escribe `index.html` con la versión indicada.
 
@@ -90,3 +90,5 @@ Fuente de verdad de la minería: [`docs/MINING.md`](docs/MINING.md). El código 
 **Enlace de referido (v1.0.71):** dentro del plan Omega, el switch «Usar 1M SP (referido)» comparte fila con las pestañas y mantiene el cálculo SP opcional. El enlace «FREE 1 Million SP! ↗» abre el [programa oficial de referidos](https://www.eveonline.com/recruit); se requiere una invitación válida para obtener la bonificación, ya que la página general no es un enlace personalizado.
 
 **Precios editables (v1.0.72):** abre «✎ Editar precios» dentro de Minería (en cualquier vista), selecciona lunar/hielo/gas, precio Jita Buy/Sell y comprimido/sin comprimir, introduce ISK/u y calcula de inmediato. También permite cambiar Jita Sell de nave, fit, implantes y upgrades. Cada importe se puede restaurar a ESI sin alterar el original; el PLEX ya tiene su propio campo editable en el Plan Omega. Los precios manuales viven en memoria hasta recargar.
+
+**v1.0.73:** HOME en sidebar, hielo enlazado a Settings (55% de reducción comercial editable para productos refinados salvo isótopos), contrato Buyback Mayhem independiente, venta local frente a envío según ISK netos y escenarios mineros de 1-30 días trabajados al mes después del primero. Ver docs/SPEC.md y docs/MINING.md.

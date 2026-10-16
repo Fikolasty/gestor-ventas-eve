@@ -180,3 +180,14 @@ Verificar el tag del primer commit marcado `[ChatGPT]` en `main`, comprobar la p
 **Seguridad:** las cotizaciones ESI no se sobrescriben. Los overrides se guardan únicamente en memoria de esta pestaña hasta recarga, por producto y tipo de orden; introducción valida importes positivos. No se modifican datos Pyfa, yields, PLEX, el motor del gestor de ventas ni sus APIs. No se añaden peticiones de ESI por interacción manual.
 
 **Pruebas:** comprobación sintáctica del JS embebido, nuevo smoke de prioridad de cotizaciones y parser numérico; workflow de GitHub Actions y despliegue Pages a verificar después del push. Comprobación visual del editor en Firefox/móvil todavía pendiente.
+
+## 15. v1.0.73 — HOME, hielo/Buyback Mayhem y días efectivos
+
+Base: v1.0.72, commit 31e6f1fe8074c8aa3bb0f8231acfe4f6fd7b2d58.
+Fuentes: sidebar HOME y control Hielo 55% en src/shell.html; estado/reglas local y shipping en src/script.js; selector Jita/HY/Buyback/refinado y días minados 1-30 desde mes 2 en src/mining.js y CSS asociado. src/refine.js y src/mining_data.js sin alteraciones.
+Tratamiento: se interpreta 55% como reducción comercial de precios locales de los productos del hielo no isotópicos; isótopos a precio normal. El yield físico de la refinería se calcula como antes. Contrato Buyback sigue regido solo por los campos Mayhem.
+Se añadió tests/ice-settings.cjs con cotizaciones, isotopos, tax especial, no acepta, días de minería, y vínculo económico a ajustes; se incorpora a GitHub Actions.
+Proteger historial y hacer push solo si main no cambió. Revisar estado real del workflow y despliegue Pages después de publicar. Pruebas visuales Firefox/móvil aún requieren comprobación del usuario.
+
+Pendiente de aclaración: ¿55% de reducción del precio local de productos (implementado) o 55% de rendimiento de refinería? La opción actual es editable en Settings → Hielo.
+
