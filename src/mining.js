@@ -259,7 +259,7 @@ const MineUI=(()=>{
     imp:'Sin, +4% o +5% de rendimiento de minería. El escenario +4% se interpola; +5% y Sin tienen datos base verificables. No son los implantes de atributos del entrenamiento.',
     boost:'Porpoise, Orca y Rorqual aportan bonificaciones de flota. Si existe compresión de ese material en el sitio, se elimina el tiempo de descarga.',
     met:'m³/h mide volumen extraído. ISK/h multiplica por el precio de venta elegido en Jita o la ruta de hielo.',
-    gear:'El fit muestra el nombre, Type ID, cantidad y precio Jita. Pulsa ⓘ junto a un componente para ver su función y abrir su ficha del juego.'
+    gear:'El fit muestra nombre, Type ID, cantidad y precio Jita. Pulsa ⓘ junto a cada componente para conocer su función y abrir su ficha.'
   };
   const INFO=(key)=>'<details class="mn-info"><summary aria-label="Información: '+key+'" title="Información · pasar el mouse o pulsar">ⓘ</summary><div class="mn-info-popup" role="note">'+HINTS[key]+'</div></details>';
   const HTML=
@@ -401,7 +401,7 @@ const MineUI=(()=>{
      '<ul><li>Todos los atributos salen de los datos estáticos de EVE (los mismos que usa Pyfa), ya con los cambios de Catalyst: ciclos nuevos, críticos de minería, Mining Survey Chipset y las skills Mining Precision y Mining Exploitation. La fórmula es la de Pyfa: los bonos se multiplican y las mejoras de minería, rigs e implantes no tienen penalización por apilamiento.</li>'+
      '<li><b>Escenario nullsec</b>: moon ore R64–R4, hielos y gases documentados de la zona Guristas (Tenal, Vale of the Silent y Venal); no se incluyen fullerites ni gases de otras regiones.</li>'+
      '<li><b>Todo a IV</b>: todo a IV salvo lo obligatorio. Para pilotar un exhumer hace falta Mining Barge V y Exhumers pide Astrogeology V. A IV no se pueden entrenar Mining Exploitation, Mining Drone Specialization, Ice Harvesting Drone Specialization ni Drone Interfacing. Tampoco se pueden usar Ice Harvester II, Gas Cloud Harvester II, ORE Gas Cloud Harvester, drones de hielo II ni Mining Drone II: se usa lo mejor disponible y se marca con ⚠.</li>'+
-     '<li><b>Moon ore</b>, regla: nada que desperdicie mineral. Los Modulated Strip Miner II dejan residuo incluso con cristal Type A, igual que los drones T2, de facción y Augmented. Por eso Full T2 usa Strip Miner I con mejoras, chipset y rigs T2, y Facción usa el ORE Strip Miner. Drones: Mining Drone I en los tres.</li>'+
+     '<li><b>Moon ore</b>, criterio: evitar residuo en los módulos principales. Los Modulated Strip Miner II dejan residuo incluso con cristal Type A, igual que los drones T2, de facción y Augmented. Por eso Full T2 usa Strip Miner I con mejoras, chipset y rigs T2, y Facción usa el ORE Strip Miner. Drones: Mining Drone I en T1; Mining Drone II en T2 y Augmented en Facción cuando las skills lo permiten. Los drones T2 (34%) y Augmented (40%) sí generan residuo; el módulo principal no.</li>'+
      '<li><b>Hielo</b>: 2 harvesters, 3 Ice Harvester Upgrades, Mining Survey Chipset, 1 Ice Harvester Accelerator (solo existe T1 y la calibración solo deja uno), 1 Drone Mining Augmentor y 1 drone de hielo.</li>'+
      '<li><b>Gas</b>: solo cuentan el harvester, las skills, la nave y el implante. No hay mejoras, rigs ni drones para gas.</li>'+
      '<li>Implantes de +5%: Highwall MX-1005 y Michi\'s Excavation Augmentor (moon), Yeti IH-1005 (hielo), Alchemist GH-805 (gas). Piden Cybernetics V.</li>'+
@@ -604,22 +604,62 @@ const MineUI=(()=>{
     const k=[Math.max(4,S.lv),S.mat,S.tier,ship].join('|');
     return MINE.fits[k]||[];
   }
+  // Type IDs enlazados al SDE, con estadísticas de drones verificadas contra EVE Ref en 2026.
+  const ITEM_HELP={
+    "444": "Mining Survey Chipset I: inspección de asteroides y modificadores mineros.",
+    "2333": "Mining Survey Chipset II: chipset Tech II para inspección y críticos.",
+    "4395": "Medium Processor Overclocking Unit I: rig que aumenta la CPU disponible.",
+    "4399": "Medium Processor Overclocking Unit II: versión Tech II del rig de CPU.",
+    "10246": "Mining Drone I (Tech I): 25 m³ por ciclo base de 60 s; 0% de residuo; 5 Mbit/s. Requiere Mining II, Drones I y Mining Drone Operation I.",
+    "10250": "Mining Drone II (Tech II): 33 m³ por ciclo base de 60 s; 34% de residuo; 5 Mbit/s. Requiere Mining IV, Mining Drone Operation V y Mining Drone Specialization I.",
+    "16278": "Ice Harvester I: extractor de hielo Tech I; importa la duración del ciclo.",
+    "17476": "Barge de alta producción con bodega pequeña: considera los viajes.",
+    "17478": "Barge con bodega grande y buena autonomía para minar solo.",
+    "17480": "Barge enfocada en resistencia.",
+    "17482": "Strip Miner I: extrae mineral sin generar residuo de módulo.",
+    "20700": "Michi's Excavation Augmentor: implante de minería de mineral.",
+    "22229": "Ice Harvester II: versión Tech II de extracción de hielo.",
+    "22535": "Highwall MX-1005: implante que incrementa la extracción de mineral.",
+    "22542": "Mining Laser Upgrade I: mejora la extracción a costa de CPU.",
+    "22544": "Exhumer de alto rendimiento y bodega relativamente pequeña.",
+    "22546": "Exhumer enfocada en resistencia.",
+    "22548": "Exhumer con gran autonomía gracias a su bodega.",
+    "22571": "Yeti IH-1005: implante que acelera la extracción de hielo.",
+    "22576": "Ice Harvester Upgrade I: reduce el ciclo de los extractores de hielo.",
+    "27239": "Alchemist GH-805: implante que acelera la recolección de gas.",
+    "28576": "Mining Laser Upgrade II: mejora Tech II de minería para ranura baja.",
+    "28578": "Ice Harvester Upgrade II: mejora Tech II del ciclo de hielo.",
+    "28752": "ORE Ice Harvester: extractor de hielo de facción.",
+    "28754": "ORE Strip Miner: extractor de mineral de facción sin residuo de módulo.",
+    "32043": "Medium Drone Mining Augmentor I: rig para mejorar el trabajo de drones mineros.",
+    "32047": "Medium Drone Mining Augmentor II: versión Tech II del rig para drones mineros.",
+    "32819": "Medium Ice Harvester Accelerator I: rig que reduce el ciclo de minería de hielo.",
+    "43694": "'Augmented' Mining Drone (facción): 37 m³ por ciclo base de 60 s; 40% de residuo; 5 Mbit/s. Es distinto de Mining Drone I y II.",
+    "43699": "Ice Harvesting Drone I: extrae 1.000 m³ por ciclo base de 360 s; sin residuo; 50 Mbit/s.",
+    "43700": "Ice Harvesting Drone II: extrae 1.000 m³ por ciclo base de 300 s; 34% de residuo; 50 Mbit/s.",
+    "60313": "Gas Cloud Harvester I: recolector de gas Tech I.",
+    "60314": "Gas Cloud Harvester II: recolector de gas Tech II.",
+    "60315": "ORE Gas Cloud Harvester: recolector de gas de facción.",
+    "94065": "Republic Fleet Mining Survey Chipset: chipset minero de facción."
+  };
   function itemHelp(id,name){
-    const descriptions={
-      10246:'Mining Drone I (Tech I): 25 m³ por ciclo de 60 s, sin residuo minero. Requisitos básicos de Mining y Mining Drone Operation.',
-      10250:'Mining Drone II (Tech II): 33 m³ por ciclo de 60 s, residuo del 34%. Requiere Mining Drone Operation V y Mining Drone Specialization I.',
-      43694:"'Augmented' Mining Drone (Facción): 37 m³ por ciclo de 60 s y residuo del 40%. Requiere habilidades avanzadas de drones de minería.",
-      43699:'Ice Harvesting Drone I: dron dedicado al hielo, con ancho de banda de 50 Mbit/s.',
-      43700:'Ice Harvesting Drone II: dron de hielo avanzado, 34% de residuo. Requiere Ice Harvesting Drone Operation V y especialización.',
-    };
     const details=h('details','mn-info mn-type-info'),summary=h('summary','','ⓘ');
     summary.title='Información del objeto';summary.setAttribute('aria-label','Información sobre '+name);
     const bubble=h('div','mn-info-popup');
-    bubble.append(h('strong','',name),h('p','',descriptions[id]||'Componente del equipamiento seleccionado. Consulta su ficha para ver requisitos y estadísticas oficiales del objeto.'));
-    const link=h('a','','Ver ficha del objeto ↗');
-    link.href='https://everef.net/types/'+Number(id);
-    link.target='_blank';link.rel='noopener noreferrer';
+    bubble.append(h('strong','',name),
+      h('p','',ITEM_HELP[id]||'Componente del fit. Consulta la ficha para efectos y requisitos actuales.'),
+      h('small','mn-info-type-id','Type ID '+id+' · Dataset SDE build '+MINE.build));
+    const link=h('a','','Ver ficha y estadísticas ↗');
+    link.href='https://everef.net/types/'+Number(id);link.target='_blank';link.rel='noopener noreferrer';
     bubble.append(link);details.append(summary,bubble);return details;
+  }
+  function fittedTierNotice(r){
+    if(S.tier==='T1'||S.lv>=5)return '';
+    if(S.mat==='moon'&&r.drones.includes('Mining Drone I'))
+      return 'Dron adaptado a tus skills: Mining Drone II y Augmented requieren habilidades superiores. Se equipa Mining Drone I; no es un dron de facción.';
+    if(S.mat==='ice'&&r.drones.includes('Ice Harvesting Drone I'))
+      return 'Dron adaptado a tus skills: Ice Harvesting Drone II requiere habilidades superiores. Se equipa Ice Harvesting Drone I.';
+    return '';
   }
   function paintDetail(){
     const host=$q('.mn-fit-cards');host.replaceChildren();
@@ -659,6 +699,8 @@ const MineUI=(()=>{
         if(manualQuote(id,'sell')!=null)tr.classList.add('mn-fit-manual');
       }
       card.append(table);
+      const fallback=fittedTierNotice(r);
+      if(fallback)card.append(h('p','mn-fit-fallback','ⓘ '+fallback));
       const total=h('div','mn-fit-total');total.append(h('span','','Inversión total del fit'),h('strong','',complete?cmpISK(sum)+' ISK':'Faltan cotizaciones'));
       card.append(total);
       if(S.lv===3||S.imp===4)card.append(h('p','mn-note','Escenario aproximado: '+(S.lv===3?'componentes del fit IV de referencia; ':'')+(S.imp===4?'implante 4% no incluido en el coste.':'')));
