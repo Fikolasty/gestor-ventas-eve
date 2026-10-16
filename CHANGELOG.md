@@ -2,6 +2,15 @@
 
 Cambios por versión del Gestor de Ventas. La más nueva arriba. El detalle técnico completo está en `docs/SPEC.txt`.
 
+## 1.0.72 — [ChatGPT] Precios manuales de minería con restablecimiento ESI
+*2026-10-16*
+
+- Nuevo editor discreto «✎ Editar precios» disponible en las tres vistas de Minería. Permite seleccionar mineral de luna, hielo y gas, alternar Jita Buy/Sell y comprimido/sin comprimir e introducir valores ISK/u propios.
+- Editor avanzado de precio Jita Sell para naves, módulos, implantes y upgrades del fit; recalcula los costes de inversión y los resultados que lo utilizan.
+- Los overrides están aislados por typeID y lado del mercado, prevalecen sobre ESI sin modificar su caché; cada importe tiene control «Volver a ESI». Se mantiene el PLEX manual ya existente.
+- Recalcula Plan Omega, Rendimiento por Nave y Nave Maxiada, manteniendo sin cambios los rendimientos físicos m³/h, las fórmulas del gestor y los endpoints ESI.
+- Admite 2.500.000, 2,500,000 y 2.5m; valida importes positivos. No persiste importes fuera de la sesión; pruebas de parser, prioridad y restablecimiento.
+
 ## 1.0.71 — [ChatGPT] Switch de 1M SP en la barra de pestañas
 *2026-10-15*
 

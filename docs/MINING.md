@@ -82,3 +82,7 @@ La fuente de precios en la interfaz es **CCP/Fenris ESI**, no números estático
 ## Controles del bono referido v1.0.71
 
 El Plan Omega tiene una barra compartida con las tres vistas. En el lado derecho de escritorio aparece un switch «Usar 1M SP (referido)» (0/1.000.000 en `S.freeSP`) y un enlace al **programa oficial** `https://www.eveonline.com/recruit` («FREE 1 Million SP! ↗»), que se abre en pestaña nueva. En móvil los controles pasan a la fila inferior. Se requiere un enlace de invitación elegible para obtener el millón de SP; esta URL informativa no los concede automáticamente. No se modifican valores de entrenamiento ni cálculos existentes.
+
+## Editor de precios manuales v1.0.72
+
+En «✎ Editar precios» se pueden seleccionar moon ore (R64 primero), hielo y gas Guristas, y editar precios por unidad del mercado Jita Buy o Jita Sell en forma cruda o comprimida. Los importes se calculan a través de una función de cotización que primero consulta el override por `typeID:buy/sell` y luego recurre a la caché de ESI. La cotización original de ESI no se altera y cada entrada tiene botón para volver al precio consultado; las actualizaciones se reflejan en las tres vistas. Incluye un editor avanzado de costes de nave y fits por typeID seleccionado, que afecta al cálculo de inversión. PLEX tiene editor independiente en Plan Omega. No se almacenan precios manuales fuera de la memoria de la pestaña, para evitar proyecciones obsoletas al recargar.

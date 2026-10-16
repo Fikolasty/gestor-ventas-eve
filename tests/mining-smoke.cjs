@@ -63,4 +63,25 @@ assert(source.includes(".mn-omega-tools').hidden=S.view!=='plan'"),'mostrar SP s
 assert(source.includes('href="https://www.eveonline.com/recruit"'),'falta enlace al sitio oficial');
 assert(source.includes('rel="noopener noreferrer"'),'enlace externo no esta protegido');
 assert(!source.includes('plan.prepend(bonusButton)'),'sigue el antiguo boton ancho de SP');
-console.log('OK — minería, referencia SP con switch, enlace oficial y progresión Exhumer IV–V.');
+
+// Precios manuales no deben alterar las cotizaciones ESI ni la matemática del motor de venta.
+assert(source.includes('const MANUAL_PRICE=Object.create(null)'),'faltan overrides aislados');
+assert(source.includes('const quote=(id,side)=>manualQuote(id,side)'),'la cotización manual no tiene prioridad');
+assert(source.includes('const iskPerM3=m=>')&&source.includes('quote(matPriceId(m),S.base)'),'rentabilidad no usa precios manuales');
+assert(source.includes("const sellOf=id=>quote(id,'sell')"),'el cálculo de inversión no usa override del fit');
+assert(source.includes("e.target.matches('.mn-edit-material')"),'material no se puede elegir desde editor');
+assert(source.includes('setManual(id,side,price);paint()'),'precios no recalculan vista');
+assert(source.includes("setManual(id,mat?S.base:'sell',null);paint()"),'no se puede volver a ESI');
+const matchPrice=source.match(/  function parseCustomPrice\(input\)\{[\s\S]*?\n  \}/);
+assert(matchPrice,'falta parseo robusto de ISK');
+const parseCustom=vm.runInNewContext(matchPrice[0]+'\nparseCustomPrice;');
+assert.equal(parseCustom('2500000'),2500000);
+assert.equal(parseCustom('2.500.000'),2500000);
+assert.equal(parseCustom('2,500,000'),2500000);
+assert.equal(parseCustom('2.5m'),2500000);
+assert.equal(parseCustom('2,5m'),2500000);
+assert.equal(parseCustom('2.500,50'),2500.5);
+assert(Number.isNaN(parseCustom('0')),'no aceptar precio cero');
+assert(Number.isNaN(parseCustom('-123')),'no aceptar precios negativos');
+assert(Number.isNaN(parseCustom('something')),'no aceptar valores mal formados');
+console.log('OK — minerías, edición de cotizaciones y recuperación ESI sin cambios en motor de ventas.');

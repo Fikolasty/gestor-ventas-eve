@@ -249,6 +249,40 @@
 @media(max-width:420px){.mn-omega-tools{gap:7px 10px}.mn-sp-toggle{font-size:.77rem}.mn-sp-cta{font-size:.72rem}.mn-toolbar .mn-views .pk-fb{padding:7px 9px}}
 @media(prefers-reduced-motion:reduce){.mn-sp-track,.mn-sp-track::after,.mn-sp-cta{transition:none}}
 
+
+/* v1.0.72 — Precios personalizados, seguros y compartidos por vistas */
+.mn-price-editor{display:block;padding:0!important;margin:0;border:1px solid rgba(222,220,209,.12)!important;border-radius:var(--r-md)!important;background:rgba(20,21,24,.58)!important}
+.mn-price-editor>summary{display:flex;align-items:center;flex-wrap:wrap;gap:9px;padding:11px 14px;cursor:pointer;list-style:none;color:var(--txt);font:600 .89rem var(--f-ui)}
+.mn-price-editor>summary::-webkit-details-marker{display:none}
+.mn-price-editor>summary::before{content:"›";display:inline-block;color:var(--ion);font-size:1.15rem;transition:transform .15s}
+.mn-price-editor[open]>summary::before{transform:rotate(90deg)}
+.mn-price-editor>summary:focus-visible{outline:2px solid var(--ion);outline-offset:2px;border-radius:var(--r-md)}
+.mn-edit-hint{font-size:.75rem;color:var(--mut);font-weight:400}
+.mn-edit-content{padding:0 14px 14px}
+.mn-edit-controls{display:flex;flex-wrap:wrap;gap:10px;margin:0 0 12px}
+.mn-edit-controls label,.mn-edit-cost label{display:flex;flex-direction:column;gap:5px;color:var(--dim);font-size:.73rem}
+.mn-edit-controls select,.mn-edit-cost select{padding:7px 9px;font-size:.85rem;max-width:100%}
+.mn-edit-mats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.mn-edit-cell{min-width:0;padding:11px;border:1px solid rgba(222,220,209,.11);border-radius:9px;background:#101113}
+.mn-edit-title{display:block;font:600 .83rem/1.3 var(--f-ui);color:var(--txt);margin-bottom:7px;overflow-wrap:anywhere}
+.mn-edit-material{display:block;width:100%;min-width:0;margin:0 0 9px;padding:7px 8px;font-size:.82rem}
+.mn-edit-value{display:flex;align-items:center;gap:6px;min-width:0}
+.mn-edit-value>input,.mn-edit-cost-price{width:100%;min-width:0;flex:1;padding:8px;font:600 .9rem var(--f-num);font-variant-numeric:tabular-nums;border-radius:7px}
+.mn-edit-value>span{color:var(--dim);font-size:.69rem;white-space:nowrap}
+.mn-edit-reset,.mn-edit-cost-reset{padding:7px 8px;border-radius:7px;border:1px solid rgba(222,220,209,.16);background:rgba(222,220,209,.06);color:var(--ion);font-size:.75rem;white-space:nowrap}
+.mn-edit-reset:hover:not(:disabled),.mn-edit-cost-reset:hover:not(:disabled){border-color:var(--ion);background:rgba(222,220,209,.1)}
+.mn-edit-reset:disabled,.mn-edit-cost-reset:disabled{opacity:.36;cursor:default}
+.mn-edit-source,.mn-edit-cost-source{display:block;margin-top:6px;color:var(--mut);font-size:.72rem;line-height:1.4}
+.mn-price-overridden{border-color:rgba(237,161,0,.45);background:rgba(237,161,0,.065)}
+.mn-price-overridden .mn-edit-source{color:#e6b866}
+.mn-edit-advanced{margin:12px 0 0!important;background:rgba(15,15,18,.5)!important;padding:9px 10px!important}
+.mn-edit-advanced>summary{font-size:.83rem!important;line-height:1.4}
+.mn-edit-cost{display:grid;grid-template-columns:minmax(0,2fr) minmax(0,1.2fr) auto;gap:10px;align-items:end;margin-top:10px}
+.mn-edit-cost-price{min-height:35px}
+.mn-edit-footnote{font-size:.74rem;line-height:1.45;color:var(--mut);margin:12px 0 0}
+@media(max-width:740px){.mn-edit-mats{grid-template-columns:repeat(2,minmax(0,1fr))}.mn-edit-cost{grid-template-columns:minmax(0,1fr)}}
+@media(max-width:470px){.mn-edit-mats{grid-template-columns:minmax(0,1fr)}.mn-edit-value>input{min-width:7ch}}
+
 }
 .mine-tab{white-space:nowrap}
 html.light #mining .mn{--mn-t1:#2a78d6;--mn-t2:#d95926;--mn-t3:#199e70;--mn-ex:#b07600;--mn-grid:rgba(31,30,29,.12);--mn-axis:#6d6b67;--mn-mut:#a9a69e}
@@ -256,3 +290,8 @@ html.light #mining .mn-maxcat{background:#fff;border-color:rgba(20,24,30,.13)}
 html.light #mining .pl-plexin{background:transparent!important;color:inherit}
 html.light #mining .pl-plexw:focus-within{background:#fff}
 @media(max-width:680px){.mine-tab{padding:7px 10px;font-size:.82rem}}
+/* Tema claro: fuera del @scope para que html.light sea aplicable. */
+html.light #mining .mn-price-editor{background:rgba(255,255,255,.8)!important;border-color:rgba(30,34,40,.16)!important}
+html.light #mining .mn-edit-cell{background:#fff;border-color:rgba(30,34,40,.12)}
+html.light #mining .mn-price-overridden{background:rgba(204,128,20,.065);border-color:rgba(193,127,35,.55)}
+html.light #mining .mn-price-overridden .mn-edit-source{color:#8e5a06}

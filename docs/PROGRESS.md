@@ -170,3 +170,13 @@ Verificar el tag del primer commit marcado `[ChatGPT]` en `main`, comprobar la p
 **Comportamiento:** checkbox accesible que mantiene el estado numérico `S.freeSP` 0/1.000.000, visible únicamente en vista plan, reflejo al repintar. Enlace oficial al programa de referidos de EVE, no un enlace de regalo directo; obtener la recompensa requiere una invitación válida.
 
 **Regresión prevista:** JS compilado y fuente parseables, marcadores antiguos ausentes, coincidencia de CSS, check de Actions, Pages actualizado, SHA de main y tag ChatGPT. Revisión visual y Firefox por el usuario si no hay navegador real disponible. **Sin cambios en motor de venta, ESI ni cálculos de minería.**
+
+## 14. Edición manual de precios (v1.0.72)
+
+**Solicitud:** «Los precios debería ser capaz de cambiar». Implementado editor compartido para mineral lunar, hielo, gas, fuente Jita Buy/Sell y comprimido/sin comprimir; también precios de nave/fit/implantes/upgrades, con reset individual ESI. El precio de PLEX conserva su campo manual previo.
+
+**Archivos:** `src/mining.js` (overrides `MANUAL_PRICE`, lectura centralizada `quote`, editor UI, validación de precios y eventos, integración en rendimiento/plan/endgame/inversión), `src/mining.css` (estilo aislado responsive), `index.html`, `tests/mining-smoke.cjs`, workflow de checks, README, CHANGELOG, SPEC, PROGRESS y MINING.
+
+**Seguridad:** las cotizaciones ESI no se sobrescriben. Los overrides se guardan únicamente en memoria de esta pestaña hasta recarga, por producto y tipo de orden; introducción valida importes positivos. No se modifican datos Pyfa, yields, PLEX, el motor del gestor de ventas ni sus APIs. No se añaden peticiones de ESI por interacción manual.
+
+**Pruebas:** comprobación sintáctica del JS embebido, nuevo smoke de prioridad de cotizaciones y parser numérico; workflow de GitHub Actions y despliegue Pages a verificar después del push. Comprobación visual del editor en Firefox/móvil todavía pendiente.
