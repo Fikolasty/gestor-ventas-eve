@@ -307,3 +307,43 @@ html.light #mining .mn-price-editor{background:rgba(255,255,255,.8)!important;bo
 html.light #mining .mn-edit-cell{background:#fff;border-color:rgba(30,34,40,.12)}
 html.light #mining .mn-price-overridden{background:rgba(204,128,20,.065);border-color:rgba(193,127,35,.55)}
 html.light #mining .mn-price-overridden .mn-edit-source{color:#8e5a06}
+
+
+/* v1.0.74: tiempo de viaje y seis tarjetas comparativas. */
+#mining .mn-turnaround{display:flex;align-items:center;flex-wrap:wrap;gap:9px 14px;padding:12px 14px;background:rgba(231,175,93,.045);border:1px solid rgba(231,175,93,.22);border-radius:10px}
+#mining .mn-turnaround label{font-weight:650;font-size:.9rem;color:var(--txt)}
+#mining .mn-turnaround-input{display:flex;align-items:center;gap:7px;flex-wrap:wrap}
+#mining #mnUnloadSec{width:92px;max-width:100%;margin:0;padding:7px 9px;border-radius:7px;font:600 .95rem var(--f-num)}
+#mining .mn-turnaround-input span,#mining .mn-turnaround small{color:var(--mut);font-size:.78rem;line-height:1.45}
+#mining .mn-turnaround small{flex-basis:100%}
+#mining .mn-unload-default{border:1px solid rgba(222,220,209,.2);border-radius:7px;background:rgba(255,255,255,.04);color:var(--txt);font-size:.78rem;padding:7px 9px;cursor:pointer}
+#mining .mn-unload-default:hover{background:rgba(255,255,255,.09)}
+#mining .mn-all-head{display:flex;align-items:center;flex-wrap:wrap;justify-content:space-between;gap:8px 16px}
+#mining .mn-all-head .mn-sec{margin:0}
+#mining .mn-all-note{margin:-8px 0 0;color:var(--mut);font-size:.79rem;line-height:1.5}
+#mining .mn-all-ships{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:11px}
+#mining .mn-ship-card{min-width:0;display:flex;flex-direction:column;gap:10px;padding:14px;border:1px solid rgba(222,220,209,.14);border-radius:11px;background:rgba(17,18,19,.55)}
+#mining .mn-ship-card.mn-ship-winner{border-color:rgba(219,163,72,.48);background:linear-gradient(160deg,rgba(215,153,53,.10),rgba(20,20,19,.74) 65%);box-shadow:inset 0 1px rgba(245,212,149,.08)}
+#mining .mn-ship-head{display:flex;justify-content:space-between;align-items:center;gap:9px;flex-wrap:wrap}
+#mining .mn-ship-name small{font-size:.67rem;letter-spacing:.06em;text-transform:uppercase;color:var(--mut)}
+#mining .mn-ship-name h4{font:600 1.14rem var(--f-serif);margin:2px 0 0;color:var(--txt)}
+#mining .mn-ship-crown{border:1px solid rgba(226,176,88,.4);background:rgba(233,170,71,.09);color:#ecc17d;padding:4px 6px;border-radius:6px;white-space:nowrap;font-size:.68rem}
+#mining .mn-ship-production strong{display:block;font:650 1.18rem var(--f-num);color:var(--txt)}
+#mining .mn-ship-production small{display:block;color:var(--mut);font-size:.76rem;margin-top:2px}
+#mining .mn-ship-stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:0}
+#mining .mn-ship-stats>div{padding:7px 8px;border:1px solid rgba(222,220,209,.08);background:rgba(255,255,255,.025);border-radius:6px;min-width:0}
+#mining .mn-ship-stats dt{font-size:.7rem;color:var(--mut);margin:0 0 2px}
+#mining .mn-ship-stats dd{font:600 .82rem var(--f-num);color:var(--txt);margin:0;overflow-wrap:anywhere}
+#mining .mn-ship-bonus-title{border-top:1px solid rgba(222,220,209,.12);padding-top:8px;font-size:.77rem;font-weight:650;color:var(--txt)}
+#mining .mn-ship-bonuses{margin:0;padding-left:18px;color:var(--mut);font-size:.76rem;line-height:1.5}
+#mining .mn-ship-bonuses li+li{margin-top:4px}
+#mining .mn-ship-notes{color:var(--warn,#dfa84f);font-size:.71rem;line-height:1.45}
+#mining .mn-kpi .mn-kpi-winner{background:linear-gradient(130deg,rgba(209,150,53,.075),rgba(21,21,21,.9))}
+#mining .mn-kpi .mn-kpi-winner b::first-letter{color:#ecc17d}
+html.light #mining .mn-ship-card{background:rgba(255,255,255,.82);border-color:rgba(30,34,40,.16)}
+html.light #mining .mn-ship-card.mn-ship-winner{background:linear-gradient(160deg,rgba(228,180,102,.26),rgba(255,255,255,.92) 70%);border-color:rgba(159,112,43,.53)}
+html.light #mining .mn-ship-crown{color:#88551d}
+html.light #mining .mn-kpi .mn-kpi-winner{background:rgba(224,170,79,.12)}
+@media(max-width:1050px){#mining .mn-all-ships{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:640px){#mining .mn-all-ships{grid-template-columns:minmax(0,1fr)}#mining .mn-ship-stats{grid-template-columns:repeat(2,minmax(0,1fr))}#mining .mn-turnaround{align-items:flex-start}}
+@media(prefers-reduced-motion:reduce){#mining .mn-ship-card{transition:none}}

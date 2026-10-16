@@ -85,3 +85,42 @@ assert(Number.isNaN(parseCustom('0')),'no aceptar precio cero');
 assert(Number.isNaN(parseCustom('-123')),'no aceptar precios negativos');
 assert(Number.isNaN(parseCustom('something')),'no aceptar valores mal formados');
 console.log('OK — minerías, edición de cotizaciones y recuperación ESI sin cambios en motor de ventas.');
+
+
+// v1.0.74: tiempo muerto y ganador calculados, sin alterar 864 filas Pyfa.
+assert(source.includes('unloadSec:65')&&source.includes('id="mnUnloadSec"'));
+assert(source.includes('function paintAllShips()')&&source.includes('function bonusParts(ship,mat)'));
+assert(source.includes('calcRow(S.boost2,lv,implanted,mat,S.ptier,ship)'));
+assert(source.includes('rebaseHistoricalEff(prior,base?.hold,S.unloadSec)'));
+const effSnippet=source.slice(source.indexOf("  const compression=r=>"),source.indexOf("  // Guristas / norte Nullsec:"));
+assert(effSnippet.includes('function effectiveRow(r)'));
+const simState={unloadSec:65};
+const f=vm.runInNewContext(effSnippet+'\n({effectiveRow,rebaseHistoricalEff});',{S:simState,idx:new Map()});
+const ix=Object.fromEntries(M.cols.map((k,i)=>[k,i]));
+function getRow(ship,mat='moon',boost=''){
+  const record=M.rows.find(r=>r[ix.ship]===ship&&r[ix.mat]===mat&&r[ix.boost]===boost&&r[ix.lv]===4&&r[ix.imp]===1&&r[ix.tier]==='T1');
+  assert(record,'falta escenario '+ship+' '+mat+' '+boost);
+  return Object.fromEntries(M.cols.map((k,i)=>[k,record[i]]));
+}
+const r65=f.effectiveRow(getRow('Retriever')),c65=f.effectiveRow(getRow('Covetor'));
+assert(c65.eff>r65.eff,'65s: Covetor gana con moon ore sin boost');
+assert(Math.abs(c65.eff-66617)<50&&Math.abs(r65.eff-63544)<50,'benchmark 65 s');
+simState.unloadSec=120;
+const r120=f.effectiveRow(getRow('Retriever')),c120=f.effectiveRow(getRow('Covetor'));
+assert(r120.eff>c120.eff,'120s: Retriever supera Covetor (escenario anterior)');
+assert(Math.abs(r120.eff-getRow('Retriever').eff)<20,'compatibilidad con 120s');
+simState.unloadSec=0;
+assert.equal(f.effectiveRow(getRow('Covetor')).eff,getRow('Covetor').tot,'0s = bruto');
+simState.unloadSec=900;
+assert(f.effectiveRow(getRow('Covetor')).eff<c65.eff,'más tiempo perdido => menos producción');
+simState.unloadSec=65;
+for(const [boost,mat] of [['Orca','moon'],['Rorqual','ice'],['Porpoise','gas']]){
+  const r=f.effectiveRow(getRow('Covetor',mat,boost));
+  assert.equal(r.eff,r.tot,'compresión en sitio no penaliza: '+boost+'/'+mat);
+  assert.equal(r.tripsHour,0);
+}
+const po=f.effectiveRow(getRow('Covetor','ice','Porpoise'));
+assert(po.eff<po.tot,'Porpoise no comprime hielo en el sitio');
+const prev=getRow('Covetor');
+assert.equal(f.rebaseHistoricalEff(prev.eff,prev.hold,120),prev.eff);
+assert(f.rebaseHistoricalEff(prev.eff,prev.hold,65)>prev.eff);

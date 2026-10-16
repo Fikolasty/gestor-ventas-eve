@@ -195,3 +195,11 @@ Pendiente de aclaración: ¿55% de reducción del precio local de productos (imp
 ### Hotfix de validación posterior a v1.0.73
 
 GitHub Actions encontró que 100 × (1−0.55) se representó como 44.99999999999999 en la primera prueba frente a 45. Solo se cambian aserciones de precios a tolerancia 1e−8, sin tocar fórmulas económicas. Verificar nueva ejecución de CI.
+
+
+## 16. v1.0.74 — Corrección aviso y tiempo muerto de naves
+Base: 76920b2cdf56bf0ea09d7dc1edbce1fc6bf8a323; no se modifica src/mining_data.js, src/refine.js ni motor de precios de Null.
+Hallazgo 1: «Precios ajustados: venta rápida −0.16%» era una etiqueta global y aparecía aun cuando el plan elegido vendía hielo en HY. No era el cálculo del precio de Null: el ajuste ya era exclusivo de tipo inst. Se adapta el aviso al plan seleccionado y se agregan pruebas de separación Jita/Null.
+Hallazgo 2: las filas de rendimiento Pyfa histórico descuentan 120 s por bodega. Con 65 s en Moon/IV/implantes/T1 sin boost, la Covetor pasa de ~59.8k a ~66.6k m³/h efectivo y la Retriever de ~61.7k a ~63.5k. No se debe fijar una ganadora: depende de los parámetros.
+Cambios: 65 s configurable, método efectivo por tiempo de llenado y parada, exenciones de compresión, seis tarjetas por fit con bonos SDE por nivel, estrella al ganador, resultados trasladados a Max y Plan; el mes 1 se reescala con bodega IV (aproximación), etapas posteriores usan rendimiento recalculado.
+Pruebas añadidas para 65/120 s, 0 s, 900 s, compresión Orca/Rorqual/Porpoise, comparación Covetor/Retriever y excepción del ajuste de Jita. Pendiente: test CI posterior a push y revisión visual Firefox/móvil.

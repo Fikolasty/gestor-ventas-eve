@@ -60,3 +60,19 @@ assert(mining.includes("iceLoc:'jita'")&&mining.includes("function iceUnitPrice(
 assert(mining.includes("reproNets(ore,1)")&&mining.includes("C.bb.special"),'minería no lee refino / Mayhem');
 for(const id of [16272,16273,16274,16275,17887,17888,17889])assert(mining.includes(String(id)),'ID de producto hielo '+id);
 console.log('OK — HOME, regla comercial 55%, excepción isotopos, Buyback Mayhem, simulación de 7–30 días.');
+
+
+// v1.0.74: −0.16% solo en Jita, también para hielo; aviso contextual al plan elegido.
+assert(js.includes('function paintSkewNote(P)'),'aviso debe recibir el plan elegido');
+assert(js.includes("if(used(['jInst','fJI']))f(C.skew.inst,'venta rápida en Jita')"),'aviso inmediato Jita aislado');
+const skewExpr=js.match(/const skf=\(o,kind\)=>[^;]+;/);
+assert(skewExpr,'factor skew no encontrado');
+const skewSettings={skew:{inst:-.0016,ord:0,nul:0}};
+const skewFn=vm.runInNewContext(skewExpr[0]+'\nskf;',{C:skewSettings});
+for(const name of ['Blue Ice','Heavy Water','Helium Isotopes']){
+  near(skewFn({name,skew:0},'nul'),1,'sin ajuste rápido para Null '+name);
+  near(skewFn({name,skew:0},'inst'),.9984,'Jita rápida ajustada '+name);
+}
+skewSettings.skew.inst=-.5;
+near(skewFn({name:'Blue Ice',skew:0},'nul'),1,'cambiar Jita instantáneo nunca modifica Null');
+near(skewFn({name:'Blue Ice',skew:0},'inst'),.5,'cambiar Jita instantáneo sí modifica Jita');

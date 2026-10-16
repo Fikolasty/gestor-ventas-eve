@@ -94,3 +94,11 @@ Los productos Heavy Water, Liquid Ozone y Strontium vendidos en HY se valoran po
 Los meses desde el segundo se pueden simular minando 1-30 días, con atajos 7/14/21/30. Las skills avanzan por 30 días naturales y Omega se resta entero, no proporcional a los días trabajados. Mes 1 sigue basándose en 28 días históricos.
 Sin cotizaciones ESI para todos los productos, la rentabilidad refinada se presenta como no disponible; no se sustituye un precio ausente por cero.
 
+
+
+## v1.0.74 — Desplazamientos reales, bonos y ganadores dinámicos
+El tiempo muerto por descarga es editable en todas las vistas: 65 segundos iniciales (10 alinear + 5 warp + 30 depositar sin dock + 10 alinear + 5 volver + 5 de margen). Con cero segundos no hay pérdida; con 120 s se aproxima al resultado original del dataset.
+El yield bruto sigue siendo el de Pyfa, con sus bonos por nivel y por rol ya aplicados. La producción efectiva se recalcula a partir del tiempo teórico hasta llenar y el viaje, no usando la penalización histórica precalculada, evitando doble descuento.
+Con Orca/Rorqual se presupone compresión sin viajes en moon/hielo/gas; la Porpoise solo evita viajes en gas. Seis tarjetas muestran todos los atributos principales de producción, autonomía, descarga y las bonificaciones de Mining Barge y Exhumers por nivel. El ganador real se elige por m³/h efectivos dentro de barge/exhumer y tier, no por nombre predefinido.
+El mes 1 reinterpreta cifras históricas ajustando la penalización de 120 s usando una bodega IV de referencia, aproximación declarada; meses posteriores toman filas Pyfa recalculadas. No incluye cambios de recursos dentro de ciclos, drones al volver ni modificaciones a navegación del piloto, fit de alineamiento o riesgo del sistema. Ajustar tiempo manualmente al trayecto observado.
+Fuentes de bonos de naves: https://db.evetools.org/type/17476 (Covetor), https://db.evetools.org/type/17478 (Retriever), https://db.evetools.org/type/17480 (Procurer), https://db.evetools.org/type/22544 (Hulk), https://db.evetools.org/type/22548 (Mackinaw), https://db.evetools.org/type/22546 (Skiff).

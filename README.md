@@ -59,7 +59,7 @@ CHANGELOG.md          ← cambios por versión
 ### Generar la página
 Solo necesitas Python 3, sin dependencias:
 ```
-python3 build.py 1.0.73
+python3 build.py 1.0.74
 ```
 Eso escribe `index.html` con la versión indicada.
 
@@ -92,3 +92,5 @@ Fuente de verdad de la minería: [`docs/MINING.md`](docs/MINING.md). El código 
 **Precios editables (v1.0.72):** abre «✎ Editar precios» dentro de Minería (en cualquier vista), selecciona lunar/hielo/gas, precio Jita Buy/Sell y comprimido/sin comprimir, introduce ISK/u y calcula de inmediato. También permite cambiar Jita Sell de nave, fit, implantes y upgrades. Cada importe se puede restaurar a ESI sin alterar el original; el PLEX ya tiene su propio campo editable en el Plan Omega. Los precios manuales viven en memoria hasta recargar.
 
 **v1.0.73:** HOME en sidebar, hielo enlazado a Settings (55% de reducción comercial editable para productos refinados salvo isótopos), contrato Buyback Mayhem independiente, venta local frente a envío según ISK netos y escenarios mineros de 1-30 días trabajados al mes después del primero. Ver docs/SPEC.md y docs/MINING.md.
+
+**v1.0.74:** tiempo de viaje configurable en Minería (65 s iniciales), tarjetas de las seis barges/exhumers con bonos, bodega y viajes/h, y ganador según producción efectiva. El aviso de precio rápido solo se muestra cuando corresponde a ventas Jita.

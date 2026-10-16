@@ -190,3 +190,13 @@ Requisitos confirmados por el usuario: botón HOME del sidebar; minería de hiel
 - No cambiar cálculos de venta de loot ajeno al hielo, yields de Pyfa ni API ESI global.
 
 Verificar regresiones de isótopos, Mayhem independiente, cortes de envío caros, inputs de días, versión compilada y Pages.
+
+
+## 17. Comparativa de viajes mineros y aviso comercial contextual (v1.0.74)
+- Tiempo muerto editable de 0 a 900 segundos, 65 s por defecto: alinear 10 + warp 5 + depositar sin dock 30 + alinear 10 + regreso 5 + margen 5.
+- Fórmula: rendimiento efectivo = rendimiento bruto × tiempo de llenar la bodega / (tiempo de llenar + parada). La duración de llenado depende de capacidad y m³/h bruto; viajes/h = rendimiento efectivo/capacidad.
+- Viaje cero con compresión en el sitio: Orca, Rorqual para materiales comparados; Porpoise solo para gas. Las cifras del dataset Pyfa histórico (120 s) no se alteran ni se penalizan dos veces.
+- La nueva elección se refleja en Rendimiento por Nave, Nave Maxiada y Plan Omega. Mes 1 del Plan usa reproyección aproximada de sus 28 días precalculados con bodega barge IV; meses posteriores conservan interpolación IV/V. Escenarios estimados, no se simulan ciclos parciales, distancias, riesgo ni condiciones exactas.
+- Seis tarjetas con producción efectiva y bruta, capacidad, minutos para llenarse, viajes/h, tiempo perdido, módulos, drones, ciclo, crítico y bonos por habilidad/rol. La mejor barge y exhumer de cada tier se distinguen sobriamente.
+- Los bonos se muestran informativamente, pero ya están incluidos en yield Pyfa: no multiplicar por ellos de nuevo.
+- El ajuste de venta rápida Jita (−0.16% inicialmente) solo participa en jInst/fJI. El aviso «Precios ajustados» informa solo de factores usados en el plan activo; no se rotulan planes de hielo vendidos en Null/Buyback como si aplicaran Jita inmediata.

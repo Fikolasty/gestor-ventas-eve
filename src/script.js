@@ -1986,17 +1986,23 @@ function paintFlipBuy(P){
   t.append(tb);box.append(t);
   box.append(el('p','fb2-n','Compra = Jita Sell × cantidad (comprando de las órdenes de venta, sin broker). Venta = el precio de lista en HY-RWO ya con Sales Tax, Broker y SCC. El envío es un solo cálculo para todo el lote. El margen se cambia junto al botón de la ruta.'));
 }
-function paintSkewNote(){const b=$('skNote'),parts=[];
+function paintSkewNote(P){const b=$('skNote'),parts=[];
+  // Solo los ajustes usados por el plan elegido; −0.16% de venta rápida es exclusivo de Jita.
+  const rows=P.rows.filter(r=>r.best),used=ks=>rows.some(r=>ks.includes(r.best));
   const f=(v,t)=>{if(v)parts.push(t+' '+(v>0?'+':'−')+pctS(Math.abs(v))+'%');};
-  f(C.skew.inst,'venta rápida');f(C.skew.ord,'órdenes en Jita');f(C.skew.nul,'órdenes en Null');
-  const n=S.items.filter(o=>o.skew).length;if(n)parts.push(n+(n>1?' items con ajuste propio':' item con ajuste propio'));
+  if(used(['jInst','fJI']))f(C.skew.inst,'venta rápida en Jita');
+  if(used(['jOrd','fJ']))f(C.skew.ord,'órdenes en Jita');
+  if(used(['null','fN']))f(C.skew.nul,'órdenes en Null');
+  const direct=['jInst','fJI','jOrd','fJ','null','fN'];
+  const n=rows.filter(r=>r.o.skew&&direct.includes(r.best)).length;
+  if(n)parts.push(n+(n>1?' items con ajuste propio':' item con ajuste propio'));
   b.hidden=!parts.length;b.textContent=parts.length?'Precios ajustados: '+parts.join(' · '):'';}
 function paintSummary(P){
   const box=$('pSum'),none=!P.rows.length||P.missing.length===P.rows.length;box.hidden=none||!S.items.length;if(box.hidden)return;
   const sys=(C.ref.name||'Null').split(' - ')[0].trim()||'Null';
   paintPicker(P);
   document.title=compactIsk(P.best)+' ISK · Market Moves+'; // v1.0.11: el total en la pestaña
-  paintSkewNote();
+  paintSkewNote(P);
   paintFlipBuy(P);
   $('resIsk').textContent=fmt(P.best);$('resWhat').textContent=$('vWhat').textContent;
   paintResGain(P,sys);

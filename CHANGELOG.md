@@ -2,6 +2,16 @@
 
 Cambios por versión del Gestor de Ventas. La más nueva arriba. El detalle técnico completo está en `docs/SPEC.txt`.
 
+## 1.0.74 — [ChatGPT] Tiempo muerto editable y comparación de barges
+*2026-10-16*
+
+- Modificador de tiempo muerto por carga de 0 a 900 s, predeterminado 65 s (alinear, warp, depositar sin dock, volver, más 5 s de margen).
+- Rendimiento efectivo calculado por capacidad y producción bruta, para que la mejor barge/exhumer cambie según material, skills, boost, fit y tiempo de viaje. Con compresión en el sitio no se descuenta viaje.
+- Seis tarjetas detalladas de naves por escalón T1/T2/Facción: valor bruto/efectivo, bodega, duración hasta llenar, viajes/h, módulos, drones, ciclo y bonos informativos del casco y habilidades. Ganadora de cada clase resaltada con estrella sutil.
+- La fórmula nueva se utiliza en Rendimiento por Nave, Nave Maxiada y Plan Omega. Primer mes reajustado aproximadamente desde simulaciones históricas de 120 s con bodega IV; progresión restante conserva sus estimaciones.
+- En el gestor, el aviso de «Precios ajustados» solo aparece en rutas que usan los ajustes: venta rápida −0.16% únicamente Jita, nunca Null/Buyback/refinado HY.
+- Sin alterar los datos de Pyfa ni fórmulas de Buyback/ESI/reprocesado. Tests para 65/120 s, compresión y ajuste Jita.
+
 ## 1.0.73 — [ChatGPT] HOME, valor del hielo y días minados
 *2026-10-16*
 
