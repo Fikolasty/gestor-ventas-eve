@@ -191,3 +191,7 @@ Proteger historial y hacer push solo si main no cambió. Revisar estado real del
 
 Pendiente de aclaración: ¿55% de reducción del precio local de productos (implementado) o 55% de rendimiento de refinería? La opción actual es editable en Settings → Hielo.
 
+
+### Hotfix de validación posterior a v1.0.73
+
+GitHub Actions encontró que 100 × (1−0.55) se representó como 44.99999999999999 en la primera prueba frente a 45. Solo se cambian aserciones de precios a tolerancia 1e−8, sin tocar fórmulas económicas. Verificar nueva ejecución de CI.

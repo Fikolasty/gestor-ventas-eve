@@ -27,14 +27,15 @@ const ctx={
 };
 const helpers=js.slice(js.indexOf('const ICE_ISOTOPES='),js.indexOf('const marginFor='));
 const local=vm.runInNewContext(helpers+'\n'+nullBody+'\nnullList;',ctx);
-assert.equal(local('Blue Ice',500,100,null,1),97.5,'hielo crudo usa descuento Hielo');
-assert.equal(local('Heavy Water',500,100,null,1),45,'producto no isotópico retiene 45%');
-assert.equal(local('Liquid Ozone',500,100,null,1),45);
-assert.equal(local('Strontium Clathrates',500,100,null,1),45);
+const near=(actual,expected,label)=>assert(Math.abs(actual-expected)<1e-8,(label||'valor')+': '+actual+' vs '+expected);
+near(local('Blue Ice',500,100,null,1),97.5,'hielo crudo usa descuento Hielo');
+near(local('Heavy Water',500,100,null,1),45,'producto no isotópico retiene 45%');
+near(local('Liquid Ozone',500,100,null,1),45);
+near(local('Strontium Clathrates',500,100,null,1),45);
 for(const isotope of ['Helium Isotopes','Hydrogen Isotopes','Nitrogen Isotopes','Oxygen Isotopes'])
-  assert.equal(local(isotope,500,100,null,1),100,'isótopo debe mantener Jita Buy: '+isotope);
-ctx.C.ice.refLoss=.10;assert.equal(local('Heavy Water',500,100,null,1),90,'Settings cambia valor local');
-ctx.C.ice.on=false;assert.equal(local('Heavy Water',500,100,null,1),90,'Hielo off vuelve a regla general de Null');
+  near(local(isotope,500,100,null,1),100,'isótopo debe mantener Jita Buy: '+isotope);
+ctx.C.ice.refLoss=.10;near(local('Heavy Water',500,100,null,1),90,'Settings cambia valor local');
+ctx.C.ice.on=false;near(local('Heavy Water',500,100,null,1),90,'Hielo off vuelve a regla general de Null');
 
 // Buyback aplica solo el tax/base/especiales del contrato y es independiente de C.ice.
 const bbCode=js.slice(js.indexOf('if(C.bb.on&&q>0){'),js.indexOf('// Venta a jugador por Discord'));
