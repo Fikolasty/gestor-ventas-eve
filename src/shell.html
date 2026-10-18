@@ -1366,6 +1366,55 @@ html.light .pl-row.min .p .pr-inline-input{background:#fff;color:#262626}
 #pk>.pk-o:hover{border-color:rgba(217,119,87,.55)!important}
 #pk>.pk-o.best{margin-bottom:0}
 @media(max-width:760px){.pk-summary{font-size:1.07rem;line-height:1.53}.pk-actions .pk-change{min-height:40px}}
+
+/* v1.0.81: diseño unificado aprobado, sin alterar los cálculos */
+.mm-modnav{position:relative;display:flex;gap:5px;flex-wrap:wrap;background:#1b1918;border:1px solid rgba(222,220,209,.12);padding:6px;border-radius:12px;margin:20px auto 14px;max-width:1100px}
+.mm-mod{appearance:none;display:flex;align-items:center;gap:9px;padding:10px 19px;font:650 .95rem var(--f-ui);background:none;color:#b9b0a7;border:1px solid transparent;border-radius:8px;cursor:pointer}
+.mm-mod[aria-selected=true]{background:linear-gradient(95deg,rgba(217,119,87,.22),rgba(217,119,87,.06));border-color:rgba(217,119,87,.5);color:#f4ece4}
+.mm-mod:hover{color:#fff}
+body.mm-mining #heroIntro,body.mm-mining #salesBody,body.mm-pi #heroIntro,body.mm-pi #salesBody{display:none!important}
+#vWhat[hidden],#pi[hidden]{display:none!important}
+.mm-pi-placeholder{border-radius:12px;padding:20px;background:#151515;border:1px solid rgba(222,220,209,.1)}
+.mm-pi-placeholder h3{margin:0 0 8px;color:var(--txt);font-size:1.1rem}.mm-pi-placeholder p{margin:0;color:var(--mut)}
+.mm-pi-features{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:12px}
+.mm-pi-features>div{padding:14px 16px;border:1px solid var(--line);background:#181716;border-radius:10px;min-width:0}
+.mm-pi-features b,.mm-pi-features small{display:block}.mm-pi-features small{color:var(--mut);margin-top:6px}
+.mm-section-head{margin:0 0 15px!important;max-width:none!important}
+.mm-title{display:flex!important;align-items:center!important;gap:12px!important;margin:0!important;text-transform:uppercase!important;letter-spacing:.035em!important;font:750 clamp(1.17rem,2.1vw,1.48rem)/1.25 var(--f-ui)!important;color:var(--txt)!important;text-align:left!important}
+.mm-title::before{content:"";display:block;flex:0 0 27px;width:27px;height:3px;background:linear-gradient(90deg,#d97757,rgba(217,119,87,0));box-shadow:0 0 12px rgba(217,119,87,.35);border-radius:9px}
+.mm-section-sub{margin:5px 0 0 39px!important;font:650 .73rem/1.55 var(--f-ui)!important;letter-spacing:.09em;text-transform:uppercase;color:var(--dim)!important}
+.mm-missing{font:650 .78rem var(--f-ui);color:#f2c978;border:1px solid rgba(226,181,104,.45);background:rgba(226,181,104,.1);padding:5px 9px;border-radius:7px}
+.mm-missing[hidden]{display:none}
+#ledger summary{gap:10px;flex-wrap:wrap}#ledger summary .mm-title{font-size:1.2rem!important}
+#verdict{padding:21px 21px 18px!important;margin:0 0 17px!important;background:linear-gradient(180deg,rgba(31,29,28,.91),rgba(21,20,19,.96))!important}
+#verdict .ov{gap:12px;margin-bottom:0}
+#verdict .ov-hd{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:24px;margin-bottom:4px}
+#verdict .ov-hd .mm-section-head{margin-bottom:8px!important}
+#verdict .v-cap{font:400 clamp(.96rem,1.25vw,1.09rem)/1.55 var(--f-ui)!important;color:#e4ddd3;max-width:810px}
+#verdict .mm-net{text-align:right;min-width:0}#verdict .mm-net-label{font:650 .76rem var(--f-ui);letter-spacing:.1em;color:var(--dim)}
+#verdict .v-isk{font-size:clamp(2rem,4.6vw,3.5rem)!important;white-space:nowrap;line-height:1.13!important}
+#verdict .v-isk span{font-size:.44em!important;color:var(--txt);margin-left:6px}
+#verdict .ov-flow{width:100%;padding:17px 18px;border-radius:12px;background:rgba(16,16,16,.82)}
+#verdict .ov-flow h4{font:650 .8rem var(--f-ui);letter-spacing:.09em;color:var(--dim);margin-bottom:11px}
+#verdict .mm-dest-inline{border-top:1px solid rgba(222,220,209,.12);padding-top:15px;margin-top:18px}
+#verdict .mm-dest-inline .ov-bar{height:11px}
+#verdict .ov-leg{grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-top:13px}
+#verdict .ov-leg>div{min-width:0}#verdict .ov-leg b{font-size:.95rem!important;white-space:normal;overflow-wrap:anywhere}
+#verdict .ov-leg small{white-space:normal;overflow:visible;text-overflow:initial}
+#verdict .ov-kpi{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:12px}
+#verdict .ov-kpi>div{display:grid;grid-template-columns:1fr auto;align-items:center;gap:3px 12px;padding:12px 16px;min-height:unset}
+#verdict .ov-kpi dt{grid-column:1 / -1}#verdict .ov-kpi dd{grid-column:1;margin:0;font-size:clamp(1.2rem,2vw,1.48rem)}
+#verdict .ov-kpi small{grid-column:2;text-align:right;align-self:center}
+#verdict .mm-legacy{display:none!important}
+#stepsPanel{padding:21px 21px 19px;margin:0 0 16px!important}
+#stepsPanel .stp-list{margin-top:8px}
+#pSum>.mm-section-head,#pExtra>.mm-section-head{margin:0 0 18px!important}
+@media(max-width:860px){#verdict .ov-hd{grid-template-columns:1fr}#verdict .mm-net{text-align:left}#verdict .ov-leg{grid-template-columns:repeat(2,minmax(0,1fr))}.mm-pi-features{grid-template-columns:1fr}}
+@media(max-width:540px){.mm-modnav{flex-direction:column}.mm-mod{justify-content:center}#verdict .ov-kpi{grid-template-columns:1fr!important}#verdict .ov-leg{grid-template-columns:1fr 1fr}#verdict .v-isk{font-size:clamp(1.9rem,8vw,2.5rem)!important}#verdict .ov-hd{gap:12px}}
+html.light .mm-modnav{background:#f4f1ed}html.light .mm-mod{color:#70685e}html.light .mm-mod[aria-selected=true]{color:#a84d31;background:#f7e7df}
+html.light .mm-pi-placeholder,html.light .mm-pi-features>div,html.light #verdict .ov-flow{background:#f8f6f3}
+html.light #verdict{background:#fff!important}html.light #verdict .v-cap{color:#37302a}html.light .mm-title{color:#28231f!important}
+
 </style>
 <script>/* v1.0.16: aplica el tema guardado antes de pintar (sin parpadeo). Por defecto: Dark. */try{var g=JSON.parse(localStorage.getItem('gestorVentas.ajustes.v1')||'null');if(g&&g.ui){if(g.ui.light)document.documentElement.classList.add('light');}}catch(e){}</script>
 </head>
@@ -1406,6 +1455,11 @@ html.light .pl-row.min .p .pr-inline-input{background:#fff;color:#262626}
     <span class="logo-l vg" role="img" aria-label="Logo de Vanguardia DR"></span>
     <div><h1>Market Moves+</h1><p class="tagline">Herramienta para gestionar tus planes de mercado.</p></div>
   </div>
+  <nav class="mm-modnav" id="mmTabs" role="tablist" aria-label="Secciones de Market Moves+">
+    <button type="button" class="mm-mod on" data-mm-module="ventas" role="tab" aria-controls="salesBody" aria-selected="true" id="mmTabVentas">Ventas</button>
+    <button type="button" class="mm-mod" data-mm-module="mining" role="tab" aria-controls="mining" aria-selected="false" id="mmTabMining">Minería</button>
+    <button type="button" class="mm-mod" data-mm-module="pi" role="tab" aria-controls="pi" aria-selected="false" id="mmTabPi">Industria Planetaria · PI</button>
+  </nav>
   <!-- v104: introducción + recordatorio visible a la derecha. Los botones comparten
        los paneles Guía de Uso y Ajustes existentes: no se duplica ningún formulario. -->
   <!-- v1.0.8: Ajustes y Guía de Uso se abren aquí, arriba, debajo del título -->
@@ -1443,6 +1497,15 @@ Contraband Freight = no</textarea><small>Una regla por línea: Nombre = tax tota
     <h2><span class="ic i-rock" aria-hidden="true"></span>Comparativa Minera · Omega y Nave Maxiada</h2>
     <p class="lead">Compara Barges y Exhumers en luna, hielo y gas del territorio Guristas, calcula ISK por hora con ESI y planifica la productividad de tus cuentas Omega.</p>
     <div id="mnRoot"></div>
+  </section>
+  <section class="panel mm-pi-panel" id="pi" role="tabpanel" aria-labelledby="mmTabPi" hidden>
+    <header class="mm-section-head"><h2 class="mm-title">INDUSTRIA PLANETARIA</h2><p class="mm-section-sub">PLANIFICA TU PI Y PRODUCCIÓN DE FUEL BLOCKS</p></header>
+    <div class="mm-pi-placeholder"><h3>PI · Espacio reservado</h3><p>Preparado para una futura herramienta de extracción, fábricas y Fuel Blocks. Los cálculos todavía no están activos.</p></div>
+    <div class="mm-pi-features">
+      <div><b>Extracción</b><small>Planetas y producción P0 → P1</small></div>
+      <div><b>Fábricas</b><small>Conversión de P1 → P2 y P3</small></div>
+      <div><b>Fuel Blocks</b><small>Comparativa entre vender materiales y fabricar</small></div>
+    </div>
   </section>
 <section class="panel" id="help" hidden>
     <div class="x-wrap"><button type="button" class="x-close" data-close="help" aria-label="Cerrar Guía de Uso" title="Cerrar Guía de Uso"></button></div>
@@ -1482,16 +1545,8 @@ Contraband Freight = no</textarea><small>Una regla por línea: Nombre = tax tota
     <p class="lead">No pide tu contraseña de EVE ni inicio de sesión. Solo se conecta a la API oficial de EVE (ESI) para precios y al servidor de imágenes de EVE para los íconos. Janice, Discord y el Buyback se abren aparte, en tu navegador.</p>
   </section>
   </div>
-  <!-- v1.0.62: «Antes de empezar» como aviso de ancho completo; se cierra con la X y no vuelve a salir en este navegador -->
-  <aside class="start-note" id="startNote" hidden aria-label="Antes de empezar">
-    <div class="start-note-body"><strong>Antes de empezar</strong>
-      <span>Lee la <b>Guía de Uso</b> y revisa tus <b>Ajustes</b> (skills, taxes y Buyback) para obtener estimaciones acordes a tu personaje.</span>
-    </div>
-    <div class="start-note-actions"><button type="button" id="heroHelp">Ver Guía de Uso</button><button type="button" id="heroSettings">Configurar Ajustes</button></div>
-    <button type="button" class="sn-x" id="startNoteX" aria-label="Cerrar aviso" title="Cerrar"></button>
-  </aside>
   <!-- v1.0.62: Tasación a la izquierda y el recuadro para pegar a la derecha (sin items, el recuadro ocupa todo el ancho) -->
-  <div class="hero-intro no-appr">
+  <div class="hero-intro no-appr" id="heroIntro" role="tabpanel" aria-labelledby="mmTabVentas">
     <div class="appr" id="appr" hidden aria-live="polite"></div>
     <div class="paste">
       <textarea id="paste" autocomplete="off" spellcheck="false" aria-label="Pega aquí tu inventario de EVE" placeholder="Pega aquí tus items con Ctrl+V"></textarea>
@@ -1500,14 +1555,14 @@ Contraband Freight = no</textarea><small>Una regla por línea: Nombre = tax tota
   </div>
 </section>
 
-<main>
+<main id="salesBody">
   <section class="panel loading" id="loading" hidden role="status" aria-live="polite">
     <span class="spin" aria-hidden="true"></span>
     <div class="ld-body"><b id="ldTxt">Trayendo precios de Jita…</b><small>Espera un momento: calculo todo cuando lleguen todos los precios.</small>
       <div class="ld-track"><i id="ldBar"></i></div></div>
   </section>
   <details class="panel thin fold" id="ledger" hidden>
-    <summary><h2><span class="ic i-box" aria-hidden="true"></span>Listado de Items Registrados</h2><span class="cnt" id="lCount"></span><span class="status" id="esiStatus" role="status"></span></summary>
+    <summary><h2 class="mm-title">LISTADO DE ITEMS REGISTRADOS</h2><span class="cnt" id="lCount"></span><span class="mm-missing" id="missCount" hidden></span><span class="status" id="esiStatus" role="status"></span></summary>
     <div class="ledger-tools">
       <p class="lead">Abre un item para consultar la guía, comparar mercados o cambiar sus datos. Haz clic en un encabezado para ordenar la lista.</p>
       <button class="ghost" id="bEsi"><span class="ic i-sync" aria-hidden="true"></span>Actualizar Precios</button>
@@ -1525,9 +1580,30 @@ Contraband Freight = no</textarea><small>Una regla por línea: Nombre = tax tota
     </div>
     <div id="lots"></div>
   </details>
+  <section class="panel verdict" id="verdict" hidden aria-live="polite">
+    <!-- v1.0.22: resumen del plan (overview): total, a dónde va el ISK, datos clave, tu lote en Jita y dónde se vende -->
+    <div class="ov">
+      <div class="ov-hd">
+        <div class="ov-ttl"><header class="mm-section-head"><h2 class="mm-title" id="vTitle">LA MEJOR RUTA DE VENTA</h2><p class="mm-section-sub">REVISA TU RUTA Y CUÁNTO RECIBIRÍAS</p></header>
+          <p class="v-cap" id="vCap">Aquí verás qué ruta elegiste y cómo se distribuye tu venta.</p><span class="v-what" id="vWhat" hidden></span></div>
+        <div class="mm-net"><span class="mm-net-label">RECIBIRÍAS NETO</span><p class="v-isk num" id="vIsk"></p></div>
+      </div>
+      <div class="ov-card ov-flow"><h4>DE DÓNDE SALE TU ISK</h4><div id="ovFlow"></div><div class="mm-dest-inline" id="ovDestW"><h4>DÓNDE SE VENDE</h4><div id="ovDest"></div></div></div>
+      <dl class="ov-kpi mm-compact-kpi">
+        <div><dt>ITEMS</dt><dd id="vsN">—</dd><small id="vsNs"></small></div>
+        <div><dt>VOLUMEN TOTAL</dt><dd id="vsV">—</dd><small id="vsVs"></small></div>
+      </dl>
+      <div class="mm-legacy" hidden aria-hidden="true">
+        <div id="ovShip"><span id="aCourT"></span><span id="aCourier"></span><span id="aCourS"></span></div>
+        <div><span id="vsCn"></span><span id="vsC"></span><label id="vsRelW" hidden><input type="checkbox" id="cRelistOn"> Relists <span id="vsRel"></span></label></div>
+        <div id="ovMktW"><div id="ovMkt"></div></div>
+      </div>
+    </div>
+
+</section>
   <!-- 1. Resultado simple -->
   <section class="panel summary res" id="pSum" hidden>
-    <h2 class="h-caps"><span class="ic i-bulb" aria-hidden="true"></span>Resultado</h2>
+    <header class="mm-section-head"><h2 class="mm-title">RESULTADO</h2><p class="mm-section-sub">COMPARA TUS PLANES Y ELIGE CÓMO PREFIERES VENDER</p></header>
     <!-- v1.0.48: arriba, lo que recibes (izquierda) y cuánto más deja frente a la alternativa simple (derecha) -->
     <div class="res-top">
       <div class="res-main"><span class="res-k">Recibes con este plan</span>
@@ -1545,32 +1621,12 @@ Contraband Freight = no</textarea><small>Una regla por línea: Nombre = tax tota
       <div class="pk-tools" id="pkTools"></div>
       <div class="pk" id="pkOthers" role="group" aria-label="Otros planes" hidden></div></div>
     <!-- v1.0.50: justo debajo de los planes. Al abrir el desglose, los planes se pliegan y el desglose pasa a ser lo principal -->
-    <button type="button" class="more-btn" id="bDeep" aria-expanded="false" aria-controls="deep"><span>Revisa cada destino, sus precios y el desglose de los costes.</span><b>Ver el desglose ▾</b></button>
+    <button type="button" class="more-btn" id="bDeep" aria-expanded="false" aria-controls="deep"><span>Consulta los destinos y precios de cada paso.</span><b>Ir a los pasos ↓</b></button>
   </section>
   <!-- 2. El análisis (oculto hasta que lo pides) -->
   <div id="deep" class="deep" hidden>
-  <section class="panel verdict" id="verdict" hidden aria-live="polite">
-    <!-- v1.0.22: resumen del plan (overview): total, a dónde va el ISK, datos clave, tu lote en Jita y dónde se vende -->
-    <div class="ov">
-      <div class="ov-hd">
-        <div class="ov-ttl"><h2><span class="ic i-target" aria-hidden="true"></span><span id="vTitle">La Mejor Ruta de Venta</span><span class="v-what" id="vWhat"></span></h2>
-          <p class="v-cap" id="vCap">ISK estimados que recibes tras taxes, Broker y envío (según tu configuración)</p></div>
-        <p class="v-isk num" id="vIsk"></p>
-      </div>
-      <div class="ov-card ov-flow"><h4>De Dónde Sale tu ISK</h4><div id="ovFlow"></div></div>
-      <dl class="ov-kpi">
-        <div><dt>Items</dt><dd id="vsN">—</dd><small id="vsNs"></small></div>
-        <div><dt>Volumen Total</dt><dd id="vsV">—</dd><small id="vsVs"></small></div>
-        <div id="ovShip"><dt id="aCourT">Envío a Jita</dt><dd id="aCourier">—</dd><small id="aCourS"></small></div>
-        <div class="tx"><dt>Taxes y Broker</dt><dd id="vsCn" class="neg-soft">—</dd><small id="vsC"></small><label class="rl" id="vsRelW" hidden><input type="checkbox" id="cRelistOn"> Relists: <span id="vsRel">—</span><small>Se cobra si bajas el precio (~2 semanas). Márcalo para contarlo.</small></label></div>
-      </dl>
-      <div class="ov-row">
-        <div class="ov-card" id="ovMktW"><h4>Tu Lote en Jita</h4><div id="ovMkt"></div></div>
-        <div class="ov-card" id="ovDestW"><h4>Dónde se Vende</h4><div id="ovDest"></div></div>
-      </div>
-    </div>
-
-    <h3 class="sub-h v-h"><span class="ic i-list" aria-hidden="true"></span>Pasos para Vender</h3>
+  <section class="panel verdict-detail" id="stepsPanel">
+    <header class="mm-section-head"><h3 class="mm-title">PASOS PARA VENDER</h3><p class="mm-section-sub">HAZ CLIC EN CUALQUIER PASO PARA VER MÁS</p></header>
     <div id="stepHead"></div>
     <div class="pl-groups stp-list" id="vPlan"></div>
 
@@ -1590,7 +1646,7 @@ Contraband Freight = no</textarea><small>Una regla por línea: Nombre = tax tota
   </div>
   <!-- v1.0.63: Extras = Contratos y Envío, Reproceso y Vender a Jugadores, dentro de un recuadro como el del Resultado -->
   <section class="panel extras" id="pExtra" hidden>
-    <h2 class="h-caps"><span class="ic i-box" aria-hidden="true"></span>Extras</h2>
+    <header class="mm-section-head"><h2 class="mm-title">EXTRAS</h2><p class="mm-section-sub">CONSULTA CONTRATOS, REPROCESO Y OTRAS OPCIONES</p></header>
   <details class="panel thin fold" id="pCtr" hidden>
     <summary><h2><span class="ic i-list" aria-hidden="true"></span><span id="ctrTitle">Contratos y Envío</span></h2><span class="sum" id="ctrSum"></span><span class="fold-cta" aria-hidden="true"><span class="fc-o">Ver ▾</span><span class="fc-c">Ocultar ▴</span></span></summary>
     <div class="ce">

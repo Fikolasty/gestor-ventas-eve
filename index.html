@@ -7,7 +7,7 @@
 <meta name="referrer" content="no-referrer">
 <title>Market Moves+ · SIGMA GRINDSET</title>
 <style>
-/* ================= Market Moves+ v1.0.80 =================
+/* ================= Market Moves+ v1.0.81 =================
    Paleta: azul de base, naranja = acción, verde/rojo = ganancia/pérdida.
    Sin backdrop-filter: el vidrio se finge con rgba + bordes. */
 *{box-sizing:border-box;margin:0;padding:0}
@@ -2379,13 +2379,13 @@ html.light #mining .mn-info-popup a{color:#175f9c}
 @media(max-width:820px){#mining .mn-controls-unified{grid-template-columns:minmax(0,1fr)}#mining .mn-context-aside{grid-column:1}#mining .mn-shared-layout{grid-template-columns:minmax(0,1fr)}#mining .mn-config-group{padding:12px 0}}
 @media(max-width:540px){#mining .mn-context-aside{padding:13px}#mining .mn-info-popup{width:min(270px,calc(100vw - 48px))}#mining .mn-config-group-intro h3{font-size:.98rem}}
 
-/* v1.0.80: ficha emergente EVE y aviso de dron adaptado a skills. */
+/* v1.0.81: ficha emergente EVE y aviso de dron adaptado a skills. */
 #mining .mn-info-type-id{display:block;margin:0 0 9px;color:#b0bccb;font:500 .73rem/1.45 var(--f-ui);font-variant-numeric:tabular-nums}
 #mining .mn-fit-fallback{margin:8px 0 12px;padding:10px 12px;border-radius:8px;border:1px solid rgba(120,167,212,.28);background:rgba(90,140,195,.07);color:var(--txt);font-size:.85rem;line-height:1.56}
 html.light #mining .mn-info-type-id{color:#496276}
 html.light #mining .mn-fit-fallback{border-color:rgba(40,100,150,.22);background:rgba(48,117,174,.06)}
 
-/* v1.0.80: selector v5 aprobado: un plan, resumen prominente y un único cambio a la derecha. */
+/* v1.0.81: selector v5 aprobado: un plan, resumen prominente y un único cambio a la derecha. */
 .pk-summary{display:block;margin:8px 0 18px;color:var(--txt);font:400 clamp(1.08rem,1.8vw,1.35rem)/1.5 var(--f-ui);letter-spacing:-.012em}
 .pk-summary strong{font-weight:700;color:var(--txt)}
 .pk-summary .pk-sum-delta.pos{color:var(--gain)!important;white-space:nowrap}
@@ -2401,6 +2401,54 @@ html.light #mining .mn-fit-fallback{border-color:rgba(40,100,150,.22);background
 #pk>.pk-o:hover{border-color:rgba(217,119,87,.55)!important}
 #pk>.pk-o.best{margin-bottom:0}
 @media(max-width:760px){.pk-summary{font-size:1.07rem;line-height:1.53}.pk-actions .pk-change{min-height:40px}}
+/* v1.0.81: diseño unificado aprobado, sin alterar los cálculos */
+.mm-modnav{position:relative;display:flex;gap:5px;flex-wrap:wrap;background:#1b1918;border:1px solid rgba(222,220,209,.12);padding:6px;border-radius:12px;margin:20px auto 14px;max-width:1100px}
+.mm-mod{appearance:none;display:flex;align-items:center;gap:9px;padding:10px 19px;font:650 .95rem var(--f-ui);background:none;color:#b9b0a7;border:1px solid transparent;border-radius:8px;cursor:pointer}
+.mm-mod[aria-selected=true]{background:linear-gradient(95deg,rgba(217,119,87,.22),rgba(217,119,87,.06));border-color:rgba(217,119,87,.5);color:#f4ece4}
+.mm-mod:hover{color:#fff}
+body.mm-mining #heroIntro,body.mm-mining #salesBody,body.mm-pi #heroIntro,body.mm-pi #salesBody{display:none!important}
+#vWhat[hidden],#pi[hidden]{display:none!important}
+.mm-pi-placeholder{border-radius:12px;padding:20px;background:#151515;border:1px solid rgba(222,220,209,.1)}
+.mm-pi-placeholder h3{margin:0 0 8px;color:var(--txt);font-size:1.1rem}.mm-pi-placeholder p{margin:0;color:var(--mut)}
+.mm-pi-features{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:12px}
+.mm-pi-features>div{padding:14px 16px;border:1px solid var(--line);background:#181716;border-radius:10px;min-width:0}
+.mm-pi-features b,.mm-pi-features small{display:block}.mm-pi-features small{color:var(--mut);margin-top:6px}
+.mm-section-head{margin:0 0 15px!important;max-width:none!important}
+.mm-title{display:flex!important;align-items:center!important;gap:12px!important;margin:0!important;text-transform:uppercase!important;letter-spacing:.035em!important;font:750 clamp(1.17rem,2.1vw,1.48rem)/1.25 var(--f-ui)!important;color:var(--txt)!important;text-align:left!important}
+.mm-title::before{content:"";display:block;flex:0 0 27px;width:27px;height:3px;background:linear-gradient(90deg,#d97757,rgba(217,119,87,0));box-shadow:0 0 12px rgba(217,119,87,.35);border-radius:9px}
+.mm-section-sub{margin:5px 0 0 39px!important;font:650 .73rem/1.55 var(--f-ui)!important;letter-spacing:.09em;text-transform:uppercase;color:var(--dim)!important}
+.mm-missing{font:650 .78rem var(--f-ui);color:#f2c978;border:1px solid rgba(226,181,104,.45);background:rgba(226,181,104,.1);padding:5px 9px;border-radius:7px}
+.mm-missing[hidden]{display:none}
+#ledger summary{gap:10px;flex-wrap:wrap}#ledger summary .mm-title{font-size:1.2rem!important}
+#verdict{padding:21px 21px 18px!important;margin:0 0 17px!important;background:linear-gradient(180deg,rgba(31,29,28,.91),rgba(21,20,19,.96))!important}
+#verdict .ov{gap:12px;margin-bottom:0}
+#verdict .ov-hd{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:24px;margin-bottom:4px}
+#verdict .ov-hd .mm-section-head{margin-bottom:8px!important}
+#verdict .v-cap{font:400 clamp(.96rem,1.25vw,1.09rem)/1.55 var(--f-ui)!important;color:#e4ddd3;max-width:810px}
+#verdict .mm-net{text-align:right;min-width:0}#verdict .mm-net-label{font:650 .76rem var(--f-ui);letter-spacing:.1em;color:var(--dim)}
+#verdict .v-isk{font-size:clamp(2rem,4.6vw,3.5rem)!important;white-space:nowrap;line-height:1.13!important}
+#verdict .v-isk span{font-size:.44em!important;color:var(--txt);margin-left:6px}
+#verdict .ov-flow{width:100%;padding:17px 18px;border-radius:12px;background:rgba(16,16,16,.82)}
+#verdict .ov-flow h4{font:650 .8rem var(--f-ui);letter-spacing:.09em;color:var(--dim);margin-bottom:11px}
+#verdict .mm-dest-inline{border-top:1px solid rgba(222,220,209,.12);padding-top:15px;margin-top:18px}
+#verdict .mm-dest-inline .ov-bar{height:11px}
+#verdict .ov-leg{grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-top:13px}
+#verdict .ov-leg>div{min-width:0}#verdict .ov-leg b{font-size:.95rem!important;white-space:normal;overflow-wrap:anywhere}
+#verdict .ov-leg small{white-space:normal;overflow:visible;text-overflow:initial}
+#verdict .ov-kpi{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:12px}
+#verdict .ov-kpi>div{display:grid;grid-template-columns:1fr auto;align-items:center;gap:3px 12px;padding:12px 16px;min-height:unset}
+#verdict .ov-kpi dt{grid-column:1 / -1}#verdict .ov-kpi dd{grid-column:1;margin:0;font-size:clamp(1.2rem,2vw,1.48rem)}
+#verdict .ov-kpi small{grid-column:2;text-align:right;align-self:center}
+#verdict .mm-legacy{display:none!important}
+#stepsPanel{padding:21px 21px 19px;margin:0 0 16px!important}
+#stepsPanel .stp-list{margin-top:8px}
+#pSum>.mm-section-head,#pExtra>.mm-section-head{margin:0 0 18px!important}
+@media(max-width:860px){#verdict .ov-hd{grid-template-columns:1fr}#verdict .mm-net{text-align:left}#verdict .ov-leg{grid-template-columns:repeat(2,minmax(0,1fr))}.mm-pi-features{grid-template-columns:1fr}}
+@media(max-width:540px){.mm-modnav{flex-direction:column}.mm-mod{justify-content:center}#verdict .ov-kpi{grid-template-columns:1fr!important}#verdict .ov-leg{grid-template-columns:1fr 1fr}#verdict .v-isk{font-size:clamp(1.9rem,8vw,2.5rem)!important}#verdict .ov-hd{gap:12px}}
+html.light .mm-modnav{background:#f4f1ed}html.light .mm-mod{color:#70685e}html.light .mm-mod[aria-selected=true]{color:#a84d31;background:#f7e7df}
+html.light .mm-pi-placeholder,html.light .mm-pi-features>div,html.light #verdict .ov-flow{background:#f8f6f3}
+html.light #verdict{background:#fff!important}html.light #verdict .v-cap{color:#37302a}html.light .mm-title{color:#28231f!important}
+
 </style>
 <script>/* v1.0.16: aplica el tema guardado antes de pintar (sin parpadeo). Por defecto: Dark. */try{var g=JSON.parse(localStorage.getItem('gestorVentas.ajustes.v1')||'null');if(g&&g.ui){if(g.ui.light)document.documentElement.classList.add('light');}}catch(e){}</script>
 </head>
@@ -2441,6 +2489,11 @@ html.light #mining .mn-fit-fallback{border-color:rgba(40,100,150,.22);background
     <span class="logo-l vg" role="img" aria-label="Logo de Vanguardia DR"></span>
     <div><h1>Market Moves+</h1><p class="tagline">Herramienta para gestionar tus planes de mercado.</p></div>
   </div>
+  <nav class="mm-modnav" id="mmTabs" role="tablist" aria-label="Secciones de Market Moves+">
+    <button type="button" class="mm-mod on" data-mm-module="ventas" role="tab" aria-controls="salesBody" aria-selected="true" id="mmTabVentas">Ventas</button>
+    <button type="button" class="mm-mod" data-mm-module="mining" role="tab" aria-controls="mining" aria-selected="false" id="mmTabMining">Minería</button>
+    <button type="button" class="mm-mod" data-mm-module="pi" role="tab" aria-controls="pi" aria-selected="false" id="mmTabPi">Industria Planetaria · PI</button>
+  </nav>
   <!-- v104: introducción + recordatorio visible a la derecha. Los botones comparten
        los paneles Guía de Uso y Ajustes existentes: no se duplica ningún formulario. -->
   <!-- v1.0.8: Ajustes y Guía de Uso se abren aquí, arriba, debajo del título -->
@@ -2478,6 +2531,15 @@ Contraband Freight = no</textarea><small>Una regla por línea: Nombre = tax tota
     <h2><span class="ic i-rock" aria-hidden="true"></span>Comparativa Minera · Omega y Nave Maxiada</h2>
     <p class="lead">Compara Barges y Exhumers en luna, hielo y gas del territorio Guristas, calcula ISK por hora con ESI y planifica la productividad de tus cuentas Omega.</p>
     <div id="mnRoot"></div>
+  </section>
+  <section class="panel mm-pi-panel" id="pi" role="tabpanel" aria-labelledby="mmTabPi" hidden>
+    <header class="mm-section-head"><h2 class="mm-title">INDUSTRIA PLANETARIA</h2><p class="mm-section-sub">PLANIFICA TU PI Y PRODUCCIÓN DE FUEL BLOCKS</p></header>
+    <div class="mm-pi-placeholder"><h3>PI · Espacio reservado</h3><p>Preparado para una futura herramienta de extracción, fábricas y Fuel Blocks. Los cálculos todavía no están activos.</p></div>
+    <div class="mm-pi-features">
+      <div><b>Extracción</b><small>Planetas y producción P0 → P1</small></div>
+      <div><b>Fábricas</b><small>Conversión de P1 → P2 y P3</small></div>
+      <div><b>Fuel Blocks</b><small>Comparativa entre vender materiales y fabricar</small></div>
+    </div>
   </section>
 <section class="panel" id="help" hidden>
     <div class="x-wrap"><button type="button" class="x-close" data-close="help" aria-label="Cerrar Guía de Uso" title="Cerrar Guía de Uso"></button></div>
@@ -2517,16 +2579,9 @@ Contraband Freight = no</textarea><small>Una regla por línea: Nombre = tax tota
     <p class="lead">No pide tu contraseña de EVE ni inicio de sesión. Solo se conecta a la API oficial de EVE (ESI) para precios y al servidor de imágenes de EVE para los íconos. Janice, Discord y el Buyback se abren aparte, en tu navegador.</p>
   </section>
   </div>
-  <!-- v1.0.62: «Antes de empezar» como aviso de ancho completo; se cierra con la X y no vuelve a salir en este navegador -->
-  <aside class="start-note" id="startNote" hidden aria-label="Antes de empezar">
-    <div class="start-note-body"><strong>Antes de empezar</strong>
-      <span>Lee la <b>Guía de Uso</b> y revisa tus <b>Ajustes</b> (skills, taxes y Buyback) para obtener estimaciones acordes a tu personaje.</span>
-    </div>
-    <div class="start-note-actions"><button type="button" id="heroHelp">Ver Guía de Uso</button><button type="button" id="heroSettings">Configurar Ajustes</button></div>
-    <button type="button" class="sn-x" id="startNoteX" aria-label="Cerrar aviso" title="Cerrar"></button>
-  </aside>
+
   <!-- v1.0.62: Tasación a la izquierda y el recuadro para pegar a la derecha (sin items, el recuadro ocupa todo el ancho) -->
-  <div class="hero-intro no-appr">
+  <div class="hero-intro no-appr" id="heroIntro" role="tabpanel" aria-labelledby="mmTabVentas">
     <div class="appr" id="appr" hidden aria-live="polite"></div>
     <div class="paste">
       <textarea id="paste" autocomplete="off" spellcheck="false" aria-label="Pega aquí tu inventario de EVE" placeholder="Pega aquí tus items con Ctrl+V"></textarea>
@@ -2535,14 +2590,14 @@ Contraband Freight = no</textarea><small>Una regla por línea: Nombre = tax tota
   </div>
 </section>
 
-<main>
+<main id="salesBody">
   <section class="panel loading" id="loading" hidden role="status" aria-live="polite">
     <span class="spin" aria-hidden="true"></span>
     <div class="ld-body"><b id="ldTxt">Trayendo precios de Jita…</b><small>Espera un momento: calculo todo cuando lleguen todos los precios.</small>
       <div class="ld-track"><i id="ldBar"></i></div></div>
   </section>
   <details class="panel thin fold" id="ledger" hidden>
-    <summary><h2><span class="ic i-box" aria-hidden="true"></span>Listado de Items Registrados</h2><span class="cnt" id="lCount"></span><span class="status" id="esiStatus" role="status"></span></summary>
+    <summary><h2 class="mm-title">LISTADO DE ITEMS REGISTRADOS</h2><span class="cnt" id="lCount"></span><span class="mm-missing" id="missCount" hidden></span><span class="status" id="esiStatus" role="status"></span></summary>
     <div class="ledger-tools">
       <p class="lead">Abre un item para consultar la guía, comparar mercados o cambiar sus datos. Haz clic en un encabezado para ordenar la lista.</p>
       <button class="ghost" id="bEsi"><span class="ic i-sync" aria-hidden="true"></span>Actualizar Precios</button>
@@ -2560,9 +2615,30 @@ Contraband Freight = no</textarea><small>Una regla por línea: Nombre = tax tota
     </div>
     <div id="lots"></div>
   </details>
+  <section class="panel verdict" id="verdict" hidden aria-live="polite">
+    <!-- v1.0.22: resumen del plan (overview): total, a dónde va el ISK, datos clave, tu lote en Jita y dónde se vende -->
+    <div class="ov">
+      <div class="ov-hd">
+        <div class="ov-ttl"><header class="mm-section-head"><h2 class="mm-title" id="vTitle">LA MEJOR RUTA DE VENTA</h2><p class="mm-section-sub">REVISA TU RUTA Y CUÁNTO RECIBIRÍAS</p></header>
+          <p class="v-cap" id="vCap">Aquí verás qué ruta elegiste y cómo se distribuye tu venta.</p><span class="v-what" id="vWhat" hidden></span></div>
+        <div class="mm-net"><span class="mm-net-label">RECIBIRÍAS NETO</span><p class="v-isk num" id="vIsk"></p></div>
+      </div>
+      <div class="ov-card ov-flow"><h4>DE DÓNDE SALE TU ISK</h4><div id="ovFlow"></div><div class="mm-dest-inline" id="ovDestW"><h4>DÓNDE SE VENDE</h4><div id="ovDest"></div></div></div>
+      <dl class="ov-kpi mm-compact-kpi">
+        <div><dt>ITEMS</dt><dd id="vsN">—</dd><small id="vsNs"></small></div>
+        <div><dt>VOLUMEN TOTAL</dt><dd id="vsV">—</dd><small id="vsVs"></small></div>
+      </dl>
+      <div class="mm-legacy" hidden aria-hidden="true">
+        <div id="ovShip"><span id="aCourT"></span><span id="aCourier"></span><span id="aCourS"></span></div>
+        <div><span id="vsCn"></span><span id="vsC"></span><label id="vsRelW" hidden><input type="checkbox" id="cRelistOn"> Relists <span id="vsRel"></span></label></div>
+        <div id="ovMktW"><div id="ovMkt"></div></div>
+      </div>
+    </div>
+
+</section>
   <!-- 1. Resultado simple -->
   <section class="panel summary res" id="pSum" hidden>
-    <h2 class="h-caps"><span class="ic i-bulb" aria-hidden="true"></span>Resultado</h2>
+    <header class="mm-section-head"><h2 class="mm-title">RESULTADO</h2><p class="mm-section-sub">COMPARA TUS PLANES Y ELIGE CÓMO PREFIERES VENDER</p></header>
     <!-- v1.0.48: arriba, lo que recibes (izquierda) y cuánto más deja frente a la alternativa simple (derecha) -->
     <div class="res-top">
       <div class="res-main"><span class="res-k">Recibes con este plan</span>
@@ -2580,32 +2656,12 @@ Contraband Freight = no</textarea><small>Una regla por línea: Nombre = tax tota
       <div class="pk-tools" id="pkTools"></div>
       <div class="pk" id="pkOthers" role="group" aria-label="Otros planes" hidden></div></div>
     <!-- v1.0.50: justo debajo de los planes. Al abrir el desglose, los planes se pliegan y el desglose pasa a ser lo principal -->
-    <button type="button" class="more-btn" id="bDeep" aria-expanded="false" aria-controls="deep"><span>Revisa cada destino, sus precios y el desglose de los costes.</span><b>Ver el desglose ▾</b></button>
+    <button type="button" class="more-btn" id="bDeep" aria-expanded="false" aria-controls="deep"><span>Consulta los destinos y precios de cada paso.</span><b>Ir a los pasos ↓</b></button>
   </section>
   <!-- 2. El análisis (oculto hasta que lo pides) -->
   <div id="deep" class="deep" hidden>
-  <section class="panel verdict" id="verdict" hidden aria-live="polite">
-    <!-- v1.0.22: resumen del plan (overview): total, a dónde va el ISK, datos clave, tu lote en Jita y dónde se vende -->
-    <div class="ov">
-      <div class="ov-hd">
-        <div class="ov-ttl"><h2><span class="ic i-target" aria-hidden="true"></span><span id="vTitle">La Mejor Ruta de Venta</span><span class="v-what" id="vWhat"></span></h2>
-          <p class="v-cap" id="vCap">ISK estimados que recibes tras taxes, Broker y envío (según tu configuración)</p></div>
-        <p class="v-isk num" id="vIsk"></p>
-      </div>
-      <div class="ov-card ov-flow"><h4>De Dónde Sale tu ISK</h4><div id="ovFlow"></div></div>
-      <dl class="ov-kpi">
-        <div><dt>Items</dt><dd id="vsN">—</dd><small id="vsNs"></small></div>
-        <div><dt>Volumen Total</dt><dd id="vsV">—</dd><small id="vsVs"></small></div>
-        <div id="ovShip"><dt id="aCourT">Envío a Jita</dt><dd id="aCourier">—</dd><small id="aCourS"></small></div>
-        <div class="tx"><dt>Taxes y Broker</dt><dd id="vsCn" class="neg-soft">—</dd><small id="vsC"></small><label class="rl" id="vsRelW" hidden><input type="checkbox" id="cRelistOn"> Relists: <span id="vsRel">—</span><small>Se cobra si bajas el precio (~2 semanas). Márcalo para contarlo.</small></label></div>
-      </dl>
-      <div class="ov-row">
-        <div class="ov-card" id="ovMktW"><h4>Tu Lote en Jita</h4><div id="ovMkt"></div></div>
-        <div class="ov-card" id="ovDestW"><h4>Dónde se Vende</h4><div id="ovDest"></div></div>
-      </div>
-    </div>
-
-    <h3 class="sub-h v-h"><span class="ic i-list" aria-hidden="true"></span>Pasos para Vender</h3>
+  <section class="panel verdict-detail" id="stepsPanel">
+    <header class="mm-section-head"><h3 class="mm-title">PASOS PARA VENDER</h3><p class="mm-section-sub">HAZ CLIC EN CUALQUIER PASO PARA VER MÁS</p></header>
     <div id="stepHead"></div>
     <div class="pl-groups stp-list" id="vPlan"></div>
 
@@ -2625,7 +2681,7 @@ Contraband Freight = no</textarea><small>Una regla por línea: Nombre = tax tota
   </div>
   <!-- v1.0.63: Extras = Contratos y Envío, Reproceso y Vender a Jugadores, dentro de un recuadro como el del Resultado -->
   <section class="panel extras" id="pExtra" hidden>
-    <h2 class="h-caps"><span class="ic i-box" aria-hidden="true"></span>Extras</h2>
+    <header class="mm-section-head"><h2 class="mm-title">EXTRAS</h2><p class="mm-section-sub">CONSULTA CONTRATOS, REPROCESO Y OTRAS OPCIONES</p></header>
   <details class="panel thin fold" id="pCtr" hidden>
     <summary><h2><span class="ic i-list" aria-hidden="true"></span><span id="ctrTitle">Contratos y Envío</span></h2><span class="sum" id="ctrSum"></span><span class="fold-cta" aria-hidden="true"><span class="fc-o">Ver ▾</span><span class="fc-c">Ocultar ▴</span></span></summary>
     <div class="ce">
@@ -2735,13 +2791,13 @@ Contraband Freight = no</textarea><small>Una regla por línea: Nombre = tax tota
 <button type="button" class="totop" id="toTop" aria-label="Volver arriba" title="Volver arriba (Inicio)" hidden><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 14l6-6 6 6"/></svg></button>
 <footer class="foot">
   <p class="foot-sec"><span class="ic i-lock" aria-hidden="true"></span>Tu inventario no se guarda: al cerrar o recargar se borra. Solo tus Ajustes quedan en este navegador.</p>
-  <div class="foot-by">Creado por <b>Fiko McGivert</b> · Vanguardia DR · SIGMA GRINDSET · <span class="ver">v1.0.80</span></div>
+  <div class="foot-by">Creado por <b>Fiko McGivert</b> · Vanguardia DR · SIGMA GRINDSET · <span class="ver">v1.0.81</span></div>
 </footer>
 
 <script>
 'use strict';
 /* ============================================================
-   Market Moves+ v1.0.80 — SIGMA GRINDSET / Vanguardia DR
+   Market Moves+ v1.0.81 — SIGMA GRINDSET / Vanguardia DR
    Flujo:  pegado → items → carga (ESI: precios, volúmenes, historial) → verificación → plan → vista
      1. Pegado      parsePaste(): parser posicional de columnas de EVE (Name · Quantity · … · Volume · Est. Price).
      2. Carga       esiItems(): trae todo lo que falta; mientras carga, refresh() NO pinta (S.loading).
@@ -3950,20 +4006,18 @@ function fadeIn(list){if(!MOTION())return;list.forEach((n,i)=>n.animate([{opacit
 document.addEventListener('toggle',e=>{const d=e.target;if(!(d instanceof HTMLDetailsElement)||!d.open||!MOTION())return;
   [...d.children].filter(c=>c.tagName!=='SUMMARY'&&!c.hidden).forEach(c=>c.animate([{opacity:0,transform:'translateY(-6px)'},{opacity:1,transform:'none'}],{duration:220,easing:EASE}));},true);
 // Divulgación progresiva: primero el resultado; el análisis y la info extra solo si los pides
-const SECT={deep:['bDeep','Ver el desglose ▾','Volver a los planes ▴']};
+const SECT={deep:['bDeep','Ir a los pasos ↓','Ir a los pasos ↓']};
 function setSect(t,open){const [b,o,c]=SECT[t];if($(t).hidden===!open)return;
   $(b).setAttribute('aria-expanded',String(open));$(b).querySelector('b').textContent=open?c:o;
   if(t==='deep'){ // v1.0.50: con el desglose abierto se pliegan los planes
-    const pw=document.querySelector('#pSum .pk-w');
-    $('pSum').classList.toggle('res-min',open);if(!open&&pw)slide(pw,true);}
+    $('pSum').classList.remove('res-min');}
   if(open){$(t).hidden=false;if(lastP)refreshNow();$(t).hidden=true;slide($(t),true);}else $(t).hidden=true;}
-Object.keys(SECT).forEach(t=>$(SECT[t][0]).addEventListener('click',()=>{const open=$(t).hidden;
-  if(open&&t==='deep')focusOnly('deep');setSect(t,open);if(open)$(SECT[t][0]).scrollIntoView({behavior:'smooth',block:'start'});}));
+$('bDeep').addEventListener('click',()=>{setSect('deep',true);$('stepsPanel').scrollIntoView({behavior:MOTION()?'smooth':'auto',block:'start'});});
 // v1.0.54: modo foco. Al abrir una sección principal (planes, desglose, Listado, Contratos, Reproceso, Jugadores, Ajustes o Guía de Uso),
 // las demás se pliegan y la vista va a la que abriste.
 function focusOnly(k){
   if(k!=='plans'&&pkView.open){pkView.open=false;if(lastP)paintPicker(lastP);}
-  if(k!=='deep')setSect('deep',false);
+  if(k!=='deep'&&k!=='plans')setSect('deep',false);
   ['ledger','pCtr','pRepro','pDisc'].forEach(id=>{if(k!==id&&$(id).open)$(id).open=false;});
   ['settings','help','mining'].forEach(id=>{if(k!==id&&!$(id).hidden)togglePanel(id,false);});
 }
@@ -3974,11 +4028,32 @@ function clearViews(){
   document.title='Market Moves+ · SIGMA GRINDSET';
   ['vPlan','vRepList','ctrList','czDots','ctrTot','shBody','fScn','rx','rxFinal','dMsg'].forEach(id=>{const e=$(id);if(e)e.textContent='';});
   ['pCtr','pSum'].forEach(id=>{const e=$(id);if(e)e.hidden=true;});
+  $('deep').hidden=true;delete $('deep').dataset.uiReady;
   lastP=null;repaintPlanGroup=null;paintAppraisal();discRows=[];czCards=[];lastCs=[];czIdx=0;S.planMode=null;ICON_POOL={};
   stepOpen=null;vShow=Object.create(null);vSort=Object.create(null);vQuery=Object.create(null);pkView={sort:'net',dir:-1,filter:'all',open:false};if($('stepHead'))$('stepHead').textContent='';
 }
+function paintWhereSold(P,none){
+  const rowsIn=P.rows;
+  // v1.0.22: dónde se vende (parte del ISK de cada acción del plan)
+  {const DC={null:'#5cba86',rNull:'#3f8f63',fN:'#5cba86',bb:'#7fc4b8',disc:'#9c9a92',jOrd:'#d97757',fJ:'#d97757',jInst:'#e0a84f',fJI:'#e0a84f',rJita:'#b5583a'};
+   const sums={};rowsIn.forEach(r=>{if(r.best)sums[r.best]=(sums[r.best]||0)+Math.max(0,r.g[r.best]-r.prod);});
+   const ks=Object.keys(sums).sort((a,b)=>sums[b]-sums[a]),tot=ks.reduce((a,k)=>a+sums[k],0),box=$('ovDest');box.textContent='';
+   $('ovDestW').hidden=none||!(tot>0);
+   if(tot>0){const bar=el('div','ov-bar'),lg=el('div','ov-leg');
+     ks.forEach(k=>{const v=sums[k],i=el('i');i.style.width=(v/tot*100)+'%';i.style.background=DC[k]||'#9c9a92';i.title=(PLAN_L[k]||k)+': '+fmt(v);bar.append(i);
+       const n=rowsIn.filter(r=>r.best===k).length,d=el('div'),sw=el('span','ov-sw');sw.style.background=DC[k]||'#9c9a92';
+       d.append(sw,el('b',null,v/tot>0&&v/tot<.005?'<1%':pct(v/tot)+'%'),el('small',null,(PLAN_L[k]||k)+' · '+n+(n===1?' item':' items')));lg.append(d);});
+     box.append(bar,lg);}}
+}
 function paintVerdict(P){
   const has=S.items.length>0;$('verdict').hidden=!has;$('ledger').hidden=!has;$('lCount').textContent=has?'· '+S.items.length+(S.items.length>1?' items':' item'):'';
+  const missing=S.items.filter(o=>o.qty>0&&!(o.jita&&(o.jita.topBuy!=null||o.jita.topSell!=null||o.jita.buy!=null||o.jita.sell!=null))).length;
+  $('missCount').hidden=!has||S.loading||missing===0;
+  $('missCount').textContent=missing+' sin precio';
+  if(has&&!$('deep').dataset.uiReady){
+    $('deep').hidden=false;$('deep').dataset.uiReady='1';
+    $('bDeep').setAttribute('aria-expanded','true');
+  }
   if(!has){clearViews();return;}
   const none=P.missing.length===P.rows.length,v=none?null:P.best;
   $('vIsk').textContent='';$('vIsk').append(document.createTextNode(v==null?'—':Math.round(v).toLocaleString('en-US')),el('span',null,'ISK'));
@@ -3994,8 +4069,18 @@ function paintVerdict(P){
    const ks=Object.keys(sums).sort((a,b)=>sums[b]-sums[a]);
    $('vWhat').dataset.k=$('resWhat').dataset.k=ks[0]||'';
    $('vWhat').textContent=none||!ks.length?'':W(ks[0])+(ks.length>1?' + '+(ks.length-1)+(ks.length>2?' más':' más'):'');}
-  {const fa=!P.mode&&P.rows.some(r=>r.fast);$('vTitle').textContent=P.mode?'Tu Plan: '+modeName(P.mode):fa?'La Mejor Opción':'La Mejor Ruta de Venta';if(fa&&$('vWhat').textContent)$('vWhat').textContent+=' · por rapidez';}
+  {const fa=!P.mode&&P.rows.some(r=>r.fast);
+    $('vTitle').textContent=P.mode?'TU RUTA DE VENTA':'LA MEJOR RUTA DE VENTA';
+    if(fa&&$('vWhat').textContent)$('vWhat').textContent+=' · por rapidez';
+    const route=$('vWhat').textContent.replace(/ · por rapidez$/,'');
+    $('vCap').textContent=none?'Estamos esperando los precios de Jita para calcular tu ruta.':
+      P.mode?'Elegiste '+modeName(P.mode)+'. Este plan te permite '+(route?route.toLowerCase():'vender tu lote')+
+        '. Aquí ves cuánto recibirías; más abajo encontrarás cada paso con sus items, destinos y precios.':
+      'Según el Plan Óptimo, '+(route?route.toLowerCase():'la combinación de rutas seleccionadas')+
+        ' es la alternativa recomendada para tu lote. Revisa cuánto recibirías y consulta las instrucciones paso a paso más abajo.';
+  }
   lastP=P;
+  paintWhereSold(P,none);
   if($('deep').hidden)return; // v1.0.8: el análisis (rutas, Qué Hacer, comparación) solo se pinta con la sección abierta
   // valor del lote en Jita con los 3 precios (como Janice): Buy · Split · Sell. Sin porcentajes engañosos.
   let vB=0,vS=0,ok3=true;P.rows.forEach(r=>{const a=r.o.jita;if(!a||a.buy==null||a.sell==null){ok3=false;return;}vB+=a.buy*r.q;vS+=a.sell*r.q;});
@@ -4163,16 +4248,7 @@ function paintVerdict(P){
   // Pie: solo los items sin precio (no pertenecen a ningún grupo)
   const miss=rowsIn.filter(r=>!r.best);
   if(miss.length){tableTarget=el('div','pl pl-totals');pl.append(tableTarget);prow('miss','Falta precio: '+miss.map(r=>r.o.name).join(', '),'No entran en el total.',null,null,null,null);}
-  // v1.0.22: dónde se vende (parte del ISK de cada acción del plan)
-  {const DC={null:'#5cba86',rNull:'#3f8f63',fN:'#5cba86',bb:'#7fc4b8',disc:'#9c9a92',jOrd:'#d97757',fJ:'#d97757',jInst:'#e0a84f',fJI:'#e0a84f',rJita:'#b5583a'};
-   const sums={};rowsIn.forEach(r=>{if(r.best)sums[r.best]=(sums[r.best]||0)+Math.max(0,r.g[r.best]-r.prod);});
-   const ks=Object.keys(sums).sort((a,b)=>sums[b]-sums[a]),tot=ks.reduce((a,k)=>a+sums[k],0),box=$('ovDest');box.textContent='';
-   $('ovDestW').hidden=none||!(tot>0);
-   if(tot>0){const bar=el('div','ov-bar'),lg=el('div','ov-leg');
-     ks.forEach(k=>{const v=sums[k],i=el('i');i.style.width=(v/tot*100)+'%';i.style.background=DC[k]||'#9c9a92';i.title=(PLAN_L[k]||k)+': '+fmt(v);bar.append(i);
-       const n=rowsIn.filter(r=>r.best===k).length,d=el('div'),sw=el('span','ov-sw');sw.style.background=DC[k]||'#9c9a92';
-       d.append(sw,el('b',null,v/tot>0&&v/tot<.005?'<1%':pct(v/tot)+'%'),el('small',null,(PLAN_L[k]||k)+' · '+n+(n===1?' item':' items')));lg.append(d);});
-     box.append(bar,lg);}}
+
   // ¿reprocesar? por item
   const reps=rowsIn.filter(r=>r.rep&&!r.rep.missing),rl=$('vRepList');rl.textContent='';$('vRep').hidden=!reps.length;
   {const ys=reps.filter(r=>r.rep.diff>0).length,a=$('vRepAns');
@@ -4902,7 +4978,8 @@ function refresh(){if(refQ)return;refQ=requestAnimationFrame(()=>{refQ=0;refresh
 // Valores crudos (mejor compra y venta más barata de Jita 4-4), sin los filtros del plan. Solo con items pegados.
 function paintAppraisal(){
   const box=$('appr');if(!box)return;box.textContent='';
-  const tb=o=>o.jita&&(o.jita.topBuy!=null?o.jita.topBuy:o.jita.buy),ts=o=>o.jita&&(o.jita.topSell!=null?o.jita.topSell:o.jita.sell);
+  // Tasación bruta: órdenes originales de Jita 4-4, sin tasas, broker ni envío.
+  const tb=o=>o.jita&&o.jita.topBuy,ts=o=>o.jita&&o.jita.topSell;
   const its=S.items.filter(o=>o.qty>0),priced=its.filter(o=>tb(o)!=null||ts(o)!=null);
   box.hidden=!its.length;box.parentNode.classList.toggle('no-appr',!its.length);if(!its.length)return;
   let vB=0,vS=0,vol=0,u=0;its.forEach(o=>{vol+=(o.m3u||0)*o.qty;u+=o.qty;});priced.forEach(o=>{vB+=(tb(o)||0)*o.qty;vS+=(ts(o)||0)*o.qty;});
@@ -4912,7 +4989,7 @@ function paintAppraisal(){
   const ok=priced.length>0,v2=Math.round(vol*100)/100;
   cell(colL,'Precios de','Jita 4-4');
   cell(colL,'Volumen',NF2.format(v2)+' m³',null,String(v2)); // 2 decimales, como Janice; clic copia el número
-  cell(colL,'Items',its.length+(its.length===1?' item · ':' items · ')+fmtQ(u)+' u.'+(priced.length<its.length?' ('+priced.length+' con precio)':''));
+  cell(colL,'Items',String(its.length));
   cell(colR,'Buy',ok?vB:'—','t-buy');cell(colR,'Split',ok?(vB+vS)/2:'—','t-split');cell(colR,'Sell',ok?vS:'—','t-sell');
   g.append(colL,colR);box.append(el('span','appr-tag','Tasación'),g);
 }
@@ -6263,9 +6340,42 @@ const MineUI=(()=>{
 })();
 
 // ================= Ajustes y Guía de Uso =================
+// Pestañas persistentes, conservando la comparativa minera existente.
+function selectAppModule(name){
+  if(!['ventas','mining','pi'].includes(name))return;
+  document.body.classList.toggle('mm-mining',name==='mining');
+  document.body.classList.toggle('mm-pi',name==='pi');
+  document.querySelectorAll('#mmTabs [data-mm-module]').forEach(b=>{
+    const active=b.dataset.mmModule===name;
+    b.setAttribute('aria-selected',String(active));b.tabIndex=active?0:-1;
+    b.classList.toggle('on',active);
+  });
+  if(name==='mining'){
+    $('pi').hidden=true;$('settings').hidden=true;$('help').hidden=true;
+    $('mining').hidden=false;MineUI.mount($('mnRoot'));MineUI.shown();
+  }else if(name==='pi'){
+    $('mining').hidden=true;$('settings').hidden=true;$('help').hidden=true;
+    $('pi').hidden=false;
+  }else{$('mining').hidden=true;$('pi').hidden=true;}
+  $('mineTab').setAttribute('aria-pressed',String(name==='mining'));
+  document.querySelectorAll('.side-i[data-panel="mining"]').forEach(b=>b.setAttribute('aria-pressed',String(name==='mining')));
+}
+const mmTabs=[...document.querySelectorAll('#mmTabs [data-mm-module]')];
+mmTabs.forEach((b,i)=>{
+  b.addEventListener('click',()=>selectAppModule(b.dataset.mmModule));
+  b.addEventListener('keydown',e=>{
+    const n=e.key==='ArrowRight'?i+1:e.key==='ArrowLeft'?i-1:null;if(n==null)return;
+    e.preventDefault();const next=mmTabs[(n+mmTabs.length)%mmTabs.length];
+    selectAppModule(next.dataset.mmModule);next.focus();
+  });
+});
+
 // v1.0.53: se abren desde el menú lateral, los botones de «Antes de empezar» y se cierran con su X.
 // force=true abre (o solo desplaza si ya está abierto); force=false cierra; sin force alterna.
-function togglePanel(id,force){const s=$(id),open=force!=null?force:s.hidden;
+function togglePanel(id,force){
+  if(id==='mining'){selectAppModule(force===false?'ventas':'mining');return;}
+  if(document.body.classList.contains('mm-mining')||document.body.classList.contains('mm-pi'))selectAppModule('ventas');
+  const s=$(id),open=force!=null?force:s.hidden;
   if(open&&!s.hidden){s.scrollIntoView({behavior:'smooth',block:'start'});return;}
   if(open){focusOnly(id);slide(s,true);if(id==='mining'){MineUI.mount($('mnRoot'));MineUI.shown();}}else s.hidden=true;
   document.querySelectorAll('.side-i[data-panel="'+id+'"]').forEach(x=>x.setAttribute('aria-pressed',String(open)));
@@ -6279,12 +6389,12 @@ function togglePanel(id,force){const s=$(id),open=force!=null?force:s.hidden;
  $('sideTg').addEventListener('click',()=>{if(mob())setO(false);else setC(!b.classList.contains('side-c'));});
  $('sideFab').addEventListener('click',()=>setO(true));$('sideBd').addEventListener('click',()=>setO(false));
  document.querySelectorAll('.side-i[data-panel]').forEach(x=>{x.setAttribute('aria-pressed','false');x.setAttribute('aria-controls',x.dataset.panel);
-   x.addEventListener('click',()=>{togglePanel(x.dataset.panel);if(mob())setO(false);});});}
+   x.addEventListener('click',()=>{if(x.dataset.panel==='mining')selectAppModule('mining');else togglePanel(x.dataset.panel);if(mob())setO(false);});});}
 // v1.0.8: X dentro de la sección (fija al bajar)
 document.querySelectorAll('.x-close').forEach(b=>b.addEventListener('click',()=>togglePanel(b.dataset.close,false)));
-$('mineTab').addEventListener('click',()=>togglePanel('mining'));
+$('mineTab').addEventListener('click',()=>selectAppModule('mining'));
 $('sideHome').addEventListener('click',()=>{
-  focusOnly('home'); // Cierra los paneles sin borrar datos ni preferencias.
+  selectAppModule('ventas');focusOnly('home'); // Cierra los paneles sin borrar datos ni preferencias.
   window.scrollTo({top:0,behavior:MOTION()?'smooth':'auto'});
   if(innerWidth<=900){document.body.classList.remove('side-open');$('sideBd').hidden=true;}
 });
@@ -6295,12 +6405,7 @@ document.querySelectorAll('#settings fieldset.st').forEach(f=>{const l=f.querySe
   l.addEventListener('click',t);l.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();t();}});});
 const stAll=open=>document.querySelectorAll('#settings fieldset.st').forEach(f=>{f.classList.toggle('closed',!open);const l=f.querySelector('legend');if(l)l.setAttribute('aria-expanded',String(open));});
 $('stOpenAll').addEventListener('click',()=>stAll(true));$('stCloseAll').addEventListener('click',()=>stAll(false));
-// v1.0.62: «Antes de empezar» sale solo hasta que lo cierras (se recuerda en este navegador, junto a los Ajustes)
-const SN_KEY='gestorVentas.aviso.v1';
-try{$('startNote').hidden=localStorage.getItem(SN_KEY)==='1';}catch(e){$('startNote').hidden=false;}
-$('startNoteX').addEventListener('click',()=>{slide($('startNote'),false);try{localStorage.setItem(SN_KEY,'1');}catch(e){}});
-// v104: botones de «Antes de empezar»: abren el panel; si ya está abierto, solo se desplaza (no lo cierran)
-$('heroHelp').addEventListener('click',()=>togglePanel('help',true));$('heroSettings').addEventListener('click',()=>togglePanel('settings',true));
+
 [['cTax','tax'],['cBroker','broker'],['cBrokerNull','brokerNull'],['cScc','scc'],['cMargin','margin'],['cProd','prod']].forEach(([id,k])=>
   $(id).addEventListener('input',e=>{C[k]=(parseFloat(e.target.value)||0)/100;refresh();}));
 [['cSkInst','inst'],['cSkOrd','ord'],['cSkNul','nul']].forEach(([id,k])=>$(id).addEventListener('input',e=>{C.skew[k]=(parseFloat(e.target.value)||0)/100;refresh();}));
