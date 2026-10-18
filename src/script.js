@@ -1221,7 +1221,7 @@ $('bDeep').addEventListener('click',()=>{setSect('deep',true);$('stepsPanel').sc
 // las demás se pliegan y la vista va a la que abriste.
 function focusOnly(k){
   if(k!=='plans'&&pkView.open){pkView.open=false;if(lastP)paintPicker(lastP);}
-  if(k!=='deep')setSect('deep',false);
+  if(k!=='deep'&&k!=='plans')setSect('deep',false);
   ['ledger','pCtr','pRepro','pDisc'].forEach(id=>{if(k!==id&&$(id).open)$(id).open=false;});
   ['settings','help','mining'].forEach(id=>{if(k!==id&&!$(id).hidden)togglePanel(id,false);});
 }
