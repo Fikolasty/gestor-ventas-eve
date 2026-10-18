@@ -2240,9 +2240,42 @@ $('themeLight').addEventListener('change',e=>{document.documentElement.classList
 /*__MINING__*/
 
 // ================= Ajustes y Guía de Uso =================
+// Pestañas persistentes, conservando la comparativa minera existente.
+function selectAppModule(name){
+  if(!['ventas','mining','pi'].includes(name))return;
+  document.body.classList.toggle('mm-mining',name==='mining');
+  document.body.classList.toggle('mm-pi',name==='pi');
+  document.querySelectorAll('#mmTabs [data-mm-module]').forEach(b=>{
+    const active=b.dataset.mmModule===name;
+    b.setAttribute('aria-selected',String(active));b.tabIndex=active?0:-1;
+    b.classList.toggle('on',active);
+  });
+  if(name==='mining'){
+    $('pi').hidden=true;$('settings').hidden=true;$('help').hidden=true;
+    $('mining').hidden=false;MineUI.mount($('mnRoot'));MineUI.shown();
+  }else if(name==='pi'){
+    $('mining').hidden=true;$('settings').hidden=true;$('help').hidden=true;
+    $('pi').hidden=false;
+  }else{$('mining').hidden=true;$('pi').hidden=true;}
+  $('mineTab').setAttribute('aria-pressed',String(name==='mining'));
+  document.querySelectorAll('.side-i[data-panel="mining"]').forEach(b=>b.setAttribute('aria-pressed',String(name==='mining')));
+}
+const mmTabs=[...document.querySelectorAll('#mmTabs [data-mm-module]')];
+mmTabs.forEach((b,i)=>{
+  b.addEventListener('click',()=>selectAppModule(b.dataset.mmModule));
+  b.addEventListener('keydown',e=>{
+    const n=e.key==='ArrowRight'?i+1:e.key==='ArrowLeft'?i-1:null;if(n==null)return;
+    e.preventDefault();const next=mmTabs[(n+mmTabs.length)%mmTabs.length];
+    selectAppModule(next.dataset.mmModule);next.focus();
+  });
+});
+
 // v1.0.53: se abren desde el menú lateral, los botones de «Antes de empezar» y se cierran con su X.
 // force=true abre (o solo desplaza si ya está abierto); force=false cierra; sin force alterna.
-function togglePanel(id,force){const s=$(id),open=force!=null?force:s.hidden;
+function togglePanel(id,force){
+  if(id==='mining'){selectAppModule(force===false?'ventas':'mining');return;}
+  if(document.body.classList.contains('mm-mining')||document.body.classList.contains('mm-pi'))selectAppModule('ventas');
+  const s=$(id),open=force!=null?force:s.hidden;
   if(open&&!s.hidden){s.scrollIntoView({behavior:'smooth',block:'start'});return;}
   if(open){focusOnly(id);slide(s,true);if(id==='mining'){MineUI.mount($('mnRoot'));MineUI.shown();}}else s.hidden=true;
   document.querySelectorAll('.side-i[data-panel="'+id+'"]').forEach(x=>x.setAttribute('aria-pressed',String(open)));
@@ -2256,12 +2289,12 @@ function togglePanel(id,force){const s=$(id),open=force!=null?force:s.hidden;
  $('sideTg').addEventListener('click',()=>{if(mob())setO(false);else setC(!b.classList.contains('side-c'));});
  $('sideFab').addEventListener('click',()=>setO(true));$('sideBd').addEventListener('click',()=>setO(false));
  document.querySelectorAll('.side-i[data-panel]').forEach(x=>{x.setAttribute('aria-pressed','false');x.setAttribute('aria-controls',x.dataset.panel);
-   x.addEventListener('click',()=>{togglePanel(x.dataset.panel);if(mob())setO(false);});});}
+   x.addEventListener('click',()=>{if(x.dataset.panel==='mining')selectAppModule('mining');else togglePanel(x.dataset.panel);if(mob())setO(false);});});}
 // v1.0.8: X dentro de la sección (fija al bajar)
 document.querySelectorAll('.x-close').forEach(b=>b.addEventListener('click',()=>togglePanel(b.dataset.close,false)));
-$('mineTab').addEventListener('click',()=>togglePanel('mining'));
+$('mineTab').addEventListener('click',()=>selectAppModule('mining'));
 $('sideHome').addEventListener('click',()=>{
-  focusOnly('home'); // Cierra los paneles sin borrar datos ni preferencias.
+  selectAppModule('ventas');focusOnly('home'); // Cierra los paneles sin borrar datos ni preferencias.
   window.scrollTo({top:0,behavior:MOTION()?'smooth':'auto'});
   if(innerWidth<=900){document.body.classList.remove('side-open');$('sideBd').hidden=true;}
 });
@@ -2272,12 +2305,6 @@ document.querySelectorAll('#settings fieldset.st').forEach(f=>{const l=f.querySe
   l.addEventListener('click',t);l.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();t();}});});
 const stAll=open=>document.querySelectorAll('#settings fieldset.st').forEach(f=>{f.classList.toggle('closed',!open);const l=f.querySelector('legend');if(l)l.setAttribute('aria-expanded',String(open));});
 $('stOpenAll').addEventListener('click',()=>stAll(true));$('stCloseAll').addEventListener('click',()=>stAll(false));
-// v1.0.62: «Antes de empezar» sale solo hasta que lo cierras (se recuerda en este navegador, junto a los Ajustes)
-const SN_KEY='gestorVentas.aviso.v1';
-try{$('startNote').hidden=localStorage.getItem(SN_KEY)==='1';}catch(e){$('startNote').hidden=false;}
-$('startNoteX').addEventListener('click',()=>{slide($('startNote'),false);try{localStorage.setItem(SN_KEY,'1');}catch(e){}});
-// v104: botones de «Antes de empezar»: abren el panel; si ya está abierto, solo se desplaza (no lo cierran)
-$('heroHelp').addEventListener('click',()=>togglePanel('help',true));$('heroSettings').addEventListener('click',()=>togglePanel('settings',true));
 [['cTax','tax'],['cBroker','broker'],['cBrokerNull','brokerNull'],['cScc','scc'],['cMargin','margin'],['cProd','prod']].forEach(([id,k])=>
   $(id).addEventListener('input',e=>{C[k]=(parseFloat(e.target.value)||0)/100;refresh();}));
 [['cSkInst','inst'],['cSkOrd','ord'],['cSkNul','nul']].forEach(([id,k])=>$(id).addEventListener('input',e=>{C.skew[k]=(parseFloat(e.target.value)||0)/100;refresh();}));
