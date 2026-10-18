@@ -1210,15 +1210,13 @@ function fadeIn(list){if(!MOTION())return;list.forEach((n,i)=>n.animate([{opacit
 document.addEventListener('toggle',e=>{const d=e.target;if(!(d instanceof HTMLDetailsElement)||!d.open||!MOTION())return;
   [...d.children].filter(c=>c.tagName!=='SUMMARY'&&!c.hidden).forEach(c=>c.animate([{opacity:0,transform:'translateY(-6px)'},{opacity:1,transform:'none'}],{duration:220,easing:EASE}));},true);
 // Divulgación progresiva: primero el resultado; el análisis y la info extra solo si los pides
-const SECT={deep:['bDeep','Ver el desglose ▾','Volver a los planes ▴']};
+const SECT={deep:['bDeep','Ir a los pasos ↓','Ir a los pasos ↓']};
 function setSect(t,open){const [b,o,c]=SECT[t];if($(t).hidden===!open)return;
   $(b).setAttribute('aria-expanded',String(open));$(b).querySelector('b').textContent=open?c:o;
   if(t==='deep'){ // v1.0.50: con el desglose abierto se pliegan los planes
-    const pw=document.querySelector('#pSum .pk-w');
-    $('pSum').classList.toggle('res-min',open);if(!open&&pw)slide(pw,true);}
+    $('pSum').classList.remove('res-min');}
   if(open){$(t).hidden=false;if(lastP)refreshNow();$(t).hidden=true;slide($(t),true);}else $(t).hidden=true;}
-Object.keys(SECT).forEach(t=>$(SECT[t][0]).addEventListener('click',()=>{const open=$(t).hidden;
-  if(open&&t==='deep')focusOnly('deep');setSect(t,open);if(open)$(SECT[t][0]).scrollIntoView({behavior:'smooth',block:'start'});}));
+$('bDeep').addEventListener('click',()=>{setSect('deep',true);$('stepsPanel').scrollIntoView({behavior:MOTION()?'smooth':'auto',block:'start'});});
 // v1.0.54: modo foco. Al abrir una sección principal (planes, desglose, Listado, Contratos, Reproceso, Jugadores, Ajustes o Guía de Uso),
 // las demás se pliegan y la vista va a la que abriste.
 function focusOnly(k){
@@ -1234,11 +1232,32 @@ function clearViews(){
   document.title='Market Moves+ · SIGMA GRINDSET';
   ['vPlan','vRepList','ctrList','czDots','ctrTot','shBody','fScn','rx','rxFinal','dMsg'].forEach(id=>{const e=$(id);if(e)e.textContent='';});
   ['pCtr','pSum'].forEach(id=>{const e=$(id);if(e)e.hidden=true;});
+  $('deep').hidden=true;delete $('deep').dataset.uiReady;
   lastP=null;repaintPlanGroup=null;paintAppraisal();discRows=[];czCards=[];lastCs=[];czIdx=0;S.planMode=null;ICON_POOL={};
   stepOpen=null;vShow=Object.create(null);vSort=Object.create(null);vQuery=Object.create(null);pkView={sort:'net',dir:-1,filter:'all',open:false};if($('stepHead'))$('stepHead').textContent='';
 }
+function paintWhereSold(P,none){
+  const rowsIn=P.rows;
+  // v1.0.22: dónde se vende (parte del ISK de cada acción del plan)
+  {const DC={null:'#5cba86',rNull:'#3f8f63',fN:'#5cba86',bb:'#7fc4b8',disc:'#9c9a92',jOrd:'#d97757',fJ:'#d97757',jInst:'#e0a84f',fJI:'#e0a84f',rJita:'#b5583a'};
+   const sums={};rowsIn.forEach(r=>{if(r.best)sums[r.best]=(sums[r.best]||0)+Math.max(0,r.g[r.best]-r.prod);});
+   const ks=Object.keys(sums).sort((a,b)=>sums[b]-sums[a]),tot=ks.reduce((a,k)=>a+sums[k],0),box=$('ovDest');box.textContent='';
+   $('ovDestW').hidden=none||!(tot>0);
+   if(tot>0){const bar=el('div','ov-bar'),lg=el('div','ov-leg');
+     ks.forEach(k=>{const v=sums[k],i=el('i');i.style.width=(v/tot*100)+'%';i.style.background=DC[k]||'#9c9a92';i.title=(PLAN_L[k]||k)+': '+fmt(v);bar.append(i);
+       const n=rowsIn.filter(r=>r.best===k).length,d=el('div'),sw=el('span','ov-sw');sw.style.background=DC[k]||'#9c9a92';
+       d.append(sw,el('b',null,v/tot>0&&v/tot<.005?'<1%':pct(v/tot)+'%'),el('small',null,(PLAN_L[k]||k)+' · '+n+(n===1?' item':' items')));lg.append(d);});
+     box.append(bar,lg);}}
+}
 function paintVerdict(P){
   const has=S.items.length>0;$('verdict').hidden=!has;$('ledger').hidden=!has;$('lCount').textContent=has?'· '+S.items.length+(S.items.length>1?' items':' item'):'';
+  const missing=S.items.filter(o=>o.qty>0&&!(o.jita&&(o.jita.topBuy!=null||o.jita.topSell!=null||o.jita.buy!=null||o.jita.sell!=null))).length;
+  $('missCount').hidden=!has||S.loading||missing===0;
+  $('missCount').textContent=missing+' sin precio';
+  if(has&&!$('deep').dataset.uiReady){
+    $('deep').hidden=false;$('deep').dataset.uiReady='1';
+    $('bDeep').setAttribute('aria-expanded','true');
+  }
   if(!has){clearViews();return;}
   const none=P.missing.length===P.rows.length,v=none?null:P.best;
   $('vIsk').textContent='';$('vIsk').append(document.createTextNode(v==null?'—':Math.round(v).toLocaleString('en-US')),el('span',null,'ISK'));
@@ -1254,8 +1273,18 @@ function paintVerdict(P){
    const ks=Object.keys(sums).sort((a,b)=>sums[b]-sums[a]);
    $('vWhat').dataset.k=$('resWhat').dataset.k=ks[0]||'';
    $('vWhat').textContent=none||!ks.length?'':W(ks[0])+(ks.length>1?' + '+(ks.length-1)+(ks.length>2?' más':' más'):'');}
-  {const fa=!P.mode&&P.rows.some(r=>r.fast);$('vTitle').textContent=P.mode?'Tu Plan: '+modeName(P.mode):fa?'La Mejor Opción':'La Mejor Ruta de Venta';if(fa&&$('vWhat').textContent)$('vWhat').textContent+=' · por rapidez';}
+  {const fa=!P.mode&&P.rows.some(r=>r.fast);
+    $('vTitle').textContent=P.mode?'TU RUTA DE VENTA':'LA MEJOR RUTA DE VENTA';
+    if(fa&&$('vWhat').textContent)$('vWhat').textContent+=' · por rapidez';
+    const route=$('vWhat').textContent.replace(/ · por rapidez$/,'');
+    $('vCap').textContent=none?'Estamos esperando los precios de Jita para calcular tu ruta.':
+      P.mode?'Elegiste '+modeName(P.mode)+'. Este plan te permite '+(route?route.toLowerCase():'vender tu lote')+
+        '. Aquí ves cuánto recibirías; más abajo encontrarás cada paso con sus items, destinos y precios.':
+      'Según el Plan Óptimo, '+(route?route.toLowerCase():'la combinación de rutas seleccionadas')+
+        ' es la alternativa recomendada para tu lote. Revisa cuánto recibirías y consulta las instrucciones paso a paso más abajo.';
+  }
   lastP=P;
+  paintWhereSold(P,none);
   if($('deep').hidden)return; // v1.0.8: el análisis (rutas, Qué Hacer, comparación) solo se pinta con la sección abierta
   // valor del lote en Jita con los 3 precios (como Janice): Buy · Split · Sell. Sin porcentajes engañosos.
   let vB=0,vS=0,ok3=true;P.rows.forEach(r=>{const a=r.o.jita;if(!a||a.buy==null||a.sell==null){ok3=false;return;}vB+=a.buy*r.q;vS+=a.sell*r.q;});
@@ -1423,16 +1452,6 @@ function paintVerdict(P){
   // Pie: solo los items sin precio (no pertenecen a ningún grupo)
   const miss=rowsIn.filter(r=>!r.best);
   if(miss.length){tableTarget=el('div','pl pl-totals');pl.append(tableTarget);prow('miss','Falta precio: '+miss.map(r=>r.o.name).join(', '),'No entran en el total.',null,null,null,null);}
-  // v1.0.22: dónde se vende (parte del ISK de cada acción del plan)
-  {const DC={null:'#5cba86',rNull:'#3f8f63',fN:'#5cba86',bb:'#7fc4b8',disc:'#9c9a92',jOrd:'#d97757',fJ:'#d97757',jInst:'#e0a84f',fJI:'#e0a84f',rJita:'#b5583a'};
-   const sums={};rowsIn.forEach(r=>{if(r.best)sums[r.best]=(sums[r.best]||0)+Math.max(0,r.g[r.best]-r.prod);});
-   const ks=Object.keys(sums).sort((a,b)=>sums[b]-sums[a]),tot=ks.reduce((a,k)=>a+sums[k],0),box=$('ovDest');box.textContent='';
-   $('ovDestW').hidden=none||!(tot>0);
-   if(tot>0){const bar=el('div','ov-bar'),lg=el('div','ov-leg');
-     ks.forEach(k=>{const v=sums[k],i=el('i');i.style.width=(v/tot*100)+'%';i.style.background=DC[k]||'#9c9a92';i.title=(PLAN_L[k]||k)+': '+fmt(v);bar.append(i);
-       const n=rowsIn.filter(r=>r.best===k).length,d=el('div'),sw=el('span','ov-sw');sw.style.background=DC[k]||'#9c9a92';
-       d.append(sw,el('b',null,v/tot>0&&v/tot<.005?'<1%':pct(v/tot)+'%'),el('small',null,(PLAN_L[k]||k)+' · '+n+(n===1?' item':' items')));lg.append(d);});
-     box.append(bar,lg);}}
   // ¿reprocesar? por item
   const reps=rowsIn.filter(r=>r.rep&&!r.rep.missing),rl=$('vRepList');rl.textContent='';$('vRep').hidden=!reps.length;
   {const ys=reps.filter(r=>r.rep.diff>0).length,a=$('vRepAns');
@@ -2162,7 +2181,8 @@ function refresh(){if(refQ)return;refQ=requestAnimationFrame(()=>{refQ=0;refresh
 // Valores crudos (mejor compra y venta más barata de Jita 4-4), sin los filtros del plan. Solo con items pegados.
 function paintAppraisal(){
   const box=$('appr');if(!box)return;box.textContent='';
-  const tb=o=>o.jita&&(o.jita.topBuy!=null?o.jita.topBuy:o.jita.buy),ts=o=>o.jita&&(o.jita.topSell!=null?o.jita.topSell:o.jita.sell);
+  // Tasación bruta: órdenes originales de Jita 4-4, sin tasas, broker ni envío.
+  const tb=o=>o.jita&&o.jita.topBuy,ts=o=>o.jita&&o.jita.topSell;
   const its=S.items.filter(o=>o.qty>0),priced=its.filter(o=>tb(o)!=null||ts(o)!=null);
   box.hidden=!its.length;box.parentNode.classList.toggle('no-appr',!its.length);if(!its.length)return;
   let vB=0,vS=0,vol=0,u=0;its.forEach(o=>{vol+=(o.m3u||0)*o.qty;u+=o.qty;});priced.forEach(o=>{vB+=(tb(o)||0)*o.qty;vS+=(ts(o)||0)*o.qty;});
@@ -2172,7 +2192,7 @@ function paintAppraisal(){
   const ok=priced.length>0,v2=Math.round(vol*100)/100;
   cell(colL,'Precios de','Jita 4-4');
   cell(colL,'Volumen',NF2.format(v2)+' m³',null,String(v2)); // 2 decimales, como Janice; clic copia el número
-  cell(colL,'Items',its.length+(its.length===1?' item · ':' items · ')+fmtQ(u)+' u.'+(priced.length<its.length?' ('+priced.length+' con precio)':''));
+  cell(colL,'Items',String(its.length));
   cell(colR,'Buy',ok?vB:'—','t-buy');cell(colR,'Split',ok?(vB+vS)/2:'—','t-split');cell(colR,'Sell',ok?vS:'—','t-sell');
   g.append(colL,colR);box.append(el('span','appr-tag','Tasación'),g);
 }
