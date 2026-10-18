@@ -21,6 +21,10 @@ Antes, revisa **Ajustes** (el engranaje del menú): tus skills, los taxes, el Bu
 Lo más exacto es copiar los % de *Broker's fee* y *Sales tax* que muestra la ventana de venta del juego.
 
 ### Funciones principales
+- **Navegación fija**: Ventas, Minería (módulo existente) e Industria Planetaria (espacio reservado; todavía sin cálculos PI).
+- **Tasación bruta**: muestra Buy/Split/Sell de las órdenes originales de Jita 4-4, sin deducciones; el listado identifica los ítems sin precio. La coincidencia exacta con Janice requiere contrastar una misma lista.
+- **Resumen de ruta**: desglose de ISK y destinos integrados en una sola tarjeta, con indicadores compactos de ítems y volumen.
+
 - **Elige un Plan**: muestra únicamente el plan seleccionado con un resumen claro de la diferencia de ISK. El botón «Cambia de Plan» abre las alternativas, incluido el Plan Óptimo, con orden y filtros.
 - **Pasos para Vender**: el plan en pasos numerados, en orden, con íconos, precios para copiar y datos de envío y contratos.
 - **Ruta invertible**: HY-RWO → Jita (vendes lo que tienes en Null) o Jita → HY-RWO (compras en Jita y vendes más caro en Null, con tu margen).
