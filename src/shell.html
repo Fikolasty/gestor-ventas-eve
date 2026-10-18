@@ -1531,6 +1531,27 @@ Contraband Freight = no</textarea><small>Una regla por línea: Nombre = tax tota
     </div>
     <div id="lots"></div>
   </details>
+  <section class="panel verdict" id="verdict" hidden aria-live="polite">
+    <!-- v1.0.22: resumen del plan (overview): total, a dónde va el ISK, datos clave, tu lote en Jita y dónde se vende -->
+    <div class="ov">
+      <div class="ov-hd">
+        <div class="ov-ttl"><header class="mm-section-head"><h2 class="mm-title" id="vTitle">LA MEJOR RUTA DE VENTA</h2><p class="mm-section-sub">REVISA TU RUTA Y CUÁNTO RECIBIRÍAS</p></header>
+          <p class="v-cap" id="vCap">Aquí verás qué ruta elegiste y cómo se distribuye tu venta.</p><span class="v-what" id="vWhat" hidden></span></div>
+        <div class="mm-net"><span class="mm-net-label">RECIBIRÍAS NETO</span><p class="v-isk num" id="vIsk"></p></div>
+      </div>
+      <div class="ov-card ov-flow"><h4>DE DÓNDE SALE TU ISK</h4><div id="ovFlow"></div><div class="mm-dest-inline" id="ovDestW"><h4>DÓNDE SE VENDE</h4><div id="ovDest"></div></div></div>
+      <dl class="ov-kpi mm-compact-kpi">
+        <div><dt>ITEMS</dt><dd id="vsN">—</dd><small id="vsNs"></small></div>
+        <div><dt>VOLUMEN TOTAL</dt><dd id="vsV">—</dd><small id="vsVs"></small></div>
+      </dl>
+      <div class="mm-legacy" hidden aria-hidden="true">
+        <div id="ovShip"><span id="aCourT"></span><span id="aCourier"></span><span id="aCourS"></span></div>
+        <div><span id="vsCn"></span><span id="vsC"></span><label id="vsRelW" hidden><input type="checkbox" id="cRelistOn"> Relists <span id="vsRel"></span></label></div>
+        <div id="ovMktW"><div id="ovMkt"></div></div>
+      </div>
+    </div>
+
+</section>
   <!-- 1. Resultado simple -->
   <section class="panel summary res" id="pSum" hidden>
     <header class="mm-section-head"><h2 class="mm-title">RESULTADO</h2><p class="mm-section-sub">COMPARA TUS PLANES Y ELIGE CÓMO PREFIERES VENDER</p></header>
@@ -1555,28 +1576,8 @@ Contraband Freight = no</textarea><small>Una regla por línea: Nombre = tax tota
   </section>
   <!-- 2. El análisis (oculto hasta que lo pides) -->
   <div id="deep" class="deep" hidden>
-  <section class="panel verdict" id="verdict" hidden aria-live="polite">
-    <!-- v1.0.22: resumen del plan (overview): total, a dónde va el ISK, datos clave, tu lote en Jita y dónde se vende -->
-    <div class="ov">
-      <div class="ov-hd">
-        <div class="ov-ttl"><h2><span class="ic i-target" aria-hidden="true"></span><span id="vTitle">La Mejor Ruta de Venta</span><span class="v-what" id="vWhat"></span></h2>
-          <p class="v-cap" id="vCap">ISK estimados que recibes tras taxes, Broker y envío (según tu configuración)</p></div>
-        <p class="v-isk num" id="vIsk"></p>
-      </div>
-      <div class="ov-card ov-flow"><h4>De Dónde Sale tu ISK</h4><div id="ovFlow"></div></div>
-      <dl class="ov-kpi">
-        <div><dt>Items</dt><dd id="vsN">—</dd><small id="vsNs"></small></div>
-        <div><dt>Volumen Total</dt><dd id="vsV">—</dd><small id="vsVs"></small></div>
-        <div id="ovShip"><dt id="aCourT">Envío a Jita</dt><dd id="aCourier">—</dd><small id="aCourS"></small></div>
-        <div class="tx"><dt>Taxes y Broker</dt><dd id="vsCn" class="neg-soft">—</dd><small id="vsC"></small><label class="rl" id="vsRelW" hidden><input type="checkbox" id="cRelistOn"> Relists: <span id="vsRel">—</span><small>Se cobra si bajas el precio (~2 semanas). Márcalo para contarlo.</small></label></div>
-      </dl>
-      <div class="ov-row">
-        <div class="ov-card" id="ovMktW"><h4>Tu Lote en Jita</h4><div id="ovMkt"></div></div>
-        <div class="ov-card" id="ovDestW"><h4>Dónde se Vende</h4><div id="ovDest"></div></div>
-      </div>
-    </div>
-
-    <h3 class="sub-h v-h"><span class="ic i-list" aria-hidden="true"></span>Pasos para Vender</h3>
+  <section class="panel verdict-detail" id="stepsPanel">
+    <header class="mm-section-head"><h3 class="mm-title">PASOS PARA VENDER</h3><p class="mm-section-sub">HAZ CLIC EN CUALQUIER PASO PARA VER MÁS</p></header>
     <div id="stepHead"></div>
     <div class="pl-groups stp-list" id="vPlan"></div>
 
