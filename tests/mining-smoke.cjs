@@ -24,6 +24,16 @@ for(const value of ["MOON_ORDER=['Exceptional (R64)','Rare (R32)'","freeSP:10000
  assert(source.includes(value),'falta requisito '+value);
 }
 assert(sales.includes('function computePlan()'),'se ha perdido el motor del gestor');
+// v1.0.81: no permitir la vuelta del popup ni ocultar los paneles principales.
+assert(html.includes('id="mmTabs"')&&html.includes('id="mmTabMining"')&&html.includes('id="mmTabPi"'),'faltan pestañas permanentes');
+assert(html.includes('id="stepsPanel"')&&html.includes('id="verdict"'),'faltan las secciones reales');
+assert(!html.includes('id="startNote"'),'debe quitarse el aviso antiguo');
+assert(html.includes('id="missCount"'),'faltan los items sin precio');
+assert(sales.includes("cell(colL,'Items',String(its.length))"),'Tasacion debe mostrar solo numero de items');
+assert(sales.includes('paintWhereSold(P,none)'),'faltan destinos del ISK en la vista principal');
+assert(sales.includes('function selectAppModule(name)'),'no se integraron pestañas');
+assert(html.includes('PI · Espacio reservado'),'PI no debe activar calculos falsos');
+
 // v1.0.80: solo el plan seleccionado en vista cerrada; se cambia desde una acción única.
 assert(sales.includes('box.append(row(chosen,true))'),'debe mostrarse el plan elegido');
 assert(sales.includes("others.hidden=!pkView.open"),'las alternativas deben estar plegadas');
