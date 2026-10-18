@@ -1,5 +1,16 @@
 # Changelog
 
+## 1.0.81 — [ChatGPT] Diseño final del gestor y navegación modular
+*2026-10-18*
+
+- Sustituye «Antes de empezar» por navegación persistente Ventas / Minería / Industria Planetaria. Minería utiliza el módulo existente; PI es solo una sección reservada.
+- Moderniza encabezados (mayúsculas, acento arcilla y subtítulos útiles) en ruta, resultado, pasos y extras.
+- Muestra el resumen de la ruta antes del resultado; «De dónde sale tu ISK» y «Dónde se vende» comparten tarjeta de ancho completo. Ítems y Volumen quedan compactos debajo.
+- Elimina del resumen principal los paneles redundantes de envío, impuestos y relists sin cambiar el motor ni sus opciones guardadas.
+- Tasación muestra únicamente el número de ítems; Buy/Split/Sell se calculan con los precios brutos originales, sin deducciones. «N sin precio» se indica en el Listado de Items Registrados.
+- La metodología exacta de Janice no se declara verificada hasta contrastar sus datos con una lista y un instante comunes.
+
+
 ## 1.0.80 — [ChatGPT] Selector de planes v5 aprobado
 *2026-10-18*
 
