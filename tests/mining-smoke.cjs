@@ -24,6 +24,12 @@ for(const value of ["MOON_ORDER=['Exceptional (R64)','Rare (R32)'","freeSP:10000
  assert(source.includes(value),'falta requisito '+value);
 }
 assert(sales.includes('function computePlan()'),'se ha perdido el motor del gestor');
+// v1.0.80: solo el plan seleccionado en vista cerrada; se cambia desde una acción única.
+assert(sales.includes('box.append(row(chosen,true))'),'debe mostrarse el plan elegido');
+assert(sales.includes("others.hidden=!pkView.open"),'las alternativas deben estar plegadas');
+assert(sales.includes("$('pkChange').addEventListener"),'falta Cambia de Plan');
+assert(sales.includes('El óptimo también se elige aquí'),'el óptimo debe estar en Cambia de Plan');
+assert(!sales.includes("back.dataset.m='auto'"),'no debe reaparecer Volver al óptimo');
 assert(sales.includes('/*__MINING__*/'),'falta montaje del módulo');
 assert(html.includes('id="mnRoot"')&&html.includes('data-panel="mining"'),'falta UI');
 

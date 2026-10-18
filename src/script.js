@@ -1973,80 +1973,99 @@ function pkShips(m,P){if(!SH())return false;if(m==='auto')return P.Vs>0;return !
 const PK_FILTERS=[['all','Todos'],['fast','Rápidos'],['noship','Sin envío'],['rep','Con reproceso']];
 const PK_COLS=[['name','Plan'],['speed','Rapidez'],['ship','Envío'],['net','Valor'],['net','Total'],['diff','vs Óptimo']];
 function paintPicker(P){
-  const box=$('pk'),bar=$('pkNote'),tools=$('pkTools');box.textContent='';bar.textContent='';tools.textContent='';
+  const box=$('pk'),bar=$('pkNote'),tools=$('pkTools'),others=$('pkOthers'),change=$('pkChange');
+  box.textContent='';bar.textContent='';tools.textContent='';others.textContent='';
   const opt=modeTotal(P,'auto').net,cur=P.mode||'auto';
-  // planes posibles con los Ajustes actuales (Buyback/Jugador apagados no salen; los que no aplican a ningún item tampoco)
   const all=MODES.filter(([m])=>!(m==='bb'&&!C.bb.on||m==='disc'&&!C.disc.on)&&(m==='auto'||P.rows.some(r=>r.g[m]!=null)))
-   .map(([m,l])=>({m,l,t:m==='auto'?{net:opt,n:P.rows.length}:modeTotal(P,m)}));
-  // v1.0.8: un plan idéntico al óptimo (mismo destino para cada item) no se repite
+    .map(([m,l])=>({m,l,t:m==='auto'?{net:opt,n:P.rows.length}:modeTotal(P,m)}));
   const same=all.filter(x=>x.m!=='auto'&&Math.round(x.t.net)===Math.round(opt)&&P.rows.every(r=>!r.auto||r.auto===x.m||r.g[x.m]==null)).map(x=>x.m);
-  const curShown=same.includes(cur)?'auto':cur;
-  const list=all.filter(x=>!same.includes(x.m));
+  // Mantener siempre visible el plan elegido, aunque su resultado sea idéntico al óptimo.
+  const list=all.filter(x=>x.m===cur||!same.includes(x.m));
+  const chosen=all.find(x=>x.m===cur)||all[0];
   const maxNet=Math.max(...list.map(x=>x.t.net),1);
   const sys=(C.ref.name||'Null').split(' - ')[0].trim()||'Null',env='Envías todo a Jita y ';
   const PK_EXP={auto:'Cada item va a donde más deja; si la diferencia es chica, prefiere vender rápido.',
     fN:'Llevas todo de Jita a '+sys+' y lo vendes con tu margen de importación.',
-    fJ:'Publicas todo en Jita con sell orders. Más ISK, se vende en días.',
+    fJ:'Publicas todo en Jita con sell orders. Se vende en días.',
     fJI:'Vendes todo en Jita a las buy orders. Cobras al instante.',
     null:'Sell orders en '+sys+' para todo. Sin envío, pero tarda días en venderse.',
-    jOrd:env+'publicas sell orders. Más ISK, se vende en días.',
+    jOrd:env+'publicas sell orders. Se vende en días.',
     jInst:env+'vendes a las buy orders. Cobras al instante.',
-    bb:'Un contrato Item Exchange al Buyback de la alianza. Rápido y simple, menos ISK.',
+    bb:'Un contrato Item Exchange al Buyback de la alianza. Rápido y simple.',
     rNull:'Reprocesas el ore o hielo y vendes los materiales en '+sys+'.',
     rJita:'Reprocesas y llevas los materiales a Jita para venderlos allí.',
-    disc:'Se lo vendes a otro jugador por Discord. Sin taxes, pero sin comprador garantizado.'};
-  // filtros: solo los que tienen al menos un plan (además del óptimo)
-  const pass={all:()=>true,fast:x=>PK_FAST.has(x.m),noship:x=>!pkShips(x.m,P),rep:x=>PK_REP.has(x.m)};
-  const fl=PK_FILTERS.filter(([f])=>f==='all'||(f!=='noship'||SH())&&list.some(x=>x.m!=='auto'&&pass[f](x)));
-  box.classList.toggle('pk-noship',!SH()); // sin envío: la columna Envío no aporta nada
-  if(!fl.some(([f])=>f===pkView.filter))pkView.filter='all';
-  if(fl.length>2&&pkView.open){const g=el('div','pk-flt');g.setAttribute('role','group');g.setAttribute('aria-label','Filtrar planes');
-    fl.forEach(([f,t])=>{const n=f==='all'?list.length-1:list.filter(x=>x.m!=='auto'&&pass[f](x)).length;
-      const b=el('button','pk-fb'+(pkView.filter===f?' on':''),t);b.type='button';b.dataset.pkf=f;b.setAttribute('aria-pressed',String(pkView.filter===f));b.append(el('small',null,String(n)));g.append(b);});
-    tools.append(g);}
-  // cabecera de columnas (clic = ordenar; el óptimo no se mueve)
+    disc:'Se lo vendes a otro jugador por Discord. Sin comprador garantizado.'};
+  // Resumen legible de un vistazo, colocado inmediatamente debajo de «Elige un Plan».
+  bar.hidden=false;
+  bar.append('Elegiste ',el('strong',null,chosen.l),'. ');
+  const delta=chosen.t.net-opt;
+  if(chosen.m==='auto'){
+    bar.append('Con esta combinación de rutas recibirías ',el('strong','pk-sum-value',fmt(opt)),
+      '. El plan prioriza vender más rápido cuando esperar no compensa la diferencia.');
+  }else if(Math.round(delta)===0){
+    bar.append('Este plan te ofrece el mismo valor estimado que el Plan Óptimo. ',PK_EXP[chosen.m]||'');
+  }else{
+    bar.append('Este plan te ofrece ',el('strong','pk-sum-delta '+(delta>0?'pos':'neg'),
+      (delta>0?'+':'−')+fmt(Math.abs(delta))),
+      ' en comparación con el Plan Óptimo. ');
+    if(delta>0&&(chosen.m==='jOrd'||chosen.m==='fJ'))
+      bar.append('A cambio, tendrías que esperar a que se completen las órdenes de venta en Jita.');
+    else bar.append(PK_EXP[chosen.m]||'Puedes consultar los detalles de esta ruta abajo.');
+  }
+  const cant=P.rows.filter(r=>r.cant);
+  if(chosen.m!=='auto'&&cant.length)bar.append(' ',cant.length===1?'Un item no admite esta ruta y mantiene su plan óptimo.':cant.length+' items no admiten esta ruta y mantienen su plan óptimo.');
   const hd=el('div','pk-hd');
   PK_COLS.forEach(([k,t],i)=>{const on=pkView.sort===k&&i!==3,b=el('button','pk-hc c'+i+(on?' on':''),t+(on?(pkView.dir>0?' ▲':' ▼'):''));
     b.type='button';if(i===3){b.disabled=true;b.tabIndex=-1;}else{b.dataset.pks=k;b.title='Ordenar por '+t.toLowerCase();}hd.append(b);});
+  box.classList.toggle('pk-noship',!SH());others.classList.toggle('pk-noship',!SH());
   box.append(hd);
-  const key={name:x=>x.l.toLowerCase(),speed:x=>pkSpeedRank(x.m,P),ship:x=>pkShips(x.m,P)?1:0,net:x=>x.t.net,diff:x=>x.t.net};
-  const rest=list.filter(x=>x.m!=='auto'&&pass[pkView.filter](x))
-    .sort((a,b)=>{const A=key[pkView.sort](a),B=key[pkView.sort](b);return (A<B?-1:A>B?1:0)*pkView.dir||b.t.net-a.t.net;});
-  const rows=[list.find(x=>x.m==='auto'),...rest].filter(Boolean);
-  // v1.0.51: cerrado, solo se ven el óptimo y el plan elegido; clic en el plan elegido despliega los demás
-  const moreN=list.filter(x=>x.m!=='auto'&&x.m!==curShown).length;
-  rows.forEach(({m,l,t})=>{
-    if(!pkView.open&&m!=='auto'&&m!==curShown)return;
-    const d=t.net-opt,on=m===curShown;
-    const b=el('button','pk-o'+(on?' on':'')+(m==='auto'?' best':''));b.type='button';b.dataset.m=m;b.setAttribute('role','radio');b.setAttribute('aria-checked',String(on));
-    const txt=el('span','pk-tx'),nm=el('span','pk-l',l);if(m==='auto')nm.append(el('em','pk-rec','Recomendado'));
-    if(on&&moreN>0){nm.append(el('em','pk-x',pkView.open?'Ocultar planes ▴':'+'+moreN+(moreN===1?' plan ▾':' planes ▾')));b.setAttribute('aria-expanded',String(pkView.open));}
-    const part=m!=='auto'&&t.n<P.rows.length?' '+t.n+' de '+P.rows.length+' items se venden así; los demás siguen el óptimo.':'';
+  function row({m,l,t},selected){
+    const d=t.net-opt;
+    const b=el(selected?'div':'button','pk-o'+(selected?' on':'')+(m==='auto'?' best':''));
+    if(!selected){b.type='button';b.dataset.m=m;b.setAttribute('aria-pressed','false');}
+    else b.setAttribute('aria-current','true');
+    const txt=el('span','pk-tx'),nm=el('span','pk-l',l);
+    if(m==='auto')nm.append(el('em','pk-rec','Recomendado'));
+    const part=m!=='auto'&&t.n<P.rows.length?' '+t.n+' de '+P.rows.length+' items siguen esta ruta; los demás siguen el óptimo.':'';
     txt.append(nm,el('small','pk-e',(PK_EXP[m]||'')+part));
     const sp=el('span','pk-sp',pkSpeed(m,P)),sh=el('span','pk-sh'+(pkShips(m,P)?' y':''),pkShips(m,P)?'Sí':'No');
     const barW=el('span','pk-bar'),bi=el('i');bi.style.width=Math.max(2,Math.min(100,t.net/maxNet*100))+'%';barW.append(bi);
-    const dd=m==='auto'?'Óptimo':Math.round(d)===0?'Igual':d>0?'+'+compactIsk(d)+' · más lento':'−'+compactIsk(-d);
-    b.append(el('span','pk-dot'),txt,sp,sh,barW,el('b','pk-v num',fmt(t.net)),el('small','pk-d '+(m==='auto'||Math.round(d)===0?'':d>0?'pos':'neg'),dd));
+    const diff=m==='auto'?'Óptimo':Math.round(d)===0?'Igual':(d>0?'+':'−')+compactIsk(Math.abs(d));
+    b.append(el('span','pk-dot'),txt,sp,sh,barW,el('b','pk-v num',fmt(t.net)),
+      el('small','pk-d '+(m==='auto'||Math.round(d)===0?'':d>0?'pos':'neg'),diff));
     if(part)b.title=part.trim();
-    box.append(b);});
-  if(pkView.open&&rows.length===1&&pkView.filter!=='all')box.append(el('p','pk-empty','Ningún otro plan cumple este filtro.'));
-  if(P.mode){const d=opt-P.best,cant=P.rows.filter(r=>r.cant);
-    bar.hidden=false;
-    bar.append(el('b',null,'Elegiste: '+modeName(P.mode)+'. '),document.createTextNode(Math.round(d)>0?'Deja '+fmt(d)+' menos que el plan óptimo.':Math.round(d)<0?'Deja '+fmt(-d)+' más que el plan óptimo, pero se vende más lento (el óptimo prefiere vender rápido cuando la diferencia es pequeña).':'Deja lo mismo que el plan óptimo.'));
-    if(cant.length)bar.append(document.createTextNode(' '+(cant.length===1?'1 item no se puede vender así y sigue':cant.length+' items no se pueden vender así y siguen')+' el óptimo: '+cant.slice(0,4).map(r=>r.o.name).join(', ')+(cant.length>4?' y '+(cant.length-4)+' más':'')+'.'));
-    const back=el('button','ghost pk-back','Volver al óptimo');back.type='button';back.dataset.m='auto';bar.append(back);
-  }else bar.hidden=true;
+    return b;
+  }
+  box.append(row(chosen,true));
+  const pass={all:()=>true,fast:x=>PK_FAST.has(x.m),noship:x=>!pkShips(x.m,P),rep:x=>PK_REP.has(x.m)};
+  const available=list.filter(x=>x.m!==chosen.m);
+  const fl=PK_FILTERS.filter(([f])=>f==='all'||(f!=='noship'||SH())&&available.some(x=>pass[f](x)));
+  if(!fl.some(([f])=>f===pkView.filter))pkView.filter='all';
+  change.hidden=available.length===0;
+  change.textContent='Cambia de Plan';
+  change.setAttribute('aria-expanded',String(pkView.open));
+  others.hidden=!pkView.open;
+  if(!pkView.open)return;
+  if(fl.length>2){const group=el('div','pk-flt');group.setAttribute('role','group');group.setAttribute('aria-label','Filtrar planes');
+    fl.forEach(([f,t])=>{const n=f==='all'?available.length:available.filter(x=>pass[f](x)).length;
+      const b=el('button','pk-fb'+(pkView.filter===f?' on':''),t);b.type='button';b.dataset.pkf=f;b.setAttribute('aria-pressed',String(pkView.filter===f));b.append(el('small',null,String(n)));group.append(b);});
+    tools.append(group);}
+  const key={name:x=>x.l.toLowerCase(),speed:x=>pkSpeedRank(x.m,P),ship:x=>pkShips(x.m,P)?1:0,net:x=>x.t.net,diff:x=>x.t.net};
+  const rest=available.filter(x=>pass[pkView.filter](x))
+    .sort((a,b)=>{const A=key[pkView.sort](a),B=key[pkView.sort](b);return (A<B?-1:A>B?1:0)*pkView.dir||b.t.net-a.t.net;});
+  // El óptimo también se elige aquí: ya no necesita un botón «Volver al óptimo».
+  rest.forEach(x=>others.append(row(x,false)));
+  if(!rest.length)others.append(el('p','pk-empty','Ningún otro plan cumple este filtro.'));
 }
-// orden y filtro: solo repintan el selector (no recalculan el plan)
+// Orden y filtro: solo repintan el selector, sin recalcular ISK.
 $('pkTools').addEventListener('click',e=>{const b=e.target.closest('[data-pkf]');if(!b||!lastP)return;pkView.filter=b.dataset.pkf;paintPicker(lastP);});
 $('pk').addEventListener('click',e=>{const b=e.target.closest('[data-pks]');if(!b||!lastP)return;e.stopPropagation();const k=b.dataset.pks;
   pkView=pkView.sort===k?{...pkView,dir:-pkView.dir}:{...pkView,sort:k,dir:k==='name'||k==='speed'||k==='ship'?1:-1};paintPicker(lastP);});
-$('pSum').addEventListener('click',e=>{const b=e.target.closest('[data-m]');if(!b)return;const m=b.dataset.m==='auto'?null:b.dataset.m;
-  if(m===S.planMode){ // v1.0.51: clic en el plan elegido = mostrar u ocultar los demás planes
-    if(b.classList.contains('pk-o')&&lastP){pkView.open=!pkView.open;if(pkView.open)focusOnly('plans');paintPicker(lastP);
-      if(pkView.open){fadeIn([...$('pk').querySelectorAll('.pk-o:not(.on):not(.best)')]);document.querySelector('#pSum .pk-w').scrollIntoView({behavior:'smooth',block:'start'});}}
-    return;}
-  S.planMode=m;pkView.open=false;czIdx=0;refreshNow();});
+$('pkChange').addEventListener('click',()=>{if(!lastP)return;pkView.open=!pkView.open;
+  if(pkView.open)focusOnly('plans');paintPicker(lastP);
+  if(pkView.open)fadeIn([...$('pkOthers').querySelectorAll('.pk-o')]);});
+$('pkOthers').addEventListener('click',e=>{const b=e.target.closest('[data-m]');if(!b)return;
+  S.planMode=b.dataset.m==='auto'?null:b.dataset.m;pkView.open=false;pkView.filter='all';czIdx=0;refreshNow();});
 // v1.0.6 (modo Jita → HY-RWO): si compras el lote en Jita al Sell, lo llevas a HY-RWO y lo vendes a Jita Sell + margen
 // (neto, ya con taxes): ganancia = venta neta − compra − envío. Todo el lote viaja (un solo cálculo de courier).
 function paintFlipBuy(P){

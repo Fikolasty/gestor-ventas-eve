@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.0.80 — [ChatGPT] Selector de planes v5 aprobado
+*2026-10-18*
+
+- Solo muestra la fila del plan seleccionado. El Plan Óptimo pasa a estar disponible en «Cambia de Plan», alineado a la derecha; desaparece «Volver al óptimo».
+- El resumen personalizado se ve justo debajo de «Elige un Plan», con una diferencia explícita como +15,195,568 ISK y texto sobre el tiempo o la ruta.
+- Conserva filtros, ordenación, ajustes, precios y motor de cálculos. Actualiza el HTML descargable, sin modificar PI ni Minería.
+
+
 Cambios por versión del Gestor de Ventas. La más nueva arriba. El detalle técnico completo está en `docs/SPEC.txt`.
 
 ## 1.0.79 — [ChatGPT] Fichas ⓘ por Type ID y coherencia de drones T1/T2

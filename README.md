@@ -21,7 +21,7 @@ Antes, revisa **Ajustes** (el engranaje del menú): tus skills, los taxes, el Bu
 Lo más exacto es copiar los % de *Broker's fee* y *Sales tax* que muestra la ventana de venta del juego.
 
 ### Funciones principales
-- **Elige un Plan**: el óptimo arriba y los demás en filas con rapidez, envío, valor y diferencia; se pueden ordenar y filtrar.
+- **Elige un Plan**: muestra únicamente el plan seleccionado con un resumen claro de la diferencia de ISK. El botón «Cambia de Plan» abre las alternativas, incluido el Plan Óptimo, con orden y filtros.
 - **Pasos para Vender**: el plan en pasos numerados, en orden, con íconos, precios para copiar y datos de envío y contratos.
 - **Ruta invertible**: HY-RWO → Jita (vendes lo que tienes en Null) o Jita → HY-RWO (compras en Jita y vendes más caro en Null, con tu margen).
 - **Switch de envío**: con envío de SIGMA Freight o con los items ya en el destino.

@@ -1349,6 +1349,23 @@ body.in-jita #pCtr,body.in-jita #pExtra,body.in-jita #vRep,body.in-jita .if-ore{
 html.light .pl-row.min .p .pr-inline-editor{background:rgba(184,123,45,.08);border-color:rgba(150,101,32,.36)}
 html.light .pl-row.min .p .pr-inline-input{background:#fff;color:#262626}
 @media(max-width:640px){.pl-row.min .p .pr-inline-editor{justify-content:flex-start}.pl-row.min .p .pr-inline-input{width:92px}}
+
+/* v1.0.80: selector v5 aprobado: un plan, resumen prominente y un único cambio a la derecha. */
+.pk-summary{display:block;margin:8px 0 18px;color:var(--txt);font:400 clamp(1.08rem,1.8vw,1.35rem)/1.5 var(--f-ui);letter-spacing:-.012em}
+.pk-summary strong{font-weight:700;color:var(--txt)}
+.pk-summary .pk-sum-delta.pos{color:var(--gain)!important;white-space:nowrap}
+.pk-summary .pk-sum-delta.neg{color:var(--loss)!important;white-space:nowrap}
+.pk-summary .pk-sum-value{color:var(--gain)!important}
+.pk-actions{display:flex;justify-content:flex-end;margin:10px 0}
+.pk-actions .pk-change{border:1px solid rgba(217,119,87,.45);border-radius:999px;background:#282321;color:#f0e4dd;padding:8px 16px;font:600 .87rem var(--f-ui);cursor:pointer;white-space:nowrap}
+.pk-actions .pk-change:hover,.pk-actions .pk-change[aria-expanded=true]{border-color:#d97757;background:rgba(217,119,87,.18)}
+.pk-w .pk-tools{margin:4px 0 8px;justify-content:flex-start}
+#pkOthers[hidden]{display:none!important}
+#pkOthers{margin-top:6px}
+#pk>.pk-o{cursor:default}
+#pk>.pk-o:hover{border-color:rgba(217,119,87,.55)!important}
+#pk>.pk-o.best{margin-bottom:0}
+@media(max-width:760px){.pk-summary{font-size:1.07rem;line-height:1.53}.pk-actions .pk-change{min-height:40px}}
 </style>
 <script>/* v1.0.16: aplica el tema guardado antes de pintar (sin parpadeo). Por defecto: Dark. */try{var g=JSON.parse(localStorage.getItem('gestorVentas.ajustes.v1')||'null');if(g&&g.ui){if(g.ui.light)document.documentElement.classList.add('light');}}catch(e){}</script>
 </head>
@@ -1521,10 +1538,12 @@ Contraband Freight = no</textarea><small>Una regla por línea: Nombre = tax tota
         <span class="res-gs" id="resGainS"></span></div>
     </div>
     <div class="fb2" id="flipBuy" hidden></div>
-    <div class="pk-w"><h4 class="pk-t">Elige un Plan <small>El óptimo viene marcado. Si eliges otro, todo se ajusta a ese plan.</small></h4>
+    <div class="pk-w"><h4 class="pk-t">Elige un Plan</h4>
+      <p class="pk-summary" id="pkNote" aria-live="polite"></p>
+      <div class="pk" id="pk" role="group" aria-label="Plan seleccionado"></div>
+      <div class="pk-actions"><button type="button" class="pk-change" id="pkChange" aria-controls="pkOthers" aria-expanded="false">Cambia de Plan</button></div>
       <div class="pk-tools" id="pkTools"></div>
-      <div class="pk" id="pk" role="radiogroup" aria-label="Plan de venta"></div>
-      <p class="pk-note" id="pkNote" hidden></p></div>
+      <div class="pk" id="pkOthers" role="group" aria-label="Otros planes" hidden></div></div>
     <!-- v1.0.50: justo debajo de los planes. Al abrir el desglose, los planes se pliegan y el desglose pasa a ser lo principal -->
     <button type="button" class="more-btn" id="bDeep" aria-expanded="false" aria-controls="deep"><span>Revisa cada destino, sus precios y el desglose de los costes.</span><b>Ver el desglose ▾</b></button>
   </section>
