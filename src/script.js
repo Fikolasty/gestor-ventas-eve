@@ -1185,7 +1185,7 @@ function paintLot(r){
   const worst=eligible.length>1?eligible.reduce((a,x)=>x.v<a.v?x:a).k:null;
   OPTS.forEach(([k])=>{
     const p=u.opt[k];if(k==='null')p.lab.textContent=nullLabel(o.name);if(k==='jOrd')p.lab.textContent=jitaLabel(o.name);
-    const hide=FLIPK[k]?!S.flip:(S.flip||((k==='rNull'||k==='rJita')&&!isOre)||(k==='bb'&&!C.bb.on)||(k==='disc'&&!C.disc.on));p.r.hidden=hide;if(hide)return;
+    const hide=(FLIPK[k]?!S.flip:(S.flip||((k==='rNull'||k==='rJita')&&!isOre)||(k==='bb'&&!C.bb.on)||(k==='disc'&&!C.disc.on)))||!Number.isFinite(r.net[k]);p.r.hidden=hide;if(hide)return;
     const v=r.net[k];
     p.r.className='opt'+(k===r.best?' best':'')+(k===worst&&k!==r.best?' worst':'')+(SHIPS[k]?' ship':'')+(v==null?' na':'');
     p.fill.style.width=v==null?'0':Math.max(0,v)/mx*100+'%';
@@ -2439,12 +2439,12 @@ $('cAssignee').addEventListener('input',()=>refresh());
 // v1.0.55: interruptor Courier (solo con la ruta Jita → HY-RWO). On: los items están en Jita y los llevas a HY-RWO
 // con SIGMA Freight (se cuenta el courier). Off: los trajiste a Jita para venderlos allí, sin ningún courier.
 // Con la ruta HY-RWO → Jita el courier siempre se cuenta y el interruptor no se muestra.
-function syncShipSwitch(){$('shipTxt').textContent=S.lang==='en'?(SH()?'Ship':'Do not ship'):(SH()?'Enviar':'No enviar');$('shipLab').hidden=!S.flip;}
+function syncShipSwitch(){$('shipTxt').textContent=S.lang==='en'?(SH()?'Ship':'Do not ship'):(SH()?'Enviar':'No enviar');$('shipLab').hidden=!S.flip;$('rtM').hidden=!S.flip;$('shipLab').title=S.lang==='en'?'On: include transport to '+nullSystem()+'. Off: sell in Jita without shipping.':'Activado: incluir transporte a '+nullSystem()+'. Desactivado: vender en Jita sin envío.';}
 function setFlip(on){
   S.flip=!!on;S.planMode=null;czIdx=0;C.shipOn=true;$('shipOn').checked=true; // cambiar de ruta vuelve a contar el courier
   SHIPS=S.flip?{fN:1}:{jOrd:1,jInst:1,rJita:1};
   $('bFlip').setAttribute('aria-pressed',String(S.flip));syncNullRouteLabels();
-  $('rtM').hidden=!S.flip;syncShipSwitch();document.body.classList.toggle('is-flip',S.flip);
+  syncShipSwitch();document.body.classList.toggle('is-flip',S.flip);
   if(S.items.length)refreshNow();
 }
 $('bFlip').addEventListener('click',()=>setFlip(!S.flip));
@@ -2476,7 +2476,7 @@ $('themeLight').addEventListener('change',e=>{document.documentElement.classList
   knob.setAttribute('aria-hidden','true');button.append(knob,left,right);
   const refreshRoute=()=>{
     right.textContent=nullSystem();
-    button.setAttribute('aria-label',S.flip?'Jita a '+nullSystem()+'. Cambiar dirección.':nullSystem()+' a Jita. Cambiar dirección.');
+    const label=S.flip?(S.lang==='en'?'Jita to ':'Jita hacia ')+nullSystem():(S.lang==='en'?'Sell from ':'Vender desde ')+nullSystem()+(S.lang==='en'?' toward Jita':' hacia Jita');button.setAttribute('aria-label',label+'. '+(S.lang==='en'?'Switch direction.':'Cambiar dirección.'));button.title=label;
   };
   button.addEventListener('click',refreshRoute);
   document.getElementById('nullMarketMode')?.addEventListener('change',refreshRoute);
