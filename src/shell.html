@@ -1594,6 +1594,16 @@ html.light #verdict .v-plan-name{color:#ad4b27}
 #vRepList .rep-item-icon{width:28px;height:28px;object-fit:contain;flex:none;border-radius:5px}
 #vRepList .rep-item-info>small{display:block;margin-top:3px}
 
+
+/* Reprocessing: number selector followed by status; prominent name with item icon. */
+#vRep .rep-tabs{display:flex;align-items:center;flex-wrap:wrap;gap:8px}
+#vRep .rep-tabs #vRepAns{display:inline-flex;align-items:center;margin:0 0 0 6px;white-space:nowrap}
+#vRep .v-h:not(:has(#vRepAns)){margin-bottom:8px}
+#vRepList .rep-item-info .rep-item-head{display:flex;align-items:center;gap:12px;min-height:36px}
+#vRepList .rep-item-info .rep-item-name{font-size:1.2rem!important;line-height:1.3;font-weight:800!important;letter-spacing:.005em;color:var(--txt)}
+#vRepList .rep-item-info img.rep-item-icon{display:block!important;width:32px!important;height:32px!important;flex:0 0 32px;object-fit:contain;border-radius:5px;visibility:visible}
+#vRepList .rep-item-info>small{margin-top:5px}
+
 </style>
 <script>/* v1.0.16: aplica el tema guardado antes de pintar (sin parpadeo). Por defecto: Dark. */try{var g=JSON.parse(localStorage.getItem('gestorVentas.ajustes.v1')||'null');if(g&&g.ui){if(g.ui.light)document.documentElement.classList.add('light');}}catch(e){}</script>
 </head>
