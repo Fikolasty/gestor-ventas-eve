@@ -1877,6 +1877,12 @@ select{appearance:none;-webkit-appearance:none;padding-right:30px!important;back
 #settings .st-tools .st-tool-reset:hover{background:rgba(148,69,42,.2);border-color:rgba(218,146,111,.55);color:#f2bc9f}
 #settings .st-tool-reset-icon{font-size:17px;line-height:1}
 @media(max-width:440px){#settings .st-tools{justify-content:center;gap:8px}#settings .st-tools .st-tool-btn{padding:7px 9px;font-size:.78rem}}
+
+/* Minimal signed-in character dropdown */
+#mmTabs .eve-identity-menu{width:180px;max-width:calc(100vw - 36px);padding:5px;border-radius:9px;top:calc(100% + 5px);background:#211e1d}
+#mmTabs .eve-identity-menu #eveLogout{margin:0;width:100%;min-height:32px;padding:6px 10px;text-align:center;font-size:.77rem;font-weight:600;line-height:1.2;border-radius:6px;background:transparent;border:0}
+#mmTabs .eve-identity-menu #eveLogout:hover{background:rgba(210,135,103,.12);color:#eeb399}
+#mmTabs .eve-identity-menu .eve-login-status[hidden]{display:none!important}
 /* ===== tema claro (generado desde el oscuro por light.py) ===== */
 html.light{--void:#e4e3dd;--hull:#e2e0da;--hull2:#e0ded8;--line:rgba(31,30,29,0.114);--line2:rgba(31,30,29,0.125);--txt:#1c1c1a;--mut:#54524d;--dim:#6c6a64;--ion:#413f3c;--blue:#a39d8b;--clay:#c96442;--thrust:#a67526;--gain:#418b62;--loss:#a92c23}
 html.light body::after{background:repeating-linear-gradient(180deg,rgba(31,30,29,0.011) 0 1px,transparent 1px 3px),
@@ -2367,6 +2373,8 @@ html.light #settings .st-tools-group{border:1px solid rgba(220,210,197,0.188);ba
 html.light #settings .st-tools .st-tool-btn:hover{background:rgba(220,210,197,0.112)}
 html.light #settings .st-tools .st-tool-reset{border-color:rgba(218,146,111,0.375);color:#9d512f;background:rgba(148,69,42,0.094)}
 html.light #settings .st-tools .st-tool-reset:hover{background:rgba(148,69,42,0.25);border-color:rgba(218,146,111,0.688);color:#ac5120}
+html.light #mmTabs .eve-identity-menu{background:#e6e4df}
+html.light #mmTabs .eve-identity-menu #eveLogout:hover{background:rgba(210,135,103,0.15);color:#a84d24}
 /* ajustes a mano del tema claro */
 html.light body{background:#e6e3da;color:#1f1e1d}
 html.light body::before{opacity:.12;filter:grayscale(.35) brightness(1.1)}
@@ -3101,7 +3109,7 @@ html.light #mining .mn-fit-fallback{border-color:rgba(40,100,150,.22);background
   </div>
   <nav class="mm-modnav" id="mmTabs" role="tablist" aria-label="Secciones de Market Moves+">
     <button type="button" id="navHome" class="mm-home" title="HOME" aria-label="Volver al inicio"><span class="ic i-home" aria-hidden="true"></span></button>
-    <div id="eveIdentity" class="eve-identity"><button type="button" id="eveIdentityButton" class="eve-identity-button" aria-expanded="false" aria-controls="eveIdentityMenu"><img id="evePortrait" alt="" hidden><span id="evePilotName">Conectar EVE</span><span class="eve-identity-arrow" aria-hidden="true" hidden></span></button><div id="eveIdentityMenu" class="eve-identity-menu" hidden><p id="eveLoginStatus" role="status">Personaje conectado mediante EVE Online.</p><button type="button" id="eveSync" hidden>Sincronizar skills</button><button type="button" id="eveLogout" hidden>Desconectar</button></div></div>
+    <div id="eveIdentity" class="eve-identity"><button type="button" id="eveIdentityButton" class="eve-identity-button" aria-expanded="false" aria-controls="eveIdentityMenu"><img id="evePortrait" alt="" hidden><span id="evePilotName">Conectar EVE</span><span class="eve-identity-arrow" aria-hidden="true" hidden></span></button><div id="eveIdentityMenu" class="eve-identity-menu" hidden><button type="button" id="eveLogout" hidden>Desconectar</button><span id="eveLoginStatus" role="status" class="eve-login-status" hidden></span></div></div>
     <div class="mm-modgroup" role="presentation">
     <button type="button" class="mm-mod on" data-mm-module="ventas" role="tab" aria-controls="salesBody" aria-selected="true" id="mmTabVentas">Ventas</button>
     <button type="button" class="mm-mod" data-mm-module="mining" role="tab" aria-controls="mining" aria-selected="false" id="mmTabMining">Minería</button>
@@ -7544,11 +7552,11 @@ stRestore();syncDeps();brokerNote();buildOreSelect();readBB();syncLots();refresh
   const EVE_CLIENT_ID='114bbd2659384151ac3b0096f183dd3b';
   const scope='esi-skills.read_skills.v1';
   let session=null;
-  const status=msg=>$e('eveLoginStatus').textContent=msg;
+  const status=msg=>{const e=$e('eveLoginStatus');e.textContent=msg;if(/^Error|^No se pudo|^No se pudieron|^Unable|^Could not/i.test(msg)){console.warn('EVE SSO:',msg);alert(msg);}};
   const b64=a=>btoa(String.fromCharCode(...new Uint8Array(a))).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');
   const rand=n=>b64(crypto.getRandomValues(new Uint8Array(n)));
   async function challenge(v){return b64(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(v)));}
-  const refreshUI=()=>{const on=!!session;$e('evePilotName').textContent=on?session.name:'Conectar EVE';$e('eveSync').hidden=!on;$e('eveLogout').hidden=!on;$e('eveIdentityButton').setAttribute('aria-label',on?'Opciones del personaje':'Iniciar sesión con EVE Online');
+  const refreshUI=()=>{const on=!!session;$e('evePilotName').textContent=on?session.name:'Conectar EVE';$e('eveLogout').hidden=!on;$e('eveIdentityButton').setAttribute('aria-label',on?'Opciones del personaje':'Iniciar sesión con EVE Online');
     $e('evePortrait').hidden=!on;if(on)$e('evePortrait').src='https://images.evetech.net/characters/'+session.id+'/portrait?size=64';else $e('evePortrait').removeAttribute('src');};
   button.addEventListener('click',()=>{if(!session){startLogin();return;}menu.hidden=!menu.hidden;button.setAttribute('aria-expanded',String(!menu.hidden));});
   document.addEventListener('click',e=>{if(!e.target.closest('#eveIdentity')){menu.hidden=true;button.setAttribute('aria-expanded','false');}});
@@ -7571,12 +7579,12 @@ stRestore();syncDeps();brokerNote();buildOreSelect();readBB();syncLots();refresh
       const ids=await idsResp.json(),resolved=new Map((ids.inventory_types||[]).map(x=>[x.name,x.id]));
       let count=0;const mapping=[['Accounting','skAcc'],['Broker Relations','skBR'],['Advanced Broker Relations','cAbr'],['Reprocessing','skRep'],['Reprocessing Efficiency','skRepE']];
       mapping.forEach(([name,id])=>{const sid=resolved.get(name);if(sid!=null&&saveSkill(id,skills.get(sid)??0))count++;});
-      status(count+' skills sincronizadas. Los impuestos se recalculan con los ajustes actuales; las tarifas privadas siguen siendo manuales.');
+      // Automatic synchronization: keep status available to accessibility tools, not visible in the menu.
+      status(count+' skills sincronizadas.');
       if(typeof refresh==='function')refresh();
     }catch(err){status('No se pudieron sincronizar las skills: '+err.message);}
   }
-  $e('eveSync').addEventListener('click',sync);
-  $e('eveLogout').addEventListener('click',()=>{session=null;refreshUI();status('Desconectado. Se conservan tus ajustes manuales.');});
+  $e('eveLogout').addEventListener('click',()=>{session=null;menu.hidden=true;button.setAttribute('aria-expanded','false');refreshUI();status('Desconectado. Se conservan tus ajustes manuales.');});
   (async()=>{const u=new URL(location.href),code=u.searchParams.get('code'),state=u.searchParams.get('state');
     if(!code&&!u.searchParams.has('error'))return;
     u.searchParams.delete('code');u.searchParams.delete('state');u.searchParams.delete('error');u.searchParams.delete('error_description');history.replaceState(null,'',u.pathname+u.search+u.hash);
@@ -7609,7 +7617,7 @@ stRestore();syncDeps();brokerNote();buildOreSelect();readBB();syncLots();refresh
       if(!scopeOK)throw Error('EVE no concedió el permiso de lectura de skills.');
       const id=Number(String(pilot.sub||'').match(/^CHARACTER:EVE:(\d+)$/)?.[1]),name=pilot.name;
       if(!Number.isSafeInteger(id)||!name)throw Error('Identidad de personaje no verificada.');
-      session={id,name,token:tokens.access_token,expires:Date.now()+(tokens.expires_in||1200)*1000-30000};refreshUI();status('Sesión autorizada para '+name+'. Sincroniza las skills cuando quieras.');await sync();
+      session={id,name,token:tokens.access_token,expires:Date.now()+(tokens.expires_in||1200)*1000-30000};refreshUI();menu.hidden=true;button.setAttribute('aria-expanded','false');await sync();
     }catch(err){status('Error de SSO: '+err.message);}
   })();
 })();
