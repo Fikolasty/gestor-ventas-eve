@@ -84,11 +84,11 @@ const refreshMarketControls=()=>{
   sel.value=marketChoice;
   document.getElementById('nullMarketActive').textContent=nullSystem();
   const note=document.getElementById('nullMarketNote');
-  note.textContent=marketChoice==='auto'?(marketAlliance?'Alianza detectada: '+marketAlliance+'.':'Sin alianza identificada. Se usa HY-RWO por defecto.'):'Selección manual: no cambiará al conectar otro personaje.';
+  note.textContent=(marketChoice==='auto'?(marketAlliance?'Alianza detectada: '+marketAlliance+'.':'Sin alianza identificada. Se usa HY-RWO por defecto.'):'Selección manual: no cambiará al conectar otro personaje.')+' Los precios de Null se estiman con reglas sobre Jita, no con órdenes locales de ESI.';
 };
 document.getElementById('nullMarketMode')?.addEventListener('change',e=>{
   if(e.target.value!=='auto'&&!Object.hasOwn(NULL_MARKETS,e.target.value))return;
-  marketChoice=e.target.value;try{localStorage.setItem(NULL_MARKET_KEY,marketChoice);}catch(_){}
+  marketChoice=e.target.value;S.refinedMan.null=Object.create(null);try{localStorage.setItem(NULL_MARKET_KEY,marketChoice);}catch(_){}
   refreshMarketControls();syncNullRouteLabels();if(typeof refresh==='function')refresh();
 });
 // Las etiquetas de ruta dependen del hub comercial, nunca de la refinería.
@@ -1520,7 +1520,7 @@ function paintVerdict(P){
   // v1.0.19: Pasos para Vender. Un paso por acción, en el orden en que se hacen: primero lo que se hace donde
   // están los items, luego el courier (si hay envío) y al final lo que se hace al llegar. Cada paso: número,
   // verbo, dónde se hace, ISK, y su tabla de items (con íconos) visible desde el inicio.
-  const sys=(C.ref.name||'Null').split(' - ')[0].trim()||'Null',orig=S.flip?'Jita':sys,dest=S.flip?sys:'Jita',arr='Cuando llegue: ';
+  const sys=nullSystem(),orig=S.flip?'Jita':sys,dest=S.flip?sys:'Jita',arr='Cuando llegue: ';
   const ORDER=S.flip?['fJ','fJI','fN']:['bb','disc','null','rNull','rJita','jOrd','jInst'];
   const tk=C.underTk>0?' − '+C.underTk+' tick'+(C.underTk===1?'':'s'):'';
   const STEP={
@@ -1651,7 +1651,7 @@ function paintVerdict(P){
     const rs=r.raw&&r.raw.sell?r.raw.sell.diff:null,rb=r.raw&&r.raw.buy?r.raw.buy.diff:null,dSp=rs!=null&&rb!=null?(rs+rb)/2:null;
     const pb=C.disc.base,dP=(pb==='sell'?rs:pb==='split'?dSp:rb),dP2=dP==null?null:dP*C.disc.pct;
     const BN={buy:'Jita Buy',split:'Split',sell:'Jita Sell'},alt=pb==='split'?['Jita Buy',rb]:['Split',dSp];
-    const sys=(C.ref.name||'Null').split(' - ')[0].trim()||'Null'; // sistema de comercio en Null (HY-RWO)
+    const sys=nullSystem(); // mercado elegido; la refinería se configura por separado
     // cada escenario: reprocesado vs sin reprocesar, con sus dos montos (como en Comparación con Otros Planes)
     const kJ=n.jOrd!=null&&(n.jInst==null||n.jOrd>=n.jInst)?'orden':'al instante';
     const prodW=ice?'Productos':'Minerales',rawW=(ice?'Hielo':'Ore')+' sin reprocesar';
@@ -1962,7 +1962,7 @@ $('pCtr').addEventListener('toggle',()=>{if($('pCtr').open&&lastP){paintContract
 //  Refinado además paga la tarifa de la refinería (tax % del valor de lo refinado).
 function paintRefCmp(r,q,nets){
   const box=$('rx'),fin=$('rxFinal');box.textContent='';fin.textContent='';
-  const sys=(C.ref.name||'Null').split(' - ')[0].trim()||'Null',tax=(parseFloat($('rTax').value)||0)/100;
+  const sys=nullSystem(),tax=(parseFloat($('rTax').value)||0)/100;
   const it=itemByName(r.key),oa=S.api[r.key.toLowerCase()],ja=it&&it.jita?it.jita:oa;
   const oS=parseFloat($('rOrePrice').value)||(ja&&ja.sell)||0,oB=ja&&ja.buy,oV=parseFloat($('rOreVol').value)||(ja&&ja.vol)||0;
   const ms=Object.keys(nets);let ok=oS>0&&oB!=null;
