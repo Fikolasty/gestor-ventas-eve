@@ -5959,12 +5959,38 @@ const MineUI=(()=>{
       return 'Dron adaptado a tus skills: Ice Harvesting Drone II requiere habilidades superiores. Se equipa Ice Harvesting Drone I.';
     return '';
   }
+  let activeFitShip=null;
   function paintDetail(){
     const host=$q('.mn-fit-cards');host.replaceChildren();
+    const ships=selectedShips().filter(ship=>row(ship,S.tier));
+    if(!ships.includes(activeFitShip))activeFitShip=ships[0]||null;
+    const tabs=h('nav','mn-fit-ship-tabs');
+    tabs.setAttribute('role','tablist');tabs.setAttribute('aria-label','Seleccionar nave para ver su fit e inversión');
+    const cards=h('div','mn-fit-ship-panels');
+    const buttons=[];
+    const activate=ship=>{
+      activeFitShip=ship;
+      buttons.forEach(btn=>{const selected=btn.dataset.ship===ship;btn.setAttribute('aria-selected',String(selected));btn.tabIndex=selected?0:-1;});
+      [...cards.children].forEach(card=>{card.hidden=card.dataset.ship!==ship;});
+    };
+    host.append(tabs,cards);
+    ships.forEach(ship=>{
+      const btn=h('button','mn-fit-ship-tab',ship);
+      btn.type='button';btn.dataset.ship=ship;btn.setAttribute('role','tab');
+      btn.addEventListener('click',()=>activate(ship));
+      btn.addEventListener('keydown',e=>{
+        if(!['ArrowLeft','ArrowRight','Home','End'].includes(e.key))return;
+        e.preventDefault();
+        const i=buttons.indexOf(btn),j=e.key==='Home'?0:e.key==='End'?buttons.length-1:(i+(e.key==='ArrowRight'?1:-1)+buttons.length)%buttons.length;
+        buttons[j].focus();activate(buttons[j].dataset.ship);
+      });
+      tabs.append(btn);buttons.push(btn);
+    });
     const addText=(container,k,v)=>{const line=h('div','mn-fit-attr');line.append(h('span','',k),h('strong','',v));container.append(line);};
-    for(const ship of selectedShips()){
+    for(const ship of ships){
       const r=row(ship,S.tier);if(!r)continue;
       const card=h('article','mn-fit-card'),heading=h('div','mn-fit-head');
+      card.dataset.ship=ship;
       heading.append(h('h4','',ship+' · '+TL[S.tier]),h('b','',fmtV(val(r))));
       card.append(heading);
       const info=h('div','mn-fit-attributes');
@@ -6003,8 +6029,9 @@ const MineUI=(()=>{
       card.append(total);
       if(S.lv===3||S.imp===4)card.append(h('p','mn-note','Escenario aproximado: '+(S.lv===3?'componentes del fit IV de referencia; ':'')+(S.imp===4?'implante 4% no incluido en el coste.':'')));
       if(r.notes.length)card.append(h('p','mn-note','⚠ '+r.notes.join(' · ')));
-      host.append(card);
+      cards.append(card);
     }
+    if(activeFitShip)activate(activeFitShip);
   }
   function shipFitIds(){return selectedShips().flatMap(s=>fitRows(s).map(x=>x[0]));}
   function paintInvestNote(){const n=$q('.mn-invst'),ids=[...shipFitIds(),...(S.imp===5&&S.lv!==3?MINE.impl[S.mat]:[])],miss=ids.filter(id=>sellOf(id)==null).length;
