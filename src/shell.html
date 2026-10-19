@@ -1630,6 +1630,18 @@ html.light #verdict .v-plan-name{color:#ad4b27}
 #mining .eve-sk-add:disabled,#mining .eve-sk-minus:disabled{opacity:.3;cursor:default}
 #mining .eve-sk-add:focus-visible,#mining .eve-sk-minus:focus-visible{outline:2px solid var(--ion);outline-offset:1px}
 
+
+/* Steps header: symmetrical compact reconciliation, no duplicate expense calculations. */
+#stepHead .stp-top{display:flex;align-items:center;justify-content:space-between;gap:14px 24px;flex-wrap:wrap;margin:4px 0 12px}
+#stepHead .stp-plan{flex:0 1 auto}
+#stepHead .stp-balance{display:grid;grid-template-columns:repeat(3,minmax(150px,1fr));gap:8px;flex:1 1 600px;max-width:800px}
+#stepHead .stp-balance-cell{min-width:0;padding:9px 12px;background:rgba(13,13,13,.65);border:1px solid var(--line2);border-radius:var(--r-sm);display:flex;flex-direction:column;gap:4px}
+#stepHead .stp-balance-cell small{font-size:.73rem;color:var(--mut);line-height:1.25}
+#stepHead .stp-balance-cell strong{font:700 .98rem var(--f-num);overflow-wrap:anywhere}
+#stepHead .stp-balance-cell .pos{color:#5cba86}
+#stepHead .stp-balance-cell .neg{color:#e86b70}
+@media(max-width:680px){#stepHead .stp-balance{grid-template-columns:1fr;flex-basis:100%}}
+
 </style>
 <script>/* v1.0.16: aplica el tema guardado antes de pintar (sin parpadeo). Por defecto: Dark. */try{var g=JSON.parse(localStorage.getItem('gestorVentas.ajustes.v1')||'null');if(g&&g.ui){if(g.ui.light)document.documentElement.classList.add('light');}}catch(e){}</script>
 </head>
