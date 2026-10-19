@@ -1692,6 +1692,16 @@ html.light #verdict .v-plan-name{color:#ad4b27}
 #verdict .v-what{grid-column:1/-1}
 @media(max-width:800px){#verdict .ov-hd{grid-template-columns:minmax(0,1fr)}#verdict .mm-net{grid-column:1;text-align:left}#verdict .v-isk{white-space:normal}}
 
+
+/* Ruta principal: tighter vertical rhythm and genuinely full-width narrative. */
+#verdict .ov-hd{grid-template-columns:minmax(0,1fr) auto!important;column-gap:20px!important;row-gap:4px!important;align-items:center!important;margin-bottom:8px!important}
+#verdict .ov-hd .ov-ttl{grid-column:1;grid-row:1;min-width:0}
+#verdict .ov-hd .mm-net{grid-column:2;grid-row:1;align-self:center}
+#verdict .ov-hd .v-cap{grid-column:1/-1!important;grid-row:2;justify-self:stretch;width:100%!important;max-width:none!important;margin:1px 0 0!important;padding:0!important;line-height:1.5!important}
+#verdict .ov-hd .v-what{grid-column:1/-1}
+#verdict .ov-hd .mm-section-head{margin-bottom:0!important}
+@media(max-width:800px){#verdict .ov-hd{grid-template-columns:minmax(0,1fr)!important;row-gap:8px!important}#verdict .ov-hd .mm-net{grid-column:1;grid-row:2;text-align:left}#verdict .ov-hd .v-cap{grid-row:3}}
+
 </style>
 <script>/* v1.0.16: aplica el tema guardado antes de pintar (sin parpadeo). Por defecto: Dark. */try{var g=JSON.parse(localStorage.getItem('gestorVentas.ajustes.v1')||'null');if(g&&g.ui){if(g.ui.light)document.documentElement.classList.add('light');}}catch(e){}</script>
 </head>
