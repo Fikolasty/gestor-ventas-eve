@@ -1824,6 +1824,13 @@ select{appearance:none;-webkit-appearance:none;padding-right:30px!important;back
 #pCtr .discord-content{padding:14px;border:1px solid var(--line);border-radius:var(--r-md);background:var(--panel,#252523);flex:1;min-width:0}
 @media(max-width:860px){#pCtr .ce{grid-template-columns:minmax(0,1fr)}}
 @media(max-width:540px){#pCtr .ce-l>.ce-h,#pCtr .discord-side>.ce-h{padding:0 2px;gap:6px}#pCtr .discord-side>.ce-h .sum{font-size:.72rem}}
+
+/* Listado: acción de apertura siempre pegada al chevron derecho. */
+#ledger>summary{display:flex!important;align-items:center!important;width:100%;gap:10px!important}
+#ledger>summary .status.cta{margin-left:auto!important;margin-right:14px!important;flex:0 0 auto!important;order:98!important;text-align:right!important}
+#ledger>summary::after{order:99!important;flex:0 0 9px!important;margin-left:0!important;margin-right:5px!important}
+#ledger>summary .cnt{margin-left:0!important;flex:0 0 auto!important}
+@media(max-width:650px){#ledger>summary .status.cta{margin-left:auto!important;margin-right:8px!important}}
 /* ===== tema claro (generado desde el oscuro por light.py) ===== */
 html.light{--void:#e4e3dd;--hull:#e2e0da;--hull2:#e0ded8;--line:rgba(31,30,29,0.114);--line2:rgba(31,30,29,0.125);--txt:#1c1c1a;--mut:#54524d;--dim:#6c6a64;--ion:#413f3c;--blue:#a39d8b;--clay:#c96442;--thrust:#a67526;--gain:#418b62;--loss:#a92c23}
 html.light body::after{background:repeating-linear-gradient(180deg,rgba(31,30,29,0.011) 0 1px,transparent 1px 3px),
