@@ -5427,11 +5427,26 @@ function paintPicker(P){
     const stat=(label,value,cl='')=>{
       const node=el('div','pk-opp-stat');node.append(el('small',null,label),el('strong',cl,value));grid.append(node);
     };
-    stat('Diferencia frente al plan con más ISK',gap<1?'0 ISK':'−'+fmt(gap),gap>=1?'neg':'');
-    stat('Alternativa con más ISK',benchmark.l+' · '+fmt(benchmark.t.net));
     const note=el('p','pk-opp-explain');
-    if(gap<1)note.textContent='Este plan está entre los de mayor ingreso neto estimado.';
-    else note.append('Al elegir ',planMark(chosen.m),', recibirías ',el('strong','neg','−'+fmt(gap)),' frente a ',planMark(benchmark.m),(ratio!=null?' ('+ratio.toFixed(1)+' % menos)':''),'.');
+    if(gap<1){
+      const runners=valid.filter(x=>x.m!==chosen.m&&x.t.net<chosen.t.net-.5).sort((a,b)=>b.t.net-a.t.net);
+      const runner=runners[0];
+      if(runner){
+        const advantage=chosen.t.net-runner.t.net;
+        const lift=runner.t.net>0?advantage/runner.t.net*100:null;
+        stat('Ventaja frente a la siguiente alternativa','+'+fmt(advantage),'pos');
+        stat('Rendimiento adicional',lift==null?'No comparable':'+'+NF1.format(lift)+' %',lift==null?'':'pos');
+        note.append('De los planes comparados, ',planMark(chosen.m),' ofrece el mayor ingreso neto estimado. Supera a ',planMark(runner.m),' por ',el('strong','pos','+'+fmt(advantage)),'; la ventaja porcentual se calcula respecto al neto de esa alternativa.');
+      }else{
+        stat('Resultado del plan','Mayor ingreso neto estimado');
+        stat('Ventaja medible','Sin alternativa inferior');
+        note.append(planMark(chosen.m),' alcanza el mayor ingreso neto estimado. Las demás rutas disponibles empatan con este resultado o no permiten calcular una diferencia positiva fiable.');
+      }
+    }else{
+      stat('Diferencia frente al plan con más ISK','−'+fmt(gap),'neg');
+      stat('Alternativa con más ISK',benchmark.l+' · '+fmt(benchmark.t.net));
+      note.append('Al elegir ',planMark(chosen.m),', recibirías ',el('strong','neg','−'+fmt(gap)),' frente a ',planMark(benchmark.m),(ratio!=null?' ('+ratio.toFixed(1)+' % menos)':''),'.');
+    }
     const speed=chosen.m==='bb'?'Buyback: sujeto a aceptación y pago del programa, sin depender de órdenes de mercado.':
       chosen.m==='jInst'||chosen.m==='fJI'?'Venta a órdenes de compra: ejecución inmediata solo si hay suficiente volumen comprador.':
       chosen.m==='disc'?'Venta entre jugadores: tiempo de cobro y comprador sin garantía.':
