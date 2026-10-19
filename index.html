@@ -3853,8 +3853,10 @@ function computePlan(){
 function modeTotal(P,m){let g=0,V=0,Cc=0,n=0;
   P.rows.forEach(r=>{const k=m==='auto'?r.auto:(r.g[m]!=null?(n++,m):r.auto);if(!k)return;g+=r.g[k]-r.prod;const s=r.ship[k];if(s){V+=s.v;Cc+=s.c;}});
   return{net:g-(V>0?courierCost(V,C.coll!=null?C.coll:Cc):0),n};}
-const MODES=[['auto','Plan Óptimo'],['fN','Todo a HY-RWO'],['fJ','Todo en Jita (Orden)'],['fJI','Todo en Jita al Instante'],['null','Todo en Null'],['jOrd','Todo a Jita (Orden)'],['jInst','Todo a Jita al Instante'],['bb','Todo al Buyback'],['rNull','Reprocesar y Vender en HY-RWO'],['rJita','Reprocesar y Llevar a Jita'],['disc','Todo a un Jugador']];
+const MODES=[['auto','Plan Óptimo'],['fN','Llevar y vender todo en HY-RWO'],['fJ','Vender todo con órdenes en Jita'],['fJI','Vender todo al instante en Jita'],['null','Vender todo en HY-RWO'],['jOrd','Vender todo con órdenes en Jita'],['jInst','Vender todo al instante en Jita'],['bb','Vender al programa Buy Back'],['rNull','Reprocesar y vender todo en HY-RWO'],['rJita','Reprocesar, llevar y vender todo en Jita'],['disc','Vender todo a un jugador']];
 const modeName=m=>(MODES.find(x=>x[0]===(m||'auto'))||MODES[0])[1];
+const planPhrase=m=>m==='auto'?'el Plan Óptimo':'el plan «'+modeName(m)+'»';
+const planMark=m=>el('strong','plan-name-accent',modeName(m));
 // ================= Guía práctica (puro) =================
 // Piso = precio por unidad en el que esta opción gana lo mismo que la siguiente mejor opción.
 function guideFor(r,Vall){
@@ -4222,7 +4224,7 @@ function paintLot(r){
 
 // ================= Vista: veredicto =================
 // nombres de cada acción del plan (iguales a la etiqueta junto a "Tu Mejor Plan")
-const PLAN_L={fN:'Llevar a HY-RWO',fJ:'Vender en Jita (Orden)',fJI:'Vender en Jita al Instante',null:'Vender en HY-RWO',rNull:'Vender en HY-RWO reprocesado',jOrd:'Vender en Jita (Orden)',jInst:'Vender en Jita al Instante',rJita:'Vender en Jita Reprocesado',bb:'Vender al Buyback',disc:'Vender a Jugador'};
+const PLAN_L={fN:'Llevar y vender todo en HY-RWO',fJ:'Vender todo con órdenes en Jita',fJI:'Vender todo al instante en Jita',null:'Vender todo en HY-RWO',rNull:'Reprocesar y vender todo en HY-RWO',jOrd:'Vender todo con órdenes en Jita',jInst:'Vender todo al instante en Jita',rJita:'Reprocesar, llevar y vender todo en Jita',bb:'Vender al programa Buy Back',disc:'Vender todo a un jugador'};
 let lastP=null;
 const ORE_PRODUCTS=new Set();Object.values(REFINE).forEach(d=>{if(d.cat!=='ice')Object.keys(d.out).forEach(m=>ORE_PRODUCTS.add(m.toLowerCase()));});
 function catOf(name){if(isIce(name))return 'ice';if(resolveOre(name)||ORE_PRODUCTS.has(String(name).toLowerCase()))return 'ore';return 'loot';}
@@ -5152,11 +5154,11 @@ function paintPicker(P){
     const stat=(label,value,cl='')=>{
       const node=el('div','pk-opp-stat');node.append(el('small',null,label),el('strong',cl,value));grid.append(node);
     };
-    stat('ISK que dejarías de recibir',gap<1?'0 ISK':'−'+fmt(gap),gap>=1?'neg':'');
-    stat('Alternativa con más ISK',benchmark.l+' · '+fmt(benchmark.t.net));
+    stat('Diferencia frente al plan con más ISK',gap<1?'0 ISK':'−'+fmt(gap),gap>=1?'neg':'');
+    stat('Alternativa con más ISK',benchmark.l+' · +'+fmt(benchmark.t.net),'pos');
     const note=el('p','pk-opp-explain');
     if(gap<1)note.textContent='Este plan está entre los de mayor ingreso neto estimado.';
-    else note.textContent='Con '+chosen.l+' recibirías '+fmt(gap)+' ISK menos'+(ratio!=null?' ('+ratio.toFixed(1)+' %)':'')+' que con '+benchmark.l+'.';
+    else note.append('Al elegir ',planMark(chosen.m),', recibirías ',el('strong','neg','−'+fmt(gap)),' frente a ',planMark(benchmark.m),(ratio!=null?' ('+ratio.toFixed(1)+' % menos)':''),'.');
     const speed=chosen.m==='bb'?'Buyback: sujeto a aceptación y pago del programa, sin depender de órdenes de mercado.':
       chosen.m==='jInst'||chosen.m==='fJI'?'Venta a órdenes de compra: ejecución inmediata solo si hay suficiente volumen comprador.':
       chosen.m==='disc'?'Venta entre jugadores: tiempo de cobro y comprador sin garantía.':
@@ -5187,16 +5189,16 @@ function paintPicker(P){
     disc:'Se lo vendes a otro jugador por Discord. Sin comprador garantizado.'};
   // Resumen legible de un vistazo, colocado inmediatamente debajo de «Elige un Plan».
   bar.hidden=false;
-  bar.append(chosen.m==='auto'?'Estás usando el ':'Elegiste ',el('strong',null,chosen.l),'. ');
+  bar.append(chosen.m==='auto'?'Estás usando el ':'Elegiste el plan ',planMark(chosen.m),'. ');
   const delta=chosen.t.net-opt;
   if(chosen.m==='auto'){
     bar.append('Para comparar valor, rapidez y envío, haz clic en esta fila y elige otra ruta disponible.');
   }else if(Math.round(delta)===0){
-    bar.append('Este plan te ofrece el mismo valor estimado que el Plan Óptimo. ',PK_EXP[chosen.m]||'');
+    bar.append('Este plan ofrece el mismo valor estimado que ',planMark('auto'),'. ',PK_EXP[chosen.m]||'');
   }else{
     bar.append('Este plan te ofrece ',el('strong','pk-sum-delta '+(delta>0?'pos':'neg'),
       (delta>0?'+':'−')+fmt(Math.abs(delta))),
-      ' en comparación con el Plan Óptimo. ');
+      ' frente a ',planMark('auto'),'. ');
     if(delta>0&&(chosen.m==='jOrd'||chosen.m==='fJ'))
       bar.append('A cambio, tendrías que esperar a que se completen las órdenes de venta en Jita.');
     else bar.append(PK_EXP[chosen.m]||'Puedes consultar los detalles de esta ruta abajo.');
