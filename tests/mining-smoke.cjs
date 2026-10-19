@@ -48,13 +48,17 @@ assert.equal(optIntro.name,'Plan Óptimo');
 assert.match(optIntro.description,/3 ítems con precio.*2 rutas de venta/);
 const jitaIntro=planIntro({mode:'jOrd',rows});
 assert.equal(jitaIntro.name,'Todo a Jita (Orden)');
-assert.match(jitaIntro.description,/2 de los 3 ítems.*otros 1/);
+assert.match(jitaIntro.description,/2 de los 3 ítems.*otro ítem mantiene/);
 const bbIntro=planIntro({mode:'bb',rows});
-assert.match(bbIntro.description,/1 de los 3 ítems.*otros 2/);
+assert.match(bbIntro.description,/1 de los 3 ítems.*otros 2 mantienen/);
 assert.match(planIntro({mode:'jOrd',rows:[{best:'jOrd'}]}).description,/1 ítem con precio sigue/);
 assert(!sales.includes("'Según el Plan Óptimo, '"),'no mantener el texto fijo anterior');
 assert(sales.includes("el('strong','v-plan-name',intro.name)"),'el nombre del plan debe resaltarse al actualizar la vista');
 assert(html.includes('.v-plan-name{font-weight:750;color:'),'falta color del plan elegido');
+
+assert(sales.includes("box.append(el('h2','mm-title appr-title','TASACIÓN'),g)"),'Tasación debe usar el título de las secciones');
+assert(!sales.includes("el('span','appr-tag','Tasación')"),'Tasación no debe aparecer como insignia antigua');
+assert(html.includes('.appr .appr-title{font-size:1.2rem!important'),'Tasación debe usar el mismo tamaño de título que el Listado');
 
 // v1.0.82: maquetación v6, controles únicos y limpieza de cachés.
 assert(html.indexOf('id="verdict"')<html.indexOf('id="pSum"') &&
