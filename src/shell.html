@@ -1526,6 +1526,20 @@ html.light #verdict .v-plan-name{color:#ad4b27}
  .hero-intro:not(.no-appr)>.paste textarea{min-height:120px}
 }
 
+
+/* Step contract carousel: keep item column and contract column symmetrical */
+.stp-b.two{align-items:stretch}
+.stp-b.two>.stp-main{display:flex;flex-direction:column;min-height:100%}
+.stp-b.two>.stp-main>.ct-items{flex:1;display:flex;flex-direction:column;min-height:100%}
+.stp-b.two>.stp-ct{min-width:0;align-self:stretch}
+.stp-contract-nav{display:flex;align-items:center;justify-content:flex-end;gap:10px;margin:2px 0 12px}
+.stp-contract-arrow{width:34px;height:30px;display:grid;place-items:center;border-radius:7px;border:1px solid var(--line2);background:rgba(222,220,209,.07);color:var(--txt);font-size:22px;line-height:1}
+.stp-contract-arrow:hover:not(:disabled){border-color:var(--clay);color:var(--clay)}
+.stp-contract-arrow:disabled{opacity:.35;cursor:default}
+.stp-contract-counter{font-weight:650;font-size:.84rem;color:var(--mut);font-variant-numeric:tabular-nums;min-width:40px;text-align:center}
+.stp-contract-slide>.stp-ct-t{margin:0 0 10px}
+@media(max-width:800px){.stp-b.two>.stp-main>.ct-items{min-height:unset}}
+
 </style>
 <script>/* v1.0.16: aplica el tema guardado antes de pintar (sin parpadeo). Por defecto: Dark. */try{var g=JSON.parse(localStorage.getItem('gestorVentas.ajustes.v1')||'null');if(g&&g.ui){if(g.ui.light)document.documentElement.classList.add('light');}}catch(e){}</script>
 </head>
