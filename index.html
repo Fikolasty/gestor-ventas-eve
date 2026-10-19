@@ -5683,7 +5683,7 @@ function paintPicker(P){
     }
     const txt=el('span','pk-tx'),nm=el('span','pk-l',l);
     if(m==='auto')nm.append(el('em','pk-rec','Recomendado'));
-    const part=m!=='auto'&&t.n<P.rows.length?' '+t.n+' de '+P.rows.length+' items siguen esta ruta; los demás siguen el óptimo.':'';
+    const part=m!=='auto'&&t.n<P.rows.length?(S.lang==='en'?' '+t.n+' of '+P.rows.length+' items follow this route; the remaining items follow the optimal plan.':' '+t.n+' de '+P.rows.length+' ítems siguen esta ruta; los demás siguen el plan óptimo.'):'';
     const short={auto:'Combina las rutas más convenientes.',null:'Vende en tu sistema sin transporte.',
       jOrd:'Publica órdenes de venta en Jita.',fJ:'Publica órdenes de venta en Jita.',
       jInst:'Venta inmediata en Jita.',fJI:'Venta inmediata en Jita.',
