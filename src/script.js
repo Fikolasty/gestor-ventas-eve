@@ -329,9 +329,29 @@ function pruneCaches(){
   const keep=new Set();
   const add=n=>{const k=String(n).toLowerCase();keep.add(k);const ore=resolveOre(n);if(ore)Object.keys(ore.d.out).forEach(m=>keep.add(m.toLowerCase()));};
   S.items.forEach(o=>add(o.name));
-  const ids=new Set();
-  Object.keys(S.api).forEach(k=>{if(keep.has(k)){if(S.api[k]&&S.api[k].id)ids.add(String(S.api[k].id));}else delete S.api[k];});
-  Object.keys(ICON).forEach(id=>{if(!ids.has(String(id))){URL.revokeObjectURL(ICON[id]);delete ICON[id];delete ICON_EL[id];delete ICON_POOL[id];}});
+  const ids=new Set(),groups=new Set();
+  Object.keys(S.api).forEach(k=>{
+    if(keep.has(k)){if(S.api[k]?.id)ids.add(String(S.api[k].id));}
+    else delete S.api[k];
+  });
+  // Mantiene los tipos y grupos del inventario activo; los viejos se reconsultarán si vuelven a pegarse.
+  for(const k of Object.keys(idCache)){
+    if(!keep.has(k))delete idCache[k];
+    else if(idCache[k])ids.add(String(idCache[k]));
+  }
+  for(const id of ids)if(grpOf[id]!=null)groups.add(String(grpOf[id]));
+  for(const cache of [volCache,volAlt,grpOf]){
+    for(const id of Object.keys(cache))if(!ids.has(String(id)))delete cache[id];
+  }
+  for(const gid of Object.keys(catCache))if(!groups.has(String(gid)))delete catCache[gid];
+  for(const key of ORE_MEMO.keys())if(!keep.has(key))ORE_MEMO.delete(key);
+  for(const id of Object.keys(ICON)){
+    if(ids.has(String(id)))continue;
+    // Los íconos actuales son HTTP(S); revokeObjectURL solo corresponde a imágenes blob: antiguas.
+    if(typeof ICON[id]==='string'&&ICON[id].startsWith('blob:'))URL.revokeObjectURL(ICON[id]);
+    delete ICON[id];delete ICON_EL[id];delete ICON_POOL[id];delete ICON_WAIT[id];
+  }
+  for(const id of Object.keys(ICON_WAIT))if(!ids.has(String(id)))delete ICON_WAIT[id];
 }
 // ¿falta algún precio de la API (items o minerales de sus ores)?
 function needsFetch(){
@@ -852,8 +872,7 @@ function paintGuide(ol,r){
 }
 
 // ================= Íconos de items (servidor de imágenes de EVE) =================
-// images.evetech.net/types/{id}/icon. Se bajan con fetch sin caché (cache:'no-store') y se muestran como blob:
-// así no queda nada guardado en el navegador. Se guardan solo en memoria y se liberan al cerrar.
+// Íconos de EVE: imágenes HTTPS directas, sin blobs. Se liberan las referencias al cambiar el inventario.
 const ICON={},ICON_WAIT={};
 const ICON_EL={};
 function iconFor(name){
