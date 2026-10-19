@@ -138,7 +138,8 @@ const MineUI=(()=>{
   // Guristas / norte Nullsec: Golden Cytoserocin (Tenal), Amber Cytoserocin (Vale),
   // Mykoserocin que aparece en Venal/Tenal. Se excluyen gases de WH y otras regiones.
   const GURISTAS_GAS=new Set(['Golden Cytoserocin','Amber Cytoserocin','Viridian Mykoserocin','Golden Mykoserocin','Amber Mykoserocin']);
-  const MATS=MINE.mats.filter(m=>m.cat!=='gas'||GURISTAS_GAS.has(m.n)),
+  const LOCAL_ICE=new Set(['Clear Icicle','Clear Icicle IV-Grade','Glare Crust','Dark Glitter','Gelidus','Krystallos']);
+  const MATS=MINE.mats.filter(m=>(m.cat!=='gas'||GURISTAS_GAS.has(m.n))&&(m.cat!=='ice'||LOCAL_ICE.has(m.n))),
         matByName=new Map(MATS.map(m=>[m.n,m]));
   const MOON_ORDER=['Exceptional (R64)','Rare (R32)','Uncommon (R16)','Common (R8)','Ubiquitous (R4)'];
   const sortedMats=mat=>MATS.filter(m=>m.cat===mat).sort((a,b)=>(mat==='moon'?MOON_ORDER.indexOf(a.grp)-MOON_ORDER.indexOf(b.grp):0)||a.n.localeCompare(b.n,'en'));
