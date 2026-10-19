@@ -1579,6 +1579,13 @@ html.light #verdict .v-plan-name{color:#ad4b27}
 .rep-tab[aria-pressed="true"]{background:var(--ion);border-color:var(--ion);color:#211d1a}
 #vRepList>.rep-it[hidden]{display:none!important}
 
+
+/* Highlight referenced plan names and signed financial outcomes. */
+.plan-name-accent{color:var(--thrust);font-weight:750}
+.pk-opp-stat strong.pos,.pk-opportunity .pos{color:#5cba86}
+.pk-opp-stat strong.neg,.pk-opportunity .neg{color:#e86b70}
+.pk-o .pk-d.pos,.pk-summary .pk-sum-delta.pos{color:#5cba86}
+.pk-o .pk-d.neg,.pk-summary .pk-sum-delta.neg{color:#e86b70}
 </style>
 <script>/* v1.0.16: aplica el tema guardado antes de pintar (sin parpadeo). Por defecto: Dark. */try{var g=JSON.parse(localStorage.getItem('gestorVentas.ajustes.v1')||'null');if(g&&g.ui){if(g.ui.light)document.documentElement.classList.add('light');}}catch(e){}</script>
 </head>
