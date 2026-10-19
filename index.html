@@ -1643,6 +1643,27 @@ html.light #verdict .v-plan-name{color:#ad4b27}
 @media(max-width:680px){#stepHead .stp-balance{grid-template-columns:1fr;flex-basis:100%}}
 
 .i-planetary{--i:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22black%22%20stroke-width%3D%221.7%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Ccircle%20cx%3D%2212%22%20cy%3D%2212%22%20r%3D%226.5%22%2F%3E%3Cellipse%20cx%3D%2212%22%20cy%3D%2212%22%20rx%3D%2211%22%20ry%3D%224%22%20transform%3D%22rotate(-28%2012%2012)%22%2F%3E%3Ccircle%20cx%3D%2214%22%20cy%3D%229.5%22%20r%3D%221.3%22%20fill%3D%22black%22%20stroke%3D%22none%22%2F%3E%3C%2Fsvg%3E")}
+
+/* Steps header: title/plan left, three equal financial columns right. */
+#stepsPanel{display:grid;grid-template-columns:minmax(220px,1fr) minmax(0,2.15fr);column-gap:24px;align-items:center}
+#stepsPanel>.mm-section-head{grid-column:1;grid-row:1;align-self:center;margin:0}
+#stepsPanel>#stepHead{grid-column:2;grid-row:1;min-width:0}
+#stepsPanel>#vPlan,#stepsPanel>#vRep,#stepsPanel>#vNote,#stepsPanel>#bbBox{grid-column:1/-1}
+#stepHead .stp-top{display:flex;flex-direction:column;gap:8px;margin:0;align-items:stretch}
+#stepHead .stp-plan{display:none}
+#stepHead .stp-balance{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;max-width:none;width:100%;flex:none}
+#stepHead .stp-balance-cell{justify-content:center;min-height:73px;padding:11px 13px}
+#stepHead .stp-balance-cell small{font-size:.73rem;line-height:1.35}
+#stepHead .stp-balance-cell strong{font-size:clamp(.82rem,1.05vw,1.02rem);white-space:normal}
+#stepsPanel>.mm-section-head:after{content:attr(data-plan);display:block;margin-top:10px;font-size:.81rem;font-weight:500;color:var(--mut)}
+@media(max-width:960px){
+ #stepsPanel{grid-template-columns:1fr;row-gap:13px}
+ #stepsPanel>.mm-section-head{grid-column:1;grid-row:auto}
+ #stepsPanel>#stepHead{grid-column:1;grid-row:auto}
+ #stepHead .stp-balance-cell strong{font-size:.95rem}
+}
+@media(max-width:600px){#stepHead .stp-balance{grid-template-columns:1fr}#stepHead .stp-balance-cell{min-height:0}}
+
 /* ===== tema claro (generado desde el oscuro por light.py) ===== */
 html.light{--void:#e4e3dd;--hull:#e2e0da;--hull2:#e0ded8;--line:rgba(31,30,29,0.114);--line2:rgba(31,30,29,0.125);--txt:#1c1c1a;--mut:#54524d;--dim:#6c6a64;--ion:#413f3c;--blue:#a39d8b;--clay:#c96442;--thrust:#a67526;--gain:#418b62;--loss:#a92c23}
 html.light body::after{background:repeating-linear-gradient(180deg,rgba(31,30,29,0.011) 0 1px,transparent 1px 3px),
