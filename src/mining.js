@@ -175,6 +175,12 @@ const MineUI=(()=>{
   }
   // Deduplica solicitudes simultáneas por typeID; evita duplicar trabajo con varios repaints.
   const priceInflight=new Map();
+  // Cotizaciones caducadas: el TTL útil es 5 min; tras 30 min se libera la memoria.
+  function pruneMiningPriceCache(){
+    const cutoff=Date.now()-30*60*1000;
+    for(const id of Object.keys(PRICE))
+      if(PRICE[id].at<cutoff&&!priceInflight.has(Number(id)))delete PRICE[id];
+  }
   function fetchPrice(id,force=false){
     if(priceInflight.has(id))return priceInflight.get(id);
     const promise=fetchPriceCore(id,force).finally(()=>priceInflight.delete(id));
@@ -182,6 +188,7 @@ const MineUI=(()=>{
     return promise;
   }
   async function loadPrice(){
+    pruneMiningPriceCache();
     const id=priceId();if(!id)return;const st=$q('.mn-pst');
     if(PRICE[id]&&Date.now()-PRICE[id].at<5*60e3){paint();return;}
     st.classList.remove('err');st.replaceChildren(document.createTextNode('Consultando Jita 4-4…'));
@@ -192,7 +199,7 @@ const MineUI=(()=>{
 
   // precios de varios ítems (fits, minerales): de a 4 en paralelo, en memoria 5 min
   let bulkBusy=0;
-  async function loadMany(ids,onDone,force=false){const need=[...new Set(ids)].filter(id=>id&&(force||!(PRICE[id]&&Date.now()-PRICE[id].at<5*60e3)));
+  async function loadMany(ids,onDone,force=false){pruneMiningPriceCache();const need=[...new Set(ids)].filter(id=>id&&(force||!(PRICE[id]&&Date.now()-PRICE[id].at<5*60e3)));
     if(!need.length){onDone();return;}bulkBusy++;let i=0,err=null;
     await Promise.all(Array.from({length:Math.min(2,need.length)},async()=>{
       while(i<need.length&&Date.now()>=miningCooldownUntil){
@@ -1296,7 +1303,13 @@ const MineUI=(()=>{
     $q('.mn-cmp').addEventListener('change',e=>{S.cmp=e.target.value==='1';paint();loadPrice();});
     window.addEventListener('pagehide',miningSaveNow,{once:true});
     fillItems();paint();needPrices();
-    if('ResizeObserver' in window)new ResizeObserver(()=>{if(root.offsetParent&&root.clientWidth!==lastW)drawCharts();}).observe(root);}
+    if('ResizeObserver' in window){
+      const chartResize=new ResizeObserver(()=>{
+        if(root.offsetParent&&root.clientWidth!==lastW)drawCharts();
+      });
+      chartResize.observe(root);
+      window.addEventListener('pagehide',()=>chartResize.disconnect(),{once:true});
+    }}
   // el panel empieza oculto: al abrirlo se dibujan los gráficos con su ancho real
   return{mount,shown(){if(root){paint();requestAnimationFrame(drawCharts);}}};
 })();
