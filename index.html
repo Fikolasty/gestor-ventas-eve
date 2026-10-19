@@ -6424,7 +6424,7 @@ const MineUI=(()=>{
         const head=h('header','mn-ship-head'),names=h('div','mn-ship-name');
         names.append(h('small','',ex?'EXHUMER · '+TL[S.tier]:'BARGE · '+TL[S.tier]),h('h4','',ship));
         head.append(names);
-        if(win){const star=h('span','mn-ship-crown','★ Mejor '+(ex?'Exhumer':'Barge'));star.title='Mayor rendimiento efectivo en su clase y escalón';head.append(star);}
+        if(win){const star=h('span','mn-ship-crown','★ Mejor '+(ex?'Exhumer':'Barge'));star.title=document.documentElement.lang==='en'?'Highest effective yield in its class and tier':'Mayor rendimiento efectivo en su clase y escalón';head.append(star);}
         card.append(head);
         const production=h('div','mn-ship-production');
         production.append(h('strong','',fmtV(val(r))),h('small','','Efectivo · '+NF0.format(r.tot)+' m³/h brutos'));card.append(production);
@@ -6593,7 +6593,7 @@ const MineUI=(()=>{
       card.append(table);
       const fallback=fittedTierNotice(r);
       if(fallback)card.append(h('p','mn-fit-fallback','ⓘ '+fallback));
-      const total=h('div','mn-fit-total');total.append(h('span','','Inversión total del fit'),h('strong','',complete?cmpISK(sum)+' ISK':'Faltan cotizaciones'));
+      const total=h('div','mn-fit-total');total.append(h('span','',document.documentElement.lang==='en'?'Total fitting investment':'Inversión total del fit'),h('strong','',complete?cmpISK(sum)+' ISK':(document.documentElement.lang==='en'?'Missing quotes':'Faltan cotizaciones')));
       card.append(total);
       if(S.lv===3||S.imp===4)card.append(h('p','mn-note','Escenario aproximado: '+(S.lv===3?'componentes del fit IV de referencia; ':'')+(S.imp===4?'implante 4% no incluido en el coste.':'')));
       if(r.notes.length)card.append(h('p','mn-note','⚠ '+r.notes.join(' · ')));
@@ -7010,7 +7010,7 @@ const MineUI=(()=>{
       const cell=$q('.mn-edit-cell[data-m="'+m+'"]'),label=cell.querySelector('.mn-edit-title'),chooser=cell.querySelector('.mn-edit-material'),
         inp=cell.querySelector('.mn-edit-price'),reset=cell.querySelector('.mn-edit-reset'),
         source=cell.querySelector('.mn-edit-source'),id=matPriceId(m),custom=manualQuote(id,S.base),value=quote(id,S.base);
-      label.textContent=MATL[m];label.title=S.cmp?'Comprimido cuando esté disponible':'Sin comprimir';
+      label.textContent=MATL[m];label.title=document.documentElement.lang==='en'?(S.cmp?'Compressed when available':'Uncompressed'):(S.cmp?'Comprimido cuando esté disponible':'Sin comprimir');
       if(!chooser.options.length){
         const groups={};sortedMats(m).forEach(x=>(groups[x.grp]||(groups[x.grp]=[])).push(x));
         for(const [name,materials] of Object.entries(groups)){
@@ -7022,7 +7022,7 @@ const MineUI=(()=>{
       inp.placeholder=value==null?'Sin precio ESI':'Introduce ISK/u';inp.dataset.itemId=String(id||'');
       if(document.activeElement!==inp)inp.value=value!=null?String(value):'';
       reset.disabled=custom==null;
-      source.textContent=custom!=null?'✎ Manual para este artículo y orden':value!=null?'ESI · '+(S.cmp?'comprimido si existe':'sin comprimir'):'Sin precio ESI. Puedes introducir uno.';
+      source.textContent=document.documentElement.lang==='en'?(custom!=null?'✎ Manual price for this item and order':value!=null?'ESI · '+(S.cmp?'compressed if available':'uncompressed'):'No ESI price. You can enter one.'):(custom!=null?'✎ Manual para este artículo y orden':value!=null?'ESI · '+(S.cmp?'comprimido si existe':'sin comprimir'):'Sin precio ESI. Puedes introducir uno.');
       cell.classList.toggle('mn-price-overridden',custom!=null);
     }
     const shipSel=$q('.mn-edit-ship');
@@ -7074,7 +7074,7 @@ const MineUI=(()=>{
     editorLoading=true;
     const button=$q('.mn-refresh-esi'),status=$q('.mn-esi-status');
     button.disabled=true;button.textContent='Consultando ESI…';
-    status.textContent='Actualizando Jita 4-4, sin borrar precios manuales…';
+    status.textContent=document.documentElement.lang==='en'?'Updating Jita 4-4 without overwriting manual prices…':'Actualizando Jita 4-4, sin borrar precios manuales…';
     const ids=[...['moon','ice','gas'].map(matPriceId),...editableCostIds(),
       ...(S.view==='ships'?shipFitIds():[])];
     try{
