@@ -443,10 +443,13 @@ function pctPrice(list,frac){
   return val/acc;
 }
 async function jitaBook(id){
-  const buys=[],sells=[];
+  const buys=[],sells=[],regionalBuys=[],regionalSells=[];
   const take=arr=>{if(!Array.isArray(arr))return;arr.forEach(o=>{
-      if(o.location_id!==JITA44||typeof o.price!=='number'||!(o.volume_remain>0))return;
-      (o.is_buy_order?buys:sells).push({p:o.price,v:o.volume_remain,min:o.min_volume||1});});};
+      if(typeof o.price!=='number'||!(o.volume_remain>0))return;
+      const item={p:o.price,v:o.volume_remain,min:o.min_volume||1};
+      (o.is_buy_order?regionalBuys:regionalSells).push(item);
+      if(o.location_id===JITA44)(o.is_buy_order?buys:sells).push(item);
+    });};
   const url=pg=>'/markets/'+FORGE+'/orders/?order_type=all&type_id='+id+'&page='+pg;
   // v105: la 1ª página dice cuántas hay (X-Pages); las demás (máx. 10) se piden en paralelo
   const r1=await esiFetch(url(1));let pages=parseInt(r1.headers.get('X-Pages')||'1',10)||1;
@@ -461,7 +464,9 @@ async function jitaBook(id){
   if(sell!=null&&sellP5&&sell<.5*sellP5){flags.push({k:'outSell',p:sell});sell=sellP5;}
   if(buy!=null&&buyP5&&buy>2*buyP5){flags.push({k:'outBuy',p:buy});buyCap=2*buyP5;buy=buyP5;}
   // v1.0.45: topBuy/topSell = mejor compra y venta más barata de Jita 4-4 tal cual (como Janice), solo para la Tasación.
-  return{buy,sell,buys:buys.slice(0,400),buyCap,flags,top:sells.slice(0,5).map(o=>({p:o.p,v:o.v})),topBuy:buys.length?buys[0].p:null,topSell:sells.length?sells[0].p:null};
+  return{buy,sell,buys:buys.slice(0,400),buyCap,flags,top:sells.slice(0,5).map(o=>({p:o.p,v:o.v})),topBuy:buys.length?buys[0].p:null,topSell:sells.length?sells[0].p:null,
+    regionBuy:regionalBuys.length?Math.max(...regionalBuys.map(o=>o.p)):null,
+    regionSell:regionalSells.length?Math.min(...regionalSells.map(o=>o.p)):null};
 }
 async function history30(id){
   try{
@@ -2217,18 +2222,24 @@ function paintAppraisal(){
   // Tasación bruta: órdenes originales de Jita 4-4, sin tasas, broker ni envío.
   const tb=o=>o.jita&&o.jita.topBuy,ts=o=>o.jita&&o.jita.topSell;
   const its=S.items.filter(o=>o.qty>0),priced=its.filter(o=>tb(o)!=null||ts(o)!=null);
+  // Regional fallback is presentation only; the actual Jita sales routes keep requiring Jita order prices.
+  const regional=!priced.length&&its.some(o=>o.jita&&(o.jita.regionBuy!=null||o.jita.regionSell!=null));
+  const buyOf=o=>regional?o.jita?.regionBuy:tb(o),sellOf=o=>regional?o.jita?.regionSell:ts(o);
   box.hidden=!its.length;box.parentNode.classList.toggle('no-appr',!its.length);if(!its.length)return;
-  let vB=0,vS=0,vol=0,u=0;its.forEach(o=>{vol+=(o.m3u||0)*o.qty;u+=o.qty;});priced.forEach(o=>{vB+=(tb(o)||0)*o.qty;vS+=(ts(o)||0)*o.qty;});
+  let vB=0,vS=0,vol=0,u=0;its.forEach(o=>{vol+=(o.m3u||0)*o.qty;u+=o.qty;});(regional?its:priced).forEach(o=>{vB+=(buyOf(o)||0)*o.qty;vS+=(sellOf(o)||0)*o.qty;});
   const g=el('div','appr-g'),colL=el('dl','appr-c'),colR=el('dl','appr-c appr-p');
   const cell=(col,k,v,c,cp)=>{const d=el('div',c||null);d.append(el('dt',null,k));const dd=el('dd','num');
     if(typeof v==='number')dd.append(copyBtn(Math.round(v),fmt(v)));else if(cp!=null)dd.append(copyBtn(cp,v));else dd.append(el('span','appr-v',v));d.append(dd);col.append(d);}; // v1.0.47: misma caja en todas las filas
-  const ok=priced.length>0,v2=Math.round(vol*100)/100;
-  cell(colL,'Precios de','Jita 4-4');
+  const ok=priced.length>0||regional,v2=Math.round(vol*100)/100;
+  cell(colL,'Precios de',regional?'The Forge (referencia)':'Jita 4-4');
   cell(colL,'Volumen',NF2.format(v2)+' m³',null,String(v2)); // 2 decimales, como Janice; clic copia el número
   cell(colL,'Items',String(its.length));
-  cell(colR,'Buy',ok?vB:'—','t-buy');cell(colR,'Split',ok?(vB+vS)/2:'—','t-split');cell(colR,'Sell',ok?vS:'—','t-sell');
+  cell(colR,'Buy',ok&&vB>0?vB:'—','t-buy');cell(colR,'Split',ok&&vB>0&&vS>0?(vB+vS)/2:'—','t-split');cell(colR,'Sell',ok&&vS>0?vS:'—','t-sell');
   g.append(colL,colR);box.append(el('h2','mm-title appr-title','TASACIÓN'),g);
-  if(!ok){
+  if(regional){
+    const note=el('p','appr-no-price','Sin órdenes disponibles en Jita 4-4. Los precios mostrados son una referencia de The Forge, no una venta garantizada en Jita.');
+    note.setAttribute('role','status');box.append(note);
+  }else if(!ok){
     const note=el('p','appr-no-price',its.some(o=>o.jita&&o.jita.id)
       ?'Sin órdenes Buy/Sell disponibles en Jita 4-4 para este inventario. Prueba hielo comprimido, reproceso o Buyback.'
       :'Todavía no hay precios de Jita disponibles para estos ítems. Revisa el estado de la API y sus nombres.');
