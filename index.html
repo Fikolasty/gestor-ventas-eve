@@ -3080,7 +3080,7 @@ html.light #mining .mn-fit-fallback{border-color:rgba(40,100,150,.22);background
   </div>
   <nav class="mm-modnav" id="mmTabs" role="tablist" aria-label="Secciones de Market Moves+">
     <button type="button" id="navHome" class="mm-home" title="HOME" aria-label="Volver al inicio"><span class="ic i-home" aria-hidden="true"></span></button>
-    <div id="eveIdentity" class="eve-identity"><button type="button" id="eveIdentityButton" class="eve-identity-button" aria-expanded="false" aria-controls="eveIdentityMenu"><img id="evePortrait" alt="" hidden><span id="evePilotName">Conectar EVE</span><span class="eve-identity-arrow" aria-hidden="true"></span></button><div id="eveIdentityMenu" class="eve-identity-menu" hidden><label for="eveClientId">Client ID de tu aplicación EVE SSO</label><input id="eveClientId" autocomplete="off" spellcheck="false" placeholder="Client ID público"><small>Callback: https://fikolasty.github.io/gestor-ventas-eve/</small><p id="eveLoginStatus" role="status">La sesión se guarda solo en memoria. Skills manuales disponibles sin login.</p><button type="button" id="eveLogin">Iniciar sesión con EVE</button><button type="button" id="eveSync" hidden>Sincronizar skills</button><button type="button" id="eveLogout" hidden>Desconectar</button></div></div>
+    <div id="eveIdentity" class="eve-identity"><button type="button" id="eveIdentityButton" class="eve-identity-button" aria-expanded="false" aria-controls="eveIdentityMenu"><img id="evePortrait" alt="" hidden><span id="evePilotName">Conectar EVE</span><span class="eve-identity-arrow" aria-hidden="true"></span></button><div id="eveIdentityMenu" class="eve-identity-menu" hidden><p id="eveLoginStatus" role="status">Conecta tu personaje mediante el inicio de sesión oficial de CCP.</p><button type="button" id="eveLogin">Iniciar sesión con EVE</button><button type="button" id="eveSync" hidden>Sincronizar skills</button><button type="button" id="eveLogout" hidden>Desconectar</button></div></div>
     <div class="mm-modgroup" role="presentation">
     <button type="button" class="mm-mod on" data-mm-module="ventas" role="tab" aria-controls="salesBody" aria-selected="true" id="mmTabVentas">Ventas</button>
     <button type="button" class="mm-mod" data-mm-module="mining" role="tab" aria-controls="mining" aria-selected="false" id="mmTabMining">Minería</button>
@@ -7506,7 +7506,9 @@ stRestore();syncDeps();brokerNote();buildOreSelect();readBB();syncLots();refresh
 /* EVE SSO v1: PKCE public client; no client secret or persistent access tokens. */
 (function eveLogin(){
   const $e=id=>document.getElementById(id), button=$e('eveIdentityButton'), menu=$e('eveIdentityMenu');
-  const base=location.origin+location.pathname, key='mm.eve.pkce', clientKey='mm.eve.clientId';
+  const base=location.origin+location.pathname, key='mm.eve.pkce';
+  // Configurar una sola vez tras registrar Market Moves+ en EVE Developers. Es público, nunca un Client Secret.
+  const EVE_CLIENT_ID='';
   const scope='esi-skills.read_skills.v1';
   let session=null;
   const status=msg=>$e('eveLoginStatus').textContent=msg;
@@ -7515,13 +7517,11 @@ stRestore();syncDeps();brokerNote();buildOreSelect();readBB();syncLots();refresh
   async function challenge(v){return b64(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(v)));}
   const refreshUI=()=>{const on=!!session;$e('evePilotName').textContent=on?session.name:'Conectar EVE';$e('eveSync').hidden=!on;$e('eveLogout').hidden=!on;$e('eveLogin').hidden=on;
     $e('evePortrait').hidden=!on;if(on)$e('evePortrait').src='https://images.evetech.net/characters/'+session.id+'/portrait?size=64';else $e('evePortrait').removeAttribute('src');};
-  $e('eveClientId').value=localStorage.getItem(clientKey)||'';
-  $e('eveClientId').addEventListener('change',()=>localStorage.setItem(clientKey,$e('eveClientId').value.trim()));
   button.addEventListener('click',()=>{menu.hidden=!menu.hidden;button.setAttribute('aria-expanded',String(!menu.hidden));});
   document.addEventListener('click',e=>{if(!e.target.closest('#eveIdentity')){menu.hidden=true;button.setAttribute('aria-expanded','false');}});
   $e('eveLogin').addEventListener('click',async()=>{
-    const client=$e('eveClientId').value.trim();if(!/^[a-zA-Z0-9_-]{12,128}$/.test(client)){status('Introduce el Client ID público registrado en EVE Developers.');return;}
-    localStorage.setItem(clientKey,client);
+    const client=EVE_CLIENT_ID;
+    if(!client){status('El inicio de sesión estará disponible cuando se registre el Client ID oficial de Market Moves+.');return;}
     try{const verifier=rand(48),state=rand(24);sessionStorage.setItem(key,JSON.stringify({verifier,state,client,redirect:base,at:Date.now()}));
       const u=new URL('https://login.eveonline.com/v2/oauth/authorize');u.searchParams.set('response_type','code');u.searchParams.set('client_id',client);u.searchParams.set('redirect_uri',base);u.searchParams.set('scope',scope);u.searchParams.set('state',state);u.searchParams.set('code_challenge',await challenge(verifier));u.searchParams.set('code_challenge_method','S256');location.assign(u.href);
     }catch(err){status('No fue posible iniciar el flujo seguro: '+err.message);}
@@ -7554,9 +7554,20 @@ stRestore();syncDeps();brokerNote();buildOreSelect();readBB();syncLots();refresh
       const data=new URLSearchParams({grant_type:'authorization_code',code,client_id:req.client,code_verifier:req.verifier,redirect_uri:req.redirect});
       const tokenResp=await fetch('https://login.eveonline.com/v2/oauth/token',{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:data});
       if(!tokenResp.ok)throw Error('Intercambio de token HTTP '+tokenResp.status);const tokens=await tokenResp.json();
-      const verified=await fetch('https://login.eveonline.com/v2/oauth/verify',{headers:{Authorization:'Bearer '+tokens.access_token}});
-      if(!verified.ok)throw Error('Verificación SSO HTTP '+verified.status);const pilot=await verified.json();
-      const id=Number(pilot.CharacterID||pilot.character_id),name=pilot.CharacterName||pilot.character_name;
+      const parts=tokens.access_token.split('.');if(parts.length!==3)throw Error('Token JWT inválido.');
+      const jsonPart=x=>JSON.parse(atob(x.replace(/-/g,'+').replace(/_/g,'/').padEnd(Math.ceil(x.length/4)*4,'=')));
+      const header=jsonPart(parts[0]),pilot=jsonPart(parts[1]);
+      if(header.alg!=='RS256'||!header.kid)throw Error('Algoritmo JWT no permitido.');
+      const metadata=await fetch('https://login.eveonline.com/.well-known/oauth-authorization-server').then(r=>{if(!r.ok)throw Error('Metadatos SSO HTTP '+r.status);return r.json()});
+      const jwksUrl=new URL(metadata.jwks_uri);if(jwksUrl.protocol!=='https:'||jwksUrl.hostname!=='login.eveonline.com')throw Error('JWKS inesperado.');
+      const keys=await fetch(jwksUrl.href).then(r=>{if(!r.ok)throw Error('JWKS HTTP '+r.status);return r.json()});
+      const jwk=keys.keys.find(k=>k.kid===header.kid&&k.kty==='RSA');if(!jwk)throw Error('No se encontró la clave de firma.');
+      const publicKey=await crypto.subtle.importKey('jwk',jwk,{name:'RSASSA-PKCS1-v1_5',hash:'SHA-256'},false,['verify']);
+      const signature=Uint8Array.from(atob(parts[2].replace(/-/g,'+').replace(/_/g,'/').padEnd(Math.ceil(parts[2].length/4)*4,'=')),c=>c.charCodeAt(0));
+      if(!await crypto.subtle.verify('RSASSA-PKCS1-v1_5',publicKey,signature,new TextEncoder().encode(parts[0]+'.'+parts[1])))throw Error('Firma JWT inválida.');
+      const audience=Array.isArray(pilot.aud)?pilot.aud:[pilot.aud];
+      if(!['https://login.eveonline.com/','login.eveonline.com'].includes(pilot.iss)||!audience.includes(req.client)||!audience.includes('EVE Online')||pilot.exp*1000<=Date.now()||!pilot.scp?.includes(scope))throw Error('Token JWT no corresponde a la aplicación o al permiso solicitado.');
+      const id=Number(String(pilot.sub||'').match(/^CHARACTER:EVE:(\\d+)$/)?.[1]),name=pilot.name;
       if(!Number.isSafeInteger(id)||!name)throw Error('Identidad de personaje no verificada.');
       session={id,name,token:tokens.access_token,expires:Date.now()+(tokens.expires_in||1200)*1000-30000};refreshUI();status('Sesión autorizada para '+name+'. Sincroniza las skills cuando quieras.');await sync();
     }catch(err){status('Error de SSO: '+err.message);}
