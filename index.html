@@ -1546,6 +1546,14 @@ html.light #verdict .v-plan-name{color:#ad4b27}
 .hero-intro:not(.no-appr)>.paste .paste-foot #bClear{margin-left:auto}
 .appr-no-price{color:var(--thrust);font-size:.79rem;line-height:1.4;margin:8px 0 0}
 @media(max-width:860px){.hero-intro:not(.no-appr){grid-template-columns:minmax(0,1fr)!important}}
+
+/* Pasos de venta: el botón de copiar forma parte del panel negro, no ocupa una fila externa. */
+.stp-b.two>.stp-main>.pl{margin:0!important;align-self:stretch}
+.stp-main>.pl>.stp-acts{display:flex;align-items:center;justify-content:flex-end;gap:10px;padding:0 12px;min-height:46px;box-sizing:border-box;border-bottom:1px solid var(--line2);flex:none}
+.stp-main>.pl>.stp-acts .cp-all{margin:0}
+.stp-main>.pl>.stp-acts .pl-search{max-width:220px;min-width:0}
+.stp-b.two>.stp-ct{align-self:stretch}
+
 /* ===== tema claro (generado desde el oscuro por light.py) ===== */
 html.light{--void:#e4e3dd;--hull:#e2e0da;--hull2:#e0ded8;--line:rgba(31,30,29,0.114);--line2:rgba(31,30,29,0.125);--txt:#1c1c1a;--mut:#54524d;--dim:#6c6a64;--ion:#413f3c;--blue:#a39d8b;--clay:#c96442;--thrust:#a67526;--gain:#418b62;--loss:#a92c23}
 html.light body::after{background:repeating-linear-gradient(180deg,rgba(31,30,29,0.011) 0 1px,transparent 1px 3px),
