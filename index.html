@@ -1714,6 +1714,16 @@ html.light #verdict .v-plan-name{color:#ad4b27}
 #bDeep:focus-visible{outline:2px solid var(--ion);outline-offset:3px}
 @media(max-width:600px){#bDeep.step-toggle{padding:12px;min-height:67px}}
 
+
+/* Reprocesar: heading and numeric chooser with breathing room and readable targets. */
+#vRep{padding-top:8px}
+#vRep>h3.v-h{font-size:1rem!important;line-height:1.4!important;margin:8px 0 14px!important;letter-spacing:.025em}
+#vRep .rep-tabs{display:flex;align-items:center;gap:10px!important;margin:0 0 18px!important;flex-wrap:wrap}
+#vRep .rep-tab{height:38px!important;min-width:40px!important;padding:0 12px!important;font-size:.94rem!important;font-weight:750!important;border-radius:8px}
+#vRep .rep-tabs #vRepAns{min-height:36px;padding:7px 12px;margin-left:10px!important;font-size:.85rem;font-weight:650;box-sizing:border-box}
+#vRepList{margin-top:0}
+@media(max-width:560px){#vRep .rep-tabs{gap:7px!important}#vRep .rep-tab{min-width:37px!important;height:37px!important}#vRep .rep-tabs #vRepAns{margin-left:2px!important}}
+
 /* ===== tema claro (generado desde el oscuro por light.py) ===== */
 html.light{--void:#e4e3dd;--hull:#e2e0da;--hull2:#e0ded8;--line:rgba(31,30,29,0.114);--line2:rgba(31,30,29,0.125);--txt:#1c1c1a;--mut:#54524d;--dim:#6c6a64;--ion:#413f3c;--blue:#a39d8b;--clay:#c96442;--thrust:#a67526;--gain:#418b62;--loss:#a92c23}
 html.light body::after{background:repeating-linear-gradient(180deg,rgba(31,30,29,0.011) 0 1px,transparent 1px 3px),
