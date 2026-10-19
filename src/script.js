@@ -239,11 +239,11 @@ function applyBait(a){
 }
 const iceNullTxt=()=>C.ice.nullMode==='jbuy'?'Jita Buy −'+pct(C.ice.nullDisc)+'%':C.ice.nullMode==='jita'?'precio de Jita':'con tu margen';
 const nullPrice=(base,name)=>base==null||!(base>0)?null:tick(base*(1+marginFor(name))); // Jita Buy (+ margen opcional)
-const nullLabel=name=>{
-  if(C.ice.on&&isIceIsotope(name))return 'Vender en HY-RWO (isótopos a Jita Buy)';
-  if(C.ice.on&&isIceRefinedNonIsotope(name))return 'Vender en HY-RWO (refinado −'+pct(C.ice.refLoss)+'%)';
-  if(C.ice.on&&isIce(name)&&C.ice.nullMode!=='margin')return 'Vender en HY-RWO ('+(C.ice.nullMode==='jbuy'?'Jita Buy −'+pct(C.ice.nullDisc)+'%':'sin margen')+')';
-  return 'Vender en HY-RWO ('+nullBaseTxt(name)+')';};
+const nullLabel=name=>{const hub=nullSystem();
+  if(C.ice.on&&isIceIsotope(name))return 'Vender en '+hub+' (isótopos a Jita Buy)';
+  if(C.ice.on&&isIceRefinedNonIsotope(name))return 'Vender en '+hub+' (refinado −'+pct(C.ice.refLoss)+'%)';
+  if(C.ice.on&&isIce(name)&&C.ice.nullMode!=='margin')return 'Vender en '+hub+' ('+(C.ice.nullMode==='jbuy'?'Jita Buy −'+pct(C.ice.nullDisc)+'%':'sin margen')+')';
+  return 'Vender en '+hub+' ('+nullBaseTxt(name)+')';};
 // precio de Null en palabras: módulo = Jita Buy (+ margen); el resto = 90% de Jita Buy
 const nullBaseTxt=name=>isModule(name)?'Jita Buy'+(marginFor(name)>0?' +'+pct(marginFor(name))+'%':''):pct(C.nullNonMod)+'% de Jita Buy';
 const jitaLabel=name=>C.ice.on&&isIce(name)&&!isIceIsotope(name)?(C.ice.jitaMode==='split'?'Orden en Jita (Split)':'Orden en Jita (Undercut)'):'Orden en Jita';
@@ -1157,7 +1157,7 @@ function paintLot(r){
   const warn=(o.checks||[]).filter(c=>c[1]==='warn').length,ok=(o.checks||[]).length&&!warn;
   setText(u.tag,warn?warn+(S.lang==='en'?(warn>1?' warnings':' warning'):(warn>1?' avisos':' aviso')):(ok?(S.lang==='en'?'verified':'verificado'):''),'tag '+(warn?'warn':ok?'ok':''));u.tag.hidden=!warn&&!ok;
   if(!u.skT){u.skT=el('span','tag sk');u.nm.append(u.skT);}u.skT.hidden=!o.skew;if(o.skew)u.skT.textContent='ajuste '+(o.skew>0?'+':'−')+pctS(Math.abs(o.skew))+'%';
-  if(r.best){const l=OPTS.find(x=>x[0]===r.best)[1];setText(u.dest,l,'lot-dest pill k-'+r.best+' '+(r.best==='disc'?'p-disc':SHIPS[r.best]?'p-jita':'p-null'));}
+  if(r.best){const l=OPTS.find(x=>x[0]===r.best)[1].replaceAll('HY-RWO',nullSystem());setText(u.dest,l,'lot-dest pill k-'+r.best+' '+(r.best==='disc'?'p-disc':SHIPS[r.best]?'p-jita':'p-null'));}
   else setText(u.dest,'Falta Precio','lot-dest pill p-none');
   setText(u.net,r.best?fmt(r.net[r.best]):'—','lot-net '+(r.best?sgn(r.net[r.best]):''));
   {const up=suggUnit(r),b=u.ppB;const t=up==null?'—':fmtP(up);if(b.textContent!==t)b.textContent=t;b.dataset.v=up==null?'':String(Math.round(up*100)/100);b.disabled=up==null;
@@ -1350,7 +1350,7 @@ const routeSummaryName=k=>({
   jOrd:'Venta mediante órdenes en Jita',jInst:'Venta inmediata en Jita',
   bb:'Programa Buy Back',rNull:'Reproceso y venta en HY-RWO',
   rJita:'Reproceso y venta en Jita',disc:'Venta directa a un jugador'
-})[k]||PLAN_L[k]||k;
+})[k]?.replaceAll('HY-RWO',nullSystem())||PLAN_L[k]?.replaceAll('HY-RWO',nullSystem())||k;
 const spanishCount=n=>({1:'un',2:'dos',3:'tres',4:'cuatro',5:'cinco',6:'seis',7:'siete',8:'ocho',9:'nueve',10:'diez'})[n]||String(n);
 const routeSentence=(k,n)=>{if(S.lang==='en'){
   const action={null:'sell through orders in HY-RWO',fN:'ship to HY-RWO to sell there',jOrd:'sell through orders in Jita',fJ:'sell through orders in Jita',jInst:'sell instantly in Jita',fJI:'sell instantly in Jita',bb:'deliver to the Buyback Program',rNull:'reprocess and sell the materials in HY-RWO',rJita:'reprocess and sell the materials in Jita',disc:'sell directly to another player'}[k]||'follow the recommended selling route';
