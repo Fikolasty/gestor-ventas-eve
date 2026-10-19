@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.0.83 — [ChatGPT] Resumen dinámico y simetría visual
+*2026-10-18*
+
+- La descripción superior se genera directamente a partir del plan seleccionado, las rutas aplicadas y el número de ítems con precio. Resalta el nombre del plan con un color suave, también en el tema claro.
+- Ajusta la proporción horizontal del encabezado y la cifra neta, mejorando separación, lectura y respuesta en pantallas estrechas.
+- «Tasación» deja de ser una insignia y comparte el encabezado en mayúsculas con acento arcilla usado en «Listado de Items Registrados».
+- Regresiones estáticas para cambios de plan y textos con rutas/ítems alternativos. No modifica cálculos de precios ni ISK.
+
+
 ## 1.0.82 — [ChatGPT] Interfaz v6 aprobada y mantenimiento de memoria
 *2026-10-18*
 

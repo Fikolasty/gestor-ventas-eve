@@ -21,6 +21,7 @@ Antes, revisa **Ajustes** (el engranaje del menú): tus skills, los taxes, el Bu
 Lo más exacto es copiar los % de *Broker's fee* y *Sales tax* que muestra la ventana de venta del juego.
 
 ### Funciones principales
+- **Resumen de ruta reactivo**: muestra el nombre del plan activo resaltado y cómo se distribuyen realmente los ítems entre rutas, sin texto fijo; Tasación usa el estilo de encabezados de sección.
 - **Interfaz v6 unificada**: resumen financiero y selector de planes en un mismo panel; haz clic en el plan actual para cambiarlo. Pestañas a la derecha, encabezados y tamaños alineados.
 - **Cachés con limpieza**: el gestor libera tipos, volúmenes, íconos y materiales que deja de usar; Minería descarta cotizaciones ESI antiguas y desconecta su observador al salir. La caché activa permanece disponible.
 
