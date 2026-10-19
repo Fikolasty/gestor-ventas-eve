@@ -1754,7 +1754,7 @@ function paintContracts(P){
   else{
     const add=(l,v,cls)=>{const d=el('div');d.append(el('span',null,l),el('b','num '+(cls||''),v));tot.append(d);};
     add('Contratos',String(cards.length));
-    if(P.toBB.length)add('Recibes del Buyback',fmt(P.bbGross),'pos');
+    if(P.toBB.length)add(S.lang==='en'?'YOUR BUYBACK PROFIT':'TU INGRESO DEL BUYBACK',fmt(P.bbGross),'pos');
     if(cs.length)add('Envío a Jita','−'+fmt(shipR),'neg');
     if(dr.length)add('Recibes de jugadores',fmt(dr.reduce((a,r)=>a+(r.g.disc||0),0)),'pos');
   }
