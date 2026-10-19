@@ -1831,6 +1831,12 @@ select{appearance:none;-webkit-appearance:none;padding-right:30px!important;back
 #ledger>summary::after{order:99!important;flex:0 0 9px!important;margin-left:0!important;margin-right:5px!important}
 #ledger>summary .cnt{margin-left:0!important;flex:0 0 auto!important}
 @media(max-width:650px){#ledger>summary .status.cta{margin-left:auto!important;margin-right:8px!important}}
+
+/* Los iconos de ayuda son tooltips, no desplegables de sección. */
+#mining details.mn-info>summary::before,
+#mining details.mn-info>summary::after{content:none!important;display:none!important;border:0!important;transform:none!important}
+#mining details.mn-info>summary{margin:0!important;padding:0!important;min-height:20px}
+#mining details.mn-info[open]>summary::after{content:none!important;display:none!important}
 </style>
 <script>/* v1.0.16: aplica el tema guardado antes de pintar (sin parpadeo). Por defecto: Dark. */try{var g=JSON.parse(localStorage.getItem('gestorVentas.ajustes.v1')||'null');if(g&&g.ui){if(g.ui.light)document.documentElement.classList.add('light');}}catch(e){}</script>
 </head>
