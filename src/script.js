@@ -1254,13 +1254,25 @@ function fadeIn(list){if(!MOTION())return;list.forEach((n,i)=>n.animate([{opacit
 document.addEventListener('toggle',e=>{const d=e.target;if(!(d instanceof HTMLDetailsElement)||!d.open||!MOTION())return;
   [...d.children].filter(c=>c.tagName!=='SUMMARY'&&!c.hidden).forEach(c=>c.animate([{opacity:0,transform:'translateY(-6px)'},{opacity:1,transform:'none'}],{duration:220,easing:EASE}));},true);
 // Divulgación progresiva: primero el resultado; el análisis y la info extra solo si los pides
-const SECT={deep:['bDeep','Ver el desglose ▾','Ver el desglose ▾']};
-function setSect(t,open){const [b,o,c]=SECT[t];if($(t).hidden===!open)return;
-  $(b).setAttribute('aria-expanded',String(open));$(b).querySelector('b').textContent=open?c:o;
-  if(t==='deep'){ // v1.0.50: con el desglose abierto se pliegan los planes
-    $('pSum').classList.remove('res-min');}
-  if(open){$(t).hidden=false;if(lastP)refreshNow();$(t).hidden=true;slide($(t),true);}else $(t).hidden=true;}
-$('bDeep').addEventListener('click',()=>{setSect('deep',true);$('stepsPanel').scrollIntoView({behavior:MOTION()?'smooth':'auto',block:'start'});});
+function setSect(t,open){
+  if(t!=='deep')return;
+  const panel=$('deep'),button=$('bDeep');
+  if(!panel||!button||panel.hidden===!open)return;
+  button.setAttribute('aria-expanded',String(open));
+  if(open){
+    $('pSum').classList.remove('res-min');
+    panel.hidden=false;
+    if(lastP)refreshNow();
+    slide(panel,true);
+  }else{
+    slide(panel,false);
+  }
+}
+$('bDeep').addEventListener('click',()=>{
+  const open=$('deep').hidden;
+  setSect('deep',open);
+  if(open)$('stepsPanel').scrollIntoView({behavior:MOTION()?'smooth':'auto',block:'start'});
+});
 // v1.0.54: modo foco. Al abrir una sección principal (planes, desglose, Listado, Contratos, Reproceso, Jugadores, Ajustes o Guía de Uso),
 // las demás se pliegan y la vista va a la que abriste.
 function focusOnly(k){
