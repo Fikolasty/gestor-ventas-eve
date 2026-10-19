@@ -1318,13 +1318,14 @@ function planIntroData(P){
   if(!active.length)return{name,description:'Todavía no hay ítems con una ruta de venta disponible.'};
   const groups=new Map();
   active.forEach(r=>{const g=groups.get(r.best)||[];g.push(r);groups.set(r.best,g);});
-  if(active.length===1)return{name,description:'conviene '+({
-    null:'vender «'+active[0].o.name+'» en HY-RWO',jOrd:'vender «'+active[0].o.name+'» mediante una orden en Jita',
-    fJ:'vender «'+active[0].o.name+'» mediante una orden en Jita',
-    bb:'entregar «'+active[0].o.name+'» al programa Buy Back',
-    rNull:'reprocesar «'+active[0].o.name+'» y vender sus materiales en HY-RWO',
-    rJita:'reprocesar «'+active[0].o.name+'» y vender sus materiales en Jita'
-  })[active[0].best]||'seguir la ruta recomendada para «'+active[0].o.name+'»'+'. Más abajo puedes revisar los pasos.'};
+  if(active.length===1){
+    const item=active[0],nameText='«'+item.o.name+'»';
+    const action=({null:'vender '+nameText+' en HY-RWO',jOrd:'vender '+nameText+' mediante una orden en Jita',
+      fJ:'vender '+nameText+' mediante una orden en Jita',bb:'entregar '+nameText+' al programa Buy Back',
+      rNull:'reprocesar '+nameText+' y vender sus materiales en HY-RWO',
+      rJita:'reprocesar '+nameText+' y vender sus materiales en Jita'})[item.best]||'seguir la ruta recomendada para '+nameText;
+    return{name,description:'conviene '+action+'. Más abajo puedes revisar los pasos.'};
+  }
   const phrases=[...groups].map(([key,rows])=>routeSentence(key,rows.length));
   const natural=phrases.length===1?phrases[0]:phrases.length===2?phrases.join(' y '):phrases.slice(0,-1).join(', ')+' y '+phrases.at(-1);
   return{name,description:'conviene distribuir el lote así: '+natural+'. Más abajo puedes revisar los pasos de cada venta.'};
