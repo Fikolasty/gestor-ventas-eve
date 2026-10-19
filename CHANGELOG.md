@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.0.82 — [ChatGPT] Interfaz v6 aprobada y mantenimiento de memoria
+*2026-10-18*
+
+- Integra en la app la v6 aprobada: barra de módulos a la derecha, sin Minería duplicada en el encabezado, títulos y subtítulos alineados, La Mejor Ruta de Venta y selección de planes en el mismo panel, fila compacta y desplegable por clic con flecha coherente.
+- Elimina el aviso Deshacer y su historial de ítems, retira resultados/cálculos visuales duplicados que ya estaban ocultos, y limpia referencias de código obsoletas sin cambiar las fórmulas de venta, reproceso ni minería.
+- Corrige limpieza de cachés al reemplazar inventarios: ids, volúmenes, categorías, ore memo e imágenes HTTPS; solo revoca object URLs si realmente son blob. Elimina cotizaciones de Minería antiguas y desconecta su ResizeObserver en pagehide.
+- Conserva la validación de ítems sin precio y la Tasación bruta existente; la equivalencia exacta con Janice continúa sin verificarse.
+- Añade regresiones para el nuevo selector, módulos, cachés y HTML distribuible.
+
+
 ## 1.0.81 — [ChatGPT] Diseño final del gestor y navegación modular
 *2026-10-18*
 
