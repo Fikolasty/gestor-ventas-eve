@@ -177,19 +177,39 @@ function jitaList(name,sell,buy,q,man){
 // v1.0.17: si tu precio de orden queda a C.spreadTk ticks o menos de la mejor compra, se prefiere vender al instante
 function tightSpread(jl,a){if(!(C.spreadTk>0)||jl==null||!a||a.buy==null||!(a.buy>0))return null;
   const g=jl<=a.buy?0:ticksBetween(a.buy,jl);return g<=C.spreadTk+1e-9?{ticks:Math.round(g),buy:a.buy,jl}:null;}
-// v1.0.17: anti-cebo en cascada (regla de Arturo). Se miran las 5 ventas más baratas:
-//  · si la 1ª está más de C.baitTk ticks por debajo de la 2ª, se salta; igual con la 2ª frente a la 3ª y la 3ª frente a la 4ª
-//    (máx. 3 saltos). No se salta una orden "muro": si su cantidad ≥ la suma de las 3 siguientes, es real.
-//  · el precio elegido se confirma con la siguiente (a C.baitTk ticks o menos). Si no se confirma, no es un cebo sino
-//    otro nivel de precio: se usa la 1ª (vender barato pero seguro).
-function applyBait(a){if(!a)return;if(a.sell0===undefined)a.sell0=a.sell;a.sell=a.sell0;a.bait=null;a.baitLevel=null;
-  const t=a.top,N=C.baitTk;if(!t||t.length<2||!(N>0)||(a.flags||[]).some(f=>f.k==='outSell'))return;
-  const far=i=>i+1<t.length&&ticksBetween(t[i].p,t[i+1].p)>N;
-  const wall=i=>t[i].v>=t.slice(i+1,i+4).reduce((s,o)=>s+o.v,0);
-  let k=0;while(k<3&&far(k)&&!wall(k))k++;
-  if(k===0)return;
-  if(k+1>=t.length||far(k)){a.baitLevel={p:t[k].p};return;} // sin siguiente que lo confirme, u otro nivel de precio: se queda la 1ª
-  a.sell=t[k].p;a.bait={skip:t.slice(0,k).map(o=>({p:o.p,v:o.v})),p:t[k].p,next:t[k+1]?t[k+1].p:null};}
+// Jita Smart Pricing: analyse the locally available depth; never make extra ESI calls.
+// Distinguish isolated low-price listings from a supported price level. Orders remain real:
+// this merely selects a representative listing price, with conservative safeguards.
+function applyBait(a){
+  if(!a)return;
+  if(a.sell0===undefined)a.sell0=a.sell;
+  a.sell=a.sell0;a.bait=null;a.baitLevel=null;a.smart=null;
+  const t=(a.top||[]).filter(o=>o&&Number.isFinite(o.p)&&o.p>0&&o.v>0);
+  if(t.length<5||!(C.baitTk>0)||!Number.isFinite(a.sell0))return;
+  const maxSkip=Math.min(3,t.length-3),gapLimit=.05;
+  const pctGap=(lo,hi)=>(hi.p-lo.p)/lo.p;
+  let chosen=-1;
+  for(let k=1;k<=maxSkip;k++){
+    // A jump must be material in BOTH relative price and the configured tick threshold.
+    if(pctGap(t[k-1],t[k])<gapLimit||ticksBetween(t[k-1].p,t[k].p)<=C.baitTk)break;
+    const rest=t.slice(k),near=rest.filter(x=>x.p<=t[k].p*1.015);
+    const supported=near.length>=3;
+    const lowerVolume=t.slice(0,k).reduce((n,o)=>n+o.v,0);
+    const nearVolume=near.reduce((n,o)=>n+o.v,0);
+    // Do not ignore a genuine liquidity wall; require at least 5x more depth around candidate.
+    if(supported&&nearVolume>=5*lowerVolume){chosen=k;break;}
+  }
+  if(chosen<1){
+    const unusual=t[1]&&pctGap(t[0],t[1])>=gapLimit;
+    a.smart={status:unusual?'review':'market',sample:t.length,reference:t[0].p,reason:unusual?'Precio aislado sin confirmación suficiente':'Precio respaldado o sin anomalías claras'};
+    if(unusual)a.baitLevel={p:t[1].p};
+    return;
+  }
+  const base=t[chosen],confirmation=t.slice(chosen).filter(o=>o.p<=base.p*1.015);
+  a.sell=base.p;
+  a.bait={skip:t.slice(0,chosen).map(o=>({p:o.p,v:o.v})),p:base.p,next:t[chosen+1]?.p||null};
+  a.smart={status:'representative',sample:t.length,reference:base.p,volume:confirmation.reduce((n,o)=>n+o.v,0),skipped:chosen,reason:'Nivel respaldado por varias órdenes y mayor volumen'};
+}
 const iceNullTxt=()=>C.ice.nullMode==='jbuy'?'Jita Buy −'+pct(C.ice.nullDisc)+'%':C.ice.nullMode==='jita'?'precio de Jita':'con tu margen';
 const nullPrice=(base,name)=>base==null||!(base>0)?null:tick(base*(1+marginFor(name))); // Jita Buy (+ margen opcional)
 const nullLabel=name=>{
@@ -464,7 +484,7 @@ async function jitaBook(id){
   if(sell!=null&&sellP5&&sell<.5*sellP5){flags.push({k:'outSell',p:sell});sell=sellP5;}
   if(buy!=null&&buyP5&&buy>2*buyP5){flags.push({k:'outBuy',p:buy});buyCap=2*buyP5;buy=buyP5;}
   // v1.0.45: topBuy/topSell = mejor compra y venta más barata de Jita 4-4 tal cual (como Janice), solo para la Tasación.
-  return{buy,sell,buys:buys.slice(0,400),buyCap,flags,top:sells.slice(0,5).map(o=>({p:o.p,v:o.v})),topBuy:buys.length?buys[0].p:null,topSell:sells.length?sells[0].p:null,
+  return{buy,sell,buys:buys.slice(0,400),buyCap,flags,top:sells.slice(0,20).map(o=>({p:o.p,v:o.v})),topBuy:buys.length?buys[0].p:null,topSell:sells.length?sells[0].p:null,
     regionBuy:regionalBuys.length?Math.max(...regionalBuys.map(o=>o.p)):null,
     regionSell:regionalSells.length?Math.min(...regionalSells.map(o=>o.p)):null};
 }
@@ -1449,7 +1469,7 @@ function paintVerdict(P){
     null:['Publicar órdenes en '+sys,'En '+sys,'Precio por unidad para tu sell order. Clic en el precio para copiarlo.'],
     rNull:['Reprocesar y vender en '+sys,'En '+sys,'Reprocesa en '+refName()+' y publica cada material al precio indicado. Doble clic para editar los precios.'],
     rJita:['Reprocesar para llevar a Jita','En '+sys,'Reprocesa en '+refName()+'; los materiales se envían y se venden en Jita. Doble clic para editar los precios.'],
-    jOrd:[arr+'Publicar órdenes en Jita','En Jita','Precio = la venta más barata'+tk+'. Clic en el precio para copiarlo.'],
+    jOrd:[arr+'Publicar órdenes en Jita','En Jita','Precio sugerido tras revisar las órdenes y su volumen en Jita'+tk+'. Clic en el precio para copiarlo.'],
     jInst:[arr+'Vender al instante en Jita','En Jita','Vende a las buy orders; el precio es el promedio que recibirías.'],
     fJ:['Publicar órdenes en Jita','En Jita','Precio = la venta más barata'+tk+'. Clic en el precio para copiarlo.'],
     fJI:['Vender al instante en Jita','En Jita','Vende a las buy orders; el precio es el promedio que recibirías.'],
