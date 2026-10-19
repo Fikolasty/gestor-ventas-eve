@@ -1724,6 +1724,22 @@ html.light #verdict .v-plan-name{color:#ad4b27}
 #vRepList{margin-top:0}
 @media(max-width:560px){#vRep .rep-tabs{gap:7px!important}#vRep .rep-tab{min-width:37px!important;height:37px!important}#vRep .rep-tabs #vRepAns{margin-left:2px!important}}
 
+
+/* Disclosure design system: same rhythm for Pasos and Extras. */
+#bDeep.step-toggle,#pExtra details.fold>summary{min-height:66px!important;box-sizing:border-box;display:flex!important;flex-direction:row!important;align-items:center!important;gap:14px!important;padding:13px 17px!important}
+#bDeep .step-toggle-copy{display:flex;flex-direction:row;flex-wrap:wrap;align-items:baseline;gap:8px 16px}
+#bDeep .step-toggle-copy strong,#pExtra details.fold>summary h2{font:800 .96rem/1.3 var(--f-ui)!important;text-transform:uppercase!important;letter-spacing:.015em;margin:0!important;color:var(--txt)}
+#bDeep .step-toggle-copy small,#pExtra details.fold>summary>.sum{font:500 .82rem/1.45 var(--f-ui)!important;color:var(--mut)!important;min-width:0;margin:0!important}
+#pExtra details.fold>summary h2{display:flex;align-items:center;gap:9px;flex:0 0 auto}
+#pExtra details.fold>summary>.sum{flex:1 1 auto;text-align:right;margin-left:auto!important;padding-right:8px}
+#pExtra details.fold>summary .fold-chevron{flex:0 0 9px;width:9px;height:9px;border-right:2px solid var(--ion);border-bottom:2px solid var(--ion);transform:rotate(45deg);transition:transform .18s ease;margin-right:5px}
+#pExtra details.fold[open]>summary .fold-chevron{transform:rotate(225deg)}
+#bDeep .step-toggle-chevron{margin-left:auto}
+#pExtra details.fold>summary .sum .pos{color:#5cba86!important}
+#pExtra details.fold>summary .sum .neg{color:#e86b70!important}
+#pExtra details.fold>summary .ic{flex:none}
+@media(max-width:700px){#bDeep .step-toggle-copy,#pExtra details.fold>summary{flex-wrap:wrap}#pExtra details.fold>summary h2{flex-basis:100%}#pExtra details.fold>summary>.sum{text-align:left;margin-left:0!important;flex:1}#bDeep .step-toggle-copy small{flex-basis:100%}}
+
 /* ===== tema claro (generado desde el oscuro por light.py) ===== */
 html.light{--void:#e4e3dd;--hull:#e2e0da;--hull2:#e0ded8;--line:rgba(31,30,29,0.114);--line2:rgba(31,30,29,0.125);--txt:#1c1c1a;--mut:#54524d;--dim:#6c6a64;--ion:#413f3c;--blue:#a39d8b;--clay:#c96442;--thrust:#a67526;--gain:#418b62;--loss:#a92c23}
 html.light body::after{background:repeating-linear-gradient(180deg,rgba(31,30,29,0.011) 0 1px,transparent 1px 3px),
@@ -2192,6 +2208,8 @@ html.light #stepHead .stp-balance-cell .pos{color:#418b62}
 html.light #stepHead .stp-balance-cell .neg{color:#a92328}
 html.light #vCap .plan-name-accent,html.light #pkNote .plan-name-accent,html.light .pk-sum .plan-name-accent,html.light .pk-opportunity .plan-name-accent{color:#a67526!important}
 html.light #bDeep.step-toggle{border:1px solid rgba(201,100,66,0.65);background:rgba(240,237,229,0.87)}
+html.light #pExtra details.fold>summary .sum .pos{color:#418b62!important}
+html.light #pExtra details.fold>summary .sum .neg{color:#a92328!important}
 /* ajustes a mano del tema claro */
 html.light body{background:#e6e3da;color:#1f1e1d}
 html.light body::before{opacity:.12;filter:grayscale(.35) brightness(1.1)}
@@ -3105,7 +3123,7 @@ Contraband Freight = no</textarea><small>Una regla por línea: Nombre = tax tota
   <section class="panel extras" id="pExtra" hidden>
     <header class="mm-section-head"><h2 class="mm-title">EXTRAS</h2><p class="mm-section-sub">CONSULTA CONTRATOS, REPROCESO Y OTRAS OPCIONES</p></header>
   <details class="panel thin fold" id="pCtr" hidden>
-    <summary><h2><span class="ic i-list" aria-hidden="true"></span><span id="ctrTitle">Contratos y Envío</span></h2><span class="sum" id="ctrSum"></span><span class="fold-cta" aria-hidden="true"><span class="fc-o">Ver ▾</span><span class="fc-c">Ocultar ▴</span></span></summary>
+    <summary><h2><span class="ic i-list" aria-hidden="true"></span><span id="ctrTitle">CONTRATOS Y ENVÍO</span></h2><span class="sum" id="ctrSum"></span><span class="fold-chevron" aria-hidden="true"></span></summary>
     <div class="ce">
       <div class="ce-l">
         <div class="ce-h"><h3 class="sub-h"><span class="ic i-list" aria-hidden="true"></span>Tus Contratos</h3>
@@ -3129,7 +3147,7 @@ Contraband Freight = no</textarea><small>Una regla por línea: Nombre = tax tota
     </div>
   </details>
   <details class="panel thin fold" id="pRepro" hidden>
-    <summary><h2><span class="ic i-flask" aria-hidden="true"></span>Reproceso</h2><span class="sum" id="rSum"></span><span class="fold-cta" aria-hidden="true"><span class="fc-o">Ver ▾</span><span class="fc-c">Ocultar ▴</span></span></summary>
+    <summary><h2><span class="ic i-flask" aria-hidden="true"></span>REPROCESO</h2><span class="sum" id="rSum"></span><span class="fold-chevron" aria-hidden="true"></span></summary>
     <p class="lead">Qué minerales deja tu ore y cuánto valen.</p>
     <div class="grid" style="margin-top:14px">
       <label>Ore<select id="rOre"></select><small id="rSkillName"></small></label>
@@ -3178,7 +3196,7 @@ Contraband Freight = no</textarea><small>Una regla por línea: Nombre = tax tota
     <p class="note">La Refinería, el Rig, la Seguridad y el Implante se cambian en Ajustes → Refinería. Reprocessing, Reprocessing Efficiency y la skill del ore se cambian en Ajustes → Tus Skills. El gas no se reprocesa.</p>
   </details>
   <details class="panel thin fold" id="pDisc" hidden>
-    <summary><h2><span class="logo sig" aria-hidden="true"></span><span class="logo vg" aria-hidden="true"></span>Vender a Jugadores</h2><span class="sum" id="dSum"></span><span class="fold-cta" aria-hidden="true"><span class="fc-o">Ver ▾</span><span class="fc-c">Ocultar ▴</span></span></summary>
+    <summary><h2><span class="logo sig" aria-hidden="true"></span><span class="logo vg" aria-hidden="true"></span>VENDER A JUGADORES</h2><span class="sum" id="dSum"></span><span class="fold-chevron" aria-hidden="true"></span></summary>
     <p class="lead" id="dLead">Último recurso: véndelo a alguien de tu alianza o corporación por Discord.</p>
     <div class="dests" role="group" aria-label="Dónde publicar">
       <button type="button" class="dest" data-d="sigma" aria-pressed="true"><span class="logo sig" aria-hidden="true"></span><span><b>SIGMA GRINDSET</b><small>Alianza · #market-trade · en inglés</small></span></button>
