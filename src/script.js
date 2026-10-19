@@ -1379,9 +1379,10 @@ function paintVerdict(P){
   }
   lastP=P;
   paintWhereSold(P,none);
-  if($('deep').hidden)return; // v1.0.8: el análisis (rutas, Qué Hacer, comparación) solo se pinta con la sección abierta
-  const vTot=P.rows.reduce((a,r)=>a+r.vol,0),cTot=P.rows.reduce((a,r)=>a+r.coll,0);
+  // Los indicadores están en el resumen visible, no dentro de Pasos a seguir.
+  const vTot=P.rows.reduce((a,r)=>a+(r.vol||0),0),cTot=P.rows.reduce((a,r)=>a+(r.coll||0),0);
   $('vsN').textContent=String(S.items.length);$('vsV').textContent=fmtV(Math.round(vTot*10)/10);
+  if($('deep').hidden)return; // El desglose pesado solo se pinta cuando se abre.
   {const u=P.rows.reduce((a,r)=>a+(r.q||0),0),n=vTot>0?trips(vTot):0;
    $('vsNs').textContent=fmtQ(u)+(u===1?' unidad':' unidades');
    $('vsVs').textContent=n&&SH()?'Si lo envías todo: '+n+(n>1?' contratos':' contrato'):'';}
