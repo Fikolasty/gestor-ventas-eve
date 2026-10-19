@@ -1787,6 +1787,12 @@ details.panel[open]>summary:not(:has(.fold-chevron))::after,.mn details[open]>su
 #pk>.pk-o[aria-expanded=true]::after{transform:translateY(-30%) rotate(225deg)!important}
 .lot-row .chev,.lot .chev{font-size:0!important;display:inline-block;width:9px;height:9px;border-right:2px solid var(--ion);border-bottom:2px solid var(--ion);transform:rotate(45deg);transition:transform .18s ease}
 select{appearance:none;-webkit-appearance:none;padding-right:30px!important;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23c3bcb1' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E")!important;background-repeat:no-repeat!important;background-position:right 9px center!important;background-size:16px!important}
+
+/* HOME en la barra superior: icono sin borde ni superficie. */
+#mmTabs .mm-home{display:inline-grid;place-items:center;align-self:center;width:40px;height:38px;padding:0;margin-right:auto;background:transparent!important;border:0!important;border-radius:0!important;box-shadow:none!important;color:var(--ion);cursor:pointer}
+#mmTabs .mm-home:hover{color:var(--txt);opacity:.85}
+#mmTabs .mm-home:focus-visible{outline:2px solid var(--ion);outline-offset:2px}
+#mmTabs .mm-home .ic{width:21px;height:21px}
 /* ===== tema claro (generado desde el oscuro por light.py) ===== */
 html.light{--void:#e4e3dd;--hull:#e2e0da;--hull2:#e0ded8;--line:rgba(31,30,29,0.114);--line2:rgba(31,30,29,0.125);--txt:#1c1c1a;--mut:#54524d;--dim:#6c6a64;--ion:#413f3c;--blue:#a39d8b;--clay:#c96442;--thrust:#a67526;--gain:#418b62;--loss:#a92c23}
 html.light body::after{background:repeating-linear-gradient(180deg,rgba(31,30,29,0.011) 0 1px,transparent 1px 3px),
@@ -2958,7 +2964,6 @@ html.light #mining .mn-fit-fallback{border-color:rgba(40,100,150,.22);background
     <span class="side-t">Opciones</span>
   </div>
   <div class="side-g"><span class="side-h">General</span>
-    <button type="button" class="side-i" id="sideHome" title="HOME · Volver al inicio sin borrar nada"><span class="ic i-home" aria-hidden="true"></span><span class="side-l">HOME</span></button>
     <button type="button" class="side-i" data-panel="settings" title="Ajustes de habilidades, impuestos, precios, envío y Buyback"><span class="ic i-gear" aria-hidden="true"></span><span class="side-l">Ajustes</span></button>
   </div>
   <div class="side-g"><span class="side-h">Módulos</span>
@@ -2994,6 +2999,7 @@ html.light #mining .mn-fit-fallback{border-color:rgba(40,100,150,.22);background
     <div><h1>Market Moves+</h1><p class="tagline">Herramienta para gestionar tus planes de mercado.</p></div>
   </div>
   <nav class="mm-modnav" id="mmTabs" role="tablist" aria-label="Secciones de Market Moves+">
+    <button type="button" id="navHome" class="mm-home" title="HOME" aria-label="Volver al inicio"><span class="ic i-home" aria-hidden="true"></span></button>
     <button type="button" class="mm-mod on" data-mm-module="ventas" role="tab" aria-controls="salesBody" aria-selected="true" id="mmTabVentas">Ventas</button>
     <button type="button" class="mm-mod" data-mm-module="mining" role="tab" aria-controls="mining" aria-selected="false" id="mmTabMining">Minería</button>
     <button type="button" class="mm-mod" data-mm-module="pi" role="tab" aria-controls="pi" aria-selected="false" id="mmTabPi">Industria Planetaria · PI</button>
@@ -3093,7 +3099,7 @@ Contraband Freight = no</textarea><small>Una regla por línea: Nombre = tax tota
   <div class="hero-intro no-appr" id="heroIntro" role="tabpanel" aria-labelledby="mmTabVentas">
     <div class="appr" id="appr" hidden aria-live="polite"></div>
     <div class="paste">
-      <div class="paste-head"><h2 class="mm-title paste-title"><span class="ic i-list" aria-hidden="true"></span> INVENTARIO</h2><span class="status" id="status" role="status"></span><button class="ghost paste-home" id="bInventoryHome" type="button" aria-label="Volver a HOME" title="HOME"><span class="ic i-home" aria-hidden="true"></span></button><button class="ghost" id="bClear"><span class="ic i-x" aria-hidden="true"></span>Limpiar</button></div>
+      <div class="paste-head"><h2 class="mm-title paste-title"><span class="ic i-list" aria-hidden="true"></span> INVENTARIO</h2><span class="status" id="status" role="status"></span></div>
       <textarea id="paste" autocomplete="off" spellcheck="false" aria-label="Pega aquí tu inventario de EVE" placeholder="Pega aquí tus items con Ctrl+V"></textarea>
     </div>
   </div>
@@ -3686,7 +3692,7 @@ function setLoading(on,txt,frac,dim){
 let pasteT=null,esiT=null;
 $('paste').addEventListener('paste',()=>{clearTimeout(pasteT);pasteT=setTimeout(()=>syncFromPaste(true),80);});
 $('paste').addEventListener('input',()=>{clearTimeout(pasteT);pasteT=setTimeout(()=>syncFromPaste(false),500);});
-$('bClear').addEventListener('click',()=>{$('paste').value='';syncFromPaste(false);$('paste').focus();});
+
 // Elimina items del texto original sin acumular copias del inventario en memoria.
 function removeFromPaste(name){
   const key=name.toLowerCase();
@@ -7144,8 +7150,7 @@ const navigateHome=()=>{
   window.scrollTo({top:0,behavior:MOTION()?'smooth':'auto'});
   if(innerWidth<=900){document.body.classList.remove('side-open');$('sideBd').hidden=true;}
 };
-$('sideHome').addEventListener('click',navigateHome);
-$('bInventoryHome').addEventListener('click',navigateHome);
+$('navHome').addEventListener('click',navigateHome);
 document.querySelectorAll('[data-go-home]').forEach(node=>{
   node.addEventListener('click',navigateHome);
   node.addEventListener('keydown',event=>{
