@@ -4483,13 +4483,15 @@ function paintVerdict(P){
     const cts=ctrFor(id);
     if(cts.length){body.classList.add('two');const as=el('aside','stp-ct');as.append(el('h5',null,cts.length>1?'Cómo llenar los contratos':'Cómo llenar el contrato'));
       if(cts.length>1){
-        const nav=el('div','stp-contract-nav'),prev=el('button','stp-contract-arrow','‹'),next=el('button','stp-contract-arrow','›'),counter=el('span','stp-contract-counter');
-        prev.type=next.type='button';prev.setAttribute('aria-label','Contrato anterior');next.setAttribute('aria-label','Contrato siguiente');
-        const slide=el('div','stp-contract-slide');let index=0;
-        const show=()=>{slide.replaceChildren(el('div','stp-ct-t',cts[index].title),slots(cts[index].fields,'slots-2'));counter.textContent=(index+1)+' / '+cts.length;prev.disabled=index===0;next.disabled=index===cts.length-1;};
-        prev.addEventListener('click',()=>{if(index>0){index--;show();}});
-        next.addEventListener('click',()=>{if(index<cts.length-1){index++;show();}});
-        nav.append(prev,counter,next);as.append(nav,slide);show();
+        const nav=el('div','stp-contract-nav');
+        nav.setAttribute('role','group');nav.setAttribute('aria-label','Seleccionar contrato');
+        const slide=el('div','stp-contract-slide');let index=0;const buttons=[];
+        const show=()=>{slide.replaceChildren(el('div','stp-ct-t',cts[index].title),slots(cts[index].fields,'slots-2'));
+          buttons.forEach((btn,i)=>{btn.setAttribute('aria-pressed',String(i===index));btn.setAttribute('aria-current',i===index?'true':'false');});};
+        cts.forEach((c,i)=>{const btn=el('button','stp-contract-number',String(i+1));
+          btn.type='button';btn.title=c.title;btn.setAttribute('aria-label','Mostrar contrato '+(i+1)+' de '+cts.length);
+          btn.addEventListener('click',()=>{index=i;show();});buttons.push(btn);nav.append(btn);});
+        as.append(nav,slide);show();
       }else{as.append(slots(cts[0].fields,'slots-2'));}
       body.append(as);}
     box.append(hd,body);return{box,main};};
