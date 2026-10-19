@@ -2481,6 +2481,7 @@ const navigateHome=()=>{
   if(innerWidth<=900){document.body.classList.remove('side-open');$('sideBd').hidden=true;}
 };
 $('sideHome').addEventListener('click',navigateHome);
+$('bInventoryHome').addEventListener('click',navigateHome);
 document.querySelectorAll('[data-go-home]').forEach(node=>{
   node.addEventListener('click',navigateHome);
   node.addEventListener('keydown',event=>{
