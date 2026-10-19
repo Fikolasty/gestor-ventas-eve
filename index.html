@@ -1554,6 +1554,20 @@ html.light #verdict .v-plan-name{color:#ad4b27}
 .stp-main>.pl>.stp-acts .pl-search{max-width:220px;min-width:0}
 .stp-b.two>.stp-ct{align-self:stretch}
 
+
+/* Coste de oportunidad: financial difference vs highest estimated net, liquidity separate. */
+.pk-opportunity{margin:12px 0 16px;padding:15px 17px;border:1px solid var(--line2);border-radius:var(--r-md);background:rgba(19,19,19,.63)}
+.pk-opportunity[hidden]{display:none}
+.pk-opp-head{font-weight:750;color:var(--txt);font-size:.87rem;letter-spacing:.045em;text-transform:uppercase;margin-bottom:12px}
+.pk-opp-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.pk-opp-stat{background:rgba(222,220,209,.035);border:1px solid var(--line);padding:11px;border-radius:var(--r-sm);min-width:0}
+.pk-opp-stat small{display:block;font-size:.77rem;color:var(--mut);margin-bottom:5px}
+.pk-opp-stat strong{font:700 1.05rem var(--f-num);color:var(--txt);overflow-wrap:anywhere}
+.pk-opp-stat strong.neg{color:var(--thrust)}
+.pk-opp-explain{color:var(--mut);font-size:.85rem;line-height:1.55;margin:12px 0 0}
+.pk-opp-note{color:var(--dim);font-size:.76rem;line-height:1.5;margin:7px 0 0}
+@media(max-width:520px){.pk-opp-grid{grid-template-columns:1fr}}
+
 /* ===== tema claro (generado desde el oscuro por light.py) ===== */
 html.light{--void:#e4e3dd;--hull:#e2e0da;--hull2:#e0ded8;--line:rgba(31,30,29,0.114);--line2:rgba(31,30,29,0.125);--txt:#1c1c1a;--mut:#54524d;--dim:#6c6a64;--ion:#413f3c;--blue:#a39d8b;--clay:#c96442;--thrust:#a67526;--gain:#418b62;--loss:#a92c23}
 html.light body::after{background:repeating-linear-gradient(180deg,rgba(31,30,29,0.011) 0 1px,transparent 1px 3px),
@@ -2004,6 +2018,8 @@ html.light .eve-sk-add.book{border-color:#9b363b;color:#c20a15;background:rgba(1
 html.light .stp-contract-number{background:rgba(31,30,29,0.057)}
 html.light .stp-contract-number[aria-pressed="true"]{color:#e6e5e0}
 html.light .stp-arrival-row{background:rgba(240,237,229,0.72)}
+html.light .pk-opportunity{background:rgba(240,237,229,0.63)}
+html.light .pk-opp-stat{background:rgba(31,30,29,0.033)}
 /* ajustes a mano del tema claro */
 html.light body{background:#e6e3da;color:#1f1e1d}
 html.light body::before{opacity:.12;filter:grayscale(.35) brightness(1.1)}
@@ -2878,6 +2894,7 @@ Contraband Freight = no</textarea><small>Una regla por línea: Nombre = tax tota
     <div class="fb2" id="flipBuy" hidden></div>
     <div class="pk-w">
       <div class="pk" id="pk" role="group" aria-label="Plan seleccionado"></div>
+      <section class="pk-opportunity" id="pkOpportunity" aria-label="Coste de oportunidad" hidden></section>
       <div class="pk-tools" id="pkTools"></div>
       <div class="pk" id="pkOthers" role="group" aria-label="Otros planes" hidden></div></div>
     <!-- v1.0.50: justo debajo de los planes. Al abrir el desglose, los planes se pliegan y el desglose pasa a ser lo principal -->
