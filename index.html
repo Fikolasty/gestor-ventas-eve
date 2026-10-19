@@ -1888,6 +1888,13 @@ select{appearance:none;-webkit-appearance:none;padding-right:30px!important;back
 #mmTabs .mm-modgroup{flex:0 0 auto;justify-content:center}
 #mmTabs .mm-modgroup .mm-mod{min-width:84px;text-align:center}
 @media(max-width:680px){#mmTabs .mm-modgroup .mm-mod{min-width:0}}
+
+/* Contract summary: all metrics align regardless of heading length. */
+#ctrTot.ct-sum{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));align-items:stretch;gap:8px}
+#ctrTot.ct-sum>div{min-width:0;display:flex;flex-direction:column;justify-content:space-between;gap:7px}
+#ctrTot.ct-sum>div>span{display:block;font-size:.72rem;line-height:1.2;min-height:2.4em;overflow-wrap:normal}
+#ctrTot.ct-sum>div>b{display:block;white-space:nowrap;font-size:clamp(.76rem,1vw,.9rem);line-height:1.25;font-variant-numeric:tabular-nums}
+@media(max-width:560px){#ctrTot.ct-sum{grid-template-columns:repeat(auto-fit,minmax(110px,1fr))}}
 /* ===== tema claro (generado desde el oscuro por light.py) ===== */
 html.light{--void:#e4e3dd;--hull:#e2e0da;--hull2:#e0ded8;--line:rgba(31,30,29,0.114);--line2:rgba(31,30,29,0.125);--txt:#1c1c1a;--mut:#54524d;--dim:#6c6a64;--ion:#413f3c;--blue:#a39d8b;--clay:#c96442;--thrust:#a67526;--gain:#418b62;--loss:#a92c23}
 html.light body::after{background:repeating-linear-gradient(180deg,rgba(31,30,29,0.011) 0 1px,transparent 1px 3px),
@@ -5193,7 +5200,7 @@ function paintContracts(P){
   else{
     const add=(l,v,cls)=>{const d=el('div');d.append(el('span',null,l),el('b','num '+(cls||''),v));tot.append(d);};
     add('Contratos',String(cards.length));
-    if(P.toBB.length)add('Recibes del Buyback',fmt(P.bbGross),'pos');
+    if(P.toBB.length)add(S.lang==='en'?'YOUR BUYBACK PROFIT':'TU INGRESO DEL BUYBACK',fmt(P.bbGross),'pos');
     if(cs.length)add('Envío a Jita','−'+fmt(shipR),'neg');
     if(dr.length)add('Recibes de jugadores',fmt(dr.reduce((a,r)=>a+(r.g.disc||0),0)),'pos');
   }
