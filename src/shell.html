@@ -1510,7 +1510,11 @@ html.light #verdict .v-plan-name{color:#ad4b27}
 
 /* Step contract carousel: keep item column and contract column symmetrical */
 .stp-b.two{align-items:stretch}
-.stp-b.two>.stp-main{display:flex;flex-direction:column;min-height:100%}
+.stp-b.two>.stp-main{display:flex;flex-direction:column;min-height:0;align-self:stretch}
+.stp-b.two>.stp-main>.pl{flex:1 1 auto;min-height:0;display:flex;flex-direction:column}
+.stp-b.two>.stp-main>.pl>.pl-row:last-child{border-bottom:0}
+.stp-b.two>.stp-main>.stp-acts{flex:none}
+.stp-b.two>.stp-ct{height:100%;box-sizing:border-box}
 .stp-b.two>.stp-main>.ct-items{flex:1;display:flex;flex-direction:column;min-height:100%}
 .stp-b.two>.stp-ct{min-width:0;align-self:stretch}
 .stp-contract-nav{display:flex;align-items:center;justify-content:flex-end;gap:10px;margin:2px 0 12px}
