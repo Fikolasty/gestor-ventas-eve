@@ -1811,6 +1811,19 @@ select{appearance:none;-webkit-appearance:none;padding-right:30px!important;back
 #mmTabs .mm-mod:hover{background:rgba(255,255,255,.055);color:#fff}
 #mmTabs .mm-mod[aria-selected=true]{background:rgba(217,119,87,.16);border-color:rgba(217,119,87,.42);box-shadow:inset 0 1px 0 rgba(255,255,255,.04);color:#ffe7dc}
 @media(max-width:680px){#mmTabs.mm-modnav{gap:8px;padding:8px 10px 8px 12px;min-height:58px}#mmTabs .mm-home{flex-basis:32px;width:32px;height:36px}#mmTabs .mm-modgroup{gap:1px;padding:3px;min-width:0;overflow-x:auto}#mmTabs .mm-mod{font-size:.78rem;padding:8px 10px;min-height:34px}}
+
+/* Igualdad visual: encabezados de contratos y Discord en el mismo nivel. */
+#pCtr .ce{grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;align-items:stretch}
+#pCtr .ce-l,#pCtr .ce-r{min-width:0}
+#pCtr .discord-side{padding:0;border:0;background:transparent;border-radius:0;display:flex;flex-direction:column;flex:1;min-width:0}
+#pCtr .ce-l>.ce-h,#pCtr .discord-side>.ce-h{box-sizing:border-box;display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:46px;height:46px;margin:0 0 10px;padding:0 6px;flex-wrap:nowrap}
+#pCtr .ce-l>.ce-h .sub-h,#pCtr .discord-side>.ce-h .sub-h{font:700 .88rem/1.25 var(--f-ui);letter-spacing:.015em;text-transform:uppercase;display:flex;gap:10px;align-items:center;white-space:nowrap;min-width:0}
+#pCtr .ce-l>.ce-h .sub-h .ic,#pCtr .discord-side>.ce-h .sub-h .ic{flex:none;width:16px;height:16px}
+#pCtr .discord-side>.ce-h .sum{font:600 .82rem/1.2 var(--f-num);color:var(--mut);white-space:nowrap;text-align:right;margin-left:auto}
+#pCtr .ce-l>.ce-h .cz-ctl{margin-left:auto;flex:none}
+#pCtr .discord-content{padding:14px;border:1px solid var(--line);border-radius:var(--r-md);background:var(--panel,#252523);flex:1;min-width:0}
+@media(max-width:860px){#pCtr .ce{grid-template-columns:minmax(0,1fr)}}
+@media(max-width:540px){#pCtr .ce-l>.ce-h,#pCtr .discord-side>.ce-h{padding:0 2px;gap:6px}#pCtr .discord-side>.ce-h .sum{font-size:.72rem}}
 </style>
 <script>/* v1.0.16: aplica el tema guardado antes de pintar (sin parpadeo). Por defecto: Dark. */try{var g=JSON.parse(localStorage.getItem('gestorVentas.ajustes.v1')||'null');if(g&&g.ui){if(g.ui.light)document.documentElement.classList.add('light');}}catch(e){}</script>
 </head>
@@ -2056,6 +2069,7 @@ Contraband Freight = no</textarea><small>Una regla por línea: Nombre = tax tota
       <div class="ce-r" id="discordColumn">
   <div class="discord-side" id="pDisc" hidden>
     <div class="ce-h"><h3 class="sub-h"><span class="ic i-list" aria-hidden="true"></span>VENTA EN DISCORD</h3><span class="sum" id="dSum"></span></div>
+    <div class="discord-content">
     <p class="lead" id="dLead">Último recurso: véndelo a alguien de tu alianza o corporación por Discord.</p>
     <div class="dests" role="group" aria-label="Dónde publicar">
       <button type="button" class="dest" data-d="sigma" aria-pressed="true"><span class="logo sig" aria-hidden="true"></span><span><b>SIGMA GRINDSET</b><small>Alianza · #market-trade · en inglés</small></span></button>
@@ -2068,6 +2082,7 @@ Contraband Freight = no</textarea><small>Una regla por línea: Nombre = tax tota
       <li><b>Cierra la Venta</b><span id="dClose"></span></li>
     </ol>
     <pre class="msg" id="dMsg"></pre>
+    </div>
   </div>
       </div>
       <div id="shipBox" hidden style="display:none">
