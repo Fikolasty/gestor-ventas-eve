@@ -894,7 +894,7 @@ function paintGuide(ol,r){
     const isN=g.k==='fN';
     if(g.k==='fJI'){step('Qué Hacer','Véndelo en Jita 4-4 directamente a las buy orders.');
       step('Precio Medio de Venta','Aproximadamente '+fmtP(r.instAvg)+' por unidad, recorriendo las buy orders para tu cantidad.');return;}
-    step('Qué Hacer',isN?'Mándalo de Jita a HY-RWO con SIGMA Freight y publica una sell order allí. El envío ya está restado.':'Publica una sell order en Jita 4-4.');
+    step('Qué Hacer',isN?'Mándalo de Jita a '+nullSystem()+' con SIGMA Freight y publica una sell order allí. El envío ya está restado.':'Publica una sell order en Jita 4-4.');
     step('Cómo Listarlo',copyBtn(g.unit,fmtP(g.unit)),' por unidad (haz clic para copiar). Publica '+fmtQ(r.q)+' unidades; valor de la orden: '+fmt(g.unit*r.q)+'.'+(isN?' Es Jita Sell +'+pct(C.impM)+'% neto, ya con Sales Tax, Broker y SCC.':''));
     step('Cuándo Revisar',cadence(g.days,isN));
     if(g.floor!=null&&g.unit>g.floor)step('Precio Mínimo Recomendado','Evita bajar de ',copyBtn(g.floor,fmtP(g.floor)),' por unidad. Más abajo, '+altLab+' deja más ISK.');
@@ -1360,11 +1360,11 @@ const routeSummaryName=k=>({
 const spanishCount=n=>({1:'un',2:'dos',3:'tres',4:'cuatro',5:'cinco',6:'seis',7:'siete',8:'ocho',9:'nueve',10:'diez'})[n]||String(n);
 const routeSentence=(k,n)=>{if(S.lang==='en'){
   const action={null:'sell through orders in HY-RWO',fN:'ship to HY-RWO to sell there',jOrd:'sell through orders in Jita',fJ:'sell through orders in Jita',jInst:'sell instantly in Jita',fJI:'sell instantly in Jita',bb:'deliver to the Buyback Program',rNull:'reprocess and sell the materials in HY-RWO',rJita:'reprocess and sell the materials in Jita',disc:'sell directly to another player'}[k]||'follow the recommended selling route';
-  return n+' '+(n===1?'item':'items')+' to '+action;
+  return (n+' '+(n===1?'item':'items')+' to '+action).replaceAll('HY-RWO',nullSystem());
 }
   const count=spanishCount(n)+' '+(n===1?'ítem':'ítems');
   const action=({null:'vender en HY-RWO mediante órdenes',fN:'llevar a HY-RWO para vender allí',jOrd:'vender mediante órdenes en Jita',fJ:'vender mediante órdenes en Jita',jInst:'vender al instante en Jita',fJI:'vender al instante en Jita',bb:'entregar al programa Buy Back',rNull:'reprocesar y vender sus materiales en HY-RWO',rJita:'reprocesar y vender sus materiales en Jita',disc:'vender directamente a otro jugador'})[k]||'vender según la ruta indicada';
-  return count+' para '+action;
+  return (count+' para '+action).replaceAll('HY-RWO',nullSystem());
 };
 function planIntroData(P){
   const name=modeName(P.mode),active=P.rows.filter(r=>r.best&&r.q>0);
@@ -2335,10 +2335,10 @@ function paintFlipBuy(P){
   const V=rows.reduce((a,r)=>a+r.ship.fN.v,0),Cc=rows.reduce((a,r)=>a+r.ship.fN.c,0),ship=V>0?courierCost(V,Cc):0;
   const it=rows.map(r=>{const buy=r.o.ref*r.q,sh=courierShare(r.ship.fN.v,r.ship.fN.c,V),sell=r.g.fN-r.prod;return{r,buy,sh,sell,p:sell-sh-buy};});
   const buy=it.reduce((a,x)=>a+x.buy,0),sell=it.reduce((a,x)=>a+x.sell,0),profit=sell-ship-buy,roi=buy>0?profit/buy:0;
-  box.append(el('h4',null,'Comprar en Jita y Vender en HY-RWO'),el('p','fb2-s','Si compras '+(rows.length===1?'este item':'estos '+rows.length+' items')+' en Jita al Sell, los llevas con SIGMA Freight y los vendes en HY-RWO a Jita Sell +'+pct(C.impM)+'% neto.'));
+  box.append(el('h4',null,'Comprar en Jita y vender en '+nullSystem()),el('p','fb2-s','Si compras '+(rows.length===1?'este item':'estos '+rows.length+' items')+' en Jita al Sell, los llevas con SIGMA Freight y los vendes en '+nullSystem()+' a Jita Sell +'+pct(C.impM)+'% neto.'));
   const big=el('div','fb2-big');big.append(el('b','num '+sgn(profit),(profit>=0?'+':'−')+fmt(Math.abs(profit))),el('span',null,(profit>=0?'de ganancia':'de pérdida')+' · '+(roi>=0?'+':'−')+pct(Math.abs(roi))+'% sobre lo invertido'));box.append(big);
   const l=el('div','fb2-l'),L=(t,v,c)=>{const d=el('div');d.append(el('span',null,t),el('b','num '+(c||''),v));l.append(d);};
-  L('Compras en Jita','−'+fmt(buy),'neg');L('Envío a HY-RWO','−'+fmt(ship),'neg');L('Vendes en HY-RWO (neto)',fmt(sell),'pos');L('Ganancia',(profit>=0?'+':'−')+fmt(Math.abs(profit)),sgn(profit));box.append(l);
+  L('Compras en Jita','−'+fmt(buy),'neg');L('Envío a '+nullSystem(),'−'+fmt(ship),'neg');L('Vendes en '+nullSystem()+' (neto)',fmt(sell),'pos');L('Ganancia',(profit>=0?'+':'−')+fmt(Math.abs(profit)),sgn(profit));box.append(l);
   const t=el('table'),th=el('thead'),hr=el('tr');[['Item',''],['Precio Unidad Compra','r'],['Precio Unidad Venta','r'],['Envío','r'],['Ganancia','r'],['Margen','r']].forEach(([x,c])=>hr.append(el('th',c||null,x)));th.append(hr);t.append(th);
   const tb=el('tbody');
   it.sort((a,b)=>b.p-a.p).slice(0,10).forEach(x=>{const tr=el('tr');
