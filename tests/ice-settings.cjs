@@ -63,9 +63,9 @@ for(const id of [16272,16273,16274,16275,17887,17888,17889])assert(mining.includ
 console.log('OK — HOME, regla comercial 55%, excepción isotopos, Buyback Mayhem, simulación de 7–30 días.');
 
 
-// v1.0.74: −0.16% solo en Jita, también para hielo; aviso contextual al plan elegido.
-assert(js.includes('function paintSkewNote(P)'),'aviso debe recibir el plan elegido');
-assert(js.includes("if(used(['jInst','fJI']))f(C.skew.inst,'venta rápida en Jita')"),'aviso inmediato Jita aislado');
+// v1.0.82: los precios ajustados siguen calculándose por ruta, aunque el aviso visual duplicado se retiró.
+assert(js.includes('function paintPicker(P)')&&js.includes('function modeTotal(P,m)'),'selección de plan intacta');
+assert(!js.includes('function paintSkewNote(P)'),'el aviso oculto no debe recalcularse');
 const skewExpr=js.match(/const skf=\(o,kind\)=>[^;]+;/);
 assert(skewExpr,'factor skew no encontrado');
 const skewSettings={skew:{inst:-.0016,ord:0,nul:0}};
