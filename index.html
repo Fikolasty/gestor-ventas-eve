@@ -5455,15 +5455,7 @@ function paintPicker(P){
       stat('Alternativa con más ISK',benchmark.l+' · '+fmt(benchmark.t.net));
       note.append('Al elegir ',planMark(chosen.m),', recibirías ',el('strong','neg','−'+fmt(gap)),' frente a ',planMark(benchmark.m),(ratio!=null?' ('+ratio.toFixed(1)+' % menos)':''),'.');
     }
-    const speed=chosen.m==='bb'?'Buyback: sujeto a aceptación y pago del programa, sin depender de órdenes de mercado.':
-      chosen.m==='jInst'||chosen.m==='fJI'?'Venta a órdenes de compra: ejecución inmediata solo si hay suficiente volumen comprador.':
-      chosen.m==='disc'?'Venta entre jugadores: tiempo de cobro y comprador sin garantía.':
-      chosen.m==='auto'?'El plan combina rutas; los plazos de venta dependen de cada ítem.':
-      chosen.m==='null'||chosen.m==='jOrd'||chosen.m==='fJ'||chosen.m==='fN'||chosen.m==='rNull'||chosen.m==='rJita'?'Órdenes de mercado: los ISK llegan cuando se ejecutan, sin plazo garantizado.':
-      'Los tiempos de liquidación dependen de los contratos y de las órdenes disponibles.';
-    const logistics=shipped?' Incluye una estimación del courier configurado.':' No requiere courier según el escenario seleccionado.';
-    const caveat=el('p','pk-opp-note',speed+logistics+(hasFallback?' Algunos ítems conservan su ruta óptima porque este plan no les aplica.':'')+' Los precios, órdenes y plazos pueden cambiar; no se atribuye rentabilidad a reinversiones hipotéticas.');
-    opportunity.append(title,grid,note,caveat);opportunity.hidden=false;
+    opportunity.append(title,grid,note);opportunity.hidden=false;
   }else{
     opportunity.hidden=false;
     opportunity.append(el('div','pk-opp-head','Coste de oportunidad'),
