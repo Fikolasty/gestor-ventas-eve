@@ -1840,7 +1840,7 @@
   "Destinos": "Destinations",
   "Costes": "Costs",
   "Pasos para vender": "Selling steps",
-  "HAZ CLIC EN CUALQUIER PASO PARA VER MÁS": "CLICK ANY STEP TO SEE MORE",
+  "HAZ CLIC EN CUALQUIER PASO PARA VER MÁS": "CLICK ANY STEP TO VIEW DETAILS",
   "Haz clic en cualquier paso para ver más": "Click any step to see more",
   "Ventas y contratos, neto de tasas y producción": "Sales and contracts, net of fees and production",
   "Coste total del transporte": "Total shipping cost",
@@ -1848,7 +1848,7 @@
   "Coste Total de shipping": "Total shipping cost",
   "Resultado final del plan": "Final plan result",
   "Result final del Plan": "Final plan result",
-  "Precio sugerido tras revisar las órdenes y su volumen en Jita": "Suggested price after reviewing Jita orders and trading volume",
+  "Precio sugerido tras revisar las órdenes y su volumen en Jita": "Suggested price after checking Jita market orders and trading volume",
   "Precio sugerido tras revisar las Orders and su Volume in Jita": "Suggested price after reviewing Jita orders and trading volume",
   "HAZ CLIC EN CUALQUIER PASO FOR SHOW MORE": "CLICK ANY STEP TO SEE MORE",
   "CONSULTA CONTRATOS, REPROCESO Y OTRAS OPCIONES": "VIEW CONTRACTS, REPROCESSING, AND OTHER OPTIONS",
@@ -1869,5 +1869,9 @@
   "Ver más": "Show more",
   "Ocultar": "Hide",
   "REVISA TU RUTA Y CUÁNTO RECIBIRÍAS": "REVIEW YOUR SELLING ROUTE AND ESTIMATED PROCEEDS",
-  "Revisa tu ruta y cuánto recibirías": "Review your selling route and estimated proceeds"
+  "Revisa tu ruta y cuánto recibirías": "Review your selling route and estimated proceeds",
+  "HAZ CLIC EN CUALQUIER PASO PARA VER LOS DETALLES": "CLICK ANY STEP TO VIEW DETAILS",
+  "Ventas y contratos, neto de tasas y procesamiento": "Sales and contracts, net of fees and processing",
+  "Ingreso final del plan": "Final plan proceeds",
+  "Precio sugerido tras revisar las órdenes y su volumen en Jita — 1 tick. Haz clic en el precio para copiarlo.": "Suggested price after checking Jita market orders and volume — 1 tick. Click the price to copy it."
 }
