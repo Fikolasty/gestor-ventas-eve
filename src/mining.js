@@ -581,7 +581,7 @@ const MineUI=(()=>{
           ['Ciclo de módulo',NF2.format(r.cyc)+' s'],
           ['Crítico',NF2.format(r.critP)+'%']
         ].forEach(([title,value])=>{const div=h('div','');div.append(h('dt','',title),h('dd','',value));stats.append(div);});
-        card.append(stats,h('div','mn-ship-bonus-title','Bonos de nave y skills'));
+        card.append(stats,h('div','mn-ship-bonus-title',document.documentElement.lang==='en'?'Ship and skill bonuses':'Bonificaciones de nave y habilidades'));
         const ul=h('ul','mn-ship-bonuses');bonusParts(ship,S.mat).forEach(t=>ul.append(h('li','',t)));card.append(ul);
         if(r.notes?.length)card.append(h('small','mn-ship-notes','⚠ '+r.notes.join(' · ')));
         host.append(card);
@@ -652,7 +652,7 @@ const MineUI=(()=>{
   };
   function itemHelp(id,name){
     const details=h('details','mn-info mn-type-info'),summary=h('summary','','ⓘ');
-    summary.title='Información del objeto';summary.setAttribute('aria-label','Información sobre '+name);
+    summary.title=document.documentElement.lang==='en'?'Item information':'Información del objeto';summary.setAttribute('aria-label',(document.documentElement.lang==='en'?'Information about ':'Información sobre ')+name);
     const bubble=h('div','mn-info-popup');
     bubble.append(h('strong','',name),
       h('p','',ITEM_HELP[id]||'Componente del fit. Consulta la ficha para efectos y requisitos actuales.'),
@@ -835,7 +835,7 @@ const MineUI=(()=>{
       tr.append(h('td','',name),h('td','',p==null?'Sin cotización':cmpISK(p)+' ISK'));
       if(p==null)missing++;else total+=p;
     });
-    books.append(h('h4','','Coste de skillbooks en Jita 4-4'),tbl);
+    books.append(h('h4','',document.documentElement.lang==='en'?'Skillbook costs in Jita 4-4':'Coste de los libros de habilidades en Jita 4-4'),tbl);
     const note=h('p','mn-books-total',missing?'Subtotal conocido: '+cmpISK(total)+' ISK · '+missing+' sin precio.':'Total de libros: '+cmpISK(total)+' ISK');
     books.append(note);
     $q('.mn-skills-reload').disabled=skillBusy;
