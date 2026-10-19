@@ -1883,6 +1883,11 @@ select{appearance:none;-webkit-appearance:none;padding-right:30px!important;back
 #mmTabs .eve-identity-menu #eveLogout{margin:0;width:100%;min-height:32px;padding:6px 10px;text-align:center;font-size:.77rem;font-weight:600;line-height:1.2;border-radius:6px;background:transparent;border:0}
 #mmTabs .eve-identity-menu #eveLogout:hover{background:rgba(210,135,103,.12);color:#eeb399}
 #mmTabs .eve-identity-menu .eve-login-status[hidden]{display:none!important}
+
+/* PI en pausa: conservar el módulo y equilibrar la navegación de Ventas / Minería. */
+#mmTabs .mm-modgroup{flex:0 0 auto;justify-content:center}
+#mmTabs .mm-modgroup .mm-mod{min-width:84px;text-align:center}
+@media(max-width:680px){#mmTabs .mm-modgroup .mm-mod{min-width:0}}
 /* ===== tema claro (generado desde el oscuro por light.py) ===== */
 html.light{--void:#e4e3dd;--hull:#e2e0da;--hull2:#e0ded8;--line:rgba(31,30,29,0.114);--line2:rgba(31,30,29,0.125);--txt:#1c1c1a;--mut:#54524d;--dim:#6c6a64;--ion:#413f3c;--blue:#a39d8b;--clay:#c96442;--thrust:#a67526;--gain:#418b62;--loss:#a92c23}
 html.light body::after{background:repeating-linear-gradient(180deg,rgba(31,30,29,0.011) 0 1px,transparent 1px 3px),
@@ -3078,7 +3083,9 @@ html.light #mining .mn-fit-fallback{border-color:rgba(40,100,150,.22);background
   <div class="side-g"><span class="side-h">Módulos</span>
     <button type="button" class="side-i" data-side-module="ventas" title="Ventas"><span class="ic i-list" aria-hidden="true"></span><span class="side-l">Ventas</span></button>
     <button type="button" class="side-i" data-side-module="mining" title="Minería"><span class="ic i-ship" aria-hidden="true"></span><span class="side-l">Minería</span></button>
+    <!-- PI temporalmente fuera de navegación; conservar para reactivar más adelante.
     <button type="button" class="side-i" data-side-module="pi" title="Industria Planetaria"><span class="ic i-planetary" aria-hidden="true"></span><span class="side-l">Industria Planetaria · PI</span></button>
+    -->
   </div>
   <div class="side-g"><span class="side-h">Cálculo</span>
   <div class="route" id="route">
@@ -3113,7 +3120,9 @@ html.light #mining .mn-fit-fallback{border-color:rgba(40,100,150,.22);background
     <div class="mm-modgroup" role="presentation">
     <button type="button" class="mm-mod on" data-mm-module="ventas" role="tab" aria-controls="salesBody" aria-selected="true" id="mmTabVentas">Ventas</button>
     <button type="button" class="mm-mod" data-mm-module="mining" role="tab" aria-controls="mining" aria-selected="false" id="mmTabMining">Minería</button>
+    <!-- PI temporalmente fuera de navegación; conservar para reactivar más adelante.
     <button type="button" class="mm-mod" data-mm-module="pi" role="tab" aria-controls="pi" aria-selected="false" id="mmTabPi">Industria Planetaria · PI</button>
+    -->
     </div>
   </nav>
   <!-- v104: introducción + recordatorio visible a la derecha. Los botones comparten
@@ -3154,7 +3163,7 @@ Contraband Freight = no</textarea><small>Una regla por línea: Nombre = tax tota
     <p class="lead">Compara Barges y Exhumers en luna, hielo y gas del territorio Guristas, calcula ISK por hora con ESI y planifica la productividad de tus cuentas Omega.</p>
     <div id="mnRoot"></div>
   </section>
-  <section class="panel mm-pi-panel" id="pi" role="tabpanel" aria-labelledby="mmTabPi" hidden>
+  <section class="panel mm-pi-panel" id="pi" role="tabpanel" aria-label="Industria Planetaria (temporalmente deshabilitada)" hidden>
     <header class="mm-section-head"><h2 class="mm-title">INDUSTRIA PLANETARIA</h2><p class="mm-section-sub">PLANIFICA TU PI Y PRODUCCIÓN DE FUEL BLOCKS</p></header>
 
     <article class="pi-article" aria-label="Guía de industria planetaria">
