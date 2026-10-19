@@ -1571,6 +1571,14 @@ html.light #verdict .v-plan-name{color:#ad4b27}
 
 .brand[data-go-home],.hero .title[data-go-home]{cursor:pointer}
 .brand[data-go-home]:focus-visible,.hero .title[data-go-home]:focus-visible{outline:2px solid var(--ion);outline-offset:5px;border-radius:var(--r-sm)}
+
+/* Reprocessing recommendation: numbered tabs, only the active ore visible. */
+.rep-tabs{display:flex;flex-wrap:wrap;gap:7px;margin:10px 0 14px}
+.rep-tab{height:32px;min-width:34px;padding:0 10px;border-radius:7px;border:1px solid var(--line2);background:rgba(25,25,25,.8);color:var(--mut);font-weight:700;cursor:pointer}
+.rep-tab:hover{color:var(--txt);border-color:var(--ion)}
+.rep-tab[aria-pressed="true"]{background:var(--ion);border-color:var(--ion);color:#211d1a}
+#vRepList>.rep-it[hidden]{display:none!important}
+
 </style>
 <script>/* v1.0.16: aplica el tema guardado antes de pintar (sin parpadeo). Por defecto: Dark. */try{var g=JSON.parse(localStorage.getItem('gestorVentas.ajustes.v1')||'null');if(g&&g.ui){if(g.ui.light)document.documentElement.classList.add('light');}}catch(e){}</script>
 </head>
