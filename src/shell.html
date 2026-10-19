@@ -2058,6 +2058,9 @@ html.light #mmTabs .mm-icon-action,html.light #mmTabs .mm-mod{color:#4b4742}
 
 /* Respect per-route visibility from the financial engine; display:grid must not override hidden. */
 .lot-body .opt[hidden],.lot-body>.lot-analysis .opt[hidden]{display:none!important}
+
+/* Directional controls and unavailable options must always respect the hidden attribute. */
+#mmTabs #shipLab[hidden],#mmTabs #rtM[hidden],.lot-body .opt[hidden],.lot-body>.lot-analysis .opt[hidden]{display:none!important}
 </style>
 <script>/* v1.0.16: aplica el tema guardado antes de pintar (sin parpadeo). Por defecto: Dark. */try{var g=JSON.parse(localStorage.getItem('gestorVentas.ajustes.v1')||'null');if(g&&g.ui){if(g.ui.light)document.documentElement.classList.add('light');}}catch(e){}</script>
 </head>
