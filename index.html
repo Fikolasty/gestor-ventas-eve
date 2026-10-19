@@ -1540,6 +1540,14 @@ html.light #verdict .v-plan-name{color:#ad4b27}
 .stp-contract-slide>.stp-ct-t{margin:0 0 10px}
 @media(max-width:800px){.stp-b.two>.stp-main>.ct-items{min-height:unset}}
 
+
+/* Final Jita sale: item, quantity, and copyable unit price. */
+.stp-arrival-list{display:flex;flex-direction:column;gap:8px}
+.stp-arrival-row{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px 14px;padding:12px 14px;border-radius:var(--r-sm);border:1px solid var(--line2);background:rgba(10,10,10,.72)}
+.stp-arrival-name{font-weight:600;color:var(--txt)}
+.stp-arrival-price{color:var(--mut);font-size:.82rem;margin-left:auto}
+.stp-arrival-row .copy{width:auto;white-space:nowrap}
+
 /* ===== tema claro (generado desde el oscuro por light.py) ===== */
 html.light{--void:#e4e3dd;--hull:#e2e0da;--hull2:#e0ded8;--line:rgba(31,30,29,0.114);--line2:rgba(31,30,29,0.125);--txt:#1c1c1a;--mut:#54524d;--dim:#6c6a64;--ion:#413f3c;--blue:#a39d8b;--clay:#c96442;--thrust:#a67526;--gain:#418b62;--loss:#a92c23}
 html.light body::after{background:repeating-linear-gradient(180deg,rgba(31,30,29,0.011) 0 1px,transparent 1px 3px),
@@ -1990,6 +1998,7 @@ html.light .eve-sk-pip.locked{background:#97907b}
 html.light .eve-sk-add{border:1px solid #408f75;color:#22aa5b;background:rgba(30,105,75,0.275)}
 html.light .eve-sk-add.book{border-color:#9b363b;color:#c20a15;background:rgba(100,20,25,0.312)}
 html.light .stp-contract-arrow{background:rgba(31,30,29,0.067)}
+html.light .stp-arrival-row{background:rgba(240,237,229,0.72)}
 /* ajustes a mano del tema claro */
 html.light body{background:#e6e3da;color:#1f1e1d}
 html.light body::before{opacity:.12;filter:grayscale(.35) brightness(1.1)}
