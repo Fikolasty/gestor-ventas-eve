@@ -1831,6 +1831,12 @@ select{appearance:none;-webkit-appearance:none;padding-right:30px!important;back
 #ledger>summary::after{order:99!important;flex:0 0 9px!important;margin-left:0!important;margin-right:5px!important}
 #ledger>summary .cnt{margin-left:0!important;flex:0 0 auto!important}
 @media(max-width:650px){#ledger>summary .status.cta{margin-left:auto!important;margin-right:8px!important}}
+
+/* Los iconos de ayuda son tooltips, no desplegables de sección. */
+#mining details.mn-info>summary::before,
+#mining details.mn-info>summary::after{content:none!important;display:none!important;border:0!important;transform:none!important}
+#mining details.mn-info>summary{margin:0!important;padding:0!important;min-height:20px}
+#mining details.mn-info[open]>summary::after{content:none!important;display:none!important}
 /* ===== tema claro (generado desde el oscuro por light.py) ===== */
 html.light{--void:#e4e3dd;--hull:#e2e0da;--hull2:#e0ded8;--line:rgba(31,30,29,0.114);--line2:rgba(31,30,29,0.125);--txt:#1c1c1a;--mut:#54524d;--dim:#6c6a64;--ion:#413f3c;--blue:#a39d8b;--clay:#c96442;--thrust:#a67526;--gain:#418b62;--loss:#a92c23}
 html.light body::after{background:repeating-linear-gradient(180deg,rgba(31,30,29,0.011) 0 1px,transparent 1px 3px),
@@ -2998,6 +3004,9 @@ html.light #mining .mn-fit-fallback{border-color:rgba(40,100,150,.22);background
 .mn details>summary::before{content:none!important;display:none!important}
 .mn details>summary::after{content:"";display:block;flex:none;width:9px;height:9px;border-right:2px solid var(--ion);border-bottom:2px solid var(--ion);margin-left:auto;margin-right:7px;transform:rotate(45deg);transition:transform .18s ease}
 .mn details[open]>summary::after{transform:rotate(225deg)}
+
+/* Corrección del chevron global: nunca pintar flechas sobre iconos de ayuda. */
+.mn details.mn-info>summary::before,.mn details.mn-info>summary::after,.mn details.mn-info[open]>summary::after{content:none!important;display:none!important}
 </style>
 <script>/* v1.0.16: aplica el tema guardado antes de pintar (sin parpadeo). Por defecto: Dark. */try{var g=JSON.parse(localStorage.getItem('gestorVentas.ajustes.v1')||'null');if(g&&g.ui){if(g.ui.light)document.documentElement.classList.add('light');}}catch(e){}</script>
 </head>
