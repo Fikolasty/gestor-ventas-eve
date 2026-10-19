@@ -2820,7 +2820,14 @@ stRestore();syncDeps();brokerNote();buildOreSelect();readBB();syncLots();refresh
       const signature=Uint8Array.from(atob(parts[2].replace(/-/g,'+').replace(/_/g,'/').padEnd(Math.ceil(parts[2].length/4)*4,'=')),c=>c.charCodeAt(0));
       if(!await crypto.subtle.verify('RSASSA-PKCS1-v1_5',publicKey,signature,new TextEncoder().encode(parts[0]+'.'+parts[1])))throw Error('Firma JWT inválida.');
       const audience=Array.isArray(pilot.aud)?pilot.aud:[pilot.aud];
-      if(!['https://login.eveonline.com/','login.eveonline.com'].includes(pilot.iss)||!audience.includes(req.client)||!audience.includes('EVE Online')||pilot.exp*1000<=Date.now()||!pilot.scp?.includes(scope))throw Error('Token JWT no corresponde a la aplicación o al permiso solicitado.');
+      // CCP puede emitir el issuer con o sin barra final; ambos identifican el mismo emisor.
+      const issuerOK=['https://login.eveonline.com','https://login.eveonline.com/','login.eveonline.com'].includes(pilot.iss);
+      const audienceOK=audience.includes(req.client)&&audience.includes('EVE Online');
+      const scopeOK=Array.isArray(pilot.scp)?pilot.scp.includes(scope):typeof pilot.scp==='string'&&pilot.scp.split(/\s+/).includes(scope);
+      if(!issuerOK)throw Error('Emisor del token de EVE no reconocido.');
+      if(!audienceOK)throw Error('Token emitido para otra aplicación.');
+      if(!Number.isFinite(pilot.exp)||pilot.exp*1000<=Date.now())throw Error('Token de EVE expirado.');
+      if(!scopeOK)throw Error('EVE no concedió el permiso de lectura de skills.');
       const id=Number(String(pilot.sub||'').match(/^CHARACTER:EVE:(\d+)$/)?.[1]),name=pilot.name;
       if(!Number.isSafeInteger(id)||!name)throw Error('Identidad de personaje no verificada.');
       session={id,name,token:tokens.access_token,expires:Date.now()+(tokens.expires_in||1200)*1000-30000};refreshUI();status('Sesión autorizada para '+name+'. Sincroniza las skills cuando quieras.');await sync();
