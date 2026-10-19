@@ -42,8 +42,7 @@ for(const name of ['mineTab','undo','undoBtn','resGain','resIsk','pkChange','ovM
   assert(!html.includes('id="'+name+'"'),'control oculto no utilizado: '+name);
 }
 assert(!sales.includes('undoStack')&&!sales.includes('clearUndo'),'no se deben retener copias del inventario para Deshacer');
-assert(!sales.includes("URL.revokeObjectURL(ICON[id]);"),'no revocar una URL HTTPS como blob');
-assert(sales.includes("startsWith('blob:')"),'solo revocar ObjectURLs de blob');
+assert(sales.includes("startsWith('blob:'))URL.revokeObjectURL(ICON[id]);"),'solo revocar ObjectURLs de blob');
 assert(sales.includes('ORE_MEMO.delete(key)')&&sales.includes('delete idCache[k]'),'liberar caches de items retirados');
 assert(source.includes('function pruneMiningPriceCache()'),'los precios mineros requieren limpieza por TTL');
 assert(source.includes('chartResize.disconnect()'),'desconectar el ResizeObserver en pagehide');
