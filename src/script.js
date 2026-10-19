@@ -2778,7 +2778,7 @@ stRestore();syncDeps();brokerNote();buildOreSelect();readBB();syncLots();refresh
     if(!client){alert('El acceso oficial de EVE todavía no está configurado: Market Moves+ necesita su Client ID público de CCP.');return;}
     try{const verifier=rand(48),state=rand(24);sessionStorage.setItem(key,JSON.stringify({verifier,state,client,redirect:base,at:Date.now()}));
       const u=new URL('https://login.eveonline.com/v2/oauth/authorize');u.searchParams.set('response_type','code');u.searchParams.set('client_id',client);u.searchParams.set('redirect_uri',base);u.searchParams.set('scope',scope);u.searchParams.set('state',state);u.searchParams.set('code_challenge',await challenge(verifier));u.searchParams.set('code_challenge_method','S256');location.assign(u.href);
-    }catch(err){status('No fue posible iniciar el flujo seguro: '+err.message);}
+    }catch(err){const message='No se pudo abrir el login oficial de EVE: '+(err?.message||String(err));status(message);alert(message);console.error('EVE SSO redirect failed',err);}
   }
   function saveSkill(id,level){const e=$e(id);if(!e)return false;const v=String(level);if(![...e.options].some(o=>o.value===v))return false;e.value=v;e.dispatchEvent(new Event('change',{bubbles:true}));return true;}
   async function sync(){
