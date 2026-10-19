@@ -1497,6 +1497,20 @@ html.light #verdict .v-plan-name{color:#ad4b27}
 .pi-muted,.pi-source{color:var(--dim);font-size:.79rem}.pi-source{padding:14px 6px}.pi-source a{color:var(--ion)}
 @media(max-width:750px){.pi-intro,.pi-photo-row{grid-template-columns:1fr}.pi-planets{grid-template-columns:repeat(2,minmax(0,1fr))}.pi-chapter{padding:17px}.pi-path i{display:none}.pi-index{gap:5px}}
 
+
+/* EVE-like skill ranks */
+.eve-sk{display:flex;align-items:center;gap:8px;margin:7px 0 4px;max-width:330px}
+.eve-sk-pips{display:flex;gap:4px;flex:1}
+.eve-sk-pip{width:19px;height:15px;border:0;border-radius:2px;background:#747776;opacity:.7;padding:0}
+.eve-sk-pip.trained{background:#f0f0ec;opacity:1}
+.eve-sk-pip.locked{width:5px;height:4px;margin:6px 7px;background:#757777}
+.eve-sk-pip:hover{outline:1px solid var(--ion)}
+.eve-sk-rank{min-width:30px;color:var(--mut);font-size:.8rem}
+.eve-sk-add{display:grid;place-items:center;width:32px;height:32px;border:1px solid #408f75;border-radius:3px;color:#b6f4d0;background:rgba(30,105,75,.22);font-size:21px}
+.eve-sk-add.book{border-color:#9b363b;color:#ffb9bd;background:rgba(100,20,25,.25);font-size:17px}
+.eve-sk-add:disabled{opacity:.42;cursor:default}
+.eve-sk-native{position:absolute!important;width:1px!important;height:1px!important;opacity:0!important;pointer-events:none!important}
+
 </style>
 <script>/* v1.0.16: aplica el tema guardado antes de pintar (sin parpadeo). Por defecto: Dark. */try{var g=JSON.parse(localStorage.getItem('gestorVentas.ajustes.v1')||'null');if(g&&g.ui){if(g.ui.light)document.documentElement.classList.add('light');}}catch(e){}</script>
 </head>
@@ -1836,5 +1850,44 @@ Contraband Freight = no</textarea><small>Una regla por línea: Nombre = tax tota
 </footer>
 
 <script>/*__SCRIPT__*/</script>
+
+<script>
+/* Skill ranks: preserve native controls as the source of truth for all existing calculations. */
+(()=>{
+'use strict';
+const ids=['skAcc','skBR','cAbr','skRep','skRepE','skOre'];
+const store='marketmoves.skillbooks.v1';
+let books={};try{books=JSON.parse(localStorage.getItem(store)||'{}')}catch(_){}
+function enhance(native,id,get,set,min){
+ if(native.dataset.eveDone)return;
+ native.dataset.eveDone='1';native.classList.add('eve-sk-native');
+ const group=document.createElement('div');group.className='eve-sk';group.setAttribute('role','group');group.setAttribute('aria-label',id==='mn-rank'?'Skills de Minería':native.closest('label')?.textContent?.split('\n')[0]||id);
+ const p=document.createElement('div');p.className='eve-sk-pips';
+ const rank=document.createElement('span');rank.className='eve-sk-rank';
+ const add=document.createElement('button');add.type='button';add.className='eve-sk-add';
+ const marks=[];
+ function draw(){const lv=get();const locked=min===0&&books[id]===false&&lv===0;marks.forEach((b,i)=>{const v=i+1;b.className='eve-sk-pip'+(locked?' locked':v<=lv?' trained':'');b.disabled=v<min;b.setAttribute('aria-pressed',String(lv===v));b.title='Nivel '+v});rank.textContent=locked?'—':lv+'/5';add.className='eve-sk-add'+(locked?' book':'');add.textContent=locked?'▣':'+';add.title=locked?'Adquirir skillbook':lv===5?'Nivel máximo':'Subir habilidad';add.disabled=lv===5&&!locked}
+ for(let i=1;i<=5;i++){const b=document.createElement('button');b.type='button';b.title='Elegir nivel '+i;b.setAttribute('aria-label','Nivel '+i);b.addEventListener('click',()=>{books[id]=true;set(i);draw()});marks.push(b);p.append(b)}
+ add.addEventListener('click',()=>{books[id]=true;localStorage.setItem(store,JSON.stringify(books));set(Math.min(5,Math.max(min,get()+1)));draw()});
+ group.addEventListener('contextmenu',e=>{if(min>0)return;e.preventDefault();books[id]=books[id]===false;localStorage.setItem(store,JSON.stringify(books));if(!books[id])set(0);draw()});
+ group.append(p,rank,add);native.after(group);native.addEventListener('change',draw);draw();
+ }
+function enhanceSettings(){ids.forEach(id=>{const n=document.getElementById(id);if(!n||n.dataset.eveDone)return;enhance(n,id,()=>Number(n.value)||0,v=>{n.value=String(v);n.dispatchEvent(new Event('input',{bubbles:true}));n.dispatchEvent(new Event('change',{bubbles:true}))},0)})}
+function enhanceMining(){
+ const root=document.getElementById('mining');if(!root)return;
+ const head=[...root.querySelectorAll('.mn-field-title')].find(n=>n.textContent.trim().startsWith('Skills'));if(!head)return;
+ const field=head.closest('.mn-config-field');if(!field)return;
+ const groups=[...field.querySelectorAll('button')].filter(b=>/^(III|IV|V)(\s|$|\s·)/.test(b.textContent.trim()));
+ if(groups.length!==3)return;
+ const old=groups[0].parentElement;if(old.dataset.eveDone)return;
+ const buttons={3:groups.find(b=>/^III/.test(b.textContent.trim())),4:groups.find(b=>/^IV/.test(b.textContent.trim())),5:groups.find(b=>/^V/.test(b.textContent.trim()))};
+ const get=()=>{const x=[3,4,5].find(n=>buttons[n]?.getAttribute('aria-pressed')==='true'||buttons[n]?.classList.contains('active')||buttons[n]?.classList.contains('on'));return x||4};
+ enhance(old,'mn-rank',get,v=>buttons[Math.max(3,v)]?.click(),3);
+}
+let pending=false;function check(){if(pending)return;pending=true;queueMicrotask(()=>{pending=false;enhanceSettings();enhanceMining()})}
+document.addEventListener('DOMContentLoaded',()=>{check();const root=document.getElementById('mining');if(root){const observer=new MutationObserver(check);observer.observe(root,{subtree:true,childList:true});window.addEventListener('pagehide',()=>observer.disconnect(),{once:true})}});
+})();
+</script>
+
 </body>
 </html>
