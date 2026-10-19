@@ -2443,10 +2443,33 @@ $('shipOn').addEventListener('change',e=>{C.shipOn=e.target.checked;syncShipSwit
 const impSync=(src,dst)=>{const v=parseFloat($(src).value);if(!(v>=0))return;C.impM=v/100;$(dst).value=String(v);refresh();};
 $('fImpM').addEventListener('input',()=>impSync('fImpM','cImpM'));$('cImpM').addEventListener('input',()=>impSync('cImpM','fImpM'));
 $('cNullDest').addEventListener('input',()=>refresh());
-$('themeLight').checked=document.documentElement.classList.contains('light');$('themeTxt').textContent=$('themeLight').checked?'Light':'Dark';
+$('themeLight').checked=!document.documentElement.classList.contains('light');$('themeTxt').textContent=$('themeLight').checked?'Dark':'Light';
 syncShipSwitch();
 // v1.0.8: tema claro / oscuro (solo en memoria; empieza oscuro)
-$('themeLight').addEventListener('change',e=>{document.documentElement.classList.toggle('light',e.target.checked);$('themeTxt').textContent=e.target.checked?'Light':'Dark';});
+$('themeLight').addEventListener('change',e=>{document.documentElement.classList.toggle('light',!e.target.checked);$('themeTxt').textContent=e.target.checked?'Dark':'Light';});
+
+// v1.0.86 — Todos los controles originales viven ahora en la barra principal; no se clonan.
+(function compactMainNavigation(){
+  const bar=$('mmTabs'),group=bar.querySelector('.mm-modgroup');
+  const controls=document.createElement('div');controls.className='mm-quick';
+  for(const id of ['settings','help']){
+    const button=document.querySelector('.side-i[data-panel="'+id+'"]');
+    if(button){button.classList.add('mm-icon-action');button.setAttribute('aria-label',id==='settings'?'Ajustes':'Guía de uso');controls.append(button);}
+  }
+  const route=$('route');route.classList.add('mm-route');
+  const theme=$('themeLight').closest('.top-theme');theme.classList.add('mm-theme');
+  group.before(controls);
+  group.after(route,theme);
+  const left=document.createElement('span'),right=document.createElement('span'),knob=document.createElement('span');
+  left.className='mm-route-left';left.textContent='Jita';
+  knob.className='mm-route-knob';knob.setAttribute('aria-hidden','true');
+  right.className='mm-route-right';right.textContent=nullSystem();
+  $('bFlip').append(left,knob,right);
+  const refreshRoute=()=>{right.textContent=nullSystem();$('bFlip').setAttribute('aria-label',S.flip?'Ruta Jita hacia '+nullSystem()+'. Cambiar a venta desde Null.':'Ruta '+nullSystem()+' hacia Jita. Cambiar a importación desde Jita.');};
+  $('bFlip').addEventListener('click',refreshRoute);
+  document.getElementById('nullMarketMode')?.addEventListener('change',refreshRoute);
+  refreshRoute();
+})();
 
 // ================= Comparativa Minera, aislada del motor del Gestor =================
 /*__MINING__*/
@@ -2788,7 +2811,7 @@ window.addEventListener('pageshow',e=>{if(e.persisted)location.reload();});
 // los precios, la ruta y el switch de envío NO se guardan: cada visita empieza limpia.
 const ST_KEY='gestorVentas.ajustes.v1';let stBusy=false,stT=0;
 const stFields=()=>[...document.querySelectorAll('#settings input,#settings select,#settings textarea')].filter(e=>e.id);
-function stSaveNow(){if(stBusy)return;const o={v:1,f:{},ui:{light:$('themeLight').checked}};
+function stSaveNow(){if(stBusy)return;const o={v:1,f:{},ui:{light:!$('themeLight').checked}};
   stFields().forEach(e=>{o.f[e.id]=e.type==='checkbox'?e.checked:e.value;});
   try{localStorage.setItem(ST_KEY,JSON.stringify(o));}catch(e){}}
 function stSave(){clearTimeout(stT);stT=setTimeout(stSaveNow,250);}
