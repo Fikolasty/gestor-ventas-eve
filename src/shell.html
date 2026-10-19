@@ -1415,6 +1415,49 @@ html.light .mm-modnav{background:#f4f1ed}html.light .mm-mod{color:#70685e}html.l
 html.light .mm-pi-placeholder,html.light .mm-pi-features>div,html.light #verdict .ov-flow{background:#f8f6f3}
 html.light #verdict{background:#fff!important}html.light #verdict .v-cap{color:#37302a}html.light .mm-title{color:#28231f!important}
 
+
+/* v1.0.82 — v6 integrada: navegación a la derecha, encabezados alineados y planes compactos. */
+.mm-modnav{max-width:none!important;width:100%;justify-content:flex-end!important;margin-left:0!important;margin-right:0!important}
+.mm-section-head{display:grid!important;grid-template-columns:26px minmax(0,1fr);grid-template-rows:auto auto auto;gap:4px 12px;align-items:start;min-width:0}
+.mm-section-head::before{content:"";width:23px;height:3px;grid-column:1;grid-row:1;margin-top:12px;background:linear-gradient(90deg,#d97757,rgba(217,119,87,0));border-radius:999px;box-shadow:0 0 11px rgba(217,119,87,.35)}
+.mm-section-head>.mm-title{display:block!important;grid-column:2;grid-row:1;min-width:0;margin:0!important;font:800 clamp(1.13rem,1.8vw,1.46rem)/1.22 var(--f-ui)!important;letter-spacing:.035em!important;font-style:normal!important}
+.mm-section-head>.mm-title::before{display:none!important}
+.mm-section-head>.mm-section-sub{display:block!important;grid-column:2;grid-row:2;margin:0!important;min-width:0;font:700 .78rem/1.45 var(--f-ui)!important;letter-spacing:.08em!important;overflow-wrap:normal;word-break:normal}
+#verdict .ov-hd{align-items:start!important}
+#verdict .ov-ttl{min-width:0}
+#verdict .v-cap{margin:9px 0 0 38px!important;max-width:800px!important}
+#verdict .mm-net{padding-top:6px}
+#verdict .v-isk{font-family:var(--f-num)!important;font-style:normal!important}
+#verdict .ov-leg b,#verdict .ov-kpi dd,.pk .pk-o .pk-v,.pk-v,.num{font-family:var(--f-num)!important;font-style:normal!important}
+#verdict .mm-plan-area{border:0;border-top:1px solid rgba(222,220,209,.13);border-radius:0;box-shadow:none!important;background:none!important;margin:22px 0 0!important;padding:20px 0 0!important}
+#pSum .res-top{display:none!important}
+#pSum>.mm-section-head{margin:0 0 24px!important}
+#pSum .pk-summary{grid-column:2;grid-row:3;margin:7px 0 0!important;padding:0!important;border:0!important;background:transparent!important;font:400 clamp(.97rem,1.2vw,1.04rem)/1.55 var(--f-ui)!important;letter-spacing:0}
+#pSum .pk-summary strong{font-weight:700}
+#pSum .pk-w{margin:0!important}
+#pSum .pk-hd{margin-top:0!important}
+#pk>.pk-o{cursor:pointer!important;position:relative;min-height:76px;padding:11px 40px 11px 14px!important;transition:border-color .12s ease,background .12s ease}
+#pk>.pk-o::after{content:"▾";font:700 1rem var(--f-ui);color:#ebd5c6;position:absolute;right:15px;top:50%;transform:translateY(-50%);transition:transform .15s}
+#pk>.pk-o[aria-expanded=true]::after{transform:translateY(-50%) rotate(180deg)}
+#pk>.pk-o:focus-visible{outline:2px solid #d97757;outline-offset:3px}
+#pk>.pk-o .pk-e{max-width:350px}
+#pk>.pk-o .pk-l{font-weight:700}
+#pkOthers{margin:12px 0 0!important}
+#pSum .pk-tools{margin:12px 0 10px!important}
+#pSum #bDeep{margin:13px 0 0!important}
+#pSum .more-btn b{white-space:nowrap}
+#verdict .mm-legacy{display:none!important}
+@media(max-width:760px){
+  .mm-section-head{grid-template-columns:22px minmax(0,1fr);gap:4px 10px}
+  .mm-section-head::before{width:18px;margin-top:10px}
+  #verdict .v-cap{margin-left:32px!important}
+  #verdict .mm-plan-area{margin-top:18px!important}
+  #pSum .pk-summary{line-height:1.5!important}
+  #pk>.pk-o{min-height:unset;padding:12px 32px 12px 12px!important}
+  .mm-modnav{flex-direction:row!important;justify-content:flex-end!important;overflow-x:auto;flex-wrap:nowrap!important}
+  .mm-mod{white-space:nowrap;padding:10px 12px}
+}
+@media(max-width:460px){#pSum .more-btn{gap:5px}#pSum .more-btn b{font-size:.86rem}}
 </style>
 <script>/* v1.0.16: aplica el tema guardado antes de pintar (sin parpadeo). Por defecto: Dark. */try{var g=JSON.parse(localStorage.getItem('gestorVentas.ajustes.v1')||'null');if(g&&g.ui){if(g.ui.light)document.documentElement.classList.add('light');}}catch(e){}</script>
 </head>
@@ -1446,7 +1489,7 @@ html.light #verdict{background:#fff!important}html.light #verdict .v-cap{color:#
   <div class="brand"><span class="logo-s sig" aria-hidden="true"></span>SIGMA GRINDSET <small>EVE Online</small></div>
   <!-- v1.0.62: anuncio tipo ticker (Skill Points gratis), en bucle; clic abre el enlace -->
   <button type="button" class="ticker" data-link="referral" aria-label="Gratis: usa mi enlace para recibir 1 Millón de Skill Points"><span class="tk-track"><span class="tk-i"><span class="ref-tag">Gratis</span>Usa mi enlace para recibir <b>1 Millón de Skill Points</b> gratis ↗</span><span class="tk-i" aria-hidden="true"><span class="ref-tag">Gratis</span>Usa mi enlace para recibir <b>1 Millón de Skill Points</b> gratis ↗</span><span class="tk-i" aria-hidden="true"><span class="ref-tag">Gratis</span>Usa mi enlace para recibir <b>1 Millón de Skill Points</b> gratis ↗</span><span class="tk-i" aria-hidden="true"><span class="ref-tag">Gratis</span>Usa mi enlace para recibir <b>1 Millón de Skill Points</b> gratis ↗</span></span></button>
-  <button type="button" class="ghost mine-tab" id="mineTab" aria-pressed="false" aria-controls="mining"><span class="ic i-rock" aria-hidden="true"></span> Minería</button>
+  
 <label class="sw top-theme" title="Tema de la página: Dark (oscuro) o Light (claro)."><input type="checkbox" id="themeLight"><span class="sw-t" aria-hidden="true"></span><span id="themeTxt">Dark</span></label>
 </header>
 
@@ -1569,7 +1612,6 @@ Contraband Freight = no</textarea><small>Una regla por línea: Nombre = tax tota
     </div>
     <!-- v103: ordenar el ledger es independiente de los filtros por recomendación de Qué Hacer.
          Los botones aplican orden al libro completo; nunca recalculan ISK ni cambian el plan. -->
-    <div class="undo" id="undo" hidden role="status"><span id="undoTxt"></span><button type="button" class="ghost" id="undoBtn">Deshacer</button></div>
     <div class="ledger-head" role="group" aria-label="Ordenar tus items">
       <button type="button" class="ledger-sort" data-lsort="n" aria-label="Ordenar por nombre">Item <span class="sort-arrow" aria-hidden="true"></span></button>
       <span class="ledger-col">Precio Unidad</span>
@@ -1596,33 +1638,22 @@ Contraband Freight = no</textarea><small>Una regla por línea: Nombre = tax tota
       <div class="mm-legacy" hidden aria-hidden="true">
         <div id="ovShip"><span id="aCourT"></span><span id="aCourier"></span><span id="aCourS"></span></div>
         <div><span id="vsCn"></span><span id="vsC"></span><label id="vsRelW" hidden><input type="checkbox" id="cRelistOn"> Relists <span id="vsRel"></span></label></div>
-        <div id="ovMktW"><div id="ovMkt"></div></div>
       </div>
     </div>
 
-</section>
   <!-- 1. Resultado simple -->
-  <section class="panel summary res" id="pSum" hidden>
-    <header class="mm-section-head"><h2 class="mm-title">RESULTADO</h2><p class="mm-section-sub">COMPARA TUS PLANES Y ELIGE CÓMO PREFIERES VENDER</p></header>
-    <!-- v1.0.48: arriba, lo que recibes (izquierda) y cuánto más deja frente a la alternativa simple (derecha) -->
-    <div class="res-top">
-      <div class="res-main"><span class="res-k">Recibes con este plan</span>
-        <p class="res-big"><span class="num" id="resIsk">—</span></p>
-        <div class="res-chips"><span class="v-what" id="resWhat"></span><p class="sk-note" id="skNote" hidden></p></div></div>
-      <div class="res-side" id="resGain" hidden><span class="res-k" id="resGainK"></span>
-        <p class="res-big"><span class="num" id="resGainN"></span></p>
-        <span class="res-gs" id="resGainS"></span></div>
-    </div>
+  <section class="summary res mm-plan-area" id="pSum" hidden>
+    <header class="mm-section-head"><h2 class="mm-title">ELIGE TU PLAN</h2><p class="mm-section-sub">COMPARA LAS OTRAS RUTAS Y ELIGE LA QUE TE CONVIENE</p><p class="pk-summary" id="pkNote" aria-live="polite"></p></header>
     <div class="fb2" id="flipBuy" hidden></div>
-    <div class="pk-w"><h4 class="pk-t">Elige un Plan</h4>
-      <p class="pk-summary" id="pkNote" aria-live="polite"></p>
+    <div class="pk-w">
       <div class="pk" id="pk" role="group" aria-label="Plan seleccionado"></div>
-      <div class="pk-actions"><button type="button" class="pk-change" id="pkChange" aria-controls="pkOthers" aria-expanded="false">Cambia de Plan</button></div>
       <div class="pk-tools" id="pkTools"></div>
       <div class="pk" id="pkOthers" role="group" aria-label="Otros planes" hidden></div></div>
     <!-- v1.0.50: justo debajo de los planes. Al abrir el desglose, los planes se pliegan y el desglose pasa a ser lo principal -->
-    <button type="button" class="more-btn" id="bDeep" aria-expanded="false" aria-controls="deep"><span>Consulta los destinos y precios de cada paso.</span><b>Ir a los pasos ↓</b></button>
+    <button type="button" class="more-btn" id="bDeep" aria-expanded="false" aria-controls="deep"><span>Consulta los destinos, precios y costes de cada paso.</span><b>Ver el desglose ▾</b></button>
   </section>
+
+</section>
   <!-- 2. El análisis (oculto hasta que lo pides) -->
   <div id="deep" class="deep" hidden>
   <section class="panel verdict-detail" id="stepsPanel">

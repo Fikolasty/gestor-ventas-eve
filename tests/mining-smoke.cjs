@@ -34,11 +34,28 @@ assert(sales.includes('paintWhereSold(P,none)'),'faltan destinos del ISK en la v
 assert(sales.includes('function selectAppModule(name)'),'no se integraron pestañas');
 assert(html.includes('PI · Espacio reservado'),'PI no debe activar calculos falsos');
 
+
+// v1.0.82: maquetación v6, controles únicos y limpieza de cachés.
+assert(html.indexOf('id="verdict"')<html.indexOf('id="pSum"') &&
+       html.indexOf('id="pSum"')<html.indexOf('id="deep"'),'plan y resumen deben ser una sola sección');
+for(const name of ['mineTab','undo','undoBtn','resGain','resIsk','pkChange','ovMktW']){
+  assert(!html.includes('id="'+name+'"'),'control oculto no utilizado: '+name);
+}
+assert(!sales.includes('undoStack')&&!sales.includes('clearUndo'),'no se deben retener copias del inventario para Deshacer');
+assert(sales.includes("startsWith('blob:'))URL.revokeObjectURL(ICON[id]);"),'solo revocar ObjectURLs de blob');
+assert(sales.includes('ORE_MEMO.delete(key)')&&sales.includes('delete idCache[k]'),'liberar caches de items retirados');
+assert(source.includes('function pruneMiningPriceCache()'),'los precios mineros requieren limpieza por TTL');
+assert(source.includes('chartResize.disconnect()'),'desconectar el ResizeObserver en pagehide');
+assert(!sales.includes('paintResGain('),'no calcular componentes de interfaz eliminados');
+assert(html.includes('class="mm-plan-area"')||html.includes('class="summary res mm-plan-area"'),'área unificada ausente');
+
 // v1.0.80: solo el plan seleccionado en vista cerrada; se cambia desde una acción única.
 assert(sales.includes('box.append(row(chosen,true))'),'debe mostrarse el plan elegido');
 assert(sales.includes("others.hidden=!pkView.open"),'las alternativas deben estar plegadas');
-assert(sales.includes("$('pkChange').addEventListener"),'falta Cambia de Plan');
-assert(sales.includes('El óptimo también se elige aquí'),'el óptimo debe estar en Cambia de Plan');
+assert(sales.includes("e.target.closest('[data-pk-toggle]')"),'la fila elegida debe desplegar las opciones');
+assert(sales.includes("aria-expanded',String(pkView.open)"),'el selector debe indicar si está abierto');
+assert(!sales.includes('pkChange'),'el botón Cambia de Plan ya no se usa');
+assert(sales.includes('El óptimo también se elige aquí'),'Plan Óptimo debe seguir seleccionable entre alternativas');
 assert(!sales.includes("back.dataset.m='auto'"),'no debe reaparecer Volver al óptimo');
 assert(sales.includes('/*__MINING__*/'),'falta montaje del módulo');
 assert(html.includes('id="mnRoot"')&&html.includes('data-panel="mining"'),'falta UI');

@@ -21,6 +21,9 @@ Antes, revisa **Ajustes** (el engranaje del menú): tus skills, los taxes, el Bu
 Lo más exacto es copiar los % de *Broker's fee* y *Sales tax* que muestra la ventana de venta del juego.
 
 ### Funciones principales
+- **Interfaz v6 unificada**: resumen financiero y selector de planes en un mismo panel; haz clic en el plan actual para cambiarlo. Pestañas a la derecha, encabezados y tamaños alineados.
+- **Cachés con limpieza**: el gestor libera tipos, volúmenes, íconos y materiales que deja de usar; Minería descarta cotizaciones ESI antiguas y desconecta su observador al salir. La caché activa permanece disponible.
+
 - **Navegación fija**: Ventas, Minería (módulo existente) e Industria Planetaria (espacio reservado; todavía sin cálculos PI).
 - **Tasación bruta**: muestra Buy/Split/Sell de las órdenes originales de Jita 4-4, sin deducciones; el listado identifica los ítems sin precio. La coincidencia exacta con Janice requiere contrastar una misma lista.
 - **Resumen de ruta**: desglose de ISK y destinos integrados en una sola tarjeta, con indicadores compactos de ítems y volumen.
