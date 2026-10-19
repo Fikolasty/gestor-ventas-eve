@@ -1800,6 +1800,17 @@ select{appearance:none;-webkit-appearance:none;padding-right:30px!important;back
 #ledger>summary .status.cta{margin-left:auto!important;white-space:nowrap;flex:none}
 #ledger>summary .mm-title{flex:0 1 auto;min-width:0}
 @media(max-width:650px){#ledger>summary{gap:7px;flex-wrap:wrap}#ledger>summary .status.cta{margin-left:auto!important}}
+
+/* Barra de módulos 2026: distribución editorial compacta, HOME ópticamente centrado. */
+#mmTabs.mm-modnav{display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:nowrap;min-height:68px;padding:9px 15px 9px 22px;border:1px solid rgba(231,223,211,.16);border-radius:16px;background:linear-gradient(125deg,rgba(34,32,31,.98),rgba(18,18,19,.98));box-shadow:0 12px 28px rgba(0,0,0,.24),inset 0 1px 0 rgba(255,255,255,.045)}
+#mmTabs .mm-home{flex:0 0 44px;display:grid;place-items:center;align-self:center;width:44px;height:44px;margin:0;padding:0;border:0!important;border-radius:0!important;background:transparent!important;box-shadow:none!important;color:#d4ccc2;transition:color .16s ease,transform .16s ease}
+#mmTabs .mm-home .ic{width:23px;height:23px}
+#mmTabs .mm-home:hover{color:var(--ion);transform:translateY(-1px);opacity:1}
+#mmTabs .mm-modgroup{display:flex;align-items:center;gap:4px;padding:5px;border-radius:12px;border:1px solid rgba(231,223,211,.09);background:rgba(0,0,0,.27)}
+#mmTabs .mm-mod{display:inline-flex;align-items:center;justify-content:center;min-height:40px;padding:9px 20px;border:1px solid transparent;border-radius:8px;font:650 .9rem var(--f-ui);white-space:nowrap;color:#bdb5ad;transition:background .16s ease,color .16s ease,border-color .16s ease}
+#mmTabs .mm-mod:hover{background:rgba(255,255,255,.055);color:#fff}
+#mmTabs .mm-mod[aria-selected=true]{background:rgba(217,119,87,.16);border-color:rgba(217,119,87,.42);box-shadow:inset 0 1px 0 rgba(255,255,255,.04);color:#ffe7dc}
+@media(max-width:680px){#mmTabs.mm-modnav{gap:8px;padding:8px 10px 8px 12px;min-height:58px}#mmTabs .mm-home{flex-basis:32px;width:32px;height:36px}#mmTabs .mm-modgroup{gap:1px;padding:3px;min-width:0;overflow-x:auto}#mmTabs .mm-mod{font-size:.78rem;padding:8px 10px;min-height:34px}}
 /* ===== tema claro (generado desde el oscuro por light.py) ===== */
 html.light{--void:#e4e3dd;--hull:#e2e0da;--hull2:#e0ded8;--line:rgba(31,30,29,0.114);--line2:rgba(31,30,29,0.125);--txt:#1c1c1a;--mut:#54524d;--dim:#6c6a64;--ion:#413f3c;--blue:#a39d8b;--clay:#c96442;--thrust:#a67526;--gain:#418b62;--loss:#a92c23}
 html.light body::after{background:repeating-linear-gradient(180deg,rgba(31,30,29,0.011) 0 1px,transparent 1px 3px),
@@ -2276,6 +2287,12 @@ html.light #pExtra details.fold>summary>.sum .sm-hide.neg{color:#a92328!importan
 html.light .hero-intro>.paste textarea{background:rgba(240,237,229,0.66)!important}
 html.light .hero-intro .paste-head .paste-home:hover{background:rgba(217,119,87,0.15)}
 html.light #pCtr .discord-side{background:var(--panel,#e5e3dd)}
+html.light #mmTabs.mm-modnav{border:1px solid rgba(31,30,29,0.152);background:linear-gradient(125deg,rgba(240,237,229,0.98),rgba(240,237,229,0.98));box-shadow:0 12px 28px rgba(0,0,0,0.038),inset 0 1px 0 rgba(31,30,29,0.043)}
+html.light #mmTabs .mm-home{color:#464541}
+html.light #mmTabs .mm-modgroup{border:1px solid rgba(31,30,29,0.085);background:rgba(0,0,0,0.043)}
+html.light #mmTabs .mm-mod{color:#5a5954}
+html.light #mmTabs .mm-mod:hover{background:rgba(31,30,29,0.052);color:#151514}
+html.light #mmTabs .mm-mod[aria-selected=true]{background:rgba(217,119,87,0.2);border-color:rgba(217,119,87,0.525);box-shadow:inset 0 1px 0 rgba(31,30,29,0.038);color:#c2440a}
 /* ajustes a mano del tema claro */
 html.light body{background:#e6e3da;color:#1f1e1d}
 html.light body::before{opacity:.12;filter:grayscale(.35) brightness(1.1)}
@@ -3007,9 +3024,11 @@ html.light #mining .mn-fit-fallback{border-color:rgba(40,100,150,.22);background
   </div>
   <nav class="mm-modnav" id="mmTabs" role="tablist" aria-label="Secciones de Market Moves+">
     <button type="button" id="navHome" class="mm-home" title="HOME" aria-label="Volver al inicio"><span class="ic i-home" aria-hidden="true"></span></button>
+    <div class="mm-modgroup" role="presentation">
     <button type="button" class="mm-mod on" data-mm-module="ventas" role="tab" aria-controls="salesBody" aria-selected="true" id="mmTabVentas">Ventas</button>
     <button type="button" class="mm-mod" data-mm-module="mining" role="tab" aria-controls="mining" aria-selected="false" id="mmTabMining">Minería</button>
     <button type="button" class="mm-mod" data-mm-module="pi" role="tab" aria-controls="pi" aria-selected="false" id="mmTabPi">Industria Planetaria · PI</button>
+    </div>
   </nav>
   <!-- v104: introducción + recordatorio visible a la derecha. Los botones comparten
        los paneles Guía de Uso y Ajustes existentes: no se duplica ningún formulario. -->
@@ -7179,7 +7198,7 @@ document.querySelectorAll('[data-go-home]').forEach(node=>{
     });
   }
   document.querySelectorAll('#mmTabs [data-mm-module]').forEach(btn=>btn.addEventListener('click',updateModuleSidebar));
-  $('sideHome').addEventListener('click',updateModuleSidebar);
+  $('navHome').addEventListener('click',updateModuleSidebar);
   function tabs(host,groups,labels){
     if(!host||host.dataset.modernized)return;
     host.dataset.modernized='true';
