@@ -4416,7 +4416,7 @@ function paintVerdict(P){
     const id=section.dataset.sortId,sort=vSort[id]||{k:null,d:1};
     const oldTable=section.querySelector('.pl');
     if(oldTable)poolIcons(oldTable); // reutiliza imágenes de EVE cuando sea posible
-    const groupTable=el('div','pl');groupTable.append(mkHead(sort));tableTarget=groupTable;
+    const groupTable=el('div','pl');const toolbar=section.querySelector('.stp-acts');if(toolbar)groupTable.append(toolbar);groupTable.append(mkHead(sort));tableTarget=groupTable;
     const query=(vQuery[id]||'').trim().toLocaleLowerCase();
     const filtered=query?g.filter(r=>r.o.name.toLocaleLowerCase().includes(query)||(r.mins||[]).some(m=>m.m.toLocaleLowerCase().includes(query))):g;
     const count=section.querySelector('.pl-match');if(count)count.textContent=query?filtered.length+' de '+g.length+' items':' ';
