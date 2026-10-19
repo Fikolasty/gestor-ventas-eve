@@ -4486,7 +4486,7 @@ function buildLot(o){
   // Importante: o.ui.last se actualiza en paintLot() aun con el detalle cerrado.
   const lot=el('article','lot'),head=el('div','lot-head');head.tabIndex=0;head.setAttribute('role','button');head.setAttribute('aria-expanded','false'); // v1.0.8: div para poder llevar dentro el botón de copiar precio
   const nm=el('span','lot-name');nm.append(el('b',null,o.name));const tag=el('span','tag');nm.append(tag);
-  const qty=el('span','lot-qty'),dest=el('span','lot-dest'),net=el('span','lot-net'),chev=el('span','chev','›');chev.setAttribute('aria-hidden','true');
+  const qty=el('span','lot-qty'),dest=el('span','lot-dest'),net=el('span','lot-net'),chev=el('span','chev');chev.setAttribute('aria-hidden','true');
   const pp=el('span','lot-pp'),ppB=copyBtn('','—');ppB.classList.add('cp-n');ppB.title='Precio por unidad sugerido: clic para copiar';pp.append(ppB);
   head.append(nm,pp,qty,dest,net,chev);
   const body=el('div','lot-body');body.hidden=true;
@@ -4522,9 +4522,9 @@ function buildLotDetails(o,ui){
   prices.append(el('summary','sub-h','Precios para publicar'),pt);
   const checks=el('ul','checks'),foot=el('div','lot-foot'),del=el('button','link danger','Quitar del lote');del.type='button';
   del.addEventListener('click',()=>removeFromPaste(o.name));foot.append(del);
-  const verdict=el('details','lot-verdict lot-fold');verdict.append(el('summary','sub-h','Resultado y recomendación'),rcall);
-  const analysis=el('div','lot-analysis');analysis.append(opts,facts);
-  body.append(gwrap,verdict,analysis,prices,checks,foot);
+  const verdict=el('section','lot-verdict');verdict.append(rcall);
+  const analysis=el('div','lot-analysis');analysis.append(opts);
+  body.append(gwrap,verdict,analysis,facts,prices,checks,foot);
   Object.assign(ui,{iRef,iM3,bBuy,bVol,pBody,checks,detailsReady:true});
 }
 // copia el valor limpio: números con máx. 2 decimales y sin "ISK" (listo para pegar en el juego)
