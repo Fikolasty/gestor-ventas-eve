@@ -1284,7 +1284,7 @@ function paintVerdict(P){
      return({fN:PLAN_L.fN,fJ:'Vender en Jita'+kind,fJI:'Vender en Jita'+kind+' al Instante',null:'Vender en HY-RWO',rNull:'Vender en HY-RWO reprocesado',jOrd:'Vender en Jita'+kind,jInst:'Vender en Jita'+kind+' al Instante',rJita:'Vender en Jita Reprocesado',bb:'Vender al Buyback',disc:'Vender a Jugador'})[k];};
    const sums={};P.rows.forEach(r=>{if(r.best)sums[r.best]=(sums[r.best]||0)+r.g[r.best]-r.prod;});
    const ks=Object.keys(sums).sort((a,b)=>sums[b]-sums[a]);
-   $('vWhat').dataset.k=$('resWhat').dataset.k=ks[0]||'';
+   $('vWhat').dataset.k=ks[0]||'';
    $('vWhat').textContent=none||!ks.length?'':W(ks[0])+(ks.length>1?' + '+(ks.length-1)+(ks.length>2?' más':' más'):'');}
   {const fa=!P.mode&&P.rows.some(r=>r.fast);
     $('vTitle').textContent=P.mode?'TU RUTA DE VENTA':'LA MEJOR RUTA DE VENTA';
@@ -1299,17 +1299,6 @@ function paintVerdict(P){
   lastP=P;
   paintWhereSold(P,none);
   if($('deep').hidden)return; // v1.0.8: el análisis (rutas, Qué Hacer, comparación) solo se pinta con la sección abierta
-  // valor del lote en Jita con los 3 precios (como Janice): Buy · Split · Sell. Sin porcentajes engañosos.
-  let vB=0,vS=0,ok3=true;P.rows.forEach(r=>{const a=r.o.jita;if(!a||a.buy==null||a.sell==null){ok3=false;return;}vB+=a.buy*r.q;vS+=a.sell*r.q;});
-  // v1.0.22: tu lote en Jita (Buy · Split · Sell) y dónde queda lo que te deja el plan
-  {const box=$('ovMkt');box.textContent='';$('ovMktW').hidden=none||!ok3||!(vS>0);
-   if(!$('ovMktW').hidden){const net=P.best,lo=Math.min(vB,net),hi=Math.max(vS,net),span=hi-lo||1,x=v=>((v-lo)/span*100).toFixed(2)+'%';
-     const trk=el('div','ov-trk');trk.append(el('i','ln'));
-     [['Buy',vB],['Split',(vB+vS)/2],['Sell',vS]].forEach(([k,v])=>{const t=el('i','tk');t.style.left=x(v);t.append(el('span',null,k));trk.append(t);});
-     const me=el('i','me');me.style.left=x(net);me.title='Tu plan: '+fmt(net);trk.append(me);
-     const l=el('div','ov-mk-l');[['Jita Buy',vB],['Split',(vB+vS)/2],['Jita Sell',vS]].forEach(([k,v])=>{const d=el('div',null,k);d.append(el('b',null,fmt(v)));l.append(d);});
-     const n=el('p','ov-mk-n');n.append('Tu plan deja ',el('b',null,fmt(net)),' neto: '+pct(net/vS)+'% del valor a Jita Sell.');
-     box.append(trk,l,n);}}
   const vTot=P.rows.reduce((a,r)=>a+r.vol,0),cTot=P.rows.reduce((a,r)=>a+r.coll,0);
   $('vsN').textContent=String(S.items.length);$('vsV').textContent=fmtV(Math.round(vTot*10)/10);
   {const u=P.rows.reduce((a,r)=>a+(r.q||0),0),n=vTot>0?trips(vTot):0;
@@ -2133,55 +2122,14 @@ function paintFlipBuy(P){
   t.append(tb);box.append(t);
   box.append(el('p','fb2-n','Compra = Jita Sell × cantidad (comprando de las órdenes de venta, sin broker). Venta = el precio de lista en HY-RWO ya con Sales Tax, Broker y SCC. El envío es un solo cálculo para todo el lote. El margen se cambia junto al botón de la ruta.'));
 }
-function paintSkewNote(P){const b=$('skNote'),parts=[];
-  // Solo los ajustes usados por el plan elegido; −0.16% de venta rápida es exclusivo de Jita.
-  const rows=P.rows.filter(r=>r.best),used=ks=>rows.some(r=>ks.includes(r.best));
-  const f=(v,t)=>{if(v)parts.push(t+' '+(v>0?'+':'−')+pctS(Math.abs(v))+'%');};
-  if(used(['jInst','fJI']))f(C.skew.inst,'venta rápida en Jita');
-  if(used(['jOrd','fJ']))f(C.skew.ord,'órdenes en Jita');
-  if(used(['null','fN']))f(C.skew.nul,'órdenes en Null');
-  const direct=['jInst','fJI','jOrd','fJ','null','fN'];
-  const n=rows.filter(r=>r.o.skew&&direct.includes(r.best)).length;
-  if(n)parts.push(n+(n>1?' items con ajuste propio':' item con ajuste propio'));
-  b.hidden=!parts.length;b.textContent=parts.length?'Precios ajustados: '+parts.join(' · '):'';}
 function paintSummary(P){
-  const box=$('pSum'),none=!P.rows.length||P.missing.length===P.rows.length;box.hidden=none||!S.items.length;if(box.hidden)return;
-  const sys=(C.ref.name||'Null').split(' - ')[0].trim()||'Null';
+  const box=$('pSum'),none=!P.rows.length||P.missing.length===P.rows.length;
+  box.hidden=none||!S.items.length;
+  if(box.hidden)return;
   paintPicker(P);
-  document.title=compactIsk(P.best)+' ISK · Market Moves+'; // v1.0.11: el total en la pestaña
-  paintSkewNote(P);
+  document.title=compactIsk(P.best)+' ISK · Market Moves+';
   paintFlipBuy(P);
-  $('resIsk').textContent=fmt(P.best);$('resWhat').textContent=$('vWhat').textContent;
-  paintResGain(P,sys);
 }
-// v1.0.48: número de la derecha del Resultado = cuánto más deja este plan frente a la alternativa simple.
-// Si el plan envía algo: frente a no enviar nada (cada item a su mejor opción sin viajar, como en computePlan).
-// Si no envía nada: frente a llevarlo todo al destino (con su courier). Se oculta si no hay con qué comparar.
-function paintResGain(P,sys){
-  const box=$('resGain'),org=S.flip?'Jita':sys,dst=S.flip?'HY-RWO':'Jita';
-  const stayK=r=>{const ks=(S.flip?['fJ','fJI']:['null','bb','rNull']).filter(k=>r.g[k]!=null);
-    return ks.length?ks.reduce((a,b)=>r.g[b]>r.g[a]?b:a):(r.g.disc!=null?'disc':null);};
-  const live=P.rows.filter(r=>r.best);let base=null,k='',sub='',tail='';
-  if(P.Vs>0){
-    if(live.some(r=>SHIPS[r.best]&&!stayK(r))){box.hidden=true;return;}
-    base=live.reduce((a,r)=>a+(SHIPS[r.best]?r.g[stayK(r)]:r.g[r.best])-r.prod,0);
-    k='Ganas de más';sub='frente a vender todo en '+org+' sin enviar nada';
-  }else{
-    const all=S.flip?P.allNull:P.allJita;if(all==null){box.hidden=true;return;}
-    base=all;k='Ganas de más';sub='frente a llevar todo a '+dst+' con envío';
-  }
-  const d=P.best-base;
-  if(!(Math.abs(d)>=1)){box.hidden=true;return;}
-  if(d<0)k='Dejas de ganar';
-  box.hidden=false;box.classList.toggle('up',d>0);box.classList.toggle('dn',d<0);
-  $('resGainK').textContent=k;$('resGainN').textContent=(d>0?'+':'−')+fmt(Math.abs(d));
-  tail=d<0&&live.some(r=>r.fast)?', a cambio de vender más rápido.':'.';
-  // v1.0.56: el % y el monto de la alternativa con color (verde positivo, rojo negativo)
-  const gs=$('resGainS');gs.textContent='';
-  if(base>0)gs.append(el('b',d>0?'pos':'neg',(d>0?'+':'−')+pctS(Math.abs(d)/base)+'%'),' ');
-  gs.append(sub+' (',el('b',base<0?'neg':'pos',(base<0?'−':'')+fmt(Math.abs(base))),')'+tail);
-}
-
 // ================= Recalcular =================
 // Colorea montos dentro de textos explicativos: verde si ganas, rojo si pierdes o pagas; neutro si es solo un total.
 // Decide por el signo (+/−) o por las palabras alrededor ("Ganas", "más" / "Pierdes", "menos", "Coste", "pagas").
@@ -2283,7 +2231,6 @@ function selectAppModule(name){
     $('mining').hidden=true;$('settings').hidden=true;$('help').hidden=true;
     $('pi').hidden=false;
   }else{$('mining').hidden=true;$('pi').hidden=true;}
-  $('mineTab').setAttribute('aria-pressed',String(name==='mining'));
   document.querySelectorAll('.side-i[data-panel="mining"]').forEach(b=>b.setAttribute('aria-pressed',String(name==='mining')));
 }
 const mmTabs=[...document.querySelectorAll('#mmTabs [data-mm-module]')];
@@ -2305,7 +2252,6 @@ function togglePanel(id,force){
   if(open&&!s.hidden){s.scrollIntoView({behavior:'smooth',block:'start'});return;}
   if(open){focusOnly(id);slide(s,true);if(id==='mining'){MineUI.mount($('mnRoot'));MineUI.shown();}}else s.hidden=true;
   document.querySelectorAll('.side-i[data-panel="'+id+'"]').forEach(x=>x.setAttribute('aria-pressed',String(open)));
-  if(id==='mining')$('mineTab').setAttribute('aria-pressed',String(open));
   if(open)s.scrollIntoView({behavior:'smooth',block:'start'});}
 // v1.0.11: menú lateral. Escritorio: se contrae a íconos. Móvil: se abre encima con fondo oscuro. Solo en memoria.
 {const mob=()=>innerWidth<=900,b=document.body;
@@ -2318,7 +2264,6 @@ function togglePanel(id,force){
    x.addEventListener('click',()=>{if(x.dataset.panel==='mining')selectAppModule('mining');else togglePanel(x.dataset.panel);if(mob())setO(false);});});}
 // v1.0.8: X dentro de la sección (fija al bajar)
 document.querySelectorAll('.x-close').forEach(b=>b.addEventListener('click',()=>togglePanel(b.dataset.close,false)));
-$('mineTab').addEventListener('click',()=>selectAppModule('mining'));
 $('sideHome').addEventListener('click',()=>{
   selectAppModule('ventas');focusOnly('home'); // Cierra los paneles sin borrar datos ni preferencias.
   window.scrollTo({top:0,behavior:MOTION()?'smooth':'auto'});
