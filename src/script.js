@@ -2742,3 +2742,64 @@ addEventListener('pagehide',()=>{if(stT){clearTimeout(stT);stSaveNow();}});
 // arranque
 stRestore();syncDeps();brokerNote();buildOreSelect();readBB();syncLots();refresh();
 
+
+
+/* EVE SSO v1: PKCE public client; no client secret or persistent access tokens. */
+(function eveLogin(){
+  const $e=id=>document.getElementById(id), button=$e('eveIdentityButton'), menu=$e('eveIdentityMenu');
+  const base=location.origin+location.pathname, key='mm.eve.pkce', clientKey='mm.eve.clientId';
+  const scope='esi-skills.read_skills.v1';
+  let session=null;
+  const status=msg=>$e('eveLoginStatus').textContent=msg;
+  const b64=a=>btoa(String.fromCharCode(...new Uint8Array(a))).replace(/\\+/g,'-').replace(/\\//g,'_').replace(/=+$/,'');
+  const rand=n=>b64(crypto.getRandomValues(new Uint8Array(n)));
+  async function challenge(v){return b64(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(v)));}
+  const refreshUI=()=>{const on=!!session;$e('evePilotName').textContent=on?session.name:'Conectar EVE';$e('eveSync').hidden=!on;$e('eveLogout').hidden=!on;$e('eveLogin').hidden=on;
+    $e('evePortrait').hidden=!on;if(on)$e('evePortrait').src='https://images.evetech.net/characters/'+session.id+'/portrait?size=64';else $e('evePortrait').removeAttribute('src');};
+  $e('eveClientId').value=localStorage.getItem(clientKey)||'';
+  $e('eveClientId').addEventListener('change',()=>localStorage.setItem(clientKey,$e('eveClientId').value.trim()));
+  button.addEventListener('click',()=>{menu.hidden=!menu.hidden;button.setAttribute('aria-expanded',String(!menu.hidden));});
+  document.addEventListener('click',e=>{if(!e.target.closest('#eveIdentity')){menu.hidden=true;button.setAttribute('aria-expanded','false');}});
+  $e('eveLogin').addEventListener('click',async()=>{
+    const client=$e('eveClientId').value.trim();if(!/^[a-zA-Z0-9_-]{12,128}$/.test(client)){status('Introduce el Client ID público registrado en EVE Developers.');return;}
+    localStorage.setItem(clientKey,client);
+    try{const verifier=rand(48),state=rand(24);sessionStorage.setItem(key,JSON.stringify({verifier,state,client,redirect:base,at:Date.now()}));
+      const u=new URL('https://login.eveonline.com/v2/oauth/authorize');u.searchParams.set('response_type','code');u.searchParams.set('client_id',client);u.searchParams.set('redirect_uri',base);u.searchParams.set('scope',scope);u.searchParams.set('state',state);u.searchParams.set('code_challenge',await challenge(verifier));u.searchParams.set('code_challenge_method','S256');location.assign(u.href);
+    }catch(err){status('No fue posible iniciar el flujo seguro: '+err.message);}
+  });
+  function saveSkill(id,level){const e=$e(id);if(!e)return false;const v=String(level);if(![...e.options].some(o=>o.value===v))return false;e.value=v;e.dispatchEvent(new Event('change',{bubbles:true}));return true;}
+  async function sync(){
+    if(!session||Date.now()>session.expires){status('La sesión expiró. Vuelve a iniciar sesión.');session=null;refreshUI();return;}
+    try{status('Consultando skills autorizadas en ESI…');
+      const resp=await fetch('https://esi.evetech.net/latest/characters/'+session.id+'/skills/?compatibility_date=2026-10-01',{headers:{Authorization:'Bearer '+session.token},cache:'no-store'});
+      if(!resp.ok)throw Error('ESI HTTP '+resp.status);const data=await resp.json(),skills=new Map(data.skills.map(x=>[x.skill_id,x.active_skill_level]));
+      const names=['Accounting','Broker Relations','Advanced Broker Relations','Reprocessing','Reprocessing Efficiency'];
+      const idsResp=await fetch('https://esi.evetech.net/latest/universe/ids/?compatibility_date=2026-10-01',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(names)});
+      if(!idsResp.ok)throw Error('Catálogo ESI HTTP '+idsResp.status);
+      const ids=await idsResp.json(),resolved=new Map((ids.inventory_types||[]).map(x=>[x.name,x.id]));
+      let count=0;const mapping=[['Accounting','skAcc'],['Broker Relations','skBR'],['Advanced Broker Relations','cAbr'],['Reprocessing','skRep'],['Reprocessing Efficiency','skRepE']];
+      mapping.forEach(([name,id])=>{const sid=resolved.get(name);if(sid!=null&&skills.has(sid)&&saveSkill(id,skills.get(sid)))count++;});
+      status(count+' skills sincronizadas. Los impuestos se recalculan con los ajustes actuales; las tarifas privadas siguen siendo manuales.');
+      if(typeof refresh==='function')refresh();
+    }catch(err){status('No se pudieron sincronizar las skills: '+err.message);}
+  }
+  $e('eveSync').addEventListener('click',sync);
+  $e('eveLogout').addEventListener('click',()=>{session=null;refreshUI();status('Desconectado. Se conservan tus ajustes manuales.');});
+  (async()=>{const u=new URL(location.href),code=u.searchParams.get('code'),state=u.searchParams.get('state');
+    if(!code&&!u.searchParams.has('error'))return;
+    u.searchParams.delete('code');u.searchParams.delete('state');u.searchParams.delete('error');u.searchParams.delete('error_description');history.replaceState(null,'',u.pathname+u.search+u.hash);
+    const saved=sessionStorage.getItem(key);sessionStorage.removeItem(key);menu.hidden=false;button.setAttribute('aria-expanded','true');
+    if(!saved){status('No se encontró una solicitud SSO válida.');return;}
+    try{const req=JSON.parse(saved);
+      if(!code||!state||req.state!==state||req.redirect!==base||Date.now()-req.at>600000)throw Error('Callback no coincide o expiró.');
+      const data=new URLSearchParams({grant_type:'authorization_code',code,client_id:req.client,code_verifier:req.verifier,redirect_uri:req.redirect});
+      const tokenResp=await fetch('https://login.eveonline.com/v2/oauth/token',{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:data});
+      if(!tokenResp.ok)throw Error('Intercambio de token HTTP '+tokenResp.status);const tokens=await tokenResp.json();
+      const verified=await fetch('https://login.eveonline.com/v2/oauth/verify',{headers:{Authorization:'Bearer '+tokens.access_token}});
+      if(!verified.ok)throw Error('Verificación SSO HTTP '+verified.status);const pilot=await verified.json();
+      const id=Number(pilot.CharacterID||pilot.character_id),name=pilot.CharacterName||pilot.character_name;
+      if(!Number.isSafeInteger(id)||!name)throw Error('Identidad de personaje no verificada.');
+      session={id,name,token:tokens.access_token,expires:Date.now()+(tokens.expires_in||1200)*1000-30000};refreshUI();status('Sesión autorizada para '+name+'. Sincroniza las skills cuando quieras.');await sync();
+    }catch(err){status('Error de SSO: '+err.message);}
+  })();
+})();
