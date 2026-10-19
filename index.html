@@ -1548,6 +1548,19 @@ html.light #verdict .v-plan-name{color:#ad4b27}
 .stp-arrival-price{color:var(--mut);font-size:.82rem;margin-left:auto}
 .stp-arrival-row .copy{width:auto;white-space:nowrap}
 
+
+/* Valuation/paste: shared upper heading track and equal bottom edge. */
+.hero-intro:not(.no-appr){grid-template-columns:repeat(2,minmax(0,1fr))!important;align-items:stretch!important;gap:16px!important}
+.hero-intro:not(.no-appr)>.appr,.hero-intro:not(.no-appr)>.paste{box-sizing:border-box;min-height:230px;height:100%;margin:0!important;border-radius:var(--r-md);padding:16px!important}
+.hero-intro:not(.no-appr)>.appr{display:grid;grid-template-rows:32px minmax(0,1fr);gap:10px}
+.hero-intro:not(.no-appr)>.appr .appr-title{margin:0!important;min-height:0!important;display:flex;align-items:center;font-size:1.2rem!important}
+.hero-intro:not(.no-appr)>.appr .appr-g{min-height:0;height:100%}
+.hero-intro:not(.no-appr)>.paste{display:grid;grid-template-rows:32px minmax(0,1fr) 48px;gap:10px}
+.hero-intro:not(.no-appr)>.paste:before{content:"INVENTARIO";font:700 1.2rem/32px var(--f-num);letter-spacing:.02em;color:var(--txt)}
+.hero-intro:not(.no-appr)>.paste textarea{width:100%;height:100%;min-height:0!important;max-height:none;padding:9px 12px;margin:0;border:1px solid var(--line2);border-radius:var(--r-sm);background:rgba(0,0,0,.2)}
+.hero-intro:not(.no-appr)>.paste .paste-foot{margin:0;padding:0;min-height:0;display:flex;align-items:center;border:0}
+@media(max-width:860px){.hero-intro:not(.no-appr){grid-template-columns:1fr!important}.hero-intro:not(.no-appr)>.appr,.hero-intro:not(.no-appr)>.paste{height:auto;min-height:220px}}
+
 /* ===== tema claro (generado desde el oscuro por light.py) ===== */
 html.light{--void:#e4e3dd;--hull:#e2e0da;--hull2:#e0ded8;--line:rgba(31,30,29,0.114);--line2:rgba(31,30,29,0.125);--txt:#1c1c1a;--mut:#54524d;--dim:#6c6a64;--ion:#413f3c;--blue:#a39d8b;--clay:#c96442;--thrust:#a67526;--gain:#418b62;--loss:#a92c23}
 html.light body::after{background:repeating-linear-gradient(180deg,rgba(31,30,29,0.011) 0 1px,transparent 1px 3px),
@@ -1999,6 +2012,7 @@ html.light .eve-sk-add{border:1px solid #408f75;color:#22aa5b;background:rgba(30
 html.light .eve-sk-add.book{border-color:#9b363b;color:#c20a15;background:rgba(100,20,25,0.312)}
 html.light .stp-contract-arrow{background:rgba(31,30,29,0.067)}
 html.light .stp-arrival-row{background:rgba(240,237,229,0.72)}
+html.light .hero-intro:not(.no-appr)>.paste textarea{background:rgba(0,0,0,0.032)}
 /* ajustes a mano del tema claro */
 html.light body{background:#e6e3da;color:#1f1e1d}
 html.light body::before{opacity:.12;filter:grayscale(.35) brightness(1.1)}
