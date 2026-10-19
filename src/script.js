@@ -2675,8 +2675,21 @@ function i18nRe(){if(I18N_RE)return I18N_RE;
   const esc=k=>k.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'),L='A-Za-zÁÉÍÓÚÜÑáéíóúüñ';
   const keys=Object.keys(I18N_EN).sort((a,b)=>b.length-a.length).map(k=>{let p=esc(k);
     if(new RegExp('^['+L+']').test(k))p='(?<!['+L+'])'+p;if(new RegExp('['+L+']$').test(k))p=p+'(?!['+L+'])';return p;});
-  return I18N_RE=new RegExp(keys.join('|'),'g');}
-const trS=s=>(s&&/[A-Za-zÁÉÍÓÚáéíóúñÑ¿¡]/.test(s))?s.replace(i18nRe(),m=>I18N_EN[m]??m):s;
+  return I18N_RE=new RegExp(keys.join('|'),'gi');}
+const I18N_LOWER=Object.create(null);
+function i18nValue(m){
+  let t=I18N_EN[m];
+  if(t===undefined){
+    const low=m.toLocaleLowerCase('es');
+    if(!Object.keys(I18N_LOWER).length)for(const [k,v] of Object.entries(I18N_EN))if(!(k.toLocaleLowerCase('es') in I18N_LOWER))I18N_LOWER[k.toLocaleLowerCase('es')]=v;
+    t=I18N_LOWER[low];
+  }
+  if(t===undefined)return m;
+  const letters=m.replace(/[^A-Za-zÁÉÍÓÚÜÑáéíóúüñ]/g,'');
+  if(letters.length>1&&letters===letters.toLocaleUpperCase('es'))return t.toLocaleUpperCase('en');
+  return t;
+}
+const trS=s=>(s&&/[A-Za-zÁÉÍÓÚáéíóúñÑ¿¡]/.test(s))?s.replace(i18nRe(),i18nValue):s;
 function i18nSkip(n){const p=n.parentElement;return !p||p.closest('script,style,textarea,.lot-name,.no-tr');}
 function i18nText(n){if(i18nSkip(n))return;const v=n.nodeValue,o=TXT0.get(n);
   if(o!==undefined&&o.en===v)return; // ya traducido
