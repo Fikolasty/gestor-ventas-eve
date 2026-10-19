@@ -7,7 +7,7 @@
 <meta name="referrer" content="no-referrer">
 <title>Market Moves+ · SIGMA GRINDSET</title>
 <style>
-/* ================= Market Moves+ v1.0.86 =================
+/* ================= Market Moves+ v1.0.87 =================
    Paleta: azul de base, naranja = acción, verde/rojo = ganancia/pérdida.
    Sin backdrop-filter: el vidrio se finge con rgba + bordes. */
 *{box-sizing:border-box;margin:0;padding:0}
@@ -1997,6 +1997,10 @@ body.side-c #mmTabs .mm-route .route-b>span{display:inline-flex!important}
 html.light #mmTabs .mm-icon-action,html.light #mmTabs .mm-mod{color:#4b4742}
 @media(max-width:900px){#mmTabs .eve-identity{margin-right:0}#mmTabs .mm-theme{margin-left:0}#mmTabs.mm-modnav{justify-content:center}#mmTabs .mm-route .route-b{width:175px}}
 
+
+/* Independent accents for the selected selling plan and the named item. */
+.plan-name-accent{color:var(--ion,#e5a47e);font-weight:750}
+.item-name-accent{color:var(--gain,#60c98c);font-weight:750}
 /* ===== tema claro (generado desde el oscuro por light.py) ===== */
 html.light{--void:#e4e3dd;--hull:#e2e0da;--hull2:#e0ded8;--line:rgba(31,30,29,0.114);--line2:rgba(31,30,29,0.125);--txt:#1c1c1a;--mut:#54524d;--dim:#6c6a64;--ion:#413f3c;--blue:#a39d8b;--clay:#c96442;--thrust:#a67526;--gain:#418b62;--loss:#a92c23}
 html.light body::after{background:repeating-linear-gradient(180deg,rgba(31,30,29,0.011) 0 1px,transparent 1px 3px),
@@ -2510,6 +2514,8 @@ html.light #mmTabs .mm-route .route-b[aria-pressed=true] .mm-route-knob{backgrou
 html.light #mmTabs .mm-route .route-b[aria-pressed=true] .mm-route-right{color:#151514}
 html.light #mmTabs .mm-theme input:not(:checked)+.sw-t{background:#dfddd7}
 html.light.light #mmTabs .mm-icon-action,html.light.light #mmTabs .mm-mod{color:#dcd9d2}
+html.light .plan-name-accent{color:var(--ion,#a35629)}
+html.light .item-name-accent{color:var(--gain,#39935f)}
 /* ajustes a mano del tema claro */
 html.light body{background:#e6e3da;color:#1f1e1d}
 html.light body::before{opacity:.12;filter:grayscale(.35) brightness(1.1)}
@@ -3573,13 +3579,13 @@ Contraband Freight = no</textarea><small>Una regla por línea: Nombre = tax tota
 <button type="button" class="totop" id="toTop" aria-label="Volver arriba" title="Volver arriba (Inicio)" hidden><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 14l6-6 6 6"/></svg></button>
 <footer class="foot">
   <p class="foot-sec"><span class="ic i-lock" aria-hidden="true"></span>Tu inventario no se guarda: al cerrar o recargar se borra. Solo tus Ajustes quedan en este navegador.</p>
-  <div class="foot-by">Creado por <b>Fiko McGivert</b> · Vanguardia DR · SIGMA GRINDSET · <span class="ver">v1.0.86</span></div>
+  <div class="foot-by">Creado por <b>Fiko McGivert</b> · Vanguardia DR · SIGMA GRINDSET · <span class="ver">v1.0.87</span></div>
 </footer>
 
 <script>
 'use strict';
 /* ============================================================
-   Market Moves+ v1.0.86 — SIGMA GRINDSET / Vanguardia DR
+   Market Moves+ v1.0.87 — SIGMA GRINDSET / Vanguardia DR
    Flujo:  pegado → items → carga (ESI: precios, volúmenes, historial) → verificación → plan → vista
      1. Pegado      parsePaste(): parser posicional de columnas de EVE (Name · Quantity · … · Volume · Est. Price).
      2. Carga       esiItems(): trae todo lo que falta; mientras carga, refresh() NO pinta (S.loading).
@@ -4945,24 +4951,31 @@ const routeSentence=(k,n)=>{if(S.lang==='en'){
   const action=({null:'vender en HY-RWO mediante órdenes',fN:'llevar a HY-RWO para vender allí',jOrd:'vender mediante órdenes en Jita',fJ:'vender mediante órdenes en Jita',jInst:'vender al instante en Jita',fJI:'vender al instante en Jita',bb:'entregar al programa Buy Back',rNull:'reprocesar y vender sus materiales en HY-RWO',rJita:'reprocesar y vender sus materiales en Jita',disc:'vender directamente a otro jugador'})[k]||'vender según la ruta indicada';
   return (count+' para '+action).replaceAll('HY-RWO',nullSystem());
 };
+const enPlanIntroPrefix=()=>S.lang==='en'?'The ':'El ';
 function planIntroData(P){
-  const name=modeName(P.mode),active=P.rows.filter(r=>r.best&&r.q>0);
-  if(!active.length)return{name,description:S.lang==='en'?'No items have an available selling route yet.':'Todavía no hay ítems con una ruta de venta disponible.'};
+  const name=P.mode?modeName(P.mode):(S.lang==='en'?'Optimal Plan':'Plan Óptimo');
+  const active=P.rows.filter(r=>r.best&&r.q>0),en=S.lang==='en';
+  if(!active.length)return{name,parts:[en?'has no available selling route yet.':'todavía no tiene rutas de venta disponibles.']};
   const groups=new Map();
   active.forEach(r=>{const g=groups.get(r.best)||[];g.push(r);groups.set(r.best,g);});
+  const actionFor=k=>{
+    const enActions={null:'through a sell order in HY-RWO',fN:'by shipping it to HY-RWO for sale',jOrd:'through a sell order in Jita',fJ:'through a sell order in Jita',jInst:'immediately in Jita',fJI:'immediately in Jita',bb:'through the Buyback program',rNull:'by reprocessing it and selling the materials in HY-RWO',rJita:'by reprocessing it and selling the materials in Jita',disc:'directly to another player'};
+    const esActions={null:'mediante una orden de venta en HY-RWO',fN:'enviándolo a HY-RWO para venderlo',jOrd:'mediante una orden de venta en Jita',fJ:'mediante una orden de venta en Jita',jInst:'al instante en Jita',fJI:'al instante en Jita',bb:'mediante el programa Buyback',rNull:'reprocesándolo y vendiendo los materiales en HY-RWO',rJita:'reprocesándolo y vendiendo los materiales en Jita',disc:'directamente a otro jugador'};
+    return ((en?enActions:esActions)[k]||(en?'using the suggested route':'por la ruta sugerida')).replaceAll('HY-RWO',nullSystem());
+  };
   if(active.length===1){
-    const item=active[0],nameText=''+item.o.name+'';
-    if(S.lang==='en'){
-      const action={null:'sell '+nameText+' in HY-RWO',jOrd:'sell '+nameText+' through an order in Jita',fJ:'sell '+nameText+' through an order in Jita',bb:'deliver '+nameText+' to the Buyback Program',rNull:'reprocess '+nameText+' and sell its materials in HY-RWO',rJita:'reprocess '+nameText+' and sell its materials in Jita'}[item.best]||'follow the recommended route for '+nameText;
-      return{name,description:'Recommended: '+action+'. You can review the selling steps below.'};
-    }
-    const action=({null:'vender '+nameText+' en HY-RWO',jOrd:'vender '+nameText+' mediante una orden en Jita',fJ:'vender '+nameText+' mediante una orden en Jita',bb:'entregar '+nameText+' al programa Buy Back',rNull:'reprocesar '+nameText+' y vender sus materiales en HY-RWO',rJita:'reprocesar '+nameText+' y vender sus materiales en Jita'})[item.best]||'seguir la ruta recomendada para '+nameText;
-    return{name,description:'conviene '+action+'. Más abajo puedes revisar los pasos.'};
+    const item=active[0];
+    return{name,parts:[en?'recommends selling ':'recomienda vender ',{item:item.o.name},' '+actionFor(item.best)+'. '+(en?'Review the steps below.':'Consulta los pasos a continuación.')]};
   }
-  const phrases=[...groups].map(([key,rows])=>routeSentence(key,rows.length));
-  const natural=phrases.length===1?phrases[0]:phrases.length===2?phrases.join(S.lang==='en'?' and ':' y '):phrases.slice(0,-1).join(', ')+(S.lang==='en'?', and ':' y ')+phrases.at(-1);
-  return{name,description:S.lang==='en'?'Recommended distribution: '+natural+'. Review the steps for each sale below.':'conviene distribuir el lote así: '+natural+'. Más abajo puedes revisar los pasos de cada venta.'};
+  const groupsArray=[...groups];
+  if(groupsArray.length===1){
+    return{name,parts:[en?'recommends selling all '+active.length+' items ':'recomienda vender los '+active.length+' ítems ',actionFor(groupsArray[0][0])+'. '+(en?'Review the steps below.':'Consulta los pasos a continuación.')]};
+  }
+  const phrases=groupsArray.map(([k,rows])=>(en?rows.length+' '+(rows.length===1?'item':'items')+' ':' '+rows.length+' '+(rows.length===1?'ítem':'ítems')+' ')+actionFor(k));
+  const natural=phrases.length===2?phrases.join(en?' and ':' y '):phrases.slice(0,-1).join(', ')+(en?', and ':' y ')+phrases.at(-1);
+  return{name,parts:[en?'recommends splitting the sale: ':'recomienda distribuir la venta así: ',natural+'. '+(en?'Review the steps for each route below.':'Consulta los pasos de cada ruta a continuación.')]};
 }
+
 let activeRep=0;
 function paintVerdict(P){
   const has=S.items.length>0;$('verdict').hidden=!has;$('ledger').hidden=!has;$('lCount').textContent=has?'· '+S.items.length+(S.items.length>1?' items':' item'):'';
@@ -4995,7 +5008,7 @@ function paintVerdict(P){
     if(none){cap.textContent=S.lang==='en'?'Waiting for Jita prices to calculate your route.':'Estamos esperando los precios de Jita para calcular tu ruta.';}
     else{
       const intro=planIntroData(P);
-      cap.append('Con ',el('strong','plan-name-accent',intro.name),', ',intro.description);
+      cap.append(enPlanIntroPrefix(),el('strong','plan-name-accent',intro.name),' ',...intro.parts.map(p=>typeof p==='string'?document.createTextNode(p):el('strong','item-name-accent',p.item)));
     }
   }
   lastP=P;
