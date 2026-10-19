@@ -1920,6 +1920,15 @@ select{appearance:none;-webkit-appearance:none;padding-right:30px!important;back
 #lots .lot-min-row[hidden]{display:none!important}
 @media(max-width:920px){#lots .lot-analysis{grid-template-columns:minmax(0,1fr)}}
 @media(max-width:520px){#lots .lot-analysis>.facts{grid-template-columns:minmax(0,1fr)}}
+
+/* Readable yield hierarchy: highest is green, lowest is orange. */
+#lots .lot-analysis .opt:not(.best):not(.worst) .opt-bar i{background:#63ad83!important}
+#lots .lot-analysis .opt:not(.best):not(.worst) .opt-v{color:#86c89e!important}
+#lots .lot-analysis .opt.worst .opt-bar i{background:#d48656!important;box-shadow:none!important}
+#lots .lot-analysis .opt.worst .opt-v{color:#e29b70!important}
+#lots .lot-analysis .opt.best .opt-bar i{background:#61cc8c!important}
+#lots .lot-analysis .opt.best .opt-v{color:#62d59a!important}
+#lots .lot-fold>summary:focus-visible,#lots .lot-min-toggle:focus-visible{outline:2px solid #de936e;outline-offset:-2px}
 </style>
 <script>/* v1.0.16: aplica el tema guardado antes de pintar (sin parpadeo). Por defecto: Dark. */try{var g=JSON.parse(localStorage.getItem('gestorVentas.ajustes.v1')||'null');if(g&&g.ui){if(g.ui.light)document.documentElement.classList.add('light');}}catch(e){}</script>
 </head>
