@@ -1895,6 +1895,31 @@ select{appearance:none;-webkit-appearance:none;padding-right:30px!important;back
 #ctrTot.ct-sum>div>span{display:block;font-size:.72rem;line-height:1.2;min-height:2.4em;overflow-wrap:normal}
 #ctrTot.ct-sum>div>b{display:block;white-space:nowrap;font-size:clamp(.76rem,1vw,.9rem);line-height:1.25;font-variant-numeric:tabular-nums}
 @media(max-width:560px){#ctrTot.ct-sum{grid-template-columns:repeat(auto-fit,minmax(110px,1fr))}}
+
+/* Registered Items: compact nested analysis, default-collapsed details. */
+#lots .lot-fold{display:block;min-width:0;border:1px solid rgba(200,194,180,.16);border-radius:10px;background:rgba(20,20,22,.38);margin:10px 0;overflow:hidden}
+#lots .lot-fold>summary{display:flex;align-items:center;gap:10px;cursor:pointer;list-style:none;min-height:41px;margin:0!important;padding:10px 14px!important;font-size:.87rem!important;font-weight:700}
+#lots .lot-fold>summary::-webkit-details-marker{display:none}
+#lots .lot-fold>summary::after{content:"";height:7px;width:7px;transform:rotate(45deg);border-right:1.8px solid currentColor;border-bottom:1.8px solid currentColor;margin-left:auto;opacity:.8}
+#lots .lot-fold[open]>summary::after{transform:rotate(225deg)}
+#lots .lot-fold[open]>summary{border-bottom:1px solid rgba(200,194,180,.12)}
+#lots .lot-fold.gwrap .guide{margin:10px 12px 12px}
+#lots .lot-fold.prices table{width:100%}
+#lots .lot-fold .rcall{margin:10px 12px 12px}
+#lots .lot-analysis{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(260px,1fr);align-items:start;gap:14px;margin:12px 0}
+#lots .lot-analysis>.opts,#lots .lot-analysis>.facts{min-width:0;margin:0}
+#lots .lot-analysis>.facts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;padding:12px;border:1px solid rgba(200,194,180,.14);border-radius:10px;background:rgba(20,20,22,.42)}
+#lots .lot-analysis>.facts .fact{min-width:0;margin:0}
+#lots .lot-analysis>.facts input{min-width:0;width:100%}
+#lots .guide>li{align-items:start}
+#lots .guide>li>*:first-child{background:rgba(10,11,13,.64);border-radius:7px;padding:6px 8px}
+#lots .lot-min-heading td{padding:0!important}
+#lots .lot-min-toggle{display:flex;align-items:center;text-align:left;gap:12px;width:100%;padding:12px;background:rgba(18,19,20,.8);color:var(--txt);font:700 .85rem var(--f-ui);cursor:pointer;border:0}
+#lots .lot-min-toggle::after{content:"";width:7px;height:7px;margin-left:auto;border-right:2px solid currentColor;border-bottom:2px solid currentColor;transform:rotate(45deg)}
+#lots .lot-min-toggle[aria-expanded=true]::after{transform:rotate(225deg)}
+#lots .lot-min-row[hidden]{display:none!important}
+@media(max-width:920px){#lots .lot-analysis{grid-template-columns:minmax(0,1fr)}}
+@media(max-width:520px){#lots .lot-analysis>.facts{grid-template-columns:minmax(0,1fr)}}
 /* ===== tema claro (generado desde el oscuro por light.py) ===== */
 html.light{--void:#e4e3dd;--hull:#e2e0da;--hull2:#e0ded8;--line:rgba(31,30,29,0.114);--line2:rgba(31,30,29,0.125);--txt:#1c1c1a;--mut:#54524d;--dim:#6c6a64;--ion:#413f3c;--blue:#a39d8b;--clay:#c96442;--thrust:#a67526;--gain:#418b62;--loss:#a92c23}
 html.light body::after{background:repeating-linear-gradient(180deg,rgba(31,30,29,0.011) 0 1px,transparent 1px 3px),
@@ -2387,6 +2412,11 @@ html.light #settings .st-tools .st-tool-reset{border-color:rgba(218,146,111,0.37
 html.light #settings .st-tools .st-tool-reset:hover{background:rgba(148,69,42,0.25);border-color:rgba(218,146,111,0.688);color:#ac5120}
 html.light #mmTabs .eve-identity-menu{background:#e6e4df}
 html.light #mmTabs .eve-identity-menu #eveLogout:hover{background:rgba(210,135,103,0.15);color:#a84d24}
+html.light #lots .lot-fold{border:1px solid rgba(31,30,29,0.152);background:rgba(240,237,229,0.6)}
+html.light #lots .lot-fold[open]>summary{border-bottom:1px solid rgba(31,30,29,0.114)}
+html.light #lots .lot-analysis>.facts{border:1px solid rgba(31,30,29,0.133);background:rgba(240,237,229,0.6)}
+html.light #lots .guide>li>*:first-child{background:rgba(240,237,229,0.64)}
+html.light #lots .lot-min-toggle{background:rgba(240,237,229,0.8)}
 /* ajustes a mano del tema claro */
 html.light body{background:#e6e3da;color:#1f1e1d}
 html.light body::before{opacity:.12;filter:grayscale(.35) brightness(1.1)}
