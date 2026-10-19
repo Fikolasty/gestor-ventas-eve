@@ -1277,8 +1277,8 @@ function planIntroData(P){
   if(!other)return{name,description:'los '+total+' '+plural+' con precio siguen la ruta seleccionada.'+next};
   if(!selected)return{name,description:'tus '+total+' '+plural+
     ' con precio utilizan otras rutas disponibles porque esta opción no se aplica a todo el lote.'+next};
-  return{name,description:selected+' de los '+total+' '+plural+' con precio siguen este plan y los otros '+
-    other+' conservan su mejor alternativa disponible.'+next};
+  return{name,description:selected+' de los '+total+' '+plural+' con precio siguen este plan y '+
+    (other===1?'el otro ítem mantiene':'los otros '+other+' mantienen')+' su mejor alternativa disponible.'+next};
 }
 function paintVerdict(P){
   const has=S.items.length>0;$('verdict').hidden=!has;$('ledger').hidden=!has;$('lCount').textContent=has?'· '+S.items.length+(S.items.length>1?' items':' item'):'';
