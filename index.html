@@ -1604,6 +1604,21 @@ html.light #verdict .v-plan-name{color:#ad4b27}
 #vRepList .rep-item-info img.rep-item-icon{display:block!important;width:32px!important;height:32px!important;flex:0 0 32px;object-fit:contain;border-radius:5px;visibility:visible}
 #vRepList .rep-item-info>small{margin-top:5px}
 
+
+/* Modern compact tabs for Settings and Guide — native sections stay mounted. */
+#settings .modern-tabs,#help .modern-tabs{display:flex;gap:7px;flex-wrap:wrap;padding:6px;margin:15px 0;border:1px solid var(--line2);background:rgba(18,18,18,.55);border-radius:var(--r-md)}
+#settings .modern-tab,#help .modern-tab{font-weight:700;font-size:.84rem;border:1px solid transparent;border-radius:var(--r-sm);background:transparent;color:var(--mut);padding:10px 14px;cursor:pointer}
+#settings .modern-tab[aria-selected="true"],#help .modern-tab[aria-selected="true"]{border-color:rgba(217,119,87,.6);color:var(--txt);background:rgba(217,119,87,.13)}
+#settings .modern-tab:hover,#help .modern-tab:hover{color:var(--txt)}
+#settings .modern-panel[hidden],#help .modern-panel[hidden]{display:none!important}
+#settings .modern-panel,#help .modern-panel{min-width:0}
+#settings .modern-panel>.st-sec{margin-top:0}
+#settings .st-wrap{min-width:0}
+#help .modern-panel .hp{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+#help .modern-panel .hp-c{min-height:0}
+#settings .st-tools{display:flex;align-items:center;justify-content:flex-end;flex-wrap:wrap;gap:8px}
+@media(max-width:750px){#help .modern-panel .hp{grid-template-columns:1fr}#settings .modern-tabs,#help .modern-tabs{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:thin}#settings .modern-tab,#help .modern-tab{flex:none;white-space:nowrap}}
+.side-i[data-side-module][aria-current="page"]{color:var(--txt);background:rgba(217,119,87,.12);border-color:rgba(217,119,87,.45)}
 /* ===== tema claro (generado desde el oscuro por light.py) ===== */
 html.light{--void:#e4e3dd;--hull:#e2e0da;--hull2:#e0ded8;--line:rgba(31,30,29,0.114);--line2:rgba(31,30,29,0.125);--txt:#1c1c1a;--mut:#54524d;--dim:#6c6a64;--ion:#413f3c;--blue:#a39d8b;--clay:#c96442;--thrust:#a67526;--gain:#418b62;--loss:#a92c23}
 html.light body::after{background:repeating-linear-gradient(180deg,rgba(31,30,29,0.011) 0 1px,transparent 1px 3px),
@@ -2062,6 +2077,9 @@ html.light .pk-opp-stat strong.pos,html.light .pk-opportunity .pos{color:#418b62
 html.light .pk-opp-stat strong.neg,html.light .pk-opportunity .neg{color:#a92328}
 html.light .pk-o .pk-d.pos,html.light .pk-summary .pk-sum-delta.pos{color:#418b62}
 html.light .pk-o .pk-d.neg,html.light .pk-summary .pk-sum-delta.neg{color:#a92328}
+html.light #settings .modern-tabs,html.light #help .modern-tabs{background:rgba(240,237,229,0.6)}
+html.light #settings .modern-tab[aria-selected="true"],html.light #help .modern-tab[aria-selected="true"]{border-color:rgba(201,100,66,0.6);background:rgba(217,119,87,0.163)}
+html.light .side-i[data-side-module][aria-current="page"]{background:rgba(217,119,87,0.15);border-color:rgba(217,119,87,0.562)}
 /* ajustes a mano del tema claro */
 html.light body{background:#e6e3da;color:#1f1e1d}
 html.light body::before{opacity:.12;filter:grayscale(.35) brightness(1.1)}
@@ -2759,10 +2777,15 @@ html.light #mining .mn-fit-fallback{border-color:rgba(40,100,150,.22);background
     <label class="route-m" id="rtM" hidden title="Margen de importación: cuánto más que Jita Sell cobras en HY-RWO (neto, ya con taxes)."><span class="rm-l">Margen</span><span class="rm-f"><span class="rm-s">+</span><input type="number" id="fImpM" min="0" step="0.5" value="15" inputmode="decimal" aria-label="Margen al vender en HY-RWO, % neto sobre Jita Sell"><span class="rm-s">%</span></span></label>
   </div>
   </div>
-  <div class="side-g"><span class="side-h">General</span>
+  <div class="side-g"><span class="side-h">Módulos</span>
+<button type="button" class="side-i" data-side-module="ventas" title="Ventas"><span class="ic i-list" aria-hidden="true"></span><span class="side-l">Ventas</span></button>
+<button type="button" class="side-i" data-side-module="mining" title="Minería"><span class="ic i-rock" aria-hidden="true"></span><span class="side-l">Minería</span></button>
+<button type="button" class="side-i" data-side-module="pi" title="Industria Planetaria"><span class="ic i-globe" aria-hidden="true"></span><span class="side-l">Industria Planetaria · PI</span></button>
+</div>
+<div class="side-g"><span class="side-h">General</span>
 <button type="button" class="side-i" id="sideHome" title="HOME · Volver al inicio sin borrar nada"><span class="ic i-home" aria-hidden="true"></span><span class="side-l">HOME</span></button>
     <button type="button" class="side-i" data-panel="settings" title="Ajustes: skills, impuestos, ajuste de precios, envío, Buyback e idioma."><span class="ic i-gear" aria-hidden="true"></span><span class="side-l">Ajustes</span></button>
-    <button type="button" class="side-i" data-panel="mining" title="Comparativa de minería: naves, progresión Omega, endgame y PLEX."><span class="ic i-rock" aria-hidden="true"></span><span class="side-l">Minería</span></button>
+    
 <button type="button" class="side-i" data-panel="help" title="Guía de Uso: cómo pegar tu inventario y leer el plan."><span class="ic i-help" aria-hidden="true"></span><span class="side-l">Guía de Uso</span></button>
   </div>
 </aside>
