@@ -851,7 +851,7 @@ function modeTotal(P,m){let g=0,V=0,Cc=0,n=0;
   P.rows.forEach(r=>{const k=m==='auto'?r.auto:(r.g[m]!=null?(n++,m):r.auto);if(!k)return;g+=r.g[k]-r.prod;const s=r.ship[k];if(s){V+=s.v;Cc+=s.c;}});
   return{net:g-(V>0?courierCost(V,Cc):0),n};}
 const MODES=[['auto','Plan Óptimo'],['fN','Llevar y vender todo en HY-RWO'],['fJ','Vender todo con órdenes en Jita'],['fJI','Vender todo al instante en Jita'],['null','Vender todo en HY-RWO'],['jOrd','Vender todo con órdenes en Jita'],['jInst','Vender todo al instante en Jita'],['bb','Vender al programa Buy Back'],['rNull','Reprocesar y vender todo en HY-RWO'],['rJita','Reprocesar, llevar y vender todo en Jita'],['disc','Vender todo a un jugador']];
-const modeName=m=>(MODES.find(x=>x[0]===(m||'auto'))||MODES[0])[1];
+const modeName=m=>(MODES.find(x=>x[0]===(m||'auto'))||MODES[0])[1].replaceAll('HY-RWO',nullSystem());
 const planPhrase=m=>m==='auto'?'el Plan Óptimo':'el plan '+modeName(m)+'';
 const planMark=m=>el('strong','plan-name-accent',modeName(m));
 // ================= Guía práctica (puro) =================
