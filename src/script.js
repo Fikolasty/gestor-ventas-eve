@@ -94,7 +94,7 @@ const sgn=v=>v==null||isNaN(v)?'':v>0?'pos':v<0?'neg':'';
 function setText(el,t,cls){el.textContent=t;if(cls!==undefined)el.className=cls;}
 function status(id,msg,cls){const s=$(id);s.textContent=msg;s.className='status'+(cls?' '+cls:'');}
 // v1.0.51: el resumen de Listado de Items Registrados funciona como botón: Ver los N items ▾ / Ocultar los items ▴
-function ledgerCta(){const n=S.items.length;if(!n)return;status('esiStatus',$('ledger').open?'Ocultar los items ▴':'Ver los '+n+(n===1?' item ▾':' items ▾'),'cta');}
+function ledgerCta(){const n=S.items.length;if(!n)return;status('esiStatus',$('ledger').open?'Ocultar los items':'Ver los '+n+(n===1?' item':' items'),'cta');}
 
 // ================= Mercado: tasas =================
 // Relist (bajar precio) = (1 − (0.5 + 0.06×ABR)) × broker% sobre el valor de la orden — EVE University
