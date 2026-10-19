@@ -329,7 +329,6 @@ function pruneCaches(){
   const keep=new Set();
   const add=n=>{const k=String(n).toLowerCase();keep.add(k);const ore=resolveOre(n);if(ore)Object.keys(ore.d.out).forEach(m=>keep.add(m.toLowerCase()));};
   S.items.forEach(o=>add(o.name));
-  undoStack.forEach(u=>u.lines.forEach(l=>{const r=parseLine(l);if(r&&!r.bad)add(r.name);}));
   const ids=new Set();
   Object.keys(S.api).forEach(k=>{if(keep.has(k)){if(S.api[k]&&S.api[k].id)ids.add(String(S.api[k].id));}else delete S.api[k];});
   Object.keys(ICON).forEach(id=>{if(!ids.has(String(id))){URL.revokeObjectURL(ICON[id]);delete ICON[id];delete ICON_EL[id];delete ICON_POOL[id];}});
@@ -349,21 +348,16 @@ function setLoading(on,txt,frac,dim){
 let pasteT=null,esiT=null;
 $('paste').addEventListener('paste',()=>{clearTimeout(pasteT);pasteT=setTimeout(()=>syncFromPaste(true),80);});
 $('paste').addEventListener('input',()=>{clearTimeout(pasteT);pasteT=setTimeout(()=>syncFromPaste(false),500);});
-$('bClear').addEventListener('click',()=>{$('paste').value='';clearUndo();syncFromPaste(false);$('paste').focus();});
-// v112: quitar un item del lote = quitar sus líneas del pegado y recalcular todo (plan, contratos, envío, totales).
-// Se puede deshacer (las líneas quitadas quedan solo en memoria, se borran al limpiar o cerrar).
-let undoStack=[];
+$('bClear').addEventListener('click',()=>{$('paste').value='';syncFromPaste(false);$('paste').focus();});
+// Elimina items del texto original sin acumular copias del inventario en memoria.
 function removeFromPaste(name){
-  const k=name.toLowerCase(),gone=[];
-  $('paste').value=$('paste').value.replace(/\r/g,'').split('\n').filter(l=>{const r=parseLine(l),hit=r&&!r.bad&&r.name.toLowerCase()===k;if(hit)gone.push(l);return !hit;}).join('\n');
-  if(gone.length){undoStack.push({name,lines:gone});if(undoStack.length>20)undoStack.shift();}
-  paintUndo();syncFromPaste(false);
+  const key=name.toLowerCase();
+  $('paste').value=$('paste').value.replace(/\r/g,'').split('\n').filter(line=>{
+    const row=parseLine(line);
+    return !(row&&!row.bad&&row.name.toLowerCase()===key);
+  }).join('\n');
+  syncFromPaste(false);
 }
-function paintUndo(){const u=undoStack[undoStack.length-1],bar=$('undo');bar.hidden=!u;
-  if(u)$('undoTxt').textContent='Quitaste '+u.name+(undoStack.length>1?' (y '+(undoStack.length-1)+' más)':'')+'. Todo se recalculó sin ese item.';}
-$('undoBtn').addEventListener('click',()=>{const u=undoStack.pop();if(!u)return;
-  const v=$('paste').value.replace(/\s+$/,'');$('paste').value=(v?v+'\n':'')+u.lines.join('\n');paintUndo();syncFromPaste(false);});
-function clearUndo(){undoStack=[];paintUndo();}
 
 // ================= API de EVE (ESI) =================
 const ESI_BASES=['https://esi.evetech.net/latest','https://esi.evetech.net'];
@@ -2456,7 +2450,7 @@ $('langSel').addEventListener('change',e=>setLang(e.target.value));
 // ================= Seguridad: el inventario no persiste (los Ajustes sí, ver v1.0.16) =================
 try{['gestorVentasEVE.v35','gestorVentasEVE.esi'].forEach(k=>localStorage.removeItem(k));}catch(e){} // restos de v35–v38
 document.querySelectorAll('input,textarea,select').forEach(e=>e.setAttribute('autocomplete','off'));
-window.addEventListener('pagehide',()=>{if(i18nObs)i18nObs.disconnect();undoStack=[];$('paste').value='';$('dLink').value='';$('dTrade').value='';LINKS.sigmaTrade='';});
+window.addEventListener('pagehide',()=>{if(i18nObs)i18nObs.disconnect();$('paste').value='';$('dLink').value='';$('dTrade').value='';LINKS.sigmaTrade='';});
 window.addEventListener('pageshow',e=>{if(e.persisted)location.reload();});
 
 
@@ -2479,7 +2473,7 @@ function stRestore(){let o=null;try{o=JSON.parse(localStorage.getItem(ST_KEY)||'
 $('settings').addEventListener('input',stSave);$('settings').addEventListener('change',stSave);
 $('themeLight').addEventListener('change',stSave);
 $('stReset').addEventListener('click',()=>{if(!confirm('¿Volver todos los Ajustes a los valores de fábrica?'))return;
-  try{localStorage.removeItem(ST_KEY);localStorage.removeItem(SN_KEY);}catch(e){}stBusy=true;location.reload();});
+  try{localStorage.removeItem(ST_KEY);}catch(e){}stBusy=true;location.reload();});
 addEventListener('pagehide',()=>{if(stT){clearTimeout(stT);stSaveNow();}});
 
 // arranque
