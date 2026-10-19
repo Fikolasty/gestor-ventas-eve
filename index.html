@@ -869,11 +869,11 @@ body::after{background:radial-gradient(130% 100% at 50% 40%,rgba(14,13,12,0) 55%
  .fb2 td.r{text-align:left}.fb2 td[data-l]::before{content:attr(data-l);display:block;font-size:.66rem;color:var(--dim);text-transform:uppercase;font-family:var(--f-ui)}}
 /* v1.0.6: debajo del título, tres columnas iguales: Skill Points · qué hace la app · Antes de empezar */
 .hero .paste{margin-top:18px}
-/* v1.0.45: Tasación a la izquierda (como Janice) y Skill Points + Antes de empezar compactos a la derecha. Sin «Qué hace».
+/* v1.0.45: Tasación a la izquierda (como Janice) y Skill Points + Antes de empezar compactos a la derecha. Sin Qué hace.
    Sin items pegados la Tasación se oculta y las dos tarjetas ocupan todo el ancho. */
 .hero-intro{grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important} /* v1.0.47: mitad y mitad */
 .hero-intro.no-appr{grid-template-columns:minmax(0,1fr)!important}
-/* v1.0.53: «Gratis» y «Antes de empezar» en una sola tarjeta (separadas por una línea) */ /* etiqueta arriba, igual que «Antes de empezar» */
+/* v1.0.53: Gratis y Antes de empezar en una sola tarjeta (separadas por una línea) */ /* etiqueta arriba, igual que Antes de empezar */
 .appr{min-width:0;display:flex;flex-direction:column;padding:14px 16px;border-radius:var(--r-md);background:rgba(21,21,21,.86);border:1px solid rgba(222,220,209,.12);box-shadow:0 2px 4px rgba(0,0,0,.45),0 8px 18px rgba(0,0,0,.3)}
 .appr-tag{display:table;align-self:flex-start;margin-bottom:10px;font-weight:600;font-size:.8rem;color:#1f1e1d;background:#d6d4cb;border-radius:999px;padding:1px 10px}
 .appr-g{display:grid;grid-template-columns:1fr 1fr;border:1px solid rgba(222,220,209,.12);border-radius:var(--r-sm);overflow:hidden;background:#151515}
@@ -903,7 +903,7 @@ body::after{background:radial-gradient(130% 100% at 50% 40%,rgba(14,13,12,0) 55%
 .res-side.up .num{color:var(--gain)!important;text-shadow:0 0 22px rgba(53,194,110,.2)!important}
 .res-gs{display:block;font-size:.88rem;color:var(--mut);line-height:1.45}
 @media(max-width:760px){.res-top{grid-template-columns:minmax(0,1fr)}.res-side{padding:12px 0 0;border-left:0;border-top:1px solid rgba(222,220,209,.1)}}
-/* v1.0.49: «Ver más planes» y botón del análisis con el mismo estilo que el plan elegido (simetría visual) */
+/* v1.0.49: Ver más planes y botón del análisis con el mismo estilo que el plan elegido (simetría visual) */
 .more-btn{border:1px solid #d97757!important;border-radius:10px!important;background:linear-gradient(90deg,rgba(217,119,87,.14),rgba(21,21,21,.95) 60%)!important;
   box-shadow:inset 3px 0 0 #d97757,0 2px 6px rgba(0,0,0,.45)!important;padding:12px 14px 12px 18px!important;font-size:1rem!important;color:#f0eee6!important}
 .more-btn b{color:#e8a588!important}
@@ -912,7 +912,7 @@ body::after{background:radial-gradient(130% 100% at 50% 40%,rgba(14,13,12,0) 55%
 /* v1.0.50: desglose abierto = el Resultado queda en su cabecera (números) y el botón; los planes se pliegan */
 #pSum .more-btn{margin-top:8px}
 #pSum.res-min .pk-w,#pSum.res-min #flipBuy{display:none!important}
-/* v1.0.51: títulos en mayúsculas; «Listado de Items Registrados» plegado con el estilo del plan elegido y «Ver el desglose» */
+/* v1.0.51: títulos en mayúsculas; Listado de Items Registrados plegado con el estilo del plan elegido y Ver el desglose */
 .h-caps{text-transform:uppercase;letter-spacing:.05em}
 details.fold>summary{align-items:center}
 details.fold>summary h2{margin:0;line-height:1.2}
@@ -921,7 +921,7 @@ details.fold:not([open]){border:1px solid #d97757!important;border-radius:10px!i
   box-shadow:inset 3px 0 0 #d97757,0 2px 6px rgba(0,0,0,.45)!important}
 details.fold:not([open]):hover{background:linear-gradient(90deg,rgba(217,119,87,.22),rgba(28,26,25,.95) 60%)!important}
 #esiStatus.cta{color:#e8a588;font:600 1rem var(--f-ui)}
-/* v1.0.51: en el plan elegido, «+N planes ▾» indica que se despliega al hacer clic */
+/* v1.0.51: en el plan elegido, +N planes ▾ indica que se despliega al hacer clic */
 .pk-x{display:inline-block;margin-left:8px;padding:1px 8px;border-radius:999px;font:600 .72rem var(--f-ui);font-style:normal;color:#e8a588;border:1px solid rgba(217,119,87,.45);background:rgba(217,119,87,.1);vertical-align:1px}
 .pk-o.on:hover .pk-x{background:rgba(217,119,87,.2)}
 /* v1.0.53: título más grande y centrado (logo + texto como un solo bloque, al centro de las tarjetas de abajo) */
@@ -944,7 +944,7 @@ details.fold:not([open]):hover{background:linear-gradient(90deg,rgba(217,119,87,
 .route-m input{width:2.4em;padding:0;margin:0;border:0!important;background:transparent!important;box-shadow:none!important;color:var(--txt);font:600 .95rem var(--f-num);text-align:center;appearance:textfield;-moz-appearance:textfield;outline:none}
 .route-m input::-webkit-outer-spin-button,.route-m input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
 .top .top-theme{flex:none}
-/* v1.0.59: secciones plegables con el mismo aspecto que «Listado de Items Registrados»; «Ver ▾ / Ocultar ▴» a la derecha */
+/* v1.0.59: secciones plegables con el mismo aspecto que Listado de Items Registrados; Ver ▾ / Ocultar ▴ a la derecha */
 .fold-cta{margin-left:auto;color:#e8a588;font:600 1rem var(--f-ui);white-space:nowrap}
 details.fold[open] .fold-cta .fc-o,details.fold:not([open]) .fold-cta .fc-c{display:none}
 details.fold>summary .sum{color:var(--mut);font-size:.88rem}
@@ -978,7 +978,7 @@ details.fold>summary h2 .logo{width:24px;height:24px;margin:0 2px 0 0}
 /* v1.0.59: dentro de los pasos, tablas y listas con el mismo negro de las casillas */
 .stp-main>.pl,.stp-main .ct-items{background:#0b0b0b!important;border:1px solid rgba(222,220,209,.08)!important;border-radius:12px;box-shadow:inset 0 1px 4px rgba(0,0,0,.6)!important}
 .stp-main .ct-items{padding:10px 12px;margin:0}
-/* v1.0.60: «Ver el desglose» y las filas de Extras con la misma medida que la fila del plan elegido */
+/* v1.0.60: Ver el desglose y las filas de Extras con la misma medida que la fila del plan elegido */
 #bDeep{min-height:65px;box-sizing:border-box;padding:10px 14px 10px 18px!important}
 .extras{display:flex;flex-direction:column;gap:10px}
 .extras>h2{margin-bottom:6px}
@@ -991,7 +991,7 @@ details.fold>summary h2 .logo{width:24px;height:24px;margin:0 2px 0 0}
 #help .hp-c p,#help .hp-t span{color:#d6d4cb}
 #help .hp-n{width:28px;height:28px;color:#fff;font-weight:700;background:linear-gradient(180deg,#e08a6c,#c96442);box-shadow:inset 0 1px 0 rgba(255,255,255,.2),0 2px 6px rgba(0,0,0,.5)}
 #help .hp-t b{color:#e8a588}
-/* v1.0.62: ticker del encabezado, aviso «Antes de empezar» y Tasación | Pegar */
+/* v1.0.62: ticker del encabezado, aviso Antes de empezar y Tasación | Pegar */
 .top{gap:18px}
 .ticker{flex:1 1 auto;min-width:0;height:40px;overflow:hidden;position:relative;border-radius:10px;border:1px solid rgba(217,119,87,.45);
   background:linear-gradient(90deg,rgba(217,119,87,.16),rgba(21,21,21,.85) 30%,rgba(21,21,21,.85) 70%,rgba(217,119,87,.16));cursor:pointer;padding:0;color:#f6d9c8;
@@ -1037,7 +1037,7 @@ details.fold>summary h2 .logo{width:24px;height:24px;margin:0 2px 0 0}
 #settings fieldset.st:not(.closed){border-color:rgba(217,119,87,.45)!important;box-shadow:inset 3px 0 0 #d97757,inset 0 1px 4px rgba(0,0,0,.6)!important}
 #settings .st-f{background:#151515;border-color:rgba(222,220,209,.08);box-shadow:none}
 #settings .st-f input:not([type=checkbox]),#settings .st-f select,#settings .st-f textarea{background:#0b0b0b!important}
-/* títulos divisores (estilo «IMPUESTOS Y PRECIOS») también en la Guía y en los subtítulos generales */
+/* títulos divisores (estilo IMPUESTOS Y PRECIOS) también en la Guía y en los subtítulos generales */
 .sub-h{display:flex;align-items:center;gap:10px;font:600 .8rem var(--f-ui)!important;letter-spacing:.1em;text-transform:uppercase;color:#e8a588!important}
 .sub-h::before{content:"";flex:none;width:18px;height:3px;border-radius:2px;background:linear-gradient(90deg,#d97757,rgba(217,119,87,.25));box-shadow:0 0 8px rgba(217,119,87,.45)}
 .sub-h .ic{display:none}
@@ -1083,8 +1083,8 @@ body::after{background:radial-gradient(120% 95% at 50% 42%,rgba(0,0,0,0) 38%,rgb
 .lot-pp .copy:disabled{opacity:.45;cursor:default}
 .ledger-col{font-size:.85rem;color:var(--dim);text-align:right;padding-right:4px}
 @media(max-width:600px){.lot-head{grid-template-areas:"name name chev" "qty net chev" "dest dest chev" "pp pp chev"!important}.lot-dest{justify-self:start}.lot-pp{justify-self:start!important}.ledger-col{display:none}}
-#pCtr.no-ship .ce{grid-template-columns:minmax(0,1fr)}
-#pCtr.no-ship .ce-l{max-width:720px}
+#pCtr.no-discord .ce{grid-template-columns:minmax(0,1fr)}
+
 .legend i{font-style:normal}
 /* v1.0.9: UNA sola fuente en toda la app (la de la interfaz). Números con cifras tabulares para que se alineen. */
 :root{--f-num:var(--f-ui);--f-serif:var(--f-ui)}
@@ -1767,6 +1767,15 @@ html.light #verdict .v-plan-name{color:#ad4b27}
 .hero-intro .paste-head .paste-home{display:inline-grid;place-items:center;min-width:34px;height:34px;padding:6px;border:1px solid var(--line2);border-radius:8px;color:var(--ion)}
 .hero-intro .paste-head .paste-home:hover{background:rgba(217,119,87,.12);border-color:var(--ion)}
 .hero-intro .paste-head .paste-home .ic{width:18px;height:18px}
+
+/* Discord reutiliza la columna derecha; el análisis de envío ya no se muestra. */
+#pCtr .discord-side{min-width:0;padding:14px;border:1px solid var(--line);border-radius:var(--r-md);background:var(--panel,#252523)}
+#pCtr .discord-side .guide{padding-left:22px}
+#pCtr .discord-side .dests{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+#pCtr .discord-side .dest{min-width:0}
+#pCtr .discord-side .msg{max-width:100%;overflow:auto}
+#pCtr.no-discord #discordColumn{display:none}
+@media(max-width:860px){#pCtr .ce{grid-template-columns:minmax(0,1fr)}#pCtr .discord-side .dests{grid-template-columns:minmax(0,1fr)}}
 /* ===== tema claro (generado desde el oscuro por light.py) ===== */
 html.light{--void:#e4e3dd;--hull:#e2e0da;--hull2:#e0ded8;--line:rgba(31,30,29,0.114);--line2:rgba(31,30,29,0.125);--txt:#1c1c1a;--mut:#54524d;--dim:#6c6a64;--ion:#413f3c;--blue:#a39d8b;--clay:#c96442;--thrust:#a67526;--gain:#418b62;--loss:#a92c23}
 html.light body::after{background:repeating-linear-gradient(180deg,rgba(31,30,29,0.011) 0 1px,transparent 1px 3px),
@@ -2242,6 +2251,7 @@ html.light #pExtra details.fold>summary>.sum .pos{color:#418b62!important}
 html.light #pExtra details.fold>summary>.sum .sm-hide.neg{color:#a92328!important}
 html.light .hero-intro>.paste textarea{background:rgba(240,237,229,0.66)!important}
 html.light .hero-intro .paste-head .paste-home:hover{background:rgba(217,119,87,0.15)}
+html.light #pCtr .discord-side{background:var(--panel,#e5e3dd)}
 /* ajustes a mano del tema claro */
 html.light body{background:#e6e3da;color:#1f1e1d}
 html.light body::before{opacity:.12;filter:grayscale(.35) brightness(1.1)}
@@ -3155,7 +3165,7 @@ Contraband Freight = no</textarea><small>Una regla por línea: Nombre = tax tota
   <section class="panel extras" id="pExtra" hidden>
     <header class="mm-section-head"><h2 class="mm-title">EXTRAS</h2><p class="mm-section-sub">CONSULTA CONTRATOS, REPROCESO Y OTRAS OPCIONES</p></header>
   <details class="panel thin fold" id="pCtr" hidden>
-    <summary><h2><span class="ic i-list" aria-hidden="true"></span><span id="ctrTitle">CONTRATOS Y ENVÍO</span></h2><span class="sum" id="ctrSum"></span><span class="fold-chevron" aria-hidden="true"></span></summary>
+    <summary><h2><span class="ic i-list" aria-hidden="true"></span><span id="ctrTitle">CONTRATOS Y DISCORD</span></h2><span class="sum" id="ctrSum"></span><span class="fold-chevron" aria-hidden="true"></span></summary>
     <div class="ce">
       <div class="ce-l">
         <div class="ce-h"><h3 class="sub-h"><span class="ic i-list" aria-hidden="true"></span>Tus Contratos</h3>
@@ -3163,7 +3173,24 @@ Contraband Freight = no</textarea><small>Una regla por línea: Nombre = tax tota
         <div class="cz" id="ctrList" tabindex="-1"></div>
         <div class="ct-sum" id="ctrTot"></div>
       </div>
-      <div class="ce-r" id="shipBox">
+      <div class="ce-r" id="discordColumn">
+  <div class="discord-side" id="pDisc" hidden>
+    <div class="ce-h"><h3 class="sub-h"><span class="ic i-list" aria-hidden="true"></span>VENTA EN DISCORD</h3><span class="sum" id="dSum"></span></div>
+    <p class="lead" id="dLead">Último recurso: véndelo a alguien de tu alianza o corporación por Discord.</p>
+    <div class="dests" role="group" aria-label="Dónde publicar">
+      <button type="button" class="dest" data-d="sigma" aria-pressed="true"><span class="logo sig" aria-hidden="true"></span><span><b>SIGMA GRINDSET</b><small>Alianza · #market-trade · en inglés</small></span></button>
+      <button type="button" class="dest" data-d="vg" aria-pressed="false"><span class="logo vg" aria-hidden="true"></span><span><b>Vanguardia DR</b><small>Corporación · #💰-mercado-local · en español</small></span></button>
+    </div>
+    <ol class="guide" style="margin-top:14px">
+      <li><b>Tasación en Janice</b><span>Copia tu lista, ábrela en Janice, pégala y copia el link que te da. <button class="copy" type="button" id="dCopyList">Copiar Lista</button> <button class="copy" type="button" id="dOpenJ">Abrir Janice</button></span></li>
+      <li><b>Pega el Link</b><span><input type="text" id="dLink" autocomplete="off" spellcheck="false" placeholder="https://janice.e-351.com/a/…" aria-label="Link de tu tasación en Janice"><small class="rc-miss" id="dLinkErr"></small></span></li>
+      <li><b>Publica el Mensaje</b><span><span id="dWhere">Cópialo y publícalo en SIGMA GRINDSET › trade › #market-trade.</span> <button class="copy" type="button" id="dCopyMsg">Copiar Mensaje</button> <button class="copy lnk" type="button" id="dOpenD" data-link="sigmaTrade">Abrir #market-trade</button><small class="lnk-note" id="dOpenNote"></small><span id="dTradeWrap" hidden><input type="text" id="dTrade" autocomplete="off" spellcheck="false" placeholder="https://discord.com/channels/…" aria-label="Link del canal market-trade de SIGMA"><small class="rc-miss" id="dTradeErr"></small></span></span></li>
+      <li><b>Cierra la Venta</b><span id="dClose"></span></li>
+    </ol>
+    <pre class="msg" id="dMsg"></pre>
+  </div>
+      </div>
+      <div id="shipBox" hidden style="display:none">
         <div class="ce-h"><h3 class="sub-h"><span class="ic i-ship" aria-hidden="true"></span><span id="shTitle">Envío a Jita</span></h3><span class="sh-route" id="shRoute">HY-RWO → Jita 4-4 · SIGMA Freight</span></div>
         <div class="sh-card">
           <div id="shBody"></div>
@@ -3227,21 +3254,7 @@ Contraband Freight = no</textarea><small>Una regla por línea: Nombre = tax tota
     </div>
     <p class="note">La Refinería, el Rig, la Seguridad y el Implante se cambian en Ajustes → Refinería. Reprocessing, Reprocessing Efficiency y la skill del ore se cambian en Ajustes → Tus Skills. El gas no se reprocesa.</p>
   </details>
-  <details class="panel thin fold" id="pDisc" hidden>
-    <summary><h2><span class="logo sig" aria-hidden="true"></span><span class="logo vg" aria-hidden="true"></span>VENDER A JUGADORES</h2><span class="sum" id="dSum"></span><span class="fold-chevron" aria-hidden="true"></span></summary>
-    <p class="lead" id="dLead">Último recurso: véndelo a alguien de tu alianza o corporación por Discord.</p>
-    <div class="dests" role="group" aria-label="Dónde publicar">
-      <button type="button" class="dest" data-d="sigma" aria-pressed="true"><span class="logo sig" aria-hidden="true"></span><span><b>SIGMA GRINDSET</b><small>Alianza · #market-trade · en inglés</small></span></button>
-      <button type="button" class="dest" data-d="vg" aria-pressed="false"><span class="logo vg" aria-hidden="true"></span><span><b>Vanguardia DR</b><small>Corporación · #💰-mercado-local · en español</small></span></button>
-    </div>
-    <ol class="guide" style="margin-top:14px">
-      <li><b>Tasación en Janice</b><span>Copia tu lista, ábrela en Janice, pégala y copia el link que te da. <button class="copy" type="button" id="dCopyList">Copiar Lista</button> <button class="copy" type="button" id="dOpenJ">Abrir Janice</button></span></li>
-      <li><b>Pega el Link</b><span><input type="text" id="dLink" autocomplete="off" spellcheck="false" placeholder="https://janice.e-351.com/a/…" aria-label="Link de tu tasación en Janice"><small class="rc-miss" id="dLinkErr"></small></span></li>
-      <li><b>Publica el Mensaje</b><span><span id="dWhere">Cópialo y publícalo en SIGMA GRINDSET › trade › #market-trade.</span> <button class="copy" type="button" id="dCopyMsg">Copiar Mensaje</button> <button class="copy lnk" type="button" id="dOpenD" data-link="sigmaTrade">Abrir #market-trade</button><small class="lnk-note" id="dOpenNote"></small><span id="dTradeWrap" hidden><input type="text" id="dTrade" autocomplete="off" spellcheck="false" placeholder="https://discord.com/channels/…" aria-label="Link del canal market-trade de SIGMA"><small class="rc-miss" id="dTradeErr"></small></span></span></li>
-      <li><b>Cierra la Venta</b><span id="dClose"></span></li>
-    </ol>
-    <pre class="msg" id="dMsg"></pre>
-  </details>
+
   </section>
   <!-- Ajustes -->
 
@@ -3284,7 +3297,7 @@ Contraband Freight = no</textarea><small>Una regla por línea: Nombre = tax tota
            (vSort/vShow/vQuery, pkView) y clearViews() las vacía junto con las referencias al DOM.
    MEMORIA: íconos = <img> directos (sin blobs); pruneCaches() suelta S.api de items que ya no están; las tablas
             reutilizan <img> (ICON_POOL); un solo listener delegado por contenedor (sin closures por fila).
-   SEGURIDAD: el inventario nunca se guarda; solo los Ajustes (localStorage «gestorVentas.ajustes.v1», v1.0.16).
+   SEGURIDAD: el inventario nunca se guarda; solo los Ajustes (localStorage gestorVentas.ajustes.v1, v1.0.16).
               La app solo se conecta a esi.evetech.net e images.evetech.net (CSP). Sin login.
    RENDIMIENTO: rAF agrupa cambios; detalles del ledger perezosos; ordenar/buscar/filtrar repinta solo su bloque.
    ============================================================ */
@@ -3339,7 +3352,7 @@ const NF0=new Intl.NumberFormat('en-US',{maximumFractionDigits:0}),NF1=new Intl.
       NF2=new Intl.NumberFormat('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}),NFV=new Intl.NumberFormat('en-US',{maximumFractionDigits:2});
 const fmt=n=>n==null||isNaN(n)?'—':NF0.format(Math.round(n))+' ISK';
 // v104: muestra magnitudes tipo EVE (B/M/K) con coma decimal y una décima
-// truncada: 44,857,369,436 ISK se visualiza «44,8 B», no se redondea a 44,9.
+// truncada: 44,857,369,436 ISK se visualiza 44,8 B, no se redondea a 44,9.
 // El número sin abreviar SIEMPRE se imprime debajo con fmt(). Solo presentación.
 const NFcmp=new Intl.NumberFormat('es-ES',{minimumFractionDigits:1,maximumFractionDigits:1});
 function compactIsk(value){
@@ -3360,7 +3373,7 @@ const pctS=v=>{const x=v*100;return (Math.round(x*100)/100).toLocaleString('en-U
 const sgn=v=>v==null||isNaN(v)?'':v>0?'pos':v<0?'neg':'';
 function setText(el,t,cls){el.textContent=t;if(cls!==undefined)el.className=cls;}
 function status(id,msg,cls){const s=$(id);s.textContent=msg;s.className='status'+(cls?' '+cls:'');}
-// v1.0.51: el resumen de «Listado de Items Registrados» funciona como botón: «Ver los N items ▾» / «Ocultar los items ▴»
+// v1.0.51: el resumen de Listado de Items Registrados funciona como botón: Ver los N items ▾ / Ocultar los items ▴
 function ledgerCta(){const n=S.items.length;if(!n)return;status('esiStatus',$('ledger').open?'Ocultar los items ▴':'Ver los '+n+(n===1?' item ▾':' items ▾'),'cta');}
 
 // ================= Mercado: tasas =================
@@ -3551,7 +3564,7 @@ function parseSpaceLine(raw){ // escrito a mano o pegado con espacios
   name=cells[0];
   if((m=name.match(/^(.+?)\s+x?\s*(\d[\d.,]*)$/i))){name=m[1].trim();qty=num(m[2]);}
   else if((m=name.match(/^(\d[\d.,]*)\s*x?\s+(.+)$/i))){name=m[2].trim();qty=num(m[1]);}
-  // v1.0.46: «Platinum 13,320 Moon Materials Material» con espacios simples: nombre hasta el primer número suelto
+  // v1.0.46: Platinum 13,320 Moon Materials Material con espacios simples: nombre hasta el primer número suelto
   else if((m=name.match(/^(.*?[a-z].*?)\s+(\d[\d.,]*)\s+(.*[a-z].*)$/i))){name=m[1].trim();qty=num(m[2]);}
   if(qty==null&&(total!=null||m3!=null))qty=1;
   return{name,qty,total,m3,qtyCol:qty!=null};
@@ -3672,7 +3685,7 @@ function removeFromPaste(name){
 const ESI_BASES=['https://esi.evetech.net/latest','https://esi.evetech.net'];
 let esiBase=null;
 const idCache={},volCache={},volAlt={},grpOf={},catCache={};
-// v1.0.46: reintentos. Firefox muestra «NetworkError» cuando ESI corta o responde sin cabeceras CORS
+// v1.0.46: reintentos. Firefox muestra NetworkError cuando ESI corta o responde sin cabeceras CORS
 // (p. ej. límite de peticiones o un error pasajero). Se reintenta con espera (0,8 s → 1,6 s → 3,2 s) antes de rendirse.
 // Sin cache:'no-store' (no añade cabeceras extra; ESI ya cachea 5 min).
 const sleep=ms=>new Promise(r=>setTimeout(r,ms));
@@ -3805,7 +3818,7 @@ async function esiItems(all){
     const unknown=(await fetchTypes([...names],n=>!!itemByName(n))).filter(n=>itemByName(n));
     S.items.forEach(o=>{o.notFound=unknown.includes(o.name);const a=S.api[o.name.toLowerCase()];if(a)o.jita=a;verify(o,true);derive(o);});
     syncLots();
-    ledgerCta(); // v1.0.51: «Ver los N items» (los avisos se ven en cada item)
+    ledgerCta(); // v1.0.51: Ver los N items (los avisos se ven en cada item)
   }catch(e){status('esiStatus','No se pudo conectar con la API de EVE ('+e.message+').','err');}
   finally{
     esiBusy=false;$('bEsi').disabled=false;
@@ -4092,7 +4105,7 @@ function modeTotal(P,m){let g=0,V=0,Cc=0,n=0;
   return{net:g-(V>0?courierCost(V,Cc):0),n};}
 const MODES=[['auto','Plan Óptimo'],['fN','Llevar y vender todo en HY-RWO'],['fJ','Vender todo con órdenes en Jita'],['fJI','Vender todo al instante en Jita'],['null','Vender todo en HY-RWO'],['jOrd','Vender todo con órdenes en Jita'],['jInst','Vender todo al instante en Jita'],['bb','Vender al programa Buy Back'],['rNull','Reprocesar y vender todo en HY-RWO'],['rJita','Reprocesar, llevar y vender todo en Jita'],['disc','Vender todo a un jugador']];
 const modeName=m=>(MODES.find(x=>x[0]===(m||'auto'))||MODES[0])[1];
-const planPhrase=m=>m==='auto'?'el Plan Óptimo':'el plan «'+modeName(m)+'»';
+const planPhrase=m=>m==='auto'?'el Plan Óptimo':'el plan '+modeName(m)+'';
 const planMark=m=>el('strong','plan-name-accent',modeName(m));
 // ================= Guía práctica (puro) =================
 // Piso = precio por unidad en el que esta opción gana lo mismo que la siguiente mejor opción.
@@ -4504,7 +4517,7 @@ $('vPlan').addEventListener('input',e=>{
 // ================= Movimiento suave (v1.0.50, más ligero en v1.0.51) =================
 // Curva ease-out-cubic corta: arranca rápido y frena suave al final. Solo opacidad + desplazamiento (transform),
 // que el navegador anima en la GPU sin recalcular la página en cada cuadro (animar la altura se sentía lento).
-// Con «reducir movimiento» del sistema, sin animación.
+// Con reducir movimiento del sistema, sin animación.
 const EASE='cubic-bezier(.22,.61,.36,1)',MOTION=()=>!(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)&&!!Element.prototype.animate;
 const ANIM=new WeakMap();
 function slide(node,show){
@@ -4600,7 +4613,7 @@ function planIntroData(P){
   const groups=new Map();
   active.forEach(r=>{const g=groups.get(r.best)||[];g.push(r);groups.set(r.best,g);});
   if(active.length===1){
-    const item=active[0],nameText='«'+item.o.name+'»';
+    const item=active[0],nameText=''+item.o.name+'';
     const action=({null:'vender '+nameText+' en HY-RWO',jOrd:'vender '+nameText+' mediante una orden en Jita',
       fJ:'vender '+nameText+' mediante una orden en Jita',bb:'entregar '+nameText+' al programa Buy Back',
       rNull:'reprocesar '+nameText+' y vender sus materiales en HY-RWO',
@@ -4744,7 +4757,7 @@ function paintVerdict(P){
     const k=section.dataset.action,g=rowsIn.filter(r=>r.best===k);
     renderPlanTable(section,k,g);
   };
-  // v1.0.19: «Pasos para Vender». Un paso por acción, en el orden en que se hacen: primero lo que se hace donde
+  // v1.0.19: Pasos para Vender. Un paso por acción, en el orden en que se hacen: primero lo que se hace donde
   // están los items, luego el courier (si hay envío) y al final lo que se hace al llegar. Cada paso: número,
   // verbo, dónde se hace, ISK, y su tabla de items (con íconos) visible desde el inicio.
   const sys=(C.ref.name||'Null').split(' - ')[0].trim()||'Null',orig=S.flip?'Jita':sys,dest=S.flip?sys:'Jita',arr='Cuando llegue: ';
@@ -4921,14 +4934,14 @@ function paintVerdict(P){
       row.append(c0,num(lines[0][1],UNDER[0]),num(lines[1][1],UNDER[1]),el('span','rt-d num '+s,v==null?'—':(v>0?'Ganas +':'Pierdes −')+fmt(Math.abs(v))));box.append(row);});
     li.append(box);rl.append(li);});
   if(rl._activateRep){rl._activateRep();delete rl._activateRep;}
-  // v1.0.22: la comparación con otros planes vive en «Elige un Plan». Aquí solo la tarjeta del envío.
+  // v1.0.22: la comparación con otros planes vive en Elige un Plan. Aquí solo la tarjeta del envío.
   {const sh=P.rows.filter(r=>r.best&&SHIPS[r.best]),n=trips(P.Vs);
    $('ovShip').hidden=!SH();$('aCourT').textContent='Envío a '+DEST();
    $('aCourier').textContent=P.Vs>0?'−'+fmt(P.shipCost):'0 ISK';$('aCourier').className=P.Vs>0?'neg':'zero';
    $('aCourS').textContent=P.Vs>0?fmtV(Math.round(P.Vs))+' · '+n+(n>1?' contratos':' contrato')+' · '+sh.length+(sh.length===1?' item':' items'):'Tu plan no envía nada.';}
   $('vNote').hidden=true;
   // contrato del buyback para los items que conviene venderle
-  $('bbBox').hidden=true; // el contrato del Buyback está en «Contratos y Envío»
+  $('bbBox').hidden=true; // el contrato del Buyback está en Contratos y Envío
 }
 
 // ================= Vista: Tus Contratos (uno por contrato, con sus items) =================
@@ -4977,7 +4990,7 @@ $('pCtr').addEventListener('keydown',e=>{if(e.target.closest('input,textarea,sel
  z.addEventListener('pointerup',e=>{if(x0==null)return;const dx=e.clientX-x0,dy=e.clientY-y0;x0=null;
    if(Math.abs(dx)>50&&Math.abs(dx)>Math.abs(dy)*1.5)czShow(czIdx+(dx<0?1:-1),dx<0?1:-1);},{passive:true});
  z.addEventListener('pointercancel',()=>{x0=null;},{passive:true});}
-// v1.0.59: datos de cada contrato, compartidos por «Contratos y Envío» y los Pasos para Vender (una sola fuente).
+// v1.0.59: datos de cada contrato, compartidos por Contratos y Envío y los Pasos para Vender (una sola fuente).
 function ctrSpecs(P,cs,dr){
   const out=[];let cn=0;
   if(P.toBB.length)out.push({cls:'bb',tag:['p-null k-bb','Buyback'],lab:'Buyback',title:'Contrato '+(++cn)+' · Al Buyback',amt:fmt(P.bbGross),
@@ -5003,10 +5016,10 @@ function ctItems(list,withC){const w=el('div','ct-items'),hd=el('div','ct-ih');
 function slots(fields,cls){const w=el('div','slots'+(cls?' '+cls:''));
   fields.forEach(([k,v,cp])=>{const d=el('div','slot'+(String(v).length>22?' wide':''));d.append(el('span','slot-k',k));d.append(copyBtn(cp!=null?cp:v,v)); /* v1.0.64: todas se copian */w.append(d);});return w;}
 // v1.0.60: el recuadro Extras se ve solo si tiene alguna sección visible
-const syncExtras=()=>{$('pRepro').hidden=S.flip||!S.items.some(o=>resolveOre(o.name));$('pExtra').hidden=!S.items.length||($('pRepro').hidden&&$('pDisc').hidden&&IN_JITA());}; // Contratos se oculta en Jita sin courier // reproceso solo en HY-RWO
+const syncExtras=()=>{$('pRepro').hidden=S.flip||!S.items.some(o=>resolveOre(o.name));$('pExtra').hidden=!S.items.length;}; // Contratos se oculta en Jita sin courier // reproceso solo en HY-RWO
 function paintContracts(P){
   const sec=$('pCtr');sec.hidden=!S.items.length;
-  $('ctrTitle').textContent=SH()?'CONTRATOS Y ENVÍO':'CONTRATOS';$('shipBox').hidden=!SH();sec.classList.toggle('no-ship',!SH());
+  $('ctrTitle').textContent=C.disc.on&&!S.flip?'CONTRATOS Y DISCORD':'CONTRATOS';sec.classList.toggle('no-discord',!C.disc.on||S.flip);
   const cs=packCouriers(P),dr=P.rows.filter(r=>r.best==='disc');lastCs=cs;
   const nC=(P.toBB.length?1:0)+cs.length+(dr.length?1:0),shipR=cs.reduce((a,k)=>a+k.reward,0);
   {const sm=$('ctrSum');sm.textContent=nC?nC+(nC>1?' contratos':' contrato'):'Sin contratos';if(cs.length)sm.append(el('span','sm-hide neg',' · envío −'+fmt(shipR)));}
@@ -5026,7 +5039,7 @@ function paintContracts(P){
     if(cs.length)add('Envío a Jita','−'+fmt(shipR),'neg');
     if(dr.length)add('Recibes de jugadores',fmt(dr.reduce((a,r)=>a+(r.g.disc||0),0)),'pos');
   }
-  paintShip(P,cs);
+  // El análisis de envío permanece fuera de la UI; el courier sigue calculándose en el motor.
   if(cards.length)czShow(czIdx,0);
 }
 // Derecha: envío a Jita
@@ -5102,7 +5115,7 @@ function paintCourier(P){
 const JANICE='https://janice.e-351.com/';
 let discRows=[];
 function paintDisc(P){
-  const box=$('pDisc');box.hidden=!S.items.length||!C.disc.on||S.flip;syncExtras();if(box.hidden)return;
+  const box=$('pDisc');box.hidden=!S.items.length||!C.disc.on||S.flip;$('pCtr').classList.toggle('no-discord',box.hidden);syncExtras();if(box.hidden)return;
   const chosen=P.rows.filter(r=>r.best==='disc');
   discRows=chosen.length?chosen:P.rows.filter(r=>r.g.disc!=null);
   const tot=discRows.reduce((a,r)=>a+(r.g.disc||0),0);
@@ -5475,7 +5488,7 @@ function paintPicker(P){
     rNull:'Reprocesas el ore o hielo y vendes los materiales en '+sys+'.',
     rJita:'Reprocesas y llevas los materiales a Jita para venderlos allí.',
     disc:'Se lo vendes a otro jugador por Discord. Sin comprador garantizado.'};
-  // Resumen legible de un vistazo, colocado inmediatamente debajo de «Elige un Plan».
+  // Resumen legible de un vistazo, colocado inmediatamente debajo de Elige un Plan.
   bar.hidden=false;
   bar.append(chosen.m==='auto'?'Estás usando ':'Elegiste ',planMark(chosen.m),'. ');
   const delta=chosen.t.net-opt;
@@ -5543,7 +5556,7 @@ function paintPicker(P){
   const key={name:x=>x.l.toLowerCase(),speed:x=>pkSpeedRank(x.m,P),ship:x=>pkShips(x.m,P)?1:0,net:x=>x.t.net,diff:x=>x.t.net};
   const rest=expandedList.filter(x=>x.m===chosen.m||pass[pkView.filter](x))
     .sort((a,b)=>{const A=key[pkView.sort](a),B=key[pkView.sort](b);return (A<B?-1:A>B?1:0)*pkView.dir||b.t.net-a.t.net;});
-  // El óptimo también se elige aquí: ya no necesita un botón «Volver al óptimo».
+  // El óptimo también se elige aquí: ya no necesita un botón Volver al óptimo.
   rest.forEach(x=>{const entry=row(x,false);if(x.m===chosen.m){entry.classList.add('on');entry.setAttribute('aria-pressed','true');entry.setAttribute('aria-current','true');entry.title='Plan seleccionado';}others.append(entry);});
   if(!rest.length)others.append(el('p','pk-empty','Ningún otro plan cumple este filtro.'));
 }
@@ -5661,7 +5674,7 @@ function refreshNow(){
 // v105: Modo ligero. v1.0.16: ya no es automático en Firefox; se guarda con los Ajustes.
 $('cAssignee').addEventListener('input',()=>refresh());
 // v1.0.5: invertir la ruta (flip). HY-RWO → Jita (normal) / Jita → HY-RWO (importar). Solo en memoria.
-// v1.0.55: interruptor «Courier» (solo con la ruta Jita → HY-RWO). On: los items están en Jita y los llevas a HY-RWO
+// v1.0.55: interruptor Courier (solo con la ruta Jita → HY-RWO). On: los items están en Jita y los llevas a HY-RWO
 // con SIGMA Freight (se cuenta el courier). Off: los trajiste a Jita para venderlos allí, sin ningún courier.
 // Con la ruta HY-RWO → Jita el courier siempre se cuenta y el interruptor no se muestra.
 function syncShipSwitch(){$('shipTxt').textContent=SH()?'Enviar':'No enviar';$('shipLab').hidden=!S.flip;}
@@ -7089,7 +7102,7 @@ mmTabs.forEach((b,i)=>{
   });
 });
 
-// v1.0.53: se abren desde el menú lateral, los botones de «Antes de empezar» y se cierran con su X.
+// v1.0.53: se abren desde el menú lateral, los botones de Antes de empezar y se cierran con su X.
 // force=true abre (o solo desplaza si ya está abierto); force=false cierra; sin force alterna.
 function togglePanel(id,force){
   if(id==='mining'){selectAppModule(force===false?'ventas':'mining');return;}
