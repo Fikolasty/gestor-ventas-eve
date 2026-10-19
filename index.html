@@ -4787,7 +4787,7 @@ function paintVerdict(P){
   const has=S.items.length>0;$('verdict').hidden=!has;$('ledger').hidden=!has;$('lCount').textContent=has?'· '+S.items.length+(S.items.length>1?' items':' item'):'';
   const missing=S.items.filter(o=>o.qty>0&&!(o.jita&&(o.jita.topBuy!=null||o.jita.topSell!=null||o.jita.buy!=null||o.jita.sell!=null))).length;
   $('missCount').hidden=!has||S.loading||missing===0;
-  $('missCount').textContent=missing+' sin precio';
+  $('missCount').textContent=missing+(S.lang==='en'?' missing prices':' sin precio');
   if(has&&!$('deep').dataset.uiReady){
     $('deep').dataset.uiReady='1'; // Pasos a seguir permanece cerrado hasta que el usuario lo abra.
   }
@@ -4807,11 +4807,11 @@ function paintVerdict(P){
    $('vWhat').dataset.k=ks[0]||'';
    $('vWhat').textContent=none||!ks.length?'':W(ks[0])+(ks.length>1?' + '+(ks.length-1)+(ks.length>2?' más':' más'):'');}
   {const fa=!P.mode&&P.rows.some(r=>r.fast);
-    $('vTitle').textContent=P.mode?'TU RUTA DE VENTA':'LA MEJOR RUTA DE VENTA';
+    $('vTitle').textContent=S.lang==='en'?(P.mode?'YOUR SELLING ROUTE':'THE BEST SELLING ROUTE'):(P.mode?'TU RUTA DE VENTA':'LA MEJOR RUTA DE VENTA');
     if(fa&&$('vWhat').textContent)$('vWhat').textContent+=' · por rapidez';
     const cap=$('vCap');
     cap.replaceChildren();
-    if(none){cap.textContent='Estamos esperando los precios de Jita para calcular tu ruta.';}
+    if(none){cap.textContent=S.lang==='en'?'Waiting for Jita prices to calculate your route.':'Estamos esperando los precios de Jita para calcular tu ruta.';}
     else{
       const intro=planIntroData(P);
       cap.append('Con ',el('strong','plan-name-accent',intro.name),', ',intro.description);
@@ -4886,7 +4886,7 @@ function paintVerdict(P){
     const groupTable=el('div','pl');const toolbar=section.querySelector('.stp-acts');if(toolbar)groupTable.append(toolbar);groupTable.append(mkHead(sort));tableTarget=groupTable;
     const query=(vQuery[id]||'').trim().toLocaleLowerCase();
     const filtered=query?g.filter(r=>r.o.name.toLocaleLowerCase().includes(query)||(r.mins||[]).some(m=>m.m.toLocaleLowerCase().includes(query))):g;
-    const count=section.querySelector('.pl-match');if(count)count.textContent=query?filtered.length+' de '+g.length+' items':' ';
+    const count=section.querySelector('.pl-match');if(count)count.textContent=query?(S.lang==='en'?filtered.length+' of '+g.length+' items':filtered.length+' de '+g.length+' ítems'):' ';
     // Orden y “mostrar más” solo aplican al listado filtrado, nunca al total financiero.
     const key=x=>sort.k==='n'?x.o.name.toLowerCase():sort.k==='q'?x.q:sort.k==='p'?(unitFor(x,k).p||0):(x.g[k]-x.prod);
     const gs=sort.k?[...filtered].sort((a,b)=>{const A=key(a),B=key(b);return (A<B?-1:A>B?1:0)*sort.d;}):filtered;
@@ -4941,7 +4941,7 @@ function paintVerdict(P){
   const steps=[...before,...(shipRows.length?['ship']:[]),...after,...(groups.some(([k])=>k==='rJita')?['sellRefined']:[])];
   const hd=$('stepHead');hd.textContent='';
   if(steps.length){
-    const t=el('div','stp-top');t.append(el('span','stp-plan',(P.mode?modeName(P.mode):'Plan Óptimo')+' · '+rowsIn.length+(rowsIn.length===1?' item':' items')));
+    const t=el('div','stp-top');t.append(el('span','stp-plan',(P.mode?modeName(P.mode):(S.lang==='en'?'Optimal plan':'Plan óptimo'))+' · '+rowsIn.length+(S.lang==='en'?(rowsIn.length===1?' item':' items'):(rowsIn.length===1?' ítem':' ítems'))));
     // The exact bridge to P.best is the already-taxed earnings from every chosen route, less production and courier.
     // Never sum step display amounts: rJita preparation and Jita sale may describe the same value twice.
     const netBeforeShipping=rowsIn.reduce((sum,r)=>sum+(r.best?(r.g[r.best]||0)-r.prod:0),0);
@@ -5648,7 +5648,7 @@ function paintPicker(P){
     disc:'Se lo vendes a otro jugador por Discord. Sin comprador garantizado.'};
   // Resumen legible de un vistazo, colocado inmediatamente debajo de Elige un Plan.
   bar.hidden=false;
-  bar.append(chosen.m==='auto'?'Estás usando ':'Elegiste ',planMark(chosen.m),'. ');
+  bar.append(chosen.m==='auto'?(S.lang==='en'?'You are using ':'Estás usando '):(S.lang==='en'?'You chose ':'Elegiste '),planMark(chosen.m),'. ');
   const delta=chosen.t.net-opt;
   if(chosen.m==='auto'){
     bar.append('Para comparar valor, rapidez y envío, haz clic en esta fila y elige otra ruta disponible.');
@@ -5663,7 +5663,7 @@ function paintPicker(P){
     else bar.append(PK_EXP[chosen.m]||'Puedes consultar los detalles de esta ruta abajo.');
   }
   const cant=P.rows.filter(r=>r.cant);
-  if(chosen.m!=='auto'&&cant.length)bar.append(' ',cant.length===1?'Un item no admite esta ruta y mantiene su plan óptimo.':cant.length+' items no admiten esta ruta y mantienen su plan óptimo.');
+  if(chosen.m!=='auto'&&cant.length)bar.append(' ',S.lang==='en'?(cant.length===1?'One item cannot use this route and keeps its optimal plan.':cant.length+' items cannot use this route and keep their optimal plans.'):(cant.length===1?'Un ítem no admite esta ruta y mantiene su plan óptimo.':cant.length+' ítems no admiten esta ruta y mantienen su plan óptimo.'));
   const hd=el('div','pk-hd');
   PK_COLS.forEach(([k,t],i)=>{const on=pkView.sort===k&&i!==3,b=el('button','pk-hc c'+i+(on?' on':''),t+(on?(pkView.dir>0?' ▲':' ▼'):''));
     b.type='button';if(i===3){b.disabled=true;b.tabIndex=-1;}else{b.dataset.pks=k;b.title='Ordenar por '+t.toLowerCase();}hd.append(b);});
