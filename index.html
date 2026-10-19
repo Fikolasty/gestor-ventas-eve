@@ -1630,6 +1630,18 @@ html.light #verdict .v-plan-name{color:#ad4b27}
 #mining .eve-sk-add:disabled,#mining .eve-sk-minus:disabled{opacity:.3;cursor:default}
 #mining .eve-sk-add:focus-visible,#mining .eve-sk-minus:focus-visible{outline:2px solid var(--ion);outline-offset:1px}
 
+
+/* Steps header: symmetrical compact reconciliation, no duplicate expense calculations. */
+#stepHead .stp-top{display:flex;align-items:center;justify-content:space-between;gap:14px 24px;flex-wrap:wrap;margin:4px 0 12px}
+#stepHead .stp-plan{flex:0 1 auto}
+#stepHead .stp-balance{display:grid;grid-template-columns:repeat(3,minmax(150px,1fr));gap:8px;flex:1 1 600px;max-width:800px}
+#stepHead .stp-balance-cell{min-width:0;padding:9px 12px;background:rgba(13,13,13,.65);border:1px solid var(--line2);border-radius:var(--r-sm);display:flex;flex-direction:column;gap:4px}
+#stepHead .stp-balance-cell small{font-size:.73rem;color:var(--mut);line-height:1.25}
+#stepHead .stp-balance-cell strong{font:700 .98rem var(--f-num);overflow-wrap:anywhere}
+#stepHead .stp-balance-cell .pos{color:#5cba86}
+#stepHead .stp-balance-cell .neg{color:#e86b70}
+@media(max-width:680px){#stepHead .stp-balance{grid-template-columns:1fr;flex-basis:100%}}
+
 /* ===== tema claro (generado desde el oscuro por light.py) ===== */
 html.light{--void:#e4e3dd;--hull:#e2e0da;--hull2:#e0ded8;--line:rgba(31,30,29,0.114);--line2:rgba(31,30,29,0.125);--txt:#1c1c1a;--mut:#54524d;--dim:#6c6a64;--ion:#413f3c;--blue:#a39d8b;--clay:#c96442;--thrust:#a67526;--gain:#418b62;--loss:#a92c23}
 html.light body::after{background:repeating-linear-gradient(180deg,rgba(31,30,29,0.011) 0 1px,transparent 1px 3px),
@@ -2093,6 +2105,9 @@ html.light #settings .modern-tab[aria-selected="true"],html.light #help .modern-
 html.light .side-i[data-side-module][aria-current="page"]{background:rgba(217,119,87,0.15);border-color:rgba(217,119,87,0.562)}
 html.light #mining .eve-sk{background:rgba(240,237,229,0.6)}
 html.light #mining .eve-sk-add:hover:not(:disabled),html.light #mining .eve-sk-minus:hover:not(:disabled){background:rgba(31,30,29,0.095)}
+html.light #stepHead .stp-balance-cell{background:rgba(240,237,229,0.65)}
+html.light #stepHead .stp-balance-cell .pos{color:#418b62}
+html.light #stepHead .stp-balance-cell .neg{color:#a92328}
 /* ajustes a mano del tema claro */
 html.light body{background:#e6e3da;color:#1f1e1d}
 html.light body::before{opacity:.12;filter:grayscale(.35) brightness(1.1)}
