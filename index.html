@@ -7,7 +7,7 @@
 <meta name="referrer" content="no-referrer">
 <title>Market Moves+ · SIGMA GRINDSET</title>
 <style>
-/* ================= Market Moves+ v1.0.82 =================
+/* ================= Market Moves+ v1.0.83 =================
    Paleta: azul de base, naranja = acción, verde/rojo = ganancia/pérdida.
    Sin backdrop-filter: el vidrio se finge con rgba + bordes. */
 *{box-sizing:border-box;margin:0;padding:0}
@@ -2379,13 +2379,13 @@ html.light #mining .mn-info-popup a{color:#175f9c}
 @media(max-width:820px){#mining .mn-controls-unified{grid-template-columns:minmax(0,1fr)}#mining .mn-context-aside{grid-column:1}#mining .mn-shared-layout{grid-template-columns:minmax(0,1fr)}#mining .mn-config-group{padding:12px 0}}
 @media(max-width:540px){#mining .mn-context-aside{padding:13px}#mining .mn-info-popup{width:min(270px,calc(100vw - 48px))}#mining .mn-config-group-intro h3{font-size:.98rem}}
 
-/* v1.0.82: ficha emergente EVE y aviso de dron adaptado a skills. */
+/* v1.0.83: ficha emergente EVE y aviso de dron adaptado a skills. */
 #mining .mn-info-type-id{display:block;margin:0 0 9px;color:#b0bccb;font:500 .73rem/1.45 var(--f-ui);font-variant-numeric:tabular-nums}
 #mining .mn-fit-fallback{margin:8px 0 12px;padding:10px 12px;border-radius:8px;border:1px solid rgba(120,167,212,.28);background:rgba(90,140,195,.07);color:var(--txt);font-size:.85rem;line-height:1.56}
 html.light #mining .mn-info-type-id{color:#496276}
 html.light #mining .mn-fit-fallback{border-color:rgba(40,100,150,.22);background:rgba(48,117,174,.06)}
 
-/* v1.0.82: selector v5 aprobado: un plan, resumen prominente y un único cambio a la derecha. */
+/* v1.0.83: selector v5 aprobado: un plan, resumen prominente y un único cambio a la derecha. */
 .pk-summary{display:block;margin:8px 0 18px;color:var(--txt);font:400 clamp(1.08rem,1.8vw,1.35rem)/1.5 var(--f-ui);letter-spacing:-.012em}
 .pk-summary strong{font-weight:700;color:var(--txt)}
 .pk-summary .pk-sum-delta.pos{color:var(--gain)!important;white-space:nowrap}
@@ -2401,7 +2401,7 @@ html.light #mining .mn-fit-fallback{border-color:rgba(40,100,150,.22);background
 #pk>.pk-o:hover{border-color:rgba(217,119,87,.55)!important}
 #pk>.pk-o.best{margin-bottom:0}
 @media(max-width:760px){.pk-summary{font-size:1.07rem;line-height:1.53}.pk-actions .pk-change{min-height:40px}}
-/* v1.0.82: diseño unificado aprobado, sin alterar los cálculos */
+/* v1.0.83: diseño unificado aprobado, sin alterar los cálculos */
 .mm-modnav{position:relative;display:flex;gap:5px;flex-wrap:wrap;background:#1b1918;border:1px solid rgba(222,220,209,.12);padding:6px;border-radius:12px;margin:20px auto 14px;max-width:1100px}
 .mm-mod{appearance:none;display:flex;align-items:center;gap:9px;padding:10px 19px;font:650 .95rem var(--f-ui);background:none;color:#b9b0a7;border:1px solid transparent;border-radius:8px;cursor:pointer}
 .mm-mod[aria-selected=true]{background:linear-gradient(95deg,rgba(217,119,87,.22),rgba(217,119,87,.06));border-color:rgba(217,119,87,.5);color:#f4ece4}
@@ -2449,7 +2449,7 @@ html.light .mm-modnav{background:#f4f1ed}html.light .mm-mod{color:#70685e}html.l
 html.light .mm-pi-placeholder,html.light .mm-pi-features>div,html.light #verdict .ov-flow{background:#f8f6f3}
 html.light #verdict{background:#fff!important}html.light #verdict .v-cap{color:#37302a}html.light .mm-title{color:#28231f!important}
 
-/* v1.0.82 — v6 integrada: navegación a la derecha, encabezados alineados y planes compactos. */
+/* v1.0.83 — v6 integrada: navegación a la derecha, encabezados alineados y planes compactos. */
 .mm-modnav{max-width:none!important;width:100%;justify-content:flex-end!important;margin-left:0!important;margin-right:0!important}
 .mm-section-head{display:grid!important;grid-template-columns:26px minmax(0,1fr);grid-template-rows:auto auto auto;gap:4px 12px;align-items:start;min-width:0}
 .mm-section-head::before{content:"";width:23px;height:3px;grid-column:1;grid-row:1;margin-top:12px;background:linear-gradient(90deg,#d97757,rgba(217,119,87,0));border-radius:999px;box-shadow:0 0 11px rgba(217,119,87,.35)}
@@ -2491,6 +2491,20 @@ html.light #verdict{background:#fff!important}html.light #verdict .v-cap{color:#
   .mm-mod{white-space:nowrap;padding:10px 12px}
 }
 @media(max-width:460px){#pSum .more-btn{gap:5px}#pSum .more-btn b{font-size:.86rem}}
+/* v1.0.83 — simetría del resumen y nombre reactivo del plan */
+#verdict .ov-hd{grid-template-columns:minmax(0,1.65fr) minmax(280px,.85fr)!important;gap:clamp(18px,2.6vw,34px)!important;align-items:center!important}
+#verdict .ov-ttl{display:flex;flex-direction:column;justify-content:center;min-width:0}
+#verdict .v-cap{max-width:72ch!important;line-height:1.58!important;margin-top:11px!important}
+#verdict .v-plan-name{font-weight:750;color:#e8a588}
+#verdict .mm-net{align-self:center;text-align:right;padding-top:0}
+#pSum .pk-hd{padding-right:40px!important}
+#pSum .pk .pk-o .pk-v{font-variant-numeric:tabular-nums}
+html.light #verdict .v-plan-name{color:#ad4b27}
+@media(max-width:980px){#verdict .ov-hd{grid-template-columns:minmax(0,1fr)!important;gap:12px!important}#verdict .mm-net{text-align:left!important;align-self:start}}
+@media(max-width:760px){#pSum .pk-hd{display:none!important}#verdict .v-cap{max-width:none!important}}
+
+/* v1.0.83: Tasación comparte el estilo del encabezado del listado, sin insignia de píldora. */
+.appr .appr-title{font-size:1.2rem!important;line-height:1.28!important;margin:0 0 13px!important;min-height:25px}
 </style>
 <script>/* v1.0.16: aplica el tema guardado antes de pintar (sin parpadeo). Por defecto: Dark. */try{var g=JSON.parse(localStorage.getItem('gestorVentas.ajustes.v1')||'null');if(g&&g.ui){if(g.ui.light)document.documentElement.classList.add('light');}}catch(e){}</script>
 </head>
@@ -2825,13 +2839,13 @@ Contraband Freight = no</textarea><small>Una regla por línea: Nombre = tax tota
 <button type="button" class="totop" id="toTop" aria-label="Volver arriba" title="Volver arriba (Inicio)" hidden><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 14l6-6 6 6"/></svg></button>
 <footer class="foot">
   <p class="foot-sec"><span class="ic i-lock" aria-hidden="true"></span>Tu inventario no se guarda: al cerrar o recargar se borra. Solo tus Ajustes quedan en este navegador.</p>
-  <div class="foot-by">Creado por <b>Fiko McGivert</b> · Vanguardia DR · SIGMA GRINDSET · <span class="ver">v1.0.82</span></div>
+  <div class="foot-by">Creado por <b>Fiko McGivert</b> · Vanguardia DR · SIGMA GRINDSET · <span class="ver">v1.0.83</span></div>
 </footer>
 
 <script>
 'use strict';
 /* ============================================================
-   Market Moves+ v1.0.82 — SIGMA GRINDSET / Vanguardia DR
+   Market Moves+ v1.0.83 — SIGMA GRINDSET / Vanguardia DR
    Flujo:  pegado → items → carga (ESI: precios, volúmenes, historial) → verificación → plan → vista
      1. Pegado      parsePaste(): parser posicional de columnas de EVE (Name · Quantity · … · Volume · Est. Price).
      2. Carga       esiItems(): trae todo lo que falta; mientras carga, refresh() NO pinta (S.loading).
@@ -4093,6 +4107,23 @@ function paintWhereSold(P,none){
        d.append(sw,el('b',null,v/tot>0&&v/tot<.005?'<1%':pct(v/tot)+'%'),el('small',null,(PLAN_L[k]||k)+' · '+n+(n===1?' item':' items')));lg.append(d);});
      box.append(bar,lg);}}
 }
+function planIntroData(P){
+  const name=modeName(P.mode),mode=P.mode||'auto';
+  const active=P.rows.filter(r=>r.best);
+  const total=active.length,plural=total===1?'ítem':'ítems';
+  const routes=new Set(active.map(r=>r.best)).size;
+  const next=' Abajo puedes revisar los destinos y los pasos de venta.';
+  if(mode==='auto'){
+    return{name,description:'los '+total+' '+plural+' con precio se distribuyen entre '+routes+
+      (routes===1?' ruta de venta':' rutas de venta')+' según su rentabilidad y rapidez.'+next};
+  }
+  const selected=active.filter(r=>r.best===mode).length,other=total-selected;
+  if(!other)return{name,description:'los '+total+' '+plural+' con precio siguen la ruta seleccionada.'+next};
+  if(!selected)return{name,description:'tus '+total+' '+plural+
+    ' con precio utilizan otras rutas disponibles porque esta opción no se aplica a todo el lote.'+next};
+  return{name,description:selected+' de los '+total+' '+plural+' con precio siguen este plan y '+
+    (other===1?'el otro ítem mantiene':'los otros '+other+' mantienen')+' su mejor alternativa disponible.'+next};
+}
 function paintVerdict(P){
   const has=S.items.length>0;$('verdict').hidden=!has;$('ledger').hidden=!has;$('lCount').textContent=has?'· '+S.items.length+(S.items.length>1?' items':' item'):'';
   const missing=S.items.filter(o=>o.qty>0&&!(o.jita&&(o.jita.topBuy!=null||o.jita.topSell!=null||o.jita.buy!=null||o.jita.sell!=null))).length;
@@ -4120,12 +4151,13 @@ function paintVerdict(P){
   {const fa=!P.mode&&P.rows.some(r=>r.fast);
     $('vTitle').textContent=P.mode?'TU RUTA DE VENTA':'LA MEJOR RUTA DE VENTA';
     if(fa&&$('vWhat').textContent)$('vWhat').textContent+=' · por rapidez';
-    const route=$('vWhat').textContent.replace(/ · por rapidez$/,'');
-    $('vCap').textContent=none?'Estamos esperando los precios de Jita para calcular tu ruta.':
-      P.mode?'Elegiste '+modeName(P.mode)+'. Este plan te permite '+(route?route.toLowerCase():'vender tu lote')+
-        '. Aquí ves cuánto recibirías; más abajo encontrarás cada paso con sus items, destinos y precios.':
-      'Según el Plan Óptimo, '+(route?route.toLowerCase():'la combinación de rutas seleccionadas')+
-        ' es la alternativa recomendada para tu lote. Revisa cuánto recibirías y consulta las instrucciones paso a paso más abajo.';
+    const cap=$('vCap');
+    cap.replaceChildren();
+    if(none){cap.textContent='Estamos esperando los precios de Jita para calcular tu ruta.';}
+    else{
+      const intro=planIntroData(P);
+      cap.append('Con ',el('strong','v-plan-name',intro.name),', ',intro.description);
+    }
   }
   lastP=P;
   paintWhereSold(P,none);
@@ -5005,7 +5037,7 @@ function paintAppraisal(){
   cell(colL,'Volumen',NF2.format(v2)+' m³',null,String(v2)); // 2 decimales, como Janice; clic copia el número
   cell(colL,'Items',String(its.length));
   cell(colR,'Buy',ok?vB:'—','t-buy');cell(colR,'Split',ok?(vB+vS)/2:'—','t-split');cell(colR,'Sell',ok?vS:'—','t-sell');
-  g.append(colL,colR);box.append(el('span','appr-tag','Tasación'),g);
+  g.append(colL,colR);box.append(el('h2','mm-title appr-title','TASACIÓN'),g);
 }
 function refreshNow(){
   if(refQ){cancelAnimationFrame(refQ);refQ=0;}
