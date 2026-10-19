@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src data: blob: https://images.evetech.net https://cdn1.eveonline.com https://wiki.eveuniversity.org https://global.discourse-cdn.com; connect-src https://esi.evetech.net https://images.evetech.net; base-uri 'none'; form-action 'none'; object-src 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src data: blob: https://images.evetech.net https://cdn1.eveonline.com https://wiki.eveuniversity.org https://global.discourse-cdn.com; connect-src https://esi.evetech.net https://images.evetech.net https://login.eveonline.com; base-uri 'none'; form-action 'none'; object-src 'none'">
 <meta name="referrer" content="no-referrer">
 <title>Market Moves+ · SIGMA GRINDSET</title>
 <style>
@@ -1837,6 +1837,24 @@ select{appearance:none;-webkit-appearance:none;padding-right:30px!important;back
 #mining details.mn-info>summary::after{content:none!important;display:none!important;border:0!important;transform:none!important}
 #mining details.mn-info>summary{margin:0!important;padding:0!important;min-height:20px}
 #mining details.mn-info[open]>summary::after{content:none!important;display:none!important}
+
+/* EVE SSO: personaje a la izquierda, tabs independientes a la derecha. */
+#mmTabs .eve-identity{position:relative;min-width:0;margin-right:auto}
+#mmTabs .mm-home{margin-right:0}
+#mmTabs .eve-identity-button{display:flex;align-items:center;gap:10px;min-height:42px;max-width:235px;padding:5px 8px;background:transparent;border:0;border-radius:8px;color:var(--txt);font:650 .87rem var(--f-ui);cursor:pointer;text-align:left}
+#mmTabs .eve-identity-button:hover{background:rgba(255,255,255,.055)}
+#mmTabs .eve-identity-button img{width:34px;height:34px;object-fit:cover;border-radius:7px}
+#mmTabs .eve-identity-button #evePilotName{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#mmTabs .eve-identity-arrow{width:7px;height:7px;border-right:2px solid var(--ion);border-bottom:2px solid var(--ion);transform:rotate(45deg);margin-left:4px;flex:none}
+#mmTabs .eve-identity-button[aria-expanded=true] .eve-identity-arrow{transform:rotate(225deg)}
+#mmTabs .eve-identity-menu{position:absolute;top:calc(100% + 12px);left:0;z-index:120;width:min(340px,calc(100vw - 45px));padding:16px;border-radius:12px;border:1px solid var(--line);background:#201f1e;box-shadow:0 15px 40px rgba(0,0,0,.55)}
+#mmTabs .eve-identity-menu[hidden]{display:none}
+#mmTabs .eve-identity-menu label{font-size:.8rem}
+#mmTabs .eve-identity-menu input{width:100%;margin:6px 0 4px;min-width:0}
+#mmTabs .eve-identity-menu small{display:block;overflow-wrap:anywhere;opacity:.7;font-size:.69rem}
+#mmTabs .eve-identity-menu p{font-size:.8rem;line-height:1.4;color:var(--mut)}
+#mmTabs .eve-identity-menu button{width:100%;padding:10px;margin-top:6px;border:1px solid var(--line2);background:#332720;color:var(--txt);border-radius:7px;cursor:pointer}
+@media(max-width:720px){#mmTabs .eve-identity-button{max-width:125px;font-size:.76rem}#mmTabs .eve-identity-button img{width:29px;height:29px}#mmTabs .mm-mod{padding:7px 9px!important}}
 /* ===== tema claro (generado desde el oscuro por light.py) ===== */
 html.light{--void:#e4e3dd;--hull:#e2e0da;--hull2:#e0ded8;--line:rgba(31,30,29,0.114);--line2:rgba(31,30,29,0.125);--txt:#1c1c1a;--mut:#54524d;--dim:#6c6a64;--ion:#413f3c;--blue:#a39d8b;--clay:#c96442;--thrust:#a67526;--gain:#418b62;--loss:#a92c23}
 html.light body::after{background:repeating-linear-gradient(180deg,rgba(31,30,29,0.011) 0 1px,transparent 1px 3px),
@@ -2320,6 +2338,9 @@ html.light #mmTabs .mm-mod{color:#5a5954}
 html.light #mmTabs .mm-mod:hover{background:rgba(31,30,29,0.052);color:#151514}
 html.light #mmTabs .mm-mod[aria-selected=true]{background:rgba(217,119,87,0.2);border-color:rgba(217,119,87,0.525);box-shadow:inset 0 1px 0 rgba(31,30,29,0.038);color:#c2440a}
 html.light #pCtr .discord-content{background:var(--panel,#e5e3dd)}
+html.light #mmTabs .eve-identity-button:hover{background:rgba(31,30,29,0.052)}
+html.light #mmTabs .eve-identity-menu{background:#e6e4df;box-shadow:0 15px 40px rgba(0,0,0,0.088)}
+html.light #mmTabs .eve-identity-menu button{background:#e3e1dc}
 /* ajustes a mano del tema claro */
 html.light body{background:#e6e3da;color:#1f1e1d}
 html.light body::before{opacity:.12;filter:grayscale(.35) brightness(1.1)}
@@ -3054,6 +3075,7 @@ html.light #mining .mn-fit-fallback{border-color:rgba(40,100,150,.22);background
   </div>
   <nav class="mm-modnav" id="mmTabs" role="tablist" aria-label="Secciones de Market Moves+">
     <button type="button" id="navHome" class="mm-home" title="HOME" aria-label="Volver al inicio"><span class="ic i-home" aria-hidden="true"></span></button>
+    <div id="eveIdentity" class="eve-identity"><button type="button" id="eveIdentityButton" class="eve-identity-button" aria-expanded="false" aria-controls="eveIdentityMenu"><img id="evePortrait" alt="" hidden><span id="evePilotName">Conectar EVE</span><span class="eve-identity-arrow" aria-hidden="true"></span></button><div id="eveIdentityMenu" class="eve-identity-menu" hidden><label for="eveClientId">Client ID de tu aplicación EVE SSO</label><input id="eveClientId" autocomplete="off" spellcheck="false" placeholder="Client ID público"><small>Callback: https://fikolasty.github.io/gestor-ventas-eve/</small><p id="eveLoginStatus" role="status">La sesión se guarda solo en memoria. Skills manuales disponibles sin login.</p><button type="button" id="eveLogin">Iniciar sesión con EVE</button><button type="button" id="eveSync" hidden>Sincronizar skills</button><button type="button" id="eveLogout" hidden>Desconectar</button></div></div>
     <div class="mm-modgroup" role="presentation">
     <button type="button" class="mm-mod on" data-mm-module="ventas" role="tab" aria-controls="salesBody" aria-selected="true" id="mmTabVentas">Ventas</button>
     <button type="button" class="mm-mod" data-mm-module="mining" role="tab" aria-controls="mining" aria-selected="false" id="mmTabMining">Minería</button>
@@ -7474,6 +7496,67 @@ addEventListener('pagehide',()=>{if(stT){clearTimeout(stT);stSaveNow();}});
 // arranque
 stRestore();syncDeps();brokerNote();buildOreSelect();readBB();syncLots();refresh();
 
+
+
+/* EVE SSO v1: PKCE public client; no client secret or persistent access tokens. */
+(function eveLogin(){
+  const $e=id=>document.getElementById(id), button=$e('eveIdentityButton'), menu=$e('eveIdentityMenu');
+  const base=location.origin+location.pathname, key='mm.eve.pkce', clientKey='mm.eve.clientId';
+  const scope='esi-skills.read_skills.v1';
+  let session=null;
+  const status=msg=>$e('eveLoginStatus').textContent=msg;
+  const b64=a=>btoa(String.fromCharCode(...new Uint8Array(a))).replace(/\\+/g,'-').replace(/\\//g,'_').replace(/=+$/,'');
+  const rand=n=>b64(crypto.getRandomValues(new Uint8Array(n)));
+  async function challenge(v){return b64(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(v)));}
+  const refreshUI=()=>{const on=!!session;$e('evePilotName').textContent=on?session.name:'Conectar EVE';$e('eveSync').hidden=!on;$e('eveLogout').hidden=!on;$e('eveLogin').hidden=on;
+    $e('evePortrait').hidden=!on;if(on)$e('evePortrait').src='https://images.evetech.net/characters/'+session.id+'/portrait?size=64';else $e('evePortrait').removeAttribute('src');};
+  $e('eveClientId').value=localStorage.getItem(clientKey)||'';
+  $e('eveClientId').addEventListener('change',()=>localStorage.setItem(clientKey,$e('eveClientId').value.trim()));
+  button.addEventListener('click',()=>{menu.hidden=!menu.hidden;button.setAttribute('aria-expanded',String(!menu.hidden));});
+  document.addEventListener('click',e=>{if(!e.target.closest('#eveIdentity')){menu.hidden=true;button.setAttribute('aria-expanded','false');}});
+  $e('eveLogin').addEventListener('click',async()=>{
+    const client=$e('eveClientId').value.trim();if(!/^[a-zA-Z0-9_-]{12,128}$/.test(client)){status('Introduce el Client ID público registrado en EVE Developers.');return;}
+    localStorage.setItem(clientKey,client);
+    try{const verifier=rand(48),state=rand(24);sessionStorage.setItem(key,JSON.stringify({verifier,state,client,redirect:base,at:Date.now()}));
+      const u=new URL('https://login.eveonline.com/v2/oauth/authorize');u.searchParams.set('response_type','code');u.searchParams.set('client_id',client);u.searchParams.set('redirect_uri',base);u.searchParams.set('scope',scope);u.searchParams.set('state',state);u.searchParams.set('code_challenge',await challenge(verifier));u.searchParams.set('code_challenge_method','S256');location.assign(u.href);
+    }catch(err){status('No fue posible iniciar el flujo seguro: '+err.message);}
+  });
+  function saveSkill(id,level){const e=$e(id);if(!e)return false;const v=String(level);if(![...e.options].some(o=>o.value===v))return false;e.value=v;e.dispatchEvent(new Event('change',{bubbles:true}));return true;}
+  async function sync(){
+    if(!session||Date.now()>session.expires){status('La sesión expiró. Vuelve a iniciar sesión.');session=null;refreshUI();return;}
+    try{status('Consultando skills autorizadas en ESI…');
+      const resp=await fetch('https://esi.evetech.net/latest/characters/'+session.id+'/skills/?compatibility_date=2026-10-01',{headers:{Authorization:'Bearer '+session.token},cache:'no-store'});
+      if(!resp.ok)throw Error('ESI HTTP '+resp.status);const data=await resp.json(),skills=new Map(data.skills.map(x=>[x.skill_id,x.active_skill_level]));
+      const names=['Accounting','Broker Relations','Advanced Broker Relations','Reprocessing','Reprocessing Efficiency'];
+      const idsResp=await fetch('https://esi.evetech.net/latest/universe/ids/?compatibility_date=2026-10-01',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(names)});
+      if(!idsResp.ok)throw Error('Catálogo ESI HTTP '+idsResp.status);
+      const ids=await idsResp.json(),resolved=new Map((ids.inventory_types||[]).map(x=>[x.name,x.id]));
+      let count=0;const mapping=[['Accounting','skAcc'],['Broker Relations','skBR'],['Advanced Broker Relations','cAbr'],['Reprocessing','skRep'],['Reprocessing Efficiency','skRepE']];
+      mapping.forEach(([name,id])=>{const sid=resolved.get(name);if(sid!=null&&skills.has(sid)&&saveSkill(id,skills.get(sid)))count++;});
+      status(count+' skills sincronizadas. Los impuestos se recalculan con los ajustes actuales; las tarifas privadas siguen siendo manuales.');
+      if(typeof refresh==='function')refresh();
+    }catch(err){status('No se pudieron sincronizar las skills: '+err.message);}
+  }
+  $e('eveSync').addEventListener('click',sync);
+  $e('eveLogout').addEventListener('click',()=>{session=null;refreshUI();status('Desconectado. Se conservan tus ajustes manuales.');});
+  (async()=>{const u=new URL(location.href),code=u.searchParams.get('code'),state=u.searchParams.get('state');
+    if(!code&&!u.searchParams.has('error'))return;
+    u.searchParams.delete('code');u.searchParams.delete('state');u.searchParams.delete('error');u.searchParams.delete('error_description');history.replaceState(null,'',u.pathname+u.search+u.hash);
+    const saved=sessionStorage.getItem(key);sessionStorage.removeItem(key);menu.hidden=false;button.setAttribute('aria-expanded','true');
+    if(!saved){status('No se encontró una solicitud SSO válida.');return;}
+    try{const req=JSON.parse(saved);
+      if(!code||!state||req.state!==state||req.redirect!==base||Date.now()-req.at>600000)throw Error('Callback no coincide o expiró.');
+      const data=new URLSearchParams({grant_type:'authorization_code',code,client_id:req.client,code_verifier:req.verifier,redirect_uri:req.redirect});
+      const tokenResp=await fetch('https://login.eveonline.com/v2/oauth/token',{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:data});
+      if(!tokenResp.ok)throw Error('Intercambio de token HTTP '+tokenResp.status);const tokens=await tokenResp.json();
+      const verified=await fetch('https://login.eveonline.com/v2/oauth/verify',{headers:{Authorization:'Bearer '+tokens.access_token}});
+      if(!verified.ok)throw Error('Verificación SSO HTTP '+verified.status);const pilot=await verified.json();
+      const id=Number(pilot.CharacterID||pilot.character_id),name=pilot.CharacterName||pilot.character_name;
+      if(!Number.isSafeInteger(id)||!name)throw Error('Identidad de personaje no verificada.');
+      session={id,name,token:tokens.access_token,expires:Date.now()+(tokens.expires_in||1200)*1000-30000};refreshUI();status('Sesión autorizada para '+name+'. Sincroniza las skills cuando quieras.');await sync();
+    }catch(err){status('Error de SSO: '+err.message);}
+  })();
+})();
 </script>
 
 <script>
