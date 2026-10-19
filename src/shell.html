@@ -2036,6 +2036,25 @@ html.light #mmTabs .mm-icon-action,html.light #mmTabs .mm-mod{color:#4b4742}
  .lot-body>.lot-analysis .opt-v{font-size:.82rem}
 }
 
+
+/* v1.0.89 — compact navigation final corrections */
+#mmTabs.mm-modnav{display:flex!important;align-items:center!important;justify-content:flex-start!important;flex-wrap:wrap;column-gap:12px}
+#mmTabs .eve-identity{margin-right:auto!important}
+#mmTabs .mm-right-actions{display:flex;align-items:center;justify-content:flex-end;gap:10px;margin-left:auto;min-width:0}
+#mmTabs .mm-right-actions .mm-quick{display:flex;align-items:center;gap:4px}
+#mmTabs .mm-right-actions .mm-theme{margin:0}
+#mmTabs .mm-route .route-b{display:grid!important;grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important;gap:0!important;justify-items:center;align-items:center;overflow:hidden;box-sizing:border-box;padding:4px!important;width:204px;min-height:40px}
+#mmTabs .mm-route .mm-route-left,#mmTabs .mm-route .mm-route-right{display:block!important;position:relative;z-index:1;text-align:center;font-size:.82rem;white-space:nowrap;pointer-events:none}
+#mmTabs .mm-route .mm-route-left{grid-column:1;grid-row:1}
+#mmTabs .mm-route .mm-route-right{grid-column:2;grid-row:1}
+#mmTabs .mm-route .mm-route-knob{display:block!important;position:absolute;left:4px;top:4px;width:calc(50% - 4px);height:calc(100% - 8px);pointer-events:none}
+#mmTabs .mm-route .route-b[aria-pressed=true] .mm-route-knob{transform:translateX(100%)}
+.top>.top-guide-action{display:grid;place-items:center;flex:0 0 38px;width:38px;height:38px;border:1px solid rgba(222,220,209,.22);border-radius:9px;margin-left:10px;color:var(--ion);background:rgba(24,23,22,.62);cursor:pointer}
+.top>.top-guide-action:hover{background:rgba(217,119,87,.13);color:var(--txt)}
+.top>.top-guide-action .ic{width:19px;height:19px;margin:0}
+@media(max-width:1020px){#mmTabs .mm-right-actions{flex-wrap:wrap;justify-content:flex-end}#mmTabs .eve-identity{margin-right:0!important}}
+@media(max-width:720px){#mmTabs .mm-right-actions{width:100%;margin-left:0;justify-content:center}#mmTabs .mm-route .route-b{width:188px}}
+
 </style>
 <script>/* v1.0.16: aplica el tema guardado antes de pintar (sin parpadeo). Por defecto: Dark. */try{var g=JSON.parse(localStorage.getItem('gestorVentas.ajustes.v1')||'null');if(g&&g.ui){if(g.ui.light)document.documentElement.classList.add('light');}}catch(e){}</script>
 </head>
