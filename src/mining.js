@@ -329,7 +329,7 @@ const MineUI=(()=>{
      '</div>'+
      '<div class="mn-config-groups">'+
      '<div class="mn-config-group">'+
-       '<div class="mn-config-group-intro"><h3>Contexto</h3></div>'+
+       
        '<div class="mn-ctl">'+
          '<div class="mn-config-field"><div class="mn-field-title"><span class="mn-lbl">Tipo de nave</span>'+INFO('shipClass')+'</div>'+SEG('shipClass',[['barge','Barges'],['exhumer','Exhumers']])+'</div>'+
          '<div class="mn-config-field"><div class="mn-field-title"><span class="mn-lbl">Material</span>'+INFO('mat')+'</div>'+SEG('mat',[['moon','Moon ore'],['ice','Hielo'],['gas','Gas']])+'</div>'+
@@ -337,7 +337,7 @@ const MineUI=(()=>{
        '</div>'+
      '</div>'+
      '<div class="mn-config-group">'+
-       '<div class="mn-config-group-intro"><h3>Personaje</h3></div>'+
+       
        '<div class="mn-ctl">'+
          '<div class="mn-config-field"><div class="mn-field-title"><span class="mn-lbl">Skills</span>'+INFO('lv')+'</div>'+SEG('lv',[['3','III · estimado'],['4','IV'],['5','V']])+'</div>'+
          '<div class="mn-config-field"><div class="mn-field-title"><span class="mn-lbl">Implantes de minería</span>'+INFO('imp')+'</div>'+SEG('imp',[['0','Sin'],['4','4%'],['5','5%']])+'</div>'+
