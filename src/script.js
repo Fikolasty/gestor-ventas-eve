@@ -2066,6 +2066,38 @@ function paintPicker(P){
   // Mantener siempre visible el plan elegido, aunque su resultado sea idéntico al óptimo.
   const list=all.filter(x=>x.m===cur||!same.includes(x.m));
   const chosen=all.find(x=>x.m===cur)||all[0];
+
+  // Benchmark is the largest estimated net across feasible plan selections, not necessarily Plan Óptimo.
+  // Financial opportunity and time/liquidity are reported separately; no fabricated days or returns.
+  const opportunity=$('pkOpportunity');
+  opportunity.replaceChildren();
+  const valid=all.filter(x=>Number.isFinite(x.t.net));
+  if(valid.length>1&&valid.some(x=>x.m===cur)){
+    const benchmark=valid.reduce((best,x)=>x.t.net>best.t.net?x:best);
+    const gap=Math.max(0,benchmark.t.net-chosen.t.net),ratio=benchmark.t.net>0?gap/benchmark.t.net*100:null;
+    const shipped=pkShips(chosen.m,P);
+    const hasFallback=chosen.m!=='auto'&&chosen.t.n<P.rows.filter(r=>r.best).length;
+    const title=el('div','pk-opp-head','Coste de oportunidad');
+    const grid=el('div','pk-opp-grid');
+    const stat=(label,value,cl='')=>{
+      const node=el('div','pk-opp-stat');node.append(el('small',null,label),el('strong',cl,value));grid.append(node);
+    };
+    stat('ISK que dejarías de recibir',gap<1?'0 ISK':'−'+fmt(gap),gap>=1?'neg':'');
+    stat('Alternativa con más ISK',benchmark.l+' · '+fmt(benchmark.t.net));
+    const note=el('p','pk-opp-explain');
+    if(gap<1)note.textContent='Este plan está entre los de mayor ingreso neto estimado.';
+    else note.textContent='Con '+chosen.l+' recibirías '+fmt(gap)+' ISK menos'+(ratio!=null?' ('+ratio.toFixed(1)+' %)':'')+' que con '+benchmark.l+'.';
+    const speed=chosen.m==='bb'?'Buyback: sujeto a aceptación y pago del programa, sin depender de órdenes de mercado.':
+      chosen.m==='jInst'||chosen.m==='fJI'?'Venta a órdenes de compra: ejecución inmediata solo si hay suficiente volumen comprador.':
+      chosen.m==='disc'?'Venta entre jugadores: tiempo de cobro y comprador sin garantía.':
+      chosen.m==='auto'?'El plan combina rutas; los plazos de venta dependen de cada ítem.':
+      chosen.m==='null'||chosen.m==='jOrd'||chosen.m==='fJ'||chosen.m==='fN'||chosen.m==='rNull'||chosen.m==='rJita'?'Órdenes de mercado: los ISK llegan cuando se ejecutan, sin plazo garantizado.':
+      'Los tiempos de liquidación dependen de los contratos y de las órdenes disponibles.';
+    const logistics=shipped?' Incluye una estimación del courier configurado.':' No requiere courier según el escenario seleccionado.';
+    const caveat=el('p','pk-opp-note',speed+logistics+(hasFallback?' Algunos ítems conservan su ruta óptima porque este plan no les aplica.':'')+' Los precios, órdenes y plazos pueden cambiar; no se atribuye rentabilidad a reinversiones hipotéticas.');
+    opportunity.append(title,grid,note,caveat);opportunity.hidden=false;
+  }else opportunity.hidden=true;
+
   const maxNet=Math.max(...list.map(x=>x.t.net),1);
   const sys=(C.ref.name||'Null').split(' - ')[0].trim()||'Null',env='Envías todo a Jita y ';
   const PK_EXP={auto:'Cada item va a donde más deja; si la diferencia es chica, prefiere vender rápido.',
