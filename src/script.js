@@ -416,7 +416,7 @@ async function esiFetch(path,opt){
         const r=await fetch(b+path,Object.assign({credentials:'omit',referrerPolicy:'no-referrer'},opt||{}));
         if(r.ok){esiBase=b;return r;}
         if(r.status===401||r.status===403)throw new Error('acceso denegado ('+r.status+')');
-        if(r.status===420||r.status===429){last=new Error('la API pidió esperar (límite de peticiones); prueba en un minuto');break;}
+        if(r.status===420||r.status===429){const h=Number(r.headers.get('Retry-After'));const wait=Number.isFinite(h)&&h>0?Math.min(h*1000,60000):Math.min(2000*Math.pow(2,tryN),16000);last=new Error('la API pidió esperar (límite de peticiones)');await sleep(wait);break;}
         last=new Error('respondió '+r.status);
         if(r.status===404||r.status===400)continue; // otra base
       }catch(e){if(/denegado/.test(e.message))throw e;last=e;}
@@ -427,7 +427,7 @@ async function esiFetch(path,opt){
 }
 // v105: hasta 10 items a la vez (cada uno pide libro, tipo e historial en paralelo). ESI usa HTTP/2,
 // así que muchas peticiones comparten una sola conexión; si ESI pide esperar (420/429) se avisa igual que antes.
-const ESI_POOL=8; // v1.0.49: 8 items a la vez (cada uno pide 3 cosas en paralelo); con los reintentos de v1.0.46 es estable y casi el doble de rápido que 4
+const ESI_POOL=4; // Evitar ráfagas excesivas: cada ítem puede consultar órdenes paginadas, volumen e historial.
 async function pool(list,n,fn){let i=0;await Promise.all(Array.from({length:Math.min(n,list.length)},async()=>{while(i<list.length){const k=i++;await fn(list[k],k);}}));}
 async function resolveIds(names){
   const miss=names.filter(n=>idCache[n.toLowerCase()]===undefined);
