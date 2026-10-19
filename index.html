@@ -3594,8 +3594,14 @@ const refreshMarketControls=()=>{
 document.getElementById('nullMarketMode')?.addEventListener('change',e=>{
   if(e.target.value!=='auto'&&!Object.hasOwn(NULL_MARKETS,e.target.value))return;
   marketChoice=e.target.value;try{localStorage.setItem(NULL_MARKET_KEY,marketChoice);}catch(_){}
-  refreshMarketControls();if(typeof refresh==='function')refresh();
+  refreshMarketControls();syncNullRouteLabels();if(typeof refresh==='function')refresh();
 });
+// Las etiquetas de ruta dependen del hub comercial, nunca de la refinería.
+function syncNullRouteLabels(){
+  const from=document.getElementById('rtFrom'),to=document.getElementById('rtTo');
+  if(from)from.textContent=S.flip?'Jita':nullSystem();
+  if(to)to.textContent=S.flip?nullSystem():'Jita';
+}
 refreshMarketControls();
 
 // ================= Formato =================
@@ -5228,7 +5234,7 @@ function packCouriers(P){
   return out;
 }
 const DEST=()=>S.flip?nullSystem():'Jita';
-const destStation=()=>S.flip?($('cNullDest').value.trim()||'HY-RWO: Time Is A Flat Circle'):'Jita IV - Moon 4 - Caldari Navy Assembly Plant';
+const destStation=()=>S.flip?($('cNullDest').value.trim()||nullSystem()):'Jita IV - Moon 4 - Caldari Navy Assembly Plant';
 // v110: Contratos y Envío. Izquierda: un contrato a la vez (carrusel: flechas, puntos, teclado, deslizar).
 // Derecha: el envío a Jita con lo útil para decidir. Solo se pinta con la sección abierta (rendimiento).
 let czIdx=0,czCards=[],lastCs=[];
@@ -5305,7 +5311,7 @@ function paintContracts(P){
 // Derecha: envío a Jita
 function paintShip(P,cs){
   const b=$('shBody');b.textContent='';
-  $('shTitle').textContent=(S.lang==='en'?'Shipping to ':'Envío a ')+DEST();$('shRoute').textContent=(S.flip?'Jita 4-4 → HY-RWO':'HY-RWO → Jita 4-4')+' · SIGMA Freight';
+  $('shTitle').textContent=(S.lang==='en'?'Shipping to ':'Envío a ')+DEST();$('shRoute').textContent=(S.flip?'Jita 4-4 → '+nullSystem():nullSystem()+' → Jita 4-4')+' · SIGMA Freight';
   $('fBase').textContent=fmt(C.base);$('fPerM3').textContent=C.perM3.toLocaleString('en-US')+' ISK';$('fCollPct').textContent=pct(C.collPct)+'%';$('fMaxVol').textContent=fmtV(C.maxVol);
   if(!C.shipOn){
     const sh=P.rows.filter(r=>r.best&&SHIPS[r.best]&&r.ship[r.best]),V=sh.reduce((a,r)=>a+r.ship[r.best].v,0),Cc=sh.reduce((a,r)=>a+r.ship[r.best].c,0);
@@ -5933,7 +5939,7 @@ function syncShipSwitch(){$('shipTxt').textContent=S.lang==='en'?(SH()?'Ship':'D
 function setFlip(on){
   S.flip=!!on;S.planMode=null;czIdx=0;C.shipOn=true;$('shipOn').checked=true; // cambiar de ruta vuelve a contar el courier
   SHIPS=S.flip?{fN:1}:{jOrd:1,jInst:1,rJita:1};
-  $('bFlip').setAttribute('aria-pressed',String(S.flip));$('rtFrom').textContent=S.flip?'Jita':'HY-RWO';$('rtTo').textContent=S.flip?'HY-RWO':'Jita';
+  $('bFlip').setAttribute('aria-pressed',String(S.flip));syncNullRouteLabels();
   $('rtM').hidden=!S.flip;syncShipSwitch();document.body.classList.toggle('is-flip',S.flip);
   if(S.items.length)refreshNow();
 }
@@ -7730,9 +7736,9 @@ stRestore();syncDeps();brokerNote();buildOreSelect();readBB();syncLots();refresh
     if(!session)return;
     try{
       const info=await fetch('https://esi.evetech.net/latest/characters/'+session.id+'/?compatibility_date=2026-10-01').then(r=>{if(!r.ok)throw Error('Character ESI '+r.status);return r.json();});
-      if(!info.alliance_id){marketAlliance='';refreshMarketControls();return;}
+      if(!info.alliance_id){marketAlliance='';refreshMarketControls();syncNullRouteLabels();return;}
       const alliance=await fetch('https://esi.evetech.net/latest/alliances/'+info.alliance_id+'/?compatibility_date=2026-10-01').then(r=>{if(!r.ok)throw Error('Alliance ESI '+r.status);return r.json();});
-      marketAlliance=alliance.name||'';refreshMarketControls();
+      marketAlliance=alliance.name||'';refreshMarketControls();syncNullRouteLabels();
       if(marketChoice==='auto'&&typeof refresh==='function')refresh();
     }catch(e){console.warn('Unable to detect market affiliation',e);}
   }
@@ -7753,7 +7759,7 @@ stRestore();syncDeps();brokerNote();buildOreSelect();readBB();syncLots();refresh
       if(typeof refresh==='function')refresh();
     }catch(err){status('No se pudieron sincronizar las skills: '+err.message);}
   }
-  $e('eveLogout').addEventListener('click',()=>{clearSaved();session=null;marketAlliance='';refreshMarketControls();menu.hidden=true;button.setAttribute('aria-expanded','false');refreshUI();status('Desconectado. Se conservan tus ajustes manuales.');});
+  $e('eveLogout').addEventListener('click',()=>{clearSaved();session=null;marketAlliance='';refreshMarketControls();syncNullRouteLabels();menu.hidden=true;button.setAttribute('aria-expanded','false');refreshUI();status('Desconectado. Se conservan tus ajustes manuales.');});
   (async()=>{const u=new URL(location.href),code=u.searchParams.get('code'),state=u.searchParams.get('state');
     if(!code&&!u.searchParams.has('error')){if(stored()){try{await renew();if(session){await syncAlliance();await sync();}}catch(err){console.warn('EVE session restore failed',err);}}return;}
     u.searchParams.delete('code');u.searchParams.delete('state');u.searchParams.delete('error');u.searchParams.delete('error_description');history.replaceState(null,'',u.pathname+u.search+u.hash);
