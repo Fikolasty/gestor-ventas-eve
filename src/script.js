@@ -1665,7 +1665,7 @@ function paintContracts(P){
   const dots=$('czDots');dots.textContent='';
   cards.forEach((c,i)=>{const d=el('button','cz-d '+c.cls,String(i+1));d.type='button';d.dataset.i=i;d.title='Contrato '+(i+1)+' · '+c.lab;d.setAttribute('aria-label',d.title);dots.append(d);});
   const tot=$('ctrTot');tot.textContent='';tot.hidden=!cards.length;
-  if(!cards.length){$('ctrList').textContent='';$('ctrList').append(el('p','sh-none','Tu plan no necesita contratos: lo vendes con órdenes en Null o al instante.'));$('czNav').hidden=$('czDots').hidden=true;}
+  if(!cards.length){$('ctrList').textContent='';$('ctrList').append(el('p','sh-none','Tu plan no necesita contratos: lo vendes con órdenes en Null o al instante.'));$('czDots').hidden=true;}
   else{
     const add=(l,v,cls)=>{const d=el('div');d.append(el('span',null,l),el('b','num '+(cls||''),v));tot.append(d);};
     add('Contratos',String(cards.length));
