@@ -4703,7 +4703,7 @@ function paintLot(r){
   const tb=u.pBody;tb.textContent='';const a=o.jita;
   const qdN=r.qd>=.0001?' · −'+pctQ(r.qd)+'% por cantidad':'';
   { // por unidad; "Te queda" = neto por unidad ya con taxes, broker y (en Jita) su parte del envío
-    const q=r.q||1,nu=k=>r.net[k]!=null?r.net[k]/q:null,jb=a&&a.buy!=null?fmtP(a.buy):'—',js=a&&a.sell!=null?fmtP(a.sell):'—',sys=(C.ref.name||'Null').split(' - ')[0].trim()||'Null';
+    const q=r.q||1,nu=k=>r.net[k]!=null?r.net[k]/q:null,jb=a&&a.buy!=null?fmtP(a.buy):'—',js=a&&a.sell!=null?fmtP(a.sell):'—',sys=nullSystem();
     const hd=el('tr','pr-h');['Dónde','Precio Unidad','Cómo se calcula','Precio Unidad Neto'].forEach((t,i)=>hd.append(el('th',i===1||i===3?'r':'',t)));tb.append(hd);
     const nullTxt=o.nullSeen?'Undercut de '+pct(C.under)+'% al precio que ves':(C.ice.on&&isIce(o.name)?iceNullTxt()+' (Jita Buy '+jb+')':nullBaseTxt(o.name)+' (Jita Buy '+jb+')');
     if(S.flip){
