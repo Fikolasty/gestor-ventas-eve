@@ -35,6 +35,27 @@ assert(sales.includes('function selectAppModule(name)'),'no se integraron pesta�
 assert(html.includes('PI · Espacio reservado'),'PI no debe activar calculos falsos');
 
 
+
+// v1.0.83: resumen dinámico por plan y cantidad real de rutas sin texto fijo ni datos globales.
+const introCode=sales.match(/function planIntroData\(P\)\{[\s\S]*?\n\}(?=\nfunction paintVerdict)/);
+assert(introCode,'el resumen debe calcularse a partir del plan activo');
+const planIntro=vm.runInNewContext(introCode[0]+'\nplanIntroData;',{
+  modeName:m=>({'auto':'Plan Óptimo','jOrd':'Todo a Jita (Orden)','bb':'Todo al Buyback'})[m||'auto']||m
+});
+const rows=[{best:'jOrd'},{best:'jOrd'},{best:'bb'},{best:null}];
+const optIntro=planIntro({mode:null,rows});
+assert.equal(optIntro.name,'Plan Óptimo');
+assert.match(optIntro.description,/3 ítems con precio.*2 rutas de venta/);
+const jitaIntro=planIntro({mode:'jOrd',rows});
+assert.equal(jitaIntro.name,'Todo a Jita (Orden)');
+assert.match(jitaIntro.description,/2 de los 3 ítems.*otros 1/);
+const bbIntro=planIntro({mode:'bb',rows});
+assert.match(bbIntro.description,/1 de los 3 ítems.*otros 2/);
+assert.match(planIntro({mode:'jOrd',rows:[{best:'jOrd'}]}).description,/1 ítem con precio sigue/);
+assert(!sales.includes("'Según el Plan Óptimo, '"),'no mantener el texto fijo anterior');
+assert(sales.includes("el('strong','v-plan-name',intro.name)"),'el nombre del plan debe resaltarse al actualizar la vista');
+assert(html.includes('.v-plan-name{font-weight:750;color:'),'falta color del plan elegido');
+
 // v1.0.82: maquetación v6, controles únicos y limpieza de cachés.
 assert(html.indexOf('id="verdict"')<html.indexOf('id="pSum"') &&
        html.indexOf('id="pSum"')<html.indexOf('id="deep"'),'plan y resumen deben ser una sola sección');
