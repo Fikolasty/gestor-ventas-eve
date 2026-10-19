@@ -1702,6 +1702,18 @@ html.light #verdict .v-plan-name{color:#ad4b27}
 #verdict .ov-hd .mm-section-head{margin-bottom:0!important}
 @media(max-width:800px){#verdict .ov-hd{grid-template-columns:minmax(0,1fr)!important;row-gap:8px!important}#verdict .ov-hd .mm-net{grid-column:1;grid-row:2;text-align:left}#verdict .ov-hd .v-cap{grid-row:3}}
 
+
+/* Shared compact disclosure row for the steps breakdown. */
+#bDeep.step-toggle{width:100%;min-height:76px;display:flex!important;flex-direction:row!important;align-items:center!important;gap:14px;text-align:left;padding:14px 18px;border:1px solid rgba(217,119,87,.65);border-left:3px solid var(--ion);border-radius:12px;background:rgba(25,23,22,.87)}
+#bDeep .step-toggle-icon{display:block;flex:0 0 21px;width:21px;height:21px;color:var(--ion)}
+#bDeep .step-toggle-copy{display:flex;flex:1 1 auto;min-width:0;flex-direction:column;gap:5px}
+#bDeep .step-toggle-copy strong{color:var(--txt);font-size:.96rem;font-weight:750;line-height:1.25}
+#bDeep .step-toggle-copy small{color:var(--mut);font-size:.82rem;line-height:1.4}
+#bDeep .step-toggle-chevron{display:block;flex:0 0 9px;width:9px;height:9px;margin-right:5px;border-right:2px solid var(--ion);border-bottom:2px solid var(--ion);transform:rotate(45deg);transition:transform .18s ease}
+#bDeep[aria-expanded="true"] .step-toggle-chevron{transform:rotate(225deg)}
+#bDeep:focus-visible{outline:2px solid var(--ion);outline-offset:3px}
+@media(max-width:600px){#bDeep.step-toggle{padding:12px;min-height:67px}}
+
 </style>
 <script>/* v1.0.16: aplica el tema guardado antes de pintar (sin parpadeo). Por defecto: Dark. */try{var g=JSON.parse(localStorage.getItem('gestorVentas.ajustes.v1')||'null');if(g&&g.ui){if(g.ui.light)document.documentElement.classList.add('light');}}catch(e){}</script>
 </head>
@@ -1907,7 +1919,7 @@ Contraband Freight = no</textarea><small>Una regla por línea: Nombre = tax tota
       <div class="pk-tools" id="pkTools"></div>
       <div class="pk" id="pkOthers" role="group" aria-label="Otros planes" hidden></div></div>
     <!-- v1.0.50: justo debajo de los planes. Al abrir el desglose, los planes se pliegan y el desglose pasa a ser lo principal -->
-    <button type="button" class="more-btn" id="bDeep" aria-expanded="false" aria-controls="deep"><span>Consulta los destinos, precios y costes de cada paso.</span><b>Ver el desglose ▾</b></button>
+    <button type="button" class="more-btn step-toggle" id="bDeep" aria-expanded="false" aria-controls="deep"><span class="step-toggle-icon ic i-list" aria-hidden="true"></span><span class="step-toggle-copy"><strong>ABRIR PASOS A SEGUIR</strong><small>Destinos, precios y costes de cada paso.</small></span><span class="step-toggle-chevron" aria-hidden="true"></span></button>
   </section>
 
 </section>
