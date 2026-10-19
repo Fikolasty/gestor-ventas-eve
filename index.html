@@ -1568,6 +1568,9 @@ html.light #verdict .v-plan-name{color:#ad4b27}
 .pk-opp-note{color:var(--dim);font-size:.76rem;line-height:1.5;margin:7px 0 0}
 @media(max-width:520px){.pk-opp-grid{grid-template-columns:1fr}}
 
+
+.brand[data-go-home],.hero .title[data-go-home]{cursor:pointer}
+.brand[data-go-home]:focus-visible,.hero .title[data-go-home]:focus-visible{outline:2px solid var(--ion);outline-offset:5px;border-radius:var(--r-sm)}
 /* ===== tema claro (generado desde el oscuro por light.py) ===== */
 html.light{--void:#e4e3dd;--hull:#e2e0da;--hull2:#e0ded8;--line:rgba(31,30,29,0.114);--line2:rgba(31,30,29,0.125);--txt:#1c1c1a;--mut:#54524d;--dim:#6c6a64;--ion:#413f3c;--blue:#a39d8b;--clay:#c96442;--thrust:#a67526;--gain:#418b62;--loss:#a92c23}
 html.light body::after{background:repeating-linear-gradient(180deg,rgba(31,30,29,0.011) 0 1px,transparent 1px 3px),
@@ -2727,7 +2730,7 @@ html.light #mining .mn-fit-fallback{border-color:rgba(40,100,150,.22);background
 <button type="button" class="side-fab" id="sideFab" aria-label="Abrir menú" title="Menú"><span class="ic i-panel" aria-hidden="true"></span></button>
 <div class="side-bd" id="sideBd" hidden></div>
 <header class="top">
-  <div class="brand"><span class="logo-s sig" aria-hidden="true"></span>SIGMA GRINDSET <small>EVE Online</small></div>
+  <div class="brand" role="button" tabindex="0" data-go-home title="Ir a Inicio" aria-label="Volver a Inicio"><span class="logo-s sig" aria-hidden="true"></span>SIGMA GRINDSET <small>EVE Online</small></div>
   <!-- v1.0.62: anuncio tipo ticker (Skill Points gratis), en bucle; clic abre el enlace -->
   <button type="button" class="ticker" data-link="referral" aria-label="Gratis: usa mi enlace para recibir 1 Millón de Skill Points"><span class="tk-track"><span class="tk-i"><span class="ref-tag">Gratis</span>Usa mi enlace para recibir <b>1 Millón de Skill Points</b> gratis ↗</span><span class="tk-i" aria-hidden="true"><span class="ref-tag">Gratis</span>Usa mi enlace para recibir <b>1 Millón de Skill Points</b> gratis ↗</span><span class="tk-i" aria-hidden="true"><span class="ref-tag">Gratis</span>Usa mi enlace para recibir <b>1 Millón de Skill Points</b> gratis ↗</span><span class="tk-i" aria-hidden="true"><span class="ref-tag">Gratis</span>Usa mi enlace para recibir <b>1 Millón de Skill Points</b> gratis ↗</span></span></button>
   
@@ -2735,7 +2738,7 @@ html.light #mining .mn-fit-fallback{border-color:rgba(40,100,150,.22);background
 </header>
 
 <section class="hero">
-  <div class="title">
+  <div class="title" role="button" tabindex="0" data-go-home title="Ir a Inicio" aria-label="Volver a Inicio">
     <span class="logo-l vg" role="img" aria-label="Logo de Vanguardia DR"></span>
     <div><h1>Market Moves+</h1><p class="tagline">Herramienta para gestionar tus planes de mercado.</p></div>
   </div>
