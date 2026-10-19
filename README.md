@@ -20,6 +20,14 @@ Descuenta los taxes, el Broker y el envío con SIGMA Freight.
 Antes, revisa **Ajustes** (el engranaje del menú): tus skills, los taxes, el Buyback, la refinería y el envío.
 Lo más exacto es copiar los % de *Broker's fee* y *Sales tax* que muestra la ventana de venta del juego.
 
+### Mercados Null configurables
+
+En **Ajustes** puedes seleccionar automáticamente por alianza del personaje autenticado o fijar manualmente **HY-RWO (SIGMA)**, **UALX-3 (BRAVE)** o **C-J6MT (Goonswarm Federation)**. La ruta y sus textos usan el mercado seleccionado; la refinería se configura de forma independiente.
+
+**Importante:** los precios estimados de venta Null siguen siendo **modelos basados en cotizaciones de Jita y los porcentajes de Ajustes**, no órdenes del mercado de esas estaciones obtenidas de ESI. Cambiar el hub **no significa** que se hayan consultado precios de su mercado local. Confirma las órdenes dentro del juego antes de comerciar.
+
+La versión 1.0.84 integra validación sintáctica y construcción automática de `index.html` en GitHub Actions. Para construir localmente, usa `python3 build.py 1.0.84`.
+
 ### Funciones principales
 - **Resumen de ruta reactivo**: muestra el nombre del plan activo resaltado y cómo se distribuyen realmente los ítems entre rutas, sin texto fijo; Tasación usa el estilo de encabezados de sección.
 - **Interfaz v6 unificada**: resumen financiero y selector de planes en un mismo panel; haz clic en el plan actual para cambiarlo. Pestañas a la derecha, encabezados y tamaños alineados.
