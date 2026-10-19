@@ -1966,6 +1966,37 @@ select{appearance:none;-webkit-appearance:none;padding-right:30px!important;back
  .lot-body>.facts{grid-template-columns:minmax(0,1fr)!important}
 }
 
+
+/* v1.0.86: barra principal única, con controles originales y switches direccionales. */
+body,body.side-c{padding-left:0!important}
+#side,#sideFab,#sideBd{display:none!important}
+#mmTabs.mm-modnav{gap:10px!important;flex-wrap:wrap;justify-content:flex-start;padding:9px 14px}
+#mmTabs .eve-identity{margin-right:auto}
+#mmTabs .mm-quick{display:flex;align-items:center;gap:4px}
+#mmTabs .mm-icon-action,#mmTabs .mm-mod{display:inline-grid!important;place-items:center;width:42px;min-width:42px!important;height:40px;min-height:40px;padding:0!important;border:1px solid transparent;border-radius:9px;background:transparent;cursor:pointer;color:var(--mut)}
+#mmTabs .mm-icon-action .ic,#mmTabs .mm-mod .ic{width:19px;height:19px;margin:0}
+#mmTabs .mm-icon-action:hover,#mmTabs .mm-mod:hover{background:rgba(217,119,87,.12);color:var(--txt)}
+#mmTabs .mm-icon-action[aria-pressed=true],#mmTabs .mm-mod[aria-selected=true]{background:rgba(217,119,87,.16);border-color:rgba(217,119,87,.4);color:var(--ion)}
+#mmTabs .mm-modgroup{gap:2px;padding:3px}
+#mmTabs .mm-route{display:flex;align-items:center;gap:5px;border:0;background:transparent;min-width:0;margin:0}
+body.side-c #mmTabs .mm-route .route-b>span{display:inline-flex!important}
+#mmTabs .mm-route .route-b{display:inline-flex!important;position:relative;align-items:center;justify-content:space-between;gap:7px;width:188px;height:40px;padding:4px 9px!important;border-radius:999px;border:1px solid rgba(222,220,209,.25);background:rgba(14,14,14,.52)!important;box-shadow:none!important;font:.75rem var(--f-ui);font-weight:650!important;isolation:isolate}
+#mmTabs .mm-route .route-b .route-ic,#mmTabs .mm-route .route-b .route-from,#mmTabs .mm-route .route-b .route-ar,#mmTabs .mm-route .route-b .route-to{display:none!important}
+#mmTabs .mm-route .mm-route-left,#mmTabs .mm-route .mm-route-right{position:relative;z-index:1;white-space:nowrap;transition:color .16s}
+#mmTabs .mm-route .mm-route-left{color:var(--txt)}
+#mmTabs .mm-route .mm-route-right{color:var(--mut)}
+#mmTabs .mm-route .mm-route-knob{position:absolute;left:5px;top:4px;width:calc(50% - 7px);height:30px;border-radius:999px;background:#54504b;transition:transform .18s,background .18s;z-index:0}
+#mmTabs .mm-route .route-b[aria-pressed=true]{border-color:rgba(217,119,87,.55)!important;background:rgba(217,119,87,.12)!important}
+#mmTabs .mm-route .route-b[aria-pressed=true] .mm-route-knob{transform:translateX(calc(100% + 4px));background:var(--clay,#d97757)}
+#mmTabs .mm-route .route-b[aria-pressed=true] .mm-route-right{color:#fff}
+#mmTabs .mm-route .route-b[aria-pressed=true] .mm-route-left{color:var(--mut)}
+#mmTabs .mm-route #shipLab,#mmTabs .mm-route #rtM{margin:0}
+#mmTabs .mm-theme{display:inline-flex;align-items:center;gap:7px;margin-left:auto}
+#mmTabs .mm-theme input:checked+.sw-t{background:var(--clay);border-color:var(--clay)}
+#mmTabs .mm-theme input:not(:checked)+.sw-t{background:#3a3937}
+html.light #mmTabs .mm-icon-action,html.light #mmTabs .mm-mod{color:#4b4742}
+@media(max-width:900px){#mmTabs .eve-identity{margin-right:0}#mmTabs .mm-theme{margin-left:0}#mmTabs.mm-modnav{justify-content:center}#mmTabs .mm-route .route-b{width:175px}}
+
 </style>
 <script>/* v1.0.16: aplica el tema guardado antes de pintar (sin parpadeo). Por defecto: Dark. */try{var g=JSON.parse(localStorage.getItem('gestorVentas.ajustes.v1')||'null');if(g&&g.ui){if(g.ui.light)document.documentElement.classList.add('light');}}catch(e){}</script>
 </head>
@@ -2017,8 +2048,8 @@ select{appearance:none;-webkit-appearance:none;padding-right:30px!important;back
     <button type="button" id="navHome" class="mm-home" title="HOME" aria-label="Volver al inicio"><span class="ic i-home" aria-hidden="true"></span></button>
     <div id="eveIdentity" class="eve-identity"><button type="button" id="eveIdentityButton" class="eve-identity-button" aria-expanded="false" aria-controls="eveIdentityMenu"><img id="evePortrait" alt="" hidden><span id="evePilotName">Conectar EVE</span><span class="eve-identity-arrow" aria-hidden="true" hidden></span></button><div id="eveIdentityMenu" class="eve-identity-menu" hidden><button type="button" id="eveLogout" hidden>Desconectar</button><span id="eveLoginStatus" role="status" class="eve-login-status" hidden></span></div></div>
     <div class="mm-modgroup" role="presentation">
-    <button type="button" class="mm-mod on" data-mm-module="ventas" role="tab" aria-controls="salesBody" aria-selected="true" id="mmTabVentas">Ventas</button>
-    <button type="button" class="mm-mod" data-mm-module="mining" role="tab" aria-controls="mining" aria-selected="false" id="mmTabMining">Minería</button>
+    <button type="button" class="mm-mod on" data-mm-module="ventas" role="tab" aria-controls="salesBody" aria-selected="true" id="mmTabVentas" title="Ventas" aria-label="Ventas"><span class="ic i-list" aria-hidden="true"></span></button>
+    <button type="button" class="mm-mod" data-mm-module="mining" role="tab" aria-controls="mining" aria-selected="false" id="mmTabMining" title="Minería" aria-label="Minería"><span class="ic i-ship" aria-hidden="true"></span></button>
     <!-- PI temporalmente fuera de navegación; conservar para reactivar más adelante.
     <button type="button" class="mm-mod" data-mm-module="pi" role="tab" aria-controls="pi" aria-selected="false" id="mmTabPi">Industria Planetaria · PI</button>
     -->
