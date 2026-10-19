@@ -1824,6 +1824,13 @@ select{appearance:none;-webkit-appearance:none;padding-right:30px!important;back
 #pCtr .discord-content{padding:14px;border:1px solid var(--line);border-radius:var(--r-md);background:var(--panel,#252523);flex:1;min-width:0}
 @media(max-width:860px){#pCtr .ce{grid-template-columns:minmax(0,1fr)}}
 @media(max-width:540px){#pCtr .ce-l>.ce-h,#pCtr .discord-side>.ce-h{padding:0 2px;gap:6px}#pCtr .discord-side>.ce-h .sum{font-size:.72rem}}
+
+/* Listado: acción de apertura siempre pegada al chevron derecho. */
+#ledger>summary{display:flex!important;align-items:center!important;width:100%;gap:10px!important}
+#ledger>summary .status.cta{margin-left:auto!important;margin-right:14px!important;flex:0 0 auto!important;order:98!important;text-align:right!important}
+#ledger>summary::after{order:99!important;flex:0 0 9px!important;margin-left:0!important;margin-right:5px!important}
+#ledger>summary .cnt{margin-left:0!important;flex:0 0 auto!important}
+@media(max-width:650px){#ledger>summary .status.cta{margin-left:auto!important;margin-right:8px!important}}
 </style>
 <script>/* v1.0.16: aplica el tema guardado antes de pintar (sin parpadeo). Por defecto: Dark. */try{var g=JSON.parse(localStorage.getItem('gestorVentas.ajustes.v1')||'null');if(g&&g.ui){if(g.ui.light)document.documentElement.classList.add('light');}}catch(e){}</script>
 </head>
