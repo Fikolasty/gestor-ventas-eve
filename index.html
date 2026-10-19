@@ -7,7 +7,7 @@
 <meta name="referrer" content="no-referrer">
 <title>Market Moves+ · SIGMA GRINDSET</title>
 <style>
-/* ================= Market Moves+ v1.0.88 =================
+/* ================= Market Moves+ v1.0.89 =================
    Paleta: azul de base, naranja = acción, verde/rojo = ganancia/pérdida.
    Sin backdrop-filter: el vidrio se finge con rgba + bordes. */
 *{box-sizing:border-box;margin:0;padding:0}
@@ -2036,6 +2036,25 @@ html.light #mmTabs .mm-icon-action,html.light #mmTabs .mm-mod{color:#4b4742}
  .lot-body>.lot-analysis .opt-v{font-size:.82rem}
 }
 
+
+/* v1.0.89 — compact navigation final corrections */
+#mmTabs.mm-modnav{display:flex!important;align-items:center!important;justify-content:flex-start!important;flex-wrap:wrap;column-gap:12px}
+#mmTabs .eve-identity{margin-right:auto!important}
+#mmTabs .mm-right-actions{display:flex;align-items:center;justify-content:flex-end;gap:10px;margin-left:auto;min-width:0}
+#mmTabs .mm-right-actions .mm-quick{display:flex;align-items:center;gap:4px}
+#mmTabs .mm-right-actions .mm-theme{margin:0}
+#mmTabs .mm-route .route-b{display:grid!important;grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important;gap:0!important;justify-items:center;align-items:center;overflow:hidden;box-sizing:border-box;padding:4px!important;width:204px;min-height:40px}
+#mmTabs .mm-route .mm-route-left,#mmTabs .mm-route .mm-route-right{display:block!important;position:relative;z-index:1;text-align:center;font-size:.82rem;white-space:nowrap;pointer-events:none}
+#mmTabs .mm-route .mm-route-left{grid-column:1;grid-row:1}
+#mmTabs .mm-route .mm-route-right{grid-column:2;grid-row:1}
+#mmTabs .mm-route .mm-route-knob{display:block!important;position:absolute;left:4px;top:4px;width:calc(50% - 4px);height:calc(100% - 8px);pointer-events:none}
+#mmTabs .mm-route .route-b[aria-pressed=true] .mm-route-knob{transform:translateX(100%)}
+.top>.top-guide-action{display:grid;place-items:center;flex:0 0 38px;width:38px;height:38px;border:1px solid rgba(222,220,209,.22);border-radius:9px;margin-left:10px;color:var(--ion);background:rgba(24,23,22,.62);cursor:pointer}
+.top>.top-guide-action:hover{background:rgba(217,119,87,.13);color:var(--txt)}
+.top>.top-guide-action .ic{width:19px;height:19px;margin:0}
+@media(max-width:1020px){#mmTabs .mm-right-actions{flex-wrap:wrap;justify-content:flex-end}#mmTabs .eve-identity{margin-right:0!important}}
+@media(max-width:720px){#mmTabs .mm-right-actions{width:100%;margin-left:0;justify-content:center}#mmTabs .mm-route .route-b{width:188px}}
+
 /* ===== tema claro (generado desde el oscuro por light.py) ===== */
 html.light{--void:#e4e3dd;--hull:#e2e0da;--hull2:#e0ded8;--line:rgba(31,30,29,0.114);--line2:rgba(31,30,29,0.125);--txt:#1c1c1a;--mut:#54524d;--dim:#6c6a64;--ion:#413f3c;--blue:#a39d8b;--clay:#c96442;--thrust:#a67526;--gain:#418b62;--loss:#a92c23}
 html.light body::after{background:repeating-linear-gradient(180deg,rgba(31,30,29,0.011) 0 1px,transparent 1px 3px),
@@ -2551,6 +2570,8 @@ html.light #mmTabs .mm-theme input:not(:checked)+.sw-t{background:#dfddd7}
 html.light.light #mmTabs .mm-icon-action,html.light.light #mmTabs .mm-mod{color:#dcd9d2}
 html.light .plan-name-accent{color:var(--ion,#a35629)}
 html.light .item-name-accent{color:var(--gain,#39935f)}
+html.light .top>.top-guide-action{border:1px solid rgba(31,30,29,0.209);background:rgba(240,237,229,0.62)}
+html.light .top>.top-guide-action:hover{background:rgba(217,119,87,0.163)}
 /* ajustes a mano del tema claro */
 html.light body{background:#e6e3da;color:#1f1e1d}
 html.light body::before{opacity:.12;filter:grayscale(.35) brightness(1.1)}
@@ -3614,13 +3635,13 @@ Contraband Freight = no</textarea><small>Una regla por línea: Nombre = tax tota
 <button type="button" class="totop" id="toTop" aria-label="Volver arriba" title="Volver arriba (Inicio)" hidden><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 14l6-6 6 6"/></svg></button>
 <footer class="foot">
   <p class="foot-sec"><span class="ic i-lock" aria-hidden="true"></span>Tu inventario no se guarda: al cerrar o recargar se borra. Solo tus Ajustes quedan en este navegador.</p>
-  <div class="foot-by">Creado por <b>Fiko McGivert</b> · Vanguardia DR · SIGMA GRINDSET · <span class="ver">v1.0.88</span></div>
+  <div class="foot-by">Creado por <b>Fiko McGivert</b> · Vanguardia DR · SIGMA GRINDSET · <span class="ver">v1.0.89</span></div>
 </footer>
 
 <script>
 'use strict';
 /* ============================================================
-   Market Moves+ v1.0.88 — SIGMA GRINDSET / Vanguardia DR
+   Market Moves+ v1.0.89 — SIGMA GRINDSET / Vanguardia DR
    Flujo:  pegado → items → carga (ESI: precios, volúmenes, historial) → verificación → plan → vista
      1. Pegado      parsePaste(): parser posicional de columnas de EVE (Name · Quantity · … · Volume · Est. Price).
      2. Carga       esiItems(): trae todo lo que falta; mientras carga, refresh() NO pinta (S.loading).
