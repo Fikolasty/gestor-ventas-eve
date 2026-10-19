@@ -2670,6 +2670,14 @@ try{const v=getComputedStyle(document.documentElement).getPropertyValue('--sigma
 const I18N_EN=/*__I18N__*/{};
 let I18N_RE=null,i18nObs=null,i18nBusy=false,TXT0=new WeakMap(),ATT0=new WeakMap();
 const I18N_ATTR=['title','aria-label','placeholder'];
+// Report untranslated UI content during development without modifying the user's data.
+window.mmI18nAudit=()=>{
+  const issues=[];
+  const walker=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT);
+  const marker=/\\b(?:para|mediante|conviene|recibirías|restablecer|reprocesar|impuestos|habilidades|cuándo|podrías|tienes|comparación|desglose|ganarías|transportar|algunas|selecciona|haz clic|cambiar|siguientes|siguiente|opción|órdenes|envío|envías|ítems|estimado)\\b/i;
+  let n;while((n=walker.nextNode())){if(i18nSkip(n))continue;const text=n.nodeValue.trim();if(text&&marker.test(text))issues.push({text:text.slice(0,240),section:n.parentElement.closest('#mining,#pi,#settings,#salesBody,#guide')?.id||'shared'});}
+  console.table(issues);return issues;
+};
 function i18nRe(){if(I18N_RE)return I18N_RE;
   const esc=k=>k.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'),L='A-Za-zÁÉÍÓÚÜÑáéíóúüñ';
   const keys=Object.keys(I18N_EN).sort((a,b)=>b.length-a.length).map(k=>{let p=esc(k);
@@ -2688,7 +2696,16 @@ function i18nValue(m){
   if(letters.length>1&&letters===letters.toLocaleUpperCase('es'))return t.toLocaleUpperCase('en');
   return t;
 }
-const trS=s=>(s&&/[A-Za-zÁÉÍÓÚáéíóúñÑ¿¡]/.test(s))?s.replace(i18nRe(),i18nValue):s;
+// Translate a complete message first. Fragment translation is only a compatibility fallback.
+const trS=s=>{
+  if(!s||!/[A-Za-zÁÉÍÓÚáéíóúñÑ¿¡]/.test(s))return s;
+  const m=String(s).match(/^(\\s*)([\\s\\S]*?)(\\s*)$/);
+  if(m){
+    const full=I18N_EN[m[2]]??I18N_LOWER[m[2].toLocaleLowerCase('es')];
+    if(full!==undefined)return m[1]+full+m[3];
+  }
+  return s.replace(i18nRe(),i18nValue);
+};
 function i18nSkip(n){const p=n.parentElement;return !p||p.closest('script,style,textarea,.lot-name,.no-tr');}
 function i18nText(n){if(i18nSkip(n))return;const v=n.nodeValue,o=TXT0.get(n);
   if(o!==undefined&&o.en===v)return; // ya traducido
