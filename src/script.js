@@ -1262,6 +1262,24 @@ function paintWhereSold(P,none){
        d.append(sw,el('b',null,v/tot>0&&v/tot<.005?'<1%':pct(v/tot)+'%'),el('small',null,(PLAN_L[k]||k)+' · '+n+(n===1?' item':' items')));lg.append(d);});
      box.append(bar,lg);}}
 }
+// El texto del resumen se deriva de los items y del modo activos, nunca del nombre de una ruta fija.
+function planIntroData(P){
+  const name=modeName(P.mode),mode=P.mode||'auto';
+  const active=P.rows.filter(r=>r.best);
+  const total=active.length,plural=total===1?'ítem':'ítems';
+  const routes=new Set(active.map(r=>r.best)).size;
+  const next=' Abajo puedes revisar los destinos y los pasos de venta.';
+  if(mode==='auto'){
+    return{name,description:'los '+total+' '+plural+' con precio se distribuyen entre '+routes+
+      (routes===1?' ruta de venta':' rutas de venta')+' según su rentabilidad y rapidez.'+next};
+  }
+  const selected=active.filter(r=>r.best===mode).length,other=total-selected;
+  if(!other)return{name,description:'los '+total+' '+plural+' con precio siguen la ruta seleccionada.'+next};
+  if(!selected)return{name,description:'tus '+total+' '+plural+
+    ' con precio utilizan otras rutas disponibles porque esta opción no se aplica a todo el lote.'+next};
+  return{name,description:selected+' de los '+total+' '+plural+' con precio siguen este plan y los otros '+
+    other+' conservan su mejor alternativa disponible.'+next};
+}
 function paintVerdict(P){
   const has=S.items.length>0;$('verdict').hidden=!has;$('ledger').hidden=!has;$('lCount').textContent=has?'· '+S.items.length+(S.items.length>1?' items':' item'):'';
   const missing=S.items.filter(o=>o.qty>0&&!(o.jita&&(o.jita.topBuy!=null||o.jita.topSell!=null||o.jita.buy!=null||o.jita.sell!=null))).length;
@@ -1289,12 +1307,13 @@ function paintVerdict(P){
   {const fa=!P.mode&&P.rows.some(r=>r.fast);
     $('vTitle').textContent=P.mode?'TU RUTA DE VENTA':'LA MEJOR RUTA DE VENTA';
     if(fa&&$('vWhat').textContent)$('vWhat').textContent+=' · por rapidez';
-    const route=$('vWhat').textContent.replace(/ · por rapidez$/,'');
-    $('vCap').textContent=none?'Estamos esperando los precios de Jita para calcular tu ruta.':
-      P.mode?'Elegiste '+modeName(P.mode)+'. Este plan te permite '+(route?route.toLowerCase():'vender tu lote')+
-        '. Aquí ves cuánto recibirías; más abajo encontrarás cada paso con sus items, destinos y precios.':
-      'Según el Plan Óptimo, '+(route?route.toLowerCase():'la combinación de rutas seleccionadas')+
-        ' es la alternativa recomendada para tu lote. Revisa cuánto recibirías y consulta las instrucciones paso a paso más abajo.';
+    const cap=$('vCap');
+    cap.replaceChildren();
+    if(none){cap.textContent='Estamos esperando los precios de Jita para calcular tu ruta.';}
+    else{
+      const intro=planIntroData(P);
+      cap.append('Con ',el('strong','v-plan-name',intro.name),', ',intro.description);
+    }
   }
   lastP=P;
   paintWhereSold(P,none);
