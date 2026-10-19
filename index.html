@@ -1776,6 +1776,17 @@ html.light #verdict .v-plan-name{color:#ad4b27}
 #pCtr .discord-side .msg{max-width:100%;overflow:auto}
 #pCtr.no-discord #discordColumn{display:none}
 @media(max-width:860px){#pCtr .ce{grid-template-columns:minmax(0,1fr)}#pCtr .discord-side .dests{grid-template-columns:minmax(0,1fr)}}
+
+/* Unificación de desplegables: chevron de trazo fino, 10 px, gira al abrir. */
+details.panel>summary h2::before,.mn details>summary::before{content:""!important;display:none!important}
+details.panel>summary, .mn details>summary{position:relative}
+details.panel>summary:not(:has(.fold-chevron))::after,.mn details>summary::after{content:""!important;display:block;flex:none;width:9px;height:9px;border-right:2px solid var(--ion);border-bottom:2px solid var(--ion);transform:rotate(45deg);transition:transform .18s ease;margin-left:auto;margin-right:7px}
+details.panel[open]>summary:not(:has(.fold-chevron))::after,.mn details[open]>summary::after{transform:rotate(225deg)}
+#pExtra details.fold>summary .fold-chevron,#bDeep .step-toggle-chevron{width:9px!important;height:9px!important;border-right:2px solid var(--ion)!important;border-bottom:2px solid var(--ion)!important;flex:0 0 9px}
+#pk>.pk-o::after{content:""!important;width:9px;height:9px;border-right:2px solid var(--ion);border-bottom:2px solid var(--ion);font-size:0!important;transform:translateY(-65%) rotate(45deg)!important}
+#pk>.pk-o[aria-expanded=true]::after{transform:translateY(-30%) rotate(225deg)!important}
+.lot-row .chev,.lot .chev{font-size:0!important;display:inline-block;width:9px;height:9px;border-right:2px solid var(--ion);border-bottom:2px solid var(--ion);transform:rotate(45deg);transition:transform .18s ease}
+select{appearance:none;-webkit-appearance:none;padding-right:30px!important;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23c3bcb1' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E")!important;background-repeat:no-repeat!important;background-position:right 9px center!important;background-size:16px!important}
 /* ===== tema claro (generado desde el oscuro por light.py) ===== */
 html.light{--void:#e4e3dd;--hull:#e2e0da;--hull2:#e0ded8;--line:rgba(31,30,29,0.114);--line2:rgba(31,30,29,0.125);--txt:#1c1c1a;--mut:#54524d;--dim:#6c6a64;--ion:#413f3c;--blue:#a39d8b;--clay:#c96442;--thrust:#a67526;--gain:#418b62;--loss:#a92c23}
 html.light body::after{background:repeating-linear-gradient(180deg,rgba(31,30,29,0.011) 0 1px,transparent 1px 3px),
@@ -2931,6 +2942,11 @@ html.light #mining .mn-fit-fallback{border-color:rgba(40,100,150,.22);background
 #mining .mn-fit-ship-tab:focus-visible{outline:2px solid var(--ion);outline-offset:2px}
 #mining .mn-fit-ship-panels>.mn-fit-card[hidden]{display:none!important}
 @media(max-width:700px){#mining .mn-fit-ship-tabs{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:thin}#mining .mn-fit-ship-tab{flex:none;white-space:nowrap}}
+
+/* Minería: mismo chevron que Ventas y Ajustes en todos los details. */
+.mn details>summary::before{content:none!important;display:none!important}
+.mn details>summary::after{content:"";display:block;flex:none;width:9px;height:9px;border-right:2px solid var(--ion);border-bottom:2px solid var(--ion);margin-left:auto;margin-right:7px;transform:rotate(45deg);transition:transform .18s ease}
+.mn details[open]>summary::after{transform:rotate(225deg)}
 </style>
 <script>/* v1.0.16: aplica el tema guardado antes de pintar (sin parpadeo). Por defecto: Dark. */try{var g=JSON.parse(localStorage.getItem('gestorVentas.ajustes.v1')||'null');if(g&&g.ui){if(g.ui.light)document.documentElement.classList.add('light');}}catch(e){}</script>
 </head>
@@ -3374,7 +3390,7 @@ const sgn=v=>v==null||isNaN(v)?'':v>0?'pos':v<0?'neg':'';
 function setText(el,t,cls){el.textContent=t;if(cls!==undefined)el.className=cls;}
 function status(id,msg,cls){const s=$(id);s.textContent=msg;s.className='status'+(cls?' '+cls:'');}
 // v1.0.51: el resumen de Listado de Items Registrados funciona como botón: Ver los N items ▾ / Ocultar los items ▴
-function ledgerCta(){const n=S.items.length;if(!n)return;status('esiStatus',$('ledger').open?'Ocultar los items ▴':'Ver los '+n+(n===1?' item ▾':' items ▾'),'cta');}
+function ledgerCta(){const n=S.items.length;if(!n)return;status('esiStatus',$('ledger').open?'Ocultar los items':'Ver los '+n+(n===1?' item':' items'),'cta');}
 
 // ================= Mercado: tasas =================
 // Relist (bajar precio) = (1 − (0.5 + 0.06×ABR)) × broker% sobre el valor de la orden — EVE University
