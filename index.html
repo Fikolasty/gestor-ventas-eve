@@ -1642,6 +1642,7 @@ html.light #verdict .v-plan-name{color:#ad4b27}
 #stepHead .stp-balance-cell .neg{color:#e86b70}
 @media(max-width:680px){#stepHead .stp-balance{grid-template-columns:1fr;flex-basis:100%}}
 
+.i-planetary{--i:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22black%22%20stroke-width%3D%221.7%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Ccircle%20cx%3D%2212%22%20cy%3D%2212%22%20r%3D%226.5%22%2F%3E%3Cellipse%20cx%3D%2212%22%20cy%3D%2212%22%20rx%3D%2211%22%20ry%3D%224%22%20transform%3D%22rotate(-28%2012%2012)%22%2F%3E%3Ccircle%20cx%3D%2214%22%20cy%3D%229.5%22%20r%3D%221.3%22%20fill%3D%22black%22%20stroke%3D%22none%22%2F%3E%3C%2Fsvg%3E")}
 /* ===== tema claro (generado desde el oscuro por light.py) ===== */
 html.light{--void:#e4e3dd;--hull:#e2e0da;--hull2:#e0ded8;--line:rgba(31,30,29,0.114);--line2:rgba(31,30,29,0.125);--txt:#1c1c1a;--mut:#54524d;--dim:#6c6a64;--ion:#413f3c;--blue:#a39d8b;--clay:#c96442;--thrust:#a67526;--gain:#418b62;--loss:#a92c23}
 html.light body::after{background:repeating-linear-gradient(180deg,rgba(31,30,29,0.011) 0 1px,transparent 1px 3px),
@@ -2797,6 +2798,15 @@ html.light #mining .mn-fit-fallback{border-color:rgba(40,100,150,.22);background
     <button type="button" class="side-tg" id="sideTg" aria-expanded="true" aria-controls="side" title="Contraer menú"><span class="ic i-panel" aria-hidden="true"></span></button>
     <span class="side-t">Opciones</span>
   </div>
+  <div class="side-g"><span class="side-h">General</span>
+    <button type="button" class="side-i" id="sideHome" title="HOME · Volver al inicio sin borrar nada"><span class="ic i-home" aria-hidden="true"></span><span class="side-l">HOME</span></button>
+    <button type="button" class="side-i" data-panel="settings" title="Ajustes de habilidades, impuestos, precios, envío y Buyback"><span class="ic i-gear" aria-hidden="true"></span><span class="side-l">Ajustes</span></button>
+  </div>
+  <div class="side-g"><span class="side-h">Módulos</span>
+    <button type="button" class="side-i" data-side-module="ventas" title="Ventas"><span class="ic i-list" aria-hidden="true"></span><span class="side-l">Ventas</span></button>
+    <button type="button" class="side-i" data-side-module="mining" title="Minería"><span class="ic i-ship" aria-hidden="true"></span><span class="side-l">Minería</span></button>
+    <button type="button" class="side-i" data-side-module="pi" title="Industria Planetaria"><span class="ic i-planetary" aria-hidden="true"></span><span class="side-l">Industria Planetaria · PI</span></button>
+  </div>
   <div class="side-g"><span class="side-h">Cálculo</span>
   <div class="route" id="route">
     <button type="button" class="route-b" id="bFlip" aria-pressed="false" title="Ruta del lote. HY-RWO → Jita: vendes lo que tienes en Null. Jita → HY-RWO: llevas (o compras) en Jita y vendes en Null más caro. Clic para invertir.">
@@ -2805,16 +2815,8 @@ html.light #mining .mn-fit-fallback{border-color:rgba(40,100,150,.22);background
     <label class="route-m" id="rtM" hidden title="Margen de importación: cuánto más que Jita Sell cobras en HY-RWO (neto, ya con taxes)."><span class="rm-l">Margen</span><span class="rm-f"><span class="rm-s">+</span><input type="number" id="fImpM" min="0" step="0.5" value="15" inputmode="decimal" aria-label="Margen al vender en HY-RWO, % neto sobre Jita Sell"><span class="rm-s">%</span></span></label>
   </div>
   </div>
-  <div class="side-g"><span class="side-h">Módulos</span>
-<button type="button" class="side-i" data-side-module="ventas" title="Ventas"><span class="ic i-list" aria-hidden="true"></span><span class="side-l">Ventas</span></button>
-<button type="button" class="side-i" data-side-module="mining" title="Minería"><span class="ic i-rock" aria-hidden="true"></span><span class="side-l">Minería</span></button>
-<button type="button" class="side-i" data-side-module="pi" title="Industria Planetaria"><span class="ic i-globe" aria-hidden="true"></span><span class="side-l">Industria Planetaria · PI</span></button>
-</div>
-<div class="side-g"><span class="side-h">General</span>
-<button type="button" class="side-i" id="sideHome" title="HOME · Volver al inicio sin borrar nada"><span class="ic i-home" aria-hidden="true"></span><span class="side-l">HOME</span></button>
-    <button type="button" class="side-i" data-panel="settings" title="Ajustes: skills, impuestos, ajuste de precios, envío, Buyback e idioma."><span class="ic i-gear" aria-hidden="true"></span><span class="side-l">Ajustes</span></button>
-    
-<button type="button" class="side-i" data-panel="help" title="Guía de Uso: cómo pegar tu inventario y leer el plan."><span class="ic i-help" aria-hidden="true"></span><span class="side-l">Guía de Uso</span></button>
+  <div class="side-g"><span class="side-h">Ayuda</span>
+    <button type="button" class="side-i" data-panel="help" title="Guía de Uso"><span class="ic i-help" aria-hidden="true"></span><span class="side-l">Guía de Uso</span></button>
   </div>
 </aside>
 <button type="button" class="side-fab" id="sideFab" aria-label="Abrir menú" title="Menú"><span class="ic i-panel" aria-hidden="true"></span></button>
