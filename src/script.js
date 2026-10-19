@@ -1302,6 +1302,7 @@ function planIntroData(P){
   const details=[...groups].map(([key,rows])=>rows.length+' '+(rows.length===1?'ítem':'ítems')+' → '+(PLAN_L[key]||key).toLowerCase());
   return{name,description:'se proponen estas rutas para tus '+total+' ítems: '+details.join('; ')+'.'+next};
 }
+let activeRep=0;
 function paintVerdict(P){
   const has=S.items.length>0;$('verdict').hidden=!has;$('ledger').hidden=!has;$('lCount').textContent=has?'· '+S.items.length+(S.items.length>1?' items':' item'):'';
   const missing=S.items.filter(o=>o.qty>0&&!(o.jita&&(o.jita.topBuy!=null||o.jita.topSell!=null||o.jita.buy!=null||o.jita.sell!=null))).length;
@@ -1521,9 +1522,25 @@ function paintVerdict(P){
   const miss=rowsIn.filter(r=>!r.best);
   if(miss.length){tableTarget=el('div','pl pl-totals');pl.append(tableTarget);prow('miss','Falta precio: '+miss.map(r=>r.o.name).join(', '),'No entran en el total.',null,null,null,null);}
   // ¿reprocesar? por item
+  const oldRepTabs=$('vRepList').parentElement.querySelector('.rep-tabs');if(oldRepTabs)oldRepTabs.remove();
   const reps=rowsIn.filter(r=>r.rep&&!r.rep.missing),rl=$('vRepList');rl.textContent='';$('vRep').hidden=!reps.length;
   {const ys=reps.filter(r=>r.rep.diff>0).length,a=$('vRepAns');
    a.textContent=!reps.length?'':ys===reps.length?'Sí':ys===0?'No':'Depende del item';a.className='pill rep-ans '+(ys===reps.length?'p-null':ys===0?'p-none':'p-jita');}
+  // Compact tabs for the reprocessing recommendation (not the separate reprocessing tool).
+  if(reps.length>1){
+    const nav=el('nav','rep-tabs');nav.setAttribute('role','group');nav.setAttribute('aria-label','Seleccionar mineral o hielo');
+    const tabs=[];
+    const activate=index=>{
+      activeRep=Math.min(Math.max(index,0),reps.length-1);
+      [...rl.querySelectorAll('.rep-it')].forEach((li,i)=>{li.hidden=i!==activeRep;});
+      tabs.forEach((btn,i)=>btn.setAttribute('aria-pressed',String(i===activeRep)));
+    };
+    reps.forEach((r,i)=>{const btn=el('button','rep-tab',String(i+1));btn.type='button';btn.title=r.o.name;
+      btn.setAttribute('aria-label','Mostrar '+r.o.name);btn.addEventListener('click',()=>activate(i));tabs.push(btn);nav.append(btn);});
+    rl.parentElement.insertBefore(nav,rl);
+    // Call once all rows are rendered below.
+    rl._activateRep=()=>activate(activeRep);
+  }
   // por escenario: enviarlo a Jita, venderlo en Null, o a un jugador a precio de Jita (sin taxes ni envío)
   reps.forEach(r=>{const n=r.net,ice=catOf(r.o.name)==='ice',noun=ice?'el hielo':'el ore';
     const best=(...ks)=>ks.map(k=>n[k]).filter(v=>v!=null).reduce((a,v)=>a==null||v>a?v:a,null);
@@ -1568,6 +1585,7 @@ function paintVerdict(P){
       const num=(x,u)=>{const s2=el('span','rt-n num',x==null?'—':fmt(x));s2.append(el('small','rt-u',u));return s2;};
       row.append(c0,num(lines[0][1],UNDER[0]),num(lines[1][1],UNDER[1]),el('span','rt-d num '+s,v==null?'—':(v>0?'Ganas +':'Pierdes −')+fmt(Math.abs(v))));box.append(row);});
     li.append(box);rl.append(li);});
+  if(rl._activateRep){rl._activateRep();delete rl._activateRep;}
   // v1.0.22: la comparación con otros planes vive en «Elige un Plan». Aquí solo la tarjeta del envío.
   {const sh=P.rows.filter(r=>r.best&&SHIPS[r.best]),n=trips(P.Vs);
    $('ovShip').hidden=!SH();$('aCourT').textContent='Envío a '+DEST();
