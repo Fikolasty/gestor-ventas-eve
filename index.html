@@ -1619,6 +1619,17 @@ html.light #verdict .v-plan-name{color:#ad4b27}
 #settings .st-tools{display:flex;align-items:center;justify-content:flex-end;flex-wrap:wrap;gap:8px}
 @media(max-width:750px){#help .modern-panel .hp{grid-template-columns:1fr}#settings .modern-tabs,#help .modern-tabs{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:thin}#settings .modern-tab,#help .modern-tab{flex:none;white-space:nowrap}}
 .side-i[data-side-module][aria-current="page"]{color:var(--txt);background:rgba(217,119,87,.12);border-color:rgba(217,119,87,.45)}
+
+/* Mining skill controls: compact stepper, keep original segmented control as calculation source. */
+#mining .eve-sk{display:inline-flex;align-items:center;gap:7px;max-width:none;margin-top:6px;border:1px solid var(--line2);border-radius:10px;padding:4px 6px;background:rgba(12,13,14,.58);width:max-content}
+#mining .eve-sk-pips{gap:3px;flex:none}
+#mining .eve-sk-pip{width:17px;height:12px}
+#mining .eve-sk-rank{min-width:28px;text-align:center;font-size:.77rem}
+#mining .eve-sk-add,#mining .eve-sk-minus{display:grid;place-items:center;width:27px;height:27px;padding:0;border:0;border-radius:6px;box-shadow:none;background:transparent;color:var(--mut);font:500 1.15rem/1 var(--f-ui);cursor:pointer}
+#mining .eve-sk-add:hover:not(:disabled),#mining .eve-sk-minus:hover:not(:disabled){background:rgba(222,220,209,.10);color:var(--txt)}
+#mining .eve-sk-add:disabled,#mining .eve-sk-minus:disabled{opacity:.3;cursor:default}
+#mining .eve-sk-add:focus-visible,#mining .eve-sk-minus:focus-visible{outline:2px solid var(--ion);outline-offset:1px}
+
 /* ===== tema claro (generado desde el oscuro por light.py) ===== */
 html.light{--void:#e4e3dd;--hull:#e2e0da;--hull2:#e0ded8;--line:rgba(31,30,29,0.114);--line2:rgba(31,30,29,0.125);--txt:#1c1c1a;--mut:#54524d;--dim:#6c6a64;--ion:#413f3c;--blue:#a39d8b;--clay:#c96442;--thrust:#a67526;--gain:#418b62;--loss:#a92c23}
 html.light body::after{background:repeating-linear-gradient(180deg,rgba(31,30,29,0.011) 0 1px,transparent 1px 3px),
@@ -2080,6 +2091,8 @@ html.light .pk-o .pk-d.neg,html.light .pk-summary .pk-sum-delta.neg{color:#a9232
 html.light #settings .modern-tabs,html.light #help .modern-tabs{background:rgba(240,237,229,0.6)}
 html.light #settings .modern-tab[aria-selected="true"],html.light #help .modern-tab[aria-selected="true"]{border-color:rgba(201,100,66,0.6);background:rgba(217,119,87,0.163)}
 html.light .side-i[data-side-module][aria-current="page"]{background:rgba(217,119,87,0.15);border-color:rgba(217,119,87,0.562)}
+html.light #mining .eve-sk{background:rgba(240,237,229,0.6)}
+html.light #mining .eve-sk-add:hover:not(:disabled),html.light #mining .eve-sk-minus:hover:not(:disabled){background:rgba(31,30,29,0.095)}
 /* ajustes a mano del tema claro */
 html.light body{background:#e6e3da;color:#1f1e1d}
 html.light body::before{opacity:.12;filter:grayscale(.35) brightness(1.1)}
@@ -5792,7 +5805,7 @@ const MineUI=(()=>{
      '</div>'+
      '<div class="mn-config-groups">'+
      '<div class="mn-config-group">'+
-       '<div class="mn-config-group-intro"><h3>Contexto</h3></div>'+
+       
        '<div class="mn-ctl">'+
          '<div class="mn-config-field"><div class="mn-field-title"><span class="mn-lbl">Tipo de nave</span>'+INFO('shipClass')+'</div>'+SEG('shipClass',[['barge','Barges'],['exhumer','Exhumers']])+'</div>'+
          '<div class="mn-config-field"><div class="mn-field-title"><span class="mn-lbl">Material</span>'+INFO('mat')+'</div>'+SEG('mat',[['moon','Moon ore'],['ice','Hielo'],['gas','Gas']])+'</div>'+
@@ -5800,7 +5813,7 @@ const MineUI=(()=>{
        '</div>'+
      '</div>'+
      '<div class="mn-config-group">'+
-       '<div class="mn-config-group-intro"><h3>Personaje</h3></div>'+
+       
        '<div class="mn-ctl">'+
          '<div class="mn-config-field"><div class="mn-field-title"><span class="mn-lbl">Skills</span>'+INFO('lv')+'</div>'+SEG('lv',[['3','III · estimado'],['4','IV'],['5','V']])+'</div>'+
          '<div class="mn-config-field"><div class="mn-field-title"><span class="mn-lbl">Implantes de minería</span>'+INFO('imp')+'</div>'+SEG('imp',[['0','Sin'],['4','4%'],['5','5%']])+'</div>'+
@@ -7175,12 +7188,14 @@ function enhance(native,id,get,set,min){
  const p=document.createElement('div');p.className='eve-sk-pips';
  const rank=document.createElement('span');rank.className='eve-sk-rank';
  const add=document.createElement('button');add.type='button';add.className='eve-sk-add';
+ const minus=document.createElement('button');minus.type='button';minus.className='eve-sk-minus';minus.textContent='−';minus.setAttribute('aria-label','Bajar un nivel');minus.title='Bajar un nivel';
  const marks=[];
- function draw(){const lv=get();const locked=min===0&&books[id]===false&&lv===0;marks.forEach((b,i)=>{const v=i+1;b.className='eve-sk-pip'+(locked?' locked':v<=lv?' trained':'');b.disabled=v<min;b.setAttribute('aria-pressed',String(lv===v));b.title='Nivel '+v});rank.textContent=locked?'—':lv+'/5';add.className='eve-sk-add'+(locked?' book':'');add.textContent=locked?'▣':'+';add.title=locked?'Adquirir skillbook':lv===5?'Nivel máximo':'Subir habilidad';add.disabled=lv===5&&!locked}
+ function draw(){const lv=get();const locked=min===0&&books[id]===false&&lv===0;marks.forEach((b,i)=>{const v=i+1;b.className='eve-sk-pip'+(locked?' locked':v<=lv?' trained':'');b.disabled=v<min;b.setAttribute('aria-pressed',String(lv===v));b.title='Nivel '+v});rank.textContent=locked?'—':lv+'/5';add.className='eve-sk-add'+(locked?' book':'');add.textContent=locked?'▣':'+';add.title=locked?'Adquirir skillbook':lv===5?'Nivel máximo':'Subir habilidad';add.disabled=lv===5&&!locked;minus.disabled=lv<=min;minus.title=lv<=min?'Nivel mínimo':'Bajar a nivel '+(lv-1)}
  for(let i=1;i<=5;i++){const b=document.createElement('button');b.type='button';b.title='Elegir nivel '+i;b.setAttribute('aria-label','Nivel '+i);b.addEventListener('click',()=>{books[id]=true;set(i);draw()});marks.push(b);p.append(b)}
  add.addEventListener('click',()=>{books[id]=true;localStorage.setItem(store,JSON.stringify(books));set(Math.min(5,Math.max(min,get()+1)));draw()});
+ minus.addEventListener('click',()=>{if(get()<=min)return;set(Math.max(min,get()-1));draw()});
  group.addEventListener('contextmenu',e=>{if(min>0)return;e.preventDefault();books[id]=books[id]===false;localStorage.setItem(store,JSON.stringify(books));if(!books[id])set(0);draw()});
- group.append(p,rank,add);native.after(group);native.addEventListener('change',draw);draw();
+ if(id==='mn-rank')group.append(minus,p,rank,add);else group.append(p,rank,add);native.after(group);native.addEventListener('change',draw);draw();
  }
 function enhanceSettings(){ids.forEach(id=>{const n=document.getElementById(id);if(!n||n.dataset.eveDone)return;enhance(n,id,()=>Number(n.value)||0,v=>{n.value=String(v);n.dispatchEvent(new Event('input',{bubbles:true}));n.dispatchEvent(new Event('change',{bubbles:true}))},0)})}
 function enhanceMining(){
