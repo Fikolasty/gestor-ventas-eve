@@ -1888,6 +1888,13 @@ select{appearance:none;-webkit-appearance:none;padding-right:30px!important;back
 #mmTabs .mm-modgroup{flex:0 0 auto;justify-content:center}
 #mmTabs .mm-modgroup .mm-mod{min-width:84px;text-align:center}
 @media(max-width:680px){#mmTabs .mm-modgroup .mm-mod{min-width:0}}
+
+/* Contract summary: all metrics align regardless of heading length. */
+#ctrTot.ct-sum{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));align-items:stretch;gap:8px}
+#ctrTot.ct-sum>div{min-width:0;display:flex;flex-direction:column;justify-content:space-between;gap:7px}
+#ctrTot.ct-sum>div>span{display:block;font-size:.72rem;line-height:1.2;min-height:2.4em;overflow-wrap:normal}
+#ctrTot.ct-sum>div>b{display:block;white-space:nowrap;font-size:clamp(.76rem,1vw,.9rem);line-height:1.25;font-variant-numeric:tabular-nums}
+@media(max-width:560px){#ctrTot.ct-sum{grid-template-columns:repeat(auto-fit,minmax(110px,1fr))}}
 </style>
 <script>/* v1.0.16: aplica el tema guardado antes de pintar (sin parpadeo). Por defecto: Dark. */try{var g=JSON.parse(localStorage.getItem('gestorVentas.ajustes.v1')||'null');if(g&&g.ui){if(g.ui.light)document.documentElement.classList.add('light');}}catch(e){}</script>
 </head>
