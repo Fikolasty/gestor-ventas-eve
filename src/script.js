@@ -83,6 +83,7 @@ const refreshMarketControls=()=>{
   const sel=document.getElementById('nullMarketMode');if(!sel)return;
   sel.value=marketChoice;
   document.getElementById('nullMarketActive').textContent=nullSystem();
+  const topMarket=document.querySelector('#mmTabs .mm-route-right');if(topMarket)topMarket.textContent=nullSystem();
   const note=document.getElementById('nullMarketNote');
   note.textContent=(marketChoice==='auto'?(marketAlliance?'Alianza detectada: '+marketAlliance+'.':'Sin alianza identificada. Se usa HY-RWO por defecto.'):'Selección manual: no cambiará al conectar otro personaje.')+' Los precios de Null se estiman con reglas sobre Jita, no con órdenes locales de ESI.';
 };
