@@ -576,3 +576,19 @@ html.light #mining .mn-fit-fallback{border-color:rgba(40,100,150,.22);background
 
 /* Corrección del chevron global: nunca pintar flechas sobre iconos de ayuda. */
 .mn details.mn-info>summary::before,.mn details.mn-info>summary::after,.mn details.mn-info[open]>summary::after{content:none!important;display:none!important}
+
+/* v1.0.83 — Ajustes compartidos: Hielo y descarga en una sola fila;
+   editor de precios como acordeón independiente a todo el ancho. */
+#mining .mn-shared-layout{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;align-items:stretch}
+#mining .mn-shared-layout>.mn-ice-settings{grid-column:1;grid-row:1;display:flex;flex-direction:column;align-items:stretch;gap:7px;margin:0;padding:12px 14px;min-height:0}
+#mining .mn-shared-layout>.mn-ice-settings[hidden]{display:none!important}
+#mining .mn-ice-settings>label{font-size:.83rem}
+#mining .mn-ice-market{width:100%;max-width:none;min-width:0}
+#mining .mn-shared-layout>.mn-turnaround{grid-column:2;grid-row:1;display:flex;flex-direction:column;align-items:stretch;justify-content:center;gap:8px;padding:12px 14px;min-height:0}
+#mining .mn-shared-layout>.mn-turnaround small{margin:0;line-height:1.35}
+#mining .mn-shared-layout>.mn-price-editor{grid-column:1/-1;grid-row:2;min-width:0}
+#mining .mn-shared-layout:has(>.mn-ice-settings[hidden])>.mn-price-editor{grid-column:1;grid-row:1}
+#mining .mn-shared-layout:has(>.mn-ice-settings[hidden])>.mn-turnaround{grid-column:2;grid-row:1}
+@media(max-width:740px){#mining .mn-shared-layout{grid-template-columns:minmax(0,1fr)}
+#mining .mn-shared-layout>.mn-ice-settings,#mining .mn-shared-layout>.mn-turnaround,#mining .mn-shared-layout>.mn-price-editor,
+#mining .mn-shared-layout:has(>.mn-ice-settings[hidden])>.mn-price-editor,#mining .mn-shared-layout:has(>.mn-ice-settings[hidden])>.mn-turnaround{grid-column:1;grid-row:auto}}
