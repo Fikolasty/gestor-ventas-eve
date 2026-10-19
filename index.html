@@ -1664,6 +1664,10 @@ html.light #verdict .v-plan-name{color:#ad4b27}
 }
 @media(max-width:600px){#stepHead .stp-balance{grid-template-columns:1fr}#stepHead .stp-balance-cell{min-height:0}}
 
+
+/* Same plan emphasis in verdict and plan picker; do not recolor monetary metrics. */
+#vCap .plan-name-accent,#pkNote .plan-name-accent,.pk-sum .plan-name-accent,.pk-opportunity .plan-name-accent{color:#e0a84f!important;font-weight:750}
+
 /* ===== tema claro (generado desde el oscuro por light.py) ===== */
 html.light{--void:#e4e3dd;--hull:#e2e0da;--hull2:#e0ded8;--line:rgba(31,30,29,0.114);--line2:rgba(31,30,29,0.125);--txt:#1c1c1a;--mut:#54524d;--dim:#6c6a64;--ion:#413f3c;--blue:#a39d8b;--clay:#c96442;--thrust:#a67526;--gain:#418b62;--loss:#a92c23}
 html.light body::after{background:repeating-linear-gradient(180deg,rgba(31,30,29,0.011) 0 1px,transparent 1px 3px),
@@ -2130,6 +2134,7 @@ html.light #mining .eve-sk-add:hover:not(:disabled),html.light #mining .eve-sk-m
 html.light #stepHead .stp-balance-cell{background:rgba(240,237,229,0.65)}
 html.light #stepHead .stp-balance-cell .pos{color:#418b62}
 html.light #stepHead .stp-balance-cell .neg{color:#a92328}
+html.light #vCap .plan-name-accent,html.light #pkNote .plan-name-accent,html.light .pk-sum .plan-name-accent,html.light .pk-opportunity .plan-name-accent{color:#a67526!important}
 /* ajustes a mano del tema claro */
 html.light body{background:#e6e3da;color:#1f1e1d}
 html.light body::before{opacity:.12;filter:grayscale(.35) brightness(1.1)}
