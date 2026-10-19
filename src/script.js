@@ -1465,7 +1465,16 @@ function paintVerdict(P){
     const body=el('div','stp-b'),main=el('div','stp-main');body.hidden=!open;body.append(main);
     const cts=ctrFor(id);
     if(cts.length){body.classList.add('two');const as=el('aside','stp-ct');as.append(el('h5',null,cts.length>1?'Cómo llenar los contratos':'Cómo llenar el contrato'));
-      cts.forEach(c=>{if(cts.length>1)as.append(el('div','stp-ct-t',c.title));as.append(slots(c.fields,'slots-2'));});body.append(as);}
+      if(cts.length>1){
+        const nav=el('div','stp-contract-nav'),prev=el('button','stp-contract-arrow','‹'),next=el('button','stp-contract-arrow','›'),counter=el('span','stp-contract-counter');
+        prev.type=next.type='button';prev.setAttribute('aria-label','Contrato anterior');next.setAttribute('aria-label','Contrato siguiente');
+        const slide=el('div','stp-contract-slide');let index=0;
+        const show=()=>{slide.replaceChildren(el('div','stp-ct-t',cts[index].title),slots(cts[index].fields,'slots-2'));counter.textContent=(index+1)+' / '+cts.length;prev.disabled=index===0;next.disabled=index===cts.length-1;};
+        prev.addEventListener('click',()=>{if(index>0){index--;show();}});
+        next.addEventListener('click',()=>{if(index<cts.length-1){index++;show();}});
+        nav.append(prev,counter,next);as.append(nav,slide);show();
+      }else{as.append(slots(cts[0].fields,'slots-2'));}
+      body.append(as);}
     box.append(hd,body);return{box,main};};
   steps.forEach((k,i)=>{
     if(k==='ship'){
