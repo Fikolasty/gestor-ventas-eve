@@ -2498,7 +2498,7 @@ document.querySelectorAll('[data-go-home]').forEach(node=>{
     });
   }
   document.querySelectorAll('#mmTabs [data-mm-module]').forEach(btn=>btn.addEventListener('click',updateModuleSidebar));
-  $('sideHome').addEventListener('click',updateModuleSidebar);
+  $('navHome').addEventListener('click',updateModuleSidebar);
   function tabs(host,groups,labels){
     if(!host||host.dataset.modernized)return;
     host.dataset.modernized='true';
