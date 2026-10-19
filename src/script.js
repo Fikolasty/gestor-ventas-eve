@@ -1223,7 +1223,7 @@ function fadeIn(list){if(!MOTION())return;list.forEach((n,i)=>n.animate([{opacit
 document.addEventListener('toggle',e=>{const d=e.target;if(!(d instanceof HTMLDetailsElement)||!d.open||!MOTION())return;
   [...d.children].filter(c=>c.tagName!=='SUMMARY'&&!c.hidden).forEach(c=>c.animate([{opacity:0,transform:'translateY(-6px)'},{opacity:1,transform:'none'}],{duration:220,easing:EASE}));},true);
 // Divulgación progresiva: primero el resultado; el análisis y la info extra solo si los pides
-const SECT={deep:['bDeep','Ir a los pasos ↓','Ir a los pasos ↓']};
+const SECT={deep:['bDeep','Ver el desglose ▾','Ver el desglose ▾']};
 function setSect(t,open){const [b,o,c]=SECT[t];if($(t).hidden===!open)return;
   $(b).setAttribute('aria-expanded',String(open));$(b).querySelector('b').textContent=open?c:o;
   if(t==='deep'){ // v1.0.50: con el desglose abierto se pliegan los planes
@@ -2005,7 +2005,7 @@ function pkShips(m,P){if(!SH())return false;if(m==='auto')return P.Vs>0;return !
 const PK_FILTERS=[['all','Todos'],['fast','Rápidos'],['noship','Sin envío'],['rep','Con reproceso']];
 const PK_COLS=[['name','Plan'],['speed','Rapidez'],['ship','Envío'],['net','Valor'],['net','Total'],['diff','vs Óptimo']];
 function paintPicker(P){
-  const box=$('pk'),bar=$('pkNote'),tools=$('pkTools'),others=$('pkOthers'),change=$('pkChange');
+  const box=$('pk'),bar=$('pkNote'),tools=$('pkTools'),others=$('pkOthers');
   box.textContent='';bar.textContent='';tools.textContent='';others.textContent='';
   const opt=modeTotal(P,'auto').net,cur=P.mode||'auto';
   const all=MODES.filter(([m])=>!(m==='bb'&&!C.bb.on||m==='disc'&&!C.disc.on)&&(m==='auto'||P.rows.some(r=>r.g[m]!=null)))
@@ -2029,11 +2029,10 @@ function paintPicker(P){
     disc:'Se lo vendes a otro jugador por Discord. Sin comprador garantizado.'};
   // Resumen legible de un vistazo, colocado inmediatamente debajo de «Elige un Plan».
   bar.hidden=false;
-  bar.append('Elegiste ',el('strong',null,chosen.l),'. ');
+  bar.append(chosen.m==='auto'?'Estás usando el ':'Elegiste ',el('strong',null,chosen.l),'. ');
   const delta=chosen.t.net-opt;
   if(chosen.m==='auto'){
-    bar.append('Con esta combinación de rutas recibirías ',el('strong','pk-sum-value',fmt(opt)),
-      '. El plan prioriza vender más rápido cuando esperar no compensa la diferencia.');
+    bar.append('Para comparar valor, rapidez y envío, haz clic en esta fila y elige otra ruta disponible.');
   }else if(Math.round(delta)===0){
     bar.append('Este plan te ofrece el mismo valor estimado que el Plan Óptimo. ',PK_EXP[chosen.m]||'');
   }else{
@@ -2053,13 +2052,26 @@ function paintPicker(P){
   box.append(hd);
   function row({m,l,t},selected){
     const d=t.net-opt;
-    const b=el(selected?'div':'button','pk-o'+(selected?' on':'')+(m==='auto'?' best':''));
-    if(!selected){b.type='button';b.dataset.m=m;b.setAttribute('aria-pressed','false');}
-    else b.setAttribute('aria-current','true');
+    const b=el('button','pk-o'+(selected?' on':'')+(m==='auto'?' best':''));
+    b.type='button';
+    if(!selected){b.dataset.m=m;b.setAttribute('aria-pressed','false');}
+    else{
+      b.dataset.pkToggle='true';
+      b.setAttribute('aria-current','true');
+      b.setAttribute('aria-controls','pkOthers');
+      b.setAttribute('aria-expanded',String(pkView.open));
+      b.title=pkView.open?'Ocultar otras rutas':'Ver otras rutas de venta';
+    }
     const txt=el('span','pk-tx'),nm=el('span','pk-l',l);
     if(m==='auto')nm.append(el('em','pk-rec','Recomendado'));
     const part=m!=='auto'&&t.n<P.rows.length?' '+t.n+' de '+P.rows.length+' items siguen esta ruta; los demás siguen el óptimo.':'';
-    txt.append(nm,el('small','pk-e',(PK_EXP[m]||'')+part));
+    const short={auto:'Combina las rutas más convenientes.',null:'Vende en tu sistema sin transporte.',
+      jOrd:'Publica órdenes de venta en Jita.',fJ:'Publica órdenes de venta en Jita.',
+      jInst:'Venta inmediata en Jita.',fJI:'Venta inmediata en Jita.',
+      bb:'Vende al Buyback de tu alianza.',disc:'Ofrece los items a jugadores.',
+      rNull:'Reprocesa y vende en tu sistema.',rJita:'Reprocesa y vende en Jita.',
+      fN:'Importa desde Jita a tu sistema.'};
+    txt.append(nm,el('small','pk-e',(selected?(short[m]||PK_EXP[m]):PK_EXP[m])+(!selected?part:'')));
     const sp=el('span','pk-sp',pkSpeed(m,P)),sh=el('span','pk-sh'+(pkShips(m,P)?' y':''),pkShips(m,P)?'Sí':'No');
     const barW=el('span','pk-bar'),bi=el('i');bi.style.width=Math.max(2,Math.min(100,t.net/maxNet*100))+'%';barW.append(bi);
     const diff=m==='auto'?'Óptimo':Math.round(d)===0?'Igual':(d>0?'+':'−')+compactIsk(Math.abs(d));
@@ -2073,9 +2085,6 @@ function paintPicker(P){
   const available=list.filter(x=>x.m!==chosen.m);
   const fl=PK_FILTERS.filter(([f])=>f==='all'||(f!=='noship'||SH())&&available.some(x=>pass[f](x)));
   if(!fl.some(([f])=>f===pkView.filter))pkView.filter='all';
-  change.hidden=available.length===0;
-  change.textContent='Cambia de Plan';
-  change.setAttribute('aria-expanded',String(pkView.open));
   others.hidden=!pkView.open;
   if(!pkView.open)return;
   if(fl.length>2){const group=el('div','pk-flt');group.setAttribute('role','group');group.setAttribute('aria-label','Filtrar planes');
@@ -2093,9 +2102,13 @@ function paintPicker(P){
 $('pkTools').addEventListener('click',e=>{const b=e.target.closest('[data-pkf]');if(!b||!lastP)return;pkView.filter=b.dataset.pkf;paintPicker(lastP);});
 $('pk').addEventListener('click',e=>{const b=e.target.closest('[data-pks]');if(!b||!lastP)return;e.stopPropagation();const k=b.dataset.pks;
   pkView=pkView.sort===k?{...pkView,dir:-pkView.dir}:{...pkView,sort:k,dir:k==='name'||k==='speed'||k==='ship'?1:-1};paintPicker(lastP);});
-$('pkChange').addEventListener('click',()=>{if(!lastP)return;pkView.open=!pkView.open;
-  if(pkView.open)focusOnly('plans');paintPicker(lastP);
-  if(pkView.open)fadeIn([...$('pkOthers').querySelectorAll('.pk-o')]);});
+$('pk').addEventListener('click',e=>{
+  if(!e.target.closest('[data-pk-toggle]')||!lastP)return;
+  pkView.open=!pkView.open;
+  if(pkView.open)focusOnly('plans');
+  paintPicker(lastP);
+  if(pkView.open)fadeIn([...$('pkOthers').querySelectorAll('.pk-o')]);
+});
 $('pkOthers').addEventListener('click',e=>{const b=e.target.closest('[data-m]');if(!b)return;
   S.planMode=b.dataset.m==='auto'?null:b.dataset.m;pkView.open=false;pkView.filter='all';czIdx=0;refreshNow();});
 // v1.0.6 (modo Jita → HY-RWO): si compras el lote en Jita al Sell, lo llevas a HY-RWO y lo vendes a Jita Sell + margen
