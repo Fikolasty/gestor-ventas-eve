@@ -3,11 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src data: blob: https://images.evetech.net; connect-src https://esi.evetech.net https://images.evetech.net; base-uri 'none'; form-action 'none'; object-src 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src data: blob: https://images.evetech.net https://cdn1.eveonline.com https://wiki.eveuniversity.org https://global.discourse-cdn.com; connect-src https://esi.evetech.net https://images.evetech.net; base-uri 'none'; form-action 'none'; object-src 'none'">
 <meta name="referrer" content="no-referrer">
 <title>Market Moves+ · SIGMA GRINDSET</title>
 <style>
-/* ================= Market Moves+ v1.0.83 =================
+/* ================= Market Moves+ v1.0.82 =================
    Paleta: azul de base, naranja = acción, verde/rojo = ganancia/pérdida.
    Sin backdrop-filter: el vidrio se finge con rgba + bordes. */
 *{box-sizing:border-box;margin:0;padding:0}
@@ -1333,6 +1333,184 @@ body.in-jita #pCtr,body.in-jita #pExtra,body.in-jita #vRep,body.in-jita .if-ore{
 .ov-mk-n{margin-top:8px;font-size:.86rem;color:var(--mut)}.ov-mk-n b{color:#e8a588}
 @media(max-width:900px){.ov-row{grid-template-columns:minmax(0,1fr)}}
 @media(max-width:520px){.ov-hd{flex-direction:column;align-items:flex-start}.ov-hd .v-isk{font-size:2rem}.ov-kpi{grid-template-columns:minmax(0,1fr)}.ov-mk-l b{font-size:.8rem}.ov-card{padding:12px}}
+
+
+/* v1.0.75 — precio de producto refinado: clic copia, doble clic / F2 edita. */
+.pl-row.min .p .cp-refined-price{cursor:copy;position:relative;outline-offset:3px}
+.pl-row.min .p .cp-refined-price:hover,.pl-row.min .p .cp-refined-price:focus-visible{border-color:rgba(226,173,97,.6)!important;background:rgba(226,173,97,.1)!important}
+.pl-row.min .p .cp-refined-price.cp-manual-price{border-color:rgba(118,191,154,.53)!important;background:rgba(91,163,126,.12)!important}
+.pl-row.min .p .cp-refined-price.cp-manual-price::after{content:"✎";margin-left:5px;font-size:.76em;opacity:.86}
+.pl-row.min .p .pr-inline-editor{display:inline-flex;align-items:center;justify-content:flex-end;gap:3px;max-width:100%;flex-wrap:wrap;padding:2px;border-radius:7px;background:rgba(225,172,91,.06);border:1px solid rgba(225,172,91,.37)}
+.pl-row.min .p .pr-inline-input{font:600 .86rem var(--f-num);width:99px;min-width:55px;max-width:100%;padding:6px;border-radius:5px;border:1px solid rgba(226,173,97,.5);color:var(--txt);background:var(--input,#151515);text-align:right}
+.pl-row.min .p .pr-inline-editor button{font:600 .76rem var(--f-ui);border:1px solid rgba(222,220,209,.2);border-radius:5px;background:rgba(222,220,209,.07);color:var(--txt);padding:5px 7px;min-height:28px;cursor:pointer}
+.pl-row.min .p .pr-inline-editor button:hover{background:rgba(222,220,209,.16)}
+.pl-row.min .p .pr-edit-save{color:var(--gain,#5cba86)!important}
+.pl-row.min .p .pr-edit-cancel{color:var(--loss,#e8746c)!important}
+html.light .pl-row.min .p .pr-inline-editor{background:rgba(184,123,45,.08);border-color:rgba(150,101,32,.36)}
+html.light .pl-row.min .p .pr-inline-input{background:#fff;color:#262626}
+@media(max-width:640px){.pl-row.min .p .pr-inline-editor{justify-content:flex-start}.pl-row.min .p .pr-inline-input{width:92px}}
+
+/* v1.0.80: selector v5 aprobado: un plan, resumen prominente y un único cambio a la derecha. */
+.pk-summary{display:block;margin:8px 0 18px;color:var(--txt);font:400 clamp(1.08rem,1.8vw,1.35rem)/1.5 var(--f-ui);letter-spacing:-.012em}
+.pk-summary strong{font-weight:700;color:var(--txt)}
+.pk-summary .pk-sum-delta.pos{color:var(--gain)!important;white-space:nowrap}
+.pk-summary .pk-sum-delta.neg{color:var(--loss)!important;white-space:nowrap}
+.pk-summary .pk-sum-value{color:var(--gain)!important}
+.pk-actions{display:flex;justify-content:flex-end;margin:10px 0}
+.pk-actions .pk-change{border:1px solid rgba(217,119,87,.45);border-radius:999px;background:#282321;color:#f0e4dd;padding:8px 16px;font:600 .87rem var(--f-ui);cursor:pointer;white-space:nowrap}
+.pk-actions .pk-change:hover,.pk-actions .pk-change[aria-expanded=true]{border-color:#d97757;background:rgba(217,119,87,.18)}
+.pk-w .pk-tools{margin:4px 0 8px;justify-content:flex-start}
+#pkOthers[hidden]{display:none!important}
+#pkOthers{margin-top:6px}
+#pk>.pk-o{cursor:default}
+#pk>.pk-o:hover{border-color:rgba(217,119,87,.55)!important}
+#pk>.pk-o.best{margin-bottom:0}
+@media(max-width:760px){.pk-summary{font-size:1.07rem;line-height:1.53}.pk-actions .pk-change{min-height:40px}}
+
+/* v1.0.81: diseño unificado aprobado, sin alterar los cálculos */
+.mm-modnav{position:relative;display:flex;gap:5px;flex-wrap:wrap;background:#1b1918;border:1px solid rgba(222,220,209,.12);padding:6px;border-radius:12px;margin:20px auto 14px;max-width:1100px}
+.mm-mod{appearance:none;display:flex;align-items:center;gap:9px;padding:10px 19px;font:650 .95rem var(--f-ui);background:none;color:#b9b0a7;border:1px solid transparent;border-radius:8px;cursor:pointer}
+.mm-mod[aria-selected=true]{background:linear-gradient(95deg,rgba(217,119,87,.22),rgba(217,119,87,.06));border-color:rgba(217,119,87,.5);color:#f4ece4}
+.mm-mod:hover{color:#fff}
+body.mm-mining #heroIntro,body.mm-mining #salesBody,body.mm-pi #heroIntro,body.mm-pi #salesBody{display:none!important}
+#vWhat[hidden],#pi[hidden]{display:none!important}
+.mm-pi-placeholder{border-radius:12px;padding:20px;background:#151515;border:1px solid rgba(222,220,209,.1)}
+.mm-pi-placeholder h3{margin:0 0 8px;color:var(--txt);font-size:1.1rem}.mm-pi-placeholder p{margin:0;color:var(--mut)}
+.mm-pi-features{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:12px}
+.mm-pi-features>div{padding:14px 16px;border:1px solid var(--line);background:#181716;border-radius:10px;min-width:0}
+.mm-pi-features b,.mm-pi-features small{display:block}.mm-pi-features small{color:var(--mut);margin-top:6px}
+.mm-section-head{margin:0 0 15px!important;max-width:none!important}
+.mm-title{display:flex!important;align-items:center!important;gap:12px!important;margin:0!important;text-transform:uppercase!important;letter-spacing:.035em!important;font:750 clamp(1.17rem,2.1vw,1.48rem)/1.25 var(--f-ui)!important;color:var(--txt)!important;text-align:left!important}
+.mm-title::before{content:"";display:block;flex:0 0 27px;width:27px;height:3px;background:linear-gradient(90deg,#d97757,rgba(217,119,87,0));box-shadow:0 0 12px rgba(217,119,87,.35);border-radius:9px}
+.mm-section-sub{margin:5px 0 0 39px!important;font:650 .73rem/1.55 var(--f-ui)!important;letter-spacing:.09em;text-transform:uppercase;color:var(--dim)!important}
+.mm-missing{font:650 .78rem var(--f-ui);color:#f2c978;border:1px solid rgba(226,181,104,.45);background:rgba(226,181,104,.1);padding:5px 9px;border-radius:7px}
+.mm-missing[hidden]{display:none}
+#ledger summary{gap:10px;flex-wrap:wrap}#ledger summary .mm-title{font-size:1.2rem!important}
+#verdict{padding:21px 21px 18px!important;margin:0 0 17px!important;background:linear-gradient(180deg,rgba(31,29,28,.91),rgba(21,20,19,.96))!important}
+#verdict .ov{gap:12px;margin-bottom:0}
+#verdict .ov-hd{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:24px;margin-bottom:4px}
+#verdict .ov-hd .mm-section-head{margin-bottom:8px!important}
+#verdict .v-cap{font:400 clamp(.96rem,1.25vw,1.09rem)/1.55 var(--f-ui)!important;color:#e4ddd3;max-width:810px}
+#verdict .mm-net{text-align:right;min-width:0}#verdict .mm-net-label{font:650 .76rem var(--f-ui);letter-spacing:.1em;color:var(--dim)}
+#verdict .v-isk{font-size:clamp(2rem,4.6vw,3.5rem)!important;white-space:nowrap;line-height:1.13!important}
+#verdict .v-isk span{font-size:.44em!important;color:var(--txt);margin-left:6px}
+#verdict .ov-flow{width:100%;padding:17px 18px;border-radius:12px;background:rgba(16,16,16,.82)}
+#verdict .ov-flow h4{font:650 .8rem var(--f-ui);letter-spacing:.09em;color:var(--dim);margin-bottom:11px}
+#verdict .mm-dest-inline{border-top:1px solid rgba(222,220,209,.12);padding-top:15px;margin-top:18px}
+#verdict .mm-dest-inline .ov-bar{height:11px}
+#verdict .ov-leg{grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-top:13px}
+#verdict .ov-leg>div{min-width:0}#verdict .ov-leg b{font-size:.95rem!important;white-space:normal;overflow-wrap:anywhere}
+#verdict .ov-leg small{white-space:normal;overflow:visible;text-overflow:initial}
+#verdict .ov-kpi{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:12px}
+#verdict .ov-kpi>div{display:grid;grid-template-columns:1fr auto;align-items:center;gap:3px 12px;padding:12px 16px;min-height:unset}
+#verdict .ov-kpi dt{grid-column:1 / -1}#verdict .ov-kpi dd{grid-column:1;margin:0;font-size:clamp(1.2rem,2vw,1.48rem)}
+#verdict .ov-kpi small{grid-column:2;text-align:right;align-self:center}
+#verdict .mm-legacy{display:none!important}
+#stepsPanel{padding:21px 21px 19px;margin:0 0 16px!important}
+#stepsPanel .stp-list{margin-top:8px}
+#pSum>.mm-section-head,#pExtra>.mm-section-head{margin:0 0 18px!important}
+@media(max-width:860px){#verdict .ov-hd{grid-template-columns:1fr}#verdict .mm-net{text-align:left}#verdict .ov-leg{grid-template-columns:repeat(2,minmax(0,1fr))}.mm-pi-features{grid-template-columns:1fr}}
+@media(max-width:540px){.mm-modnav{flex-direction:column}.mm-mod{justify-content:center}#verdict .ov-kpi{grid-template-columns:1fr!important}#verdict .ov-leg{grid-template-columns:1fr 1fr}#verdict .v-isk{font-size:clamp(1.9rem,8vw,2.5rem)!important}#verdict .ov-hd{gap:12px}}
+html.light .mm-modnav{background:#f4f1ed}html.light .mm-mod{color:#70685e}html.light .mm-mod[aria-selected=true]{color:#a84d31;background:#f7e7df}
+html.light .mm-pi-placeholder,html.light .mm-pi-features>div,html.light #verdict .ov-flow{background:#f8f6f3}
+html.light #verdict{background:#fff!important}html.light #verdict .v-cap{color:#37302a}html.light .mm-title{color:#28231f!important}
+
+
+/* v1.0.82 — v6 integrada: navegación a la derecha, encabezados alineados y planes compactos. */
+.mm-modnav{max-width:none!important;width:100%;justify-content:flex-end!important;margin-left:0!important;margin-right:0!important}
+.mm-section-head{display:grid!important;grid-template-columns:26px minmax(0,1fr);grid-template-rows:auto auto auto;gap:4px 12px;align-items:start;min-width:0}
+.mm-section-head::before{content:"";width:23px;height:3px;grid-column:1;grid-row:1;margin-top:12px;background:linear-gradient(90deg,#d97757,rgba(217,119,87,0));border-radius:999px;box-shadow:0 0 11px rgba(217,119,87,.35)}
+.mm-section-head>.mm-title{display:block!important;grid-column:2;grid-row:1;min-width:0;margin:0!important;font:800 clamp(1.13rem,1.8vw,1.46rem)/1.22 var(--f-ui)!important;letter-spacing:.035em!important;font-style:normal!important}
+.mm-section-head>.mm-title::before{display:none!important}
+.mm-section-head>.mm-section-sub{display:block!important;grid-column:2;grid-row:2;margin:0!important;min-width:0;font:700 .78rem/1.45 var(--f-ui)!important;letter-spacing:.08em!important;overflow-wrap:normal;word-break:normal}
+#verdict .ov-hd{align-items:start!important}
+#verdict .ov-ttl{min-width:0}
+#verdict .v-cap{margin:9px 0 0 38px!important;max-width:800px!important}
+#verdict .mm-net{padding-top:6px}
+#verdict .v-isk{font-family:var(--f-num)!important;font-style:normal!important}
+#verdict .ov-leg b,#verdict .ov-kpi dd,.pk .pk-o .pk-v,.pk-v,.num{font-family:var(--f-num)!important;font-style:normal!important}
+#verdict .mm-plan-area{border:0;border-top:1px solid rgba(222,220,209,.13);border-radius:0;box-shadow:none!important;background:none!important;margin:22px 0 0!important;padding:20px 0 0!important}
+#pSum .res-top{display:none!important}
+#pSum>.mm-section-head{margin:0 0 24px!important}
+#pSum .pk-summary{grid-column:2;grid-row:3;margin:7px 0 0!important;padding:0!important;border:0!important;background:transparent!important;font:400 clamp(.97rem,1.2vw,1.04rem)/1.55 var(--f-ui)!important;letter-spacing:0}
+#pSum .pk-summary strong{font-weight:700}
+#pSum .pk-w{margin:0!important}
+#pSum .pk-hd{margin-top:0!important}
+#pk>.pk-o{cursor:pointer!important;position:relative;min-height:76px;padding:11px 40px 11px 14px!important;transition:border-color .12s ease,background .12s ease}
+#pk>.pk-o::after{content:"▾";font:700 1rem var(--f-ui);color:#ebd5c6;position:absolute;right:15px;top:50%;transform:translateY(-50%);transition:transform .15s}
+#pk>.pk-o[aria-expanded=true]::after{transform:translateY(-50%) rotate(180deg)}
+#pk>.pk-o:focus-visible{outline:2px solid #d97757;outline-offset:3px}
+#pk>.pk-o .pk-e{max-width:350px}
+#pk>.pk-o .pk-l{font-weight:700}
+#pkOthers{margin:12px 0 0!important}
+#pSum .pk-tools{margin:12px 0 10px!important}
+#pSum #bDeep{margin:13px 0 0!important}
+#pSum .more-btn b{white-space:nowrap}
+#verdict .mm-legacy{display:none!important}
+@media(max-width:760px){
+  .mm-section-head{grid-template-columns:22px minmax(0,1fr);gap:4px 10px}
+  .mm-section-head::before{width:18px;margin-top:10px}
+  #verdict .v-cap{margin-left:32px!important}
+  #verdict .mm-plan-area{margin-top:18px!important}
+  #pSum .pk-summary{line-height:1.5!important}
+  #pk>.pk-o{min-height:unset;padding:12px 32px 12px 12px!important}
+  .mm-modnav{flex-direction:row!important;justify-content:flex-end!important;overflow-x:auto;flex-wrap:nowrap!important}
+  .mm-mod{white-space:nowrap;padding:10px 12px}
+}
+@media(max-width:460px){#pSum .more-btn{gap:5px}#pSum .more-btn b{font-size:.86rem}}
+
+/* v1.0.83 — simetría del resumen y nombre reactivo del plan */
+#verdict .ov-hd{grid-template-columns:minmax(0,1.65fr) minmax(280px,.85fr)!important;gap:clamp(18px,2.6vw,34px)!important;align-items:center!important}
+#verdict .ov-ttl{display:flex;flex-direction:column;justify-content:center;min-width:0}
+#verdict .v-cap{max-width:72ch!important;line-height:1.58!important;margin-top:11px!important}
+#verdict .v-plan-name{font-weight:750;color:#e8a588}
+#verdict .mm-net{align-self:center;text-align:right;padding-top:0}
+#pSum .pk-hd{padding-right:40px!important}
+#pSum .pk .pk-o .pk-v{font-variant-numeric:tabular-nums}
+html.light #verdict .v-plan-name{color:#ad4b27}
+@media(max-width:980px){#verdict .ov-hd{grid-template-columns:minmax(0,1fr)!important;gap:12px!important}#verdict .mm-net{text-align:left!important;align-self:start}}
+@media(max-width:760px){#pSum .pk-hd{display:none!important}#verdict .v-cap{max-width:none!important}}
+
+/* v1.0.83: Tasación comparte el estilo del encabezado del listado, sin insignia de píldora. */
+.appr .appr-title{font-size:1.2rem!important;line-height:1.28!important;margin:0 0 13px!important;min-height:25px}
+
+/* ===== Artículo PI — reutiliza tokens de Market Moves+ ===== */
+.pi-article{font-size:15px;line-height:1.65;color:var(--mut);margin-top:20px}
+.pi-article h3{font:600 clamp(1.35rem,2.4vw,1.9rem)/1.25 var(--f-num);color:var(--txt);margin:10px 0 13px}
+.pi-article h4{font:600 1.05rem var(--f-num);color:var(--txt);margin:14px 0 8px}
+.pi-article p{margin:9px 0 13px}.pi-article strong,.pi-article b{color:var(--txt)}
+.pi-intro,.pi-photo-row{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(280px,.8fr);gap:24px;align-items:center}
+.pi-intro{padding:24px;border:1px solid var(--line2);background:linear-gradient(115deg,rgba(222,220,209,.09),rgba(36,35,33,.6));border-radius:var(--r-lg)}
+.pi-intro figure,.pi-photo-row figure{margin:0;min-width:0}
+.pi-article figure img{width:100%;max-height:320px;object-fit:contain;background:rgba(0,0,0,.3);border:1px solid var(--line);border-radius:var(--r-md);display:block}
+.pi-article figcaption{font-size:.75rem;color:var(--dim);line-height:1.4;margin-top:7px}
+.pi-eyebrow,.pi-num{display:block;font:.75rem var(--f-num);letter-spacing:.11em;color:var(--thrust);font-weight:700}
+.pi-chips{display:flex;flex-wrap:wrap;gap:7px;margin-top:22px}.pi-chips span{border:1px solid var(--line2);border-radius:20px;padding:4px 11px;font-size:.78rem;color:var(--txt)}
+.pi-index{display:flex;gap:8px;flex-wrap:wrap;margin:20px 0}.pi-index a{border:1px solid var(--line2);background:rgba(36,35,33,.5);border-radius:30px;padding:8px 12px;font-size:.75rem;text-decoration:none;color:var(--mut);font-weight:700}.pi-index a:hover{color:var(--txt);border-color:var(--ion)}
+.pi-chapter{scroll-margin-top:25px;border:1px solid var(--line);background:linear-gradient(180deg,rgba(48,48,46,.7),rgba(36,35,33,.65));border-radius:var(--r-lg);padding:24px;margin:14px 0}
+.pi-path{display:flex;align-items:center;flex-wrap:wrap;gap:8px;margin:17px 0}.pi-path>span{flex:1;min-width:95px;background:rgba(36,35,33,.72);border:1px solid var(--line2);padding:12px;border-radius:var(--r-sm)}.pi-path b{display:block;font-size:1.15rem;color:var(--thrust)}.pi-path small{font-size:.75rem;display:block}.pi-path i{font-style:normal;color:var(--thrust)}
+.pi-tip,.pi-callout{background:rgba(224,168,79,.06);border-left:3px solid var(--thrust);padding:13px 15px;border-radius:0 var(--r-sm) var(--r-sm) 0;margin-top:16px}
+.pi-table-wrap{overflow-x:auto;margin:15px 0}.pi-table{width:100%;border-collapse:collapse;text-align:left;font-size:.86rem;min-width:540px}.pi-table th{padding:11px 12px;color:var(--txt);font-weight:700;background:rgba(222,220,209,.08)}.pi-table td{padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:top}.pi-table tr:last-child td{border-bottom:0}.pi-table td:first-child{color:var(--txt);font-weight:600}
+.pi-planets{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px;margin:18px 0}.pi-planets>div{border:1px solid var(--line2);border-radius:var(--r-md);padding:13px 10px;background:rgba(36,35,33,.5)}.pi-planets b{display:block}.pi-planets small{display:block;font-size:.72rem;color:var(--dim)}.pi-dot{display:block;width:32px;height:32px;border-radius:50%;margin-bottom:8px;box-shadow:inset -8px -5px 12px rgba(0,0,0,.5),0 0 0 1px rgba(255,255,255,.15)}.pi-dot-0{background:#9b8669}.pi-dot-1{background:#8fb3bf}.pi-dot-2{background:#a7d8e8}.pi-dot-3{background:#c16c40}.pi-dot-4{background:#2872a1}.pi-dot-5{background:#cfb95d}.pi-dot-6{background:#6383aa}.pi-dot-7{background:#5d947c}
+.pi-photo-row{grid-template-columns:minmax(280px,.8fr) minmax(0,1.2fr);align-items:start;margin:17px 0}.pi-photo-row p{margin:0 0 11px}
+.pi-step{display:grid;grid-template-columns:44px 1fr;gap:12px;padding:13px 0;border-bottom:1px solid var(--line)}.pi-step:last-child{border-bottom:0}.pi-step>span{font:700 1.2rem var(--f-num);color:var(--thrust)}.pi-step h4{margin:0 0 3px}.pi-step p{margin:0}
+.pi-muted,.pi-source{color:var(--dim);font-size:.79rem}.pi-source{padding:14px 6px}.pi-source a{color:var(--ion)}
+@media(max-width:750px){.pi-intro,.pi-photo-row{grid-template-columns:1fr}.pi-planets{grid-template-columns:repeat(2,minmax(0,1fr))}.pi-chapter{padding:17px}.pi-path i{display:none}.pi-index{gap:5px}}
+
+
+/* EVE-like skill ranks */
+.eve-sk{display:flex;align-items:center;gap:8px;margin:7px 0 4px;max-width:330px}
+.eve-sk-pips{display:flex;gap:4px;flex:1}
+.eve-sk-pip{width:19px;height:15px;border:0;border-radius:2px;background:#747776;opacity:.7;padding:0}
+.eve-sk-pip.trained{background:#f0f0ec;opacity:1}
+.eve-sk-pip.locked{width:5px;height:4px;margin:6px 7px;background:#757777}
+.eve-sk-pip:hover{outline:1px solid var(--ion)}
+.eve-sk-rank{min-width:30px;color:var(--mut);font-size:.8rem}
+.eve-sk-add{display:grid;place-items:center;width:32px;height:32px;border:1px solid #408f75;border-radius:3px;color:#b6f4d0;background:rgba(30,105,75,.22);font-size:21px}
+.eve-sk-add.book{border-color:#9b363b;color:#ffb9bd;background:rgba(100,20,25,.25);font-size:17px}
+.eve-sk-add:disabled{opacity:.42;cursor:default}
+.eve-sk-native{position:absolute!important;width:1px!important;height:1px!important;opacity:0!important;pointer-events:none!important}
+
 /* ===== tema claro (generado desde el oscuro por light.py) ===== */
 html.light{--void:#e4e3dd;--hull:#e2e0da;--hull2:#e0ded8;--line:rgba(31,30,29,0.114);--line2:rgba(31,30,29,0.125);--txt:#1c1c1a;--mut:#54524d;--dim:#6c6a64;--ion:#413f3c;--blue:#a39d8b;--clay:#c96442;--thrust:#a67526;--gain:#418b62;--loss:#a92c23}
 html.light body::after{background:repeating-linear-gradient(180deg,rgba(31,30,29,0.011) 0 1px,transparent 1px 3px),
@@ -1722,6 +1900,66 @@ html.light .ov-trk .ln{background:linear-gradient(90deg,#a92c23,#a67526,#418b62)
 html.light .ov-trk .tk{background:#413f3c}
 html.light .ov-trk .me{background:#c96442;border:2px solid #151514;box-shadow:0 0 8px rgba(201,100,66,0.8)}
 html.light .ov-mk-n b{color:#a44d28}
+html.light .pl-row.min .p .cp-refined-price:hover,html.light .pl-row.min .p .cp-refined-price:focus-visible{border-color:rgba(165,113,39,0.6)!important;background:rgba(226,173,97,0.125)!important}
+html.light .pl-row.min .p .cp-refined-price.cp-manual-price{border-color:rgba(118,191,154,0.663)!important;background:rgba(91,163,126,0.15)!important}
+html.light .pl-row.min .p .pr-inline-editor{background:rgba(225,172,91,0.075);border:1px solid rgba(225,172,91,0.463)}
+html.light .pl-row.min .p .pr-inline-input{border:1px solid rgba(226,173,97,0.625);background:var(--input,#e9e7e3)}
+html.light .pl-row.min .p .pr-inline-editor button{border:1px solid rgba(31,30,29,0.19);background:rgba(31,30,29,0.067)}
+html.light .pl-row.min .p .pr-inline-editor button:hover{background:rgba(31,30,29,0.152)}
+html.light .pl-row.min .p .pr-edit-save{color:var(--gain,#418b62)!important}
+html.light .pl-row.min .p .pr-edit-cancel{color:var(--loss,#a92c23)!important}
+html.light.light .pl-row.min .p .pr-inline-editor{background:rgba(184,123,45,0.1);border-color:rgba(150,101,32,0.45)}
+html.light.light .pl-row.min .p .pr-inline-input{background:#151514;color:#e4e2dd}
+html.light .pk-actions .pk-change{border:1px solid rgba(217,119,87,0.562);background:#e5e3dd;color:#2c2b29}
+html.light .pk-actions .pk-change:hover,html.light .pk-actions .pk-change[aria-expanded=true]{border-color:#c96442;background:rgba(217,119,87,0.225)}
+html.light #pk>.pk-o:hover{border-color:rgba(217,119,87,0.688)!important}
+html.light .mm-modnav{background:#e7e6e1;border:1px solid rgba(31,30,29,0.114)}
+html.light .mm-mod{color:#5f5d58}
+html.light .mm-mod[aria-selected=true]{background:linear-gradient(95deg,rgba(217,119,87,0.275),rgba(217,119,87,0.075));border-color:rgba(217,119,87,0.625);color:#272624}
+html.light .mm-mod:hover{color:#151514}
+html.light .mm-pi-placeholder{background:#e9e7e3;border:1px solid rgba(31,30,29,0.095)}
+html.light .mm-pi-features>div{background:#e8e7e2}
+html.light .mm-title::before{background:linear-gradient(90deg,#c96442,rgba(217,119,87,0));box-shadow:0 0 12px rgba(217,119,87,0.438)}
+html.light .mm-missing{color:#b27f1a;border:1px solid rgba(226,181,104,0.562);background:rgba(226,181,104,0.125)}
+html.light #verdict{background:linear-gradient(180deg,rgba(240,237,229,0.91),rgba(240,237,229,0.96))!important}
+html.light #verdict .v-cap{color:#363532}
+html.light #verdict .ov-flow{background:rgba(240,237,229,0.82)}
+html.light #verdict .mm-dest-inline{border-top:1px solid rgba(31,30,29,0.114)}
+html.light.light .mm-modnav{background:#232220}
+html.light.light .mm-mod{color:#a49e8c}
+html.light.light .mm-mod[aria-selected=true]{color:#a84d31;background:#9d542f}
+html.light.light .mm-pi-placeholder,html.light.light .mm-pi-features>div,html.light.light #verdict .ov-flow{background:#1e1e1c}
+html.light.light #verdict{background:#151514!important}
+html.light.light #verdict .v-cap{color:#e1dfd9}
+html.light.light .mm-title{color:#e5e3de!important}
+html.light .mm-section-head::before{background:linear-gradient(90deg,#c96442,rgba(217,119,87,0));box-shadow:0 0 11px rgba(217,119,87,0.438)}
+html.light #verdict .mm-plan-area{border-top:1px solid rgba(31,30,29,0.123)}
+html.light #pk>.pk-o::after{color:#925e3a}
+html.light #pk>.pk-o:focus-visible{outline:2px solid #c96442}
+html.light #verdict .v-plan-name{color:#a44d28}
+html.light.light #verdict .v-plan-name{color:#ad4b27}
+html.light .pi-intro{background:linear-gradient(115deg,rgba(31,30,29,0.085),rgba(240,237,229,0.6))}
+html.light .pi-article figure img{background:rgba(0,0,0,0.048)}
+html.light .pi-index a{background:rgba(240,237,229,0.6)}
+html.light .pi-chapter{background:linear-gradient(180deg,rgba(240,237,229,0.7),rgba(240,237,229,0.65))}
+html.light .pi-path>span{background:rgba(240,237,229,0.72)}
+html.light .pi-tip,html.light .pi-callout{background:rgba(224,168,79,0.075)}
+html.light .pi-table th{background:rgba(31,30,29,0.076)}
+html.light .pi-planets>div{background:rgba(240,237,229,0.6)}
+html.light .pi-dot{box-shadow:inset -8px -5px 12px rgba(0,0,0,0.08),0 0 0 1px rgba(31,30,29,0.142)}
+html.light .pi-dot-0{background:#786954}
+html.light .pi-dot-1{background:#4d737f}
+html.light .pi-dot-2{background:#30819c}
+html.light .pi-dot-3{background:#955737}
+html.light .pi-dot-4{background:#2872a1}
+html.light .pi-dot-5{background:#988534}
+html.light .pi-dot-6{background:#4b6381}
+html.light .pi-dot-7{background:#5d947c}
+html.light .eve-sk-pip{background:#98917b}
+html.light .eve-sk-pip.trained{background:#252422}
+html.light .eve-sk-pip.locked{background:#97907b}
+html.light .eve-sk-add{border:1px solid #408f75;color:#22aa5b;background:rgba(30,105,75,0.275)}
+html.light .eve-sk-add.book{border-color:#9b363b;color:#c20a15;background:rgba(100,20,25,0.312)}
 /* ajustes a mano del tema claro */
 html.light body{background:#e6e3da;color:#1f1e1d}
 html.light body::before{opacity:.12;filter:grayscale(.35) brightness(1.1)}
@@ -1831,7 +2069,6 @@ html.light #settings .st-f{background:#f7f5ef}
 html.light #settings .st-f input:not([type=checkbox]),html.light #settings .st-f select,html.light #settings .st-f textarea{background:#fff!important}
 html.light .sub-h{color:#b5532f!important}
 
-/* [ChatGPT] Comparativa Minera CSS, aislado de ventas */
 .i-rock{--i:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 15l3-8 7-3 6 5-1 8-7 3-6-2z'/%3E%3Cpath d='M9 10l3 2 4-2M12 12v5'/%3E%3C/svg%3E")}
 /* Scope moderno para no contaminar el gestor de ventas. */
 @scope (#mining) {
@@ -2041,7 +2278,7 @@ html.light .sub-h{color:#b5532f!important}
 .pl-tile .pk-flt+.pk-flt{margin-top:2px}
 
 
-/* v1.0.78 [ChatGPT]: adaptación del módulo histórico al gestor actual */
+/* v1.0.69 [ChatGPT]: adaptación del módulo histórico al gestor actual */
 .mn .mn-v-max,.mn .mn-v-ships,.mn .mn-v-plan{min-width:0}
 .mn .mn-v-max[hidden],.mn .mn-v-ships[hidden],.mn .mn-v-plan[hidden]{display:none!important}
 .mn-maxbody{display:grid;gap:14px;margin-top:14px}
@@ -2063,7 +2300,7 @@ html.light .sub-h{color:#b5532f!important}
 @media(prefers-reduced-motion:reduce){.mn *{scroll-behavior:auto!important}}
 
 
-/* v1.0.78 — switch de SP y enlace oficial junto a los tabs */
+/* v1.0.71 — switch de SP y enlace oficial junto a los tabs */
 .mn-toolbar{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px 16px;min-width:0}
 .mn-toolbar .mn-views{flex:0 1 auto;min-width:0}
 .mn-omega-tools{display:flex;align-items:center;justify-content:flex-end;flex-wrap:wrap;gap:9px 12px;min-width:0;margin-left:auto}
@@ -2084,7 +2321,7 @@ html.light .sub-h{color:#b5532f!important}
 @media(prefers-reduced-motion:reduce){.mn-sp-track,.mn-sp-track::after,.mn-sp-cta{transition:none}}
 
 
-/* v1.0.78 — Precios personalizados, seguros y compartidos por vistas */
+/* v1.0.72 — Precios personalizados, seguros y compartidos por vistas */
 .mn-price-editor{display:block;padding:0!important;margin:0;border:1px solid rgba(222,220,209,.12)!important;border-radius:var(--r-md)!important;background:rgba(20,21,24,.58)!important}
 .mn-price-editor>summary{display:flex;align-items:center;flex-wrap:wrap;gap:9px;padding:11px 14px;cursor:pointer;list-style:none;color:var(--txt);font:600 .89rem var(--f-ui)}
 .mn-price-editor>summary::-webkit-details-marker{display:none}
@@ -2118,7 +2355,7 @@ html.light .sub-h{color:#b5532f!important}
 @media(max-width:470px){.mn-edit-mats{grid-template-columns:minmax(0,1fr)}.mn-edit-value>input{min-width:7ch}}
 
 
-/* v1.0.78 — enlace de Ajustes de hielo y días de minado desde el mes 2 */
+/* v1.0.73 — enlace de Ajustes de hielo y días de minado desde el mes 2 */
 .mn-ice-settings{display:flex;align-items:center;flex-wrap:wrap;gap:8px 12px;margin:12px 0 10px;padding:10px 12px;border:1px solid rgba(220,186,117,.25);border-radius:9px;background:rgba(240,178,42,.045);min-width:0}
 .mn-ice-settings[hidden]{display:none!important}
 .mn-ice-settings>label{color:var(--txt);font-size:.84rem;font-weight:650}
@@ -2143,8 +2380,7 @@ html.light #mining .mn-price-overridden{background:rgba(204,128,20,.065);border-
 html.light #mining .mn-price-overridden .mn-edit-source{color:#8e5a06}
 
 
-
-/* v1.0.78: tiempo de viaje y seis tarjetas comparativas. */
+/* v1.0.74: tiempo de viaje y seis tarjetas comparativas. */
 #mining .mn-turnaround{display:flex;align-items:center;flex-wrap:wrap;gap:9px 14px;padding:12px 14px;background:rgba(231,175,93,.045);border:1px solid rgba(231,175,93,.22);border-radius:10px}
 #mining .mn-turnaround label{font-weight:650;font-size:.9rem;color:var(--txt)}
 #mining .mn-turnaround-input{display:flex;align-items:center;gap:7px;flex-wrap:wrap}
@@ -2184,7 +2420,7 @@ html.light #mining .mn-kpi .mn-kpi-winner{background:rgba(224,170,79,.12)}
 @media(prefers-reduced-motion:reduce){#mining .mn-ship-card{transition:none}}
 
 
-/* v1.0.78 — controles consistentes, fichas verticales, entrenamiento y presupuestos. */
+/* v1.0.75 — controles consistentes, fichas verticales, entrenamiento y presupuestos. */
 #mining .mn-controls-unified{padding:16px;border:1px solid rgba(222,220,209,.14);background:rgba(21,23,27,.76);border-radius:12px}
 #mining .mn-controls-unified .mn-ctl{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,12rem),1fr));gap:14px}
 #mining .mn-controls-unified .mn-ctl>div{display:flex;flex-direction:column;align-items:flex-start;gap:7px;max-width:100%}
@@ -2250,7 +2486,7 @@ html.light #mining .mn-price .mn-pst{background:rgba(255,255,255,.74);border-col
 @media(max-width:680px){#mining .mn-price{grid-template-columns:1fr}#mining .mn-price .mn-pst{grid-column:auto}#mining .mn-fit-attributes{grid-template-columns:1fr}#mining .mn-tr-steps{grid-template-columns:1fr}#mining .mn-edit-cost{grid-template-columns:1fr}}
 
 
-/* v1.0.78 — Guía de escenarios: controles compactos, simetría y lectura por etapas. */
+/* v1.0.76 — Guía de escenarios: controles compactos, simetría y lectura por etapas. */
 #mining .mn-module-intro{padding:20px 24px 18px;border:1px solid rgba(222,220,209,.12);border-radius:12px;background:linear-gradient(115deg,rgba(107,145,177,.09),rgba(25,26,29,.28) 55%,rgba(237,161,0,.035))}
 #mining .mn-module-eyebrow{display:block;font:650 .72rem/1.3 var(--f-ui);letter-spacing:.11em;text-transform:uppercase;color:var(--ion);margin-bottom:8px}
 #mining .mn-module-intro h2{margin:0 0 6px;color:var(--txt);font:650 clamp(1.23rem,2vw,1.55rem)/1.24 var(--f-serif)}
@@ -2322,7 +2558,7 @@ html.light #mining .mn-guidance .mn-iii-estimate,html.light #mining .mn-guidance
 @media(prefers-reduced-motion:reduce){#mining .mn-controls-unified .pk-fb{transition:none}}
 
 
-/* v1.0.78 — HUD EVE: ⓘ accesibles, configuración a dos columnas y ficha por typeID. */
+/* v1.0.77 — HUD EVE: ⓘ accesibles, configuración a dos columnas y ficha por typeID. */
 #mining .mn-shared-intro{display:flex;align-items:center;flex-wrap:wrap;gap:8px 12px;min-height:24px}
 #mining .mn-shared-intro strong{font-size:.96rem;color:var(--txt)}
 #mining .mn-shared-layout{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(275px,.8fr);align-items:start;gap:12px}
@@ -2379,132 +2615,11 @@ html.light #mining .mn-info-popup a{color:#175f9c}
 @media(max-width:820px){#mining .mn-controls-unified{grid-template-columns:minmax(0,1fr)}#mining .mn-context-aside{grid-column:1}#mining .mn-shared-layout{grid-template-columns:minmax(0,1fr)}#mining .mn-config-group{padding:12px 0}}
 @media(max-width:540px){#mining .mn-context-aside{padding:13px}#mining .mn-info-popup{width:min(270px,calc(100vw - 48px))}#mining .mn-config-group-intro h3{font-size:.98rem}}
 
-/* v1.0.83: ficha emergente EVE y aviso de dron adaptado a skills. */
+/* v1.0.79: ficha emergente EVE y aviso de dron adaptado a skills. */
 #mining .mn-info-type-id{display:block;margin:0 0 9px;color:#b0bccb;font:500 .73rem/1.45 var(--f-ui);font-variant-numeric:tabular-nums}
 #mining .mn-fit-fallback{margin:8px 0 12px;padding:10px 12px;border-radius:8px;border:1px solid rgba(120,167,212,.28);background:rgba(90,140,195,.07);color:var(--txt);font-size:.85rem;line-height:1.56}
 html.light #mining .mn-info-type-id{color:#496276}
 html.light #mining .mn-fit-fallback{border-color:rgba(40,100,150,.22);background:rgba(48,117,174,.06)}
-
-/* v1.0.83: selector v5 aprobado: un plan, resumen prominente y un único cambio a la derecha. */
-.pk-summary{display:block;margin:8px 0 18px;color:var(--txt);font:400 clamp(1.08rem,1.8vw,1.35rem)/1.5 var(--f-ui);letter-spacing:-.012em}
-.pk-summary strong{font-weight:700;color:var(--txt)}
-.pk-summary .pk-sum-delta.pos{color:var(--gain)!important;white-space:nowrap}
-.pk-summary .pk-sum-delta.neg{color:var(--loss)!important;white-space:nowrap}
-.pk-summary .pk-sum-value{color:var(--gain)!important}
-.pk-actions{display:flex;justify-content:flex-end;margin:10px 0}
-.pk-actions .pk-change{border:1px solid rgba(217,119,87,.45);border-radius:999px;background:#282321;color:#f0e4dd;padding:8px 16px;font:600 .87rem var(--f-ui);cursor:pointer;white-space:nowrap}
-.pk-actions .pk-change:hover,.pk-actions .pk-change[aria-expanded=true]{border-color:#d97757;background:rgba(217,119,87,.18)}
-.pk-w .pk-tools{margin:4px 0 8px;justify-content:flex-start}
-#pkOthers[hidden]{display:none!important}
-#pkOthers{margin-top:6px}
-#pk>.pk-o{cursor:default}
-#pk>.pk-o:hover{border-color:rgba(217,119,87,.55)!important}
-#pk>.pk-o.best{margin-bottom:0}
-@media(max-width:760px){.pk-summary{font-size:1.07rem;line-height:1.53}.pk-actions .pk-change{min-height:40px}}
-/* v1.0.83: diseño unificado aprobado, sin alterar los cálculos */
-.mm-modnav{position:relative;display:flex;gap:5px;flex-wrap:wrap;background:#1b1918;border:1px solid rgba(222,220,209,.12);padding:6px;border-radius:12px;margin:20px auto 14px;max-width:1100px}
-.mm-mod{appearance:none;display:flex;align-items:center;gap:9px;padding:10px 19px;font:650 .95rem var(--f-ui);background:none;color:#b9b0a7;border:1px solid transparent;border-radius:8px;cursor:pointer}
-.mm-mod[aria-selected=true]{background:linear-gradient(95deg,rgba(217,119,87,.22),rgba(217,119,87,.06));border-color:rgba(217,119,87,.5);color:#f4ece4}
-.mm-mod:hover{color:#fff}
-body.mm-mining #heroIntro,body.mm-mining #salesBody,body.mm-pi #heroIntro,body.mm-pi #salesBody{display:none!important}
-#vWhat[hidden],#pi[hidden]{display:none!important}
-.mm-pi-placeholder{border-radius:12px;padding:20px;background:#151515;border:1px solid rgba(222,220,209,.1)}
-.mm-pi-placeholder h3{margin:0 0 8px;color:var(--txt);font-size:1.1rem}.mm-pi-placeholder p{margin:0;color:var(--mut)}
-.mm-pi-features{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:12px}
-.mm-pi-features>div{padding:14px 16px;border:1px solid var(--line);background:#181716;border-radius:10px;min-width:0}
-.mm-pi-features b,.mm-pi-features small{display:block}.mm-pi-features small{color:var(--mut);margin-top:6px}
-.mm-section-head{margin:0 0 15px!important;max-width:none!important}
-.mm-title{display:flex!important;align-items:center!important;gap:12px!important;margin:0!important;text-transform:uppercase!important;letter-spacing:.035em!important;font:750 clamp(1.17rem,2.1vw,1.48rem)/1.25 var(--f-ui)!important;color:var(--txt)!important;text-align:left!important}
-.mm-title::before{content:"";display:block;flex:0 0 27px;width:27px;height:3px;background:linear-gradient(90deg,#d97757,rgba(217,119,87,0));box-shadow:0 0 12px rgba(217,119,87,.35);border-radius:9px}
-.mm-section-sub{margin:5px 0 0 39px!important;font:650 .73rem/1.55 var(--f-ui)!important;letter-spacing:.09em;text-transform:uppercase;color:var(--dim)!important}
-.mm-missing{font:650 .78rem var(--f-ui);color:#f2c978;border:1px solid rgba(226,181,104,.45);background:rgba(226,181,104,.1);padding:5px 9px;border-radius:7px}
-.mm-missing[hidden]{display:none}
-#ledger summary{gap:10px;flex-wrap:wrap}#ledger summary .mm-title{font-size:1.2rem!important}
-#verdict{padding:21px 21px 18px!important;margin:0 0 17px!important;background:linear-gradient(180deg,rgba(31,29,28,.91),rgba(21,20,19,.96))!important}
-#verdict .ov{gap:12px;margin-bottom:0}
-#verdict .ov-hd{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:24px;margin-bottom:4px}
-#verdict .ov-hd .mm-section-head{margin-bottom:8px!important}
-#verdict .v-cap{font:400 clamp(.96rem,1.25vw,1.09rem)/1.55 var(--f-ui)!important;color:#e4ddd3;max-width:810px}
-#verdict .mm-net{text-align:right;min-width:0}#verdict .mm-net-label{font:650 .76rem var(--f-ui);letter-spacing:.1em;color:var(--dim)}
-#verdict .v-isk{font-size:clamp(2rem,4.6vw,3.5rem)!important;white-space:nowrap;line-height:1.13!important}
-#verdict .v-isk span{font-size:.44em!important;color:var(--txt);margin-left:6px}
-#verdict .ov-flow{width:100%;padding:17px 18px;border-radius:12px;background:rgba(16,16,16,.82)}
-#verdict .ov-flow h4{font:650 .8rem var(--f-ui);letter-spacing:.09em;color:var(--dim);margin-bottom:11px}
-#verdict .mm-dest-inline{border-top:1px solid rgba(222,220,209,.12);padding-top:15px;margin-top:18px}
-#verdict .mm-dest-inline .ov-bar{height:11px}
-#verdict .ov-leg{grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-top:13px}
-#verdict .ov-leg>div{min-width:0}#verdict .ov-leg b{font-size:.95rem!important;white-space:normal;overflow-wrap:anywhere}
-#verdict .ov-leg small{white-space:normal;overflow:visible;text-overflow:initial}
-#verdict .ov-kpi{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:12px}
-#verdict .ov-kpi>div{display:grid;grid-template-columns:1fr auto;align-items:center;gap:3px 12px;padding:12px 16px;min-height:unset}
-#verdict .ov-kpi dt{grid-column:1 / -1}#verdict .ov-kpi dd{grid-column:1;margin:0;font-size:clamp(1.2rem,2vw,1.48rem)}
-#verdict .ov-kpi small{grid-column:2;text-align:right;align-self:center}
-#verdict .mm-legacy{display:none!important}
-#stepsPanel{padding:21px 21px 19px;margin:0 0 16px!important}
-#stepsPanel .stp-list{margin-top:8px}
-#pSum>.mm-section-head,#pExtra>.mm-section-head{margin:0 0 18px!important}
-@media(max-width:860px){#verdict .ov-hd{grid-template-columns:1fr}#verdict .mm-net{text-align:left}#verdict .ov-leg{grid-template-columns:repeat(2,minmax(0,1fr))}.mm-pi-features{grid-template-columns:1fr}}
-@media(max-width:540px){.mm-modnav{flex-direction:column}.mm-mod{justify-content:center}#verdict .ov-kpi{grid-template-columns:1fr!important}#verdict .ov-leg{grid-template-columns:1fr 1fr}#verdict .v-isk{font-size:clamp(1.9rem,8vw,2.5rem)!important}#verdict .ov-hd{gap:12px}}
-html.light .mm-modnav{background:#f4f1ed}html.light .mm-mod{color:#70685e}html.light .mm-mod[aria-selected=true]{color:#a84d31;background:#f7e7df}
-html.light .mm-pi-placeholder,html.light .mm-pi-features>div,html.light #verdict .ov-flow{background:#f8f6f3}
-html.light #verdict{background:#fff!important}html.light #verdict .v-cap{color:#37302a}html.light .mm-title{color:#28231f!important}
-
-/* v1.0.83 — v6 integrada: navegación a la derecha, encabezados alineados y planes compactos. */
-.mm-modnav{max-width:none!important;width:100%;justify-content:flex-end!important;margin-left:0!important;margin-right:0!important}
-.mm-section-head{display:grid!important;grid-template-columns:26px minmax(0,1fr);grid-template-rows:auto auto auto;gap:4px 12px;align-items:start;min-width:0}
-.mm-section-head::before{content:"";width:23px;height:3px;grid-column:1;grid-row:1;margin-top:12px;background:linear-gradient(90deg,#d97757,rgba(217,119,87,0));border-radius:999px;box-shadow:0 0 11px rgba(217,119,87,.35)}
-.mm-section-head>.mm-title{display:block!important;grid-column:2;grid-row:1;min-width:0;margin:0!important;font:800 clamp(1.13rem,1.8vw,1.46rem)/1.22 var(--f-ui)!important;letter-spacing:.035em!important;font-style:normal!important}
-.mm-section-head>.mm-title::before{display:none!important}
-.mm-section-head>.mm-section-sub{display:block!important;grid-column:2;grid-row:2;margin:0!important;min-width:0;font:700 .78rem/1.45 var(--f-ui)!important;letter-spacing:.08em!important;overflow-wrap:normal;word-break:normal}
-#verdict .ov-hd{align-items:start!important}
-#verdict .ov-ttl{min-width:0}
-#verdict .v-cap{margin:9px 0 0 38px!important;max-width:800px!important}
-#verdict .mm-net{padding-top:6px}
-#verdict .v-isk{font-family:var(--f-num)!important;font-style:normal!important}
-#verdict .ov-leg b,#verdict .ov-kpi dd,.pk .pk-o .pk-v,.pk-v,.num{font-family:var(--f-num)!important;font-style:normal!important}
-#verdict .mm-plan-area{border:0;border-top:1px solid rgba(222,220,209,.13);border-radius:0;box-shadow:none!important;background:none!important;margin:22px 0 0!important;padding:20px 0 0!important}
-#pSum .res-top{display:none!important}
-#pSum>.mm-section-head{margin:0 0 24px!important}
-#pSum .pk-summary{grid-column:2;grid-row:3;margin:7px 0 0!important;padding:0!important;border:0!important;background:transparent!important;font:400 clamp(.97rem,1.2vw,1.04rem)/1.55 var(--f-ui)!important;letter-spacing:0}
-#pSum .pk-summary strong{font-weight:700}
-#pSum .pk-w{margin:0!important}
-#pSum .pk-hd{margin-top:0!important}
-#pk>.pk-o{cursor:pointer!important;position:relative;min-height:76px;padding:11px 40px 11px 14px!important;transition:border-color .12s ease,background .12s ease}
-#pk>.pk-o::after{content:"▾";font:700 1rem var(--f-ui);color:#ebd5c6;position:absolute;right:15px;top:50%;transform:translateY(-50%);transition:transform .15s}
-#pk>.pk-o[aria-expanded=true]::after{transform:translateY(-50%) rotate(180deg)}
-#pk>.pk-o:focus-visible{outline:2px solid #d97757;outline-offset:3px}
-#pk>.pk-o .pk-e{max-width:350px}
-#pk>.pk-o .pk-l{font-weight:700}
-#pkOthers{margin:12px 0 0!important}
-#pSum .pk-tools{margin:12px 0 10px!important}
-#pSum #bDeep{margin:13px 0 0!important}
-#pSum .more-btn b{white-space:nowrap}
-#verdict .mm-legacy{display:none!important}
-@media(max-width:760px){
-  .mm-section-head{grid-template-columns:22px minmax(0,1fr);gap:4px 10px}
-  .mm-section-head::before{width:18px;margin-top:10px}
-  #verdict .v-cap{margin-left:32px!important}
-  #verdict .mm-plan-area{margin-top:18px!important}
-  #pSum .pk-summary{line-height:1.5!important}
-  #pk>.pk-o{min-height:unset;padding:12px 32px 12px 12px!important}
-  .mm-modnav{flex-direction:row!important;justify-content:flex-end!important;overflow-x:auto;flex-wrap:nowrap!important}
-  .mm-mod{white-space:nowrap;padding:10px 12px}
-}
-@media(max-width:460px){#pSum .more-btn{gap:5px}#pSum .more-btn b{font-size:.86rem}}
-/* v1.0.83 — simetría del resumen y nombre reactivo del plan */
-#verdict .ov-hd{grid-template-columns:minmax(0,1.65fr) minmax(280px,.85fr)!important;gap:clamp(18px,2.6vw,34px)!important;align-items:center!important}
-#verdict .ov-ttl{display:flex;flex-direction:column;justify-content:center;min-width:0}
-#verdict .v-cap{max-width:72ch!important;line-height:1.58!important;margin-top:11px!important}
-#verdict .v-plan-name{font-weight:750;color:#e8a588}
-#verdict .mm-net{align-self:center;text-align:right;padding-top:0}
-#pSum .pk-hd{padding-right:40px!important}
-#pSum .pk .pk-o .pk-v{font-variant-numeric:tabular-nums}
-html.light #verdict .v-plan-name{color:#ad4b27}
-@media(max-width:980px){#verdict .ov-hd{grid-template-columns:minmax(0,1fr)!important;gap:12px!important}#verdict .mm-net{text-align:left!important;align-self:start}}
-@media(max-width:760px){#pSum .pk-hd{display:none!important}#verdict .v-cap{max-width:none!important}}
-
-/* v1.0.83: Tasación comparte el estilo del encabezado del listado, sin insignia de píldora. */
-.appr .appr-title{font-size:1.2rem!important;line-height:1.28!important;margin:0 0 13px!important;min-height:25px}
 </style>
 <script>/* v1.0.16: aplica el tema guardado antes de pintar (sin parpadeo). Por defecto: Dark. */try{var g=JSON.parse(localStorage.getItem('gestorVentas.ajustes.v1')||'null');if(g&&g.ui){if(g.ui.light)document.documentElement.classList.add('light');}}catch(e){}</script>
 </head>
@@ -2590,12 +2705,18 @@ Contraband Freight = no</textarea><small>Una regla por línea: Nombre = tax tota
   </section>
   <section class="panel mm-pi-panel" id="pi" role="tabpanel" aria-labelledby="mmTabPi" hidden>
     <header class="mm-section-head"><h2 class="mm-title">INDUSTRIA PLANETARIA</h2><p class="mm-section-sub">PLANIFICA TU PI Y PRODUCCIÓN DE FUEL BLOCKS</p></header>
-    <div class="mm-pi-placeholder"><h3>PI · Espacio reservado</h3><p>Preparado para una futura herramienta de extracción, fábricas y Fuel Blocks. Los cálculos todavía no están activos.</p></div>
-    <div class="mm-pi-features">
-      <div><b>Extracción</b><small>Planetas y producción P0 → P1</small></div>
-      <div><b>Fábricas</b><small>Conversión de P1 → P2 y P3</small></div>
-      <div><b>Fuel Blocks</b><small>Comparativa entre vender materiales y fabricar</small></div>
-    </div>
+
+    <article class="pi-article" aria-label="Guía de industria planetaria">
+      <div class="pi-intro"><div><span class="pi-eyebrow">GUÍA PARA PILOTOS · DE CERO A PRODUCCIÓN</span><h3>Tu industria empieza en un planeta.</h3><p>Extrae recursos, transforma materiales y abastece tus Fuel Blocks. Esta guía explica qué comprar, qué entrenar y cómo montar una colonia sin perderte en fórmulas.</p><div class="pi-chips"><span>8 tipos de planeta</span><span>6 colonias máximo por personaje</span><span>P0 → P4</span></div></div><figure><img loading="lazy" src="https://cdn1.eveonline.com/community/devblog/2011/CC_Update.jpg" alt="Captura de EVE Online: centro de mando planetario con barras de CPU y Powergrid"><figcaption>Centro de mando y sus límites de CPU / Powergrid · captura histórica oficial de CCP.</figcaption></figure></div>
+      <nav class="pi-index" aria-label="Índice de PI"><a href="#pi-what">QUÉ ES PI</a><a href="#pi-skills">HABILIDADES</a><a href="#pi-planets">PLANETAS Y CENTROS</a><a href="#pi-buildings">INSTALACIONES</a><a href="#pi-colony">PRIMERA COLONIA</a><a href="#pi-chain">PRODUCCIÓN</a></nav>
+      <section id="pi-what" class="pi-chapter"><span class="pi-num">01 / FUNDAMENTOS</span><h3>¿Qué es la Industria Planetaria?</h3><p>PI (Planetary Industry) convierte los recursos de la superficie de los planetas en materiales industriales. Sirve para vender P1/P2/P3/P4 o alimentar otras industrias, incluidos los Fuel Blocks. Necesitas una cuenta <strong>Omega</strong> para operarla; cada personaje lleva sus colonias independientemente.</p><div class="pi-path"><span><b>P0</b><small>Recurso extraído</small></span><i>→</i><span><b>P1</b><small>Procesado básico</small></span><i>→</i><span><b>P2</b><small>Dos P1</small></span><i>→</i><span><b>P3</b><small>Procesado avanzado</small></span><i>→</i><span><b>P4</b><small>Producto final</small></span></div><p class="pi-tip"><b>Consejo:</b> no tienes que completar toda la cadena en un mismo planeta. Puedes extraer P1 en varios planetas y llevarlos a un planeta de fábricas.</p></section>
+      <section id="pi-skills" class="pi-chapter"><span class="pi-num">02 / PREPARACIÓN</span><h3>Las habilidades que necesitas</h3><p>Empieza por <strong>Remote Sensing I</strong>, <strong>Interplanetary Consolidation IV</strong> y <strong>Command Center Upgrades IV</strong>. El nivel V en las dos últimas habilidades permite seis planetas y el máximo presupuesto de instalaciones.</p><div class="pi-table-wrap"><table class="pi-table"><thead><tr><th>Habilidad</th><th>Para qué sirve</th><th>Objetivo</th></tr></thead><tbody><tr><td>Remote Sensing</td><td>Escanear recursos a distancia</td><td>I mínimo</td></tr><tr><td>Interplanetary Consolidation</td><td>Permite <b>1 + nivel</b> planetas (máximo 6)</td><td>IV–V</td></tr><tr><td>Command Center Upgrades</td><td>Aumenta CPU y Powergrid disponibles</td><td>IV–V</td></tr><tr><td>Planetology</td><td>Mejora resolución del escaneo</td><td>III–IV</td></tr><tr><td>Advanced Planetology</td><td>Mejora precisión de los depósitos</td><td>III–IV</td></tr><tr><td>Customs Code Expertise</td><td>Reduce la parte NPC del impuesto de POCO en highsec; no cambia impuestos fijados por jugadores</td><td>Opcional</td></tr></tbody></table></div><p class="pi-tip">Planetas por personaje: IC 0 = 1 · I = 2 · II = 3 · III = 4 · IV = 5 · V = 6. Ejemplo: HFik0 con IC IV puede usar cinco colonias, aunque su plan actual use menos.</p></section>
+      <section id="pi-planets" class="pi-chapter"><span class="pi-num">03 / ELECCIÓN</span><h3>Ocho planetas, ocho Command Centers</h3><p>Primero identifica el tipo del planeta; después compra en el Market un <strong>Command Center del mismo tipo</strong>. Todos se colocan inicialmente en nivel 0 y se mejoran desde la interfaz del planeta. No compres una versión avanzada: la mejora se hace <em>después</em> de desplegarlo.</p><div class="pi-planets"><div><span class="pi-dot pi-dot-0"></span><b>Barren</b><small>Barren Command Center</small></div><div><span class="pi-dot pi-dot-1"></span><b>Gas</b><small>Gas Command Center</small></div><div><span class="pi-dot pi-dot-2"></span><b>Ice</b><small>Ice Command Center</small></div><div><span class="pi-dot pi-dot-3"></span><b>Lava</b><small>Lava Command Center</small></div><div><span class="pi-dot pi-dot-4"></span><b>Oceanic</b><small>Oceanic Command Center</small></div><div><span class="pi-dot pi-dot-5"></span><b>Plasma</b><small>Plasma Command Center</small></div><div><span class="pi-dot pi-dot-6"></span><b>Storm</b><small>Storm Command Center</small></div><div><span class="pi-dot pi-dot-7"></span><b>Temperate</b><small>Temperate Command Center</small></div></div><p class="pi-tip"><b>Compra:</b> cada Command Center ocupa <strong>1.000 m³</strong> en tu nave. Su precio depende del mercado; no confundas el precio de compra con los costes fijos de mejorar el centro de mando.</p><h4>Capacidad exacta por nivel de Command Center</h4><div class="pi-table-wrap"><table class="pi-table"><thead><tr><th>Nivel CCU</th><th>CPU disponible</th><th>Powergrid</th><th>Coste de mejora</th></tr></thead><tbody><tr><td>0</td><td>1.675 tf</td><td>6.000 MW</td><td>—</td></tr><tr><td>1</td><td>7.057 tf</td><td>9.000 MW</td><td>580.000 ISK</td></tr><tr><td>2</td><td>12.136 tf</td><td>12.000 MW</td><td>930.000 ISK</td></tr><tr><td>3</td><td>17.215 tf</td><td>15.000 MW</td><td>1.200.000 ISK</td></tr><tr><td>4</td><td>21.315 tf</td><td>17.000 MW</td><td>1.500.000 ISK</td></tr><tr><td>5</td><td>25.415 tf</td><td>19.000 MW</td><td>2.100.000 ISK</td></tr></tbody></table></div><p class="pi-muted">Las mejoras se pagan por escalón. La capacidad interna del Command Center es 500 m³ en todos los niveles.</p></section>
+      <section id="pi-buildings" class="pi-chapter"><span class="pi-num">04 / INFRAESTRUCTURA</span><h3>Qué construye cada instalación</h3><div class="pi-photo-row"><figure><img loading="lazy" src="https://wiki.eveuniversity.org/images/thumb/c/c4/Surveying.jpg/640px-Surveying.jpg" alt="Interfaz de extractor planetario con cabezales y gráfico de producción"><figcaption>Survey de un extractor: recurso, cabezales y producción estimada · EVE University (captura histórica).</figcaption></figure><div><p><b>ECU y cabezales:</b> recogen P0. Cada ECU admite hasta 10 cabezales; puedes moverlos cuando cambian los depósitos.</p><p><b>Basic Industry:</b> transforma P0 en P1.</p><p><b>Advanced Industry:</b> transforma materiales procesados en P2 o P3 según el esquema.</p><p><b>High-Tech:</b> procesa P4 y solo está disponible en planetas adecuados (Barren y Temperate).</p><p><b>Launchpad:</b> almacena y conecta importaciones y exportaciones con la oficina aduanera (POCO).</p></div></div><div class="pi-table-wrap"><table class="pi-table"><thead><tr><th>Instalación</th><th>CPU</th><th>PG</th><th>Construcción</th></tr></thead><tbody><tr><td>Extractor Control Unit</td><td>400 tf</td><td>2,600 MW</td><td>45,000 ISK</td></tr><tr><td>Extractor Head (cada uno)</td><td>110 tf</td><td>550 MW</td><td>0 ISK</td></tr><tr><td>Basic Industry Facility</td><td>200 tf</td><td>800 MW</td><td>75,000 ISK</td></tr><tr><td>Advanced Industry Facility</td><td>500 tf</td><td>700 MW</td><td>250,000 ISK</td></tr><tr><td>High-Tech Industry Facility</td><td>1,100 tf</td><td>400 MW</td><td>525,000 ISK</td></tr><tr><td>Storage Facility</td><td>500 tf</td><td>700 MW</td><td>250,000 ISK</td></tr><tr><td>Launchpad</td><td>3,600 tf</td><td>700 MW</td><td>900,000 ISK</td></tr></tbody></table></div><p class="pi-muted">Storage Facility: 5.000 m³ · Launchpad: 10.000 m³. Los Links consumen CPU y PG adicionales según su longitud.</p></section>
+      <section id="pi-colony" class="pi-chapter"><span class="pi-num">05 / PASO A PASO</span><h3>Tu primera colonia, sin saltarte nada</h3><div class="pi-steps"><div class="pi-step"><span>01</span><div><h4>Encuentra un planeta</h4><p>Inspecciona los cinco recursos y busca concentraciones altas. En Nullsec y wormholes suelen ser más abundantes.</p></div></div><div class="pi-step"><span>02</span><div><h4>Compra el Command Center correcto</h4><p>Llévalo en la bodega de la nave (1.000 m³), viaja al sistema y abre Planet Mode.</p></div></div><div class="pi-step"><span>03</span><div><h4>Colócalo y pulsa Submit</h4><p>No basta con situarlo en el mapa. Confirma con Submit y mejora el CC hasta el nivel de tu habilidad.</p></div></div><div class="pi-step"><span>04</span><div><h4>Monta una red corta</h4><p>ECU → Launchpad/Storage → Basic Industry. Conecta con Links; las rutas de producto se configuran por separado.</p></div></div><div class="pi-step"><span>05</span><div><h4>Configura la extracción</h4><p>Selecciona el recurso, posiciona cabezales, elige el periodo (hasta 14 días), instala el programa y crea la ruta para P0.</p></div></div><div class="pi-step"><span>06</span><div><h4>Configura las fábricas</h4><p>Elige el Schematic correcto, crea rutas de entrada y salida, confirma con Submit y revisa que la producción comience.</p></div></div><div class="pi-step"><span>07</span><div><h4>Retira la producción</h4><p>Exporta desde Launchpad usando POCO, revisa el impuesto y recoge con una nave apropiada (por ejemplo Epithal).</p></div></div></div><p class="pi-tip"><b>Error frecuente:</b> tener un Link no crea automáticamente una Route. Si la ECU dice <em>Not routed</em>, el material no llega al almacén.</p></section>
+      <section id="pi-chain" class="pi-chapter"><span class="pi-num">06 / PRODUCCIÓN Y FUEL</span><h3>Cómo se conectan P0, P1, P2, P3 y P4</h3><div class="pi-photo-row"><figure><img loading="lazy" src="https://global.discourse-cdn.com/eveonline/original/4X/d/3/d/d3d1a93ab70c58043ce239d2960f83c8b4d19af2.jpeg" alt="Ejemplo de distribución compacta de fábricas y almacenes planetarios"><figcaption>Ejemplo comunitario de layout compacto de instalaciones · foro oficial de EVE.</figcaption></figure><div><p><b>P0 → P1:</b> una Basic Industry Facility consume normalmente 3.000 P0 por ciclo de 30 minutos y produce 20 P1.</p><p><b>P1 → P2:</b> una Advanced Industry Facility suele consumir 40 unidades de cada uno de dos P1 y produce 5 P2 por hora.</p><p><b>P2 → P3 / P3 → P4:</b> utiliza esquemas específicos; no todos los productos siguen una combinación idéntica.</p><p>Para <b>Fuel Blocks</b> puedes dedicar planetas a producir materiales como <b>Water</b>, <b>Oxygen</b>, <b>Coolant</b>, <b>Enriched Uranium</b>, <b>Mechanical Parts</b> y <b>Robotics</b>, según la receta industrial que sigas.</p></div></div><div class="pi-callout"><b>Para tu plan en HY-RWO</b><p>Organizaremos la producción por personaje y número de colonias disponibles (IC), sin inventar planetas o niveles de fábrica. También podremos aprovechar los planetas sobrantes para producir P1/P2 vendible además del objetivo principal de Fuel Blocks.</p></div></section>
+      <footer class="pi-source">DATOS DE REFERENCIA: <a href="https://wiki.eveuniversity.org/Planetary_Industry" target="_blank" rel="noopener noreferrer">EVE University · PI</a> · <a href="https://wiki.eveuniversity.org/Planetary_buildings" target="_blank" rel="noopener noreferrer">Edificios y costes</a>. Cifras fijas de instalaciones; precios de mercado, impuestos POCO y rendimientos reales varían. Capturas orientativas de interfaces históricas, no de la versión actual.</footer>
+    </article>
   </section>
 <section class="panel" id="help" hidden>
     <div class="x-wrap"><button type="button" class="x-close" data-close="help" aria-label="Cerrar Guía de Uso" title="Cerrar Guía de Uso"></button></div>
@@ -2635,7 +2756,6 @@ Contraband Freight = no</textarea><small>Una regla por línea: Nombre = tax tota
     <p class="lead">No pide tu contraseña de EVE ni inicio de sesión. Solo se conecta a la API oficial de EVE (ESI) para precios y al servidor de imágenes de EVE para los íconos. Janice, Discord y el Buyback se abren aparte, en tu navegador.</p>
   </section>
   </div>
-
   <!-- v1.0.62: Tasación a la izquierda y el recuadro para pegar a la derecha (sin items, el recuadro ocupa todo el ancho) -->
   <div class="hero-intro no-appr" id="heroIntro" role="tabpanel" aria-labelledby="mmTabVentas">
     <div class="appr" id="appr" hidden aria-live="polite"></div>
@@ -2660,7 +2780,6 @@ Contraband Freight = no</textarea><small>Una regla por línea: Nombre = tax tota
     </div>
     <!-- v103: ordenar el ledger es independiente de los filtros por recomendación de Qué Hacer.
          Los botones aplican orden al libro completo; nunca recalculan ISK ni cambian el plan. -->
-
     <div class="ledger-head" role="group" aria-label="Ordenar tus items">
       <button type="button" class="ledger-sort" data-lsort="n" aria-label="Ordenar por nombre">Item <span class="sort-arrow" aria-hidden="true"></span></button>
       <span class="ledger-col">Precio Unidad</span>
@@ -2687,10 +2806,8 @@ Contraband Freight = no</textarea><small>Una regla por línea: Nombre = tax tota
       <div class="mm-legacy" hidden aria-hidden="true">
         <div id="ovShip"><span id="aCourT"></span><span id="aCourier"></span><span id="aCourS"></span></div>
         <div><span id="vsCn"></span><span id="vsC"></span><label id="vsRelW" hidden><input type="checkbox" id="cRelistOn"> Relists <span id="vsRel"></span></label></div>
-
       </div>
     </div>
-
 
   <!-- 1. Resultado simple -->
   <section class="summary res mm-plan-area" id="pSum" hidden>
@@ -2698,7 +2815,6 @@ Contraband Freight = no</textarea><small>Una regla por línea: Nombre = tax tota
     <div class="fb2" id="flipBuy" hidden></div>
     <div class="pk-w">
       <div class="pk" id="pk" role="group" aria-label="Plan seleccionado"></div>
-
       <div class="pk-tools" id="pkTools"></div>
       <div class="pk" id="pkOthers" role="group" aria-label="Otros planes" hidden></div></div>
     <!-- v1.0.50: justo debajo de los planes. Al abrir el desglose, los planes se pliegan y el desglose pasa a ser lo principal -->
@@ -2839,13 +2955,13 @@ Contraband Freight = no</textarea><small>Una regla por línea: Nombre = tax tota
 <button type="button" class="totop" id="toTop" aria-label="Volver arriba" title="Volver arriba (Inicio)" hidden><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 14l6-6 6 6"/></svg></button>
 <footer class="foot">
   <p class="foot-sec"><span class="ic i-lock" aria-hidden="true"></span>Tu inventario no se guarda: al cerrar o recargar se borra. Solo tus Ajustes quedan en este navegador.</p>
-  <div class="foot-by">Creado por <b>Fiko McGivert</b> · Vanguardia DR · SIGMA GRINDSET · <span class="ver">v1.0.83</span></div>
+  <div class="foot-by">Creado por <b>Fiko McGivert</b> · Vanguardia DR · SIGMA GRINDSET · <span class="ver">v1.0.82</span></div>
 </footer>
 
 <script>
 'use strict';
 /* ============================================================
-   Market Moves+ v1.0.83 — SIGMA GRINDSET / Vanguardia DR
+   Market Moves+ v1.0.82 — SIGMA GRINDSET / Vanguardia DR
    Flujo:  pegado → items → carga (ESI: precios, volúmenes, historial) → verificación → plan → vista
      1. Pegado      parsePaste(): parser posicional de columnas de EVE (Name · Quantity · … · Volume · Est. Price).
      2. Carga       esiItems(): trae todo lo que falta; mientras carga, refresh() NO pinta (S.loading).
@@ -3222,7 +3338,6 @@ function removeFromPaste(name){
   }).join('\n');
   syncFromPaste(false);
 }
-
 
 // ================= API de EVE (ESI) =================
 const ESI_BASES=['https://esi.evetech.net/latest','https://esi.evetech.net'];
@@ -4107,6 +4222,7 @@ function paintWhereSold(P,none){
        d.append(sw,el('b',null,v/tot>0&&v/tot<.005?'<1%':pct(v/tot)+'%'),el('small',null,(PLAN_L[k]||k)+' · '+n+(n===1?' item':' items')));lg.append(d);});
      box.append(bar,lg);}}
 }
+// El texto del resumen se deriva de los items y del modo activos, nunca del nombre de una ruta fija.
 function planIntroData(P){
   const name=modeName(P.mode),mode=P.mode||'auto';
   const active=P.rows.filter(r=>r.best);
@@ -4162,7 +4278,6 @@ function paintVerdict(P){
   lastP=P;
   paintWhereSold(P,none);
   if($('deep').hidden)return; // v1.0.8: el análisis (rutas, Qué Hacer, comparación) solo se pinta con la sección abierta
-
   const vTot=P.rows.reduce((a,r)=>a+r.vol,0),cTot=P.rows.reduce((a,r)=>a+r.coll,0);
   $('vsN').textContent=String(S.items.length);$('vsV').textContent=fmtV(Math.round(vTot*10)/10);
   {const u=P.rows.reduce((a,r)=>a+(r.q||0),0),n=vTot>0?trips(vTot):0;
@@ -4318,7 +4433,6 @@ function paintVerdict(P){
   // Pie: solo los items sin precio (no pertenecen a ningún grupo)
   const miss=rowsIn.filter(r=>!r.best);
   if(miss.length){tableTarget=el('div','pl pl-totals');pl.append(tableTarget);prow('miss','Falta precio: '+miss.map(r=>r.o.name).join(', '),'No entran en el total.',null,null,null,null);}
-
   // ¿reprocesar? por item
   const reps=rowsIn.filter(r=>r.rep&&!r.rep.missing),rl=$('vRepList');rl.textContent='';$('vRep').hidden=!reps.length;
   {const ys=reps.filter(r=>r.rep.diff>0).length,a=$('vRepAns');
@@ -4939,7 +5053,6 @@ function paintPicker(P){
   const available=list.filter(x=>x.m!==chosen.m);
   const fl=PK_FILTERS.filter(([f])=>f==='all'||(f!=='noship'||SH())&&available.some(x=>pass[f](x)));
   if(!fl.some(([f])=>f===pkView.filter))pkView.filter='all';
-
   others.hidden=!pkView.open;
   if(!pkView.open)return;
   if(fl.length>2){const group=el('div','pk-flt');group.setAttribute('role','group');group.setAttribute('aria-label','Filtrar planes');
@@ -4988,7 +5101,6 @@ function paintFlipBuy(P){
   t.append(tb);box.append(t);
   box.append(el('p','fb2-n','Compra = Jita Sell × cantidad (comprando de las órdenes de venta, sin broker). Venta = el precio de lista en HY-RWO ya con Sales Tax, Broker y SCC. El envío es un solo cálculo para todo el lote. El margen se cambia junto al botón de la ruta.'));
 }
-
 function paintSummary(P){
   const box=$('pSum'),none=!P.rows.length||P.missing.length===P.rows.length;
   box.hidden=none||!S.items.length;
@@ -4996,9 +5108,7 @@ function paintSummary(P){
   paintPicker(P);
   document.title=compactIsk(P.best)+' ISK · Market Moves+';
   paintFlipBuy(P);
-
 }
-
 // ================= Recalcular =================
 // Colorea montos dentro de textos explicativos: verde si ganas, rojo si pierdes o pagas; neutro si es solo un total.
 // Decide por el signo (+/−) o por las palabras alrededor ("Ganas", "más" / "Pierdes", "menos", "Coste", "pagas").
@@ -6416,7 +6526,6 @@ function selectAppModule(name){
     $('mining').hidden=true;$('settings').hidden=true;$('help').hidden=true;
     $('pi').hidden=false;
   }else{$('mining').hidden=true;$('pi').hidden=true;}
-
   document.querySelectorAll('.side-i[data-panel="mining"]').forEach(b=>b.setAttribute('aria-pressed',String(name==='mining')));
 }
 const mmTabs=[...document.querySelectorAll('#mmTabs [data-mm-module]')];
@@ -6438,7 +6547,6 @@ function togglePanel(id,force){
   if(open&&!s.hidden){s.scrollIntoView({behavior:'smooth',block:'start'});return;}
   if(open){focusOnly(id);slide(s,true);if(id==='mining'){MineUI.mount($('mnRoot'));MineUI.shown();}}else s.hidden=true;
   document.querySelectorAll('.side-i[data-panel="'+id+'"]').forEach(x=>x.setAttribute('aria-pressed',String(open)));
-
   if(open)s.scrollIntoView({behavior:'smooth',block:'start'});}
 // v1.0.11: menú lateral. Escritorio: se contrae a íconos. Móvil: se abre encima con fondo oscuro. Solo en memoria.
 {const mob=()=>innerWidth<=900,b=document.body;
@@ -6451,7 +6559,6 @@ function togglePanel(id,force){
    x.addEventListener('click',()=>{if(x.dataset.panel==='mining')selectAppModule('mining');else togglePanel(x.dataset.panel);if(mob())setO(false);});});}
 // v1.0.8: X dentro de la sección (fija al bajar)
 document.querySelectorAll('.x-close').forEach(b=>b.addEventListener('click',()=>togglePanel(b.dataset.close,false)));
-
 $('sideHome').addEventListener('click',()=>{
   selectAppModule('ventas');focusOnly('home'); // Cierra los paneles sin borrar datos ni preferencias.
   window.scrollTo({top:0,behavior:MOTION()?'smooth':'auto'});
@@ -6464,7 +6571,6 @@ document.querySelectorAll('#settings fieldset.st').forEach(f=>{const l=f.querySe
   l.addEventListener('click',t);l.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();t();}});});
 const stAll=open=>document.querySelectorAll('#settings fieldset.st').forEach(f=>{f.classList.toggle('closed',!open);const l=f.querySelector('legend');if(l)l.setAttribute('aria-expanded',String(open));});
 $('stOpenAll').addEventListener('click',()=>stAll(true));$('stCloseAll').addEventListener('click',()=>stAll(false));
-
 [['cTax','tax'],['cBroker','broker'],['cBrokerNull','brokerNull'],['cScc','scc'],['cMargin','margin'],['cProd','prod']].forEach(([id,k])=>
   $(id).addEventListener('input',e=>{C[k]=(parseFloat(e.target.value)||0)/100;refresh();}));
 [['cSkInst','inst'],['cSkOrd','ord'],['cSkNul','nul']].forEach(([id,k])=>$(id).addEventListener('input',e=>{C.skew[k]=(parseFloat(e.target.value)||0)/100;refresh();}));
@@ -6646,5 +6752,44 @@ addEventListener('pagehide',()=>{if(stT){clearTimeout(stT);stSaveNow();}});
 stRestore();syncDeps();brokerNote();buildOreSelect();readBB();syncLots();refresh();
 
 </script>
+
+<script>
+/* Skill ranks: preserve native controls as the source of truth for all existing calculations. */
+(()=>{
+'use strict';
+const ids=['skAcc','skBR','cAbr','skRep','skRepE','skOre'];
+const store='marketmoves.skillbooks.v1';
+let books={};try{books=JSON.parse(localStorage.getItem(store)||'{}')}catch(_){}
+function enhance(native,id,get,set,min){
+ if(native.dataset.eveDone)return;
+ native.dataset.eveDone='1';native.classList.add('eve-sk-native');
+ const group=document.createElement('div');group.className='eve-sk';group.setAttribute('role','group');group.setAttribute('aria-label',id==='mn-rank'?'Skills de Minería':native.closest('label')?.textContent?.split('\n')[0]||id);
+ const p=document.createElement('div');p.className='eve-sk-pips';
+ const rank=document.createElement('span');rank.className='eve-sk-rank';
+ const add=document.createElement('button');add.type='button';add.className='eve-sk-add';
+ const marks=[];
+ function draw(){const lv=get();const locked=min===0&&books[id]===false&&lv===0;marks.forEach((b,i)=>{const v=i+1;b.className='eve-sk-pip'+(locked?' locked':v<=lv?' trained':'');b.disabled=v<min;b.setAttribute('aria-pressed',String(lv===v));b.title='Nivel '+v});rank.textContent=locked?'—':lv+'/5';add.className='eve-sk-add'+(locked?' book':'');add.textContent=locked?'▣':'+';add.title=locked?'Adquirir skillbook':lv===5?'Nivel máximo':'Subir habilidad';add.disabled=lv===5&&!locked}
+ for(let i=1;i<=5;i++){const b=document.createElement('button');b.type='button';b.title='Elegir nivel '+i;b.setAttribute('aria-label','Nivel '+i);b.addEventListener('click',()=>{books[id]=true;set(i);draw()});marks.push(b);p.append(b)}
+ add.addEventListener('click',()=>{books[id]=true;localStorage.setItem(store,JSON.stringify(books));set(Math.min(5,Math.max(min,get()+1)));draw()});
+ group.addEventListener('contextmenu',e=>{if(min>0)return;e.preventDefault();books[id]=books[id]===false;localStorage.setItem(store,JSON.stringify(books));if(!books[id])set(0);draw()});
+ group.append(p,rank,add);native.after(group);native.addEventListener('change',draw);draw();
+ }
+function enhanceSettings(){ids.forEach(id=>{const n=document.getElementById(id);if(!n||n.dataset.eveDone)return;enhance(n,id,()=>Number(n.value)||0,v=>{n.value=String(v);n.dispatchEvent(new Event('input',{bubbles:true}));n.dispatchEvent(new Event('change',{bubbles:true}))},0)})}
+function enhanceMining(){
+ const root=document.getElementById('mining');if(!root)return;
+ const head=[...root.querySelectorAll('.mn-field-title')].find(n=>n.textContent.trim().startsWith('Skills'));if(!head)return;
+ const field=head.closest('.mn-config-field');if(!field)return;
+ const groups=[...field.querySelectorAll('button')].filter(b=>/^(III|IV|V)(\s|$|\s·)/.test(b.textContent.trim()));
+ if(groups.length!==3)return;
+ const old=groups[0].parentElement;if(old.dataset.eveDone)return;
+ const buttons={3:groups.find(b=>/^III/.test(b.textContent.trim())),4:groups.find(b=>/^IV/.test(b.textContent.trim())),5:groups.find(b=>/^V/.test(b.textContent.trim()))};
+ const get=()=>{const x=[3,4,5].find(n=>buttons[n]?.getAttribute('aria-pressed')==='true'||buttons[n]?.classList.contains('active')||buttons[n]?.classList.contains('on'));return x||4};
+ enhance(old,'mn-rank',get,v=>buttons[Math.max(3,v)]?.click(),3);
+}
+let pending=false;function check(){if(pending)return;pending=true;queueMicrotask(()=>{pending=false;enhanceSettings();enhanceMining()})}
+document.addEventListener('DOMContentLoaded',()=>{check();const root=document.getElementById('mining');if(root){const observer=new MutationObserver(check);observer.observe(root,{subtree:true,childList:true});window.addEventListener('pagehide',()=>observer.disconnect(),{once:true})}});
+})();
+</script>
+
 </body>
 </html>
