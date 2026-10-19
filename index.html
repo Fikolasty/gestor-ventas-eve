@@ -4445,39 +4445,34 @@ function paintWhereSold(P,none){
    if(tot>0){const bar=el('div','ov-bar'),lg=el('div','ov-leg');
      ks.forEach(k=>{const v=sums[k],i=el('i');i.style.width=(v/tot*100)+'%';i.style.background=DC[k]||'#9c9a92';i.title=(PLAN_L[k]||k)+': '+fmt(v);bar.append(i);
        const n=rowsIn.filter(r=>r.best===k).length,d=el('div'),sw=el('span','ov-sw');sw.style.background=DC[k]||'#9c9a92';
-       d.append(sw,el('b',null,v/tot>0&&v/tot<.005?'<1%':pct(v/tot)+'%'),el('small',null,(PLAN_L[k]||k)+' · '+n+(n===1?' item':' items')));lg.append(d);});
+       d.append(sw,el('b',null,v/tot>0&&v/tot<.005?'<1%':pct(v/tot)+'%'),el('small',null,routeSummaryName(k)+' · '+n+(n===1?' ítem':' ítems')));lg.append(d);});
      box.append(bar,lg);}}
 }
 // El texto del resumen se deriva de los items y del modo activos, nunca del nombre de una ruta fija.
+// Compact descriptions are per destination, never whole-lot plan names.
+const routeSummaryName=k=>({
+  fN:'Importar y vender en HY-RWO',fJ:'Venta mediante órdenes en Jita',
+  fJI:'Venta inmediata en Jita',null:'Venta mediante órdenes en HY-RWO',
+  jOrd:'Venta mediante órdenes en Jita',jInst:'Venta inmediata en Jita',
+  bb:'Programa Buy Back',rNull:'Reproceso y venta en HY-RWO',
+  rJita:'Reproceso y venta en Jita',disc:'Venta directa a un jugador'
+})[k]||PLAN_L[k]||k;
 function planIntroData(P){
   const name=modeName(P.mode),active=P.rows.filter(r=>r.best&&r.q>0),total=active.length;
   const next=' Revisa abajo el destino y los pasos para completar la venta.';
   if(!total)return{name,description:'Todavía no hay ítems con una ruta de venta disponible.'};
-  const routeText=k=>({
-    fN:'transportarlo a HY-RWO y venderlo allí',
-    fJ:'venderlo mediante una orden en Jita',
-    fJI:'venderlo al instante en Jita',
-    null:'venderlo mediante una orden en HY-RWO',
-    jOrd:'venderlo mediante una orden en Jita',
-    jInst:'venderlo al instante en Jita',
-    bb:'entregarlo al Buyback',
-    rNull:'reprocesarlo y vender sus materiales en HY-RWO',
-    rJita:'reprocesarlo y vender sus materiales en Jita',
-    disc:'venderlo directamente a otro jugador'
-  })[k]||'seguir la ruta de venta indicada';
   const groups=new Map();
-  active.forEach(r=>{const a=groups.get(r.best)||[];a.push(r);groups.set(r.best,a)});
+  active.forEach(r=>{const list=groups.get(r.best)||[];list.push(r);groups.set(r.best,list);});
   if(total===1){
     const r=active[0];
-    return{name,description:'para «'+r.o.name+'», se recomienda '+routeText(r.best)+'.'+next};
+    return{name,description:'para «'+r.o.name+'» se recomienda esta ruta: '+routeSummaryName(r.best)+'.'+next};
   }
   if(groups.size===1){
-    const [route]=groups.keys();
-    const label=PLAN_L[route]||route;
-    return{name,description:'se recomienda '+(route==='bb'?'utilizar el programa Buy Back':route==='disc'?'vender el lote a un jugador':label.toLowerCase())+' para los '+total+' ítems del lote.'+next};
+    const k=groups.keys().next().value;
+    return{name,description:'los '+total+' ítems siguen una misma ruta: '+routeSummaryName(k)+'.'+next};
   }
-  const details=[...groups].map(([key,rows])=>rows.length+' '+(rows.length===1?'ítem':'ítems')+' → '+(PLAN_L[key]||key).toLowerCase());
-  return{name,description:'se proponen estas rutas para tus '+total+' ítems: '+details.join('; ')+'.'+next};
+  const details=[...groups].map(([k,rows])=>rows.length+' '+(rows.length===1?'ítem':'ítems')+' → '+routeSummaryName(k));
+  return{name,description:'tus '+total+' ítems se reparten así: '+details.join('; ')+'.'+next};
 }
 let activeRep=0;
 function paintVerdict(P){
@@ -4512,7 +4507,7 @@ function paintVerdict(P){
     if(none){cap.textContent='Estamos esperando los precios de Jita para calcular tu ruta.';}
     else{
       const intro=planIntroData(P);
-      cap.append('Con ',el('strong','v-plan-name',intro.name),', ',intro.description);
+      cap.append('Con ',el('strong','plan-name-accent',intro.name),', ',intro.description);
     }
   }
   lastP=P;
