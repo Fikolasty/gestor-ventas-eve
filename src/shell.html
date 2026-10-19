@@ -1512,21 +1512,6 @@ html.light #verdict .v-plan-name{color:#ad4b27}
 .eve-sk-native{position:absolute!important;width:1px!important;height:1px!important;opacity:0!important;pointer-events:none!important}
 
 
-/* Align the valuation and paste cards as a matched pair. */
-.hero-intro:not(.no-appr){align-items:stretch;gap:16px}
-.hero-intro:not(.no-appr)>.appr,
-.hero-intro:not(.no-appr)>.paste{height:100%;min-height:210px;box-sizing:border-box}
-.hero-intro:not(.no-appr)>.paste{padding:14px 16px 12px!important;display:flex;flex-direction:column}
-.hero-intro:not(.no-appr)>.paste textarea{flex:1;min-height:0;padding:3px 0 12px;margin:0;line-height:1.55}
-.hero-intro:not(.no-appr)>.paste .paste-foot{margin-top:auto;padding:11px 0 0;border-top:1px solid var(--line2);gap:12px;min-height:43px}
-.hero-intro:not(.no-appr)>.paste .status{line-height:1.4}
-.hero-intro:not(.no-appr)>.paste #bClear{margin-left:auto;flex-shrink:0}
-@media(max-width:860px){
- .hero-intro:not(.no-appr)>.appr,.hero-intro:not(.no-appr)>.paste{height:auto;min-height:0}
- .hero-intro:not(.no-appr)>.paste textarea{min-height:120px}
-}
-
-
 /* Step contract carousel: keep item column and contract column symmetrical */
 .stp-b.two{align-items:stretch}
 .stp-b.two>.stp-main{display:flex;flex-direction:column;min-height:100%}
@@ -1549,22 +1534,18 @@ html.light #verdict .v-plan-name{color:#ad4b27}
 .stp-arrival-row .copy{width:auto;white-space:nowrap}
 
 
-/* Valuation/paste: shared upper heading track and equal bottom edge. */
-.hero-intro:not(.no-appr){grid-template-columns:repeat(2,minmax(0,1fr))!important;align-items:stretch!important;gap:16px!important}
-.hero-intro:not(.no-appr)>.appr,.hero-intro:not(.no-appr)>.paste{box-sizing:border-box;min-height:230px;height:100%;margin:0!important;border-radius:var(--r-md);padding:16px!important}
-.hero-intro:not(.no-appr)>.appr{display:grid;grid-template-rows:32px minmax(0,1fr);gap:10px}
-.hero-intro:not(.no-appr)>.appr .appr-title{margin:0!important;min-height:0!important;display:flex;align-items:center;font-size:1.2rem!important}
-.hero-intro:not(.no-appr)>.appr .appr-g{min-height:0;height:100%}
-.hero-intro:not(.no-appr)>.paste{display:grid;grid-template-rows:32px minmax(0,1fr) 48px;gap:10px}
-.hero-intro:not(.no-appr)>.paste:before{content:"INVENTARIO";font:700 1.2rem/32px var(--f-num);letter-spacing:.02em;color:var(--txt)}
-.hero-intro:not(.no-appr)>.paste textarea{width:100%;height:100%;min-height:0!important;max-height:none;padding:9px 12px;margin:0;border:1px solid var(--line2);border-radius:var(--r-sm);background:rgba(0,0,0,.2)}
-.hero-intro:not(.no-appr)>.paste .paste-foot{margin:0;padding:0;min-height:0;display:flex;align-items:center;border:0}
-@media(max-width:860px){.hero-intro:not(.no-appr){grid-template-columns:1fr!important}.hero-intro:not(.no-appr)>.appr,.hero-intro:not(.no-appr)>.paste{height:auto;min-height:220px}}
-
-
-.hero-intro:not(.no-appr)>.appr:has(.appr-no-price){grid-template-rows:32px minmax(0,1fr) auto}
-.appr-no-price{color:var(--thrust);font-size:.79rem;line-height:1.4;margin:0;padding:5px 0 0;max-width:100%}
-
+/* Tasación e inventario: una sola regla, sin capas contradictorias. */
+.hero-intro:not(.no-appr){display:grid;grid-template-columns:repeat(2,minmax(0,1fr));align-items:stretch;gap:16px}
+.hero-intro:not(.no-appr)>.appr,.hero-intro:not(.no-appr)>.paste{margin:0;min-width:0;min-height:220px;padding:16px;box-sizing:border-box}
+.hero-intro:not(.no-appr)>.appr{display:flex;flex-direction:column}
+.hero-intro:not(.no-appr)>.appr .appr-title{margin:0 0 12px!important;flex:none;line-height:28px}
+.hero-intro:not(.no-appr)>.appr .appr-g{flex:1;min-height:138px}
+.hero-intro:not(.no-appr)>.paste{display:flex;flex-direction:column;gap:0}
+.hero-intro:not(.no-appr)>.paste textarea{display:block;flex:1;min-height:138px;max-height:none;margin:0;resize:vertical;padding:8px 10px;line-height:1.5}
+.hero-intro:not(.no-appr)>.paste .paste-foot{flex:none;min-height:43px;margin-top:8px;padding:6px 2px 0;border-top:1px solid var(--line2)}
+.hero-intro:not(.no-appr)>.paste .paste-foot #bClear{margin-left:auto}
+.appr-no-price{color:var(--thrust);font-size:.79rem;line-height:1.4;margin:8px 0 0}
+@media(max-width:860px){.hero-intro:not(.no-appr){grid-template-columns:minmax(0,1fr)!important}}
 </style>
 <script>/* v1.0.16: aplica el tema guardado antes de pintar (sin parpadeo). Por defecto: Dark. */try{var g=JSON.parse(localStorage.getItem('gestorVentas.ajustes.v1')||'null');if(g&&g.ui){if(g.ui.light)document.documentElement.classList.add('light');}}catch(e){}</script>
 </head>
