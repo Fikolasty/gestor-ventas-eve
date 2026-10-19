@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src data: blob: https://images.evetech.net https://cdn1.eveonline.com https://wiki.eveuniversity.org https://global.discourse-cdn.com; connect-src https://esi.evetech.net https://images.evetech.net; base-uri 'none'; form-action 'none'; object-src 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src data: blob: https://images.evetech.net https://cdn1.eveonline.com https://wiki.eveuniversity.org https://global.discourse-cdn.com; connect-src https://esi.evetech.net https://images.evetech.net https://login.eveonline.com; base-uri 'none'; form-action 'none'; object-src 'none'">
 <meta name="referrer" content="no-referrer">
 <title>Market Moves+ · SIGMA GRINDSET</title>
 <style>
@@ -1837,6 +1837,24 @@ select{appearance:none;-webkit-appearance:none;padding-right:30px!important;back
 #mining details.mn-info>summary::after{content:none!important;display:none!important;border:0!important;transform:none!important}
 #mining details.mn-info>summary{margin:0!important;padding:0!important;min-height:20px}
 #mining details.mn-info[open]>summary::after{content:none!important;display:none!important}
+
+/* EVE SSO: personaje a la izquierda, tabs independientes a la derecha. */
+#mmTabs .eve-identity{position:relative;min-width:0;margin-right:auto}
+#mmTabs .mm-home{margin-right:0}
+#mmTabs .eve-identity-button{display:flex;align-items:center;gap:10px;min-height:42px;max-width:235px;padding:5px 8px;background:transparent;border:0;border-radius:8px;color:var(--txt);font:650 .87rem var(--f-ui);cursor:pointer;text-align:left}
+#mmTabs .eve-identity-button:hover{background:rgba(255,255,255,.055)}
+#mmTabs .eve-identity-button img{width:34px;height:34px;object-fit:cover;border-radius:7px}
+#mmTabs .eve-identity-button #evePilotName{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#mmTabs .eve-identity-arrow{width:7px;height:7px;border-right:2px solid var(--ion);border-bottom:2px solid var(--ion);transform:rotate(45deg);margin-left:4px;flex:none}
+#mmTabs .eve-identity-button[aria-expanded=true] .eve-identity-arrow{transform:rotate(225deg)}
+#mmTabs .eve-identity-menu{position:absolute;top:calc(100% + 12px);left:0;z-index:120;width:min(340px,calc(100vw - 45px));padding:16px;border-radius:12px;border:1px solid var(--line);background:#201f1e;box-shadow:0 15px 40px rgba(0,0,0,.55)}
+#mmTabs .eve-identity-menu[hidden]{display:none}
+#mmTabs .eve-identity-menu label{font-size:.8rem}
+#mmTabs .eve-identity-menu input{width:100%;margin:6px 0 4px;min-width:0}
+#mmTabs .eve-identity-menu small{display:block;overflow-wrap:anywhere;opacity:.7;font-size:.69rem}
+#mmTabs .eve-identity-menu p{font-size:.8rem;line-height:1.4;color:var(--mut)}
+#mmTabs .eve-identity-menu button{width:100%;padding:10px;margin-top:6px;border:1px solid var(--line2);background:#332720;color:var(--txt);border-radius:7px;cursor:pointer}
+@media(max-width:720px){#mmTabs .eve-identity-button{max-width:125px;font-size:.76rem}#mmTabs .eve-identity-button img{width:29px;height:29px}#mmTabs .mm-mod{padding:7px 9px!important}}
 </style>
 <script>/* v1.0.16: aplica el tema guardado antes de pintar (sin parpadeo). Por defecto: Dark. */try{var g=JSON.parse(localStorage.getItem('gestorVentas.ajustes.v1')||'null');if(g&&g.ui){if(g.ui.light)document.documentElement.classList.add('light');}}catch(e){}</script>
 </head>
@@ -1884,6 +1902,7 @@ select{appearance:none;-webkit-appearance:none;padding-right:30px!important;back
   </div>
   <nav class="mm-modnav" id="mmTabs" role="tablist" aria-label="Secciones de Market Moves+">
     <button type="button" id="navHome" class="mm-home" title="HOME" aria-label="Volver al inicio"><span class="ic i-home" aria-hidden="true"></span></button>
+    <div id="eveIdentity" class="eve-identity"><button type="button" id="eveIdentityButton" class="eve-identity-button" aria-expanded="false" aria-controls="eveIdentityMenu"><img id="evePortrait" alt="" hidden><span id="evePilotName">Conectar EVE</span><span class="eve-identity-arrow" aria-hidden="true"></span></button><div id="eveIdentityMenu" class="eve-identity-menu" hidden><label for="eveClientId">Client ID de tu aplicación EVE SSO</label><input id="eveClientId" autocomplete="off" spellcheck="false" placeholder="Client ID público"><small>Callback: https://fikolasty.github.io/gestor-ventas-eve/</small><p id="eveLoginStatus" role="status">La sesión se guarda solo en memoria. Skills manuales disponibles sin login.</p><button type="button" id="eveLogin">Iniciar sesión con EVE</button><button type="button" id="eveSync" hidden>Sincronizar skills</button><button type="button" id="eveLogout" hidden>Desconectar</button></div></div>
     <div class="mm-modgroup" role="presentation">
     <button type="button" class="mm-mod on" data-mm-module="ventas" role="tab" aria-controls="salesBody" aria-selected="true" id="mmTabVentas">Ventas</button>
     <button type="button" class="mm-mod" data-mm-module="mining" role="tab" aria-controls="mining" aria-selected="false" id="mmTabMining">Minería</button>
