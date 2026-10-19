@@ -276,7 +276,7 @@ const MineUI=(()=>{
      '<p>Prepara un escenario, compara el rendimiento real de tus naves y calcula el coste del fit antes de decidir.</p>'+
    '</header>'+
    '<div class="mn-toolbar">'+
-  '<div class="mn-views">'+SEG('view',[['ships','Rendimiento por Nave'],['plan','Plan para Omega Nuevo'],['max','Nave Maxiada']])+'</div>'+
+  '<div class="mn-views">'+SEG('view',[['ships','Rendimiento Nave'],['plan','Plan Omega'],['max','Nave Maxeada']])+'</div>'+
   '<div class="mn-omega-tools" hidden>'+
     '<label class="mn-sp-toggle" for="mnFreeSpSwitch" title="Se necesita un enlace de invitación válido para reclamar los SP">'+
       '<input type="checkbox" id="mnFreeSpSwitch" class="mn-sp-checkbox" checked>'+
@@ -1229,8 +1229,39 @@ const MineUI=(()=>{
     if(ids.some(id=>!PRICE[id]))paint();}
   function drawCharts(){if(!root||!root.offsetParent)return;lastW=root.clientWidth;if(S.view==='plan'){drawCum({moon:planCalc('moon'),ice:planCalc('ice'),gas:planCalc('gas')});return;}if(S.view==='max')return;paintBars();drawn=true;}
 
+  // Secondary navigation: all panels remain mounted for existing painting and ESI updates.
+  function mountAnalysisTabs(){
+    const shipView=root.querySelector('.mn-v-ships');
+    if(!shipView)return;
+    const cards=[...shipView.querySelectorAll('.mn-card')];
+    const findCard=title=>cards.find(e=>e.querySelector('h3')?.textContent?.trim().startsWith(title));
+    const sections=[
+      ['visual','Comparativa visual',findCard('Comparativa visual')],
+      ['fits','Fit e inversión',findCard('Fit y Detalle')],
+      ['skills','Entrenamiento',findCard('Ruta recomendada')],
+      ['reco','Recomendaciones',shipView.querySelector('.mn-reco')],
+      ['method','Cómo se calculó',shipView.querySelector('.mn-how')]
+    ].filter(x=>x[2]);
+    if(!sections.length)return;
+    const nav=document.createElement('nav');
+    nav.className='mn-analysis-tabs';nav.setAttribute('role','tablist');nav.setAttribute('aria-label','Detalles de la comparativa');
+    const panels=document.createElement('div');panels.className='mn-analysis-panels';
+    sections[0][2].before(nav,panels);
+    const tabs=[];
+    function activate(id){
+      sections.forEach(([key,,section])=>{section.hidden=key!==id;section.classList.toggle('mn-analysis-active',key===id)});
+      tabs.forEach(b=>{const yes=b.dataset.tab===id;b.setAttribute('aria-selected',String(yes));b.tabIndex=yes?0:-1});
+    }
+    sections.forEach(([id,label,section],i)=>{
+      const b=document.createElement('button');b.type='button';b.className='mn-analysis-tab';b.dataset.tab=id;
+      b.setAttribute('role','tab');b.textContent=label;b.addEventListener('click',()=>activate(id));
+      b.addEventListener('keydown',e=>{if(!['ArrowRight','ArrowLeft','Home','End'].includes(e.key))return;e.preventDefault();const pos=e.key==='Home'?0:e.key==='End'?tabs.length-1:(tabs.indexOf(b)+(e.key==='ArrowRight'?1:-1)+tabs.length)%tabs.length;tabs[pos].focus();activate(tabs[pos].dataset.tab)});
+      nav.append(b);tabs.push(b);panels.append(section);
+    });
+    activate('visual');
+  }
   // ---------- montaje ----------
-  function mount(r){if(root)return;restoreMiningPlan();root=r;root.classList.add('mn');root.innerHTML=HTML;$q=s=>root.querySelector(s);
+  function mount(r){if(root)return;restoreMiningPlan();root=r;root.classList.add('mn');root.innerHTML=HTML;$q=s=>root.querySelector(s);mountAnalysisTabs();
     const bonusSwitch=$q('#mnFreeSpSwitch');
     bonusSwitch.addEventListener('change',()=>{S.freeSP=bonusSwitch.checked?1000000:0;paint();});
     const accField=$q('.pl-stp[data-k="acc"]');
