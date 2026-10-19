@@ -1579,6 +1579,13 @@ html.light #verdict .v-plan-name{color:#ad4b27}
 .rep-tab[aria-pressed="true"]{background:var(--ion);border-color:var(--ion);color:#211d1a}
 #vRepList>.rep-it[hidden]{display:none!important}
 
+
+/* Highlight referenced plan names and signed financial outcomes. */
+.plan-name-accent{color:var(--thrust);font-weight:750}
+.pk-opp-stat strong.pos,.pk-opportunity .pos{color:#5cba86}
+.pk-opp-stat strong.neg,.pk-opportunity .neg{color:#e86b70}
+.pk-o .pk-d.pos,.pk-summary .pk-sum-delta.pos{color:#5cba86}
+.pk-o .pk-d.neg,.pk-summary .pk-sum-delta.neg{color:#e86b70}
 /* ===== tema claro (generado desde el oscuro por light.py) ===== */
 html.light{--void:#e4e3dd;--hull:#e2e0da;--hull2:#e0ded8;--line:rgba(31,30,29,0.114);--line2:rgba(31,30,29,0.125);--txt:#1c1c1a;--mut:#54524d;--dim:#6c6a64;--ion:#413f3c;--blue:#a39d8b;--clay:#c96442;--thrust:#a67526;--gain:#418b62;--loss:#a92c23}
 html.light body::after{background:repeating-linear-gradient(180deg,rgba(31,30,29,0.011) 0 1px,transparent 1px 3px),
@@ -2033,6 +2040,10 @@ html.light .pk-opportunity{background:rgba(240,237,229,0.63)}
 html.light .pk-opp-stat{background:rgba(31,30,29,0.033)}
 html.light .rep-tab{background:rgba(240,237,229,0.8)}
 html.light .rep-tab[aria-pressed="true"]{color:#e6e5e0}
+html.light .pk-opp-stat strong.pos,html.light .pk-opportunity .pos{color:#418b62}
+html.light .pk-opp-stat strong.neg,html.light .pk-opportunity .neg{color:#a92328}
+html.light .pk-o .pk-d.pos,html.light .pk-summary .pk-sum-delta.pos{color:#418b62}
+html.light .pk-o .pk-d.neg,html.light .pk-summary .pk-sum-delta.neg{color:#a92328}
 /* ajustes a mano del tema claro */
 html.light body{background:#e6e3da;color:#1f1e1d}
 html.light body::before{opacity:.12;filter:grayscale(.35) brightness(1.1)}
