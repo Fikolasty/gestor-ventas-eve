@@ -1,5 +1,17 @@
 # Changelog
 
+## 1.0.84 — Mercados Null configurables y mantenimiento de rutas
+*2026-10-19*
+
+- Separa explícitamente el sistema de venta Null de la estructura de reproceso; el selector admite HY-RWO (SIGMA), UALX-3 (BRAVE) y C-J6MT (Goonswarm Federation), con selección automática por alianza ESI o manual.
+- Sincroniza las etiquetas de rutas, contratos de envío y textos del análisis de importación con el mercado elegido.
+- Descarta precios manuales de productos refinados Null cuando el usuario cambia de mercado, para no trasladarlos inadvertidamente a otro sistema.
+- Aclara en Ajustes que los precios de venta Null se estiman con reglas basadas en Jita: no hay cotizaciones locales de órdenes Null integradas.
+- Automatiza reconstrucción del HTML al editar fuentes y añade verificaciones sintácticas del JavaScript y comprobaciones del bundle generado.
+
+**Pendiente de validación:** confirmar la ejecución de GitHub Actions, la publicación de index.html y pruebas de escenarios in-game en los tres mercados. La estimación de mercado Null no es una consulta real de órdenes locales.
+
+
 ## 1.0.83 — [ChatGPT] Resumen dinámico y simetría visual
 *2026-10-18*
 
