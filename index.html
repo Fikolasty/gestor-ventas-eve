@@ -2662,6 +2662,15 @@ html.light #mining .mn-fit-fallback{border-color:rgba(40,100,150,.22);background
 #mining .mn-analysis-panels > [hidden]{display:none!important}
 #mining .mn-analysis-panels > details{padding:18px;border:1px solid var(--line);border-radius:var(--r-md);background:rgba(36,35,33,.75)}
 @media(max-width:700px){#mining .mn-analysis-tabs{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:thin}#mining .mn-analysis-tab{white-space:nowrap;flex:none;padding:8px 11px}}
+
+/* Fit e inversión: select exactly one ship without re-running calculations. */
+#mining .mn-fit-ship-tabs{display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin:14px 0 15px;padding:6px;border:1px solid var(--line2);border-radius:var(--r-md);background:rgba(18,18,18,.48)}
+#mining .mn-fit-ship-tab{font-size:.84rem;font-weight:650;color:var(--mut);background:transparent;border:1px solid transparent;border-radius:var(--r-sm);padding:8px 13px;cursor:pointer}
+#mining .mn-fit-ship-tab:hover{color:var(--txt);background:rgba(222,220,209,.07)}
+#mining .mn-fit-ship-tab[aria-selected="true"]{color:var(--txt);background:rgba(217,119,87,.12);border-color:rgba(217,119,87,.55)}
+#mining .mn-fit-ship-tab:focus-visible{outline:2px solid var(--ion);outline-offset:2px}
+#mining .mn-fit-ship-panels>.mn-fit-card[hidden]{display:none!important}
+@media(max-width:700px){#mining .mn-fit-ship-tabs{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:thin}#mining .mn-fit-ship-tab{flex:none;white-space:nowrap}}
 </style>
 <script>/* v1.0.16: aplica el tema guardado antes de pintar (sin parpadeo). Por defecto: Dark. */try{var g=JSON.parse(localStorage.getItem('gestorVentas.ajustes.v1')||'null');if(g&&g.ui){if(g.ui.light)document.documentElement.classList.add('light');}}catch(e){}</script>
 </head>
