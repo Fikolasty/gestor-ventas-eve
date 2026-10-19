@@ -2371,10 +2371,17 @@ function togglePanel(id,force){
    x.addEventListener('click',()=>{if(x.dataset.panel==='mining')selectAppModule('mining');else togglePanel(x.dataset.panel);if(mob())setO(false);});});}
 // v1.0.8: X dentro de la sección (fija al bajar)
 document.querySelectorAll('.x-close').forEach(b=>b.addEventListener('click',()=>togglePanel(b.dataset.close,false)));
-$('sideHome').addEventListener('click',()=>{
-  selectAppModule('ventas');focusOnly('home'); // Cierra los paneles sin borrar datos ni preferencias.
+const navigateHome=()=>{
+  selectAppModule('ventas');focusOnly('home'); // Cierra paneles sin borrar inventario ni preferencias.
   window.scrollTo({top:0,behavior:MOTION()?'smooth':'auto'});
   if(innerWidth<=900){document.body.classList.remove('side-open');$('sideBd').hidden=true;}
+};
+$('sideHome').addEventListener('click',navigateHome);
+document.querySelectorAll('[data-go-home]').forEach(node=>{
+  node.addEventListener('click',navigateHome);
+  node.addEventListener('keydown',event=>{
+    if(event.key==='Enter'||event.key===' '){event.preventDefault();navigateHome();}
+  });
 });
 // v1.0.8: cada grupo de Ajustes es desplegable (empiezan cerrados); se abren con clic o Enter en su título
 document.querySelectorAll('#settings fieldset.st').forEach(f=>{const l=f.querySelector('legend');if(!l)return;f.classList.add('closed');
