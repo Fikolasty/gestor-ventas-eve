@@ -4302,7 +4302,7 @@ function unitFor(r,k){const a=r.o.jita;
 // v102: pestaña:acción es la clave en todas las preferencias de vista (sin persistencia).
 let vSort=Object.create(null),vShow=Object.create(null),vQuery=Object.create(null);
 let repaintPlanGroup=null; // solo pinta una tabla; no ejecuta computePlan() ni el resto de la pantalla.
-let stepOpen=null; // v1.0.59: pasos abiertos (null = aún no se pintó: abre el primero)
+let stepOpen=null; // Los pasos empiezan plegados; se preservan los abiertos al recalcular.
 $('vPlan').addEventListener('click',e=>{
   const sh=e.target.closest('.stp-h');if(sh&&stepOpen){const id=sh.dataset.stp,box=sh.parentElement,body=box.querySelector('.stp-b'),open=body.hidden;
     if(open)stepOpen.add(id);else stepOpen.delete(id);box.classList.toggle('open',open);sh.setAttribute('aria-expanded',String(open));slide(body,open);
@@ -4579,10 +4579,24 @@ function paintVerdict(P){
   // Refined materials need a separate sale step AFTER the courier arrives in Jita.
   const steps=[...before,...(shipRows.length?['ship']:[]),...after,...(groups.some(([k])=>k==='rJita')?['sellRefined']:[])];
   const hd=$('stepHead');hd.textContent='';
-  if(steps.length){const t=el('div','stp-top');t.append(el('span','stp-plan',(P.mode?modeName(P.mode):'Plan Óptimo')+' · '+rowsIn.length+(rowsIn.length===1?' item':' items')));hd.append(t);}
-  // v1.0.59: cada paso se pliega. Por defecto solo el primero está abierto; abrir uno no cierra los demás y lo centra.
+  if(steps.length){
+    const t=el('div','stp-top');t.append(el('span','stp-plan',(P.mode?modeName(P.mode):'Plan Óptimo')+' · '+rowsIn.length+(rowsIn.length===1?' item':' items')));
+    // The exact bridge to P.best is the already-taxed earnings from every chosen route, less production and courier.
+    // Never sum step display amounts: rJita preparation and Jita sale may describe the same value twice.
+    const netBeforeShipping=rowsIn.reduce((sum,r)=>sum+(r.best?(r.g[r.best]||0)-r.prod:0),0);
+    const shipping=P.shipCost||0;
+    const net=P.best;
+    const balance=el('div','stp-balance');
+    const cell=(title,amount,kind)=>{const part=el('div','stp-balance-cell');part.append(el('small',null,title),el('strong',kind,(amount>0&&kind==='pos'?'+':amount<0?'−':'')+fmt(Math.abs(amount))));balance.append(part);};
+    cell('Ventas y contratos, neto de tasas y producción',netBeforeShipping,netBeforeShipping>=0?'pos':'neg');
+    cell('Coste total de envío',-shipping,shipping?'neg':'');
+    cell('Resultado final del plan',net,net>=0?'pos':'neg');
+    t.append(balance);
+    hd.append(t);
+  }
+  // Todos los pasos empiezan cerrados; abrir uno no cierra los demás.
   // Los pasos con contrato tienen dos columnas: a la izquierda lo que haces, a la derecha cómo llenar el contrato.
-  if(!stepOpen)stepOpen=new Set(steps.slice(0,1));
+  if(!stepOpen)stepOpen=new Set();
   const specs=ctrSpecs(P,packCouriers(P),rowsIn.filter(r=>r.best==='disc'));
   const ctrFor=k=>specs.filter(c=>k==='ship'?c.cls==='cr':k==='bb'?c.cls==='bb':k==='disc'?c.cls==='pl':false);
   const stepBox=(id,num,title,where,sub,amt,amtNote)=>{
