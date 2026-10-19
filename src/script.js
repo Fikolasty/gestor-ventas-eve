@@ -2420,6 +2420,80 @@ document.querySelectorAll('[data-go-home]').forEach(node=>{
     if(event.key==='Enter'||event.key===' '){event.preventDefault();navigateHome();}
   });
 });
+// Navigation and compact editorial sections. Original input nodes are moved, never cloned.
+(function modernizeSections(){
+  document.querySelectorAll('[data-side-module]').forEach(btn=>btn.addEventListener('click',()=>{
+    selectAppModule(btn.dataset.sideModule);
+    focusOnly('home');
+    window.scrollTo({top:0,behavior:MOTION()?'smooth':'auto'});
+    if(innerWidth<=900){document.body.classList.remove('side-open');$('sideBd').hidden=true;}
+    updateModuleSidebar();
+  }));
+  function updateModuleSidebar(){
+    const active=document.body.classList.contains('mm-pi')?'pi':document.body.classList.contains('mm-mining')?'mining':'ventas';
+    document.querySelectorAll('[data-side-module]').forEach(btn=>{
+      if(btn.dataset.sideModule===active)btn.setAttribute('aria-current','page');
+      else btn.removeAttribute('aria-current');
+    });
+  }
+  document.querySelectorAll('#mmTabs [data-mm-module]').forEach(btn=>btn.addEventListener('click',updateModuleSidebar));
+  $('sideHome').addEventListener('click',updateModuleSidebar);
+  function tabs(host,groups,labels){
+    if(!host||host.dataset.modernized)return;
+    host.dataset.modernized='true';
+    const bar=document.createElement('div');bar.className='modern-tabs';bar.setAttribute('role','tablist');
+    const buttons=[];
+    const activate=i=>{
+      groups.forEach((panel,j)=>panel.hidden=j!==i);
+      buttons.forEach((btn,j)=>{const active=j===i;btn.setAttribute('aria-selected',String(active));btn.tabIndex=active?0:-1;});
+    };
+    groups.forEach((panel,i)=>{
+      panel.classList.add('modern-panel');
+      const btn=document.createElement('button');btn.type='button';btn.className='modern-tab';btn.textContent=labels[i];
+      btn.setAttribute('role','tab');btn.addEventListener('click',()=>activate(i));
+      btn.addEventListener('keydown',e=>{
+        if(!['ArrowLeft','ArrowRight','Home','End'].includes(e.key))return;
+        e.preventDefault();const p=e.key==='Home'?0:e.key==='End'?buttons.length-1:(i+(e.key==='ArrowRight'?1:-1)+buttons.length)%buttons.length;
+        buttons[p].focus();activate(p);
+      });
+      buttons.push(btn);bar.append(btn);
+    });
+    host.prepend(bar);groups.forEach(x=>host.append(x));activate(0);
+  }
+  const wrap=document.querySelector('#settings .st-wrap');
+  if(wrap){
+    const sections=[...wrap.children],groups=[],labels=[];
+    let panel=null;
+    sections.forEach(child=>{
+      if(child.classList.contains('st-sec')){
+        panel=document.createElement('div');groups.push(panel);labels.push(child.querySelector('h3')?.textContent.trim()||'Ajustes');
+      }
+      if(panel)panel.append(child);
+    });
+    tabs(wrap,groups,labels);
+  }
+  const help=$('help');
+  if(help){
+    const hp=help.querySelector('.hp');
+    const heads=[...help.querySelectorAll(':scope > h3.sub-h')];
+    if(hp&&heads.length>=3){
+      const groups=[],labels=['Primeros pasos','Rutas de venta','Glosario','Seguridad'];
+      const first=document.createElement('div');first.append(hp);groups.push(first);
+      heads.slice(0,3).forEach((heading,i)=>{
+        const panel=document.createElement('div');
+        let node=heading;
+        while(node&&node!==heads[i+1]&&node.tagName!=='SECTION'){
+          const next=node.nextElementSibling;panel.append(node);node=next;
+        }
+        groups.push(panel);
+      });
+      const anchor=help.querySelector('p.lead');
+      const slot=document.createElement('div');anchor.after(slot);tabs(slot,groups,labels);
+    }
+  }
+  updateModuleSidebar();
+})();
+
 // v1.0.8: cada grupo de Ajustes es desplegable (empiezan cerrados); se abren con clic o Enter en su título
 document.querySelectorAll('#settings fieldset.st').forEach(f=>{const l=f.querySelector('legend');if(!l)return;f.classList.add('closed');
   l.tabIndex=0;l.setAttribute('role','button');l.setAttribute('aria-expanded','false');
