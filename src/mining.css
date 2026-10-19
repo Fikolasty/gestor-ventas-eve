@@ -549,3 +549,13 @@ html.light #mining .mn-info-popup a{color:#175f9c}
 #mining .mn-fit-fallback{margin:8px 0 12px;padding:10px 12px;border-radius:8px;border:1px solid rgba(120,167,212,.28);background:rgba(90,140,195,.07);color:var(--txt);font-size:.85rem;line-height:1.56}
 html.light #mining .mn-info-type-id{color:#496276}
 html.light #mining .mn-fit-fallback{border-color:rgba(40,100,150,.22);background:rgba(48,117,174,.06)}
+
+/* Mining comparison: compact secondary tabs */
+#mining .mn-analysis-tabs{display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin:18px 0 12px;padding:6px;border:1px solid var(--line2);border-radius:var(--r-md);background:rgba(24,24,23,.58)}
+#mining .mn-analysis-tab{border:1px solid transparent;border-radius:var(--r-sm);font-size:.86rem;font-weight:650;color:var(--mut);padding:9px 14px;transition:background .14s,border-color .14s,color .14s}
+#mining .mn-analysis-tab:hover{color:var(--txt);background:rgba(222,220,209,.07)}
+#mining .mn-analysis-tab[aria-selected="true"]{color:var(--txt);background:rgba(217,119,87,.12);border-color:rgba(217,119,87,.55)}
+#mining .mn-analysis-panels{min-width:0}
+#mining .mn-analysis-panels > [hidden]{display:none!important}
+#mining .mn-analysis-panels > details{padding:18px;border:1px solid var(--line);border-radius:var(--r-md);background:rgba(36,35,33,.75)}
+@media(max-width:700px){#mining .mn-analysis-tabs{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:thin}#mining .mn-analysis-tab{white-space:nowrap;flex:none;padding:8px 11px}}
