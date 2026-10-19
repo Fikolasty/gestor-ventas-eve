@@ -1763,6 +1763,10 @@ html.light #verdict .v-plan-name{color:#ad4b27}
 .hero-intro:not(.no-appr)>.paste textarea{min-height:138px}
 @media(max-width:780px){.hero-intro>.paste .paste-head .status{order:3;max-width:none;flex-basis:100%;margin-left:0}.hero-intro>.paste .paste-head{row-gap:4px}}
 
+
+.hero-intro .paste-head .paste-home{display:inline-grid;place-items:center;min-width:34px;height:34px;padding:6px;border:1px solid var(--line2);border-radius:8px;color:var(--ion)}
+.hero-intro .paste-head .paste-home:hover{background:rgba(217,119,87,.12);border-color:var(--ion)}
+.hero-intro .paste-head .paste-home .ic{width:18px;height:18px}
 /* ===== tema claro (generado desde el oscuro por light.py) ===== */
 html.light{--void:#e4e3dd;--hull:#e2e0da;--hull2:#e0ded8;--line:rgba(31,30,29,0.114);--line2:rgba(31,30,29,0.125);--txt:#1c1c1a;--mut:#54524d;--dim:#6c6a64;--ion:#413f3c;--blue:#a39d8b;--clay:#c96442;--thrust:#a67526;--gain:#418b62;--loss:#a92c23}
 html.light body::after{background:repeating-linear-gradient(180deg,rgba(31,30,29,0.011) 0 1px,transparent 1px 3px),
@@ -2237,6 +2241,7 @@ html.light #pExtra details.fold>summary>.sum .neg{color:#a92328!important}
 html.light #pExtra details.fold>summary>.sum .pos{color:#418b62!important}
 html.light #pExtra details.fold>summary>.sum .sm-hide.neg{color:#a92328!important}
 html.light .hero-intro>.paste textarea{background:rgba(240,237,229,0.66)!important}
+html.light .hero-intro .paste-head .paste-home:hover{background:rgba(217,119,87,0.15)}
 /* ajustes a mano del tema claro */
 html.light body{background:#e6e3da;color:#1f1e1d}
 html.light body::before{opacity:.12;filter:grayscale(.35) brightness(1.1)}
@@ -3062,7 +3067,7 @@ Contraband Freight = no</textarea><small>Una regla por línea: Nombre = tax tota
   <div class="hero-intro no-appr" id="heroIntro" role="tabpanel" aria-labelledby="mmTabVentas">
     <div class="appr" id="appr" hidden aria-live="polite"></div>
     <div class="paste">
-      <div class="paste-head"><h2 class="mm-title paste-title"><span class="ic i-list" aria-hidden="true"></span> INVENTARIO</h2><span class="status" id="status" role="status"></span><button class="ghost" id="bClear"><span class="ic i-x" aria-hidden="true"></span>Limpiar</button></div>
+      <div class="paste-head"><h2 class="mm-title paste-title"><span class="ic i-list" aria-hidden="true"></span> INVENTARIO</h2><span class="status" id="status" role="status"></span><button class="ghost paste-home" id="bInventoryHome" type="button" aria-label="Volver a HOME" title="HOME"><span class="ic i-home" aria-hidden="true"></span></button><button class="ghost" id="bClear"><span class="ic i-x" aria-hidden="true"></span>Limpiar</button></div>
       <textarea id="paste" autocomplete="off" spellcheck="false" aria-label="Pega aquí tu inventario de EVE" placeholder="Pega aquí tus items con Ctrl+V"></textarea>
     </div>
   </div>
