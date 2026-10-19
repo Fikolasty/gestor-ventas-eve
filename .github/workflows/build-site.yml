@@ -22,6 +22,12 @@ jobs:
       - name: Compile site
         run: |
           python build.py 1.0.84
+      - name: JavaScript syntax check
+        run: |
+          node --check src/script.js
+          node --check src/mining.js
+          node --check src/refine.js
+          node --check src/mining_data.js
       - name: Verify bundle
         run: |
           python3 - <<'PY'
