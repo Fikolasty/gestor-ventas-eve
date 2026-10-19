@@ -1571,6 +1571,14 @@ html.light #verdict .v-plan-name{color:#ad4b27}
 
 .brand[data-go-home],.hero .title[data-go-home]{cursor:pointer}
 .brand[data-go-home]:focus-visible,.hero .title[data-go-home]:focus-visible{outline:2px solid var(--ion);outline-offset:5px;border-radius:var(--r-sm)}
+
+/* Reprocessing recommendation: numbered tabs, only the active ore visible. */
+.rep-tabs{display:flex;flex-wrap:wrap;gap:7px;margin:10px 0 14px}
+.rep-tab{height:32px;min-width:34px;padding:0 10px;border-radius:7px;border:1px solid var(--line2);background:rgba(25,25,25,.8);color:var(--mut);font-weight:700;cursor:pointer}
+.rep-tab:hover{color:var(--txt);border-color:var(--ion)}
+.rep-tab[aria-pressed="true"]{background:var(--ion);border-color:var(--ion);color:#211d1a}
+#vRepList>.rep-it[hidden]{display:none!important}
+
 /* ===== tema claro (generado desde el oscuro por light.py) ===== */
 html.light{--void:#e4e3dd;--hull:#e2e0da;--hull2:#e0ded8;--line:rgba(31,30,29,0.114);--line2:rgba(31,30,29,0.125);--txt:#1c1c1a;--mut:#54524d;--dim:#6c6a64;--ion:#413f3c;--blue:#a39d8b;--clay:#c96442;--thrust:#a67526;--gain:#418b62;--loss:#a92c23}
 html.light body::after{background:repeating-linear-gradient(180deg,rgba(31,30,29,0.011) 0 1px,transparent 1px 3px),
@@ -2023,6 +2031,8 @@ html.light .stp-contract-number[aria-pressed="true"]{color:#e6e5e0}
 html.light .stp-arrival-row{background:rgba(240,237,229,0.72)}
 html.light .pk-opportunity{background:rgba(240,237,229,0.63)}
 html.light .pk-opp-stat{background:rgba(31,30,29,0.033)}
+html.light .rep-tab{background:rgba(240,237,229,0.8)}
+html.light .rep-tab[aria-pressed="true"]{color:#e6e5e0}
 /* ajustes a mano del tema claro */
 html.light body{background:#e6e3da;color:#1f1e1d}
 html.light body::before{opacity:.12;filter:grayscale(.35) brightness(1.1)}
