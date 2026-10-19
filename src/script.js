@@ -2764,11 +2764,11 @@ stRestore();syncDeps();brokerNote();buildOreSelect();readBB();syncLots();refresh
   const EVE_CLIENT_ID='114bbd2659384151ac3b0096f183dd3b';
   const scope='esi-skills.read_skills.v1';
   let session=null;
-  const status=msg=>$e('eveLoginStatus').textContent=msg;
+  const status=msg=>{const e=$e('eveLoginStatus');e.textContent=msg;if(/^Error|^No se pudo|^No se pudieron|^Unable|^Could not/i.test(msg)){console.warn('EVE SSO:',msg);alert(msg);}};
   const b64=a=>btoa(String.fromCharCode(...new Uint8Array(a))).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');
   const rand=n=>b64(crypto.getRandomValues(new Uint8Array(n)));
   async function challenge(v){return b64(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(v)));}
-  const refreshUI=()=>{const on=!!session;$e('evePilotName').textContent=on?session.name:'Conectar EVE';$e('eveSync').hidden=!on;$e('eveLogout').hidden=!on;$e('eveIdentityButton').setAttribute('aria-label',on?'Opciones del personaje':'Iniciar sesión con EVE Online');
+  const refreshUI=()=>{const on=!!session;$e('evePilotName').textContent=on?session.name:'Conectar EVE';$e('eveLogout').hidden=!on;$e('eveIdentityButton').setAttribute('aria-label',on?'Opciones del personaje':'Iniciar sesión con EVE Online');
     $e('evePortrait').hidden=!on;if(on)$e('evePortrait').src='https://images.evetech.net/characters/'+session.id+'/portrait?size=64';else $e('evePortrait').removeAttribute('src');};
   button.addEventListener('click',()=>{if(!session){startLogin();return;}menu.hidden=!menu.hidden;button.setAttribute('aria-expanded',String(!menu.hidden));});
   document.addEventListener('click',e=>{if(!e.target.closest('#eveIdentity')){menu.hidden=true;button.setAttribute('aria-expanded','false');}});
@@ -2791,12 +2791,12 @@ stRestore();syncDeps();brokerNote();buildOreSelect();readBB();syncLots();refresh
       const ids=await idsResp.json(),resolved=new Map((ids.inventory_types||[]).map(x=>[x.name,x.id]));
       let count=0;const mapping=[['Accounting','skAcc'],['Broker Relations','skBR'],['Advanced Broker Relations','cAbr'],['Reprocessing','skRep'],['Reprocessing Efficiency','skRepE']];
       mapping.forEach(([name,id])=>{const sid=resolved.get(name);if(sid!=null&&saveSkill(id,skills.get(sid)??0))count++;});
-      status(count+' skills sincronizadas. Los impuestos se recalculan con los ajustes actuales; las tarifas privadas siguen siendo manuales.');
+      // Automatic synchronization: keep status available to accessibility tools, not visible in the menu.
+      status(count+' skills sincronizadas.');
       if(typeof refresh==='function')refresh();
     }catch(err){status('No se pudieron sincronizar las skills: '+err.message);}
   }
-  $e('eveSync').addEventListener('click',sync);
-  $e('eveLogout').addEventListener('click',()=>{session=null;refreshUI();status('Desconectado. Se conservan tus ajustes manuales.');});
+  $e('eveLogout').addEventListener('click',()=>{session=null;menu.hidden=true;button.setAttribute('aria-expanded','false');refreshUI();status('Desconectado. Se conservan tus ajustes manuales.');});
   (async()=>{const u=new URL(location.href),code=u.searchParams.get('code'),state=u.searchParams.get('state');
     if(!code&&!u.searchParams.has('error'))return;
     u.searchParams.delete('code');u.searchParams.delete('state');u.searchParams.delete('error');u.searchParams.delete('error_description');history.replaceState(null,'',u.pathname+u.search+u.hash);
@@ -2829,7 +2829,7 @@ stRestore();syncDeps();brokerNote();buildOreSelect();readBB();syncLots();refresh
       if(!scopeOK)throw Error('EVE no concedió el permiso de lectura de skills.');
       const id=Number(String(pilot.sub||'').match(/^CHARACTER:EVE:(\d+)$/)?.[1]),name=pilot.name;
       if(!Number.isSafeInteger(id)||!name)throw Error('Identidad de personaje no verificada.');
-      session={id,name,token:tokens.access_token,expires:Date.now()+(tokens.expires_in||1200)*1000-30000};refreshUI();status('Sesión autorizada para '+name+'. Sincroniza las skills cuando quieras.');await sync();
+      session={id,name,token:tokens.access_token,expires:Date.now()+(tokens.expires_in||1200)*1000-30000};refreshUI();menu.hidden=true;button.setAttribute('aria-expanded','false');await sync();
     }catch(err){status('Error de SSO: '+err.message);}
   })();
 })();
