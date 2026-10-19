@@ -1793,6 +1793,13 @@ select{appearance:none;-webkit-appearance:none;padding-right:30px!important;back
 #mmTabs .mm-home:hover{color:var(--txt);opacity:.85}
 #mmTabs .mm-home:focus-visible{outline:2px solid var(--ion);outline-offset:2px}
 #mmTabs .mm-home .ic{width:21px;height:21px}
+
+/* Listado: conteo una sola vez junto al título, acción al extremo derecho. */
+#ledger>summary{display:flex;align-items:center;gap:12px;flex-wrap:nowrap}
+#ledger>summary .cnt{white-space:nowrap;margin-left:0!important;flex:none}
+#ledger>summary .status.cta{margin-left:auto!important;white-space:nowrap;flex:none}
+#ledger>summary .mm-title{flex:0 1 auto;min-width:0}
+@media(max-width:650px){#ledger>summary{gap:7px;flex-wrap:wrap}#ledger>summary .status.cta{margin-left:auto!important}}
 /* ===== tema claro (generado desde el oscuro por light.py) ===== */
 html.light{--void:#e4e3dd;--hull:#e2e0da;--hull2:#e0ded8;--line:rgba(31,30,29,0.114);--line2:rgba(31,30,29,0.125);--txt:#1c1c1a;--mut:#54524d;--dim:#6c6a64;--ion:#413f3c;--blue:#a39d8b;--clay:#c96442;--thrust:#a67526;--gain:#418b62;--loss:#a92c23}
 html.light body::after{background:repeating-linear-gradient(180deg,rgba(31,30,29,0.011) 0 1px,transparent 1px 3px),
@@ -3138,10 +3145,8 @@ Contraband Freight = no</textarea><small>Una regla por línea: Nombre = tax tota
         <p class="v-cap" id="vCap">Aquí verás qué ruta elegiste y cómo se distribuye tu venta.</p><span class="v-what" id="vWhat" hidden></span>
       </div>
       <div class="ov-card ov-flow"><h4>DE DÓNDE SALE TU ISK</h4><div id="ovFlow"></div><div class="mm-dest-inline" id="ovDestW"><h4>DÓNDE SE VENDE</h4><div id="ovDest"></div></div></div>
-      <dl class="ov-kpi mm-compact-kpi">
-        <div><dt>ITEMS</dt><dd id="vsN">—</dd><small id="vsNs"></small></div>
-        <div><dt>VOLUMEN TOTAL</dt><dd id="vsV">—</dd><small id="vsVs"></small></div>
-      </dl>
+      <!-- Cifras usadas por el motor, sin tarjetas repetidas en la UI. -->
+      <div hidden aria-hidden="true"><span id="vsN"></span><span id="vsNs"></span><span id="vsV"></span><span id="vsVs"></span></div>
       <div class="mm-legacy" hidden aria-hidden="true">
         <div id="ovShip"><span id="aCourT"></span><span id="aCourier"></span><span id="aCourS"></span></div>
         <div><span id="vsCn"></span><span id="vsC"></span><label id="vsRelW" hidden><input type="checkbox" id="cRelistOn"> Relists <span id="vsRel"></span></label></div>
@@ -3396,7 +3401,7 @@ const sgn=v=>v==null||isNaN(v)?'':v>0?'pos':v<0?'neg':'';
 function setText(el,t,cls){el.textContent=t;if(cls!==undefined)el.className=cls;}
 function status(id,msg,cls){const s=$(id);s.textContent=msg;s.className='status'+(cls?' '+cls:'');}
 // v1.0.51: el resumen de Listado de Items Registrados funciona como botón: Ver los N items ▾ / Ocultar los items ▴
-function ledgerCta(){const n=S.items.length;if(!n)return;status('esiStatus',$('ledger').open?'Ocultar los items':'Ver los '+n+(n===1?' item':' items'),'cta');}
+function ledgerCta(){const n=S.items.length;if(!n)return;status('esiStatus',$('ledger').open?'Ocultar listado':'Ver listado','cta');}
 
 // ================= Mercado: tasas =================
 // Relist (bajar precio) = (1 − (0.5 + 0.06×ABR)) × broker% sobre el valor de la orden — EVE University
