@@ -2461,24 +2461,27 @@ $('themeLight').addEventListener('change',e=>{document.documentElement.classList
 (function compactMainNavigation(){
   const bar=$('mmTabs'),group=bar.querySelector('.mm-modgroup');
   const controls=document.createElement('div');controls.className='mm-quick';
-  for(const id of ['settings','help']){
-    const button=document.querySelector('.side-i[data-panel="'+id+'"]');
-    if(button){button.classList.add('mm-icon-action');button.setAttribute('aria-label',id==='settings'?'Ajustes':'Guía de uso');controls.append(button);}
-  }
+  const settings=document.querySelector('.side-i[data-panel="settings"]');
+  if(settings){settings.classList.add('mm-icon-action');settings.setAttribute('aria-label','Ajustes');controls.append(settings);}
+  const guide=document.querySelector('.side-i[data-panel="help"]');
+  if(guide){guide.classList.add('top-guide-action');guide.setAttribute('aria-label','Guía de uso');guide.title='Guía de uso';document.querySelector('.top').append(guide);}
   const route=$('route');route.classList.add('mm-route');
   const theme=$('themeLight').closest('.top-theme');theme.classList.add('mm-theme');
   group.before(controls);
-  group.after(route,theme);
-  const left=document.createElement('span'),right=document.createElement('span'),knob=document.createElement('span');
-  left.className='mm-route-left';left.textContent='Jita';
-  knob.className='mm-route-knob';knob.setAttribute('aria-hidden','true');
-  right.className='mm-route-right';right.textContent=nullSystem();
-  $('bFlip').append(left,knob,right);
-  const refreshRoute=()=>{right.textContent=nullSystem();$('bFlip').setAttribute('aria-label',S.flip?'Ruta Jita hacia '+nullSystem()+'. Cambiar a venta desde Null.':'Ruta '+nullSystem()+' hacia Jita. Cambiar a importación desde Jita.');};
-  $('bFlip').addEventListener('click',refreshRoute);
+  const rightGroup=document.createElement('div');rightGroup.className='mm-right-actions';
+  group.before(rightGroup);rightGroup.append(controls,group,route,theme);
+  const button=$('bFlip');
+  button.replaceChildren();
+  const left=el('span','mm-route-left','Jita'),knob=el('span','mm-route-knob'),right=el('span','mm-route-right',nullSystem());
+  knob.setAttribute('aria-hidden','true');button.append(knob,left,right);
+  const refreshRoute=()=>{
+    right.textContent=nullSystem();
+    button.setAttribute('aria-label',S.flip?'Jita a '+nullSystem()+'. Cambiar dirección.':nullSystem()+' a Jita. Cambiar dirección.');
+  };
+  button.addEventListener('click',refreshRoute);
   document.getElementById('nullMarketMode')?.addEventListener('change',refreshRoute);
   refreshRoute();
-})();
+})();;
 
 // ================= Comparativa Minera, aislada del motor del Gestor =================
 /*__MINING__*/
