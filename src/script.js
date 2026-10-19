@@ -2200,9 +2200,10 @@ function paintPicker(P){
     if(part)b.title=part.trim();
     return b;
   }
-  box.append(row(chosen,true));
+  if(!pkView.open)box.append(row(chosen,true));
   const pass={all:()=>true,fast:x=>PK_FAST.has(x.m),noship:x=>!pkShips(x.m,P),rep:x=>PK_REP.has(x.m)};
   const available=list.filter(x=>x.m!==chosen.m);
+  const expandedList=pkView.open?[...list]:available;
   const fl=PK_FILTERS.filter(([f])=>f==='all'||(f!=='noship'||SH())&&available.some(x=>pass[f](x)));
   if(!fl.some(([f])=>f===pkView.filter))pkView.filter='all';
   others.hidden=!pkView.open;
@@ -2212,10 +2213,10 @@ function paintPicker(P){
       const b=el('button','pk-fb'+(pkView.filter===f?' on':''),t);b.type='button';b.dataset.pkf=f;b.setAttribute('aria-pressed',String(pkView.filter===f));b.append(el('small',null,String(n)));group.append(b);});
     tools.append(group);}
   const key={name:x=>x.l.toLowerCase(),speed:x=>pkSpeedRank(x.m,P),ship:x=>pkShips(x.m,P)?1:0,net:x=>x.t.net,diff:x=>x.t.net};
-  const rest=available.filter(x=>pass[pkView.filter](x))
+  const rest=expandedList.filter(x=>x.m===chosen.m||pass[pkView.filter](x))
     .sort((a,b)=>{const A=key[pkView.sort](a),B=key[pkView.sort](b);return (A<B?-1:A>B?1:0)*pkView.dir||b.t.net-a.t.net;});
   // El óptimo también se elige aquí: ya no necesita un botón «Volver al óptimo».
-  rest.forEach(x=>others.append(row(x,false)));
+  rest.forEach(x=>{const entry=row(x,false);if(x.m===chosen.m){entry.classList.add('on');entry.setAttribute('aria-pressed','true');entry.setAttribute('aria-current','true');entry.title='Plan seleccionado';}others.append(entry);});
   if(!rest.length)others.append(el('p','pk-empty','Ningún otro plan cumple este filtro.'));
 }
 // Orden y filtro: solo repintan el selector, sin recalcular ISK.
