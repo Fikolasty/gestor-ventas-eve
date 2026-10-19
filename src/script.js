@@ -962,7 +962,7 @@ function buildLotDetails(o,ui){
   // Los inputs se preservan durante paintLot para que escribir no pierda foco.
   const body=ui.body;
   const rcall=el('div','call rcall'),rcB=el('b'),rcS=el('small'),rcR=el('small','rcr');rcall.append(rcB,rcS,rcR);rcall.hidden=true;
-  const gwrap=el('div','gwrap'),guide=el('ol','guide');gwrap.append(el('h3','sub-h','Guía para vender este item'),guide);
+  const gwrap=el('details','gwrap lot-fold'),guide=el('ol','guide');gwrap.append(el('summary','sub-h','Guía para vender este ítem'),guide);
   const opts=el('div','opts');Object.assign(ui,{opt:{},rcall,rcB,rcS,rcR,guide});
   OPTS.forEach(([k,l])=>{
     const r=el('div','opt'),lab=el('span','opt-l',k==='null'?'':l),bar=el('span','opt-bar'),fill=el('i'),v=el('span','opt-v'),h=el('span','opt-h');
@@ -980,11 +980,13 @@ function buildLotDetails(o,ui){
   const fSk=el('label','fact','Ajuste de precio %');fSk.append(numIn(o.skew!=null&&o.skew!==0?Math.round(o.skew*1e4)/100:null,'0',v=>{const x=parseFloat(v);o.skew=isNaN(x)?0:x/100;refresh();},'Ajuste de precio de este item, % (se suma al general)'));
   fSk.append(el('small','fact-h','Se suma al ajuste general. Ej.: −2 = lo vendes 2% más barato.'));
   facts.append(fQty,fRef,fBuy,fSeen,fM3,fVol,fSk);
-  const prices=el('div','prices'),pBody=el('tbody'),pt=el('table');pt.append(pBody);
-  prices.append(el('h3','sub-h','Precios para Listar'),pt);
+  const prices=el('details','prices lot-fold'),pBody=el('tbody'),pt=el('table');pt.append(pBody);
+  prices.append(el('summary','sub-h','Precios para publicar'),pt);
   const checks=el('ul','checks'),foot=el('div','lot-foot'),del=el('button','link danger','Quitar del lote');del.type='button';
   del.addEventListener('click',()=>removeFromPaste(o.name));foot.append(del);
-  body.append(gwrap,rcall,opts,facts,prices,checks,foot);
+  const verdict=el('details','lot-verdict lot-fold');verdict.append(el('summary','sub-h','Resultado y recomendación'),rcall);
+  const analysis=el('div','lot-analysis');analysis.append(opts,facts);
+  body.append(gwrap,verdict,analysis,prices,checks,foot);
   Object.assign(ui,{iRef,iM3,bBuy,bVol,pBody,checks,detailsReady:true});
 }
 // copia el valor limpio: números con máx. 2 decimales y sin "ISK" (listo para pegar en el juego)
@@ -1178,9 +1180,12 @@ function paintLot(r){
     const n=el('tr');const nt=el('td','muted pr-foot');nt.colSpan=4;nt.textContent='Clic en un precio para copiarlo. En el juego se lista por unidad: pon este precio y la cantidad ('+fmtQ(r.q)+').';n.append(nt);tb.append(n);
   }}
   if(r.mins&&r.mins.length){
-    const h=el('tr'),th=el('td');th.colSpan=4;th.append(el('h3','sub-h','Minerales al Reprocesar'));h.append(th);tb.append(h);
+    const h=el('tr','lot-min-heading'),th=el('td');th.colSpan=4;
+    const toggle=el('button','lot-min-toggle','Minerales obtenidos al reprocesar · '+r.mins.length);toggle.type='button';toggle.setAttribute('aria-expanded','false');
+    toggle.addEventListener('click',()=>{const show=toggle.getAttribute('aria-expanded')!=='true';toggle.setAttribute('aria-expanded',String(show));let row=h.nextElementSibling;while(row&&row.classList.contains('lot-min-row')){row.hidden=!show;row=row.nextElementSibling;}});
+    th.append(toggle);h.append(th);tb.append(h);
     r.mins.forEach(x=>{
-      const tr=el('tr');tr.append(el('td',null,x.m+' · '+fmtQ(x.n)+' u.'));
+      const tr=el('tr','lot-min-row');tr.hidden=true;tr.append(el('td',null,x.m+' · '+fmtQ(x.n)+' u.'));
       const a1=el('td','r'),a2=el('td','r');
       a1.append(x.np!=null?copyBtn(x.np,'Null '+fmtP(x.np)):el('span','muted','sin precio'));
       a2.append(x.p!=null?copyBtn(x.p,'Jita '+fmtP(x.p)):el('span','muted',''));
