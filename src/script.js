@@ -2096,7 +2096,11 @@ function paintPicker(P){
     const logistics=shipped?' Incluye una estimación del courier configurado.':' No requiere courier según el escenario seleccionado.';
     const caveat=el('p','pk-opp-note',speed+logistics+(hasFallback?' Algunos ítems conservan su ruta óptima porque este plan no les aplica.':'')+' Los precios, órdenes y plazos pueden cambiar; no se atribuye rentabilidad a reinversiones hipotéticas.');
     opportunity.append(title,grid,note,caveat);opportunity.hidden=false;
-  }else opportunity.hidden=true;
+  }else{
+    opportunity.hidden=false;
+    opportunity.append(el('div','pk-opp-head','Coste de oportunidad'),
+      el('p','pk-opp-explain','No hay suficientes alternativas con precios disponibles para calcular una comparación fiable. Revisa las cotizaciones y las rutas habilitadas.'));
+  }
 
   const maxNet=Math.max(...list.map(x=>x.t.net),1);
   const sys=(C.ref.name||'Null').split(' - ')[0].trim()||'Null',env='Envías todo a Jita y ';
