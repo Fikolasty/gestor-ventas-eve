@@ -1568,7 +1568,11 @@ function paintVerdict(P){
     const y=r.rep.diff>0,li=el('li','rep-it');
     const dest=['en Jita','en '+sys,'a un jugador'];
     const yes=sc.map((s,i)=>s[2]!=null&&s[2]>0?dest[i]:null).filter(Boolean),no=sc.map((s,i)=>s[2]!=null&&s[2]<=0?dest[i]:null).filter(Boolean);
-    const w=el('span','rw',r.o.name);
+    const w=el('span','rw rep-item-info');
+    const label=el('strong','rep-item-name',r.o.name);
+    const head=el('span','rep-item-head');
+    const icon=iconFor(r.o.name);if(icon){icon.classList.add('rep-item-icon');head.append(icon);}
+    head.append(label);w.append(head);
     if(no.length)w.append(el('small','rep-no','No lo reproceses si lo vas a vender '+no.join(' o ')+'.'));
     if(yes.length)w.append(el('small','rep-yes','Sí, reprocésalo si lo vas a vender '+yes.join(' o ')+'.'));
     li.append(el('span'),w,el('span','amt '+(y?'pos':'neg'),(y?'+':'−')+fmt(Math.abs(r.rep.diff))));
