@@ -1304,7 +1304,7 @@ function paintWhereSold(P,none){
    if(tot>0){const bar=el('div','ov-bar'),lg=el('div','ov-leg');
      ks.forEach(k=>{const v=sums[k],i=el('i');i.style.width=(v/tot*100)+'%';i.style.background=DC[k]||'#9c9a92';i.title=(PLAN_L[k]||k)+': '+fmt(v);bar.append(i);
        const n=rowsIn.filter(r=>r.best===k).length,d=el('div'),sw=el('span','ov-sw');sw.style.background=DC[k]||'#9c9a92';
-       d.append(sw,el('b',null,v/tot>0&&v/tot<.005?'<1%':pct(v/tot)+'%'),el('small',null,routeSummaryName(k)+' · '+n+(n===1?' ítem':' ítems')));lg.append(d);});
+       d.append(sw,el('b',null,v/tot>0&&v/tot<.005?'<1%':pct(v/tot)+'%'),el('small',null,routeSummaryName(k)+' · '+n+(S.lang==='en'?(n===1?' item':' items'):(n===1?' ítem':' ítems'))));lg.append(d);});
      box.append(bar,lg);}}
 }
 // El texto del resumen se deriva de los items y del modo activos, nunca del nombre de una ruta fija.
@@ -1741,7 +1741,7 @@ function paintContracts(P){
   $('ctrTitle').textContent=C.disc.on&&!S.flip?'CONTRATOS Y DISCORD':'CONTRATOS';sec.classList.toggle('no-discord',!C.disc.on||S.flip);
   const cs=packCouriers(P),dr=P.rows.filter(r=>r.best==='disc');lastCs=cs;
   const nC=(P.toBB.length?1:0)+cs.length+(dr.length?1:0),shipR=cs.reduce((a,k)=>a+k.reward,0);
-  {const sm=$('ctrSum');sm.textContent=nC?nC+(nC>1?' contratos':' contrato'):'Sin contratos';if(cs.length)sm.append(el('span','sm-hide neg',' · envío −'+fmt(shipR)));}
+  {const sm=$('ctrSum');sm.textContent=S.lang==='en'?(nC?nC+(nC>1?' contracts':' contract'):'No contracts'):(nC?nC+(nC>1?' contratos':' contrato'):'Sin contratos');if(cs.length)sm.append(el('span','sm-hide neg',' · envío −'+fmt(shipR)));}
   if(!sec.open)return; // cerrada: solo el resumen del encabezado
   const cards=[];
   ctrSpecs(P,cs,dr).forEach(c=>{const n=el('div','ct '+c.cls),h=el('div','ct-h');h.append(el('span','pill '+c.tag[0],c.tag[1]),el('b',null,c.title));h.append(el('span','ct-s num',c.amt));
@@ -1820,7 +1820,7 @@ function paintShip(P,cs){
   const tb=el('tbody');
   ship.sort((a,b)=>b.cost-a.cost).slice(0,8).forEach(x=>{const tr=el('tr'),nm=(x.r.best==='rJita'?(isIce(x.r.o.name)?'Productos de ':'Minerales de '):'')+x.r.o.name,td=el('td',null,nm);td.title=nm;
     tr.append(td,el('td','r',fmtV(Math.round(x.s.v*100)/100)),el('td','r','−'+fmt(x.cost)),el('td','r '+sgn(x.extra),x.extra==null?'—':(x.extra>=0?'+':'−')+fmt(Math.abs(x.extra))));tb.append(tr);});
-  if(ship.length>8){const tr=el('tr'),td=el('td','muted','y '+(ship.length-8)+' items más');td.colSpan=4;tr.append(td);tb.append(tr);}
+  if(ship.length>8){const tr=el('tr'),td=el('td','muted',S.lang==='en'?'and '+(ship.length-8)+' more items':'y '+(ship.length-8)+' ítems más');td.colSpan=4;tr.append(td);tb.append(tr);}
   t.append(tb);b.append(t);
   b.append(el('small','sh-rates',S.flip?'Gana extra = lo que deja en HY-RWO, ya con taxes y su parte del envío, menos lo que dejaría vendido en Jita.':'Gana extra = lo que deja en Jita, ya con taxes y su parte del envío, menos lo que dejaría sin viajar (Null o Buyback).'));
 }
@@ -1892,7 +1892,7 @@ function paintScenarios(P){
   [A,B].filter(Boolean).forEach(s=>{
     const d=el('div',s===win&&B?'win':'');const h=el('h4');h.append(el('span',null,s.title),el('b',sgn(s.net),fmt(s.net)));d.append(h);
     const ul=el('ul');s.list.slice(0,8).forEach(([n,v])=>{const li=el('li');li.append(el('span',null,n),el('span',null,fmtV(Math.round(v*100)/100)));ul.append(li);});
-    if(s.list.length>8){const li=el('li');li.append(el('span',null,'y '+(s.list.length-8)+' más'),el('span'));ul.append(li);}
+    if(s.list.length>8){const li=el('li');li.append(el('span',null,S.lang==='en'?'and '+(s.list.length-8)+' more':'y '+(s.list.length-8)+' más'),el('span'));ul.append(li);}
     d.append(ul);
     const dl=el('dl');[['Volumen',fmtV(Math.round(s.V*100)/100)+' · '+s.n+(s.n>1?' contratos':' contrato')],['Colateral',fmt(s.Cc)],['Venta en Jita (neta)',fmt(s.G)],['Costo del envío','−'+fmt(s.cost)],['Te queda',fmt(s.net)]]
       .forEach(([k,v],i)=>{const dd=el('dd',i===3?'neg':i===4?sgn(s.net):'',v);dl.append(el('dt',null,k),dd);});
@@ -2310,7 +2310,7 @@ function paintFlipBuy(P){
   it.sort((a,b)=>b.p-a.p).slice(0,10).forEach(x=>{const tr=el('tr');
     const c=[el('td',null,x.r.o.name),el('td','r',fmtP(x.r.o.ref)),el('td','r',fmtP(x.r.np)),el('td','r','−'+fmt(x.sh)),el('td','r '+sgn(x.p),(x.p>=0?'+':'−')+fmt(Math.abs(x.p))),el('td','r '+sgn(x.p),(x.p>=0?'+':'−')+pct(Math.abs(x.buy>0?x.p/x.buy:0))+'%')];
     ['','Precio Unidad Compra','Precio Unidad Venta','Envío','Ganancia','Margen'].forEach((d,i)=>{if(d)c[i].dataset.l=d;});tr.append(...c);tb.append(tr);});
-  if(it.length>10){const tr=el('tr'),td=el('td','muted','y '+(it.length-10)+' items más');td.colSpan=6;tr.append(td);tb.append(tr);}
+  if(it.length>10){const tr=el('tr'),td=el('td','muted',S.lang==='en'?'and '+(it.length-10)+' more items':'y '+(it.length-10)+' ítems más');td.colSpan=6;tr.append(td);tb.append(tr);}
   t.append(tb);box.append(t);
   box.append(el('p','fb2-n','Compra = Jita Sell × cantidad (comprando de las órdenes de venta, sin broker). Venta = el precio de lista en HY-RWO ya con Sales Tax, Broker y SCC. El envío es un solo cálculo para todo el lote. El margen se cambia junto al botón de la ruta.'));
 }
