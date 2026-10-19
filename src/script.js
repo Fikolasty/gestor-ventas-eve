@@ -390,7 +390,7 @@ function setLoading(on,txt,frac,dim){
 let pasteT=null,esiT=null;
 $('paste').addEventListener('paste',()=>{clearTimeout(pasteT);pasteT=setTimeout(()=>syncFromPaste(true),80);});
 $('paste').addEventListener('input',()=>{clearTimeout(pasteT);pasteT=setTimeout(()=>syncFromPaste(false),500);});
-$('bClear').addEventListener('click',()=>{$('paste').value='';syncFromPaste(false);$('paste').focus();});
+
 // Elimina items del texto original sin acumular copias del inventario en memoria.
 function removeFromPaste(name){
   const key=name.toLowerCase();
@@ -2474,8 +2474,7 @@ const navigateHome=()=>{
   window.scrollTo({top:0,behavior:MOTION()?'smooth':'auto'});
   if(innerWidth<=900){document.body.classList.remove('side-open');$('sideBd').hidden=true;}
 };
-$('sideHome').addEventListener('click',navigateHome);
-$('bInventoryHome').addEventListener('click',navigateHome);
+$('navHome').addEventListener('click',navigateHome);
 document.querySelectorAll('[data-go-home]').forEach(node=>{
   node.addEventListener('click',navigateHome);
   node.addEventListener('keydown',event=>{
