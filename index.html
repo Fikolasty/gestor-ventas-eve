@@ -7738,7 +7738,7 @@ stRestore();syncDeps();brokerNote();buildOreSelect();readBB();syncLots();refresh
       const info=await fetch('https://esi.evetech.net/latest/characters/'+session.id+'/?compatibility_date=2026-10-01').then(r=>{if(!r.ok)throw Error('Character ESI '+r.status);return r.json();});
       if(!info.alliance_id){marketAlliance='';refreshMarketControls();syncNullRouteLabels();return;}
       const alliance=await fetch('https://esi.evetech.net/latest/alliances/'+info.alliance_id+'/?compatibility_date=2026-10-01').then(r=>{if(!r.ok)throw Error('Alliance ESI '+r.status);return r.json();});
-      marketAlliance=alliance.name||'';refreshMarketControls();syncNullRouteLabels();
+      const previousHub=activeNullMarket();marketAlliance=alliance.name||'';if(activeNullMarket()!==previousHub)S.refinedMan.null=Object.create(null);refreshMarketControls();syncNullRouteLabels();
       if(marketChoice==='auto'&&typeof refresh==='function')refresh();
     }catch(e){console.warn('Unable to detect market affiliation',e);}
   }
