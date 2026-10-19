@@ -2776,11 +2776,29 @@ stRestore();syncDeps();brokerNote();buildOreSelect();readBB();syncLots();refresh
 /* EVE SSO v1: PKCE public client; no client secret or persistent access tokens. */
 (function eveLogin(){
   const $e=id=>document.getElementById(id), button=$e('eveIdentityButton'), menu=$e('eveIdentityMenu');
-  const base=location.origin+location.pathname, key='mm.eve.pkce';
+  const base=location.origin+location.pathname, key='mm.eve.pkce', persistentKey='mm.eve.session.v1';
   // Configurar una sola vez tras registrar Market Moves+ en EVE Developers. Es público, nunca un Client Secret.
   const EVE_CLIENT_ID='114bbd2659384151ac3b0096f183dd3b';
   const scope='esi-skills.read_skills.v1';
-  let session=null;
+  let session=null,refreshPending=null;
+  const stored=()=>{try{const v=JSON.parse(localStorage.getItem(persistentKey)||'null');return v&&v.client===EVE_CLIENT_ID&&typeof v.refresh==='string'&&Number.isSafeInteger(v.id)&&typeof v.name==='string'?v:null;}catch(e){return null;}};
+  const persist=()=>{try{if(session?.refresh)localStorage.setItem(persistentKey,JSON.stringify({id:session.id,name:session.name,refresh:session.refresh,client:EVE_CLIENT_ID}));}catch(e){console.warn('Cannot persist EVE session',e);}};
+  const clearSaved=()=>{try{localStorage.removeItem(persistentKey);}catch(e){}};
+  async function renew(){
+    if(refreshPending)return refreshPending;
+    refreshPending=(async()=>{
+      const v=session?.refresh?{id:session.id,name:session.name,refresh:session.refresh}:stored();
+      if(!v)return false;
+      const body=new URLSearchParams({grant_type:'refresh_token',refresh_token:v.refresh,client_id:EVE_CLIENT_ID});
+      const resp=await fetch('https://login.eveonline.com/v2/oauth/token',{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body,cache:'no-store'});
+      if(!resp.ok){if(resp.status===400||resp.status===401){clearSaved();session=null;refreshUI();}throw Error('EVE token refresh HTTP '+resp.status);}
+      const tokens=await resp.json();
+      if(!tokens.access_token)throw Error('No access token received from EVE SSO');
+      session={id:v.id,name:v.name,token:tokens.access_token,expires:Date.now()+(tokens.expires_in||1200)*1000-30000,refresh:tokens.refresh_token||v.refresh};
+      persist();refreshUI();return true;
+    })().finally(()=>{refreshPending=null;});
+    return refreshPending;
+  }
   const status=msg=>{const e=$e('eveLoginStatus');e.textContent=msg;if(/^Error|^No se pudo|^No se pudieron|^Unable|^Could not/i.test(msg)){console.warn('EVE SSO:',msg);alert(msg);}};
   const b64=a=>btoa(String.fromCharCode(...new Uint8Array(a))).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');
   const rand=n=>b64(crypto.getRandomValues(new Uint8Array(n)));
@@ -2798,7 +2816,8 @@ stRestore();syncDeps();brokerNote();buildOreSelect();readBB();syncLots();refresh
   }
   function saveSkill(id,level){const e=$e(id);if(!e)return false;const v=String(level);if(![...e.options].some(o=>o.value===v))return false;e.value=v;e.dispatchEvent(new Event('change',{bubbles:true}));return true;}
   async function sync(){
-    if(!session||Date.now()>session.expires){status('La sesión expiró. Vuelve a iniciar sesión.');session=null;refreshUI();return;}
+    if(!session)return;
+    if(Date.now()>session.expires){try{await renew();}catch(err){status('No se pudo renovar la sesión de EVE: '+err.message);return;}if(!session)return;}
     try{status('Consultando skills autorizadas en ESI…');
       const resp=await fetch('https://esi.evetech.net/latest/characters/'+session.id+'/skills/?compatibility_date=2026-10-01',{headers:{Authorization:'Bearer '+session.token},cache:'no-store'});
       if(!resp.ok)throw Error('ESI HTTP '+resp.status);const data=await resp.json(),skills=new Map(data.skills.map(x=>[x.skill_id,x.active_skill_level]));
@@ -2813,9 +2832,9 @@ stRestore();syncDeps();brokerNote();buildOreSelect();readBB();syncLots();refresh
       if(typeof refresh==='function')refresh();
     }catch(err){status('No se pudieron sincronizar las skills: '+err.message);}
   }
-  $e('eveLogout').addEventListener('click',()=>{session=null;menu.hidden=true;button.setAttribute('aria-expanded','false');refreshUI();status('Desconectado. Se conservan tus ajustes manuales.');});
+  $e('eveLogout').addEventListener('click',()=>{clearSaved();session=null;menu.hidden=true;button.setAttribute('aria-expanded','false');refreshUI();status('Desconectado. Se conservan tus ajustes manuales.');});
   (async()=>{const u=new URL(location.href),code=u.searchParams.get('code'),state=u.searchParams.get('state');
-    if(!code&&!u.searchParams.has('error'))return;
+    if(!code&&!u.searchParams.has('error')){if(stored()){try{await renew();if(session)await sync();}catch(err){console.warn('EVE session restore failed',err);}}return;}
     u.searchParams.delete('code');u.searchParams.delete('state');u.searchParams.delete('error');u.searchParams.delete('error_description');history.replaceState(null,'',u.pathname+u.search+u.hash);
     const saved=sessionStorage.getItem(key);sessionStorage.removeItem(key);menu.hidden=false;button.setAttribute('aria-expanded','true');
     if(!saved){status('No se encontró una solicitud SSO válida.');return;}
@@ -2846,7 +2865,7 @@ stRestore();syncDeps();brokerNote();buildOreSelect();readBB();syncLots();refresh
       if(!scopeOK)throw Error('EVE no concedió el permiso de lectura de skills.');
       const id=Number(String(pilot.sub||'').match(/^CHARACTER:EVE:(\d+)$/)?.[1]),name=pilot.name;
       if(!Number.isSafeInteger(id)||!name)throw Error('Identidad de personaje no verificada.');
-      session={id,name,token:tokens.access_token,expires:Date.now()+(tokens.expires_in||1200)*1000-30000};refreshUI();menu.hidden=true;button.setAttribute('aria-expanded','false');await sync();
+      session={id,name,token:tokens.access_token,expires:Date.now()+(tokens.expires_in||1200)*1000-30000,refresh:tokens.refresh_token||null};persist();refreshUI();menu.hidden=true;button.setAttribute('aria-expanded','false');await sync();
     }catch(err){status('Error de SSO: '+err.message);}
   })();
 })();
