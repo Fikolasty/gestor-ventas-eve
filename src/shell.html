@@ -1860,6 +1860,10 @@ select{appearance:none;-webkit-appearance:none;padding-right:30px!important;back
 .hero-intro:not(.no-appr) .appr .appr-title,
 .hero-intro:not(.no-appr) .paste .paste-title{font:750 1.2rem/1.28 var(--f-ui)!important;letter-spacing:.035em!important;text-transform:uppercase!important;min-height:28px!important;margin:0!important;white-space:nowrap}
 .hero-intro:not(.no-appr) .paste .paste-head{min-height:28px;align-items:center;margin-bottom:13px}
+
+/* EVE login: one-click SSO, profile actions only after authentication. */
+#mmTabs .eve-identity-button .eve-identity-arrow[hidden]{display:none!important}
+#mmTabs .eve-identity-button:not([aria-expanded=true]){cursor:pointer}
 </style>
 <script>/* v1.0.16: aplica el tema guardado antes de pintar (sin parpadeo). Por defecto: Dark. */try{var g=JSON.parse(localStorage.getItem('gestorVentas.ajustes.v1')||'null');if(g&&g.ui){if(g.ui.light)document.documentElement.classList.add('light');}}catch(e){}</script>
 </head>
@@ -1907,7 +1911,7 @@ select{appearance:none;-webkit-appearance:none;padding-right:30px!important;back
   </div>
   <nav class="mm-modnav" id="mmTabs" role="tablist" aria-label="Secciones de Market Moves+">
     <button type="button" id="navHome" class="mm-home" title="HOME" aria-label="Volver al inicio"><span class="ic i-home" aria-hidden="true"></span></button>
-    <div id="eveIdentity" class="eve-identity"><button type="button" id="eveIdentityButton" class="eve-identity-button" aria-expanded="false" aria-controls="eveIdentityMenu"><img id="evePortrait" alt="" hidden><span id="evePilotName">Conectar EVE</span><span class="eve-identity-arrow" aria-hidden="true"></span></button><div id="eveIdentityMenu" class="eve-identity-menu" hidden><p id="eveLoginStatus" role="status">Conecta tu personaje mediante el inicio de sesión oficial de CCP.</p><button type="button" id="eveLogin">Iniciar sesión con EVE</button><button type="button" id="eveSync" hidden>Sincronizar skills</button><button type="button" id="eveLogout" hidden>Desconectar</button></div></div>
+    <div id="eveIdentity" class="eve-identity"><button type="button" id="eveIdentityButton" class="eve-identity-button" aria-expanded="false" aria-controls="eveIdentityMenu"><img id="evePortrait" alt="" hidden><span id="evePilotName">Conectar EVE</span><span class="eve-identity-arrow" aria-hidden="true" hidden></span></button><div id="eveIdentityMenu" class="eve-identity-menu" hidden><p id="eveLoginStatus" role="status">Personaje conectado mediante EVE Online.</p><button type="button" id="eveSync" hidden>Sincronizar skills</button><button type="button" id="eveLogout" hidden>Desconectar</button></div></div>
     <div class="mm-modgroup" role="presentation">
     <button type="button" class="mm-mod on" data-mm-module="ventas" role="tab" aria-controls="salesBody" aria-selected="true" id="mmTabVentas">Ventas</button>
     <button type="button" class="mm-mod" data-mm-module="mining" role="tab" aria-controls="mining" aria-selected="false" id="mmTabMining">Minería</button>
