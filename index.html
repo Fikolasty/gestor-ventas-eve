@@ -4723,32 +4723,31 @@ const routeSummaryName=k=>({
   rJita:'Reproceso y venta en Jita',disc:'Venta directa a un jugador'
 })[k]||PLAN_L[k]||k;
 const spanishCount=n=>({1:'un',2:'dos',3:'tres',4:'cuatro',5:'cinco',6:'seis',7:'siete',8:'ocho',9:'nueve',10:'diez'})[n]||String(n);
-const routeSentence=(k,n)=>{const count=spanishCount(n)+' '+(n===1?'ítem':'ítems');
-  const action=({
-    null:'vender en HY-RWO mediante órdenes',fN:'llevar a HY-RWO para vender allí',
-    jOrd:'vender mediante órdenes en Jita',fJ:'vender mediante órdenes en Jita',
-    jInst:'vender al instante en Jita',fJI:'vender al instante en Jita',
-    bb:'entregar al programa Buy Back',rNull:'reprocesar y vender sus materiales en HY-RWO',
-    rJita:'reprocesar y vender sus materiales en Jita',disc:'vender directamente a otro jugador'
-  })[k]||'vender según la ruta indicada';
+const routeSentence=(k,n)=>{if(S.lang==='en'){
+  const action={null:'sell through orders in HY-RWO',fN:'ship to HY-RWO to sell there',jOrd:'sell through orders in Jita',fJ:'sell through orders in Jita',jInst:'sell instantly in Jita',fJI:'sell instantly in Jita',bb:'deliver to the Buyback Program',rNull:'reprocess and sell the materials in HY-RWO',rJita:'reprocess and sell the materials in Jita',disc:'sell directly to another player'}[k]||'follow the recommended selling route';
+  return n+' '+(n===1?'item':'items')+' to '+action;
+}
+  const count=spanishCount(n)+' '+(n===1?'ítem':'ítems');
+  const action=({null:'vender en HY-RWO mediante órdenes',fN:'llevar a HY-RWO para vender allí',jOrd:'vender mediante órdenes en Jita',fJ:'vender mediante órdenes en Jita',jInst:'vender al instante en Jita',fJI:'vender al instante en Jita',bb:'entregar al programa Buy Back',rNull:'reprocesar y vender sus materiales en HY-RWO',rJita:'reprocesar y vender sus materiales en Jita',disc:'vender directamente a otro jugador'})[k]||'vender según la ruta indicada';
   return count+' para '+action;
 };
 function planIntroData(P){
   const name=modeName(P.mode),active=P.rows.filter(r=>r.best&&r.q>0);
-  if(!active.length)return{name,description:'Todavía no hay ítems con una ruta de venta disponible.'};
+  if(!active.length)return{name,description:S.lang==='en'?'No items have an available selling route yet.':'Todavía no hay ítems con una ruta de venta disponible.'};
   const groups=new Map();
   active.forEach(r=>{const g=groups.get(r.best)||[];g.push(r);groups.set(r.best,g);});
   if(active.length===1){
     const item=active[0],nameText=''+item.o.name+'';
-    const action=({null:'vender '+nameText+' en HY-RWO',jOrd:'vender '+nameText+' mediante una orden en Jita',
-      fJ:'vender '+nameText+' mediante una orden en Jita',bb:'entregar '+nameText+' al programa Buy Back',
-      rNull:'reprocesar '+nameText+' y vender sus materiales en HY-RWO',
-      rJita:'reprocesar '+nameText+' y vender sus materiales en Jita'})[item.best]||'seguir la ruta recomendada para '+nameText;
+    if(S.lang==='en'){
+      const action={null:'sell '+nameText+' in HY-RWO',jOrd:'sell '+nameText+' through an order in Jita',fJ:'sell '+nameText+' through an order in Jita',bb:'deliver '+nameText+' to the Buyback Program',rNull:'reprocess '+nameText+' and sell its materials in HY-RWO',rJita:'reprocess '+nameText+' and sell its materials in Jita'}[item.best]||'follow the recommended route for '+nameText;
+      return{name,description:'Recommended: '+action+'. You can review the selling steps below.'};
+    }
+    const action=({null:'vender '+nameText+' en HY-RWO',jOrd:'vender '+nameText+' mediante una orden en Jita',fJ:'vender '+nameText+' mediante una orden en Jita',bb:'entregar '+nameText+' al programa Buy Back',rNull:'reprocesar '+nameText+' y vender sus materiales en HY-RWO',rJita:'reprocesar '+nameText+' y vender sus materiales en Jita'})[item.best]||'seguir la ruta recomendada para '+nameText;
     return{name,description:'conviene '+action+'. Más abajo puedes revisar los pasos.'};
   }
   const phrases=[...groups].map(([key,rows])=>routeSentence(key,rows.length));
-  const natural=phrases.length===1?phrases[0]:phrases.length===2?phrases.join(' y '):phrases.slice(0,-1).join(', ')+' y '+phrases.at(-1);
-  return{name,description:'conviene distribuir el lote así: '+natural+'. Más abajo puedes revisar los pasos de cada venta.'};
+  const natural=phrases.length===1?phrases[0]:phrases.length===2?phrases.join(S.lang==='en'?' and ':' y '):phrases.slice(0,-1).join(', ')+(S.lang==='en'?', and ':' y ')+phrases.at(-1);
+  return{name,description:S.lang==='en'?'Recommended distribution: '+natural+'. Review the steps for each sale below.':'conviene distribuir el lote así: '+natural+'. Más abajo puedes revisar los pasos de cada venta.'};
 }
 let activeRep=0;
 function paintVerdict(P){
