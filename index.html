@@ -1655,7 +1655,7 @@ html.light #verdict .v-plan-name{color:#ad4b27}
 #stepHead .stp-balance-cell{justify-content:center;min-height:73px;padding:11px 13px}
 #stepHead .stp-balance-cell small{font-size:.73rem;line-height:1.35}
 #stepHead .stp-balance-cell strong{font-size:clamp(.82rem,1.05vw,1.02rem);white-space:normal}
-#stepsPanel>.mm-section-head:after{content:attr(data-plan);display:block;margin-top:10px;font-size:.81rem;font-weight:500;color:var(--mut)}
+#stepsPanel>.mm-section-head:after{content:none!important;display:none!important}
 @media(max-width:960px){
  #stepsPanel{grid-template-columns:1fr;row-gap:13px}
  #stepsPanel>.mm-section-head{grid-column:1;grid-row:auto}
@@ -1668,6 +1668,18 @@ html.light #verdict .v-plan-name{color:#ad4b27}
 /* Same plan emphasis in verdict and plan picker; do not recolor monetary metrics. */
 #vCap .plan-name-accent,#pkNote .plan-name-accent,.pk-sum .plan-name-accent,.pk-opportunity .plan-name-accent{color:#e0a84f!important;font-weight:750}
 
+
+/* Steps header: consistent title and three evenly sized financial cards. */
+#stepsPanel{grid-template-columns:minmax(270px,1fr) minmax(0,3fr);column-gap:22px;align-items:center}
+#stepsPanel>.mm-section-head{min-width:0;align-self:center}
+#stepsPanel>#stepHead{min-width:0}
+#stepsPanel #stepHead .stp-top{display:block;margin:0}
+#stepsPanel #stepHead .stp-plan{display:none!important}
+#stepsPanel #stepHead .stp-balance{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;width:100%;max-width:none}
+#stepsPanel #stepHead .stp-balance-cell{height:82px;min-height:0;box-sizing:border-box;justify-content:center;padding:10px 12px}
+#stepsPanel #stepHead .stp-balance-cell small{min-height:2.5em}
+@media(max-width:1050px){#stepsPanel{grid-template-columns:1fr}#stepsPanel>.mm-section-head,#stepsPanel>#stepHead{grid-column:1;grid-row:auto}}
+@media(max-width:620px){#stepsPanel #stepHead .stp-balance{grid-template-columns:1fr}#stepsPanel #stepHead .stp-balance-cell{height:auto;min-height:66px}#stepsPanel #stepHead .stp-balance-cell small{min-height:0}}
 /* ===== tema claro (generado desde el oscuro por light.py) ===== */
 html.light{--void:#e4e3dd;--hull:#e2e0da;--hull2:#e0ded8;--line:rgba(31,30,29,0.114);--line2:rgba(31,30,29,0.125);--txt:#1c1c1a;--mut:#54524d;--dim:#6c6a64;--ion:#413f3c;--blue:#a39d8b;--clay:#c96442;--thrust:#a67526;--gain:#418b62;--loss:#a92c23}
 html.light body::after{background:repeating-linear-gradient(180deg,rgba(31,30,29,0.011) 0 1px,transparent 1px 3px),
