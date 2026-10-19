@@ -4611,8 +4611,7 @@ function paintVerdict(P){
   $('missCount').hidden=!has||S.loading||missing===0;
   $('missCount').textContent=missing+' sin precio';
   if(has&&!$('deep').dataset.uiReady){
-    $('deep').hidden=false;$('deep').dataset.uiReady='1';
-    $('bDeep').setAttribute('aria-expanded','true');
+    $('deep').dataset.uiReady='1'; // Pasos a seguir permanece cerrado hasta que el usuario lo abra.
   }
   if(!has){clearViews();return;}
   const none=P.missing.length===P.rows.length,v=none?null:P.best;
