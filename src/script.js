@@ -1737,10 +1737,10 @@ function slots(fields,cls){const w=el('div','slots'+(cls?' '+cls:''));
 const syncExtras=()=>{$('pRepro').hidden=S.flip||!S.items.some(o=>resolveOre(o.name));$('pExtra').hidden=!S.items.length||($('pRepro').hidden&&$('pDisc').hidden&&IN_JITA());}; // Contratos se oculta en Jita sin courier // reproceso solo en HY-RWO
 function paintContracts(P){
   const sec=$('pCtr');sec.hidden=!S.items.length;
-  $('ctrTitle').textContent=SH()?'Contratos y Envío':'Contratos';$('shipBox').hidden=!SH();sec.classList.toggle('no-ship',!SH());
+  $('ctrTitle').textContent=SH()?'CONTRATOS Y ENVÍO':'CONTRATOS';$('shipBox').hidden=!SH();sec.classList.toggle('no-ship',!SH());
   const cs=packCouriers(P),dr=P.rows.filter(r=>r.best==='disc');lastCs=cs;
   const nC=(P.toBB.length?1:0)+cs.length+(dr.length?1:0),shipR=cs.reduce((a,k)=>a+k.reward,0);
-  {const sm=$('ctrSum');sm.textContent=nC?nC+(nC>1?' contratos':' contrato'):'Sin contratos';if(cs.length)sm.append(el('span','sm-hide',' · envío −'+fmt(shipR)));}
+  {const sm=$('ctrSum');sm.textContent=nC?nC+(nC>1?' contratos':' contrato'):'Sin contratos';if(cs.length)sm.append(el('span','sm-hide neg',' · envío −'+fmt(shipR)));}
   if(!sec.open)return; // cerrada: solo el resumen del encabezado
   const cards=[];
   ctrSpecs(P,cs,dr).forEach(c=>{const n=el('div','ct '+c.cls),h=el('div','ct-h');h.append(el('span','pill '+c.tag[0],c.tag[1]),el('b',null,c.title));h.append(el('span','ct-s num',c.amt));
