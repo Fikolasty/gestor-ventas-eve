@@ -1126,7 +1126,7 @@ function paintLot(r){
   if(!u.ic){const ic=iconFor(o.name);if(ic){u.nm.querySelector('b').prepend(ic);u.ic=ic;}} // ícono cuando ya se conoce el type_id
   u.qty.textContent=fmtQ(r.q);
   const warn=(o.checks||[]).filter(c=>c[1]==='warn').length,ok=(o.checks||[]).length&&!warn;
-  setText(u.tag,warn?warn+(warn>1?' avisos':' aviso'):(ok?'verificado':''),'tag '+(warn?'warn':ok?'ok':''));u.tag.hidden=!warn&&!ok;
+  setText(u.tag,warn?warn+(S.lang==='en'?(warn>1?' warnings':' warning'):(warn>1?' avisos':' aviso')):(ok?(S.lang==='en'?'verified':'verificado'):''),'tag '+(warn?'warn':ok?'ok':''));u.tag.hidden=!warn&&!ok;
   if(!u.skT){u.skT=el('span','tag sk');u.nm.append(u.skT);}u.skT.hidden=!o.skew;if(o.skew)u.skT.textContent='ajuste '+(o.skew>0?'+':'−')+pctS(Math.abs(o.skew))+'%';
   if(r.best){const l=OPTS.find(x=>x[0]===r.best)[1];setText(u.dest,l,'lot-dest pill k-'+r.best+' '+(r.best==='disc'?'p-disc':SHIPS[r.best]?'p-jita':'p-null'));}
   else setText(u.dest,'Falta Precio','lot-dest pill p-none');
@@ -1656,7 +1656,7 @@ function paintVerdict(P){
   if(rl._activateRep){rl._activateRep();delete rl._activateRep;}
   // v1.0.22: la comparación con otros planes vive en Elige un Plan. Aquí solo la tarjeta del envío.
   {const sh=P.rows.filter(r=>r.best&&SHIPS[r.best]),n=trips(P.Vs);
-   $('ovShip').hidden=!SH();$('aCourT').textContent='Envío a '+DEST();
+   $('ovShip').hidden=!SH();$('aCourT').textContent=(S.lang==='en'?'Shipping to ':'Envío a ')+DEST();
    $('aCourier').textContent=P.Vs>0?'−'+fmt(P.shipCost):'0 ISK';$('aCourier').className=P.Vs>0?'neg':'zero';
    $('aCourS').textContent=P.Vs>0?fmtV(Math.round(P.Vs))+' · '+n+(n>1?' contratos':' contrato')+' · '+sh.length+(sh.length===1?' item':' items'):'Tu plan no envía nada.';}
   $('vNote').hidden=true;
@@ -1739,7 +1739,7 @@ function slots(fields,cls){const w=el('div','slots'+(cls?' '+cls:''));
 const syncExtras=()=>{$('pRepro').hidden=S.flip||!S.items.some(o=>resolveOre(o.name));$('pExtra').hidden=!S.items.length;}; // Contratos se oculta en Jita sin courier // reproceso solo en HY-RWO
 function paintContracts(P){
   const sec=$('pCtr');sec.hidden=!S.items.length;
-  $('ctrTitle').textContent=C.disc.on&&!S.flip?'CONTRATOS Y DISCORD':'CONTRATOS';sec.classList.toggle('no-discord',!C.disc.on||S.flip);
+  $('ctrTitle').textContent=S.lang==='en'?(C.disc.on&&!S.flip?'CONTRACTS AND DISCORD':'CONTRACTS'):(C.disc.on&&!S.flip?'CONTRATOS Y DISCORD':'CONTRATOS');sec.classList.toggle('no-discord',!C.disc.on||S.flip);
   const cs=packCouriers(P),dr=P.rows.filter(r=>r.best==='disc');lastCs=cs;
   const nC=(P.toBB.length?1:0)+cs.length+(dr.length?1:0),shipR=cs.reduce((a,k)=>a+k.reward,0);
   {const sm=$('ctrSum');sm.textContent=S.lang==='en'?(nC?nC+(nC>1?' contracts':' contract'):'No contracts'):(nC?nC+(nC>1?' contratos':' contrato'):'Sin contratos');if(cs.length)sm.append(el('span','sm-hide neg',' · envío −'+fmt(shipR)));}
@@ -1765,7 +1765,7 @@ function paintContracts(P){
 // Derecha: envío a Jita
 function paintShip(P,cs){
   const b=$('shBody');b.textContent='';
-  $('shTitle').textContent='Envío a '+DEST();$('shRoute').textContent=(S.flip?'Jita 4-4 → HY-RWO':'HY-RWO → Jita 4-4')+' · SIGMA Freight';
+  $('shTitle').textContent=(S.lang==='en'?'Shipping to ':'Envío a ')+DEST();$('shRoute').textContent=(S.flip?'Jita 4-4 → HY-RWO':'HY-RWO → Jita 4-4')+' · SIGMA Freight';
   $('fBase').textContent=fmt(C.base);$('fPerM3').textContent=C.perM3.toLocaleString('en-US')+' ISK';$('fCollPct').textContent=pct(C.collPct)+'%';$('fMaxVol').textContent=fmtV(C.maxVol);
   if(!C.shipOn){
     const sh=P.rows.filter(r=>r.best&&SHIPS[r.best]&&r.ship[r.best]),V=sh.reduce((a,r)=>a+r.ship[r.best].v,0),Cc=sh.reduce((a,r)=>a+r.ship[r.best].c,0);
@@ -1897,7 +1897,7 @@ function paintScenarios(P){
     d.append(ul);
     const dl=el('dl');[['Volumen',fmtV(Math.round(s.V*100)/100)+' · '+s.n+(s.n>1?' contratos':' contrato')],['Colateral',fmt(s.Cc)],['Venta en Jita (neta)',fmt(s.G)],['Costo del envío','−'+fmt(s.cost)],['Te queda',fmt(s.net)]]
       .forEach(([k,v],i)=>{const dd=el('dd',i===3?'neg':i===4?sgn(s.net):'',v);dl.append(el('dt',null,k),dd);});
-    d.append(dl);if(s.miss.length)d.append(el('small','muted','Sin precio: '+s.miss.join(', ')+'.'));box.append(d);});
+    d.append(dl);if(s.miss.length)d.append(el('small','muted',(S.lang==='en'?'Missing prices: ':'Sin precio: ')+s.miss.join(', ')+'.'));box.append(d);});
   const v=$('fScnV');
   if(A.miss.length||(B&&B.miss.length)){
     v.textContent='Comparación parcial: faltan precios de '+[...new Set(A.miss.concat(B?B.miss:[]))].join(', ')+'. No se puede comparar contra el plan completo.';
@@ -1945,7 +1945,7 @@ function paintRefCmp(r,q,nets){
     // titular grande: la respuesta de este mercado
     const hd0=el('div','rx-hd');hd0.append(el('span','lamp '+(B.net>A.net?'pos':'neg')),el('span','rx-big',(B.net>A.net?'Refina si '+where:'No refines si '+where).toUpperCase()));
     d.append(hd0,el('h4',null,title));
-    const t=el('table'),hd=el('tr');['','Sin Refinar','Refinado'].forEach(x=>hd.append(el('th',null,x)));t.append(hd);
+    const t=el('table'),hd=el('tr');(S.lang==='en'?['','Unrefined','Refined']:['','Sin refinar','Refinado']).forEach(x=>hd.append(el('th',null,x)));t.append(hd);
     const row=(l,a,b,cls)=>{const tr=el('tr',cls||'');tr.append(el('td',null,l),el('td',cls==='p'?'':(l.startsWith('−')?'ded':''),a),el('td',cls==='p'?'':(l.startsWith('−')?'ded':''),b));t.append(tr);};
     row('Precio',priceNo,priceRe,'p');
     row('Venta bruta',fmt(A.gross),fmt(B.gross));
@@ -2389,7 +2389,7 @@ $('cAssignee').addEventListener('input',()=>refresh());
 // v1.0.55: interruptor Courier (solo con la ruta Jita → HY-RWO). On: los items están en Jita y los llevas a HY-RWO
 // con SIGMA Freight (se cuenta el courier). Off: los trajiste a Jita para venderlos allí, sin ningún courier.
 // Con la ruta HY-RWO → Jita el courier siempre se cuenta y el interruptor no se muestra.
-function syncShipSwitch(){$('shipTxt').textContent=SH()?'Enviar':'No enviar';$('shipLab').hidden=!S.flip;}
+function syncShipSwitch(){$('shipTxt').textContent=S.lang==='en'?(SH()?'Ship':'Do not ship'):(SH()?'Enviar':'No enviar');$('shipLab').hidden=!S.flip;}
 function setFlip(on){
   S.flip=!!on;S.planMode=null;czIdx=0;C.shipOn=true;$('shipOn').checked=true; // cambiar de ruta vuelve a contar el courier
   SHIPS=S.flip?{fN:1}:{jOrd:1,jInst:1,rJita:1};
