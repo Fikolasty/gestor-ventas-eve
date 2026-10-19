@@ -2187,7 +2187,7 @@ function paintAppraisal(){
   cell(colL,'Volumen',NF2.format(v2)+' m³',null,String(v2)); // 2 decimales, como Janice; clic copia el número
   cell(colL,'Items',String(its.length));
   cell(colR,'Buy',ok?vB:'—','t-buy');cell(colR,'Split',ok?(vB+vS)/2:'—','t-split');cell(colR,'Sell',ok?vS:'—','t-sell');
-  g.append(colL,colR);box.append(el('span','appr-tag','Tasación'),g);
+  g.append(colL,colR);box.append(el('h2','mm-title appr-title','TASACIÓN'),g);
 }
 function refreshNow(){
   if(refQ){cancelAnimationFrame(refQ);refQ=0;}
