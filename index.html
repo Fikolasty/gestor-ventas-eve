@@ -1526,6 +1526,20 @@ html.light #verdict .v-plan-name{color:#ad4b27}
  .hero-intro:not(.no-appr)>.paste textarea{min-height:120px}
 }
 
+
+/* Step contract carousel: keep item column and contract column symmetrical */
+.stp-b.two{align-items:stretch}
+.stp-b.two>.stp-main{display:flex;flex-direction:column;min-height:100%}
+.stp-b.two>.stp-main>.ct-items{flex:1;display:flex;flex-direction:column;min-height:100%}
+.stp-b.two>.stp-ct{min-width:0;align-self:stretch}
+.stp-contract-nav{display:flex;align-items:center;justify-content:flex-end;gap:10px;margin:2px 0 12px}
+.stp-contract-arrow{width:34px;height:30px;display:grid;place-items:center;border-radius:7px;border:1px solid var(--line2);background:rgba(222,220,209,.07);color:var(--txt);font-size:22px;line-height:1}
+.stp-contract-arrow:hover:not(:disabled){border-color:var(--clay);color:var(--clay)}
+.stp-contract-arrow:disabled{opacity:.35;cursor:default}
+.stp-contract-counter{font-weight:650;font-size:.84rem;color:var(--mut);font-variant-numeric:tabular-nums;min-width:40px;text-align:center}
+.stp-contract-slide>.stp-ct-t{margin:0 0 10px}
+@media(max-width:800px){.stp-b.two>.stp-main>.ct-items{min-height:unset}}
+
 /* ===== tema claro (generado desde el oscuro por light.py) ===== */
 html.light{--void:#e4e3dd;--hull:#e2e0da;--hull2:#e0ded8;--line:rgba(31,30,29,0.114);--line2:rgba(31,30,29,0.125);--txt:#1c1c1a;--mut:#54524d;--dim:#6c6a64;--ion:#413f3c;--blue:#a39d8b;--clay:#c96442;--thrust:#a67526;--gain:#418b62;--loss:#a92c23}
 html.light body::after{background:repeating-linear-gradient(180deg,rgba(31,30,29,0.011) 0 1px,transparent 1px 3px),
@@ -1975,6 +1989,7 @@ html.light .eve-sk-pip.trained{background:#252422}
 html.light .eve-sk-pip.locked{background:#97907b}
 html.light .eve-sk-add{border:1px solid #408f75;color:#22aa5b;background:rgba(30,105,75,0.275)}
 html.light .eve-sk-add.book{border-color:#9b363b;color:#c20a15;background:rgba(100,20,25,0.312)}
+html.light .stp-contract-arrow{background:rgba(31,30,29,0.067)}
 /* ajustes a mano del tema claro */
 html.light body{background:#e6e3da;color:#1f1e1d}
 html.light body::before{opacity:.12;filter:grayscale(.35) brightness(1.1)}
