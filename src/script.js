@@ -741,6 +741,7 @@ function computePlan(){
     for(let pass=0;pass<3;pass++){
       const moving=rows.filter(r=>r.best&&r.ship[r.best]);
       const totalV=moving.reduce((v,r)=>v+r.ship[r.best].v,0);
+      const totalC=moving.reduce((v,r)=>v+r.ship[r.best].c,0);
       if(!moving.length||!totalV)break;
       let changed=false;
       moving.forEach(r=>{
@@ -749,7 +750,10 @@ function computePlan(){
         if(!choices.length)return;
         const alt=choices.reduce((a,b)=>r.g[b]>r.g[a]?b:a);
         const travelling=r.ship[r.best];
-        const afterCost=r.g[r.best]-courierShare(travelling.v,travelling.c,totalV);
+        // Marginal courier cost includes extra contracts triggered by this particular cargo.
+        // Unlike pro-rata averages, this captures the huge step change at the volume cap.
+        const marginal=courierCost(totalV,totalC)-courierCost(Math.max(0,totalV-travelling.v),Math.max(0,totalC-travelling.c));
+        const afterCost=r.g[r.best]-Math.max(0,marginal);
         if(r.g[alt]>afterCost+0.01){
           r.best=alt;r.noShip=true;r.fast=null;r.guide=guideFor(r,Vall);changed=true;
           r.hint.iceShip='El envío a Jita es más caro que '+(alt==='bb'?'el contrato de Buyback Mayhem':'la mejor venta local')+'.';
@@ -1447,7 +1451,8 @@ function paintVerdict(P){
   const seq=[];groups.forEach(([k,g])=>{if(SHIPS[k]&&!seq.includes('ship'))seq.push('ship');seq.push(k);});
   // los pasos de origen van antes del courier; rJita (reprocesar) también es de origen
   const before=seq.filter(k=>k!=='ship'&&(!SHIPS[k]||k==='rJita')),after=seq.filter(k=>k!=='ship'&&SHIPS[k]&&k!=='rJita');
-  const steps=[...before,...(shipRows.length?['ship']:[]),...after];
+  // Refined materials need a separate sale step AFTER the courier arrives in Jita.
+  const steps=[...before,...(shipRows.length?['ship']:[]),...after,...(groups.some(([k])=>k==='rJita')?['sellRefined']:[])];
   const hd=$('stepHead');hd.textContent='';
   if(steps.length){const t=el('div','stp-top');t.append(el('span','stp-plan',(P.mode?modeName(P.mode):'Plan Óptimo')+' · '+rowsIn.length+(rowsIn.length===1?' item':' items')));hd.append(t);}
   // v1.0.59: cada paso se pliega. Por defecto solo el primero está abierto; abrir uno no cierra los demás y lo centra.
@@ -1477,6 +1482,19 @@ function paintVerdict(P){
       body.append(as);}
     box.append(hd,body);return{box,main};};
   steps.forEach((k,i)=>{
+    if(k==='sellRefined'){
+      const refined=rowsIn.filter(r=>r.best==='rJita'&&r.mins?.length);
+      const gross=refined.reduce((n,r)=>n+r.g.rJita-r.prod,0);
+      const {box,main}=stepBox('sellRefined',i+1,'Cuando llegue: vender materiales en Jita','En Jita','Publica los productos reprocesados a los precios indicados. Pulsa un precio para copiarlo.',gross,'antes del envío');
+      const list=el('div','stp-arrival-list');
+      refined.forEach(r=>r.mins.forEach(m=>{if(!(m.n>0))return;
+        const line=el('div','stp-arrival-row');
+        line.append(el('span','stp-arrival-name',m.m+' × '+fmtQ(m.n)),el('span','stp-arrival-price',m.p==null?'Sin precio':'Precio por unidad: '));
+        if(m.p!=null)line.append(copyBtn(m.p,fmtP(m.p)));
+        list.append(line);
+      }));
+      main.append(list);pl.append(box);return;
+    }
     if(k==='ship'){
       const vol=shipRows.reduce((a,r)=>a+(r.ship[r.best]?r.ship[r.best].v:0),0),n=trips(vol);
       const {box,main}=stepBox('ship',i+1,'Envío a '+dest+' con SIGMA Freight','Envío',shipRows.length+(shipRows.length===1?' item':' items')+' · '+fmtV(Math.round(vol))+' · '+n+(n===1?' contrato':' contratos')+' · llega en '+C.cDays[0]+'–'+C.cDays[1]+' días',-(P.shipCost||0),'costo del envío');
