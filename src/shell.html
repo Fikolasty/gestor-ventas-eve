@@ -1540,6 +1540,14 @@ html.light #verdict .v-plan-name{color:#ad4b27}
 .stp-contract-slide>.stp-ct-t{margin:0 0 10px}
 @media(max-width:800px){.stp-b.two>.stp-main>.ct-items{min-height:unset}}
 
+
+/* Final Jita sale: item, quantity, and copyable unit price. */
+.stp-arrival-list{display:flex;flex-direction:column;gap:8px}
+.stp-arrival-row{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px 14px;padding:12px 14px;border-radius:var(--r-sm);border:1px solid var(--line2);background:rgba(10,10,10,.72)}
+.stp-arrival-name{font-weight:600;color:var(--txt)}
+.stp-arrival-price{color:var(--mut);font-size:.82rem;margin-left:auto}
+.stp-arrival-row .copy{width:auto;white-space:nowrap}
+
 </style>
 <script>/* v1.0.16: aplica el tema guardado antes de pintar (sin parpadeo). Por defecto: Dark. */try{var g=JSON.parse(localStorage.getItem('gestorVentas.ajustes.v1')||'null');if(g&&g.ui){if(g.ui.light)document.documentElement.classList.add('light');}}catch(e){}</script>
 </head>
