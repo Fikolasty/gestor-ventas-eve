@@ -1510,9 +1510,10 @@ function paintVerdict(P){
     const net=P.best;
     const balance=el('div','stp-balance');
     const cell=(title,amount,kind)=>{const part=el('div','stp-balance-cell');part.append(el('small',null,title),el('strong',kind,(amount>0&&kind==='pos'?'+':amount<0?'−':'')+fmt(Math.abs(amount))));balance.append(part);};
-    cell('Ventas y contratos, neto de tasas y producción',netBeforeShipping,netBeforeShipping>=0?'pos':'neg');
-    cell('Coste total de envío',-shipping,shipping?'neg':'');
-    cell('Resultado final del plan',net,net>=0?'pos':'neg');
+    const english=S.lang==='en';
+    cell(english?'Sales and contracts, net of fees and processing':'Ventas y contratos, neto de tasas y procesamiento',netBeforeShipping,netBeforeShipping>=0?'pos':'neg');
+    cell(english?'Total shipping cost':'Coste total del transporte',-shipping,shipping?'neg':'');
+    cell(english?'Final plan proceeds':'Ingreso final del plan',net,net>=0?'pos':'neg');
     t.append(balance);
     hd.append(t);
   }
