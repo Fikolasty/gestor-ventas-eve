@@ -1664,6 +1664,10 @@ html.light #verdict .v-plan-name{color:#ad4b27}
 }
 @media(max-width:600px){#stepHead .stp-balance{grid-template-columns:1fr}#stepHead .stp-balance-cell{min-height:0}}
 
+
+/* Same plan emphasis in verdict and plan picker; do not recolor monetary metrics. */
+#vCap .plan-name-accent,#pkNote .plan-name-accent,.pk-sum .plan-name-accent,.pk-opportunity .plan-name-accent{color:#e0a84f!important;font-weight:750}
+
 </style>
 <script>/* v1.0.16: aplica el tema guardado antes de pintar (sin parpadeo). Por defecto: Dark. */try{var g=JSON.parse(localStorage.getItem('gestorVentas.ajustes.v1')||'null');if(g&&g.ui){if(g.ui.light)document.documentElement.classList.add('light');}}catch(e){}</script>
 </head>
