@@ -5251,6 +5251,12 @@ function paintAppraisal(){
   cell(colL,'Items',String(its.length));
   cell(colR,'Buy',ok?vB:'—','t-buy');cell(colR,'Split',ok?(vB+vS)/2:'—','t-split');cell(colR,'Sell',ok?vS:'—','t-sell');
   g.append(colL,colR);box.append(el('h2','mm-title appr-title','TASACIÓN'),g);
+  if(!ok){
+    const note=el('p','appr-no-price',its.some(o=>o.jita&&o.jita.id)
+      ?'Sin órdenes Buy/Sell disponibles en Jita 4-4 para este inventario. Prueba hielo comprimido, reproceso o Buyback.'
+      :'Todavía no hay precios de Jita disponibles para estos ítems. Revisa el estado de la API y sus nombres.');
+    note.setAttribute('role','status');box.append(note);
+  }
 }
 function refreshNow(){
   if(refQ){cancelAnimationFrame(refQ);refQ=0;}
