@@ -1740,6 +1740,17 @@ html.light #verdict .v-plan-name{color:#ad4b27}
 #pExtra details.fold>summary .ic{flex:none}
 @media(max-width:700px){#bDeep .step-toggle-copy,#pExtra details.fold>summary{flex-wrap:wrap}#pExtra details.fold>summary h2{flex-basis:100%}#pExtra details.fold>summary>.sum{text-align:left;margin-left:0!important;flex:1}#bDeep .step-toggle-copy small{flex-basis:100%}}
 
+
+/* Summary sits immediately after the title; chevron takes the far right. */
+#pExtra details.fold>summary{justify-content:flex-start!important;flex-wrap:nowrap!important}
+#pExtra details.fold>summary h2{flex:0 0 auto!important;white-space:nowrap}
+#pExtra details.fold>summary>.sum{flex:1 1 auto!important;text-align:left!important;margin-left:6px!important;padding-right:12px!important;overflow-wrap:anywhere}
+#pExtra details.fold>summary .fold-chevron{margin-left:auto!important}
+#pExtra details.fold>summary>.sum .neg{color:#e86b70!important}
+#pExtra details.fold>summary>.sum .pos{color:#5cba86!important}
+#pExtra details.fold>summary>.sum .sm-hide.neg{color:#e86b70!important}
+@media(max-width:700px){#pExtra details.fold>summary{flex-wrap:wrap!important}#pExtra details.fold>summary h2{flex-basis:auto!important}#pExtra details.fold>summary>.sum{flex-basis:100%!important;margin-left:0!important;order:3}#pExtra details.fold>summary .fold-chevron{order:2}}
+
 /* ===== tema claro (generado desde el oscuro por light.py) ===== */
 html.light{--void:#e4e3dd;--hull:#e2e0da;--hull2:#e0ded8;--line:rgba(31,30,29,0.114);--line2:rgba(31,30,29,0.125);--txt:#1c1c1a;--mut:#54524d;--dim:#6c6a64;--ion:#413f3c;--blue:#a39d8b;--clay:#c96442;--thrust:#a67526;--gain:#418b62;--loss:#a92c23}
 html.light body::after{background:repeating-linear-gradient(180deg,rgba(31,30,29,0.011) 0 1px,transparent 1px 3px),
@@ -2210,6 +2221,9 @@ html.light #vCap .plan-name-accent,html.light #pkNote .plan-name-accent,html.lig
 html.light #bDeep.step-toggle{border:1px solid rgba(201,100,66,0.65);background:rgba(240,237,229,0.87)}
 html.light #pExtra details.fold>summary .sum .pos{color:#418b62!important}
 html.light #pExtra details.fold>summary .sum .neg{color:#a92328!important}
+html.light #pExtra details.fold>summary>.sum .neg{color:#a92328!important}
+html.light #pExtra details.fold>summary>.sum .pos{color:#418b62!important}
+html.light #pExtra details.fold>summary>.sum .sm-hide.neg{color:#a92328!important}
 /* ajustes a mano del tema claro */
 html.light body{background:#e6e3da;color:#1f1e1d}
 html.light body::before{opacity:.12;filter:grayscale(.35) brightness(1.1)}
