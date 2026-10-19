@@ -1479,7 +1479,6 @@ function paintVerdict(P){
   const hd=$('stepHead');hd.textContent='';
   if(steps.length){
     const t=el('div','stp-top');t.append(el('span','stp-plan',(P.mode?modeName(P.mode):'Plan Óptimo')+' · '+rowsIn.length+(rowsIn.length===1?' item':' items')));
-    $('stepsPanel').querySelector('.mm-section-head').dataset.plan=(P.mode?modeName(P.mode):'Plan Óptimo')+' · '+rowsIn.length+(rowsIn.length===1?' ítem':' ítems');
     // The exact bridge to P.best is the already-taxed earnings from every chosen route, less production and courier.
     // Never sum step display amounts: rJita preparation and Jita sale may describe the same value twice.
     const netBeforeShipping=rowsIn.reduce((sum,r)=>sum+(r.best?(r.g[r.best]||0)-r.prod:0),0);
