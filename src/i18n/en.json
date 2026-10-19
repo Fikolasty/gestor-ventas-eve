@@ -1900,5 +1900,8 @@
   "Elige el recurso que quieres extraer, coloca los cabezales sobre las mejores concentraciones y ajusta la duración del programa de extracción. Finalmente, crea una ruta para enviar el P0 al almacén.": "Choose a resource, position extractor heads over the richest deposits, and set the extraction program duration. Then route the extracted P0 to storage.",
   "Selecciona la receta (Schematic) de cada fábrica. Enlaza los materiales que necesita recibir y configura una ruta para guardar lo que produzca. Pulsa": "Select each factory's schematic, connect its required inputs, and create a route to store its output. Click",
   "Envía tus productos del Launchpad a la oficina aduanera (POCO). Comprueba cuánto pagarás de impuestos y recógelos con una nave con suficiente espacio, como la Epithal.": "Send products from the launchpad to the customs office (POCO). Check the taxes and collect them using a ship with sufficient cargo space, such as an Epithal.",
-  "construir un enlace (Link) no crea una ruta de transporte (Route). Debes configurarla manualmente; de lo contrario, los materiales no llegarán a su destino.": "Building a link does not automatically create a route. Configure the route manually or materials will not reach their destination."
+  "construir un enlace (Link) no crea una ruta de transporte (Route). Debes configurarla manualmente; de lo contrario, los materiales no llegarán a su destino.": "Building a link does not automatically create a route. Configure the route manually or materials will not reach their destination.",
+  "aviso": "warning",
+  "avisos": "warnings",
+  "1 aviso": "1 warning"
 }
