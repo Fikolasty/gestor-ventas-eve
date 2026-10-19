@@ -2420,6 +2420,9 @@ $('themeLight').addEventListener('change',e=>{document.documentElement.classList
 // ================= Ajustes y Guía de Uso =================
 // Pestañas persistentes, conservando la comparativa minera existente.
 function selectAppModule(name){
+  // PI EN PAUSA: conservar la implementación completa para reactivarla en una futura versión.
+  // Mientras está oculta en la navegación, no permitir activarla mediante accesos antiguos.
+  if(name==='pi')name='ventas';
   if(!['ventas','mining','pi'].includes(name))return;
   document.body.classList.toggle('mm-mining',name==='mining');
   document.body.classList.toggle('mm-pi',name==='pi');
