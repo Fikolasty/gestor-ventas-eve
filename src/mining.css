@@ -573,3 +573,6 @@ html.light #mining .mn-fit-fallback{border-color:rgba(40,100,150,.22);background
 .mn details>summary::before{content:none!important;display:none!important}
 .mn details>summary::after{content:"";display:block;flex:none;width:9px;height:9px;border-right:2px solid var(--ion);border-bottom:2px solid var(--ion);margin-left:auto;margin-right:7px;transform:rotate(45deg);transition:transform .18s ease}
 .mn details[open]>summary::after{transform:rotate(225deg)}
+
+/* Corrección del chevron global: nunca pintar flechas sobre iconos de ayuda. */
+.mn details.mn-info>summary::before,.mn details.mn-info>summary::after,.mn details.mn-info[open]>summary::after{content:none!important;display:none!important}
