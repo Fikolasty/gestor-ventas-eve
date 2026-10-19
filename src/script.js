@@ -66,6 +66,33 @@ const S={
 };
 const C=S.cfg;
 
+// Catálogo central: mercado local y refinería / courier son conceptos independientes.
+// Si ESI no permite identificar la alianza, se mantiene HY-RWO por compatibilidad.
+const NULL_MARKETS=Object.freeze({
+  'HY-RWO':{system:'HY-RWO',alliance:'SIGMA'},
+  'UALX-3':{system:'UALX-3',alliance:'BRAVE'},
+  'C-J6MT':{system:'C-J6MT',alliance:'Goonswarm Federation'}
+});
+const NULL_MARKET_KEY='mm.nullMarket.v1';
+let marketAlliance='',marketChoice='auto';
+try{const saved=localStorage.getItem(NULL_MARKET_KEY);if(saved==='auto'||Object.hasOwn(NULL_MARKETS,saved))marketChoice=saved;}catch(_){}
+const marketForAlliance=name=>/sigma/i.test(name)?'HY-RWO':/brave/i.test(name)?'UALX-3':/goonswarm/i.test(name)?'C-J6MT':null;
+const activeNullMarket=()=>marketChoice==='auto'?(marketForAlliance(marketAlliance)||'HY-RWO'):marketChoice;
+const nullSystem=()=>NULL_MARKETS[activeNullMarket()].system;
+const refreshMarketControls=()=>{
+  const sel=document.getElementById('nullMarketMode');if(!sel)return;
+  sel.value=marketChoice;
+  document.getElementById('nullMarketActive').textContent=nullSystem();
+  const note=document.getElementById('nullMarketNote');
+  note.textContent=marketChoice==='auto'?(marketAlliance?'Alianza detectada: '+marketAlliance+'.':'Sin alianza identificada. Se usa HY-RWO por defecto.'):'Selección manual: no cambiará al conectar otro personaje.';
+};
+document.getElementById('nullMarketMode')?.addEventListener('change',e=>{
+  if(e.target.value!=='auto'&&!Object.hasOwn(NULL_MARKETS,e.target.value))return;
+  marketChoice=e.target.value;try{localStorage.setItem(NULL_MARKET_KEY,marketChoice);}catch(_){}
+  refreshMarketControls();if(typeof refresh==='function')refresh();
+});
+refreshMarketControls();
+
 // ================= Formato =================
 // Formateadores Intl creados UNA vez (toLocaleString con opciones crea uno nuevo en cada llamada: muy lento)
 const NF0=new Intl.NumberFormat('en-US',{maximumFractionDigits:0}),NF1=new Intl.NumberFormat('en-US',{maximumFractionDigits:1}),
@@ -1695,7 +1722,7 @@ function packCouriers(P){
   out.forEach(k=>{k.v=Math.ceil(k.v);k.c=Math.ceil(k.c);k.reward=courierRaw(k.v,k.c);});
   return out;
 }
-const DEST=()=>S.flip?'HY-RWO':'Jita';
+const DEST=()=>S.flip?nullSystem():'Jita';
 const destStation=()=>S.flip?($('cNullDest').value.trim()||'HY-RWO: Time Is A Flat Circle'):'Jita IV - Moon 4 - Caldari Navy Assembly Plant';
 // v110: Contratos y Envío. Izquierda: un contrato a la vez (carrusel: flechas, puntos, teclado, deslizar).
 // Derecha: el envío a Jita con lo útil para decidir. Solo se pinta con la sección abierta (rendimiento).
@@ -2204,7 +2231,7 @@ function paintPicker(P){
   }
 
   const maxNet=Math.max(...list.map(x=>x.t.net),1);
-  const sys=(C.ref.name||'Null').split(' - ')[0].trim()||'Null',env='Envías todo a Jita y ';
+  const sys=nullSystem(),env='Envías todo a Jita y ';
   const PK_EXP_ES={auto:'Cada ítem sigue la ruta más rentable; si la diferencia es pequeña, se prioriza vender antes.',fN:'Llevas todo de Jita a '+sys+' y lo vendes con tu margen de importación.',fJ:'Publicas órdenes de venta en Jita. La venta puede tardar días.',fJI:'Vendes todo a órdenes de compra en Jita y cobras inmediatamente.',null:'Publicas órdenes de venta en '+sys+'. No necesitas transporte, pero la venta puede tardar días.',jOrd:'Envías todo a Jita y publicas órdenes de venta. La venta puede tardar días.',jInst:'Envías todo a Jita y vendes a órdenes de compra. Cobras inmediatamente.',bb:'Creas un contrato Item Exchange para el programa Buyback de tu alianza.',rNull:'Reprocesas el mineral o el hielo y vendes los materiales en '+sys+'.',rJita:'Reprocesas los materiales y los envías a Jita para venderlos.',disc:'Ofreces el lote a otro jugador por Discord. No hay comprador garantizado.'};
   const PK_EXP_EN={auto:'Each item follows its most profitable route; when the difference is small, faster sales take priority.',fN:'Ship everything from Jita to '+sys+' and sell it with your import markup.',fJ:'Place sell orders in Jita. Sales may take several days.',fJI:'Sell everything to Jita buy orders and receive payment immediately.',null:'Place sell orders in '+sys+'. No shipping is needed, but sales may take days.',jOrd:'Ship everything to Jita and place sell orders. Sales may take several days.',jInst:'Ship everything to Jita and sell to buy orders for immediate payment.',bb:'Create an Item Exchange contract with your alliance Buyback program.',rNull:'Reprocess the ore or ice and sell the materials in '+sys+'.',rJita:'Reprocess the materials and ship them to Jita for sale.',disc:'Offer the lot to another player on Discord. There is no guaranteed buyer.'};
   const PK_EXP=S.lang==='en'?PK_EXP_EN:PK_EXP_ES;
@@ -2819,6 +2846,16 @@ stRestore();syncDeps();brokerNote();buildOreSelect();readBB();syncLots();refresh
     }catch(err){const message='No se pudo abrir el login oficial de EVE: '+(err?.message||String(err));status(message);alert(message);console.error('EVE SSO redirect failed',err);}
   }
   function saveSkill(id,level){const e=$e(id);if(!e)return false;const v=String(level);if(![...e.options].some(o=>o.value===v))return false;e.value=v;e.dispatchEvent(new Event('change',{bubbles:true}));return true;}
+  async function syncAlliance(){
+    if(!session)return;
+    try{
+      const info=await fetch('https://esi.evetech.net/latest/characters/'+session.id+'/?compatibility_date=2026-10-01').then(r=>{if(!r.ok)throw Error('Character ESI '+r.status);return r.json();});
+      if(!info.alliance_id){marketAlliance='';refreshMarketControls();return;}
+      const alliance=await fetch('https://esi.evetech.net/latest/alliances/'+info.alliance_id+'/?compatibility_date=2026-10-01').then(r=>{if(!r.ok)throw Error('Alliance ESI '+r.status);return r.json();});
+      marketAlliance=alliance.name||'';refreshMarketControls();
+      if(marketChoice==='auto'&&typeof refresh==='function')refresh();
+    }catch(e){console.warn('Unable to detect market affiliation',e);}
+  }
   async function sync(){
     if(!session)return;
     if(Date.now()>session.expires){try{await renew();}catch(err){status('No se pudo renovar la sesión de EVE: '+err.message);return;}if(!session)return;}
@@ -2836,9 +2873,9 @@ stRestore();syncDeps();brokerNote();buildOreSelect();readBB();syncLots();refresh
       if(typeof refresh==='function')refresh();
     }catch(err){status('No se pudieron sincronizar las skills: '+err.message);}
   }
-  $e('eveLogout').addEventListener('click',()=>{clearSaved();session=null;menu.hidden=true;button.setAttribute('aria-expanded','false');refreshUI();status('Desconectado. Se conservan tus ajustes manuales.');});
+  $e('eveLogout').addEventListener('click',()=>{clearSaved();session=null;marketAlliance='';refreshMarketControls();menu.hidden=true;button.setAttribute('aria-expanded','false');refreshUI();status('Desconectado. Se conservan tus ajustes manuales.');});
   (async()=>{const u=new URL(location.href),code=u.searchParams.get('code'),state=u.searchParams.get('state');
-    if(!code&&!u.searchParams.has('error')){if(stored()){try{await renew();if(session)await sync();}catch(err){console.warn('EVE session restore failed',err);}}return;}
+    if(!code&&!u.searchParams.has('error')){if(stored()){try{await renew();if(session){await syncAlliance();await sync();}}catch(err){console.warn('EVE session restore failed',err);}}return;}
     u.searchParams.delete('code');u.searchParams.delete('state');u.searchParams.delete('error');u.searchParams.delete('error_description');history.replaceState(null,'',u.pathname+u.search+u.hash);
     const saved=sessionStorage.getItem(key);sessionStorage.removeItem(key);menu.hidden=false;button.setAttribute('aria-expanded','true');
     if(!saved){status('No se encontró una solicitud SSO válida.');return;}
@@ -2869,7 +2906,7 @@ stRestore();syncDeps();brokerNote();buildOreSelect();readBB();syncLots();refresh
       if(!scopeOK)throw Error('EVE no concedió el permiso de lectura de skills.');
       const id=Number(String(pilot.sub||'').match(/^CHARACTER:EVE:(\d+)$/)?.[1]),name=pilot.name;
       if(!Number.isSafeInteger(id)||!name)throw Error('Identidad de personaje no verificada.');
-      session={id,name,token:tokens.access_token,expires:Date.now()+(tokens.expires_in||1200)*1000-30000,refresh:tokens.refresh_token||null};persist();refreshUI();menu.hidden=true;button.setAttribute('aria-expanded','false');await sync();
+      session={id,name,token:tokens.access_token,expires:Date.now()+(tokens.expires_in||1200)*1000-30000,refresh:tokens.refresh_token||null};persist();refreshUI();menu.hidden=true;button.setAttribute('aria-expanded','false');await syncAlliance();await sync();
     }catch(err){status('Error de SSO: '+err.message);}
   })();
 })();
