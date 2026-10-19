@@ -2196,32 +2196,24 @@ function paintPicker(P){
 
   const maxNet=Math.max(...list.map(x=>x.t.net),1);
   const sys=(C.ref.name||'Null').split(' - ')[0].trim()||'Null',env='Envías todo a Jita y ';
-  const PK_EXP={auto:'Cada item va a donde más deja; si la diferencia es chica, prefiere vender rápido.',
-    fN:'Llevas todo de Jita a '+sys+' y lo vendes con tu margen de importación.',
-    fJ:'Publicas todo en Jita con sell orders. Se vende en días.',
-    fJI:'Vendes todo en Jita a las buy orders. Cobras al instante.',
-    null:'Sell orders en '+sys+' para todo. Sin envío, pero tarda días en venderse.',
-    jOrd:env+'publicas sell orders. Se vende en días.',
-    jInst:env+'vendes a las buy orders. Cobras al instante.',
-    bb:'Un contrato Item Exchange al Buyback de la alianza. Rápido y simple.',
-    rNull:'Reprocesas el ore o hielo y vendes los materiales en '+sys+'.',
-    rJita:'Reprocesas y llevas los materiales a Jita para venderlos allí.',
-    disc:'Se lo vendes a otro jugador por Discord. Sin comprador garantizado.'};
+  const PK_EXP_ES={auto:'Cada ítem sigue la ruta más rentable; si la diferencia es pequeña, se prioriza vender antes.',fN:'Llevas todo de Jita a '+sys+' y lo vendes con tu margen de importación.',fJ:'Publicas órdenes de venta en Jita. La venta puede tardar días.',fJI:'Vendes todo a órdenes de compra en Jita y cobras inmediatamente.',null:'Publicas órdenes de venta en '+sys+'. No necesitas transporte, pero la venta puede tardar días.',jOrd:'Envías todo a Jita y publicas órdenes de venta. La venta puede tardar días.',jInst:'Envías todo a Jita y vendes a órdenes de compra. Cobras inmediatamente.',bb:'Creas un contrato Item Exchange para el programa Buyback de tu alianza.',rNull:'Reprocesas el mineral o el hielo y vendes los materiales en '+sys+'.',rJita:'Reprocesas los materiales y los envías a Jita para venderlos.',disc:'Ofreces el lote a otro jugador por Discord. No hay comprador garantizado.'};
+  const PK_EXP_EN={auto:'Each item follows its most profitable route; when the difference is small, faster sales take priority.',fN:'Ship everything from Jita to '+sys+' and sell it with your import markup.',fJ:'Place sell orders in Jita. Sales may take several days.',fJI:'Sell everything to Jita buy orders and receive payment immediately.',null:'Place sell orders in '+sys+'. No shipping is needed, but sales may take days.',jOrd:'Ship everything to Jita and place sell orders. Sales may take several days.',jInst:'Ship everything to Jita and sell to buy orders for immediate payment.',bb:'Create an Item Exchange contract with your alliance Buyback program.',rNull:'Reprocess the ore or ice and sell the materials in '+sys+'.',rJita:'Reprocess the materials and ship them to Jita for sale.',disc:'Offer the lot to another player on Discord. There is no guaranteed buyer.'};
+  const PK_EXP=S.lang==='en'?PK_EXP_EN:PK_EXP_ES;
   // Resumen legible de un vistazo, colocado inmediatamente debajo de Elige un Plan.
   bar.hidden=false;
   bar.append(chosen.m==='auto'?(S.lang==='en'?'You are using ':'Estás usando '):(S.lang==='en'?'You chose ':'Elegiste '),planMark(chosen.m),'. ');
   const delta=chosen.t.net-opt;
   if(chosen.m==='auto'){
-    bar.append('Para comparar valor, rapidez y envío, haz clic en esta fila y elige otra ruta disponible.');
+    bar.append(S.lang==='en'?'To compare profit, speed, and shipping, click this row and choose another available route.':'Para comparar ganancias, rapidez y transporte, haz clic en esta fila y elige otra ruta disponible.');
   }else if(Math.round(delta)===0){
-    bar.append('Este plan ofrece el mismo valor estimado que ',planMark('auto'),'. ',PK_EXP[chosen.m]||'');
+    bar.append(S.lang==='en'?'This plan has the same estimated value as ':'Este plan ofrece el mismo valor estimado que ',planMark('auto'),'. ',PK_EXP[chosen.m]||'');
   }else{
-    bar.append('Este plan te ofrece ',el('strong','pk-sum-delta '+(delta>0?'pos':'neg'),
+    bar.append(S.lang==='en'?'This plan returns ':'Este plan te ofrece ',el('strong','pk-sum-delta '+(delta>0?'pos':'neg'),
       (delta>0?'+':'−')+fmt(Math.abs(delta))),
-      ' frente a ',planMark('auto'),'. ');
+      S.lang==='en'?' compared with ':' frente a ',planMark('auto'),'. ');
     if(delta>0&&(chosen.m==='jOrd'||chosen.m==='fJ'))
-      bar.append('A cambio, tendrías que esperar a que se completen las órdenes de venta en Jita.');
-    else bar.append(PK_EXP[chosen.m]||'Puedes consultar los detalles de esta ruta abajo.');
+      bar.append(S.lang==='en'?'However, you would need to wait for the Jita sell orders to fill.':'A cambio, tendrías que esperar a que se completen las órdenes de venta en Jita.');
+    else bar.append(PK_EXP[chosen.m]||(S.lang==='en'?'You can review this route below.':'Puedes consultar los detalles de esta ruta más abajo.'));
   }
   const cant=P.rows.filter(r=>r.cant);
   if(chosen.m!=='auto'&&cant.length)bar.append(' ',S.lang==='en'?(cant.length===1?'One item cannot use this route and keeps its optimal plan.':cant.length+' items cannot use this route and keep their optimal plans.'):(cant.length===1?'Un ítem no admite esta ruta y mantiene su plan óptimo.':cant.length+' ítems no admiten esta ruta y mantienen su plan óptimo.'));
