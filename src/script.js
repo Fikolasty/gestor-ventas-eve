@@ -1302,22 +1302,32 @@ const routeSummaryName=k=>({
   bb:'Programa Buy Back',rNull:'Reproceso y venta en HY-RWO',
   rJita:'Reproceso y venta en Jita',disc:'Venta directa a un jugador'
 })[k]||PLAN_L[k]||k;
+const spanishCount=n=>({1:'un',2:'dos',3:'tres',4:'cuatro',5:'cinco',6:'seis',7:'siete',8:'ocho',9:'nueve',10:'diez'})[n]||String(n);
+const routeSentence=(k,n)=>{const count=spanishCount(n)+' '+(n===1?'ítem':'ítems');
+  const action=({
+    null:'vender en HY-RWO mediante órdenes',fN:'llevar a HY-RWO para vender allí',
+    jOrd:'vender mediante órdenes en Jita',fJ:'vender mediante órdenes en Jita',
+    jInst:'vender al instante en Jita',fJI:'vender al instante en Jita',
+    bb:'entregar al programa Buy Back',rNull:'reprocesar y vender sus materiales en HY-RWO',
+    rJita:'reprocesar y vender sus materiales en Jita',disc:'vender directamente a otro jugador'
+  })[k]||'vender según la ruta indicada';
+  return count+' para '+action;
+};
 function planIntroData(P){
-  const name=modeName(P.mode),active=P.rows.filter(r=>r.best&&r.q>0),total=active.length;
-  const next=' Revisa abajo el destino y los pasos para completar la venta.';
-  if(!total)return{name,description:'Todavía no hay ítems con una ruta de venta disponible.'};
+  const name=modeName(P.mode),active=P.rows.filter(r=>r.best&&r.q>0);
+  if(!active.length)return{name,description:'Todavía no hay ítems con una ruta de venta disponible.'};
   const groups=new Map();
-  active.forEach(r=>{const list=groups.get(r.best)||[];list.push(r);groups.set(r.best,list);});
-  if(total===1){
-    const r=active[0];
-    return{name,description:'para «'+r.o.name+'» se recomienda esta ruta: '+routeSummaryName(r.best)+'.'+next};
-  }
-  if(groups.size===1){
-    const k=groups.keys().next().value;
-    return{name,description:'los '+total+' ítems siguen una misma ruta: '+routeSummaryName(k)+'.'+next};
-  }
-  const details=[...groups].map(([k,rows])=>rows.length+' '+(rows.length===1?'ítem':'ítems')+' → '+routeSummaryName(k));
-  return{name,description:'tus '+total+' ítems se reparten así: '+details.join('; ')+'.'+next};
+  active.forEach(r=>{const g=groups.get(r.best)||[];g.push(r);groups.set(r.best,g);});
+  if(active.length===1)return{name,description:'conviene '+({
+    null:'vender «'+active[0].o.name+'» en HY-RWO',jOrd:'vender «'+active[0].o.name+'» mediante una orden en Jita',
+    fJ:'vender «'+active[0].o.name+'» mediante una orden en Jita',
+    bb:'entregar «'+active[0].o.name+'» al programa Buy Back',
+    rNull:'reprocesar «'+active[0].o.name+'» y vender sus materiales en HY-RWO',
+    rJita:'reprocesar «'+active[0].o.name+'» y vender sus materiales en Jita'
+  })[active[0].best]||'seguir la ruta recomendada para «'+active[0].o.name+'»'+'. Más abajo puedes revisar los pasos.'};
+  const phrases=[...groups].map(([key,rows])=>routeSentence(key,rows.length));
+  const natural=phrases.length===1?phrases[0]:phrases.length===2?phrases.join(' y '):phrases.slice(0,-1).join(', ')+' y '+phrases.at(-1);
+  return{name,description:'conviene distribuir el lote así: '+natural+'. Más abajo puedes revisar los pasos de cada venta.'};
 }
 let activeRep=0;
 function paintVerdict(P){
