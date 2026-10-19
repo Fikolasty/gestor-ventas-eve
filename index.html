@@ -4362,7 +4362,7 @@ function planIntroData(P){
   if(groups.size===1){
     const [route]=groups.keys();
     const label=PLAN_L[route]||route;
-    return{name,description:'se recomienda '+label.toLowerCase()+' para los '+total+' ítems del lote.'+next};
+    return{name,description:'se recomienda '+(route==='bb'?'utilizar el programa Buy Back':route==='disc'?'vender el lote a un jugador':label.toLowerCase())+' para los '+total+' ítems del lote.'+next};
   }
   const details=[...groups].map(([key,rows])=>rows.length+' '+(rows.length===1?'ítem':'ítems')+' → '+(PLAN_L[key]||key).toLowerCase());
   return{name,description:'se proponen estas rutas para tus '+total+' ítems: '+details.join('; ')+'.'+next};
@@ -5166,7 +5166,7 @@ function paintPicker(P){
       const node=el('div','pk-opp-stat');node.append(el('small',null,label),el('strong',cl,value));grid.append(node);
     };
     stat('Diferencia frente al plan con más ISK',gap<1?'0 ISK':'−'+fmt(gap),gap>=1?'neg':'');
-    stat('Alternativa con más ISK',benchmark.l+' · +'+fmt(benchmark.t.net),'pos');
+    stat('Alternativa con más ISK',benchmark.l+' · '+fmt(benchmark.t.net));
     const note=el('p','pk-opp-explain');
     if(gap<1)note.textContent='Este plan está entre los de mayor ingreso neto estimado.';
     else note.append('Al elegir ',planMark(chosen.m),', recibirías ',el('strong','neg','−'+fmt(gap)),' frente a ',planMark(benchmark.m),(ratio!=null?' ('+ratio.toFixed(1)+' % menos)':''),'.');
@@ -5200,7 +5200,7 @@ function paintPicker(P){
     disc:'Se lo vendes a otro jugador por Discord. Sin comprador garantizado.'};
   // Resumen legible de un vistazo, colocado inmediatamente debajo de «Elige un Plan».
   bar.hidden=false;
-  bar.append(chosen.m==='auto'?'Estás usando el ':'Elegiste el plan ',planMark(chosen.m),'. ');
+  bar.append(chosen.m==='auto'?'Estás usando ':'Elegiste ',planMark(chosen.m),'. ');
   const delta=chosen.t.net-opt;
   if(chosen.m==='auto'){
     bar.append('Para comparar valor, rapidez y envío, haz clic en esta fila y elige otra ruta disponible.');
