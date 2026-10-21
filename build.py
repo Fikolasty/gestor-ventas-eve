@@ -33,7 +33,7 @@ body{background:transparent!important;min-height:0!important}
 @media(max-width:600px){.wrap{padding:10px 5px 24px!important}}
 </style>""", 1)
 skills_doc = skills_doc.replace('function planState(p){', """
-let pilotConnected=false,pilotName='',liveLevels=Object.create(null),liveSP=Object.create(null);
+let pilotConnected=false,pilotName='',liveLevels=Object.create(null),liveSP=Object.create(null),liveBooks=new Set();
 const skillLevels=()=>pilotConnected?liveLevels:demoSkills;
 function planState(p){""", 1)
 # Exact substitutions preserve the prototype's simulation but activate real levels
@@ -48,7 +48,13 @@ skills_doc = skills_doc.replace('planQuote(demo?skills.filter', 'planQuote((demo
 skills_doc = skills_doc.replace('if(demo){', 'if(demo||pilotConnected){')
 skills_doc = skills_doc.replace('if(demo&&seen>=sk.level)', 'if((demo||pilotConnected)&&seen>=sk.level)')
 skills_doc = skills_doc.replace('const seen=demo?', 'const seen=(demo||pilotConnected)?')
-skills_doc = skills_doc.replace("function updateStatus(){", """function updateStatus(){""", 1)
+# A skillbook is already owned even if the pilot injected the skill but has trained
+# no level yet; do not bill it twice. Account for partial SP on trained skills.
+skills_doc = skills_doc.replace("const owned=demo&&(demoSkills[sk.name]||0)>0;", "const owned=pilotConnected?liveBooks.has(sk.name):demo&&(demoSkills[sk.name]||0)>0;")
+skills_doc = skills_doc.replace("const owned=(demo||pilotConnected)&&(skillLevels()[sk.name]||0)>0;", "const owned=pilotConnected?liveBooks.has(sk.name):demo&&(skillLevels()[sk.name]||0)>0;")
+skills_doc = skills_doc.replace("planQuote((demo||pilotConnected)?skills.filter(x=>!(skillLevels()[x.name]>0)):skills)", "planQuote(pilotConnected?skills.filter(x=>!liveBooks.has(x.name)):demo?skills.filter(x=>!(skillLevels()[x.name]>0)):skills)")
+skills_doc = skills_doc.replace("return Math.max(0,(spThresholds[skill.level]-spThresholds[oldLevel])*r);", "return pilotConnected?Math.max(0,spThresholds[skill.level]*r-(liveSP[skill.name]||0)):Math.max(0,(spThresholds[skill.level]-spThresholds[oldLevel])*r);")
+
 # Append the safe parent/child bridge before the last script closing tag.
 skills_bridge = r"""
 const announceHeight=()=>parent.postMessage({kind:'mm-skills-height',height:document.body.scrollHeight},'*');
@@ -63,13 +69,13 @@ window.addEventListener('message',event=>{
   if(m.kind==='mm-skills-pilot'){
     pilotConnected=!!m.connected&&Array.isArray(m.skills);
     pilotName=String(m.name||'').slice(0,100);
-    liveLevels=Object.create(null);liveSP=Object.create(null);
+    liveLevels=Object.create(null);liveSP=Object.create(null);liveBooks=new Set();
     if(pilotConnected){
       for(const item of m.skills.slice(0,2500)){
         const id=Number(item.skill_id),level=Number(item.active_skill_level);
         if(!Number.isSafeInteger(id)||!Number.isFinite(level))continue;
         const name=allNames.find(n=>catalog.get(n)?.id===id);
-        if(name){liveLevels[name]=Math.max(0,Math.min(5,level));liveSP[name]=Number(item.skillpoints_in_skill)||0;}
+        if(name){liveLevels[name]=Math.max(0,Math.min(5,level));liveSP[name]=Number(item.skillpoints_in_skill)||0;liveBooks.add(name);}
       }
       demo=false;
     }
