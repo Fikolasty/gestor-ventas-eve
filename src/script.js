@@ -2387,16 +2387,28 @@ $('pkOthers').addEventListener('click',e=>{const b=e.target.closest('[data-m]');
   S.planMode=b.dataset.m==='auto'?null:b.dataset.m;pkView.open=false;pkView.filter='all';czIdx=0;refreshNow();});
 // Reconcile investment, net receipts and profit against the ACTIVE plan. Never
 // replace P.best: all plan rankings and courier calculations still use net proceeds.
+// EVE Sell = fill existing ask immediately; Buy Order = *potential* purchase at
+// current Jita bid and broker on order placement. Bid fill is NOT guaranteed.
+function tradePurchaseUnit(r){
+  const u=C.buyMode==='buy'?r.o.jita?.buy:r.o.ref;
+  return Number.isFinite(u)&&u>0?u:null;
+}
+function tradePurchaseCost(r){
+  const unit=tradePurchaseUnit(r);
+  return unit==null?null:unit*r.q*(C.buyMode==='buy'?1+C.broker:1);
+}
 function flipPlanAccounting(P){
   if(!S.flip)return null;
   const rows=P.rows.filter(r=>r.best&&r.q>0);
-  if(!rows.length||rows.some(r=>!Number.isFinite(r.o.ref)||r.o.ref<0||!Number.isFinite(r.g[r.best])))return null;
-  const buy=rows.reduce((sum,r)=>sum+r.o.ref*r.q,0);
+  if(!rows.length||rows.some(r=>tradePurchaseUnit(r)==null||!Number.isFinite(r.g[r.best])))return null;
+  const basis=C.buyMode==='buy'?'buy':'sell';
+  const fee=basis==='buy'?C.broker:0; // placing a buy order incurs broker fee, no sales tax on purchase
+  const buy=rows.reduce((sum,r)=>sum+tradePurchaseCost(r),0);
   const sell=rows.reduce((sum,r)=>sum+r.g[r.best]-r.prod,0);
   const ship=P.shipCost;
   const net=P.best;
   const profit=net-buy;
-  return{rows,buy,sell,ship,net,profit,roi:buy>0?profit/buy:null,
+  return{rows,buy,basis,fee,sell,ship,net,profit,roi:buy>0?profit/buy:null,
     allNull:rows.every(r=>r.best==='fN'),
     allJita:rows.every(r=>r.best==='fJ'||r.best==='fJI'),
     nNull:rows.filter(r=>r.best==='fN').length,
@@ -2412,12 +2424,15 @@ function paintFlipBuy(P){
   const context=d.allNull?(en?'Buy in Jita and sell in '+sys:'Comprar en Jita y vender en '+sys)
     :d.allJita?(en?'Buy and sell in Jita':'Comprar y vender en Jita')
     :(en?'Jita purchases — selected selling plan':'Compras en Jita — plan de venta seleccionado');
+  const basisNote=C.buyMode==='buy'?
+    (en?' Buy Orders may take time to fill; prices include placement broker.':' Las Buy Orders podrían tardar en completarse; la compra incluye el broker de publicación.'):
+    (en?' Purchases use Jita Sell orders.':' Las compras se valoran a Jita Sell.');
   const intro=d.allNull
     ?(en?'Buying '+n+' '+(n===1?'item':'items')+' at Jita Sell, shipping with SIGMA Freight and selling in '+sys+' at Jita Sell +'+pct(C.impM)+'% net.'
         :'Si compras '+(n===1?'este ítem':'estos '+n+' ítems')+' en Jita al Sell, los llevas con SIGMA Freight y los vendes en '+sys+' a Jita Sell +'+pct(C.impM)+'% neto.')
     :(en?'Based on the actual selected plan: '+d.nNull+' '+(d.nNull===1?'item shipped':'items shipped')+' to '+sys+' and '+d.nJita+' sold in Jita. Transport is charged only on shipped items.'
        :'Según el plan seleccionado: '+d.nNull+' '+(d.nNull===1?'ítem enviado':'ítems enviados')+' a '+sys+' y '+d.nJita+' vendidos en Jita. El envío solo se cobra a los ítems transportados.');
-  box.append(el('h4',null,context),el('p','fb2-s',intro));
+  box.append(el('h4',null,context),el('p','fb2-s',intro+basisNote));
   const big=el('div','fb2-big');
   big.append(el('b','num '+sgn(d.profit),(d.profit>=0?'+':'−')+fmt(Math.abs(d.profit))),
     el('span',null,(en?(d.profit>=0?'estimated net profit':'estimated net loss'):(d.profit>=0?'de ganancia neta estimada':'de pérdida neta estimada'))+
@@ -2425,7 +2440,7 @@ function paintFlipBuy(P){
   box.append(big);
   const l=el('div','fb2-l');
   const add=(label,value,color)=>{const x=el('div');x.append(el('span',null,label),el('b','num '+color,value));l.append(x);};
-  add(en?'Purchase in Jita':'Compras en Jita','−'+fmt(d.buy),'neg');
+  add(en?(d.basis==='buy'?'Buy Order investment':'Jita Sell investment'):(d.basis==='buy'?'Inversión Buy Order':'Compras Jita Sell'),'−'+fmt(d.buy),'neg');
   add(en?'Shipping to '+sys:'Envío a '+sys,'−'+fmt(d.ship),'neg');
   add(en?'Net sales before shipping':'Vendes (neto antes de envío)',fmt(d.sell),'pos');
   add(en?'Estimated net profit':'Ganancia neta estimada',(d.profit>=0?'+':'−')+fmt(Math.abs(d.profit)),sgn(d.profit));
@@ -2434,14 +2449,14 @@ function paintFlipBuy(P){
   (en?['Item','Purchase per unit','Sale route','Shipping','Profit','Margin']:['Ítem','Compra por unidad','Ruta de venta','Envío','Ganancia','Margen']).forEach((label,i)=>{const cell=el('th',i?'r':null,label);hr.append(cell);});th.append(hr);t.append(th);
   const tb=el('tbody');
   const allocated=d.rows.map(r=>{
-    const k=r.best,price=r.o.ref*r.q,share=r.ship[k]&&P.Vs>0?courierShare(r.ship[k].v,r.ship[k].c,P.Vs):0;
+    const k=r.best,price=tradePurchaseCost(r),share=r.courierAllocated||0;
     const gained=r.g[k]-r.prod-share-price;
     return{r,k,share,price,gained};
   }).sort((a,b)=>b.gained-a.gained);
   allocated.slice(0,10).forEach(({r,k,share,price,gained})=>{
     const tr=el('tr'),cells=[
       el('td',null,r.o.name),
-      el('td','r',fmtP(r.o.ref)),
+      el('td','r',fmtP(tradePurchaseUnit(r))),
       el('td','r',routeSummaryName(k)),
       el('td','r','−'+fmt(share)),
       el('td','r '+sgn(gained),(gained>=0?'+':'−')+fmt(Math.abs(gained))),
@@ -2453,8 +2468,8 @@ function paintFlipBuy(P){
   if(allocated.length>10){const tr=el('tr'),td=el('td','muted',(en?'and ':'y ')+(allocated.length-10)+(en?' more items':' ítems más'));td.colSpan=6;tr.append(td);tb.append(tr);}
   t.append(tb);box.append(t);
   box.append(el('p','fb2-n',en
-    ?'Investment = Jita Sell × quantity. Net sales already deduct market taxes, broker fees and SCC. Estimated profit = selected plan net proceeds − investment, including transport.'
-    :'Inversión = Jita Sell × cantidad. La venta neta ya descuenta impuestos, broker y SCC. Ganancia estimada = ingresos netos del plan seleccionado − inversión, incluido el transporte.'));
+    ?'Investment uses Jita Sell or Jita Buy Order pricing; Buy Orders include placement broker and are not guaranteed to fill. Profit = plan net proceeds − investment.'
+    :'Inversión a Jita Sell o Buy Order; la Buy Order incluye broker y no garantiza ejecución. Ganancia estimada = ingresos netos del plan seleccionado − inversión.'));
 }
 function paintSummary(P){
   const box=$('pSum'),none=!P.rows.length||P.missing.length===P.rows.length;
