@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.0.95 — [ChatGPT] Navegación, importación y Skills ES/EN
+*2026-10-21*
+
+- Pestañas de Ventas, Minería y Skills con icono y nombre; icono EVE de skillbook; Ajustes junto a Guía de uso en la cabecera.
+- Mueve Enviar y Margen al bloque de importación, mostrado solo para la dirección Jita → Null.
+- Endurece la actualización de idioma del módulo Skills, con fallback español y render al cambiar ES/EN.
+- Identifica las etapas totalmente entrenadas con «PLAN COMPLETADO · 100 %» / «PLAN COMPLETE · 100%» y estilo de éxito.
+- Mejora tipografía pequeña de Skills a un mínimo de 11,5 px.
+- Amplía las pruebas de integración del build; pendiente validación manual con piloto real y precios online.
+
 ## 1.0.94 — [ChatGPT] Limpieza de caché y protección de sesión EVE
 *2026-10-21*
 
