@@ -266,3 +266,11 @@ En CI de v1.0.77 falló mining-types (0 != 34). Causa: la comparación de prefij
 - `build.py` elimina cambios duplicados de DOM sobre estado conectado. Se añadió `tests/financial-accounting.cjs` y se amplió `tests/skills-integration.cjs`.
 - GitHub Actions generó `index.html` v1.0.96 (`a42405b83854…`) tras completar el pipeline. Verificación visual/ESI real aún pendiente.
 
+
+
+## 2026-10-21 — v1.0.97: Light y Skill Plan
+
+- Ajuste de contraste de tabs de navegación en tema Light con estados legibles. Modo Dark intacto.
+- Nuevo nombre visible **Skill Plan**, icono de EVE conservado.
+- El render Hulk (ID 22544) se compone sin recuadro negro: `screen` en Dark y `multiply` con inversión de color en Light; sin nuevas imágenes ni cambios en el simulador minero.
+- Pruebas de regresión extendidas en `tests/skills-integration.cjs`; pendiente inspección visual manual en dispositivo final.
