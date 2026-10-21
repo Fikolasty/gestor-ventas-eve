@@ -20,6 +20,78 @@ v = sys.argv[1]
 js = rd('script.js')
 js = js.replace('/*__REFINE__*/', rd('refine.js').strip()).replace('__VER__', v)
 js = js.replace('/*__MINING__*/', rd('mining_data.js').strip() + '\n' + rd('mining.js').strip())
+
+# Skills Library is embedded in the distributable index.html, without an extra HTTP file.
+# The standalone design runs inside a sandboxed srcdoc iframe, so its CSS cannot affect
+# the sales or mining pages. Only sanitized skill levels cross the frame boundary.
+import re
+skills_doc = rd('skills_preview.html')
+skills_doc = re.sub(r'<header\b[^>]*>.*?</header>', '', skills_doc, count=1, flags=re.S)
+skills_doc = skills_doc.replace('</style>', """
+body{background:transparent!important;min-height:0!important}
+.wrap{padding:15px 12px 38px!important}
+@media(max-width:600px){.wrap{padding:10px 5px 24px!important}}
+</style>""", 1)
+skills_doc = skills_doc.replace('function planState(p){', """
+let pilotConnected=false,pilotName='',liveLevels=Object.create(null),liveSP=Object.create(null);
+const skillLevels=()=>pilotConnected?liveLevels:demoSkills;
+function planState(p){""", 1)
+# Exact substitutions preserve the prototype's simulation but activate real levels
+# when the main EVE SSO (with existing read_skills permission) supplies them.
+skills_doc = skills_doc.replace('demoSkills[', 'skillLevels()[')
+skills_doc = skills_doc.replace('demo?all.filter', '(demo||pilotConnected)?all.filter')
+skills_doc = skills_doc.replace('const oldLevel=demo?', 'const oldLevel=(demo||pilotConnected)?')
+skills_doc = skills_doc.replace('const seen=demo?', 'const seen=(demo||pilotConnected)?')
+skills_doc = skills_doc.replace('const trained=demo&&', 'const trained=(demo||pilotConnected)&&')
+skills_doc = skills_doc.replace('const owned=demo&&', 'const owned=(demo||pilotConnected)&&')
+skills_doc = skills_doc.replace('planQuote(demo?skills.filter', 'planQuote((demo||pilotConnected)?skills.filter')
+skills_doc = skills_doc.replace('if(demo){', 'if(demo||pilotConnected){')
+skills_doc = skills_doc.replace('if(demo&&seen>=sk.level)', 'if((demo||pilotConnected)&&seen>=sk.level)')
+skills_doc = skills_doc.replace('const seen=demo?', 'const seen=(demo||pilotConnected)?')
+skills_doc = skills_doc.replace("function updateStatus(){", """function updateStatus(){""", 1)
+# Append the safe parent/child bridge before the last script closing tag.
+skills_bridge = r"""
+const announceHeight=()=>parent.postMessage({kind:'mm-skills-height',height:document.body.scrollHeight},'*');
+const heightObserver=new ResizeObserver(()=>requestAnimationFrame(announceHeight));
+heightObserver.observe(document.body);
+window.addEventListener('message',event=>{
+  if(event.source!==parent||!event.data||typeof event.data!=='object')return;
+  const m=event.data;
+  if(m.kind==='mm-skills-language'&&(m.lang==='es'||m.lang==='en')){
+    if(lang!==m.lang){lang=m.lang;render();}
+  }
+  if(m.kind==='mm-skills-pilot'){
+    pilotConnected=!!m.connected&&Array.isArray(m.skills);
+    pilotName=String(m.name||'').slice(0,100);
+    liveLevels=Object.create(null);liveSP=Object.create(null);
+    if(pilotConnected){
+      for(const item of m.skills.slice(0,2500)){
+        const id=Number(item.skill_id),level=Number(item.active_skill_level);
+        if(!Number.isSafeInteger(id)||!Number.isFinite(level))continue;
+        const name=allNames.find(n=>catalog.get(n)?.id===id);
+        if(name){liveLevels[name]=Math.max(0,Math.min(5,level));liveSP[name]=Number(item.skillpoints_in_skill)||0;}
+      }
+      demo=false;
+    }
+    render();
+    if(pilotConnected){
+      $('connectionTitle').textContent=lang==='es'?'Plan personalizado para '+pilotName:'Personalized plan for '+pilotName;
+      $('connectionText').textContent=lang==='es'?'Se muestran las habilidades que te faltan para completar cada etapa.':'Only the training you still need is shown for each stage.';
+      $('connectionStatus').textContent=lang==='es'?'PILOTO CONECTADO':'PILOT CONNECTED';
+      $('tryDemo').hidden=true;
+    }else $('tryDemo').hidden=false;
+    announceHeight();
+  }
+  if(m.kind==='mm-skills-measure')announceHeight();
+});
+parent.postMessage({kind:'mm-skills-ready'},'*');
+requestAnimationFrame(announceHeight);
+"""
+skills_doc = skills_doc.replace('</script>', skills_bridge + '\n</script>', 1)
+# Important: the preview HTML contains </script>; escape '<' inside the JS literal.
+skills_literal = json.dumps(skills_doc, ensure_ascii=False).replace('<', '\\u003c')
+js = js.replace('/*__SKILLS__*/', 'const SKILLS_DOCUMENT=' + skills_literal + ';\n' + rd('skills.js').strip())
+
 D = json.loads(rd('i18n', 'en.json'))
 js = js.replace('/*__I18N__*/{}', json.dumps(D, ensure_ascii=False, separators=(',', ':')))
 
