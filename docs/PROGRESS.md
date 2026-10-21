@@ -255,3 +255,14 @@ En CI de v1.0.77 falló mining-types (0 != 34). Causa: la comparación de prefij
 - Faltan verificar con ejecución: Actions compilación completa, apertura de los seis planes en el sitio publicado, iconos con red, precios con órdenes reales y progreso/tiempos con un piloto real, persistencia y traducciones ES↔EN, navegación cruzada entre secciones y Firefox/móvil.
 - **Mantenimiento:** en esta iteración se ha reducido tráfico y aislado el estado nuevo; no se afirma auditoría de memoria mediante profiler del gestor histórico. No eliminar funciones ni caches legados sin métricas y tests de regresión completos.
 
+
+
+## 2026-10-21 · v1.0.96 publicada — Importación, minería y Skills
+
+- El importe principal de venta en Jita → Null es **ganancia estimada**, reconciliada con el desglose financiero del plan elegido. Motor `computePlan` conserva `P.best` como ingresos netos para comparación de rutas; solo la UI presenta `P.best − inversión`. Cuando no existe precio de compra, no se inventa beneficio.
+- Minería tiene encabezado centralizado, tipografía destacada y color armónico con Skills; pestaña con Hulk oficial por Type ID 22544 y fallback.
+- Ajustes usa un engranaje adecuado, no iconografía solar.
+- «Simular piloto»/«Simulate pilot»: sin conexión es simulación opcional; con piloto autorizado la planificación personalizada entra automáticamente y la simulación se desactiva.
+- `build.py` elimina cambios duplicados de DOM sobre estado conectado. Se añadió `tests/financial-accounting.cjs` y se amplió `tests/skills-integration.cjs`.
+- GitHub Actions generó `index.html` v1.0.96 (`a42405b83854…`) tras completar el pipeline. Verificación visual/ESI real aún pendiente.
+
