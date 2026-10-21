@@ -228,3 +228,13 @@ Pruebas adicionales de drones, typeIDs, requisitos, 864 filas, diseño y compati
 
 ## 20. v1.0.78 — Fix CI del residuo de Ice II
 En CI de v1.0.77 falló mining-types (0 != 34). Causa: la comparación de prefijo de Ice Harvesting Drone I coincidía también con Drone II al construir el dataset derivado. Fix aplicado en 96 filas, sin variar m³/h ni rutas. Test ampliado a todos los boosts e implantes; mantener v1.0.77 como recovery anterior y publicar hotfix. Revalidar Pages y CI.
+
+
+## 21. 2026-10-21 — SDD maestro, Skills preview y nuevo selector ES/EN
+
+- **Documento de continuidad:** `docs/SDD.md` funciona como índice vivo de requisitos, decisiones, prototipos, tareas, pruebas y commits. Consultar el SDD + SPEC + PROGRESS al abrir un nuevo chat. Conservar SPEC.txt como referencia histórica, sin borrar su contenido.
+- **Skills Library (preview, no producción):** dos categorías en subheader Core Skills/Planetary Industry, tres etapas cada una, acordeones cerrados por defecto; skillbooks, explicaciones por skill y costes/ETA estimados donde se puedan fundamentar. El selector local ES/EN fue retirado; el idioma depende de Ajustes. El botón de demo pasó al subheader como interruptor «Simula mi cuenta» y el título accesible «Conecta tu piloto para un plan más personalizado». La simulación nunca se presenta como cuenta autenticada.
+- **Estado del preview:** Chromium headless 1336×940 y 400×850; categorías, toggle ON/OFF, acordeones cerrados inicialmente, apertura y sin errores JS / overflow: PASS. ESI live no verificado y SSO real pendiente.
+- **Ajustes:** `src/shell.html` tiene botones de idioma ES/EN; `src/script.js` los enlaza al `#langSel` oculto para conservar el idioma y la persistencia previos. Commits `0d891556` y `f80ddf59`. El smoke visual del gestor completo no se ha ejecutado todavía.
+- **Compilación:** cambio a v1.0.92 para reflejar los ajustes publicados; comprobar resultado en GitHub Actions y Pages. Ningún motor de venta/minería fue modificado para esta mejora de idioma.
+- **Siguiente paso:** integrar Skills solo después de comprobar SSO y Type IDs, compatibilidad Alpha/Omega, habilidad ya aprendida, skills/atributos SP, precios Jita ESI y nueva sección en Build + i18n, sin degradar el gestor.
