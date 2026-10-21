@@ -3385,6 +3385,45 @@ html.light #mining .mn-fit-fallback{border-color:rgba(40,100,150,.22);background
 @media(max-width:740px){#mining .mn-shared-layout{grid-template-columns:minmax(0,1fr)}
 #mining .mn-shared-layout>.mn-ice-settings,#mining .mn-shared-layout>.mn-turnaround,#mining .mn-shared-layout>.mn-price-editor,
 #mining .mn-shared-layout:has(>.mn-ice-settings[hidden])>.mn-price-editor,#mining .mn-shared-layout:has(>.mn-ice-settings[hidden])>.mn-turnaround{grid-column:1;grid-row:auto}}
+
+
+/* v1.0.96 — mining identity matches the large Skills Library typography. */
+#mining .mn-module-intro{
+  position:relative;overflow:hidden;isolation:isolate;text-align:center;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:8px;padding:33px 22px 30px;margin-bottom:7px;
+  border:1px solid rgba(217,119,87,.32);border-radius:15px;
+  background:linear-gradient(115deg,rgba(63,39,32,.76),rgba(32,31,31,.93) 46%,rgba(41,37,32,.78));
+  box-shadow:0 14px 36px rgba(0,0,0,.19),inset 0 1px rgba(245,206,178,.08)
+}
+#mining .mn-module-intro::before{
+  content:"";position:absolute;left:15%;right:15%;top:0;height:2px;z-index:-1;
+  background:linear-gradient(90deg,transparent,rgba(237,157,102,.78),transparent)
+}
+#mining .mn-module-eyebrow{
+  font:800 .82rem/1.5 var(--f-ui);letter-spacing:.16em;text-transform:uppercase;
+  color:#f0b68e;margin:0
+}
+#mining .mn-module-intro h2{
+  margin:3px 0 2px;font:800 clamp(2.05rem,4.4vw,3.1rem)/1.11 var(--f-ui);
+  letter-spacing:-.035em;color:#f0b58f;
+  text-shadow:0 5px 23px rgba(205,104,64,.15)
+}
+#mining .mn-module-intro p{
+  font:450 clamp(.91rem,1.4vw,1.02rem)/1.65 var(--f-ui);
+  color:var(--txt);opacity:.84;margin:0 auto;max-width:68ch;text-align:center
+}
+html.light #mining .mn-module-intro{
+  background:linear-gradient(115deg,rgba(250,241,234,.97),rgba(255,255,255,.94));
+  border-color:rgba(164,92,55,.3)
+}
+html.light #mining .mn-module-intro h2{color:#975333;text-shadow:none}
+html.light #mining .mn-module-eyebrow{color:#a35b35}
+@media(max-width:620px){
+  #mining .mn-module-intro{padding:25px 13px 23px}
+  #mining .mn-module-intro h2{font-size:clamp(1.9rem,8vw,2.45rem)}
+}
+@media(prefers-reduced-motion:reduce){#mining .mn-module-intro{scroll-behavior:auto}}
 </style>
 <script>/* v1.0.16: aplica el tema guardado antes de pintar (sin parpadeo). Por defecto: Dark. */try{var g=JSON.parse(localStorage.getItem('gestorVentas.ajustes.v1')||'null');if(g&&g.ui){if(g.ui.light)document.documentElement.classList.add('light');}}catch(e){}</script>
 </head>
