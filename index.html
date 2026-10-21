@@ -2105,6 +2105,10 @@ html.light .mm-import-controls{background:rgba(255,255,255,.88)}
 
 
 body.mm-mining #importControls,body.mm-skills #importControls,body.mm-pi #importControls{display:none!important}
+#mmTabs .mm-mod .mm-skills-icon{position:relative;display:inline-grid;place-items:center;flex:0 0 20px;width:20px;height:20px}
+#mmTabs .mm-mod .mm-skills-icon>.ic,#mmTabs .mm-mod .mm-skills-icon>img{grid-area:1/1;width:20px;height:20px;min-width:0;max-width:100%;border:0}
+#mmTabs .mm-mod .mm-skills-icon>img{position:relative;z-index:1;object-fit:cover;border-radius:3px}
+#mmTabs .mm-mod .mm-skills-icon>img[hidden]{display:none!important}
 /* v1.0.95 — legible icon-and-label tabs, with Settings beside User Guide. */
 #mmTabs.mm-modnav .mm-right-actions{gap:12px}
 #mmTabs.mm-modnav .mm-modgroup{display:flex;align-items:center;gap:3px;padding:4px;min-width:0;flex:0 1 auto}
@@ -3418,7 +3422,7 @@ html.light #mining .mn-fit-fallback{border-color:rgba(40,100,150,.22);background
     <div class="mm-modgroup" role="presentation">
     <button type="button" class="mm-mod on" data-mm-module="ventas" role="tab" aria-controls="salesBody" aria-selected="true" id="mmTabVentas" title="Ventas" aria-label="Ventas"><span class="ic i-list" aria-hidden="true"></span><span class="mm-mod-label">Ventas</span></button>
     <button type="button" class="mm-mod" data-mm-module="mining" role="tab" aria-controls="mining" aria-selected="false" id="mmTabMining" title="Minería" aria-label="Minería"><span class="ic i-ship" aria-hidden="true"></span><span class="mm-mod-label">Minería</span></button>
-    <button type="button" class="mm-mod" data-mm-module="skills" role="tab" aria-controls="skills" aria-selected="false" id="mmTabSkills" title="Skills" aria-label="Skills"><span class="ic i-key" aria-hidden="true"></span><span class="mm-mod-label">Skills</span></button>
+    <button type="button" class="mm-mod" data-mm-module="skills" role="tab" aria-controls="skills" aria-selected="false" id="mmTabSkills" title="Skills" aria-label="Skills"><span class="mm-skills-icon" aria-hidden="true"><span class="ic i-key"></span><img class="mm-eve-skill-icon" src="https://images.evetech.net/types/3426/icon?size=64" alt="" width="20" height="20" loading="lazy" onerror="this.hidden=true"></span><span class="mm-mod-label">Skills</span></button>
     <!-- PI temporalmente fuera de navegación; conservar para reactivar más adelante.
     <button type="button" class="mm-mod" data-mm-module="pi" role="tab" aria-controls="pi" aria-selected="false" id="mmTabPi">Industria Planetaria · PI</button>
     -->
