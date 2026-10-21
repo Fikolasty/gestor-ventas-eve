@@ -204,3 +204,24 @@
 
 **Validación todavía pendiente:** prueba manual in situ de ES→EN→ES, precios e iconos con acceso de red, sincronización con piloto autorizado real, perfiles Firefox/móvil y comparación de importes por modo del switch. No afirmar que todos esos casos estén verificados visualmente por la compilación.
 
+
+
+## 2026-10-21 — v1.0.96 · Conciliación financiera, identidad visual y piloto
+
+**Estado de GitHub:** código pusheado a `main`; la automatización generó `index.html` v1.0.96 en el commit `a42405b83854…` tras validaciones sintácticas, pruebas de Skills y la nueva prueba de cálculo financiero.
+
+**Finanzas (Jita → Null):**
+- La cifra grande de «LA MEJOR RUTA DE VENTA» se presenta como **ganancia neta estimada**, cuando existe un precio de compra Jita para cada ítem del plan activo. Regla: **ganancia = ingresos netos del plan elegido (P.best) − inversión (Jita Sell × cantidades)**. No se toca `P.best` ni se cambia la elección de rutas, broker, taxes, reproceso, contratos o courier; se cambia la **presentación**.
+- El texto superior muestra ingreso neto, inversión y ganancia, incluyendo el transporte ya restado de `P.best`. Si falta algún precio de compra, no inventa beneficios y sigue mostrando ingresos netos.
+- «ELIGE TU PLAN» ahora refleja el **plan seleccionado realmente** y no una simulación «todos los ítems a Null» aunque el usuario hubiera elegido ventas en Jita o una mezcla; muestra inversión, ventas netas antes del envío, envío y beneficio.
+- Ejemplo de regresión sintética: venta neta antes del envío 390 ISK, transporte 15 ISK, ingreso neto 375 ISK, compra 270 ISK, **ganancia 105 ISK**. Ver `tests/financial-accounting.cjs` y `tests/skills-integration.cjs`. Los datos sintéticos no son cotizaciones reales.
+
+**Navegación, apariencia y Skills:**
+- Minería usa encabezado centrado, grande, con jerarquía y acento cálido similares a Skills; light/dark y móvil contemplados en `src/mining.css`. La pestaña Minería usa la **imagen oficial de Hulk, Type ID 22544**, con fallback a su icono anterior si falla la imagen. No afecta a los datos de rendimiento de naves.
+- Ajustes emplea **icono de engranaje**, ya no el dibujo que se confundía con un sol. Se preserva el identificador/clase `i-gear` y los handlers existentes.
+- En Skills, el toggle de prueba se llama **«Simular piloto»** / **«Simulate pilot»** sin conexión. Cuando hay personaje autenticado con habilidades consultadas, el modo personalizado **se activa automáticamente** (sin simular niveles ficticios), el switch queda activado y no permite sustituir información real por demostración; el texto cambia a «Piloto conectado». La desconexión recupera las opciones originales.
+- El build dejó de insertar dos bloques duplicados que cambiaban el estado del piloto y ocultaban el toggle; ahora `updateText()` del módulo es la única fuente de presentación del estado, con un puente mínimo para recibir datos desde la sesión autorizada.
+- `src/script.js`, `src/shell.html`, `src/mining.css`, `src/skills_preview.html`, `build.py`, `tests/skills-integration.cjs`, `tests/financial-accounting.cjs` y workflow tienen los cambios correspondientes.
+
+**Pruebas y límites:** GitHub Actions generó v1.0.96 tras ejecutar sus pruebas; verifican JavaScript embebido, existencia de DOM/contratos del módulo, presentación del piloto y cálculos sintéticos del plan. Quedan pendientes comprobaciones visuales manuales en Firefox y móvil, pruebas con sesión real autorizada e iconos/precios remotos, y un perfilador de memoria prolongado. No prometer más cobertura que la realmente observada.
+
