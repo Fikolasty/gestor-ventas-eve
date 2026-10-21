@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.0.94 — [ChatGPT] Limpieza de caché y protección de sesión EVE
+*2026-10-21*
+
+- Cancela al abandonar la página los temporizadores de pegado, consulta diferida y limpieza de cachés, incluidos los trabajos idle del navegador. Conserva la lógica original de limpieza de precios, ID de ítems e iconos.
+- Evita que renovaciones SSO o solicitudes de habilidades/alianza retrasadas vuelvan a guardar una sesión o modificar niveles y mercado después de que el piloto se desconecte.
+- Amplía las pruebas de regresión para verificar limpieza, respuestas atrasadas, límites de mercado y el módulo Skills integrado.
+- Conserva íntegros los cálculos de ventas, reproceso y minería. La inspección estática y las pruebas funcionales disponibles no sustituyen un profiler de memoria con una sesión prolongada.
+
 ## 1.0.93 — [ChatGPT] Skills Library y mantenimiento preventivo
 *2026-10-21*
 
