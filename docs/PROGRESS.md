@@ -238,3 +238,20 @@ En CI de v1.0.77 falló mining-types (0 != 34). Causa: la comparación de prefij
 - **Ajustes:** `src/shell.html` tiene botones de idioma ES/EN; `src/script.js` los enlaza al `#langSel` oculto para conservar el idioma y la persistencia previos. Commits `0d891556` y `f80ddf59`. El smoke visual del gestor completo no se ha ejecutado todavía.
 - **Compilación:** cambio a v1.0.92 para reflejar los ajustes publicados; comprobar resultado en GitHub Actions y Pages. Ningún motor de venta/minería fue modificado para esta mejora de idioma.
 - **Siguiente paso:** integrar Skills solo después de comprobar SSO y Type IDs, compatibilidad Alpha/Omega, habilidad ya aprendida, skills/atributos SP, precios Jita ESI y nueva sección en Build + i18n, sin degradar el gestor.
+
+
+## 2026-10-21 — Integración de Skills Library v1.0.93
+
+**Estado de implementación:** código integrado y pusheado a `main`; despliegue de Actions/Pages y QA final visual **pendientes de comprobar**.
+
+- Nuevo `src/skills_preview.html`: fuente del diseño de Skills; datos de 33 habilidades, 6 planes, 2 categorías, acordeones, detalles, etiquetas ES/EN, iconos de imágenes oficiales y consultas de mercado Jita.
+- `src/skills.js`: puente aislado `SkillUI` que crea el módulo al acceder por primera vez y mantiene una única instancia. Comunica a su iframe únicamente nombre e información mínima de las habilidades; **no** expone tokens, credenciales ni el inventario del piloto.
+- `src/shell.html`: botón Skills en la navegación, sección y CSS del contenedor, CSP ajustada para `srcdoc` y segunda fuente oficial de iconos.
+- `src/script.js`: enrutado Ventas/Minería/Skills; integra las skills obtenidas por el login EVE existente; limpia estado al desconectar y comparte idioma desde Ajustes.
+- `build.py`: incrusta de forma segura todo Skills dentro del index generado y aplica las reglas de personalización real: nivel, SP entrenados/parciales, libros aprendidos y etiquetas de piloto conectado. Sin romper el formato de un solo `index.html`.
+- `tests/skills-integration.cjs`: valida rutas, contenido embebido, JavaScript integrado y ausencia de tokens en puente.
+- Precios: solicitudes públicas a Jita 4-4, 3 workers, hasta 4 páginas por libro, pausa al recibir 420/429; cotización real o referencia rotulada, nunca falsificar precisión.
+- Es obligatorio conservar el toggle «Simula mi cuenta» como demostración no autenticada; el modo conectado se activa por skills autorizadas realmente leídas.
+- Faltan verificar con ejecución: Actions compilación completa, apertura de los seis planes en el sitio publicado, iconos con red, precios con órdenes reales y progreso/tiempos con un piloto real, persistencia y traducciones ES↔EN, navegación cruzada entre secciones y Firefox/móvil.
+- **Mantenimiento:** en esta iteración se ha reducido tráfico y aislado el estado nuevo; no se afirma auditoría de memoria mediante profiler del gestor histórico. No eliminar funciones ni caches legados sin métricas y tests de regresión completos.
+
