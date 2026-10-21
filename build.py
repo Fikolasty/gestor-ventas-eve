@@ -66,14 +66,15 @@ assert 'liveBooks.has(sk.name)' in skills_doc
 
 # Append the safe parent/child bridge before the last script closing tag.
 skills_bridge = r"""
-const announceHeight=()=>parent.postMessage({kind:'mm-skills-height',height:document.body.scrollHeight},'*');
+let lastReportedHeight=0;
+const announceHeight=()=>{const height=Math.max(0,document.documentElement.scrollHeight,document.body.scrollHeight);if(height!==lastReportedHeight){lastReportedHeight=height;parent.postMessage({kind:'mm-skills-height',height},'*');}};
 const heightObserver=new ResizeObserver(()=>requestAnimationFrame(announceHeight));
 heightObserver.observe(document.body);
 window.addEventListener('message',event=>{
   if(event.source!==parent||!event.data||typeof event.data!=='object')return;
   const m=event.data;
   if(m.kind==='mm-skills-language'&&(m.lang==='es'||m.lang==='en')){
-    if(lang!==m.lang){lang=m.lang;render();}
+    lang=m.lang;render();announceHeight();
   }
   if(m.kind==='mm-skills-pilot'){
     pilotConnected=!!m.connected&&Array.isArray(m.skills);
