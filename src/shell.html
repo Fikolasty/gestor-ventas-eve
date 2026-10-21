@@ -2103,6 +2103,41 @@ body.mm-skills #heroIntro,body.mm-skills #salesBody{display:none!important}
 @media(max-width:590px){.mm-import-controls{padding:12px;align-items:stretch}.mm-import-actions{justify-content:space-between;flex-wrap:wrap;gap:8px}.mm-import-actions #shipLab,.mm-import-actions #rtM{flex:1 1 auto;justify-content:center}}
 html.light .mm-import-controls{background:rgba(255,255,255,.88)}
 
+
+/* v1.0.95 — legible icon-and-label tabs, with Settings beside User Guide. */
+#mmTabs.mm-modnav .mm-right-actions{gap:12px}
+#mmTabs.mm-modnav .mm-modgroup{display:flex;align-items:center;gap:3px;padding:4px;min-width:0;flex:0 1 auto}
+#mmTabs.mm-modnav .mm-modgroup .mm-mod{
+  display:inline-flex!important;align-items:center!important;justify-content:center!important;
+  gap:9px!important;width:auto!important;min-width:0!important;height:40px!important;
+  padding:0 15px!important;border-radius:8px!important;white-space:nowrap;
+  font:650 .88rem var(--f-ui)!important;line-height:1.2!important
+}
+#mmTabs.mm-modnav .mm-modgroup .mm-mod .ic{display:block!important;flex:0 0 19px;width:19px;height:19px;margin:0}
+#mmTabs.mm-modnav .mm-modgroup .mm-mod .mm-mod-label{display:inline!important;font:inherit;color:inherit;line-height:1.2}
+#mmTabs.mm-modnav .mm-modgroup .mm-mod[aria-selected=true]{color:var(--ion)!important;background:rgba(217,119,87,.17)!important;border-color:rgba(217,119,87,.42)!important}
+.top .mm-top-actions{margin-left:auto;display:flex;flex:0 0 auto;gap:8px;align-items:center}
+.top .mm-top-actions>.side-i{display:inline-flex!important;align-items:center!important;justify-content:center!important;
+  flex:0 0 38px!important;width:38px!important;min-width:38px!important;height:38px!important;
+  padding:0!important;margin:0!important;gap:0;border-radius:9px!important;
+  border:1px solid rgba(222,220,209,.22)!important;background:rgba(24,23,22,.62)!important;
+  color:var(--ion)!important;cursor:pointer
+}
+.top .mm-top-actions>.side-i:hover{background:rgba(217,119,87,.13)!important;color:var(--txt)!important}
+.top .mm-top-actions>.side-i .ic{display:block;width:19px;height:19px;margin:0}
+.top .mm-top-actions>.side-i .side-l{display:none!important}
+.top .mm-top-actions>.side-i:focus-visible{outline:2px solid var(--ion);outline-offset:3px}
+@media(max-width:1120px){
+  #mmTabs.mm-modnav .mm-right-actions{flex-wrap:wrap;gap:8px}
+  #mmTabs.mm-modnav .mm-modgroup .mm-mod{padding-inline:11px!important}
+}
+@media(max-width:720px){
+  #mmTabs.mm-modnav .mm-right-actions{width:100%;justify-content:center}
+  #mmTabs.mm-modnav .mm-modgroup{max-width:100%;overflow-x:auto}
+  #mmTabs.mm-modnav .mm-modgroup .mm-mod{height:36px!important;min-height:36px!important;gap:6px!important;padding-inline:10px!important;font-size:.78rem!important}
+  .top .mm-top-actions{margin-left:auto}
+}
+
 </style>
 <script>/* v1.0.16: aplica el tema guardado antes de pintar (sin parpadeo). Por defecto: Dark. */try{var g=JSON.parse(localStorage.getItem('gestorVentas.ajustes.v1')||'null');if(g&&g.ui){if(g.ui.light)document.documentElement.classList.add('light');}}catch(e){}</script>
 </head>
@@ -2152,9 +2187,9 @@ html.light .mm-import-controls{background:rgba(255,255,255,.88)}
     <button type="button" id="navHome" class="mm-home" title="HOME" aria-label="Volver al inicio"><span class="ic i-home" aria-hidden="true"></span></button>
     <div id="eveIdentity" class="eve-identity"><button type="button" id="eveIdentityButton" class="eve-identity-button" aria-expanded="false" aria-controls="eveIdentityMenu"><img id="evePortrait" alt="" hidden><span id="evePilotName">Conectar EVE</span><span class="eve-identity-arrow" aria-hidden="true" hidden></span></button><div id="eveIdentityMenu" class="eve-identity-menu" hidden><button type="button" id="eveLogout" hidden>Desconectar</button><span id="eveLoginStatus" role="status" class="eve-login-status" hidden></span></div></div>
     <div class="mm-modgroup" role="presentation">
-    <button type="button" class="mm-mod on" data-mm-module="ventas" role="tab" aria-controls="salesBody" aria-selected="true" id="mmTabVentas" title="Ventas" aria-label="Ventas"><span class="ic i-list" aria-hidden="true"></span></button>
-    <button type="button" class="mm-mod" data-mm-module="mining" role="tab" aria-controls="mining" aria-selected="false" id="mmTabMining" title="Minería" aria-label="Minería"><span class="ic i-ship" aria-hidden="true"></span></button>
-    <button type="button" class="mm-mod" data-mm-module="skills" role="tab" aria-controls="skills" aria-selected="false" id="mmTabSkills" title="Skills" aria-label="Skills"><span class="ic i-key" aria-hidden="true"></span></button>
+    <button type="button" class="mm-mod on" data-mm-module="ventas" role="tab" aria-controls="salesBody" aria-selected="true" id="mmTabVentas" title="Ventas" aria-label="Ventas"><span class="ic i-list" aria-hidden="true"></span><span class="mm-mod-label">Ventas</span></button>
+    <button type="button" class="mm-mod" data-mm-module="mining" role="tab" aria-controls="mining" aria-selected="false" id="mmTabMining" title="Minería" aria-label="Minería"><span class="ic i-ship" aria-hidden="true"></span><span class="mm-mod-label">Minería</span></button>
+    <button type="button" class="mm-mod" data-mm-module="skills" role="tab" aria-controls="skills" aria-selected="false" id="mmTabSkills" title="Skills" aria-label="Skills"><span class="ic i-key" aria-hidden="true"></span><span class="mm-mod-label">Skills</span></button>
     <!-- PI temporalmente fuera de navegación; conservar para reactivar más adelante.
     <button type="button" class="mm-mod" data-mm-module="pi" role="tab" aria-controls="pi" aria-selected="false" id="mmTabPi">Industria Planetaria · PI</button>
     -->
