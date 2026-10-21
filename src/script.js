@@ -2563,16 +2563,44 @@ function syncShipSwitch(){
   $('importMarketLabel').textContent=nullSystem();
   $('importHeadingPrefix').textContent=S.lang==='en'?'IMPORT TO':'IMPORTACIÓN A';
   $('importHelp').textContent=S.lang==='en'?'Choose whether to transport your items from Jita and set your Nullsec selling margin.':'Elige si transportas los ítems desde Jita y ajusta el margen de venta en Null.';
-  $('shipLab').title=S.lang==='en'?'On: include transport to '+nullSystem()+'. Off: sell in Jita without shipping.':'Activado: incluir transporte a '+nullSystem()+'. Desactivado: vender en Jita sin envío.';
+  $('shipLab').title=S.lang==='en'?'Include alliance freight or compare sales without shipping.':'Incluye el courier de la alianza o compara ventas sin transportar.';
+  $('tradePurchaseLabel').textContent=S.lang==='en'?'Purchase at':'Comprar a';
 }
 function setFlip(on){
   S.flip=!!on;S.planMode=null;czIdx=0;C.shipOn=true;$('shipOn').checked=true; // cambiar de ruta vuelve a contar el courier
   SHIPS=S.flip?{fN:1}:{jOrd:1,jInst:1,rJita:1};
   $('bFlip').setAttribute('aria-pressed',String(S.flip));syncNullRouteLabels();
-  syncShipSwitch();document.body.classList.toggle('is-flip',S.flip);
+  syncShipSwitch();syncBusinessMode();document.body.classList.toggle('is-flip',S.flip);
   if(S.items.length)refreshNow();
 }
 $('bFlip').addEventListener('click',()=>setFlip(!S.flip));
+/* Business UX: the visible tabs select the existing verified direction states.
+   Internal #bFlip and S.flip remain for compatibility; there is only one
+   computation engine, not two divergent copies of the formulas. */
+function syncBusinessMode(){
+  const en=S.lang==='en';
+  const a=$('modeLiquidation'),b=$('modeTrading');
+  for(const [button,active] of [[a,!S.flip],[b,S.flip]]){
+    button.classList.toggle('on',active);button.setAttribute('aria-pressed',String(active));
+  }
+  a.querySelector('span:last-child').textContent=en?'Sell my items':'Vender mis ítems';
+  b.querySelector('span:last-child').textContent=en?'Trade from Jita':'Comerciar desde Jita';
+  $('businessCaption').textContent=S.flip?
+    (en?'Purchase in Jita, compare resale in Null and see profit after transport.':'Compra en Jita, compara la reventa en Null y revisa beneficio después del envío.'):
+    (en?'Compare your Keepstar, Jita, Buyback and reprocessing routes.':'Compara Keepstar, Jita, Buyback y reproceso según tus ajustes.');
+}
+$('businessSwitch').addEventListener('click',e=>{
+  const tab=e.target.closest('button[data-business]');if(!tab)return;
+  const isTrade=tab.dataset.business==='trading';
+  if(S.flip!==isTrade)setFlip(isTrade);
+  syncBusinessMode();
+});
+$('tradePurchaseMode').addEventListener('change',e=>{
+  if(!['buy','sell'].includes(e.target.value))return;
+  C.buyMode=e.target.value;refresh();
+});
+$('tradePurchaseMode').value=C.buyMode;
+syncBusinessMode();
 $('shipOn').addEventListener('change',e=>{C.shipOn=e.target.checked;syncShipSwitch();S.planMode=null;czIdx=0;if(S.items.length)refreshNow();});
 const impSync=(src,dst)=>{const v=parseFloat($(src).value);if(!(v>=0))return;C.impM=v/100;$(dst).value=String(v);refresh();};
 $('fImpM').addEventListener('input',()=>impSync('fImpM','cImpM'));$('cImpM').addEventListener('input',()=>impSync('cImpM','fImpM'));
@@ -2775,6 +2803,9 @@ $('stOpenAll').addEventListener('click',()=>stAll(true));$('stCloseAll').addEven
 $('cTick').addEventListener('change',e=>{C.tick=e.target.checked;refresh();});
 $('cRelistOn').addEventListener('change',e=>{C.relistOn=e.target.checked;refresh();});
 $('cNonMod').addEventListener('input',e=>{const v=parseFloat(e.target.value);C.nullNonMod=isNaN(v)?.9:Math.max(0,v)/100;refresh();});
+$('cBulkNull').addEventListener('input',e=>{
+  const v=parseFloat(e.target.value);C.nullBulk=Number.isFinite(v)?Math.max(0,Math.min(2,v/100)):.45;refresh();
+});
 $('qdOn').addEventListener('change',e=>{C.qd.on=e.target.checked;refresh();});
 [['cDayMin',0],['cDayMax',1]].forEach(([id,i])=>$(id).addEventListener('input',e=>{C.cDays[i]=Math.max(0,parseFloat(e.target.value)||0);if(C.cDays[1]<C.cDays[0]){if(i===0){C.cDays[1]=C.cDays[0];$('cDayMax').value=C.cDays[1];}else{C.cDays[0]=C.cDays[1];$('cDayMin').value=C.cDays[0];}}refresh();}));
 $('cFast').addEventListener('input',e=>{C.fast=Math.max(0,(parseFloat(e.target.value)||0)/100);refresh();});
@@ -2940,7 +2971,7 @@ function syncLanguageChoices(){
   });
 }
 function setLang(l){
-  S.lang=l==='en'?'en':'es';document.documentElement.lang=S.lang;syncLanguageChoices();SkillUI.setLanguage(S.lang);syncShipSwitch();
+  S.lang=l==='en'?'en':'es';document.documentElement.lang=S.lang;syncLanguageChoices();SkillUI.setLanguage(S.lang);syncShipSwitch();syncBusinessMode();
   if(i18nObs){i18nObs.disconnect();i18nObs=null;}
   if(S.lang==='en'){
     i18nWalk(document.documentElement);
