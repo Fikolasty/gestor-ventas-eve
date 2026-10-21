@@ -4006,7 +4006,7 @@ const FORGE=10000002,JITA44=60003760;
 const S={
   planMode:null,
   flip:false,    // v1.0.5: false = HY-RWO → Jita (normal); true = Jita → HY-RWO (importar a Null). Solo memoria. // v111: plan elegido por el usuario (null = óptimo). Solo en memoria.
-  cfg:{disc:{on:true,base:'buy',pct:1,days:3},ref:{name:'HY-RWO - Metal Exchange',struct:'tatara',rig:'t2',sec:'null',imp:.04},ice:{on:true,nullMode:'jbuy',nullDisc:.025,jitaMode:'under',nullDays:14,refLoss:.55},under:.001,underTk:1,baitTk:5,spreadTk:2,nullDays:7,tax:.03375,broker:.015,brokerNull:.01,scc:.005,margin:0,prod:0,relists:1,abr:0,umbral:1000000,cDays:[1,3],fast:.05,impM:.15,shipOn:true,skew:{inst:-.0016,ord:0,nul:0},discEdge:.1,relistOn:false,nullNonMod:.9,tick:true,qd:{on:true,max:.05},stdFac:0,stdCorp:0,
+  cfg:{disc:{on:true,base:'buy',pct:1,days:3},ref:{name:'HY-RWO - Metal Exchange',struct:'tatara',rig:'t2',sec:'null',imp:.04},ice:{on:true,nullMode:'jbuy',nullDisc:.025,jitaMode:'under',nullDays:14,refLoss:.55},under:.001,underTk:1,baitTk:5,spreadTk:2,nullDays:7,tax:.03375,broker:.015,brokerNull:.01,scc:.005,margin:0,prod:0,relists:1,abr:0,umbral:1000000,cDays:[1,3],fast:.05,impM:.15,shipOn:true,skew:{inst:-.0016,ord:0,nul:0},discEdge:.1,relistOn:false,nullNonMod:.9,nullBulk:.45,buyMode:'sell',tick:true,qd:{on:true,max:.05},stdFac:0,stdCorp:0,
        base:10000000,perM3:653,collPct:.01,maxVol:350000,coll:null,
        bb:{on:true,tax:.05,base:'buy',special:{}}},
   items:[],      // {name,qty,srcQty,qtyCol,qtyDeduced,pasteRef,pasteTotal,pasteM3u,pasteM3tot,refMan,m3uMan,jita,ref,m3u,checks,notFound,ui}
@@ -4101,6 +4101,21 @@ function tick(p){
 // Hielo y sus productos se venden en Null SIN margen (pedido de Arturo); el resto con tu margen
 const ICE_PRODUCTS=new Set();Object.values(REFINE).forEach(d=>{if(d.cat==='ice')Object.keys(d.out).forEach(m=>ICE_PRODUCTS.add(m.toLowerCase()));});
 const ICE_ISOTOPES=new Set(['helium isotopes','hydrogen isotopes','oxygen isotopes','nitrogen isotopes']);
+// Market rules are ESTIMATES: local Null sell orders are not available from public ESI.
+// Discount abundant raw ore/minerals and large stacks, but never override the high
+// value / low-volume moon materials, isotopes or manually entered local quotes.
+const MOON_MATERIALS=new Set(),ORE_MINERALS=new Set();
+Object.values(REFINE).forEach(d=>{
+  const target=d.cat==='moon'?MOON_MATERIALS:(d.cat==='ore'?ORE_MINERALS:null);
+  if(target)Object.keys(d.out).forEach(m=>target.add(m.toLowerCase()));
+});
+function bulkNullMaterial(name,q){
+  const key=String(name||'').toLowerCase(),ore=resolveOre(name);
+  if(ore&&(ore.d.cat==='moon'||ore.d.cat==='mercoxit'||ore.d.cat==='ice'))return false;
+  if(MOON_MATERIALS.has(key)||ICE_ISOTOPES.has(key)||isModule(name))return false;
+  if(ore?.d.cat==='ore'||ORE_MINERALS.has(key))return true;
+  return q>=1000; // High-supply lots; estimate can always be overwritten per item.
+}
 const isIceIsotope=name=>ICE_ISOTOPES.has(String(name||'').toLowerCase());
 const isIceRefinedNonIsotope=name=>ICE_PRODUCTS.has(String(name||'').toLowerCase())&&!isIceIsotope(name);
 function isIce(name){const r=resolveOre(name);return (r&&r.d.cat==='ice')||ICE_PRODUCTS.has(String(name||'').toLowerCase());}
@@ -4126,12 +4141,14 @@ function nullList(name,sell,buy,seen,q){
     if(C.ice.nullMode==='jita')return tickDown(buy);
     if(C.ice.nullMode==='margin')return tickDown(buy*(1+C.margin));
   }
-  // HY-RWO: penalización comercial configurada de productos del hielo refinado.
-  // Isótopos mantienen Jita Buy; ni el rendimiento de reproceso ni el contrato Mayhem cambian.
+  // HY-RWO: preserve existing ice-product and isotope exceptions ahead of the
+  // general 45% surplus estimate (55% loss = 45% of Jita Buy).
+  // Isotopes remain close to Jita Buy; neither reprocessing yield nor buyback changes.
   if(C.ice.on&&buy!=null&&isIceIsotope(name))return tickDown(buy);
   if(C.ice.on&&buy!=null&&isIceRefinedNonIsotope(name))return tickDown(buy*(1-C.ice.refLoss));
   // en Null nunca se vende a Jita Sell. Módulos: Jita Buy (+ margen). Todo lo demás (ore, minerales, productos,
   // commodities…): un % de Jita Buy (90% por defecto), que es lo que normalmente pagan en Null.
+  if(buy!=null&&bulkNullMaterial(name,q))return qdApply(tickDown(buy*C.nullBulk),name,q);
   if(buy!=null&&!isModule(name))return qdApply(tickDown(buy*C.nullNonMod),name,q);
   return qdApply(nullPrice(buy,name),name,q);
 }
@@ -4205,7 +4222,13 @@ const nullLabel=name=>{const hub=nullSystem();
   if(C.ice.on&&isIce(name)&&C.ice.nullMode!=='margin')return 'Vender en '+hub+' ('+(C.ice.nullMode==='jbuy'?'Jita Buy −'+pct(C.ice.nullDisc)+'%':'sin margen')+')';
   return 'Vender en '+hub+' ('+nullBaseTxt(name)+')';};
 // precio de Null en palabras: módulo = Jita Buy (+ margen); el resto = 90% de Jita Buy
-const nullBaseTxt=name=>isModule(name)?'Jita Buy'+(marginFor(name)>0?' +'+pct(marginFor(name))+'%':''):pct(C.nullNonMod)+'% de Jita Buy';
+const nullBaseTxt=name=>{
+  const custom=S.refinedMan.null[String(name||'').toLowerCase()];
+  if(custom!=null)return 'precio local manual';
+  if(isModule(name))return 'Jita Buy'+(marginFor(name)>0?' +'+pct(marginFor(name))+'%':'');
+  const o=itemByName(name);
+  return pct(bulkNullMaterial(name,o?.qty||0)?C.nullBulk:C.nullNonMod)+'% de Jita Buy (estimado)';
+};
 const jitaLabel=name=>C.ice.on&&isIce(name)&&!isIceIsotope(name)?(C.ice.jitaMode==='split'?'Orden en Jita (Split)':'Orden en Jita (Undercut)'):'Orden en Jita';
 const trips=v=>v>0&&C.maxVol>0?Math.ceil(Math.ceil(v)/C.maxVol):0;
 // v1.0.7: "Contar envío" (C.shipOn). Apagado = lo llevas tú: el courier no se descuenta ni se arman contratos de envío.
@@ -4673,13 +4696,16 @@ function computePlan(){
         if(a&&a.buy!=null){const w=a.buys?walkBuys(a,q):{filled:q,value:a.buy*q};
           if(w.filled>=q){const fi=skf(o,'inst');row.g.fJI=w.value*fi*rI;row.instAvg=w.value*fi/q;}else row.hint.fJI='Jita solo compra '+fmtQ(w.filled)+' de '+fmtQ(q);}
         else row.hint.fJI='sin compras en Jita';
-        if(rN>0){const np=skTick(tick(ref*(1+C.impM)/rN),o,'nul');row.np=np;row.g.fN=np*q*rN;row.ship.fN={v:row.vol,c:row.coll};}
+        if(rN>0){const manual=S.refinedMan.null[String(o.name).toLowerCase()];
+          const np=manual!=null?manual:skTick(tick(ref*(1+C.impM)/rN),o,'nul');
+          row.np=np;row.g.fN=np*q*rN;row.ship.fN={v:row.vol,c:row.coll};}
       }
       if(!SH()){delete row.g.fN;delete row.ship.fN;} // v1.0.55: Courier en Off: no viajan a HY-RWO, solo se venden en Jita
       return row;
     }
     if(ref!=null&&q>0){
-      row.qd=qtyDisc(o.name,q);const np=skTick(nullList(o.name,ref,a&&a.buy,o.nullSeen,q),o,'nul');if(np!=null){row.g.null=np*q*rN;row.np=np;}
+      row.qd=qtyDisc(o.name,q);const manual=S.refinedMan.null[String(o.name).toLowerCase()];
+      const np=manual!=null?manual:skTick(nullList(o.name,ref,a&&a.buy,o.nullSeen,q),o,'nul');if(np!=null){row.g.null=np*q*rN;row.np=np;}
       const jl=skTick(jitaList(o.name,ref,a&&a.buy,q,o.refMan!=null),o,'ord');row.jl=jl;row.g.jOrd=jl*q*rJ;row.tight=tightSpread(jl,a);row.ship.jOrd={v:row.vol,c:row.coll};
       if(a&&a.buy!=null){
         const w=a.buys?walkBuys(a,q):{filled:q,value:a.buy*q};
