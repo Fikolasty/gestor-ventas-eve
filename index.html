@@ -2085,6 +2085,24 @@ body.mm-skills #heroIntro,body.mm-skills #salesBody{display:none!important}
 .skills-app-frame{width:100%;min-width:0;display:block;border:0;background:transparent}
 @media(max-width:650px){#skills{padding:3px!important}}
 
+
+/* v1.0.95: route direction is the only control in the top navigation.
+   Shipping and import margin retain their original IDs and event handlers. */
+.mm-import-controls{margin:12px 0 0;padding:13px 16px;display:flex;align-items:center;justify-content:space-between;gap:16px;background:linear-gradient(120deg,rgba(34,32,31,.96),rgba(18,18,19,.95));border:1px solid var(--line2);border-radius:12px;box-shadow:0 8px 20px rgba(0,0,0,.14)}
+.mm-import-controls[hidden],.mm-import-actions>[hidden]{display:none!important}
+.mm-import-intro{min-width:0;display:flex;flex-direction:column;gap:3px}
+.mm-import-intro strong{display:flex;align-items:center;gap:7px;font-size:.85rem;line-height:1.35;font-weight:750;letter-spacing:.035em;color:var(--txt)}
+.mm-import-intro strong .ic{width:16px;height:16px;color:var(--clay)}
+.mm-import-intro small{color:var(--mut);font-size:.79rem;line-height:1.4}
+.mm-import-actions{display:flex;align-items:center;gap:12px;flex:none}
+.mm-import-actions #shipLab,.mm-import-actions #rtM{min-height:40px;margin:0;display:inline-flex;align-items:center;gap:10px;font-size:.83rem}
+.mm-import-actions #shipLab #shipTxt{display:inline!important;white-space:nowrap;color:var(--txt)}
+.mm-import-actions #rtM{gap:12px}
+.mm-import-actions #rtM .rm-l{color:var(--mut)}
+@media(max-width:900px){.mm-import-controls{flex-wrap:wrap}.mm-import-intro{flex:1 1 230px}.mm-import-actions{flex:1 1 290px;justify-content:flex-end}}
+@media(max-width:590px){.mm-import-controls{padding:12px;align-items:stretch}.mm-import-actions{justify-content:space-between;flex-wrap:wrap;gap:8px}.mm-import-actions #shipLab,.mm-import-actions #rtM{flex:1 1 auto;justify-content:center}}
+html.light .mm-import-controls{background:rgba(255,255,255,.88)}
+
 /* ===== tema claro (generado desde el oscuro por light.py) ===== */
 html.light{--void:#e4e3dd;--hull:#e2e0da;--hull2:#e0ded8;--line:rgba(31,30,29,0.114);--line2:rgba(31,30,29,0.125);--txt:#1c1c1a;--mut:#54524d;--dim:#6c6a64;--ion:#413f3c;--blue:#a39d8b;--clay:#c96442;--thrust:#a67526;--gain:#418b62;--loss:#a92c23}
 html.light body::after{background:repeating-linear-gradient(180deg,rgba(31,30,29,0.011) 0 1px,transparent 1px 3px),
@@ -2605,6 +2623,8 @@ html.light .top>.top-guide-action:hover{background:rgba(217,119,87,0.163)}
 html.light #settings .st-language-actions{background:#e6e4df}
 html.light #settings .st-lang-option:hover{background:rgba(31,30,29,0.043)}
 html.light #settings .st-lang-option.on{background:rgba(217,119,87,0.2);border-color:rgba(217,119,87,0.625)}
+html.light .mm-import-controls{background:linear-gradient(120deg,rgba(240,237,229,0.96),rgba(240,237,229,0.95));box-shadow:0 8px 20px rgba(0,0,0,0.022)}
+html.light.light .mm-import-controls{background:rgba(31,30,29,0.836)}
 /* ajustes a mano del tema claro */
 html.light body{background:#e6e3da;color:#1f1e1d}
 html.light body::before{opacity:.12;filter:grayscale(.35) brightness(1.1)}
@@ -3332,8 +3352,6 @@ html.light #mining .mn-fit-fallback{border-color:rgba(40,100,150,.22);background
   <div class="route" id="route">
     <button type="button" class="route-b" id="bFlip" aria-pressed="false" title="Ruta del lote. HY-RWO → Jita: vendes lo que tienes en Null. Jita → HY-RWO: llevas (o compras) en Jita y vendes en Null más caro. Clic para invertir.">
       <span class="route-ic" aria-hidden="true"></span><span class="route-from" id="rtFrom">HY-RWO</span><span class="route-ar" aria-hidden="true">→</span><span class="route-to" id="rtTo">Jita</span></button>
-    <label class="sw" id="shipLab" hidden title="Enviar: utiliza SIGMA Freight para llevar los items a HY-RWO. No enviar: venderás los items en Jita sin contabilizar transporte."><input type="checkbox" id="shipOn" checked><span class="sw-t" aria-hidden="true"></span><span id="shipTxt">Enviar</span></label>
-    <label class="route-m" id="rtM" hidden title="Margen de importación: cuánto más que Jita Sell cobras en HY-RWO (neto, ya con taxes)."><span class="rm-l">Margen</span><span class="rm-f"><span class="rm-s">+</span><input type="number" id="fImpM" min="0" step="0.5" value="15" inputmode="decimal" aria-label="Margen al vender en HY-RWO, % neto sobre Jita Sell"><span class="rm-s">%</span></span></label>
   </div>
   </div>
   <div class="side-g"><span class="side-h">Ayuda</span>
@@ -3367,6 +3385,17 @@ html.light #mining .mn-fit-fallback{border-color:rgba(40,100,150,.22);background
     -->
     </div>
   </nav>
+  <!-- Import options belong to the selected Jita → Null route, not the navigation switch. -->
+  <section class="mm-import-controls" id="importControls" hidden aria-label="Opciones de importación">
+    <div class="mm-import-intro">
+      <strong><span class="ic i-ship" aria-hidden="true"></span> IMPORTACIÓN A <span id="importMarketLabel">HY-RWO</span></strong>
+      <small>Elige si transportas los ítems desde Jita y ajusta el margen de venta en Null.</small>
+    </div>
+    <div class="mm-import-actions">
+    <label class="sw" id="shipLab" hidden title="Enviar: utiliza SIGMA Freight para llevar los items a HY-RWO. No enviar: venderás los items en Jita sin contabilizar transporte."><input type="checkbox" id="shipOn" checked><span class="sw-t" aria-hidden="true"></span><span id="shipTxt">Enviar</span></label>
+    <label class="route-m" id="rtM" hidden title="Margen de importación: cuánto más que Jita Sell cobras en HY-RWO (neto, ya con taxes)."><span class="rm-l">Margen</span><span class="rm-f"><span class="rm-s">+</span><input type="number" id="fImpM" min="0" step="0.5" value="15" inputmode="decimal" aria-label="Margen al vender en HY-RWO, % neto sobre Jita Sell"><span class="rm-s">%</span></span></label>
+    </div>
+  </section>
   <!-- v104: introducción + recordatorio visible a la derecha. Los botones comparten
        los paneles Guía de Uso y Ajustes existentes: no se duplica ningún formulario. -->
   <!-- v1.0.8: Ajustes y Guía de Uso se abren aquí, arriba, debajo del título -->
