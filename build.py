@@ -47,13 +47,22 @@ skills_doc = skills_doc.replace('const owned=demo&&', 'const owned=(demo||pilotC
 skills_doc = skills_doc.replace('planQuote(demo?skills.filter', 'planQuote((demo||pilotConnected)?skills.filter')
 skills_doc = skills_doc.replace('if(demo){', 'if(demo||pilotConnected){')
 skills_doc = skills_doc.replace('if(demo&&seen>=sk.level)', 'if((demo||pilotConnected)&&seen>=sk.level)')
-skills_doc = skills_doc.replace('const seen=demo?', 'const seen=(demo||pilotConnected)?')
 # A skillbook is already owned even if the pilot injected the skill but has trained
 # no level yet; do not bill it twice. Account for partial SP on trained skills.
-skills_doc = skills_doc.replace("const owned=demo&&(demoSkills[sk.name]||0)>0;", "const owned=pilotConnected?liveBooks.has(sk.name):demo&&(demoSkills[sk.name]||0)>0;")
 skills_doc = skills_doc.replace("const owned=(demo||pilotConnected)&&(skillLevels()[sk.name]||0)>0;", "const owned=pilotConnected?liveBooks.has(sk.name):demo&&(skillLevels()[sk.name]||0)>0;")
 skills_doc = skills_doc.replace("planQuote((demo||pilotConnected)?skills.filter(x=>!(skillLevels()[x.name]>0)):skills)", "planQuote(pilotConnected?skills.filter(x=>!liveBooks.has(x.name)):demo?skills.filter(x=>!(skillLevels()[x.name]>0)):skills)")
 skills_doc = skills_doc.replace("return Math.max(0,(spThresholds[skill.level]-spThresholds[oldLevel])*r);", "return pilotConnected?Math.max(0,spThresholds[skill.level]*r-(liveSP[skill.name]||0)):Math.max(0,(spThresholds[skill.level]-spThresholds[oldLevel])*r);")
+
+# Preserve personalized status and natural-language labels across every re-render.
+skills_doc = skills_doc.replace("updateStatus();}\nfunction updateStatus(){", """updateStatus();
+if(pilotConnected){
+  $('connectionTitle').textContent=lang==='es'?'Plan personalizado para '+pilotName:'Personalized plan for '+pilotName;
+  $('connectionText').textContent=lang==='es'?'Solo aparecen las habilidades pendientes de cada etapa.':'Only the skills you still need appear in each stage.';
+  $('connectionStatus').textContent=lang==='es'?'PILOTO CONECTADO':'PILOT CONNECTED';
+  $('tryDemo').hidden=true;
+}}\nfunction updateStatus(){""", 1)
+assert 'function planState(p)' in skills_doc and 'const skillLevels=' in skills_doc
+assert 'liveBooks.has(sk.name)' in skills_doc
 
 # Append the safe parent/child bridge before the last script closing tag.
 skills_bridge = r"""
