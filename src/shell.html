@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src data: blob: https://images.evetech.net https://cdn1.eveonline.com https://wiki.eveuniversity.org https://global.discourse-cdn.com; connect-src https://esi.evetech.net https://images.evetech.net https://login.eveonline.com; base-uri 'none'; form-action 'none'; object-src 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src data: blob: https://images.evetech.net https://cdn1.eveonline.com https://wiki.eveuniversity.org https://global.discourse-cdn.com https://image.eveonline.com; frame-src 'self' about:; connect-src https://esi.evetech.net https://images.evetech.net https://login.eveonline.com; base-uri 'none'; form-action 'none'; object-src 'none'">
 <meta name="referrer" content="no-referrer">
 <title>Market Moves+ · SIGMA GRINDSET</title>
 <style>
@@ -2076,6 +2076,15 @@ html.light #mmTabs .mm-icon-action,html.light #mmTabs .mm-mod{color:#4b4742}
 #settings #langSel[hidden]{display:none!important}
 @media(max-width:540px){#settings .st-language-actions{width:100%;display:flex}#settings .st-lang-option{min-width:0;flex:1}}
 
+
+/* Skills is an embedded, isolated module. No rules inside it affect Sales/Mining. */
+body.mm-skills #heroIntro,body.mm-skills #salesBody{display:none!important}
+#skills[hidden]{display:none!important}
+#skills{margin:0;padding:9px!important;overflow:visible}
+#skillRoot{min-width:0;width:100%}
+.skills-app-frame{width:100%;min-width:0;display:block;border:0;background:transparent}
+@media(max-width:650px){#skills{padding:3px!important}}
+
 </style>
 <script>/* v1.0.16: aplica el tema guardado antes de pintar (sin parpadeo). Por defecto: Dark. */try{var g=JSON.parse(localStorage.getItem('gestorVentas.ajustes.v1')||'null');if(g&&g.ui){if(g.ui.light)document.documentElement.classList.add('light');}}catch(e){}</script>
 </head>
@@ -2129,6 +2138,7 @@ html.light #mmTabs .mm-icon-action,html.light #mmTabs .mm-mod{color:#4b4742}
     <div class="mm-modgroup" role="presentation">
     <button type="button" class="mm-mod on" data-mm-module="ventas" role="tab" aria-controls="salesBody" aria-selected="true" id="mmTabVentas" title="Ventas" aria-label="Ventas"><span class="ic i-list" aria-hidden="true"></span></button>
     <button type="button" class="mm-mod" data-mm-module="mining" role="tab" aria-controls="mining" aria-selected="false" id="mmTabMining" title="Minería" aria-label="Minería"><span class="ic i-ship" aria-hidden="true"></span></button>
+    <button type="button" class="mm-mod" data-mm-module="skills" role="tab" aria-controls="skills" aria-selected="false" id="mmTabSkills" title="Skills" aria-label="Skills"><span class="ic i-key" aria-hidden="true"></span></button>
     <!-- PI temporalmente fuera de navegación; conservar para reactivar más adelante.
     <button type="button" class="mm-mod" data-mm-module="pi" role="tab" aria-controls="pi" aria-selected="false" id="mmTabPi">Industria Planetaria · PI</button>
     -->
@@ -2192,6 +2202,7 @@ Contraband Freight = no</textarea><small>Una regla por línea: Nombre = tax tota
     <p class="lead">Compara Barges y Exhumers en luna, hielo y gas del territorio Guristas, calcula ISK por hora con ESI y planifica la productividad de tus cuentas Omega.</p>
     <div id="mnRoot"></div>
   </section>
+  <section class="panel mm-skills-panel" id="skills" role="tabpanel" aria-labelledby="mmTabSkills" hidden><div id="skillRoot"></div></section>
   <section class="panel mm-pi-panel" id="pi" role="tabpanel" aria-label="Industria Planetaria (temporalmente deshabilitada)" hidden>
     <header class="mm-section-head"><h2 class="mm-title">INDUSTRIA PLANETARIA</h2><p class="mm-section-sub">PLANIFICA TU PI Y PRODUCCIÓN DE FUEL BLOCKS</p></header>
 
