@@ -53,14 +53,6 @@ skills_doc = skills_doc.replace("const owned=(demo||pilotConnected)&&(skillLevel
 skills_doc = skills_doc.replace("planQuote((demo||pilotConnected)?skills.filter(x=>!(skillLevels()[x.name]>0)):skills)", "planQuote(pilotConnected?skills.filter(x=>!liveBooks.has(x.name)):demo?skills.filter(x=>!(skillLevels()[x.name]>0)):skills)")
 skills_doc = skills_doc.replace("return Math.max(0,(spThresholds[skill.level]-spThresholds[oldLevel])*r);", "return pilotConnected?Math.max(0,spThresholds[skill.level]*r-(liveSP[skill.name]||0)):Math.max(0,(spThresholds[skill.level]-spThresholds[oldLevel])*r);")
 
-# Preserve personalized status and natural-language labels across every re-render.
-skills_doc = skills_doc.replace("updateStatus();}\nfunction updateStatus(){", """updateStatus();
-if(pilotConnected){
-  $('connectionTitle').textContent=lang==='es'?'Plan personalizado para '+pilotName:'Personalized plan for '+pilotName;
-  $('connectionText').textContent=lang==='es'?'Solo aparecen las habilidades pendientes de cada etapa.':'Only the skills you still need appear in each stage.';
-  $('connectionStatus').textContent=lang==='es'?'PILOTO CONECTADO':'PILOT CONNECTED';
-  $('tryDemo').hidden=true;
-}}\nfunction updateStatus(){""", 1)
 assert 'function planState(p)' in skills_doc and 'const skillLevels=' in skills_doc
 assert 'liveBooks.has(sk.name)' in skills_doc
 
@@ -89,13 +81,9 @@ window.addEventListener('message',event=>{
       }
       demo=false;
     }
+    // The Skills render owns the connected-state copy and switch presentation.
+    // No duplicate DOM overrides: connected pilots auto-enable personalized plans.
     render();
-    if(pilotConnected){
-      $('connectionTitle').textContent=lang==='es'?'Plan personalizado para '+pilotName:'Personalized plan for '+pilotName;
-      $('connectionText').textContent=lang==='es'?'Se muestran las habilidades que te faltan para completar cada etapa.':'Only the training you still need is shown for each stage.';
-      $('connectionStatus').textContent=lang==='es'?'PILOTO CONECTADO':'PILOT CONNECTED';
-      $('tryDemo').hidden=true;
-    }else $('tryDemo').hidden=false;
     announceHeight();
   }
   if(m.kind==='mm-skills-measure')announceHeight();
