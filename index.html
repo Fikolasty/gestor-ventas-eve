@@ -2187,6 +2187,19 @@ html.light #mmTabs.mm-modnav .mm-modgroup .mm-mod:focus-visible{
 #mmTabs .mm-mod .mm-mining-icon>.ic,#mmTabs .mm-mod .mm-mining-icon>img{grid-area:1/1;width:24px;height:24px;margin:0}
 #mmTabs .mm-mod .mm-mining-icon>img{position:relative;z-index:1;object-fit:contain;border-radius:3px}
 #mmTabs .mm-mod .mm-mining-icon>img[hidden]{display:none!important}
+/* Official Hulk render has a dark plate. Blend out that backdrop without
+   replacing the ship or downloading/storing any new image assets.
+   Dark: black render pixels disappear with screen.
+   Light: invert black to white and multiply it away, preserving a visible ship silhouette. */
+#mmTabs .mm-mod .mm-mining-icon>.mm-eve-hulk-icon:not([hidden]){
+  mix-blend-mode:screen;
+  filter:contrast(1.18) brightness(1.15);
+}
+html.light #mmTabs .mm-mod .mm-mining-icon>.mm-eve-hulk-icon:not([hidden]){
+  mix-blend-mode:multiply;
+  filter:invert(1) contrast(1.22);
+}
+
 #verdict .mm-net{display:flex;flex-direction:column;align-items:flex-end;justify-content:center;min-width:0;gap:2px}
 #verdict .mm-net-label{font:750 .75rem/1.35 var(--f-ui);letter-spacing:.065em;color:var(--mut);text-align:right}
 #verdict .mm-net-label[hidden]{display:none!important}
