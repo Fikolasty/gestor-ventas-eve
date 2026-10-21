@@ -2297,9 +2297,12 @@ const PK_COLS=[['name','Plan'],['speed','Rapidez'],['ship','Envío'],['net','Val
 function paintPicker(P){
   const box=$('pk'),bar=$('pkNote'),tools=$('pkTools'),others=$('pkOthers');
   box.textContent='';bar.textContent='';tools.textContent='';others.textContent='';
-  const opt=modeTotal(P,'auto').net,cur=P.mode||'auto';
+  const investment=S.flip?flipPlanAccounting(P)?.buy:null;
+  const showProfit=investment!=null;
+  const planValue=t=>showProfit?{...t,net:t.net-investment}:t;
+  const opt=planValue(modeTotal(P,'auto')).net,cur=P.mode||'auto';
   const all=MODES.filter(([m])=>!(m==='bb'&&!C.bb.on||m==='disc'&&!C.disc.on)&&(m==='auto'||P.rows.some(r=>r.g[m]!=null)))
-    .map(([m,l])=>({m,l,t:m==='auto'?{net:opt,n:P.rows.length}:modeTotal(P,m)}));
+    .map(([m,l])=>({m,l,t:m==='auto'?{net:opt,n:P.rows.length}:planValue(modeTotal(P,m))}));
   const same=all.filter(x=>x.m!=='auto'&&Math.round(x.t.net)===Math.round(opt)&&P.rows.every(r=>!r.auto||r.auto===x.m||r.g[x.m]==null)).map(x=>x.m);
   // Mantener siempre visible el plan elegido, aunque su resultado sea idéntico al óptimo.
   const list=all.filter(x=>x.m===cur||!same.includes(x.m));
@@ -2387,7 +2390,9 @@ function paintPicker(P){
   const cant=P.rows.filter(r=>r.cant);
   if(chosen.m!=='auto'&&cant.length)bar.append(' ',S.lang==='en'?(cant.length===1?'One item cannot use this route and keeps its optimal plan.':cant.length+' items cannot use this route and keep their optimal plans.'):(cant.length===1?'Un ítem no admite esta ruta y mantiene su plan óptimo.':cant.length+' ítems no admiten esta ruta y mantienen su plan óptimo.'));
   const hd=el('div','pk-hd');
-  PK_COLS.forEach(([k,t],i)=>{const on=pkView.sort===k&&i!==3,b=el('button','pk-hc c'+i+(on?' on':''),t+(on?(pkView.dir>0?' ▲':' ▼'):''));
+  PK_COLS.forEach(([k,t],i)=>{
+    const label=showProfit&&i===4?(S.lang==='en'?'Profit':'Beneficio'):t;
+    const on=pkView.sort===k&&i!==3,b=el('button','pk-hc c'+i+(on?' on':''),label+(on?(pkView.dir>0?' ▲':' ▼'):''));
     b.type='button';if(i===3){b.disabled=true;b.tabIndex=-1;}else{b.dataset.pks=k;b.title='Ordenar por '+t.toLowerCase();}hd.append(b);});
   box.classList.toggle('pk-noship',!SH());others.classList.toggle('pk-noship',!SH());
   box.append(hd);
@@ -2416,7 +2421,8 @@ function paintPicker(P){
     const sp=el('span','pk-sp',pkSpeed(m,P)),sh=el('span','pk-sh'+(pkShips(m,P)?' y':''),pkShips(m,P)?'Sí':'No');
     const barW=el('span','pk-bar'),bi=el('i');bi.style.width=Math.max(2,Math.min(100,t.net/maxNet*100))+'%';barW.append(bi);
     const diff=m==='auto'?'Óptimo':Math.round(d)===0?'Igual':(d>0?'+':'−')+compactIsk(Math.abs(d));
-    b.append(el('span','pk-dot'),txt,sp,sh,barW,el('b','pk-v num',fmt(t.net)),
+    b.append(el('span','pk-dot'),txt,sp,sh,barW,
+      el('b','pk-v num '+(showProfit?sgn(t.net):''),showProfit?(t.net>=0?'+':'−')+fmt(Math.abs(t.net)):fmt(t.net)),
       el('small','pk-d '+(m==='auto'||Math.round(d)===0?'':d>0?'pos':'neg'),diff));
     if(part)b.title=part.trim();
     return b;
