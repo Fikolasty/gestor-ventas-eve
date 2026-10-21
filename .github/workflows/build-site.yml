@@ -46,6 +46,7 @@ jobs:
           assert len(s)>100000
           print('Generated site validation OK')
           PY
+      # Includes Light-theme tab contrast, Skill Plan naming, and Hulk silhouette checks.
       - name: Skills Library regression checks
         run: node tests/skills-integration.cjs
       - name: Jita import financial reconciliation
