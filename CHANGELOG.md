@@ -1,5 +1,16 @@
 # Changelog
 
+## 1.0.96 — [ChatGPT] Conciliación de importación y armonía visual
+*2026-10-21*
+
+- En dirección Jita → Null, el resumen superior muestra la **ganancia neta estimada** que corresponde al plan activo: ingresos netos menos inversión en Jita. Los ingresos netos, la inversión y el transporte también aparecen expresamente en el desglose; si faltan precios base, se mantiene la cifra verificable de ingresos, sin beneficios inventados.
+- La tarjeta «Comprar en Jita…» dejó de forzar la hipótesis de transportar todo: usa la ruta **realmente seleccionada** y contempla mezclas de ventas en Jita y Null.
+- Nuevo encabezado Minería centrado y de gran formato, consistente con Skills; icono oficial de **Hulk (22544)** en la pestaña, con fallback.
+- Reemplaza el icono parecido a un sol por un verdadero **engranaje** en Ajustes.
+- En Skills el interruptor se llama **«Simular piloto»**, y detecta automáticamente el piloto conectado y activa planes personalizados reales sin pedir simulación; al conectarse, el estado se muestra como «Piloto conectado».
+- Eliminadas sobrescrituras duplicadas de texto y visibilidad del piloto en el build, manteniendo cálculos y utilidades.
+- Nuevas pruebas financieras sintéticas y regresiones de Skills en GitHub Actions. Quedan pruebas visuales y ESI real pendientes.
+
 ## 1.0.95 — [ChatGPT] Navegación, importación y Skills ES/EN
 *2026-10-21*
 
