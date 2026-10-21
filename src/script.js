@@ -889,10 +889,27 @@ function computePlan(){
   allJita=wJ.length?wJ.reduce((a,r)=>a+r.g.jOrd-r.prod,0)-allJitaCost:null;}
   const wB=rows.filter(r=>r.g.bb!=null),allBB=wB.length?wB.reduce((a,r)=>a+r.g.bb-r.prod,0):null;
   const toBB=rows.filter(r=>r.best==='bb'),bbGross=toBB.reduce((a,r)=>a+r.g.bb,0);
-  return{mode:M,allBB,nBBno:rows.filter(r=>r.hint.bb==='el Buyback no lo acepta').length,toBB,bbGross,rows,Vs,Cs:coll,shipCost,best:gross-shipCost,valShip,valStay,allNull,allJita,allJitaCost,VJ,
+  const result={mode:M,allBB,nBBno:rows.filter(r=>r.hint.bb==='el Buyback no lo acepta').length,toBB,bbGross,rows,Vs,Cs:coll,shipCost,best:gross-shipCost,valShip,valStay,allNull,allJita,allJitaCost,VJ,
     nShip:rows.filter(r=>r.best&&SHIPS[r.best]).length,nStay:rows.filter(r=>r.best&&!SHIPS[r.best]).length,missing:rows.filter(r=>!r.best)};
+  allocateCourier(result);
+  return result;
 }
 
+// Allocate the ACTUAL shared courier bill once, including contract fixed fees.
+// Normalizing approximate item weights prevents rounding and multiple contracts
+// from charging an extra base fee to each row. Allocations sum to P.shipCost.
+function allocateCourier(P){
+  P.rows.forEach(r=>{r.courierAllocated=0;r.courierPerUnit=0;});
+  const shipped=P.rows.filter(r=>r.best&&r.ship[r.best]&&r.q>0);
+  if(!(P.shipCost>0)||!shipped.length)return;
+  const weights=shipped.map(r=>{const sh=r.ship[r.best];return Math.max(0,courierShare(sh.v,sh.c,P.Vs));});
+  const total=weights.reduce((a,b)=>a+b,0);
+  let left=P.shipCost;
+  shipped.forEach((r,i)=>{
+    const share=i===shipped.length-1?left:total>0?P.shipCost*weights[i]/total:P.shipCost/shipped.length;
+    r.courierAllocated=share;r.courierPerUnit=share/r.q;left-=share;
+  });
+}
 // v111: total neto exacto de cada plan a partir del plan calculado (barato: una suma por item, sin pintar).
 // m='auto' = óptimo. Los items que no admiten m siguen el óptimo (igual que computePlan con S.planMode=m).
 function modeTotal(P,m){let g=0,V=0,Cc=0,n=0;
@@ -1257,6 +1274,41 @@ function paintLot(r){
     priceRow(tb,'Venta rápida en Jita',r.instAvg!=null?r.instAvg:(a&&a.buy!=null?a.buy:null),'Jita Buy'+(r.instAvg!=null&&a&&r.instAvg<a.buy*.995?' (promedio al vender todo)':'')+'. Resta envío y Sales Tax.',nu('jInst'),r.best==='jInst');
     const n=el('tr');const nt=el('td','muted pr-foot');nt.colSpan=4;nt.textContent='Clic en un precio para copiarlo. En el juego se lista por unidad: pon este precio y la cantidad ('+fmtQ(r.q)+').';n.append(nt);tb.append(n);
   }}
+  // User-entered Null sell price is authoritative; no public local-market API.
+  // Keeps input in memory per item; never modifies the reference Jita price.
+  const manualKey=o.name.toLowerCase(),manual=S.refinedMan.null[manualKey];
+  const manualRow=el('tr','pr-local-manual'),manualCell=el('td');manualCell.colSpan=4;
+  const manualEditor=el('div','pr-manual-editor'),manualLabel=el('label',null,'Precio real de '+nullSystem()+' · ISK/u');
+  const manualInput=el('input');manualInput.type='text';manualInput.inputMode='decimal';manualInput.autocomplete='off';
+  manualInput.value=manual!=null?String(manual):'';
+  manualInput.placeholder=r.np!=null?String(Math.round(r.np*100)/100):'Sin referencia';
+  manualInput.setAttribute('aria-label','Precio local de '+o.name+' por unidad');
+  const resetPrice=el('button',null,'Automático ↺');resetPrice.type='button';
+  resetPrice.title='Quitar precio local manual y usar el estimado';
+  const savePrice=()=>{
+    const raw=manualInput.value.trim();
+    if(!raw){delete S.refinedMan.null[manualKey];refreshNow();return;}
+    const value=num(raw);
+    if(!Number.isFinite(value)||value<=0||value>1e15){
+      manualInput.setCustomValidity('Escribe un precio positivo en ISK por unidad.');
+      manualInput.reportValidity();return;
+    }
+    manualInput.setCustomValidity('');
+    if(S.refinedMan.null[manualKey]===value)return;
+    S.refinedMan.null[manualKey]=value;refreshNow();
+  };
+  manualInput.addEventListener('change',savePrice);
+  manualInput.addEventListener('input',()=>manualInput.setCustomValidity(''));
+  manualInput.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();manualInput.blur();}});
+  resetPrice.addEventListener('click',()=>{delete S.refinedMan.null[manualKey];refreshNow();});
+  manualEditor.append(manualLabel,manualInput,resetPrice,el('small',null,manual!=null?'Precio manual activo':'Estimación modificable'));
+  manualCell.append(manualEditor);manualRow.append(manualCell);tb.append(manualRow);
+  if(r.courierAllocated>0&&r.q>0){
+    const unitRow=el('tr','pr-unit-courier'),unitCell=el('td','muted');unitCell.colSpan=4;
+    unitCell.textContent=(S.lang==='en'?'Allocated freight: ':'Envío repartido: ')+fmt(r.courierAllocated)+' · '+fmtP(r.courierPerUnit)+
+      '/'+(S.lang==='en'?'unit':'unidad')+' · '+fmtV(r.vol)+' m³';
+    unitRow.append(unitCell);tb.append(unitRow);
+  }
   if(r.mins&&r.mins.length){
     const h=el('tr','lot-min-heading'),th=el('td');th.colSpan=4;
     const toggle=el('button','lot-min-toggle','Minerales obtenidos al reprocesar · '+r.mins.length);toggle.type='button';toggle.setAttribute('aria-expanded','false');
