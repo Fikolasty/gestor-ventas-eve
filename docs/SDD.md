@@ -189,3 +189,18 @@
 - **Estado:** cambios enviados a `main`; validar Actions/Pages tras la compilación.
 
 **Verificación final de v1.0.94:** GitHub Actions completó la secuencia de compilación y produjo el commit `build: regenerate Market Moves+ v1.0.94` (`fb2608ad8…`). Por tanto, las comprobaciones automáticas del workflow pasaron antes de publicar el HTML. Continúan pendientes pruebas de piloto real, precios/iconos con acceso de red y profiler de memoria prolongado.
+
+
+## 2026-10-21 — v1.0.95 · Navegación e idioma Skills
+
+**Entregado:** versión 1.0.95 publicada en `main`. GitHub Actions generó `index.html` mediante commit `139d839bf8…`, después de los chequeos de compilación y regresión.
+
+- **Navegación:** Ventas, Minería y Skills son pestañas con nombre e icono. Skills utiliza la imagen oficial del libro de habilidad EVE `3426` con fallback si no carga. Ajustes y Guía de uso están juntos en la cabecera superior.
+- **Switch Jita/Null:** el control de dirección permanece solo en la barra; `shipLab` (Enviar/No enviar) y `rtM` (margen) se trasladaron intactos al panel `#importControls`, fuera de la barra. Solo se muestran en modo de importación Jita → Null dentro de Ventas. Se conservan los IDs, inputs y eventos de cálculo, y se sincroniza el nombre del mercado.
+- **Skills ES/EN:** el catálogo tiene traducción con fallback español; cada actualización de idioma provoca un render explícito dentro del módulo aislado. No depender de almacenamiento disponible en el iframe sandbox.
+- **Skills completados:** al alcanzar todos los niveles del plan, la etapa muestra `✓ PLAN COMPLETADO · 100 %` en español o `✓ PLAN COMPLETE · 100%` en inglés, con estilo verde; al 100 % no se copian niveles pendientes ni se vuelven a cobrar libros entrenados.
+- **Legibilidad:** se elevaron fuentes de contenido de 10–11 px a **al menos 11,5 px** en el módulo Skills.
+- **Regresiones:** `tests/skills-integration.cjs` amplió las verificaciones de pestañas, importación, actualización de idioma y estados de completado. Chromium con el preview aislado había validado apertura de acordeones, copia y activación de simulación; no equivale a comprobar un piloto real conectado.
+
+**Validación todavía pendiente:** prueba manual in situ de ES→EN→ES, precios e iconos con acceso de red, sincronización con piloto autorizado real, perfiles Firefox/móvil y comparación de importes por modo del switch. No afirmar que todos esos casos estén verificados visualmente por la compilación.
+
