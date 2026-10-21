@@ -2347,6 +2347,22 @@ function paintPicker(P){
       el('p','pk-opp-explain','No hay suficientes alternativas con precios disponibles para calcular una comparación fiable. Revisa las cotizaciones y las rutas habilitadas.'));
   }
 
+  // Keep the detailed plan comparison accessible without using vertical space
+  // unless the user explicitly expands it. Preserve open state across recalcs.
+  const detail=el('details','pk-opp-details');
+  detail.open=!!pkView.opportunityOpen;
+  const summary=el('summary','pk-opp-brief');
+  summary.append(el('span',null,S.lang==='en'?'Why this plan? · Opportunity cost':'¿Por qué este plan? · Coste de oportunidad'));
+  const closest=valid.filter(x=>x.m!==chosen.m).sort((a,b)=>b.t.net-a.t.net)[0];
+  if(closest){
+    const diff=chosen.t.net-closest.t.net;
+    summary.append(el('strong',diff>=0?'pos':'neg',(diff>=0?'+':'−')+fmt(Math.abs(diff))));
+  }
+  detail.append(summary);
+  while(opportunity.firstChild)detail.append(opportunity.firstChild);
+  opportunity.append(detail);
+  detail.addEventListener('toggle',()=>{pkView.opportunityOpen=detail.open;});
+
   const maxNet=Math.max(...list.map(x=>x.t.net),1);
   const sys=nullSystem(),env='Envías todo a Jita y ';
   const PK_EXP_ES={auto:'Cada ítem sigue la ruta más rentable; si la diferencia es pequeña, se prioriza vender antes.',fN:'Llevas todo de Jita a '+sys+' y lo vendes con tu margen de importación.',fJ:'Publicas órdenes de venta en Jita. La venta puede tardar días.',fJI:'Vendes todo a órdenes de compra en Jita y cobras inmediatamente.',null:'Publicas órdenes de venta en '+sys+'. No necesitas transporte, pero la venta puede tardar días.',jOrd:'Envías todo a Jita y publicas órdenes de venta. La venta puede tardar días.',jInst:'Envías todo a Jita y vendes a órdenes de compra. Cobras inmediatamente.',bb:'Creas un contrato Item Exchange para el programa Buyback de tu alianza.',rNull:'Reprocesas el mineral o el hielo y vendes los materiales en '+sys+'.',rJita:'Reprocesas los materiales y los envías a Jita para venderlos.',disc:'Ofreces el lote a otro jugador por Discord. No hay comprador garantizado.'};
@@ -2523,11 +2539,30 @@ function paintFlipBuy(P){
     ?'Investment uses Jita Sell or Jita Buy Order pricing; Buy Orders include placement broker and are not guaranteed to fill. Profit = plan net proceeds − investment.'
     :'Inversión a Jita Sell o Buy Order; la Buy Order incluye broker y no garantiza ejecución. Ganancia estimada = ingresos netos del plan seleccionado − inversión.'));
 }
+// Optional compact breakdown of the *selected* plan's single shared freight
+// bill. A separate per-unit number is displayed for each shipped item.
+function paintCourierUnits(P){
+  const box=$('unitCourierBox'),host=$('unitCourierRows');
+  host.replaceChildren();
+  const rows=P.rows.filter(r=>r.courierAllocated>0&&r.q>0);
+  box.hidden=!rows.length;
+  if(!rows.length)return;
+  const en=S.lang==='en';
+  $('unitCourierHeading').textContent=en?'Shipping cost per unit':'Coste de envío por unidad';
+  $('unitCourierTotal').textContent='−'+fmt(P.shipCost)+' · '+trips(P.Vs)+(en?' contracts':' contratos');
+  rows.forEach(r=>{
+    const node=el('div','mm-unit-row');
+    node.append(el('span',null,r.o.name+' · '+fmtQ(r.q)+' u.'),
+      el('b','neg','−'+fmtP(r.courierPerUnit)+'/u.'),
+      el('small',null,(en?'Total freight: ':'Coste total: ')+fmt(r.courierAllocated)+' · '+fmtV(r.vol)+' m³'));
+    host.append(node);
+  });
+}
 function paintSummary(P){
   const box=$('pSum'),none=!P.rows.length||P.missing.length===P.rows.length;
   box.hidden=none||!S.items.length;
   if(box.hidden)return;
-  paintPicker(P);
+  paintPicker(P);paintCourierUnits(P);
   const active=flipPlanAccounting(P);
   document.title=compactIsk(active?active.profit:P.best)+' ISK · Market Moves+';
   paintFlipBuy(P);
