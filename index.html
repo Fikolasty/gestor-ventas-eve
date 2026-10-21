@@ -4841,10 +4841,27 @@ function computePlan(){
   allJita=wJ.length?wJ.reduce((a,r)=>a+r.g.jOrd-r.prod,0)-allJitaCost:null;}
   const wB=rows.filter(r=>r.g.bb!=null),allBB=wB.length?wB.reduce((a,r)=>a+r.g.bb-r.prod,0):null;
   const toBB=rows.filter(r=>r.best==='bb'),bbGross=toBB.reduce((a,r)=>a+r.g.bb,0);
-  return{mode:M,allBB,nBBno:rows.filter(r=>r.hint.bb==='el Buyback no lo acepta').length,toBB,bbGross,rows,Vs,Cs:coll,shipCost,best:gross-shipCost,valShip,valStay,allNull,allJita,allJitaCost,VJ,
+  const result={mode:M,allBB,nBBno:rows.filter(r=>r.hint.bb==='el Buyback no lo acepta').length,toBB,bbGross,rows,Vs,Cs:coll,shipCost,best:gross-shipCost,valShip,valStay,allNull,allJita,allJitaCost,VJ,
     nShip:rows.filter(r=>r.best&&SHIPS[r.best]).length,nStay:rows.filter(r=>r.best&&!SHIPS[r.best]).length,missing:rows.filter(r=>!r.best)};
+  allocateCourier(result);
+  return result;
 }
 
+// Allocate the ACTUAL shared courier bill once, including contract fixed fees.
+// Normalizing approximate item weights prevents rounding and multiple contracts
+// from charging an extra base fee to each row. Allocations sum to P.shipCost.
+function allocateCourier(P){
+  P.rows.forEach(r=>{r.courierAllocated=0;r.courierPerUnit=0;});
+  const shipped=P.rows.filter(r=>r.best&&r.ship[r.best]&&r.q>0);
+  if(!(P.shipCost>0)||!shipped.length)return;
+  const weights=shipped.map(r=>{const sh=r.ship[r.best];return Math.max(0,courierShare(sh.v,sh.c,P.Vs));});
+  const total=weights.reduce((a,b)=>a+b,0);
+  let left=P.shipCost;
+  shipped.forEach((r,i)=>{
+    const share=i===shipped.length-1?left:total>0?P.shipCost*weights[i]/total:P.shipCost/shipped.length;
+    r.courierAllocated=share;r.courierPerUnit=share/r.q;left-=share;
+  });
+}
 // v111: total neto exacto de cada plan a partir del plan calculado (barato: una suma por item, sin pintar).
 // m='auto' = óptimo. Los items que no admiten m siguen el óptimo (igual que computePlan con S.planMode=m).
 function modeTotal(P,m){let g=0,V=0,Cc=0,n=0;
@@ -5209,6 +5226,41 @@ function paintLot(r){
     priceRow(tb,'Venta rápida en Jita',r.instAvg!=null?r.instAvg:(a&&a.buy!=null?a.buy:null),'Jita Buy'+(r.instAvg!=null&&a&&r.instAvg<a.buy*.995?' (promedio al vender todo)':'')+'. Resta envío y Sales Tax.',nu('jInst'),r.best==='jInst');
     const n=el('tr');const nt=el('td','muted pr-foot');nt.colSpan=4;nt.textContent='Clic en un precio para copiarlo. En el juego se lista por unidad: pon este precio y la cantidad ('+fmtQ(r.q)+').';n.append(nt);tb.append(n);
   }}
+  // User-entered Null sell price is authoritative; no public local-market API.
+  // Keeps input in memory per item; never modifies the reference Jita price.
+  const manualKey=o.name.toLowerCase(),manual=S.refinedMan.null[manualKey];
+  const manualRow=el('tr','pr-local-manual'),manualCell=el('td');manualCell.colSpan=4;
+  const manualEditor=el('div','pr-manual-editor'),manualLabel=el('label',null,'Precio real de '+nullSystem()+' · ISK/u');
+  const manualInput=el('input');manualInput.type='text';manualInput.inputMode='decimal';manualInput.autocomplete='off';
+  manualInput.value=manual!=null?String(manual):'';
+  manualInput.placeholder=r.np!=null?String(Math.round(r.np*100)/100):'Sin referencia';
+  manualInput.setAttribute('aria-label','Precio local de '+o.name+' por unidad');
+  const resetPrice=el('button',null,'Automático ↺');resetPrice.type='button';
+  resetPrice.title='Quitar precio local manual y usar el estimado';
+  const savePrice=()=>{
+    const raw=manualInput.value.trim();
+    if(!raw){delete S.refinedMan.null[manualKey];refreshNow();return;}
+    const value=num(raw);
+    if(!Number.isFinite(value)||value<=0||value>1e15){
+      manualInput.setCustomValidity('Escribe un precio positivo en ISK por unidad.');
+      manualInput.reportValidity();return;
+    }
+    manualInput.setCustomValidity('');
+    if(S.refinedMan.null[manualKey]===value)return;
+    S.refinedMan.null[manualKey]=value;refreshNow();
+  };
+  manualInput.addEventListener('change',savePrice);
+  manualInput.addEventListener('input',()=>manualInput.setCustomValidity(''));
+  manualInput.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();manualInput.blur();}});
+  resetPrice.addEventListener('click',()=>{delete S.refinedMan.null[manualKey];refreshNow();});
+  manualEditor.append(manualLabel,manualInput,resetPrice,el('small',null,manual!=null?'Precio manual activo':'Estimación modificable'));
+  manualCell.append(manualEditor);manualRow.append(manualCell);tb.append(manualRow);
+  if(r.courierAllocated>0&&r.q>0){
+    const unitRow=el('tr','pr-unit-courier'),unitCell=el('td','muted');unitCell.colSpan=4;
+    unitCell.textContent=(S.lang==='en'?'Allocated freight: ':'Envío repartido: ')+fmt(r.courierAllocated)+' · '+fmtP(r.courierPerUnit)+
+      '/'+(S.lang==='en'?'unit':'unidad')+' · '+fmtV(r.vol)+' m³';
+    unitRow.append(unitCell);tb.append(unitRow);
+  }
   if(r.mins&&r.mins.length){
     const h=el('tr','lot-min-heading'),th=el('td');th.colSpan=4;
     const toggle=el('button','lot-min-toggle','Minerales obtenidos al reprocesar · '+r.mins.length);toggle.type='button';toggle.setAttribute('aria-expanded','false');
@@ -6247,6 +6299,22 @@ function paintPicker(P){
       el('p','pk-opp-explain','No hay suficientes alternativas con precios disponibles para calcular una comparación fiable. Revisa las cotizaciones y las rutas habilitadas.'));
   }
 
+  // Keep the detailed plan comparison accessible without using vertical space
+  // unless the user explicitly expands it. Preserve open state across recalcs.
+  const detail=el('details','pk-opp-details');
+  detail.open=!!pkView.opportunityOpen;
+  const summary=el('summary','pk-opp-brief');
+  summary.append(el('span',null,S.lang==='en'?'Why this plan? · Opportunity cost':'¿Por qué este plan? · Coste de oportunidad'));
+  const closest=valid.filter(x=>x.m!==chosen.m).sort((a,b)=>b.t.net-a.t.net)[0];
+  if(closest){
+    const diff=chosen.t.net-closest.t.net;
+    summary.append(el('strong',diff>=0?'pos':'neg',(diff>=0?'+':'−')+fmt(Math.abs(diff))));
+  }
+  detail.append(summary);
+  while(opportunity.firstChild)detail.append(opportunity.firstChild);
+  opportunity.append(detail);
+  detail.addEventListener('toggle',()=>{pkView.opportunityOpen=detail.open;});
+
   const maxNet=Math.max(...list.map(x=>x.t.net),1);
   const sys=nullSystem(),env='Envías todo a Jita y ';
   const PK_EXP_ES={auto:'Cada ítem sigue la ruta más rentable; si la diferencia es pequeña, se prioriza vender antes.',fN:'Llevas todo de Jita a '+sys+' y lo vendes con tu margen de importación.',fJ:'Publicas órdenes de venta en Jita. La venta puede tardar días.',fJI:'Vendes todo a órdenes de compra en Jita y cobras inmediatamente.',null:'Publicas órdenes de venta en '+sys+'. No necesitas transporte, pero la venta puede tardar días.',jOrd:'Envías todo a Jita y publicas órdenes de venta. La venta puede tardar días.',jInst:'Envías todo a Jita y vendes a órdenes de compra. Cobras inmediatamente.',bb:'Creas un contrato Item Exchange para el programa Buyback de tu alianza.',rNull:'Reprocesas el mineral o el hielo y vendes los materiales en '+sys+'.',rJita:'Reprocesas los materiales y los envías a Jita para venderlos.',disc:'Ofreces el lote a otro jugador por Discord. No hay comprador garantizado.'};
@@ -6339,16 +6407,28 @@ $('pkOthers').addEventListener('click',e=>{const b=e.target.closest('[data-m]');
   S.planMode=b.dataset.m==='auto'?null:b.dataset.m;pkView.open=false;pkView.filter='all';czIdx=0;refreshNow();});
 // Reconcile investment, net receipts and profit against the ACTIVE plan. Never
 // replace P.best: all plan rankings and courier calculations still use net proceeds.
+// EVE Sell = fill existing ask immediately; Buy Order = *potential* purchase at
+// current Jita bid and broker on order placement. Bid fill is NOT guaranteed.
+function tradePurchaseUnit(r){
+  const u=C.buyMode==='buy'?r.o.jita?.buy:r.o.ref;
+  return Number.isFinite(u)&&u>0?u:null;
+}
+function tradePurchaseCost(r){
+  const unit=tradePurchaseUnit(r);
+  return unit==null?null:unit*r.q*(C.buyMode==='buy'?1+C.broker:1);
+}
 function flipPlanAccounting(P){
   if(!S.flip)return null;
   const rows=P.rows.filter(r=>r.best&&r.q>0);
-  if(!rows.length||rows.some(r=>!Number.isFinite(r.o.ref)||r.o.ref<0||!Number.isFinite(r.g[r.best])))return null;
-  const buy=rows.reduce((sum,r)=>sum+r.o.ref*r.q,0);
+  if(!rows.length||rows.some(r=>tradePurchaseUnit(r)==null||!Number.isFinite(r.g[r.best])))return null;
+  const basis=C.buyMode==='buy'?'buy':'sell';
+  const fee=basis==='buy'?C.broker:0; // placing a buy order incurs broker fee, no sales tax on purchase
+  const buy=rows.reduce((sum,r)=>sum+tradePurchaseCost(r),0);
   const sell=rows.reduce((sum,r)=>sum+r.g[r.best]-r.prod,0);
   const ship=P.shipCost;
   const net=P.best;
   const profit=net-buy;
-  return{rows,buy,sell,ship,net,profit,roi:buy>0?profit/buy:null,
+  return{rows,buy,basis,fee,sell,ship,net,profit,roi:buy>0?profit/buy:null,
     allNull:rows.every(r=>r.best==='fN'),
     allJita:rows.every(r=>r.best==='fJ'||r.best==='fJI'),
     nNull:rows.filter(r=>r.best==='fN').length,
@@ -6364,12 +6444,15 @@ function paintFlipBuy(P){
   const context=d.allNull?(en?'Buy in Jita and sell in '+sys:'Comprar en Jita y vender en '+sys)
     :d.allJita?(en?'Buy and sell in Jita':'Comprar y vender en Jita')
     :(en?'Jita purchases — selected selling plan':'Compras en Jita — plan de venta seleccionado');
+  const basisNote=C.buyMode==='buy'?
+    (en?' Buy Orders may take time to fill; prices include placement broker.':' Las Buy Orders podrían tardar en completarse; la compra incluye el broker de publicación.'):
+    (en?' Purchases use Jita Sell orders.':' Las compras se valoran a Jita Sell.');
   const intro=d.allNull
     ?(en?'Buying '+n+' '+(n===1?'item':'items')+' at Jita Sell, shipping with SIGMA Freight and selling in '+sys+' at Jita Sell +'+pct(C.impM)+'% net.'
         :'Si compras '+(n===1?'este ítem':'estos '+n+' ítems')+' en Jita al Sell, los llevas con SIGMA Freight y los vendes en '+sys+' a Jita Sell +'+pct(C.impM)+'% neto.')
     :(en?'Based on the actual selected plan: '+d.nNull+' '+(d.nNull===1?'item shipped':'items shipped')+' to '+sys+' and '+d.nJita+' sold in Jita. Transport is charged only on shipped items.'
        :'Según el plan seleccionado: '+d.nNull+' '+(d.nNull===1?'ítem enviado':'ítems enviados')+' a '+sys+' y '+d.nJita+' vendidos en Jita. El envío solo se cobra a los ítems transportados.');
-  box.append(el('h4',null,context),el('p','fb2-s',intro));
+  box.append(el('h4',null,context),el('p','fb2-s',intro+basisNote));
   const big=el('div','fb2-big');
   big.append(el('b','num '+sgn(d.profit),(d.profit>=0?'+':'−')+fmt(Math.abs(d.profit))),
     el('span',null,(en?(d.profit>=0?'estimated net profit':'estimated net loss'):(d.profit>=0?'de ganancia neta estimada':'de pérdida neta estimada'))+
@@ -6377,7 +6460,7 @@ function paintFlipBuy(P){
   box.append(big);
   const l=el('div','fb2-l');
   const add=(label,value,color)=>{const x=el('div');x.append(el('span',null,label),el('b','num '+color,value));l.append(x);};
-  add(en?'Purchase in Jita':'Compras en Jita','−'+fmt(d.buy),'neg');
+  add(en?(d.basis==='buy'?'Buy Order investment':'Jita Sell investment'):(d.basis==='buy'?'Inversión Buy Order':'Compras Jita Sell'),'−'+fmt(d.buy),'neg');
   add(en?'Shipping to '+sys:'Envío a '+sys,'−'+fmt(d.ship),'neg');
   add(en?'Net sales before shipping':'Vendes (neto antes de envío)',fmt(d.sell),'pos');
   add(en?'Estimated net profit':'Ganancia neta estimada',(d.profit>=0?'+':'−')+fmt(Math.abs(d.profit)),sgn(d.profit));
@@ -6386,14 +6469,14 @@ function paintFlipBuy(P){
   (en?['Item','Purchase per unit','Sale route','Shipping','Profit','Margin']:['Ítem','Compra por unidad','Ruta de venta','Envío','Ganancia','Margen']).forEach((label,i)=>{const cell=el('th',i?'r':null,label);hr.append(cell);});th.append(hr);t.append(th);
   const tb=el('tbody');
   const allocated=d.rows.map(r=>{
-    const k=r.best,price=r.o.ref*r.q,share=r.ship[k]&&P.Vs>0?courierShare(r.ship[k].v,r.ship[k].c,P.Vs):0;
+    const k=r.best,price=tradePurchaseCost(r),share=r.courierAllocated||0;
     const gained=r.g[k]-r.prod-share-price;
     return{r,k,share,price,gained};
   }).sort((a,b)=>b.gained-a.gained);
   allocated.slice(0,10).forEach(({r,k,share,price,gained})=>{
     const tr=el('tr'),cells=[
       el('td',null,r.o.name),
-      el('td','r',fmtP(r.o.ref)),
+      el('td','r',fmtP(tradePurchaseUnit(r))),
       el('td','r',routeSummaryName(k)),
       el('td','r','−'+fmt(share)),
       el('td','r '+sgn(gained),(gained>=0?'+':'−')+fmt(Math.abs(gained))),
@@ -6403,16 +6486,37 @@ function paintFlipBuy(P){
     tr.append(...cells);tb.append(tr);
   });
   if(allocated.length>10){const tr=el('tr'),td=el('td','muted',(en?'and ':'y ')+(allocated.length-10)+(en?' more items':' ítems más'));td.colSpan=6;tr.append(td);tb.append(tr);}
-  t.append(tb);box.append(t);
-  box.append(el('p','fb2-n',en
-    ?'Investment = Jita Sell × quantity. Net sales already deduct market taxes, broker fees and SCC. Estimated profit = selected plan net proceeds − investment, including transport.'
-    :'Inversión = Jita Sell × cantidad. La venta neta ya descuenta impuestos, broker y SCC. Ganancia estimada = ingresos netos del plan seleccionado − inversión, incluido el transporte.'));
+  t.append(tb);
+  const detail=el('details','fb2-more'),head=el('summary',null,en?'Inspect per-item returns':'Ver beneficio de cada ítem');
+  detail.append(head,t,el('p','fb2-n',en
+    ?'Jita Sell or Buy Order investment; buy orders include placement broker and may not fill. Profit = plan net proceeds − investment.'
+    :'Inversión a Jita Sell o Buy Order; las Buy Orders incluyen broker y podrían no completarse. Beneficio = ingresos netos − inversión.'));
+  box.append(detail);
+}
+// Optional compact breakdown of the *selected* plan's single shared freight
+// bill. A separate per-unit number is displayed for each shipped item.
+function paintCourierUnits(P){
+  const box=$('unitCourierBox'),host=$('unitCourierRows');
+  host.replaceChildren();
+  const rows=P.rows.filter(r=>r.courierAllocated>0&&r.q>0);
+  box.hidden=!rows.length;
+  if(!rows.length)return;
+  const en=S.lang==='en';
+  $('unitCourierHeading').textContent=en?'Shipping cost per unit':'Coste de envío por unidad';
+  $('unitCourierTotal').textContent='−'+fmt(P.shipCost)+' · '+trips(P.Vs)+(en?' contracts':' contratos');
+  rows.forEach(r=>{
+    const node=el('div','mm-unit-row');
+    node.append(el('span',null,r.o.name+' · '+fmtQ(r.q)+' u.'),
+      el('b','neg','−'+fmtP(r.courierPerUnit)+'/u.'),
+      el('small',null,(en?'Total freight: ':'Coste total: ')+fmt(r.courierAllocated)+' · '+fmtV(r.vol)+' m³'));
+    host.append(node);
+  });
 }
 function paintSummary(P){
   const box=$('pSum'),none=!P.rows.length||P.missing.length===P.rows.length;
   box.hidden=none||!S.items.length;
   if(box.hidden)return;
-  paintPicker(P);
+  paintPicker(P);paintCourierUnits(P);
   const active=flipPlanAccounting(P);
   document.title=compactIsk(active?active.profit:P.best)+' ISK · Market Moves+';
   paintFlipBuy(P);
@@ -6500,16 +6604,44 @@ function syncShipSwitch(){
   $('importMarketLabel').textContent=nullSystem();
   $('importHeadingPrefix').textContent=S.lang==='en'?'IMPORT TO':'IMPORTACIÓN A';
   $('importHelp').textContent=S.lang==='en'?'Choose whether to transport your items from Jita and set your Nullsec selling margin.':'Elige si transportas los ítems desde Jita y ajusta el margen de venta en Null.';
-  $('shipLab').title=S.lang==='en'?'On: include transport to '+nullSystem()+'. Off: sell in Jita without shipping.':'Activado: incluir transporte a '+nullSystem()+'. Desactivado: vender en Jita sin envío.';
+  $('shipLab').title=S.lang==='en'?'Include alliance freight or compare sales without shipping.':'Incluye el courier de la alianza o compara ventas sin transportar.';
+  $('tradePurchaseLabel').textContent=S.lang==='en'?'Purchase at':'Comprar a';
 }
 function setFlip(on){
   S.flip=!!on;S.planMode=null;czIdx=0;C.shipOn=true;$('shipOn').checked=true; // cambiar de ruta vuelve a contar el courier
   SHIPS=S.flip?{fN:1}:{jOrd:1,jInst:1,rJita:1};
   $('bFlip').setAttribute('aria-pressed',String(S.flip));syncNullRouteLabels();
-  syncShipSwitch();document.body.classList.toggle('is-flip',S.flip);
+  syncShipSwitch();syncBusinessMode();document.body.classList.toggle('is-flip',S.flip);
   if(S.items.length)refreshNow();
 }
 $('bFlip').addEventListener('click',()=>setFlip(!S.flip));
+/* Business UX: the visible tabs select the existing verified direction states.
+   Internal #bFlip and S.flip remain for compatibility; there is only one
+   computation engine, not two divergent copies of the formulas. */
+function syncBusinessMode(){
+  const en=S.lang==='en';
+  const a=$('modeLiquidation'),b=$('modeTrading');
+  for(const [button,active] of [[a,!S.flip],[b,S.flip]]){
+    button.classList.toggle('on',active);button.setAttribute('aria-pressed',String(active));
+  }
+  a.querySelector('span:last-child').textContent=en?'Sell my items':'Vender mis ítems';
+  b.querySelector('span:last-child').textContent=en?'Trade from Jita':'Comerciar desde Jita';
+  $('businessCaption').textContent=S.flip?
+    (en?'Purchase in Jita, compare resale in Null and see profit after transport.':'Compra en Jita, compara la reventa en Null y revisa beneficio después del envío.'):
+    (en?'Compare your Keepstar, Jita, Buyback and reprocessing routes.':'Compara Keepstar, Jita, Buyback y reproceso según tus ajustes.');
+}
+$('businessSwitch').addEventListener('click',e=>{
+  const tab=e.target.closest('button[data-business]');if(!tab)return;
+  const isTrade=tab.dataset.business==='trading';
+  if(S.flip!==isTrade)setFlip(isTrade);
+  syncBusinessMode();
+});
+$('tradePurchaseMode').addEventListener('change',e=>{
+  if(!['buy','sell'].includes(e.target.value))return;
+  C.buyMode=e.target.value;refresh();
+});
+$('tradePurchaseMode').value=C.buyMode;
+syncBusinessMode();
 $('shipOn').addEventListener('change',e=>{C.shipOn=e.target.checked;syncShipSwitch();S.planMode=null;czIdx=0;if(S.items.length)refreshNow();});
 const impSync=(src,dst)=>{const v=parseFloat($(src).value);if(!(v>=0))return;C.impM=v/100;$(dst).value=String(v);refresh();};
 $('fImpM').addEventListener('input',()=>impSync('fImpM','cImpM'));$('cImpM').addEventListener('input',()=>impSync('cImpM','fImpM'));
@@ -8133,6 +8265,9 @@ $('stOpenAll').addEventListener('click',()=>stAll(true));$('stCloseAll').addEven
 $('cTick').addEventListener('change',e=>{C.tick=e.target.checked;refresh();});
 $('cRelistOn').addEventListener('change',e=>{C.relistOn=e.target.checked;refresh();});
 $('cNonMod').addEventListener('input',e=>{const v=parseFloat(e.target.value);C.nullNonMod=isNaN(v)?.9:Math.max(0,v)/100;refresh();});
+$('cBulkNull').addEventListener('input',e=>{
+  const v=parseFloat(e.target.value);C.nullBulk=Number.isFinite(v)?Math.max(0,Math.min(2,v/100)):.45;refresh();
+});
 $('qdOn').addEventListener('change',e=>{C.qd.on=e.target.checked;refresh();});
 [['cDayMin',0],['cDayMax',1]].forEach(([id,i])=>$(id).addEventListener('input',e=>{C.cDays[i]=Math.max(0,parseFloat(e.target.value)||0);if(C.cDays[1]<C.cDays[0]){if(i===0){C.cDays[1]=C.cDays[0];$('cDayMax').value=C.cDays[1];}else{C.cDays[0]=C.cDays[1];$('cDayMin').value=C.cDays[0];}}refresh();}));
 $('cFast').addEventListener('input',e=>{C.fast=Math.max(0,(parseFloat(e.target.value)||0)/100);refresh();});
@@ -8298,7 +8433,7 @@ function syncLanguageChoices(){
   });
 }
 function setLang(l){
-  S.lang=l==='en'?'en':'es';document.documentElement.lang=S.lang;syncLanguageChoices();SkillUI.setLanguage(S.lang);syncShipSwitch();
+  S.lang=l==='en'?'en':'es';document.documentElement.lang=S.lang;syncLanguageChoices();SkillUI.setLanguage(S.lang);syncShipSwitch();syncBusinessMode();
   if(i18nObs){i18nObs.disconnect();i18nObs=null;}
   if(S.lang==='en'){
     i18nWalk(document.documentElement);
