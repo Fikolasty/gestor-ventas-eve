@@ -2,7 +2,7 @@
 
 **Actualizado:** 2026-10-21 · **Estado:** documento vivo de Spec-Driven Development (SDD).
 **Repositorio:** [Fikolasty/gestor-ventas-eve](https://github.com/Fikolasty/gestor-ventas-eve) · **Entrega:** rama `main` · **App:** https://fikolasty.github.io/gestor-ventas-eve/
-**Base funcional revisada:** workflow de build `1.0.91`, más el cambio de Ajustes de idioma pendiente de versión `1.0.92`.
+**Base funcional revisada:** workflow de build `1.0.92` (commit `64d5bb63`); cambios de Ajustes de idioma ya pusheados y pendientes de QA en la aplicación publicada.
 **Propósito:** conservar decisiones, requisitos, evidencia de pruebas y estado verificable al cambiar de conversación.
 
 > Este documento es el **punto de entrada** para retomar el proyecto. **No sustituye** [SPEC.md](SPEC.md), [PROGRESS.md](PROGRESS.md), [MINING.md](MINING.md) ni el [CHANGELOG](../CHANGELOG.md). `SPEC.txt` es historial antiguo y no debe prevalecer sobre el comportamiento y las decisiones actuales. Ante un conflicto, confirmar en el código y registrar la resolución, no inferirla.
@@ -89,9 +89,9 @@
 | ID | Prioridad | Trabajo | Estado |
 |---|---|---|---|
 | T-01 | Alta | Entregar preview Skills revisado con toggle «Simula mi cuenta», categorías subheader y todos los acordeones inicialmente cerrados | **Listo: archivo local, probado en Chromium** |
-| T-02 | Alta | Consolidar SDD en GitHub y entregar copia adjunta en conversación | **En curso en esta entrega** |
+| T-02 | Alta | Consolidar SDD en GitHub y entregar copia adjunta en conversación | **Completado: `docs/SDD.md` y archivo descargable** |
 | T-03 | Alta | Verificar Ajustes ES/EN en navegador real, modo claro/oscuro, restauración de preferencia | Pendiente |
-| T-04 | Alta | Versionar y verificar compilación automática luego de cambios de Ajustes | Pendiente |
+| T-04 | Alta | Versionar y verificar compilación automática luego de cambios de Ajustes | **Workflow versionado a 1.0.92; resultado de Actions/Pages pendiente** |
 | T-05 | Alta | Auditar SSO existente, diseñar ESI real (autorización, scopes, persistencia y fallback) | Pendiente |
 | T-06 | Media | Validar Type IDs/bonos/prerrequisitos, límites Alpha y Skillbooks en vivo | Pendiente |
 | T-07 | Media | Integrar Skills en `src/` y `build.py`, añadir navegación y i18n con QA | **No iniciado** |
@@ -117,7 +117,7 @@
 | 2026-10-19–21 | `1.0.89` | Navegación, switch de ruta sin etiquetas duplicadas y Guía de Uso arriba. |
 | 2026-10-19–21 | `1.0.90` | Restauración de filas `hidden` que CSS estaba mostrando erróneamente. |
 | 2026-10-21 | `1.0.91` | Condiciones de rutas/valores no válidos y etiquetas de cambio de dirección; build configurado en `1.0.91`. |
-| 2026-10-21 | Ajustes idioma | `src/shell.html`: ES/EN segmentados; `src/script.js`: sincronización con `#langSel`. Commits `0d891556` y `f80ddf59`; por verificar en app. |
+| 2026-10-21 | Ajustes idioma | `src/shell.html`: ES/EN segmentados; `src/script.js`: sincronización con `#langSel`. Commits `0d891556` y `f80ddf59`; build `1.0.92` en `64d5bb63`; por verificar en app. |
 | 2026-10-21 | Skills preview | HTML interactivo externo; sin selector de idioma propio; toggle «Simula mi cuenta», 6 acordeones y tiempo de entrenamiento por perfiles. **No integrado en `main`.** |
 
 **Último test local comprobado del preview (2026-10-21):** Chromium headless, escritorio 1336×940 y móvil 400×850; Core/PI, toggle OFF→ON→OFF, acordeones cerrados al inicio, apertura de filas, consola sin excepciones, ancho móvil sin overflow: **PASS**. ESI remoto se bloqueó en la prueba, por lo que **no** certifica precios en vivo ni autenticación.
