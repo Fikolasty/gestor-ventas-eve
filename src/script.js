@@ -2933,6 +2933,7 @@ stRestore();syncDeps();brokerNote();buildOreSelect();readBB();syncLots();refresh
     const epoch=sessionEpoch,pilotId=session.id;
     try{
       const info=await fetch('https://esi.evetech.net/latest/characters/'+session.id+'/?compatibility_date=2026-10-01').then(r=>{if(!r.ok)throw Error('Character ESI '+r.status);return r.json();});
+      if(epoch!==sessionEpoch||session?.id!==pilotId)return;
       if(!info.alliance_id){marketAlliance='';refreshMarketControls();syncNullRouteLabels();return;}
       const alliance=await fetch('https://esi.evetech.net/latest/alliances/'+info.alliance_id+'/?compatibility_date=2026-10-01').then(r=>{if(!r.ok)throw Error('Alliance ESI '+r.status);return r.json();});
       if(epoch!==sessionEpoch||session?.id!==pilotId)return;
@@ -2953,13 +2954,15 @@ stRestore();syncDeps();brokerNote();buildOreSelect();readBB();syncLots();refresh
       const names=['Accounting','Broker Relations','Advanced Broker Relations','Reprocessing','Reprocessing Efficiency'];
       const idsResp=await fetch('https://esi.evetech.net/latest/universe/ids/?compatibility_date=2026-10-01',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(names)});
       if(!idsResp.ok)throw Error('Catálogo ESI HTTP '+idsResp.status);
-      const ids=await idsResp.json(),resolved=new Map((ids.inventory_types||[]).map(x=>[x.name,x.id]));
+      const ids=await idsResp.json();
+      if(epoch!==sessionEpoch||session?.id!==pilotId)return;
+      const resolved=new Map((ids.inventory_types||[]).map(x=>[x.name,x.id]));
       let count=0;const mapping=[['Accounting','skAcc'],['Broker Relations','skBR'],['Advanced Broker Relations','cAbr'],['Reprocessing','skRep'],['Reprocessing Efficiency','skRepE']];
       mapping.forEach(([name,id])=>{const sid=resolved.get(name);if(sid!=null&&saveSkill(id,skills.get(sid)??0))count++;});
       // Automatic synchronization: keep status available to accessibility tools, not visible in the menu.
       status(count+' skills sincronizadas.');
       if(typeof refresh==='function')refresh();
-    }catch(err){status('No se pudieron sincronizar las skills: '+err.message);}
+    }catch(err){if(epoch===sessionEpoch)status('No se pudieron sincronizar las skills: '+err.message);}
   }
   $e('eveLogout').addEventListener('click',()=>{sessionEpoch++;SkillUI.setPilot(null);clearSaved();session=null;marketAlliance='';refreshMarketControls();syncNullRouteLabels();menu.hidden=true;button.setAttribute('aria-expanded','false');refreshUI();status('Desconectado. Se conservan tus ajustes manuales.');});
   (async()=>{const u=new URL(location.href),code=u.searchParams.get('code'),state=u.searchParams.get('state');
