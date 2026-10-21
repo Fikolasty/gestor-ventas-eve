@@ -284,7 +284,7 @@ input,select,textarea{box-shadow:inset 0 2px 5px rgba(0,0,0,.55)}
 .i-box{--i:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M21 8l-9-5-9 5 9 5 9-5z'/%3E%3Cpath d='M3 8v8l9 5 9-5V8'/%3E%3Cpath d='M12 13v8'/%3E%3C/svg%3E")}
 .i-flask{--i:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M9 3h6M10 3v6L4.5 19a1.5 1.5 0 0 0 1.3 2h12.4a1.5 1.5 0 0 0 1.3-2L14 9V3'/%3E%3Cpath d='M7 15h10'/%3E%3C/svg%3E")}
 .i-ship{--i:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M2 7h11v9H2zM13 10h4l4 3v3h-8z'/%3E%3Ccircle cx='6' cy='18' r='2'/%3E%3Ccircle cx='17' cy='18' r='2'/%3E%3C/svg%3E")}
-.i-gear{--i:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='3'/%3E%3Cpath d='M12 2v3M12 19v3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M2 12h3M19 12h3M4.9 19.1L7 17M17 7l2.1-2.1'/%3E%3C/svg%3E")}
+.i-gear{--i:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22black%22%20stroke-width%3D%221.75%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22M12%208.5a3.5%203.5%200%201%200%200%207%203.5%203.5%200%200%200%200-7z%22%2F%3E%3Cpath%20d%3D%22M19.3%2013.5a7.8%207.8%200%200%200%200-3l1.8-1.4-1.7-3-2.2.8a7.8%207.8%200%200%200-2.5-1.5L14.3%203h-3.5l-.4%202.4a7.8%207.8%200%200%200-2.5%201.5l-2.2-.8-1.7%203%201.8%201.4a7.8%207.8%200%200%200%200%203L4%2014.9l1.7%203%202.2-.8a7.8%207.8%200%200%200%202.5%201.5l.4%202.4h3.5l.4-2.4a7.8%207.8%200%200%200%202.5-1.5l2.2.8%201.7-3z%22%2F%3E%3C%2Fsvg%3E")}
 .i-help{--i:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='9'/%3E%3Cpath d='M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.7.3-1 .9-1 1.7v.5'/%3E%3Cpath d='M12 17.2v.3'/%3E%3C/svg%3E")}
 .i-x{--i:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 6l12 12M18 6L6 18'/%3E%3C/svg%3E")}
 .i-key{--i:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='8' cy='15' r='4'/%3E%3Cpath d='M11 12l9-9M17 6l3 3M15 8l2 2'/%3E%3C/svg%3E")}
@@ -2143,6 +2143,19 @@ body.mm-mining #importControls,body.mm-skills #importControls,body.mm-pi #import
   .top .mm-top-actions{margin-left:auto}
 }
 
+
+/* v1.0.96 — financial metric labels and official Hulk tab art. */
+#mmTabs .mm-mod .mm-mining-icon{position:relative;display:inline-grid;place-items:center;flex:0 0 24px;width:24px;height:24px}
+#mmTabs .mm-mod .mm-mining-icon>.ic,#mmTabs .mm-mod .mm-mining-icon>img{grid-area:1/1;width:24px;height:24px;margin:0}
+#mmTabs .mm-mod .mm-mining-icon>img{position:relative;z-index:1;object-fit:contain;border-radius:3px}
+#mmTabs .mm-mod .mm-mining-icon>img[hidden]{display:none!important}
+#verdict .mm-net{display:flex;flex-direction:column;align-items:flex-end;justify-content:center;min-width:0;gap:2px}
+#verdict .mm-net-label{font:750 .75rem/1.35 var(--f-ui);letter-spacing:.065em;color:var(--mut);text-align:right}
+#verdict .mm-net-label[hidden]{display:none!important}
+#verdict .flip-summary-breakdown{display:block;margin-top:7px;color:var(--mut);font-size:.86rem;line-height:1.55}
+#verdict .flip-summary-breakdown strong{color:var(--pos,#65be91);font-weight:800}
+@media(max-width:700px){#verdict .mm-net{align-items:flex-start}#verdict .mm-net-label{text-align:left}}
+
 /* ===== tema claro (generado desde el oscuro por light.py) ===== */
 html.light{--void:#e4e3dd;--hull:#e2e0da;--hull2:#e0ded8;--line:rgba(31,30,29,0.114);--line2:rgba(31,30,29,0.125);--txt:#1c1c1a;--mut:#54524d;--dim:#6c6a64;--ion:#413f3c;--blue:#a39d8b;--clay:#c96442;--thrust:#a67526;--gain:#418b62;--loss:#a92c23}
 html.light body::after{background:repeating-linear-gradient(180deg,rgba(31,30,29,0.011) 0 1px,transparent 1px 3px),
@@ -2668,6 +2681,7 @@ html.light.light .mm-import-controls{background:rgba(31,30,29,0.836)}
 html.light #mmTabs.mm-modnav .mm-modgroup .mm-mod[aria-selected=true]{background:rgba(217,119,87,0.213)!important;border-color:rgba(217,119,87,0.525)!important}
 html.light .top .mm-top-actions>.side-i{border:1px solid rgba(31,30,29,0.209)!important;background:rgba(240,237,229,0.62)!important}
 html.light .top .mm-top-actions>.side-i:hover{background:rgba(217,119,87,0.163)!important}
+html.light #verdict .flip-summary-breakdown strong{color:var(--pos,#418b66)}
 /* ajustes a mano del tema claro */
 html.light body{background:#e6e3da;color:#1f1e1d}
 html.light body::before{opacity:.12;filter:grayscale(.35) brightness(1.1)}
@@ -3421,7 +3435,7 @@ html.light #mining .mn-fit-fallback{border-color:rgba(40,100,150,.22);background
     <div id="eveIdentity" class="eve-identity"><button type="button" id="eveIdentityButton" class="eve-identity-button" aria-expanded="false" aria-controls="eveIdentityMenu"><img id="evePortrait" alt="" hidden><span id="evePilotName">Conectar EVE</span><span class="eve-identity-arrow" aria-hidden="true" hidden></span></button><div id="eveIdentityMenu" class="eve-identity-menu" hidden><button type="button" id="eveLogout" hidden>Desconectar</button><span id="eveLoginStatus" role="status" class="eve-login-status" hidden></span></div></div>
     <div class="mm-modgroup" role="presentation">
     <button type="button" class="mm-mod on" data-mm-module="ventas" role="tab" aria-controls="salesBody" aria-selected="true" id="mmTabVentas" title="Ventas" aria-label="Ventas"><span class="ic i-list" aria-hidden="true"></span><span class="mm-mod-label">Ventas</span></button>
-    <button type="button" class="mm-mod" data-mm-module="mining" role="tab" aria-controls="mining" aria-selected="false" id="mmTabMining" title="Minería" aria-label="Minería"><span class="ic i-ship" aria-hidden="true"></span><span class="mm-mod-label">Minería</span></button>
+    <button type="button" class="mm-mod" data-mm-module="mining" role="tab" aria-controls="mining" aria-selected="false" id="mmTabMining" title="Minería" aria-label="Minería"><span class="mm-mining-icon" aria-hidden="true"><span class="ic i-ship"></span><img class="mm-eve-hulk-icon" src="https://images.evetech.net/types/22544/render?size=64" alt="" width="24" height="24" loading="lazy" onerror="this.hidden=true"></span><span class="mm-mod-label">Minería</span></button>
     <button type="button" class="mm-mod" data-mm-module="skills" role="tab" aria-controls="skills" aria-selected="false" id="mmTabSkills" title="Skills" aria-label="Skills"><span class="mm-skills-icon" aria-hidden="true"><span class="ic i-key"></span><img class="mm-eve-skill-icon" src="https://images.evetech.net/types/3426/icon?size=64" alt="" width="20" height="20" loading="lazy" onerror="this.hidden=true"></span><span class="mm-mod-label">Skills</span></button>
     <!-- PI temporalmente fuera de navegación; conservar para reactivar más adelante.
     <button type="button" class="mm-mod" data-mm-module="pi" role="tab" aria-controls="pi" aria-selected="false" id="mmTabPi">Industria Planetaria · PI</button>
@@ -3589,8 +3603,8 @@ Contraband Freight = no</textarea><small>Una regla por línea: Nombre = tax tota
     <!-- v1.0.22: resumen del plan (overview): total, a dónde va el ISK, datos clave, tu lote en Jita y dónde se vende -->
     <div class="ov">
       <div class="ov-hd">
-        <div class="ov-ttl"><header class="mm-section-head"><h2 class="mm-title" id="vTitle">LA MEJOR RUTA DE VENTA</h2><p class="mm-section-sub">REVISA TU RUTA Y CUÁNTO RECIBIRÍAS</p></header></div>
-        <div class="mm-net"><p class="v-isk num" id="vIsk"></p></div>
+        <div class="ov-ttl"><header class="mm-section-head"><h2 class="mm-title" id="vTitle">LA MEJOR RUTA DE VENTA</h2><p class="mm-section-sub" id="vSubtitle">REVISA TU RUTA Y CUÁNTO RECIBIRÍAS</p></header></div>
+        <div class="mm-net"><span class="mm-net-label" id="vMetric" hidden>INGRESOS NETOS POR VENTA</span><p class="v-isk num" id="vIsk"></p></div>
         <p class="v-cap" id="vCap">Aquí verás qué ruta elegiste y cómo se distribuye tu venta.</p><span class="v-what" id="vWhat" hidden></span>
       </div>
       <div class="ov-card ov-flow"><h4>DE DÓNDE SALE TU ISK</h4><div id="ovFlow"></div><div class="mm-dest-inline" id="ovDestW"><h4>DÓNDE SE VENDE</h4><div id="ovDest"></div></div></div>
