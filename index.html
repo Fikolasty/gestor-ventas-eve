@@ -2061,6 +2061,21 @@ html.light #mmTabs .mm-icon-action,html.light #mmTabs .mm-mod{color:#4b4742}
 
 /* Directional controls and unavailable options must always respect the hidden attribute. */
 #mmTabs #shipLab[hidden],#mmTabs #rtM[hidden],.lot-body .opt[hidden],.lot-body>.lot-analysis .opt[hidden]{display:none!important}
+
+/* Compact language chooser in Settings (same persisted #langSel as before). */
+#settings .st-language{display:flex;align-items:center;justify-content:space-between;column-gap:20px;row-gap:12px;flex-wrap:wrap;padding-block:15px;margin-block:5px 13px}
+#settings .st-language-copy{flex:1 1 200px;min-width:0}
+#settings .st-language .st-sec-t{margin-bottom:4px}
+#settings .st-language .st-sec-i{margin:0}
+#settings .st-language-actions{display:inline-flex;flex:0 0 auto;align-items:center;gap:4px;padding:4px;background:#201f1e;border:1px solid var(--line2);border-radius:11px}
+#settings .st-lang-option{display:inline-flex;align-items:center;justify-content:center;gap:9px;min-height:39px;min-width:116px;padding:8px 15px;border-radius:8px;border:1px solid transparent;color:var(--mut);font-size:.85rem;font-weight:750}
+#settings .st-lang-option span{font-size:.78rem;font-weight:550}
+#settings .st-lang-option:hover{color:var(--txt);background:rgba(222,220,209,.045)}
+#settings .st-lang-option.on{color:var(--txt);background:rgba(217,119,87,.16);border-color:rgba(217,119,87,.5)}
+#settings .st-lang-option:focus-visible{outline:2px solid var(--clay);outline-offset:2px}
+#settings #langSel[hidden]{display:none!important}
+@media(max-width:540px){#settings .st-language-actions{width:100%;display:flex}#settings .st-lang-option{min-width:0;flex:1}}
+
 /* ===== tema claro (generado desde el oscuro por light.py) ===== */
 html.light{--void:#e4e3dd;--hull:#e2e0da;--hull2:#e0ded8;--line:rgba(31,30,29,0.114);--line2:rgba(31,30,29,0.125);--txt:#1c1c1a;--mut:#54524d;--dim:#6c6a64;--ion:#413f3c;--blue:#a39d8b;--clay:#c96442;--thrust:#a67526;--gain:#418b62;--loss:#a92c23}
 html.light body::after{background:repeating-linear-gradient(180deg,rgba(31,30,29,0.011) 0 1px,transparent 1px 3px),
@@ -2578,6 +2593,9 @@ html.light .plan-name-accent{color:var(--ion,#a35629)}
 html.light .item-name-accent{color:var(--gain,#39935f)}
 html.light .top>.top-guide-action{border:1px solid rgba(31,30,29,0.209);background:rgba(240,237,229,0.62)}
 html.light .top>.top-guide-action:hover{background:rgba(217,119,87,0.163)}
+html.light #settings .st-language-actions{background:#e6e4df}
+html.light #settings .st-lang-option:hover{background:rgba(31,30,29,0.043)}
+html.light #settings .st-lang-option.on{background:rgba(217,119,87,0.2);border-color:rgba(217,119,87,0.625)}
 /* ajustes a mano del tema claro */
 html.light body{background:#e6e3da;color:#1f1e1d}
 html.light body::before{opacity:.12;filter:grayscale(.35) brightness(1.1)}
@@ -3358,8 +3376,19 @@ html.light #mining .mn-fit-fallback{border-color:rgba(40,100,150,.22);background
           <div class="st-f"><span class="st-l">Mercado activo</span><strong id="nullMarketActive">HY-RWO</strong><small id="nullMarketNote">Mercado predeterminado hasta detectar una alianza.</small></div>
         </div>
       </fieldset>
-      <div class="st-sec"><h3 class="st-sec-t">Idioma</h3><p class="st-sec-i">Idioma de la interfaz.</p></div>
-      <fieldset class="st"><legend><span class="ic i-help" aria-hidden="true"></span><span class="st-tt">Idioma de la App<small class="st-sum">Español o English</small></span></legend><p class="st-i">Cambia el idioma de toda la app. Los nombres de items y sistemas de EVE no cambian.</p><div class="st-g"><label class="st-f"><span class="st-l">Idioma / Language</span><select id="langSel" title="Idioma de la interfaz: Español o English."><option value="es" selected>Español</option><option value="en">English</option></select><small>Se guarda con tus Ajustes.</small></label></div></fieldset>
+      <!-- Language is a compact setting, not a nested dropdown. Keep #langSel as
+           the sole persisted value for backward compatibility with existing Settings. -->
+      <div class="st-sec st-language" role="group" aria-labelledby="stLanguageLabel">
+        <div class="st-language-copy">
+          <h3 class="st-sec-t" id="stLanguageLabel">Idioma / Language</h3>
+          <p class="st-sec-i">Elige el idioma de la interfaz.</p>
+        </div>
+        <div class="st-language-actions" id="langButtons" role="group" aria-label="Idioma de la interfaz">
+          <button type="button" class="st-lang-option on" data-lang="es" aria-pressed="true">ES <span>Español</span></button>
+          <button type="button" class="st-lang-option" data-lang="en" aria-pressed="false">EN <span>English</span></button>
+        </div>
+        <select id="langSel" hidden tabindex="-1" aria-hidden="true"><option value="es" selected>Español</option><option value="en">English</option></select>
+      </div>
       <div class="st-sec"><h3 class="st-sec-t">Tu Personaje</h3><p class="st-sec-i">Lo que sabe tu piloto: baja los taxes y sube lo que recuperas al reprocesar.</p></div>
       <fieldset class="st"><legend><span class="ic i-key" aria-hidden="true"></span><span class="st-tt">Tus Skills<small class="st-sum">Accounting, Broker Relations y reproceso de tu piloto</small></span></legend><p class="st-i">Selecciona tus niveles reales. Accounting afecta el Sales Tax; Broker Relations reduce costes de órdenes; las skills de reproceso determinan cuántos materiales recuperas.</p><div class="st-g"><label class="st-f"><span class="st-l">Accounting</span><select id="skAcc"><option value="0">Nivel 0</option><option value="1">Nivel 1</option><option value="2">Nivel 2</option><option value="3">Nivel 3</option><option value="4">Nivel 4</option><option value="5" selected>Nivel 5</option></select><small>Baja el Sales Tax: 7.5% × (1 − 0.11 × nivel). Se enlaza con Sales Tax %.</small></label><label class="st-f"><span class="st-l">Broker Relations</span><select id="skBR"><option value="0">Nivel 0</option><option value="1">Nivel 1</option><option value="2">Nivel 2</option><option value="3">Nivel 3</option><option value="4">Nivel 4</option><option value="5" selected>Nivel 5</option></select><small>Baja el Broker de Jita: 3% − 0.3% × nivel. Se enlaza con Broker en Jita % y los standings.</small></label><label class="st-f"><span class="st-l">Advanced Broker Relations</span><select id="cAbr"><option value="0" selected>Nivel 0</option><option value="1">Nivel 1</option><option value="2">Nivel 2</option><option value="3">Nivel 3</option><option value="4">Nivel 4</option><option value="5">Nivel 5</option></select><small>Abarata cada Relist (cambio de precio).</small></label><label class="st-f"><span class="st-l">Reprocessing</span><select id="skRep"><option value="0">Nivel 0</option><option value="1">Nivel 1</option><option value="2">Nivel 2</option><option value="3">Nivel 3</option><option value="4">Nivel 4</option><option value="5" selected>Nivel 5</option></select><small>+3% de rendimiento por nivel.</small></label><label class="st-f"><span class="st-l">Reprocessing Efficiency</span><select id="skRepE"><option value="0">Nivel 0</option><option value="1">Nivel 1</option><option value="2">Nivel 2</option><option value="3">Nivel 3</option><option value="4">Nivel 4</option><option value="5" selected>Nivel 5</option></select><small>+2% de rendimiento por nivel.</small></label><label class="st-f"><span class="st-l">Skill del ore o hielo</span><select id="skOre"><option value="0">Nivel 0</option><option value="1">Nivel 1</option><option value="2">Nivel 2</option><option value="3">Nivel 3</option><option value="4">Nivel 4</option><option value="5" selected>Nivel 5</option></select><small>Ice Processing, Simple Ore Processing, etc.: +2% por nivel.</small></label></div></fieldset>
       <div class="st-sec"><h3 class="st-sec-t">Impuestos y Precios</h3><p class="st-sec-i">Lo que se descuenta en cada venta y cómo se ajustan los precios de Jita antes de calcular.</p></div>
