@@ -2264,6 +2264,28 @@ html.light .mm-unit-courier{background:rgba(255,255,255,.82)}
  background:rgba(217,119,87,.1);color:var(--txt);font:650 .8rem var(--f-ui)}
 .pr-manual-editor small{color:var(--mut);font:.76rem/1.3 var(--f-ui)}
 
+
+/* Comparison and trading tables stay behind explicit disclosure, with one
+   clear compact summary at the top. Preserves all comparison calculations. */
+#pkOpportunity{padding:0;overflow:hidden}
+#pkOpportunity .pk-opp-details>summary{list-style:none;display:flex;justify-content:space-between;
+  align-items:center;gap:15px;padding:13px 16px;cursor:pointer;color:var(--txt);font:750 .85rem/1.4 var(--f-ui)}
+#pkOpportunity .pk-opp-details>summary::-webkit-details-marker{display:none}
+#pkOpportunity .pk-opp-details>summary>strong{font:800 .89rem var(--f-num)}
+#pkOpportunity .pk-opp-details>.pk-opp-head,#pkOpportunity .pk-opp-details>.pk-opp-grid,
+#pkOpportunity .pk-opp-details>.pk-opp-explain{margin-left:15px;margin-right:15px}
+#pkOpportunity .pk-opp-details>.pk-opp-head{margin-top:12px}
+#pkOpportunity .pk-opp-details>.pk-opp-explain{margin-bottom:15px}
+#pkOpportunity .pk-opp-details[open]>summary{border-bottom:1px solid var(--line2)}
+.fb2 .fb2-more{margin-top:13px;border-top:1px solid var(--line2)}
+.fb2 .fb2-more>summary{list-style:none;padding:12px 0;cursor:pointer;color:var(--txt);
+ font:700 .84rem var(--f-ui)}
+.fb2 .fb2-more>summary::-webkit-details-marker{display:none}
+.fb2 .fb2-more>summary::after{content:"⌄";float:right;font-size:1.1rem;color:var(--ion)}
+.fb2 .fb2-more[open]>summary::after{content:"⌃"}
+.fb2 .fb2-more>.fb2-n{margin:12px 0 0}
+html.light #pkOpportunity{background:rgba(255,255,255,.9)}
+
 /* ===== tema claro (generado desde el oscuro por light.py) ===== */
 html.light{--void:#e4e3dd;--hull:#e2e0da;--hull2:#e0ded8;--line:rgba(31,30,29,0.114);--line2:rgba(31,30,29,0.125);--txt:#1c1c1a;--mut:#54524d;--dim:#6c6a64;--ion:#413f3c;--blue:#a39d8b;--clay:#c96442;--thrust:#a67526;--gain:#418b62;--loss:#a92c23}
 html.light body::after{background:repeating-linear-gradient(180deg,rgba(31,30,29,0.011) 0 1px,transparent 1px 3px),
@@ -2809,6 +2831,7 @@ html.light .mm-unit-courier{background:rgba(240,237,229,0.6)}
 html.light .mm-unit-courier-total{color:#915d3b}
 html.light.light .mm-unit-courier{background:rgba(31,30,29,0.779)}
 html.light .pr-manual-editor button{background:rgba(217,119,87,0.125)}
+html.light.light #pkOpportunity{background:rgba(31,30,29,0.855)}
 /* ajustes a mano del tema claro */
 html.light body{background:#e6e3da;color:#1f1e1d}
 html.light body::before{opacity:.12;filter:grayscale(.35) brightness(1.1)}
