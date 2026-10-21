@@ -132,3 +132,23 @@
 
 ---
 **Regla de actualización:** cada cambio de alcance o implementación requiere fecha, decisión, archivos/commits afectados, pruebas observadas y pendientes. Este SDD se usa como índice de continuidad; para ingeniería de detalle consultar SPEC/PROGRESS y el código vigente.
+
+
+## 2026-10-21 — Skills Preview: presentación sin jerga, iconos oficiales, cotizaciones y remap
+
+**Decisiones explícitas del usuario:**
+- **NO** mostrar la palabra **ESI** en textos visibles de Skills; los usuarios deben leer «Cotizaciones de Jita», «Actualizar cotizaciones», «Precio base de referencia» o equivalentes naturales en inglés. ESI permanece como API técnica interna.
+- Iconos como los del gestor: enlazar cada skillbook mediante **Type ID oficial de EVE** a `https://images.evetech.net/types/{typeID}/icon?size=64`; si no se carga el servidor de imágenes, mostrar un fallback neutro sin atribuirle identidad falsa.
+- Las **cotizaciones** y el **tiempo con remap recomendado** deben aparecer en el preview. No ocultar todas las cifras cuando falle la consulta remota.
+- Conservar los planes modulares, todos minimizados de entrada, el subheader horizontal y el toggle «Simula mi cuenta». El idioma continúa centralizado en Ajustes, no en Skills.
+
+**Aplicación en preview (archivo descargable; no en la app publicada):**
+1. Catálogo precargado de **33 habilidades** con sus Type IDs, multiplicadores y pares de atributos para renderizar iconos y computar SP/ETA de forma autónoma. Verificar contra datos EVE si CCP modifica habilidades. `Science IV` se mantiene en PI por prerequisito.
+2. Se mantienen peticiones de precios públicos de órdenes Sell en Jita 4-4; cuando faltan, mostrar **solo** un precio base de libro comprobado y rotulado expresamente como **referencia, no cotización Jita**, o «Sin precio de Jita» si tampoco existe base conocida. No inventar cotizaciones ni convertir fallos en 0 ISK.
+3. Estimación estándar con 20/20 y remap recomendado optimizado entre 17 y 27 puntos por atributo, con 14 puntos adicionales, respetando máxima asignación de 10 extra por atributo. Sin implantes ni conocimiento del SP real cuando no hay login; se indica que son estimaciones. Para cuenta conectada calcular pendientes con SP reales cuando la integración esté aprobada.
+4. Los elementos expandibles enseñan nivel, atributos, multiplicador, efecto y tiempo; el texto español e inglés tiene equivalentes sin siglas técnicas de backend.
+5. No se modificó `src/script.js`, `src/shell.html`, `index.html` ni el motor del gestor por esta iteración del preview.
+
+**Pruebas ejecutadas:** `node --check` sobre JS extraído **PASS**; Chromium headless viewport **1360×850** y **390×850**, tráfico externo bloqueado: seis planes repartidos en dos categorías, apertura/cierre, etiquetas sin «ESI», citas de precios base verificables, ETA estándar y remap **no vacíos**, Type IDs en URLs oficiales y **sin desbordamiento horizontal ni excepciones JS**: **PASS**. **No comprobado:** respuesta efectiva de órdenes Jita, carga de iconos en red pública, EVE SSO y QA final integrado del gestor.
+
+**Estado:** PREVIEW ACTUALIZADO / NO INTEGRADO. La copia entregada en conversación se llama `market_moves_skills_preview.html`. 
