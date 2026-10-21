@@ -225,3 +225,12 @@
 
 **Pruebas y límites:** GitHub Actions generó v1.0.96 tras ejecutar sus pruebas; verifican JavaScript embebido, existencia de DOM/contratos del módulo, presentación del piloto y cálculos sintéticos del plan. Quedan pendientes comprobaciones visuales manuales en Firefox y móvil, pruebas con sesión real autorizada e iconos/precios remotos, y un perfilador de memoria prolongado. No prometer más cobertura que la realmente observada.
 
+
+
+## 2026-10-21 — v1.0.97 · Contraste Light, Skill Plan e icono Hulk sin recuadro
+
+- Se corrigió la cascada CSS de la barra de módulos: los botones **Ventas**, **Minería** y **Skill Plan** ahora utilizan texto oscuro legible en modo Light, con contrastes distintos para estado normal, hover y activo. Modo Dark conserva sus colores anteriores.
+- Se renombró únicamente el tab de navegación «Skills» a **«Skill Plan»** (título y aria-label incluidos); no se cambió el identificador interno ni el contenido funcional de Skills Library.
+- La imagen oficial de **Hulk (Type ID 22544)** conserva su URL y modelo exacto, pero elimina **visualmente** el recuadro negro del render por composición CSS: `mix-blend-mode: screen` en Dark y `invert(1) + multiply` en Light. Es una solución visual, **no se ha generado PNG con alfa auténtico**; en Light la silueta puede verse con colores invertidos. Se mantiene el fallback si falla la imagen.
+- Los tests de `tests/skills-integration.cjs` comprueban estilos de estado en Light, etiqueta «Skill Plan» y tratamiento de la Hulk en ambos temas. Mantener este contrato al modificar la navegación.
+- Publicación con versión `1.0.97` mediante GitHub Actions. Resultado de navegador real y carga de iconos remotos **pendiente de QA**. Esta iteración no tocó cálculos de ISK, Skills, minería ni SSO.
