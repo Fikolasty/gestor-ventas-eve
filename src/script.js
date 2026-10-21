@@ -2534,10 +2534,12 @@ function paintFlipBuy(P){
     tr.append(...cells);tb.append(tr);
   });
   if(allocated.length>10){const tr=el('tr'),td=el('td','muted',(en?'and ':'y ')+(allocated.length-10)+(en?' more items':' ítems más'));td.colSpan=6;tr.append(td);tb.append(tr);}
-  t.append(tb);box.append(t);
-  box.append(el('p','fb2-n',en
-    ?'Investment uses Jita Sell or Jita Buy Order pricing; Buy Orders include placement broker and are not guaranteed to fill. Profit = plan net proceeds − investment.'
-    :'Inversión a Jita Sell o Buy Order; la Buy Order incluye broker y no garantiza ejecución. Ganancia estimada = ingresos netos del plan seleccionado − inversión.'));
+  t.append(tb);
+  const detail=el('details','fb2-more'),head=el('summary',null,en?'Inspect per-item returns':'Ver beneficio de cada ítem');
+  detail.append(head,t,el('p','fb2-n',en
+    ?'Jita Sell or Buy Order investment; buy orders include placement broker and may not fill. Profit = plan net proceeds − investment.'
+    :'Inversión a Jita Sell o Buy Order; las Buy Orders incluyen broker y podrían no completarse. Beneficio = ingresos netos − inversión.'));
+  box.append(detail);
 }
 // Optional compact breakdown of the *selected* plan's single shared freight
 // bill. A separate per-unit number is displayed for each shipped item.
