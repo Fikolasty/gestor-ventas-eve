@@ -2796,8 +2796,17 @@ function i18nRestore(){
   document.querySelectorAll('[title],[aria-label],[placeholder]').forEach(el=>{const m=ATT0.get(el);if(!m)return;
     for(const a in m)if(el.getAttribute(a)===m[a].en)el.setAttribute(a,m[a].es);});
   TXT0=new WeakMap();ATT0=new WeakMap();}
+function syncLanguageChoices(){
+  const select=$('langSel');
+  if(select&&select.value!==S.lang)select.value=S.lang;
+  document.querySelectorAll('#langButtons [data-lang]').forEach(b=>{
+    const selected=b.dataset.lang===S.lang;
+    b.classList.toggle('on',selected);
+    b.setAttribute('aria-pressed',String(selected));
+  });
+}
 function setLang(l){
-  S.lang=l==='en'?'en':'es';document.documentElement.lang=S.lang;
+  S.lang=l==='en'?'en':'es';document.documentElement.lang=S.lang;syncLanguageChoices();
   if(i18nObs){i18nObs.disconnect();i18nObs=null;}
   if(S.lang==='en'){
     i18nWalk(document.documentElement);
@@ -2810,6 +2819,15 @@ function setLang(l){
   }else{i18nRestore();I18N_RE=null;} // suelta la regex grande (se rehace si vuelves a English)
   if(lastP)refreshNow();}
 $('langSel').addEventListener('change',e=>setLang(e.target.value));
+$('langButtons').addEventListener('click',event=>{
+  const button=event.target.closest('button[data-lang]');
+  if(!button)return;
+  const select=$('langSel');
+  if(select.value===button.dataset.lang)return;
+  select.value=button.dataset.lang;
+  select.dispatchEvent(new Event('change',{bubbles:true}));
+});
+syncLanguageChoices();
 
 // ================= Seguridad: el inventario no persiste (los Ajustes sí, ver v1.0.16) =================
 try{['gestorVentasEVE.v35','gestorVentasEVE.esi'].forEach(k=>localStorage.removeItem(k));}catch(e){} // restos de v35–v38
