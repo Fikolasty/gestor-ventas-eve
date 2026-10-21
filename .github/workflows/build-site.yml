@@ -21,13 +21,14 @@ jobs:
           python-version: '3.12'
       - name: Compile site
         run: |
-          python build.py 1.0.92
+          python build.py 1.0.93
       - name: JavaScript syntax check
         run: |
           node --check src/script.js
           node --check src/mining.js
           node --check src/refine.js
           node --check src/mining_data.js
+          node --check src/skills.js
       - name: Verify bundle
         run: |
           python3 - <<'PY'
@@ -45,12 +46,14 @@ jobs:
           assert len(s)>100000
           print('Generated site validation OK')
           PY
+      - name: Skills Library regression checks
+        run: node tests/skills-integration.cjs
       - name: Commit generated site
         run: |
           if ! git diff --quiet -- index.html; then
             git config user.name "github-actions[bot]"
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
             git add index.html
-            git commit -m "build: regenerate Market Moves+ v1.0.92"
+            git commit -m "build: regenerate Market Moves+ v1.0.93"
             git push
           fi
