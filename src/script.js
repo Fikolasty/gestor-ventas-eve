@@ -378,8 +378,22 @@ function syncFromPaste(fromPaste){
 }
 // v1.0.8: limpieza en segundo plano. Precios, íconos e imágenes de items que ya no están en la lista (ni en Deshacer)
 // se sueltan para que el navegador libere la memoria. Si vuelves a pegarlos, se piden de nuevo.
-let pruneT=0;
-function schedulePrune(){clearTimeout(pruneT);pruneT=setTimeout(()=>{(window.requestIdleCallback||setTimeout)(pruneCaches);},4000);}
+let pruneT=0,pruneIdle=0;
+function schedulePrune(){
+  clearTimeout(pruneT);
+  pruneT=setTimeout(()=>{
+    const run=()=>{pruneIdle=0;pruneCaches();};
+    pruneIdle=window.requestIdleCallback?window.requestIdleCallback(run,{timeout:4000}):setTimeout(run,0);
+  },4000);
+}
+window.addEventListener('pagehide',()=>{
+  clearTimeout(pruneT);clearTimeout(pasteT);clearTimeout(esiT);
+  if(pruneIdle){
+    if(window.cancelIdleCallback)window.cancelIdleCallback(pruneIdle);
+    else clearTimeout(pruneIdle);
+    pruneIdle=0;
+  }
+});
 function pruneCaches(){
   if(S.loading)return schedulePrune();
   const keep=new Set();
@@ -2877,13 +2891,14 @@ stRestore();syncDeps();brokerNote();buildOreSelect();readBB();syncLots();refresh
   // Configurar una sola vez tras registrar Market Moves+ en EVE Developers. Es público, nunca un Client Secret.
   const EVE_CLIENT_ID='114bbd2659384151ac3b0096f183dd3b';
   const scope='esi-skills.read_skills.v1';
-  let session=null,refreshPending=null;
+  let session=null,refreshPending=null,sessionEpoch=0;
   const stored=()=>{try{const v=JSON.parse(localStorage.getItem(persistentKey)||'null');return v&&v.client===EVE_CLIENT_ID&&typeof v.refresh==='string'&&Number.isSafeInteger(v.id)&&typeof v.name==='string'?v:null;}catch(e){return null;}};
   const persist=()=>{try{if(session?.refresh)localStorage.setItem(persistentKey,JSON.stringify({id:session.id,name:session.name,refresh:session.refresh,client:EVE_CLIENT_ID}));}catch(e){console.warn('Cannot persist EVE session',e);}};
   const clearSaved=()=>{try{localStorage.removeItem(persistentKey);}catch(e){}};
   async function renew(){
     if(refreshPending)return refreshPending;
     refreshPending=(async()=>{
+      const epoch=sessionEpoch;
       const v=session?.refresh?{id:session.id,name:session.name,refresh:session.refresh}:stored();
       if(!v)return false;
       const body=new URLSearchParams({grant_type:'refresh_token',refresh_token:v.refresh,client_id:EVE_CLIENT_ID});
@@ -2891,6 +2906,7 @@ stRestore();syncDeps();brokerNote();buildOreSelect();readBB();syncLots();refresh
       if(!resp.ok){if(resp.status===400||resp.status===401){clearSaved();session=null;refreshUI();}throw Error('EVE token refresh HTTP '+resp.status);}
       const tokens=await resp.json();
       if(!tokens.access_token)throw Error('No access token received from EVE SSO');
+      if(epoch!==sessionEpoch)return false; // Logout happened during token renewal.
       session={id:v.id,name:v.name,token:tokens.access_token,expires:Date.now()+(tokens.expires_in||1200)*1000-30000,refresh:tokens.refresh_token||v.refresh};
       persist();refreshUI();return true;
     })().finally(()=>{refreshPending=null;});
@@ -2914,20 +2930,25 @@ stRestore();syncDeps();brokerNote();buildOreSelect();readBB();syncLots();refresh
   function saveSkill(id,level){const e=$e(id);if(!e)return false;const v=String(level);if(![...e.options].some(o=>o.value===v))return false;e.value=v;e.dispatchEvent(new Event('change',{bubbles:true}));return true;}
   async function syncAlliance(){
     if(!session)return;
+    const epoch=sessionEpoch,pilotId=session.id;
     try{
       const info=await fetch('https://esi.evetech.net/latest/characters/'+session.id+'/?compatibility_date=2026-10-01').then(r=>{if(!r.ok)throw Error('Character ESI '+r.status);return r.json();});
       if(!info.alliance_id){marketAlliance='';refreshMarketControls();syncNullRouteLabels();return;}
       const alliance=await fetch('https://esi.evetech.net/latest/alliances/'+info.alliance_id+'/?compatibility_date=2026-10-01').then(r=>{if(!r.ok)throw Error('Alliance ESI '+r.status);return r.json();});
+      if(epoch!==sessionEpoch||session?.id!==pilotId)return;
       const previousHub=activeNullMarket();marketAlliance=alliance.name||'';if(activeNullMarket()!==previousHub)S.refinedMan.null=Object.create(null);refreshMarketControls();syncNullRouteLabels();
       if(marketChoice==='auto'&&typeof refresh==='function')refresh();
     }catch(e){console.warn('Unable to detect market affiliation',e);}
   }
   async function sync(){
     if(!session)return;
+    const epoch=sessionEpoch,pilotId=session.id;
     if(Date.now()>session.expires){try{await renew();}catch(err){status('No se pudo renovar la sesión de EVE: '+err.message);return;}if(!session)return;}
     try{status('Consultando skills autorizadas en ESI…');
       const resp=await fetch('https://esi.evetech.net/latest/characters/'+session.id+'/skills/?compatibility_date=2026-10-01',{headers:{Authorization:'Bearer '+session.token},cache:'no-store'});
-      if(!resp.ok)throw Error('ESI HTTP '+resp.status);const data=await resp.json(),skills=new Map(data.skills.map(x=>[x.skill_id,x.active_skill_level]));
+      if(!resp.ok)throw Error('ESI HTTP '+resp.status);const data=await resp.json();
+      if(epoch!==sessionEpoch||session?.id!==pilotId)return; // Discard stale EVE skill responses after logout.
+      const skills=new Map(data.skills.map(x=>[x.skill_id,x.active_skill_level]));
       SkillUI.setPilot({name:session.name,skills:data.skills});
       const names=['Accounting','Broker Relations','Advanced Broker Relations','Reprocessing','Reprocessing Efficiency'];
       const idsResp=await fetch('https://esi.evetech.net/latest/universe/ids/?compatibility_date=2026-10-01',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(names)});
@@ -2940,7 +2961,7 @@ stRestore();syncDeps();brokerNote();buildOreSelect();readBB();syncLots();refresh
       if(typeof refresh==='function')refresh();
     }catch(err){status('No se pudieron sincronizar las skills: '+err.message);}
   }
-  $e('eveLogout').addEventListener('click',()=>{SkillUI.setPilot(null);clearSaved();session=null;marketAlliance='';refreshMarketControls();syncNullRouteLabels();menu.hidden=true;button.setAttribute('aria-expanded','false');refreshUI();status('Desconectado. Se conservan tus ajustes manuales.');});
+  $e('eveLogout').addEventListener('click',()=>{sessionEpoch++;SkillUI.setPilot(null);clearSaved();session=null;marketAlliance='';refreshMarketControls();syncNullRouteLabels();menu.hidden=true;button.setAttribute('aria-expanded','false');refreshUI();status('Desconectado. Se conservan tus ajustes manuales.');});
   (async()=>{const u=new URL(location.href),code=u.searchParams.get('code'),state=u.searchParams.get('state');
     if(!code&&!u.searchParams.has('error')){if(stored()){try{await renew();if(session){await syncAlliance();await sync();}}catch(err){console.warn('EVE session restore failed',err);}}return;}
     u.searchParams.delete('code');u.searchParams.delete('state');u.searchParams.delete('error');u.searchParams.delete('error_description');history.replaceState(null,'',u.pathname+u.search+u.hash);
