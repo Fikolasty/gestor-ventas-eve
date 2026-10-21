@@ -187,3 +187,5 @@
 - **Integridad:** no se eliminaron funciones históricas ni se alteraron motores económicos, ratios Pyfa ni Buyback; se priorizó aislar Skills y mejorar el ciclo de vida. No se afirma ausencia universal de memory leaks sin profiler de sesiones prolongadas.
 - **Pruebas:** CI v1.0.94 verifica el bundle y `tests/skills-integration.cjs`; se realizó prueba Chromium de navegación/copia dentro del iframe sandboxed (apertura 3 planes, copia y PI: PASS); falta reproducir con pilotos reales y comprobar Firefox.
 - **Estado:** cambios enviados a `main`; validar Actions/Pages tras la compilación.
+
+**Verificación final de v1.0.94:** GitHub Actions completó la secuencia de compilación y produjo el commit `build: regenerate Market Moves+ v1.0.94` (`fb2608ad8…`). Por tanto, las comprobaciones automáticas del workflow pasaron antes de publicar el HTML. Continúan pendientes pruebas de piloto real, precios/iconos con acceso de red y profiler de memoria prolongado.
