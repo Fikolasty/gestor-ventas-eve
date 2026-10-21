@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.0.97 — [ChatGPT] Contraste de pestañas e icono Hulk
+*2026-10-21*
+
+- Mejora el contraste de Ventas, Minería y Skill Plan en tema Light para estados normal, hover y seleccionado, preservando el diseño Dark.
+- Renombra la pestaña «Skills» a **«Skill Plan»**, sin modificar su funcionalidad.
+- Elimina visualmente la placa oscura del render oficial de Hulk mediante composición CSS adaptada a Light/Dark; conserva el modelo oficial y el icono de respaldo sin descargar nuevas imágenes.
+- Añade comprobaciones de regresión de estos estilos. Pendiente de validación visual con el navegador del usuario.
+
 ## 1.0.96 — [ChatGPT] Conciliación de importación y armonía visual
 *2026-10-21*
 
