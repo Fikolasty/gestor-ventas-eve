@@ -2144,6 +2144,9 @@ body.mm-mining #importControls,body.mm-skills #importControls,body.mm-pi #import
 }
 
 
+/* Preserve the full import margin value (e.g. 15%) in narrow flex layouts. */
+.mm-import-actions #fImpM{display:block!important;flex:0 0 4ch!important;width:4ch!important;min-width:4ch!important;text-align:center}
+.mm-import-actions #rtM .rm-f{flex:0 0 auto;white-space:nowrap}
 /* v1.0.96 — financial metric labels and official Hulk tab art. */
 #mmTabs .mm-mod .mm-mining-icon{position:relative;display:inline-grid;place-items:center;flex:0 0 24px;width:24px;height:24px}
 #mmTabs .mm-mod .mm-mining-icon>.ic,#mmTabs .mm-mod .mm-mining-icon>img{grid-area:1/1;width:24px;height:24px;margin:0}
