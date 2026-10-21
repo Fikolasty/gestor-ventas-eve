@@ -38,7 +38,7 @@ En **Ajustes** puedes seleccionar automáticamente por alianza del personaje aut
 
 **Importante:** los precios estimados de venta Null siguen siendo **modelos basados en cotizaciones de Jita y los porcentajes de Ajustes**, no órdenes del mercado de esas estaciones obtenidas de ESI. Cambiar el hub **no significa** que se hayan consultado precios de su mercado local. Confirma las órdenes dentro del juego antes de comerciar.
 
-La versión 1.0.84 integra validación sintáctica y construcción automática de `index.html` en GitHub Actions. Para construir localmente, usa `python3 build.py 1.0.84`.
+La versión 1.0.94 integra la nueva sección Skills y mantiene validación sintáctica, pruebas de integración y construcción automática de `index.html` en GitHub Actions. Para construir localmente, usa `python3 build.py 1.0.94`.
 
 ### Funciones principales
 - **Resumen de ruta reactivo**: muestra el nombre del plan activo resaltado y cómo se distribuyen realmente los ítems entre rutas, sin texto fijo; Tasación usa el estilo de encabezados de sección.
@@ -87,7 +87,7 @@ CHANGELOG.md          ← cambios por versión
 ### Generar la página
 Solo necesitas Python 3, sin dependencias:
 ```
-python3 build.py 1.0.79
+python3 build.py 1.0.94
 ```
 Eso escribe `index.html` con la versión indicada.
 
