@@ -152,3 +152,13 @@
 **Pruebas ejecutadas:** `node --check` sobre JS extraído **PASS**; Chromium headless viewport **1360×850** y **390×850**, tráfico externo bloqueado: seis planes repartidos en dos categorías, apertura/cierre, etiquetas sin «ESI», citas de precios base verificables, ETA estándar y remap **no vacíos**, Type IDs en URLs oficiales y **sin desbordamiento horizontal ni excepciones JS**: **PASS**. **No comprobado:** respuesta efectiva de órdenes Jita, carga de iconos en red pública, EVE SSO y QA final integrado del gestor.
 
 **Estado:** PREVIEW ACTUALIZADO / NO INTEGRADO. La copia entregada en conversación se llama `market_moves_skills_preview.html`. 
+
+
+## 2026-10-21 — Libros adquiridos, habilidades completadas e imágenes en Skills Preview
+
+- Con piloto autenticado (futuro) o simulado (preview), **nivel del personaje >= nivel objetivo** implica habilidad completada: estado visual verde, 0 SP/tiempo restante, exclusión de la lista "Copiar pendientes", pero conservación de su ficha explicativa en el plan completo.
+- Un skillbook ya **inyectado/aprendido** NO debe volver a cobrarse aunque falten niveles; coste de libro pendiente: **0 ISK**. Diferenciar haber aprendido el libro de haber entrenado los cinco niveles.
+- Si no falta ninguna skill: mostrar claramente 100 % y "Plan completado". Una habilidad con nivel V satisface objetivos IV/III sin duplicar entrenamiento.
+- **Corrección en preview:** cada tarjeta de libro aprendido refleja **0 ISK** y estado "Libro aprendido", en vez de mostrar la cotización de mercado como si aún se debiera comprar; el cálculo agregado ya excluía libros aprendidos. Verificación local Chromium con red bloqueada: 3 etapas Core, 14 tarjetas en etapa 1, 0 ISK para skillbook de CPU Management V, 4 habilidades pendientes, ninguna excepción JavaScript; `node --check` PASS.
+- **Iconos oficiales:** el preview usa URL oficial por Type ID `images.evetech.net/types/{id}/icon?size=64`, con segundo intento en el CDN de imágenes histórico solo si falla el primero. **La vista incrustada puede bloquear imágenes externas**, y en ese caso sigue apareciendo el fallback ilustrativo. NO afirmar que todos los iconos originales están incorporados localmente o visibles sin red. Para garantía offline, empaquetar archivos reales de la colección de imágenes de CCP en futuras versiones.
+- **Estado:** cambio del HTML de preview local; módulo Skills todavía NO integrado en `main`. No modificar motor de mercado, minería o fórmulas por este ajuste.
