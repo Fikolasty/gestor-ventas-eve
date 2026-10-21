@@ -14,6 +14,14 @@ Descuenta los taxes, el Broker y el envío con SIGMA Freight.
 
 La bitácora **[SDD / Spec-Driven Development](docs/SDD.md)** es el punto de partida para nuevas sesiones de desarrollo: decisiones, funcionalidad implementada, prototipos, pendientes y pruebas verificadas. Leer también [SPEC](docs/SPEC.md) y [PROGRESS](docs/PROGRESS.md) antes de editar.
 
+## Skills Library (v1.0.93)
+
+La sección **Skills** se abre desde la barra principal y presenta seis planes copiables en dos familias: **Core Skills** (Magic 14 y habilidades complementarias) e **Industria Planetaria** (5 planetas, mejor escaneo y ampliación opcional a 6). Cada etapa abre un acordeón con habilidades, detalles, costes de skillbooks y tiempo estándar/con remap.
+
+Los iconos de habilidad se solicitan al servidor oficial de EVE por Type ID. Los precios de los libros proceden de órdenes de Jita 4-4 cuando están disponibles; las cantidades base de referencia aparecen etiquetadas como tales, no como cotizaciones. El módulo puede mostrar únicamente lo pendiente del personaje autorizado. Sin conexión presenta el plan completo y permite la simulación voluntaria. Los datos de habilidades autorizados se comunican al módulo sin compartir tokens.
+
+El módulo está integrado en el `index.html` distribuible, sin requerir una página adicional al abrirlo. Se carga al acceder a Skills, con su propio CSS aislado para proteger Ventas y Minería. Revisa el [SDD maestro](docs/SDD.md) para límites conocidos y verificaciones.
+
 ## Cómo se usa
 
 1. En EVE abre el inventario en **vista de lista** (columnas *Name* y *Quantity* como mínimo).
@@ -56,8 +64,8 @@ La versión 1.0.84 integra validación sintáctica y construcción automática d
 
 - **Tu inventario nunca se guarda**: lo pegado, los precios y el plan se borran al cerrar o recargar.
 - **Tus Ajustes sí se guardan**, solo en tu navegador (localStorage): skills, taxes, Buyback, refinería, envío, idioma y tema. El botón **Restablecer** los borra.
-- **Solo se conecta a los servidores oficiales de EVE**: `esi.evetech.net` (precios) e `images.evetech.net` (íconos). Lo fuerza la Content-Security-Policy de la página.
-- No pide login ni contraseña de EVE.
+- **Inicio de sesión opcional con EVE Online:** usa autorización oficial de CCP para leer habilidades del piloto; la app nunca pide tu contraseña. Puedes desconectarte desde el selector de personaje. La sesión autorizada puede guardar un token de renovación en este navegador para conservar el acceso.
+- **Conexiones oficiales:** consulta datos en `esi.evetech.net` y usa `images.evetech.net` para iconos. El acceso de usuario utiliza `login.eveonline.com`. La Content-Security-Policy limita los destinos autorizados.
 - Es un solo archivo HTML, sin librerías externas.
 
 ## Estructura del proyecto
