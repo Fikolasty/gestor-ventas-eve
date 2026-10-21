@@ -179,3 +179,11 @@
 - Faltan verificar con ejecución: Actions compilación completa, apertura de los seis planes en el sitio publicado, iconos con red, precios con órdenes reales y progreso/tiempos con un piloto real, persistencia y traducciones ES↔EN, navegación cruzada entre secciones y Firefox/móvil.
 - **Mantenimiento:** en esta iteración se ha reducido tráfico y aislado el estado nuevo; no se afirma auditoría de memoria mediante profiler del gestor histórico. No eliminar funciones ni caches legados sin métricas y tests de regresión completos.
 
+
+## 2026-10-21 — Mantenimiento v1.0.94
+
+- **Cache/idle:** `src/script.js` cancela `pruneT`, `pruneIdle`, `pasteT` y `esiT` al cerrar/navegar; la limpieza en segundo plano de datos e iconos sigue intacta mientras la app está activa.
+- **Concurrencia SSO:** `sessionEpoch` invalida respuestas tardías de renovación de token, consulta de alianza y sincronización de niveles cuando se desconecta el personaje. Impide volver a escribir sesión y sobrescribir habilidades/manuales con respuestas obsoletas.
+- **Integridad:** no se eliminaron funciones históricas ni se alteraron motores económicos, ratios Pyfa ni Buyback; se priorizó aislar Skills y mejorar el ciclo de vida. No se afirma ausencia universal de memory leaks sin profiler de sesiones prolongadas.
+- **Pruebas:** CI v1.0.94 verifica el bundle y `tests/skills-integration.cjs`; se realizó prueba Chromium de navegación/copia dentro del iframe sandboxed (apertura 3 planes, copia y PI: PASS); falta reproducir con pilotos reales y comprobar Firefox.
+- **Estado:** cambios enviados a `main`; validar Actions/Pages tras la compilación.
