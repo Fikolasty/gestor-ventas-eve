@@ -2147,6 +2147,41 @@ body.mm-mining #importControls,body.mm-skills #importControls,body.mm-pi #import
 /* Preserve the full import margin value (e.g. 15%) in narrow flex layouts. */
 .mm-import-actions #fImpM{display:block!important;flex:0 0 4ch!important;width:4ch!important;min-width:4ch!important;text-align:center}
 .mm-import-actions #rtM .rm-f{flex:0 0 auto;white-space:nowrap}
+/* v1.0.97 — Light theme contrast for all three module tabs.
+   Earlier generic Light rules were overridden by later #mmTabs / .mm-modgroup
+   selectors with dark-theme colors, leaving inactive titles nearly invisible. */
+html.light #mmTabs.mm-modnav .mm-modgroup{
+  background:rgba(83,63,47,.065);
+  border-color:rgba(75,58,44,.17);
+}
+html.light #mmTabs.mm-modnav .mm-modgroup .mm-mod{
+  color:#302923!important;
+  opacity:1!important;
+  filter:none!important;
+  background:transparent!important;
+  border-color:transparent!important;
+}
+html.light #mmTabs.mm-modnav .mm-modgroup .mm-mod .mm-mod-label,
+html.light #mmTabs.mm-modnav .mm-modgroup .mm-mod .ic{
+  color:inherit!important;
+  opacity:1!important;
+}
+html.light #mmTabs.mm-modnav .mm-modgroup .mm-mod:hover{
+  color:#603c29!important;
+  background:rgba(184,112,70,.13)!important;
+  border-color:rgba(174,106,63,.20)!important;
+}
+html.light #mmTabs.mm-modnav .mm-modgroup .mm-mod[aria-selected="true"]{
+  color:#733a25!important;
+  background:#ecd7cb!important;
+  border-color:#ba8266!important;
+  box-shadow:inset 0 1px rgba(255,255,255,.75);
+}
+html.light #mmTabs.mm-modnav .mm-modgroup .mm-mod:focus-visible{
+  outline:2px solid #a95e3b;
+  outline-offset:2px;
+}
+
 /* v1.0.96 — financial metric labels and official Hulk tab art. */
 #mmTabs .mm-mod .mm-mining-icon{position:relative;display:inline-grid;place-items:center;flex:0 0 24px;width:24px;height:24px}
 #mmTabs .mm-mod .mm-mining-icon>.ic,#mmTabs .mm-mod .mm-mining-icon>img{grid-area:1/1;width:24px;height:24px;margin:0}
