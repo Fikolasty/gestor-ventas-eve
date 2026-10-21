@@ -2486,27 +2486,34 @@ $('themeLight').addEventListener('change',e=>{document.documentElement.classList
 // ================= Comparativa Minera, aislada del motor del Gestor =================
 /*__MINING__*/
 
+// Skills runs in an isolated view and cannot modify the sales/mining CSS or formulas.
+/*__SKILLS__*/
+
 // ================= Ajustes y Guía de Uso =================
 // Pestañas persistentes, conservando la comparativa minera existente.
 function selectAppModule(name){
   // PI EN PAUSA: conservar la implementación completa para reactivarla en una futura versión.
   // Mientras está oculta en la navegación, no permitir activarla mediante accesos antiguos.
   if(name==='pi')name='ventas';
-  if(!['ventas','mining','pi'].includes(name))return;
+  if(!['ventas','mining','pi','skills'].includes(name))return;
   document.body.classList.toggle('mm-mining',name==='mining');
   document.body.classList.toggle('mm-pi',name==='pi');
+  document.body.classList.toggle('mm-skills',name==='skills');
   document.querySelectorAll('#mmTabs [data-mm-module]').forEach(b=>{
     const active=b.dataset.mmModule===name;
     b.setAttribute('aria-selected',String(active));b.tabIndex=active?0:-1;
     b.classList.toggle('on',active);
   });
   if(name==='mining'){
-    $('pi').hidden=true;$('settings').hidden=true;$('help').hidden=true;
+    $('pi').hidden=true;$('skills').hidden=true;$('settings').hidden=true;$('help').hidden=true;
     $('mining').hidden=false;MineUI.mount($('mnRoot'));MineUI.shown();
   }else if(name==='pi'){
-    $('mining').hidden=true;$('settings').hidden=true;$('help').hidden=true;
+    $('mining').hidden=true;$('skills').hidden=true;$('settings').hidden=true;$('help').hidden=true;
     $('pi').hidden=false;
-  }else{$('mining').hidden=true;$('pi').hidden=true;}
+  }else if(name==='skills'){
+    $('mining').hidden=true;$('pi').hidden=true;$('settings').hidden=true;$('help').hidden=true;
+    $('skills').hidden=false;SkillUI.mount($('skillRoot'));SkillUI.setLanguage(S.lang);SkillUI.shown();
+  }else{$('mining').hidden=true;$('pi').hidden=true;$('skills').hidden=true;}
   document.querySelectorAll('.side-i[data-panel="mining"]').forEach(b=>b.setAttribute('aria-pressed',String(name==='mining')));
 }
 const mmTabs=[...document.querySelectorAll('#mmTabs [data-mm-module]')];
@@ -2523,7 +2530,7 @@ mmTabs.forEach((b,i)=>{
 // force=true abre (o solo desplaza si ya está abierto); force=false cierra; sin force alterna.
 function togglePanel(id,force){
   if(id==='mining'){selectAppModule(force===false?'ventas':'mining');return;}
-  if(document.body.classList.contains('mm-mining')||document.body.classList.contains('mm-pi'))selectAppModule('ventas');
+  if(document.body.classList.contains('mm-mining')||document.body.classList.contains('mm-pi')||document.body.classList.contains('mm-skills'))selectAppModule('ventas');
   const s=$(id),open=force!=null?force:s.hidden;
   if(open&&!s.hidden){s.scrollIntoView({behavior:'smooth',block:'start'});return;}
   if(open){focusOnly(id);slide(s,true);if(id==='mining'){MineUI.mount($('mnRoot'));MineUI.shown();}}else s.hidden=true;
@@ -2562,7 +2569,7 @@ document.querySelectorAll('[data-go-home]').forEach(node=>{
     updateModuleSidebar();
   }));
   function updateModuleSidebar(){
-    const active=document.body.classList.contains('mm-pi')?'pi':document.body.classList.contains('mm-mining')?'mining':'ventas';
+    const active=document.body.classList.contains('mm-pi')?'pi':document.body.classList.contains('mm-mining')?'mining':document.body.classList.contains('mm-skills')?'skills':'ventas';
     document.querySelectorAll('[data-side-module]').forEach(btn=>{
       if(btn.dataset.sideModule===active)btn.setAttribute('aria-current','page');
       else btn.removeAttribute('aria-current');
@@ -2806,7 +2813,7 @@ function syncLanguageChoices(){
   });
 }
 function setLang(l){
-  S.lang=l==='en'?'en':'es';document.documentElement.lang=S.lang;syncLanguageChoices();
+  S.lang=l==='en'?'en':'es';document.documentElement.lang=S.lang;syncLanguageChoices();SkillUI.setLanguage(S.lang);
   if(i18nObs){i18nObs.disconnect();i18nObs=null;}
   if(S.lang==='en'){
     i18nWalk(document.documentElement);
@@ -2921,6 +2928,7 @@ stRestore();syncDeps();brokerNote();buildOreSelect();readBB();syncLots();refresh
     try{status('Consultando skills autorizadas en ESI…');
       const resp=await fetch('https://esi.evetech.net/latest/characters/'+session.id+'/skills/?compatibility_date=2026-10-01',{headers:{Authorization:'Bearer '+session.token},cache:'no-store'});
       if(!resp.ok)throw Error('ESI HTTP '+resp.status);const data=await resp.json(),skills=new Map(data.skills.map(x=>[x.skill_id,x.active_skill_level]));
+      SkillUI.setPilot({name:session.name,skills:data.skills});
       const names=['Accounting','Broker Relations','Advanced Broker Relations','Reprocessing','Reprocessing Efficiency'];
       const idsResp=await fetch('https://esi.evetech.net/latest/universe/ids/?compatibility_date=2026-10-01',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(names)});
       if(!idsResp.ok)throw Error('Catálogo ESI HTTP '+idsResp.status);
@@ -2932,7 +2940,7 @@ stRestore();syncDeps();brokerNote();buildOreSelect();readBB();syncLots();refresh
       if(typeof refresh==='function')refresh();
     }catch(err){status('No se pudieron sincronizar las skills: '+err.message);}
   }
-  $e('eveLogout').addEventListener('click',()=>{clearSaved();session=null;marketAlliance='';refreshMarketControls();syncNullRouteLabels();menu.hidden=true;button.setAttribute('aria-expanded','false');refreshUI();status('Desconectado. Se conservan tus ajustes manuales.');});
+  $e('eveLogout').addEventListener('click',()=>{SkillUI.setPilot(null);clearSaved();session=null;marketAlliance='';refreshMarketControls();syncNullRouteLabels();menu.hidden=true;button.setAttribute('aria-expanded','false');refreshUI();status('Desconectado. Se conservan tus ajustes manuales.');});
   (async()=>{const u=new URL(location.href),code=u.searchParams.get('code'),state=u.searchParams.get('state');
     if(!code&&!u.searchParams.has('error')){if(stored()){try{await renew();if(session){await syncAlliance();await sync();}}catch(err){console.warn('EVE session restore failed',err);}}return;}
     u.searchParams.delete('code');u.searchParams.delete('state');u.searchParams.delete('error');u.searchParams.delete('error_description');history.replaceState(null,'',u.pathname+u.search+u.hash);
