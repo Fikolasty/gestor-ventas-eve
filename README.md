@@ -10,6 +10,10 @@ Descuenta los taxes, el Broker y el envío con SIGMA Freight.
 
 ---
 
+## Continuidad de desarrollo
+
+La bitácora **[SDD / Spec-Driven Development](docs/SDD.md)** es el punto de partida para nuevas sesiones de desarrollo: decisiones, funcionalidad implementada, prototipos, pendientes y pruebas verificadas. Leer también [SPEC](docs/SPEC.md) y [PROGRESS](docs/PROGRESS.md) antes de editar.
+
 ## Cómo se usa
 
 1. En EVE abre el inventario en **vista de lista** (columnas *Name* y *Quantity* como mínimo).
