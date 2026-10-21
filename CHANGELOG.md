@@ -1,5 +1,17 @@
 # Changelog
 
+## 1.0.93 — [ChatGPT] Skills Library y mantenimiento preventivo
+*2026-10-21*
+
+- Integra el preview aprobado de **Skills** como sección al mismo nivel de Minería; Core Skills y Planetary Industry contienen tres etapas cada una con acordeones, copia de lista EVE, atributos, skillbooks e iconos oficiales por Type ID.
+- Aísla los estilos de Skills en un documento incrustado y protegido para que no se propaguen a Ventas, Minería, Ajustes ni el CSS del resto de la página. Se conserva la distribución existente.
+- Reutiliza la sesión EVE SSO ya autorizada; solo transmite al módulo niveles y SP de habilidades, **nunca tokens**. Sin sesión, planes originales completos; toggle de simulación diferenciado.
+- Estima SP pendiente, tiempo estándar y remap sugerido. Si un libro ya se aprendió (incluso sin nivel entrenado), no se vuelve a presupuestar. Precios de Jita 4-4 con fallback de referencia claramente identificado.
+- Modera la carga de mercado del módulo: 3 solicitudes concurrentes, máximo 4 páginas por habilidad, evita duplicados y respeta pausas de 60 s ante respuestas de límite. Solo se crea el iframe al abrir Skills; cachés de precio y habilidad con conjunto acotado.
+- Añade `tests/skills-integration.cjs` y su ejecución tras el build. No se modifica el motor económico, el reproceso ni el dataset Pyfa de Minería.
+
+**Pendiente por validar:** ejecución satisfactoria de Actions/Pages, reproducción real con EVE SSO, cotizaciones en red, iconos oficiales cargados y QA integral en Firefox/móvil. Los totales e ISK de Ventas no se han recalculado con datos reales en esta entrega.
+
 ## 1.0.84 — Mercados Null configurables y mantenimiento de rutas
 *2026-10-19*
 
