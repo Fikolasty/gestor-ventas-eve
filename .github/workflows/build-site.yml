@@ -21,7 +21,7 @@ jobs:
           python-version: '3.12'
       - name: Compile site
         run: |
-          python build.py 1.0.91
+          python build.py 1.0.92
       - name: JavaScript syntax check
         run: |
           node --check src/script.js
@@ -34,6 +34,8 @@ jobs:
           from pathlib import Path
           s=Path('index.html').read_text(encoding='utf-8')
           assert 'const NULL_MARKETS=' in s
+          assert 'id="langButtons"' in s
+          assert 'syncLanguageChoices' in s
           assert "if(!SH()){delete row.g.fN;delete row.ship.fN;}" in s
           assert "SHIPS=S.flip?{fN:1}:{jOrd:1,jInst:1,rJita:1}" in s
           assert "!Number.isFinite(r.net[k])" in s
@@ -49,6 +51,6 @@ jobs:
             git config user.name "github-actions[bot]"
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
             git add index.html
-            git commit -m "build: regenerate Market Moves+ v1.0.91"
+            git commit -m "build: regenerate Market Moves+ v1.0.92"
             git push
           fi
