@@ -83,6 +83,7 @@ const refreshMarketControls=()=>{
   const sel=document.getElementById('nullMarketMode');if(!sel)return;
   sel.value=marketChoice;
   document.getElementById('nullMarketActive').textContent=nullSystem();
+  const importLabel=document.getElementById('importMarketLabel');if(importLabel)importLabel.textContent=nullSystem();
   const topMarket=document.querySelector('#mmTabs .mm-route-right');if(topMarket)topMarket.textContent=nullSystem();
   const note=document.getElementById('nullMarketNote');
   note.textContent=(marketChoice==='auto'?(marketAlliance?'Alianza detectada: '+marketAlliance+'.':'Sin alianza identificada. Se usa HY-RWO por defecto.'):'Selección manual: no cambiará al conectar otro personaje.')+' Los precios de Null se estiman con reglas sobre Jita, no con órdenes locales de ESI.';
@@ -2453,7 +2454,17 @@ $('cAssignee').addEventListener('input',()=>refresh());
 // v1.0.55: interruptor Courier (solo con la ruta Jita → HY-RWO). On: los items están en Jita y los llevas a HY-RWO
 // con SIGMA Freight (se cuenta el courier). Off: los trajiste a Jita para venderlos allí, sin ningún courier.
 // Con la ruta HY-RWO → Jita el courier siempre se cuenta y el interruptor no se muestra.
-function syncShipSwitch(){$('shipTxt').textContent=S.lang==='en'?(SH()?'Ship':'Do not ship'):(SH()?'Enviar':'No enviar');$('shipLab').hidden=!S.flip;$('rtM').hidden=!S.flip;$('shipLab').title=S.lang==='en'?'On: include transport to '+nullSystem()+'. Off: sell in Jita without shipping.':'Activado: incluir transporte a '+nullSystem()+'. Desactivado: vender en Jita sin envío.';}
+function syncShipSwitch(){
+  const isImport=S.flip;
+  $('shipTxt').textContent=S.lang==='en'?(SH()?'Ship':'Do not ship'):(SH()?'Enviar':'No enviar');
+  $('importControls').hidden=!isImport;
+  $('shipLab').hidden=!isImport;
+  $('rtM').hidden=!isImport;
+  $('importMarketLabel').textContent=nullSystem();
+  $('importHeadingPrefix').textContent=S.lang==='en'?'IMPORT TO':'IMPORTACIÓN A';
+  $('importHelp').textContent=S.lang==='en'?'Choose whether to transport your items from Jita and set your Nullsec selling margin.':'Elige si transportas los ítems desde Jita y ajusta el margen de venta en Null.';
+  $('shipLab').title=S.lang==='en'?'On: include transport to '+nullSystem()+'. Off: sell in Jita without shipping.':'Activado: incluir transporte a '+nullSystem()+'. Desactivado: vender en Jita sin envío.';
+}
 function setFlip(on){
   S.flip=!!on;S.planMode=null;czIdx=0;C.shipOn=true;$('shipOn').checked=true; // cambiar de ruta vuelve a contar el courier
   SHIPS=S.flip?{fN:1}:{jOrd:1,jInst:1,rJita:1};
@@ -2474,16 +2485,18 @@ $('themeLight').addEventListener('change',e=>{document.documentElement.classList
 // v1.0.86 — Todos los controles originales viven ahora en la barra principal; no se clonan.
 (function compactMainNavigation(){
   const bar=$('mmTabs'),group=bar.querySelector('.mm-modgroup');
-  const controls=document.createElement('div');controls.className='mm-quick';
   const settings=document.querySelector('.side-i[data-panel="settings"]');
-  if(settings){settings.classList.add('mm-icon-action');settings.setAttribute('aria-label','Ajustes');controls.append(settings);}
   const guide=document.querySelector('.side-i[data-panel="help"]');
-  if(guide){guide.classList.add('top-guide-action');guide.setAttribute('aria-label','Guía de uso');guide.title='Guía de uso';document.querySelector('.top').append(guide);}
+  const topActions=document.createElement('div');
+  topActions.className='mm-top-actions';
+  if(settings){settings.classList.add('top-header-action');settings.setAttribute('aria-label','Ajustes');settings.title='Ajustes';topActions.append(settings);}
+  if(guide){guide.classList.add('top-guide-action');guide.setAttribute('aria-label','Guía de uso');guide.title='Guía de uso';topActions.append(guide);}
+  document.querySelector('.top').append(topActions);
   const route=$('route');route.classList.add('mm-route');
   const theme=$('themeLight').closest('.top-theme');theme.classList.add('mm-theme');
-  group.before(controls);
   const rightGroup=document.createElement('div');rightGroup.className='mm-right-actions';
-  group.before(rightGroup);rightGroup.append(controls,group,route,theme);
+  group.before(rightGroup);
+  rightGroup.append(group,route,theme);
   const button=$('bFlip');
   button.replaceChildren();
   const left=el('span','mm-route-left','Jita'),knob=el('span','mm-route-knob'),right=el('span','mm-route-right',nullSystem());
@@ -2827,7 +2840,7 @@ function syncLanguageChoices(){
   });
 }
 function setLang(l){
-  S.lang=l==='en'?'en':'es';document.documentElement.lang=S.lang;syncLanguageChoices();SkillUI.setLanguage(S.lang);
+  S.lang=l==='en'?'en':'es';document.documentElement.lang=S.lang;syncLanguageChoices();SkillUI.setLanguage(S.lang);syncShipSwitch();
   if(i18nObs){i18nObs.disconnect();i18nObs=null;}
   if(S.lang==='en'){
     i18nWalk(document.documentElement);
