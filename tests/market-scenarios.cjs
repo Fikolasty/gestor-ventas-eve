@@ -66,3 +66,37 @@ assert.match(html,/id="unitCourierBox"/);
 assert.match(src,/S\.refinedMan\.null\[manualKey\]=value/);
 assert.match(src,/prod:ref!=null\&\&!S\.flip\?C\.prod\*ref\*q:0/);
 console.log('Market scenarios PASS: bulk 45%, rare moon, isotope, override, 350k contract allocation and tabs.');
+
+// UI regression: both business captions display the selected local market, not
+// "Null" or an assumed Keepstar. Test all three alliance hubs in ES and EN.
+const renderBody=segment('function syncBusinessMode(){', "$('businessSwitch').addEventListener");
+let currentHub='HY-RWO',written='';
+const user={flip:false,lang:'es'};
+const makeButton=()=>({classList:{toggle(){}},setAttribute(){},querySelector(){return {textContent:''}}});
+const caption={replaceChildren(...nodes){written=nodes.map(x=>x.textContent).join('')}};
+const controls={modeLiquidation:makeButton(),modeTrading:makeButton(),businessCaption:caption};
+const renderBusiness=vm.runInNewContext(renderBody+'\nsyncBusinessMode;',{
+  S:user,$:id=>controls[id],nullSystem:()=>currentHub,
+  document:{createTextNode:text=>({textContent:text}),createElement:()=>({textContent:'',className:''})}
+});
+for(const hub of ['HY-RWO','UALX-3','C-J6MT']){
+  currentHub=hub;
+  for(const flip of [false,true]){
+    user.flip=flip;
+    for(const lang of ['es','en']){
+      user.lang=lang;renderBusiness();
+      assert(written.includes(hub),hub+' no se muestra en '+lang+' / '+flip);
+      assert(!/\bKeepstar\b|\bNullsec\b|\bNull\b/i.test(written),'no se deben mostrar nombres de lugares genéricos');
+      assert(written.includes('Jita'),'ambos escenarios mantienen la referencia Jita');
+    }
+  }
+}
+// Real embedded RGBA PNG, with no icon stacked underneath the Hulk image.
+const alphaURI=fs.readFileSync('src/assets/hulk_icon.b64','utf8').trim();
+assert(alphaURI.startsWith('data:image/png;base64,'));
+const png=Buffer.from(alphaURI.slice(22),'base64');
+assert.equal(png.toString('hex',0,8),'89504e470d0a1a0a');
+assert.equal(png.readUInt8(25),6,'Hulk asset should use PNG RGBA (with transparency)');
+assert(html.includes('src="__HULK_ICON__"'));
+assert(!/mm-mining-icon"[^>]*><span class="ic i-ship"/.test(html));
+console.log('Local hub captions and alpha Hulk icon PASS.');

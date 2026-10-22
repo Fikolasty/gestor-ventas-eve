@@ -2697,9 +2697,15 @@ function syncBusinessMode(){
   a.querySelector('span:last-child').textContent=en?'Sell my items':'Vender mis ítems';
   b.querySelector('span:last-child').textContent=en?'Trade from Jita':'Comerciar desde Jita';
   const hub=nullSystem();
-  $('businessCaption').textContent=S.flip?
-    (en?'Compare buying in Jita and reselling in '+hub+'. Review profit after shipping.':'Compara comprar en Jita y revender en '+hub+'. Revisa la ganancia después del envío.'):
-    (en?'Compare selling in '+hub+', Jita, Buyback and reprocessing using your settings.':'Compara vender en '+hub+', Jita, Buyback y reproceso según tus ajustes.');
+  const market=document.createElement('strong');market.className='mm-market-accent';market.textContent=hub;
+  const caption=$('businessCaption');
+  // Keep the market name visually distinct and update the DOM when Settings/ESI
+  // chooses a different home hub. Text nodes make this safe for user item names.
+  caption.replaceChildren(
+    document.createTextNode(S.flip?(en?'Compare buying in Jita and reselling in ':'Compara comprar en Jita y revender en '):(en?'Compare selling in ':'Compara vender en ')),
+    market,
+    document.createTextNode(S.flip?(en?'. Review profit after shipping.':'. Revisa la ganancia después del envío.'):(en?', Jita, Buyback and reprocessing using your settings.':', Jita, Buyback y reproceso según tus ajustes.'))
+  );
 }
 $('businessSwitch').addEventListener('click',e=>{
   const tab=e.target.closest('button[data-business]');if(!tab)return;
