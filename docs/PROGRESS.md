@@ -274,3 +274,16 @@ En CI de v1.0.77 falló mining-types (0 != 34). Causa: la comparación de prefij
 - Nuevo nombre visible **Skill Plan**, icono de EVE conservado.
 - El render Hulk (ID 22544) se compone sin recuadro negro: `screen` en Dark y `multiply` con inversión de color en Light; sin nuevas imágenes ni cambios en el simulador minero.
 - Pruebas de regresión extendidas en `tests/skills-integration.cjs`; pendiente inspección visual manual en dispositivo final.
+
+
+## 2026-10-21 — v1.0.98 · Refactor controlado de Ventas
+
+**Estado:** nueva versión compilada en `main` mediante GitHub Actions; tests automatizados de escenarios y de accounting aprobados al generarse `index.html`. Queda pendiente QA visual manual en el navegador y prueba EVE real.
+
+- Reemplaza navegación conmutada por **Vender mis ítems** y **Comerciar desde Jita**, sin bifurcar ni borrar los motores de impuestos, envío, Buyback y reproceso.
+- En Trading, modela inversión a Jita Sell o Buy Order más broker, con referencia explícita a la incertidumbre de llenado. No aplica por segunda vez un coste de producción propio de liquidación.
+- Ajuste de precios Null `cBulkNull=45%` para ore común, minerales y lotes grandes (1.000+), conservando excepciones para Moon Goo, isótopos y hielo especial. Precio manual de Null por ítem prevalece sobre reglas automáticas y es solo de esta sesión.
+- Nuevo reparto de courier por ítem y por unidad, respetando coste real y límite de 350.000 m³/contrato. Prueba sintética verifica que la suma de asignaciones equivale al transporte total.
+- Oportunidad y tabla detallada de comercio pasan a acordeones compactos; signos y colores comunicativos en beneficios y diferencias. UI y motor siguen ES/EN y Dark/Light.
+- Suite `tests/market-scenarios.cjs` añade clasificación del tipo de material y reparto; `tests/financial-accounting.cjs` contempla sell/buy y fees de compra.
+- **Riesgo documentado:** el Plan Óptimo existente usa heurística por ítem y recalcula courier compartido; no está demostrado óptimo combinatorio global. Mejoras futuras requerirán un solver y conjunto de escenarios de regresión antes de reemplazarlo.
