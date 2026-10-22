@@ -145,3 +145,10 @@ assert(salesHTML.includes('@media(max-width:1450px)'));
 assert(salesHTML.includes('grid-template-columns:max-content minmax(0,1fr)!important'));
 assert(salesJS.includes("$('importDestination').title=S.lang==='en'?"));
 assert(salesJS.includes("$('tradePurchaseMode').title=S.lang==='en'?"));
+
+assert(salesHTML.includes('grid-template-columns:repeat(2,minmax(0,1fr))!important'),
+  'Settings and Help must have symmetrical equal-width columns');
+assert(salesHTML.includes('.top .mm-top-actions>.mm-profile-row{'),
+  'Profile must sit centered underneath the two tools');
+assert(salesHTML.includes('grid-column:1/-1!important;grid-row:2!important'),
+  'SSO row must span both utility icons');
