@@ -64,4 +64,5 @@ assert.match(html,/id="tradePurchaseMode"/);
 assert.match(html,/id="cBulkNull"/);
 assert.match(html,/id="unitCourierBox"/);
 assert.match(src,/S\.refinedMan\.null\[manualKey\]=value/);
+assert.match(src,/prod:ref!=null\&\&!S\.flip\?C\.prod\*ref\*q:0/);
 console.log('Market scenarios PASS: bulk 45%, rare moon, isotope, override, 350k contract allocation and tabs.');
