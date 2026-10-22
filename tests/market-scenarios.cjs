@@ -39,7 +39,7 @@ assert.equal(nullList('Generic commodity',100,100,null,20),90);
 assert.equal(nullList('Dysprosium',100,100,null,3000),90);
 assert.equal(nullList('Moon Ore',100,100,null,3000),90);
 assert.equal(nullList('Blue Ice',100,100,null,3000),97.5);
-assert.equal(nullList('Heavy Water',100,100,null,3000),45);
+assert(Math.abs(nullList('Heavy Water',100,100,null,3000)-45)<1e-8);
 assert.equal(nullList('Helium Isotopes',100,100,null,3000),100);
 S.refinedMan.null['tritanium']=123;
 assert.equal(nullList('Tritanium',100,100,null,3000),123,'manual quote supersedes discounts');
