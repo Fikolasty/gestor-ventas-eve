@@ -1351,10 +1351,26 @@ let lastP=null;
 const ORE_PRODUCTS=new Set();Object.values(REFINE).forEach(d=>{if(d.cat!=='ice')Object.keys(d.out).forEach(m=>ORE_PRODUCTS.add(m.toLowerCase()));});
 function catOf(name){if(isIce(name))return 'ice';if(resolveOre(name)||ORE_PRODUCTS.has(String(name).toLowerCase()))return 'ore';return 'loot';}
 // parte del envío de un item: su m³ y su colateral, más su parte del precio base
-// precio por unidad de cada acción
-function unitFor(r,k){const a=r.o.jita;
-  return k==='null'?{p:r.np,l:'Lístalo en '+nullSystem()+' a este precio'}:k==='jOrd'?{p:r.jl,l:'Lístalo en Jita a este Precio'}:k==='jInst'?{p:r.instAvg!=null?r.instAvg:(a&&a.buy),l:'Te pagan (promedio)'}:
-    k==='bb'?{p:r.bbUnit,l:'Te paga el Buyback'}:k==='disc'?{p:r.discUnit,l:'Pídelo en Discord'}:{p:null,l:'Precio de cada '+(isIce(r.o.name)?'producto':'mineral')+' abajo'};}
+// Unit-price display must cover EVERY selling route used by computePlan.
+// In particular: fN is the IMPORT price already calculated in row.np;
+// fJ uses the Jita sell-order quote row.jl; fJI uses the buy-order fill average.
+// The "material prices below" placeholder belongs ONLY to reprocessing.
+function unitFor(r,k){
+  const a=r.o.jita,avg=r.instAvg!=null?r.instAvg:(a?.buy??null);
+  switch(k){
+    case 'fN':return{p:r.np??null,l:'Publicar orden en '+nullSystem()};
+    case 'null':return{p:r.np??null,l:'Publicar orden en '+nullSystem()};
+    case 'fJ':return{p:r.jl??null,l:'Orden de venta en Jita'};
+    case 'jOrd':return{p:r.jl??null,l:'Orden de venta en Jita'};
+    case 'fJI':return{p:avg,l:'Compra inmediata en Jita (promedio)'};
+    case 'jInst':return{p:avg,l:'Compra inmediata en Jita (promedio)'};
+    case 'bb':return{p:r.bbUnit??null,l:'Te paga el Buyback'};
+    case 'disc':return{p:r.discUnit??null,l:'Pídelo en Discord'};
+    case 'rNull':
+    case 'rJita':return{p:null,l:'Precio de cada '+(isIce(r.o.name)?'producto':'mineral')+' abajo'};
+    default:return{p:null,l:'Sin precio unitario disponible'};
+  }
+}
 // orden, mostrar más y copiar al hacer clic en nombre/cantidad/ganancia
 // v102: pestaña:acción es la clave en todas las preferencias de vista (sin persistencia).
 let vSort=Object.create(null),vShow=Object.create(null),vQuery=Object.create(null);
@@ -1608,7 +1624,7 @@ function paintVerdict(P){
   // plan: por acción, la recomendación y luego cada item con su precio por unidad
   const pl=$('vPlan');poolIcons(pl);pl.textContent='';
   // Botones de orden repetidos por grupo, siempre encima de sus items.
-  const mkHead=sort=>{const hd=el('div','pl-head');[['n','Item'],['q','Cantidad'],['p','Precio Unidad'],['a','Ganancia']].forEach(([k,t])=>{
+  const mkHead=sort=>{const hd=el('div','pl-head');[['n','Item'],['q','Cantidad'],['p','Precio Unidad'],['a',S.flip?'Ingreso neto':'Ganancia']].forEach(([k,t])=>{
     const active=sort.k===k,b=el('button','srt'+(active?' on':''),t+(active?(sort.d>0?' ▲':' ▼'):''));
     b.type='button';b.dataset.s=k;b.title='Ordenar por '+t.toLowerCase()+(active?' (clic para cambiar orden)':'');
     b.setAttribute('aria-label',b.title);b.setAttribute('aria-pressed',String(active));hd.append(b);});return hd;};
@@ -1653,7 +1669,7 @@ function paintVerdict(P){
     vis.forEach(r=>{
       const u=unitFor(r,k),qdTxt=r.qd>=.0001&&k==='null'?'Con −'+pctQ(r.qd)+'% por cantidad':null;
       const fT=r.fast?'Por rapidez: '+(r.fast.from==='disc'?'a un jugador':'en '+nullSystem())+' ganarías '+fmt(Math.max(0,r.fast.loss))+' más, pero tarda más.':null;
-      prow('',r.o.name,[qdTxt,fT].filter(Boolean).join(' · ')||null,r.q,u.p,u.l,r.g[k]-r.prod,SHIPS[k]?'antes del envío':null);
+      prow('',r.o.name,[qdTxt,fT].filter(Boolean).join(' · ')||null,r.q,u.p,u.l,r.g[k]-r.prod,S.flip?(SHIPS[k]?'antes del envío y la inversión':'antes de la inversión'):(SHIPS[k]?'antes del envío':null));
       if((k==='rNull'||k==='rJita')&&r.mins){
         const pr=x=>k==='rNull'?x.np:x.p,rt=k==='rNull'?rateNull():rateJita();
         const keyMin=x=>sort.k==='n'?x.m.toLowerCase():sort.k==='q'?x.n:
@@ -1763,7 +1779,7 @@ function paintVerdict(P){
       main.append(ctItems(shipRows.map(r=>({n:r.o.name,q:r.q,v:r.ship[r.best]?r.ship[r.best].v:0})),true));pl.append(box);return;}
     const g=rowsIn.filter(r=>r.best===k),[title,where,sub]=STEP[k]||[PLAN_L[k]||k,'',''];
     const groupGross=g.reduce((a,r)=>a+r.g[k]-r.prod,0);
-    const {box,main}=stepBox(k,i+1,title,where,sub,groupGross,SHIPS[k]?'antes del envío':'netos, ya con taxes');
+    const {box,main}=stepBox(k,i+1,title,where,sub,groupGross,S.flip?(SHIPS[k]?'antes del envío y la inversión':'antes de la inversión'):(SHIPS[k]?'antes del envío':'netos, ya con taxes'));
     box.classList.add('pl-section');box.dataset.sortId='all:'+k;box.dataset.action=k;
     const acts=el('div','stp-acts');
     const cb=copyBtn(g.map(r=>r.o.name+'\t'+Math.round(r.q)).join('\n'),'Copiar '+g.length+(g.length>1?' items':' item'));cb.classList.add('cp-all');acts.append(cb);
