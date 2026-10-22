@@ -287,3 +287,8 @@ En CI de v1.0.77 falló mining-types (0 != 34). Causa: la comparación de prefij
 - Oportunidad y tabla detallada de comercio pasan a acordeones compactos; signos y colores comunicativos en beneficios y diferencias. UI y motor siguen ES/EN y Dark/Light.
 - Suite `tests/market-scenarios.cjs` añade clasificación del tipo de material y reparto; `tests/financial-accounting.cjs` contempla sell/buy y fees de compra.
 - **Riesgo documentado:** el Plan Óptimo existente usa heurística por ítem y recalcula courier compartido; no está demostrado óptimo combinatorio global. Mejoras futuras requerirán un solver y conjunto de escenarios de regresión antes de reemplazarlo.
+
+
+## 2026-10-22 — v1.0.109 · Header oficial y mantenimiento prudente
+
+Se publicó el header aprobado sin sustituir la aplicación. Los elementos originales se reagrupan a través del código original, sin un segundo motor financiero ni perfiles duplicados. Se retiraron estilos contradictorios exclusivos del antiguo navbar, preservando paneles y funcionalidad. Margen de importación en Ajustes, incluso fuera de Comercio Jita; el campo oculto `#fImpM` sigue sincronizado con `#cImpM`. Se actualizó el HTML distribuible y las comprobaciones estáticas. Pendientes: validación real de ESI/SSO y verificación visual manual en Firefox/Light/Móvil.
