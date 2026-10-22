@@ -2345,246 +2345,174 @@ html.light .mm-unit-courier{background:rgba(255,255,255,.82)}
 html.light #pkOpportunity{background:rgba(255,255,255,.9)}
 
 
-/* v1.0.106: ONE balanced navigation row: Home | sales modes | import | modules.
-   Layout is grid so the selected-mode tools expand into the middle without
-   pushing the module switch or dark-theme control off the right edge. */
-#mmTabs.mm-modnav{
-  display:grid!important;
-  grid-template-columns:44px max-content minmax(0,1fr) max-content!important;
-  gap:10px!important;align-items:center!important;
-  justify-content:stretch!important;flex-wrap:initial!important;
-  min-height:67px;padding:9px 14px!important;overflow:visible!important
-}
-#mmTabs>.mm-home{grid-column:1;grid-row:1;margin:0!important;justify-self:center}
-#mmTabs>#businessSwitch{
-  grid-column:2;grid-row:1;display:flex!important;align-items:center;
-  min-width:0;min-height:44px;margin:0!important;padding:0 0 0 10px!important;
-  border:0!important;border-left:1px solid var(--line2)!important;
-  border-radius:0!important;box-shadow:none!important;background:transparent!important;
-  flex-wrap:nowrap!important;justify-content:flex-start!important;gap:0!important
-}
-#mmTabs>#businessSwitch>.mm-business-tabs{
-  display:inline-flex;flex-wrap:nowrap;align-items:center;
-  gap:3px;padding:3px!important;flex:0 0 auto;
-  border-radius:10px;white-space:nowrap
-}
-#mmTabs>#businessSwitch .mm-business-tab{
-  display:inline-flex;gap:7px;align-items:center;justify-content:center;
-  min-height:38px!important;height:38px;padding:0 11px!important;
-  font:650 .82rem/1.2 var(--f-ui)!important;white-space:nowrap
-}
-#mmTabs>#businessSwitch .mm-business-tab .ic{width:17px;height:17px;flex:0 0 17px}
-#mmTabs>.mm-right-actions{
-  grid-column:4;grid-row:1;display:flex;align-items:center;
-  justify-self:end;justify-content:flex-end;
-  gap:8px!important;margin:0!important;width:auto!important;min-width:0;flex-wrap:nowrap!important
-}
-#mmTabs .mm-modgroup{flex:0 0 auto}
-#mmTabs.mm-modnav .mm-modgroup .mm-mod{
-  height:38px!important;min-height:38px!important;padding:0 10px!important;gap:6px!important
-}
-#mmTabs>#importControls{
-  grid-column:3;grid-row:1;
-  display:flex;align-items:center;justify-content:space-between;
-  flex-wrap:nowrap;min-width:0;max-width:none;width:100%;min-height:44px;
-  padding:4px 7px!important;margin:0!important;
-  border:1px solid rgba(217,119,87,.2);border-radius:9px;
-  background:rgba(16,15,15,.2)!important;box-shadow:none!important;gap:6px
-}
-#mmTabs>#importControls[hidden]{display:none!important}
-#mmTabs>#importControls .mm-import-intro{flex:0 0 auto;min-width:0}
-#mmTabs>#importControls .mm-import-intro strong{font:700 .71rem/1.2 var(--f-ui)!important;white-space:nowrap;letter-spacing:.01em}
-#mmTabs>#importControls .mm-import-actions{display:flex;align-items:center;justify-content:flex-end;gap:6px;flex:0 1 auto;min-width:0;flex-wrap:nowrap}
-#mmTabs>#importControls .mm-buy-basis{gap:5px}
-#mmTabs>#importControls .mm-buy-basis select{min-width:105px;max-width:110px;min-height:35px}
-#mmTabs>#importControls #shipLab,#mmTabs>#importControls #rtM{min-height:35px;gap:6px}
-#mmTabs>#importControls #rtM .rm-f{white-space:nowrap}
-#mmTabs>#businessSwitch[hidden],body.mm-mining #mmTabs>#businessSwitch,
-body.mm-skills #mmTabs>#businessSwitch,body.mm-pi #mmTabs>#businessSwitch{display:none!important}
-html.light #mmTabs>#businessSwitch{background:transparent!important}
-html.light #mmTabs>#importControls{background:rgba(255,255,255,.6)!important}
-@media(max-width:1250px){
- #mmTabs.mm-modnav{grid-template-columns:44px max-content minmax(0,1fr)!important}
- #mmTabs>.mm-right-actions{grid-column:3;grid-row:1}
- #mmTabs>#importControls{grid-column:2/4;grid-row:2;justify-self:stretch;width:100%;box-sizing:border-box;padding:9px 12px!important}
- #mmTabs>#importControls .mm-import-actions{flex:1 1 auto;justify-content:flex-end}
-}
-@media(max-width:720px){
- #mmTabs.mm-modnav{grid-template-columns:34px minmax(0,1fr)!important;gap:8px!important;padding:9px 10px!important}
- #mmTabs>.mm-home{grid-column:1;grid-row:1}
- #mmTabs>#businessSwitch{grid-column:2;grid-row:1;padding-left:7px!important}
- #mmTabs>#businessSwitch>.mm-business-tabs{max-width:100%;min-width:0}
- #mmTabs>#businessSwitch .mm-business-tab{padding:0 7px!important;font-size:.75rem!important}
- #mmTabs>.mm-right-actions{grid-column:1/-1;grid-row:2;justify-self:center;justify-content:center;min-width:0;width:100%!important}
- #mmTabs>#importControls{grid-column:1/-1;grid-row:3;flex-wrap:wrap;gap:8px;min-width:0}
- #mmTabs>#importControls .mm-import-intro{flex:1 1 auto}
- #mmTabs>#importControls .mm-import-actions{flex:1 1 100%;flex-wrap:wrap;justify-content:space-between}
- #mmTabs.mm-modnav .mm-modgroup .mm-mod{padding-inline:8px!important}
-}
-@media(max-width:410px){
- #mmTabs>#businessSwitch .mm-business-tab{gap:4px;padding:0 5px!important;font-size:.69rem!important}
- #mmTabs>#businessSwitch .mm-business-tab .ic{width:14px;height:14px;flex-basis:14px}
- #mmTabs .mm-theme{margin:0}
-}
 
-
-/* v1.0.107 — compact Jita import bar.
-   Root cause: an unconstrained no-wrap flex row tried to fit full
-   "IMPORTACIÓN A HY-RWO" + "Comprar a" + select + courier + margin inside a
-   narrow grid track. Never allow text/controls to paint over one another. */
-#mmTabs>#importControls{
-  display:grid!important;
-  grid-template-columns:max-content minmax(0,1fr)!important;
-  align-items:center!important;
-  column-gap:9px!important;row-gap:7px!important;
-  padding:5px 8px!important;
-  min-width:0!important;min-height:44px!important;
-  box-sizing:border-box!important;
-  justify-content:initial!important;
+/* v1.0.109: only the approved main header. All financial/mining/skills panels keep original styles. */
+body .top.mm-ho-root{
+ display:grid!important;grid-template-columns:minmax(185px,1fr) minmax(0,auto) minmax(225px,1fr)!important;
+ grid-template-areas:"brand main actions" "context context context" "ticker ticker ticker"!important;
+ align-items:center!important;gap:0 18px!important;padding:12px clamp(18px,3vw,48px) 0!important;
+ width:100%!important;max-width:none!important;min-height:0!important;margin:0!important;
+ background:rgba(28,27,26,.88)!important;border-bottom:1px solid rgba(222,220,209,.13)!important;
 }
-#mmTabs>#importControls[hidden]{display:none!important}
-#mmTabs>#importControls .mm-import-intro{
-  grid-column:1;display:flex!important;align-items:center!important;
-  min-width:0!important;max-width:100%;flex:initial!important
+body .top.mm-ho-root>.brand{grid-area:brand!important;justify-self:start!important;min-width:0!important;margin:0!important;white-space:nowrap!important}
+body .top.mm-ho-root>#mmTabs{display:contents!important;border:0!important;background:none!important;box-shadow:none!important;margin:0!important;padding:0!important}
+body .top.mm-ho-root #mmTabs>.mm-ho-main{
+ grid-area:main;display:flex!important;align-items:center!important;justify-content:center!important;
+ gap:clamp(10px,1.6vw,23px)!important;min-width:0!important
 }
-#mmTabs>#importControls #importDestination{
-  display:inline-flex!important;align-items:center!important;
-  gap:6px;min-width:0;max-width:100%;
-  padding:7px 9px;border-radius:7px;
-  background:rgba(217,119,87,.10);
-  border:1px solid rgba(217,119,87,.25);
-  color:var(--txt);white-space:nowrap!important;
-  font:700 .76rem/1.15 var(--f-ui)!important;
-  letter-spacing:0!important;
-  cursor:help
+body .top.mm-ho-root #mmTabs>.mm-ho-context{
+ grid-area:context;display:flex!important;align-items:center!important;justify-content:center!important;
+ flex-wrap:wrap!important;gap:8px 28px!important;min-height:44px;min-width:0;
+ border-top:1px solid rgba(222,220,209,.11);margin-top:12px;padding:7px 0
 }
-#mmTabs>#importControls #importDestination>.ic{
-  width:15px;height:15px;flex:0 0 15px;color:var(--clay)
+body .top.mm-ho-root #mmTabs>.mm-ho-legacy{display:none!important}
+body .top.mm-ho-root .mm-ho-main .mm-modgroup{
+ display:flex!important;align-items:center!important;gap:clamp(10px,1.6vw,23px)!important;
+ flex:0 0 auto!important;max-width:none!important;overflow:visible!important;
+ border:0!important;background:transparent!important;box-shadow:none!important;padding:0!important;margin:0!important
 }
-#mmTabs>#importControls #importMarketLabel{white-space:nowrap;letter-spacing:.015em}
-#mmTabs>#importControls #importHeadingPrefix,
-#mmTabs>#importControls #tradePurchaseLabel{
-  position:absolute!important;overflow:hidden!important;
-  width:1px!important;height:1px!important;
-  padding:0!important;margin:-1px!important;
-  border:0!important;clip:rect(0,0,0,0)!important;
-  white-space:nowrap!important
+body .top.mm-ho-root .mm-ho-main .mm-home,
+body .top.mm-ho-root .mm-ho-main .mm-mod{
+ display:inline-flex!important;position:relative!important;align-items:center!important;justify-content:center!important;
+ flex:0 0 auto!important;width:auto!important;min-width:0!important;height:37px!important;min-height:37px!important;
+ margin:0!important;padding:9px 0!important;border:0!important;border-radius:0!important;
+ background:transparent!important;box-shadow:none!important;font:500 13px/1.25 var(--f-ui,system-ui)!important;
+ color:var(--mut,#c2c0b6)!important;white-space:nowrap!important
 }
-#mmTabs>#importControls .mm-import-actions{
-  grid-column:2;display:flex!important;min-width:0!important;
-  align-items:center!important;justify-content:flex-end!important;
-  gap:7px!important;flex:initial!important;flex-wrap:wrap!important
+body .top.mm-ho-root .mm-ho-main .mm-home::after{content:"Home"}
+body .top.mm-ho-root .mm-ho-main .mm-home .ic,
+body .top.mm-ho-root .mm-ho-main .mm-mod .ic,
+body .top.mm-ho-root .mm-ho-main .mm-mining-icon,
+body .top.mm-ho-root .mm-ho-main .mm-skills-icon{display:none!important}
+body .top.mm-ho-root .mm-ho-main .mm-mod[aria-selected="true"]{color:var(--txt,#faf9f5)!important;font-weight:650!important}
+body .top.mm-ho-root .mm-ho-main .mm-mod[aria-selected="true"]::after,
+body .top.mm-ho-root .mm-ho-main .mm-mod:hover::after{
+ content:"";position:absolute;left:0;right:0;bottom:0;height:2px;background:var(--clay,#d97757)
 }
-#mmTabs>#importControls .mm-buy-basis{
-  display:inline-flex!important;align-items:center!important;
-  flex:0 0 auto!important;min-width:0!important;width:auto!important;
-  gap:0!important
+body .top.mm-ho-root>.mm-top-actions{
+ grid-area:actions!important;display:flex!important;flex-direction:row!important;
+ justify-self:end!important;justify-content:flex-end!important;align-items:center!important;
+ margin:0!important;padding:0!important;gap:10px!important;max-width:100%!important;
+ width:auto!important;min-width:0!important;flex:0 1 auto!important
 }
-#mmTabs>#importControls .mm-buy-basis select{
-  width:116px!important;min-width:116px!important;max-width:116px!important;
-  min-height:35px!important;height:35px!important;flex:0 0 116px!important;
-  padding:5px 6px!important;margin:0!important;
-  font:650 .78rem/1.1 var(--f-ui)!important;
+body .top.mm-ho-root>.mm-top-actions>.top-header-action,
+body .top.mm-ho-root>.mm-top-actions>.top-guide-action{
+ display:inline-flex!important;position:static!important;align-items:center!important;justify-content:center!important;
+ width:auto!important;height:33px!important;min-height:33px!important;padding:4px 0!important;margin:0!important;
+ border:0!important;box-shadow:none!important;background:transparent!important;
+ color:var(--mut,#c2c0b6)!important;font:500 12px/1.2 var(--f-ui,system-ui)!important
 }
-#mmTabs>#importControls #shipLab{
-  display:inline-flex!important;flex:0 0 auto;align-items:center!important;
-  gap:7px!important;min-height:35px!important;
-  white-space:nowrap!important;margin:0!important
+body .top.mm-ho-root>.mm-top-actions .top-header-action .ic,
+body .top.mm-ho-root>.mm-top-actions .top-guide-action .ic{display:none!important}
+body .top.mm-ho-root>.mm-top-actions .top-header-action .side-l,
+body .top.mm-ho-root>.mm-top-actions .top-guide-action .side-l{display:inline!important;color:inherit!important}
+body .top.mm-ho-root>.mm-top-actions>.mm-profile-row{
+ position:static!important;grid-row:auto!important;grid-column:auto!important;display:flex!important;
+ width:auto!important;min-width:0!important;padding-left:14px!important;border-left:1px solid rgba(222,220,209,.15)!important
 }
-#mmTabs>#importControls #shipLab[hidden],
-#mmTabs>#importControls #rtM[hidden]{display:none!important}
-#mmTabs>#importControls #rtM{
-  display:inline-flex!important;flex:0 0 auto;align-items:center!important;
-  gap:5px!important;min-height:35px!important;
-  margin:0!important;white-space:nowrap!important
+body .top.mm-ho-root .mm-profile-row .eve-identity{display:flex!important;width:auto!important;max-width:155px!important;min-width:0!important}
+body .top.mm-ho-root .mm-profile-row .eve-identity-button{
+ display:flex!important;align-items:center!important;gap:6px!important;
+ width:auto!important;max-width:155px!important;min-width:0!important;
+ height:34px!important;min-height:34px!important;padding:4px 6px!important;margin:0!important;
+ border:0!important;border-radius:5px!important;background:transparent!important;box-shadow:none!important
 }
-#mmTabs>#importControls #rtM .rm-f{display:inline-flex!important;flex:0 0 auto!important;min-width:0}
-#mmTabs>#importControls #fImpM{min-width:4ch!important;width:4ch!important;max-width:4ch!important}
-html.light #mmTabs>#importControls #importDestination{
-  background:rgba(177,96,55,.09);border-color:rgba(177,96,55,.29)
+body .top.mm-ho-root .mm-profile-row .eve-identity-button img{width:25px!important;height:25px!important;flex:0 0 25px!important}
+body .top.mm-ho-root .mm-profile-row #evePilotName{
+ max-width:105px!important;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+ font:600 12px/1.2 var(--f-ui)!important
 }
-/* When the available navbar gets tight, the import bar has its own second
-   row. This is preferable to clipping prices or overlapping form controls. */
-@media(max-width:1450px){
-  #mmTabs.mm-modnav{grid-template-columns:44px max-content minmax(0,1fr)!important}
-  #mmTabs>.mm-right-actions{grid-column:3!important;grid-row:1!important}
-  #mmTabs>#importControls{
-    grid-column:2/4!important;grid-row:2!important;
-    width:100%!important;min-width:0!important;
-    grid-template-columns:max-content minmax(0,1fr)!important;
-    justify-self:stretch;padding:8px 11px!important
-  }
+body .top.mm-ho-root .mm-ho-context #businessSwitch,
+body .top.mm-ho-root .mm-ho-context .mm-business-tabs{
+ display:flex!important;align-items:center!important;justify-content:center!important;
+ flex:0 0 auto!important;width:auto!important;min-width:0!important;min-height:0!important;
+ border:0!important;background:transparent!important;box-shadow:none!important;margin:0!important;padding:0!important
 }
-@media(max-width:720px){
-  #mmTabs>#importControls{
-    grid-column:1/-1!important;grid-row:3!important;
-    grid-template-columns:minmax(0,1fr)!important;
-    justify-self:stretch!important
-  }
-  #mmTabs>#importControls .mm-import-intro{grid-column:1}
-  #mmTabs>#importControls .mm-import-actions{
-    grid-column:1;justify-content:flex-start!important;
-    flex-wrap:wrap!important;width:100%!important
-  }
+body .top.mm-ho-root .mm-ho-context .mm-business-tabs{gap:21px!important}
+body .top.mm-ho-root .mm-ho-context .mm-business-tab{
+ display:inline-flex!important;position:relative!important;align-items:center!important;
+ flex:0 0 auto!important;width:auto!important;min-width:0!important;
+ height:32px!important;min-height:32px!important;margin:0!important;padding:5px 0!important;
+ border:0!important;border-radius:0!important;background:transparent!important;box-shadow:none!important;
+ color:var(--mut,#c2c0b6)!important;font:550 12px/1.2 var(--f-ui,system-ui)!important;white-space:nowrap!important
 }
-
-
-/* Upper-right actions: true symmetry instead of a three-column grid with
-   an empty column on the left. Tools sit in equal columns, and the same EVE
-   character button occupies the centered row directly beneath both tools. */
-.top .mm-top-actions{
-  display:grid!important;
-  grid-template-columns:repeat(2,minmax(0,1fr))!important;
-  grid-template-rows:40px 36px!important;
-  width:170px!important;min-width:170px!important;
-  gap:7px 8px!important;
-  align-content:center!important;
-  align-items:center!important;justify-items:center!important;
-  flex:0 0 170px!important;
-  margin-left:auto!important;padding:0!important;
+body .top.mm-ho-root .mm-ho-context .mm-business-tab.on{color:var(--txt,#faf9f5)!important}
+body .top.mm-ho-root .mm-ho-context .mm-business-tab.on::after{
+ content:"";position:absolute;bottom:0;left:0;right:0;height:2px;background:var(--clay,#d97757)
 }
-.top .mm-top-actions>.top-header-action{
-  grid-column:1!important;grid-row:1!important;
-  justify-self:center!important
+body .top.mm-ho-root .mm-ho-context .mm-business-tab .ic{display:none!important}
+body .top.mm-ho-root .mm-ho-context #importControls{
+ display:flex!important;position:static!important;align-items:center!important;justify-content:center!important;
+ width:auto!important;min-width:0!important;max-width:none!important;height:auto!important;min-height:0!important;
+ grid-row:auto!important;grid-column:auto!important;margin:0!important;padding:0!important;gap:8px!important;
+ flex-wrap:wrap!important;border:0!important;border-radius:0!important;
+ background:transparent!important;box-shadow:none!important
 }
-.top .mm-top-actions>.top-guide-action{
-  grid-column:2!important;grid-row:1!important;
-  justify-self:center!important
+body .top.mm-ho-root .mm-ho-context #importControls[hidden]{display:none!important}
+body .top.mm-ho-root .mm-ho-context #importDestination,
+body .top.mm-ho-root .mm-ho-context #importHelp,
+body .top.mm-ho-root .mm-ho-context #rtM{display:none!important}
+body .top.mm-ho-root .mm-ho-context #importControls .mm-import-actions{
+ display:flex!important;align-items:center!important;justify-content:center!important;
+ width:auto!important;min-width:0!important;flex-wrap:wrap!important;gap:9px!important;padding:0!important;margin:0!important
 }
-.top .mm-top-actions>.mm-profile-row{
-  grid-column:1/-1!important;grid-row:2!important;
-  width:100%!important;min-width:0!important;
-  display:flex!important;align-items:center!important;
-  justify-content:center!important
+body .top.mm-ho-root .mm-ho-context .mm-buy-basis select{
+ width:116px!important;max-width:116px!important;min-width:116px!important;
+ height:34px!important;min-height:34px!important;margin:0!important;padding:4px 18px 4px 8px!important;
+ border:1px solid rgba(222,220,209,.2)!important;border-radius:7px!important;
+ background:rgba(25,25,24,.7)!important;color:var(--txt,#faf9f5)!important;font:500 12px/1.3 var(--f-ui,system-ui)!important
 }
-.top .mm-profile-row .eve-identity{
-  width:100%!important;max-width:170px!important;
-  display:flex!important;justify-content:center!important
+body .top.mm-ho-root .mm-ho-context #shipLab{display:inline-flex!important;align-items:center!important;gap:6px!important;margin:0!important;white-space:nowrap!important;font-size:12px!important}
+body .top.mm-ho-root .mm-ho-context #shipLab[hidden]{display:none!important}
+body .top.mm-ho-root .mm-ho-context .mm-theme{display:flex!important;align-items:center!important;gap:6px!important;margin:0!important;padding:0!important;font-size:12px!important}
+body .top.mm-ho-root>.ticker{
+ grid-area:ticker!important;display:flex!important;justify-content:center!important;width:100%!important;max-width:none!important;
+ height:24px!important;min-height:24px!important;margin:0!important;padding:0!important;order:0!important;
+ border:0!important;border-top:1px solid rgba(222,220,209,.1)!important;border-radius:0!important;
+ background:transparent!important;box-shadow:none!important;overflow:hidden!important;
+ -webkit-mask-image:none!important;mask-image:none!important
 }
-.top .mm-profile-row .eve-identity-button{
-  display:flex!important;align-items:center!important;justify-content:center!important;
-  width:100%!important;max-width:170px!important;min-width:0!important;
-  height:36px!important;min-height:36px!important;
-  gap:8px!important;padding:3px 9px!important;
-  border-radius:8px;border:1px solid rgba(231,223,211,.14);
-  background:rgba(24,23,22,.34);
-  box-sizing:border-box
+body .top.mm-ho-root .ticker .tk-track{height:24px!important;display:flex!important;align-items:center!important;animation:none!important;transform:none!important}
+body .top.mm-ho-root .ticker .tk-i{font-size:10px!important;padding:0 5px!important}
+body .top.mm-ho-root .ticker .tk-i:not(:first-child){display:none!important}
+body .top.mm-ho-root .ticker .ref-tag{font-size:9px!important}
+body.mm-mining .top.mm-ho-root .mm-ho-context #businessSwitch,
+body.mm-skills .top.mm-ho-root .mm-ho-context #businessSwitch,
+body.mm-pi .top.mm-ho-root .mm-ho-context #businessSwitch{display:none!important}
+html.light body .top.mm-ho-root{background:rgba(247,245,239,.93)!important;border-color:rgba(69,53,43,.2)!important}
+html.light body .top.mm-ho-root .mm-ho-context .mm-buy-basis select{background:#fff!important;color:#2e2923!important}
+@media(max-width:1120px){
+ body .top.mm-ho-root{grid-template-columns:minmax(0,1fr) auto!important;grid-template-areas:"brand actions" "main main" "context context" "ticker ticker"!important;gap:0 15px!important;padding-top:10px!important}
+ body .top.mm-ho-root #mmTabs>.mm-ho-main{padding:7px 0 0!important;justify-self:center!important}
+ body .top.mm-ho-root #mmTabs>.mm-ho-context{margin-top:3px!important}
 }
-.top .mm-profile-row .eve-identity-button img{
-  flex:0 0 26px;width:26px!important;height:26px!important;border-radius:6px
+@media(max-width:610px){
+ body .top.mm-ho-root{padding:10px 12px 0!important;gap:4px 8px!important}
+ body .top.mm-ho-root>.brand{font-size:12px!important;overflow:hidden;text-overflow:ellipsis}
+ body .top.mm-ho-root>.brand small{display:none!important}
+ body .top.mm-ho-root>.mm-top-actions{gap:8px!important}
+ body .top.mm-ho-root>.mm-top-actions>.top-header-action,
+ body .top.mm-ho-root>.mm-top-actions>.top-guide-action{width:27px!important;padding:5px!important;font-size:0!important}
+ body .top.mm-ho-root .mm-top-actions .top-header-action .ic,
+ body .top.mm-ho-root .mm-top-actions .top-guide-action .ic{display:inline-block!important;width:18px!important;height:18px!important}
+ body .top.mm-ho-root .mm-top-actions .top-header-action .side-l,
+ body .top.mm-ho-root .mm-top-actions .top-guide-action .side-l{display:none!important}
+ body .top.mm-ho-root>.mm-top-actions>.mm-profile-row{padding-left:8px!important}
+ body .top.mm-ho-root .mm-profile-row .eve-identity-button{max-width:95px!important}
+ body .top.mm-ho-root .mm-profile-row #evePilotName{max-width:65px!important;font-size:10px!important}
+ body .top.mm-ho-root #mmTabs>.mm-ho-main{width:100%!important;justify-self:stretch!important;justify-content:center!important;gap:11px!important}
+ body .top.mm-ho-root .mm-ho-main .mm-modgroup{gap:11px!important}
+ body .top.mm-ho-root .mm-ho-main .mm-home,
+ body .top.mm-ho-root .mm-ho-main .mm-mod{height:31px!important;min-height:31px!important;font-size:11px!important}
+ body .top.mm-ho-root #mmTabs>.mm-ho-context{padding:3px 0!important;gap:4px 12px!important}
+ body .top.mm-ho-root .mm-ho-context .mm-business-tabs{gap:14px!important}
+ body .top.mm-ho-root .mm-ho-context .mm-business-tab{height:30px!important;min-height:30px!important;font-size:11px!important}
+ body .top.mm-ho-root .mm-ho-context .mm-theme{font-size:10px!important}
+ body .top.mm-ho-root>.ticker{height:23px!important}
 }
-.top .mm-profile-row .eve-identity-button #evePilotName{
-  flex:0 1 auto;min-width:0;max-width:115px;
-  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
-  font:650 .78rem/1.1 var(--f-ui)
-}
-html.light .top .mm-profile-row .eve-identity-button{
-  border-color:rgba(67,53,45,.18);background:rgba(255,255,255,.63)
-}
-@media(max-width:760px){
-  .top .mm-top-actions{width:146px!important;min-width:146px!important;flex-basis:146px!important}
-  .top .mm-profile-row .eve-identity-button{max-width:146px!important}
-  .top .mm-profile-row .eve-identity-button #evePilotName{max-width:89px}
+@media(max-width:380px){
+ body .top.mm-ho-root #mmTabs>.mm-ho-main,body .top.mm-ho-root .mm-ho-main .mm-modgroup{gap:7px!important}
+ body .top.mm-ho-root .mm-ho-main .mm-home,body .top.mm-ho-root .mm-ho-main .mm-mod{font-size:10px!important}
 }
 
 </style>
