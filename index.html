@@ -6793,6 +6793,7 @@ const MineUI=(()=>{
   const simShip=s=>BARGE_OF[s]||s;
   const BOOST=new Map((MINE.boosts||[]).map(b=>[b.n,b]));
   const PRICE={}; // por typeID: {buy,sell,at} — solo en memoria
+  const PRICE_ERRORS=new Map(); // fallo de consulta ESI no significa que el mercado esté vacío
   const MANUAL_PRICE=Object.create(null); // overrides por ID y lado; mantiene ESI intacto
   const manualKey=(id,side)=>String(id)+':'+side;
   const manualQuote=(id,side)=>MANUAL_PRICE[manualKey(id,side)]??null;
@@ -6907,10 +6908,22 @@ const MineUI=(()=>{
       if(PRICE[id].at<cutoff&&!priceInflight.has(Number(id)))delete PRICE[id];
   }
   function fetchPrice(id,force=false){
+    id=Number(id);
     if(priceInflight.has(id))return priceInflight.get(id);
-    const promise=fetchPriceCore(id,force).finally(()=>priceInflight.delete(id));
+    const promise=fetchPriceCore(id,force).then(book=>{
+      PRICE_ERRORS.delete(id);return book;
+    },err=>{PRICE_ERRORS.set(id,String(err?.message||err));throw err;})
+      .finally(()=>priceInflight.delete(id));
     priceInflight.set(id,promise);
     return promise;
+  }
+  // Diferencia precio pendiente, fallo ESI y mercado realmente sin órdenes.
+  function marketPriceState(id,side){
+    if(quote(id,side)!=null)return null;
+    if(priceInflight.has(Number(id)))return 'Consultando el precio en Jita 4-4…';
+    if(PRICE_ERRORS.has(Number(id)))return 'Error al consultar Jita 4-4: '+PRICE_ERRORS.get(Number(id))+'. Reintenta desde Editar precios o escribe el valor manual.';
+    if(PRICE[id])return 'No hay una orden '+(side==='buy'?'de compra':'de venta')+' en Jita 4-4. Prueba otra orden, sin comprimir o un precio manual.';
+    return 'Precio de Jita pendiente. Actualiza ESI en Editar precios o introduce una cotización manual.';
   }
   async function loadPrice(){
     pruneMiningPriceCache();
@@ -7232,8 +7245,10 @@ const MineUI=(()=>{
         ': '+NF2.format(val)+' ISK netos por unidad de hielo minada.';
       st.classList.toggle('err',val==null);return;
     }
-    const v=unitPrice();if(v==null&&!p){st.replaceChildren(document.createTextNode('Consultando Jita 4-4…'));return;}
-    if(v==null){st.classList.add('err');st.replaceChildren(document.createTextNode('No hay órdenes de ese lado en Jita 4-4 para este ítem. Prueba el otro precio o «Sin comprimir».'));return;}
+    const v=unitPrice();if(v==null){
+      st.classList.toggle('err',!priceInflight.has(Number(priceId())));
+      st.replaceChildren(document.createTextNode(marketPriceState(priceId(),S.base)));return;
+    }
     const header=h('span','mn-pst-title','Precio '+(S.base==='buy'?'Jita Buy':'Jita Sell')+' · por unidad');
     const amount=h('b','mn-pst-main',NF2.format(v)+' ISK');
     const meta=h('span','mn-pst-meta',(S.cmp&&m.cid?'Compressed ':'')+m.n+
@@ -7316,7 +7331,12 @@ const MineUI=(()=>{
     box.querySelectorAll('svg,.mn-empty').forEach(n=>n.remove());const W=box.clientWidth;if(W<50)return;
     const data=selectedShips().map(s=>({s,rows:TIERS.map(t=>row(s,t))}));
     const max=Math.max(0,...data.flatMap(d=>d.rows.map(r=>r&&val(r)!=null?val(r):0)));
-    if(!(max>0)){box.appendChild(h('div','mn-empty',S.met==='isk'?'Sin precio todavía.':'Sin datos.'));return;}
+    if(!(max>0)){
+      const message=S.met==='isk'?(S.mat==='ice'&&S.iceLoc!=='jita'?
+        'Faltan cotizaciones para valorar el hielo con la ruta seleccionada. Revisa Ajustes y Editar precios.':
+        marketPriceState(priceId(),S.base)):'No hay datos de extracción para este escenario.';
+      box.appendChild(h('div','mn-empty',message));return;
+    }
     const H=340,mL=86,mR=58,mT=4,mB=22,svg=el('svg',{viewBox:'0 0 '+W+' '+H,role:'img','aria-label':'Producción por nave y escalón'});
     const tk=ticks(max,W<480?3:5),top=tk[tk.length-1],x=v=>mL+(W-mL-mR)*v/top;
     const band=(H-mT-mB)/data.length,inner=band*.78,bh=inner/3;
@@ -7495,7 +7515,9 @@ const MineUI=(()=>{
         missing.forEach(name=>SKILL_RESOLVED.add(name));
       }
       const ids=names.map(name=>SKILL_BOOK_IDS[name]).filter(Boolean);
-      await loadMany(ids,()=>{},force);
+      let quoteError=null;
+      await loadMany(ids,err=>{quoteError=err;},force);
+      if(quoteError)skillError=String(quoteError.message||quoteError);
     }catch(e){skillError=String(e.message||e);}
     finally{skillBusy=false;paintTraining();}
   }
@@ -7971,14 +7993,28 @@ const MineUI=(()=>{
     $q('.mn-iii-estimate').hidden=S.lv!==3;
     $q('.mn-imp-estimate').hidden=S.lv===3||S.imp!==4;
     paintBoost();paintPrice();paintTake();paintKpi();paintAllShips();paintDetail();paintInvestNote();paintTraining();drawCharts();}
-  function needPrices(){let ids;
-    if(S.view==='max'){ids=[...['moon','ice','gas'].map(matPriceId),22615,22623];}
-    else if(S.view==='plan'){ids=[...['moon','ice','gas'].flatMap(m=>[matPriceId(m),...(planFit(m)||{items:[]}).items.map(x=>x[0]),...MINE.impl[m]]),...MINE.attrImpl['3']];
-      if(!PLEX.at){bulkBusy++;loadPlex().finally(()=>{bulkBusy--;paint();});}}
-    else ids=[...shipFitIds(),...(S.imp?MINE.impl[S.mat]:[])];
+  function needPrices(){
+    // El material seleccionado es la primera cotización en TODAS las vistas.
+    // Antes Rendimiento Nave pedía los fits, no el ore/hielo/gas, por lo que
+    // ISK/h quedaba sin precio tras restaurar los ajustes de una sesión.
+    let ids;
+    if(S.view==='max'){
+      ids=[matPriceId(S.mat),...['moon','ice','gas'].map(matPriceId),22615,22623];
+    }else if(S.view==='plan'){
+      ids=[matPriceId(S.dmat),...['moon','ice','gas'].flatMap(m=>[
+        matPriceId(m),...(planFit(m)?.items||[]).map(x=>x[0]),...(MINE.impl[m]||[])
+      ]),...(MINE.attrImpl['3']||[])];
+      if(!PLEX.at){bulkBusy++;loadPlex().finally(()=>{bulkBusy--;paint();});}
+    }else{
+      ids=[matPriceId(S.mat),...shipFitIds(),...(S.imp?(MINE.impl[S.mat]||[]):[])];
+    }
     if(S.iceLoc==='refine'&&((S.view==='ships'&&S.mat==='ice')||S.view==='plan'||S.view==='max'))ids.push(...iceProducts());
-    loadMany(ids,()=>paint());if(S.view==='ships')loadSkillBooks();
-    if(ids.some(id=>!PRICE[id]))paint();}
+    ids=[...new Set(ids.filter(id=>Number.isInteger(Number(id))&&Number(id)>0).map(Number))];
+    loadMany(ids,()=>paint());
+    if(S.view==='ships')loadSkillBooks();
+    // La última pintura ocurre cuando terminan las consultas, también si ESI falla.
+    if(ids.some(id=>!PRICE[id]))paint();
+  }
   function drawCharts(){if(!root||!root.offsetParent)return;lastW=root.clientWidth;if(S.view==='plan'){drawCum({moon:planCalc('moon'),ice:planCalc('ice'),gas:planCalc('gas')});return;}if(S.view==='max')return;paintBars();drawn=true;}
 
   // Secondary navigation: all panels remain mounted for existing painting and ESI updates.
