@@ -234,3 +234,72 @@
 - La imagen oficial de **Hulk (Type ID 22544)** conserva su URL y modelo exacto, pero elimina **visualmente** el recuadro negro del render por composición CSS: `mix-blend-mode: screen` en Dark y `invert(1) + multiply` en Light. Es una solución visual, **no se ha generado PNG con alfa auténtico**; en Light la silueta puede verse con colores invertidos. Se mantiene el fallback si falla la imagen.
 - Los tests de `tests/skills-integration.cjs` comprueban estilos de estado en Light, etiqueta «Skill Plan» y tratamiento de la Hulk en ambos temas. Mantener este contrato al modificar la navegación.
 - Publicación con versión `1.0.97` mediante GitHub Actions. Resultado de navegador real y carga de iconos remotos **pendiente de QA**. Esta iteración no tocó cálculos de ISK, Skills, minería ni SSO.
+
+
+## 2026-10-21 — v1.0.98 · Dos negocios, materiales Null, coste unitario y UX compacto
+
+**Tipo de decisión:** especificación + implementación + pruebas. **Estado:** código integrado en `main`, compilación `1.0.98` generada por GitHub Actions (commit `2e8b2ea8c04c…`); falta QA manual de la UI en Firefox, móvil y EVE real. **Esta sección prevalece sobre cualquier mención antigua al switch Jita/HY-RWO visible o al descuento genérico de 90 % para todos los materiales.**
+
+### /specify — Problema y resultado esperado
+
+**Problema:** un switch sin contexto mezclaba liquidación de objetos farmeados en Nullsec con la actividad distinta de importación especulativa Jita→Null. La cifra principal cambiaba de significado; los precios del mercado local no son accesibles de forma confiable, los materiales abundantes suelen tener descuentos fuertes y el courier pesado puede requerir múltiples contratos.
+
+**Solución de UX:** bajo la pestaña principal Ventas aparecen dos opciones explícitas y simétricas:
+1. **Vender mis ítems:** inventario ya poseído/obtenido en Nullsec. Salidas locales (Keepstar/órdenes, Buyback, reproceso, venta a jugadores personalizada) o Jita con transporte. Magnitud principal: **ISK netos que recibe el piloto**. No deducir un coste histórico de fabricación/farmeo inexistente.
+2. **Comerciar desde Jita:** comprar en Jita mediante `Sell` o `Buy Order` y revender en Null con envío e impuestos; también pueden compararse alternativas de vender en Jita. Magnitud principal: **beneficio neto = ingreso neto de la ruta escogida − inversión inicial**. En Buy Order, inversión incluye el **broker de colocar la orden**, pero **no** promete que la orden se complete al precio/volumen de la cotización.
+
+**Reutilización:** `S.flip`, `setFlip`, el motor `computePlan`, `modeTotal`, los costes `courierCost`, Buyback, impuesto de venta, reproceso y pedidos quedan **intactos semánticamente**. `#bFlip` permanece oculto como control técnico de compatibilidad; `#businessSwitch` llama `setFlip` y actualiza etiquetas ES/EN. Evitar mantener dos implementaciones de cálculo que puedan divergir.
+
+### /clarify — Precios locales: política conservadora y overrides
+
+La fuente de precio local **no es una cotización ESI de HY-RWO**. El motor usa reglas explícitas con esta precedencia, antes de taxes y broker:
+
+| Prioridad | Regla en `nullList()` | Justificación |
+|---|---|---|
+| 1 | Precio manual del ítem en `S.refinedMan.null[name]` | Cotización real escrita por el piloto, en ISK por unidad. No afecta Jita/Buyback. |
+| 2 | Precio local visto/escrito `nullSeen` cuando exista | Usar la evidencia específica mejor que cualquier descuento genérico. |
+| 3 | Hielo sin refinar (`C.ice.nullMode`) | Conservar política de hielo previa. |
+| 4 | Isótopos de hielo | Referencia Jita Buy, no aplicar remate general. |
+| 5 | Heavy Water, Liquid Ozone, Strontium | Mantener `C.ice.refLoss=55%` de descuento, que equivale a **45 % de Jita Buy**. |
+| 6 | Ore común, minerales refinados de ore y otros no-módulos en pilas de ≥1.000 unidades | `C.nullBulk=0.45`: precio de venta local **45 % de Jita Buy**, **no 45 % de descuento**. Ajustable en Settings (`cBulkNull`). |
+| 7 | Moon Goo/refinados lunares, isótopos, Mercoxit, módulos y otros objetos | No usar `nullBulk`; mantener reglas originales `nullNonMod` y `marginFor`. |
+
+**Moon Goo y R64:** proteger materiales refinados lunares de una penalización indiscriminada; EVE puede tener alta densidad de ISK/m³ al refinar R64. El modelo **no garantiza** que cada moon ore bruto sea rentable de exportar: la ruta de Jita debe pagar su verdadero courier por volumen y colateral. La categoría del mineral se deriva de `REFINE`, no de una lista inventada de precios.
+
+**Descuento por volumen/cantidad:** `qtyDisc` sigue siendo independiente, conserva topes/interruptor y se aplica cuando corresponda. No agregar un descuento adicional oculto a precios manuales.
+
+**Importante:** el 45 % es una **hipótesis editable para HY-RWO**, no una media verificada ni garantía de ejecución. Las ofertas reales difieren por ítem, momento y hub. La interfaz debe identificar la procedencia de estos valores, no presentarlos como órdenes consultadas.
+
+### /plan — Contratos, coste marginal y comparación
+
+`C.maxVol` conserva el máximo de **350.000 m³ por contrato** por defecto. `trips(V)` genera múltiples contratos cuando se excede; `courierCost(V,C)` aplica cargo fijo por contrato, tarifa por m³ y colateral, una vez sobre todo el lote efectivamente enviado. Los ítems refinados pueden ocupar menos volumen que el ore original y resultar más rentables tras deducciones, por lo que la opción reprocesar y enviar sigue comparándose.
+
+`allocateCourier(P)` utiliza `courierShare` solo para hallar **pesos de reparto** entre ítems enviados, luego normaliza contra `P.shipCost` para evitar errores de redondeo y cobrar múltiples veces el cargo fijo. **Invariante:**
+`sum(r.courierAllocated) == P.shipCost` (con margen de coma flotante), y `r.courierPerUnit = r.courierAllocated / r.q`. El coste por unidad se muestra en el propio desglose expandido de cada ítem y en el acordeón `#unitCourierBox`.
+
+`flipPlanAccounting(P)` respeta el plan elegido y el presupuesto de compra:
+- Sell Order inmediata de compra: `precio Jita Sell × q`.
+- Buy Order de adquisición: `precio Jita Buy × q × (1 + broker de colocación)`. Ejecutar en Jita requiere compradores/vendedores reales y liquidez suficiente; el fill es hipotético.
+- `profit = P.best − sum(inversión)`, donde `P.best` ya descuenta cargos del courier **y** impuestos de venta del plan.
+- `paintPicker` expresa alternativas en **beneficio**, no en ingresos de venta, cuando la base de inversión está completa. Como la base es común a todas las rutas, `delta` entre alternativas se conserva.
+- Si faltan precios necesarios para comprar, mostrar la cantidad verificable de ingresos netos, **no** inventar beneficio o ROI.
+
+**Coste de oportunidad:** compara el plan elegido contra la mejor alternativa disponible por resultado monetario, con importes firmados (+ verde / − rojo) y nombres de planes acentuados; detalles detrás de acordeón `pk-opp-details`. No prometer velocidad de ejecución real sin datos de demanda.
+
+### /tasks — Código y aceptación
+
+| Artefacto | Cambios |
+|---|---|
+| `src/shell.html` | Business tabs, compra Sell/Buy Order, precios Bulk en Settings, courier por unidad, layouts compactos, acordeones y Light/Dark. |
+| `src/script.js` | `syncBusinessMode`, `bulkNullMaterial`, precios Null manuales, `tradePurchaseUnit/Cost`, `allocateCourier`, `paintCourierUnits`, oportunidad compacta y negocio condicionado. |
+| `tests/financial-accounting.cjs` | Financiación Jita Sell/Buy Order, broker, ROI, faltantes y planes mixtos con ejemplos sintéticos. |
+| `tests/market-scenarios.cjs` | Ore, minerales, Moon Goo, isótopos, hielo, override local, cambio de 45 %, reparto courier por unidad y presencia de controles. |
+| `.github/workflows/build-site.yml` | Versión `1.0.98`, ejecución de nuevas pruebas tras generar el sitio. |
+| `docs/SDD.md`, `docs/PROGRESS.md`, `CHANGELOG.md`, `README.md` | Registrar diseño, invariantes, limitaciones, QA y resultados. |
+
+**QA automatizado comprobado:** commit `2e8b2ea8c04c…` es el build generado por el pipeline; las regresiones integradas pasaron para generar ese HTML. También se validó sintaxis JS y se ejercitaron ejemplos sintéticos de compra Sell, Buy Order con broker, excepción de isótopos/Moon Goo y reparto de courier.
+
+**QA todavía pendiente:** sesión real, datos de usuario y variaciones en el mercado; inspección visual interactiva en el sitio publicado (incluida alternancia Light/Dark y mobile); perfilador de memoria de larga duración. **El motor heredado de selección automática es heurístico** (mejor opción por ítem, segundo cálculo del courier y reglas de velocidad). **NO se afirma una optimización combinatoria global exhaustiva de todas las rutas**; añadirla exige un algoritmo separado y regresiones económicas específicas antes de cambiar recomendaciones.
+
+**No eliminar todavía:** el estado `S.flip`, `#bFlip` y los controles internos necesarios para que la lógica histórica siga funcionando. **Sí eliminado/simplificado:** la necesidad de navegar por un switch ambiguo, tablas extensas abiertas por defecto y duplicaciones de representación económica en la pantalla principal.
+
