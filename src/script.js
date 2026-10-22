@@ -86,13 +86,25 @@ const refreshMarketControls=()=>{
   const importLabel=document.getElementById('importMarketLabel');if(importLabel)importLabel.textContent=nullSystem();
   const topMarket=document.querySelector('#mmTabs .mm-route-right');if(topMarket)topMarket.textContent=nullSystem();
   const note=document.getElementById('nullMarketNote');
-  note.textContent=(marketChoice==='auto'?(marketAlliance?'Alianza detectada: '+marketAlliance+'.':'Sin alianza identificada. Se usa HY-RWO por defecto.'):'Selección manual: no cambiará al conectar otro personaje.')+' Los precios de Null se estiman con reglas sobre Jita, no con órdenes locales de ESI.';
+  note.textContent=(marketChoice==='auto'?(marketAlliance?'Alianza detectada: '+marketAlliance+'.':'Sin alianza identificada. Se usa HY-RWO por defecto.'):'Selección manual: no cambiará al conectar otro personaje.')+' Los precios de '+nullSystem()+' se estiman con reglas sobre Jita, no con órdenes locales de ESI.';
+  syncMarketCopy();
 };
 document.getElementById('nullMarketMode')?.addEventListener('change',e=>{
   if(e.target.value!=='auto'&&!Object.hasOwn(NULL_MARKETS,e.target.value))return;
   marketChoice=e.target.value;S.refinedMan.null=Object.create(null);try{localStorage.setItem(NULL_MARKET_KEY,marketChoice);}catch(_){}
-  refreshMarketControls();syncNullRouteLabels();if(typeof refresh==='function')refresh();
+  refreshMarketControls();syncNullRouteLabels();syncBusinessMode();if(typeof refresh==='function')refresh();
 });
+// Keep UI system labels synchronized with the market in Settings.
+// This only edits explicitly marked elements, not Nullsec security levels,
+// inventory names, internal route keys, calculation formulas, or caches.
+function syncMarketCopy(){
+  const hub=nullSystem(),en=S.lang==='en';
+  document.querySelectorAll('[data-market-system]').forEach(node=>{if(node.textContent!==hub)node.textContent=hub;});
+  const ship=document.getElementById('shipLab'),margin=document.getElementById('rtM'),input=document.getElementById('fImpM');
+  if(ship)ship.title=en?'Courier from Jita to '+hub+'.':'Enviar desde Jita a '+hub+' con el courier configurado.';
+  if(margin)margin.title=en?'Net resale margin in '+hub+'.':'Margen neto de reventa en '+hub+'.';
+  if(input)input.setAttribute('aria-label',en?'Resale margin in '+hub+', %':'Margen al vender en '+hub+', % neto sobre Jita Sell');
+}
 // Las etiquetas de ruta dependen del hub comercial, nunca de la refinería.
 function syncNullRouteLabels(){
   const from=document.getElementById('rtFrom'),to=document.getElementById('rtTo');
@@ -2657,7 +2669,7 @@ function syncShipSwitch(){
   $('rtM').hidden=!isImport;
   $('importMarketLabel').textContent=nullSystem();
   $('importHeadingPrefix').textContent=S.lang==='en'?'IMPORT TO':'IMPORTACIÓN A';
-  $('importHelp').textContent=S.lang==='en'?'Choose whether to transport your items from Jita and set your Nullsec selling margin.':'Elige si transportas los ítems desde Jita y ajusta el margen de venta en Null.';
+  $('importHelp').textContent=S.lang==='en'?'Choose whether to ship items from Jita and set your selling margin in '+nullSystem()+'.':'Elige si transportas los ítems desde Jita y ajusta el margen de venta en '+nullSystem()+'.';
   $('shipLab').title=S.lang==='en'?'Include alliance freight or compare sales without shipping.':'Incluye el courier de la alianza o compara ventas sin transportar.';
   $('tradePurchaseLabel').textContent=S.lang==='en'?'Purchase at':'Comprar a';
 }
@@ -2680,9 +2692,10 @@ function syncBusinessMode(){
   }
   a.querySelector('span:last-child').textContent=en?'Sell my items':'Vender mis ítems';
   b.querySelector('span:last-child').textContent=en?'Trade from Jita':'Comerciar desde Jita';
+  const hub=nullSystem();
   $('businessCaption').textContent=S.flip?
-    (en?'Purchase in Jita, compare resale in Null and see profit after transport.':'Compra en Jita, compara la reventa en Null y revisa beneficio después del envío.'):
-    (en?'Compare your Keepstar, Jita, Buyback and reprocessing routes.':'Compara Keepstar, Jita, Buyback y reproceso según tus ajustes.');
+    (en?'Compare buying in Jita and reselling in '+hub+'. Review profit after shipping.':'Compara comprar en Jita y revender en '+hub+'. Revisa la ganancia después del envío.'):
+    (en?'Compare selling in '+hub+', Jita, Buyback and reprocessing using your settings.':'Compara vender en '+hub+', Jita, Buyback y reproceso según tus ajustes.');
 }
 $('businessSwitch').addEventListener('click',e=>{
   const tab=e.target.closest('button[data-business]');if(!tab)return;
@@ -3077,6 +3090,7 @@ function setLang(l){
         else if(m.type==='attributes')i18nAttrs(m.target);}}finally{i18nBusy=false;}});
     i18nObs.observe(document.documentElement,{subtree:true,childList:true,characterData:true,attributes:true,attributeFilter:I18N_ATTR});
   }else{i18nRestore();I18N_RE=null;} // suelta la regex grande (se rehace si vuelves a English)
+  syncMarketCopy();syncBusinessMode();
   if(lastP)refreshNow();}
 $('langSel').addEventListener('change',e=>setLang(e.target.value));
 $('langButtons').addEventListener('click',event=>{

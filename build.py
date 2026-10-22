@@ -106,6 +106,7 @@ f = f.replace('</style>', '/* ===== tema claro (generado desde el oscuro por lig
 out = (f.replace('__ATHANOR__', rd('assets', 'background.b64').strip())
         .replace('__SIGMA__', rd('assets', 'sigma.b64').strip())
         .replace('__VG__', rd('assets', 'vanguardia.b64').strip())
+        .replace('__HULK_ICON__', rd('assets', 'hulk_icon.b64').strip())
         .replace('/*__SCRIPT__*/', js))
 p = os.path.join(R, 'index.html')  # GitHub Pages sirve este archivo
 open(p, 'w', encoding='utf-8').write(out)

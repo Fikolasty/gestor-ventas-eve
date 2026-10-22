@@ -2182,23 +2182,10 @@ html.light #mmTabs.mm-modnav .mm-modgroup .mm-mod:focus-visible{
   outline-offset:2px;
 }
 
-/* v1.0.96 — financial metric labels and official Hulk tab art. */
-#mmTabs .mm-mod .mm-mining-icon{position:relative;display:inline-grid;place-items:center;flex:0 0 24px;width:24px;height:24px}
-#mmTabs .mm-mod .mm-mining-icon>.ic,#mmTabs .mm-mod .mm-mining-icon>img{grid-area:1/1;width:24px;height:24px;margin:0}
-#mmTabs .mm-mod .mm-mining-icon>img{position:relative;z-index:1;object-fit:contain;border-radius:3px}
-#mmTabs .mm-mod .mm-mining-icon>img[hidden]{display:none!important}
-/* Official Hulk render has a dark plate. Blend out that backdrop without
-   replacing the ship or downloading/storing any new image assets.
-   Dark: black render pixels disappear with screen.
-   Light: invert black to white and multiply it away, preserving a visible ship silhouette. */
-#mmTabs .mm-mod .mm-mining-icon>.mm-eve-hulk-icon:not([hidden]){
-  mix-blend-mode:screen;
-  filter:contrast(1.18) brightness(1.15);
-}
-html.light #mmTabs .mm-mod .mm-mining-icon>.mm-eve-hulk-icon:not([hidden]){
-  mix-blend-mode:multiply;
-  filter:invert(1) contrast(1.22);
-}
+/* Hulk mining icon: official type 22544 ship cut out into a true RGBA PNG.
+   No legacy icon layered beneath it; no blend/invert hacks in Light or Dark. */
+#mmTabs .mm-mod .mm-mining-icon{display:inline-grid;place-items:center;flex:0 0 28px;width:28px;height:26px}
+#mmTabs .mm-mod .mm-mining-icon>.mm-eve-hulk-icon{display:block;width:28px;height:26px;object-fit:contain;background:transparent!important;border:0!important;filter:none!important;mix-blend-mode:normal!important}
 
 #verdict .mm-net{display:flex;flex-direction:column;align-items:flex-end;justify-content:center;min-width:0;gap:2px}
 #verdict .mm-net-label{font:750 .75rem/1.35 var(--f-ui);letter-spacing:.065em;color:var(--mut);text-align:right}
@@ -2336,7 +2323,7 @@ html.light #pkOpportunity{background:rgba(255,255,255,.9)}
     <div id="eveIdentity" class="eve-identity"><button type="button" id="eveIdentityButton" class="eve-identity-button" aria-expanded="false" aria-controls="eveIdentityMenu"><img id="evePortrait" alt="" hidden><span id="evePilotName">Conectar EVE</span><span class="eve-identity-arrow" aria-hidden="true" hidden></span></button><div id="eveIdentityMenu" class="eve-identity-menu" hidden><button type="button" id="eveLogout" hidden>Desconectar</button><span id="eveLoginStatus" role="status" class="eve-login-status" hidden></span></div></div>
     <div class="mm-modgroup" role="presentation">
     <button type="button" class="mm-mod on" data-mm-module="ventas" role="tab" aria-controls="salesBody" aria-selected="true" id="mmTabVentas" title="Ventas" aria-label="Ventas"><span class="ic i-list" aria-hidden="true"></span><span class="mm-mod-label">Ventas</span></button>
-    <button type="button" class="mm-mod" data-mm-module="mining" role="tab" aria-controls="mining" aria-selected="false" id="mmTabMining" title="Minería" aria-label="Minería"><span class="mm-mining-icon" aria-hidden="true"><span class="ic i-ship"></span><img class="mm-eve-hulk-icon" src="https://images.evetech.net/types/22544/render?size=64" alt="" width="24" height="24" loading="lazy" onerror="this.hidden=true"></span><span class="mm-mod-label">Minería</span></button>
+    <button type="button" class="mm-mod" data-mm-module="mining" role="tab" aria-controls="mining" aria-selected="false" id="mmTabMining" title="Minería" aria-label="Minería"><span class="mm-mining-icon" aria-hidden="true"><img class="mm-eve-hulk-icon" src="__HULK_ICON__" alt="" width="28" height="26"></span><span class="mm-mod-label">Minería</span></button>
     <button type="button" class="mm-mod" data-mm-module="skills" role="tab" aria-controls="skills" aria-selected="false" id="mmTabSkills" title="Skill Plan" aria-label="Skill Plan"><span class="mm-skills-icon" aria-hidden="true"><span class="ic i-key"></span><img class="mm-eve-skill-icon" src="https://images.evetech.net/types/3426/icon?size=64" alt="" width="20" height="20" loading="lazy" onerror="this.hidden=true"></span><span class="mm-mod-label">Skill Plan</span></button>
     <!-- PI temporalmente fuera de navegación; conservar para reactivar más adelante.
     <button type="button" class="mm-mod" data-mm-module="pi" role="tab" aria-controls="pi" aria-selected="false" id="mmTabPi">Industria Planetaria · PI</button>
@@ -2350,7 +2337,7 @@ html.light #pkOpportunity{background:rgba(255,255,255,.9)}
       <button type="button" class="mm-business-tab on" id="modeLiquidation" data-business="liquidation" aria-pressed="true"><span class="ic i-list" aria-hidden="true"></span><span>Vender mis ítems</span></button>
       <button type="button" class="mm-business-tab" id="modeTrading" data-business="trading" aria-pressed="false"><span class="ic i-scale" aria-hidden="true"></span><span>Comerciar desde Jita</span></button>
     </div>
-    <p class="mm-business-caption" id="businessCaption">Compara Keepstar, Jita, Buyback y reproceso según tus ajustes.</p>
+    <p class="mm-business-caption" id="businessCaption">Compara vender en HY-RWO, Jita, Buyback y reproceso según tus ajustes.</p>
   </section>
   <!-- Import options belong to the selected Jita → Null route, not the navigation switch. -->
   <section class="mm-import-controls" id="importControls" hidden aria-label="Opciones de importación">
