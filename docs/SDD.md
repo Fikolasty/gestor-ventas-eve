@@ -2,7 +2,7 @@
 
 **Actualizado:** 2026-10-21 · **Estado:** documento vivo de Spec-Driven Development (SDD).
 **Repositorio:** [Fikolasty/gestor-ventas-eve](https://github.com/Fikolasty/gestor-ventas-eve) · **Entrega:** rama `main` · **App:** https://fikolasty.github.io/gestor-ventas-eve/
-**Base funcional revisada:** workflow de build `1.0.92` (commit `64d5bb63`); cambios de Ajustes de idioma ya pusheados y pendientes de QA en la aplicación publicada.
+**Base funcional vigente:** compilación `1.0.98` (GitHub Actions, commit generado `dbdbf0e5e22c`); dos modos de Ventas, escenario de materiales, coste de courier por unidad, Skills/Mining y regresiones. Quedan pruebas visuales y de mercado real pendientes; ver sección v1.0.98.
 **Propósito:** conservar decisiones, requisitos, evidencia de pruebas y estado verificable al cambiar de conversación.
 
 > Este documento es el **punto de entrada** para retomar el proyecto. **No sustituye** [SPEC.md](SPEC.md), [PROGRESS.md](PROGRESS.md), [MINING.md](MINING.md) ni el [CHANGELOG](../CHANGELOG.md). `SPEC.txt` es historial antiguo y no debe prevalecer sobre el comportamiento y las decisiones actuales. Ante un conflicto, confirmar en el código y registrar la resolución, no inferirla.
