@@ -7,7 +7,7 @@
 <meta name="referrer" content="no-referrer">
 <title>Market Moves+ · SIGMA GRINDSET</title>
 <style>
-/* ================= Market Moves+ v1.0.109 =================
+/* ================= Market Moves+ v1.0.108 =================
    Paleta: azul de base, naranja = acción, verde/rojo = ganancia/pérdida.
    Sin backdrop-filter: el vidrio se finge con rgba + bordes. */
 *{box-sizing:border-box;margin:0;padding:0}
@@ -2345,6 +2345,176 @@ html.light .mm-unit-courier{background:rgba(255,255,255,.82)}
 html.light #pkOpportunity{background:rgba(255,255,255,.9)}
 
 
+
+/* v1.0.109: only the approved main header. All financial/mining/skills panels keep original styles. */
+body .top.mm-ho-root{
+ display:grid!important;grid-template-columns:minmax(185px,1fr) minmax(0,auto) minmax(225px,1fr)!important;
+ grid-template-areas:"brand main actions" "context context context" "ticker ticker ticker"!important;
+ align-items:center!important;gap:0 18px!important;padding:12px clamp(18px,3vw,48px) 0!important;
+ width:100%!important;max-width:none!important;min-height:0!important;margin:0!important;
+ background:rgba(28,27,26,.88)!important;border-bottom:1px solid rgba(222,220,209,.13)!important;
+}
+body .top.mm-ho-root>.brand{grid-area:brand!important;justify-self:start!important;min-width:0!important;margin:0!important;white-space:nowrap!important}
+body .top.mm-ho-root>#mmTabs{display:contents!important;border:0!important;background:none!important;box-shadow:none!important;margin:0!important;padding:0!important}
+body .top.mm-ho-root #mmTabs>.mm-ho-main{
+ grid-area:main;display:flex!important;align-items:center!important;justify-content:center!important;
+ gap:clamp(10px,1.6vw,23px)!important;min-width:0!important
+}
+body .top.mm-ho-root #mmTabs>.mm-ho-context{
+ grid-area:context;display:flex!important;align-items:center!important;justify-content:center!important;
+ flex-wrap:wrap!important;gap:8px 28px!important;min-height:44px;min-width:0;
+ border-top:1px solid rgba(222,220,209,.11);margin-top:12px;padding:7px 0
+}
+body .top.mm-ho-root #mmTabs>.mm-ho-legacy{display:none!important}
+body .top.mm-ho-root .mm-ho-main .mm-modgroup{
+ display:flex!important;align-items:center!important;gap:clamp(10px,1.6vw,23px)!important;
+ flex:0 0 auto!important;max-width:none!important;overflow:visible!important;
+ border:0!important;background:transparent!important;box-shadow:none!important;padding:0!important;margin:0!important
+}
+body .top.mm-ho-root .mm-ho-main .mm-home,
+body .top.mm-ho-root .mm-ho-main .mm-mod{
+ display:inline-flex!important;position:relative!important;align-items:center!important;justify-content:center!important;
+ flex:0 0 auto!important;width:auto!important;min-width:0!important;height:37px!important;min-height:37px!important;
+ margin:0!important;padding:9px 0!important;border:0!important;border-radius:0!important;
+ background:transparent!important;box-shadow:none!important;font:500 13px/1.25 var(--f-ui,system-ui)!important;
+ color:var(--mut,#c2c0b6)!important;white-space:nowrap!important
+}
+body .top.mm-ho-root .mm-ho-main .mm-home::after{content:"Home"}
+body .top.mm-ho-root .mm-ho-main .mm-home .ic,
+body .top.mm-ho-root .mm-ho-main .mm-mod .ic,
+body .top.mm-ho-root .mm-ho-main .mm-mining-icon,
+body .top.mm-ho-root .mm-ho-main .mm-skills-icon{display:none!important}
+body .top.mm-ho-root .mm-ho-main .mm-mod[aria-selected="true"]{color:var(--txt,#faf9f5)!important;font-weight:650!important}
+body .top.mm-ho-root .mm-ho-main .mm-mod[aria-selected="true"]::after,
+body .top.mm-ho-root .mm-ho-main .mm-mod:hover::after{
+ content:"";position:absolute;left:0;right:0;bottom:0;height:2px;background:var(--clay,#d97757)
+}
+body .top.mm-ho-root>.mm-top-actions{
+ grid-area:actions!important;display:flex!important;flex-direction:row!important;
+ justify-self:end!important;justify-content:flex-end!important;align-items:center!important;
+ margin:0!important;padding:0!important;gap:10px!important;max-width:100%!important;
+ width:auto!important;min-width:0!important;flex:0 1 auto!important
+}
+body .top.mm-ho-root>.mm-top-actions>.top-header-action,
+body .top.mm-ho-root>.mm-top-actions>.top-guide-action{
+ display:inline-flex!important;position:static!important;align-items:center!important;justify-content:center!important;
+ width:auto!important;height:33px!important;min-height:33px!important;padding:4px 0!important;margin:0!important;
+ border:0!important;box-shadow:none!important;background:transparent!important;
+ color:var(--mut,#c2c0b6)!important;font:500 12px/1.2 var(--f-ui,system-ui)!important
+}
+body .top.mm-ho-root>.mm-top-actions .top-header-action .ic,
+body .top.mm-ho-root>.mm-top-actions .top-guide-action .ic{display:none!important}
+body .top.mm-ho-root>.mm-top-actions .top-header-action .side-l,
+body .top.mm-ho-root>.mm-top-actions .top-guide-action .side-l{display:inline!important;color:inherit!important}
+body .top.mm-ho-root>.mm-top-actions>.mm-profile-row{
+ position:static!important;grid-row:auto!important;grid-column:auto!important;display:flex!important;
+ width:auto!important;min-width:0!important;padding-left:14px!important;border-left:1px solid rgba(222,220,209,.15)!important
+}
+body .top.mm-ho-root .mm-profile-row .eve-identity{display:flex!important;width:auto!important;max-width:155px!important;min-width:0!important}
+body .top.mm-ho-root .mm-profile-row .eve-identity-button{
+ display:flex!important;align-items:center!important;gap:6px!important;
+ width:auto!important;max-width:155px!important;min-width:0!important;
+ height:34px!important;min-height:34px!important;padding:4px 6px!important;margin:0!important;
+ border:0!important;border-radius:5px!important;background:transparent!important;box-shadow:none!important
+}
+body .top.mm-ho-root .mm-profile-row .eve-identity-button img{width:25px!important;height:25px!important;flex:0 0 25px!important}
+body .top.mm-ho-root .mm-profile-row #evePilotName{
+ max-width:105px!important;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+ font:600 12px/1.2 var(--f-ui)!important
+}
+body .top.mm-ho-root .mm-ho-context #businessSwitch,
+body .top.mm-ho-root .mm-ho-context .mm-business-tabs{
+ display:flex!important;align-items:center!important;justify-content:center!important;
+ flex:0 0 auto!important;width:auto!important;min-width:0!important;min-height:0!important;
+ border:0!important;background:transparent!important;box-shadow:none!important;margin:0!important;padding:0!important
+}
+body .top.mm-ho-root .mm-ho-context .mm-business-tabs{gap:21px!important}
+body .top.mm-ho-root .mm-ho-context .mm-business-tab{
+ display:inline-flex!important;position:relative!important;align-items:center!important;
+ flex:0 0 auto!important;width:auto!important;min-width:0!important;
+ height:32px!important;min-height:32px!important;margin:0!important;padding:5px 0!important;
+ border:0!important;border-radius:0!important;background:transparent!important;box-shadow:none!important;
+ color:var(--mut,#c2c0b6)!important;font:550 12px/1.2 var(--f-ui,system-ui)!important;white-space:nowrap!important
+}
+body .top.mm-ho-root .mm-ho-context .mm-business-tab.on{color:var(--txt,#faf9f5)!important}
+body .top.mm-ho-root .mm-ho-context .mm-business-tab.on::after{
+ content:"";position:absolute;bottom:0;left:0;right:0;height:2px;background:var(--clay,#d97757)
+}
+body .top.mm-ho-root .mm-ho-context .mm-business-tab .ic{display:none!important}
+body .top.mm-ho-root .mm-ho-context #importControls{
+ display:flex!important;position:static!important;align-items:center!important;justify-content:center!important;
+ width:auto!important;min-width:0!important;max-width:none!important;height:auto!important;min-height:0!important;
+ grid-row:auto!important;grid-column:auto!important;margin:0!important;padding:0!important;gap:8px!important;
+ flex-wrap:wrap!important;border:0!important;border-radius:0!important;
+ background:transparent!important;box-shadow:none!important
+}
+body .top.mm-ho-root .mm-ho-context #importControls[hidden]{display:none!important}
+body .top.mm-ho-root .mm-ho-context #importDestination,
+body .top.mm-ho-root .mm-ho-context #importHelp,
+body .top.mm-ho-root .mm-ho-context #rtM{display:none!important}
+body .top.mm-ho-root .mm-ho-context #importControls .mm-import-actions{
+ display:flex!important;align-items:center!important;justify-content:center!important;
+ width:auto!important;min-width:0!important;flex-wrap:wrap!important;gap:9px!important;padding:0!important;margin:0!important
+}
+body .top.mm-ho-root .mm-ho-context .mm-buy-basis select{
+ width:116px!important;max-width:116px!important;min-width:116px!important;
+ height:34px!important;min-height:34px!important;margin:0!important;padding:4px 18px 4px 8px!important;
+ border:1px solid rgba(222,220,209,.2)!important;border-radius:7px!important;
+ background:rgba(25,25,24,.7)!important;color:var(--txt,#faf9f5)!important;font:500 12px/1.3 var(--f-ui,system-ui)!important
+}
+body .top.mm-ho-root .mm-ho-context #shipLab{display:inline-flex!important;align-items:center!important;gap:6px!important;margin:0!important;white-space:nowrap!important;font-size:12px!important}
+body .top.mm-ho-root .mm-ho-context #shipLab[hidden]{display:none!important}
+body .top.mm-ho-root .mm-ho-context .mm-theme{display:flex!important;align-items:center!important;gap:6px!important;margin:0!important;padding:0!important;font-size:12px!important}
+body .top.mm-ho-root>.ticker{
+ grid-area:ticker!important;display:flex!important;justify-content:center!important;width:100%!important;max-width:none!important;
+ height:24px!important;min-height:24px!important;margin:0!important;padding:0!important;order:0!important;
+ border:0!important;border-top:1px solid rgba(222,220,209,.1)!important;border-radius:0!important;
+ background:transparent!important;box-shadow:none!important;overflow:hidden!important;
+ -webkit-mask-image:none!important;mask-image:none!important
+}
+body .top.mm-ho-root .ticker .tk-track{height:24px!important;display:flex!important;align-items:center!important;animation:none!important;transform:none!important}
+body .top.mm-ho-root .ticker .tk-i{font-size:10px!important;padding:0 5px!important}
+body .top.mm-ho-root .ticker .tk-i:not(:first-child){display:none!important}
+body .top.mm-ho-root .ticker .ref-tag{font-size:9px!important}
+body.mm-mining .top.mm-ho-root .mm-ho-context #businessSwitch,
+body.mm-skills .top.mm-ho-root .mm-ho-context #businessSwitch,
+body.mm-pi .top.mm-ho-root .mm-ho-context #businessSwitch{display:none!important}
+html.light body .top.mm-ho-root{background:rgba(247,245,239,.93)!important;border-color:rgba(69,53,43,.2)!important}
+html.light body .top.mm-ho-root .mm-ho-context .mm-buy-basis select{background:#fff!important;color:#2e2923!important}
+@media(max-width:1120px){
+ body .top.mm-ho-root{grid-template-columns:minmax(0,1fr) auto!important;grid-template-areas:"brand actions" "main main" "context context" "ticker ticker"!important;gap:0 15px!important;padding-top:10px!important}
+ body .top.mm-ho-root #mmTabs>.mm-ho-main{padding:7px 0 0!important;justify-self:center!important}
+ body .top.mm-ho-root #mmTabs>.mm-ho-context{margin-top:3px!important}
+}
+@media(max-width:610px){
+ body .top.mm-ho-root{padding:10px 12px 0!important;gap:4px 8px!important}
+ body .top.mm-ho-root>.brand{font-size:12px!important;overflow:hidden;text-overflow:ellipsis}
+ body .top.mm-ho-root>.brand small{display:none!important}
+ body .top.mm-ho-root>.mm-top-actions{gap:8px!important}
+ body .top.mm-ho-root>.mm-top-actions>.top-header-action,
+ body .top.mm-ho-root>.mm-top-actions>.top-guide-action{width:27px!important;padding:5px!important;font-size:0!important}
+ body .top.mm-ho-root .mm-top-actions .top-header-action .ic,
+ body .top.mm-ho-root .mm-top-actions .top-guide-action .ic{display:inline-block!important;width:18px!important;height:18px!important}
+ body .top.mm-ho-root .mm-top-actions .top-header-action .side-l,
+ body .top.mm-ho-root .mm-top-actions .top-guide-action .side-l{display:none!important}
+ body .top.mm-ho-root>.mm-top-actions>.mm-profile-row{padding-left:8px!important}
+ body .top.mm-ho-root .mm-profile-row .eve-identity-button{max-width:95px!important}
+ body .top.mm-ho-root .mm-profile-row #evePilotName{max-width:65px!important;font-size:10px!important}
+ body .top.mm-ho-root #mmTabs>.mm-ho-main{width:100%!important;justify-self:stretch!important;justify-content:center!important;gap:11px!important}
+ body .top.mm-ho-root .mm-ho-main .mm-modgroup{gap:11px!important}
+ body .top.mm-ho-root .mm-ho-main .mm-home,
+ body .top.mm-ho-root .mm-ho-main .mm-mod{height:31px!important;min-height:31px!important;font-size:11px!important}
+ body .top.mm-ho-root #mmTabs>.mm-ho-context{padding:3px 0!important;gap:4px 12px!important}
+ body .top.mm-ho-root .mm-ho-context .mm-business-tabs{gap:14px!important}
+ body .top.mm-ho-root .mm-ho-context .mm-business-tab{height:30px!important;min-height:30px!important;font-size:11px!important}
+ body .top.mm-ho-root .mm-ho-context .mm-theme{font-size:10px!important}
+ body .top.mm-ho-root>.ticker{height:23px!important}
+}
+@media(max-width:380px){
+ body .top.mm-ho-root #mmTabs>.mm-ho-main,body .top.mm-ho-root .mm-ho-main .mm-modgroup{gap:7px!important}
+ body .top.mm-ho-root .mm-ho-main .mm-home,body .top.mm-ho-root .mm-ho-main .mm-mod{font-size:10px!important}
+}
+
 /* ===== tema claro (generado desde el oscuro por light.py) ===== */
 html.light{--void:#e4e3dd;--hull:#e2e0da;--hull2:#e0ded8;--line:rgba(31,30,29,0.114);--line2:rgba(31,30,29,0.125);--txt:#1c1c1a;--mut:#54524d;--dim:#6c6a64;--ion:#413f3c;--blue:#a39d8b;--clay:#c96442;--thrust:#a67526;--gain:#418b62;--loss:#a92c23}
 html.light body::after{background:repeating-linear-gradient(180deg,rgba(31,30,29,0.011) 0 1px,transparent 1px 3px),
@@ -2896,12 +3066,20 @@ html.light .mm-unit-courier-total{color:#915d3b}
 html.light.light .mm-unit-courier{background:rgba(31,30,29,0.779)}
 html.light .pr-manual-editor button{background:rgba(217,119,87,0.125)}
 html.light.light #pkOpportunity{background:rgba(31,30,29,0.855)}
-html.light #mmTabs>#importControls{border:1px solid rgba(217,119,87,0.25);background:rgba(240,237,229,0.6)!important}
-html.light.light #mmTabs>#importControls{background:rgba(31,30,29,0.57)!important}
-html.light #mmTabs>#importControls #importDestination{background:rgba(217,119,87,0.125);border:1px solid rgba(217,119,87,0.312)}
-html.light.light #mmTabs>#importControls #importDestination{background:rgba(177,96,55,0.112);border-color:rgba(177,96,55,0.362)}
-html.light .top .mm-profile-row .eve-identity-button{border:1px solid rgba(31,30,29,0.133);background:rgba(240,237,229,0.6)}
-html.light.light .top .mm-profile-row .eve-identity-button{border-color:rgba(67,53,45,0.225);background:rgba(31,30,29,0.598)}
+html.light body .top.mm-ho-root{background:rgba(240,237,229,0.88)!important;border-bottom:1px solid rgba(31,30,29,0.123)!important}
+html.light body .top.mm-ho-root #mmTabs>.mm-ho-context{border-top:1px solid rgba(31,30,29,0.104)}
+html.light body .top.mm-ho-root .mm-ho-main .mm-home,html.light body .top.mm-ho-root .mm-ho-main .mm-mod{color:var(--mut,#54524d)!important}
+html.light body .top.mm-ho-root .mm-ho-main .mm-mod[aria-selected="true"]{color:var(--txt,#1c1c1a)!important}
+html.light body .top.mm-ho-root .mm-ho-main .mm-mod[aria-selected="true"]::after,html.light body .top.mm-ho-root .mm-ho-main .mm-mod:hover::after{background:var(--clay,#c96442)}
+html.light body .top.mm-ho-root>.mm-top-actions>.top-header-action,html.light body .top.mm-ho-root>.mm-top-actions>.top-guide-action{color:var(--mut,#54524d)!important}
+html.light body .top.mm-ho-root>.mm-top-actions>.mm-profile-row{border-left:1px solid rgba(31,30,29,0.142)!important}
+html.light body .top.mm-ho-root .mm-ho-context .mm-business-tab{color:var(--mut,#54524d)!important}
+html.light body .top.mm-ho-root .mm-ho-context .mm-business-tab.on{color:var(--txt,#1c1c1a)!important}
+html.light body .top.mm-ho-root .mm-ho-context .mm-business-tab.on::after{background:var(--clay,#c96442)}
+html.light body .top.mm-ho-root .mm-ho-context .mm-buy-basis select{border:1px solid rgba(31,30,29,0.19)!important;background:rgba(240,237,229,0.7)!important;color:var(--txt,#1c1c1a)!important}
+html.light body .top.mm-ho-root>.ticker{border-top:1px solid rgba(31,30,29,0.095)!important}
+html.light.light body .top.mm-ho-root{background:rgba(31,30,29,0.883)!important;border-color:rgba(69,53,43,0.25)!important}
+html.light.light body .top.mm-ho-root .mm-ho-context .mm-buy-basis select{background:#151514!important;color:#e3e2dc!important}
 /* ajustes a mano del tema claro */
 html.light body{background:#e6e3da;color:#1f1e1d}
 html.light body::before{opacity:.12;filter:grayscale(.35) brightness(1.1)}
@@ -3644,176 +3822,6 @@ html.light #mining .mn-module-eyebrow{color:#a35b35}
   #mining .mn-module-intro h2{font-size:clamp(1.9rem,8vw,2.45rem)}
 }
 @media(prefers-reduced-motion:reduce){#mining .mn-module-intro{scroll-behavior:auto}}
-
-/* v1.0.109: only the approved main header. All financial/mining/skills panels keep original styles. */
-body .top.mm-ho-root{
- display:grid!important;grid-template-columns:minmax(185px,1fr) minmax(0,auto) minmax(225px,1fr)!important;
- grid-template-areas:"brand main actions" "context context context" "ticker ticker ticker"!important;
- align-items:center!important;gap:0 18px!important;padding:12px clamp(18px,3vw,48px) 0!important;
- width:100%!important;max-width:none!important;min-height:0!important;margin:0!important;
- background:rgba(28,27,26,.88)!important;border-bottom:1px solid rgba(222,220,209,.13)!important;
-}
-body .top.mm-ho-root>.brand{grid-area:brand!important;justify-self:start!important;min-width:0!important;margin:0!important;white-space:nowrap!important}
-body .top.mm-ho-root>#mmTabs{display:contents!important;border:0!important;background:none!important;box-shadow:none!important;margin:0!important;padding:0!important}
-body .top.mm-ho-root #mmTabs>.mm-ho-main{
- grid-area:main;display:flex!important;align-items:center!important;justify-content:center!important;
- gap:clamp(10px,1.6vw,23px)!important;min-width:0!important
-}
-body .top.mm-ho-root #mmTabs>.mm-ho-context{
- grid-area:context;display:flex!important;align-items:center!important;justify-content:center!important;
- flex-wrap:wrap!important;gap:8px 28px!important;min-height:44px;min-width:0;
- border-top:1px solid rgba(222,220,209,.11);margin-top:12px;padding:7px 0
-}
-body .top.mm-ho-root #mmTabs>.mm-ho-legacy{display:none!important}
-body .top.mm-ho-root .mm-ho-main .mm-modgroup{
- display:flex!important;align-items:center!important;gap:clamp(10px,1.6vw,23px)!important;
- flex:0 0 auto!important;max-width:none!important;overflow:visible!important;
- border:0!important;background:transparent!important;box-shadow:none!important;padding:0!important;margin:0!important
-}
-body .top.mm-ho-root .mm-ho-main .mm-home,
-body .top.mm-ho-root .mm-ho-main .mm-mod{
- display:inline-flex!important;position:relative!important;align-items:center!important;justify-content:center!important;
- flex:0 0 auto!important;width:auto!important;min-width:0!important;height:37px!important;min-height:37px!important;
- margin:0!important;padding:9px 0!important;border:0!important;border-radius:0!important;
- background:transparent!important;box-shadow:none!important;font:500 13px/1.25 var(--f-ui,system-ui)!important;
- color:var(--mut,#c2c0b6)!important;white-space:nowrap!important
-}
-body .top.mm-ho-root .mm-ho-main .mm-home::after{content:"Home"}
-body .top.mm-ho-root .mm-ho-main .mm-home .ic,
-body .top.mm-ho-root .mm-ho-main .mm-mod .ic,
-body .top.mm-ho-root .mm-ho-main .mm-mining-icon,
-body .top.mm-ho-root .mm-ho-main .mm-skills-icon{display:none!important}
-body .top.mm-ho-root .mm-ho-main .mm-mod[aria-selected="true"]{color:var(--txt,#faf9f5)!important;font-weight:650!important}
-body .top.mm-ho-root .mm-ho-main .mm-mod[aria-selected="true"]::after,
-body .top.mm-ho-root .mm-ho-main .mm-mod:hover::after{
- content:"";position:absolute;left:0;right:0;bottom:0;height:2px;background:var(--clay,#d97757)
-}
-body .top.mm-ho-root>.mm-top-actions{
- grid-area:actions!important;display:flex!important;flex-direction:row!important;
- justify-self:end!important;justify-content:flex-end!important;align-items:center!important;
- margin:0!important;padding:0!important;gap:10px!important;max-width:100%!important;
- width:auto!important;min-width:0!important;flex:0 1 auto!important
-}
-body .top.mm-ho-root>.mm-top-actions>.top-header-action,
-body .top.mm-ho-root>.mm-top-actions>.top-guide-action{
- display:inline-flex!important;position:static!important;align-items:center!important;justify-content:center!important;
- width:auto!important;height:33px!important;min-height:33px!important;padding:4px 0!important;margin:0!important;
- border:0!important;box-shadow:none!important;background:transparent!important;
- color:var(--mut,#c2c0b6)!important;font:500 12px/1.2 var(--f-ui,system-ui)!important
-}
-body .top.mm-ho-root>.mm-top-actions .top-header-action .ic,
-body .top.mm-ho-root>.mm-top-actions .top-guide-action .ic{display:none!important}
-body .top.mm-ho-root>.mm-top-actions .top-header-action .side-l,
-body .top.mm-ho-root>.mm-top-actions .top-guide-action .side-l{display:inline!important;color:inherit!important}
-body .top.mm-ho-root>.mm-top-actions>.mm-profile-row{
- position:static!important;grid-row:auto!important;grid-column:auto!important;display:flex!important;
- width:auto!important;min-width:0!important;padding-left:14px!important;border-left:1px solid rgba(222,220,209,.15)!important
-}
-body .top.mm-ho-root .mm-profile-row .eve-identity{display:flex!important;width:auto!important;max-width:155px!important;min-width:0!important}
-body .top.mm-ho-root .mm-profile-row .eve-identity-button{
- display:flex!important;align-items:center!important;gap:6px!important;
- width:auto!important;max-width:155px!important;min-width:0!important;
- height:34px!important;min-height:34px!important;padding:4px 6px!important;margin:0!important;
- border:0!important;border-radius:5px!important;background:transparent!important;box-shadow:none!important
-}
-body .top.mm-ho-root .mm-profile-row .eve-identity-button img{width:25px!important;height:25px!important;flex:0 0 25px!important}
-body .top.mm-ho-root .mm-profile-row #evePilotName{
- max-width:105px!important;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
- font:600 12px/1.2 var(--f-ui)!important
-}
-body .top.mm-ho-root .mm-ho-context #businessSwitch,
-body .top.mm-ho-root .mm-ho-context .mm-business-tabs{
- display:flex!important;align-items:center!important;justify-content:center!important;
- flex:0 0 auto!important;width:auto!important;min-width:0!important;min-height:0!important;
- border:0!important;background:transparent!important;box-shadow:none!important;margin:0!important;padding:0!important
-}
-body .top.mm-ho-root .mm-ho-context .mm-business-tabs{gap:21px!important}
-body .top.mm-ho-root .mm-ho-context .mm-business-tab{
- display:inline-flex!important;position:relative!important;align-items:center!important;
- flex:0 0 auto!important;width:auto!important;min-width:0!important;
- height:32px!important;min-height:32px!important;margin:0!important;padding:5px 0!important;
- border:0!important;border-radius:0!important;background:transparent!important;box-shadow:none!important;
- color:var(--mut,#c2c0b6)!important;font:550 12px/1.2 var(--f-ui,system-ui)!important;white-space:nowrap!important
-}
-body .top.mm-ho-root .mm-ho-context .mm-business-tab.on{color:var(--txt,#faf9f5)!important}
-body .top.mm-ho-root .mm-ho-context .mm-business-tab.on::after{
- content:"";position:absolute;bottom:0;left:0;right:0;height:2px;background:var(--clay,#d97757)
-}
-body .top.mm-ho-root .mm-ho-context .mm-business-tab .ic{display:none!important}
-body .top.mm-ho-root .mm-ho-context #importControls{
- display:flex!important;position:static!important;align-items:center!important;justify-content:center!important;
- width:auto!important;min-width:0!important;max-width:none!important;height:auto!important;min-height:0!important;
- grid-row:auto!important;grid-column:auto!important;margin:0!important;padding:0!important;gap:8px!important;
- flex-wrap:wrap!important;border:0!important;border-radius:0!important;
- background:transparent!important;box-shadow:none!important
-}
-body .top.mm-ho-root .mm-ho-context #importControls[hidden]{display:none!important}
-body .top.mm-ho-root .mm-ho-context #importDestination,
-body .top.mm-ho-root .mm-ho-context #importHelp,
-body .top.mm-ho-root .mm-ho-context #rtM{display:none!important}
-body .top.mm-ho-root .mm-ho-context #importControls .mm-import-actions{
- display:flex!important;align-items:center!important;justify-content:center!important;
- width:auto!important;min-width:0!important;flex-wrap:wrap!important;gap:9px!important;padding:0!important;margin:0!important
-}
-body .top.mm-ho-root .mm-ho-context .mm-buy-basis select{
- width:116px!important;max-width:116px!important;min-width:116px!important;
- height:34px!important;min-height:34px!important;margin:0!important;padding:4px 18px 4px 8px!important;
- border:1px solid rgba(222,220,209,.2)!important;border-radius:7px!important;
- background:rgba(25,25,24,.7)!important;color:var(--txt,#faf9f5)!important;font:500 12px/1.3 var(--f-ui,system-ui)!important
-}
-body .top.mm-ho-root .mm-ho-context #shipLab{display:inline-flex!important;align-items:center!important;gap:6px!important;margin:0!important;white-space:nowrap!important;font-size:12px!important}
-body .top.mm-ho-root .mm-ho-context #shipLab[hidden]{display:none!important}
-body .top.mm-ho-root .mm-ho-context .mm-theme{display:flex!important;align-items:center!important;gap:6px!important;margin:0!important;padding:0!important;font-size:12px!important}
-body .top.mm-ho-root>.ticker{
- grid-area:ticker!important;display:flex!important;justify-content:center!important;width:100%!important;max-width:none!important;
- height:24px!important;min-height:24px!important;margin:0!important;padding:0!important;order:0!important;
- border:0!important;border-top:1px solid rgba(222,220,209,.1)!important;border-radius:0!important;
- background:transparent!important;box-shadow:none!important;overflow:hidden!important;
- -webkit-mask-image:none!important;mask-image:none!important
-}
-body .top.mm-ho-root .ticker .tk-track{height:24px!important;display:flex!important;align-items:center!important;animation:none!important;transform:none!important}
-body .top.mm-ho-root .ticker .tk-i{font-size:10px!important;padding:0 5px!important}
-body .top.mm-ho-root .ticker .tk-i:not(:first-child){display:none!important}
-body .top.mm-ho-root .ticker .ref-tag{font-size:9px!important}
-body.mm-mining .top.mm-ho-root .mm-ho-context #businessSwitch,
-body.mm-skills .top.mm-ho-root .mm-ho-context #businessSwitch,
-body.mm-pi .top.mm-ho-root .mm-ho-context #businessSwitch{display:none!important}
-html.light body .top.mm-ho-root{background:rgba(247,245,239,.93)!important;border-color:rgba(69,53,43,.2)!important}
-html.light body .top.mm-ho-root .mm-ho-context .mm-buy-basis select{background:#fff!important;color:#2e2923!important}
-@media(max-width:1120px){
- body .top.mm-ho-root{grid-template-columns:minmax(0,1fr) auto!important;grid-template-areas:"brand actions" "main main" "context context" "ticker ticker"!important;gap:0 15px!important;padding-top:10px!important}
- body .top.mm-ho-root #mmTabs>.mm-ho-main{padding:7px 0 0!important;justify-self:center!important}
- body .top.mm-ho-root #mmTabs>.mm-ho-context{margin-top:3px!important}
-}
-@media(max-width:610px){
- body .top.mm-ho-root{padding:10px 12px 0!important;gap:4px 8px!important}
- body .top.mm-ho-root>.brand{font-size:12px!important;overflow:hidden;text-overflow:ellipsis}
- body .top.mm-ho-root>.brand small{display:none!important}
- body .top.mm-ho-root>.mm-top-actions{gap:8px!important}
- body .top.mm-ho-root>.mm-top-actions>.top-header-action,
- body .top.mm-ho-root>.mm-top-actions>.top-guide-action{width:27px!important;padding:5px!important;font-size:0!important}
- body .top.mm-ho-root .mm-top-actions .top-header-action .ic,
- body .top.mm-ho-root .mm-top-actions .top-guide-action .ic{display:inline-block!important;width:18px!important;height:18px!important}
- body .top.mm-ho-root .mm-top-actions .top-header-action .side-l,
- body .top.mm-ho-root .mm-top-actions .top-guide-action .side-l{display:none!important}
- body .top.mm-ho-root>.mm-top-actions>.mm-profile-row{padding-left:8px!important}
- body .top.mm-ho-root .mm-profile-row .eve-identity-button{max-width:95px!important}
- body .top.mm-ho-root .mm-profile-row #evePilotName{max-width:65px!important;font-size:10px!important}
- body .top.mm-ho-root #mmTabs>.mm-ho-main{width:100%!important;justify-self:stretch!important;justify-content:center!important;gap:11px!important}
- body .top.mm-ho-root .mm-ho-main .mm-modgroup{gap:11px!important}
- body .top.mm-ho-root .mm-ho-main .mm-home,
- body .top.mm-ho-root .mm-ho-main .mm-mod{height:31px!important;min-height:31px!important;font-size:11px!important}
- body .top.mm-ho-root #mmTabs>.mm-ho-context{padding:3px 0!important;gap:4px 12px!important}
- body .top.mm-ho-root .mm-ho-context .mm-business-tabs{gap:14px!important}
- body .top.mm-ho-root .mm-ho-context .mm-business-tab{height:30px!important;min-height:30px!important;font-size:11px!important}
- body .top.mm-ho-root .mm-ho-context .mm-theme{font-size:10px!important}
- body .top.mm-ho-root>.ticker{height:23px!important}
-}
-@media(max-width:380px){
- body .top.mm-ho-root #mmTabs>.mm-ho-main,body .top.mm-ho-root .mm-ho-main .mm-modgroup{gap:7px!important}
- body .top.mm-ho-root .mm-ho-main .mm-home,body .top.mm-ho-root .mm-ho-main .mm-mod{font-size:10px!important}
-}
-
 </style>
 <script>/* v1.0.16: aplica el tema guardado antes de pintar (sin parpadeo). Por defecto: Dark. */try{var g=JSON.parse(localStorage.getItem('gestorVentas.ajustes.v1')||'null');if(g&&g.ui){if(g.ui.light)document.documentElement.classList.add('light');}}catch(e){}</script>
 </head>
@@ -4207,13 +4215,13 @@ Contraband Freight = no</textarea><small>Una regla por línea: Nombre = tax tota
 <button type="button" class="totop" id="toTop" aria-label="Volver arriba" title="Volver arriba (Inicio)" hidden><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 14l6-6 6 6"/></svg></button>
 <footer class="foot">
   <p class="foot-sec"><span class="ic i-lock" aria-hidden="true"></span>Tu inventario no se guarda: al cerrar o recargar se borra. Solo tus Ajustes quedan en este navegador.</p>
-  <div class="foot-by">Creado por <b>Fiko McGivert</b> · Vanguardia DR · SIGMA GRINDSET · <span class="ver">v1.0.109</span></div>
+  <div class="foot-by">Creado por <b>Fiko McGivert</b> · Vanguardia DR · SIGMA GRINDSET · <span class="ver">v1.0.108</span></div>
 </footer>
 
 <script>
 'use strict';
 /* ============================================================
-   Market Moves+ v1.0.109 — SIGMA GRINDSET / Vanguardia DR
+   Market Moves+ v1.0.108 — SIGMA GRINDSET / Vanguardia DR
    Flujo:  pegado → items → carga (ESI: precios, volúmenes, historial) → verificación → plan → vista
      1. Pegado      parsePaste(): parser posicional de columnas de EVE (Name · Quantity · … · Volume · Est. Price).
      2. Carga       esiItems(): trae todo lo que falta; mientras carga, refresh() NO pinta (S.loading).
