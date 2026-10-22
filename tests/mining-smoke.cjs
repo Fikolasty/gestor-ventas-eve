@@ -250,7 +250,8 @@ const stageStart=source.indexOf('<section class="mn-controls-unified"');
 const stageEnd=source.indexOf('<section class="mn-results-header"');
 assert(stageStart>=0&&stageEnd>stageStart,'Configuración y Resultados deben estar separados y ordenados');
 const stage=source.slice(stageStart,stageEnd);
-for(const title of ['Configura tu escenario','Contexto','Personaje','Apoyo y valoración'])
+// The first two cards use field labels instead of the deprecated Contexto/Personaje headings.
+for(const title of ['Configura tu escenario','Tipo de nave','Skills','Apoyo y valoración'])
   assert(stage.includes(title),'falta el grupo de configuración '+title);
 for(const binding of ["SEG('shipClass'","SEG('mat'","SEG('tier'","SEG('lv'","SEG('imp'","SEG('boost'","SEG('met'"]){
   assert.equal(stage.split(binding).length-1,1,'filtro duplicado o ausente: '+binding);
