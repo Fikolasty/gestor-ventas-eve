@@ -1085,10 +1085,13 @@ function buildLotDetails(o,ui){
   const iM3=numIn(o.m3uMan,'',v=>{const x=parseFloat(v);o.m3uMan=isNaN(x)?null:x;derive(o);refresh();},'m³ por unidad');
   const fM3=el('label','fact','m³ por unidad');fM3.append(iM3);
   const fVol=el('div','fact','Volumen total'),bVol=el('b');fVol.append(bVol);
-  const fSk=el('label','fact','Ajuste de precio %');fSk.append(numIn(o.skew!=null&&o.skew!==0?Math.round(o.skew*1e4)/100:null,'0',v=>{const x=parseFloat(v);o.skew=isNaN(x)?0:x/100;refresh();},'Ajuste de precio de este item, % (se suma al general)'));
-  fSk.append(el('small','fact-h','Se suma al ajuste general. Ej.: −2 = lo vendes 2% más barato.'));
-  fSk.classList.add('fact-wide');
-  facts.append(fQty,fRef,fBuy,fM3,fSeen,fVol,fSk);
+  const fSk=el('label','fact fact-price-adjust','Ajuste de precio %');
+  const iSk=numIn(o.skew!=null&&o.skew!==0?Math.round(o.skew*1e4)/100:null,'0',v=>{const x=parseFloat(v);o.skew=isNaN(x)?0:x/100;refresh();},'Ajuste de precio de este ítem, %');
+  iSk.removeAttribute('min'); // Negative percentages (e.g. −2%) are valid here.
+  const skewHint='Se suma al ajuste general. Ej.: −2 = lo vendes 2% más barato.';
+  fSk.title=skewHint;iSk.title=skewHint;iSk.setAttribute('aria-description',skewHint);
+  fSk.append(iSk);
+  facts.append(fQty,fBuy,fRef,fSeen,fM3,fVol,fSk);
   const prices=el('details','prices lot-fold'),pBody=el('tbody'),pt=el('table');pt.append(pBody);
   prices.append(el('summary','sub-h','Precios para publicar'),pt);
   const checks=el('ul','checks'),foot=el('div','lot-foot'),del=el('button','link danger','Quitar del lote');del.type='button';
