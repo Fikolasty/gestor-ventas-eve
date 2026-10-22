@@ -207,7 +207,12 @@ const MineUI=(()=>{
     if(PRICE[id]&&Date.now()-PRICE[id].at<5*60e3){paint();return;}
     st.classList.remove('err');st.replaceChildren(document.createTextNode('Consultando Jita 4-4…'));
     const my=loading=id;
-    try{await fetchPrice(id);}catch(e){if(loading===my){st.classList.add('err');st.replaceChildren(document.createTextNode('No se pudo consultar el precio: '+e.message));}return;}
+    try{await fetchPrice(id);}catch(e){
+      // Repaint all financial views as well as the price field: an ESI error
+      // must not leave the chart stuck saying "Consultando…" or "Sin precio".
+      if(loading===my)paint();
+      return;
+    }
     if(loading===my)paint();
   }
 
