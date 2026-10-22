@@ -1479,27 +1479,51 @@ const routeSentence=(k,n)=>{if(S.lang==='en'){
 };
 const enPlanIntroPrefix=()=>S.lang==='en'?'The ':'El ';
 function planIntroData(P){
-  const name=P.mode?modeName(P.mode):(S.lang==='en'?'Optimal Plan':'Plan Óptimo');
-  const active=P.rows.filter(r=>r.best&&r.q>0),en=S.lang==='en';
+  const en=S.lang==='en',name=P.mode?modeName(P.mode):(en?'Optimal Plan':'Plan Óptimo');
+  const active=P.rows.filter(r=>r.best&&r.q>0);
   if(!active.length)return{name,parts:[en?'has no available selling route yet.':'todavía no tiene rutas de venta disponibles.']};
   const groups=new Map();
-  active.forEach(r=>{const g=groups.get(r.best)||[];g.push(r);groups.set(r.best,g);});
-  const actionFor=k=>{
-    const enActions={null:'through a sell order in HY-RWO',fN:'by shipping it to HY-RWO for sale',jOrd:'through a sell order in Jita',fJ:'through a sell order in Jita',jInst:'immediately in Jita',fJI:'immediately in Jita',bb:'through the Buyback program',rNull:'by reprocessing it and selling the materials in HY-RWO',rJita:'by reprocessing it and selling the materials in Jita',disc:'directly to another player'};
-    const esActions={null:'mediante una orden de venta en HY-RWO',fN:'enviándolo a HY-RWO para venderlo',jOrd:'mediante una orden de venta en Jita',fJ:'mediante una orden de venta en Jita',jInst:'al instante en Jita',fJI:'al instante en Jita',bb:'mediante el programa Buyback',rNull:'reprocesándolo y vendiendo los materiales en HY-RWO',rJita:'reprocesándolo y vendiendo los materiales en Jita',disc:'directamente a otro jugador'};
-    return ((en?enActions:esActions)[k]||(en?'using the suggested route':'por la ruta sugerida')).replaceAll('HY-RWO',nullSystem());
+  active.forEach(r=>{const group=groups.get(r.best)||[];group.push(r);groups.set(r.best,group);});
+  // Each route expresses a complete action: a Jita purchase with fN means
+  // import and resell, not "sell the items by shipping it to sell it".
+  const actionFor=(key,rows)=>{
+    const count=rows.length,one=count===1,pronoun=one?'lo':'los';
+    const descriptor=one?[{item:rows[0].o.name}]:[en?count+' '+(one?'item':'items'):'los '+count+' '+(one?'ítem':'ítems')];
+    const actions=en?{
+      fN:S.flip?'buy {items} in Jita and resell '+(one?'it':'them')+' in HY-RWO after shipping':'ship {items} to HY-RWO for sale',
+      null:'sell {items} through sell orders in HY-RWO',
+      jOrd:'sell {items} through sell orders in Jita',
+      fJ:'sell {items} through sell orders in Jita',
+      jInst:'sell {items} immediately in Jita',
+      fJI:'sell {items} immediately in Jita',
+      bb:'sell {items} to the Buyback program',
+      rNull:'reprocess {items} and sell the materials in HY-RWO',
+      rJita:'reprocess {items} and sell the materials in Jita',
+      disc:'sell {items} directly to another player'
+    }:{
+      fN:S.flip?'comprar {items} en Jita y revender'+pronoun+' en HY-RWO después del envío':'enviar {items} a HY-RWO para su venta',
+      null:'vender {items} mediante órdenes en HY-RWO',
+      jOrd:'vender {items} mediante órdenes en Jita',
+      fJ:'vender {items} mediante órdenes en Jita',
+      jInst:'vender {items} al instante en Jita',
+      fJI:'vender {items} al instante en Jita',
+      bb:'vender {items} al programa Buyback',
+      rNull:'reprocesar {items} y vender sus materiales en HY-RWO',
+      rJita:'reprocesar {items} y vender sus materiales en Jita',
+      disc:'vender {items} directamente a otro jugador'
+    };
+    const template=(actions[key]||(en?'sell {items} using the recommended route':'vender {items} por la ruta recomendada')).replaceAll('HY-RWO',nullSystem());
+    const cut=template.split('{items}');
+    return[cut[0],...descriptor,cut[1]||''];
   };
-  if(active.length===1){
-    const item=active[0];
-    return{name,parts:[en?'recommends selling ':'recomienda vender ',{item:item.o.name},' '+actionFor(item.best)+'. '+(en?'Review the steps below.':'Consulta los pasos a continuación.')]};
-  }
-  const groupsArray=[...groups];
-  if(groupsArray.length===1){
-    return{name,parts:[en?'recommends selling all '+active.length+' items ':'recomienda vender los '+active.length+' ítems ',actionFor(groupsArray[0][0])+'. '+(en?'Review the steps below.':'Consulta los pasos a continuación.')]};
-  }
-  const phrases=groupsArray.map(([k,rows])=>(en?rows.length+' '+(rows.length===1?'item':'items')+' ':' '+rows.length+' '+(rows.length===1?'ítem':'ítems')+' ')+actionFor(k));
-  const natural=phrases.length===2?phrases.join(en?' and ':' y '):phrases.slice(0,-1).join(', ')+(en?', and ':' y ')+phrases.at(-1);
-  return{name,parts:[en?'recommends splitting the sale: ':'recomienda distribuir la venta así: ',natural+'. '+(en?'Review the steps for each route below.':'Consulta los pasos de cada ruta a continuación.')]};
+  const entries=[...groups],single=entries.length===1;
+  const parts=[single?(en?'recommends ':'recomienda '):(en?'recommends splitting the sale: ':'recomienda distribuir las operaciones así: ')];
+  entries.forEach(([key,rows],index)=>{
+    if(index)parts.push(index===entries.length-1?(en?' and ':' y '):', ');
+    parts.push(...actionFor(key,rows));
+  });
+  parts.push(en?(single?'. Review the steps below.':'. Review the steps for each route below.'):(single?'. Consulta los pasos a continuación.':'. Consulta los pasos de cada ruta a continuación.'));
+  return{name,parts};
 }
 
 let activeRep=0;
@@ -1514,8 +1538,19 @@ function paintVerdict(P){
   if(!has){clearViews();return;}
   const none=P.missing.length===P.rows.length,flipAcct=flipPlanAccounting(P),v=none?null:flipAcct?flipAcct.profit:P.best;
   const metric=$('vMetric');metric.hidden=!!none;metric.textContent=flipAcct?(S.lang==='en'?'ESTIMATED NET PROFIT':'GANANCIA NETA ESTIMADA'):(S.lang==='en'?'NET SALES PROCEEDS':'INGRESOS NETOS POR VENTA');
-  $('vIsk').textContent='';$('vIsk').append(document.createTextNode(v==null?'—':Math.round(v).toLocaleString('en-US')),el('span',null,'ISK'));
-  $('vIsk').className='v-isk num '+sgn(v);
+  const amount=$('vIsk');
+  amount.textContent='';amount.append(document.createTextNode(v==null?'—':Math.round(v).toLocaleString('en-US')),el('span',null,'ISK'));
+  amount.className='v-isk num '+sgn(v);
+  // Keep the visible introduction concise; make the same accounting numbers
+  // available via tooltip on the prominent metric (also focusable by keyboard).
+  const breakdown=flipAcct?(S.lang==='en'?
+    'Estimated net profit: '+(flipAcct.profit>=0?'+':'−')+fmt(Math.abs(flipAcct.profit))+
+      ' = net sales '+fmt(flipAcct.net)+' − investment '+fmt(flipAcct.buy)+'.':
+    'Ganancia neta estimada: '+(flipAcct.profit>=0?'+':'−')+fmt(Math.abs(flipAcct.profit))+
+      ' = ingresos netos '+fmt(flipAcct.net)+' − inversión '+fmt(flipAcct.buy)+'.'):'';
+  amount.title=breakdown;metric.title=breakdown;
+  if(breakdown){amount.tabIndex=0;amount.setAttribute('aria-label',breakdown);}
+  else{amount.removeAttribute('tabindex');amount.removeAttribute('aria-label');}
   // qué se descontó, según el plan
   const ded=['taxes','broker'];if(C.relistOn&&C.relists>0)ded.push('relists');if(P.Vs>0&&C.shipOn)ded.push('envío');if(C.prod>0)ded.push('producción');
   {const ore=P.rows.some(r=>resolveOre(r.o.name));document.querySelectorAll('.if-ore').forEach(e=>e.hidden=!ore);} // "Sin Reproceso" solo si hay ore
@@ -1537,13 +1572,8 @@ function paintVerdict(P){
     else{
       const intro=planIntroData(P);
       cap.append(enPlanIntroPrefix(),el('strong','plan-name-accent',intro.name),' ',...intro.parts.map(p=>typeof p==='string'?document.createTextNode(p):el('strong','item-name-accent',p.item)));
-      if(flipAcct){
-        const detail=el('span','flip-summary-breakdown');
-        detail.append(document.createTextNode(S.lang==='en'?' Estimated net profit: ':' Ganancia neta estimada: '),
-          el('strong','num '+sgn(flipAcct.profit),(flipAcct.profit>=0?'+':'−')+fmt(Math.abs(flipAcct.profit))),
-          document.createTextNode((S.lang==='en'?' = net sales ':' = ingresos netos ')+fmt(flipAcct.net)+(S.lang==='en'?' − investment ':' − inversión ')+fmt(flipAcct.buy)+'.'));
-        cap.append(detail);
-      }
+      // In trading mode the profit formula is available from the amount tooltip,
+      // not repeated as a second line under the selected plan.
     }
   }
   lastP=P;
