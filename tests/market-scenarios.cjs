@@ -103,3 +103,26 @@ assert.equal(png.readUInt8(25),6,'Hulk asset should use PNG RGBA (with transpare
 assert(html.includes('src="__HULK_ICON__"'));
 assert(!/mm-mining-icon"[^>]*><span class="ic i-ship"/.test(html));
 console.log('Local hub captions and alpha Hulk icon PASS.');
+
+// Layout contract: exact controls move, not cloned, and the new business
+// header has one conditionally visible import panel without copy column.
+const salesHTML=fs.readFileSync('src/shell.html','utf8');
+const salesJS=fs.readFileSync('src/script.js','utf8');
+const modeStart=salesHTML.indexOf('id="businessSwitch"'),modeEnd=salesHTML.indexOf('<!-- v104:',modeStart);
+const modeHTML=salesHTML.slice(modeStart,modeEnd);
+assert(modeHTML.includes('Vender Ítems')&&modeHTML.includes('Comercio Jita'));
+assert(modeHTML.includes('id="importControls"'));
+assert(modeHTML.indexOf('id="importControls"')<modeHTML.lastIndexOf('</section>'));
+assert(!modeHTML.includes('id="businessCaption"'));
+assert(!salesHTML.includes('id="businessCaption"'));
+assert.equal((salesHTML.match(/id="eveIdentity"/g)||[]).length,1,'SSO profile must have one source DOM element');
+// The existing SSO markup is moved to the top actions from its original
+// (only) DOM node; the following check protects against duplicate IDs.
+assert(salesJS.includes("const identity=$('eveIdentity');if(identity)profile.append(identity)"));
+assert(salesJS.includes("topActions.append(profile)"));
+assert(salesJS.includes("button.title=description"));
+assert(salesJS.includes("a.querySelector('span:last-child').textContent=en?'Sell Items':'Vender Ítems'"));
+assert(salesJS.includes("b.querySelector('span:last-child').textContent=en?'Jita Trading':'Comercio Jita'"));
+assert(salesJS.includes("$('importControls').hidden=!isImport"));
+assert(salesHTML.includes('.mm-business-switch>.mm-import-controls[hidden]{display:none!important}'));
+console.log('PASS: compact header and import scenarios, tooltips, preserved EVE SSO placement.');
