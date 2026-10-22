@@ -7,7 +7,7 @@
 <meta name="referrer" content="no-referrer">
 <title>Market Moves+ · SIGMA GRINDSET</title>
 <style>
-/* ================= Market Moves+ v1.0.106 =================
+/* ================= Market Moves+ v1.0.107 =================
    Paleta: azul de base, naranja = acción, verde/rojo = ganancia/pérdida.
    Sin backdrop-filter: el vidrio se finge con rgba + bordes. */
 *{box-sizing:border-box;margin:0;padding:0}
@@ -2427,6 +2427,107 @@ html.light #mmTabs>#importControls{background:rgba(255,255,255,.6)!important}
  #mmTabs .mm-theme{margin:0}
 }
 
+
+/* v1.0.107 — compact Jita import bar.
+   Root cause: an unconstrained no-wrap flex row tried to fit full
+   "IMPORTACIÓN A HY-RWO" + "Comprar a" + select + courier + margin inside a
+   narrow grid track. Never allow text/controls to paint over one another. */
+#mmTabs>#importControls{
+  display:grid!important;
+  grid-template-columns:max-content minmax(0,1fr)!important;
+  align-items:center!important;
+  column-gap:9px!important;row-gap:7px!important;
+  padding:5px 8px!important;
+  min-width:0!important;min-height:44px!important;
+  box-sizing:border-box!important;
+  justify-content:initial!important;
+}
+#mmTabs>#importControls[hidden]{display:none!important}
+#mmTabs>#importControls .mm-import-intro{
+  grid-column:1;display:flex!important;align-items:center!important;
+  min-width:0!important;max-width:100%;flex:initial!important
+}
+#mmTabs>#importControls #importDestination{
+  display:inline-flex!important;align-items:center!important;
+  gap:6px;min-width:0;max-width:100%;
+  padding:7px 9px;border-radius:7px;
+  background:rgba(217,119,87,.10);
+  border:1px solid rgba(217,119,87,.25);
+  color:var(--txt);white-space:nowrap!important;
+  font:700 .76rem/1.15 var(--f-ui)!important;
+  letter-spacing:0!important;
+  cursor:help
+}
+#mmTabs>#importControls #importDestination>.ic{
+  width:15px;height:15px;flex:0 0 15px;color:var(--clay)
+}
+#mmTabs>#importControls #importMarketLabel{white-space:nowrap;letter-spacing:.015em}
+#mmTabs>#importControls #importHeadingPrefix,
+#mmTabs>#importControls #tradePurchaseLabel{
+  position:absolute!important;overflow:hidden!important;
+  width:1px!important;height:1px!important;
+  padding:0!important;margin:-1px!important;
+  border:0!important;clip:rect(0,0,0,0)!important;
+  white-space:nowrap!important
+}
+#mmTabs>#importControls .mm-import-actions{
+  grid-column:2;display:flex!important;min-width:0!important;
+  align-items:center!important;justify-content:flex-end!important;
+  gap:7px!important;flex:initial!important;flex-wrap:wrap!important
+}
+#mmTabs>#importControls .mm-buy-basis{
+  display:inline-flex!important;align-items:center!important;
+  flex:0 0 auto!important;min-width:0!important;width:auto!important;
+  gap:0!important
+}
+#mmTabs>#importControls .mm-buy-basis select{
+  width:116px!important;min-width:116px!important;max-width:116px!important;
+  min-height:35px!important;height:35px!important;flex:0 0 116px!important;
+  padding:5px 6px!important;margin:0!important;
+  font:650 .78rem/1.1 var(--f-ui)!important;
+}
+#mmTabs>#importControls #shipLab{
+  display:inline-flex!important;flex:0 0 auto;align-items:center!important;
+  gap:7px!important;min-height:35px!important;
+  white-space:nowrap!important;margin:0!important
+}
+#mmTabs>#importControls #shipLab[hidden],
+#mmTabs>#importControls #rtM[hidden]{display:none!important}
+#mmTabs>#importControls #rtM{
+  display:inline-flex!important;flex:0 0 auto;align-items:center!important;
+  gap:5px!important;min-height:35px!important;
+  margin:0!important;white-space:nowrap!important
+}
+#mmTabs>#importControls #rtM .rm-f{display:inline-flex!important;flex:0 0 auto!important;min-width:0}
+#mmTabs>#importControls #fImpM{min-width:4ch!important;width:4ch!important;max-width:4ch!important}
+html.light #mmTabs>#importControls #importDestination{
+  background:rgba(177,96,55,.09);border-color:rgba(177,96,55,.29)
+}
+/* When the available navbar gets tight, the import bar has its own second
+   row. This is preferable to clipping prices or overlapping form controls. */
+@media(max-width:1450px){
+  #mmTabs.mm-modnav{grid-template-columns:44px max-content minmax(0,1fr)!important}
+  #mmTabs>.mm-right-actions{grid-column:3!important;grid-row:1!important}
+  #mmTabs>#importControls{
+    grid-column:2/4!important;grid-row:2!important;
+    width:100%!important;min-width:0!important;
+    grid-template-columns:max-content minmax(0,1fr)!important;
+    justify-self:stretch;padding:8px 11px!important
+  }
+}
+@media(max-width:720px){
+  #mmTabs>#importControls{
+    grid-column:1/-1!important;grid-row:3!important;
+    grid-template-columns:minmax(0,1fr)!important;
+    justify-self:stretch!important
+  }
+  #mmTabs>#importControls .mm-import-intro{grid-column:1}
+  #mmTabs>#importControls .mm-import-actions{
+    grid-column:1;justify-content:flex-start!important;
+    flex-wrap:wrap!important;width:100%!important
+  }
+}
+
 /* ===== tema claro (generado desde el oscuro por light.py) ===== */
 html.light{--void:#e4e3dd;--hull:#e2e0da;--hull2:#e0ded8;--line:rgba(31,30,29,0.114);--line2:rgba(31,30,29,0.125);--txt:#1c1c1a;--mut:#54524d;--dim:#6c6a64;--ion:#413f3c;--blue:#a39d8b;--clay:#c96442;--thrust:#a67526;--gain:#418b62;--loss:#a92c23}
 html.light body::after{background:repeating-linear-gradient(180deg,rgba(31,30,29,0.011) 0 1px,transparent 1px 3px),
@@ -2980,6 +3081,8 @@ html.light .pr-manual-editor button{background:rgba(217,119,87,0.125)}
 html.light.light #pkOpportunity{background:rgba(31,30,29,0.855)}
 html.light #mmTabs>#importControls{border:1px solid rgba(217,119,87,0.25);background:rgba(240,237,229,0.6)!important}
 html.light.light #mmTabs>#importControls{background:rgba(31,30,29,0.57)!important}
+html.light #mmTabs>#importControls #importDestination{background:rgba(217,119,87,0.125);border:1px solid rgba(217,119,87,0.312)}
+html.light.light #mmTabs>#importControls #importDestination{background:rgba(177,96,55,0.112);border-color:rgba(177,96,55,0.362)}
 /* ajustes a mano del tema claro */
 html.light body{background:#e6e3da;color:#1f1e1d}
 html.light body::before{opacity:.12;filter:grayscale(.35) brightness(1.1)}
@@ -3780,7 +3883,7 @@ html.light #mining .mn-module-eyebrow{color:#a35b35}
     <!-- Trade-only controls share the same main navigation. -->
     <section class="mm-import-controls" id="importControls" hidden aria-label="Opciones de importación">
         <div class="mm-import-intro">
-          <strong><span class="ic i-ship" aria-hidden="true"></span> <span id="importHeadingPrefix">IMPORTACIÓN A</span> <span id="importMarketLabel">HY-RWO</span></strong>
+          <strong id="importDestination" title="Destino de importación: HY-RWO"><span class="ic i-ship" aria-hidden="true"></span><span id="importHeadingPrefix">IMPORTACIÓN A</span><span id="importMarketLabel">HY-RWO</span></strong>
           <small id="importHelp" hidden>Elige si transportas los ítems desde Jita y ajusta el margen de venta en <span data-market-system>HY-RWO</span>.</small>
         </div>
         <div class="mm-import-actions">
@@ -4115,13 +4218,13 @@ Contraband Freight = no</textarea><small>Una regla por línea: Nombre = tax tota
 <button type="button" class="totop" id="toTop" aria-label="Volver arriba" title="Volver arriba (Inicio)" hidden><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 14l6-6 6 6"/></svg></button>
 <footer class="foot">
   <p class="foot-sec"><span class="ic i-lock" aria-hidden="true"></span>Tu inventario no se guarda: al cerrar o recargar se borra. Solo tus Ajustes quedan en este navegador.</p>
-  <div class="foot-by">Creado por <b>Fiko McGivert</b> · Vanguardia DR · SIGMA GRINDSET · <span class="ver">v1.0.106</span></div>
+  <div class="foot-by">Creado por <b>Fiko McGivert</b> · Vanguardia DR · SIGMA GRINDSET · <span class="ver">v1.0.107</span></div>
 </footer>
 
 <script>
 'use strict';
 /* ============================================================
-   Market Moves+ v1.0.106 — SIGMA GRINDSET / Vanguardia DR
+   Market Moves+ v1.0.107 — SIGMA GRINDSET / Vanguardia DR
    Flujo:  pegado → items → carga (ESI: precios, volúmenes, historial) → verificación → plan → vista
      1. Pegado      parsePaste(): parser posicional de columnas de EVE (Name · Quantity · … · Volume · Est. Price).
      2. Carga       esiItems(): trae todo lo que falta; mientras carga, refresh() NO pinta (S.loading).
@@ -6785,8 +6888,13 @@ function syncShipSwitch(){
   $('importMarketLabel').textContent=nullSystem();
   $('importHeadingPrefix').textContent=S.lang==='en'?'IMPORT TO':'IMPORTACIÓN A';
   $('importHelp').textContent=S.lang==='en'?'Choose whether to ship items from Jita and set your selling margin in '+nullSystem()+'.':'Elige si transportas los ítems desde Jita y ajusta el margen de venta en '+nullSystem()+'.';
+  // The destination is a compact chip. Keep its full meaning discoverable,
+  // in both languages and across the three configurable local-market hubs.
+  $('importDestination').title=S.lang==='en'?'Import destination: '+nullSystem():'Destino de importación: '+nullSystem();
+  $('importDestination').setAttribute('aria-label',$('importDestination').title);
   $('shipLab').title=S.lang==='en'?'Include alliance freight or compare sales without shipping.':'Incluye el courier de la alianza o compara ventas sin transportar.';
   $('tradePurchaseLabel').textContent=S.lang==='en'?'Purchase at':'Comprar a';
+  $('tradePurchaseMode').title=S.lang==='en'?'Price used for purchases in Jita':'Precio utilizado para comprar en Jita';
 }
 function setFlip(on){
   S.flip=!!on;S.planMode=null;czIdx=0;C.shipOn=true;$('shipOn').checked=true; // cambiar de ruta vuelve a contar el courier
