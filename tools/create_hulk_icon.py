@@ -42,6 +42,13 @@ else:
     cv2.grabCut(bgr, segmentation, bounds, bg, fg, 9, cv2.GC_INIT_WITH_RECT)
     mask = np.where((segmentation == cv2.GC_FGD) | (segmentation == cv2.GC_PR_FGD), 255, 0).astype(np.uint8)
 
+    # The official render includes a teal illuminated background polygon.
+    # Cut this backdrop hue out of the alpha mask; otherwise a translucent
+    # geometric plate remains behind the actual Hulk on Light and Dark.
+    hsv = cv2.cvtColor(bgr, cv2.COLOR_BGR2HSV)
+    teal_plate = (hsv[:, :, 0] >= 72) & (hsv[:, :, 0] <= 116) & (hsv[:, :, 1] >= 24) & (hsv[:, :, 2] >= 34)
+    mask[teal_plate] = 0
+
     # Eliminate stray background speckles but retain detached ship appendages.
     count, labels, stats, centers = cv2.connectedComponentsWithStats(mask, 8)
     if count > 1:
