@@ -1,6 +1,6 @@
 # PROGRESS — Market Moves+
 
-**Actualizado:** 2026-10-15
+**Actualizado:** 2026-10-21 (v1.0.98). La auditoría v1.0.66 que sigue debajo es la base histórica.
 **Repositorio autorizado:** Fikolasty/gestor-ventas-eve; no operar con la cuenta Geiner.
 **Base de código auditada inicialmente:** main, v1.0.66, commit 2df3197c02ea156f8c56c772a9a49972a2ea966f.
 **Rama activa para entregas:** `main` (página original). `develop` queda como referencia histórica, sin staging.
