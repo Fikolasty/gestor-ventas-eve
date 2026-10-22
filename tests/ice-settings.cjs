@@ -5,9 +5,9 @@ const js=fs.readFileSync('src/script.js','utf8'),
       html=fs.readFileSync('src/shell.html','utf8'),
       mining=fs.readFileSync('src/mining.js','utf8');
 new Function(js);new Function(mining);
-for(const term of ["id=\"sideHome\"","id=\"iceRefLoss\"","id=\"mnRoot\""])
+for(const term of ["id=\"navHome\"","id=\"iceRefLoss\"","id=\"mnRoot\""])
   assert(html.includes(term),'UI ausente: '+term);
-assert(js.includes("'sideHome').addEventListener('click'"),'HOME no tiene navegación');
+assert(js.includes("'navHome').addEventListener('click',navigateHome)"),'HOME no tiene navegación');
 assert(js.includes("refLoss:.55"),'penalización por defecto distinta de 55%');
 assert(js.includes("isIceRefinedNonIsotope(name)"),'descuento no enlazado');
 assert(js.includes("isIceIsotope(name)"),'excepción de isótopos ausente');
@@ -20,9 +20,10 @@ assert(nullStart>=0&&nullEnd>nullStart,'falta regla de precio local');
 const nullBody=js.slice(nullStart,nullEnd+2);
 const ctx={
   S:{refinedMan:{null:Object.create(null),jita:Object.create(null)}},
+  REFINE:{'Blue Ice':{cat:'ice',out:{'Heavy Water':10}}},
   ICE_PRODUCTS:new Set(['heavy water','liquid ozone','strontium clathrates','helium isotopes','hydrogen isotopes','oxygen isotopes','nitrogen isotopes']),
   C:{ice:{on:true,nullMode:'jbuy',nullDisc:.025,refLoss:.55},tick:false,
-    nullNonMod:.9,margin:0,qd:{on:false},under:.001},
+    nullNonMod:.9,nullBulk:.45,margin:0,qd:{on:false},under:.001},
   resolveOre:n=>({ 'Blue Ice':{d:{cat:'ice'}} }[n]||null),
   qdApply:p=>p, tickDown:p=>p,nullPrice:p=>p,isModule:()=>false
 };
