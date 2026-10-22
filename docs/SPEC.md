@@ -1,7 +1,7 @@
 # SPEC — Market Moves+
 
 **Estado:** especificación viva para desarrollo y pruebas.
-**Base revisada:** main, v1.0.66 (15-10-2026), commit 2df3197c02ea156f8c56c772a9a49972a2ea966f.
+**Base de auditoría original:** main, v1.0.66 (15-10-2026), commit 2df3197c02ea156f8c56c772a9a49972a2ea966f. **Versión funcional actual:** v1.0.98 (21-10-2026); nuevas decisiones y límites en [SDD](SDD.md).
 **Alcance:** aplicación web de EVE Online para comparar destinos de venta y estimar ISK netos.
 **Responsable de aprobar cambios funcionales:** propietario del repositorio Fikolasty.
 
