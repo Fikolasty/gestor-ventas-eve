@@ -2,7 +2,7 @@
 
 **Actualizado:** 2026-10-21 · **Estado:** documento vivo de Spec-Driven Development (SDD).
 **Repositorio:** [Fikolasty/gestor-ventas-eve](https://github.com/Fikolasty/gestor-ventas-eve) · **Entrega:** rama `main` · **App:** https://fikolasty.github.io/gestor-ventas-eve/
-**Base funcional vigente:** compilación `1.0.98` (GitHub Actions, commit generado `dbdbf0e5e22c`); dos modos de Ventas, escenario de materiales, coste de courier por unidad, Skills/Mining y regresiones. Quedan pruebas visuales y de mercado real pendientes; ver sección v1.0.98.
+**Base funcional vigente:** compilación `1.0.99` (GitHub Actions, commit generado `dbdbf0e5e22c`); dos modos de Ventas, escenario de materiales, coste de courier por unidad, Skills/Mining y regresiones. Quedan pruebas visuales y de mercado real pendientes; ver sección v1.0.98.
 **Propósito:** conservar decisiones, requisitos, evidencia de pruebas y estado verificable al cambiar de conversación.
 
 > Este documento es el **punto de entrada** para retomar el proyecto. **No sustituye** [SPEC.md](SPEC.md), [PROGRESS.md](PROGRESS.md), [MINING.md](MINING.md) ni el [CHANGELOG](../CHANGELOG.md). `SPEC.txt` es historial antiguo y no debe prevalecer sobre el comportamiento y las decisiones actuales. Ante un conflicto, confirmar en el código y registrar la resolución, no inferirla.
@@ -317,3 +317,22 @@ La fuente de precio local **no es una cotización ESI de HY-RWO**. El motor usa 
 **Evidencia remota en GitHub Actions con base de código `8215c08b67437b289153ece8821cf480c87e32e6`:** verificación minera [39699655364](https://github.com/Fikolasty/gestor-ventas-eve/actions/runs/39699655364) **SUCCESS**; compilación [39699655338](https://github.com/Fikolasty/gestor-ventas-eve/actions/runs/39699655338) **SUCCESS**; versionado [39699655376](https://github.com/Fikolasty/gestor-ventas-eve/actions/runs/39699655376) **SUCCESS**; GitHub Pages [39699654534](https://github.com/Fikolasty/gestor-ventas-eve/actions/runs/39699654534) **SUCCESS**.
 
 **Alcance:** exclusivamente tests, workflow y esta bitácora. Sin cambios a `src/script.js`, `src/mining.js`, `src/refine.js`, datos Pyfa, compra, Buyback, fees, courier, SSO ni fórmulas económicas. No se afirma QA visual manual, precisión de las cotizaciones reales de Null ni optimización combinatoria exhaustiva de Plan Óptimo. Conservar código PI deshabilitado conforme a la instrucción previa.
+
+
+## 2026-10-21 — v1.0.99 · Identidad de mercado y Hulk transparente
+
+**Decisión de producto:** las menciones de la ubicación de *venta local* en interfaz deben mostrar el sistema de mercado activo en Ajustes; no usar el nombre genérico "Null", "Nullsec" ni asumir una Keepstar. Los tres mercados permitidos son **HY-RWO / SIGMA**, **UALX-3 / BRAVE** y **C-J6MT / Goonswarm Federation**. El modo automático usa alianza del piloto autorizado, con HY-RWO como reserva cuando no puede identificarse. La selección manual persiste en `mm.nullMarket.v1`.
+
+**Modo Ventas:**
+- `Vender mis ítems`: «Compara vender en [sistema], Jita, Buyback y reproceso según tus ajustes».
+- `Comerciar desde Jita`: «Compara comprar en Jita y revender en [sistema]. Revisa la ganancia después del envío».
+- `syncBusinessMode()` usa `nullSystem()`, actualiza después de cambiar Ajustes, conexión/desconexión y ES↔EN, y resalta el nombre del sistema con `mm-market-accent`. No se modifica `S.flip` ni `computePlan`.
+- `syncMarketCopy()` actualiza `[data-market-system]`, títulos de importación y márgenes. Se alinearon etiquetas, descripciones de ajustes y guías de rutas. `Nullsec` permanece donde es **categoría de seguridad** o concepto geográfico, no nombre del mercado. Los destinos de envío, las ubicaciones de contratos y la refinería siguen siendo ajustes separados; nunca sobrescribirlos con el hub de mercado.
+
+**Icono Minería:**
+- Sustituye por completo el montaje antiguo de dos capas (icono `i-ship` debajo + render con fondo oscuro). Ya no se utilizan `mix-blend-mode:screen`, `mix-blend-mode:multiply` ni invertir colores en Light.
+- `tools/create_hulk_icon.py` obtiene el **render oficial Hulk Type ID 22544**, extrae el fondo negro/celeste a un canal alfa auténtico, mantiene la nave real y genera `src/assets/hulk_icon.b64` (`data:image/png;base64`).
+- `build.py` integra el PNG transparente en el `index.html` único. El workflow genera el recurso solo si no está guardado; compilaciones posteriores son reproducibles sin acceder a la imagen remota. No se usa ilustración recreada o nave distinta.
+- `tests/skills-integration.cjs` exige el montaje de imagen único sin la superposición; `tests/market-scenarios.cjs` valida 3 sistemas × 2 escenarios × 2 idiomas y el formato PNG RGBA.
+
+**Pruebas automáticas:** GitHub Actions sobre `144b06f1847bbfeefa420e12780e0f12e76d7fe3`: Build Market Moves+ [39702586685](https://github.com/Fikolasty/gestor-ventas-eve/actions/runs/39702586685) **SUCCESS**, Verificación minera [39702586775](https://github.com/Fikolasty/gestor-ventas-eve/actions/runs/39702586775) **SUCCESS**, Versiones [39702586758](https://github.com/Fikolasty/gestor-ventas-eve/actions/runs/39702586758) **SUCCESS**. Queda por comprobar la renderización subjetiva en Firefox/Light/Dark y los datos remotos reales con conexión de EVE. Ninguna fórmula financiera o minera fue modificada.
