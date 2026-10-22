@@ -30,7 +30,7 @@ jobs:
           fi
       - name: Compile site
         run: |
-          python build.py 1.0.99
+          python build.py 1.0.100
       - name: JavaScript syntax check
         run: |
           node --check src/script.js
@@ -64,6 +64,8 @@ jobs:
       # Includes Light-theme tab contrast, Skill Plan naming, and Hulk silhouette checks.
       - name: Skills Library regression checks
         run: node tests/skills-integration.cjs
+      - name: Mining price-flow regression
+        run: node tests/mining-price-flow.cjs
       - name: Jita import financial reconciliation
         run: node tests/financial-accounting.cjs
       - name: Null market material and courier scenarios
@@ -74,6 +76,6 @@ jobs:
             git config user.name "github-actions[bot]"
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
             git add index.html src/assets/hulk_icon.b64
-            git commit -m "build: regenerate Market Moves+ v1.0.99"
+            git commit -m "build: regenerate Market Moves+ v1.0.100"
             git push
           fi
