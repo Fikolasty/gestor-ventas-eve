@@ -20,6 +20,14 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
+      # Generate and keep a *real alpha-channel* Hulk cutout once. The resulting
+      # data URI is committed for deterministic, offline-safe future builds.
+      - name: Prepare transparent Hulk render
+        run: |
+          if [ ! -s src/assets/hulk_icon.b64 ]; then
+            python -m pip install --disable-pip-version-check Pillow opencv-python-headless
+            python tools/create_hulk_icon.py
+          fi
       - name: Compile site
         run: |
           python build.py 1.0.98
@@ -61,10 +69,10 @@ jobs:
         run: node tests/market-scenarios.cjs
       - name: Commit generated site
         run: |
-          if ! git diff --quiet -- index.html; then
+          if ! git diff --quiet -- index.html || [ -n "$(git ls-files --others --exclude-standard src/assets/hulk_icon.b64)" ]; then
             git config user.name "github-actions[bot]"
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-            git add index.html
+            git add index.html src/assets/hulk_icon.b64
             git commit -m "build: regenerate Market Moves+ v1.0.98"
             git push
           fi
