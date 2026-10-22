@@ -7,7 +7,7 @@
 <meta name="referrer" content="no-referrer">
 <title>Market Moves+ · SIGMA GRINDSET</title>
 <style>
-/* ================= Market Moves+ v1.0.101 =================
+/* ================= Market Moves+ v1.0.102 =================
    Paleta: azul de base, naranja = acción, verde/rojo = ganancia/pérdida.
    Sin backdrop-filter: el vidrio se finge con rgba + bordes. */
 *{box-sizing:border-box;margin:0;padding:0}
@@ -3626,7 +3626,7 @@ html.light #mining .mn-module-eyebrow{color:#a35b35}
       <button type="button" class="mm-business-tab on" id="modeLiquidation" data-business="liquidation" aria-pressed="true"><span class="ic i-list" aria-hidden="true"></span><span>Vender mis ítems</span></button>
       <button type="button" class="mm-business-tab" id="modeTrading" data-business="trading" aria-pressed="false"><span class="ic i-scale" aria-hidden="true"></span><span>Comerciar desde Jita</span></button>
     </div>
-    <p class="mm-business-caption" id="businessCaption">Genera un plan de venta para tus ítems, comparando las opciones disponibles para obtener la mayor ganancia estimada según tus ajustes.</p>
+    <p class="mm-business-caption" id="businessCaption">Genera un plan de venta con la mayor ganancia estimada según tus ajustes.</p>
   </section>
   <!-- Import options belong to the selected Jita → Null route, not the navigation switch. -->
   <section class="mm-import-controls" id="importControls" hidden aria-label="Opciones de importación">
@@ -3958,13 +3958,13 @@ Contraband Freight = no</textarea><small>Una regla por línea: Nombre = tax tota
 <button type="button" class="totop" id="toTop" aria-label="Volver arriba" title="Volver arriba (Inicio)" hidden><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 14l6-6 6 6"/></svg></button>
 <footer class="foot">
   <p class="foot-sec"><span class="ic i-lock" aria-hidden="true"></span>Tu inventario no se guarda: al cerrar o recargar se borra. Solo tus Ajustes quedan en este navegador.</p>
-  <div class="foot-by">Creado por <b>Fiko McGivert</b> · Vanguardia DR · SIGMA GRINDSET · <span class="ver">v1.0.101</span></div>
+  <div class="foot-by">Creado por <b>Fiko McGivert</b> · Vanguardia DR · SIGMA GRINDSET · <span class="ver">v1.0.102</span></div>
 </footer>
 
 <script>
 'use strict';
 /* ============================================================
-   Market Moves+ v1.0.101 — SIGMA GRINDSET / Vanguardia DR
+   Market Moves+ v1.0.102 — SIGMA GRINDSET / Vanguardia DR
    Flujo:  pegado → items → carga (ESI: precios, volúmenes, historial) → verificación → plan → vista
      1. Pegado      parsePaste(): parser posicional de columnas de EVE (Name · Quantity · … · Volume · Est. Price).
      2. Carga       esiItems(): trae todo lo que falta; mientras carga, refresh() NO pinta (S.loading).
@@ -6665,16 +6665,16 @@ function syncBusinessMode(){
     // The engine estimates the best available net return; it cannot guarantee
     // the mathematically global maximum or future execution prices.
     caption.textContent=en?
-      'Create a sales plan for your items, comparing available options to estimate the highest profit based on your settings.':
-      'Genera un plan de venta para tus ítems, comparando las opciones disponibles para obtener la mayor ganancia estimada según tus ajustes.';
+      'Create a sales plan for the highest estimated profit based on your settings.':
+      'Genera un plan de venta con la mayor ganancia estimada según tus ajustes.';
     return;
   }
   // Jita trading still names the active hub selected in Settings or pilot SSO.
   const market=document.createElement('strong');market.className='mm-market-accent';market.textContent=nullSystem();
   caption.replaceChildren(
-    document.createTextNode(en?'Compare buying in Jita and reselling in ':'Compara comprar en Jita y revender en '),
+    document.createTextNode(en?'Estimate your profit buying in Jita and reselling in ':'Calcula tu ganancia al comprar en Jita y revender en '),
     market,
-    document.createTextNode(en?'. Review profit after shipping.':'. Revisa la ganancia después del envío.')
+    document.createTextNode(en?', after shipping.':', después del envío.')
   );
 }
 $('businessSwitch').addEventListener('click',e=>{
