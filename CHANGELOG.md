@@ -1,5 +1,16 @@
 # Changelog
 
+## 1.0.98 — [ChatGPT] Dos modos de negocio y escenarios Null/Trading
+*2026-10-21*
+
+- Sustituye el switch direccional visible por pestañas **Vender mis ítems** y **Comerciar desde Jita**. Conserva la maquinaria interna y evita duplicar los motores de venta, taxes, courier y reproceso.
+- Trading permite estimar compra a Jita Sell o mediante Buy Order, con broker de compra y advertencia de que la orden no garantiza ejecución. No cobra coste de fabricación otra vez.
+- Ajuste por defecto del **45 % de Jita Buy** para ore, minerales y lotes grandes (≥1.000 unidades) en Null, con excepciones a isótopos y Moon Goo. El precio local por unidad puede editarse por ítem; no se simulan órdenes de Null inexistentes.
+- Distribuye los costes de courier del contrato compartido entre ítems, mostrando el coste por unidad. Mantiene límite configurable de **350.000 m³/contrato**, incluso si exige varios contratos.
+- La comparación de planes se expresa como ingresos netos en liquidación o como beneficio en Trading, incluyendo oportunidad con diferencias positivas/negativas. Tablas largas pasan a acordeones.
+- Nuevas regresiones `tests/market-scenarios.cjs` y ampliación `tests/financial-accounting.cjs`. Minería, Skill Plan, lógica del Buyback y reproceso conservados.
+- Documenta limitaciones del optimizador heurístico y los precios estimados de Null en el SDD.
+
 ## 1.0.97 — [ChatGPT] Contraste de pestañas e icono Hulk
 *2026-10-21*
 
