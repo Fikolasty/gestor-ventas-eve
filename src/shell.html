@@ -2210,7 +2210,7 @@ html.light #mmTabs .mm-mod .mm-mining-icon>.mm-eve-hulk-icon:not([hidden]){
 
 /* Business-mode UX: two clearly named activities, with legacy direction control hidden.
    All original IDs and calculations remain intact. */
-body:not(.mm-mining):not(.mm-skills):not(.mm-pi) #mmTabs .mm-route{display:none!important}
+#mmTabs .mm-route{display:none!important} /* business modes replace route toggle everywhere */
 .mm-business-switch{display:flex;align-items:center;justify-content:space-between;gap:12px 24px;
   padding:10px 13px;border:1px solid var(--line2);border-radius:12px;background:rgba(24,23,22,.87);
   margin:10px 0 12px;flex-wrap:wrap}
