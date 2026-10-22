@@ -40,7 +40,9 @@ assert.equal(accounting({rows:[{best:'fN',q:1,o:{ref:100,jita:{}},g:{fN:120},pro
 C.buyMode='sell';
 assert.match(shell,/id="vMetric"/);
 assert.match(shell,/id="vSubtitle"/);
-assert.match(app,/\$\('vIsk'\).*Math\.round\(v\)/);
+assert.match(app,/amount\.append\(document\.createTextNode\(v==null\?'—':Math\.round\(v\)/);
+assert.match(app,/amount\.title=breakdown;metric\.title=breakdown/);
+assert.doesNotMatch(app,/el\('span','flip-summary-breakdown'\)/);
 assert.match(app,/flipAcct\?flipAcct\.profit:P\.best/);
 assert.match(app,/const d=flipPlanAccounting\(P\)/);
 assert.match(app,/profit=net-buy/);
