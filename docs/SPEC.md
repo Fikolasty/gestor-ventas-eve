@@ -232,3 +232,20 @@ Verificar regresiones de isótopos, Mayhem independiente, cortes de envío caros
 
 ## 21. Hotfix de Type IDs y residuos (v1.0.78)
 La denominación Ice Harvesting Drone I es prefijo de Ice Harvesting Drone II. Al llenar droneWaste nunca se deben usar coincidencias de prefijos que puedan asignar el 0% de I al II. El canon verificado es II: 34%, I: 0% (96 escenarios II con todos los boosts/implantes). Test exhaustivo de la columna para todas las filas.
+
+
+## 22. Dos actividades financieras en Ventas (v1.0.98)
+
+**Especificación vigente:** la interfaz distingue explícitamente dos negocios usando tabs compactos en Ventas:
+- `Vender mis ítems`: se poseen los activos en Nullsec. Resultado principal: ingreso neto de la liquidación. Se comparan Keepstar/Null, Jita con courier, Buyback, reproceso y venta directa como caso especial. El coste original de obtener los ítems no se supone.
+- `Comerciar desde Jita`: inversión al Jita Sell, o adquisición mediante Buy Order con broker de creación (la orden podría no completarse). Resultado principal: **beneficio = neto del plan − coste de compra**. El ajuste `Costo de producción` no se aplica por segunda vez a productos comprados para comerciar.
+
+**Compatibilidad:** el sistema interno `S.flip`, `setFlip`, rutas por clave, contratos y costes se mantienen; `#bFlip` está oculto y las pestañas llaman la misma función. No duplicar el motor para cada actividad.
+
+**Precios Null:** el orden de precedencia es precio manual del ítem → precio visto → reglas de hielo e isótopos → materiales abundantes (precio = 45 % de Jita Buy por defecto) → reglas anteriores de módulos/otros. Ajuste `cBulkNull` en Settings. Los refinados lunares/Moon Goo e isótopos quedan excluidos del nuevo remate general. Un ítem puede tener su propio precio de orden local, editable en el detalle, sin alterar su precio Jita ni el Buyback.
+
+**Logística:** los contratos y costes de SIGMA Freight conservan la capacidad de 350.000 m³ (editable); los costes de múltiples contratos se calculan una sola vez por el lote efectivamente transportado. `allocateCourier` reparte el coste total exacto entre los ítems para indicar el gasto por unidad. La suma del reparto coincide con el courier del plan.
+
+**Comparación:** nombres de rutas acentuados, diferencias + verdes y − rojas, oportunidad de elegir una ruta frente a otra, detalle a través de acordeón. En Trading, los planes se muestran como beneficio cuando hay información de adquisición; en Liquidación, como neto recibido. El motor heurístico heredado **no equivale** a una búsqueda exhaustiva de todas las combinaciones globales: preservar esta distinción en UI/documentación.
+
+**Pruebas:** `tests/market-scenarios.cjs` y `tests/financial-accounting.cjs` se añaden al workflow v1.0.98, además del suite de Skills existente. Sin datos reales no puede certificarse liquidez del mercado Null ni ejecución de Buy Orders. El [SDD maestro](SDD.md) documenta invariantes y riesgos de cálculo más extensamente.
