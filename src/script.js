@@ -1980,7 +1980,7 @@ function paintShip(P,cs){
   const ALT={null:'venderlo en '+nullSystem(),rNull:'reprocesarlo y vender en '+nullSystem(),bb:'el Buyback',fJ:'venderlo en Jita',fJI:'venderlo al instante en Jita'};
   ex.filter(x=>x.r.fast&&x.extra<0).forEach(x=>T(x.r.o.name+(S.flip?' se queda en Jita por rapidez:':' va a Jita por rapidez:')+' deja '+fmt(-x.extra)+' menos que '+ALT[x.alt]+', pero se vende mucho más rápido. Si no tienes apuro, '+({null:'véndelo en '+nullSystem(),rNull:'reprocésalo y véndelo en Null',bb:'véndeselo al Buyback',fJ:'véndelo en Jita',fJI:'véndelo al instante en Jita'})[x.alt]+'.'));
   const weak=ex.filter(x=>!x.r.fast&&x.extra<x.cost*.25).sort((a,b)=>a.extra-b.extra)[0];
-  if(weak)T(weak.r.o.name+' gana solo '+(weak.extra>=0?'':'−')+fmt(Math.abs(weak.extra))+' por viajar (su envío: '+fmt(weak.cost)+'). Si necesitas espacio, es lo primero que puedes dejar en '+(S.flip?'Jita':'Null')+'.');
+  if(weak)T(weak.r.o.name+' gana solo '+(weak.extra>=0?'':'−')+fmt(Math.abs(weak.extra))+' por viajar (su envío: '+fmt(weak.cost)+'). Si necesitas espacio, es lo primero que puedes dejar en '+(S.flip?'Jita':nullSystem())+'.');
   if(!tips.childNodes.length)T('Contrato bien aprovechado: '+pct(cap>0?V/cap:0)+'% del espacio y el envío pesa '+pct(Cc>0?R/Cc:0)+'% del valor.','ok');
   b.append(tips);
   // qué viaja
@@ -3005,7 +3005,7 @@ const DEPS=[
   [['discBase','discPct','discDays','discLoc'],()=>!$('discOn').checked,'Activa Comparar esta opción.'],
   [['qdMax'],()=>!$('qdOn').checked,'Activa Descuento por cantidad.'],
   [['cDayMin','cDayMax','cAssignee'],()=>!C.shipOn,'El envío está apagado (switch del menú).'],
-  [['cImpM','cNullDest'],()=>!S.flip,'Solo en la ruta Jita → HY-RWO.'],
+  [['cImpM','cNullDest'],()=>!S.flip,'Solo en la ruta Jita → '+nullSystem()+'.'],
 ];
 function syncDeps(){const off=new Map();
   DEPS.forEach(([ids,f,why])=>{if(f())ids.forEach(id=>{if(!off.has(id))off.set(id,why);});});
