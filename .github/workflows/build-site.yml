@@ -21,7 +21,7 @@ jobs:
           python-version: '3.12'
       - name: Compile site
         run: |
-          python build.py 1.0.97
+          python build.py 1.0.98
       - name: JavaScript syntax check
         run: |
           node --check src/script.js
@@ -36,6 +36,11 @@ jobs:
           s=Path('index.html').read_text(encoding='utf-8')
           assert 'const NULL_MARKETS=' in s
           assert 'id="langButtons"' in s
+          assert 'id="modeLiquidation"' in s and 'id="modeTrading"' in s
+          assert 'id="tradePurchaseMode"' in s and 'id="cBulkNull"' in s
+          assert 'id="unitCourierBox"' in s
+          assert 'function allocateCourier(P)' in s
+          assert 'function bulkNullMaterial(name,q)' in s
           assert 'syncLanguageChoices' in s
           assert "if(!SH()){delete row.g.fN;delete row.ship.fN;}" in s
           assert "SHIPS=S.flip?{fN:1}:{jOrd:1,jInst:1,rJita:1}" in s
@@ -51,12 +56,14 @@ jobs:
         run: node tests/skills-integration.cjs
       - name: Jita import financial reconciliation
         run: node tests/financial-accounting.cjs
+      - name: Null market material and courier scenarios
+        run: node tests/market-scenarios.cjs
       - name: Commit generated site
         run: |
           if ! git diff --quiet -- index.html; then
             git config user.name "github-actions[bot]"
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
             git add index.html
-            git commit -m "build: regenerate Market Moves+ v1.0.97"
+            git commit -m "build: regenerate Market Moves+ v1.0.98"
             git push
           fi
