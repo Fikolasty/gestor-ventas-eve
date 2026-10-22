@@ -1841,6 +1841,13 @@ select{appearance:none;-webkit-appearance:none;padding-right:30px!important;back
 #mining details.mn-info>summary{margin:0!important;padding:0!important;min-height:20px}
 #mining details.mn-info[open]>summary::after{content:none!important;display:none!important}
 
+/* The profile row can extend leftward beneath the two utility icons. */
+.top .mm-top-actions{grid-template-columns:minmax(34px,1fr) 38px 38px!important;min-width:170px;justify-items:end!important}
+.top .mm-top-actions>.top-header-action{grid-column:2!important}
+.top .mm-top-actions>.top-guide-action{grid-column:3!important}
+.top .mm-top-actions>.mm-profile-row{grid-column:1/-1!important;justify-content:flex-end!important;width:100%}
+.top .eve-identity-button{max-width:180px}
+
 /* EVE SSO: personaje a la izquierda, tabs independientes a la derecha. */
 #mmTabs .eve-identity{position:relative;min-width:0;margin-right:auto}
 #mmTabs .mm-home{margin-right:0}
@@ -1898,6 +1905,16 @@ select{appearance:none;-webkit-appearance:none;padding-right:30px!important;back
 #ctrTot.ct-sum>div>span{display:block;font-size:.72rem;line-height:1.2;min-height:2.4em;overflow-wrap:normal}
 #ctrTot.ct-sum>div>b{display:block;white-space:nowrap;font-size:clamp(.76rem,1vw,.9rem);line-height:1.25;font-variant-numeric:tabular-nums}
 @media(max-width:560px){#ctrTot.ct-sum{grid-template-columns:repeat(auto-fit,minmax(110px,1fr))}}
+
+/* Registered item editing: fixed single-column rows with controls aligned
+   to the right. Original input IDs and listeners are unchanged. */
+#lots .lot-body>.facts,#lots .lot-analysis>.facts{display:grid!important;grid-template-columns:minmax(0,1fr)!important;gap:0!important;padding:8px 14px!important}
+#lots .lot-body>.facts>.fact,#lots .lot-analysis>.facts>.fact{display:grid!important;grid-template-columns:minmax(0,1fr) minmax(126px,210px)!important;gap:10px;align-items:center;grid-column:1!important;min-width:0;padding:9px 0!important;margin:0!important;line-height:1.35}
+#lots .lot-body>.facts>.fact+.fact,#lots .lot-analysis>.facts>.fact+.fact{border-top:1px solid rgba(188,182,171,.12)}
+#lots .lot-body>.facts>.fact input,#lots .lot-analysis>.facts>.fact input{height:36px;width:100%!important;max-width:none!important;min-width:0!important;margin:0!important;box-sizing:border-box;text-align:right;font-variant-numeric:tabular-nums}
+#lots .lot-body>.facts>.fact>b,#lots .lot-analysis>.facts>.fact>b{display:flex;align-items:center;justify-content:flex-end;min-height:36px;margin:0!important;font:600 .95rem var(--f-num);text-align:right}
+#lots .lot-body>.facts>.fact-price-adjust{cursor:help}
+@media(max-width:520px){#lots .lot-body>.facts>.fact,#lots .lot-analysis>.facts>.fact{grid-template-columns:minmax(0,1fr) minmax(106px,40%)!important;gap:7px;font-size:.82rem}}
 
 /* Registered Items: compact nested analysis, default-collapsed details. */
 #lots .lot-fold{display:block;min-width:0;border:1px solid rgba(200,194,180,.16);border-radius:10px;background:rgba(20,20,22,.38);margin:10px 0;overflow:hidden}
@@ -2803,6 +2820,7 @@ html.light #settings .st-tools .st-tool-reset{border-color:rgba(218,146,111,0.37
 html.light #settings .st-tools .st-tool-reset:hover{background:rgba(148,69,42,0.25);border-color:rgba(218,146,111,0.688);color:#ac5120}
 html.light #mmTabs .eve-identity-menu{background:#e6e4df}
 html.light #mmTabs .eve-identity-menu #eveLogout:hover{background:rgba(210,135,103,0.15);color:#a84d24}
+html.light #lots .lot-body>.facts>.fact+.fact,html.light #lots .lot-analysis>.facts>.fact+.fact{border-top:1px solid rgba(31,30,29,0.114)}
 html.light #lots .lot-fold{border:1px solid rgba(31,30,29,0.152);background:rgba(240,237,229,0.6)}
 html.light #lots .lot-fold[open]>summary{border-bottom:1px solid rgba(31,30,29,0.114)}
 html.light #lots .lot-analysis>.facts{border:1px solid rgba(31,30,29,0.133);background:rgba(240,237,229,0.6)}
@@ -5086,10 +5104,13 @@ function buildLotDetails(o,ui){
   const iM3=numIn(o.m3uMan,'',v=>{const x=parseFloat(v);o.m3uMan=isNaN(x)?null:x;derive(o);refresh();},'m³ por unidad');
   const fM3=el('label','fact','m³ por unidad');fM3.append(iM3);
   const fVol=el('div','fact','Volumen total'),bVol=el('b');fVol.append(bVol);
-  const fSk=el('label','fact','Ajuste de precio %');fSk.append(numIn(o.skew!=null&&o.skew!==0?Math.round(o.skew*1e4)/100:null,'0',v=>{const x=parseFloat(v);o.skew=isNaN(x)?0:x/100;refresh();},'Ajuste de precio de este item, % (se suma al general)'));
-  fSk.append(el('small','fact-h','Se suma al ajuste general. Ej.: −2 = lo vendes 2% más barato.'));
-  fSk.classList.add('fact-wide');
-  facts.append(fQty,fRef,fBuy,fM3,fSeen,fVol,fSk);
+  const fSk=el('label','fact fact-price-adjust','Ajuste de precio %');
+  const iSk=numIn(o.skew!=null&&o.skew!==0?Math.round(o.skew*1e4)/100:null,'0',v=>{const x=parseFloat(v);o.skew=isNaN(x)?0:x/100;refresh();},'Ajuste de precio de este ítem, %');
+  iSk.removeAttribute('min'); // Negative percentages (e.g. −2%) are valid here.
+  const skewHint='Se suma al ajuste general. Ej.: −2 = lo vendes 2% más barato.';
+  fSk.title=skewHint;iSk.title=skewHint;iSk.setAttribute('aria-description',skewHint);
+  fSk.append(iSk);
+  facts.append(fQty,fBuy,fRef,fSeen,fM3,fVol,fSk);
   const prices=el('details','prices lot-fold'),pBody=el('tbody'),pt=el('table');pt.append(pBody);
   prices.append(el('summary','sub-h','Precios para publicar'),pt);
   const checks=el('ul','checks'),foot=el('div','lot-foot'),del=el('button','link danger','Quitar del lote');del.type='button';
