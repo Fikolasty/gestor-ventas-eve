@@ -25,7 +25,7 @@ for(const hub of ['HY-RWO','UALX-3','C-J6MT']){
   const proceeds=100642250;
   assert(Math.abs(local.p*r.q*taxAndFees-proceeds)<.01,
     'unit list price × quantity × local net-sales multiplier matches row proceeds');
-  assert.notMatch(local.l,/mineral|producto abajo/i);
+  assert.doesNotMatch(local.l,/mineral|producto abajo/i);
 }
 assert.equal(unitFor(r,'fJ').p,r.jl,'Jita sell-order price');
 assert.equal(unitFor(r,'jOrd').p,r.jl,'Jita sell-order (asset sale)');
