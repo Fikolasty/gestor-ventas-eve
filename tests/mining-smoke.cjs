@@ -32,7 +32,14 @@ assert(html.includes('id="missCount"'),'faltan los items sin precio');
 assert(sales.includes("cell(colL,'Items',String(its.length))"),'Tasacion debe mostrar solo numero de items');
 assert(sales.includes('paintWhereSold(P,none)'),'faltan destinos del ISK en la vista principal');
 assert(sales.includes('function selectAppModule(name)'),'no se integraron pestañas');
-assert(html.includes('PI · Espacio reservado'),'PI no debe activar calculos falsos');
+// PI was deliberately hidden from navigation, while its implementation is preserved.
+// Reject old deep links without removing its source or exposing unverified calculations.
+assert(html.includes('id="pi" role="tabpanel" aria-label="Industria Planetaria (temporalmente deshabilitada)" hidden'),
+  'PI debe permanecer oculto mientras el módulo está en pausa');
+assert(html.includes('<!-- PI temporalmente fuera de navegación; conservar para reactivar más adelante.'),
+  'la entrada de PI debe seguir comentada para reactivación futura');
+assert(sales.includes("if(name==='pi')name='ventas'"),
+  'las rutas antiguas a PI deben volver a Ventas sin activar cálculos');
 
 
 
