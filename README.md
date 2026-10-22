@@ -14,13 +14,32 @@ Descuenta los taxes, el Broker y el envío con SIGMA Freight.
 
 La bitácora **[SDD / Spec-Driven Development](docs/SDD.md)** es el punto de partida para nuevas sesiones de desarrollo: decisiones, funcionalidad implementada, prototipos, pendientes y pruebas verificadas. Leer también [SPEC](docs/SPEC.md) y [PROGRESS](docs/PROGRESS.md) antes de editar.
 
-## Skills Library (v1.0.93)
+## Skill Plan (v1.0.98)
 
-La sección **Skills** se abre desde la barra principal y presenta seis planes copiables en dos familias: **Core Skills** (Magic 14 y habilidades complementarias) e **Industria Planetaria** (5 planetas, mejor escaneo y ampliación opcional a 6). Cada etapa abre un acordeón con habilidades, detalles, costes de skillbooks y tiempo estándar/con remap.
+La sección **Skill Plan** se abre desde la barra principal y presenta seis planes copiables en dos familias: **Core Skills** (Magic 14 y habilidades complementarias) e **Industria Planetaria** (5 planetas, mejor escaneo y ampliación opcional a 6). Cada etapa abre un acordeón con habilidades, detalles, costes de skillbooks y tiempo estándar/con remap.
 
 Los iconos de habilidad se solicitan al servidor oficial de EVE por Type ID. Los precios de los libros proceden de órdenes de Jita 4-4 cuando están disponibles; las cantidades base de referencia aparecen etiquetadas como tales, no como cotizaciones. El módulo puede mostrar únicamente lo pendiente del personaje autorizado. Sin conexión presenta el plan completo y permite la simulación voluntaria. Los datos de habilidades autorizados se comunican al módulo sin compartir tokens.
 
 El módulo está integrado en el `index.html` distribuible, sin requerir una página adicional al abrirlo. Se carga al acceder a Skills, con su propio CSS aislado para proteger Ventas y Minería. Revisa el [SDD maestro](docs/SDD.md) para límites conocidos y verificaciones.
+
+## Modos de negocio (v1.0.98)
+
+El gestor distingue dos actividades sin duplicar los motores económicos:
+
+- **Vender mis ítems:** mercancía obtenida en Nullsec. Compara venta local (Keepstar), Jita mediante courier, Buyback y reproceso cuando aplica. La cifra principal representa **ingresos netos estimados** después de costes del plan. El coste histórico de obtención de un ítem no se conoce ni se inventa.
+- **Comerciar desde Jita:** compra ítems a **Jita Sell** o coloca una **Buy Order**, con broker de la orden. La orden de compra puede tardar o no completarse. Calcula el beneficio después de **inversión, impuestos de venta y courier**. El importe principal y las comparaciones de plan muestran **beneficio neto estimado** cuando existe referencia de compra suficiente.
+
+Los antiguos controles técnicos de dirección se conservan internamente para no romper fórmulas, pero ya no se muestran como navegación. El subheader presenta las dos actividades por su nombre.
+
+### Precios locales y materiales abundantes
+
+No se consultan precios reales de los mercados de Nullsec. Para ore, minerales comunes y lotes grandes (1.000+ unidades), se usa por defecto **45 % de Jita Buy** como referencia editable en **Ajustes → Precios en Null**. Esta regla no se aplica al Moon Goo/refinados lunares ni a isótopos; el hielo refinado conserva sus reglas específicas. Módulos y otros ítems siguen sus propios ajustes. El descuento por cantidad, si está activado, sigue siendo adicional y configurable.
+
+Abre un ítem de **Listado de ítems registrados → Precios para listar** para introducir el **precio de venta local por unidad** o restaurar la estimación. Este precio prevalece sobre la fórmula de referencia, sin alterar Jita ni Buyback.
+
+El courier utiliza los límites de volumen y el coste de contratos ya configurados (**350.000 m³ por contrato por defecto**). El desplegable **Coste de envío por unidad** distribuye entre los ítems enviados el coste total real del escenario, incluyendo gastos fijos, por volumen y colateral. La suma del reparto coincide con el coste total mostrado.
+
+Las diferencias y el coste de oportunidad entre planes están resumidos en un acordeón; se pueden expandir para examinar importes, alternativas y razones. La elección automática existente tiene reglas de velocidad y preferencias y **no garantiza una búsqueda combinatoria global exhaustiva**: no se presenta esa garantía sin incorporar y probar un optimizador exacto.
 
 ## Cómo se usa
 
@@ -38,7 +57,7 @@ En **Ajustes** puedes seleccionar automáticamente por alianza del personaje aut
 
 **Importante:** los precios estimados de venta Null siguen siendo **modelos basados en cotizaciones de Jita y los porcentajes de Ajustes**, no órdenes del mercado de esas estaciones obtenidas de ESI. Cambiar el hub **no significa** que se hayan consultado precios de su mercado local. Confirma las órdenes dentro del juego antes de comerciar.
 
-La versión 1.0.94 integra la nueva sección Skills y mantiene validación sintáctica, pruebas de integración y construcción automática de `index.html` en GitHub Actions. Para construir localmente, usa `python3 build.py 1.0.94`.
+La versión 1.0.98 integra la nueva sección Skills y mantiene validación sintáctica, pruebas de integración y construcción automática de `index.html` en GitHub Actions. Para construir localmente, usa `python3 build.py 1.0.98`.
 
 ### Funciones principales
 - **Resumen de ruta reactivo**: muestra el nombre del plan activo resaltado y cómo se distribuyen realmente los ítems entre rutas, sin texto fijo; Tasación usa el estilo de encabezados de sección.
@@ -51,7 +70,7 @@ La versión 1.0.94 integra la nueva sección Skills y mantiene validación sint�
 
 - **Elige un Plan**: muestra únicamente el plan seleccionado con un resumen claro de la diferencia de ISK. El botón «Cambia de Plan» abre las alternativas, incluido el Plan Óptimo, con orden y filtros.
 - **Pasos para Vender**: el plan en pasos numerados, en orden, con íconos, precios para copiar y datos de envío y contratos.
-- **Ruta invertible**: HY-RWO → Jita (vendes lo que tienes en Null) o Jita → HY-RWO (compras en Jita y vendes más caro en Null, con tu margen).
+- **Dos modos de negocio**: liquidación de ítems de Nullsec o comercio desde Jita, sin switch de dirección visible.
 - **Switch de envío**: con envío de SIGMA Freight o con los items ya en el destino.
 - **Reproceso** de ore y hielo con tus skills, la estructura, el rig y el implante.
 - **Contratos** listos para copiar: Buyback (Item Exchange), courier y venta a jugadores.
@@ -87,7 +106,7 @@ CHANGELOG.md          ← cambios por versión
 ### Generar la página
 Solo necesitas Python 3, sin dependencias:
 ```
-python3 build.py 1.0.94
+python3 build.py 1.0.98
 ```
 Eso escribe `index.html` con la versión indicada.
 
