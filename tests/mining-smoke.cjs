@@ -43,25 +43,32 @@ assert(sales.includes("if(name==='pi')name='ventas'"),
 
 
 
-// v1.0.83: resumen dinámico por plan y cantidad real de rutas sin texto fijo ni datos globales.
-const introCode=sales.match(/function planIntroData\(P\)\{[\s\S]*?\n\}(?=\nfunction paintVerdict)/);
+// The current plan introduction is composed from semantic parts for i18n and
+// colored plan/item names. Test route counts and names, not obsolete fixed prose.
+const introCode=sales.match(/function planIntroData\(P\)\{[\s\S]*?\n\}(?=\n\nlet activeRep=0;)/);
 assert(introCode,'el resumen debe calcularse a partir del plan activo');
-const planIntro=vm.runInNewContext(introCode[0]+'\nplanIntroData;',{
-  modeName:m=>({'auto':'Plan Óptimo','jOrd':'Todo a Jita (Orden)','bb':'Todo al Buyback'})[m||'auto']||m
-});
-const rows=[{best:'jOrd'},{best:'jOrd'},{best:'bb'},{best:null}];
+const introCtx={S:{lang:'es'},nullSystem:()=> 'HY-RWO',modeName:m=>({'auto':'Plan Óptimo','jOrd':'Todo a Jita (Orden)','bb':'Todo al Buyback'})[m||'auto']||m};
+const planIntro=vm.runInNewContext(introCode[0]+'\nplanIntroData;',introCtx);
+const rows=[
+  {best:'jOrd',q:2,o:{name:'Tritanium'}},
+  {best:'jOrd',q:1,o:{name:'Morphite'}},
+  {best:'bb',q:1,o:{name:'Module X'}},
+  {best:null,q:1,o:{name:'Unknown'}}
+];
+const introText=x=>x.parts.map(p=>typeof p==='string'?p:p.item).join('');
 const optIntro=planIntro({mode:null,rows});
 assert.equal(optIntro.name,'Plan Óptimo');
-assert.match(optIntro.description,/3 ítems con precio.*2 rutas de venta/);
+assert.match(introText(optIntro),/2 ítems.*Jita.*1 ítem.*Buyback/);
 const jitaIntro=planIntro({mode:'jOrd',rows});
 assert.equal(jitaIntro.name,'Todo a Jita (Orden)');
-assert.match(jitaIntro.description,/2 de los 3 ítems.*otro ítem mantiene/);
-const bbIntro=planIntro({mode:'bb',rows});
-assert.match(bbIntro.description,/1 de los 3 ítems.*otros 2 mantienen/);
-assert.match(planIntro({mode:'jOrd',rows:[{best:'jOrd'}]}).description,/1 ítem con precio sigue/);
+assert.match(introText(jitaIntro),/2 ítems.*Jita.*1 ítem.*Buyback/);
+assert.match(introText(planIntro({mode:'jOrd',rows:[rows[0]]})),/Tritanium.*Jita/);
+introCtx.S.lang='en';
+assert.equal(planIntro({mode:null,rows}).name,'Optimal Plan');
+assert.match(introText(planIntro({mode:null,rows})),/2 items.*Jita.*1 item.*Buyback/);
 assert(!sales.includes("'Según el Plan Óptimo, '"),'no mantener el texto fijo anterior');
-assert(sales.includes("el('strong','v-plan-name',intro.name)"),'el nombre del plan debe resaltarse al actualizar la vista');
-assert(html.includes('.v-plan-name{font-weight:750;color:'),'falta color del plan elegido');
+assert(sales.includes("el('strong','plan-name-accent',intro.name)"),'el nombre del plan debe resaltarse al actualizar la vista');
+assert(html.includes('.plan-name-accent{color:var(--thrust)'), 'falta color del plan elegido');
 
 assert(sales.includes("box.append(el('h2','mm-title appr-title','TASACIÓN'),g)"),'Tasación debe usar el título de las secciones');
 assert(!sales.includes("el('span','appr-tag','Tasación')"),'Tasación no debe aparecer como insignia antigua');
@@ -90,7 +97,7 @@ assert(!sales.includes('pkChange'),'el botón Cambia de Plan ya no se usa');
 assert(sales.includes('El óptimo también se elige aquí'),'Plan Óptimo debe seguir seleccionable entre alternativas');
 assert(!sales.includes("back.dataset.m='auto'"),'no debe reaparecer Volver al óptimo');
 assert(sales.includes('/*__MINING__*/'),'falta montaje del módulo');
-assert(html.includes('id="mnRoot"')&&html.includes('data-panel="mining"'),'falta UI');
+assert(html.includes('id="mnRoot"')&&html.includes('id="mining" hidden'),'falta UI');
 
 // v1.0.70: el plan debe mostrar Retriever → Mackinaw y aumento IV → V,
 // y no dejar la misma rentabilidad constante todos los meses.
