@@ -414,3 +414,11 @@ Solución de UI (sin cambios financieros): el destino local se resume en chip «
 ## 2026-10-22 — v1.0.108 · Simetría del acceso EVE
 
 Ajuste visual complementario al rediseño del navbar: la botonera del extremo superior derecho conservaba una regla anterior de *tres columnas* (primera vacía y dos iconos), que desplazaba Settings/Help respecto al botón de personaje EVE. Se establece un layout final de **dos columnas exactamente iguales** para Settings y Help y una segunda fila cuyo único botón, retrato + nombre, se centra bajo ambas. Anchos y huecos responsivos consistentes; recorte con puntos suspensivos para pilotos de nombre largo. Se mueve solo CSS, conservando el mismo elemento `#eveIdentity`, estado de SSO y handlers originales.
+
+
+## 2026-10-22 — v1.0.109 · Integración del header aprobado
+
+- **Alcance limitado:** se integra el header de texto y filas simétricas aprobado por el usuario sobre la aplicación original. Home, Ventas, Minería, Skill Plan, Ajustes, Ayuda y EVE SSO comparten la cabecera; Comercio Jita muestra selección de precio de compra y transporte solo en ese modo. El destino de importación y el margen se retiran exclusivamente del encabezado por redundancia.
+- **Conservación de funciones:** el script reubica nodos existentes (`#mmTabs`, `#businessSwitch`, `#importControls`, grupo de módulos, `#themeLight`) sin clonarlos ni reemplazar listeners. El control interno `#bFlip` sigue existiendo para compatibilidad con rutas, y `#cImpM` queda siempre editable en Ajustes; el mismo `C.impM` se usa en los cálculos.
+- **Limpieza CSS conservadora:** se reemplazan los bloques del navbar 1.0.106–108 (11.564 caracteres) por reglas limitadas a `.top.mm-ho-root` con media queries de escritorio/móvil. No se eliminan motores ni CSS de componentes de Ventas, Minería, Skills, PI, reproceso, ESI, cuentas o formularios.
+- Se actualizaron `src/shell.html`, `src/script.js`, `index.html` y las aserciones del encabezado en `tests/market-scenarios.cjs`. La verificación automatizada no sustituye QA visual, de ESI ni de OAuth en producción.
