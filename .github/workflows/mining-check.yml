@@ -28,4 +28,4 @@ jobs:
           node tests/mining-price-flow.cjs
           node tests/trading-unit-prices.cjs
       - name: Verificar generación de HTML
-        run: python3 build.py 1.0.106
+        run: python3 build.py 1.0.107

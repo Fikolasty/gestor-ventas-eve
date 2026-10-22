@@ -2665,8 +2665,13 @@ function syncShipSwitch(){
   $('importMarketLabel').textContent=nullSystem();
   $('importHeadingPrefix').textContent=S.lang==='en'?'IMPORT TO':'IMPORTACIÓN A';
   $('importHelp').textContent=S.lang==='en'?'Choose whether to ship items from Jita and set your selling margin in '+nullSystem()+'.':'Elige si transportas los ítems desde Jita y ajusta el margen de venta en '+nullSystem()+'.';
+  // The destination is a compact chip. Keep its full meaning discoverable,
+  // in both languages and across the three configurable local-market hubs.
+  $('importDestination').title=S.lang==='en'?'Import destination: '+nullSystem():'Destino de importación: '+nullSystem();
+  $('importDestination').setAttribute('aria-label',$('importDestination').title);
   $('shipLab').title=S.lang==='en'?'Include alliance freight or compare sales without shipping.':'Incluye el courier de la alianza o compara ventas sin transportar.';
   $('tradePurchaseLabel').textContent=S.lang==='en'?'Purchase at':'Comprar a';
+  $('tradePurchaseMode').title=S.lang==='en'?'Price used for purchases in Jita':'Precio utilizado para comprar en Jita';
 }
 function setFlip(on){
   S.flip=!!on;S.planMode=null;czIdx=0;C.shipOn=true;$('shipOn').checked=true; // cambiar de ruta vuelve a contar el courier

@@ -132,3 +132,16 @@ assert(salesHTML.indexOf('id="importControls"')<salesHTML.indexOf('class="mm-mod
 assert(salesHTML.includes('grid-template-columns:44px max-content minmax(0,1fr) max-content'));
 assert(!salesHTML.includes('role="tablist" aria-label="Secciones de Market Moves+"'));
 console.log('PASS: compact header and import scenarios, tooltips, preserved EVE SSO placement.');
+
+// Redesign regression: import destination chip (not verbose headline),
+// accessible purchase selector, responsive wrapping, and no overlapping text.
+assert(salesHTML.includes('id="importDestination"'));
+assert(salesHTML.includes('id="importHeadingPrefix"'));
+assert(salesHTML.includes('id="importMarketLabel"'));
+assert(salesHTML.includes('#mmTabs>#importControls #importHeadingPrefix,'));
+assert(salesHTML.includes('#mmTabs>#importControls #tradePurchaseLabel{'));
+assert(salesHTML.includes('flex-wrap:wrap!important'));
+assert(salesHTML.includes('@media(max-width:1450px)'));
+assert(salesHTML.includes('grid-template-columns:max-content minmax(0,1fr)!important'));
+assert(salesJS.includes("$('importDestination').title=S.lang==='en'?"));
+assert(salesJS.includes("$('tradePurchaseMode').title=S.lang==='en'?"));

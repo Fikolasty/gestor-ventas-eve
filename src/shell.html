@@ -2427,6 +2427,107 @@ html.light #mmTabs>#importControls{background:rgba(255,255,255,.6)!important}
  #mmTabs .mm-theme{margin:0}
 }
 
+
+/* v1.0.107 — compact Jita import bar.
+   Root cause: an unconstrained no-wrap flex row tried to fit full
+   "IMPORTACIÓN A HY-RWO" + "Comprar a" + select + courier + margin inside a
+   narrow grid track. Never allow text/controls to paint over one another. */
+#mmTabs>#importControls{
+  display:grid!important;
+  grid-template-columns:max-content minmax(0,1fr)!important;
+  align-items:center!important;
+  column-gap:9px!important;row-gap:7px!important;
+  padding:5px 8px!important;
+  min-width:0!important;min-height:44px!important;
+  box-sizing:border-box!important;
+  justify-content:initial!important;
+}
+#mmTabs>#importControls[hidden]{display:none!important}
+#mmTabs>#importControls .mm-import-intro{
+  grid-column:1;display:flex!important;align-items:center!important;
+  min-width:0!important;max-width:100%;flex:initial!important
+}
+#mmTabs>#importControls #importDestination{
+  display:inline-flex!important;align-items:center!important;
+  gap:6px;min-width:0;max-width:100%;
+  padding:7px 9px;border-radius:7px;
+  background:rgba(217,119,87,.10);
+  border:1px solid rgba(217,119,87,.25);
+  color:var(--txt);white-space:nowrap!important;
+  font:700 .76rem/1.15 var(--f-ui)!important;
+  letter-spacing:0!important;
+  cursor:help
+}
+#mmTabs>#importControls #importDestination>.ic{
+  width:15px;height:15px;flex:0 0 15px;color:var(--clay)
+}
+#mmTabs>#importControls #importMarketLabel{white-space:nowrap;letter-spacing:.015em}
+#mmTabs>#importControls #importHeadingPrefix,
+#mmTabs>#importControls #tradePurchaseLabel{
+  position:absolute!important;overflow:hidden!important;
+  width:1px!important;height:1px!important;
+  padding:0!important;margin:-1px!important;
+  border:0!important;clip:rect(0,0,0,0)!important;
+  white-space:nowrap!important
+}
+#mmTabs>#importControls .mm-import-actions{
+  grid-column:2;display:flex!important;min-width:0!important;
+  align-items:center!important;justify-content:flex-end!important;
+  gap:7px!important;flex:initial!important;flex-wrap:wrap!important
+}
+#mmTabs>#importControls .mm-buy-basis{
+  display:inline-flex!important;align-items:center!important;
+  flex:0 0 auto!important;min-width:0!important;width:auto!important;
+  gap:0!important
+}
+#mmTabs>#importControls .mm-buy-basis select{
+  width:116px!important;min-width:116px!important;max-width:116px!important;
+  min-height:35px!important;height:35px!important;flex:0 0 116px!important;
+  padding:5px 6px!important;margin:0!important;
+  font:650 .78rem/1.1 var(--f-ui)!important;
+}
+#mmTabs>#importControls #shipLab{
+  display:inline-flex!important;flex:0 0 auto;align-items:center!important;
+  gap:7px!important;min-height:35px!important;
+  white-space:nowrap!important;margin:0!important
+}
+#mmTabs>#importControls #shipLab[hidden],
+#mmTabs>#importControls #rtM[hidden]{display:none!important}
+#mmTabs>#importControls #rtM{
+  display:inline-flex!important;flex:0 0 auto;align-items:center!important;
+  gap:5px!important;min-height:35px!important;
+  margin:0!important;white-space:nowrap!important
+}
+#mmTabs>#importControls #rtM .rm-f{display:inline-flex!important;flex:0 0 auto!important;min-width:0}
+#mmTabs>#importControls #fImpM{min-width:4ch!important;width:4ch!important;max-width:4ch!important}
+html.light #mmTabs>#importControls #importDestination{
+  background:rgba(177,96,55,.09);border-color:rgba(177,96,55,.29)
+}
+/* When the available navbar gets tight, the import bar has its own second
+   row. This is preferable to clipping prices or overlapping form controls. */
+@media(max-width:1450px){
+  #mmTabs.mm-modnav{grid-template-columns:44px max-content minmax(0,1fr)!important}
+  #mmTabs>.mm-right-actions{grid-column:3!important;grid-row:1!important}
+  #mmTabs>#importControls{
+    grid-column:2/4!important;grid-row:2!important;
+    width:100%!important;min-width:0!important;
+    grid-template-columns:max-content minmax(0,1fr)!important;
+    justify-self:stretch;padding:8px 11px!important
+  }
+}
+@media(max-width:720px){
+  #mmTabs>#importControls{
+    grid-column:1/-1!important;grid-row:3!important;
+    grid-template-columns:minmax(0,1fr)!important;
+    justify-self:stretch!important
+  }
+  #mmTabs>#importControls .mm-import-intro{grid-column:1}
+  #mmTabs>#importControls .mm-import-actions{
+    grid-column:1;justify-content:flex-start!important;
+    flex-wrap:wrap!important;width:100%!important
+  }
+}
+
 </style>
 <script>/* v1.0.16: aplica el tema guardado antes de pintar (sin parpadeo). Por defecto: Dark. */try{var g=JSON.parse(localStorage.getItem('gestorVentas.ajustes.v1')||'null');if(g&&g.ui){if(g.ui.light)document.documentElement.classList.add('light');}}catch(e){}</script>
 </head>
@@ -2485,7 +2586,7 @@ html.light #mmTabs>#importControls{background:rgba(255,255,255,.6)!important}
     <!-- Trade-only controls share the same main navigation. -->
     <section class="mm-import-controls" id="importControls" hidden aria-label="Opciones de importación">
         <div class="mm-import-intro">
-          <strong><span class="ic i-ship" aria-hidden="true"></span> <span id="importHeadingPrefix">IMPORTACIÓN A</span> <span id="importMarketLabel">HY-RWO</span></strong>
+          <strong id="importDestination" title="Destino de importación: HY-RWO"><span class="ic i-ship" aria-hidden="true"></span><span id="importHeadingPrefix">IMPORTACIÓN A</span><span id="importMarketLabel">HY-RWO</span></strong>
           <small id="importHelp" hidden>Elige si transportas los ítems desde Jita y ajusta el margen de venta en <span data-market-system>HY-RWO</span>.</small>
         </div>
         <div class="mm-import-actions">
