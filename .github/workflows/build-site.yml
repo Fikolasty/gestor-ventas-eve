@@ -5,6 +5,7 @@ on:
     paths:
       - 'src/**'
       - 'build.py'
+      - 'tests/**'
       - '.github/workflows/build-site.yml'
   workflow_dispatch:
 permissions:
