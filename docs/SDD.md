@@ -303,3 +303,17 @@ La fuente de precio local **no es una cotización ESI de HY-RWO**. El motor usa 
 
 **No eliminar todavía:** el estado `S.flip`, `#bFlip` y los controles internos necesarios para que la lógica histórica siga funcionando. **Sí eliminado/simplificado:** la necesidad de navegar por un switch ambiguo, tablas extensas abiertas por defecto y duplicaciones de representación económica en la pantalla principal.
 
+
+
+## 2026-10-21 — QA de continuidad tras v1.0.98
+
+**Diagnóstico:** GitHub Pages y la compilación comercial podían finalizar correctamente mientras el workflow independiente `Verificacion minera` fallaba por aserciones de UI anteriores a los rediseños actuales. Esos fallos no demostraban una regresión en el motor minero: comprobaban textos o IDs retirados (`PI · Espacio reservado`, `sideHome`, `Contexto`/`Personaje`) y el antiguo formato monolítico de `planIntroData.description`.
+
+**Correcciones limitadas a infraestructura de prueba:**
+- `tests/mining-smoke.cjs`: comprueba ahora que PI permanece oculta y redirige a Ventas, sin eliminar su implementación en pausa; valida el resumen actual basado en `parts` en ES/EN, incluidos nombres de planes resaltados, y los títulos y controles realmente presentes en Minería.
+- `tests/ice-settings.cjs`: usa la navegación `navHome` actual y agrega fixtures `REFINE`/`nullBulk` necesarios para ejecutar la política vigente de materiales Null dentro del aislamiento de la prueba. Sigue contrastando excepciones de hielo/isótopos, overrides, independencia de Buyback y rutas Jita.
+- `.github/workflows/mining-check.yml`: verifica `build.py 1.0.98` en vez de regenerar una versión obsoleta.
+
+**Evidencia remota en GitHub Actions con base de código `8215c08b67437b289153ece8821cf480c87e32e6`:** verificación minera [39699655364](https://github.com/Fikolasty/gestor-ventas-eve/actions/runs/39699655364) **SUCCESS**; compilación [39699655338](https://github.com/Fikolasty/gestor-ventas-eve/actions/runs/39699655338) **SUCCESS**; versionado [39699655376](https://github.com/Fikolasty/gestor-ventas-eve/actions/runs/39699655376) **SUCCESS**; GitHub Pages [39699654534](https://github.com/Fikolasty/gestor-ventas-eve/actions/runs/39699654534) **SUCCESS**.
+
+**Alcance:** exclusivamente tests, workflow y esta bitácora. Sin cambios a `src/script.js`, `src/mining.js`, `src/refine.js`, datos Pyfa, compra, Buyback, fees, courier, SSO ni fórmulas económicas. No se afirma QA visual manual, precisión de las cotizaciones reales de Null ni optimización combinatoria exhaustiva de Plan Óptimo. Conservar código PI deshabilitado conforme a la instrucción previa.
