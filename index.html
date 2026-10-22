@@ -4710,7 +4710,7 @@ function computePlan(){
   const rJ=rateJita(),rN=rateNull(),rI=rateInst();
   const rows=S.items.map(o=>{
     const q=o.qty||0,ref=o.ref,a=o.jita;
-    const row={o,q,vol:(o.m3u||0)*q,coll:appraisalSell(o)*q,prod:ref!=null?C.prod*ref*q:0,g:{},ship:{},hint:{}};
+    const row={o,q,vol:(o.m3u||0)*q,coll:appraisalSell(o)*q,prod:ref!=null&&!S.flip?C.prod*ref*q:0,g:{},ship:{},hint:{}}; // bought-in-Jita goods do not incur a second fabrication cost
     // v1.0.5 modo Jita → HY-RWO: el lote está en Jita. Venderlo ahí (orden o al instante) o llevarlo a HY-RWO y
     // venderlo con orden a Jita Sell + margen de importación (neto, ya con taxes y broker de la estructura).
     if(S.flip){
