@@ -739,8 +739,9 @@ function minPrice(m){
 }
 
 // ================= Motor: ¿dónde vendo? (puro) =================
-const OPTS=[['null','Vender en HY-RWO'],['bb','Venderle al Buyback'],['jOrd','Orden en Jita'],['jInst','Venta Rápida en Jita'],['rNull','Reprocesar → Null'],['rJita','Reprocesar → Jita'],['disc','Venta a Jugador'],
+const OPTS=[['null','Vender en HY-RWO'],['bb','Venderle al Buyback'],['jOrd','Orden en Jita'],['jInst','Venta Rápida en Jita'],['rNull','Reprocesar → HY-RWO'],['rJita','Reprocesar → Jita'],['disc','Venta a Jugador'],
   ['fN','Llevar a HY-RWO'],['fJ','Orden en Jita'],['fJI','Venta Rápida en Jita']]; // f* = modo Jita → HY-RWO
+const optionMarketText=value=>String(value||'').replaceAll('HY-RWO',nullSystem()).replace(/\bNull\b/g,nullSystem());
 const FLIPK={fN:1,fJ:1,fJI:1};
 let SHIPS={jOrd:1,jInst:1,rJita:1}; // qué opciones viajan en courier (cambia con la dirección)
 function computePlan(){
@@ -949,7 +950,8 @@ function guideFor(r,Vall){
   }else if((k==='rNull'||k==='rJita')&&altNet!=null&&r.g[k]>0)g.tol=1-(altNet+r.prod+share)/r.g[k];
   return g;
 }
-const ACT={fN:'llévalo a HY-RWO y véndelo allí',fJ:'pon orden en Jita',fJI:'véndelo al instante en Jita',disc:'véndeselo a un jugador por Discord',null:'véndelo en Null',bb:'véndeselo al Buyback',jOrd:'pon orden en Jita',jInst:'véndelo al instante en Jita',rNull:'reprocésalo y vende los minerales en Null',rJita:'reprocésalo y lleva los minerales a Jita'};
+const ACT={fN:'llévalo a HY-RWO y véndelo allí',fJ:'pon orden en Jita',fJI:'véndelo al instante en Jita',disc:'véndeselo a un jugador por Discord',null:'véndelo en HY-RWO',bb:'véndeselo al Buyback',jOrd:'pon orden en Jita',jInst:'véndelo al instante en Jita',rNull:'reprocésalo y vende los minerales en HY-RWO',rJita:'reprocésalo y lleva los minerales a Jita'};
+const actionText=k=>(ACT[k]||'compara las alternativas').replaceAll('HY-RWO',nullSystem());
 function cadence(days,isNull){
   if(isNull)return days>7?'Mercado lento: revisa cada 2–3 días y no persigas cada Undercut.':'Revisa una vez al día.';
   if(days==null)return 'Revisa 1–2 veces al día.';
@@ -973,7 +975,7 @@ function paintGuide(ol,r){
   }
   if(g.k==='null'||g.k==='jOrd'){
     const isN=g.k==='null';
-    step('Qué Hacer',isN?'Publica una sell order en tu estructura de Nullsec. No necesitas envío a Jita.':'Manda el item a Jita 4-4 mediante un envío y crea una sell order. El envío está incluido en la comparación.');
+    step('Qué Hacer',isN?'Publica una sell order en '+nullSystem()+'. No necesitas envío a Jita.':'Manda el item a Jita 4-4 mediante un envío y crea una sell order. El envío está incluido en la comparación.');
     step('Cómo Listarlo',copyBtn(g.unit,fmtP(g.unit)),' por unidad (haz clic para copiar). Publica '+fmtQ(r.q)+' unidades; valor de la orden: '+fmt(g.unit*r.q)+'. Duración sugerida: 3 meses'+
       (isN&&o.nullSeen?' · Undercut de '+pct(C.under)+'% al precio que ves':'')+
       (!isN&&C.ice.on&&isIce(o.name)?(C.ice.jitaMode==='split'?' · precio Split':' · Undercut de '+pct(C.under)+'% a Jita Sell'):'')+
@@ -983,8 +985,8 @@ function paintGuide(ol,r){
       const und=g.unit>0?1-g.floor/g.unit:0;
       if(und>0)step('Precio Mínimo Recomendado','Evita bajar de ',copyBtn(g.floor,fmtP(g.floor)),' por unidad ('+pct(und)+'% por debajo de tu precio actual). Con un precio menor, la alternativa '+altLab+' dejaría más ISK según los valores actuales.');
       else step('Precio Mínimo Recomendado','Tu precio ya está en el punto de equilibrio frente a '+altLab+'. Otro undercut podría hacer menos conveniente esta venta.');
-      step('Cuándo Cambiar de Plan','Si el mercado baja de '+fmtP(g.floor)+(g.days!=null?' o la orden sigue sin venderse después de unos '+Math.max(1,Math.round(g.days*1.5))+' días':'')+', vuelve a comparar las opciones: puede convenir '+ACT[g.alt]+'.');
-    }else if(altLab)step('Cuándo Cancelar',(g.days!=null?'Si pasan ~'+Math.max(1,Math.round(g.days*1.5))+' días sin vender, ':'Si no se vende, ')+'cancela y '+ACT[g.alt]+'.');
+      step('Cuándo Cambiar de Plan','Si el mercado baja de '+fmtP(g.floor)+(g.days!=null?' o la orden sigue sin venderse después de unos '+Math.max(1,Math.round(g.days*1.5))+' días':'')+', vuelve a comparar las opciones: puede convenir '+actionText(g.alt)+'.');
+    }else if(altLab)step('Cuándo Cancelar',(g.days!=null?'Si pasan ~'+Math.max(1,Math.round(g.days*1.5))+' días sin vender, ':'Si no se vende, ')+'cancela y '+actionText(g.alt)+'.');
     step('Costo de un Relist','Aproximadamente '+fmt(g.relistFee)+' por modificar el precio de esta orden, según tu configuración. Antes de hacer undercut, comprueba que el cambio compense.');
   }else if(g.k==='jInst'){
     step('Qué Hacer','Envíalo a Jita 4-4 y vende directamente a las buy orders disponibles, sin esperar a que se complete una sell order.');
@@ -995,14 +997,14 @@ function paintGuide(ol,r){
     step('Qué Hacer','Prepara una oferta WTS en Discord (SIGMA o Vanguardia DR). Adjunta una tasación de Janice para que el comprador verifique el precio.');
     step('Precio',copyBtn(r.discUnit,fmtP(r.discUnit)),' por unidad ('+pct(C.disc.pct)+'% de Jita '+({buy:'Buy',split:'Split',sell:'Sell'})[C.disc.base]+') · total '+fmt(r.g.disc)+'.');
     step('Cómo','Sigue los pasos de "Vender a Jugadores" al final de la página.');
-    if(g.alt)step('Si Nadie Compra','Si en ~'+C.disc.days+' días nadie lo toma, '+ACT[g.alt]+'.');
+    if(g.alt)step('Si Nadie Compra','Si en ~'+C.disc.days+' días nadie lo toma, '+actionText(g.alt)+'.');
   }else if(g.k==='bb'){
     step('Qué Hacer','Usa el Buyback de tu alianza. Crea un contrato Item Exchange con el destinatario y la ubicación definidos en Ajustes.');
     step('Pago del Buyback',copyBtn(r.bbUnit,fmtP(r.bbUnit)),' por unidad, con el tax del programa ('+pct(r.bbTax)+'%) ya descontado. Esta ruta no incluye envío ni Sales Tax de mercado.');
     step('Cómo Crear el Contrato','Copia los datos del contrato que salen en este paso o en Contratos y Envío. Verifica que el Buyback acepte el item antes de enviarlo.');
   }else{
     const toJ=g.k==='rJita';
-    step('Qué Hacer','Reprocesa el item en '+refName()+'. Después '+(toJ?'envía los materiales resultantes a Jita para venderlos con órdenes.':'vende los materiales resultantes con órdenes en tu estructura de Nullsec.'));
+    step('Qué Hacer','Reprocesa el item en '+refName()+'. Después '+(toJ?'envía los materiales resultantes a Jita para venderlos con órdenes.':'vende los materiales resultantes con órdenes en '+nullSystem()+'.'));
     step('Precios de los Productos','Los precios de cada material están en el desglose de reproceso. Pon una sell order por cada material; duración sugerida: 3 meses.');
     if(g.tol!=null)step('Margen de Seguridad',g.tol>0?'Los productos pueden perder hasta '+pct(g.tol)+'% de valor antes de que la alternativa '+altLab+' iguale el resultado estimado.':'La diferencia es pequeña. Si bajan los precios de los materiales, vuelve a comparar con '+altLab+'.');
   }
@@ -1069,7 +1071,7 @@ function buildLotDetails(o,ui){
   const gwrap=el('details','gwrap lot-fold'),guide=el('ol','guide');gwrap.append(el('summary','sub-h','Guía para vender este ítem'),guide);
   const opts=el('div','opts');Object.assign(ui,{opt:{},rcall,rcB,rcS,rcR,guide});
   OPTS.forEach(([k,l])=>{
-    const r=el('div','opt'),lab=el('span','opt-l',k==='null'?'':l),bar=el('span','opt-bar'),fill=el('i'),v=el('span','opt-v'),h=el('span','opt-h');
+    const r=el('div','opt'),lab=el('span','opt-l',k==='null'?'':optionMarketText(l)),bar=el('span','opt-bar'),fill=el('i'),v=el('span','opt-v'),h=el('span','opt-h');
     bar.append(fill);r.append(lab,bar,v,h);opts.append(r);ui.opt[k]={r,lab,fill,v,h};
   });
   const facts=el('div','facts');
@@ -1077,7 +1079,7 @@ function buildLotDetails(o,ui){
   const iRef=numIn(o.refMan,'',v=>{const x=parseFloat(v);o.refMan=isNaN(x)?null:x;derive(o);refresh();},'Jita Sell por unidad');
   const fRef=el('label','fact','Jita Sell por unidad');fRef.append(iRef);
   const fBuy=el('div','fact','Jita Buy por unidad'),bBuy=el('b');fBuy.append(bBuy);
-  const fSeen=el('label','fact','Precio Unidad que ves en Null');fSeen.append(numIn(o.nullSeen,'Opcional',v=>{const x=parseFloat(v);o.nullSeen=isNaN(x)||x<=0?null:x;refresh();},'Precio que ves listado en Null'));
+  const fSeen=el('label','fact','Precio Unidad que ves en '+nullSystem());fSeen.append(numIn(o.nullSeen,'Opcional',v=>{const x=parseFloat(v);o.nullSeen=isNaN(x)||x<=0?null:x;refresh();},'Precio que ves listado en '+nullSystem()));
   const iM3=numIn(o.m3uMan,'',v=>{const x=parseFloat(v);o.m3uMan=isNaN(x)?null:x;derive(o);refresh();},'m³ por unidad');
   const fM3=el('label','fact','m³ por unidad');fM3.append(iM3);
   const fVol=el('div','fact','Volumen total'),bVol=el('b');fVol.append(bVol);
@@ -1235,7 +1237,7 @@ function paintLot(r){
   const warn=(o.checks||[]).filter(c=>c[1]==='warn').length,ok=(o.checks||[]).length&&!warn;
   setText(u.tag,warn?warn+(S.lang==='en'?(warn>1?' warnings':' warning'):(warn>1?' avisos':' aviso')):(ok?(S.lang==='en'?'verified':'verificado'):''),'tag '+(warn?'warn':ok?'ok':''));u.tag.hidden=!warn&&!ok;
   if(!u.skT){u.skT=el('span','tag sk');u.nm.append(u.skT);}u.skT.hidden=!o.skew;if(o.skew)u.skT.textContent='ajuste '+(o.skew>0?'+':'−')+pctS(Math.abs(o.skew))+'%';
-  if(r.best){const l=OPTS.find(x=>x[0]===r.best)[1].replaceAll('HY-RWO',nullSystem());setText(u.dest,l,'lot-dest pill k-'+r.best+' '+(r.best==='disc'?'p-disc':SHIPS[r.best]?'p-jita':'p-null'));}
+  if(r.best){const l=OPTS.find(x=>x[0]===r.best)[1].replaceAll('HY-RWO',nullSystem()).replace(/\bNull\b/g,nullSystem());setText(u.dest,l,'lot-dest pill k-'+r.best+' '+(r.best==='disc'?'p-disc':SHIPS[r.best]?'p-jita':'p-null'));}
   else setText(u.dest,'Falta Precio','lot-dest pill p-none');
   setText(u.net,r.best?fmt(r.net[r.best]):'—','lot-net '+(r.best?sgn(r.net[r.best]):''));
   {const up=suggUnit(r),b=u.ppB;const t=up==null?'—':fmtP(up);if(b.textContent!==t)b.textContent=t;b.dataset.v=up==null?'':String(Math.round(up*100)/100);b.disabled=up==null;
@@ -1245,7 +1247,7 @@ function paintLot(r){
   paintGuide(u.guide,r);
   u.rcall.hidden=!r.rep;
   if(r.rep){const w=r.raw&&r.raw.sell;u.rcR.textContent=w?'Valor bruto a Jita Sell (solo '+(parseFloat($('rTax').value)||0)+'% de tax de refinería): ore '+fmt(w.ore)+' → productos '+fmt(w.prod)+' ('+(w.diff>=0?'+':'')+fmt(w.diff)+', '+(w.pct>=0?'+':'')+pct(w.pct)+'%).':'';u.rcR.hidden=!w;}
-  if(r.rep){const lab=k=>k==='null'?nullLabel(o.name):OPTS.find(x=>x[0]===k)[1];
+  if(r.rep){const lab=k=>k==='null'?nullLabel(o.name):optionMarketText(OPTS.find(x=>x[0]===k)[1]);
     if(r.rep.missing){setText(u.rcB,'¿Reprocesar? Faltan precios','');u.rcS.textContent='Trae los precios de los minerales para saberlo.';}
     else if(r.rep.diff>0){setText(u.rcB,'Sí vale la pena reprocesar: +'+fmt(r.rep.diff),'pos');u.rcS.textContent=lab(r.rep.kr)+' gana a '+lab(r.rep.kn)+'.';}
     else{setText(u.rcB,'No vale la pena reprocesar: '+fmt(r.rep.diff),'neg');u.rcS.textContent='Mejor '+lab(r.rep.kn)+' sin reprocesar.';}
@@ -1254,7 +1256,7 @@ function paintLot(r){
   const eligible=OPTS.filter(([k])=>!(FLIPK[k]?!S.flip:(S.flip||((k==='rNull'||k==='rJita')&&!isOre)||(k==='bb'&&!C.bb.on)||(k==='disc'&&!C.disc.on)))).map(([k])=>({k,v:r.net[k]})).filter(x=>Number.isFinite(x.v));
   const worst=eligible.length>1?eligible.reduce((a,x)=>x.v<a.v?x:a).k:null;
   OPTS.forEach(([k])=>{
-    const p=u.opt[k];if(k==='null')p.lab.textContent=nullLabel(o.name);if(k==='jOrd')p.lab.textContent=jitaLabel(o.name);
+    const p=u.opt[k];if(k==='null')p.lab.textContent=nullLabel(o.name);else if(k==='jOrd')p.lab.textContent=jitaLabel(o.name);else p.lab.textContent=optionMarketText(OPTS.find(x=>x[0]===k)?.[1]);
     const hide=(FLIPK[k]?!S.flip:(S.flip||((k==='rNull'||k==='rJita')&&!isOre)||(k==='bb'&&!C.bb.on)||(k==='disc'&&!C.disc.on)))||!Number.isFinite(r.net[k]);p.r.hidden=hide;if(hide)return;
     const v=r.net[k];
     p.r.className='opt'+(k===r.best?' best':'')+(k===worst&&k!==r.best?' worst':'')+(SHIPS[k]?' ship':'')+(v==null?' na':'');
@@ -1329,7 +1331,7 @@ function paintLot(r){
     r.mins.forEach(x=>{
       const tr=el('tr','lot-min-row');tr.hidden=true;tr.append(el('td',null,x.m+' · '+fmtQ(x.n)+' u.'));
       const a1=el('td','r'),a2=el('td','r');
-      a1.append(x.np!=null?copyBtn(x.np,'Null '+fmtP(x.np)):el('span','muted','sin precio'));
+      a1.append(x.np!=null?copyBtn(x.np,nullSystem()+' '+fmtP(x.np)):el('span','muted','sin precio'));
       a2.append(x.p!=null?copyBtn(x.p,'Jita '+fmtP(x.p)):el('span','muted',''));
       tr.append(a1,a2);tb.append(tr);
     });
@@ -1349,7 +1351,7 @@ function catOf(name){if(isIce(name))return 'ice';if(resolveOre(name)||ORE_PRODUC
 // parte del envío de un item: su m³ y su colateral, más su parte del precio base
 // precio por unidad de cada acción
 function unitFor(r,k){const a=r.o.jita;
-  return k==='null'?{p:r.np,l:'Lístalo en Null a este Precio'}:k==='jOrd'?{p:r.jl,l:'Lístalo en Jita a este Precio'}:k==='jInst'?{p:r.instAvg!=null?r.instAvg:(a&&a.buy),l:'Te pagan (promedio)'}:
+  return k==='null'?{p:r.np,l:'Lístalo en '+nullSystem()+' a este precio'}:k==='jOrd'?{p:r.jl,l:'Lístalo en Jita a este Precio'}:k==='jInst'?{p:r.instAvg!=null?r.instAvg:(a&&a.buy),l:'Te pagan (promedio)'}:
     k==='bb'?{p:r.bbUnit,l:'Te paga el Buyback'}:k==='disc'?{p:r.discUnit,l:'Pídelo en Discord'}:{p:null,l:'Precio de cada '+(isIce(r.o.name)?'producto':'mineral')+' abajo'};}
 // orden, mostrar más y copiar al hacer clic en nombre/cantidad/ganancia
 // v102: pestaña:acción es la clave en todas las preferencias de vista (sin persistencia).
@@ -1618,7 +1620,7 @@ function paintVerdict(P){
     const lim=vShow[id]||5,vis=gs.slice(0,lim);
     vis.forEach(r=>{
       const u=unitFor(r,k),qdTxt=r.qd>=.0001&&k==='null'?'Con −'+pctQ(r.qd)+'% por cantidad':null;
-      const fT=r.fast?'Por rapidez: '+(r.fast.from==='disc'?'a un jugador':'en Null')+' ganarías '+fmt(Math.max(0,r.fast.loss))+' más, pero tarda más.':null;
+      const fT=r.fast?'Por rapidez: '+(r.fast.from==='disc'?'a un jugador':'en '+nullSystem())+' ganarías '+fmt(Math.max(0,r.fast.loss))+' más, pero tarda más.':null;
       prow('',r.o.name,[qdTxt,fT].filter(Boolean).join(' · ')||null,r.q,u.p,u.l,r.g[k]-r.prod,SHIPS[k]?'antes del envío':null);
       if((k==='rNull'||k==='rJita')&&r.mins){
         const pr=x=>k==='rNull'?x.np:x.p,rt=k==='rNull'?rateNull():rateJita();
@@ -1626,7 +1628,7 @@ function paintVerdict(P){
           sort.k==='p'?(pr(x)??-Infinity):sort.k==='a'?(pr(x)!=null?x.n*pr(x)*rt:-Infinity):0;
         const mins=sort.k?[...r.mins].sort((a,b)=>{const A=keyMin(a),B=keyMin(b);return (A<B?-1:A>B?1:0)*sort.d;}):r.mins;
         mins.forEach(x=>{const p=pr(x);
-          prow('min','↳ '+x.m,x.qd>=.0001&&k==='rNull'?'Con −'+pctQ(x.qd)+'% por cantidad':null,x.n,p,k==='rNull'?'Orden en Null':'Orden en Jita',p!=null?x.n*p*rt:null,'neto de este '+(isIce(r.o.name)?'producto':'mineral'),{route:k==='rNull'?'null':'jita',name:x.m});});}
+          prow('min','↳ '+x.m,x.qd>=.0001&&k==='rNull'?'Con −'+pctQ(x.qd)+'% por cantidad':null,x.n,p,k==='rNull'?'Orden en '+nullSystem():'Orden en Jita',p!=null?x.n*p*rt:null,'neto de este '+(isIce(r.o.name)?'producto':'mineral'),{route:k==='rNull'?'null':'jita',name:x.m});});}
     });
     if(!gs.length)groupTable.append(el('div','pl-nomatch',query?'No hay items con ese nombre en esta recomendación.':'No hay items.'));
     if(gs.length>lim){const hid=gs.slice(lim),sum=hid.reduce((a,r)=>a+r.g[k]-r.prod,0);
@@ -1915,7 +1917,7 @@ function paintContracts(P){
   const dots=$('czDots');dots.textContent='';
   cards.forEach((c,i)=>{const d=el('button','cz-d '+c.cls,String(i+1));d.type='button';d.dataset.i=i;d.title='Contrato '+(i+1)+' · '+c.lab;d.setAttribute('aria-label',d.title);dots.append(d);});
   const tot=$('ctrTot');tot.textContent='';tot.hidden=!cards.length;
-  if(!cards.length){$('ctrList').textContent='';$('ctrList').append(el('p','sh-none','Tu plan no necesita contratos: lo vendes con órdenes en Null o al instante.'));$('czDots').hidden=true;}
+  if(!cards.length){$('ctrList').textContent='';$('ctrList').append(el('p','sh-none','Tu plan no necesita contratos: lo vendes con órdenes en '+nullSystem()+' o al instante.'));$('czDots').hidden=true;}
   else{
     const add=(l,v,cls)=>{const d=el('div');d.append(el('span',null,l),el('b','num '+(cls||''),v));tot.append(d);};
     add('Contratos',String(cards.length));
@@ -1958,7 +1960,7 @@ function paintShip(P,cs){
   K('Pesa sobre la carga',pct(Cc>0?R/Cc:0)+'%','de lo que vale en Jita Sell');
   K('Costo real por m³',fmt(V>0?R/V:0),'con la base incluida');
   K('Espacio usado',pct(cap>0?V/cap:0)+'%',fmtV(Math.round(V))+' de '+fmtV(cap));
-  if(ex.length)K(gain>=0?'Ganas por enviarlo':'Por enviarlo',(gain>=0?'+':'−')+fmt(Math.abs(gain)),gain>=0?(S.flip?'frente a venderlo en Jita':'frente a no enviarlo (Null o Buyback)')+', ya restado el envío':'menos que no enviarlo'+(ex.some(x=>x.r.fast)?': se envía por rapidez':''),gain>=0?'pos':'neg');
+  if(ex.length)K(gain>=0?'Ganas por enviarlo':'Por enviarlo',(gain>=0?'+':'−')+fmt(Math.abs(gain)),gain>=0?(S.flip?'frente a venderlo en Jita':'frente a no enviarlo ('+nullSystem()+' o Buyback)')+', ya restado el envío':'menos que no enviarlo'+(ex.some(x=>x.r.fast)?': se envía por rapidez':''),gain>=0?'pos':'neg');
   else K('Si se pierde',fmt(Cc),'el colateral que te pagan si el contrato falla');
   b.append(kpi);
   // capacidad por contrato (clic = ver ese contrato)
@@ -1973,8 +1975,8 @@ function paintShip(P,cs){
   const last=cs[n-1],free=C.maxVol-last.v;
   if(last.v<C.maxVol*.6)T('Al '+(n>1?'último contrato':'contrato')+' le sobran '+fmtV(Math.round(free))+'. Puedes meter más carga sin pagar otra base de '+fmt(C.base)+': cada m³ extra cuesta solo '+C.perM3+' ISK.');
   if(R>0&&pB/R>.5)T('La base es el '+pct(pB/R)+'% del envío. Con poca carga sale caro por m³: si puedes, junta más antes de enviar.');
-  const ALT={null:'venderlo en Null',rNull:'reprocesarlo y vender en Null',bb:'el Buyback',fJ:'venderlo en Jita',fJI:'venderlo al instante en Jita'};
-  ex.filter(x=>x.r.fast&&x.extra<0).forEach(x=>T(x.r.o.name+(S.flip?' se queda en Jita por rapidez:':' va a Jita por rapidez:')+' deja '+fmt(-x.extra)+' menos que '+ALT[x.alt]+', pero se vende mucho más rápido. Si no tienes apuro, '+({null:'véndelo en Null',rNull:'reprocésalo y véndelo en Null',bb:'véndeselo al Buyback',fJ:'véndelo en Jita',fJI:'véndelo al instante en Jita'})[x.alt]+'.'));
+  const ALT={null:'venderlo en '+nullSystem(),rNull:'reprocesarlo y vender en '+nullSystem(),bb:'el Buyback',fJ:'venderlo en Jita',fJI:'venderlo al instante en Jita'};
+  ex.filter(x=>x.r.fast&&x.extra<0).forEach(x=>T(x.r.o.name+(S.flip?' se queda en Jita por rapidez:':' va a Jita por rapidez:')+' deja '+fmt(-x.extra)+' menos que '+ALT[x.alt]+', pero se vende mucho más rápido. Si no tienes apuro, '+({null:'véndelo en '+nullSystem(),rNull:'reprocésalo y véndelo en Null',bb:'véndeselo al Buyback',fJ:'véndelo en Jita',fJI:'véndelo al instante en Jita'})[x.alt]+'.'));
   const weak=ex.filter(x=>!x.r.fast&&x.extra<x.cost*.25).sort((a,b)=>a.extra-b.extra)[0];
   if(weak)T(weak.r.o.name+' gana solo '+(weak.extra>=0?'':'−')+fmt(Math.abs(weak.extra))+' por viajar (su envío: '+fmt(weak.cost)+'). Si necesitas espacio, es lo primero que puedes dejar en '+(S.flip?'Jita':'Null')+'.');
   if(!tips.childNodes.length)T('Contrato bien aprovechado: '+pct(cap>0?V/cap:0)+'% del espacio y el envío pesa '+pct(Cc>0?R/Cc:0)+'% del valor.','ok');
@@ -1987,7 +1989,7 @@ function paintShip(P,cs){
     tr.append(td,el('td','r',fmtV(Math.round(x.s.v*100)/100)),el('td','r','−'+fmt(x.cost)),el('td','r '+sgn(x.extra),x.extra==null?'—':(x.extra>=0?'+':'−')+fmt(Math.abs(x.extra))));tb.append(tr);});
   if(ship.length>8){const tr=el('tr'),td=el('td','muted',S.lang==='en'?'and '+(ship.length-8)+' more items':'y '+(ship.length-8)+' ítems más');td.colSpan=4;tr.append(td);tb.append(tr);}
   t.append(tb);b.append(t);
-  b.append(el('small','sh-rates',S.flip?'Gana extra = lo que deja en HY-RWO, ya con taxes y su parte del envío, menos lo que dejaría vendido en Jita.':'Gana extra = lo que deja en Jita, ya con taxes y su parte del envío, menos lo que dejaría sin viajar (Null o Buyback).'));
+  b.append(el('small','sh-rates',S.flip?'Gana extra = lo que deja en '+nullSystem()+', ya con taxes y su parte del envío, menos lo que dejaría vendido en Jita.':'Gana extra = lo que deja en Jita, ya con taxes y su parte del envío, menos lo que dejaría sin viajar ('+nullSystem()+' o Buyback).'));
 }
 function paintCourier(P){
   const w=$('fScnWrap');
@@ -2237,7 +2239,7 @@ function paintRepro(){
     tr.append(el('td','r '+sgn(d1),f(d1)),el('td','r muted',''),el('td','r muted',''),el('td','r '+sgn(d2),f(d2)));tb.append(tr);
   };
   diffRow('Diferencia en Jita (minerales − ore)',opts[3],opts[1]);
-  diffRow('Diferencia en Null (minerales − ore)',opts[2],opts[0]);
+  diffRow('Diferencia en '+nullSystem()+' (minerales − ore)',opts[2],opts[0]);
   // dos divisiones: minerales vs ore directo, ambos con orden en Jita — sin y con courier
   const card=(i,min,ore,miss)=>{
     const d=min!=null&&ore!=null&&!miss?min-ore:null;
@@ -2252,7 +2254,7 @@ function paintRepro(){
   card(1,opts[3].a,opts[1].a,m1);
   card(2,opts[3].b,opts[1].b,m1||(!(oreVol>0)?'Pon el m³ por unidad del ore para contar el envío.':null));
   const gb=b2||b1,rg=$('rGuide');
-  rg.textContent=!gb?'':'Qué hacer: '+({oN:'vende el ore en tu estructura de Null.',oJ:'lleva el ore a Jita y pon orden.',mN:'reprocésalo en '+refName()+' y vende los minerales en Null.',mJ:'reprocésalo en '+refName()+' y lleva los minerales a Jita.'})[gb.k]+
+  rg.textContent=!gb?'':'Qué hacer: '+({oN:'vende el ore en '+nullSystem()+'.',oJ:'lleva el ore a Jita y pon orden.',mN:'reprocésalo en '+refName()+' y vende los minerales en '+nullSystem()+'.',mJ:'reprocésalo en '+refName()+' y lleva los minerales a Jita.'})[gb.k]+
     (gb.k[0]==='m'?' Lista cada mineral con los precios de "Minerales al Reprocesar" del item.':'');
   paintOreVsMin(r,q,nets);
 }
