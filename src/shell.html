@@ -1706,6 +1706,22 @@ html.light #verdict .v-plan-name{color:#ad4b27}
 @media(max-width:800px){#verdict .ov-hd{grid-template-columns:minmax(0,1fr)!important;row-gap:8px!important}#verdict .ov-hd .mm-net{grid-column:1;grid-row:2;text-align:left}#verdict .ov-hd .v-cap{grid-row:3}}
 
 
+/* Low-profile accounting strip instead of a paragraph repeating the plan,
+   or three giant boxed KPI cards. Total profit remains the headline above. */
+#verdict .ov-hd .v-cap{min-width:0;font:inherit!important}
+#verdict .v-finance{display:flex;flex-wrap:wrap;gap:9px 0;width:100%;margin:6px 0 0;padding:11px 0;border-block:1px solid var(--line2)}
+#verdict .v-finance-item{flex:1 1 190px;min-width:0;display:flex;flex-direction:column;gap:6px;justify-content:center;padding:3px 16px;border-right:1px solid var(--line2)}
+#verdict .v-finance-item:first-child{padding-left:0}
+#verdict .v-finance-item:last-child{border-right:0}
+#verdict .v-finance-item small{font:500 .8rem/1.3 var(--f-ui);color:var(--mut)}
+#verdict .v-finance-item strong{font:700 clamp(.91rem,1.3vw,1.12rem)/1.25 var(--f-num);font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
+#verdict .v-finance-item .pos{color:var(--gain)}
+#verdict .v-finance-item .neg{color:var(--loss)}
+#stepsPanel{display:block!important}
+#stepsPanel>.mm-section-head{width:100%;display:block!important;margin:0 0 14px!important}
+#stepsPanel>#vPlan{width:100%;min-width:0}
+@media(max-width:650px){#verdict .v-finance-item{flex-basis:100%;border-right:0;border-bottom:1px solid var(--line2);padding:4px 0 10px}#verdict .v-finance-item:last-child{border-bottom:0}}
+
 /* Shared compact disclosure row for the steps breakdown. */
 #bDeep.step-toggle{width:100%;min-height:76px;display:flex!important;flex-direction:row!important;align-items:center!important;gap:14px;text-align:left;padding:14px 18px;border:1px solid rgba(217,119,87,.65);border-left:3px solid var(--ion);border-radius:12px;background:rgba(25,23,22,.87)}
 #bDeep .step-toggle-icon{display:block;flex:0 0 21px;width:21px;height:21px;color:var(--ion)}
@@ -2555,7 +2571,7 @@ Contraband Freight = no</textarea><small>Una regla por línea: Nombre = tax tota
       <div class="ov-hd">
         <div class="ov-ttl"><header class="mm-section-head"><h2 class="mm-title" id="vTitle">LA MEJOR RUTA DE VENTA</h2><p class="mm-section-sub" id="vSubtitle">REVISA TU RUTA Y CUÁNTO RECIBIRÍAS</p></header></div>
         <div class="mm-net"><span class="mm-net-label" id="vMetric" hidden>INGRESOS NETOS POR VENTA</span><p class="v-isk num" id="vIsk"></p></div>
-        <p class="v-cap" id="vCap">Aquí verás qué ruta elegiste y cómo se distribuye tu venta.</p><span class="v-what" id="vWhat" hidden></span>
+        <div class="v-cap" id="vCap">Aquí verás los componentes económicos del plan elegido.</div><span class="v-what" id="vWhat" hidden></span>
       </div>
       <div class="ov-card ov-flow"><h4>DE DÓNDE SALE TU ISK</h4><div id="ovFlow"></div><div class="mm-dest-inline" id="ovDestW"><h4>DÓNDE SE VENDE</h4><div id="ovDest"></div></div></div>
       <!-- Cifras usadas por el motor, sin tarjetas repetidas en la UI. -->
@@ -2588,7 +2604,6 @@ Contraband Freight = no</textarea><small>Una regla por línea: Nombre = tax tota
   <div id="deep" class="deep" hidden>
   <section class="panel verdict-detail" id="stepsPanel">
     <header class="mm-section-head"><h3 class="mm-title">PASOS PARA VENDER</h3><p class="mm-section-sub">HAZ CLIC EN CUALQUIER PASO PARA VER LOS DETALLES</p></header>
-    <div id="stepHead"></div>
     <div class="pl-groups stp-list" id="vPlan"></div>
 
     <div id="vRep" hidden>

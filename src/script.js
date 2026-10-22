@@ -1487,62 +1487,15 @@ const routeSummaryName=k=>({
   bb:'Programa Buy Back',rNull:'Reproceso y venta en HY-RWO',
   rJita:'Reproceso y venta en Jita',disc:'Venta directa a un jugador'
 })[k]?.replaceAll('HY-RWO',nullSystem())||PLAN_L[k]?.replaceAll('HY-RWO',nullSystem())||k;
-const spanishCount=n=>({1:'un',2:'dos',3:'tres',4:'cuatro',5:'cinco',6:'seis',7:'siete',8:'ocho',9:'nueve',10:'diez'})[n]||String(n);
-const routeSentence=(k,n)=>{if(S.lang==='en'){
-  const action={null:'sell through orders in HY-RWO',fN:'ship to HY-RWO to sell there',jOrd:'sell through orders in Jita',fJ:'sell through orders in Jita',jInst:'sell instantly in Jita',fJI:'sell instantly in Jita',bb:'deliver to the Buyback Program',rNull:'reprocess and sell the materials in HY-RWO',rJita:'reprocess and sell the materials in Jita',disc:'sell directly to another player'}[k]||'follow the recommended selling route';
-  return (n+' '+(n===1?'item':'items')+' to '+action).replaceAll('HY-RWO',nullSystem());
-}
-  const count=spanishCount(n)+' '+(n===1?'ítem':'ítems');
-  const action=({null:'vender en HY-RWO mediante órdenes',fN:'llevar a HY-RWO para vender allí',jOrd:'vender mediante órdenes en Jita',fJ:'vender mediante órdenes en Jita',jInst:'vender al instante en Jita',fJI:'vender al instante en Jita',bb:'entregar al programa Buy Back',rNull:'reprocesar y vender sus materiales en HY-RWO',rJita:'reprocesar y vender sus materiales en Jita',disc:'vender directamente a otro jugador'})[k]||'vender según la ruta indicada';
-  return (count+' para '+action).replaceAll('HY-RWO',nullSystem());
-};
-const enPlanIntroPrefix=()=>S.lang==='en'?'The ':'El ';
-function planIntroData(P){
-  const en=S.lang==='en',name=P.mode?modeName(P.mode):(en?'Optimal Plan':'Plan Óptimo');
-  const active=P.rows.filter(r=>r.best&&r.q>0);
-  if(!active.length)return{name,parts:[en?'has no available selling route yet.':'todavía no tiene rutas de venta disponibles.']};
-  const groups=new Map();
-  active.forEach(r=>{const group=groups.get(r.best)||[];group.push(r);groups.set(r.best,group);});
-  // Each route expresses a complete action: a Jita purchase with fN means
-  // import and resell, not "sell the items by shipping it to sell it".
-  const actionFor=(key,rows)=>{
-    const count=rows.length,one=count===1,pronoun=one?'lo':'los';
-    const descriptor=one?[{item:rows[0].o.name}]:[en?count+' '+(one?'item':'items'):'los '+count+' '+(one?'ítem':'ítems')];
-    const actions=en?{
-      fN:S.flip?'buy {items} in Jita and resell '+(one?'it':'them')+' in HY-RWO after shipping':'ship {items} to HY-RWO for sale',
-      null:'sell {items} through sell orders in HY-RWO',
-      jOrd:'sell {items} through sell orders in Jita',
-      fJ:'sell {items} through sell orders in Jita',
-      jInst:'sell {items} immediately in Jita',
-      fJI:'sell {items} immediately in Jita',
-      bb:'sell {items} to the Buyback program',
-      rNull:'reprocess {items} and sell the materials in HY-RWO',
-      rJita:'reprocess {items} and sell the materials in Jita',
-      disc:'sell {items} directly to another player'
-    }:{
-      fN:S.flip?'comprar {items} en Jita y revender'+pronoun+' en HY-RWO después del envío':'enviar {items} a HY-RWO para su venta',
-      null:'vender {items} mediante órdenes en HY-RWO',
-      jOrd:'vender {items} mediante órdenes en Jita',
-      fJ:'vender {items} mediante órdenes en Jita',
-      jInst:'vender {items} al instante en Jita',
-      fJI:'vender {items} al instante en Jita',
-      bb:'vender {items} al programa Buyback',
-      rNull:'reprocesar {items} y vender sus materiales en HY-RWO',
-      rJita:'reprocesar {items} y vender sus materiales en Jita',
-      disc:'vender {items} directamente a otro jugador'
-    };
-    const template=(actions[key]||(en?'sell {items} using the recommended route':'vender {items} por la ruta recomendada')).replaceAll('HY-RWO',nullSystem());
-    const cut=template.split('{items}');
-    return[cut[0],...descriptor,cut[1]||''];
+// Reconciles the selected route on the overview, without double-counting
+// reprocessing steps; P.best is authoritative for final proceeds.
+function verdictFinance(P,tradeAccounting){
+  return{
+    sales:P.rows.reduce((sum,r)=>sum+(r.best?(r.g[r.best]||0)-r.prod:0),0),
+    shipping:P.shipCost||0,
+    proceeds:P.best,
+    investment:tradeAccounting?tradeAccounting.buy:null
   };
-  const entries=[...groups],single=entries.length===1;
-  const parts=[single?(en?'recommends ':'recomienda '):(en?'recommends splitting the sale: ':'recomienda distribuir las operaciones así: ')];
-  entries.forEach(([key,rows],index)=>{
-    if(index)parts.push(index===entries.length-1?(en?' and ':' y '):', ');
-    parts.push(...actionFor(key,rows));
-  });
-  parts.push(en?(single?'. Review the steps below.':'. Review the steps for each route below.'):(single?'. Consulta los pasos a continuación.':'. Consulta los pasos de cada ruta a continuación.'));
-  return{name,parts};
 }
 
 let activeRep=0;
@@ -1570,10 +1523,7 @@ function paintVerdict(P){
   amount.title=breakdown;metric.title=breakdown;
   if(breakdown){amount.tabIndex=0;amount.setAttribute('aria-label',breakdown);}
   else{amount.removeAttribute('tabindex');amount.removeAttribute('aria-label');}
-  // qué se descontó, según el plan
-  const ded=['taxes','broker'];if(C.relistOn&&C.relists>0)ded.push('relists');if(P.Vs>0&&C.shipOn)ded.push('envío');if(C.prod>0)ded.push('producción');
-  {const ore=P.rows.some(r=>resolveOre(r.o.name));document.querySelectorAll('.if-ore').forEach(e=>e.hidden=!ore);} // "Sin Reproceso" solo si hay ore
-  $('vCap').textContent=none?'Esperando precios de Jita…':'Recibes netos luego de deducciones ('+ded.join(', ')+')';
+  {const ore=P.rows.some(r=>resolveOre(r.o.name));document.querySelectorAll('.if-ore').forEach(e=>e.hidden=!ore);}
   // cuál es el plan, en una etiqueta: la acción que más aporta (y cuántas más hay)
   {const W=k=>{const g=P.rows.filter(r=>r.best===k),kind=IN_JITA()?'':g.every(r=>isIce(r.o.name))?' Hielo':g.every(r=>resolveOre(r.o.name))?' Ore':'';
      return({fN:PLAN_L.fN,fJ:'Vender en Jita'+kind,fJI:'Vender en Jita'+kind+' al Instante',null:'Vender en HY-RWO',rNull:'Vender en HY-RWO reprocesado',jOrd:'Vender en Jita'+kind,jInst:'Vender en Jita'+kind+' al Instante',rJita:'Vender en Jita Reprocesado',bb:'Vender al Buyback',disc:'Vender a Jugador'})[k];};
@@ -1585,14 +1535,22 @@ function paintVerdict(P){
     $('vTitle').textContent=S.lang==='en'?(P.mode?'YOUR SELLING ROUTE':'THE BEST SELLING ROUTE'):(P.mode?'TU RUTA DE VENTA':'LA MEJOR RUTA DE VENTA');
     $('vSubtitle').textContent=flipAcct?(S.lang==='en'?'AFTER PURCHASE, TAXES AND TRANSPORT':'DESPUÉS DE COMPRA, IMPUESTOS Y ENVÍO'):(S.lang==='en'?'CHECK YOUR ROUTE AND NET SALES':'REVISA TU RUTA Y CUÁNTO RECIBIRÍAS');
     if(fa&&$('vWhat').textContent)$('vWhat').textContent+=' · por rapidez';
-    const cap=$('vCap');
-    cap.replaceChildren();
+    const cap=$('vCap');cap.replaceChildren();
     if(none){cap.textContent=S.lang==='en'?'Waiting for Jita prices to calculate your route.':'Estamos esperando los precios de Jita para calcular tu ruta.';}
     else{
-      const intro=planIntroData(P);
-      cap.append(enPlanIntroPrefix(),el('strong','plan-name-accent',intro.name),' ',...intro.parts.map(p=>typeof p==='string'?document.createTextNode(p):el('strong','item-name-accent',p.item)));
-      // In trading mode the profit formula is available from the amount tooltip,
-      // not repeated as a second line under the selected plan.
+      // Top-level financial breakdown replaces duplicate plan narration.
+      // Final result / profit remains shown ONCE in the large ISK figure.
+      const en=S.lang==='en',fig=verdictFinance(P,flipAcct),bridge=el('div','v-finance');
+      bridge.setAttribute('role','group');bridge.setAttribute('aria-label',en?'Selected plan accounting':'Desglose del plan elegido');
+      const card=(label,number,cost)=>{
+        const item=el('div','v-finance-item');
+        item.append(el('small',null,label),el('strong','num '+(cost?'neg':'pos'),(cost&&number>0?'−':'')+fmt(Math.abs(number))+' ISK'));
+        bridge.append(item);
+      };
+      card(en?'Net sales after fees':'Ventas netas después de tasas',fig.sales,false);
+      card(en?'Shipping cost':'Coste de envío',fig.shipping,true);
+      if(flipAcct)card(en?'Purchase investment':'Inversión de compra',fig.investment,true);
+      cap.append(bridge);
     }
   }
   lastP=P;
@@ -1717,23 +1675,7 @@ function paintVerdict(P){
   const before=seq.filter(k=>k!=='ship'&&(!SHIPS[k]||k==='rJita')),after=seq.filter(k=>k!=='ship'&&SHIPS[k]&&k!=='rJita');
   // Refined materials need a separate sale step AFTER the courier arrives in Jita.
   const steps=[...before,...(shipRows.length?['ship']:[]),...after,...(groups.some(([k])=>k==='rJita')?['sellRefined']:[])];
-  const hd=$('stepHead');hd.textContent='';
-  if(steps.length){
-    const t=el('div','stp-top');t.append(el('span','stp-plan',(P.mode?modeName(P.mode):(S.lang==='en'?'Optimal plan':'Plan óptimo'))+' · '+rowsIn.length+(S.lang==='en'?(rowsIn.length===1?' item':' items'):(rowsIn.length===1?' ítem':' ítems'))));
-    // The exact bridge to P.best is the already-taxed earnings from every chosen route, less production and courier.
-    // Never sum step display amounts: rJita preparation and Jita sale may describe the same value twice.
-    const netBeforeShipping=rowsIn.reduce((sum,r)=>sum+(r.best?(r.g[r.best]||0)-r.prod:0),0);
-    const shipping=P.shipCost||0;
-    const net=P.best;
-    const balance=el('div','stp-balance');
-    const cell=(title,amount,kind)=>{const part=el('div','stp-balance-cell');part.append(el('small',null,title),el('strong',kind,(amount>0&&kind==='pos'?'+':amount<0?'−':'')+fmt(Math.abs(amount))));balance.append(part);};
-    const english=S.lang==='en';
-    cell(english?'Sales and contracts, net of fees and processing':'Ventas y contratos, neto de tasas y procesamiento',netBeforeShipping,netBeforeShipping>=0?'pos':'neg');
-    cell(english?'Total shipping cost':'Coste total del transporte',-shipping,shipping?'neg':'');
-    cell(english?'Final plan proceeds':'Ingreso final del plan',net,net>=0?'pos':'neg');
-    t.append(balance);
-    hd.append(t);
-  }
+  // Detailed actions only: the financial bridge moved above.
   // Todos los pasos empiezan cerrados; abrir uno no cierra los demás.
   // Los pasos con contrato tienen dos columnas: a la izquierda lo que haces, a la derecha cómo llenar el contrato.
   if(!stepOpen)stepOpen=new Set();

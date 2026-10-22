@@ -44,6 +44,8 @@ assert.match(app,/amount\.append\(document\.createTextNode\(v==null\?'—':Math\
 assert.match(app,/amount\.title=breakdown;metric\.title=breakdown/);
 assert.doesNotMatch(app,/el\('span','flip-summary-breakdown'\)/);
 assert.match(app,/flipAcct\?flipAcct\.profit:P\.best/);
+assert.match(app,/const en=S\.lang==='en',fig=verdictFinance\(P,flipAcct\)/);
+assert.doesNotMatch(app,/function planIntroData\(P\)/);
 assert.match(app,/const d=flipPlanAccounting\(P\)/);
 assert.match(app,/profit=net-buy/);
 console.log('Import finance presentation: proceeds, investment, transport, profit, mixed plans and missing prices passed.');

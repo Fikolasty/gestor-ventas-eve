@@ -43,44 +43,27 @@ assert(sales.includes("if(name==='pi')name='ventas'"),
 
 
 
-// The current plan introduction is composed from semantic parts for i18n and
-// colored plan/item names. Test route counts and names, not obsolete fixed prose.
-const introCode=sales.match(/function planIntroData\(P\)\{[\s\S]*?\n\}(?=\n\nlet activeRep=0;)/);
-assert(introCode,'el resumen debe calcularse a partir del plan activo');
-const introCtx={S:{lang:'es'},nullSystem:()=> 'HY-RWO',modeName:m=>({'auto':'Plan Óptimo','jOrd':'Todo a Jita (Orden)','bb':'Todo al Buyback'})[m||'auto']||m};
-const planIntro=vm.runInNewContext(introCode[0]+'\nplanIntroData;',introCtx);
-const rows=[
-  {best:'jOrd',q:2,o:{name:'Tritanium'}},
-  {best:'jOrd',q:1,o:{name:'Morphite'}},
-  {best:'bb',q:1,o:{name:'Module X'}},
-  {best:null,q:1,o:{name:'Unknown'}}
-];
-const introText=x=>x.parts.map(p=>typeof p==='string'?p:p.item).join('');
-const optIntro=planIntro({mode:null,rows});
-assert.equal(optIntro.name,'Plan Óptimo');
-assert.match(introText(optIntro),/2 ítems.*Jita.*Module X.*Buyback/);
-const jitaIntro=planIntro({mode:'jOrd',rows});
-assert.equal(jitaIntro.name,'Todo a Jita (Orden)');
-assert.match(introText(jitaIntro),/2 ítems.*Jita.*Module X.*Buyback/);
-assert.match(introText(planIntro({mode:'jOrd',rows:[rows[0]]})),/Tritanium.*Jita/);
-introCtx.S.flip=true;
-const flippedRows=[{best:'fN',q:1,o:{name:'PLEX'}},{best:'fN',q:1,o:{name:'Hulk'}},{best:'fN',q:1,o:{name:'Veldspar'}},{best:'fN',q:1,o:{name:'Isogen'}},{best:'fN',q:1,o:{name:'Megacyte'}}];
-assert.match(introText(planIntro({mode:null,rows:flippedRows})),/comprar los 5 ítems en Jita y revenderlos en HY-RWO después del envío/);
-assert.doesNotMatch(introText(planIntro({mode:null,rows:flippedRows})),/enviándolo.*venderlo/);
-introCtx.S.flip=false;
-assert.match(introText(planIntro({mode:null,rows:flippedRows})),/enviar los 5 ítems a HY-RWO para su venta/);
-introCtx.S.flip=true;
-assert.match(introText(planIntro({mode:null,rows:[flippedRows[0]]})),/comprar PLEX en Jita y revenderlo en HY-RWO/);
-introCtx.S.lang='en';
-assert.equal(planIntro({mode:null,rows}).name,'Optimal Plan');
-assert.match(introText(planIntro({mode:null,rows})),/2 items.*Jita.*Module X.*Buyback/);
-assert.match(introText(planIntro({mode:null,rows:flippedRows})),/buy 5 items in Jita and resell them in HY-RWO after shipping/);
-assert(!sales.includes("'Según el Plan Óptimo, '"),'no mantener el texto fijo anterior');
-assert(sales.includes("el('strong','plan-name-accent',intro.name)"),'el nombre del plan debe resaltarse al actualizar la vista');
-assert(html.includes('.plan-name-accent{color:var(--thrust)'), 'falta color del plan elegido');
-assert(html.includes('#vCap .plan-name-accent{font:inherit!important;font-weight:inherit!important'), 'el nombre del plan debe tener la misma tipografía');
-assert(sales.includes('amount.title=breakdown;metric.title=breakdown'), 'desglose de ganancia debe estar en tooltip');
-assert(!sales.includes("el('span','flip-summary-breakdown')"), 'no repetir la fórmula financiera bajo el resumen');
+// A financial reconciliation replaces the repeated plan sentence.
+const bridgeSource=sales.match(/function verdictFinance\(P,tradeAccounting\)\{[\s\S]*?\n\}/);
+assert(bridgeSource);
+const verifyBridge=vm.runInNewContext(bridgeSource[0]+'\nverdictFinance;');
+const bridgePlan={rows:[{best:'fN',g:{fN:300},prod:0},{best:'fJ',g:{fJ:85},prod:5}],shipCost:20,best:360};
+const bridgeValues=verifyBridge(bridgePlan,{buy:205});
+assert.equal(bridgeValues.sales,380);
+assert.equal(bridgeValues.shipping,20);
+assert.equal(bridgeValues.proceeds,360);
+assert.equal(bridgeValues.investment,205);
+assert.equal(verifyBridge(bridgePlan,null).investment,null);
+assert(!sales.includes('function planIntroData('));
+assert(sales.includes('cap.append(bridge)'));
+assert(!sales.includes("el('div','stp-balance')"));
+assert(!html.includes('id="stepHead"'));
+assert(html.includes('.v-finance-item'));
+assert(sales.includes("facts.append(fQty,fBuy,fRef,fSeen,fM3,fVol,fSk)"));
+assert(sales.includes("iSk.removeAttribute('min')"));
+assert(!sales.includes("fSk.append(el('small','fact-h'"));
+assert(sales.includes("iSk.setAttribute('aria-description',skewHint)"));
+assert(sales.includes('amount.title=breakdown;metric.title=breakdown'));
 
 assert(sales.includes("box.append(el('h2','mm-title appr-title','TASACIÓN'),g)"),'Tasación debe usar el título de las secciones');
 assert(!sales.includes("el('span','appr-tag','Tasación')"),'Tasación no debe aparecer como insignia antigua');
