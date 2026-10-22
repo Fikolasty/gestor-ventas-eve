@@ -74,7 +74,7 @@ const renderBody=segment('function syncBusinessMode(){', "$('businessSwitch').ad
 let currentHub='HY-RWO',written='';
 const user={flip:false,lang:'es'};
 const makeButton=()=>({classList:{toggle(){}},setAttribute(){},querySelector(){return {textContent:''}}});
-const caption={replaceChildren(...nodes){written=nodes.map(x=>x.textContent).join('')}};
+const caption={replaceChildren(...nodes){written=nodes.map(x=>x.textContent).join('')},set textContent(value){written=String(value)},get textContent(){return written}};
 const controls={modeLiquidation:makeButton(),modeTrading:makeButton(),businessCaption:caption};
 const renderBusiness=vm.runInNewContext(renderBody+'\nsyncBusinessMode;',{
   S:user,$:id=>controls[id],nullSystem:()=>currentHub,
