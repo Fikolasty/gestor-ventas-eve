@@ -2740,25 +2740,15 @@ function syncBusinessMode(){
   for(const [button,active] of [[a,!S.flip],[b,S.flip]]){
     button.classList.toggle('on',active);button.setAttribute('aria-pressed',String(active));
   }
-  a.querySelector('span:last-child').textContent=en?'Sell my items':'Vender mis ítems';
-  b.querySelector('span:last-child').textContent=en?'Trade from Jita':'Comerciar desde Jita';
-  const caption=$('businessCaption');
-  if(!S.flip){
-    // Explain the value of the whole sales plan instead of listing routes.
-    // The engine estimates the best available net return; it cannot guarantee
-    // the mathematically global maximum or future execution prices.
-    caption.textContent=en?
-      'Create a sales plan for the highest estimated profit based on your settings.':
-      'Genera un plan de venta con la mayor ganancia estimada según tus ajustes.';
-    return;
-  }
-  // Jita trading still names the active hub selected in Settings or pilot SSO.
-  const market=document.createElement('strong');market.className='mm-market-accent';market.textContent=nullSystem();
-  caption.replaceChildren(
-    document.createTextNode(en?'Estimate your profit buying in Jita and reselling in ':'Calcula tu ganancia al comprar en Jita y revender en '),
-    market,
-    document.createTextNode(en?', after shipping.':', después del envío.')
-  );
+  a.querySelector('span:last-child').textContent=en?'Sell Items':'Vender Ítems';
+  b.querySelector('span:last-child').textContent=en?'Jita Trading':'Comercio Jita';
+  // No redundant lateral description column. The buttons carry contextual
+  // native tooltips, updated for language and the active alliance market.
+  const descriptions=[
+    [a,en?'Create a sales plan for the highest estimated profit based on your settings.':'Genera un plan de venta con la mayor ganancia estimada según tus ajustes.'],
+    [b,en?'Estimate your profit buying in Jita and reselling in '+nullSystem()+', after shipping.':'Calcula tu ganancia al comprar en Jita y revender en '+nullSystem()+', después del envío.']
+  ];
+  descriptions.forEach(([button,description])=>{button.title=description;button.setAttribute('aria-description',description);});
 }
 $('businessSwitch').addEventListener('click',e=>{
   const tab=e.target.closest('button[data-business]');if(!tab)return;
@@ -2790,6 +2780,9 @@ $('themeLight').addEventListener('change',e=>{document.documentElement.classList
   topActions.className='mm-top-actions';
   if(settings){settings.classList.add('top-header-action');settings.setAttribute('aria-label','Ajustes');settings.title='Ajustes';topActions.append(settings);}
   if(guide){guide.classList.add('top-guide-action');guide.setAttribute('aria-label','Guía de uso');guide.title='Guía de uso';topActions.append(guide);}
+  const profile=document.createElement('div');profile.className='mm-profile-row';
+  const identity=$('eveIdentity');if(identity)profile.append(identity);
+  topActions.append(profile);
   document.querySelector('.top').append(topActions);
   const route=$('route');route.classList.add('mm-route');
   const theme=$('themeLight').closest('.top-theme');theme.classList.add('mm-theme');

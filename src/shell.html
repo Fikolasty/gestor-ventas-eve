@@ -2089,6 +2089,40 @@ body.mm-skills #heroIntro,body.mm-skills #salesBody{display:none!important}
 @media(max-width:650px){#skills{padding:3px!important}}
 
 
+
+/* Identity belongs below Settings + Help in the upper-right corner.
+   Re-parent the exact SSO DOM node: don't clone profile or auth listeners. */
+.top .mm-top-actions{display:grid!important;grid-template-columns:repeat(2,38px);gap:5px 8px!important;justify-items:center;justify-content:end;align-content:center;margin-left:auto}
+.top .mm-top-actions>.top-header-action{grid-column:1;grid-row:1}
+.top .mm-top-actions>.top-guide-action{grid-column:2;grid-row:1}
+.top .mm-top-actions>.mm-profile-row{grid-column:1/-1;grid-row:2;display:flex;justify-content:center;min-width:0;width:100%}
+.top .eve-identity{position:relative;min-width:0;max-width:100%;margin:0}
+.top .eve-identity-button{display:flex;align-items:center;justify-content:center;gap:6px;max-width:180px;min-height:32px;padding:3px 6px;border:0;border-radius:8px;background:transparent;color:var(--txt);font:600 .75rem/1.2 var(--f-ui);cursor:pointer}
+.top .eve-identity-button:hover{background:rgba(217,119,87,.12)}
+.top .eve-identity-button img{width:26px;height:26px;object-fit:cover;border-radius:6px}
+.top #evePilotName{max-width:140px;text-overflow:ellipsis;overflow:hidden;white-space:nowrap}
+.top .eve-identity-arrow{width:6px;height:6px;flex:none;border-right:2px solid var(--ion);border-bottom:2px solid var(--ion);transform:rotate(45deg)}
+.top .eve-identity-button[aria-expanded=true] .eve-identity-arrow{transform:rotate(225deg)}
+.top .eve-identity-menu{position:absolute;top:calc(100% + 5px);right:0;left:auto;z-index:120;width:180px;max-width:calc(100vw - 36px);padding:5px;border-radius:9px;border:1px solid var(--line);background:#211e1d;box-shadow:0 15px 40px rgba(0,0,0,.5)}
+.top .eve-identity-menu[hidden],.top .eve-login-status[hidden]{display:none!important}
+.top .eve-identity-menu #eveLogout{width:100%;min-height:32px;padding:6px 10px;text-align:center;font:.77rem/1.2 var(--f-ui);background:transparent;border:0;border-radius:6px;color:var(--txt);cursor:pointer}
+.top .eve-identity-menu #eveLogout:hover{background:rgba(210,135,103,.12);color:#eeb399}
+/* One compact scenario row. The import panel is adjacent to Comercio Jita,
+   only when that mode is active; scenario copy lives in button tooltips. */
+.mm-business-switch{display:flex!important;flex-direction:row;flex-wrap:wrap;align-items:center;justify-content:flex-start;column-gap:14px;row-gap:9px;padding:10px 12px}
+.mm-business-switch>.mm-business-tabs{flex:none}
+.mm-business-switch>.mm-import-controls{display:flex;flex:1 1 520px;min-width:0;margin:0!important;padding:6px 10px;gap:8px 16px;border:1px solid rgba(217,119,87,.23);border-radius:9px;box-shadow:none!important;background:rgba(12,12,12,.28)}
+.mm-business-switch>.mm-import-controls[hidden]{display:none!important}
+.mm-business-switch .mm-import-intro{flex:0 0 auto;min-width:0}
+.mm-business-switch .mm-import-intro strong{font-size:.74rem;white-space:nowrap;letter-spacing:.015em}
+.mm-business-switch #importHelp{display:none!important}
+.mm-business-switch .mm-import-actions{display:flex;flex:1 1 auto;justify-content:flex-end;gap:7px;min-width:0;flex-wrap:wrap}
+.mm-business-switch .mm-import-actions #shipLab,.mm-business-switch .mm-import-actions #rtM{min-height:34px}
+.mm-business-switch .mm-buy-basis select{min-height:34px}
+.mm-business-switch .mm-business-tab{font-size:.84rem;white-space:nowrap}
+@media(max-width:1150px){.mm-business-switch>.mm-import-controls{flex:1 1 100%;justify-content:space-between}}
+@media(max-width:640px){.mm-business-switch>.mm-business-tabs{width:100%;display:flex}.mm-business-switch .mm-business-tab{flex:1 1 50%;min-width:0}.mm-business-switch>.mm-import-controls{align-items:stretch;padding:9px;flex-wrap:wrap}.mm-business-switch .mm-import-actions{justify-content:flex-start;gap:8px}.mm-business-switch .mm-import-intro{flex:1 1 100%}}
+
 /* v1.0.95: route direction is the only control in the top navigation.
    Shipping and import margin retain their original IDs and event handlers. */
 .mm-import-controls{margin:12px 0 0;padding:13px 16px;display:flex;align-items:center;justify-content:space-between;gap:16px;background:linear-gradient(120deg,rgba(34,32,31,.96),rgba(18,18,19,.95));border:1px solid var(--line2);border-radius:12px;box-shadow:0 8px 20px rgba(0,0,0,.14)}
@@ -2324,7 +2358,6 @@ html.light #pkOpportunity{background:rgba(255,255,255,.9)}
   </div>
   <nav class="mm-modnav" id="mmTabs" role="tablist" aria-label="Secciones de Market Moves+">
     <button type="button" id="navHome" class="mm-home" title="HOME" aria-label="Volver al inicio"><span class="ic i-home" aria-hidden="true"></span></button>
-    <div id="eveIdentity" class="eve-identity"><button type="button" id="eveIdentityButton" class="eve-identity-button" aria-expanded="false" aria-controls="eveIdentityMenu"><img id="evePortrait" alt="" hidden><span id="evePilotName">Conectar EVE</span><span class="eve-identity-arrow" aria-hidden="true" hidden></span></button><div id="eveIdentityMenu" class="eve-identity-menu" hidden><button type="button" id="eveLogout" hidden>Desconectar</button><span id="eveLoginStatus" role="status" class="eve-login-status" hidden></span></div></div>
     <div class="mm-modgroup" role="presentation">
     <button type="button" class="mm-mod on" data-mm-module="ventas" role="tab" aria-controls="salesBody" aria-selected="true" id="mmTabVentas" title="Ventas" aria-label="Ventas"><span class="ic i-list" aria-hidden="true"></span><span class="mm-mod-label">Ventas</span></button>
     <button type="button" class="mm-mod" data-mm-module="mining" role="tab" aria-controls="mining" aria-selected="false" id="mmTabMining" title="Minería" aria-label="Minería"><span class="mm-mining-icon" aria-hidden="true"><img class="mm-eve-hulk-icon" src="__HULK_ICON__" alt="" width="28" height="26"></span><span class="mm-mod-label">Minería</span></button>
@@ -2338,22 +2371,20 @@ html.light #pkOpportunity{background:rgba(255,255,255,.9)}
        backward-compatible calculation events but no longer serves as navigation. -->
   <section class="mm-business-switch" id="businessSwitch" aria-label="Tipo de negocio">
     <div class="mm-business-tabs" role="group" aria-label="Escenario de mercado">
-      <button type="button" class="mm-business-tab on" id="modeLiquidation" data-business="liquidation" aria-pressed="true"><span class="ic i-list" aria-hidden="true"></span><span>Vender mis ítems</span></button>
-      <button type="button" class="mm-business-tab" id="modeTrading" data-business="trading" aria-pressed="false"><span class="ic i-scale" aria-hidden="true"></span><span>Comerciar desde Jita</span></button>
+      <button type="button" class="mm-business-tab on" id="modeLiquidation" data-business="liquidation" aria-pressed="true"><span class="ic i-list" aria-hidden="true"></span><span>Vender Ítems</span></button>
+      <button type="button" class="mm-business-tab" id="modeTrading" data-business="trading" aria-pressed="false"><span class="ic i-scale" aria-hidden="true"></span><span>Comercio Jita</span></button>
     </div>
-    <p class="mm-business-caption" id="businessCaption">Genera un plan de venta con la mayor ganancia estimada según tus ajustes.</p>
-  </section>
-  <!-- Import options belong to the selected Jita → Null route, not the navigation switch. -->
-  <section class="mm-import-controls" id="importControls" hidden aria-label="Opciones de importación">
+    <section class="mm-import-controls" id="importControls" hidden aria-label="Opciones de importación">
     <div class="mm-import-intro">
       <strong><span class="ic i-ship" aria-hidden="true"></span> <span id="importHeadingPrefix">IMPORTACIÓN A</span> <span id="importMarketLabel">HY-RWO</span></strong>
-      <small id="importHelp">Elige si transportas los ítems desde Jita y ajusta el margen de venta en <span data-market-system>HY-RWO</span>.</small>
+      <small id="importHelp" hidden>Elige si transportas los ítems desde Jita y ajusta el margen de venta en <span data-market-system>HY-RWO</span>.</small>
     </div>
     <div class="mm-import-actions">
     <label class="mm-buy-basis" for="tradePurchaseMode"><span id="tradePurchaseLabel">Comprar a</span><select id="tradePurchaseMode" aria-label="Cómo comprar en Jita"><option value="sell">Jita Sell</option><option value="buy">Buy Order</option></select></label>
     <label class="sw" id="shipLab" hidden title="Enviar: utiliza SIGMA Freight para llevar los items a HY-RWO. No enviar: venderás los items en Jita sin contabilizar transporte."><input type="checkbox" id="shipOn" checked><span class="sw-t" aria-hidden="true"></span><span id="shipTxt">Enviar</span></label>
     <label class="route-m" id="rtM" hidden title="Margen de importación: cuánto más que Jita Sell cobras en HY-RWO (neto, ya con taxes)."><span class="rm-l">Margen</span><span class="rm-f"><span class="rm-s">+</span><input type="number" id="fImpM" min="0" step="0.5" value="15" inputmode="decimal" aria-label="Margen al vender en HY-RWO, % neto sobre Jita Sell"><span class="rm-s">%</span></span></label>
     </div>
+  </section>
   </section>
   <!-- v104: introducción + recordatorio visible a la derecha. Los botones comparten
        los paneles Guía de Uso y Ajustes existentes: no se duplica ningún formulario. -->
