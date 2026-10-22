@@ -7,7 +7,7 @@
 <meta name="referrer" content="no-referrer">
 <title>Market Moves+ · SIGMA GRINDSET</title>
 <style>
-/* ================= Market Moves+ v1.0.107 =================
+/* ================= Market Moves+ v1.0.108 =================
    Paleta: azul de base, naranja = acción, verde/rojo = ganancia/pérdida.
    Sin backdrop-filter: el vidrio se finge con rgba + bordes. */
 *{box-sizing:border-box;margin:0;padding:0}
@@ -2528,6 +2528,65 @@ html.light #mmTabs>#importControls #importDestination{
   }
 }
 
+
+/* Upper-right actions: true symmetry instead of a three-column grid with
+   an empty column on the left. Tools sit in equal columns, and the same EVE
+   character button occupies the centered row directly beneath both tools. */
+.top .mm-top-actions{
+  display:grid!important;
+  grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  grid-template-rows:40px 36px!important;
+  width:170px!important;min-width:170px!important;
+  gap:7px 8px!important;
+  align-content:center!important;
+  align-items:center!important;justify-items:center!important;
+  flex:0 0 170px!important;
+  margin-left:auto!important;padding:0!important;
+}
+.top .mm-top-actions>.top-header-action{
+  grid-column:1!important;grid-row:1!important;
+  justify-self:center!important
+}
+.top .mm-top-actions>.top-guide-action{
+  grid-column:2!important;grid-row:1!important;
+  justify-self:center!important
+}
+.top .mm-top-actions>.mm-profile-row{
+  grid-column:1/-1!important;grid-row:2!important;
+  width:100%!important;min-width:0!important;
+  display:flex!important;align-items:center!important;
+  justify-content:center!important
+}
+.top .mm-profile-row .eve-identity{
+  width:100%!important;max-width:170px!important;
+  display:flex!important;justify-content:center!important
+}
+.top .mm-profile-row .eve-identity-button{
+  display:flex!important;align-items:center!important;justify-content:center!important;
+  width:100%!important;max-width:170px!important;min-width:0!important;
+  height:36px!important;min-height:36px!important;
+  gap:8px!important;padding:3px 9px!important;
+  border-radius:8px;border:1px solid rgba(231,223,211,.14);
+  background:rgba(24,23,22,.34);
+  box-sizing:border-box
+}
+.top .mm-profile-row .eve-identity-button img{
+  flex:0 0 26px;width:26px!important;height:26px!important;border-radius:6px
+}
+.top .mm-profile-row .eve-identity-button #evePilotName{
+  flex:0 1 auto;min-width:0;max-width:115px;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+  font:650 .78rem/1.1 var(--f-ui)
+}
+html.light .top .mm-profile-row .eve-identity-button{
+  border-color:rgba(67,53,45,.18);background:rgba(255,255,255,.63)
+}
+@media(max-width:760px){
+  .top .mm-top-actions{width:146px!important;min-width:146px!important;flex-basis:146px!important}
+  .top .mm-profile-row .eve-identity-button{max-width:146px!important}
+  .top .mm-profile-row .eve-identity-button #evePilotName{max-width:89px}
+}
+
 /* ===== tema claro (generado desde el oscuro por light.py) ===== */
 html.light{--void:#e4e3dd;--hull:#e2e0da;--hull2:#e0ded8;--line:rgba(31,30,29,0.114);--line2:rgba(31,30,29,0.125);--txt:#1c1c1a;--mut:#54524d;--dim:#6c6a64;--ion:#413f3c;--blue:#a39d8b;--clay:#c96442;--thrust:#a67526;--gain:#418b62;--loss:#a92c23}
 html.light body::after{background:repeating-linear-gradient(180deg,rgba(31,30,29,0.011) 0 1px,transparent 1px 3px),
@@ -3083,6 +3142,8 @@ html.light #mmTabs>#importControls{border:1px solid rgba(217,119,87,0.25);backgr
 html.light.light #mmTabs>#importControls{background:rgba(31,30,29,0.57)!important}
 html.light #mmTabs>#importControls #importDestination{background:rgba(217,119,87,0.125);border:1px solid rgba(217,119,87,0.312)}
 html.light.light #mmTabs>#importControls #importDestination{background:rgba(177,96,55,0.112);border-color:rgba(177,96,55,0.362)}
+html.light .top .mm-profile-row .eve-identity-button{border:1px solid rgba(31,30,29,0.133);background:rgba(240,237,229,0.6)}
+html.light.light .top .mm-profile-row .eve-identity-button{border-color:rgba(67,53,45,0.225);background:rgba(31,30,29,0.598)}
 /* ajustes a mano del tema claro */
 html.light body{background:#e6e3da;color:#1f1e1d}
 html.light body::before{opacity:.12;filter:grayscale(.35) brightness(1.1)}
@@ -4218,13 +4279,13 @@ Contraband Freight = no</textarea><small>Una regla por línea: Nombre = tax tota
 <button type="button" class="totop" id="toTop" aria-label="Volver arriba" title="Volver arriba (Inicio)" hidden><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 14l6-6 6 6"/></svg></button>
 <footer class="foot">
   <p class="foot-sec"><span class="ic i-lock" aria-hidden="true"></span>Tu inventario no se guarda: al cerrar o recargar se borra. Solo tus Ajustes quedan en este navegador.</p>
-  <div class="foot-by">Creado por <b>Fiko McGivert</b> · Vanguardia DR · SIGMA GRINDSET · <span class="ver">v1.0.107</span></div>
+  <div class="foot-by">Creado por <b>Fiko McGivert</b> · Vanguardia DR · SIGMA GRINDSET · <span class="ver">v1.0.108</span></div>
 </footer>
 
 <script>
 'use strict';
 /* ============================================================
-   Market Moves+ v1.0.107 — SIGMA GRINDSET / Vanguardia DR
+   Market Moves+ v1.0.108 — SIGMA GRINDSET / Vanguardia DR
    Flujo:  pegado → items → carga (ESI: precios, volúmenes, historial) → verificación → plan → vista
      1. Pegado      parsePaste(): parser posicional de columnas de EVE (Name · Quantity · … · Volume · Est. Price).
      2. Carga       esiItems(): trae todo lo que falta; mientras carga, refresh() NO pinta (S.loading).
