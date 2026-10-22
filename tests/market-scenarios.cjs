@@ -104,51 +104,34 @@ assert(html.includes('src="__HULK_ICON__"'));
 assert(!/mm-mining-icon"[^>]*><span class="ic i-ship"/.test(html));
 console.log('Local hub captions and alpha Hulk icon PASS.');
 
-// Layout contract: exact controls move, not cloned, and the new business
-// header has one conditionally visible import panel without copy column.
+// v1.0.109 header regression: the original DOM is reparented at runtime,
+// not cloned and not replaced with simplified calculators.
 const salesHTML=fs.readFileSync('src/shell.html','utf8');
 const salesJS=fs.readFileSync('src/script.js','utf8');
-const modeStart=salesHTML.indexOf('id="businessSwitch"'),modeEnd=salesHTML.indexOf('class="mm-modgroup"',modeStart);
-const modeHTML=salesHTML.slice(modeStart,modeEnd);
-assert(modeHTML.includes('Vender Ítems')&&modeHTML.includes('Comercio Jita'));
-assert(modeHTML.includes('id="importControls"'),'import controls must be beside the business switch');
-assert(/<\/section>\s*<!-- Trade-only controls[^]*?<section class="mm-import-controls"/.test(modeHTML),
-  'import panel must be a sibling immediately after business tabs');
-assert(!modeHTML.includes('id="businessCaption"'));
-assert(!salesHTML.includes('id="businessCaption"'));
-assert.equal((salesHTML.match(/id="eveIdentity"/g)||[]).length,1,'SSO profile must have one source DOM element');
-// The existing SSO markup is moved to the top actions from its original
-// (only) DOM node; the following check protects against duplicate IDs.
+assert(salesHTML.includes('id="businessSwitch"')&&salesHTML.includes('id="importControls"'));
+assert(salesHTML.includes('id="modeLiquidation"')&&salesHTML.includes('id="modeTrading"'));
+assert(salesHTML.includes('id="tradePurchaseMode"')&&salesHTML.includes('id="shipOn"'));
+assert(salesHTML.includes('id="cImpM"'),'Margin stays editable in Settings');
+assert.equal((salesHTML.match(/id="eveIdentity"/g)||[]).length,1,'Only one EVE profile');
 assert(salesJS.includes("const identity=$('eveIdentity');if(identity)profile.append(identity)"));
-assert(salesJS.includes("topActions.append(profile)"));
+assert(salesJS.includes("headerMain.append($('navHome'),group)"));
+assert(salesJS.includes("headerContext.append($('businessSwitch'),$('importControls'),theme)"));
+assert(salesJS.includes("headerLegacy.append(rightGroup)"),'Original internal route control must survive');
+assert(salesJS.includes("header.insertBefore(bar,topActions)"),'Navigation must be in main header');
+assert(salesJS.includes("$('importControls').hidden=!isImport"));
 assert(salesJS.includes("button.title=description"));
 assert(salesJS.includes("a.querySelector('span:last-child').textContent=en?'Sell Items':'Vender Ítems'"));
 assert(salesJS.includes("b.querySelector('span:last-child').textContent=en?'Jita Trading':'Comercio Jita'"));
-assert(salesJS.includes("$('importControls').hidden=!isImport"));
-assert(salesHTML.includes('#mmTabs>#importControls[hidden]{display:none!important}'));
-assert(salesHTML.indexOf('id="navHome"')<salesHTML.indexOf('id="businessSwitch"'));
-assert(salesHTML.indexOf('id="businessSwitch"')<salesHTML.indexOf('id="importControls"'));
-assert(salesHTML.indexOf('id="importControls"')<salesHTML.indexOf('class="mm-modgroup"'));
-assert(salesHTML.includes('grid-template-columns:44px max-content minmax(0,1fr) max-content'));
-assert(!salesHTML.includes('role="tablist" aria-label="Secciones de Market Moves+"'));
-console.log('PASS: compact header and import scenarios, tooltips, preserved EVE SSO placement.');
-
-// Redesign regression: import destination chip (not verbose headline),
-// accessible purchase selector, responsive wrapping, and no overlapping text.
-assert(salesHTML.includes('id="importDestination"'));
-assert(salesHTML.includes('id="importHeadingPrefix"'));
-assert(salesHTML.includes('id="importMarketLabel"'));
-assert(salesHTML.includes('#mmTabs>#importControls #importHeadingPrefix,'));
-assert(salesHTML.includes('#mmTabs>#importControls #tradePurchaseLabel{'));
-assert(salesHTML.includes('flex-wrap:wrap!important'));
-assert(salesHTML.includes('@media(max-width:1450px)'));
-assert(salesHTML.includes('grid-template-columns:max-content minmax(0,1fr)!important'));
-assert(salesJS.includes("$('importDestination').title=S.lang==='en'?"));
-assert(salesJS.includes("$('tradePurchaseMode').title=S.lang==='en'?"));
-
-assert(salesHTML.includes('grid-template-columns:repeat(2,minmax(0,1fr))!important'),
-  'Settings and Help must have symmetrical equal-width columns');
-assert(salesHTML.includes('.top .mm-top-actions>.mm-profile-row{'),
-  'Profile must sit centered underneath the two tools');
-assert(salesHTML.includes('grid-column:1/-1!important;grid-row:2!important'),
-  'SSO row must span both utility icons');
+assert(salesJS.includes("[['cNullDest'],()=>!S.flip"),'Margin must not be disabled outside trading mode');
+assert(!salesJS.includes("[['cImpM','cNullDest'],()=>!S.flip"));
+assert(salesJS.includes("C.impM=v/100"),'The same margin is still used for finance calculations');
+assert(salesHTML.includes('.top.mm-ho-root'),'Approved style scope must be present');
+assert(salesHTML.includes('grid-template-areas:"brand main actions" "context context context" "ticker ticker ticker"'));
+assert(salesHTML.includes('.mm-ho-context #importControls[hidden]{display:none!important}'));
+assert(salesHTML.includes('.mm-ho-context #rtM{display:none!important}'),'Duplicate header margin must be hidden');
+assert(salesHTML.includes('@media(max-width:1120px)')&&salesHTML.includes('@media(max-width:610px)'));
+assert(!salesHTML.includes('/* v1.0.106: ONE balanced navigation row:'));
+assert(!salesHTML.includes('/* v1.0.107 — compact Jita import bar.'));
+assert(salesJS.includes('function computePlan()')&&salesJS.includes('function selectAppModule(name)'));
+assert(salesJS.includes('function syncBusinessMode()')&&salesJS.includes('function syncShipSwitch()'));
+console.log('PASS: approved header, responsive CSS, unique controls, persisted margin and original engines.');
