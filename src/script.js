@@ -2750,6 +2750,18 @@ $('themeLight').addEventListener('change',e=>{document.documentElement.classList
   button.addEventListener('click',refreshRoute);
   document.getElementById('nullMarketMode')?.addEventListener('change',refreshRoute);
   refreshRoute();
+  // v1.0.109. Approved navigation: move the original live DOM elements, never clone listeners.
+  // Original finance, module, ESI and theme handlers remain bound to these IDs.
+  const header=document.querySelector('header.top');
+  const headerMain=document.createElement('div');headerMain.className='mm-ho-main';
+  headerMain.append($('navHome'),group);
+  const headerContext=document.createElement('div');headerContext.className='mm-ho-context';
+  headerContext.append($('businessSwitch'),$('importControls'),theme);
+  const headerLegacy=document.createElement('div');headerLegacy.className='mm-ho-legacy';
+  headerLegacy.append(rightGroup); // retains the internal #bFlip route control and its listener
+  bar.append(headerMain,headerContext,headerLegacy);
+  header.classList.add('mm-ho-root');
+  header.insertBefore(bar,topActions);
 })();;
 
 // ================= Comparativa Minera, aislada del motor del Gestor =================
@@ -3001,7 +3013,7 @@ const DEPS=[
   [['discBase','discPct','discDays','discLoc'],()=>!$('discOn').checked,'Activa Comparar esta opción.'],
   [['qdMax'],()=>!$('qdOn').checked,'Activa Descuento por cantidad.'],
   [['cDayMin','cDayMax','cAssignee'],()=>!C.shipOn,'El envío está apagado (switch del menú).'],
-  [['cImpM','cNullDest'],()=>!S.flip,'Solo en la ruta Jita → '+nullSystem()+'.'],
+  [['cNullDest'],()=>!S.flip,'Solo en la ruta Jita → '+nullSystem()+'.'],
 ];
 function syncDeps(){const off=new Map();
   DEPS.forEach(([ids,f,why])=>{if(f())ids.forEach(id=>{if(!off.has(id))off.set(id,why);});});
