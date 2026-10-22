@@ -2696,15 +2696,22 @@ function syncBusinessMode(){
   }
   a.querySelector('span:last-child').textContent=en?'Sell my items':'Vender mis ítems';
   b.querySelector('span:last-child').textContent=en?'Trade from Jita':'Comerciar desde Jita';
-  const hub=nullSystem();
-  const market=document.createElement('strong');market.className='mm-market-accent';market.textContent=hub;
   const caption=$('businessCaption');
-  // Keep the market name visually distinct and update the DOM when Settings/ESI
-  // chooses a different home hub. Text nodes make this safe for user item names.
+  if(!S.flip){
+    // Explain the value of the whole sales plan instead of listing routes.
+    // The engine estimates the best available net return; it cannot guarantee
+    // the mathematically global maximum or future execution prices.
+    caption.textContent=en?
+      'Create a sales plan for your items, comparing available options to estimate the highest profit based on your settings.':
+      'Genera un plan de venta para tus ítems, comparando las opciones disponibles para obtener la mayor ganancia estimada según tus ajustes.';
+    return;
+  }
+  // Jita trading still names the active hub selected in Settings or pilot SSO.
+  const market=document.createElement('strong');market.className='mm-market-accent';market.textContent=nullSystem();
   caption.replaceChildren(
-    document.createTextNode(S.flip?(en?'Compare buying in Jita and reselling in ':'Compara comprar en Jita y revender en '):(en?'Compare selling in ':'Compara vender en ')),
+    document.createTextNode(en?'Compare buying in Jita and reselling in ':'Compara comprar en Jita y revender en '),
     market,
-    document.createTextNode(S.flip?(en?'. Review profit after shipping.':'. Revisa la ganancia después del envío.'):(en?', Jita, Buyback and reprocessing using your settings.':', Jita, Buyback y reproceso según tus ajustes.'))
+    document.createTextNode(en?'. Review profit after shipping.':'. Revisa la ganancia después del envío.')
   );
 }
 $('businessSwitch').addEventListener('click',e=>{

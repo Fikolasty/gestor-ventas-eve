@@ -67,8 +67,9 @@ assert.match(src,/S\.refinedMan\.null\[manualKey\]=value/);
 assert.match(src,/prod:ref!=null\&\&!S\.flip\?C\.prod\*ref\*q:0/);
 console.log('Market scenarios PASS: bulk 45%, rare moon, isotope, override, 350k contract allocation and tabs.');
 
-// UI regression: both business captions display the selected local market, not
-// "Null" or an assumed Keepstar. Test all three alliance hubs in ES and EN.
+// UI regression: liquidation explains the value of planning (no misleading
+// guarantee or hub list). Trading still displays its active market hub.
+// Test both business modes, all three alliance hubs and both languages.
 const renderBody=segment('function syncBusinessMode(){', "$('businessSwitch').addEventListener");
 let currentHub='HY-RWO',written='';
 const user={flip:false,lang:'es'};
@@ -85,9 +86,16 @@ for(const hub of ['HY-RWO','UALX-3','C-J6MT']){
     user.flip=flip;
     for(const lang of ['es','en']){
       user.lang=lang;renderBusiness();
-      assert(written.includes(hub),hub+' no se muestra en '+lang+' / '+flip);
       assert(!/\bKeepstar\b|\bNullsec\b|\bNull\b/i.test(written),'no se deben mostrar nombres de lugares genéricos');
-      assert(written.includes('Jita'),'ambos escenarios mantienen la referencia Jita');
+      if(flip){
+        assert(written.includes(hub),hub+' no se muestra en '+lang+' / comercio');
+        assert(written.includes('Jita'),'comercio debe mencionar Jita');
+      }else{
+        assert(!written.includes(hub),'el plan de venta no debe listar un sistema concreto');
+        assert(lang==='es'?written.includes('ganancia estimada'):written.includes('highest profit'),
+          'la descripción debe explicar la rentabilidad estimada');
+        assert(!/posible|possible|guarantee/i.test(written),'no prometer óptimo global');
+      }
     }
   }
 }
