@@ -108,11 +108,12 @@ console.log('Local hub captions and alpha Hulk icon PASS.');
 // header has one conditionally visible import panel without copy column.
 const salesHTML=fs.readFileSync('src/shell.html','utf8');
 const salesJS=fs.readFileSync('src/script.js','utf8');
-const modeStart=salesHTML.indexOf('id="businessSwitch"'),modeEnd=salesHTML.indexOf('<!-- v104:',modeStart);
+const modeStart=salesHTML.indexOf('id="businessSwitch"'),modeEnd=salesHTML.indexOf('class="mm-modgroup"',modeStart);
 const modeHTML=salesHTML.slice(modeStart,modeEnd);
 assert(modeHTML.includes('Vender Ítems')&&modeHTML.includes('Comercio Jita'));
-assert(modeHTML.includes('id="importControls"'));
-assert(modeHTML.indexOf('id="importControls"')<modeHTML.lastIndexOf('</section>'));
+assert(modeHTML.includes('id="importControls"'),'import controls must be beside the business switch');
+assert(/<\/section>\s*<!-- Trade-only controls[^]*?<section class="mm-import-controls"/.test(modeHTML),
+  'import panel must be a sibling immediately after business tabs');
 assert(!modeHTML.includes('id="businessCaption"'));
 assert(!salesHTML.includes('id="businessCaption"'));
 assert.equal((salesHTML.match(/id="eveIdentity"/g)||[]).length,1,'SSO profile must have one source DOM element');
@@ -124,5 +125,10 @@ assert(salesJS.includes("button.title=description"));
 assert(salesJS.includes("a.querySelector('span:last-child').textContent=en?'Sell Items':'Vender Ítems'"));
 assert(salesJS.includes("b.querySelector('span:last-child').textContent=en?'Jita Trading':'Comercio Jita'"));
 assert(salesJS.includes("$('importControls').hidden=!isImport"));
-assert(salesHTML.includes('.mm-business-switch>.mm-import-controls[hidden]{display:none!important}'));
+assert(salesHTML.includes('#mmTabs>#importControls[hidden]{display:none!important}'));
+assert(salesHTML.indexOf('id="navHome"')<salesHTML.indexOf('id="businessSwitch"'));
+assert(salesHTML.indexOf('id="businessSwitch"')<salesHTML.indexOf('id="importControls"'));
+assert(salesHTML.indexOf('id="importControls"')<salesHTML.indexOf('class="mm-modgroup"'));
+assert(salesHTML.includes('grid-template-columns:44px max-content minmax(0,1fr) max-content'));
+assert(!salesHTML.includes('role="tablist" aria-label="Secciones de Market Moves+"'));
 console.log('PASS: compact header and import scenarios, tooltips, preserved EVE SSO placement.');

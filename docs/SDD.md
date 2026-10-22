@@ -396,3 +396,11 @@ El paso **Comerciar desde Jita** etiqueta la columna antes llamada `Ganancia` co
 - CSS responsive para la franja financiera y el inspector vertical; se conserva la independencia de UI de Minería/Skills/PI.
 
 **Verificación:** las pruebas de mercado, minería, finanzas y build siguen incluidas en ambos workflows. La comprobación automática no sustituye QA visual manual de Firefox ni de tamaños móviles. No se cambió la API ESI ni la fuente de precios.
+
+## 2026-10-22 — v1.0.106 · Unificación simétrica de navegación
+
+El usuario mostró que las opciones «Vender Ítems» y «Comercio Jita» aún ocupaban una barra completa debajo de la barra Home/Ventas/Minería/Skill Plan, dejando un enorme espacio vacío entre Home y los módulos. Se elimina la segunda barra: se reubica la sección **real** `#businessSwitch` junto a Home dentro de `#mmTabs`, y `#importControls` como hermano inmediato para que el modo Comercio Jita aparezca **al lado** y no haga más alta otra barra. Se conservan los IDs/listeners de `setFlip`, `syncShipSwitch`, `#shipOn`, `#fImpM` y la fuente del precio de Jita.
+
+El layout de `#mmTabs` utiliza 4 columnas en escritorio (Home, modos, importación opcional, módulos + tema); la tercera es un espaciador elástico al vender y contiene los controles de importación al comerciar. En tablet se permite una segunda fila **dentro de la misma barra** para los controles de importación; en móvil los controles se apilan y los tabs conservan el orden. Se reemplaza el `role="tablist"` del contenedor general por una navegación normal, y se concede `role="tablist"` únicamente a `.mm-modgroup` para mantener la semántica accesible. Los tooltips permanecen en ambos botones y la identidad SSO sigue bajo Ajustes/Ayuda en la cabecera superior. Sin cambios económicos.
+
+**QA:** `tests/market-scenarios.cjs` comprueba que el modo, importación y módulos ahora están en ese orden en un único `#mmTabs`; las validaciones de rutas, tema y perfil se mantienen. Requiere verificación visual en Firefox y modo móvil; las pruebas automatizadas no comprueban píxeles.
