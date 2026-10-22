@@ -365,3 +365,21 @@ La fuente de precio local **no es una cotización ESI de HY-RWO**. El motor usa 
 - `tests/mining-smoke.cjs` y `tests/financial-accounting.cjs` verifican la corrección de la gramática, el modo de compra, nombres coloreados con peso normal, tooltip y eliminación del desglose duplicado.
 
 **Verificaciones:** pruebas automáticas completas **SUCCESS** (previo al incremento de versión): [Build Market Moves+](https://github.com/Fikolasty/gestor-ventas-eve/actions/runs/39705924433) y [Verificación minera](https://github.com/Fikolasty/gestor-ventas-eve/actions/runs/39705924430). Queda QA visual manual en ambos temas. No hay cambios en algoritmos económicos, cálculos financieros, Skill Plan, Minería ni UI oculta de PI.
+
+
+## 2026-10-21 — v1.0.104 · Precio por unidad de las rutas de comercio
+
+**Reporte:** en **Comerciar desde Jita → Pasos a seguir → Cuando llegue: Publicar órdenes en HY-RWO**, la columna `Precio Unidad` de implantes `Social Adaptation Chip - Standard`, `Memory Augmentation - Standard`, `Ocular Filter - Standard`, `Neural Boost - Standard` y `Cybernetic Subprocessor - Standard` mostraba incorrectamente «Precio de cada mineral abajo», mientras la columna `Ganancia` tenía importes elevados.
+
+**Causa confirmada:** `src/script.js → unitFor(r,k)` solo reconocía `null`, `jOrd`, `jInst`, `bb` y `disc`, y usaba la frase de reproceso para cualquier opción no reconocida. Faltaban las tres rutas `fN`, `fJ` y `fJI` del modo `S.flip=true`. No era prueba de error en la fórmula: `computePlan()` ya asignaba `r.np` para `fN`, `r.jl` para `fJ` y `r.instAvg` para `fJI`. La tabla, reutilizada entre los dos modos, simplemente no mostraba esos precios.
+
+**Corrección:** `unitFor()` usa ahora un `switch` explícito para las 10 rutas:
+- `fN` y `null`: precio de venta `r.np`, con el hub activo `nullSystem()`, copiable.
+- `fJ` y `jOrd`: `r.jl`, precio de la orden en Jita.
+- `fJI` y `jInst`: `r.instAvg` (precio promedio de ejecución sobre las Buy Orders) o `o.jita.buy` si no existe un promedio.
+- `bb` y `disc`: `r.bbUnit` / `r.discUnit`.
+- `rNull` y `rJita`: el texto «Precio de cada mineral/producto abajo», exclusivamente en reproceso.
+
+El paso **Comerciar desde Jita** etiqueta la columna antes llamada `Ganancia` como **Ingreso neto** y explicita que las cantidades mostradas son anteriores a la inversión de compra y, si procede, al coste de envío. Se evita presentar el resultado `r.g[k]-r.prod` como beneficio de arbitraje, que se calcula separadamente por `flipPlanAccounting`. El motor de rentabilidad, descuentos, impuestos, courier y precios manuales no cambió.
+
+**QA:** `tests/trading-unit-prices.cjs` verifica con precios sintéticos que cada ruta retorna el mismo precio que se utilizaría en su cálculo económico, incluidas 3 sedes (HY-RWO, UALX-3, C-J6MT), precios medios de compra, 5 unidades por ítem y el caso reproceso. Se ejecuta tanto en `Verificación minera` como en `Build Market Moves+`. Ambas suites pasaron tras corregir una aserción de prueba escrita inicialmente con un método no soportado por Node: [minería](https://github.com/Fikolasty/gestor-ventas-eve/actions/runs/39708163493), [build](https://github.com/Fikolasty/gestor-ventas-eve/actions/runs/39708163429). El valor real del mercado local sigue siendo estimado salvo precio local manual; sin QA de ESI en vivo.
