@@ -87,7 +87,7 @@ const refreshMarketControls=()=>{
   const topMarket=document.querySelector('#mmTabs .mm-route-right');if(topMarket)topMarket.textContent=nullSystem();
   const note=document.getElementById('nullMarketNote');
   note.textContent=(marketChoice==='auto'?(marketAlliance?'Alianza detectada: '+marketAlliance+'.':'Sin alianza identificada. Se usa HY-RWO por defecto.'):'Selección manual: no cambiará al conectar otro personaje.')+' Los precios de '+nullSystem()+' se estiman con reglas sobre Jita, no con órdenes locales de ESI.';
-  syncMarketCopy();
+  syncMarketCopy();syncBusinessMode();
 };
 document.getElementById('nullMarketMode')?.addEventListener('change',e=>{
   if(e.target.value!=='auto'&&!Object.hasOwn(NULL_MARKETS,e.target.value))return;
@@ -104,6 +104,8 @@ function syncMarketCopy(){
   if(ship)ship.title=en?'Courier from Jita to '+hub+'.':'Enviar desde Jita a '+hub+' con el courier configurado.';
   if(margin)margin.title=en?'Net resale margin in '+hub+'.':'Margen neto de reventa en '+hub+'.';
   if(input)input.setAttribute('aria-label',en?'Resale margin in '+hub+', %':'Margen al vender en '+hub+', % neto sobre Jita Sell');
+  const help=document.getElementById('importHelp');
+  if(help)help.textContent=en?'Choose whether to ship items from Jita and set your selling margin in '+hub+'.':'Elige si transportas los ítems desde Jita y ajusta el margen de venta en '+hub+'.';
 }
 // Las etiquetas de ruta dependen del hub comercial, nunca de la refinería.
 function syncNullRouteLabels(){

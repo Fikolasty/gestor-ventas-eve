@@ -30,7 +30,7 @@ jobs:
           fi
       - name: Compile site
         run: |
-          python build.py 1.0.98
+          python build.py 1.0.99
       - name: JavaScript syntax check
         run: |
           node --check src/script.js
@@ -55,7 +55,8 @@ jobs:
           assert "SHIPS=S.flip?{fN:1}:{jOrd:1,jInst:1,rJita:1}" in s
           assert "!Number.isFinite(r.net[k])" in s
           assert "#mmTabs #shipLab[hidden]" in s
-          assert 'Los precios de Null se estiman' in s
+          assert "' Los precios de '+nullSystem()+' se estiman" in s
+          assert 'data:image/png;base64,' in s and '__HULK_ICON__' not in s
           assert '__REFINE__' not in s and '__MINING__' not in s
           assert len(s)>100000
           print('Generated site validation OK')
@@ -73,6 +74,6 @@ jobs:
             git config user.name "github-actions[bot]"
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
             git add index.html src/assets/hulk_icon.b64
-            git commit -m "build: regenerate Market Moves+ v1.0.98"
+            git commit -m "build: regenerate Market Moves+ v1.0.99"
             git push
           fi
