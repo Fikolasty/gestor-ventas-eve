@@ -1,3 +1,8 @@
+## v1.0.109 — 2026-10-22
+- Header aprobado reorganizado; se conservan todos los módulos y motores existentes.
+- Navegación y contexto de comercio sin controles redundantes; margen en Ajustes.
+- Limpieza de estilos del navbar v106–108 y nuevas regresiones de compatibilidad.
+
 # Changelog
 
 ## 1.0.98 — [ChatGPT] Dos modos de negocio y escenarios Null/Trading
