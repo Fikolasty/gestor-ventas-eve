@@ -30,7 +30,7 @@ jobs:
           fi
       - name: Compile site
         run: |
-          python build.py 1.0.101
+          python build.py 1.0.102
       - name: JavaScript syntax check
         run: |
           node --check src/script.js
@@ -76,6 +76,6 @@ jobs:
             git config user.name "github-actions[bot]"
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
             git add index.html src/assets/hulk_icon.b64
-            git commit -m "build: regenerate Market Moves+ v1.0.101"
+            git commit -m "build: regenerate Market Moves+ v1.0.102"
             git push
           fi

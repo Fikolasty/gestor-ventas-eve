@@ -90,10 +90,16 @@ for(const hub of ['HY-RWO','UALX-3','C-J6MT']){
       if(flip){
         assert(written.includes(hub),hub+' no se muestra en '+lang+' / comercio');
         assert(written.includes('Jita'),'comercio debe mencionar Jita');
+        assert(lang==='es'?written.startsWith('Calcula tu ganancia al comprar en Jita y revender en '):
+          written.startsWith('Estimate your profit buying in Jita and reselling in '),
+          'el texto de comercio debe describir las ganancias');
+        assert(lang==='es'?written.endsWith(', después del envío.'):written.endsWith(', after shipping.'),
+          'el comercio debe contemplar el envío');
       }else{
         assert(!written.includes(hub),'el plan de venta no debe listar un sistema concreto');
-        assert(lang==='es'?written.includes('ganancia estimada'):written.includes('highest profit'),
-          'la descripción debe explicar la rentabilidad estimada');
+        assert(lang==='es'?written==='Genera un plan de venta con la mayor ganancia estimada según tus ajustes.':
+          written==='Create a sales plan for the highest estimated profit based on your settings.',
+          'la descripción del plan debe ser breve y explicar rentabilidad estimada');
         assert(!/posible|possible|guarantee/i.test(written),'no prometer óptimo global');
       }
     }

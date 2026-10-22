@@ -27,4 +27,4 @@ jobs:
           node tests/ice-settings.cjs
           node tests/mining-price-flow.cjs
       - name: Verificar generación de HTML
-        run: python3 build.py 1.0.101
+        run: python3 build.py 1.0.102

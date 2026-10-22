@@ -2702,16 +2702,16 @@ function syncBusinessMode(){
     // The engine estimates the best available net return; it cannot guarantee
     // the mathematically global maximum or future execution prices.
     caption.textContent=en?
-      'Create a sales plan for your items, comparing available options to estimate the highest profit based on your settings.':
-      'Genera un plan de venta para tus ítems, comparando las opciones disponibles para obtener la mayor ganancia estimada según tus ajustes.';
+      'Create a sales plan for the highest estimated profit based on your settings.':
+      'Genera un plan de venta con la mayor ganancia estimada según tus ajustes.';
     return;
   }
   // Jita trading still names the active hub selected in Settings or pilot SSO.
   const market=document.createElement('strong');market.className='mm-market-accent';market.textContent=nullSystem();
   caption.replaceChildren(
-    document.createTextNode(en?'Compare buying in Jita and reselling in ':'Compara comprar en Jita y revender en '),
+    document.createTextNode(en?'Estimate your profit buying in Jita and reselling in ':'Calcula tu ganancia al comprar en Jita y revender en '),
     market,
-    document.createTextNode(en?'. Review profit after shipping.':'. Revisa la ganancia después del envío.')
+    document.createTextNode(en?', after shipping.':', después del envío.')
   );
 }
 $('businessSwitch').addEventListener('click',e=>{
