@@ -2299,7 +2299,7 @@ body.mm-mining .mm-business-switch,body.mm-skills .mm-business-switch,body.mm-pi
 
 
 /* Compact courier unit analysis: rendered only for the current selected plan. */
-.mm-unit-courier{border:1px solid var(--line2);border-radius:11px;background:rgba(20,20,19,.53);
+.mm-unit-courier{border:1px solid var(--line2);border-radius:11px;background:var(--surface-card);
   margin:13px 0;overflow:hidden}
 .mm-unit-courier[hidden]{display:none!important}
 .mm-unit-courier>summary{display:flex;align-items:center;gap:9px;min-height:43px;padding:10px 13px;
@@ -2359,7 +2359,7 @@ body .top.mm-ho-root{
   min-height:0!important;margin:0!important;
   padding:10px max(20px,calc((100vw - 1490px)/2)) 0!important;
   border-bottom:1px solid rgba(222,220,209,.13)!important;
-  background:rgba(21,21,22,.96)!important;
+  background:var(--header-surface,rgba(21,21,22,.96))!important;
   box-shadow:0 5px 22px rgba(0,0,0,.24)!important;
 }
 body .top.mm-ho-root>.brand{
@@ -2649,11 +2649,11 @@ html.light body .top.mm-ho-root .mm-ho-context .mm-buy-basis select{
   width:min(610px,100%)!important;max-width:100%!important;
   min-height:37px!important;height:37px!important;margin:16px auto 5px!important;
   padding:0!important;border:1px solid rgba(217,119,87,.37)!important;
-  border-radius:9px!important;background:rgba(22,21,21,.91)!important;
+  border-radius:9px!important;background:var(--ticker-surface,rgba(22,21,21,.91))!important;
   box-shadow:0 3px 12px rgba(0,0,0,.2)!important;overflow:hidden!important;
   -webkit-mask-image:none!important;mask-image:none!important;color:var(--txt)!important;
 }
-.hero>.hero-referral:hover{border-color:var(--clay)!important;background:rgba(37,29,25,.96)!important}
+.hero>.hero-referral:hover{border-color:var(--clay)!important;background:var(--ticker-hover,rgba(37,29,25,.96))!important}
 .hero>.hero-referral .tk-track{
   display:flex!important;align-items:center!important;height:100%!important;width:max-content!important;
   animation:tk 30s linear infinite!important;
