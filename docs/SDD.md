@@ -510,3 +510,12 @@ Capturas del usuario confirman persistencia de fondos oscuros, tarjetas claras y
 5. Validar ES→EN→ES y persistencia/SSO; el observador actual traduce nodos DOM agregados en EN, pero no garantiza automáticamente la cobertura de textos no registrados. Mantener auditoría y tests de cobertura.
 
 **Límites de verificación:** inspección estática de claves y código; sin prueba visual de sesión SSO ni despliegue publicado todavía.
+
+
+## 2026-10-22 — EVE 7 · Shipping cost, header, ticker y fondo en Light
+
+- Reporte: Shipping cost per unit permanecía oscuro, al igual que las carcasas de Appraisal/Inventory, el espacio vacío del ticker y la barra de navegación. El usuario solicita mayor visibilidad de la foto de fondo.
+- `src/shell.html` ahora usa tokens de superficie para el panel de coste de envío por unidad, encabezado y ticker, sin modificar lógica ni textos.
+- `src/light_extra.css` declara tokens Light y normaliza superficies/textos en la barra superior, el ticker, contenedores simétricos y la tabla de courier; la capa de imagen de fondo aumenta opacidad desde .12 a .30 para apreciarla mejor.
+- Commits: `527ffeb3`, `35dfc55d`.
+- Pruebas pendientes: compilación de `index.html`, despliegue Pages y contraste/captura real Firefox en Light y Dark. No declarar completada inspección visual de navegador sin estas comprobaciones.
