@@ -195,7 +195,7 @@ function paintVerdict(P){
       bridge.setAttribute('role','group');bridge.setAttribute('aria-label',en?'Selected plan accounting':'Desglose del plan elegido');
       const card=(label,number,cost)=>{
         const item=el('div','v-finance-item');
-        item.append(el('small',null,label),el('strong','num '+(cost?'neg':'pos'),(cost&&number>0?'−':'')+fmt(Math.abs(number))+' ISK'));
+        item.append(el('small',null,label),el('strong','num '+(cost?'neg':'pos'),(cost&&number>0?'−':'')+fmt(Math.abs(number))));
         bridge.append(item);
       };
       card(en?'Net sales after fees':'Ventas netas después de tasas',fig.sales,false);
