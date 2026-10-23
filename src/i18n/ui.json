@@ -334,5 +334,61 @@
   "mining.unknown": {
     "es": "—",
     "en": "—"
+  },
+  "route.auto": {
+    "es": "Plan óptimo",
+    "en": "Optimal plan"
+  },
+  "route.fN": {
+    "es": "Importar y vender en {system}",
+    "en": "Import and sell in {system}"
+  },
+  "route.fJ": {
+    "es": "Vender con órdenes en Jita",
+    "en": "Sell with Jita orders"
+  },
+  "route.fJI": {
+    "es": "Venta inmediata en Jita",
+    "en": "Instant sale in Jita"
+  },
+  "route.null": {
+    "es": "Vender en {system}",
+    "en": "Sell in {system}"
+  },
+  "route.jOrd": {
+    "es": "Vender con órdenes en Jita",
+    "en": "Sell with Jita orders"
+  },
+  "route.jInst": {
+    "es": "Venta inmediata en Jita",
+    "en": "Instant sale in Jita"
+  },
+  "route.bb": {
+    "es": "Vender al Buyback",
+    "en": "Sell to Buyback"
+  },
+  "route.rNull": {
+    "es": "Reprocesar y vender en {system}",
+    "en": "Reprocess and sell in {system}"
+  },
+  "route.rJita": {
+    "es": "Reprocesar y vender en Jita",
+    "en": "Reprocess and sell in Jita"
+  },
+  "route.disc": {
+    "es": "Vender a otro jugador",
+    "en": "Sell to another player"
+  },
+  "route.prefix": {
+    "es": "el plan {name}",
+    "en": "the {name} plan"
+  },
+  "route.optimalPhrase": {
+    "es": "el plan óptimo",
+    "en": "the optimal plan"
+  },
+  "picker.partial": {
+    "es": " · {selected} de {total} ítems admiten esta ruta.",
+    "en": " · {selected} of {total} items support this route."
   }
 }
