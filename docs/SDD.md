@@ -656,3 +656,8 @@ Capturas del usuario confirman persistencia de fondos oscuros, tarjetas claras y
 - Commit `cede2935`: tras superar Python/Node/Chromium y publicar el artefacto en main, el workflow marca `publishable=true`, copia `index.html` validado a `_site`, lo sube con `actions/upload-pages-artifact@v3` y ejecuta un job `deploy` con permisos `pages:write`, `id-token:write`, entorno `github-pages` y `actions/deploy-pages@v4`. Las compilaciones obsoletas no exponen `publishable` y por tanto no despliegan. No modifica fórmulas ni interfaz.
 
 **Validación pendiente:** confirmar el resultado concreto del job `deploy` en GitHub Actions, el URL servido por Pages y que el pie público dice `v1.0.118`. No confundir confirmación de commit de `index.html` con verificación de despliegue. Si la configuración de Pages impide despliegue mediante Actions, revisar `Settings → Pages → Build and deployment → Source` (GitHub Actions).
+
+
+#### Cierre de despliegue público v1.0.118
+
+La ejecución `39918683797` confirmó `compile: success` y `Deploy verified Market Moves+ to GitHub Pages: success`, incluyendo `actions/upload-pages-artifact@v3` y `actions/deploy-pages@v4`. La ejecución posterior `39918883672` completó exitosamente el nuevo chequeo `Verify the public site serves v1.0.118`, que consulta la URL devuelta por Pages con parámetro anti-caché y exige el HTML real `<span class="ver">v1.0.118</span>`. Esto confirma publicación **pública** de v1.0.118, no sólo su presencia en el repo.
