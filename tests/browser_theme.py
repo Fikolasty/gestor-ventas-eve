@@ -121,6 +121,26 @@ class ThemeBrowserTests(unittest.TestCase):
         self.assertIn("¿Nuevo en EVE?", self.page.locator(".hero-referral").inner_text())
         self.assertIn("Primeros pasos", self.page.locator("#help .modern-tabs").inner_text())
 
+    def test_canonical_finance_strings_switch_languages(self):
+        self.page.evaluate("setLang('en')")
+        en=self.page.evaluate("""() => [
+            tx('picker.optimalSummary'),tx('verdict.netSales'),
+            tx('picker.shipping'),tx('mining.mostProfitable')
+        ]""")
+        self.assertIn('HIGHEST ESTIMATED NET',en[0])
+        self.assertEqual(en[1],'NET SALES AFTER FEES')
+        self.assertEqual(en[2],'SHIPPING')
+        self.assertEqual(en[3],'★ Most profitable')
+        self.page.evaluate("setLang('es')")
+        es=self.page.evaluate("""() => [
+            tx('picker.optimalSummary'),tx('verdict.netSales'),
+            tx('picker.shipping'),tx('mining.mostProfitable')
+        ]""")
+        self.assertIn('MÁXIMO NETO',es[0])
+        self.assertEqual(es[1],'VENTAS NETAS DESPUÉS DE TASAS')
+        self.assertEqual(es[2],'ENVÍO')
+        self.assertEqual(es[3],'★ Más rentable')
+
     def test_skills_inherits_parent_fonts_and_dark_light_surfaces(self):
         from playwright.sync_api import expect
         import re
