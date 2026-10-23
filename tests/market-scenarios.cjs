@@ -128,9 +128,15 @@ assert(!salesJS.includes("[['cImpM','cNullDest'],()=>!S.flip"));
 assert(salesJS.includes("C.impM=v/100"),'The same margin is still used for finance calculations');
 assert(salesHTML.includes('.top.mm-ho-root'),'Approved style scope must be present');
 assert(salesHTML.includes('grid-template-areas:"brand main actions" "context context context"'));
+assert(salesHTML.includes("/* v1.0.111 · YouTube-inspired toolbar"));
+assert(salesHTML.includes("border-radius:999px!important"));
+assert(salesHTML.includes("grid-template-areas:\"brand actions\" \"main main\" \"context context\""));
+assert(salesHTML.includes("body.mm-mining .top.mm-ho-root #mmTabs>.mm-ho-context"));
+assert(!salesHTML.includes("/* v1.0.110 · Cabecera compacta"));
+
 assert(salesHTML.includes('.mm-ho-context #importControls[hidden]{display:none!important}'));
 assert(salesHTML.includes('.mm-ho-context #rtM{display:none!important}'),'Duplicate header margin must be hidden');
-assert(salesHTML.includes('@media(max-width:1260px)')&&salesHTML.includes('@media(max-width:630px)'));
+assert(salesHTML.includes('@media(max-width:1190px)')&&salesHTML.includes('@media(max-width:520px)'));
 assert(!salesHTML.includes('/* v1.0.106: ONE balanced navigation row:'));
 assert(!salesHTML.includes('/* v1.0.107 — compact Jita import bar.'));
 assert(salesHTML.includes('class="brand-wordmark">SIGMA GRINDSET</span>'));
