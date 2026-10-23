@@ -2738,7 +2738,7 @@ $('themeLight').addEventListener('change',e=>{document.documentElement.classList
   const theme=$('themeLight').closest('.top-theme');theme.classList.add('mm-theme');
   const rightGroup=document.createElement('div');rightGroup.className='mm-right-actions';
   group.before(rightGroup);
-  rightGroup.append(group,route,theme);
+  rightGroup.append(group,route);
   const button=$('bFlip');
   button.replaceChildren();
   const left=el('span','mm-route-left','Jita'),knob=el('span','mm-route-knob'),right=el('span','mm-route-right',nullSystem());
@@ -2756,7 +2756,8 @@ $('themeLight').addEventListener('change',e=>{document.documentElement.classList
   const headerMain=document.createElement('div');headerMain.className='mm-ho-main';
   headerMain.append($('navHome'),group);
   const headerContext=document.createElement('div');headerContext.className='mm-ho-context';
-  headerContext.append($('businessSwitch'),$('importControls'),theme);
+  headerContext.append($('businessSwitch'),$('importControls'));
+  topActions.insertBefore(theme,profile); // Light/Dark shares the right-side action group
   const headerLegacy=document.createElement('div');headerLegacy.className='mm-ho-legacy';
   headerLegacy.append(rightGroup); // retains the internal #bFlip route control and its listener
   bar.append(headerMain,headerContext,headerLegacy);
