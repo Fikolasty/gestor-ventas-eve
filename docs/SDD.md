@@ -589,3 +589,14 @@ Capturas del usuario confirman persistencia de fondos oscuros, tarjetas claras y
 - Test estático `tests/test_light_generation.py` ahora rechaza esas repeticiones de tokens y overlays (`bbd93307`).
 - **Evidencia verificada:** run `39896552011` terminó correctamente y publicó `1.0.116` en `54334a1c`, correspondiente a fuente `0f22aa4e`.
 - **Limitación explícita:** la limpieza `80400da6` y el test `bbd93307` son posteriores a ese snapshot verificado; validar nueva ejecución y Pages antes de dar esa revisión como publicada. No asumir que esto completa la auditoría total de CSS o la medición con inventarios grandes.
+
+
+## 2026-10-23 — v1.0.117: tokens de cabecera/ticker y regresión de hover
+
+- Se declararon **tokens Dark explícitos** en `src/styles/00-foundation.css` para `--header-surface`, `--ticker-surface` y `--ticker-hover`, manteniendo los valores RGB previos. Light sigue definiendo sus contrapartes en `src/styles/themes/light-header-shipping.css`.
+- `src/styles/50-navigation.css` consume las variables sin fallback literal y elimina reglas explícitas antiguas de Light para header/ticker que eran sobrescritas por `LIGHT_PARTS`. No cambia layout ni fórmulas.
+- Tests estáticos `tests/test_light_generation.py` verifican titularidad de tokens de ambos temas y ausencia de fallbacks/duplicaciones antiguas; Chromium `tests/browser_theme.py` verifica que el ticker de Light sea legible **sin hover y con hover**, en escritorio 1440 px y móvil 390 px.
+- `.github/workflows/rebuild-market-moves.yml` compila `1.0.117` tras pruebas financieras, source assembly y navegador, guardando capturas de temas.
+- La actualización de archivos mediante GitHub crea commits en `main` inmediatamente; no equivale a afirmar que `index.html` se haya publicado. Verificar run y `docs/QA_STATUS.md` actualizado a v1.0.117 antes de cerrar QA.
+
+**Pendientes posteriores:** limpieza cuidadosa de más estilos heredados, mediciones de inventario grande, rendimiento real Firefox/Chrome y pruebas ESI/SSO de extremo a extremo.
