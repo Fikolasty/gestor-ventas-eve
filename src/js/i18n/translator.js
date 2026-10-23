@@ -11,7 +11,7 @@ const I18N_ATTR=['title','aria-label','placeholder'];
 window.mmI18nAudit=()=>{
   const issues=[];
   const walker=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT);
-  const marker=/\\b(?:para|mediante|conviene|recibirías|restablecer|reprocesar|impuestos|habilidades|cuándo|podrías|tienes|comparación|desglose|ganarías|transportar|algunas|selecciona|haz clic|cambiar|siguientes|siguiente|opción|órdenes|envío|envías|ítems|estimado)\\b/i;
+  const marker=/\b(?:para|mediante|conviene|recibirías|restablecer|reprocesar|impuestos|habilidades|cuándo|podrías|tienes|comparación|desglose|ganarías|transportar|algunas|selecciona|haz clic|cambiar|siguientes|siguiente|opción|órdenes|envío|envías|ítems|estimado)\\b/i;
   let n;while((n=walker.nextNode())){if(i18nSkip(n))continue;const text=n.nodeValue.trim();if(text&&marker.test(text))issues.push({text:text.slice(0,240),section:n.parentElement.closest('#mining,#pi,#settings,#salesBody,#guide')?.id||'shared'});}
   console.table(issues);return issues;
 };
@@ -36,7 +36,7 @@ function i18nValue(m){
 // Translate a complete message first. Fragment translation is only a compatibility fallback.
 const trS=s=>{
   if(!s||!/[A-Za-zÁÉÍÓÚáéíóúñÑ¿¡]/.test(s))return s;
-  const m=String(s).match(/^(\\s*)([\\s\\S]*?)(\\s*)$/);
+  const m=String(s).match(/^(\s*)([\s\S]*?)(\s*)$/);
   if(m){
     const full=I18N_EN[m[2]]??I18N_LOWER[m[2].toLocaleLowerCase('es')];
     if(full!==undefined)return m[1]+full+m[3];
