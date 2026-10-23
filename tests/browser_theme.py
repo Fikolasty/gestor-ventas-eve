@@ -84,5 +84,37 @@ class ThemeBrowserTests(unittest.TestCase):
         self.page.wait_for_function("document.querySelector('#evePilotName')?.textContent.trim()==='Iniciar sesión'")
 
 
+    def test_mobile_light_surfaces_and_navigation_contrast(self):
+        self.page.set_viewport_size({"width": 390, "height": 844})
+        self.page.evaluate("document.documentElement.classList.add('light')")
+        self.assertGreater(brightness(self.color("header.top.mm-ho-root")), 180)
+        self.assertGreater(brightness(self.color(".hero>.hero-referral")), 180)
+        self.page.evaluate("document.documentElement.classList.remove('light')")
+        self.assertLess(brightness(self.color("header.top.mm-ho-root")), 120)
+        self.assertLess(brightness(self.color(".hero>.hero-referral")), 120)
+
+    def test_capture_reference_screenshots_and_idle_render_baseline(self):
+        # Reference screenshots are CI artifacts; not a claim of visual parity.
+        # Save viewport-only images, with no ESI login or user data.
+        out = INDEX.parent / "tests" / "artifacts" / "theme"
+        out.mkdir(parents=True, exist_ok=True)
+        for width, height in [(1440, 900), (390, 844)]:
+            self.page.set_viewport_size({"width": width, "height": height})
+            for mode in ("dark", "light"):
+                self.page.evaluate("(mode) => document.documentElement.classList.toggle('light', mode === 'light')", mode)
+                self.page.screenshot(path=str(out / f"{mode}-{width}.png"), animations="disabled")
+        times = self.page.evaluate("""() => {
+            const samples = [];
+            if (typeof refreshNow !== 'function') return samples;
+            for (let i = 0; i < 15; i++) {
+                const before = performance.now();
+                refreshNow();
+                samples.push(performance.now() - before);
+            }
+            return samples.sort((a,b)=>a-b);
+        }""")
+        self.assertEqual(len(times), 15)
+        print(f"Idle refresh (headless Chromium, no inventory): median={times[7]:.2f}ms, p95={times[14]:.2f}ms")
+
 if __name__ == "__main__":
     unittest.main()
