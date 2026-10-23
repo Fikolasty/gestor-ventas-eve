@@ -390,5 +390,57 @@
   "picker.partial": {
     "es": " · {selected} de {total} ítems admiten esta ruta.",
     "en": " · {selected} of {total} items support this route."
+  },
+  "freight.heading": {
+    "es": "PRECIO UNITARIO CON ENVÍO",
+    "en": "UNIT PRICE WITH FREIGHT"
+  },
+  "freight.contractOne": {
+    "es": "1 contrato",
+    "en": "1 contract"
+  },
+  "freight.contractMany": {
+    "es": "{count} contratos",
+    "en": "{count} contracts"
+  },
+  "freight.qty": {
+    "es": "{count} unidades",
+    "en": "{count} units"
+  },
+  "freight.base": {
+    "es": "PRECIO BASE / UD.",
+    "en": "BASE PRICE / UNIT"
+  },
+  "freight.increment": {
+    "es": "+ ENVÍO / UD.",
+    "en": "+ FREIGHT / UNIT"
+  },
+  "freight.landed": {
+    "es": "PRECIO CON ENVÍO / UD.",
+    "en": "PRICE WITH FREIGHT / UNIT"
+  },
+  "freight.totalLot": {
+    "es": "TOTAL DEL LOTE CON ENVÍO",
+    "en": "LOT TOTAL WITH FREIGHT"
+  },
+  "freight.totalCost": {
+    "es": "Envío del lote: {amount}",
+    "en": "Lot freight: {amount}"
+  },
+  "freight.volume": {
+    "es": "Volumen: {volume}",
+    "en": "Volume: {volume}"
+  },
+  "freight.derived": {
+    "es": "Referencia neta estimada para esta ruta de reproceso, no una cotización de venta del ítem original.",
+    "en": "Estimated net value for this reprocessing route, not a sell quote for the original item."
+  },
+  "freight.reference": {
+    "es": "Precio de referencia más envío asignado; no incluye el efecto de nuevas tasas sobre un precio de venta mayor.",
+    "en": "Reference price plus allocated freight; does not include the effect of new fees on a higher sale price."
+  },
+  "freight.missingQuote": {
+    "es": "Precio base no disponible",
+    "en": "Base price unavailable"
   }
 }
