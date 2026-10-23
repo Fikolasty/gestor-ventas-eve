@@ -112,8 +112,8 @@ class ThemeBrowserTests(unittest.TestCase):
             "() => document.querySelector('#mmTabSkills .mm-mod-label')?.textContent.trim()==='Skill Plans'"
         )
         self.assertIn("New to EVE?", self.page.locator(".hero-referral").inner_text())
-        self.assertIn("Getting started", self.page.locator("#help .modern-tabs").inner_text())
-        self.assertIn("Home market", self.page.locator("#settings").inner_text())
+        self.assertIn("Getting started", self.page.locator("#help .modern-tabs").text_content())
+        self.assertIn("Home market", self.page.locator("#settings").text_content())
         self.page.evaluate("setLang('es')")
         self.page.wait_for_function(
             "() => document.querySelector('#mmTabSkills .mm-mod-label')?.textContent.trim()==='Planes de habilidades'"
