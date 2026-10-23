@@ -21,7 +21,7 @@ function selectAppModule(name){
     $('pi').hidden=false;
   }else if(name==='skills'){
     $('mining').hidden=true;$('pi').hidden=true;$('settings').hidden=true;$('help').hidden=true;
-    $('skills').hidden=false;SkillUI.mount($('skillRoot'));SkillUI.setLanguage(S.lang);SkillUI.shown();
+    $('skills').hidden=false;SkillUI.mount($('skillRoot'));SkillUI.setLanguage(S.lang);SkillUI.setTheme(document.documentElement.classList.contains('light')?'light':'dark');SkillUI.shown();
   }else{$('mining').hidden=true;$('pi').hidden=true;$('skills').hidden=true;}
   document.querySelectorAll('.side-i[data-panel="mining"]').forEach(b=>b.setAttribute('aria-pressed',String(name==='mining')));
 }
