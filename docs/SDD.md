@@ -461,3 +461,13 @@ Ajuste visual complementario al rediseño del navbar: la botonera del extremo su
 - **Recompilación y publicación:** GitHub Actions produjo inicialmente v111 (`07341b5c5ad4c6a683fd12be6bc4fd5875898678`). Se compiló también una versión directa del bundle (`d7774584740b3c100fbdb021e9849cae67314cfa`), pero se prioriza la salida canónica de `python build.py`, no la alternativa.
 - **Estado final verificado en repositorio:** se disparó nueva compilación mediante `src/light_extra.css` (comentario no funcional) y GitHub Actions generó **`index.html` v1.0.111** en el commit `ad7475b44511e30604ea0c7299403ff827d08419` (blob `e79d605c57f7192b85d38ff375777a3320e1c682`). Como el commit automático ocurre *después* de los pasos de tests del workflow, la publicación compilada fue generada tras superar esos pasos.
 - **Limitación:** se verificó la actualización del blob y commit de Pages, no la representación exacta en el navegador local del usuario. Si persiste una cabecera vieja, probar recarga forzada y URL con query distinta tras dar tiempo al despliegue de GitHub Pages; si sigue igual, revisar Pages/branch/caché de CDN.
+
+
+## 2026-10-22 — EVE 7 · Normalización de Light Mode
+
+- **Petición:** Light Mode presenta contrastes incorrectos y estilos rotos en varias secciones.
+- **Diagnóstico:** `src/shell.html` define tokens Dark y reglas aisladas `html.light`; el compilador `build.py` genera reglas claras automáticamente desde `src/light.py` y añade `src/light_extra.css` después. Era necesario unificar colores semánticos y superficies claras al final de la cascada, no duplicar el motor.
+- **Implementación:** `src/light_extra.css` incorpora tokens claros globales, superficies, formularios, tablas, controles, navegación, indicadores ISK, foco y estilos de paneles; se preserva el fondo EVE y la identidad de la cabecera. Cambios exclusivamente CSS, sin alterar ESI, SSO, SIGMA Freight ni cálculos.
+- **Commits:** `2190a145` inicial; `b83e2294` traslada el ajuste al origen correcto; `d5b0d620` aplica la normalización después del tema generado.
+- **Verificación:** inspección de código y orden de composición `build.py`. **No verificados todavía:** screenshot Firefox desktop/móvil, contraste pixel a pixel, workflows y publicación real de `index.html`. No declarar esos escenarios probados sin evidencia.
+- **Criterio de aceptación:** todas las secciones de Ventas, Tasación, Inventario, Minería, Skills y Ajustes legibles en Light y Dark; controles legibles con selección/foco; persistencia tras recarga; contraste de los elementos financieros positivo/negativo; ninguna regresión en las fórmulas.
