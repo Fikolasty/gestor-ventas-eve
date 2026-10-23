@@ -280,8 +280,12 @@ function paintCourierUnits(P){
   $('unitCourierHeading').textContent=tx('freight.heading');
   $('unitCourierTotal').textContent='−'+fmt(P.shipCost)+' · '+
     tx(count===1?'freight.contractOne':'freight.contractMany',{count});
-  const value=(key,amount)=>el('div','mm-freight-metric',
-    el('small',null,tx(key)),el('strong','num',amount==null?'—':fmtP(amount)));
+  const value=(key,amount)=>{
+    const item=el('div','mm-freight-metric');
+    item.append(el('small',null,tx(key)),
+      el('strong','num',amount==null?'—':fmtP(amount)));
+    return item;
+  };
   rows.forEach(r=>{
     const costs=courierUnitPresentation(r);
     const card=el('article','mm-unit-row');
@@ -298,12 +302,13 @@ function paintCourierUnits(P){
       el('span','mm-freight-op','='),
       value('freight.landed',costs.unit));
     const foot=el('div','mm-freight-foot');
-    foot.append(el('div','mm-freight-lot',
-        el('small',null,tx('freight.totalLot')),
-        el('strong','num',costs.total==null?tx('freight.missingQuote'):fmtP(costs.total))),
-      el('div','mm-freight-meta',
-        el('span',null,tx('freight.totalCost',{amount:fmt(costs.allocated)})),
-        el('span',null,tx('freight.volume',{volume:fmtV(r.vol)}))));
+    const lot=el('div','mm-freight-lot');
+    lot.append(el('small',null,tx('freight.totalLot')),
+      el('strong','num',costs.total==null?tx('freight.missingQuote'):fmtP(costs.total)));
+    const meta=el('div','mm-freight-meta');
+    meta.append(el('span',null,tx('freight.totalCost',{amount:fmt(costs.allocated)})),
+      el('span',null,tx('freight.volume',{volume:fmtV(r.vol)})));
+    foot.append(lot,meta);
     card.append(title,math,foot);
     if(costs.derived){
       const caution=el('small','mm-freight-source',tx('freight.derived'));
