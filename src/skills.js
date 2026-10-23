@@ -1,11 +1,12 @@
 /* Skills Library: isolated document, no duplicate global CSS, no access-token forwarding. */
 const SkillUI=(()=>{
-  let frame=null, pilot=null, language='es', ready=false, lastHeight=0;
+  let frame=null, pilot=null, language='es', theme='dark', ready=false, lastHeight=0;
   const send=(message)=>{
     if(frame&&ready&&frame.contentWindow)frame.contentWindow.postMessage(message,'*');
   };
   const sync=()=>{
     send({kind:'mm-skills-language',lang:language});
+    send({kind:'mm-skills-theme',theme});
     send({kind:'mm-skills-pilot',connected:!!pilot,name:pilot?.name||'',skills:pilot?.skills||[]});
   };
   function incoming(event){
@@ -36,11 +37,12 @@ const SkillUI=(()=>{
   const shown=()=>{if(frame){send({kind:'mm-skills-measure'});sync();}};
   const setPilot=data=>{pilot=data?.skills&&Array.isArray(data.skills)?{name:String(data.name||''),skills:data.skills.map(x=>({skill_id:Number(x.skill_id),active_skill_level:Number(x.active_skill_level)||0,skillpoints_in_skill:Number(x.skillpoints_in_skill)||0})).filter(x=>Number.isSafeInteger(x.skill_id)&&x.skill_id>0)}:null;sync();};
   const setLanguage=l=>{language=l==='en'?'en':'es';send({kind:'mm-skills-language',lang:language});};
+  const setTheme=t=>{theme=t==='light'?'light':'dark';send({kind:'mm-skills-theme',theme});};
   const destroy=()=>{
     if(frame){frame.remove();frame=null;ready=false;lastHeight=0;}
     pilot=null;
     window.removeEventListener('message',incoming);
   };
   window.addEventListener('pagehide',destroy,{once:true});
-  return {mount,shown,setPilot,setLanguage};
+  return {mount,shown,setPilot,setLanguage,setTheme};
 })();
