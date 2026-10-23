@@ -454,3 +454,10 @@ Ajuste visual complementario al rediseño del navbar: la botonera del extremo su
 
 **QA:** comprobación estática de balance de llaves CSS y unicidad de login/ticker; pruebas de automatización y browser OAuth/ESI requieren verificación mediante Actions o navegador real. No atribuir éxito de despliegue a la mera existencia del commit fuente.
 
+### Verificación de publicación v1.0.111
+
+- **Código fuente:** commit `2f95af6e670ba4e20e1ff1acca19b8909b05dc83` (cabecera) y `0fbc58f60f67d039ac532ac755cb3eab7639a747` (workflow actualizado).
+- **Motivo de la discrepancia visual:** la página publicada sirve el `index.html` compilado; los cambios en `src/` no llegan a ella hasta el commit de build. La generación automática de v110 se produjo en `78cb157e3fddabaaacdf2bf92681e122be191311`, más tarde que los primeros commits fuente.
+- **Recompilación y publicación:** GitHub Actions produjo inicialmente v111 (`07341b5c5ad4c6a683fd12be6bc4fd5875898678`). Se compiló también una versión directa del bundle (`d7774584740b3c100fbdb021e9849cae67314cfa`), pero se prioriza la salida canónica de `python build.py`, no la alternativa.
+- **Estado final verificado en repositorio:** se disparó nueva compilación mediante `src/light_extra.css` (comentario no funcional) y GitHub Actions generó **`index.html` v1.0.111** en el commit `ad7475b44511e30604ea0c7299403ff827d08419` (blob `e79d605c57f7192b85d38ff375777a3320e1c682`). Como el commit automático ocurre *después* de los pasos de tests del workflow, la publicación compilada fue generada tras superar esos pasos.
+- **Limitación:** se verificó la actualización del blob y commit de Pages, no la representación exacta en el navegador local del usuario. Si persiste una cabecera vieja, probar recarga forzada y URL con query distinta tras dar tiempo al despliegue de GitHub Pages; si sigue igual, revisar Pages/branch/caché de CDN.
