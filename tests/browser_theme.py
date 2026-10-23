@@ -72,7 +72,7 @@ class ThemeBrowserTests(unittest.TestCase):
         # background-color may be transparent even though the pixels are light.
         self.assertTrue(
             brightness(inventory_bg) > 180 or
-            re.search(r"rgba?\(255,\s*255,\s*255|rgba?\\(248,\s*246,\s*242", inventory_gradient),
+            ("255, 255, 255" in inventory_gradient or "248, 246, 242" in inventory_gradient),
             f"Light inventory card is dark: {inventory_bg} / {inventory_gradient}"
         )
         self.assertGreater(brightness(self.color(".mm-unit-courier")), 180)
