@@ -125,7 +125,7 @@ document.querySelectorAll('[data-go-home]').forEach(node=>{
     const hp=help.querySelector('.hp');
     const heads=[...help.querySelectorAll(':scope > h3.sub-h')];
     if(hp&&heads.length>=3){
-      const groups=[],labels=['Primeros pasos','Rutas de venta','Glosario','Seguridad'];
+      const groups=[],labels=['guide.gettingStarted','guide.routes','guide.glossary','guide.privacy'].map(key=>tx(key));
       const first=document.createElement('div');first.append(hp);groups.push(first);
       heads.slice(0,3).forEach((heading,i)=>{
         const panel=document.createElement('div');
