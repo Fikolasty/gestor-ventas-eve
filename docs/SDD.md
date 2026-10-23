@@ -600,3 +600,11 @@ Capturas del usuario confirman persistencia de fondos oscuros, tarjetas claras y
 - La actualización de archivos mediante GitHub crea commits en `main` inmediatamente; no equivale a afirmar que `index.html` se haya publicado. Verificar run y `docs/QA_STATUS.md` actualizado a v1.0.117 antes de cerrar QA.
 
 **Pendientes posteriores:** limpieza cuidadosa de más estilos heredados, mediciones de inventario grande, rendimiento real Firefox/Chrome y pruebas ESI/SSO de extremo a extremo.
+
+
+### 2026-10-23 — Protección contra publicación de compilaciones obsoletas
+
+- Tras el cambio de fuentes y workflow para v1.0.117, otro workflow anterior generó un nuevo commit de `index.html` **v1.0.116** (`461967def1a5`, QA run `39906616476`). Esto confirma la carrera de publicación de versiones observada previamente, incluso con `concurrency.cancel-in-progress: false` mientras se completan jobs encolados.
+- Commit `aa676929`: el workflow actual, tras cada `git fetch origin main` en su bucle de publicación, exige que `GITHUB_SHA` sea ancestro de `origin/main` y que `git diff "$GITHUB_SHA" origin/main -- build.py src tests .github/workflows/rebuild-market-moves.yml` no detecte cambios en fuentes, tests o definición del workflow. Si los encuentra, **omite publicar el artefacto anticuado** y espera que la nueva ejecución publique la versión vigente, sin forzar ni sobrescribir.
+- La protección sólo aplica a ejecuciones creadas usando la versión **nueva** del workflow; no puede modificar ejecuciones antiguas que ya arrancaron.
+- **Verificación pendiente:** comprobar en el siguiente `docs/QA_STATUS.md` y el commit generado que efectivamente se publica `1.0.117`, además de los tests Light/Dark, hover y regresiones financieras. No declarar v1.0.117 desplegada sólo por haber subido el workflow.
