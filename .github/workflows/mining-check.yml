@@ -20,6 +20,8 @@ jobs:
           node --check src/mining.js
           node --check src/mining_data.js
           node --check src/script.js
+      - name: Compile current modular site for integration checks
+        run: python3 build.py 1.0.115
       - name: Regresión estática de minería
         run: |
           node tests/mining-smoke.cjs
@@ -30,5 +32,3 @@ jobs:
           node tests/market-scenarios.cjs
           node tests/financial-accounting.cjs
           node tests/skills-integration.cjs
-      - name: Verificar generación de HTML
-        run: python3 build.py 1.0.109
