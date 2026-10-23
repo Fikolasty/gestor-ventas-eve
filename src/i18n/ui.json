@@ -1,0 +1,290 @@
+{
+  "picker.plan": {
+    "es": "PLAN",
+    "en": "PLAN"
+  },
+  "picker.speed": {
+    "es": "RAPIDEZ",
+    "en": "SPEED"
+  },
+  "picker.shipping": {
+    "es": "ENVÍO",
+    "en": "SHIPPING"
+  },
+  "picker.value": {
+    "es": "VALOR",
+    "en": "VALUE"
+  },
+  "picker.total": {
+    "es": "TOTAL",
+    "en": "TOTAL"
+  },
+  "picker.profit": {
+    "es": "BENEFICIO",
+    "en": "PROFIT"
+  },
+  "picker.difference": {
+    "es": "VS. ÓPTIMO",
+    "en": "VS. OPTIMAL"
+  },
+  "picker.optimal": {
+    "es": "Óptimo",
+    "en": "Optimal"
+  },
+  "picker.same": {
+    "es": "Igual",
+    "en": "Same"
+  },
+  "picker.recommended": {
+    "es": "MAYOR BENEFICIO",
+    "en": "HIGHEST PROFIT"
+  },
+  "picker.yes": {
+    "es": "Sí",
+    "en": "Yes"
+  },
+  "picker.no": {
+    "es": "No",
+    "en": "No"
+  },
+  "picker.fast": {
+    "es": "Inmediato",
+    "en": "Immediate"
+  },
+  "picker.mixed": {
+    "es": "Mixto",
+    "en": "Mixed"
+  },
+  "picker.uncertain": {
+    "es": "Incierto",
+    "en": "Uncertain"
+  },
+  "picker.days": {
+    "es": "Días",
+    "en": "Days"
+  },
+  "picker.shippingDays": {
+    "es": "Envío + días",
+    "en": "Shipping + days"
+  },
+  "picker.shippingRange": {
+    "es": "Envío {range} d",
+    "en": "Shipping {range} d"
+  },
+  "picker.shippingWeeks": {
+    "es": "Envío + 1–2 semanas",
+    "en": "Shipping + 1–2 weeks"
+  },
+  "picker.weeks": {
+    "es": "1–2 semanas",
+    "en": "1–2 weeks"
+  },
+  "picker.approxOneDay": {
+    "es": "~1 día",
+    "en": "~1 day"
+  },
+  "picker.selected": {
+    "es": "Plan seleccionado",
+    "en": "Selected plan"
+  },
+  "picker.showAlternatives": {
+    "es": "Ver otras rutas",
+    "en": "Show other routes"
+  },
+  "picker.hideAlternatives": {
+    "es": "Ocultar otras rutas",
+    "en": "Hide other routes"
+  },
+  "picker.sortBy": {
+    "es": "Ordenar por {label}",
+    "en": "Sort by {label}"
+  },
+  "picker.filters": {
+    "es": "Filtrar planes",
+    "en": "Filter plans"
+  },
+  "picker.empty": {
+    "es": "Ninguna ruta coincide con este filtro.",
+    "en": "No routes match this filter."
+  },
+  "picker.all": {
+    "es": "Todos",
+    "en": "All"
+  },
+  "picker.fastFilter": {
+    "es": "Rápidos",
+    "en": "Fast"
+  },
+  "picker.noShipping": {
+    "es": "Sin envío",
+    "en": "No shipping"
+  },
+  "picker.reprocessing": {
+    "es": "Con reproceso",
+    "en": "Reprocessing"
+  },
+  "picker.bestDesc": {
+    "es": "La combinación con mayor ingreso neto estimado.",
+    "en": "The combination with the highest estimated net proceeds."
+  },
+  "picker.localDesc": {
+    "es": "Venta local sin courier.",
+    "en": "Local sale without freight."
+  },
+  "picker.jitaOrdersDesc": {
+    "es": "Órdenes de venta en Jita.",
+    "en": "Jita sell orders."
+  },
+  "picker.instantDesc": {
+    "es": "Venta inmediata en Jita.",
+    "en": "Immediate sale in Jita."
+  },
+  "picker.buybackDesc": {
+    "es": "Contrato de Buyback.",
+    "en": "Buyback contract."
+  },
+  "picker.playerDesc": {
+    "es": "Oferta a otros jugadores.",
+    "en": "Offer to other players."
+  },
+  "picker.reprocessLocalDesc": {
+    "es": "Reprocesar y vender localmente.",
+    "en": "Reprocess and sell locally."
+  },
+  "picker.reprocessJitaDesc": {
+    "es": "Reprocesar y vender en Jita.",
+    "en": "Reprocess and sell in Jita."
+  },
+  "picker.importDesc": {
+    "es": "Importar desde Jita.",
+    "en": "Import from Jita."
+  },
+  "picker.optimalSummary": {
+    "es": "MÁXIMO NETO ESTIMADO · Elige otra ruta para comparar ingresos, tiempo y transporte.",
+    "en": "HIGHEST ESTIMATED NET · Select another route to compare proceeds, time and freight."
+  },
+  "picker.selectedSame": {
+    "es": "MISMO NETO ESTIMADO QUE EL ÓPTIMO.",
+    "en": "SAME ESTIMATED NET AS OPTIMAL."
+  },
+  "picker.selectedDifference": {
+    "es": "{difference} frente al óptimo.",
+    "en": "{difference} versus optimal."
+  },
+  "picker.fallbackOne": {
+    "es": "1 ítem no admite esta ruta; conserva su mejor alternativa.",
+    "en": "1 item cannot use this route and keeps its best alternative."
+  },
+  "picker.fallbackMany": {
+    "es": "{count} ítems no admiten esta ruta; conservan su mejor alternativa.",
+    "en": "{count} items cannot use this route and keep their best alternatives."
+  },
+  "picker.nextBest": {
+    "es": "SIGUIENTE ALTERNATIVA",
+    "en": "NEXT ALTERNATIVE"
+  },
+  "picker.why": {
+    "es": "COMPARACIÓN DE BENEFICIO",
+    "en": "PROFIT COMPARISON"
+  },
+  "picker.gap": {
+    "es": "DIFERENCIA DE INGRESOS NETOS",
+    "en": "NET PROCEEDS DIFFERENCE"
+  },
+  "picker.gain": {
+    "es": "VENTAJA NETA",
+    "en": "NET ADVANTAGE"
+  },
+  "picker.advantage": {
+    "es": "RENDIMIENTO ADICIONAL",
+    "en": "ADDITIONAL RETURN"
+  },
+  "picker.higherNet": {
+    "es": "ALTERNATIVA CON MÁS ISK",
+    "en": "HIGHER-ISK ALTERNATIVE"
+  },
+  "picker.insufficient": {
+    "es": "No hay suficientes cotizaciones para comparar estas rutas.",
+    "en": "Not enough quoted prices to compare these routes."
+  },
+  "picker.quickNote": {
+    "es": "La rapidez solo desempata rutas con ingresos prácticamente iguales.",
+    "en": "Speed breaks ties only when net proceeds are effectively equal."
+  },
+  "verdict.netSales": {
+    "es": "VENTAS NETAS DESPUÉS DE TASAS",
+    "en": "NET SALES AFTER FEES"
+  },
+  "verdict.freight": {
+    "es": "COSTE DE ENVÍO",
+    "en": "SHIPPING COST"
+  },
+  "verdict.investment": {
+    "es": "INVERSIÓN DE COMPRA",
+    "en": "PURCHASE INVESTMENT"
+  },
+  "verdict.planTitle": {
+    "es": "LA RUTA MÁS RENTABLE",
+    "en": "MOST PROFITABLE ROUTE"
+  },
+  "verdict.selectedTitle": {
+    "es": "TU RUTA DE VENTA",
+    "en": "YOUR SELLING ROUTE"
+  },
+  "verdict.planSubtitle": {
+    "es": "MÁXIMO INGRESO NETO ESTIMADO",
+    "en": "HIGHEST ESTIMATED NET PROCEEDS"
+  },
+  "verdict.selectedSubtitle": {
+    "es": "INGRESOS NETOS DEL PLAN ELEGIDO",
+    "en": "SELECTED PLAN NET PROCEEDS"
+  },
+  "verdict.pending": {
+    "es": "Esperando cotizaciones de Jita.",
+    "en": "Waiting for Jita quotes."
+  },
+  "verdict.accounting": {
+    "es": "DESGLOSE DEL PLAN",
+    "en": "PLAN ACCOUNTING"
+  },
+  "module.sales": {
+    "es": "Ventas",
+    "en": "Sales"
+  },
+  "module.mining": {
+    "es": "Minería",
+    "en": "Mining"
+  },
+  "module.skills": {
+    "es": "Planes de habilidades",
+    "en": "Skill Plans"
+  },
+  "module.settings": {
+    "es": "Ajustes",
+    "en": "Settings"
+  },
+  "module.guide": {
+    "es": "Guía de Uso",
+    "en": "User Guide"
+  },
+  "guide.gettingStarted": {
+    "es": "Primeros pasos",
+    "en": "Getting started"
+  },
+  "guide.routes": {
+    "es": "Rutas de venta",
+    "en": "Selling routes"
+  },
+  "guide.glossary": {
+    "es": "Glosario",
+    "en": "Glossary"
+  },
+  "guide.privacy": {
+    "es": "Privacidad y acceso a EVE",
+    "en": "Privacy and EVE access"
+  },
+  "units.isk": {
+    "es": "ISK",
+    "en": "ISK"
+  }
+}
