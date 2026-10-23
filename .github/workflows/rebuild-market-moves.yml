@@ -35,11 +35,11 @@ jobs:
       - name: Build single-file app
         id: build_site
         run: |
-          python3 build.py 1.0.118
+          python3 build.py 1.0.119
           test -s index.html
           grep -q 'EVE7 theme ownership' index.html
           grep -q 'Login' index.html
-          grep -q 'v1.0.118' index.html
+          grep -q 'v1.0.119' index.html
           ! grep -q '/\\*__STYLE_SOURCES__\\*/' index.html
       - name: Legacy EVE market, mining and skills regressions on assembled sources
         id: domain_checks
@@ -90,7 +90,7 @@ jobs:
 
           - Source commit: \`${GITHUB_SHA}\`
           - Workflow run: \`${GITHUB_RUN_ID}\`
-          - Version: \`1.0.118\`
+          - Version: \`1.0.119\`
           - Verified before publication: Python source assembly, Node syntax, SIGMA Freight formula regression, build, Chromium Light/Dark contrast and Login/Iniciar sesión checks.
           - Limitation: automated headless checks do not replace human visual review of every view or live ESI/SSO.
           EOF
@@ -101,7 +101,7 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add index.html docs/QA_STATUS.md
           if ! git diff --cached --quiet; then
-            git commit -m "build: publish Market Moves+ 1.0.118 from modular sources"
+            git commit -m "build: publish Market Moves+ 1.0.119 from modular sources"
             # Other documentation / source commits may land while Chromium runs.
             # Rebase our tested artifact instead of overwriting or force pushing.
             for attempt in 1 2 3 4; do
@@ -140,7 +140,7 @@ jobs:
           mkdir -p _site
           cp index.html _site/index.html
           touch _site/.nojekyll
-          grep -q 'v1.0.118' _site/index.html
+          grep -q 'v1.0.119' _site/index.html
       - name: Upload verified GitHub Pages artifact
         if: steps.publish_site.outputs.published == 'true'
         uses: actions/upload-pages-artifact@v3
@@ -162,7 +162,7 @@ jobs:
           body="# Market Moves+ — CI publication blocked\\n\\n"
           body+=f"- Source: \`{os.environ['GITHUB_SHA']}\`\\n"
           body+=f"- Run: \`{os.environ['GITHUB_RUN_ID']}\`\\n"
-          body+="- Expected version: \`1.0.118\`\\n"
+          body+="- Expected version: \`1.0.119\`\\n"
           body+="- Failed gates: "+(', '.join(failed) or 'unknown (check GitHub Actions logs)')+"\\n"
           body+="\\nPublication was stopped. See the workflow run for error details.\\n"
           pathlib.Path('docs/CI_FAILURE.md').write_text(body,encoding='utf-8')
@@ -172,7 +172,7 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add docs/CI_FAILURE.md
           if ! git diff --cached --quiet; then
-            git commit -m "ci: record failed v1.0.118 publication gate"
+            git commit -m "ci: record failed v1.0.119 publication gate"
             git fetch origin main
             git rebase origin/main || { git rebase --abort || true; exit 0; }
             git push origin HEAD:main || true
@@ -194,18 +194,18 @@ jobs:
       - name: Publish verified Pages artifact
         id: pages_deployment
         uses: actions/deploy-pages@v4
-      - name: Verify the public site serves v1.0.118
+      - name: Verify the public site serves v1.0.119
         env:
           PAGES_URL: ${{ steps.pages_deployment.outputs.page_url }}
         run: |
           test -n "$PAGES_URL"
           for attempt in $(seq 1 15); do
-            if curl -fLsS --connect-timeout 10 --max-time 20 "${PAGES_URL}?verified=${GITHUB_RUN_ID}" | grep -Fq '<span class="ver">v1.0.118</span>'; then
-              echo "Public GitHub Pages footer confirms v1.0.118 at $PAGES_URL"
+            if curl -fLsS --connect-timeout 10 --max-time 20 "${PAGES_URL}?verified=${GITHUB_RUN_ID}" | grep -Fq '<span class="ver">v1.0.119</span>'; then
+              echo "Public GitHub Pages footer confirms v1.0.119 at $PAGES_URL"
               exit 0
             fi
-            echo "Waiting for Pages CDN to serve v1.0.118 (attempt $attempt of 15)"
+            echo "Waiting for Pages CDN to serve v1.0.119 (attempt $attempt of 15)"
             sleep 6
           done
-          echo "Pages deployment did not serve the validated v1.0.118 footer."
+          echo "Pages deployment did not serve the validated v1.0.119 footer."
           exit 1
