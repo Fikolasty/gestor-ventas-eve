@@ -7,7 +7,7 @@
 <meta name="referrer" content="no-referrer">
 <title>Market Moves+ · SIGMA GRINDSET</title>
 <style>
-/* ================= Market Moves+ v1.0.114 =================
+/* ================= Market Moves+ v1.0.111 =================
    Paleta: azul de base, naranja = acción, verde/rojo = ganancia/pérdida.
    Sin backdrop-filter: el vidrio se finge con rgba + bordes. */
 *{box-sizing:border-box;margin:0;padding:0}
@@ -3098,11 +3098,6 @@ html.light .route .route-ic{background:#dfddd7;border:1px solid rgba(31,30,29,0.
 html.light .route .route-ic::before{background:#54524d}
 html.light .route .route-b[aria-pressed="true"] .route-ic::before{background:#151514}
 html.light .route .route-b[aria-pressed="true"]{color:#33322f}
-html.light.light .route .route-ic{background:#33322f;border-color:rgba(240,237,229,0.6)}
-html.light.light .route .route-ic::before{background:#aea999}
-html.light.light .route .route-b[aria-pressed="true"] .route-ic{background:#994d33;border-color:#994d33}
-html.light.light .route .route-b[aria-pressed="true"] .route-ic::before{background:#151514}
-html.light.light .route .route-b[aria-pressed="true"]{color:#e4e2dc}
 html.light .sk-note{color:#aa7622;background:rgba(224,168,79,0.125);border:1px solid rgba(224,168,79,0.438)}
 html.light .tag.sk{color:#aa7622;border-color:rgba(224,168,79,0.5)}
 html.light{--glass:rgba(240,237,229,0.88);--glass2:rgba(31,30,29,0.033);--edge:rgba(31,30,29,0.114)}
@@ -3183,8 +3178,6 @@ html.light .pl-row.min .p .pr-inline-editor button{border:1px solid rgba(31,30,2
 html.light .pl-row.min .p .pr-inline-editor button:hover{background:rgba(31,30,29,0.152)}
 html.light .pl-row.min .p .pr-edit-save{color:var(--gain,#418b62)!important}
 html.light .pl-row.min .p .pr-edit-cancel{color:var(--loss,#a92c23)!important}
-html.light.light .pl-row.min .p .pr-inline-editor{background:rgba(184,123,45,0.1);border-color:rgba(150,101,32,0.45)}
-html.light.light .pl-row.min .p .pr-inline-input{background:#151514;color:#e4e2dd}
 html.light .pk-actions .pk-change{border:1px solid rgba(217,119,87,0.562);background:#e5e3dd;color:#2c2b29}
 html.light .pk-actions .pk-change:hover,html.light .pk-actions .pk-change[aria-expanded=true]{border-color:#c96442;background:rgba(217,119,87,0.225)}
 html.light #pk>.pk-o:hover{border-color:rgba(217,119,87,0.688)!important}
@@ -3199,19 +3192,11 @@ html.light .mm-missing{color:#b27f1a;border:1px solid rgba(226,181,104,0.562);ba
 html.light #verdict .v-cap{color:#363532}
 html.light #verdict .ov-flow{background:rgba(240,237,229,0.82)}
 html.light #verdict .mm-dest-inline{border-top:1px solid rgba(31,30,29,0.114)}
-html.light.light .mm-modnav{background:#232220}
-html.light.light .mm-mod{color:#a49e8c}
-html.light.light .mm-mod[aria-selected=true]{color:#a84d31;background:#9d542f}
-html.light.light .mm-pi-placeholder,html.light.light .mm-pi-features>div,html.light.light #verdict .ov-flow{background:#1e1e1c}
-html.light.light #verdict{background:#151514!important}
-html.light.light #verdict .v-cap{color:#e1dfd9}
-html.light.light .mm-title{color:#e5e3de!important}
 html.light .mm-section-head::before{background:linear-gradient(90deg,#c96442,rgba(217,119,87,0));box-shadow:0 0 11px rgba(217,119,87,0.438)}
 html.light #verdict .mm-plan-area{border-top:1px solid rgba(31,30,29,0.123)}
 html.light #pk>.pk-o::after{color:#925e3a}
 html.light #pk>.pk-o:focus-visible{outline:2px solid #c96442}
 html.light #verdict .v-plan-name{color:#a44d28}
-html.light.light #verdict .v-plan-name{color:#ad4b27}
 html.light .pi-intro{background:linear-gradient(115deg,rgba(31,30,29,0.085),rgba(240,237,229,0.6))}
 html.light .pi-article figure img{background:rgba(0,0,0,0.048)}
 html.light .pi-index a{background:rgba(240,237,229,0.6)}
@@ -3300,7 +3285,6 @@ html.light #mmTabs .mm-route .route-b[aria-pressed=true]{border-color:rgba(217,1
 html.light #mmTabs .mm-route .route-b[aria-pressed=true] .mm-route-knob{background:var(--clay,#c96442)}
 html.light #mmTabs .mm-route .route-b[aria-pressed=true] .mm-route-right{color:#151514}
 html.light #mmTabs .mm-theme input:not(:checked)+.sw-t{background:#dfddd7}
-html.light.light #mmTabs .mm-icon-action,html.light.light #mmTabs .mm-mod{color:#dcd9d2}
 html.light .plan-name-accent{color:var(--ion,#a35629)}
 html.light .item-name-accent{color:var(--gain,#39935f)}
 html.light .top>.top-guide-action{border:1px solid rgba(31,30,29,0.209);background:rgba(240,237,229,0.62)}
@@ -3313,30 +3297,17 @@ html.light .top .eve-identity-menu{background:#e6e4df;box-shadow:0 15px 40px rgb
 html.light .top .eve-identity-menu #eveLogout:hover{background:rgba(210,135,103,0.15);color:#a84d24}
 html.light .mm-business-switch>.mm-import-controls{border:1px solid rgba(217,119,87,0.288);background:rgba(240,237,229,0.6)}
 html.light .mm-import-controls{background:linear-gradient(120deg,rgba(240,237,229,0.96),rgba(240,237,229,0.95));box-shadow:0 8px 20px rgba(0,0,0,0.022)}
-html.light.light .mm-import-controls{background:rgba(31,30,29,0.836)}
 html.light #mmTabs.mm-modnav .mm-modgroup .mm-mod[aria-selected=true]{background:rgba(217,119,87,0.213)!important;border-color:rgba(217,119,87,0.525)!important}
 html.light .top .mm-top-actions>.side-i{border:1px solid rgba(31,30,29,0.209)!important;background:rgba(240,237,229,0.62)!important}
 html.light .top .mm-top-actions>.side-i:hover{background:rgba(217,119,87,0.163)!important}
-html.light.light #mmTabs.mm-modnav .mm-modgroup{background:rgba(83,63,47,0.081);border-color:rgba(75,58,44,0.213)}
-html.light.light #mmTabs.mm-modnav .mm-modgroup .mm-mod{color:#e3e1dc!important}
-html.light.light #mmTabs.mm-modnav .mm-modgroup .mm-mod:hover{color:#efe9e7!important;background:rgba(184,112,70,0.163)!important;border-color:rgba(174,106,63,0.25)!important}
-html.light.light #mmTabs.mm-modnav .mm-modgroup .mm-mod[aria-selected="true"]{color:#f0e8e5!important;background:#915a3b!important;border-color:#895a43!important;box-shadow:inset 0 1px rgba(31,30,29,0.712)}
-html.light.light #mmTabs.mm-modnav .mm-modgroup .mm-mod:focus-visible{outline:2px solid #a95e3b}
 html.light #verdict .flip-summary-breakdown strong{color:var(--pos,#418b66)}
 html.light .mm-business-switch{background:rgba(240,237,229,0.87)}
 html.light .mm-business-tabs{border:1px solid rgba(217,119,87,0.25);background:rgba(0,0,0,0.04)}
 html.light .mm-business-tab.on,html.light .mm-business-tab[aria-pressed=true]{background:rgba(217,119,87,0.225);border-color:rgba(217,119,87,0.65)}
 html.light .mm-business-tab:hover:not(.on){background:rgba(217,119,87,0.112)}
 html.light .mm-import-actions .mm-buy-basis select{background:rgba(0,0,0,0.056)}
-html.light.light .mm-business-switch{background:rgba(31,30,29,0.874);border-color:rgba(67,53,45,0.25)}
-html.light.light .mm-business-tabs{background:rgba(62,41,27,0.069);border-color:rgba(114,73,51,0.225)}
-html.light.light .mm-business-tab{color:#dfddd7}
-html.light.light .mm-business-tab.on{background:#915a3b;color:#713e29;border-color:#8a5a42}
-html.light.light .mm-import-actions .mm-buy-basis select{background:#151514;color:#e3e1db}
 html.light .mm-unit-courier-total{color:#915d3b}
-html.light.light .mm-unit-courier{background:rgba(31,30,29,0.779)}
 html.light .pr-manual-editor button{background:rgba(217,119,87,0.125)}
-html.light.light #pkOpportunity{background:rgba(31,30,29,0.855)}
 html.light body .top.mm-ho-root{border-bottom:1px solid rgba(31,30,29,0.123)!important;background:var(--header-surface,rgba(240,237,229,0.96))!important;box-shadow:0 5px 22px rgba(0,0,0,0.038)!important}
 html.light body .top.mm-ho-root #mmTabs>.mm-ho-main{border:1px solid rgba(31,30,29,0.171)!important;background:rgba(0,0,0,0.043)!important;box-shadow:inset 0 1px 2px rgba(0,0,0,0.04)!important}
 html.light body .top.mm-ho-root .mm-ho-main .mm-home,html.light body .top.mm-ho-root .mm-ho-main .mm-mod{color:var(--mut,#54524d)!important}
@@ -3352,23 +3323,10 @@ html.light body .top.mm-ho-root #mmTabs>.mm-ho-context{border-top:1px solid rgba
 html.light body .top.mm-ho-root .mm-ho-context .mm-business-tab:hover{background:rgba(31,30,29,0.076)!important}
 html.light body .top.mm-ho-root .mm-ho-context .mm-business-tab.on{background:rgba(217,119,87,0.163)!important;border-color:rgba(217,119,87,0.362)!important}
 html.light body .top.mm-ho-root .mm-ho-context .mm-buy-basis select{border:1px solid rgba(31,30,29,0.19)!important;background:rgba(240,237,229,0.74)!important}
-html.light.light body .top.mm-ho-root{background:rgba(31,30,29,0.912)!important;border-color:rgba(69,53,43,0.225)!important}
-html.light.light body .top.mm-ho-root #mmTabs>.mm-ho-main{background:rgba(73,56,44,0.069)!important;border-color:rgba(78,62,47,0.25)!important}
-html.light.light body .top.mm-ho-root .mm-ho-main .mm-mod[aria-selected="true"]{background:rgba(217,119,87,0.225)!important;color:#eeeae8!important}
-html.light.light body .top.mm-ho-root .mm-ho-main .mm-home:hover,html.light.light body .top.mm-ho-root .mm-ho-main .mm-mod:hover{background:rgba(73,56,44,0.112)!important;color:#e3e1dc!important}
-html.light.light body .top.mm-ho-root .mm-top-actions>.top-header-action,html.light.light body .top.mm-ho-root .mm-top-actions>.top-guide-action,html.light.light body .top.mm-ho-root .mm-top-actions .mm-theme,html.light.light body .top.mm-ho-root .mm-profile-row .eve-identity-button{background:rgba(70,49,39,0.056)!important;border-color:rgba(70,49,39,0.25)!important;color:#e3e1dc!important}
-html.light.light body .top.mm-ho-root .mm-ho-context .mm-business-tab.on{background:rgba(217,119,87,0.213)!important;color:#eeeae7!important}
-html.light.light body .top.mm-ho-root .mm-ho-context .mm-buy-basis select{background:#151514!important;color:#e3e2dc!important}
 html.light .hero>.hero-referral{border:1px solid rgba(217,119,87,0.463)!important;background:var(--ticker-surface,rgba(240,237,229,0.91))!important;box-shadow:0 3px 12px rgba(0,0,0,0.032)!important}
 html.light .hero>.hero-referral:hover{background:var(--ticker-hover,rgba(240,237,229,0.96))!important}
 html.light .hero>.hero-referral .tk-i b{color:#a65226!important}
-html.light.light body .top.mm-ho-root{background:rgba(31,30,29,0.893)!important;border-color:rgba(69,53,43,0.25)!important}
-html.light.light body .top.mm-ho-root .mm-top-actions>.top-header-action,html.light.light body .top.mm-ho-root .mm-top-actions>.top-guide-action,html.light.light body .top.mm-ho-root .mm-profile-row .eve-identity-button{background:rgba(71,48,35,0.069)!important;border-color:rgba(71,48,35,0.275)!important;color:#e3e1dc!important}
-html.light.light body .top.mm-ho-root .mm-ho-context .mm-buy-basis select{background:#151514!important;color:#e3e2dc!important}
-html.light.light .hero>.hero-referral{background:rgba(31,30,29,0.893)!important;color:#e2e0da!important}
-html.light.light .hero>.hero-referral .tk-i b{color:#a35030!important}
 html.light .hero-intro:not(.no-appr)>.appr,html.light .hero-intro:not(.no-appr)>.paste{border:1px solid rgba(31,30,29,0.171)!important;box-shadow:0 8px 16px rgba(0,0,0,0.056)!important}
-html.light.light .hero-intro:not(.no-appr)>.appr,html.light.light .hero-intro:not(.no-appr)>.paste{background:rgba(31,30,29,0.902)!important;border-color:rgba(83,63,47,0.25)!important}
 .i-rock{--i:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 15l3-8 7-3 6 5-1 8-7 3-6-2z'/%3E%3Cpath d='M9 10l3 2 4-2M12 12v5'/%3E%3C/svg%3E")}
 /* Scope moderno para no contaminar el gestor de ventas. */
 @scope (#mining) {
@@ -4817,13 +4775,13 @@ Contraband Freight = no</textarea><small>Una regla por línea: Nombre = tax tota
 <button type="button" class="totop" id="toTop" aria-label="Volver arriba" title="Volver arriba (Inicio)" hidden><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 14l6-6 6 6"/></svg></button>
 <footer class="foot">
   <p class="foot-sec"><span class="ic i-lock" aria-hidden="true"></span>Tu inventario no se guarda: al cerrar o recargar se borra. Solo tus Ajustes quedan en este navegador.</p>
-  <div class="foot-by">Creado por <b>Fiko McGivert</b> · Vanguardia DR · SIGMA GRINDSET · <span class="ver">v1.0.114</span></div>
+  <div class="foot-by">Creado por <b>Fiko McGivert</b> · Vanguardia DR · SIGMA GRINDSET · <span class="ver">v1.0.111</span></div>
 </footer>
 
 <script>
 'use strict';
 /* ============================================================
-   Market Moves+ v1.0.114 — SIGMA GRINDSET / Vanguardia DR
+   Market Moves+ v1.0.111 — SIGMA GRINDSET / Vanguardia DR
    Flujo:  pegado → items → carga (ESI: precios, volúmenes, historial) → verificación → plan → vista
      1. Pegado      parsePaste(): parser posicional de columnas de EVE (Name · Quantity · … · Volume · Est. Price).
      2. Carga       esiItems(): trae todo lo que falta; mientras carga, refresh() NO pinta (S.loading).
