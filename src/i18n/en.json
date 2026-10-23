@@ -1903,5 +1903,7 @@
   "construir un enlace (Link) no crea una ruta de transporte (Route). Debes configurarla manualmente; de lo contrario, los materiales no llegarán a su destino.": "Building a link does not automatically create a route. Configure the route manually or materials will not reach their destination.",
   "aviso": "warning",
   "avisos": "warnings",
-  "1 aviso": "1 warning"
+  "1 aviso": "1 warning",
+  "Iniciar sesión": "Login",
+  "Iniciar sesión con EVE Online": "Log in with EVE Online"
 }
