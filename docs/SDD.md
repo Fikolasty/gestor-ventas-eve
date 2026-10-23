@@ -519,3 +519,11 @@ Capturas del usuario confirman persistencia de fondos oscuros, tarjetas claras y
 - `src/light_extra.css` declara tokens Light y normaliza superficies/textos en la barra superior, el ticker, contenedores simétricos y la tabla de courier; la capa de imagen de fondo aumenta opacidad desde .12 a .30 para apreciarla mejor.
 - Commits: `527ffeb3`, `35dfc55d`.
 - Pruebas pendientes: compilación de `index.html`, despliegue Pages y contraste/captura real Firefox en Light y Dark. No declarar completada inspección visual de navegador sin estas comprobaciones.
+
+
+## 2026-10-22 — EVE 7 · Diagnóstico de publicación (captura v1.0.111)
+
+- La captura real del usuario muestra aún el pie `v1.0.111`, ticker negro con contraste incorrecto hasta hover y header Dark con textos oscuros en Light. Este es un indicio verificable de que el HTML distribuido no incorporaba todavía los últimos cambios de fuente.
+- La hoja `src/light_extra.css` sí contiene los nuevos tokens del header/ticker/Light, pero editar fuentes **no** actualiza automáticamente el `index.html` distribuido sin un build.
+- Se añadió `.github/workflows/rebuild-market-moves.yml` (commit `2ffa1495`) para ejecutar `python3 build.py 1.0.112` con cambios en `src/**` o `build.py`, comprobar marcas de compilación y hacer commit de `index.html` si cambió. El workflow también permite `workflow_dispatch`.
+- **No afirmar éxito de despliegue** mientras no se comprueben la ejecución de Actions, el nuevo contenido de `index.html` y GitHub Pages. Si Actions no tiene permiso de escritura, revisar configuración de permisos en el repo.
