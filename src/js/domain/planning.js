@@ -19,14 +19,15 @@ function mostProfitableMix(rows,Vall){
   const candidates=active.map(choices);
   const speed=k=>({jInst:0,fJI:0,bb:1,jOrd:3,fJ:3,null:4,rNull:5,rJita:5,fN:6,disc:9})[k]??7;
   const ship=(r,k)=>k&&r.ship[k]?r.ship[k]:null;
-  const score=keys=>{
+  const totals=keys=>{
     let gross=0,V=0,coll=0,wait=0;
     keys.forEach((k,i)=>{if(!k)return;const r=active[i],sh=ship(r,k);
       gross+=r.g[k]-r.prod;wait+=speed(k)*Math.max(1,r.q);
       if(sh){V+=sh.v;coll+=sh.c;}
     });
-    return {net:gross-(V>0?courierCost(V,coll):0),wait};
+    return {gross,V,coll,wait};
   };
+  const value=t=>({net:t.gross-(t.V>0?courierCost(t.V,t.coll):0),wait:t.wait});
   // Never trade away a financially meaningful gain for a speed preference.
   const better=(a,b)=>a.net>b.net+.5||(Math.abs(a.net-b.net)<=.5&&a.wait<b.wait);
   const bestOf=(i,requireShipping)=>{
@@ -42,22 +43,30 @@ function mostProfitableMix(rows,Vall){
   let winner=null,winningScore=null;
   for(const initial of seeds){
     const chosen=[...initial];
+    let state=totals(chosen);
     for(let pass=0;pass<4;pass++){
       let changed=false;
       for(let i=0;i<active.length;i++){
         const old=chosen[i];if(!old)continue;
-        let top=score(chosen),preferred=old;
+        const row=active[i],oldShip=ship(row,old);
+        let top=value(state),preferred=old,selected=state;
         for(const k of candidates[i]){
           if(k===old)continue;
-          chosen[i]=k;const trial=score(chosen);
-          if(better(trial,top)){top=trial;preferred=k;}
+          const newShip=ship(row,k);
+          const trialState={
+            gross:state.gross-row.g[old]+row.g[k],
+            V:Math.max(0,state.V-(oldShip?.v||0)+(newShip?.v||0)),
+            coll:Math.max(0,state.coll-(oldShip?.c||0)+(newShip?.c||0)),
+            wait:state.wait+(speed(k)-speed(old))*Math.max(1,row.q)
+          };
+          const trial=value(trialState);
+          if(better(trial,top)){top=trial;preferred=k;selected=trialState;}
         }
-        chosen[i]=preferred;
-        if(preferred!==old)changed=true;
+        if(preferred!==old){chosen[i]=preferred;state=selected;changed=true;}
       }
       if(!changed)break;
     }
-    const final=score(chosen);
+    const final=value(state);
     if(!winner||better(final,winningScore)){winner=chosen;winningScore=final;}
   }
   if(!winner)return;
