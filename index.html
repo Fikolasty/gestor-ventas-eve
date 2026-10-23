@@ -4186,6 +4186,90 @@ html.light .mm-pi-placeholder,html.light .mm-pi-features>div,
 html.light #verdict .ov-flow{background:#f7f5f1!important;color:var(--txt)}
 /* Native widgets, especially Firefox dropdowns, follow the selected theme. */
 html:not(.light){color-scheme:dark}
+
+
+/* EVE7: component-scoped light surfaces — canonical overrides, not business rules. */
+html.light body .top.mm-ho-root,
+html.light body .top.mm-ho-root #mmTabs,
+html.light body .top.mm-ho-root .mm-ho-main,
+html.light body .top.mm-ho-root .mm-ho-context{
+  background:rgba(250,248,244,.97)!important;
+  color:var(--txt)!important;
+  border-color:rgba(70,55,43,.2)!important;
+}
+html.light body .top.mm-ho-root .brand,
+html.light body .top.mm-ho-root .brand *,
+html.light body .top.mm-ho-root .mm-mod:not([aria-selected="true"]),
+html.light body .top.mm-ho-root .mm-business-tab:not(.on),
+html.light body .top.mm-ho-root .mm-profile-row,
+html.light body .top.mm-ho-root .mm-profile-row *,
+html.light body .top.mm-ho-root .mm-top-actions{
+  color:var(--txt)!important;
+}
+html.light .hero>.hero-referral,
+html.light .hero>.hero-referral .tk-track{
+  background:#f8f6f2!important;color:#332c25!important;
+}
+html.light .hero>.hero-referral .tk-i{color:#332c25!important}
+html.light .hero>.hero-referral .tk-i b{color:#9c4226!important}
+html.light .hero-intro:not(.no-appr)>.appr,
+html.light .hero-intro:not(.no-appr)>.paste{
+  background:rgba(251,250,247,.98)!important;
+  border-color:rgba(75,60,48,.2)!important;
+  color:#292723!important;
+}
+html.light .hero-intro:not(.no-appr)>.appr .appr-title,
+html.light .hero-intro:not(.no-appr)>.paste .paste-title,
+html.light .hero-intro:not(.no-appr)>.paste .paste-head,
+html.light .hero-intro:not(.no-appr)>.paste .status{color:#292723!important}
+html.light .hero-intro:not(.no-appr)>.appr .appr-g,
+html.light .hero-intro:not(.no-appr)>.appr .appr-c{
+  background:#fff!important;color:#292723!important;border-color:var(--line)!important;
+}
+html.light .hero-intro:not(.no-appr)>.paste textarea{
+  background:#fff!important;color:#292723!important;border:1px solid var(--line2)!important;
+}
+html.light #ledger,
+html.light #verdict,
+html.light #pSum,
+html.light #pExtra,
+html.light #stepsPanel,
+html.light #settings{
+  color:var(--txt)!important;
+  background:linear-gradient(180deg,#fff,#f8f6f2)!important;
+  border-color:rgba(70,55,43,.16)!important;
+}
+html.light #verdict .ov-flow,
+html.light #verdict .ov-kpi>div,
+html.light #pkOpportunity,
+html.light #verdict .receipt,
+html.light #verdict .call{
+  background:#f7f5f1!important;
+  color:var(--txt)!important;
+  border-color:var(--line)!important;
+}
+html.light #verdict .v-cap,
+html.light #verdict .mm-net-label,
+html.light #verdict .ov-kpi dt,
+html.light #verdict .ov-flow h4,
+html.light #verdict .ov-leg small,
+html.light #pSum .mm-section-sub,
+html.light #pExtra .mm-section-sub,
+html.light .mm-section-sub{color:#645b52!important}
+html.light #verdict .v-isk span,
+html.light #verdict .ov-kpi dd,
+html.light #verdict .ov-leg b{color:var(--txt)}
+html.light #verdict .v-isk.pos,
+html.light #verdict .ov-kpi dd.pos{color:var(--gain)!important}
+html.light #verdict .v-isk.neg,
+html.light #verdict .ov-kpi dd.neg{color:var(--loss)!important}
+html.light #ledger summary .mm-title,
+html.light #verdict .mm-title,
+html.light #pSum .mm-title,
+html.light #pExtra .mm-title{color:var(--txt)!important}
+/* Keep accents informative even when generic light conversion alters their text colors. */
+html.light .pos{color:var(--gain)}
+html.light .neg{color:var(--loss)}
 </style>
 <script>/* v1.0.16: aplica el tema guardado antes de pintar (sin parpadeo). Por defecto: Dark. */try{var g=JSON.parse(localStorage.getItem('gestorVentas.ajustes.v1')||'null');if(g&&g.ui){if(g.ui.light)document.documentElement.classList.add('light');}}catch(e){}</script>
 </head>
