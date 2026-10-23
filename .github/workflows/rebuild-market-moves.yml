@@ -82,6 +82,16 @@ jobs:
             # Rebase our tested artifact instead of overwriting or force pushing.
             for attempt in 1 2 3 4; do
               git fetch origin main
+              # Never publish an artifact compiled from obsolete sources. A
+              # previous workflow may still be running when a new one starts.
+              if ! git merge-base --is-ancestor "$GITHUB_SHA" origin/main; then
+                echo "Remote history changed; refusing to publish unverified artifact."
+                exit 1
+              fi
+              if ! git diff --quiet "$GITHUB_SHA" origin/main -- build.py src tests .github/workflows/rebuild-market-moves.yml; then
+                echo "Newer source or tests detected: skip stale build; the new push has its own CI run."
+                exit 0
+              fi
               if ! git rebase origin/main; then
                 git rebase --abort || true
                 echo "Newer conflicting index.html was published; keep remote intact."
