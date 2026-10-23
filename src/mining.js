@@ -543,13 +543,13 @@ const MineUI=(()=>{
     p.append(document.createTextNode(MATL[S.mat]+', skills '+['','I','II','III','IV','V'][S.lv]+(S.lv===3?' (estimado)':'')+
       ', implantes '+(S.lv===3?'Sin':S.imp?S.imp+'%':'Sin')+', '+(S.boost?'boost '+S.boost:'sin boost')+
       ', '+TL[S.tier]+', '+(ex?'exhumers':'barges')+': '),
-      h('b','',winner.s),document.createTextNode(' produce más ('+fmtV(winner.v)+'). Mayor autonomía: '),
-      h('b','',autonomy.s),document.createTextNode(' ('+NF1.format(autonomy.v)+' min hasta llenar).'));}
+      h('b','',winner.s),document.createTextNode(tx('mining.outproduces',{value:fmtV(winner.v)})),
+      h('b','',autonomy.s),document.createTextNode(tx('mining.minutesFill',{minutes:NF1.format(autonomy.v)})));}
   function paintKpi(){const k=$q('.mn-kpi');k.replaceChildren();
     const ex=S.shipClass==='exhumer';TIERS.forEach(t=>{const b=best(t,ex,val),a=best(t,ex,r=>r.fill),d=h('div',ex?'ex':'');
       d.classList.add('mn-kpi-winner');
       d.append(h('span','',(ex?'Exhumer':'Barge')+' · '+TL[t]),h('b','',(b?'★ ':'')+(b?b.s:'—')),h('div','v',b?fmtV(b.v):'—'));
-      if(a){const s=h('small');s.append(document.createTextNode('Más autonomía: '),document.createTextNode(a.s+' ('+NF1.format(a.v)+' min)'));d.appendChild(s);}
+      if(a){const s=h('small');s.append(document.createTextNode(tx('mining.moreAutonomy')),document.createTextNode(a.s+' ('+NF1.format(a.v)+' min)'));d.appendChild(s);}
       k.appendChild(d);});}
 
   // Bonos del SDE, informativos: la simulación Pyfa ya incluye sus efectos en el yield.
@@ -942,19 +942,19 @@ const MineUI=(()=>{
   function paintPlan(){paintSetup();seg();
     const R={moon:planCalc('moon'),ice:planCalc('ice'),gas:planCalc('gas')},ST={moon:steadyCalc('moon'),ice:steadyCalc('ice'),gas:steadyCalc('gas')},N=S.acc,MS=['moon','ice','gas'];
     const ready=MS.filter(m=>R[m].balance!=null);
-    const st=$q('.pl-status');st.textContent=bulkBusy?'Consultando precios de ESI…':(ready.length<3?'Faltan cotizaciones de algunos artículos; puedes introducir precios manuales en el editor superior.':'Precios de ESI y/o importes manuales, según selecciones; ESI se actualiza cada 5 minutos.');
+    const st=$q('.pl-status');st.textContent=bulkBusy?tx('mining.esiLoading'):(ready.length<3?tx('mining.priceMissing'):tx('mining.priceReady'));
     // titular
-    const vt=$q('.pl-vt'),tk=$q('.pl-take');vt.textContent=N>1?'Resultado para tus '+N+' cuentas':'Resultado para 1 cuenta';tk.replaceChildren();
+    const vt=$q('.pl-vt'),tk=$q('.pl-take');vt.textContent=N>1?tx('mining.resultMany',{count:N}):tx('mining.resultOne');tk.replaceChildren();
     let best=null;if(ready.length){best=ready.reduce((a,b)=>R[b].balance>R[a].balance?b:a);const r=R[best],s=ST[best];
       tk.append(document.createTextNode('Con '+S.barge+' en '+TL[S.ptier]+', '+fmtN(S.hrs)+' h de minado al día y '+PATTL[S.patt]+', lo que más deja es '),h('b','',MATL[best]+' ('+S.item[best]+')'),document.createTextNode('. '));
       if(r.balance>=0)tk.append(document.createTextNode('En 28 días te quedan '),h('b','',signISK(r.balance*N)),document.createTextNode(' después de pagar '+(N>1?(BARGE_OF[S.barge]?(r.noEs?'las exhumers y los ':'las exhumers, los Expert Systems y los ')+N+' próximos Omegas.':(r.noEs?'las barges y los ':'las barges, los Expert Systems y los ')+N+' próximos Omegas.'):(BARGE_OF[S.barge]?(r.noEs?'la exhumer y el próximo Omega.':'la exhumer, el Expert System y el próximo Omega.'):(r.noEs?'la barge y el próximo Omega.':'la barge, el Expert System y el próximo Omega.')))));
       else tk.append(document.createTextNode('Aun así, en 28 días te faltan '),h('b','',isk(-r.balance*N)),document.createTextNode(' para cubrir todo. Prueba con más horas al día, otra nave u otro mineral más caro.'));
       if(s.profit!=null)tk.append(document.createTextNode(' Referencia fija IV (sin progresión): '),h('b','',signISK(s.profit*N)),document.createTextNode(' al mes.'));}
-    else tk.textContent=bulkBusy?'Consultando precios…':'Sin precios no se puede calcular. Revisa la conexión con la API de EVE.';
+    else tk.textContent=bulkBusy?tx('mining.loading'):tx('mining.noPrice');
     // una tarjeta por material: primer mes y referencia fija de IV para comparar
     const tl=$q('.pl-tiles');tl.replaceChildren();
     MS.forEach(m=>{const r=R[m],s=ST[m],c=h('div','pl-vc'+(m===best?' best':''));tl.appendChild(c);
-      const hd=h('div','pl-vch');hd.appendChild(h('span','pl-vcn',MATL[m]));if(m===best)hd.appendChild(h('span','pl-badge','★ Más rentable'));c.appendChild(hd);
+      const hd=h('div','pl-vch');hd.appendChild(h('span','pl-vcn',MATL[m]));if(m===best)hd.appendChild(h('span','pl-badge',tx('mining.mostProfitable')));c.appendChild(hd);
       const sel=document.createElement('select');sel.className='mn-mitem';sel.dataset.m=m;sel.setAttribute('aria-label','Qué minas');const groups={};
       sortedMats(m).forEach(x=>{(groups[x.grp]||(groups[x.grp]=[])).push(x);});
       Object.keys(groups).forEach(g=>{const og=document.createElement('optgroup');og.label=g;groups[g].forEach(x=>{const o=new Option(x.n,x.n);o.className='no-tr';og.appendChild(o);});sel.appendChild(og);});
