@@ -581,3 +581,11 @@ Capturas del usuario confirman persistencia de fondos oscuros, tarjetas claras y
 - **Pruebas nuevas:** test estático de ensamblado Light, smoke Chromium Light/Dark a 390px, pruebas de identidad DOM para cambios de impuestos/precios, capturas de referencia Dark/Light a 390/1440px; diagnóstico inicial de `refreshNow` sin inventario (no representa carga real).
 - **Entrega:** workflow actualizado a `1.0.116` con artefactos PNG de regresión. La publicación y los tests de esa versión deben verificarse en Actions y Pages antes de afirmar el hito terminado.
 - **Pendientes:** retirar el auto-conversor tras suite amplia de capturas, optimización de inventarios grandes basada en métricas y no intuición, validación ESI/SSO live, separación total del estado global.
+
+
+### Fase 3A — Seguimiento de limpieza CSS y estado de validación
+
+- Segunda limpieza: `light-components.css` ya no repite los tokens `--surface-card`/`--surface-result` ni fondos/bordes de las carcasas Appraisal/Inventory sobrescritos más adelante; `light-foundation.css` ya no duplica fondos del body, opacidad del overlay ni `body::after`. Sus definiciones definitivas permanecen en `light-header-shipping.css` (commits `0f22aa4e`, `80400da6`).
+- Test estático `tests/test_light_generation.py` ahora rechaza esas repeticiones de tokens y overlays (`bbd93307`).
+- **Evidencia verificada:** run `39896552011` terminó correctamente y publicó `1.0.116` en `54334a1c`, correspondiente a fuente `0f22aa4e`.
+- **Limitación explícita:** la limpieza `80400da6` y el test `bbd93307` son posteriores a ese snapshot verificado; validar nueva ejecución y Pages antes de dar esa revisión como publicada. No asumir que esto completa la auditoría total de CSS o la medición con inventarios grandes.
