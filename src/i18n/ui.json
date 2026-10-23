@@ -380,8 +380,8 @@
     "en": "Sell to another player"
   },
   "route.prefix": {
-    "es": "el plan {name}",
-    "en": "the {name} plan"
+    "es": "la ruta «{name}»",
+    "en": "the “{name}” route"
   },
   "route.optimalPhrase": {
     "es": "el plan óptimo",
