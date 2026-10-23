@@ -471,3 +471,17 @@ Ajuste visual complementario al rediseño del navbar: la botonera del extremo su
 - **Commits:** `2190a145` inicial; `b83e2294` traslada el ajuste al origen correcto; `d5b0d620` aplica la normalización después del tema generado.
 - **Verificación:** inspección de código y orden de composición `build.py`. **No verificados todavía:** screenshot Firefox desktop/móvil, contraste pixel a pixel, workflows y publicación real de `index.html`. No declarar esos escenarios probados sin evidencia.
 - **Criterio de aceptación:** todas las secciones de Ventas, Tasación, Inventario, Minería, Skills y Ajustes legibles en Light y Dark; controles legibles con selección/foco; persistencia tras recarga; contraste de los elementos financieros positivo/negativo; ninguna regresión en las fórmulas.
+
+
+## 2026-10-22 — EVE 7 · Auditoría de separación de responsabilidades
+
+**Hallazgos confirmados por inspección estática:**
+- El build combinaba `shell.html`, conversión automática de Light (`light.py`), overrides manuales (`light_extra.css`) y `mining.css` en ese orden; las reglas finales de Minería podían imponerse a Light Mode.
+- `shell.html` contiene múltiples capas de overrides con `!important`, incluidos colores Dark explícitos en encabezado, tarjetas y resultado. El autoconversor de colores no garantiza que una regla Light gane la cascada frente a un selector más específico.
+- El JS principal contiene tanto lógica económica como renderización/persistencia; **no** se movieron ni eliminaron funciones sin pruebas de dependencia. Una futura separación del motor necesita pruebas de equivalencia de resultados, courier, impuestos, reproceso y dos modos de negocio.
+
+**Cambios realizados:** orden de compilación `shell CSS → Light generado → Minería → Light manual final` (`b1c38fc`); Light de componentes de header, Tasación, Inventario, Veredicto y planes en `src/light_extra.css` (`a73a08f`). No se alteraron ecuaciones, endpoints ESI ni autenticación.
+
+**Siguiente refactor recomendado (no realizado):** identificar tokens y componentes compartidos, retirar duplicados cuando existan tests de snapshot CSS; segmentar lógica de dominio, adaptadores ESI, almacenamiento y vistas con pruebas comparativas antes de cambiar su ubicación.
+
+**Verificación:** inspección estática de fuentes; faltan ejecución de build/workflows, captura real Light/Dark y casos de regresión financieros y de persistencia. Los commits en main no acreditan por sí solos que `index.html` haya sido recompilado/desplegado.
