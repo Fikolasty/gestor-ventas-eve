@@ -19,7 +19,7 @@ concurrency:
 jobs:
   compile:
     if: github.ref == 'refs/heads/main'
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
         with:
@@ -36,6 +36,16 @@ jobs:
           grep -q 'Login' index.html
           grep -q 'v1.0.115' index.html
           ! grep -q '/\\*__STYLE_SOURCES__\\*/' index.html
+      - name: Legacy EVE market, mining and skills regressions on assembled sources
+        run: |
+          node tests/mining-smoke.cjs
+          node tests/mining-types.cjs
+          node tests/ice-settings.cjs
+          node tests/mining-price-flow.cjs
+          node tests/trading-unit-prices.cjs
+          node tests/market-scenarios.cjs
+          node tests/financial-accounting.cjs
+          node tests/skills-integration.cjs
       - name: Install headless Chromium for theme smoke tests
         run: |
           python3 -m pip install playwright==1.56.0
