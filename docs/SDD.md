@@ -440,3 +440,17 @@ Ajuste visual complementario al rediseño del navbar: la botonera del extremo su
 
 **Límites de esta verificación:** la revisión estructural del código y las aserciones no son sustitutos de un test visual real con sesión OAuth y consultas ESI. Dejar QA de navegador y SSO como pendiente hasta observarlos ejecutándose.
 
+
+## 2026-10-22 — v1.0.111 · Header inspirado en YouTube (revisión)
+
+**Motivo:** referencia visual explícita de YouTube: cabecera horizontal contenida, navegación en una cápsula central y acciones agrupadas a la derecha. No se toma la búsqueda porque no existe una búsqueda equivalente en el gestor; tampoco se crea un botón de menú sin función. El usuario señaló que seguía viendo la versión anterior en la web tras los commits de v1.0.110.
+
+- **Header principal:** contenedor de ancho completo, contenido máximo centrado con padding fluido; marca SIGMA a la izquierda, bloque original Home/Ventas/Minería/Skill Plan reestilizado como cápsula con opción activa resaltada, controles reales Ajustes/Guía/Tema EVE agrupados a la derecha, y personaje SSO como botón tipo avatar/cápsula.
+- **Contexto de venta:** pequeña franja de segunda fila con «Vender Ítems»/«Comercio Jita» y, solo cuando corresponde, selector de Jita Buy/Sell y switch de envío. En Minería/Skills/PI se colapsa toda la fila secundaria, en lugar de dejar una barra vacía.
+- **Layout adaptable:** una sola fila a partir de 1191px, dos filas hasta 520px, y apilamiento ordenado por debajo de 520px. En 760px las acciones conservan accesibilidad y muestran iconos en lugar de palabras; modo Light conserva contraste.
+- **Preservación crítica:** no se crea ningún ID adicional ni se duplican nodos. Siguen los listeners EVE SSO, navegación de módulos, Dark/Light y paneles Ajustes/Guía. Tasación/Inventario se mantienen simétricos con el mismo CSS aprobado en v1.0.110. El ticker bajo «MARKET MOVES+» sigue como enlace de referido único.
+- **Código:** se sustituye *solo* el bloque de reglas de cabecera v110, delimitado por el comentario de referente «Referral», en `src/shell.html`; se mantienen los demás estilos del hero, cards y módulos, y se modifican aserciones de `tests/market-scenarios.cjs`.
+- **Distribución:** se actualiza el compilador de GitHub Actions a v1.0.111. Es imprescindible un commit nuevo de generación en `index.html` para que GitHub Pages muestre el cambio. Si no aparece dicho commit, investigar el workflow antes de marcar publicación exitosa; revisar cache del navegador únicamente después de confirmar que el artefacto se regeneró.
+
+**QA:** comprobación estática de balance de llaves CSS y unicidad de login/ticker; pruebas de automatización y browser OAuth/ESI requieren verificación mediante Actions o navegador real. No atribuir éxito de despliegue a la mera existencia del commit fuente.
+
