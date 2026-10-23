@@ -2,8 +2,8 @@
 // No live EVE prices or changes to the financial engine: exercise the presentation
 // helper with synthetic rows and ensure both the summary and comparison use it.
 const fs=require('node:fs'),vm=require('node:vm'),assert=require('node:assert/strict');
-const app=fs.readFileSync('src/script.js','utf8');
-const shell=fs.readFileSync('src/shell.html','utf8');
+const app=require('./source-bundle.cjs').script();
+const shell=require('./source-bundle.cjs').shell();
 const start=app.indexOf('function tradePurchaseUnit(r){');
 const end=app.indexOf('\n}\n// Jita purchase scenario',start);
 assert(start>0&&end>start,'Accounting helper must exist and be delimited');
