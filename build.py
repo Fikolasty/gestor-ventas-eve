@@ -8,6 +8,7 @@ y genera el tema claro (src/light.py + src/light_extra.css). Sin dependencias ex
 import json, os, sys
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), 'src'))
 import light as LT
+import build_sources as BS
 
 R = os.path.dirname(os.path.abspath(__file__))
 S = os.path.join(R, 'src')
@@ -17,7 +18,7 @@ if len(sys.argv) < 2:
     sys.exit('uso: python3 build.py <versión>   (ej. 1.0.14)')
 v = sys.argv[1]
 
-js = rd('script.js')
+js = BS.javascript_sources(rd, rd('script.js'))
 js = js.replace('/*__REFINE__*/', rd('refine.js').strip()).replace('__VER__', v)
 js = js.replace('/*__MINING__*/', rd('mining_data.js').strip() + '\n' + rd('mining.js').strip())
 
@@ -99,7 +100,7 @@ js = js.replace('/*__SKILLS__*/', 'const SKILLS_DOCUMENT=' + skills_literal + ';
 D = json.loads(rd('i18n', 'en.json'))
 js = js.replace('/*__I18N__*/{}', json.dumps(D, ensure_ascii=False, separators=(',', ':')))
 
-f = rd('shell.html').replace('__VER__', v).replace('/*__MINING_CSS__*/', '')
+f = rd('shell.html').replace('/*__STYLE_SOURCES__*/', BS.css_sources(rd)).replace('__VER__', v).replace('/*__MINING_CSS__*/', '')
 css = f[f.index('<style>') + 7:f.index('</style>')]
 f = f.replace('</style>', '/* ===== tema claro (generado desde el oscuro por light.py) ===== */\n'
               + LT.light(css) + '\n' + rd('mining.css') + '\n' + rd('light_extra.css') + '</style>', 1)
