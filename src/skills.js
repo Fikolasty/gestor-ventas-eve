@@ -38,7 +38,7 @@ const SkillUI=(()=>{
     if(frame||!root)return;
     frame=document.createElement('iframe');
     frame.className='skills-app-frame';
-    frame.title='Skills Library · Market Moves+';
+    frame.title=language==='en'?'Skill Plans · Market Moves+':'Planes de habilidades · Market Moves+';
     frame.setAttribute('sandbox','allow-scripts');
     frame.setAttribute('allow','clipboard-write');
     frame.setAttribute('referrerpolicy','no-referrer');
@@ -51,7 +51,7 @@ const SkillUI=(()=>{
   };
   const shown=()=>{if(frame){send({kind:'mm-skills-measure'});sync();}};
   const setPilot=data=>{pilot=data?.skills&&Array.isArray(data.skills)?{name:String(data.name||''),skills:data.skills.map(x=>({skill_id:Number(x.skill_id),active_skill_level:Number(x.active_skill_level)||0,skillpoints_in_skill:Number(x.skillpoints_in_skill)||0})).filter(x=>Number.isSafeInteger(x.skill_id)&&x.skill_id>0)}:null;sync();};
-  const setLanguage=l=>{language=l==='en'?'en':'es';send({kind:'mm-skills-language',lang:language});};
+  const setLanguage=l=>{language=l==='en'?'en':'es';if(frame)frame.title=language==='en'?'Skill Plans · Market Moves+':'Planes de habilidades · Market Moves+';send({kind:'mm-skills-language',lang:language});};
   const setTheme=t=>{theme=t==='light'?'light':'dark';send(themeMessage());};
   const destroy=()=>{
     if(frame){frame.remove();frame=null;ready=false;lastHeight=0;}
