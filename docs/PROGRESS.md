@@ -1,7 +1,7 @@
 # PROGRESS — Market Moves+
 
-**Actualizado:** 2026-10-22 (v1.0.110). La auditoría v1.0.66 que sigue debajo es la base histórica.
-**Estado v1.0.110:** rediseño visual del header, ticker de referido debajo de MARKET MOVES+ y simetría entre TASACIÓN e INVENTARIO. Sin modificaciones al motor financiero; detalles y pendientes de QA en [SDD](SDD.md).
+**Actualizado:** 2026-10-22 (v1.0.111). La auditoría v1.0.66 que sigue debajo es la base histórica.
+**Estado v1.0.111:** header inspirado en YouTube: navegación central en cápsula, herramientas alineadas y subbarra contextual; se preservan el ticker bajo MARKET MOVES+ y la simetría entre TASACIÓN e INVENTARIO. Despliegue sujeto a generación de index.html. Sin modificaciones al motor financiero; detalles y pendientes de QA en [SDD](SDD.md).
 **Repositorio autorizado:** Fikolasty/gestor-ventas-eve; no operar con la cuenta Geiner.
 **Base de código auditada inicialmente:** main, v1.0.66, commit 2df3197c02ea156f8c56c772a9a49972a2ea966f.
 **Rama activa para entregas:** `main` (página original). `develop` queda como referencia histórica, sin staging.
