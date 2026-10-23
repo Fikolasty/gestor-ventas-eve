@@ -59,6 +59,19 @@ class ThemeBrowserTests(unittest.TestCase):
             self.assertLess(brightness(color), 130, f"Text contrast failure at {selector}: {color}")
         self.assertGreater(float(self.page.evaluate("getComputedStyle(document.body,'::before').opacity")), 0.2)
 
+    def test_light_ticker_readability_at_rest_and_hover_on_desktop_and_mobile(self):
+        self.page.evaluate("document.documentElement.classList.add('light')")
+        for width, height in [(1440, 900), (390, 844)]:
+            self.page.set_viewport_size({"width": width, "height": height})
+            ticker = self.page.locator(".hero>.hero-referral")
+            # Previous regression: dark background at rest, light on :hover.
+            self.page.mouse.move(1, 1)
+            self.assertGreater(brightness(self.color(".hero>.hero-referral")), 180)
+            self.assertLess(brightness(self.color(".hero>.hero-referral .tk-i", "color")), 130)
+            ticker.hover()
+            self.assertGreater(brightness(self.color(".hero>.hero-referral")), 180)
+            self.assertLess(brightness(self.color(".hero>.hero-referral .tk-i", "color")), 130)
+
     def test_dark_mode_still_uses_dark_surfaces(self):
         self.page.evaluate("document.documentElement.classList.remove('light')")
         self.assertLess(brightness(self.color("header.top.mm-ho-root")), 120)
