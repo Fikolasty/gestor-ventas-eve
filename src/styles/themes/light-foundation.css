@@ -1,0 +1,183 @@
+/* ajustes a mano del tema claro */
+html.light body{background:#e6e3da;color:#1f1e1d}
+html.light body::before{opacity:.30;filter:grayscale(.25) brightness(1.07)}
+html.light body::after{background:none!important}
+html.light *{text-shadow:none!important}
+html.light .btn,html.light .btn *{color:#fff}
+html.light .x-close:hover{color:#1f1e1d}
+html.light .pk-o.on{box-shadow:0 0 0 1px #c96442!important}
+html.light .lot-x:hover{color:#c4473a}
+html.light .cz-d[aria-current="true"]{background:#1f1e1d;color:#faf9f5;border-color:#1f1e1d}
+html.light .sw-t::after{background:#fff}
+html.light .hero h1,html.light .hero p,html.light .hero .tagline,html.light .top .brand,html.light .foot-by,html.light .sw,html.light .route-m{text-shadow:none!important}
+html.light .sw input:checked+.sw-t::after{background:#fff}
+html.light .sw-t{background:#e4e2da;border-color:rgba(31,30,29,.2)}
+html.light .sw input:checked+.sw-t{background:#c96442;border-color:#c96442}
+html.light input,html.light select,html.light textarea{background:#f1eee6}
+html.light .route{background:rgba(240,237,229,.92);border-color:rgba(31,30,29,.14);box-shadow:0 2px 6px rgba(0,0,0,.08)}
+html.light .route>*{color:#2a2926}
+html.light .route .route-b[aria-pressed="true"]{color:#7a3a22}
+html.light .route .route-b[aria-pressed="true"]{background:transparent!important;color:#2a2926!important}
+html.light .route .route-b[aria-pressed="true"] .route-ic{background:#c96442;border-color:#c96442}
+html.light .route .route-b[aria-pressed="true"] .route-ic::before{background:#fff}
+html.light .route>*{color:#2a2926!important}
+html.light .side .route{background:none!important;border:0!important;box-shadow:none!important}
+html.light .route .route-ic{background:#e4e2da!important;border-color:rgba(31,30,29,.2)!important}
+html.light .route .route-ic::before{background:#5e5d59!important}
+html.light .route .route-b[aria-pressed="true"] .route-ic{background:#c96442!important;border-color:#c96442!important}
+html.light .route .route-b[aria-pressed="true"] .route-ic::before{background:#fff!important}
+html.light .side{box-shadow:4px 0 14px rgba(0,0,0,.06)}
+/* v1.0.13: Ajustes en Light */
+html.light #settings fieldset.st{background:linear-gradient(180deg,#f7f5ef,#efece4)!important;border-color:rgba(31,30,29,.12)!important;box-shadow:inset 0 1px 0 #fff,0 1px 2px rgba(0,0,0,.08),0 6px 16px rgba(0,0,0,.07)!important}
+html.light #settings fieldset.st:not(.closed){border-color:rgba(201,100,66,.45)!important;box-shadow:inset 3px 0 0 #c96442,inset 0 1px 0 #fff,0 2px 4px rgba(0,0,0,.08),0 10px 22px rgba(0,0,0,.09)!important}
+html.light #settings fieldset.st>legend .ic{background:linear-gradient(180deg,rgba(201,100,66,.16),rgba(201,100,66,.07));border-color:rgba(201,100,66,.35);box-shadow:inset 0 1px 0 rgba(255,255,255,.7),0 1px 3px rgba(0,0,0,.1)}
+html.light #settings fieldset.st>legend .ic::before{background:#c96442}
+html.light #settings fieldset.st:not(.closed)>legend .ic{background:linear-gradient(180deg,#d9785a,#c96442);border-color:#c96442}
+html.light #settings fieldset.st:not(.closed)>legend .ic::before{background:#fff}
+html.light #settings .st-f{background:#fbfaf6;border-color:rgba(31,30,29,.08);box-shadow:inset 0 1px 0 #fff}
+html.light #settings .st-f .st-l,html.light #settings .st-ck .st-l{color:#2a2926}
+html.light #settings .st-f input:not([type=checkbox]),html.light #settings .st-f select,html.light #settings .st-f textarea{background:#fff!important;border-color:rgba(31,30,29,.16)!important;box-shadow:inset 0 1px 2px rgba(0,0,0,.08)!important;color:#1f1e1d}
+html.light #settings .st-f input:not([type=checkbox]):focus,html.light #settings .st-f select:focus,html.light #settings .st-f textarea:focus{border-color:#c96442!important;box-shadow:0 0 0 3px rgba(201,100,66,.18)!important}
+html.light #settings .st-i{background:rgba(201,100,66,.06);border-left-color:rgba(201,100,66,.6);color:#4d4c48}
+html.light #settings .st-sec-t{color:#b5583a!important}
+html.light #settings .st-tools .ghost{background:linear-gradient(180deg,#fbfaf6,#eeebe3);border-color:rgba(31,30,29,.14);box-shadow:inset 0 1px 0 #fff,0 1px 3px rgba(0,0,0,.08)}
+html.light #settings fieldset.st:not(.closed)>legend{border-bottom-color:rgba(31,30,29,.08)}
+/* v1.0.19: Pasos para Vender en Light */
+html.light .stp{background:linear-gradient(180deg,#f7f5ef,#efece4);border-color:rgba(31,30,29,.12);box-shadow:inset 0 1px 0 #fff,0 1px 2px rgba(0,0,0,.08),0 6px 16px rgba(0,0,0,.07)}
+html.light .pl-moreb{background:rgba(0,0,0,.02)}
+/* v1.0.20: Elige un Plan en Light */
+html.light .pk-dot{border-color:rgba(31,30,29,.35);box-shadow:inset 0 1px 2px rgba(0,0,0,.12)}
+html.light .pk-o.on .pk-dot{border-color:#c96442}html.light .pk-o.on .pk-dot::after{background:#c96442;box-shadow:none}
+html.light .pk-bar{background:rgba(0,0,0,.07);box-shadow:inset 0 1px 2px rgba(0,0,0,.1)}
+html.light .pk-bar i{background:linear-gradient(90deg,rgba(31,30,29,.25),rgba(31,30,29,.45))}
+html.light .pk-o.best .pk-bar i{background:linear-gradient(90deg,#3f8f63,#4ea877)}
+html.light .pk-o.on .pk-bar i{background:linear-gradient(90deg,#c96442,#d9785a)}
+html.light .pk .pk-o.on{background:linear-gradient(90deg,rgba(201,100,66,.10),rgba(255,255,255,.6) 60%)!important;box-shadow:inset 3px 0 0 #c96442!important}
+html.light .pk-rec{color:#2f7a52;border-color:rgba(47,122,82,.4)}
+html.light .pk-flt{background:#fff;border-color:rgba(31,30,29,.14);box-shadow:inset 0 1px 2px rgba(0,0,0,.08)}
+html.light .pk-fb.on{background:#f3efe7;color:#1f1e1d;box-shadow:0 0 0 1px rgba(201,100,66,.6)}
+html.light .pk-fb:hover{color:#1f1e1d}
+html.light .pk-sh.y{color:#9a6a12}
+html.light .pk-hc:hover:not(:disabled),html.light .pk-hc.on{color:#b5583a}
+html.light .pk .pk-o{background:linear-gradient(180deg,#f7f5ef,#efece4);border-color:rgba(31,30,29,.12);box-shadow:inset 0 1px 0 #fff,0 1px 2px rgba(0,0,0,.07)}
+/* v1.0.22: overview en Light */
+html.light .ov-card,html.light .ov-kpi>div{background:linear-gradient(180deg,#f7f5ef,#efece4);border-color:rgba(31,30,29,.12);box-shadow:inset 0 1px 0 #fff,0 1px 2px rgba(0,0,0,.07)}
+html.light .ov-bar{background:#e4e1d8;box-shadow:inset 0 1px 2px rgba(0,0,0,.12)}
+html.light .ov-trk .tk{background:#5e5d59}html.light .ov-trk .me{border-color:#fff}
+html.light .ov-leg .cost b{color:#b23b32}
+
+/* v1.0.45: Tasación en Light */
+html.light .appr{background:linear-gradient(180deg,#f7f5ef,#efece4);border-color:rgba(31,30,29,.12);box-shadow:inset 0 1px 0 #fff,0 1px 2px rgba(0,0,0,.07)}
+html.light .appr-g{background:#fbfaf6;border-color:rgba(31,30,29,.12)}
+html.light .appr-c+.appr-c,html.light .appr-c>div+div{border-color:rgba(31,30,29,.1)}
+html.light .appr-c dt{color:#5e5d59}html.light .appr-c dd{color:#1f1e1d}
+html.light .appr-c dd .copy:hover{background:#ebe8df;border-color:rgba(31,30,29,.18)}
+html.light .appr-c .t-buy dd{color:#b23b32}html.light .appr-c .t-split dd{color:#9a6a12}html.light .appr-c .t-sell dd{color:#2f7d4f}
+
+/* v1.0.49: Ver más planes y botón del análisis en Light */
+html.light .more-btn b{color:#b5532f!important}
+html.light .more-btn{background:linear-gradient(90deg,rgba(217,119,87,.16),#f7f5ef 60%)!important;color:#1f1e1d!important;box-shadow:inset 3px 0 0 #d97757,0 1px 2px rgba(0,0,0,.08)!important}
+
+/* v1.0.51: «Listado de Items Registrados» plegado en Light */
+html.light details.fold:not([open]){background:linear-gradient(90deg,rgba(217,119,87,.16),#f7f5ef 60%)!important;box-shadow:inset 3px 0 0 #d97757,0 1px 2px rgba(0,0,0,.08)!important}
+html.light #esiStatus.cta{color:#b5532f}
+html.light .pk-x{color:#b5532f;background:rgba(217,119,87,.1)}
+/* v1.0.53: enlace de Skill Points en Light */
+/* v1.0.57: margen en Light */
+html.light .route-m{background:#f7f5ef;border-color:rgba(31,30,29,.14)}
+html.light .route-m .rm-f{background:#fff;border-color:rgba(31,30,29,.2)}
+html.light .fold-cta{color:#b5532f}
+/* v1.0.59: pasos y casillas en Light */
+html.light .stp-ct{background:#efece4;border-color:rgba(31,30,29,.12);box-shadow:inset 0 1px 3px rgba(0,0,0,.08)}
+html.light .slot{background:#fff;border-color:rgba(31,30,29,.14);box-shadow:inset 0 1px 2px rgba(0,0,0,.06)}
+html.light .stp-ct-t{color:#b5532f}
+html.light .stp-main>.pl,html.light .stp-main .ct-items{background:#efece4!important;border-color:rgba(31,30,29,.12)!important;box-shadow:inset 0 1px 3px rgba(0,0,0,.08)!important}
+html.light #help .hp-c,html.light #help .hp-t>div{background:#efece4!important;border-color:rgba(31,30,29,.12)!important;box-shadow:inset 0 1px 3px rgba(0,0,0,.08)!important}
+html.light #help .hp-c p,html.light #help .hp-t span{color:#3d3c39}
+html.light #help .hp-t b{color:#b5532f}
+/* v1.0.62: ticker en Light */
+html.light .ticker{background:linear-gradient(90deg,rgba(217,119,87,.18),#f7f5ef 30%,#f7f5ef 70%,rgba(217,119,87,.18));color:#7a3a1f}
+html.light .tk-i b{color:#b5532f}
+html.light .sn-x{background:#fff;color:#7a3a1f}
+html.light .tk-i .ref-tag{color:#fff}
+/* v1.0.65 */
+html.light #settings fieldset.st{background:#efece4!important;box-shadow:inset 0 1px 3px rgba(0,0,0,.08)!important}
+html.light #settings fieldset.st:not(.closed){box-shadow:inset 3px 0 0 #d97757,inset 0 1px 3px rgba(0,0,0,.08)!important}
+html.light #settings .st-f{background:#f7f5ef}
+html.light #settings .st-f input:not([type=checkbox]),html.light #settings .st-f select,html.light #settings .st-f textarea{background:#fff!important}
+html.light .sub-h{color:#b5532f!important}
+/* v1.0.111 build synchronization: the canonical Python build produces the published index.html. */
+
+/* Light Mode foundation — all modules inherit readable semantic colors.
+   Keep the hero photographic backdrop dark, while surfaces and controls turn light.
+   Scoped to html.light: Dark Mode has no behavioral/visual changes. */
+html.light{
+  color-scheme:light;
+  --void:#f0eee9;--hull:#ffffff;--hull2:#f7f5f1;
+  --line:rgba(55,46,38,.15);--line2:rgba(55,46,38,.23);
+  --txt:#292723;--mut:#554f48;--dim:#6d665e;--ion:#544f48;
+  --blue:#625f59;--gain:#137344;--loss:#b12e30;--thrust:#885b16;--clay:#b65334;
+}
+html.light body{background:#eeece7;color:var(--txt)}
+/* Preserve the EVE station and legible, white hero branding. */
+html.light body::before{background-color:#252422}
+html.light .hero>.title,html.light .hero>.title h1{color:#fff}
+html.light .hero>.title .tagline{color:#eee8df}
+html.light .hero>p{color:#eee9e2}
+html.light .panel,html.light details.panel,html.light .appr,html.light .hero-intro>.paste{
+  background:linear-gradient(180deg,rgba(255,255,255,.98),rgba(248,246,242,.98))!important;
+  border-color:var(--line)!important;
+  color:var(--txt);
+  box-shadow:0 5px 22px rgba(25,20,17,.12),inset 0 1px 0 #fff!important;
+}
+html.light .verdict{
+  background:radial-gradient(100% 75% at 0 0,rgba(19,115,68,.07),transparent 60%),linear-gradient(180deg,#fff,#f8f6f2)!important;
+}
+html.light .panel::before{background:linear-gradient(90deg,transparent,rgba(65,53,42,.15),transparent)}
+html.light .paste textarea,html.light textarea,html.light input:not([type=checkbox]):not([type=radio]),html.light select{
+  color:var(--txt);background:#fff;border-color:var(--line2);
+  box-shadow:inset 0 1px 2px rgba(0,0,0,.05);
+}
+html.light .paste textarea{background:transparent;border:0;box-shadow:none}
+html.light input::placeholder,html.light textarea::placeholder{color:var(--dim)}
+html.light select option{background:#fff;color:#292723}
+html.light :focus-visible{outline-color:#a45134}
+html.light input:focus,html.light select:focus,html.light textarea:focus{border-color:#a45134;box-shadow:0 0 0 3px rgba(164,81,52,.15)}
+html.light .ghost,html.light .copy,html.light .tab,html.light .dest,html.light .msg,
+html.light .receipt,html.light .guide,html.light .route,html.light .mm-business-switch,
+html.light .mm-import-controls,html.light #pkOpportunity{
+  background:#f7f5f1!important;color:var(--txt);border-color:var(--line2)!important;
+  box-shadow:0 2px 7px rgba(35,28,23,.07)!important;
+}
+html.light .dest b,html.light .guide li b,html.light .receipt .rw,html.light .rc-t,
+html.light .copy,html.light .sub-h{color:var(--txt)}
+html.light .route>*{color:var(--txt)!important}
+html.light .route>.route-b[aria-pressed=true]{color:#713c2a!important}
+html.light .route .route-ar{color:var(--mut)}
+html.light .lot.open{background:#f5f3ef!important;box-shadow:0 4px 12px rgba(35,28,23,.08)!important}
+html.light .lot-head:hover,html.light .lot.open .lot-head{background:rgba(58,48,40,.055)}
+html.light .opt-bar,html.light .split{background:rgba(45,40,35,.11)}
+html.light .opt-bar i{background:#978f83}
+html.light .v-isk,html.light .lot-net,html.light .opt-v,html.light .rc-t b{ text-shadow:none!important }
+html.light .pos,html.light .p-null{color:var(--gain)}
+html.light .neg{color:var(--loss)}
+html.light .p-jita{color:#4c504d;border-color:rgba(55,46,38,.24);background:rgba(55,46,38,.065)}
+html.light .tag.ok{color:var(--gain)}
+html.light .tag.warn,html.light .sk-note{color:#865516}
+html.light .mm-title,html.light .panel h2,html.light .panel h3,
+html.light th,html.light td,html.light legend{color:var(--txt)}
+html.light th,html.light td{border-color:var(--line)}
+html.light .mm-modnav,html.light #mmTabs>.mm-ho-main{background:#f6f3ed}
+html.light #mmTabs .mm-mod:not([aria-selected=true]){color:var(--mut)}
+html.light #mmTabs .mm-mod[aria-selected=true]{color:#823f29}
+html.light button:disabled{opacity:.55}
+/* Restore the dark contrast specifically for accent-filled calls-to-action. */
+html.light .btn{color:#fff}
+html.light .btn:hover{color:#fff}
+/* For embedded module surfaces with a hard-coded dark backing. */
+html.light .mm-pi-placeholder,html.light .mm-pi-features>div,
+html.light #verdict .ov-flow{background:#f7f5f1!important;color:var(--txt)}
+/* Native widgets, especially Firefox dropdowns, follow the selected theme. */
+html:not(.light){color-scheme:dark}
+
+
