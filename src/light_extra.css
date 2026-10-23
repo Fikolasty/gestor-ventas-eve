@@ -106,3 +106,4 @@ html.light #settings fieldset.st:not(.closed){box-shadow:inset 3px 0 0 #d97757,i
 html.light #settings .st-f{background:#f7f5ef}
 html.light #settings .st-f input:not([type=checkbox]),html.light #settings .st-f select,html.light #settings .st-f textarea{background:#fff!important}
 html.light .sub-h{color:#b5532f!important}
+/* v1.0.111 build synchronization: the canonical Python build produces the published index.html. */
