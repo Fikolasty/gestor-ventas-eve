@@ -2,8 +2,8 @@
 const fs=require('node:fs'), vm=require('node:vm'), assert=require('node:assert/strict');
 const html=fs.readFileSync('index.html','utf8');
 const source=fs.readFileSync('src/skills_preview.html','utf8');
-const shell=fs.readFileSync('src/shell.html','utf8');
-const app=fs.readFileSync('src/script.js','utf8');
+const shell=require('./source-bundle.cjs').shell();
+const app=require('./source-bundle.cjs').script();
 const build=fs.readFileSync('build.py','utf8');
 const bridge=fs.readFileSync('src/skills.js','utf8');
 assert.match(shell,/data-mm-module="skills"/);
