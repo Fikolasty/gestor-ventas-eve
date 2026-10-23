@@ -1,3 +1,11 @@
+## v1.0.110 — 2026-10-22
+- Compact SIGMA GRINDSET branding; remove redundant “EVE Online” and main-title tagline.
+- Move the unique 1M Skill Points referral link into a readable animated ticker below MARKET MOVES+; remove the Gratis tag.
+- Show Settings and Help as real bordered buttons; theme switch beside them; increase SSO portrait, label and hit target.
+- Appraisal/Inventory: equal-width/equal-height cards, matched headers and spacing; responsive stack at 860px.
+- Replace v109 header-specific CSS rather than piling additional overrides. Keep core EVE API, financial math, business modes, Light/Dark and authentication DOM intact.
+- Update header regression assertions and GitHub Actions generated site to 1.0.110; details and QA limits in docs/SDD.md.
+
 ## v1.0.109 — 2026-10-22
 - Header aprobado reorganizado; se conservan todos los módulos y motores existentes.
 - Navegación y contexto de comercio sin controles redundantes; margen en Ajustes.
