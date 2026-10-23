@@ -10,7 +10,7 @@ body .top.mm-ho-root{
   min-height:0!important;margin:0!important;
   padding:10px max(20px,calc((100vw - 1490px)/2)) 0!important;
   border-bottom:1px solid rgba(222,220,209,.13)!important;
-  background:var(--header-surface,rgba(21,21,22,.96))!important;
+  background:var(--header-surface)!important;
   box-shadow:0 5px 22px rgba(0,0,0,.24)!important;
 }
 body .top.mm-ho-root>.brand{
@@ -300,11 +300,11 @@ html.light body .top.mm-ho-root .mm-ho-context .mm-buy-basis select{
   width:min(610px,100%)!important;max-width:100%!important;
   min-height:37px!important;height:37px!important;margin:16px auto 5px!important;
   padding:0!important;border:1px solid rgba(217,119,87,.37)!important;
-  border-radius:9px!important;background:var(--ticker-surface,rgba(22,21,21,.91))!important;
+  border-radius:9px!important;background:var(--ticker-surface)!important;
   box-shadow:0 3px 12px rgba(0,0,0,.2)!important;overflow:hidden!important;
   -webkit-mask-image:none!important;mask-image:none!important;color:var(--txt)!important;
 }
-.hero>.hero-referral:hover{border-color:var(--clay)!important;background:var(--ticker-hover,rgba(37,29,25,.96))!important}
+.hero>.hero-referral:hover{border-color:var(--clay)!important;background:var(--ticker-hover)!important}
 .hero>.hero-referral .tk-track{
   display:flex!important;align-items:center!important;height:100%!important;width:max-content!important;
   animation:tk 30s linear infinite!important;
@@ -320,7 +320,6 @@ html.light body .top.mm-ho-root .mm-ho-context .mm-buy-basis select{
 .hero .title{margin:0!important}
 .hero .title h1{margin:0!important}
 .hero{padding-top:35px}
-html.light body .top.mm-ho-root{background:rgba(247,245,239,.94)!important;border-color:rgba(69,53,43,.2)!important}
 html.light body .top.mm-ho-root .mm-top-actions>.top-header-action,
 html.light body .top.mm-ho-root .mm-top-actions>.top-guide-action,
 html.light body .top.mm-ho-root .mm-profile-row .eve-identity-button{
@@ -330,5 +329,3 @@ html.light body .top.mm-ho-root .mm-profile-row .eve-identity-button{
 html.light body .top.mm-ho-root .mm-ho-context .mm-buy-basis select{
   background:#fff!important;color:#2e2923!important
 }
-html.light .hero>.hero-referral{background:rgba(248,247,244,.94)!important;color:#372e28!important}
-html.light .hero>.hero-referral .tk-i b{color:#a35030!important}
