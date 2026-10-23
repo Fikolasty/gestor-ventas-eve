@@ -65,3 +65,11 @@ html.light #unitCourierRows .mm-unit-row{
 }
 html.light #unitCourierRows .mm-unit-row span,
 html.light #unitCourierRows .mm-unit-row small{color:var(--mut)!important}
+
+/* Guide panels share Sales theme tokens in Light, too. */
+html.light #help .hp-c,html.light #help .hp-t>div{
+  background:var(--surface-card)!important;border-color:var(--line)!important;
+  box-shadow:none!important;color:var(--txt)!important;
+}
+html.light #help :is(.hp-c h3,.hp-t>div>b,.hp-c b){color:var(--txt)!important}
+html.light #help :is(.hp-c p,.hp-t>div>span){color:var(--mut)!important}
