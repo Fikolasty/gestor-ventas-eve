@@ -131,6 +131,8 @@ class ThemeBrowserTests(unittest.TestCase):
         self.assertEqual(en[1],'NET SALES AFTER FEES')
         self.assertEqual(en[2],'SHIPPING')
         self.assertEqual(en[3],'★ Most profitable')
+        self.assertEqual(self.page.evaluate("modeName('auto')"),'Optimal plan')
+        self.assertIn('Import and sell in ',self.page.evaluate("modeName('fN')"))
         self.page.evaluate("setLang('es')")
         es=self.page.evaluate("""() => [
             tx('picker.optimalSummary'),tx('verdict.netSales'),
@@ -140,6 +142,8 @@ class ThemeBrowserTests(unittest.TestCase):
         self.assertEqual(es[1],'VENTAS NETAS DESPUÉS DE TASAS')
         self.assertEqual(es[2],'ENVÍO')
         self.assertEqual(es[3],'★ Más rentable')
+        self.assertEqual(self.page.evaluate("modeName('auto')"),'Plan óptimo')
+        self.assertIn('Importar y vender en ',self.page.evaluate("modeName('fN')"))
 
     def test_skills_inherits_parent_fonts_and_dark_light_surfaces(self):
         from playwright.sync_api import expect
