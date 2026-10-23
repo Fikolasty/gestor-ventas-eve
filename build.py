@@ -82,7 +82,8 @@ window.addEventListener('message',event=>{
       document.documentElement.style.setProperty('--mm-font',tokens.font);
     if(typeof tokens.size==='string'&&/^\d+(?:\.\d+)?px$/.test(tokens.size))
       document.documentElement.style.setProperty('--mm-size',tokens.size);
-    render();announceHeight();
+    // Theme tokens are pure CSS: no plan recomputation or DOM replacement.
+    requestAnimationFrame(announceHeight);
   }
   if(m.kind==='mm-skills-pilot'){
     pilotConnected=!!m.connected&&Array.isArray(m.skills);
