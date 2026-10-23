@@ -316,9 +316,9 @@ function paintCourierUnits(P){
     }
     host.append(card);
   });
-  // A display-only reference; our net route optimizer remains the authoritative
-  // calculation of received ISK after sales taxes and courier.
-  host.title=tx('freight.reference');
+  // A display-only reference; the plan result remains authoritative after
+  // market fees and courier. Keep the fee caveat visible instead of tooltip-only.
+  host.append(el('p','mm-freight-note',tx('freight.reference')));
 }
 function paintSummary(P){
   const box=$('pSum'),none=!P.rows.length||P.missing.length===P.rows.length;
