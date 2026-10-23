@@ -16,12 +16,6 @@ html.light body .top.mm-ho-root .mm-profile-row *,
 html.light body .top.mm-ho-root .mm-top-actions{
   color:var(--txt)!important;
 }
-html.light .hero>.hero-referral,
-html.light .hero>.hero-referral .tk-track{
-  background:#f8f6f2!important;color:#332c25!important;
-}
-html.light .hero>.hero-referral .tk-i{color:#332c25!important}
-html.light .hero>.hero-referral .tk-i b{color:#9c4226!important}
 html.light .hero-intro:not(.no-appr)>.appr,
 html.light .hero-intro:not(.no-appr)>.paste{
   background:rgba(251,250,247,.98)!important;
@@ -115,12 +109,6 @@ html.light #verdict .v-finance-item .neg{color:var(--loss)!important}
 html.light #verdict .v-isk{color:var(--txt)}
 html.light #verdict .v-isk.pos{color:var(--gain)!important}
 html.light #verdict .v-isk.neg{color:var(--loss)!important}
-html.light .hero-intro:not(.no-appr)>.appr,
-html.light .hero-intro:not(.no-appr)>.paste{
-  background:var(--surface-card)!important;
-  border-color:var(--edge)!important;
-  box-shadow:0 6px 18px rgba(41,31,24,.09)!important;
-}
 html.light .hero-intro:not(.no-appr)>.appr .appr-g,
 html.light .hero-intro:not(.no-appr)>.paste textarea{
   background:#fff!important;color:var(--txt)!important;
