@@ -19,6 +19,13 @@ if len(sys.argv) < 2:
 v = sys.argv[1]
 
 js = BS.javascript_sources(rd, rd('script.js'))
+# Typed UI messages are embedded in the earliest formatter module so every
+# module (including Settings created before translator.js) can use tx(key).
+UI_MESSAGES = json.loads(rd('i18n', 'ui.json'))
+assert all(set(entry) == {'es','en'} and all(isinstance(v,str) for v in entry.values())
+           for entry in UI_MESSAGES.values()), 'Malformed bilingual UI catalog'
+js = js.replace('/*__UI_CATALOG__*/{}', json.dumps(UI_MESSAGES, ensure_ascii=False, separators=(',', ':')))
+
 js = js.replace('/*__REFINE__*/', rd('refine.js').strip()).replace('__VER__', v)
 js = js.replace('/*__MINING__*/', rd('mining_data.js').strip() + '\n' + rd('mining.js').strip())
 
