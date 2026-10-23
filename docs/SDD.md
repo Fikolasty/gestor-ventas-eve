@@ -557,3 +557,17 @@ Capturas del usuario confirman persistencia de fondos oscuros, tarjetas claras y
 - CI `rebuild-market-moves.yml`: valida pruebas Python + Node y browser antes de publicar `index.html` v1.0.114; sólo tras ejecutar correctamente estos pasos escribe `docs/QA_STATUS.md` con fuente y número del run.
 
 **No verificado aún:** el último workflow de navegador, cobertura visual total, desempeño real (fps/long tasks/memoria), ESI/SSO end-to-end y publicación real de Pages en cliente. Un commit de código o build anterior no significa que el gate Chromium actual haya pasado. La limpieza de overrides Light sigue pendiente, al igual que la separación formal del estado global `S`/`C` del motor restante.
+
+
+## 2026-10-22 — EVE 7 · Root cause de version antigua y CI (v1.0.115)
+
+**Diagnóstico comprobado en Actions (2026-10-23 UTC):**
+1. `rebuild-market-moves.yml` ejecutó pruebas Python, Node de SIGMA Freight y tests de integración financiera/minería, build y test Chromium Light/Dark/Login con éxito en la ejecución 39893710750. La publicación *falló* en `git push` porque `main` avanzó durante el trabajo (`non-fast-forward`).
+2. Playwright antiguo en `ubuntu-latest` se ejecutaba en Ubuntu 26.04, entorno que no soporta Chromium con la versión instalada; se fijó `ubuntu-24.04` y la fase de navegador ya pasó.
+3. Los tests de Minería y mercado examinaban `src/script.js` monolítico directamente, dando falsos negativos al separar funciones. `tests/source-bundle.cjs` reconstruye fuentes desde `src/build_sources.py` y los tests existentes ahora evalúan el **script y CSS ensamblados**.
+4. El workflow heredado `build-site.yml` seguía intentando publicar **v1.0.111** en paralelo al compilador v1.0.115, una carrera capaz de restaurar el diseño y textos antiguos. Se eliminó la escritura en ese workflow, reducido a validación read-only; **sólo `rebuild-market-moves.yml` publica**.
+5. `mining-check.yml` compila v1.0.115 antes de lanzar pruebas; verificada ejecución 39893761644 con `success` para Minería.
+
+**Correcciones fuente:** `light.py` ya no autoconvierte reglas que comienzan por `html.light`, evitando `html.light.light`; `tests/test_light_generation.py` cubre este caso. `courier.js` mantiene el motor de envío modular/puro con pruebas de equivalencia.
+
+**Pipeline pendiente de comprobación:** `rebuild-market-moves.yml` incorpora reintentos de rebase no destructivos para publicar `index.html` cuando la rama avanza. Verificar que la nueva ejecución publique la versión vigente y `docs/QA_STATUS.md` antes de declarar Pages al día. La prueba en Chromium constata condiciones concretas de contraste, no una inspección visual exhaustiva.
