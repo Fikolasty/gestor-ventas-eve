@@ -43,6 +43,9 @@ class LightGeneratorTests(unittest.TestCase):
         self.assertIn("--ticker-surface:rgba(250,248,245,.94)", css)
         self.assertIn("html.light #unitCourierBox.mm-unit-courier", css)
         self.assertEqual(css.count("/* EVE7 theme ownership:"), 1)
+        self.assertEqual(css.count("--surface-card:"), 1)
+        self.assertEqual(css.count("--surface-result:"), 1)
+        self.assertEqual(css.count("html.light body::after{background:none!important}"), 1)
         self.assertEqual(css.count("html.light .hero>.hero-referral .tk-i b{"), 1)
         self.assertNotIn("html.light.light", css)
 
