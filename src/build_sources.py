@@ -22,6 +22,11 @@ JS_PARTS = (
     ("/*__MODULE_ESI__*/", ("js", "services", "esi.js")),
     ("/*__MODULE_REFINING__*/", ("js", "domain", "refining.js")),
     ("/*__MODULE_PLANNING__*/", ("js", "domain", "planning.js")),
+    ("/*__MODULE_LEDGER_UI__*/", ("js", "ui", "ledger.js")),
+    ("/*__MODULE_SELLING_RESULTS__*/", ("js", "ui", "selling-results.js")),
+    ("/*__MODULE_FULFILLMENT_UI__*/", ("js", "ui", "fulfillment.js")),
+    ("/*__MODULE_REFINING_VIEW__*/", ("js", "ui", "refining-view.js")),
+    ("/*__MODULE_PLAN_PICKER__*/", ("js", "ui", "plan-picker.js")),
 )
 
 def css_sources(read):
