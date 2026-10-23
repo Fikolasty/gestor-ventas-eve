@@ -81,7 +81,7 @@
     <div class="mm-modgroup" role="tablist" aria-label="Módulos de Market Moves+">
     <button type="button" class="mm-mod on" data-mm-module="ventas" role="tab" aria-controls="salesBody" aria-selected="true" id="mmTabVentas" title="Ventas" aria-label="Ventas"><span class="ic i-list" aria-hidden="true"></span><span class="mm-mod-label">Ventas</span></button>
     <button type="button" class="mm-mod" data-mm-module="mining" role="tab" aria-controls="mining" aria-selected="false" id="mmTabMining" title="Minería" aria-label="Minería"><span class="mm-mining-icon" aria-hidden="true"><img class="mm-eve-hulk-icon" src="__HULK_ICON__" alt="" width="28" height="26"></span><span class="mm-mod-label">Minería</span></button>
-    <button type="button" class="mm-mod" data-mm-module="skills" role="tab" aria-controls="skills" aria-selected="false" id="mmTabSkills" title="Skill Plan" aria-label="Skill Plan"><span class="mm-skills-icon" aria-hidden="true"><span class="ic i-key"></span><img class="mm-eve-skill-icon" src="https://images.evetech.net/types/3426/icon?size=64" alt="" width="20" height="20" loading="lazy" onerror="this.hidden=true"></span><span class="mm-mod-label">Skill Plan</span></button>
+    <button type="button" class="mm-mod" data-mm-module="skills" role="tab" aria-controls="skills" aria-selected="false" id="mmTabSkills" title="Planes de habilidades" aria-label="Planes de habilidades"><span class="mm-skills-icon" aria-hidden="true"><span class="ic i-key"></span><img class="mm-eve-skill-icon" src="https://images.evetech.net/types/3426/icon?size=64" alt="" width="20" height="20" loading="lazy" onerror="this.hidden=true"></span><span class="mm-mod-label">Planes de habilidades</span></button>
     <!-- PI temporalmente fuera de navegación; conservar para reactivar más adelante.
     <button type="button" class="mm-mod" data-mm-module="pi" role="tab" aria-controls="pi" aria-selected="false" id="mmTabPi">Industria Planetaria · PI</button>
     -->
@@ -141,11 +141,10 @@ Contraband Freight = no</textarea><small>Una regla por línea: Nombre = tax tota
   </section>
     <section class="panel" id="mining" hidden>
     <div class="x-wrap"><button type="button" class="x-close" data-close="mining" aria-label="Cerrar Comparativa Minera" title="Cerrar Comparativa Minera"></button></div>
-    <h2><span class="ic i-rock" aria-hidden="true"></span>Comparativa Minera · Omega y Nave Maxiada</h2>
-    <p class="lead">Compara Barges y Exhumers en luna, hielo y gas del territorio Guristas, calcula ISK por hora con ESI y planifica la productividad de tus cuentas Omega.</p>
+    <header class="mm-section-head mm-module-heading"><h2 class="mm-title">MINERÍA</h2><p class="mm-section-sub">COMPARA NAVES, RENDIMIENTO Y PLANES OMEGA</p></header>
     <div id="mnRoot"></div>
   </section>
-  <section class="panel mm-skills-panel" id="skills" role="tabpanel" aria-labelledby="mmTabSkills" hidden><div id="skillRoot"></div></section>
+  <section class="panel mm-skills-panel" id="skills" role="tabpanel" aria-labelledby="mmTabSkills" hidden><header class="mm-section-head mm-module-heading"><h2 class="mm-title">PLANES DE HABILIDADES</h2><p class="mm-section-sub">ENTRENAMIENTO, SKILLBOOKS Y PLANES PERSONALIZADOS</p></header><div id="skillRoot"></div></section>
   <section class="panel mm-pi-panel" id="pi" role="tabpanel" aria-label="Industria Planetaria (temporalmente deshabilitada)" hidden>
     <header class="mm-section-head"><h2 class="mm-title">INDUSTRIA PLANETARIA</h2><p class="mm-section-sub">PLANIFICA TU PI Y PRODUCCIÓN DE FUEL BLOCKS</p></header>
 
@@ -163,21 +162,21 @@ Contraband Freight = no</textarea><small>Una regla por línea: Nombre = tax tota
   </section>
 <section class="panel" id="help" hidden>
     <div class="x-wrap"><button type="button" class="x-close" data-close="help" aria-label="Cerrar Guía de Uso" title="Cerrar Guía de Uso"></button></div>
-    <h2><span class="ic i-help" aria-hidden="true"></span>Guía de Uso</h2>
-    <p class="lead">Pega tus items, espera los precios de Jita 4-4 y Market Moves+ te dice dónde venderlos, cuánto recibirías y cómo hacerlo paso a paso. No necesitas iniciar sesión.</p>
+    <header class="mm-section-head mm-module-heading"><h2 class="mm-title">GUÍA DE USO</h2><p class="mm-section-sub">DEL INVENTARIO A LA MEJOR RUTA DE VENTA</p></header>
+    <p class="lead">Pega tu inventario para comparar rutas de venta con precios de EVE. Puedes empezar sin iniciar sesión; conectar tu piloto es opcional para usar sus habilidades.</p>
     <div class="hp">
       <div class="hp-c"><h3><span class="hp-n">1</span>Copia tu Inventario</h3>
         <p>En EVE abre el inventario en vista de lista con al menos las columnas <b>Name</b> y <b>Quantity</b>. Si también ves <b>Volume</b> y <b>Est. Price</b>, mejor: se usan para verificar.</p>
         <p>Selecciona los items, copia con <b>Ctrl+C</b> y pégalos en el recuadro de inicio con <b>Ctrl+V</b>. Al pegar aparece la Tasación (Buy, Split y Sell de Jita, como Janice).</p></div>
       <div class="hp-c"><h3><span class="hp-n">2</span>Espera los Precios</h3>
-        <p>Los precios salen de la API oficial de EVE (ESI, de Fenris Creations). Espera a que termine de cargar: un item sin precio no entra en el total.</p>
+        <p>Los precios de mercado se consultan mediante ESI de EVE Online. Espera a que termine la actualización y revisa los avisos de ítems con cotizaciones incompletas.</p>
         <p>Si un item tiene avisos (volumen distinto, precio atípico, pocas compras), ábrelo en el <b>Listado de Items Registrados</b> para revisarlo antes de publicar.</p></div>
       <div class="hp-c"><h3><span class="hp-n">3</span>Lee el Plan</h3>
-        <p><b>Resultado</b> muestra lo que recibirías con el plan elegido y cuánto más (o menos) deja frente a la alternativa simple. Clic en el Plan Óptimo para ver los demás planes.</p>
-        <p><b>Ver el desglose</b> abre los Pasos para Vender: cada paso dice qué hacer y dónde, con sus items, precios para copiar y, si hay contrato, cómo llenarlo.</p></div>
+        <p><b>Resultado</b> muestra lo que recibirías con el plan elegido y cuánto más (o menos) deja frente a la alternativa simple. En ELIGE TU PLAN puedes comparar el plan óptimo con las demás rutas disponibles.</p>
+        <p>Pulsa <b>ABRIR PASOS A SEGUIR</b> para ver destinos, precios y contratos. Los pasos comienzan plegados y puedes abrir solo los que necesites.</p></div>
       <div class="hp-c"><h3><span class="hp-n">4</span>Ajusta a tu Medida</h3>
-        <p>En Ventas eliges si vendes tus ítems o comercias desde Jita, mientras que Ajustes define tu mercado principal, el envío y los márgenes. En <b>Ajustes</b> pon tus skills, taxes, Buyback, refinería y tiempos de envío.</p>
-        <p>Solo tus Ajustes y el tema se guardan en este navegador; lo que pegas nunca se guarda y se borra al recargar.</p></div>
+        <p>En Ventas eliges Vender Ítems o Comercio Jita; en Ajustes configuras el mercado principal, los impuestos, el Buyback, el reproceso y el envío. En <b>Ajustes</b> pon tus skills, taxes, Buyback, refinería y tiempos de envío.</p>
+        <p>Los Ajustes y el tema se guardan en este navegador. El inventario pegado no se conserva al recargar. Minería y Planes de habilidades tienen sus propias opciones.</p></div>
     </div>
     <h3 class="sub-h" style="margin-top:20px">Las Formas de Vender</h3>
     <div class="hp-t">
@@ -196,7 +195,7 @@ Contraband Freight = no</textarea><small>Una regla por línea: Nombre = tax tota
       <div><b>Colateral</b><span>Valor declarado de la carga en el envío (Jita Sell). SIGMA Freight cobra base por contrato + ISK por m³ + % del colateral.</span></div>
     </div>
     <h3 class="sub-h" style="margin-top:20px"><span class="ic i-lock" aria-hidden="true"></span>Seguridad</h3>
-    <p class="lead">No pide tu contraseña de EVE ni inicio de sesión. Solo se conecta a la API oficial de EVE (ESI) para precios y al servidor de imágenes de EVE para los íconos. Janice, Discord y el Buyback se abren aparte, en tu navegador.</p>
+    <p class="lead">Puedes consultar precios sin iniciar sesión. Si conectas tu personaje, la autenticación se realiza mediante EVE SSO; no se te pide la contraseña en Market Moves+. Los precios se consultan mediante ESI y los enlaces externos se abren por separado.</p>
   </section>
   </div>
   <!-- v1.0.62: Tasación a la izquierda y el recuadro para pegar a la derecha (sin items, el recuadro ocupa todo el ancho) -->
