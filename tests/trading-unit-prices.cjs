@@ -3,7 +3,7 @@
 // only to rNull/rJita. No live market request is needed for these assertions.
 'use strict';
 const assert=require('node:assert/strict'),fs=require('node:fs'),vm=require('node:vm');
-const src=fs.readFileSync('src/script.js','utf8');
+const src=require('./source-bundle.cjs').script();
 new Function(src);
 const start=src.indexOf('function unitFor(r,k){');
 const end=src.indexOf('\n// orden, mostrar más',start);
