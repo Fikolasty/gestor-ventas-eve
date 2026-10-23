@@ -134,7 +134,7 @@ assert(salesHTML.includes("grid-template-areas:\"brand actions\" \"main main\" \
 assert(salesHTML.includes("body.mm-mining .top.mm-ho-root #mmTabs>.mm-ho-context"));
 assert(!salesHTML.includes("/* v1.0.110 · Cabecera compacta"));
 
-assert(salesHTML.includes('.mm-ho-context #importControls[hidden]{display:none!important}'));
+assert(salesHTML.includes('.mm-ho-context #importControls[hidden],')&&salesHTML.includes('.mm-ho-context #shipLab[hidden]{display:none!important}'));
 assert(salesHTML.includes('.mm-ho-context #rtM{display:none!important}'),'Duplicate header margin must be hidden');
 assert(salesHTML.includes('@media(max-width:1190px)')&&salesHTML.includes('@media(max-width:520px)'));
 assert(!salesHTML.includes('/* v1.0.106: ONE balanced navigation row:'));
