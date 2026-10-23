@@ -543,3 +543,17 @@ Capturas del usuario confirman persistencia de fondos oscuros, tarjetas claras y
 **Criterio de no regresión en esta fase:** el contenido CSS concatenado es byte-por-byte idéntico al CSS anterior, y JS extraído/reinsertado también se comprobó byte-por-byte en el entorno de edición. Se mantuvieron fórmulas, permisos y orden de inicialización; no son ES modules reales todavía. No se hizo un rediseño visual ni optimización de ejecución en esta fase.
 
 **Pendiente imprescindible:** ejecución real de tests del workflow, compilación/publicación del `index.html`, captura de Dark/Light y pruebas end-to-end de precios, ESI/SSO y resultados económicos. El usuario sigue reportando contraste incorrecto en header/ticker de Light; la modularización **no constituye por sí sola una corrección visual**. Después de validar, abordar limpieza de overrides y medir rendimiento antes de refactorizar contratos de funciones.
+
+
+## 2026-10-22 — EVE 7 · Fase 2: separación de vistas y QA automatizado
+
+**Implementado y subido a main:**
+- Módulos `src/js/ui/ledger.js`, `selling-results.js`, `fulfillment.js`, `refining-view.js`, `plan-picker.js`, `settings.js`, `skills-bridge.js`, `mining-bridge.js`.
+- Servicios y aplicación `src/js/app/refresh.js`, `settings-persistence.js`, `src/js/i18n/translator.js`, `src/js/auth/eve-sso.js`.
+- Ensamblado en `src/build_sources.py` mantiene orden lexicográfico de ejecución original por posición de marcadores y elimina dependencia de un único `src/script.js` gigante.
+- **Prueba de preservación:** al expandir los módulos nuevos, sus contenidos se compararon carácter a carácter con `src/script.js` del commit previo `3df7f442`; la sección previa a «Recalcular» y la sección desde «Recalcular» hasta el final coincidieron exactamente.
+- **Primer cálculo puro reutilizable:** `freightContracts`, `freightRaw`, `freightShare` en `src/js/domain/courier.js`; interfaces existentes conservadas. `tests/courier_math.test.cjs` compara fórmulas de SIGMA Freight contra implementación previa con redondeos, volumen límite de contratos, collateral y envío deshabilitado.
+- `tests/browser_theme.py`: comprobación Chromium sin red de header/ticker normal, superficies de inventario/courier, contraste Light/Dark, imagen de fondo y Login/Iniciar sesión.
+- CI `rebuild-market-moves.yml`: valida pruebas Python + Node y browser antes de publicar `index.html` v1.0.114; sólo tras ejecutar correctamente estos pasos escribe `docs/QA_STATUS.md` con fuente y número del run.
+
+**No verificado aún:** el último workflow de navegador, cobertura visual total, desempeño real (fps/long tasks/memoria), ESI/SSO end-to-end y publicación real de Pages en cliente. Un commit de código o build anterior no significa que el gate Chromium actual haya pasado. La limpieza de overrides Light sigue pendiente, al igual que la separación formal del estado global `S`/`C` del motor restante.
