@@ -527,3 +527,19 @@ Capturas del usuario confirman persistencia de fondos oscuros, tarjetas claras y
 - La hoja `src/light_extra.css` sí contiene los nuevos tokens del header/ticker/Light, pero editar fuentes **no** actualiza automáticamente el `index.html` distribuido sin un build.
 - Se añadió `.github/workflows/rebuild-market-moves.yml` (commit `2ffa1495`) para ejecutar `python3 build.py 1.0.112` con cambios en `src/**` o `build.py`, comprobar marcas de compilación y hacer commit de `index.html` si cambió. El workflow también permite `workflow_dispatch`.
 - **No afirmar éxito de despliegue** mientras no se comprueben la ejecución de Actions, el nuevo contenido de `index.html` y GitHub Pages. Si Actions no tiene permiso de escritura, revisar configuración de permisos en el repo.
+
+
+## 2026-10-22 — EVE 7 · Refactor modular v1.0.113 (solicitud de arquitectura y fluidez)
+
+**Autorización:** el usuario solicita separar CSS del HTML y colocar las funciones reutilizables donde corresponde, para facilitar mantenimiento, corrección de temas y optimización hacia una interfaz fluida similar a aplicaciones web modernas.
+
+**Implementado en `main`:**
+- CSS original de `src/shell.html` repartido sin cambiar el orden ni una declaración entre `src/styles/00-foundation.css` ... `60-final-layout.css` (7 partes, longitud original aprox. 237 KB). El HTML contiene ahora `/*__STYLE_SOURCES__*/`.
+- Bloques JS extraídos de `src/script.js`, sustituidos por marcadores ensamblados en su posición original: `src/js/ui/format.js`; `domain/market-pricing.js`, `domain/courier.js`, `domain/refining.js`, `domain/planning.js`; `inventory/parser.js`; `services/esi.js`.
+- `src/build_sources.py` define explícitamente el orden de fuentes y falla si falta o se duplica un marcador JS; `build.py` conserva un único script inline y estilo inline para distribución.
+- `tests/test_modular_sources.py`: smoke tests de fuentes, marcadores y orden lógico; `node --check` cuando hay Node. Workflow de publicación ejecuta tests antes del build `1.0.113`.
+- `docs/ARCHITECTURE.md` documenta responsabilidades, estrategia futura para temas declarativos, límites actuales de CSS heredado, pruebas y prácticas de rendimiento.
+
+**Criterio de no regresión en esta fase:** el contenido CSS concatenado es byte-por-byte idéntico al CSS anterior, y JS extraído/reinsertado también se comprobó byte-por-byte en el entorno de edición. Se mantuvieron fórmulas, permisos y orden de inicialización; no son ES modules reales todavía. No se hizo un rediseño visual ni optimización de ejecución en esta fase.
+
+**Pendiente imprescindible:** ejecución real de tests del workflow, compilación/publicación del `index.html`, captura de Dark/Light y pruebas end-to-end de precios, ESI/SSO y resultados económicos. El usuario sigue reportando contraste incorrecto en header/ticker de Light; la modularización **no constituye por sí sola una corrección visual**. Después de validar, abordar limpieza de overrides y medir rendimiento antes de refactorizar contratos de funciones.
