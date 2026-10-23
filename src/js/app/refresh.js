@@ -21,15 +21,30 @@ let refQ=0;
 function refresh(){if(refQ)return;refQ=requestAnimationFrame(()=>{refQ=0;refreshNow();});}
 // v1.0.45: Tasación del lote como Janice: Precios de · Volumen · Items | Buy · Split · Sell.
 // Valores crudos (mejor compra y venta más barata de Jita 4-4), sin los filtros del plan. Solo con items pegados.
+let appraisalRenderKey=null,appraisalRenderNode=null;
 function paintAppraisal(){
-  const box=$('appr');if(!box)return;box.textContent='';
+  const box=$('appr');if(!box)return;
+  // Appraisal depends on raw EVE market prices and inventory, NOT brokerage,
+  // courier, selected sales plan, or taxes. Preserve its DOM on unrelated edits
+  // to avoid needless allocations, lost focus and repeated MutationObserver work.
+  const its=S.items.filter(o=>o.qty>0);
+  const key=JSON.stringify([S.lang,its.map(o=>[
+    o.name,o.qty,o.m3u,o.jita?.id,o.jita?.topBuy,o.jita?.topSell,
+    o.jita?.regionBuy,o.jita?.regionSell
+  ])]);
+  box.hidden=!its.length;
+  box.parentNode.classList.toggle('no-appr',!its.length);
+  if(appraisalRenderNode===box&&appraisalRenderKey===key)return;
+  box.textContent='';
+  appraisalRenderNode=box;
+  appraisalRenderKey=null; // failed render must not become a cache hit
+  if(!its.length){appraisalRenderKey=key;return;}
   // Tasación bruta: órdenes originales de Jita 4-4, sin tasas, broker ni envío.
   const tb=o=>o.jita&&o.jita.topBuy,ts=o=>o.jita&&o.jita.topSell;
-  const its=S.items.filter(o=>o.qty>0),priced=its.filter(o=>tb(o)!=null||ts(o)!=null);
+  const priced=its.filter(o=>tb(o)!=null||ts(o)!=null);
   // Regional fallback is presentation only; the actual Jita sales routes keep requiring Jita order prices.
   const regional=!priced.length&&its.some(o=>o.jita&&(o.jita.regionBuy!=null||o.jita.regionSell!=null));
   const buyOf=o=>regional?o.jita?.regionBuy:tb(o),sellOf=o=>regional?o.jita?.regionSell:ts(o);
-  box.hidden=!its.length;box.parentNode.classList.toggle('no-appr',!its.length);if(!its.length)return;
   let vB=0,vS=0,vol=0,u=0;its.forEach(o=>{vol+=(o.m3u||0)*o.qty;u+=o.qty;});(regional?its:priced).forEach(o=>{vB+=(buyOf(o)||0)*o.qty;vS+=(sellOf(o)||0)*o.qty;});
   const g=el('div','appr-g'),colL=el('dl','appr-c'),colR=el('dl','appr-c appr-p');
   const cell=(col,k,v,c,cp)=>{const d=el('div',c||null);d.append(el('dt',null,k));const dd=el('dd','num');
@@ -49,6 +64,7 @@ function paintAppraisal(){
       :'Todavía no hay precios de Jita disponibles para estos ítems. Revisa el estado de la API y sus nombres.');
     note.setAttribute('role','status');box.append(note);
   }
+  appraisalRenderKey=key;
 }
 function refreshNow(){
   if(refQ){cancelAnimationFrame(refQ);refQ=0;}
