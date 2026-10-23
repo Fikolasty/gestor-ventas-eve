@@ -151,7 +151,7 @@ $('cNullDest').addEventListener('input',()=>refresh());
 $('themeLight').checked=!document.documentElement.classList.contains('light');$('themeTxt').textContent=$('themeLight').checked?'Dark':'Light';
 syncShipSwitch();
 // v1.0.8: tema claro / oscuro (solo en memoria; empieza oscuro)
-$('themeLight').addEventListener('change',e=>{document.documentElement.classList.toggle('light',!e.target.checked);$('themeTxt').textContent=e.target.checked?'Dark':'Light';});
+$('themeLight').addEventListener('change',e=>{document.documentElement.classList.toggle('light',!e.target.checked);$('themeTxt').textContent=e.target.checked?'Dark':'Light';SkillUI.setTheme(e.target.checked?'dark':'light');});
 
 // v1.0.86 — Todos los controles originales viven ahora en la barra principal; no se clonan.
 (function compactMainNavigation(){
