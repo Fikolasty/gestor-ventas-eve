@@ -102,7 +102,7 @@ js = js.replace('/*__I18N__*/{}', json.dumps(D, ensure_ascii=False, separators=(
 f = rd('shell.html').replace('__VER__', v).replace('/*__MINING_CSS__*/', '')
 css = f[f.index('<style>') + 7:f.index('</style>')]
 f = f.replace('</style>', '/* ===== tema claro (generado desde el oscuro por light.py) ===== */\n'
-              + LT.light(css) + '\n' + rd('light_extra.css') + '\n' + rd('mining.css') + '</style>', 1)
+              + LT.light(css) + '\n' + rd('mining.css') + '\n' + rd('light_extra.css') + '</style>', 1)
 out = (f.replace('__ATHANOR__', rd('assets', 'background.b64').strip())
         .replace('__SIGMA__', rd('assets', 'sigma.b64').strip())
         .replace('__VG__', rd('assets', 'vanguardia.b64').strip())
