@@ -1,0 +1,73 @@
+/* Market Moves+ visual type scale — one system for Sales, Mining, Skills and Guide.
+   The iframe receives the same body font and theme tokens via its bridge.
+   Only use existing theme variables; do not invent per-module accent colors. */
+:root{
+  --mm-type-body:.875rem;
+  --mm-type-label:.71rem;
+  --mm-type-note:.81rem;
+  --mm-type-heading:clamp(1.1rem,1.65vw,1.4rem);
+  --mm-type-leading:1.45;
+}
+#verdict .mm-section-head>.mm-title,
+#pSum .mm-section-head>.mm-title,
+#mining>.mm-section-head>.mm-title,
+#skills>.mm-section-head>.mm-title,
+#help>.mm-section-head>.mm-title{
+  font:800 var(--mm-type-heading)/1.2 var(--f-ui)!important;
+  letter-spacing:.035em!important;
+}
+.mm-section-head>.mm-section-sub{
+  font:700 var(--mm-type-label)/1.4 var(--f-ui)!important;
+  letter-spacing:.075em!important;
+  text-transform:uppercase!important;
+  color:var(--mut)!important;
+}
+#pSum .pk-summary{
+  font:700 var(--mm-type-note)/1.42 var(--f-ui)!important;
+  letter-spacing:.025em!important;
+  text-transform:uppercase!important;
+  color:var(--mut)!important;
+  max-width:84ch;
+  margin:5px 0 0!important;
+}
+#pk .pk-hc,
+#pkOthers .pk-hc{
+  font:700 var(--mm-type-label)/1.35 var(--f-ui)!important;
+  letter-spacing:.055em!important;
+  text-transform:uppercase!important;
+  color:var(--mut)!important;
+}
+#pk .pk-l,#pkOthers .pk-l{
+  font:750 .88rem/1.35 var(--f-ui)!important;
+  letter-spacing:0!important;
+}
+#pk .pk-e,#pkOthers .pk-e{
+  font:400 var(--mm-type-note)/1.35 var(--f-ui)!important;
+  color:var(--mut)!important;
+}
+#verdict .v-finance-item small,
+#pSum .mm-unit-courier>summary>strong{
+  font:700 var(--mm-type-label)/1.45 var(--f-ui)!important;
+  letter-spacing:.055em!important;
+  text-transform:uppercase!important;
+  color:var(--mut)!important;
+}
+#verdict .v-finance-item strong{
+  font:750 clamp(.95rem,1.25vw,1.1rem)/1.25 var(--f-num)!important;
+  letter-spacing:0!important;
+}
+#pSum .pk-opp-brief,
+#pSum .pk-opp-head{
+  font:750 .78rem/1.4 var(--f-ui)!important;
+  letter-spacing:.025em!important;
+}
+#help .hp-c p,#help .hp-t>div>span,
+#settings .st-i,#settings .st-f small{
+  font-family:var(--f-ui)!important;
+  font-size:var(--mm-type-body)!important;
+  line-height:1.5!important;
+}
+@media(max-width:740px){
+  #pSum .pk-summary{max-width:100%;font-size:.76rem!important}
+  #verdict .v-finance-item strong{font-size:1rem!important}
+}
