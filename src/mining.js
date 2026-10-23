@@ -289,11 +289,6 @@ const MineUI=(()=>{
   };
   const INFO=(key)=>'<details class="mn-info"><summary aria-label="Información: '+key+'" title="Información · pasar el mouse o pulsar">ⓘ</summary><div class="mn-info-popup" role="note">'+HINTS[key]+'</div></details>';
   const HTML=
-   '<header class="mn-module-intro">'+
-     '<span class="mn-module-eyebrow">Market Moves+ / Minería</span>'+
-     '<h2>Planifica tu minería con números claros</h2>'+
-     '<p>Prepara un escenario, compara el rendimiento real de tus naves y calcula el coste del fit antes de decidir.</p>'+
-   '</header>'+
    '<div class="mn-toolbar">'+
   '<div class="mn-views">'+SEG('view',[['ships','Rendimiento Nave'],['plan','Plan Omega'],['max','Nave Maxeada']])+'</div>'+
   '<div class="mn-omega-tools" hidden>'+
