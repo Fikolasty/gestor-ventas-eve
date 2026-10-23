@@ -39,39 +39,30 @@ function paintPicker(P){
   const valid=all.filter(x=>Number.isFinite(x.t.net));
   if(valid.length>1&&valid.some(x=>x.m===cur)){
     const benchmark=valid.reduce((best,x)=>x.t.net>best.t.net?x:best);
-    const gap=Math.max(0,benchmark.t.net-chosen.t.net),ratio=benchmark.t.net>0?gap/benchmark.t.net*100:null;
-    const shipped=pkShips(chosen.m,P);
-    const hasFallback=chosen.m!=='auto'&&chosen.t.n<P.rows.filter(r=>r.best).length;
-    const title=el('div','pk-opp-head','Coste de oportunidad');
+    const gap=Math.max(0,benchmark.t.net-chosen.t.net);
+    const title=el('div','pk-opp-head',tx('picker.why'));
     const grid=el('div','pk-opp-grid');
     const stat=(label,value,cl='')=>{
-      const node=el('div','pk-opp-stat');node.append(el('small',null,label),el('strong',cl,value));grid.append(node);
+      const node=el('div','pk-opp-stat');
+      node.append(el('small',null,label),el('strong',cl,value));grid.append(node);
     };
-    const note=el('p','pk-opp-explain');
-    if(gap<1){
-      const runners=valid.filter(x=>x.m!==chosen.m&&x.t.net<chosen.t.net-.5).sort((a,b)=>b.t.net-a.t.net);
-      const runner=runners[0];
+    if(gap<.5){
+      const runner=valid.filter(x=>x.m!==chosen.m&&x.t.net<chosen.t.net-.5)
+        .sort((a,b)=>b.t.net-a.t.net)[0];
       if(runner){
         const advantage=chosen.t.net-runner.t.net;
-        const lift=runner.t.net>0?advantage/runner.t.net*100:null;
-        stat(S.lang==='en'?'Advantage over next best alternative':'Ventaja frente a la siguiente alternativa','+'+fmt(advantage),'pos');
-        stat(S.lang==='en'?'Additional return':'Rendimiento adicional',lift==null?(S.lang==='en'?'Not comparable':'No comparable'):'+'+NF1.format(lift)+' %',lift==null?'':'pos');
-        note.append(S.lang==='en'?'Among the plans compared, ':'De los planes comparados, ',planMark(chosen.m),S.lang==='en'?' has the highest estimated net income. It exceeds ':' ofrece el mayor ingreso neto estimado. Supera a ',planMark(runner.m),S.lang==='en'?' by ':' por ',el('strong','pos','+'+fmt(advantage)),S.lang==='en'?'; the percentage advantage is calculated against that alternative’s net proceeds.':'; la ventaja porcentual se calcula respecto al neto de esa alternativa.');
-      }else{
-        stat(S.lang==='en'?'Plan result':'Resultado del plan',S.lang==='en'?'Highest estimated net income':'Mayor ingreso neto estimado');
-        stat(S.lang==='en'?'Measurable advantage':'Ventaja medible',S.lang==='en'?'No lower-paying alternative':'Sin alternativa inferior');
-        note.append(planMark(chosen.m),S.lang==='en'?' achieves the highest estimated net income. The other available routes either tie or do not support a reliable positive comparison.':' alcanza el mayor ingreso neto estimado. Las demás rutas disponibles empatan con este resultado o no permiten calcular una diferencia positiva fiable.');
-      }
+        stat(tx('picker.gain'),'+'+fmt(advantage),'pos');
+        stat(tx('picker.nextBest'),(S.lang==='en'?trS(runner.l):runner.l)+' · '+fmt(runner.t.net));
+      }else stat(tx('picker.gain'),tx('picker.same'));
     }else{
-      stat(S.lang==='en'?'Difference vs highest-ISK plan':'Diferencia frente al plan con más ISK','−'+fmt(gap),'neg');
-      stat(S.lang==='en'?'Higher-ISK alternative':'Alternativa con más ISK',(S.lang==='en'?trS(benchmark.l):benchmark.l)+' · '+fmt(benchmark.t.net));
-      note.append(S.lang==='en'?'Choosing ':'Al elegir ',planMark(chosen.m),S.lang==='en'?', you would receive ':', recibirías ',el('strong','neg','−'+fmt(gap)),S.lang==='en'?' compared with ':' frente a ',planMark(benchmark.m),(ratio!=null?' ('+ratio.toFixed(1)+(S.lang==='en'?'% less)':' % menos)'):''),'.');
+      stat(tx('picker.gap'),'−'+fmt(gap),'neg');
+      stat(tx('picker.higherNet'),(S.lang==='en'?trS(benchmark.l):benchmark.l)+' · '+fmt(benchmark.t.net));
     }
-    opportunity.append(title,grid,note);opportunity.hidden=false;
+    opportunity.append(title,grid);opportunity.hidden=false;
   }else{
     opportunity.hidden=false;
-    opportunity.append(el('div','pk-opp-head','Coste de oportunidad'),
-      el('p','pk-opp-explain','No hay suficientes alternativas con precios disponibles para calcular una comparación fiable. Revisa las cotizaciones y las rutas habilitadas.'));
+    opportunity.append(el('div','pk-opp-head',tx('picker.why')),
+      el('p','pk-opp-explain',tx('picker.insufficient')));
   }
 
   // Keep the detailed plan comparison accessible without using vertical space
@@ -79,7 +70,7 @@ function paintPicker(P){
   const detail=el('details','pk-opp-details');
   detail.open=!!pkView.opportunityOpen;
   const summary=el('summary','pk-opp-brief');
-  summary.append(el('span',null,S.lang==='en'?'Why this plan? · Opportunity cost':'¿Por qué este plan? · Coste de oportunidad'));
+  summary.append(el('span',null,tx('picker.why')));
   const closest=valid.filter(x=>x.m!==chosen.m).sort((a,b)=>b.t.net-a.t.net)[0];
   if(closest){
     const diff=chosen.t.net-closest.t.net;
