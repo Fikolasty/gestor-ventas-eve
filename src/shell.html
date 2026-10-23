@@ -2346,173 +2346,325 @@ html.light #pkOpportunity{background:rgba(255,255,255,.9)}
 
 
 
-/* v1.0.109: only the approved main header. All financial/mining/skills panels keep original styles. */
+
+/* v1.0.110 · Cabecera compacta, acciones accesibles y dos tarjetas realmente simétricas.
+   Solo estructura visual. Se reutilizan todos los controles/IDs y sus listeners. */
 body .top.mm-ho-root{
- display:grid!important;grid-template-columns:minmax(185px,1fr) minmax(0,auto) minmax(225px,1fr)!important;
- grid-template-areas:"brand main actions" "context context context" "ticker ticker ticker"!important;
- align-items:center!important;gap:0 18px!important;padding:12px clamp(18px,3vw,48px) 0!important;
- width:100%!important;max-width:none!important;min-height:0!important;margin:0!important;
- background:rgba(28,27,26,.88)!important;border-bottom:1px solid rgba(222,220,209,.13)!important;
+  display:grid!important;
+  grid-template-columns:minmax(190px,1fr) auto minmax(345px,1fr)!important;
+  grid-template-areas:"brand main actions" "context context context"!important;
+  align-items:center!important;gap:0 22px!important;
+  width:100%!important;max-width:none!important;min-height:0!important;
+  margin:0!important;padding:10px max(20px,calc((100vw - 1440px)/2)) 0!important;
+  background:rgba(28,27,26,.92)!important;
+  border-bottom:1px solid rgba(222,220,209,.13)!important;
 }
-body .top.mm-ho-root>.brand{grid-area:brand!important;justify-self:start!important;min-width:0!important;margin:0!important;white-space:nowrap!important}
-body .top.mm-ho-root>#mmTabs{display:contents!important;border:0!important;background:none!important;box-shadow:none!important;margin:0!important;padding:0!important}
+body .top.mm-ho-root>.brand{
+  grid-area:brand!important;display:inline-flex!important;align-items:center!important;
+  justify-self:start!important;gap:7px!important;min-width:0!important;
+  margin:0!important;white-space:nowrap!important;font:700 14px/1.2 var(--f-ui)!important;
+  letter-spacing:.015em!important;
+}
+body .top.mm-ho-root>.brand .logo-s{
+  display:block!important;flex:0 0 25px!important;width:25px!important;height:25px!important;
+  margin:0!important;vertical-align:middle!important;
+}
+body .top.mm-ho-root>.brand .brand-wordmark{min-width:0;overflow:hidden;text-overflow:ellipsis}
+body .top.mm-ho-root>#mmTabs{
+  display:contents!important;border:0!important;background:none!important;
+  box-shadow:none!important;margin:0!important;padding:0!important;
+}
 body .top.mm-ho-root #mmTabs>.mm-ho-main{
- grid-area:main;display:flex!important;align-items:center!important;justify-content:center!important;
- gap:clamp(10px,1.6vw,23px)!important;min-width:0!important
+  grid-area:main;display:flex!important;align-items:center!important;
+  justify-content:center!important;gap:16px!important;min-width:0!important;
 }
-body .top.mm-ho-root #mmTabs>.mm-ho-context{
- grid-area:context;display:flex!important;align-items:center!important;justify-content:center!important;
- flex-wrap:wrap!important;gap:8px 28px!important;min-height:44px;min-width:0;
- border-top:1px solid rgba(222,220,209,.11);margin-top:12px;padding:7px 0
-}
-body .top.mm-ho-root #mmTabs>.mm-ho-legacy{display:none!important}
 body .top.mm-ho-root .mm-ho-main .mm-modgroup{
- display:flex!important;align-items:center!important;gap:clamp(10px,1.6vw,23px)!important;
- flex:0 0 auto!important;max-width:none!important;overflow:visible!important;
- border:0!important;background:transparent!important;box-shadow:none!important;padding:0!important;margin:0!important
+  display:flex!important;align-items:center!important;gap:16px!important;
+  flex:0 0 auto!important;max-width:none!important;overflow:visible!important;
+  border:0!important;background:transparent!important;box-shadow:none!important;
+  padding:0!important;margin:0!important;
 }
 body .top.mm-ho-root .mm-ho-main .mm-home,
 body .top.mm-ho-root .mm-ho-main .mm-mod{
- display:inline-flex!important;position:relative!important;align-items:center!important;justify-content:center!important;
- flex:0 0 auto!important;width:auto!important;min-width:0!important;height:37px!important;min-height:37px!important;
- margin:0!important;padding:9px 0!important;border:0!important;border-radius:0!important;
- background:transparent!important;box-shadow:none!important;font:500 13px/1.25 var(--f-ui,system-ui)!important;
- color:var(--mut,#c2c0b6)!important;white-space:nowrap!important
+  display:inline-flex!important;position:relative!important;align-items:center!important;
+  justify-content:center!important;flex:0 0 auto!important;width:auto!important;
+  min-width:0!important;height:39px!important;min-height:39px!important;
+  margin:0!important;padding:9px 2px!important;border:0!important;border-radius:0!important;
+  background:transparent!important;box-shadow:none!important;
+  font:550 13px/1.2 var(--f-ui,system-ui)!important;
+  color:var(--mut,#c2c0b6)!important;white-space:nowrap!important;
 }
 body .top.mm-ho-root .mm-ho-main .mm-home::after{content:"Home"}
 body .top.mm-ho-root .mm-ho-main .mm-home .ic,
 body .top.mm-ho-root .mm-ho-main .mm-mod .ic,
 body .top.mm-ho-root .mm-ho-main .mm-mining-icon,
 body .top.mm-ho-root .mm-ho-main .mm-skills-icon{display:none!important}
-body .top.mm-ho-root .mm-ho-main .mm-mod[aria-selected="true"]{color:var(--txt,#faf9f5)!important;font-weight:650!important}
+body .top.mm-ho-root .mm-ho-main .mm-mod[aria-selected="true"]{color:var(--txt)!important;font-weight:700!important}
 body .top.mm-ho-root .mm-ho-main .mm-mod[aria-selected="true"]::after,
 body .top.mm-ho-root .mm-ho-main .mm-mod:hover::after{
- content:"";position:absolute;left:0;right:0;bottom:0;height:2px;background:var(--clay,#d97757)
+  content:"";position:absolute;bottom:0;left:0;right:0;height:2px;background:var(--clay);
 }
 body .top.mm-ho-root>.mm-top-actions{
- grid-area:actions!important;display:flex!important;flex-direction:row!important;
- justify-self:end!important;justify-content:flex-end!important;align-items:center!important;
- margin:0!important;padding:0!important;gap:10px!important;max-width:100%!important;
- width:auto!important;min-width:0!important;flex:0 1 auto!important
+  grid-area:actions!important;display:flex!important;flex-direction:row!important;
+  justify-self:end!important;justify-content:flex-end!important;align-items:center!important;
+  flex-wrap:nowrap!important;gap:8px!important;width:auto!important;max-width:100%!important;
+  min-width:0!important;margin:0!important;padding:0!important;
 }
 body .top.mm-ho-root>.mm-top-actions>.top-header-action,
 body .top.mm-ho-root>.mm-top-actions>.top-guide-action{
- display:inline-flex!important;position:static!important;align-items:center!important;justify-content:center!important;
- width:auto!important;height:33px!important;min-height:33px!important;padding:4px 0!important;margin:0!important;
- border:0!important;box-shadow:none!important;background:transparent!important;
- color:var(--mut,#c2c0b6)!important;font:500 12px/1.2 var(--f-ui,system-ui)!important
+  display:inline-flex!important;position:static!important;align-items:center!important;
+  justify-content:center!important;gap:6px!important;flex:0 0 auto!important;
+  width:auto!important;min-width:0!important;min-height:35px!important;height:35px!important;
+  padding:6px 11px!important;margin:0!important;
+  border:1px solid rgba(222,220,209,.2)!important;border-radius:8px!important;
+  background:rgba(255,255,255,.04)!important;box-shadow:none!important;
+  color:var(--txt)!important;font:650 12px/1.2 var(--f-ui)!important;
 }
-body .top.mm-ho-root>.mm-top-actions .top-header-action .ic,
-body .top.mm-ho-root>.mm-top-actions .top-guide-action .ic{display:none!important}
-body .top.mm-ho-root>.mm-top-actions .top-header-action .side-l,
-body .top.mm-ho-root>.mm-top-actions .top-guide-action .side-l{display:inline!important;color:inherit!important}
+body .top.mm-ho-root>.mm-top-actions>.top-header-action:hover,
+body .top.mm-ho-root>.mm-top-actions>.top-guide-action:hover{
+  border-color:var(--clay)!important;background:rgba(217,119,87,.13)!important;
+}
+body .top.mm-ho-root .mm-top-actions .top-header-action .ic,
+body .top.mm-ho-root .mm-top-actions .top-guide-action .ic{
+  display:inline-block!important;flex:none!important;width:15px!important;height:15px!important;
+}
+body .top.mm-ho-root .mm-top-actions .top-header-action .side-l,
+body .top.mm-ho-root .mm-top-actions .top-guide-action .side-l{
+  display:inline!important;color:inherit!important;white-space:nowrap!important;
+}
+body .top.mm-ho-root .mm-top-actions .mm-theme{
+  display:inline-flex!important;flex:0 0 auto!important;align-items:center!important;
+  gap:5px!important;min-width:0!important;height:35px!important;white-space:nowrap!important;
+  padding:0 4px!important;margin:0!important;font:600 12px/1.2 var(--f-ui)!important;
+}
+body .top.mm-ho-root .mm-top-actions .mm-theme .sw-t{margin:0!important}
 body .top.mm-ho-root>.mm-top-actions>.mm-profile-row{
- position:static!important;grid-row:auto!important;grid-column:auto!important;display:flex!important;
- width:auto!important;min-width:0!important;padding-left:14px!important;border-left:1px solid rgba(222,220,209,.15)!important
+  display:flex!important;align-items:center!important;justify-content:flex-start!important;
+  position:static!important;grid-column:auto!important;grid-row:auto!important;
+  min-width:0!important;width:auto!important;padding:0 0 0 9px!important;margin:0!important;
+  border-left:1px solid rgba(222,220,209,.17)!important;
 }
-body .top.mm-ho-root .mm-profile-row .eve-identity{display:flex!important;width:auto!important;max-width:155px!important;min-width:0!important}
+body .top.mm-ho-root .mm-profile-row .eve-identity{
+  display:flex!important;position:relative!important;min-width:0!important;
+  width:auto!important;max-width:195px!important;margin:0!important;
+}
 body .top.mm-ho-root .mm-profile-row .eve-identity-button{
- display:flex!important;align-items:center!important;gap:6px!important;
- width:auto!important;max-width:155px!important;min-width:0!important;
- height:34px!important;min-height:34px!important;padding:4px 6px!important;margin:0!important;
- border:0!important;border-radius:5px!important;background:transparent!important;box-shadow:none!important
+  display:inline-flex!important;align-items:center!important;justify-content:flex-start!important;
+  gap:8px!important;width:auto!important;min-width:0!important;max-width:195px!important;
+  min-height:39px!important;height:39px!important;padding:3px 8px!important;margin:0!important;
+  border:1px solid rgba(222,220,209,.14)!important;border-radius:8px!important;
+  background:rgba(255,255,255,.04)!important;box-shadow:none!important;
 }
-body .top.mm-ho-root .mm-profile-row .eve-identity-button img{width:25px!important;height:25px!important;flex:0 0 25px!important}
+body .top.mm-ho-root .mm-profile-row .eve-identity-button:hover{border-color:var(--clay)!important}
+body .top.mm-ho-root .mm-profile-row .eve-identity-button img{
+  width:32px!important;height:32px!important;flex:0 0 32px!important;
+}
 body .top.mm-ho-root .mm-profile-row #evePilotName{
- max-width:105px!important;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
- font:600 12px/1.2 var(--f-ui)!important
+  display:block;min-width:0!important;max-width:145px!important;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+  font:650 13px/1.2 var(--f-ui)!important;
 }
+body .top.mm-ho-root #mmTabs>.mm-ho-context{
+  grid-area:context;display:flex!important;align-items:center!important;
+  justify-content:center!important;flex-wrap:wrap!important;gap:7px 26px!important;
+  min-width:0!important;min-height:43px!important;margin-top:8px!important;
+  padding:6px 0!important;border-top:1px solid rgba(222,220,209,.11)!important;
+}
+body .top.mm-ho-root #mmTabs>.mm-ho-legacy{display:none!important}
 body .top.mm-ho-root .mm-ho-context #businessSwitch,
 body .top.mm-ho-root .mm-ho-context .mm-business-tabs{
- display:flex!important;align-items:center!important;justify-content:center!important;
- flex:0 0 auto!important;width:auto!important;min-width:0!important;min-height:0!important;
- border:0!important;background:transparent!important;box-shadow:none!important;margin:0!important;padding:0!important
+  display:flex!important;align-items:center!important;justify-content:center!important;
+  flex:0 0 auto!important;width:auto!important;min-width:0!important;min-height:0!important;
+  border:0!important;background:transparent!important;box-shadow:none!important;
+  margin:0!important;padding:0!important;
 }
-body .top.mm-ho-root .mm-ho-context .mm-business-tabs{gap:21px!important}
+body .top.mm-ho-root .mm-ho-context .mm-business-tabs{gap:22px!important}
 body .top.mm-ho-root .mm-ho-context .mm-business-tab{
- display:inline-flex!important;position:relative!important;align-items:center!important;
- flex:0 0 auto!important;width:auto!important;min-width:0!important;
- height:32px!important;min-height:32px!important;margin:0!important;padding:5px 0!important;
- border:0!important;border-radius:0!important;background:transparent!important;box-shadow:none!important;
- color:var(--mut,#c2c0b6)!important;font:550 12px/1.2 var(--f-ui,system-ui)!important;white-space:nowrap!important
+  display:inline-flex!important;position:relative!important;align-items:center!important;
+  flex:0 0 auto!important;width:auto!important;min-width:0!important;
+  height:33px!important;min-height:33px!important;margin:0!important;padding:5px 0!important;
+  border:0!important;border-radius:0!important;background:transparent!important;
+  box-shadow:none!important;color:var(--mut)!important;
+  font:600 12px/1.2 var(--f-ui)!important;white-space:nowrap!important;
 }
-body .top.mm-ho-root .mm-ho-context .mm-business-tab.on{color:var(--txt,#faf9f5)!important}
+body .top.mm-ho-root .mm-ho-context .mm-business-tab.on{color:var(--txt)!important}
 body .top.mm-ho-root .mm-ho-context .mm-business-tab.on::after{
- content:"";position:absolute;bottom:0;left:0;right:0;height:2px;background:var(--clay,#d97757)
+  content:"";position:absolute;bottom:0;left:0;right:0;height:2px;background:var(--clay)
 }
 body .top.mm-ho-root .mm-ho-context .mm-business-tab .ic{display:none!important}
 body .top.mm-ho-root .mm-ho-context #importControls{
- display:flex!important;position:static!important;align-items:center!important;justify-content:center!important;
- width:auto!important;min-width:0!important;max-width:none!important;height:auto!important;min-height:0!important;
- grid-row:auto!important;grid-column:auto!important;margin:0!important;padding:0!important;gap:8px!important;
- flex-wrap:wrap!important;border:0!important;border-radius:0!important;
- background:transparent!important;box-shadow:none!important
+  display:flex!important;position:static!important;align-items:center!important;justify-content:center!important;
+  width:auto!important;min-width:0!important;max-width:none!important;
+  height:auto!important;min-height:0!important;grid-row:auto!important;grid-column:auto!important;
+  margin:0!important;padding:0!important;gap:8px!important;flex-wrap:wrap!important;
+  border:0!important;border-radius:0!important;background:transparent!important;box-shadow:none!important;
 }
-body .top.mm-ho-root .mm-ho-context #importControls[hidden]{display:none!important}
+body .top.mm-ho-root .mm-ho-context #importControls[hidden],
+body .top.mm-ho-root .mm-ho-context #shipLab[hidden]{display:none!important}
 body .top.mm-ho-root .mm-ho-context #importDestination,
 body .top.mm-ho-root .mm-ho-context #importHelp,
 body .top.mm-ho-root .mm-ho-context #rtM{display:none!important}
 body .top.mm-ho-root .mm-ho-context #importControls .mm-import-actions{
- display:flex!important;align-items:center!important;justify-content:center!important;
- width:auto!important;min-width:0!important;flex-wrap:wrap!important;gap:9px!important;padding:0!important;margin:0!important
+  display:flex!important;align-items:center!important;justify-content:center!important;
+  width:auto!important;min-width:0!important;flex-wrap:wrap!important;gap:9px!important;
+  padding:0!important;margin:0!important
 }
 body .top.mm-ho-root .mm-ho-context .mm-buy-basis select{
- width:116px!important;max-width:116px!important;min-width:116px!important;
- height:34px!important;min-height:34px!important;margin:0!important;padding:4px 18px 4px 8px!important;
- border:1px solid rgba(222,220,209,.2)!important;border-radius:7px!important;
- background:rgba(25,25,24,.7)!important;color:var(--txt,#faf9f5)!important;font:500 12px/1.3 var(--f-ui,system-ui)!important
+  width:120px!important;min-width:120px!important;max-width:120px!important;
+  height:34px!important;min-height:34px!important;margin:0!important;
+  padding:4px 18px 4px 8px!important;
+  border:1px solid rgba(222,220,209,.2)!important;border-radius:7px!important;
+  background:rgba(25,25,24,.75)!important;color:var(--txt)!important;
+  font:550 12px/1.3 var(--f-ui)!important;
 }
-body .top.mm-ho-root .mm-ho-context #shipLab{display:inline-flex!important;align-items:center!important;gap:6px!important;margin:0!important;white-space:nowrap!important;font-size:12px!important}
-body .top.mm-ho-root .mm-ho-context #shipLab[hidden]{display:none!important}
-body .top.mm-ho-root .mm-ho-context .mm-theme{display:flex!important;align-items:center!important;gap:6px!important;margin:0!important;padding:0!important;font-size:12px!important}
-body .top.mm-ho-root>.ticker{
- grid-area:ticker!important;display:flex!important;justify-content:center!important;width:100%!important;max-width:none!important;
- height:24px!important;min-height:24px!important;margin:0!important;padding:0!important;order:0!important;
- border:0!important;border-top:1px solid rgba(222,220,209,.1)!important;border-radius:0!important;
- background:transparent!important;box-shadow:none!important;overflow:hidden!important;
- -webkit-mask-image:none!important;mask-image:none!important
+body .top.mm-ho-root .mm-ho-context #shipLab{
+  display:inline-flex!important;align-items:center!important;gap:7px!important;
+  margin:0!important;white-space:nowrap!important;font-size:12px!important;
 }
-body .top.mm-ho-root .ticker .tk-track{height:24px!important;display:flex!important;align-items:center!important;animation:none!important;transform:none!important}
-body .top.mm-ho-root .ticker .tk-i{font-size:10px!important;padding:0 5px!important}
-body .top.mm-ho-root .ticker .tk-i:not(:first-child){display:none!important}
-body .top.mm-ho-root .ticker .ref-tag{font-size:9px!important}
 body.mm-mining .top.mm-ho-root .mm-ho-context #businessSwitch,
 body.mm-skills .top.mm-ho-root .mm-ho-context #businessSwitch,
 body.mm-pi .top.mm-ho-root .mm-ho-context #businessSwitch{display:none!important}
-html.light body .top.mm-ho-root{background:rgba(247,245,239,.93)!important;border-color:rgba(69,53,43,.2)!important}
-html.light body .top.mm-ho-root .mm-ho-context .mm-buy-basis select{background:#fff!important;color:#2e2923!important}
-@media(max-width:1120px){
- body .top.mm-ho-root{grid-template-columns:minmax(0,1fr) auto!important;grid-template-areas:"brand actions" "main main" "context context" "ticker ticker"!important;gap:0 15px!important;padding-top:10px!important}
- body .top.mm-ho-root #mmTabs>.mm-ho-main{padding:7px 0 0!important;justify-self:center!important}
- body .top.mm-ho-root #mmTabs>.mm-ho-context{margin-top:3px!important}
+/* Referral: shown below the name, not between navigation elements. */
+.hero>.hero-referral{
+  display:flex!important;justify-content:center!important;position:relative!important;
+  width:min(610px,100%)!important;max-width:100%!important;
+  min-height:37px!important;height:37px!important;margin:16px auto 5px!important;
+  padding:0!important;border:1px solid rgba(217,119,87,.37)!important;
+  border-radius:9px!important;background:rgba(22,21,21,.91)!important;
+  box-shadow:0 3px 12px rgba(0,0,0,.2)!important;overflow:hidden!important;
+  -webkit-mask-image:none!important;mask-image:none!important;color:var(--txt)!important;
 }
-@media(max-width:610px){
- body .top.mm-ho-root{padding:10px 12px 0!important;gap:4px 8px!important}
- body .top.mm-ho-root>.brand{font-size:12px!important;overflow:hidden;text-overflow:ellipsis}
- body .top.mm-ho-root>.brand small{display:none!important}
- body .top.mm-ho-root>.mm-top-actions{gap:8px!important}
- body .top.mm-ho-root>.mm-top-actions>.top-header-action,
- body .top.mm-ho-root>.mm-top-actions>.top-guide-action{width:27px!important;padding:5px!important;font-size:0!important}
- body .top.mm-ho-root .mm-top-actions .top-header-action .ic,
- body .top.mm-ho-root .mm-top-actions .top-guide-action .ic{display:inline-block!important;width:18px!important;height:18px!important}
- body .top.mm-ho-root .mm-top-actions .top-header-action .side-l,
- body .top.mm-ho-root .mm-top-actions .top-guide-action .side-l{display:none!important}
- body .top.mm-ho-root>.mm-top-actions>.mm-profile-row{padding-left:8px!important}
- body .top.mm-ho-root .mm-profile-row .eve-identity-button{max-width:95px!important}
- body .top.mm-ho-root .mm-profile-row #evePilotName{max-width:65px!important;font-size:10px!important}
- body .top.mm-ho-root #mmTabs>.mm-ho-main{width:100%!important;justify-self:stretch!important;justify-content:center!important;gap:11px!important}
- body .top.mm-ho-root .mm-ho-main .mm-modgroup{gap:11px!important}
- body .top.mm-ho-root .mm-ho-main .mm-home,
- body .top.mm-ho-root .mm-ho-main .mm-mod{height:31px!important;min-height:31px!important;font-size:11px!important}
- body .top.mm-ho-root #mmTabs>.mm-ho-context{padding:3px 0!important;gap:4px 12px!important}
- body .top.mm-ho-root .mm-ho-context .mm-business-tabs{gap:14px!important}
- body .top.mm-ho-root .mm-ho-context .mm-business-tab{height:30px!important;min-height:30px!important;font-size:11px!important}
- body .top.mm-ho-root .mm-ho-context .mm-theme{font-size:10px!important}
- body .top.mm-ho-root>.ticker{height:23px!important}
+.hero>.hero-referral:hover{border-color:var(--clay)!important;background:rgba(37,29,25,.96)!important}
+.hero>.hero-referral .tk-track{
+  display:flex!important;align-items:center!important;height:100%!important;width:max-content!important;
+  animation:tk 30s linear infinite!important;
 }
-@media(max-width:380px){
- body .top.mm-ho-root #mmTabs>.mm-ho-main,body .top.mm-ho-root .mm-ho-main .mm-modgroup{gap:7px!important}
- body .top.mm-ho-root .mm-ho-main .mm-home,body .top.mm-ho-root .mm-ho-main .mm-mod{font-size:10px!important}
+.hero>.hero-referral .tk-i{
+  display:inline-flex!important;align-items:center!important;gap:5px!important;
+  flex:0 0 auto!important;padding:0 28px!important;
+  white-space:nowrap!important;font:600 13px/1.2 var(--f-ui)!important;
+}
+.hero>.hero-referral .tk-i b{font-weight:800!important;color:#e9a785!important}
+.hero>.hero-referral:hover .tk-track,
+.hero>.hero-referral:focus-visible .tk-track{animation-play-state:paused!important}
+.hero .title{margin:0!important}
+.hero .title h1{margin:0!important}
+.hero{padding-top:35px}
+html.light body .top.mm-ho-root{background:rgba(247,245,239,.94)!important;border-color:rgba(69,53,43,.2)!important}
+html.light body .top.mm-ho-root .mm-top-actions>.top-header-action,
+html.light body .top.mm-ho-root .mm-top-actions>.top-guide-action,
+html.light body .top.mm-ho-root .mm-profile-row .eve-identity-button{
+  background:rgba(71,48,35,.055)!important;border-color:rgba(71,48,35,.22)!important;
+  color:#302923!important;
+}
+html.light body .top.mm-ho-root .mm-ho-context .mm-buy-basis select{
+  background:#fff!important;color:#2e2923!important
+}
+html.light .hero>.hero-referral{background:rgba(248,247,244,.94)!important;color:#372e28!important}
+html.light .hero>.hero-referral .tk-i b{color:#a35030!important}
+/* Appraisal and inventory: exact same card box, header rhythm, content height. */
+.hero-intro:not(.no-appr){
+  display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  align-items:stretch!important;grid-auto-rows:1fr!important;gap:14px!important;
+}
+.hero-intro:not(.no-appr)>.appr,
+.hero-intro:not(.no-appr)>.paste{
+  display:flex!important;flex-direction:column!important;align-self:stretch!important;
+  min-width:0!important;min-height:224px!important;height:100%!important;
+  margin:0!important;padding:14px 16px!important;gap:0!important;
+  border:1px solid rgba(222,220,209,.18)!important;border-radius:11px!important;
+  background:rgba(21,21,21,.9)!important;box-shadow:0 8px 16px rgba(0,0,0,.35)!important;
+  box-sizing:border-box!important;
+}
+.hero-intro:not(.no-appr)>.appr .appr-title,
+.hero-intro:not(.no-appr)>.paste .paste-head{
+  display:flex!important;align-items:center!important;flex:0 0 35px!important;
+  height:35px!important;min-height:35px!important;
+  margin:0 0 10px!important;padding:0 0 8px!important;box-sizing:border-box!important;
+}
+.hero-intro:not(.no-appr)>.appr .appr-title,
+.hero-intro:not(.no-appr)>.paste .paste-title{
+  font:750 1.08rem/1.25 var(--f-ui)!important;letter-spacing:.025em!important;
+  text-transform:uppercase!important;margin:0!important;white-space:nowrap!important;
+}
+.hero-intro:not(.no-appr)>.paste .paste-head .status{
+  margin-left:auto!important;max-width:55%!important;
+  font-size:.76rem!important;text-align:right;
+}
+.hero-intro:not(.no-appr)>.appr .appr-g,
+.hero-intro:not(.no-appr)>.paste textarea{
+  flex:1 1 auto!important;min-height:138px!important;width:100%!important;
+  margin:0!important;box-sizing:border-box!important;
+}
+.hero-intro:not(.no-appr)>.appr .appr-g{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+.hero-intro:not(.no-appr)>.appr .appr-c>div{
+  min-width:0!important;min-height:43px!important;padding:7px 10px!important;
+}
+.hero-intro:not(.no-appr)>.appr .appr-c dt{font-size:.81rem!important;white-space:nowrap}
+.hero-intro:not(.no-appr)>.appr .appr-c dd{min-width:0!important;font-size:.87rem!important}
+.hero-intro:not(.no-appr)>.paste textarea{resize:vertical!important}
+html.light .hero-intro:not(.no-appr)>.appr,
+html.light .hero-intro:not(.no-appr)>.paste{
+  background:rgba(251,249,245,.95)!important;border-color:rgba(83,63,47,.2)!important;
+}
+@media(max-width:1260px){
+  body .top.mm-ho-root{
+    grid-template-columns:minmax(0,1fr) auto!important;
+    grid-template-areas:"brand actions" "main main" "context context"!important;
+    gap:0 14px!important;padding:9px 20px 0!important;
+  }
+  body .top.mm-ho-root #mmTabs>.mm-ho-main{
+    justify-self:center!important;margin-top:7px!important;
+  }
+  body .top.mm-ho-root #mmTabs>.mm-ho-context{margin-top:5px!important}
+}
+@media(max-width:860px){
+  .hero-intro:not(.no-appr){grid-template-columns:minmax(0,1fr)!important;grid-auto-rows:auto!important}
+  .hero-intro:not(.no-appr)>.appr,.hero-intro:not(.no-appr)>.paste{height:auto!important}
+}
+@media(max-width:630px){
+  body .top.mm-ho-root{padding:9px 12px 0!important;gap:5px 7px!important}
+  body .top.mm-ho-root>.brand{font-size:12px!important;gap:5px!important}
+  body .top.mm-ho-root>.brand .logo-s{width:21px!important;height:21px!important;flex-basis:21px!important}
+  body .top.mm-ho-root>.mm-top-actions{gap:5px!important}
+  body .top.mm-ho-root>.mm-top-actions>.top-header-action,
+  body .top.mm-ho-root>.mm-top-actions>.top-guide-action{
+    width:32px!important;min-width:32px!important;height:33px!important;
+    min-height:33px!important;padding:7px!important;
+  }
+  body .top.mm-ho-root .mm-top-actions .top-header-action .side-l,
+  body .top.mm-ho-root .mm-top-actions .top-guide-action .side-l{display:none!important}
+  body .top.mm-ho-root .mm-top-actions .mm-theme{height:33px!important;padding:0 1px!important}
+  body .top.mm-ho-root .mm-top-actions .mm-theme #themeTxt{display:none!important}
+  body .top.mm-ho-root>.mm-top-actions>.mm-profile-row{padding-left:5px!important}
+  body .top.mm-ho-root .mm-profile-row .eve-identity-button{max-width:126px!important;padding:2px 4px!important}
+  body .top.mm-ho-root .mm-profile-row .eve-identity-button img{
+    width:27px!important;height:27px!important;flex-basis:27px!important
+  }
+  body .top.mm-ho-root .mm-profile-row #evePilotName{max-width:87px!important;font-size:11px!important}
+  body .top.mm-ho-root #mmTabs>.mm-ho-main,
+  body .top.mm-ho-root .mm-ho-main .mm-modgroup{gap:13px!important}
+  body .top.mm-ho-root .mm-ho-main .mm-home,
+  body .top.mm-ho-root .mm-ho-main .mm-mod{
+    height:33px!important;min-height:33px!important;font-size:12px!important;
+  }
+  body .top.mm-ho-root #mmTabs>.mm-ho-context{padding:3px 0!important;gap:5px 12px!important}
+  body .top.mm-ho-root .mm-ho-context .mm-business-tabs{gap:15px!important}
+  body .top.mm-ho-root .mm-ho-context .mm-business-tab{font-size:11px!important}
+  .hero>.hero-referral{height:35px!important;min-height:35px!important;margin-top:12px!important}
+  .hero>.hero-referral .tk-i{font-size:12px!important}
+}
+@media(max-width:390px){
+  body .top.mm-ho-root>.brand{font-size:11px!important}
+  body .top.mm-ho-root #mmTabs>.mm-ho-main,
+  body .top.mm-ho-root .mm-ho-main .mm-modgroup{gap:8px!important}
+  body .top.mm-ho-root .mm-ho-main .mm-home,
+  body .top.mm-ho-root .mm-ho-main .mm-mod{font-size:11px!important}
+  body .top.mm-ho-root .mm-profile-row .eve-identity-button{max-width:108px!important}
+  body .top.mm-ho-root .mm-profile-row #evePilotName{max-width:67px!important}
+}
+@media(prefers-reduced-motion:reduce){
+  .hero>.hero-referral .tk-track{animation:none!important}
 }
 
 </style>
@@ -2548,9 +2700,8 @@ html.light body .top.mm-ho-root .mm-ho-context .mm-buy-basis select{background:#
 <button type="button" class="side-fab" id="sideFab" aria-label="Abrir menú" title="Menú"><span class="ic i-panel" aria-hidden="true"></span></button>
 <div class="side-bd" id="sideBd" hidden></div>
 <header class="top">
-  <div class="brand" role="button" tabindex="0" data-go-home title="Ir a Inicio" aria-label="Volver a Inicio"><span class="logo-s sig" aria-hidden="true"></span>SIGMA GRINDSET <small>EVE Online</small></div>
-  <!-- v1.0.62: anuncio tipo ticker (Skill Points gratis), en bucle; clic abre el enlace -->
-  <button type="button" class="ticker" data-link="referral" aria-label="Gratis: usa mi enlace para recibir 1 Millón de Skill Points"><span class="tk-track"><span class="tk-i"><span class="ref-tag">Gratis</span>Usa mi enlace para recibir <b>1 Millón de Skill Points</b> gratis ↗</span><span class="tk-i" aria-hidden="true"><span class="ref-tag">Gratis</span>Usa mi enlace para recibir <b>1 Millón de Skill Points</b> gratis ↗</span><span class="tk-i" aria-hidden="true"><span class="ref-tag">Gratis</span>Usa mi enlace para recibir <b>1 Millón de Skill Points</b> gratis ↗</span><span class="tk-i" aria-hidden="true"><span class="ref-tag">Gratis</span>Usa mi enlace para recibir <b>1 Millón de Skill Points</b> gratis ↗</span></span></button>
+  <div class="brand" role="button" tabindex="0" data-go-home title="Ir a Inicio" aria-label="Volver a Inicio"><span class="logo-s sig" aria-hidden="true"></span><span class="brand-wordmark">SIGMA GRINDSET</span></div>
+
   
 <label class="sw top-theme" title="Tema de la página: Dark (oscuro) o Light (claro)."><input type="checkbox" id="themeLight"><span class="sw-t" aria-hidden="true"></span><span id="themeTxt">Dark</span></label>
 <div id="eveIdentity" class="eve-identity"><button type="button" id="eveIdentityButton" class="eve-identity-button" aria-expanded="false" aria-controls="eveIdentityMenu"><img id="evePortrait" alt="" hidden><span id="evePilotName">Conectar EVE</span><span class="eve-identity-arrow" aria-hidden="true" hidden></span></button><div id="eveIdentityMenu" class="eve-identity-menu" hidden><button type="button" id="eveLogout" hidden>Desconectar</button><span id="eveLoginStatus" role="status" class="eve-login-status" hidden></span></div></div>
@@ -2559,8 +2710,14 @@ html.light body .top.mm-ho-root .mm-ho-context .mm-buy-basis select{background:#
 <section class="hero">
   <div class="title" role="button" tabindex="0" data-go-home title="Ir a Inicio" aria-label="Volver a Inicio">
     <span class="logo-l vg" role="img" aria-label="Logo de Vanguardia DR"></span>
-    <div><h1>Market Moves+</h1><p class="tagline">Herramienta para gestionar tus planes de mercado.</p></div>
+    <div><h1>Market Moves+</h1></div>
   </div>
+  <button type="button" class="ticker hero-referral" data-link="referral" aria-label="Usa mi enlace de referido de EVE Online para recibir un millón de Skill Points">
+    <span class="tk-track">
+      <span class="tk-i">¿Nuevo en EVE? Usa mi enlace y recibe <b>1 millón de Skill Points</b> gratis <span aria-hidden="true">↗</span></span>
+      <span class="tk-i" aria-hidden="true">¿Nuevo en EVE? Usa mi enlace y recibe <b>1 millón de Skill Points</b> gratis ↗</span>
+    </span>
+  </button>
   <nav class="mm-modnav" id="mmTabs" aria-label="Navegación de Market Moves+">
     <button type="button" id="navHome" class="mm-home" title="HOME" aria-label="Volver al inicio"><span class="ic i-home" aria-hidden="true"></span></button>
     <!-- Both business modes occupy the formerly empty space beside Home. -->
