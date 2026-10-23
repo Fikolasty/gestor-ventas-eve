@@ -25,10 +25,13 @@ jobs:
         with:
           persist-credentials: true
       - name: Source assembly and JavaScript syntax tests
+        id: source_checks
         run: python3 -m unittest discover -s tests -p 'test_*.py' -v
       - name: Finance math regression tests
+        id: finance_checks
         run: node --test tests/*.test.cjs
       - name: Build single-file app
+        id: build_site
         run: |
           python3 build.py 1.0.118
           test -s index.html
@@ -37,6 +40,7 @@ jobs:
           grep -q 'v1.0.118' index.html
           ! grep -q '/\\*__STYLE_SOURCES__\\*/' index.html
       - name: Legacy EVE market, mining and skills regressions on assembled sources
+        id: domain_checks
         run: |
           node tests/mining-smoke.cjs
           node tests/mining-types.cjs
@@ -47,10 +51,12 @@ jobs:
           node tests/financial-accounting.cjs
           node tests/skills-integration.cjs
       - name: Install headless Chromium for theme smoke tests
+        id: install_browser
         run: |
           python3 -m pip install playwright==1.56.0
           python3 -m playwright install chromium --with-deps
       - name: Validate Light/Dark and EVE login translations in Chromium
+        id: browser_checks
         run: python3 -m unittest discover -s tests -p 'browser_*.py' -v
       - name: Upload Light/Dark responsive screenshots
         if: always()
@@ -72,6 +78,7 @@ jobs:
           - Limitation: automated headless checks do not replace human visual review of every view or live ESI/SSO.
           EOF
       - name: Publish generated index
+        id: publish_site
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
@@ -104,4 +111,35 @@ jobs:
             done
             echo "Unable to publish after four non-destructive retries."
             exit 1
+          fi
+
+      # This does not bypass QA; it records which gate rejected publication.
+      # Documentation-only commits do not trigger this rebuild workflow.
+      - name: Record failed build gate
+        if: failure()
+        env:
+          CHECKS: ${{ toJSON(steps) }}
+        run: |
+          python3 - <<'PY'
+          import json, os, pathlib
+          data=json.loads(os.environ.get('CHECKS','{}'))
+          failed=[f"{key}: {item.get('outcome', 'unknown')}" for key,item in data.items()
+                  if item.get('outcome') in ('failure','cancelled')]
+          body="# Market Moves+ — CI publication blocked\\n\\n"
+          body+=f"- Source: \`{os.environ['GITHUB_SHA']}\`\\n"
+          body+=f"- Run: \`{os.environ['GITHUB_RUN_ID']}\`\\n"
+          body+="- Expected version: \`1.0.118\`\\n"
+          body+="- Failed gates: "+(', '.join(failed) or 'unknown (check GitHub Actions logs)')+"\\n"
+          body+="\\nPublication was stopped. See the workflow run for error details.\\n"
+          pathlib.Path('docs/CI_FAILURE.md').write_text(body,encoding='utf-8')
+          print(body)
+          PY
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/CI_FAILURE.md
+          if ! git diff --cached --quiet; then
+            git commit -m "ci: record failed v1.0.118 publication gate"
+            git fetch origin main
+            git rebase origin/main || { git rebase --abort || true; exit 0; }
+            git push origin HEAD:main || true
           fi
