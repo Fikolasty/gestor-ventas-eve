@@ -2787,77 +2787,6 @@ html.light .hero-intro:not(.no-appr)>.paste{
 }
 
 
-/* Light Mode foundation — all modules inherit readable semantic colors.
-   Keep the hero photographic backdrop dark, while surfaces and controls turn light.
-   Scoped to html.light: Dark Mode has no behavioral/visual changes. */
-html.light{
-  color-scheme:light;
-  --void:#f0eee9;--hull:#ffffff;--hull2:#f7f5f1;
-  --line:rgba(55,46,38,.15);--line2:rgba(55,46,38,.23);
-  --txt:#292723;--mut:#554f48;--dim:#6d665e;--ion:#544f48;
-  --blue:#625f59;--gain:#137344;--loss:#b12e30;--thrust:#885b16;--clay:#b65334;
-}
-html.light body{background:#eeece7;color:var(--txt)}
-/* Preserve the EVE station and legible, white hero branding. */
-html.light body::before{background-color:#252422}
-html.light .hero>.title,html.light .hero>.title h1{color:#fff}
-html.light .hero>.title .tagline{color:#eee8df}
-html.light .hero>p{color:#eee9e2}
-html.light .panel,html.light details.panel,html.light .appr,html.light .hero-intro>.paste{
-  background:linear-gradient(180deg,rgba(255,255,255,.98),rgba(248,246,242,.98))!important;
-  border-color:var(--line)!important;
-  color:var(--txt);
-  box-shadow:0 5px 22px rgba(25,20,17,.12),inset 0 1px 0 #fff!important;
-}
-html.light .verdict{
-  background:radial-gradient(100% 75% at 0 0,rgba(19,115,68,.07),transparent 60%),linear-gradient(180deg,#fff,#f8f6f2)!important;
-}
-html.light .panel::before{background:linear-gradient(90deg,transparent,rgba(65,53,42,.15),transparent)}
-html.light .paste textarea,html.light textarea,html.light input:not([type=checkbox]):not([type=radio]),html.light select{
-  color:var(--txt);background:#fff;border-color:var(--line2);
-  box-shadow:inset 0 1px 2px rgba(0,0,0,.05);
-}
-html.light .paste textarea{background:transparent;border:0;box-shadow:none}
-html.light input::placeholder,html.light textarea::placeholder{color:var(--dim)}
-html.light select option{background:#fff;color:#292723}
-html.light :focus-visible{outline-color:#a45134}
-html.light input:focus,html.light select:focus,html.light textarea:focus{border-color:#a45134;box-shadow:0 0 0 3px rgba(164,81,52,.15)}
-html.light .ghost,html.light .copy,html.light .tab,html.light .dest,html.light .msg,
-html.light .receipt,html.light .guide,html.light .route,html.light .mm-business-switch,
-html.light .mm-import-controls,html.light #pkOpportunity{
-  background:#f7f5f1!important;color:var(--txt);border-color:var(--line2)!important;
-  box-shadow:0 2px 7px rgba(35,28,23,.07)!important;
-}
-html.light .dest b,html.light .guide li b,html.light .receipt .rw,html.light .rc-t,
-html.light .copy,html.light .sub-h{color:var(--txt)}
-html.light .route>*{color:var(--txt)!important}
-html.light .route>.route-b[aria-pressed=true]{color:#713c2a!important}
-html.light .route .route-ar{color:var(--mut)}
-html.light .lot.open{background:#f5f3ef!important;box-shadow:0 4px 12px rgba(35,28,23,.08)!important}
-html.light .lot-head:hover,html.light .lot.open .lot-head{background:rgba(58,48,40,.055)}
-html.light .opt-bar,html.light .split{background:rgba(45,40,35,.11)}
-html.light .opt-bar i{background:#978f83}
-html.light .v-isk,html.light .lot-net,html.light .opt-v,html.light .rc-t b{ text-shadow:none!important }
-html.light .pos,html.light .p-null{color:var(--gain)}
-html.light .neg{color:var(--loss)}
-html.light .p-jita{color:#4c504d;border-color:rgba(55,46,38,.24);background:rgba(55,46,38,.065)}
-html.light .tag.ok{color:var(--gain)}
-html.light .tag.warn,html.light .sk-note{color:#865516}
-html.light .mm-title,html.light .panel h2,html.light .panel h3,
-html.light th,html.light td,html.light legend{color:var(--txt)}
-html.light th,html.light td{border-color:var(--line)}
-html.light .mm-modnav,html.light #mmTabs>.mm-ho-main{background:#f6f3ed}
-html.light #mmTabs .mm-mod:not([aria-selected=true]){color:var(--mut)}
-html.light #mmTabs .mm-mod[aria-selected=true]{color:#823f29}
-html.light button:disabled{opacity:.55}
-/* Restore the dark contrast specifically for accent-filled calls-to-action. */
-html.light .btn{color:#fff}
-html.light .btn:hover{color:#fff}
-/* For embedded module surfaces with a hard-coded dark backing. */
-html.light .mm-pi-placeholder,html.light .mm-pi-features>div,
-html.light #verdict .ov-flow{background:#f7f5f1!important;color:var(--txt)}
-/* Native widgets, especially Firefox dropdowns, follow the selected theme. */
-html:not(.light){color-scheme:dark}
 
 /* ===== tema claro (generado desde el oscuro por light.py) ===== */
 html.light{--void:#e4e3dd;--hull:#e2e0da;--hull2:#e0ded8;--line:rgba(31,30,29,0.114);--line2:rgba(31,30,29,0.125);--txt:#1c1c1a;--mut:#54524d;--dim:#6c6a64;--ion:#413f3c;--blue:#a39d8b;--clay:#c96442;--thrust:#a67526;--gain:#418b62;--loss:#a92c23}
@@ -3442,32 +3371,6 @@ html.light.light .hero>.hero-referral{background:rgba(31,30,29,0.893)!important;
 html.light.light .hero>.hero-referral .tk-i b{color:#a35030!important}
 html.light .hero-intro:not(.no-appr)>.appr,html.light .hero-intro:not(.no-appr)>.paste{border:1px solid rgba(31,30,29,0.171)!important;background:rgba(240,237,229,0.9)!important;box-shadow:0 8px 16px rgba(0,0,0,0.056)!important}
 html.light.light .hero-intro:not(.no-appr)>.appr,html.light.light .hero-intro:not(.no-appr)>.paste{background:rgba(31,30,29,0.902)!important;border-color:rgba(83,63,47,0.25)!important}
-html.light.light{--void:#272624;--hull:#151514;--hull2:#201f1d;--line:rgba(240,237,229,0.6);--line2:rgba(240,237,229,0.6);--txt:#e4e2dd;--mut:#bab5a7;--dim:#a6a08d;--ion:#bab6a8;--blue:#ada796;--gain:#e3f2eb;--loss:#b12e30;--thrust:#885b16;--clay:#b65334}
-html.light.light body{background:#282825}
-html.light.light body::before{background-color:#e5e3de}
-html.light.light .hero>.title,html.light.light .hero>.title h1{color:#151514}
-html.light.light .hero>.title .tagline{color:#2c2b29}
-html.light.light .hero>p{color:#2b2a27}
-html.light.light .panel,html.light.light details.panel,html.light.light .appr,html.light.light .hero-intro>.paste{background:linear-gradient(180deg,rgba(31,30,29,0.931),rgba(31,30,29,0.931))!important;box-shadow:0 5px 22px rgba(240,237,229,0.6),inset 0 1px 0 #151514!important}
-html.light.light .verdict{background:radial-gradient(100% 75% at 0 0,rgba(19,115,68,0.088),transparent 60%),linear-gradient(180deg,#151514,#1f1e1c)!important}
-html.light.light .panel::before{background:linear-gradient(90deg,transparent,rgba(65,53,42,0.188),transparent)}
-html.light.light .paste textarea,html.light.light textarea,html.light.light input:not([type=checkbox]):not([type=radio]),html.light.light select{background:#151514;box-shadow:inset 0 1px 2px rgba(0,0,0,0.008)}
-html.light.light select option{background:#151514;color:#e4e2dd}
-html.light.light :focus-visible{outline-color:#a45134}
-html.light.light input:focus,html.light.light select:focus,html.light.light textarea:focus{border-color:#a45134;box-shadow:0 0 0 3px rgba(164,81,52,0.188)}
-html.light.light .ghost,html.light.light .copy,html.light.light .tab,html.light.light .dest,html.light.light .msg,html.light.light .receipt,html.light.light .guide,html.light.light .route,html.light.light .mm-business-switch,html.light.light .mm-import-controls,html.light.light #pkOpportunity{background:#201f1d!important;box-shadow:0 2px 7px rgba(240,237,229,0.6)!important}
-html.light.light .route>.route-b[aria-pressed=true]{color:#713c2a!important}
-html.light.light .lot.open{background:#21211f!important;box-shadow:0 4px 12px rgba(240,237,229,0.6)!important}
-html.light.light .lot-head:hover,html.light.light .lot.open .lot-head{background:rgba(240,237,229,0.6)}
-html.light.light .opt-bar,html.light.light .split{background:rgba(240,237,229,0.6)}
-html.light.light .opt-bar i{background:#77746d}
-html.light.light .p-jita{color:#bab6a8;border-color:rgba(240,237,229,0.6);background:rgba(240,237,229,0.6)}
-html.light.light .tag.warn,html.light.light .sk-note{color:#865516}
-html.light.light .mm-modnav,html.light.light #mmTabs>.mm-ho-main{background:#22211f}
-html.light.light #mmTabs .mm-mod[aria-selected=true]{color:#823f29}
-html.light.light .btn{color:#151514}
-html.light.light .btn:hover{color:#151514}
-html.light.light .mm-pi-placeholder,html.light.light .mm-pi-features>div,html.light.light #verdict .ov-flow{background:#201f1d!important}
 /* ajustes a mano del tema claro */
 html.light body{background:#e6e3da;color:#1f1e1d}
 html.light body::before{opacity:.12;filter:grayscale(.35) brightness(1.1)}
@@ -3577,6 +3480,78 @@ html.light #settings .st-f{background:#f7f5ef}
 html.light #settings .st-f input:not([type=checkbox]),html.light #settings .st-f select,html.light #settings .st-f textarea{background:#fff!important}
 html.light .sub-h{color:#b5532f!important}
 /* v1.0.111 build synchronization: the canonical Python build produces the published index.html. */
+
+/* Light Mode foundation — all modules inherit readable semantic colors.
+   Keep the hero photographic backdrop dark, while surfaces and controls turn light.
+   Scoped to html.light: Dark Mode has no behavioral/visual changes. */
+html.light{
+  color-scheme:light;
+  --void:#f0eee9;--hull:#ffffff;--hull2:#f7f5f1;
+  --line:rgba(55,46,38,.15);--line2:rgba(55,46,38,.23);
+  --txt:#292723;--mut:#554f48;--dim:#6d665e;--ion:#544f48;
+  --blue:#625f59;--gain:#137344;--loss:#b12e30;--thrust:#885b16;--clay:#b65334;
+}
+html.light body{background:#eeece7;color:var(--txt)}
+/* Preserve the EVE station and legible, white hero branding. */
+html.light body::before{background-color:#252422}
+html.light .hero>.title,html.light .hero>.title h1{color:#fff}
+html.light .hero>.title .tagline{color:#eee8df}
+html.light .hero>p{color:#eee9e2}
+html.light .panel,html.light details.panel,html.light .appr,html.light .hero-intro>.paste{
+  background:linear-gradient(180deg,rgba(255,255,255,.98),rgba(248,246,242,.98))!important;
+  border-color:var(--line)!important;
+  color:var(--txt);
+  box-shadow:0 5px 22px rgba(25,20,17,.12),inset 0 1px 0 #fff!important;
+}
+html.light .verdict{
+  background:radial-gradient(100% 75% at 0 0,rgba(19,115,68,.07),transparent 60%),linear-gradient(180deg,#fff,#f8f6f2)!important;
+}
+html.light .panel::before{background:linear-gradient(90deg,transparent,rgba(65,53,42,.15),transparent)}
+html.light .paste textarea,html.light textarea,html.light input:not([type=checkbox]):not([type=radio]),html.light select{
+  color:var(--txt);background:#fff;border-color:var(--line2);
+  box-shadow:inset 0 1px 2px rgba(0,0,0,.05);
+}
+html.light .paste textarea{background:transparent;border:0;box-shadow:none}
+html.light input::placeholder,html.light textarea::placeholder{color:var(--dim)}
+html.light select option{background:#fff;color:#292723}
+html.light :focus-visible{outline-color:#a45134}
+html.light input:focus,html.light select:focus,html.light textarea:focus{border-color:#a45134;box-shadow:0 0 0 3px rgba(164,81,52,.15)}
+html.light .ghost,html.light .copy,html.light .tab,html.light .dest,html.light .msg,
+html.light .receipt,html.light .guide,html.light .route,html.light .mm-business-switch,
+html.light .mm-import-controls,html.light #pkOpportunity{
+  background:#f7f5f1!important;color:var(--txt);border-color:var(--line2)!important;
+  box-shadow:0 2px 7px rgba(35,28,23,.07)!important;
+}
+html.light .dest b,html.light .guide li b,html.light .receipt .rw,html.light .rc-t,
+html.light .copy,html.light .sub-h{color:var(--txt)}
+html.light .route>*{color:var(--txt)!important}
+html.light .route>.route-b[aria-pressed=true]{color:#713c2a!important}
+html.light .route .route-ar{color:var(--mut)}
+html.light .lot.open{background:#f5f3ef!important;box-shadow:0 4px 12px rgba(35,28,23,.08)!important}
+html.light .lot-head:hover,html.light .lot.open .lot-head{background:rgba(58,48,40,.055)}
+html.light .opt-bar,html.light .split{background:rgba(45,40,35,.11)}
+html.light .opt-bar i{background:#978f83}
+html.light .v-isk,html.light .lot-net,html.light .opt-v,html.light .rc-t b{ text-shadow:none!important }
+html.light .pos,html.light .p-null{color:var(--gain)}
+html.light .neg{color:var(--loss)}
+html.light .p-jita{color:#4c504d;border-color:rgba(55,46,38,.24);background:rgba(55,46,38,.065)}
+html.light .tag.ok{color:var(--gain)}
+html.light .tag.warn,html.light .sk-note{color:#865516}
+html.light .mm-title,html.light .panel h2,html.light .panel h3,
+html.light th,html.light td,html.light legend{color:var(--txt)}
+html.light th,html.light td{border-color:var(--line)}
+html.light .mm-modnav,html.light #mmTabs>.mm-ho-main{background:#f6f3ed}
+html.light #mmTabs .mm-mod:not([aria-selected=true]){color:var(--mut)}
+html.light #mmTabs .mm-mod[aria-selected=true]{color:#823f29}
+html.light button:disabled{opacity:.55}
+/* Restore the dark contrast specifically for accent-filled calls-to-action. */
+html.light .btn{color:#fff}
+html.light .btn:hover{color:#fff}
+/* For embedded module surfaces with a hard-coded dark backing. */
+html.light .mm-pi-placeholder,html.light .mm-pi-features>div,
+html.light #verdict .ov-flow{background:#f7f5f1!important;color:var(--txt)}
+/* Native widgets, especially Firefox dropdowns, follow the selected theme. */
+html:not(.light){color-scheme:dark}
 
 .i-rock{--i:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 15l3-8 7-3 6 5-1 8-7 3-6-2z'/%3E%3Cpath d='M9 10l3 2 4-2M12 12v5'/%3E%3C/svg%3E")}
 /* Scope moderno para no contaminar el gestor de ventas. */
