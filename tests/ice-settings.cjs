@@ -1,8 +1,8 @@
 'use strict';
 // [ChatGPT] Smoke regresión: ajustes de hielo, buyback Mayhem y proyección de días.
 const fs=require('node:fs'),vm=require('node:vm'),assert=require('node:assert/strict');
-const js=fs.readFileSync('src/script.js','utf8'),
-      html=fs.readFileSync('src/shell.html','utf8'),
+const js=require('./source-bundle.cjs').script(),
+      html=require('./source-bundle.cjs').shell(),
       mining=fs.readFileSync('src/mining.js','utf8');
 new Function(js);new Function(mining);
 for(const term of ["id=\"navHome\"","id=\"iceRefLoss\"","id=\"mnRoot\""])
