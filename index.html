@@ -9404,7 +9404,7 @@ stRestore();syncDeps();brokerNote();buildOreSelect();readBB();syncLots();refresh
   const b64=a=>btoa(String.fromCharCode(...new Uint8Array(a))).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');
   const rand=n=>b64(crypto.getRandomValues(new Uint8Array(n)));
   async function challenge(v){return b64(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(v)));}
-  const refreshUI=()=>{const on=!!session;$e('evePilotName').textContent=on?session.name:'Conectar EVE';$e('eveLogout').hidden=!on;$e('eveIdentityButton').setAttribute('aria-label',on?'Opciones del personaje':'Iniciar sesión con EVE Online');
+  const refreshUI=()=>{const on=!!session;$e('evePilotName').textContent=on?session.name:'Iniciar sesión';$e('eveLogout').hidden=!on;$e('eveIdentityButton').setAttribute('aria-label',on?'Opciones del personaje':'Iniciar sesión con EVE Online');
     $e('evePortrait').hidden=!on;if(on)$e('evePortrait').src='https://images.evetech.net/characters/'+session.id+'/portrait?size=64';else $e('evePortrait').removeAttribute('src');};
   button.addEventListener('click',()=>{if(!session){startLogin();return;}menu.hidden=!menu.hidden;button.setAttribute('aria-expanded',String(!menu.hidden));});
   document.addEventListener('click',e=>{if(!e.target.closest('#eveIdentity')){menu.hidden=true;button.setAttribute('aria-expanded','false');}});
