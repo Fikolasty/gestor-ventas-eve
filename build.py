@@ -69,6 +69,10 @@ window.addEventListener('message',event=>{
   if(m.kind==='mm-skills-language'&&(m.lang==='es'||m.lang==='en')){
     lang=m.lang;render();announceHeight();
   }
+  if(m.kind==='mm-skills-theme'&&(m.theme==='dark'||m.theme==='light')){
+    document.documentElement.classList.toggle('mm-light',m.theme==='light');
+    render();announceHeight();
+  }
   if(m.kind==='mm-skills-pilot'){
     pilotConnected=!!m.connected&&Array.isArray(m.skills);
     pilotName=String(m.name||'').slice(0,100);
