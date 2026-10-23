@@ -485,3 +485,12 @@ Ajuste visual complementario al rediseño del navbar: la botonera del extremo su
 **Siguiente refactor recomendado (no realizado):** identificar tokens y componentes compartidos, retirar duplicados cuando existan tests de snapshot CSS; segmentar lógica de dominio, adaptadores ESI, almacenamiento y vistas con pruebas comparativas antes de cambiar su ubicación.
 
 **Verificación:** inspección estática de fuentes; faltan ejecución de build/workflows, captura real Light/Dark y casos de regresión financieros y de persistencia. Los commits en main no acreditan por sí solos que `index.html` haya sido recompilado/desplegado.
+
+
+## 2026-10-22 — EVE 7 · Dálmata Light y simetría
+
+Capturas del usuario confirman persistencia de fondos oscuros, tarjetas claras y texto oscuro ilegible. Diagnóstico: el estilo del resultado y tarjetas usa fondos Dark hardcodeados, la generación automática de Light y `light_extra.css` requieren propiedad semántica de colores; los encabezados de TASACIÓN/INVENTARIO tenían reglas visualmente independientes.
+
+- Commit `7b9aae48`: crea `--surface-card`, `--surface-result` y `--surface-panel` en la fuente de tema base, aplica variables al resultado y tarjetas.
+- Commit `5d132c4e`: asigna valores claros en `light_extra.css`; alinea altura, baseline, separación y contenido de las tarjetas gemelas, y aclara resultados y textos.
+- Prohibido afirmar que el screenshot haya quedado corregido sin inspeccionar la versión compilada de `index.html` y su despliegue real. Pendiente QA visual/Firefox e identificar nuevos conflictos; no se tocó lógica financiera.
