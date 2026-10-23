@@ -7,7 +7,7 @@
 <meta name="referrer" content="no-referrer">
 <title>Market Moves+ · SIGMA GRINDSET</title>
 <style>
-/* ================= Market Moves+ v1.0.115 =================
+/* ================= Market Moves+ v1.0.116 =================
    Paleta: azul de base, naranja = acción, verde/rojo = ganancia/pérdida.
    Sin backdrop-filter: el vidrio se finge con rgba + bordes. */
 *{box-sizing:border-box;margin:0;padding:0}
@@ -4164,8 +4164,6 @@ html.light body .top.mm-ho-root .mm-top-actions{
 }
 html.light .hero-intro:not(.no-appr)>.appr,
 html.light .hero-intro:not(.no-appr)>.paste{
-  background:rgba(251,250,247,.98)!important;
-  border-color:rgba(75,60,48,.2)!important;
   color:#292723!important;
 }
 html.light .hero-intro:not(.no-appr)>.appr .appr-title,
@@ -4227,8 +4225,6 @@ html.light{
   --glass:rgba(255,255,255,.96);
   --glass2:#f7f5f1;
   --edge:rgba(56,45,36,.16);
-  --surface-card:rgba(255,255,255,.96);
-  --surface-result:linear-gradient(180deg,#fff 0%,#f8f6f2 100%);
   --surface-panel:rgba(255,255,255,.97);
 }
 /* Color ownership belongs to theme variables, not dark hardcoded containers. */
@@ -4763,13 +4759,13 @@ Contraband Freight = no</textarea><small>Una regla por línea: Nombre = tax tota
 <button type="button" class="totop" id="toTop" aria-label="Volver arriba" title="Volver arriba (Inicio)" hidden><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 14l6-6 6 6"/></svg></button>
 <footer class="foot">
   <p class="foot-sec"><span class="ic i-lock" aria-hidden="true"></span>Tu inventario no se guarda: al cerrar o recargar se borra. Solo tus Ajustes quedan en este navegador.</p>
-  <div class="foot-by">Creado por <b>Fiko McGivert</b> · Vanguardia DR · SIGMA GRINDSET · <span class="ver">v1.0.115</span></div>
+  <div class="foot-by">Creado por <b>Fiko McGivert</b> · Vanguardia DR · SIGMA GRINDSET · <span class="ver">v1.0.116</span></div>
 </footer>
 
 <script>
 'use strict';
 /* ============================================================
-   Market Moves+ v1.0.115 — SIGMA GRINDSET / Vanguardia DR
+   Market Moves+ v1.0.116 — SIGMA GRINDSET / Vanguardia DR
    Flujo:  pegado → items → carga (ESI: precios, volúmenes, historial) → verificación → plan → vista
      1. Pegado      parsePaste(): parser posicional de columnas de EVE (Name · Quantity · … · Volume · Est. Price).
      2. Carga       esiItems(): trae todo lo que falta; mientras carga, refresh() NO pinta (S.loading).
@@ -7388,15 +7384,30 @@ let refQ=0;
 function refresh(){if(refQ)return;refQ=requestAnimationFrame(()=>{refQ=0;refreshNow();});}
 // v1.0.45: Tasación del lote como Janice: Precios de · Volumen · Items | Buy · Split · Sell.
 // Valores crudos (mejor compra y venta más barata de Jita 4-4), sin los filtros del plan. Solo con items pegados.
+let appraisalRenderKey=null,appraisalRenderNode=null;
 function paintAppraisal(){
-  const box=$('appr');if(!box)return;box.textContent='';
+  const box=$('appr');if(!box)return;
+  // Appraisal depends on raw EVE market prices and inventory, NOT brokerage,
+  // courier, selected sales plan, or taxes. Preserve its DOM on unrelated edits
+  // to avoid needless allocations, lost focus and repeated MutationObserver work.
+  const its=S.items.filter(o=>o.qty>0);
+  const key=JSON.stringify([S.lang,its.map(o=>[
+    o.name,o.qty,o.m3u,o.jita?.id,o.jita?.topBuy,o.jita?.topSell,
+    o.jita?.regionBuy,o.jita?.regionSell
+  ])]);
+  box.hidden=!its.length;
+  box.parentNode.classList.toggle('no-appr',!its.length);
+  if(appraisalRenderNode===box&&appraisalRenderKey===key)return;
+  box.textContent='';
+  appraisalRenderNode=box;
+  appraisalRenderKey=null; // failed render must not become a cache hit
+  if(!its.length){appraisalRenderKey=key;return;}
   // Tasación bruta: órdenes originales de Jita 4-4, sin tasas, broker ni envío.
   const tb=o=>o.jita&&o.jita.topBuy,ts=o=>o.jita&&o.jita.topSell;
-  const its=S.items.filter(o=>o.qty>0),priced=its.filter(o=>tb(o)!=null||ts(o)!=null);
+  const priced=its.filter(o=>tb(o)!=null||ts(o)!=null);
   // Regional fallback is presentation only; the actual Jita sales routes keep requiring Jita order prices.
   const regional=!priced.length&&its.some(o=>o.jita&&(o.jita.regionBuy!=null||o.jita.regionSell!=null));
   const buyOf=o=>regional?o.jita?.regionBuy:tb(o),sellOf=o=>regional?o.jita?.regionSell:ts(o);
-  box.hidden=!its.length;box.parentNode.classList.toggle('no-appr',!its.length);if(!its.length)return;
   let vB=0,vS=0,vol=0,u=0;its.forEach(o=>{vol+=(o.m3u||0)*o.qty;u+=o.qty;});(regional?its:priced).forEach(o=>{vB+=(buyOf(o)||0)*o.qty;vS+=(sellOf(o)||0)*o.qty;});
   const g=el('div','appr-g'),colL=el('dl','appr-c'),colR=el('dl','appr-c appr-p');
   const cell=(col,k,v,c,cp)=>{const d=el('div',c||null);d.append(el('dt',null,k));const dd=el('dd','num');
@@ -7416,6 +7427,7 @@ function paintAppraisal(){
       :'Todavía no hay precios de Jita disponibles para estos ítems. Revisa el estado de la API y sus nombres.');
     note.setAttribute('role','status');box.append(note);
   }
+  appraisalRenderKey=key;
 }
 function refreshNow(){
   if(refQ){cancelAnimationFrame(refQ);refQ=0;}
