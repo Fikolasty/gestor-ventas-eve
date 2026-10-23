@@ -93,6 +93,29 @@ class ThemeBrowserTests(unittest.TestCase):
         self.assertLess(brightness(self.color("header.top.mm-ho-root")), 120)
         self.assertLess(brightness(self.color(".hero>.hero-referral")), 120)
 
+    def test_appraisal_rerenders_only_for_changed_market_data(self):
+        result = self.page.evaluate("""() => {
+            const oldItems = S.items, oldTax = C.tax;
+            try {
+                S.items = [{name:'Synthetic Test Ore',qty:4,m3u:2,jita:{
+                    id:34,topBuy:100,topSell:120,regionBuy:95,regionSell:130
+                }}];
+                paintAppraisal();
+                const original = document.querySelector('#appr>.appr-g');
+                C.tax = oldTax + 0.005;
+                paintAppraisal();
+                const sameOnTax = original === document.querySelector('#appr>.appr-g');
+                S.items[0].jita.topSell = 125;
+                paintAppraisal();
+                const newOnMarket = original !== document.querySelector('#appr>.appr-g');
+                return {sameOnTax,newOnMarket};
+            } finally {
+                S.items = oldItems; C.tax = oldTax; paintAppraisal();
+            }
+        }""")
+        self.assertTrue(result["sameOnTax"], "Appraisal should not redraw when only broker/tax changes")
+        self.assertTrue(result["newOnMarket"], "Appraisal must redraw when a market price changes")
+
     def test_capture_reference_screenshots_and_idle_render_baseline(self):
         # Reference screenshots are CI artifacts; not a claim of visual parity.
         # Save viewport-only images, with no ESI login or user data.
