@@ -1,6 +1,6 @@
 # Market Moves+ — SDD / Bitácora maestra
 
-**Actualizado:** 2026-10-21 · **Estado:** documento vivo de Spec-Driven Development (SDD).
+**Actualizado:** 2026-10-22 · **Estado:** documento vivo de Spec-Driven Development (SDD).
 **Repositorio:** [Fikolasty/gestor-ventas-eve](https://github.com/Fikolasty/gestor-ventas-eve) · **Entrega:** rama `main` · **App:** https://fikolasty.github.io/gestor-ventas-eve/
 **Base funcional vigente:** compilación `1.0.99` (GitHub Actions, commit generado `dbdbf0e5e22c`); dos modos de Ventas, escenario de materiales, coste de courier por unidad, Skills/Mining y regresiones. Quedan pruebas visuales y de mercado real pendientes; ver sección v1.0.98.
 **Propósito:** conservar decisiones, requisitos, evidencia de pruebas y estado verificable al cambiar de conversación.
@@ -422,3 +422,21 @@ Ajuste visual complementario al rediseño del navbar: la botonera del extremo su
 - **Conservación de funciones:** el script reubica nodos existentes (`#mmTabs`, `#businessSwitch`, `#importControls`, grupo de módulos, `#themeLight`) sin clonarlos ni reemplazar listeners. El control interno `#bFlip` sigue existiendo para compatibilidad con rutas, y `#cImpM` queda siempre editable en Ajustes; el mismo `C.impM` se usa en los cálculos.
 - **Limpieza CSS conservadora:** se reemplazan los bloques del navbar 1.0.106–108 (11.564 caracteres) por reglas limitadas a `.top.mm-ho-root` con media queries de escritorio/móvil. No se eliminan motores ni CSS de componentes de Ventas, Minería, Skills, PI, reproceso, ESI, cuentas o formularios.
 - Se actualizaron `src/shell.html`, `src/script.js`, `index.html` y las aserciones del encabezado en `tests/market-scenarios.cjs`. La verificación automatizada no sustituye QA visual, de ESI ni de OAuth en producción.
+
+
+## 2026-10-22 — v1.0.110 · Refinamiento del header y simetría TASACIÓN / INVENTARIO
+
+**Origen:** revisión visual del usuario sobre v1.0.109. **Alcance:** solo estructura, espaciado, tipografía y tarjetas de inicio; se preservan las fórmulas y los mismos nodos de negocio/ESI/SSO.
+
+1. **Marca SIGMA:** icono SIGMA de 25 px con separación interna de 7 px y nombre dentro de `.brand-wordmark`; se elimina el texto accesorio «EVE Online». En móvil se reduce icono/tipografía sin separar la marca.
+2. **Enlace de referido:** único botón `[data-link="referral"]` movido del header al bloque principal debajo de `<h1>Market Moves+</h1>`, con ticker legible, clic conservado, pausa al hover/foco y respeto por `prefers-reduced-motion`. Se elimina la etiqueta «Gratis» y las copias redundantes antiguas. Se suprime exclusivamente el subtítulo «Herramienta para gestionar tus planes de mercado».
+3. **Acciones a la derecha:** `Ajustes` y `Guía de Uso` siguen siendo los botones reales `.side-i[data-panel]` (no se duplican listeners) pero con borde, fondo, icono y superficie táctil. El switch de tema original `#themeLight` se traslada junto a ambos botones mediante `topActions.insertBefore(theme,profile)`; fuera de la banda de importación. En anchos estrechos se muestran iconos con etiquetas accesibles.
+4. **Personaje/SSO:** se conserva exactamente un `#eveIdentity`, `#eveIdentityButton` y `#evePilotName` con sus handlers originales. Retrato de 32 px, nombre 13 px con truncamiento para pilotos largos, botón propio de 39 px y un único divisor junto al grupo derecho. El ancho útil del contenido del header se concentra en 1440 px para evitar extremos excesivamente alejados en monitores grandes.
+5. **Navegación y controles de comercio:** Home, Ventas, Minería, Skill Plan y subnavegación siguen usando los nodos reubicados en v109. `#importControls[hidden]` y `#shipLab[hidden]` permanecen invisibles fuera de su escenario. `#rtM` sigue oculto solo en cabecera; el ajuste `#cImpM` permanece utilizable en Ajustes. El control técnico `#bFlip` sobrevive internamente.
+6. **TASACIÓN e INVENTARIO:** columnas 50/50 con `minmax(0,1fr)`, separación de 14 px, tarjetas con fondo, borde, `padding:14px 16px` y altura mínima de 224 px idénticos. Cabeceras con reserva vertical de 35 px, misma familia/tamaño tipográfico y separaciones; bloque de tasación y textarea son flexibles, ocupando el alto restante sin cambiar `paintAppraisal()`, la API, el número de filas o el contenido pegado. Bajo 860 px se apilan en una columna.
+7. **Temas y adaptabilidad:** colores específicos de tema claro para barras, selectores, tarjeta y referido; en pantalla intermedia se distribuye navegación en segunda fila (hasta 1260 px) y en móvil se compactan botones/nombre (hasta 630 y 390 px), sin ocultar el inicio de sesión ni los modos de comercio.
+8. **Higiene del CSS:** se **sustituye** el bloque aislado `v1.0.109` por uno `v1.0.110` en `src/shell.html`, evitando acumular otra capa de overrides al final. No se modifican CSS de las funciones de minería, Skills, PI o el motor de cálculo. Se ajusta `tests/market-scenarios.cjs` con nuevas aserciones de ubicación, unicidad de nodos, responsive y conservación de rutas.
+9. **Distribución:** `.github/workflows/build-site.yml` compila ahora `index.html` v1.0.110 cuando se actualiza `main`. El HTML publicado es derivado de `src/`; no se edita manualmente para evitar divergencias. Tras los pushes verificar el estado del workflow y abrir la web en escritorio/móvil, Dark/Light, pegado vacío y lleno, cambio a Comercio Jita y EVE SSO.
+
+**Límites de esta verificación:** la revisión estructural del código y las aserciones no son sustitutos de un test visual real con sesión OAuth y consultas ESI. Dejar QA de navegador y SSO como pendiente hasta observarlos ejecutándose.
+
