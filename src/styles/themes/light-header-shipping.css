@@ -1,0 +1,67 @@
+/* EVE7 theme ownership: shipping, header, ticker, lighter station image */
+html.light {
+ --header-surface:rgba(250,248,245,.94);
+ --ticker-surface:rgba(250,248,245,.94);
+ --ticker-hover:rgba(244,239,233,.98);
+ --surface-card:rgba(251,249,246,.92);
+ --surface-result:linear-gradient(180deg,rgba(255,255,255,.94),rgba(248,246,242,.94));
+}
+html.light body{background:#e9e7e2!important}
+html.light body::before{opacity:.30!important;filter:grayscale(.2) brightness(1.08)!important}
+html.light body::after{background:none!important}
+html.light body .top.mm-ho-root{
+ background:var(--header-surface)!important;
+ color:var(--txt)!important;border-color:var(--edge)!important;
+}
+html.light body .top.mm-ho-root>.brand,
+html.light body .top.mm-ho-root>.brand .brand-wordmark,
+html.light body .top.mm-ho-root .mm-ho-main .mm-home,
+html.light body .top.mm-ho-root .mm-ho-main .mm-mod:not([aria-selected="true"]),
+html.light body .top.mm-ho-root .mm-ho-context,
+html.light body .top.mm-ho-root .mm-top-actions,
+html.light body .top.mm-ho-root .mm-top-actions .side-l,
+html.light body .top.mm-ho-root .mm-profile-row #evePilotName{
+ color:var(--txt)!important;
+}
+html.light body .top.mm-ho-root .mm-top-actions>.top-header-action,
+html.light body .top.mm-ho-root .mm-top-actions>.top-guide-action,
+html.light body .top.mm-ho-root .mm-top-actions .mm-theme,
+html.light body .top.mm-ho-root .mm-profile-row .eve-identity-button{
+ color:var(--txt)!important;
+ background:rgba(87,66,49,.055)!important;border-color:var(--edge)!important;
+}
+html.light .hero>.hero-referral,
+html.light .hero>.hero-referral:hover{
+ background:var(--ticker-surface)!important;
+ border-color:rgba(161,86,55,.32)!important;
+ color:#332c25!important;
+}
+html.light .hero>.hero-referral:hover{background:var(--ticker-hover)!important}
+html.light .hero>.hero-referral .tk-track,
+html.light .hero>.hero-referral .tk-i{
+ background:transparent!important;color:#332c25!important;
+}
+html.light .hero>.hero-referral .tk-i b{color:#a34d2c!important}
+html.light .hero-intro:not(.no-appr)>.appr,
+html.light .hero-intro:not(.no-appr)>.paste{
+ background:var(--surface-card)!important;
+ box-shadow:0 5px 14px rgba(45,35,25,.1)!important;
+ border-color:var(--edge)!important;
+}
+html.light #unitCourierBox.mm-unit-courier,
+html.light .mm-unit-courier{
+ background:var(--surface-card)!important;
+ border:1px solid var(--edge)!important;
+ color:var(--txt)!important;
+ box-shadow:0 2px 9px rgba(45,35,25,.07)!important;
+}
+html.light #unitCourierBox.mm-unit-courier>summary,
+html.light #unitCourierBox .mm-unit-courier-total,
+html.light #unitCourierRows .mm-unit-row b{color:var(--txt)!important}
+html.light #unitCourierRows{background:transparent!important;border-color:var(--edge)!important}
+html.light #unitCourierRows .mm-unit-row{
+ background:rgba(255,255,255,.8)!important;
+ border-color:var(--edge)!important;
+}
+html.light #unitCourierRows .mm-unit-row span,
+html.light #unitCourierRows .mm-unit-row small{color:var(--mut)!important}
