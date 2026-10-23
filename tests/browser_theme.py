@@ -208,7 +208,7 @@ class ThemeBrowserTests(unittest.TestCase):
             }
         }""")
         self.assertEqual(result["english"]["head"],"UNIT PRICE WITH FREIGHT")
-        self.assertEqual(result["english"]["values"],["7,000 ISK","2,000 ISK","9,000 ISK"])
+        self.assertEqual(result["english"]["values"],["7,000.00 ISK","2,000.00 ISK","9,000.00 ISK"])
         self.assertEqual(result["english"]["lot"],"540,000 ISK")
         self.assertEqual(result["english"]["icon"],"34")
         self.assertEqual(result["english"]["volume"].count("m³"),1)
