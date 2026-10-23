@@ -26,7 +26,7 @@ function paintPicker(P){
   const planValue=t=>showProfit?{...t,net:t.net-investment}:t;
   const opt=planValue(modeTotal(P,'auto')).net,cur=P.mode||'auto';
   const all=MODES.filter(([m])=>!(m==='bb'&&!C.bb.on||m==='disc'&&!C.disc.on)&&(m==='auto'||P.rows.some(r=>r.g[m]!=null)))
-    .map(([m,l])=>({m,l,t:m==='auto'?{net:opt,n:P.rows.length}:planValue(modeTotal(P,m))}));
+    .map(([m])=>({m,l:modeName(m),t:m==='auto'?{net:opt,n:P.rows.length}:planValue(modeTotal(P,m))}));
   const same=all.filter(x=>x.m!=='auto'&&Math.round(x.t.net)===Math.round(opt)&&P.rows.every(r=>!r.auto||r.auto===x.m||r.g[x.m]==null)).map(x=>x.m);
   // Mantener siempre visible el plan elegido, aunque su resultado sea idéntico al óptimo.
   const list=all.filter(x=>x.m===cur||!same.includes(x.m));
@@ -116,7 +116,7 @@ function paintPicker(P){
     }
     const txt=el('span','pk-tx'),nm=el('span','pk-l',l);
     if(m==='auto')nm.append(el('em','pk-rec',tx('picker.recommended')));
-    const part=m!=='auto'&&t.n<P.rows.length?(S.lang==='en'?' '+t.n+' of '+P.rows.length+' items follow this route; the remaining items follow the optimal plan.':' '+t.n+' de '+P.rows.length+' ítems siguen esta ruta; los demás siguen el plan óptimo.'):'';
+    const part=m!=='auto'&&t.n<P.rows.length?tx('picker.partial',{selected:t.n,total:P.rows.length}):'';
     const short={auto:'picker.bestDesc',null:'picker.localDesc',
       jOrd:'picker.jitaOrdersDesc',fJ:'picker.jitaOrdersDesc',
       jInst:'picker.instantDesc',fJI:'picker.instantDesc',
