@@ -179,6 +179,43 @@ class ThemeBrowserTests(unittest.TestCase):
         dark = iframe.locator(".main").evaluate("el=>getComputedStyle(el).backgroundColor")
         self.assertLess(brightness(dark), 120, dark)
 
+    def test_freight_unit_cards_show_quote_uplift_and_icon_in_both_languages(self):
+        result = self.page.evaluate("""() => {
+            const oldLang=S.lang, oldApi=S.api['synthetic circuit'];
+            try {
+                S.api['synthetic circuit']={id:34};
+                const item={o:{name:'Synthetic Circuit',jita:{buy:5000,sell:7000}},
+                    q:60,best:'jOrd',jl:7000,g:{jOrd:390000},vol:6,
+                    courierAllocated:120000,courierPerUnit:2000};
+                const list={rows:[item],Vs:6,shipCost:120000};
+                S.lang='en';paintCourierUnits(list);
+                const node=document.querySelector('#unitCourierRows .mm-unit-row');
+                const english={head:document.querySelector('#unitCourierHeading').textContent,
+                    values:Array.from(node.querySelectorAll('.mm-freight-metric strong'),x=>x.textContent),
+                    lot:node.querySelector('.mm-freight-lot strong').textContent,
+                    icon:node.querySelector('img.ti')?.dataset.tid,
+                    volume:node.querySelector('.mm-freight-meta').textContent};
+                S.lang='es';paintCourierUnits(list);
+                const spanish={head:document.querySelector('#unitCourierHeading').textContent,
+                    equation:document.querySelector('#unitCourierRows .mm-freight-equation').textContent};
+                const panel=document.querySelector('#unitCourierBox');
+                const plans=document.querySelector('#pSum .pk-w');
+                return {english,spanish,moved:!!(plans.compareDocumentPosition(panel)&Node.DOCUMENT_POSITION_FOLLOWING)};
+            } finally {
+                S.lang=oldLang;
+                if(oldApi===undefined)delete S.api['synthetic circuit'];
+                else S.api['synthetic circuit']=oldApi;
+            }
+        }""")
+        self.assertEqual(result["english"]["head"],"UNIT PRICE WITH FREIGHT")
+        self.assertEqual(result["english"]["values"],["7,000 ISK","2,000 ISK","9,000 ISK"])
+        self.assertEqual(result["english"]["lot"],"540,000 ISK")
+        self.assertEqual(result["english"]["icon"],"34")
+        self.assertEqual(result["english"]["volume"].count("m³"),1)
+        self.assertEqual(result["spanish"]["head"],"PRECIO UNITARIO CON ENVÍO")
+        self.assertIn("PRECIO BASE",result["spanish"]["equation"])
+        self.assertTrue(result["moved"],"Unit freight panel must be after plan comparison")
+
     def test_appraisal_rerenders_only_for_changed_market_data(self):
         result = self.page.evaluate("""() => {
             const oldItems = S.items, oldTax = C.tax;
