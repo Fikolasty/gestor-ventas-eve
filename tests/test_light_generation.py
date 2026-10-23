@@ -31,5 +31,20 @@ class LightGeneratorTests(unittest.TestCase):
         self.assertNotIn("html.light.light", output)
         self.assertIn("html.light", output)
 
+    def test_modular_light_theme_order_and_ownership(self):
+        self.assertEqual(
+            build_sources.LIGHT_PARTS,
+            ("light-foundation.css", "light-components.css", "light-header-shipping.css"),
+        )
+        css = build_sources.light_sources(read)
+        self.assertGreater(len(css), 20000)
+        self.assertTrue(css.startswith("/* ajustes a mano del tema claro */"))
+        self.assertIn("--header-surface:rgba(250,248,245,.94)", css)
+        self.assertIn("--ticker-surface:rgba(250,248,245,.94)", css)
+        self.assertIn("html.light #unitCourierBox.mm-unit-courier", css)
+        self.assertEqual(css.count("/* EVE7 theme ownership:"), 1)
+        self.assertEqual(css.count("html.light .hero>.hero-referral .tk-i b{"), 1)
+        self.assertNotIn("html.light.light", css)
+
 if __name__ == "__main__":
     unittest.main()
