@@ -18,8 +18,6 @@ html.light body .top.mm-ho-root .mm-top-actions{
 }
 html.light .hero-intro:not(.no-appr)>.appr,
 html.light .hero-intro:not(.no-appr)>.paste{
-  background:rgba(251,250,247,.98)!important;
-  border-color:rgba(75,60,48,.2)!important;
   color:#292723!important;
 }
 html.light .hero-intro:not(.no-appr)>.appr .appr-title,
@@ -81,8 +79,6 @@ html.light{
   --glass:rgba(255,255,255,.96);
   --glass2:#f7f5f1;
   --edge:rgba(56,45,36,.16);
-  --surface-card:rgba(255,255,255,.96);
-  --surface-result:linear-gradient(180deg,#fff 0%,#f8f6f2 100%);
   --surface-panel:rgba(255,255,255,.97);
 }
 /* Color ownership belongs to theme variables, not dark hardcoded containers. */
