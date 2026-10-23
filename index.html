@@ -5127,9 +5127,24 @@ const SH=()=>C.shipOn;
 const IN_JITA=()=>S.flip&&!C.shipOn; // v1.0.55: Jita → HY-RWO con Courier en Off = los items se venden en Jita, sin envío
 // SIGMA Freight: solo Sell bruto de Tasación, sin ajustes; redondeo al alza en m³ y collateral.
 const appraisalSell=o=>o?.jita?.topSell??o?.jita?.regionSell??0;
-const courierRaw=(v,c)=>{const volume=Math.ceil(Math.max(0,v||0)),sell=Math.ceil(Math.max(0,c||0));return trips(volume)*C.base+C.perM3*volume+C.collPct*sell;};
+// Pure SIGMA Freight math: pass the settings explicitly so the UI, optimizer and
+// automated tests use a single financial implementation. Keep the original
+// rounding rules and operation order for backwards-compatible ISK estimates.
+function freightContracts(volume,maxVol){
+  return volume>0&&maxVol>0?Math.ceil(Math.ceil(volume)/maxVol):0;
+}
+function freightRaw(volumeValue,collateralValue,maxVol,base,perM3,collPct){
+  const volume=Math.ceil(Math.max(0,volumeValue||0));
+  const sell=Math.ceil(Math.max(0,collateralValue||0));
+  return freightContracts(volume,maxVol)*base+perM3*volume+collPct*sell;
+}
+function freightShare(itemVolume,itemCollateral,totalVolume,maxVol,base,perM3,collPct){
+  return perM3*Math.ceil(itemVolume)+collPct*Math.ceil(itemCollateral)+
+    (totalVolume>0?freightContracts(totalVolume,maxVol)*base*itemVolume/totalVolume:0);
+}
+const courierRaw=(v,c)=>freightRaw(v,c,C.maxVol,C.base,C.perM3,C.collPct);
 const courierCost=(v,c)=>C.shipOn?courierRaw(v,c):0;
-const courierShare=(v,c,V)=>C.shipOn?C.perM3*Math.ceil(v)+C.collPct*Math.ceil(c)+(V>0?trips(V)*C.base*v/V:0):0;
+const courierShare=(v,c,V)=>C.shipOn?freightShare(v,c,V,C.maxVol,C.base,C.perM3,C.collPct):0;
 
 // ================= Pegado =================
 // Números: 1,234.56 · 1.234,56 · 1 234,56
