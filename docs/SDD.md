@@ -571,3 +571,13 @@ Capturas del usuario confirman persistencia de fondos oscuros, tarjetas claras y
 **Correcciones fuente:** `light.py` ya no autoconvierte reglas que comienzan por `html.light`, evitando `html.light.light`; `tests/test_light_generation.py` cubre este caso. `courier.js` mantiene el motor de envío modular/puro con pruebas de equivalencia.
 
 **Pipeline pendiente de comprobación:** `rebuild-market-moves.yml` incorpora reintentos de rebase no destructivos para publicar `index.html` cuando la rama avanza. Verificar que la nueva ejecución publique la versión vigente y `docs/QA_STATUS.md` antes de declarar Pages al día. La prueba en Chromium constata condiciones concretas de contraste, no una inspección visual exhaustiva.
+
+
+## 2026-10-22 — EVE 7 · Fase 3A: tema Light modular + Appraisal incremental (build objetivo 1.0.116)
+
+- **Fuentes:** `src/light_extra.css` dejó de ser el origen activo; sus bytes iniciales se separaron en `src/styles/themes/light-foundation.css`, `light-components.css`, `light-header-shipping.css`, leídos en ese orden por `BS.light_sources(rd)`. Se borró el archivo obsoleto.
+- **CSS:** retirada prudente de dos bloques redundantes anteriores de ticker y tarjetas Appraisal/Inventory que están sobrescritos por el tema canónico final. Todavía quedan overrides heredados que necesitan inspección y limpieza.
+- **Rendimiento:** `paintAppraisal` reutiliza DOM en cambios no relacionados (tax, courier, plan) si idioma, cantidades, volúmenes y precios crudos Buy/Sell siguen iguales; invalida ante datos modificados. **No se cambiaron fórmulas financieras.**
+- **Pruebas nuevas:** test estático de ensamblado Light, smoke Chromium Light/Dark a 390px, pruebas de identidad DOM para cambios de impuestos/precios, capturas de referencia Dark/Light a 390/1440px; diagnóstico inicial de `refreshNow` sin inventario (no representa carga real).
+- **Entrega:** workflow actualizado a `1.0.116` con artefactos PNG de regresión. La publicación y los tests de esa versión deben verificarse en Actions y Pages antes de afirmar el hito terminado.
+- **Pendientes:** retirar el auto-conversor tras suite amplia de capturas, optimización de inventarios grandes basada en métricas y no intuición, validación ESI/SSO live, separación total del estado global.
