@@ -70,5 +70,20 @@ jobs:
           git add index.html docs/QA_STATUS.md
           if ! git diff --cached --quiet; then
             git commit -m "build: publish Market Moves+ 1.0.115 from modular sources"
-            git push
+            # Other documentation / source commits may land while Chromium runs.
+            # Rebase our tested artifact instead of overwriting or force pushing.
+            for attempt in 1 2 3 4; do
+              git fetch origin main
+              if ! git rebase origin/main; then
+                git rebase --abort || true
+                echo "Newer conflicting index.html was published; keep remote intact."
+                exit 1
+              fi
+              if git push origin HEAD:main; then
+                exit 0
+              fi
+              sleep 2
+            done
+            echo "Unable to publish after four non-destructive retries."
+            exit 1
           fi
