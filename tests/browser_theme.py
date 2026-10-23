@@ -12,7 +12,7 @@ INDEX = Path(__file__).resolve().parents[1] / "index.html"
 
 
 def channels(css_color):
-    match = re.fullmatch(r"rgba?\\(\\s*(\\d+)\\s*,\\s*(\\d+)\\s*,\\s*(\\d+)(?:\\s*,\\s*[\\d.]+)?\\s*\\)", css_color)
+    match = re.fullmatch(r"rgba?\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)(?:\s*,\s*[\d.]+)?\s*\)", css_color)
     if not match:
         raise AssertionError(f"Unsupported computed CSS color: {css_color}")
     return tuple(int(c) for c in match.groups())
