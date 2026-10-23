@@ -2299,7 +2299,7 @@ body.mm-mining .mm-business-switch,body.mm-skills .mm-business-switch,body.mm-pi
 
 
 /* Compact courier unit analysis: rendered only for the current selected plan. */
-.mm-unit-courier{border:1px solid var(--line2);border-radius:11px;background:rgba(20,20,19,.53);
+.mm-unit-courier{border:1px solid var(--line2);border-radius:11px;background:var(--surface-card);
   margin:13px 0;overflow:hidden}
 .mm-unit-courier[hidden]{display:none!important}
 .mm-unit-courier>summary{display:flex;align-items:center;gap:9px;min-height:43px;padding:10px 13px;
@@ -2359,7 +2359,7 @@ body .top.mm-ho-root{
   min-height:0!important;margin:0!important;
   padding:10px max(20px,calc((100vw - 1490px)/2)) 0!important;
   border-bottom:1px solid rgba(222,220,209,.13)!important;
-  background:rgba(21,21,22,.96)!important;
+  background:var(--header-surface,rgba(21,21,22,.96))!important;
   box-shadow:0 5px 22px rgba(0,0,0,.24)!important;
 }
 body .top.mm-ho-root>.brand{
@@ -2649,11 +2649,11 @@ html.light body .top.mm-ho-root .mm-ho-context .mm-buy-basis select{
   width:min(610px,100%)!important;max-width:100%!important;
   min-height:37px!important;height:37px!important;margin:16px auto 5px!important;
   padding:0!important;border:1px solid rgba(217,119,87,.37)!important;
-  border-radius:9px!important;background:rgba(22,21,21,.91)!important;
+  border-radius:9px!important;background:var(--ticker-surface,rgba(22,21,21,.91))!important;
   box-shadow:0 3px 12px rgba(0,0,0,.2)!important;overflow:hidden!important;
   -webkit-mask-image:none!important;mask-image:none!important;color:var(--txt)!important;
 }
-.hero>.hero-referral:hover{border-color:var(--clay)!important;background:rgba(37,29,25,.96)!important}
+.hero>.hero-referral:hover{border-color:var(--clay)!important;background:var(--ticker-hover,rgba(37,29,25,.96))!important}
 .hero>.hero-referral .tk-track{
   display:flex!important;align-items:center!important;height:100%!important;width:max-content!important;
   animation:tk 30s linear infinite!important;
@@ -3333,12 +3333,11 @@ html.light.light .mm-business-tabs{background:rgba(62,41,27,0.069);border-color:
 html.light.light .mm-business-tab{color:#dfddd7}
 html.light.light .mm-business-tab.on{background:#915a3b;color:#713e29;border-color:#8a5a42}
 html.light.light .mm-import-actions .mm-buy-basis select{background:#151514;color:#e3e1db}
-html.light .mm-unit-courier{background:rgba(240,237,229,0.6)}
 html.light .mm-unit-courier-total{color:#915d3b}
 html.light.light .mm-unit-courier{background:rgba(31,30,29,0.779)}
 html.light .pr-manual-editor button{background:rgba(217,119,87,0.125)}
 html.light.light #pkOpportunity{background:rgba(31,30,29,0.855)}
-html.light body .top.mm-ho-root{border-bottom:1px solid rgba(31,30,29,0.123)!important;background:rgba(240,237,229,0.96)!important;box-shadow:0 5px 22px rgba(0,0,0,0.038)!important}
+html.light body .top.mm-ho-root{border-bottom:1px solid rgba(31,30,29,0.123)!important;background:var(--header-surface,rgba(240,237,229,0.96))!important;box-shadow:0 5px 22px rgba(0,0,0,0.038)!important}
 html.light body .top.mm-ho-root #mmTabs>.mm-ho-main{border:1px solid rgba(31,30,29,0.171)!important;background:rgba(0,0,0,0.043)!important;box-shadow:inset 0 1px 2px rgba(0,0,0,0.04)!important}
 html.light body .top.mm-ho-root .mm-ho-main .mm-home,html.light body .top.mm-ho-root .mm-ho-main .mm-mod{color:var(--mut,#54524d)!important}
 html.light body .top.mm-ho-root .mm-ho-main .mm-home:hover,html.light body .top.mm-ho-root .mm-ho-main .mm-mod:hover{background:rgba(31,30,29,0.095)!important}
@@ -3360,8 +3359,8 @@ html.light.light body .top.mm-ho-root .mm-ho-main .mm-home:hover,html.light.ligh
 html.light.light body .top.mm-ho-root .mm-top-actions>.top-header-action,html.light.light body .top.mm-ho-root .mm-top-actions>.top-guide-action,html.light.light body .top.mm-ho-root .mm-top-actions .mm-theme,html.light.light body .top.mm-ho-root .mm-profile-row .eve-identity-button{background:rgba(70,49,39,0.056)!important;border-color:rgba(70,49,39,0.25)!important;color:#e3e1dc!important}
 html.light.light body .top.mm-ho-root .mm-ho-context .mm-business-tab.on{background:rgba(217,119,87,0.213)!important;color:#eeeae7!important}
 html.light.light body .top.mm-ho-root .mm-ho-context .mm-buy-basis select{background:#151514!important;color:#e3e2dc!important}
-html.light .hero>.hero-referral{border:1px solid rgba(217,119,87,0.463)!important;background:rgba(240,237,229,0.91)!important;box-shadow:0 3px 12px rgba(0,0,0,0.032)!important}
-html.light .hero>.hero-referral:hover{background:rgba(240,237,229,0.96)!important}
+html.light .hero>.hero-referral{border:1px solid rgba(217,119,87,0.463)!important;background:var(--ticker-surface,rgba(240,237,229,0.91))!important;box-shadow:0 3px 12px rgba(0,0,0,0.032)!important}
+html.light .hero>.hero-referral:hover{background:var(--ticker-hover,rgba(240,237,229,0.96))!important}
 html.light .hero>.hero-referral .tk-i b{color:#a65226!important}
 html.light.light body .top.mm-ho-root{background:rgba(31,30,29,0.893)!important;border-color:rgba(69,53,43,0.25)!important}
 html.light.light body .top.mm-ho-root .mm-top-actions>.top-header-action,html.light.light body .top.mm-ho-root .mm-top-actions>.top-guide-action,html.light.light body .top.mm-ho-root .mm-profile-row .eve-identity-button{background:rgba(71,48,35,0.069)!important;border-color:rgba(71,48,35,0.275)!important;color:#e3e1dc!important}
