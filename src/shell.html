@@ -15,7 +15,7 @@
   --sigma:url(__SIGMA__);
   --athanor:url(__ATHANOR__); /* v1.0.49: el fondo va una sola vez; se usa con var(--athanor) */
   --vg:url(__VG__);
-  --void:#262624; --hull:#30302e; --hull2:#353533; --line:rgba(222,220,209,.12); --line2:rgba(222,220,209,0.132);
+  --surface-card:rgba(21,21,21,.9); --surface-result:linear-gradient(180deg,rgba(31,29,28,.91),rgba(21,20,19,.96)); --surface-panel:rgba(30,30,29,.96); --void:#262624; --hull:#30302e; --hull2:#353533; --line:rgba(222,220,209,.12); --line2:rgba(222,220,209,0.132);
   --txt:#faf9f5; --mut:#c2c0b6; --dim:#9c9a92;
   --ion:#d6d4cb; --blue:#6b6a65; --clay:#d97757; --thrust:#e0a84f; --gain:#5cba86; --loss:#e8746c;
   --f-num:var(--f-ui);
@@ -874,7 +874,7 @@ body::after{background:radial-gradient(130% 100% at 50% 40%,rgba(14,13,12,0) 55%
 .hero-intro{grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important} /* v1.0.47: mitad y mitad */
 .hero-intro.no-appr{grid-template-columns:minmax(0,1fr)!important}
 /* v1.0.53: Gratis y Antes de empezar en una sola tarjeta (separadas por una línea) */ /* etiqueta arriba, igual que Antes de empezar */
-.appr{min-width:0;display:flex;flex-direction:column;padding:14px 16px;border-radius:var(--r-md);background:rgba(21,21,21,.86);border:1px solid rgba(222,220,209,.12);box-shadow:0 2px 4px rgba(0,0,0,.45),0 8px 18px rgba(0,0,0,.3)}
+.appr{min-width:0;display:flex;flex-direction:column;padding:14px 16px;border-radius:var(--r-md);background:var(--surface-card);border:1px solid rgba(222,220,209,.12);box-shadow:0 2px 4px rgba(0,0,0,.45),0 8px 18px rgba(0,0,0,.3)}
 .appr-tag{display:table;align-self:flex-start;margin-bottom:10px;font-weight:600;font-size:.8rem;color:#1f1e1d;background:#d6d4cb;border-radius:999px;padding:1px 10px}
 .appr-g{display:grid;grid-template-columns:1fr 1fr;border:1px solid rgba(222,220,209,.12);border-radius:var(--r-sm);overflow:hidden;background:#151515}
 .appr-g{flex:1}
@@ -1382,7 +1382,7 @@ body.mm-mining #heroIntro,body.mm-mining #salesBody,body.mm-pi #heroIntro,body.m
 .mm-missing{font:650 .78rem var(--f-ui);color:#f2c978;border:1px solid rgba(226,181,104,.45);background:rgba(226,181,104,.1);padding:5px 9px;border-radius:7px}
 .mm-missing[hidden]{display:none}
 #ledger summary{gap:10px;flex-wrap:wrap}#ledger summary .mm-title{font-size:1.2rem!important}
-#verdict{padding:21px 21px 18px!important;margin:0 0 17px!important;background:linear-gradient(180deg,rgba(31,29,28,.91),rgba(21,20,19,.96))!important}
+#verdict{padding:21px 21px 18px!important;margin:0 0 17px!important;background:var(--surface-result)!important}
 #verdict .ov{gap:12px;margin-bottom:0}
 #verdict .ov-hd{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:24px;margin-bottom:4px}
 #verdict .ov-hd .mm-section-head{margin-bottom:8px!important}
@@ -2692,7 +2692,7 @@ html.light .hero>.hero-referral .tk-i b{color:#a35030!important}
   min-width:0!important;min-height:224px!important;height:100%!important;
   margin:0!important;padding:14px 16px!important;gap:0!important;
   border:1px solid rgba(222,220,209,.18)!important;border-radius:11px!important;
-  background:rgba(21,21,21,.9)!important;box-shadow:0 8px 16px rgba(0,0,0,.35)!important;
+  background:var(--surface-card)!important;box-shadow:0 8px 16px rgba(0,0,0,.35)!important;
   box-sizing:border-box!important;
 }
 .hero-intro:not(.no-appr)>.appr .appr-title,
