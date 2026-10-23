@@ -30,11 +30,11 @@ jobs:
         run: node --test tests/*.test.cjs
       - name: Build single-file app
         run: |
-          python3 build.py 1.0.116
+          python3 build.py 1.0.117
           test -s index.html
           grep -q 'EVE7 theme ownership' index.html
           grep -q 'Login' index.html
-          grep -q 'v1.0.116' index.html
+          grep -q 'v1.0.117' index.html
           ! grep -q '/\\*__STYLE_SOURCES__\\*/' index.html
       - name: Legacy EVE market, mining and skills regressions on assembled sources
         run: |
@@ -67,7 +67,7 @@ jobs:
 
           - Source commit: \`${GITHUB_SHA}\`
           - Workflow run: \`${GITHUB_RUN_ID}\`
-          - Version: \`1.0.116\`
+          - Version: \`1.0.117\`
           - Verified before publication: Python source assembly, Node syntax, SIGMA Freight formula regression, build, Chromium Light/Dark contrast and Login/Iniciar sesión checks.
           - Limitation: automated headless checks do not replace human visual review of every view or live ESI/SSO.
           EOF
@@ -77,7 +77,7 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add index.html docs/QA_STATUS.md
           if ! git diff --cached --quiet; then
-            git commit -m "build: publish Market Moves+ 1.0.116 from modular sources"
+            git commit -m "build: publish Market Moves+ 1.0.117 from modular sources"
             # Other documentation / source commits may land while Chromium runs.
             # Rebase our tested artifact instead of overwriting or force pushing.
             for attempt in 1 2 3 4; do
