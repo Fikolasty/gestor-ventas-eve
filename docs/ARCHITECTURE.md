@@ -75,3 +75,15 @@ La equivalencia del texto reconstruido se comprobó con la versión previa `3df7
 **Nuevos gates de publicación:** tests Python estructurales, `node --check`, `node --test tests/*.test.cjs`, build v1.0.114 y prueba de navegador en Chromium (`tests/browser_theme.py`) para la apariencia del header, ticker, panel de inventario, envío y etiqueta Login/Iniciar sesión. Aún es necesario **confirmar el éxito efectivo del último workflow**, no inferirlo porque existe un commit anterior de build.
 
 **Fase 3 planificada:** fijar tokens explícitos y retirar progresivamente el conversor automático Light y overrides oscuros, sólo después de capturar/verificar las diferencias visuales; perfilar ESI, render de lotes grandes y memory footprint antes de cambios de rendimiento perceptible.
+
+
+## 2026-10-22 · Fase 3A — CSS claro seccionado y primera optimización de render
+
+- La antigua fuente monolítica `src/light_extra.css` se repartió en `src/styles/themes/light-foundation.css`, `light-components.css` y `light-header-shipping.css`. `src/build_sources.py` define `LIGHT_PARTS` y `build.py` concatena esos archivos en el mismo orden; **la separación inicial preservó exactamente los bytes** del CSS anterior.
+- Se eliminó el antiguo `light_extra.css` y dos bloques anteriores redundantes (ticker y fondo/sombra de las tarjetas Appraisal/Inventory) cuya última regla explícita sigue existiendo en `light-header-shipping.css`. Esta es una limpieza incremental, **no la eliminación total de `light.py`**.
+- Se añadió prueba estática del contrato de Light en `tests/test_light_generation.py` para orden, tokens y ausencia de un acento de ticker duplicado.
+- `src/js/app/refresh.js` ahora conserva el DOM de la tarjeta **Appraisal** cuando cambian impuestos, planes o courier y el inventario/precios crudos no han cambiado; el cache key incluye idioma, nombre, cantidad, volumen, Jita Buy/Sell, The Forge fallback e ID. No modifica `computePlan` ni las fórmulas. Cuando esos insumos cambian reconstruye la tarjeta.
+- Prueba Chromium `test_appraisal_rerenders_only_for_changed_market_data` protege reutilización en un cambio de impuestos e invalidación ante cambio de precio. Se añadieron capturas Light/Dark a 1440px y 390px y una **medición inicial** de tiempos de refresco sin inventario; es telemetría de CI, **no prueba de rendimiento en hardware real**.
+- El workflow `rebuild-market-moves.yml` apunta a **v1.0.116**, publica capturas como artifact y no despliega si fallan pruebas.
+
+**Pendientes:** confirmar ejecución y despliegue reales de v1.0.116; ampliar validación visual fuera de cabecera/ticker, completar eliminación de overrides, medir interacción con inventarios grandes, perfilar navegadores reales, separar `S/C` del resto de funciones y probar OAuth/ESI extremo a extremo.
