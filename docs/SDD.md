@@ -494,3 +494,19 @@ Capturas del usuario confirman persistencia de fondos oscuros, tarjetas claras y
 - Commit `7b9aae48`: crea `--surface-card`, `--surface-result` y `--surface-panel` en la fuente de tema base, aplica variables al resultado y tarjetas.
 - Commit `5d132c4e`: asigna valores claros en `light_extra.css`; alinea altura, baseline, separación y contenido de las tarjetas gemelas, y aclara resultados y textos.
 - Prohibido afirmar que el screenshot haya quedado corregido sin inspeccionar la versión compilada de `index.html` y su despliegue real. Pendiente QA visual/Firefox e identificar nuevos conflictos; no se tocó lógica financiera.
+
+
+## 2026-10-22 — EVE 7 · Contrato de traducción ES/EN (SSO Login)
+
+**Requisito del usuario:** toda instrucción de copy en español o inglés se interpreta como solicitud de texto bilingüe; nunca debe convertirse en un literal permanente de un único idioma. La elección actual de idioma debe gobernar el texto visible en todo el producto, incluidas secciones dinámicas y controles EVE SSO.
+
+**Cambios:** etiqueta del botón de EVE SSO desconectado, tanto en HTML inicial como en `refreshUI()`: `Iniciar sesión` (ES) / `Login` (EN); accesibilidad: `Iniciar sesión con EVE Online` / `Log in with EVE Online`. Se añadieron entradas explícitas en `src/i18n/en.json`. No cambió el flujo OAuth, permisos, sesión ni API.
+
+**Contrato para cambios futuros:**
+1. Cualquier texto visible nuevo o editado requiere par ES/EN. El idioma del prompt no determina el idioma fijo de la interfaz.
+2. Conservar el contenido base español del sistema actual y registrar en `src/i18n/en.json` su texto completo en inglés; preferir traducción completa sobre sustitución parcial. El texto dinámico debe generarse desde claves/mensajes traducibles, no concatenaciones sin entradas.
+3. Traducir botones, encabezados, tooltips, placeholders, `aria-label`, estados vacíos, errores, formularios, diálogos y módulos separados (Mining/Skills/PI).
+4. No traducir nombres del piloto, inventarios pegados, ítems, nombres de sistemas, URLs ni otros datos de origen.
+5. Validar ES→EN→ES y persistencia/SSO; el observador actual traduce nodos DOM agregados en EN, pero no garantiza automáticamente la cobertura de textos no registrados. Mantener auditoría y tests de cobertura.
+
+**Límites de verificación:** inspección estática de claves y código; sin prueba visual de sesión SSO ni despliegue publicado todavía.
