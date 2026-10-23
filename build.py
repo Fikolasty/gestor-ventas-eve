@@ -3,7 +3,7 @@
 
 Junta src/shell.html + src/script.js, mete el dataset de reproceso (src/refine.js),
 el diccionario de inglés (src/i18n/en.json), las imágenes en base64 (src/assets)
-y genera el tema claro (src/light.py + src/light_extra.css). Sin dependencias externas; integra Comparativa Minera desde sus fuentes.
+y genera el tema claro (src/light.py + src/styles/themes/*.css). Sin dependencias externas; integra Comparativa Minera desde sus fuentes.
 """
 import json, os, sys
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), 'src'))
