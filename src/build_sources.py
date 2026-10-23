@@ -27,6 +27,13 @@ JS_PARTS = (
     ("/*__MODULE_FULFILLMENT_UI__*/", ("js", "ui", "fulfillment.js")),
     ("/*__MODULE_REFINING_VIEW__*/", ("js", "ui", "refining-view.js")),
     ("/*__MODULE_PLAN_PICKER__*/", ("js", "ui", "plan-picker.js")),
+    ("/*__MODULE_REFRESH__*/", ("js", "app", "refresh.js")),
+    ("/*__MODULE_MINING_BRIDGE__*/", ("js", "ui", "mining-bridge.js")),
+    ("/*__MODULE_SETTINGS_UI__*/", ("js", "ui", "settings.js")),
+    ("/*__MODULE_SKILLS_BRIDGE__*/", ("js", "ui", "skills-bridge.js")),
+    ("/*__MODULE_TRANSLATOR__*/", ("js", "i18n", "translator.js")),
+    ("/*__MODULE_SETTINGS_PERSISTENCE__*/", ("js", "app", "settings-persistence.js")),
+    ("/*__MODULE_EVE_SSO__*/", ("js", "auth", "eve-sso.js")),
 )
 
 def css_sources(read):
