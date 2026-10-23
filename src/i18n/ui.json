@@ -286,5 +286,53 @@
   "units.isk": {
     "es": "ISK",
     "en": "ISK"
+  },
+  "mining.outproduces": {
+    "es": " produce más ({value}). Mayor autonomía: ",
+    "en": " produces more ({value}). Best capacity: "
+  },
+  "mining.minutesFill": {
+    "es": " ({minutes} min hasta llenar).",
+    "en": " ({minutes} min until full)."
+  },
+  "mining.moreAutonomy": {
+    "es": "Más autonomía: ",
+    "en": "Greater capacity: "
+  },
+  "mining.mostProfitable": {
+    "es": "★ Más rentable",
+    "en": "★ Most profitable"
+  },
+  "mining.resultOne": {
+    "es": "Resultado para 1 cuenta",
+    "en": "Result for 1 account"
+  },
+  "mining.resultMany": {
+    "es": "Resultado para {count} cuentas",
+    "en": "Result for {count} accounts"
+  },
+  "mining.loading": {
+    "es": "Consultando precios…",
+    "en": "Checking prices…"
+  },
+  "mining.noPrice": {
+    "es": "Sin cotizaciones no se puede calcular; revisa ESI.",
+    "en": "Cannot calculate without quotes; check ESI."
+  },
+  "mining.priceMissing": {
+    "es": "Faltan cotizaciones; puedes introducir precios manualmente.",
+    "en": "Some prices are missing; you can enter manual quotes."
+  },
+  "mining.priceReady": {
+    "es": "Precios ESI/manuales. ESI se actualiza cada 5 minutos.",
+    "en": "ESI/manual prices. ESI refreshes every 5 minutes."
+  },
+  "mining.esiLoading": {
+    "es": "Consultando precios de ESI…",
+    "en": "Loading ESI prices…"
+  },
+  "mining.unknown": {
+    "es": "—",
+    "en": "—"
   }
 }
