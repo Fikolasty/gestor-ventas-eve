@@ -1,0 +1,107 @@
+/* Appraisal and inventory: exact same card box, header rhythm, content height. */
+.hero-intro:not(.no-appr){
+  display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  align-items:stretch!important;grid-auto-rows:1fr!important;gap:14px!important;
+}
+.hero-intro:not(.no-appr)>.appr,
+.hero-intro:not(.no-appr)>.paste{
+  display:flex!important;flex-direction:column!important;align-self:stretch!important;
+  min-width:0!important;min-height:224px!important;height:100%!important;
+  margin:0!important;padding:14px 16px!important;gap:0!important;
+  border:1px solid rgba(222,220,209,.18)!important;border-radius:11px!important;
+  background:var(--surface-card)!important;box-shadow:0 8px 16px rgba(0,0,0,.35)!important;
+  box-sizing:border-box!important;
+}
+.hero-intro:not(.no-appr)>.appr .appr-title,
+.hero-intro:not(.no-appr)>.paste .paste-head{
+  display:flex!important;align-items:center!important;flex:0 0 35px!important;
+  height:35px!important;min-height:35px!important;
+  margin:0 0 10px!important;padding:0 0 8px!important;box-sizing:border-box!important;
+}
+.hero-intro:not(.no-appr)>.appr .appr-title,
+.hero-intro:not(.no-appr)>.paste .paste-title{
+  font:750 1.08rem/1.25 var(--f-ui)!important;letter-spacing:.025em!important;
+  text-transform:uppercase!important;margin:0!important;white-space:nowrap!important;
+}
+.hero-intro:not(.no-appr)>.paste .paste-head .status{
+  margin-left:auto!important;max-width:55%!important;
+  font-size:.76rem!important;text-align:right;
+}
+.hero-intro:not(.no-appr)>.appr .appr-g,
+.hero-intro:not(.no-appr)>.paste textarea{
+  flex:1 1 auto!important;min-height:138px!important;width:100%!important;
+  margin:0!important;box-sizing:border-box!important;
+}
+.hero-intro:not(.no-appr)>.appr .appr-g{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+.hero-intro:not(.no-appr)>.appr .appr-c>div{
+  min-width:0!important;min-height:43px!important;padding:7px 10px!important;
+}
+.hero-intro:not(.no-appr)>.appr .appr-c dt{font-size:.81rem!important;white-space:nowrap}
+.hero-intro:not(.no-appr)>.appr .appr-c dd{min-width:0!important;font-size:.87rem!important}
+.hero-intro:not(.no-appr)>.paste textarea{resize:vertical!important}
+html.light .hero-intro:not(.no-appr)>.appr,
+html.light .hero-intro:not(.no-appr)>.paste{
+  background:rgba(251,249,245,.95)!important;border-color:rgba(83,63,47,.2)!important;
+}
+@media(max-width:1260px){
+  body .top.mm-ho-root{
+    grid-template-columns:minmax(0,1fr) auto!important;
+    grid-template-areas:"brand actions" "main main" "context context"!important;
+    gap:0 14px!important;padding:9px 20px 0!important;
+  }
+  body .top.mm-ho-root #mmTabs>.mm-ho-main{
+    justify-self:center!important;margin-top:7px!important;
+  }
+  body .top.mm-ho-root #mmTabs>.mm-ho-context{margin-top:5px!important}
+}
+@media(max-width:860px){
+  .hero-intro:not(.no-appr){grid-template-columns:minmax(0,1fr)!important;grid-auto-rows:auto!important}
+  .hero-intro:not(.no-appr)>.appr,.hero-intro:not(.no-appr)>.paste{height:auto!important}
+}
+@media(max-width:630px){
+  body .top.mm-ho-root{padding:9px 12px 0!important;gap:5px 7px!important}
+  body .top.mm-ho-root>.brand{font-size:12px!important;gap:5px!important}
+  body .top.mm-ho-root>.brand .logo-s{width:21px!important;height:21px!important;flex-basis:21px!important}
+  body .top.mm-ho-root>.mm-top-actions{gap:5px!important}
+  body .top.mm-ho-root>.mm-top-actions>.top-header-action,
+  body .top.mm-ho-root>.mm-top-actions>.top-guide-action{
+    width:32px!important;min-width:32px!important;height:33px!important;
+    min-height:33px!important;padding:7px!important;
+  }
+  body .top.mm-ho-root .mm-top-actions .top-header-action .side-l,
+  body .top.mm-ho-root .mm-top-actions .top-guide-action .side-l{display:none!important}
+  body .top.mm-ho-root .mm-top-actions .mm-theme{height:33px!important;padding:0 1px!important}
+  body .top.mm-ho-root .mm-top-actions .mm-theme #themeTxt{display:none!important}
+  body .top.mm-ho-root>.mm-top-actions>.mm-profile-row{padding-left:5px!important}
+  body .top.mm-ho-root .mm-profile-row .eve-identity-button{max-width:126px!important;padding:2px 4px!important}
+  body .top.mm-ho-root .mm-profile-row .eve-identity-button img{
+    width:27px!important;height:27px!important;flex-basis:27px!important
+  }
+  body .top.mm-ho-root .mm-profile-row #evePilotName{max-width:87px!important;font-size:11px!important}
+  body .top.mm-ho-root #mmTabs>.mm-ho-main,
+  body .top.mm-ho-root .mm-ho-main .mm-modgroup{gap:13px!important}
+  body .top.mm-ho-root .mm-ho-main .mm-home,
+  body .top.mm-ho-root .mm-ho-main .mm-mod{
+    height:33px!important;min-height:33px!important;font-size:12px!important;
+  }
+  body .top.mm-ho-root #mmTabs>.mm-ho-context{padding:3px 0!important;gap:5px 12px!important}
+  body .top.mm-ho-root .mm-ho-context .mm-business-tabs{gap:15px!important}
+  body .top.mm-ho-root .mm-ho-context .mm-business-tab{font-size:11px!important}
+  .hero>.hero-referral{height:35px!important;min-height:35px!important;margin-top:12px!important}
+  .hero>.hero-referral .tk-i{font-size:12px!important}
+}
+@media(max-width:390px){
+  body .top.mm-ho-root>.brand{font-size:11px!important}
+  body .top.mm-ho-root #mmTabs>.mm-ho-main,
+  body .top.mm-ho-root .mm-ho-main .mm-modgroup{gap:8px!important}
+  body .top.mm-ho-root .mm-ho-main .mm-home,
+  body .top.mm-ho-root .mm-ho-main .mm-mod{font-size:11px!important}
+  body .top.mm-ho-root .mm-profile-row .eve-identity-button{max-width:108px!important}
+  body .top.mm-ho-root .mm-profile-row #evePilotName{max-width:67px!important}
+}
+@media(prefers-reduced-motion:reduce){
+  .hero>.hero-referral .tk-track{animation:none!important}
+}
+
+
+
