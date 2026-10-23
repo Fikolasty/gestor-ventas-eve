@@ -183,24 +183,24 @@ function paintVerdict(P){
    $('vWhat').dataset.k=ks[0]||'';
    $('vWhat').textContent=none||!ks.length?'':W(ks[0])+(ks.length>1?' + '+(ks.length-1)+(ks.length>2?' más':' más'):'');}
   {const fa=!P.mode&&P.rows.some(r=>r.fast);
-    $('vTitle').textContent=S.lang==='en'?(P.mode?'YOUR SELLING ROUTE':'THE BEST SELLING ROUTE'):(P.mode?'TU RUTA DE VENTA':'LA MEJOR RUTA DE VENTA');
-    $('vSubtitle').textContent=flipAcct?(S.lang==='en'?'AFTER PURCHASE, TAXES AND TRANSPORT':'DESPUÉS DE COMPRA, IMPUESTOS Y ENVÍO'):(S.lang==='en'?'CHECK YOUR ROUTE AND NET SALES':'REVISA TU RUTA Y CUÁNTO RECIBIRÍAS');
+    $('vTitle').textContent=tx(P.mode?'verdict.selectedTitle':'verdict.planTitle');
+    $('vSubtitle').textContent=tx(P.mode?'verdict.selectedSubtitle':'verdict.planSubtitle');
     if(fa&&$('vWhat').textContent)$('vWhat').textContent+=' · por rapidez';
     const cap=$('vCap');cap.replaceChildren();
-    if(none){cap.textContent=S.lang==='en'?'Waiting for Jita prices to calculate your route.':'Estamos esperando los precios de Jita para calcular tu ruta.';}
+    if(none){cap.textContent=tx('verdict.pending');}
     else{
       // Top-level financial breakdown replaces duplicate plan narration.
       // Final result / profit remains shown ONCE in the large ISK figure.
       const en=S.lang==='en',fig=verdictFinance(P,flipAcct),bridge=el('div','v-finance');
-      bridge.setAttribute('role','group');bridge.setAttribute('aria-label',en?'Selected plan accounting':'Desglose del plan elegido');
+      bridge.setAttribute('role','group');bridge.setAttribute('aria-label',tx('verdict.accounting'));
       const card=(label,number,cost)=>{
         const item=el('div','v-finance-item');
         item.append(el('small',null,label),el('strong','num '+(cost?'neg':'pos'),(cost&&number>0?'−':'')+fmt(Math.abs(number))));
         bridge.append(item);
       };
-      card(en?'Net sales after fees':'Ventas netas después de tasas',fig.sales,false);
-      card(en?'Shipping cost':'Coste de envío',fig.shipping,true);
-      if(flipAcct)card(en?'Purchase investment':'Inversión de compra',fig.investment,true);
+      card(tx('verdict.netSales'),fig.sales,false);
+      card(tx('verdict.freight'),fig.shipping,true);
+      if(flipAcct)card(tx('verdict.investment'),fig.investment,true);
       cap.append(bridge);
     }
   }
