@@ -1,0 +1,40 @@
+name: Rebuild Market Moves distributable
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'build.py'
+      - 'src/**'
+      - '.github/workflows/rebuild-market-moves.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: market-moves-build-main
+  cancel-in-progress: false
+
+jobs:
+  compile:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - name: Build single-file app
+        run: |
+          python3 build.py 1.0.112
+          test -s index.html
+          grep -q 'EVE7 theme ownership' index.html
+          grep -q 'Login' index.html
+      - name: Publish generated index
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html
+          if ! git diff --cached --quiet; then
+            git commit -m "build: publish Market Moves+ 1.0.112 from sources"
+            git push
+          fi
