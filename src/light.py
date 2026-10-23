@@ -45,6 +45,9 @@ def sel(sx):
     for x in split_top(sx,','):
         x=x.strip()
         if not x:continue
+        # Explicit Light selectors are authoritative; converting them creates
+        # html.light.light selectors that cause unexpected precedence.
+        if x=='html.light' or any(x.startswith('html.light'+p) for p in (' ', '.', ':', '[', '#')):continue
         if x.startswith(':root'):res.append('html.light'+x[5:])
         elif re.match(r'html(?![\w-])',x):res.append('html.light'+x[4:])
         else:res.append('html.light '+x)
@@ -74,5 +77,6 @@ def light(css):
             p,v=dcl.split(':',1);p=p.strip()
             if not COLOR_PROPS.match(p) or not COL.search(v) or 'url(__' in v:continue
             decls.append(p+':'+COL.sub(lambda m:conv(m.group(0)),v.strip()))
-        if decls:out.append(sel(head)+'{'+';'.join(decls)+'}')
+        qualified=sel(head)
+        if decls and qualified:out.append(qualified+'{'+';'.join(decls)+'}')
     return '\n'.join(out)
