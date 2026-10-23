@@ -22,7 +22,7 @@
 | `src/styles/50-navigation.css` | Header y navegación actual |
 | `src/styles/60-final-layout.css` | Últimas reglas de simetría y responsive |
 | `src/light.py` | Conversión Light heredada, pendiente de sustitución controlada por temas explícitos |
-| `src/light_extra.css` | Correcciones Light existentes; no seguir agregando reglas sin identificar la regla original conflictiva |
+| `src/styles/themes/light-*.css` | Tema claro modular: tokens y base, componentes, cabecera/ticker/courier; evitar duplicar definiciones |
 | `src/mining.css` | Módulo Minería |
 | `src/js/ui/format.js` | Presentación numérica / unidades y signos |
 | `src/js/domain/market-pricing.js` | Tasas, reglas de precios y mercado |
