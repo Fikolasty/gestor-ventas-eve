@@ -1,4 +1,15 @@
 // ================= Formato =================
+// Central ES/EN catalog. All newly authored dynamic labels should use tx()
+// rather than concatenating translated fragments or maintaining parallel strings.
+// The build embeds src/i18n/ui.json here (no network request or extra script).
+const UI_TEXT=/*__UI_CATALOG__*/{};
+function tx(key,params={}){
+  const record=UI_TEXT[key];
+  if(!record)return key;
+  const locale=typeof S==='object'&&S.lang==='en'?'en':'es';
+  return (record[locale]||record.es).replace(/\{([a-zA-Z][\w]*)\}/g,
+    (_,k)=>params[k]==null?'':String(params[k]));
+}
 // Formateadores Intl creados UNA vez (toLocaleString con opciones crea uno nuevo en cada llamada: muy lento)
 const NF0=new Intl.NumberFormat('en-US',{maximumFractionDigits:0}),NF1=new Intl.NumberFormat('en-US',{maximumFractionDigits:1}),
       NF2=new Intl.NumberFormat('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}),NFV=new Intl.NumberFormat('en-US',{maximumFractionDigits:2});
