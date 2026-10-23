@@ -71,6 +71,17 @@ window.addEventListener('message',event=>{
   }
   if(m.kind==='mm-skills-theme'&&(m.theme==='dark'||m.theme==='light')){
     document.documentElement.classList.toggle('mm-light',m.theme==='light');
+    const tokens=m.tokens&&typeof m.tokens==='object'?m.tokens:{};
+    // Accept only fixed visual tokens, never HTML, script, URLs or user-provided CSS.
+    for(const key of ['txt','mut','dim','line','line2','clay','ion','gain','loss','surface-card','surface-panel','r-sm','r-md','r-lg']){
+      const value=tokens[key];
+      if(typeof value==='string'&&value.length<160&&!/[;{}<>]/.test(value))
+        document.documentElement.style.setProperty('--mm-'+key,value);
+    }
+    if(typeof tokens.font==='string'&&tokens.font.length<300&&!/[;{}<>]/.test(tokens.font))
+      document.documentElement.style.setProperty('--mm-font',tokens.font);
+    if(typeof tokens.size==='string'&&/^\\d+(?:\\.\\d+)?px$/.test(tokens.size))
+      document.documentElement.style.setProperty('--mm-size',tokens.size);
     render();announceHeight();
   }
   if(m.kind==='mm-skills-pilot'){
