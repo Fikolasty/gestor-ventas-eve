@@ -104,7 +104,7 @@ assert(html.includes('src="__HULK_ICON__"'));
 assert(!/mm-mining-icon"[^>]*><span class="ic i-ship"/.test(html));
 console.log('Local hub captions and alpha Hulk icon PASS.');
 
-// v1.0.109 header regression: the original DOM is reparented at runtime,
+// v1.0.110 header regression: the original DOM is reparented at runtime,
 // not cloned and not replaced with simplified calculators.
 const salesHTML=fs.readFileSync('src/shell.html','utf8');
 const salesJS=fs.readFileSync('src/script.js','utf8');
@@ -115,7 +115,8 @@ assert(salesHTML.includes('id="cImpM"'),'Margin stays editable in Settings');
 assert.equal((salesHTML.match(/id="eveIdentity"/g)||[]).length,1,'Only one EVE profile');
 assert(salesJS.includes("const identity=$('eveIdentity');if(identity)profile.append(identity)"));
 assert(salesJS.includes("headerMain.append($('navHome'),group)"));
-assert(salesJS.includes("headerContext.append($('businessSwitch'),$('importControls'),theme)"));
+assert(salesJS.includes("headerContext.append($('businessSwitch'),$('importControls'))"));
+assert(salesJS.includes('topActions.insertBefore(theme,profile)'),'Theme must live beside Settings, Guide and the EVE pilot');
 assert(salesJS.includes("headerLegacy.append(rightGroup)"),'Original internal route control must survive');
 assert(salesJS.includes("header.insertBefore(bar,topActions)"),'Navigation must be in main header');
 assert(salesJS.includes("$('importControls').hidden=!isImport"));
@@ -126,12 +127,23 @@ assert(salesJS.includes("[['cNullDest'],()=>!S.flip"),'Margin must not be disabl
 assert(!salesJS.includes("[['cImpM','cNullDest'],()=>!S.flip"));
 assert(salesJS.includes("C.impM=v/100"),'The same margin is still used for finance calculations');
 assert(salesHTML.includes('.top.mm-ho-root'),'Approved style scope must be present');
-assert(salesHTML.includes('grid-template-areas:"brand main actions" "context context context" "ticker ticker ticker"'));
+assert(salesHTML.includes('grid-template-areas:"brand main actions" "context context context"'));
 assert(salesHTML.includes('.mm-ho-context #importControls[hidden]{display:none!important}'));
 assert(salesHTML.includes('.mm-ho-context #rtM{display:none!important}'),'Duplicate header margin must be hidden');
-assert(salesHTML.includes('@media(max-width:1120px)')&&salesHTML.includes('@media(max-width:610px)'));
+assert(salesHTML.includes('@media(max-width:1260px)')&&salesHTML.includes('@media(max-width:630px)'));
 assert(!salesHTML.includes('/* v1.0.106: ONE balanced navigation row:'));
 assert(!salesHTML.includes('/* v1.0.107 — compact Jita import bar.'));
+assert(salesHTML.includes('class="brand-wordmark">SIGMA GRINDSET</span>'));
+assert(!salesHTML.includes('SIGMA GRINDSET <small>EVE Online</small>'));
+assert(!salesHTML.includes('Herramienta para gestionar tus planes de mercado.'));
+assert(salesHTML.includes('class="ticker hero-referral"'));
+assert(!salesHTML.includes('class="ref-tag">Gratis</span>'),'No Gratis badge in referral');
+assert.equal((salesHTML.match(/data-link="referral"/g)||[]).length,1,'Unique referral link');
+assert(salesHTML.indexOf('class="ticker hero-referral"')>salesHTML.indexOf('<h1>Market Moves+</h1>'));
+assert(salesHTML.includes('Appraisal and inventory: exact same card box'));
+assert(salesHTML.includes('grid-template-columns:repeat(2,minmax(0,1fr))!important'));
+assert(salesHTML.includes('top-header-action')&&salesHTML.includes('top-guide-action'));
+assert.equal((salesHTML.match(/id="themeLight"/g)||[]).length,1);
 assert(salesJS.includes('function computePlan()')&&salesJS.includes('function selectAppModule(name)'));
 assert(salesJS.includes('function syncBusinessMode()')&&salesJS.includes('function syncShipSwitch()'));
 console.log('PASS: approved header, responsive CSS, unique controls, persisted margin and original engines.');
