@@ -4,9 +4,24 @@ const SkillUI=(()=>{
   const send=(message)=>{
     if(frame&&ready&&frame.contentWindow)frame.contentWindow.postMessage(message,'*');
   };
+  // Read the real Market Moves+ design tokens each time the view or theme changes.
+  // The iframe is sandboxed, so these explicit visual values are passed through
+  // postMessage instead of creating a second hard-coded theme.
+  const themeMessage=()=>{
+    const style=getComputedStyle(document.documentElement);
+    const bodyStyle=getComputedStyle(document.body);
+    const tokens={};
+    for(const key of ['txt','mut','dim','line','line2','clay','ion','gain','loss','surface-card','surface-panel','r-sm','r-md','r-lg']){
+      tokens[key]=style.getPropertyValue('--'+key).trim();
+    }
+    tokens.font=bodyStyle.fontFamily;
+    tokens.size=bodyStyle.fontSize;
+    tokens.leading=bodyStyle.lineHeight;
+    return {kind:'mm-skills-theme',theme,tokens};
+  };
   const sync=()=>{
     send({kind:'mm-skills-language',lang:language});
-    send({kind:'mm-skills-theme',theme});
+    send(themeMessage());
     send({kind:'mm-skills-pilot',connected:!!pilot,name:pilot?.name||'',skills:pilot?.skills||[]});
   };
   function incoming(event){
@@ -37,7 +52,7 @@ const SkillUI=(()=>{
   const shown=()=>{if(frame){send({kind:'mm-skills-measure'});sync();}};
   const setPilot=data=>{pilot=data?.skills&&Array.isArray(data.skills)?{name:String(data.name||''),skills:data.skills.map(x=>({skill_id:Number(x.skill_id),active_skill_level:Number(x.active_skill_level)||0,skillpoints_in_skill:Number(x.skillpoints_in_skill)||0})).filter(x=>Number.isSafeInteger(x.skill_id)&&x.skill_id>0)}:null;sync();};
   const setLanguage=l=>{language=l==='en'?'en':'es';send({kind:'mm-skills-language',lang:language});};
-  const setTheme=t=>{theme=t==='light'?'light':'dark';send({kind:'mm-skills-theme',theme});};
+  const setTheme=t=>{theme=t==='light'?'light':'dark';send(themeMessage());};
   const destroy=()=>{
     if(frame){frame.remove();frame=null;ready=false;lastHeight=0;}
     pilot=null;
