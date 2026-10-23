@@ -52,11 +52,26 @@ jobs:
           node tests/market-scenarios.cjs
           node tests/financial-accounting.cjs
           node tests/skills-integration.cjs
+      # Browser binaries are expensive to download on each short source commit.
+      # Cache downloads without skipping the OS libraries required by fresh runners.
+      - name: Restore cached Chromium and pip wheels
+        id: browser_cache
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cache/ms-playwright
+            ~/.cache/pip
+          key: ${{ runner.os }}-playwright-1.56.0-browser-v1
       - name: Install headless Chromium for theme smoke tests
         id: install_browser
         run: |
-          python3 -m pip install playwright==1.56.0
-          python3 -m playwright install chromium --with-deps
+          python3 -m pip install --disable-pip-version-check playwright==1.56.0
+          if [ "${{ steps.browser_cache.outputs.cache-hit }}" = "true" ]; then
+            python3 -m playwright install-deps chromium
+            python3 -m playwright install chromium
+          else
+            python3 -m playwright install chromium --with-deps
+          fi
       - name: Validate Light/Dark and EVE login translations in Chromium
         id: browser_checks
         run: python3 -m unittest discover -s tests -p 'browser_*.py' -v
