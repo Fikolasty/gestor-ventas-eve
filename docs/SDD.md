@@ -608,3 +608,18 @@ Capturas del usuario confirman persistencia de fondos oscuros, tarjetas claras y
 - Commit `aa676929`: el workflow actual, tras cada `git fetch origin main` en su bucle de publicación, exige que `GITHUB_SHA` sea ancestro de `origin/main` y que `git diff "$GITHUB_SHA" origin/main -- build.py src tests .github/workflows/rebuild-market-moves.yml` no detecte cambios en fuentes, tests o definición del workflow. Si los encuentra, **omite publicar el artefacto anticuado** y espera que la nueva ejecución publique la versión vigente, sin forzar ni sobrescribir.
 - La protección sólo aplica a ejecuciones creadas usando la versión **nueva** del workflow; no puede modificar ejecuciones antiguas que ya arrancaron.
 - **Verificación pendiente:** comprobar en el siguiente `docs/QA_STATUS.md` y el commit generado que efectivamente se publica `1.0.117`, además de los tests Light/Dark, hover y regresiones financieras. No declarar v1.0.117 desplegada sólo por haber subido el workflow.
+
+
+## 2026-10-23 — v1.0.118: paridad visual de módulos y traducción dinámica
+
+**Alcance solicitado:** Minería, Planes de habilidades y Guía deben parecerse a Ventas y tomar de Market Moves+ el tema Dark/Light, tipografías, tamaños base, colores, superficies, bordes y radios. La etiqueta de navegación de Skills y cualquier texto visible (incluido ticker y Ajustes) deben respetar idioma ES/EN.
+
+**Realizado (commits fuente en `main`):**
+- `src/shell.html`: Minería, Skills y Guía ahora usan cabeceras `mm-section-head` / `mm-title` / `mm-section-sub` de Ventas. La navegación usa el texto fuente español `Planes de habilidades` (traducible a `Skill Plans`), en lugar de `Skill Plan` fijo en inglés.
+- `src/mining.js`: se retiró el banner `mn-module-intro` redundante; `src/mining.css` unifica tarjetas, cuadros, fuente y colores con `var(--f-ui)`, `--txt`, `--mut`, `--surface-card`, `--line` y `--r-md`. No se cambiaron las fórmulas.
+- `src/skills.js`, `src/skills_preview.html`, `build.py`, `src/js/ui/settings.js`, `src/js/app/refresh.js`: el iframe sandboxed de Skills recibe exclusivamente tokens visuales permitidos del documento principal mediante el bridge existente `postMessage`: color texto/segundario/acentos, superficies, bordes, radios, font family y font size. Reacciona a Light/Dark en vivo y se sincroniza cuando se monta; la lógica SSO sigue aislada. Sus encabezados, tarjetas y controles usan las variables recibidas con fallbacks solo para el preview independiente; etiqueta accesible y título se actualizan ES/EN.
+- `src/styles/60-final-layout.css`, `src/styles/themes/light-header-shipping.css` y `src/shell.html`: unificadas las tarjetas de Primeros pasos, Rutas, Glosario y Seguridad usando la apariencia de Ventas. Se evita la duplicidad de cabeceras dentro de tabs, y se actualizó la Guía: `ABRIR PASOS A SEGUIR` en vez de `Ver el desglose`, EVE SSO opcional y configuraciones vigentes.
+- `src/js/i18n/translator.js`: corregidos escapes erróneos de regexp para reconocer frases completas y el auditor; `src/i18n/en.json` incorpora traducciones de etiquetas de módulos, ticker, guía, Ajustes y valores dinámicos principales.
+- Nuevas pruebas `tests/test_shared_visual_i18n.py` y Chromium `tests/browser_theme.py`: localización de ticker/guía/skills y herencia de colores/fuentes dentro del iframe. Mantener cobertura financiera, SSO y Minería existente.
+
+**Condición de cierre:** la fuente está subida, pero NO declarar `v1.0.118` publicada hasta verificar build, pruebas Node/Python/Chromium, commit de `index.html` generado y registro de QA de Actions. El checklist de textos de Settings es incremental, y requiere comprobación visual manual adicional de los flujos condicionados por valores ESI.
