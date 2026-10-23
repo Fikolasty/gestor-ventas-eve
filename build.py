@@ -80,7 +80,7 @@ window.addEventListener('message',event=>{
     }
     if(typeof tokens.font==='string'&&tokens.font.length<300&&!/[;{}<>]/.test(tokens.font))
       document.documentElement.style.setProperty('--mm-font',tokens.font);
-    if(typeof tokens.size==='string'&&/^\\d+(?:\\.\\d+)?px$/.test(tokens.size))
+    if(typeof tokens.size==='string'&&/^\d+(?:\.\d+)?px$/.test(tokens.size))
       document.documentElement.style.setProperty('--mm-size',tokens.size);
     render();announceHeight();
   }
