@@ -26,13 +26,15 @@ jobs:
           persist-credentials: true
       - name: Source assembly and JavaScript syntax tests
         run: python3 -m unittest discover -s tests -p 'test_*.py' -v
+      - name: Finance math regression tests
+        run: node --test tests/*.test.cjs
       - name: Build single-file app
         run: |
-          python3 build.py 1.0.113
+          python3 build.py 1.0.114
           test -s index.html
           grep -q 'EVE7 theme ownership' index.html
           grep -q 'Login' index.html
-          grep -q 'v1.0.113' index.html
+          grep -q 'v1.0.114' index.html
           ! grep -q '/\\*__STYLE_SOURCES__\\*/' index.html
       - name: Publish generated index
         run: |
@@ -40,6 +42,6 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add index.html
           if ! git diff --cached --quiet; then
-            git commit -m "build: publish Market Moves+ 1.0.113 from modular sources"
+            git commit -m "build: publish Market Moves+ 1.0.114 from modular sources"
             git push
           fi
