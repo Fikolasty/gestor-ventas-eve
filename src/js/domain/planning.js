@@ -4,6 +4,71 @@ const OPTS=[['null','Vender en HY-RWO'],['bb','Venderle al Buyback'],['jOrd','Or
 const optionMarketText=value=>String(value||'').replaceAll('HY-RWO',nullSystem()).replace(/\bNull\b/g,nullSystem());
 const FLIPK={fN:1,fJ:1,fJI:1};
 let SHIPS={jOrd:1,jInst:1,rJita:1}; // qué opciones viajan en courier (cambia con la dirección)
+// Highest-net selling combination. Courier is assessed against the ENTIRE
+// shipment, including contract thresholds; per-item allocated fees are not
+// sufficient for choosing the global maximum. Speed only breaks ~ISK ties.
+// Multi-start coordinate search avoids the fixed-contract trap where shipping
+// several items together pays but shipping one alone would not.
+function mostProfitableMix(rows,Vall){
+  const active=rows.filter(r=>r.q>0);
+  const choices=r=>{
+    const keys=Object.keys(r.g).filter(k=>Number.isFinite(r.g[k]));
+    const regular=keys.filter(k=>k!=='disc');
+    return regular.length?regular:keys; // Player sale only when nothing else works
+  };
+  const candidates=active.map(choices);
+  const speed=k=>({jInst:0,fJI:0,bb:1,jOrd:3,fJ:3,null:4,rNull:5,rJita:5,fN:6,disc:9})[k]??7;
+  const ship=(r,k)=>k&&r.ship[k]?r.ship[k]:null;
+  const score=keys=>{
+    let gross=0,V=0,coll=0,wait=0;
+    keys.forEach((k,i)=>{if(!k)return;const r=active[i],sh=ship(r,k);
+      gross+=r.g[k]-r.prod;wait+=speed(k)*Math.max(1,r.q);
+      if(sh){V+=sh.v;coll+=sh.c;}
+    });
+    return {net:gross-(V>0?courierCost(V,coll):0),wait};
+  };
+  // Never trade away a financially meaningful gain for a speed preference.
+  const better=(a,b)=>a.net>b.net+.5||(Math.abs(a.net-b.net)<=.5&&a.wait<b.wait);
+  const bestOf=(i,requireShipping)=>{
+    const opts=candidates[i].filter(k=>!!ship(active[i],k)===requireShipping);
+    return opts.length?opts.reduce((a,k)=>active[i].g[k]>active[i].g[a]?k:a):null;
+  };
+  const seeds=[
+    active.map((r,i)=>candidates[i].includes(r.best)?r.best:candidates[i][0]||null),
+    active.map((r,i)=>bestOf(i,false)||bestOf(i,true)),
+    active.map((r,i)=>bestOf(i,true)||bestOf(i,false)),
+    active.map((r,i)=>candidates[i].reduce((a,k)=>a==null||r.g[k]>r.g[a]?k:a,null))
+  ];
+  let winner=null,winningScore=null;
+  for(const initial of seeds){
+    const chosen=[...initial];
+    for(let pass=0;pass<4;pass++){
+      let changed=false;
+      for(let i=0;i<active.length;i++){
+        const old=chosen[i];if(!old)continue;
+        let top=score(chosen),preferred=old;
+        for(const k of candidates[i]){
+          if(k===old)continue;
+          chosen[i]=k;const trial=score(chosen);
+          if(better(trial,top)){top=trial;preferred=k;}
+        }
+        chosen[i]=preferred;
+        if(preferred!==old)changed=true;
+      }
+      if(!changed)break;
+    }
+    const final=score(chosen);
+    if(!winner||better(final,winningScore)){winner=chosen;winningScore=final;}
+  }
+  if(!winner)return;
+  active.forEach((r,i)=>{
+    const previous=r.best;
+    r.best=winner[i];r.fast=null;r.tightPick=false;
+    r.noShip=!!(previous&&r.ship[previous]&&!r.ship[r.best]);
+    r.guide=guideFor(r,Vall);
+  });
+}
+
 function computePlan(){
   const rJ=rateJita(),rN=rateNull(),rI=rateInst();
   const rows=S.items.map(o=>{
@@ -137,6 +202,8 @@ function computePlan(){
       if(!changed)break;
     }
   }
+  // Optimize the FINAL shared-courier bill before optional user-forced routes.
+  mostProfitableMix(rows,Vall);
   // v111: plan elegido. r.auto = lo que elige el plan óptimo. Si el usuario elige un plan (p. ej. todo a Jita),
   // cada item que admite esa opción la toma; el que no puede (sin precio, el Buyback no lo acepta…) sigue el óptimo.
   const M=S.planMode;
