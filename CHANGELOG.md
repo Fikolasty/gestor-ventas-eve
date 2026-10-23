@@ -1,3 +1,9 @@
+## v1.0.111 — 2026-10-22
+- Layout inspirado en YouTube: marca compacta, navegación en cápsula central y controles reales a la derecha.
+- Franja contextual de comercio separada y oculta para Minería/Skill Plan; responsive hasta móvil.
+- Sin cambios al motor financiero, EVE SSO, Dark/Light, módulos ni simetría Tasación/Inventario.
+- Pruebas de regresión actualizadas; workflow genera versión 1.0.111; documentación y advertencias de publicación en docs/SDD.md.
+
 ## v1.0.110 — 2026-10-22
 - Compact SIGMA GRINDSET branding; remove redundant “EVE Online” and main-title tagline.
 - Move the unique 1M Skill Points referral link into a readable animated ticker below MARKET MOVES+; remove the Gratis tag.
