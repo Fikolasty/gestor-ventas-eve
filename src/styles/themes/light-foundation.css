@@ -1,7 +1,5 @@
 /* ajustes a mano del tema claro */
-html.light body{background:#e6e3da;color:#1f1e1d}
-html.light body::before{opacity:.30;filter:grayscale(.25) brightness(1.07)}
-html.light body::after{background:none!important}
+html.light body{color:#1f1e1d}
 html.light *{text-shadow:none!important}
 html.light .btn,html.light .btn *{color:#fff}
 html.light .x-close:hover{color:#1f1e1d}
@@ -118,7 +116,7 @@ html.light{
   --txt:#292723;--mut:#554f48;--dim:#6d665e;--ion:#544f48;
   --blue:#625f59;--gain:#137344;--loss:#b12e30;--thrust:#885b16;--clay:#b65334;
 }
-html.light body{background:#eeece7;color:var(--txt)}
+html.light body{color:var(--txt)}
 /* Preserve the EVE station and legible, white hero branding. */
 html.light body::before{background-color:#252422}
 html.light .hero>.title,html.light .hero>.title h1{color:#fff}
