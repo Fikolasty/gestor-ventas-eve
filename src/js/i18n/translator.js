@@ -11,7 +11,7 @@ const I18N_ATTR=['title','aria-label','placeholder'];
 window.mmI18nAudit=()=>{
   const issues=[];
   const walker=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT);
-  const marker=/\b(?:para|mediante|conviene|recibirías|restablecer|reprocesar|impuestos|habilidades|cuándo|podrías|tienes|comparación|desglose|ganarías|transportar|algunas|selecciona|haz clic|cambiar|siguientes|siguiente|opción|órdenes|envío|envías|ítems|estimado)\\b/i;
+  const marker=/\b(?:para|mediante|conviene|recibirías|restablecer|reprocesar|impuestos|habilidades|cuándo|podrías|tienes|comparación|desglose|ganarías|transportar|algunas|selecciona|haz clic|cambiar|siguientes|siguiente|opción|órdenes|envío|envías|ítems|estimado)\b/i;
   let n;while((n=walker.nextNode())){if(i18nSkip(n))continue;const text=n.nodeValue.trim();if(text&&marker.test(text))issues.push({text:text.slice(0,240),section:n.parentElement.closest('#mining,#pi,#settings,#salesBody,#guide')?.id||'shared'});}
   console.table(issues);return issues;
 };
