@@ -1943,5 +1943,15 @@
   "Llévalo en la bodega de la nave (1.000 m³), viaja al sistema y abre Planet Mode.": "Carry it in the ship's hold (1,000 m³), travel to the system, and open Planet Mode.",
   "Colócalo y pulsa Submit": "Place it and press Submit",
   "Vender Ítems": "Sell Items",
-  "Comercio Jita": "Jita Trading"
+  "Comercio Jita": "Jita Trading",
+  "Compara tu Minería": "Compare Your Mining",
+  "Planifica tus Habilidades": "Plan Your Skills",
+  "En Ventas puedes elegir Vender Ítems o Comercio Jita. Usa Ajustes para configurar tu mercado, habilidades, impuestos, Buyback, refinería, márgenes y envío.": "In Sales, choose Sell Items or Jita Trading. Use Settings to configure your market, skills, taxes, Buyback, refinery, margins, and shipping.",
+  "Los Ajustes y el tema se guardan en este navegador. El inventario pegado no se conserva al recargar.": "Settings and theme preferences are saved in this browser. Pasted inventory is not retained after a reload.",
+  "Abre Minería para comparar Barges y Exhumers, calcular ISK por hora y revisar los escenarios de Plan Omega y Nave Maxeada. Configura naves, habilidades, implantes y precios según tus objetivos.": "Open Mining to compare barges and exhumers, calculate ISK per hour, and review Omega Plan and Maxed Ship scenarios. Adjust ships, skills, implants, and prices to match your goals.",
+  "En Planes de habilidades consulta etapas de Magic 14 y de Industria Planetaria, copia planes y calcula el entrenamiento. Puedes simular un piloto o conectar EVE SSO para consultar los niveles que te faltan.": "In Skill Plans, explore Magic 14 and Planetary Industry stages, copy plans, and estimate training time. Simulate a pilot or connect through EVE SSO to check which skill levels you still need.",
+  "En Ventas puedes elegir": "In Sales, you can choose",
+  "Usa Ajustes para configurar": "Use Settings to configure",
+  "Abre Minería para comparar": "Open Mining to compare",
+  "En Planes de habilidades consulta": "In Skill Plans, explore"
 }
