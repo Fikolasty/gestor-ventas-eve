@@ -436,8 +436,8 @@
     "en": "Estimated net value for this reprocessing route, not a sell quote for the original item."
   },
   "freight.reference": {
-    "es": "Precio de referencia más envío asignado; no incluye el efecto de nuevas tasas sobre un precio de venta mayor.",
-    "en": "Reference price plus allocated freight; does not include the effect of new fees on a higher sale price."
+    "es": "Precio de referencia + envío asignado. Las tasas de venta sobre cualquier aumento se calculan por separado.",
+    "en": "Reference price + allocated freight. Sales fees on any price increase are calculated separately."
   },
   "freight.missingQuote": {
     "es": "Precio base no disponible",
