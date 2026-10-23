@@ -365,6 +365,7 @@ function suggestedText(remap){if(!remap)return T('remapUnavail');const sorted=Ob
 function quotedStat(q){return q.total===0?T('alreadyLearned'):q.count?`${q.refs?'≈ ':''}${money(q.sum)}${q.count<q.total?` · ${q.count}/${q.total}`:''}${q.refs?' · '+T('includesReference'):''}`:T('noQuote');}
 function updateText(){
   document.documentElement.lang=lang;
+  document.title=lang==='en'?'Market Moves+ | Skill Plans':'Market Moves+ | Planes de habilidades';
   const connected=typeof pilotConnected==='boolean'&&pilotConnected;
   $('lead').textContent=T('lead');
   document.querySelector('[data-tab="core"] span').textContent=lang==='en'?'Core Skills':'Habilidades básicas';
