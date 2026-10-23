@@ -190,6 +190,26 @@ body{background:transparent!important;color:var(--mm-txt)!important;font-family:
   .heading{flex-wrap:wrap}
 }
 
+
+/* The embedded Skills view uses Market Moves+ typographic scale.
+   Dynamic --mm-font/--mm-size/--mm-* values come from the parent bridge. */
+:root{--mm-type-caption:.71rem;--mm-type-body:.875rem;--mm-type-title:1.1rem}
+.category-head h2,.step-heading strong,.connection strong{
+  font-family:var(--mm-font)!important;
+  font-size:var(--mm-type-title)!important;line-height:1.3!important
+}
+.step-heading strong,.connection strong{font-size:.91rem!important}
+.category-head p,.heading p,.content>p,.notes p,.notes li,.skill-description p,
+.book-card .book-name,.category-strip .tab,.sim-label{
+  font-family:var(--mm-font)!important;
+  font-size:var(--mm-type-body)!important;line-height:1.48!important
+}
+.category-head .count,.stack-title,.stat small,.step-heading small,.model-bar small,
+.model-bar .legend,.book-card .book-sub,.book-card .book-price,.statusline{
+  font-family:var(--mm-font)!important;
+  font-size:var(--mm-type-caption)!important;
+  line-height:1.4!important
+}
 </style></head><body>
 <header><div class="brand"><span>⚔</span> SIGMA GRINDSET <span style="color:#92867d;font-weight:500;letter-spacing:0"> / MARKET MOVES+</span></div><div class="top-right"><span>SKILLS LIBRARY · PREVIEW</span></div></header>
 <div class="wrap">
