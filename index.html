@@ -7,7 +7,7 @@
 <meta name="referrer" content="no-referrer">
 <title>Market Moves+ · SIGMA GRINDSET</title>
 <style>
-/* ================= Market Moves+ v1.0.116 =================
+/* ================= Market Moves+ v1.0.117 =================
    Paleta: azul de base, naranja = acción, verde/rojo = ganancia/pérdida.
    Sin backdrop-filter: el vidrio se finge con rgba + bordes. */
 *{box-sizing:border-box;margin:0;padding:0}
@@ -2360,7 +2360,7 @@ body .top.mm-ho-root{
   min-height:0!important;margin:0!important;
   padding:10px max(20px,calc((100vw - 1490px)/2)) 0!important;
   border-bottom:1px solid rgba(222,220,209,.13)!important;
-  background:var(--header-surface,rgba(21,21,22,.96))!important;
+  background:var(--header-surface)!important;
   box-shadow:0 5px 22px rgba(0,0,0,.24)!important;
 }
 body .top.mm-ho-root>.brand{
@@ -2650,11 +2650,11 @@ html.light body .top.mm-ho-root .mm-ho-context .mm-buy-basis select{
   width:min(610px,100%)!important;max-width:100%!important;
   min-height:37px!important;height:37px!important;margin:16px auto 5px!important;
   padding:0!important;border:1px solid rgba(217,119,87,.37)!important;
-  border-radius:9px!important;background:var(--ticker-surface,rgba(22,21,21,.91))!important;
+  border-radius:9px!important;background:var(--ticker-surface)!important;
   box-shadow:0 3px 12px rgba(0,0,0,.2)!important;overflow:hidden!important;
   -webkit-mask-image:none!important;mask-image:none!important;color:var(--txt)!important;
 }
-.hero>.hero-referral:hover{border-color:var(--clay)!important;background:var(--ticker-hover,rgba(37,29,25,.96))!important}
+.hero>.hero-referral:hover{border-color:var(--clay)!important;background:var(--ticker-hover)!important}
 .hero>.hero-referral .tk-track{
   display:flex!important;align-items:center!important;height:100%!important;width:max-content!important;
   animation:tk 30s linear infinite!important;
@@ -2670,7 +2670,6 @@ html.light body .top.mm-ho-root .mm-ho-context .mm-buy-basis select{
 .hero .title{margin:0!important}
 .hero .title h1{margin:0!important}
 .hero{padding-top:35px}
-html.light body .top.mm-ho-root{background:rgba(247,245,239,.94)!important;border-color:rgba(69,53,43,.2)!important}
 html.light body .top.mm-ho-root .mm-top-actions>.top-header-action,
 html.light body .top.mm-ho-root .mm-top-actions>.top-guide-action,
 html.light body .top.mm-ho-root .mm-profile-row .eve-identity-button{
@@ -2680,8 +2679,6 @@ html.light body .top.mm-ho-root .mm-profile-row .eve-identity-button{
 html.light body .top.mm-ho-root .mm-ho-context .mm-buy-basis select{
   background:#fff!important;color:#2e2923!important
 }
-html.light .hero>.hero-referral{background:rgba(248,247,244,.94)!important;color:#372e28!important}
-html.light .hero>.hero-referral .tk-i b{color:#a35030!important}
 /* Appraisal and inventory: exact same card box, header rhythm, content height. */
 .hero-intro:not(.no-appr){
   display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;
@@ -3309,7 +3306,7 @@ html.light .mm-business-tab:hover:not(.on){background:rgba(217,119,87,0.112)}
 html.light .mm-import-actions .mm-buy-basis select{background:rgba(0,0,0,0.056)}
 html.light .mm-unit-courier-total{color:#915d3b}
 html.light .pr-manual-editor button{background:rgba(217,119,87,0.125)}
-html.light body .top.mm-ho-root{border-bottom:1px solid rgba(31,30,29,0.123)!important;background:var(--header-surface,rgba(240,237,229,0.96))!important;box-shadow:0 5px 22px rgba(0,0,0,0.038)!important}
+html.light body .top.mm-ho-root{border-bottom:1px solid rgba(31,30,29,0.123)!important;box-shadow:0 5px 22px rgba(0,0,0,0.038)!important}
 html.light body .top.mm-ho-root #mmTabs>.mm-ho-main{border:1px solid rgba(31,30,29,0.171)!important;background:rgba(0,0,0,0.043)!important;box-shadow:inset 0 1px 2px rgba(0,0,0,0.04)!important}
 html.light body .top.mm-ho-root .mm-ho-main .mm-home,html.light body .top.mm-ho-root .mm-ho-main .mm-mod{color:var(--mut,#54524d)!important}
 html.light body .top.mm-ho-root .mm-ho-main .mm-home:hover,html.light body .top.mm-ho-root .mm-ho-main .mm-mod:hover{background:rgba(31,30,29,0.095)!important}
@@ -3324,8 +3321,7 @@ html.light body .top.mm-ho-root #mmTabs>.mm-ho-context{border-top:1px solid rgba
 html.light body .top.mm-ho-root .mm-ho-context .mm-business-tab:hover{background:rgba(31,30,29,0.076)!important}
 html.light body .top.mm-ho-root .mm-ho-context .mm-business-tab.on{background:rgba(217,119,87,0.163)!important;border-color:rgba(217,119,87,0.362)!important}
 html.light body .top.mm-ho-root .mm-ho-context .mm-buy-basis select{border:1px solid rgba(31,30,29,0.19)!important;background:rgba(240,237,229,0.74)!important}
-html.light .hero>.hero-referral{border:1px solid rgba(217,119,87,0.463)!important;background:var(--ticker-surface,rgba(240,237,229,0.91))!important;box-shadow:0 3px 12px rgba(0,0,0,0.032)!important}
-html.light .hero>.hero-referral:hover{background:var(--ticker-hover,rgba(240,237,229,0.96))!important}
+html.light .hero>.hero-referral{border:1px solid rgba(217,119,87,0.463)!important;box-shadow:0 3px 12px rgba(0,0,0,0.032)!important}
 html.light .hero>.hero-referral .tk-i b{color:#a65226!important}
 html.light .hero-intro:not(.no-appr)>.appr,html.light .hero-intro:not(.no-appr)>.paste{border:1px solid rgba(31,30,29,0.171)!important;box-shadow:0 8px 16px rgba(0,0,0,0.056)!important}
 .i-rock{--i:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 15l3-8 7-3 6 5-1 8-7 3-6-2z'/%3E%3Cpath d='M9 10l3 2 4-2M12 12v5'/%3E%3C/svg%3E")}
@@ -4758,13 +4754,13 @@ Contraband Freight = no</textarea><small>Una regla por línea: Nombre = tax tota
 <button type="button" class="totop" id="toTop" aria-label="Volver arriba" title="Volver arriba (Inicio)" hidden><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 14l6-6 6 6"/></svg></button>
 <footer class="foot">
   <p class="foot-sec"><span class="ic i-lock" aria-hidden="true"></span>Tu inventario no se guarda: al cerrar o recargar se borra. Solo tus Ajustes quedan en este navegador.</p>
-  <div class="foot-by">Creado por <b>Fiko McGivert</b> · Vanguardia DR · SIGMA GRINDSET · <span class="ver">v1.0.116</span></div>
+  <div class="foot-by">Creado por <b>Fiko McGivert</b> · Vanguardia DR · SIGMA GRINDSET · <span class="ver">v1.0.117</span></div>
 </footer>
 
 <script>
 'use strict';
 /* ============================================================
-   Market Moves+ v1.0.116 — SIGMA GRINDSET / Vanguardia DR
+   Market Moves+ v1.0.117 — SIGMA GRINDSET / Vanguardia DR
    Flujo:  pegado → items → carga (ESI: precios, volúmenes, historial) → verificación → plan → vista
      1. Pegado      parsePaste(): parser posicional de columnas de EVE (Name · Quantity · … · Volume · Est. Price).
      2. Carga       esiItems(): trae todo lo que falta; mientras carga, refresh() NO pinta (S.loading).
