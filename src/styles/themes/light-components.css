@@ -1,0 +1,166 @@
+/* EVE7: component-scoped light surfaces — canonical overrides, not business rules. */
+html.light body .top.mm-ho-root,
+html.light body .top.mm-ho-root #mmTabs,
+html.light body .top.mm-ho-root .mm-ho-main,
+html.light body .top.mm-ho-root .mm-ho-context{
+  background:rgba(250,248,244,.97)!important;
+  color:var(--txt)!important;
+  border-color:rgba(70,55,43,.2)!important;
+}
+html.light body .top.mm-ho-root .brand,
+html.light body .top.mm-ho-root .brand *,
+html.light body .top.mm-ho-root .mm-mod:not([aria-selected="true"]),
+html.light body .top.mm-ho-root .mm-business-tab:not(.on),
+html.light body .top.mm-ho-root .mm-profile-row,
+html.light body .top.mm-ho-root .mm-profile-row *,
+html.light body .top.mm-ho-root .mm-top-actions{
+  color:var(--txt)!important;
+}
+html.light .hero>.hero-referral,
+html.light .hero>.hero-referral .tk-track{
+  background:#f8f6f2!important;color:#332c25!important;
+}
+html.light .hero>.hero-referral .tk-i{color:#332c25!important}
+html.light .hero>.hero-referral .tk-i b{color:#9c4226!important}
+html.light .hero-intro:not(.no-appr)>.appr,
+html.light .hero-intro:not(.no-appr)>.paste{
+  background:rgba(251,250,247,.98)!important;
+  border-color:rgba(75,60,48,.2)!important;
+  color:#292723!important;
+}
+html.light .hero-intro:not(.no-appr)>.appr .appr-title,
+html.light .hero-intro:not(.no-appr)>.paste .paste-title,
+html.light .hero-intro:not(.no-appr)>.paste .paste-head,
+html.light .hero-intro:not(.no-appr)>.paste .status{color:#292723!important}
+html.light .hero-intro:not(.no-appr)>.appr .appr-g,
+html.light .hero-intro:not(.no-appr)>.appr .appr-c{
+  background:#fff!important;color:#292723!important;border-color:var(--line)!important;
+}
+html.light .hero-intro:not(.no-appr)>.paste textarea{
+  background:#fff!important;color:#292723!important;border:1px solid var(--line2)!important;
+}
+html.light #ledger,
+html.light #verdict,
+html.light #pSum,
+html.light #pExtra,
+html.light #stepsPanel,
+html.light #settings{
+  color:var(--txt)!important;
+  background:linear-gradient(180deg,#fff,#f8f6f2)!important;
+  border-color:rgba(70,55,43,.16)!important;
+}
+html.light #verdict .ov-flow,
+html.light #verdict .ov-kpi>div,
+html.light #pkOpportunity,
+html.light #verdict .receipt,
+html.light #verdict .call{
+  background:#f7f5f1!important;
+  color:var(--txt)!important;
+  border-color:var(--line)!important;
+}
+html.light #verdict .v-cap,
+html.light #verdict .mm-net-label,
+html.light #verdict .ov-kpi dt,
+html.light #verdict .ov-flow h4,
+html.light #verdict .ov-leg small,
+html.light #pSum .mm-section-sub,
+html.light #pExtra .mm-section-sub,
+html.light .mm-section-sub{color:#645b52!important}
+html.light #verdict .v-isk span,
+html.light #verdict .ov-kpi dd,
+html.light #verdict .ov-leg b{color:var(--txt)}
+html.light #verdict .v-isk.pos,
+html.light #verdict .ov-kpi dd.pos{color:var(--gain)!important}
+html.light #verdict .v-isk.neg,
+html.light #verdict .ov-kpi dd.neg{color:var(--loss)!important}
+html.light #ledger summary .mm-title,
+html.light #verdict .mm-title,
+html.light #pSum .mm-title,
+html.light #pExtra .mm-title{color:var(--txt)!important}
+/* Keep accents informative even when generic light conversion alters their text colors. */
+html.light .pos{color:var(--gain)}
+html.light .neg{color:var(--loss)}
+
+
+/* EVE 7: structural theme surfaces and symmetric appraisal/inventory headings */
+html.light{
+  --glass:rgba(255,255,255,.96);
+  --glass2:#f7f5f1;
+  --edge:rgba(56,45,36,.16);
+  --surface-card:rgba(255,255,255,.96);
+  --surface-result:linear-gradient(180deg,#fff 0%,#f8f6f2 100%);
+  --surface-panel:rgba(255,255,255,.97);
+}
+/* Color ownership belongs to theme variables, not dark hardcoded containers. */
+html.light .panel,html.light #verdict.panel,html.light #pSum.panel,
+html.light #pExtra.panel,html.light #stepsPanel.panel{
+  background:var(--surface-result)!important;
+  color:var(--txt)!important;
+  border-color:var(--edge)!important;
+}
+html.light #verdict .ov,html.light #verdict .ov-hd,
+html.light #verdict .v-finance,html.light #verdict .mm-net,
+html.light #verdict .ov-ttl{background:transparent!important;color:var(--txt)!important}
+html.light #verdict .mm-title,html.light #verdict .mm-section-head>.mm-title,
+html.light #pSum .mm-title,html.light #stepsPanel .mm-title,
+html.light .hero-intro .appr-title,html.light .hero-intro .paste-title{
+ color:var(--txt)!important;text-shadow:none!important;
+}
+html.light #verdict .v-finance-item,
+html.light #verdict .v-finance-item small,
+html.light #verdict .v-finance-item dt,
+html.light #verdict .v-finance-item .muted{color:var(--mut)!important}
+html.light #verdict .v-finance-item .pos{color:var(--gain)!important}
+html.light #verdict .v-finance-item .neg{color:var(--loss)!important}
+html.light #verdict .v-isk{color:var(--txt)}
+html.light #verdict .v-isk.pos{color:var(--gain)!important}
+html.light #verdict .v-isk.neg{color:var(--loss)!important}
+html.light .hero-intro:not(.no-appr)>.appr,
+html.light .hero-intro:not(.no-appr)>.paste{
+  background:var(--surface-card)!important;
+  border-color:var(--edge)!important;
+  box-shadow:0 6px 18px rgba(41,31,24,.09)!important;
+}
+html.light .hero-intro:not(.no-appr)>.appr .appr-g,
+html.light .hero-intro:not(.no-appr)>.paste textarea{
+  background:#fff!important;color:var(--txt)!important;
+  border-color:var(--edge)!important;
+}
+/* The two symmetric cards use identical heading baseline, visual hierarchy and content track. */
+.hero-intro:not(.no-appr)>.appr,
+.hero-intro:not(.no-appr)>.paste{min-width:0}
+.hero-intro:not(.no-appr)>.appr .appr-title,
+.hero-intro:not(.no-appr)>.paste .paste-head{
+  box-sizing:border-box!important;
+  min-height:38px!important;height:38px!important;
+  flex:0 0 38px!important;
+  margin:0 0 10px!important;
+  padding:0 0 9px!important;
+  align-items:center!important;
+}
+.hero-intro:not(.no-appr)>.appr .appr-title,
+.hero-intro:not(.no-appr)>.paste .paste-title{
+  font-size:1.08rem!important;
+  line-height:1.25!important;
+  letter-spacing:.025em!important;
+}
+.hero-intro:not(.no-appr)>.appr .appr-g,
+.hero-intro:not(.no-appr)>.paste textarea{
+  min-height:138px!important;
+  height:100%!important;
+  flex:1 1 auto!important;
+}
+.hero-intro:not(.no-appr)>.paste .paste-head .status{
+  margin-left:auto!important;text-align:right!important;
+  min-width:0!important;max-width:48%!important;
+}
+/* The selling route's header and value share a consistent baseline. */
+#verdict .ov-hd .ov-ttl{min-width:0!important}
+#verdict .ov-hd .mm-net{min-width:0!important}
+@media(max-width:760px){
+  .hero-intro:not(.no-appr){grid-template-columns:minmax(0,1fr)!important}
+  #verdict .ov-hd{grid-template-columns:minmax(0,1fr)!important}
+  #verdict .ov-hd .mm-net{grid-column:1!important;grid-row:2!important;text-align:left!important}
+}
+
+
