@@ -19,6 +19,9 @@ JS_PARTS = (
     ("/*__MODULE_MARKET_PRICING__*/", ("js", "domain", "market-pricing.js")),
     ("/*__MODULE_COURIER__*/", ("js", "domain", "courier.js")),
     ("/*__MODULE_INVENTORY_PARSER__*/", ("js", "inventory", "parser.js")),
+    ("/*__MODULE_ESI__*/", ("js", "services", "esi.js")),
+    ("/*__MODULE_REFINING__*/", ("js", "domain", "refining.js")),
+    ("/*__MODULE_PLANNING__*/", ("js", "domain", "planning.js")),
 )
 
 def css_sources(read):
