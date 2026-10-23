@@ -412,8 +412,8 @@
     "en": "BASE PRICE / UNIT"
   },
   "freight.increment": {
-    "es": "+ ENVÍO / UD.",
-    "en": "+ FREIGHT / UNIT"
+    "es": "ENVÍO / UD.",
+    "en": "FREIGHT / UNIT"
   },
   "freight.landed": {
     "es": "PRECIO CON ENVÍO / UD.",
