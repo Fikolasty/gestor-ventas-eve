@@ -623,3 +623,12 @@ Capturas del usuario confirman persistencia de fondos oscuros, tarjetas claras y
 - Nuevas pruebas `tests/test_shared_visual_i18n.py` y Chromium `tests/browser_theme.py`: localización de ticker/guía/skills y herencia de colores/fuentes dentro del iframe. Mantener cobertura financiera, SSO y Minería existente.
 
 **Condición de cierre:** la fuente está subida, pero NO declarar `v1.0.118` publicada hasta verificar build, pruebas Node/Python/Chromium, commit de `index.html` generado y registro de QA de Actions. El checklist de textos de Settings es incremental, y requiere comprobación visual manual adicional de los flujos condicionados por valores ESI.
+
+
+### Cierre de fuentes v1.0.118 (2026-10-23)
+
+- La Guía ahora incluye seis pasos, con Minería y Planes de habilidades (antes sólo cubría Ventas); los párrafos nuevos usan frases íntegras para favorecer traducciones exactas por ES/EN.
+- Skill Plans recibe también font-size raíz (en rem) desde Market Moves+, y cambios de tema solo actualizan CSS; no vuelven a renderizar los planes.
+- Sintaxis V8 comprobada localmente para `src/skills_preview.html`, `src/skills.js`, `src/mining.js`, `src/js/i18n/translator.js` y `src/js/app/refresh.js`, sin ejecutar los flujos de ESI.
+- El workflow de build cambió a `concurrency.cancel-in-progress: true` (commit `583961cb`); cancela jobs previos cuando hay pushes nuevos, evitando colas de compilaciones viejas. Sigue vigente la protección que compara fuentes de compilación con `main` antes de publicar.
+- **QA aún sin verificar:** `docs/QA_STATUS.md` seguía en v1.0.117 cuando se documentó esto. Los cambios fuente de v1.0.118 están pusheados, pero no afirmar Pages en v1.0.118 hasta validar Actions y el commit de `index.html`.
