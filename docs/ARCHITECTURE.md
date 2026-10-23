@@ -62,3 +62,16 @@
 `python3 build.py 1.0.113` produce `index.html` listo para Pages. GitHub Actions debe ejecutar tests **antes** de escribir el HTML final. Además de estas pruebas estructurales, están pendientes las pruebas visuales automatizadas, las pruebas de flujos ESI/SSO y equivalencia económica con casos de referencia.
 
 **Importante:** compilar no equivale a publicar; comprobar el workflow, el commit de `index.html` y la versión que sirve GitHub Pages antes de afirmar despliegue exitoso.
+
+
+## 2026-10-22 · Fase 2 — módulos de interfaz y motor reutilizable
+
+**Separaciones realizadas sin cambiar el JavaScript ejecutado:** `src/js/ui/ledger.js` (registro de ítems); `selling-results.js` (resumen); `fulfillment.js` (contratos/pasos); `refining-view.js`; `plan-picker.js`; `settings.js`; `mining-bridge.js`; `skills-bridge.js`; `src/js/app/refresh.js` y `settings-persistence.js`; `src/js/i18n/translator.js`; `src/js/auth/eve-sso.js`. Cada marcador conserva la ubicación anterior durante el build.
+
+La equivalencia del texto reconstruido se comprobó con la versión previa `3df7f442`: las dos regiones extraídas en Fase 2 resultaron **idénticas carácter por carácter** después de reinsertar sus archivos.
+
+**Primer refactor real del motor:** `src/js/domain/courier.js` tiene ahora funciones puras `freightContracts`, `freightRaw` y `freightShare`. Los wrappers `courierRaw`/`courierCost`/`courierShare` siguen respetando `C.shipOn` y toman los parámetros actuales de SIGMA Freight. `tests/courier_math.test.cjs` compara directamente con las fórmulas heredadas para valores fraccionarios, límites de contratos y miles de millones de ISK; la equivalencia no depende de ESI.
+
+**Nuevos gates de publicación:** tests Python estructurales, `node --check`, `node --test tests/*.test.cjs`, build v1.0.114 y prueba de navegador en Chromium (`tests/browser_theme.py`) para la apariencia del header, ticker, panel de inventario, envío y etiqueta Login/Iniciar sesión. Aún es necesario **confirmar el éxito efectivo del último workflow**, no inferirlo porque existe un commit anterior de build.
+
+**Fase 3 planificada:** fijar tokens explícitos y retirar progresivamente el conversor automático Light y overrides oscuros, sólo después de capturar/verificar las diferencias visuales; perfilar ESI, render de lotes grandes y memory footprint antes de cambios de rendimiento perceptible.
