@@ -254,24 +254,66 @@ function paintFlipBuy(P){
     :'Inversión a Jita Sell o Buy Order; las Buy Orders incluyen broker y podrían no completarse. Beneficio = ingresos netos − inversión.'));
   box.append(detail);
 }
-// Optional compact breakdown of the *selected* plan's single shared freight
-// bill. A separate per-unit number is displayed for each shipped item.
+// Unit-price illustration: quote per unit + the ACTUAL freight allocation.
+// Does not mutate selling-route prices, taxes or courier billing.
+function courierUnitPresentation(r){
+  if(!(r.q>0))return null;
+  const quote=unitFor(r,r.best);
+  const hasQuote=quote&&Number.isFinite(quote.p)&&quote.p>=0;
+  const routeGross=r.g&&r.g[r.best];
+  // For reprocessing, the original item has no directly comparable sell quote:
+  // use the calculated net route value per original unit and label it as such.
+  const base=hasQuote?quote.p:(Number.isFinite(routeGross)?routeGross/r.q:null);
+  const allocated=Math.max(0,r.courierAllocated||0);
+  return{base,freightUnit:allocated/r.q,unit:base==null?null:base+allocated/r.q,
+    total:base==null?null:base*r.q+allocated,allocated,derived:!hasQuote};
+}
 function paintCourierUnits(P){
   const box=$('unitCourierBox'),host=$('unitCourierRows');
+  // Return icon elements to the common Registered Items pool before repaint.
+  poolIcons(host);
   host.replaceChildren();
   const rows=P.rows.filter(r=>r.courierAllocated>0&&r.q>0);
   box.hidden=!rows.length;
   if(!rows.length)return;
-  const en=S.lang==='en';
-  $('unitCourierHeading').textContent=en?'Shipping cost per unit':'Coste de envío por unidad';
-  $('unitCourierTotal').textContent='−'+fmt(P.shipCost)+' · '+trips(P.Vs)+(en?' contracts':' contratos');
+  const count=trips(P.Vs);
+  $('unitCourierHeading').textContent=tx('freight.heading');
+  $('unitCourierTotal').textContent='−'+fmt(P.shipCost)+' · '+
+    tx(count===1?'freight.contractOne':'freight.contractMany',{count});
+  const value=(key,amount)=>el('div','mm-freight-metric',
+    el('small',null,tx(key)),el('strong','num',amount==null?'—':fmtP(amount)));
   rows.forEach(r=>{
-    const node=el('div','mm-unit-row');
-    node.append(el('span',null,r.o.name+' · '+fmtQ(r.q)+' u.'),
-      el('b','neg','−'+fmtP(r.courierPerUnit)+'/u.'),
-      el('small',null,(en?'Total freight: ':'Coste total: ')+fmt(r.courierAllocated)+' · '+fmtV(r.vol)+' m³'));
-    host.append(node);
+    const costs=courierUnitPresentation(r);
+    const card=el('article','mm-unit-row');
+    const title=el('div','mm-freight-item');
+    const pic=iconFor(r.o.name);if(pic)title.append(pic);
+    const identity=el('div','mm-freight-ident');
+    identity.append(el('b',null,r.o.name),
+      el('small',null,tx('freight.qty',{count:fmtQ(r.q)})));
+    title.append(identity);
+    const math=el('div','mm-freight-equation');
+    math.append(value('freight.base',costs.base),
+      el('span','mm-freight-op','+'),
+      value('freight.increment',costs.freightUnit),
+      el('span','mm-freight-op','='),
+      value('freight.landed',costs.unit));
+    const foot=el('div','mm-freight-foot');
+    foot.append(el('div','mm-freight-lot',
+        el('small',null,tx('freight.totalLot')),
+        el('strong','num',costs.total==null?tx('freight.missingQuote'):fmtP(costs.total))),
+      el('div','mm-freight-meta',
+        el('span',null,tx('freight.totalCost',{amount:fmt(costs.allocated)})),
+        el('span',null,tx('freight.volume',{volume:fmtV(r.vol)}))));
+    card.append(title,math,foot);
+    if(costs.derived){
+      const caution=el('small','mm-freight-source',tx('freight.derived'));
+      card.append(caution);
+    }
+    host.append(card);
   });
+  // A display-only reference; our net route optimizer remains the authoritative
+  // calculation of received ISK after sales taxes and courier.
+  host.title=tx('freight.reference');
 }
 function paintSummary(P){
   const box=$('pSum'),none=!P.rows.length||P.missing.length===P.rows.length;
