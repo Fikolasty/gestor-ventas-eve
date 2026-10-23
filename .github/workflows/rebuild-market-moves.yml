@@ -14,7 +14,7 @@ permissions:
 
 concurrency:
   group: market-moves-build-main
-  cancel-in-progress: false
+  cancel-in-progress: true
 
 jobs:
   compile:
