@@ -111,6 +111,85 @@
 .sim-toggle:disabled{cursor:default;opacity:1;background:#294033;border-color:#6ba17e;color:#ddf7e5}
 .sim-toggle:disabled:hover{background:#294033;border-color:#6ba17e}
 
+
+/* All embedded visuals inherit the live Market Moves+ design tokens.
+   These are populated by the sandbox bridge; fallbacks only support standalone preview. */
+:root{
+  --mm-txt:#faf9f5;--mm-mut:#c2c0b6;--mm-dim:#9c9a92;
+  --mm-line:rgba(222,220,209,.12);--mm-line2:rgba(222,220,209,.14);
+  --mm-clay:#d97757;--mm-ion:#d6d4cb;--mm-gain:#5cba86;--mm-loss:#e8746c;
+  --mm-surface-card:rgba(21,21,21,.9);--mm-surface-panel:rgba(30,30,29,.96);
+  --mm-r-sm:8px;--mm-r-md:12px;--mm-r-lg:18px;
+  --mm-font:ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;--mm-size:16px;
+  --ink:var(--mm-txt);--muted:var(--mm-mut);--line:var(--mm-line);
+  --panel:var(--mm-surface-panel);--card:var(--mm-surface-card);
+  --accent:var(--mm-clay);--green:var(--mm-gain);
+  font-family:var(--mm-font);color:var(--mm-txt);
+}
+html.mm-light{color-scheme:light}
+html:not(.mm-light){color-scheme:dark}
+body{background:transparent!important;color:var(--mm-txt)!important;font-family:var(--mm-font)!important;font-size:var(--mm-size)!important;line-height:1.55}
+.wrap{max-width:none!important;padding:0 3px 24px!important}
+.eyebrow,.heading h1,.category-strip .strip-home{display:none!important}
+.heading{align-items:center;margin:0 0 15px!important;gap:14px}
+.heading p{color:var(--mm-mut)!important;font:400 .88rem/1.5 var(--mm-font)!important;max-width:76ch}
+.badge,.category-head .count{border-color:var(--mm-line)!important;color:var(--mm-mut)!important;background:transparent!important}
+.category-strip,.main,.connection,.model-bar,.books-panel,.detail-panel,.copybox,.notes,.stat,.book-card,.skill-list{
+  box-shadow:none!important;border-radius:var(--mm-r-md)!important;
+  border-color:var(--mm-line)!important;
+}
+.category-strip,.model-bar,.connection,.main,.books-panel,.skill-list,.copybox,.notes{
+  background:var(--mm-surface-panel)!important;color:var(--mm-txt)!important;
+}
+.main{padding:20px!important}
+.category-strip{padding:7px!important;gap:8px}
+.category-strip .tabs{gap:6px}
+.category-strip .tab{border-radius:var(--mm-r-sm);font:650 .82rem/1.35 var(--mm-font);color:var(--mm-mut)!important}
+.category-strip .tab.active{background:color-mix(in srgb,var(--mm-clay) 14%,transparent)!important;border-color:color-mix(in srgb,var(--mm-clay) 38%,transparent)!important;color:var(--mm-txt)!important}
+.category-strip .tab:hover{background:color-mix(in srgb,var(--mm-txt) 7%,transparent)!important}
+.sim-toggle,.model-bar select,.copy,.category-strip .tiny-btn,.category-strip .lang-btn{
+  font-family:var(--mm-font)!important;border-radius:var(--mm-r-sm)!important
+}
+.model-bar select{background:var(--mm-surface-card)!important;color:var(--mm-txt)!important;border-color:var(--mm-line)!important}
+.connection,.model-bar,.stat,.book-card,.step-heading,.notes,.copybox,.books-panel{
+  color:var(--mm-txt)!important;
+}
+.stat,.book-card,.steps>details,.skill-row{background:var(--mm-surface-card)!important;border-color:var(--mm-line)!important}
+.steps>details,.skill-list{border-radius:var(--mm-r-md)!important}
+.steps>details[open],.skill-row[open]{border-color:color-mix(in srgb,var(--mm-clay) 44%,var(--mm-line))!important}
+.steps>details>summary,.skill-row>summary{color:var(--mm-txt)!important}
+.step-heading strong,.category-head h2,.skill-label b,.connection strong,.book-name,.book-card .book-name,.notes b{
+  color:var(--mm-txt)!important;font-family:var(--mm-font)!important
+}
+.step-heading small,.category-head p,.content>p,.connection p,.connection .connection-status,
+.stats small,.stat small,.skill-row .skill-label small,.book-sub,.book-card .book-sub,
+.notes p,.notes li,.source-links,.footline,.statusline,.model-bar small,.model-bar .legend,.heading p{
+  color:var(--mm-mut)!important
+}
+.category-head,.content,.boxhead,.plan-name-row,.skill-list,.skill-row{border-color:var(--mm-line)!important}
+.num,.level,.skill-row .level,.model-bar .pill{
+  border-color:var(--mm-line)!important;
+  background:color-mix(in srgb,var(--mm-clay) 12%,var(--mm-surface-card))!important;
+  color:var(--mm-clay)!important;
+}
+.copy,.connection button:not(:disabled){background:color-mix(in srgb,var(--mm-clay) 15%,var(--mm-surface-panel))!important;color:var(--mm-txt)!important;border-color:var(--mm-line)!important}
+.copy.alt{background:var(--mm-surface-card)!important;color:var(--mm-gain)!important}
+.skills-text,.skill-description,.skill-description p{color:var(--mm-txt)!important}
+.skill-facts span{color:var(--mm-mut)!important;border-color:var(--mm-line)!important}
+.detail-panel,.books-panel,.model-bar,.connection{background:var(--mm-surface-panel)!important}
+.skillbook,.book-card img,.skill-mini{background:var(--mm-surface-card)!important;border-color:var(--mm-line)!important}
+.stack-title,.step-heading .pill.omega,.book-price,.book-card .book-price{color:var(--mm-clay)!important}
+.book-card.book-owned .book-price{color:var(--mm-gain)!important}
+.plan.is-complete .step-heading strong,.plan.is-complete .step-heading small{color:var(--mm-gain)!important}
+.book-card,.stat{min-height:0}
+.footer{display:none!important}
+@media(max-width:750px){
+  .wrap{padding:0 1px 18px!important}
+  .main{padding:12px!important}
+  .category-strip{flex-wrap:wrap}
+  .heading{flex-wrap:wrap}
+}
+
 </style></head><body>
 <header><div class="brand"><span>⚔</span> SIGMA GRINDSET <span style="color:#92867d;font-weight:500;letter-spacing:0"> / MARKET MOVES+</span></div><div class="top-right"><span>SKILLS LIBRARY · PREVIEW</span></div></header>
 <div class="wrap">
@@ -288,6 +367,8 @@ function updateText(){
   document.documentElement.lang=lang;
   const connected=typeof pilotConnected==='boolean'&&pilotConnected;
   $('lead').textContent=T('lead');
+  document.querySelector('[data-tab="core"] span').textContent=lang==='en'?'Core Skills':'Habilidades básicas';
+  document.querySelector('[data-tab="pi"] span').textContent=lang==='en'?'Planetary Industry':'Industria Planetaria';
   $('planCount').textContent=T('count');
   $('connectionTitle').textContent=connected?(lang==='en'?'Personalized plan for ':'Plan personalizado para ')+(typeof pilotName==='string'?pilotName:''):(demo?T('demoTitleOn'):T('demoTitle'));
   $('connectionText').textContent=connected?(lang==='en'?'Your trained skills were detected. The plans show only the levels still needed.':'Detectamos las habilidades de tu piloto. Los planes muestran únicamente los niveles pendientes.'):(demo?T('demoTextOn'):T('demoText'));
@@ -296,7 +377,7 @@ function updateText(){
   $('tryDemo').setAttribute('aria-label',connected?(lang==='en'?'Connected pilot — personalized plans':'Piloto conectado — planes personalizados'):T('demoAction'));
   $('tryDemo').disabled=connected;
   $('connection').classList.toggle('demo',connected||demo);
-  $('connectionStatus').textContent=connected?(lang==='en'?'PILOT CONNECTED':'PILOTO CONECTADO'):demo?(lang==='en'?'SIMULATED':'SIMULACIÓN'):(lang==='en'?'FULL PLANS':'PLANES COMPLETOS');$('timeModelTitle').textContent=T('timeTitle');$('timeProfile').options[0].textContent=T('balanced');$('timeProfile').options[1].textContent=T('remap');$('timeProfile').value=activeProfile;$('trainingNote').textContent=T('timeNote');$('refreshPrices').textContent=T('refresh');$('stagesCount').textContent=T('stages');$('catTitle').textContent=current==='core'?'CORE SKILLS':'PLANETARY INDUSTRY';$('catDesc').textContent=T(current==='core'?'coreDesc':'piDesc');$('sources').innerHTML=`${esc(T('source'))}: <a href="https://developers.eveonline.com/docs/guides/useful-formulae/" target="_blank" rel="noopener">SP</a> · <a href="https://wiki.eveuniversity.org/The_Magic_14" target="_blank" rel="noopener">Magic 14</a> · <a href="https://wiki.eveuniversity.org/Skills:Planet_Management" target="_blank" rel="noopener">PI</a> · <a href="https://developers.eveonline.com/docs/services/image-server/" target="_blank" rel="noopener">Images</a>`;updateStatus();}
+  $('connectionStatus').textContent=connected?(lang==='en'?'PILOT CONNECTED':'PILOTO CONECTADO'):demo?(lang==='en'?'SIMULATED':'SIMULACIÓN'):(lang==='en'?'FULL PLANS':'PLANES COMPLETOS');$('timeModelTitle').textContent=T('timeTitle');$('timeProfile').options[0].textContent=T('balanced');$('timeProfile').options[1].textContent=T('remap');$('timeProfile').value=activeProfile;$('trainingNote').textContent=T('timeNote');$('refreshPrices').textContent=T('refresh');$('stagesCount').textContent=T('stages');$('catTitle').textContent=current==='core'?(lang==='en'?'CORE SKILLS':'HABILIDADES BÁSICAS'):(lang==='en'?'PLANETARY INDUSTRY':'INDUSTRIA PLANETARIA');$('catDesc').textContent=T(current==='core'?'coreDesc':'piDesc');$('sources').innerHTML=`${esc(T('source'))}: <a href="https://developers.eveonline.com/docs/guides/useful-formulae/" target="_blank" rel="noopener">SP</a> · <a href="https://wiki.eveuniversity.org/The_Magic_14" target="_blank" rel="noopener">Magic 14</a> · <a href="https://wiki.eveuniversity.org/Skills:Planet_Management" target="_blank" rel="noopener">PI</a> · <a href="https://developers.eveonline.com/docs/services/image-server/" target="_blank" rel="noopener">Images</a>`;updateStatus();}
 function updateStatus(){const msg=apiState==='loading'?T('esiPartial'):apiFailed?T('esiOffline'):apiState==='ready'?T('esiReady'):T('esiStarting');$('esiStatus').textContent=msg;}
 function fillSkillDetail(sk){const meta=catalog.get(sk.name)||{},pair=attributePair(sk),rank=meta.rank||knownRanks[sk.name];const intro=descriptions[sk.name]?.[lang==='es'?0:1]||T('unknown');const seen=demo?(demoSkills[sk.name]||0):0;const mins=timeMin(sk,null);const detail= document.createElement('div');detail.className='skill-description';const p=document.createElement('p');p.textContent=intro;detail.append(p);const facts=document.createElement('div');facts.className='skill-facts';const entries=[[T('level'),roman[sk.level]],[T('rank'),rank?rank+'×':'—'],[T('primary'),pair?attributeNames[pair[0]][lang==='es'?0:1]:'—'],[T('secondary'),pair?attributeNames[pair[1]][lang==='es'?0:1]:'—'],[T('trainInfo'),mins===null?T('noExact'):formatDuration(mins)]];for(const [k,v]of entries){const x=document.createElement('span');x.textContent=k+': '+v;facts.append(x);}detail.append(facts);if(demo&&seen>=sk.level){const done=document.createElement('p');done.style.color='#93d6a9';done.textContent=T('ready');detail.append(done);}return detail;}
 function renderSkillRow(sk){const row=document.createElement('details');row.className='skill-row';const trained=demo&&(demoSkills[sk.name]||0)>=sk.level;const summary=document.createElement('summary');const im=document.createElement('img');im.className='skill-mini';im.src=icon(catalog.get(sk.name)?.id);im.alt='';im.loading='lazy';imageBackup(im);const label=document.createElement('span');label.className='skill-label';const b=document.createElement('b');b.textContent=sk.name;const small=document.createElement('small');small.textContent=T('skillDes')+' · '+(knownRanks[sk.name]||catalog.get(sk.name)?.rank||'—')+'×';label.append(b,small);const lvl=document.createElement('span');lvl.className='level'+(trained?' trained':'');lvl.textContent=trained?'✓ '+roman[sk.level]:roman[sk.level];const chev=document.createElement('span');chev.className='chev';summary.append(im,label,lvl,chev);row.append(summary);row.addEventListener('toggle',()=>{if(row.open&&!row.querySelector('.skill-description'))row.append(fillSkillDetail(sk));});return row;}
