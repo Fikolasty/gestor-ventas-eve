@@ -643,3 +643,16 @@ Capturas del usuario confirman persistencia de fondos oscuros, tarjetas claras y
 **Diagnóstico adicional:** commit `a8707b5a` agrega IDs a los gates del workflow y, en fallos, intentará generar `docs/CI_FAILURE.md` con el commit, run y gates fallidos. No se omiten ni relajan las pruebas financieras ni la verificación visual para publicar.
 
 **Cierre aún por verificar:** no declarar v1.0.118 publicada hasta que `docs/QA_STATUS.md` reporte esa versión y exista el commit generado de `index.html`.
+
+
+### 2026-10-23 — Corrección de la publicación web de 1.0.118 (GitHub Pages)
+
+**Síntoma confirmado por captura del usuario:** la URL pública seguía mostrando `v1.0.117` en el pie de página incluso con recarga forzada, mientras `docs/QA_STATUS.md` y el commit `494ee61f` ya tenían la compilación verificada `1.0.118`. El pie usa `v__VER__` en `src/shell.html`: **no** existe una versión fija `1.0.117` en la plantilla.
+
+**Causa técnica probable, respaldada por GitHub Docs:** publicar `index.html` con `GITHUB_TOKEN` desde Actions no activa la reconstrucción de GitHub Pages cuando la fuente es una rama. Subir el archivo no equivale a desplegarlo. El flujo `rebuild-market-moves.yml` terminaba después de `git push` sin invocar `actions/deploy-pages`.
+
+**Correcciones en main:**
+- Commit `a388a2c1`: se creó `.nojekyll` mediante un push autenticado normal, para activar la publicación de origen por rama y evitar que Jekyll procese archivos del sitio.
+- Commit `cede2935`: tras superar Python/Node/Chromium y publicar el artefacto en main, el workflow marca `publishable=true`, copia `index.html` validado a `_site`, lo sube con `actions/upload-pages-artifact@v3` y ejecuta un job `deploy` con permisos `pages:write`, `id-token:write`, entorno `github-pages` y `actions/deploy-pages@v4`. Las compilaciones obsoletas no exponen `publishable` y por tanto no despliegan. No modifica fórmulas ni interfaz.
+
+**Validación pendiente:** confirmar el resultado concreto del job `deploy` en GitHub Actions, el URL servido por Pages y que el pie público dice `v1.0.118`. No confundir confirmación de commit de `index.html` con verificación de despliegue. Si la configuración de Pages impide despliegue mediante Actions, revisar `Settings → Pages → Build and deployment → Source` (GitHub Actions).
