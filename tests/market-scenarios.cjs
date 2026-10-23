@@ -2,8 +2,8 @@
 /* Market rules must be conservative estimates, never fabricated Null quotes.
    This suite exercises the source engine logic (not an independent reimplementation). */
 const fs=require('node:fs'),vm=require('node:vm'),assert=require('node:assert/strict');
-const src=fs.readFileSync('src/script.js','utf8');
-const html=fs.readFileSync('src/shell.html','utf8');
+const src=require('./source-bundle.cjs').script();
+const html=require('./source-bundle.cjs').shell();
 const segment=(a,b)=>{const start=src.indexOf(a),end=src.indexOf(b,start);assert(start>=0&&end>start,a+' not found');return src.slice(start,end);};
 const REFINE={
  Veldspar:{cat:'ore',out:{Tritanium:400}},
@@ -106,8 +106,8 @@ console.log('Local hub captions and alpha Hulk icon PASS.');
 
 // v1.0.110 header regression: the original DOM is reparented at runtime,
 // not cloned and not replaced with simplified calculators.
-const salesHTML=fs.readFileSync('src/shell.html','utf8');
-const salesJS=fs.readFileSync('src/script.js','utf8');
+const salesHTML=require('./source-bundle.cjs').shell();
+const salesJS=require('./source-bundle.cjs').script();
 assert(salesHTML.includes('id="businessSwitch"')&&salesHTML.includes('id="importControls"'));
 assert(salesHTML.includes('id="modeLiquidation"')&&salesHTML.includes('id="modeTrading"'));
 assert(salesHTML.includes('id="tradePurchaseMode"')&&salesHTML.includes('id="shipOn"'));
