@@ -106,6 +106,55 @@ class ThemeBrowserTests(unittest.TestCase):
         self.assertLess(brightness(self.color("header.top.mm-ho-root")), 120)
         self.assertLess(brightness(self.color(".hero>.hero-referral")), 120)
 
+    def test_guide_ticker_settings_and_skills_tabs_translate_both_ways(self):
+        self.page.evaluate("setLang('en')")
+        self.page.wait_for_function(
+            "() => document.querySelector('#mmTabSkills .mm-mod-label')?.textContent.trim()==='Skill Plans'"
+        )
+        self.assertIn("New to EVE?", self.page.locator(".hero-referral").inner_text())
+        self.assertIn("Getting started", self.page.locator("#help .modern-tabs").inner_text())
+        self.assertIn("Home market", self.page.locator("#settings").inner_text())
+        self.page.evaluate("setLang('es')")
+        self.page.wait_for_function(
+            "() => document.querySelector('#mmTabSkills .mm-mod-label')?.textContent.trim()==='Planes de habilidades'"
+        )
+        self.assertIn("¿Nuevo en EVE?", self.page.locator(".hero-referral").inner_text())
+        self.assertIn("Primeros pasos", self.page.locator("#help .modern-tabs").inner_text())
+
+    def test_skills_inherits_parent_fonts_and_dark_light_surfaces(self):
+        from playwright.sync_api import expect
+        import re
+        self.page.evaluate("selectAppModule('skills')")
+        iframe = self.page.frame_locator("#skillRoot iframe.skills-app-frame")
+        html = iframe.locator("html")
+        html.wait_for(state="attached")
+        self.page.evaluate("""() => {
+            const sw=document.querySelector('#themeLight');
+            sw.checked=false;
+            sw.dispatchEvent(new Event('change',{bubbles:true}));
+        }""")
+        expect(html).to_have_class(re.compile(r"mm-light"))
+        child = html.evaluate("""el => ({
+            text:getComputedStyle(el).getPropertyValue('--mm-txt').trim(),
+            font:getComputedStyle(el).getPropertyValue('--mm-font').trim(),
+            bg:getComputedStyle(el.ownerDocument.querySelector('.main')).backgroundColor
+        })""")
+        host = self.page.evaluate("""() => ({
+            text:getComputedStyle(document.documentElement).getPropertyValue('--txt').trim(),
+            font:getComputedStyle(document.body).fontFamily
+        })""")
+        self.assertEqual(child["text"], host["text"])
+        self.assertEqual(child["font"], host["font"])
+        self.assertGreater(brightness(child["bg"]), 180, child["bg"])
+        self.page.evaluate("""() => {
+            const sw=document.querySelector('#themeLight');
+            sw.checked=true;
+            sw.dispatchEvent(new Event('change',{bubbles:true}));
+        }""")
+        expect(html).not_to_have_class(re.compile(r"mm-light"))
+        dark = iframe.locator(".main").evaluate("el=>getComputedStyle(el).backgroundColor")
+        self.assertLess(brightness(dark), 120, dark)
+
     def test_appraisal_rerenders_only_for_changed_market_data(self):
         result = self.page.evaluate("""() => {
             const oldItems = S.items, oldTax = C.tax;
