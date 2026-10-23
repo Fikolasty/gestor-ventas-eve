@@ -14,6 +14,16 @@ CSS_PARTS = (
     "50-navigation.css",
     "60-final-layout.css",
 )
+# Light theme order intentionally mirrors the former single light_extra.css.
+LIGHT_PARTS = (
+    "light-foundation.css",
+    "light-components.css",
+    "light-header-shipping.css",
+)
+
+def light_sources(read):
+    return "".join(read("styles", "themes", file) for file in LIGHT_PARTS)
+
 JS_PARTS = (
     ("/*__MODULE_FORMAT__*/", ("js", "ui", "format.js")),
     ("/*__MODULE_MARKET_PRICING__*/", ("js", "domain", "market-pricing.js")),
