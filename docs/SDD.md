@@ -632,3 +632,14 @@ Capturas del usuario confirman persistencia de fondos oscuros, tarjetas claras y
 - Sintaxis V8 comprobada localmente para `src/skills_preview.html`, `src/skills.js`, `src/mining.js`, `src/js/i18n/translator.js` y `src/js/app/refresh.js`, sin ejecutar los flujos de ESI.
 - El workflow de build cambió a `concurrency.cancel-in-progress: true` (commit `583961cb`); cancela jobs previos cuando hay pushes nuevos, evitando colas de compilaciones viejas. Sigue vigente la protección que compara fuentes de compilación con `main` antes de publicar.
 - **QA aún sin verificar:** `docs/QA_STATUS.md` seguía en v1.0.117 cuando se documentó esto. Los cambios fuente de v1.0.118 están pusheados, pero no afirmar Pages en v1.0.118 hasta validar Actions y el commit de `index.html`.
+
+
+### 2026-10-23 — Bloqueo de despliegue 1.0.118 (diagnóstico)
+
+**Síntoma:** la página seguía mostrando `1.0.117` incluso tras Ctrl+F5, Ctrl+Shift+R; `docs/QA_STATUS.md` permanecía en `1.0.117`, así que no era apropiado atribuir el problema a la caché.
+
+**Incompatibilidad concreta identificada:** `tests/skills-integration.cjs` todavía exigía literalmente `Skill Plan` para el tab y el atributo `title` de Skills, mientras `src/shell.html` ya usaba `Planes de habilidades` para su traducción ES/EN. Commit `6738dfa9` actualiza el test a la etiqueta localizada sin restablecer el texto hardcoded. Esta aserción vieja era suficiente para bloquear la fase de pruebas Node previa a publicación.
+
+**Diagnóstico adicional:** commit `a8707b5a` agrega IDs a los gates del workflow y, en fallos, intentará generar `docs/CI_FAILURE.md` con el commit, run y gates fallidos. No se omiten ni relajan las pruebas financieras ni la verificación visual para publicar.
+
+**Cierre aún por verificar:** no declarar v1.0.118 publicada hasta que `docs/QA_STATUS.md` reporte esa versión y exista el commit generado de `index.html`.
