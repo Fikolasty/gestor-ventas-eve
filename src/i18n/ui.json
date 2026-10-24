@@ -706,5 +706,9 @@
   "refinery.marketSelected": {
     "es": "Venta local: {market}",
     "en": "Local market: {market}"
+  },
+  "refinery.implantHelp": {
+    "es": "Implante de tu personaje refinador.",
+    "en": "Implant equipped on your reprocessing character."
   }
 }
