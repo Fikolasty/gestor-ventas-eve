@@ -36,8 +36,8 @@
     "en": "Same"
   },
   "picker.recommended": {
-    "es": "MAYOR BENEFICIO",
-    "en": "HIGHEST PROFIT"
+    "es": "MÁS ISK",
+    "en": "MOST ISK"
   },
   "picker.yes": {
     "es": "Sí",
@@ -124,8 +124,8 @@
     "en": "Reprocessing"
   },
   "picker.bestDesc": {
-    "es": "La combinación con mayor ingreso neto estimado.",
-    "en": "The combination with the highest estimated net proceeds."
+    "es": "La combinación que te deja más ISK según los precios y gastos disponibles.",
+    "en": "The mix that leaves you with the most ISK based on available prices and costs."
   },
   "picker.localDesc": {
     "es": "Venta local sin courier.",
@@ -168,8 +168,8 @@
     "en": "SAME ESTIMATED NET AS OPTIMAL."
   },
   "picker.selectedDifference": {
-    "es": "{difference} frente al óptimo.",
-    "en": "{difference} versus optimal."
+    "es": "{difference} frente a la opción de más ISK.",
+    "en": "{difference} compared with the most-ISK option."
   },
   "picker.fallbackOne": {
     "es": "1 ítem no admite esta ruta; conserva su mejor alternativa.",
@@ -180,28 +180,28 @@
     "en": "{count} items cannot use this route and keep their best alternatives."
   },
   "picker.nextBest": {
-    "es": "SIGUIENTE ALTERNATIVA",
-    "en": "NEXT ALTERNATIVE"
+    "es": "OTRA FORMA DE VENDER",
+    "en": "ANOTHER WAY TO SELL"
   },
   "picker.why": {
-    "es": "COMPARACIÓN DE BENEFICIO",
-    "en": "PROFIT COMPARISON"
+    "es": "VER DIFERENCIAS DE ISK",
+    "en": "SEE ISK DIFFERENCES"
   },
   "picker.gap": {
-    "es": "DIFERENCIA DE INGRESOS NETOS",
-    "en": "NET PROCEEDS DIFFERENCE"
+    "es": "ISK QUE DEJAS DE GANAR",
+    "en": "ISK YOU GIVE UP"
   },
   "picker.gain": {
-    "es": "VENTAJA NETA",
-    "en": "NET ADVANTAGE"
+    "es": "ISK EXTRA",
+    "en": "EXTRA ISK"
   },
   "picker.advantage": {
     "es": "RENDIMIENTO ADICIONAL",
     "en": "ADDITIONAL RETURN"
   },
   "picker.higherNet": {
-    "es": "ALTERNATIVA CON MÁS ISK",
-    "en": "HIGHER-ISK ALTERNATIVE"
+    "es": "RUTA QUE DA MÁS ISK",
+    "en": "ROUTE THAT PAYS MORE"
   },
   "picker.insufficient": {
     "es": "No hay suficientes cotizaciones para comparar estas rutas.",
@@ -530,5 +530,57 @@
   "sales.modeTrade": {
     "es": "Comercio Jita",
     "en": "Jita Trading"
+  },
+  "picker.simpleQuick": {
+    "es": "¿Quieres cobrar con menos espera?",
+    "en": "Want a quicker way to get paid?"
+  },
+  "picker.simpleQuickSub": {
+    "es": "Esta opción evita esperar una orden de venta, pero deja menos ISK.",
+    "en": "This option avoids waiting for a sell order, but leaves you with less ISK."
+  },
+  "picker.simpleLoss": {
+    "es": "{amount} ISK menos",
+    "en": "{amount} ISK less"
+  },
+  "picker.simpleView": {
+    "es": "Ver esta alternativa",
+    "en": "See this alternative"
+  },
+  "picker.simpleShip": {
+    "es": "Primero hay que enviar los ítems. El transporte también toma tiempo.",
+    "en": "Items must be shipped first. Delivery still takes time."
+  },
+  "picker.simpleNoShip": {
+    "es": "Sin envío adicional. El pago depende de las órdenes o del Buyback.",
+    "en": "No extra shipping. Payment depends on orders or Buyback."
+  },
+  "picker.simplePartial": {
+    "es": "Sirve para {count} de {total} ítems; los demás siguen su mejor ruta.",
+    "en": "Works for {count} of {total} items; the rest keep their best route."
+  },
+  "picker.simpleCurrent": {
+    "es": "Ya tienes seleccionada una ruta rápida.",
+    "en": "You're already using a quick route."
+  },
+  "picker.netMeaningSell": {
+    "es": "ISK que recibirías tras tasas y envío estimados.",
+    "en": "ISK you'd receive after estimated fees and shipping."
+  },
+  "picker.netMeaningTrade": {
+    "es": "ISK que ganarías después de comprar y pagar los gastos estimados.",
+    "en": "ISK you'd earn after buying and paying estimated expenses."
+  },
+  "picker.bestEasy": {
+    "es": "MÁS ISK",
+    "en": "MOST ISK"
+  },
+  "picker.quickTag": {
+    "es": "COBRAR ANTES",
+    "en": "GET PAID SOONER"
+  },
+  "picker.quickFull": {
+    "es": "Puede requerir envío; el plazo depende del mercado.",
+    "en": "May require shipping; timing depends on the market."
   }
 }
