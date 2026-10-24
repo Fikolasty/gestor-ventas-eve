@@ -124,7 +124,7 @@ function syncBusinessMode(){
   }
   a.querySelector('span:last-child').textContent=en?'Sell Items':'Vender Ítems';
   b.querySelector('span:last-child').textContent=en?'Jita Trading':'Comercio Jita';
-  const current=document.getElementById('salesModeCurrent');
+  const current=$('salesModeCurrent');
   if(current)current.textContent=S.flip?(en?'Jita Trading':'Comercio Jita'):(en?'Sell Items':'Vender Ítems');
   // No redundant lateral description column. The buttons carry contextual
   // native tooltips, updated for language and the active alliance market.
