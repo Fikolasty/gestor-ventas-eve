@@ -174,10 +174,11 @@ function paintDisc(P){
   discRows=chosen.length?chosen:P.rows.filter(r=>r.g.disc!=null);
   const tot=discRows.reduce((a,r)=>a+(r.g.disc||0),0);
   $('dSum').textContent=discRows.length?fmt(tot):'';
-  $('dLead').textContent=chosen.length?'Conviene venderle a un jugador: '+chosen.map(r=>r.o.name).join(', ')+'.':'Último recurso: si las otras opciones no funcionan, publica todo el lote en el Discord de tu alianza o de tu corporación.';
+  $('dLead').textContent=chosen.length
+    ?tx('player.lastResortNames',{items:chosen.map(r=>r.o.name).join(', ')})
+    :tx('player.lastResortGuide');
   const link=$('dLink').value.trim(),okLink=link.startsWith(JANICE);
   $('dLinkErr').textContent=link&&!okLink?'Ese link no es de janice.e-351.com.':'';
-  const base=({buy:'Jita Buy',split:'Jita Split',sell:'Jita Sell'})[C.disc.base];
   const es=discDest==='vg',loc=$('discLoc').value||'—',n=discRows.length;
   // botón al canal donde se pega el mensaje (SIGMA: #market-trade; Vanguardia: su Discord)
   const ob=$('dOpenD'),hasS=!!LINKS.sigmaTrade;ob.dataset.link=es?'vgDiscord':'sigmaTrade';
@@ -186,11 +187,15 @@ function paintDisc(P){
   $('dOpenNote').textContent=es?'Pide login en Discord. Te lleva al servidor de la corporación.':(hasS?'Pide login en Discord. Te lleva directo al canal #market-trade de SIGMA.':'Pega abajo el link del canal #market-trade (clic derecho en el canal → Copiar enlace).');
   $('dWhere').textContent=es?'Cópialo y publícalo en Vanguardia DR › Actividades › #💰-mercado-local.':'Cópialo y publícalo en SIGMA GRINDSET › trade › #market-trade.';
   // mensaje corto: los items ya están en el link de Janice; la entrega es por contrato (inmediata)
-  const lines=[es?'VENDO':'WTS'];
-  lines.push((es?'Precio: ':'Price: ')+Math.round(tot).toLocaleString('en-US')+' ISK ('+pct(C.disc.pct)+'% '+base+')');
-  lines.push('Janice: '+(okLink?link:(es?'<pega aquí tu link de Janice>':'<paste your Janice link>')));
-  lines.push(es?'Contrato en: '+loc+' (Item Exchange, entrega inmediata)':'Contract at: '+loc+' (Item Exchange, instant delivery)');
-  lines.push(es?'Escríbeme por DM si te interesa.':'DM me if interested.');
+  const localSpanish=S.lang!=='en';
+  const lines=[localSpanish?'VENDO':'WTS'];
+  // The Jita Buy × percentage rule belongs ONLY in Settings/pricing.
+  // Discord previews and copied WTS messages contain the final offer price,
+  // never the internal price formula.
+  lines.push((localSpanish?'Precio: ':'Price: ')+Math.round(tot).toLocaleString('en-US')+' ISK');
+  lines.push('Janice: '+(okLink?link:(localSpanish?'<pega aquí tu link de Janice>':'<paste your Janice link>')));
+  lines.push(localSpanish?'Contrato en: '+loc+' (Item Exchange, entrega inmediata)':'Contract at: '+loc+' (Item Exchange, instant delivery)');
+  lines.push(localSpanish?'Escríbeme por DM si te interesa.':'DM me if interested.');
   $('dMsg').textContent=lines.join('\n');
   $('dCopyMsg').dataset.v=lines.join('\n');
   $('dCopyList').dataset.v=discRows.map(r=>r.o.name+'\t'+r.q).join('\n');

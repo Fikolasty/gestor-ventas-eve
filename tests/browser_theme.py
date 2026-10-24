@@ -278,6 +278,73 @@ class ThemeBrowserTests(unittest.TestCase):
         self.assertIn("500,000 ISK less",shortcut.inner_text())
         self.assertIsNone(self.page.evaluate("S.planMode"))
 
+    def test_sales_selector_is_on_right_edge_desktop_and_mobile(self):
+        from playwright.sync_api import expect
+        self.page.evaluate("selectAppModule('ventas')")
+        for width,height in [(1440,900),(390,844)]:
+            self.page.set_viewport_size({"width":width,"height":height})
+            trigger=self.page.locator("#salesModeTrigger")
+            expect(trigger).to_be_visible()
+            edges=self.page.evaluate("""() => {
+                const t=document.querySelector('#salesModeTrigger').getBoundingClientRect();
+                const b=document.querySelector('#salesModeToolbar').getBoundingClientRect();
+                return {gap:b.right-t.right,overflow:t.right-innerWidth};
+            }""")
+            self.assertLess(abs(edges['gap']),6,edges)
+            self.assertLessEqual(edges['overflow'],1,edges)
+            trigger.click()
+            expect(self.page.locator("#modeTrading")).to_be_visible()
+            self.page.locator("#modeTrading").click()
+            expect(trigger).to_be_visible()
+            trigger.click()
+            self.page.locator("#modeLiquidation").click()
+            self.assertFalse(self.page.evaluate("S.flip"))
+
+    def test_manual_player_offer_stays_last_and_does_not_redefine_best_isk(self):
+        from playwright.sync_api import expect
+        self.page.evaluate("""() => {
+            C.disc.on=true;C.bb.on=true;S.flip=false;S.planMode=null;
+            const row={
+                o:{name:'Tritanium'},q:1,auto:'null',best:'null',
+                g:{null:100000,bb:95000,disc:160000},
+                ship:{},prod:0,net:{},cant:false
+            };
+            lastP={mode:null,rows:[row],Vs:0,shipCost:0,best:100000};
+            document.querySelector('#pSum').hidden=false;
+            pkView.open=true;pkView.filter='all';
+            paintPicker(lastP);
+        }""")
+        self.assertIsNone(self.page.evaluate("S.planMode"))
+        choices=self.page.locator("#pkOthers [data-m]")
+        self.assertEqual(choices.last.get_attribute("data-m"),"disc")
+        self.assertNotIn("160,000",self.page.locator("#pkOpportunity").inner_text())
+        self.page.evaluate("""() => {
+            lastP.mode='disc';
+            paintPicker(lastP);
+        }""")
+        self.assertIn("no cuenta como la ruta automática",self.page.locator("#pkOpportunity").inner_text())
+        self.page.evaluate("setLang('en')")
+        self.page.evaluate("paintPicker(lastP)")
+        self.assertIn("does not count as the automatic",self.page.locator("#pkOpportunity").inner_text())
+
+    def test_discord_offer_preview_and_copy_do_not_show_price_formula(self):
+        self.page.evaluate("""() => {
+            C.disc.on=true;S.flip=false;C.disc.base='buy';C.disc.pct=1;
+            S.items=[{name:'Tritanium',qty:1}];
+            paintDisc({rows:[{best:'null',o:{name:'Tritanium'},q:1,
+                g:{null:95000,disc:100000}}]});
+        }""")
+        preview=self.page.locator("#dMsg").inner_text()
+        copied=self.page.locator("#dCopyMsg").get_attribute("data-v")
+        self.assertIn("100,000 ISK",preview)
+        self.assertEqual(preview,copied)
+        self.assertNotIn("Jita Buy",preview)
+        self.assertNotIn("100%",preview)
+        self.page.evaluate("setLang('en')")
+        self.page.evaluate("paintDisc({rows:[{best:'null',o:{name:'Tritanium'},q:1,g:{null:95000,disc:100000}}]})")
+        self.assertIn("Price: 100,000 ISK",self.page.locator("#dMsg").inner_text())
+        self.assertNotIn("Jita Buy",self.page.locator("#dCopyMsg").get_attribute("data-v"))
+
     def test_skill_plan_iframe_language_roundtrip(self):
         from playwright.sync_api import expect
         self.page.evaluate("selectAppModule('skills')")

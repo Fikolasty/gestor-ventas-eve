@@ -144,8 +144,8 @@
     "en": "Buyback contract."
   },
   "picker.playerDesc": {
-    "es": "Oferta a otros jugadores.",
-    "en": "Offer to other players."
+    "es": "Oferta manual en Discord. No es una venta confirmada.",
+    "en": "Manual Discord offer. No confirmed buyer."
   },
   "picker.reprocessLocalDesc": {
     "es": "Reprocesar y vender localmente.",
@@ -582,5 +582,17 @@
   "picker.quickFull": {
     "es": "Puede requerir envío; el plazo depende del mercado.",
     "en": "May require shipping; timing depends on the market."
+  },
+  "picker.playerUnconfirmed": {
+    "es": "Esta oferta depende de encontrar comprador. Aunque el importe sea mayor, no cuenta como la ruta automática de más ISK.",
+    "en": "This offer requires finding a buyer. Even if the asking price is higher, it does not count as the automatic most-ISK route."
+  },
+  "player.lastResortNames": {
+    "es": "Último recurso: ofrecer a otro jugador los ítems {items}. La venta no está garantizada.",
+    "en": "Last resort: offer {items} to another player. The sale is not guaranteed."
+  },
+  "player.lastResortGuide": {
+    "es": "Último recurso: crea una oferta WTS si las rutas normales no te convienen. El precio depende de que otro jugador acepte.",
+    "en": "Last resort: create a WTS offer if standard routes do not work for you. Another player must accept the price."
   }
 }

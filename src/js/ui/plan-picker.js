@@ -37,6 +37,11 @@ function paintPicker(P){
   const opportunity=$('pkOpportunity');
   opportunity.replaceChildren();
   const valid=all.filter(x=>Number.isFinite(x.t.net));
+  // Selling to an unknown player is a WTS offer, not an executable quote.
+  // It can be manually selected, but must not define the highest-ISK
+  // benchmark or displace the financially recommended market plan.
+  const comparable=valid.filter(x=>x.m!=='disc');
+  const financial= comparable.length?comparable:valid;
   // Plain-language decision aid. These are the EXACT plan comparison totals,
   // including taxes and one shared courier bill, not a second price engine.
   // Quick means no waiting for a sell order; delivery/payment is not promised.
@@ -71,8 +76,11 @@ function paintPicker(P){
     shortcutPanel.append(heading,method,caption,button);
     shortcutPanel.hidden=false;
   }
-  if(valid.length>1&&valid.some(x=>x.m===cur)){
-    const benchmark=valid.reduce((best,x)=>x.t.net>best.t.net?x:best);
+  if(chosen.m==='disc'){
+    opportunity.append(el('p','pk-opp-explain',tx('picker.playerUnconfirmed')));
+    opportunity.hidden=false;
+  }else if(financial.length>1&&financial.some(x=>x.m===cur)){
+    const benchmark=financial.reduce((best,x)=>x.t.net>best.t.net?x:best);
     const gap=Math.max(0,benchmark.t.net-chosen.t.net);
     const grid=el('div','pk-opp-grid');
     const stat=(label,value,cl='')=>{
@@ -80,7 +88,7 @@ function paintPicker(P){
       node.append(el('small',null,label),el('strong',cl,value));grid.append(node);
     };
     if(gap<.5){
-      const runner=valid.filter(x=>x.m!==chosen.m&&x.t.net<chosen.t.net-.5)
+      const runner=financial.filter(x=>x.m!==chosen.m&&x.t.net<chosen.t.net-.5)
         .sort((a,b)=>b.t.net-a.t.net)[0];
       if(runner){
         const advantage=chosen.t.net-runner.t.net;
@@ -99,6 +107,7 @@ function paintPicker(P){
 
   // Keep the detailed plan comparison accessible without using vertical space
   // unless the user explicitly expands it. Preserve open state across recalcs.
+  if(chosen.m!=='disc'){
   const detail=el('details','pk-opp-details');
   detail.open=!!pkView.opportunityOpen;
   const summary=el('summary','pk-opp-brief');
@@ -112,8 +121,9 @@ function paintPicker(P){
   while(opportunity.firstChild)detail.append(opportunity.firstChild);
   opportunity.append(detail);
   detail.addEventListener('toggle',()=>{pkView.opportunityOpen=detail.open;});
+  }
 
-  const maxNet=Math.max(...list.map(x=>x.t.net),1);
+  const maxNet=Math.max(...list.filter(x=>x.m!=='disc').map(x=>x.t.net),1);
   // Optimal is already identified by the section subtitle and the opportunity
   // comparison. Repeating that claim as an all-caps paragraph adds visual noise.
   // Show a compact, actionable difference only when a different route is chosen.
@@ -181,7 +191,13 @@ function paintPicker(P){
     tools.append(group);}
   const key={name:x=>x.l.toLowerCase(),speed:x=>pkSpeedRank(x.m,P),ship:x=>pkShips(x.m,P)?1:0,net:x=>x.t.net,diff:x=>x.t.net};
   const rest=expandedList.filter(x=>x.m===chosen.m||pass[pkView.filter](x))
-    .sort((a,b)=>{const A=key[pkView.sort](a),B=key[pkView.sort](b);return (A<B?-1:A>B?1:0)*pkView.dir||b.t.net-a.t.net;});
+    .sort((a,b)=>{
+      // Manual WTS/Discord is always displayed LAST regardless of sort mode.
+      if(a.m==='disc'&&b.m!=='disc')return 1;
+      if(b.m==='disc'&&a.m!=='disc')return -1;
+      const A=key[pkView.sort](a),B=key[pkView.sort](b);
+      return (A<B?-1:A>B?1:0)*pkView.dir||b.t.net-a.t.net;
+    });
   // El óptimo también se elige aquí: ya no necesita un botón Volver al óptimo.
   rest.forEach(x=>{const entry=row(x,false);if(x.m===chosen.m){entry.classList.add('on');entry.setAttribute('aria-pressed','true');entry.setAttribute('aria-current','true');entry.title=tx('picker.selected');}others.append(entry);});
   if(!rest.length)others.append(el('p','pk-empty',tx('picker.empty')));

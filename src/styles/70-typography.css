@@ -450,3 +450,17 @@ html.light .hero .mm-sales-mode-picker>.mm-sales-mode-trigger{
     grid-template-areas:"heading" "method" "note" "action"}
   #pSum .pk-shortcut-action{justify-self:stretch;text-align:center}
 }
+
+/* The Sales operation is a task control, aligned at the far right of the
+   Sales workspace. Import controls retain their live inputs on the left. */
+.hero .mm-sales-toolbar{justify-content:flex-end!important;}
+.hero .mm-sales-toolbar>.mm-sales-mode-picker{
+  order:2!important;margin-left:auto!important;flex:0 0 auto!important;
+}
+.hero .mm-sales-toolbar>#importControls{
+  order:1!important;justify-content:flex-start!important;
+}
+@media(max-width:690px){
+  .hero .mm-sales-toolbar{justify-content:flex-end!important}
+  .hero .mm-sales-toolbar>.mm-sales-mode-picker{margin-left:auto!important}
+}
