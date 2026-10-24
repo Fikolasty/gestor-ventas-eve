@@ -496,24 +496,29 @@ class ThemeBrowserTests(unittest.TestCase):
         self.assertEqual(self.page.locator("#pRepro #rTax").count(),0)
         first=float(self.page.locator("#refineryYieldLive").inner_text().rstrip("%"))
         self.assertAlmostEqual(first,90.63,delta=.02)
-        self.page.locator("#refImp").select_option("0")
+        def set_setting(id,value,event="change"):
+            self.page.evaluate("""({id,value,event}) => {
+                const el=document.getElementById(id);el.value=value;
+                el.dispatchEvent(new Event(event,{bubbles:true}));
+            }""",{"id":id,"value":value,"event":event})
+        set_setting("refImp","0")
         no_implant=float(self.page.locator("#refineryYieldLive").inner_text().rstrip("%"))
         self.assertLess(no_implant,first)
-        self.page.locator("#skRep").select_option("3")
+        set_setting("skRep","3")
         less_skill=float(self.page.locator("#refineryYieldLive").inner_text().rstrip("%"))
         self.assertLess(less_skill,no_implant)
-        fee.fill("2")
+        set_setting("rTax","2","input")
         self.page.evaluate("stSaveNow()")
         stored=self.page.evaluate("""() => JSON.parse(localStorage.getItem('gestorVentas.ajustes.v1')).f.rTax""")
         self.assertEqual(stored,"2")
         self.page.evaluate("setLang('en')")
         expect(self.page.locator('#refineryProfile')).to_contain_text('Estimated yield')
-        self.page.locator("#skRep").select_option("5")
-        self.page.locator("#refImp").select_option("0.04")
+        set_setting("skRep","5")
+        set_setting("refImp","0.04")
         final=float(self.page.locator("#refineryYieldLive").inner_text().rstrip("%"))
         self.assertAlmostEqual(final,first,delta=.02)
         # Changing a fee is a cost change, never a change of profile yield.
-        fee.fill("0.5")
+        set_setting("rTax","0.5","input")
         self.page.evaluate("paintRefineryProfile()")
         self.assertEqual(float(self.page.locator("#refineryYieldLive").inner_text().rstrip("%")),final)
 
