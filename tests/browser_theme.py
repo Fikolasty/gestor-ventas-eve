@@ -488,6 +488,56 @@ class ThemeBrowserTests(unittest.TestCase):
         expect(self.page.locator("#mnReadingTitle")).to_have_text(
             "De tu primera barge a tu primera Omega")
 
+    def test_refiner_profile_tracks_skills_implant_and_saved_fee(self):
+        from playwright.sync_api import expect
+        fee=self.page.locator("#rTax")
+        expect(fee).to_have_value("0.5")
+        self.assertEqual(self.page.locator("#settings #rTax").count(),1)
+        self.assertEqual(self.page.locator("#pRepro #rTax").count(),0)
+        first=float(self.page.locator("#refineryYieldLive").inner_text().rstrip("%"))
+        self.assertAlmostEqual(first,90.63,delta=.02)
+        self.page.locator("#refImp").select_option("0")
+        no_implant=float(self.page.locator("#refineryYieldLive").inner_text().rstrip("%"))
+        self.assertLess(no_implant,first)
+        self.page.locator("#skRep").select_option("3")
+        less_skill=float(self.page.locator("#refineryYieldLive").inner_text().rstrip("%"))
+        self.assertLess(less_skill,no_implant)
+        fee.fill("2")
+        self.page.evaluate("stSaveNow()")
+        stored=self.page.evaluate("""() => JSON.parse(localStorage.getItem('gestorVentas.ajustes.v1')).f.rTax""")
+        self.assertEqual(stored,"2")
+        self.page.evaluate("setLang('en')")
+        expect(self.page.locator('#refineryProfile')).to_contain_text('Estimated yield')
+        self.page.locator("#skRep").select_option("5")
+        self.page.locator("#refImp").select_option("0.04")
+        final=float(self.page.locator("#refineryYieldLive").inner_text().rstrip("%"))
+        self.assertAlmostEqual(final,first,delta=.02)
+        # Changing a fee is a cost change, never a change of profile yield.
+        fee.fill("0.5")
+        self.page.evaluate("paintRefineryProfile()")
+        self.assertEqual(float(self.page.locator("#refineryYieldLive").inner_text().rstrip("%")),final)
+
+    def test_sell_mode_is_aligned_with_inventory_paste_area(self):
+        from playwright.sync_api import expect
+        for width,height in [(1440,900),(390,844)]:
+            self.page.set_viewport_size({"width":width,"height":height})
+            trigger=self.page.locator("#salesModeTrigger")
+            expect(trigger).to_be_visible()
+            geometry=self.page.evaluate("""() => {
+              const mode=document.querySelector('#salesModeTrigger').getBoundingClientRect();
+              const input=document.querySelector('#heroIntro .paste textarea').getBoundingClientRect();
+              const header=document.querySelector('#heroIntro .paste .paste-head').getBoundingClientRect();
+              return {sameCard:document.querySelector('#salesModeTrigger')
+                       .closest('.paste-head')===document.querySelector('#heroIntro .paste-head'),
+                      rightDifference:Math.abs(mode.right-input.right),
+                      inside:mode.left>=header.left-1&&mode.right<=header.right+1,
+                      overflow:mode.right-innerWidth};
+            }""")
+            self.assertTrue(geometry['sameCard'],geometry)
+            self.assertTrue(geometry['inside'],geometry)
+            self.assertLess(geometry['rightDifference'],4,geometry)
+            self.assertLessEqual(geometry['overflow'],1,geometry)
+
     def test_skill_plan_iframe_language_roundtrip(self):
         from playwright.sync_api import expect
         self.page.evaluate("selectAppModule('skills')")
