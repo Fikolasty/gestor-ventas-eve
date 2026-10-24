@@ -506,5 +506,21 @@
   "css.home": {
     "es": "Inicio",
     "en": "Home"
+  },
+  "settings.overview": {
+    "es": "Ajusta habilidades, impuestos y mercados. Los cambios se guardan en este navegador.",
+    "en": "Adjust skills, taxes and markets. Changes are saved in this browser."
+  },
+  "settings.languageHeading": {
+    "es": "IDIOMA",
+    "en": "LANGUAGE"
+  },
+  "sales.modeSelectAria": {
+    "es": "Seleccionar operación de ventas",
+    "en": "Choose sales operation"
+  },
+  "sales.modeHeading": {
+    "es": "Operación",
+    "en": "Operation"
   }
 }
