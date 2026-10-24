@@ -26,7 +26,7 @@ class TranslationContract(unittest.TestCase):
             data=path.read_text(encoding='utf-8')
             keys.update(re.findall(r"tx\(['\"]([a-z][a-zA-Z0-9_.]*)['\"]",data))
         self.assertFalse(keys-set(catalog),'Untranslated UI messages: '+repr(keys-set(catalog)))
-        self.assertIn('picker.optimalSummary',keys)
+        self.assertIn('picker.selectedDifference',keys)
         self.assertIn('verdict.netSales',keys)
     def test_build_consumes_exactly_one_catalog(self):
         script=(SRC/'js/ui/format.js').read_text(encoding='utf-8')
