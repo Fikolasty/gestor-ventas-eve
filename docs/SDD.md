@@ -685,3 +685,22 @@ La ejecución `39918683797` confirmó `compile: success` y `Deploy verified Mark
 - **i18n:** todos los labels nuevos tienen traducciones ES/EN en `src/i18n/ui.json`; no se añadió texto económico hardcodeado al renderer.
 - **Pruebas:** `tests/courier-unit-display.test.cjs` verifica precio base + cargo por unidad = valor unitario y total del lote, fallback de reproceso, ítems sin cotización, iconos y formato del volumen. `tests/browser_theme.py` verifica traducción ES/EN, importes representados, icono y orden DOM posterior al comparador. Versión objetivo `1.0.120`.
 - **Validación:** esperar ejecución de Actions con resultado satisfactorio y confirmación de `deploy-pages` antes de marcar la nueva versión como publicada.
+
+
+## Revisión integral ES/EN — 24-oct-2026
+
+**Causa raíz de las inconsistencias:** coexistían (1) el catálogo nuevo y seguro por claves `src/i18n/ui.json` con `tx(key,params)`; (2) el traductor heredado `src/i18n/en.json`, que intenta reconocer textos españoles originales mediante coincidencias exactas o parciales y un `MutationObserver`; (3) textos ES/EN separados en expresiones condicionales y en el documento aislado de Skill Plans. Una modificación del texto español, una nueva etiqueta o una vista dinámica no siempre actualizaban sus equivalentes en inglés. Las pruebas anteriores comprobaban apenas unas cadenas y hasta seguían exigiendo el ticker eliminado.
+
+**Correcciones, manteniendo compatibilidad y fórmulas:**
+- `src/shell.html`: banner del millón de SP y descripciones accesibles del idioma/referido marcados con `data-i18n` / `data-i18n-aria-label`, sin cambiar estilos ni el enlace.
+- `src/js/i18n/translator.js`: resolución determinista desde `UI_TEXT` para esos nodos, restauración explícita ES al alternar, compatibilidad con el traductor heredado para el resto de la interfaz, y exclusión de nodos con claves del traductor heurístico. No se reescribe un nodo si ya tiene el texto objetivo, evitando ciclos de mutaciones. El módulo de Minería visible se repinta cuando cambia el idioma, para que sus etiquetas generadas previamente no queden en el idioma anterior.
+- `src/i18n/ui.json`: claves nuevas con `es` y `en`, incluido el aria-label del referido. Para todo texto nuevo **se deben usar claves en este archivo**, no frases hardcoded ni comparación textual.
+- `src/i18n/en.json`: traducciones completas adicionales para textos existentes en Ajustes, Guía, Industria Planetaria (PI), Tasación, Veredicto, Planes, contratos, etiquetas de ESI, Minería, fit e inversión. Sigue siendo **compatibilidad heredada**, no el sistema recomendado para módulos nuevos.
+- `tests/i18n-contract.test.cjs`: verificación de claves obligatorias, ES/EN, interpolaciones coincidentes, contenido estático visible y atributos accesibles de `shell.html`; también revisa textos españoles literales de los módulos JS existentes (incluidos sin tilde) para impedir nuevas omisiones antes del build.
+- `tests/browser_theme.py`: cambio real ES→EN→ES en Chromium, banner y aria-label, Ajustes, Guía, PI, Minería y el iframe de Skill Plans. Las pruebas exigen el texto correcto, no solamente `document.lang`.
+
+**Reglas para implementaciones futuras:** todo texto nuevo de JS usa `tx('clave')`, con placeholders tipados por nombre en ambas traducciones; HTML estático usa `data-i18n` o `data-i18n-aria-label`; los nombres de ítems y el contenido pegado del usuario no deben traducirse; las fórmulas de ISK/impuestos/courier y formato EVE (miles con comas y decimal con punto) no se acoplan al lenguaje. Si el cambio afecta Minería o Skills, ampliar pruebas bilingües dentro de ese módulo. Ejecutar suites Python, Node y Chromium antes de publicar. No desactivar comprobaciones fallidas; corregir la fuente o la expectativa desactualizada.
+
+**Límite conocido:** el traductor heredado por fragmentos persiste en gran parte del HTML anterior y las pruebas estáticas usan heurísticas, por lo que no constituyen una demostración matemática de 100% de cobertura para todo dato posible. La migración progresiva a claves es necesaria para eliminar esa deuda técnica de manera segura. Las traducciones en el iframe de Skills mantienen su catálogo ES/EN interno y el idioma se comunica por `postMessage` sin acceso a tokens del piloto.
+
+**Impacto financiero:** ninguno. No se modificaron `market-pricing.js`, `planning.js`, `courier.js`, `refining.js` ni sus fórmulas. El workflow de publicación sigue exigiendo pruebas y despliegue verificado.
