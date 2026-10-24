@@ -124,8 +124,8 @@ assert(salesJS.includes("headerLegacy.append(rightGroup)"),'Original internal ro
 assert(salesJS.includes("header.insertBefore(bar,topActions)"),'Navigation must be in main header');
 assert(salesJS.includes("$('importControls').hidden=!isImport"));
 assert(salesJS.includes("button.title=description"));
-assert(salesJS.includes("a.querySelector('span:last-child').textContent=en?'Sell Items':'Vender Ítems'"));
-assert(salesJS.includes("b.querySelector('span:last-child').textContent=en?'Jita Trading':'Comercio Jita'"));
+assert(salesJS.includes("a.querySelector('span:last-child').textContent=tx('sales.modeSell')"),'Sale mode comes from UI catalog');
+assert(salesJS.includes("b.querySelector('span:last-child').textContent=tx('sales.modeTrade')"),'Trade mode comes from UI catalog');
 assert(salesJS.includes("[['cNullDest'],()=>!S.flip"),'Margin must not be disabled outside trading mode');
 assert(!salesJS.includes("[['cImpM','cNullDest'],()=>!S.flip"));
 assert(salesJS.includes("C.impM=v/100"),'The same margin is still used for finance calculations');
