@@ -246,6 +246,38 @@ class ThemeBrowserTests(unittest.TestCase):
                          "Ajusta habilidades, impuestos y mercados. Los cambios se guardan en este navegador.")
         self.assertEqual(self.page.locator("#stLanguageLabel").inner_text(),"IDIOMA")
 
+    def test_quicker_sale_preview_keeps_highest_isk_plan_selected(self):
+        from playwright.sync_api import expect
+        def fixture():
+            self.page.evaluate("""() => {
+                S.flip=false; S.planMode=null; C.bb.on=true;
+                const row={
+                    o:{name:'Tritanium'},q:1,auto:'null',best:'null',
+                    g:{null:10000000,bb:9500000,jInst:9200000},
+                    ship:{jInst:{v:100,c:10000000}},
+                    prod:0,net:{},cant:false
+                };
+                lastP={mode:null,rows:[row],Vs:0,shipCost:0,best:10000000};
+                document.querySelector('#verdict').hidden=false;
+                document.querySelector('#pSum').hidden=false;
+                paintPicker(lastP);
+            }""")
+        fixture()
+        shortcut=self.page.locator("#pkShortcut")
+        expect(shortcut).to_be_visible()
+        self.assertIn("¿Quieres cobrar con menos espera?",shortcut.inner_text())
+        self.assertIn("9,500,000 ISK",shortcut.inner_text())
+        self.assertIn("500,000 ISK menos",shortcut.inner_text())
+        self.assertIsNone(self.page.evaluate("S.planMode"))
+        shortcut.locator("button").click()
+        self.assertIsNone(self.page.evaluate("S.planMode"))
+        expect(self.page.locator("#pkOthers .pk-shortcut-highlight")).to_have_count(1)
+        self.page.evaluate("setLang('en')")
+        fixture()
+        self.assertIn("Want a quicker way to get paid?",shortcut.inner_text())
+        self.assertIn("500,000 ISK less",shortcut.inner_text())
+        self.assertIsNone(self.page.evaluate("S.planMode"))
+
     def test_skill_plan_iframe_language_roundtrip(self):
         from playwright.sync_api import expect
         self.page.evaluate("selectAppModule('skills')")
