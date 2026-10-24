@@ -358,7 +358,7 @@ class ThemeBrowserTests(unittest.TestCase):
             S.items=rows.map(r=>({...r.o,qty:r.q}));
             stepOpen=new Set(['null']);
             document.querySelector('#deep').hidden=false;
-            paintVerdict({rows,missing:[],mode:null,best:1440,Vs:0,shipCost:0});
+            paintVerdict({rows,missing:[],toBB:[],bbGross:0,mode:null,best:1440,Vs:0,shipCost:0});
         }""")
         field=self.page.locator("#vPlan .pl-search")
         expect(field).to_be_visible()
