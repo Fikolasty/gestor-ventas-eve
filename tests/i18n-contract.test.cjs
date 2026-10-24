@@ -83,3 +83,24 @@ test('browser dialogs use the catalog rather than hard-coded Spanish',()=>{
   assert.match(read('src/js/auth/eve-sso.js'),/tx\\('sso.missingClient'\\)/);
 });
 
+
+test('responsive CSS labels are catalog driven in both languages',()=>{
+  const panels=read('src/styles/20-panels.css');
+  const navigation=read('src/styles/50-navigation.css');
+  const translator=read('src/js/i18n/translator.js');
+  for(const [cssVar,key] of [
+    ['--mm-i18n-volume','css.volume'],
+    ['--mm-i18n-shipping','css.shipping'],
+    ['--mm-i18n-extra-gain','css.extraGain'],
+    ['--mm-i18n-reprocessed','css.reprocessed'],
+    ['--mm-i18n-unprocessed','css.unprocessed'],
+    ['--mm-i18n-units','css.units'],
+    ['--mm-i18n-home','css.home']
+  ]){
+    assert.ok(Object.hasOwn(ui,key),key);
+    assert.ok((panels+navigation).includes('var('+cssVar+','),cssVar);
+    assert.ok(translator.includes("'"+cssVar+"':'"+key+"'"),cssVar);
+  }
+  const literalContent=(panels+navigation).match(/content\s*:\s*["'][^"'\r\n]{3,}["']/g)||[];
+  assert.deepEqual(literalContent,[],'Do not hardcode translatable CSS pseudo-element copy');
+});
