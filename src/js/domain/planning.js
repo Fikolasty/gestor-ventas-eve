@@ -78,6 +78,42 @@ function mostProfitableMix(rows,Vall){
   });
 }
 
+// Safety check after the mixed-route optimizer: choosing the best mix must
+// never pay less than any supported uniform selling mode for this same lot.
+// Every candidate is priced with the REAL shared courier bill (including
+// contract steps). Unsupported rows keep their prior best route. This does
+// not claim an exhaustive combinatorial optimum.
+function protectBestSaleRoute(rows,Vall){
+  const active=rows.filter(r=>r.q>0&&r.best);
+  if(!active.length)return null;
+  const saleValue=pick=>{
+    let gross=0,volume=0,collateral=0;
+    for(const r of active){
+      const k=pick(r),v=k&&r.g[k];
+      if(!Number.isFinite(v))return -Infinity;
+      gross+=v-r.prod;
+      const ship=r.ship[k];
+      if(ship){volume+=ship.v;collateral+=ship.c;}
+    }
+    return gross-(volume>0?courierCost(volume,collateral):0);
+  };
+  let bestNet=saleValue(r=>r.best),betterMode=null;
+  const modes=['null','bb','jOrd','jInst','rNull','rJita','fN','fJ','fJI'];
+  for(const mode of modes){
+    if(!active.some(r=>Number.isFinite(r.g[mode])))continue;
+    const value=saleValue(r=>Number.isFinite(r.g[mode])?mode:r.best);
+    if(value>bestNet+.01){bestNet=value;betterMode=mode;}
+  }
+  if(betterMode){
+    active.forEach(r=>{
+      if(!Number.isFinite(r.g[betterMode]))return;
+      r.best=betterMode;r.fast=null;r.tightPick=false;r.noShip=!r.ship[betterMode];
+      r.guide=guideFor(r,Vall);
+    });
+  }
+  return {net:bestNet,mode:betterMode};
+}
+
 function computePlan(){
   const rJ=rateJita(),rN=rateNull(),rI=rateInst();
   const rows=S.items.map(o=>{
@@ -213,6 +249,7 @@ function computePlan(){
   }
   // Optimize the FINAL shared-courier bill before optional user-forced routes.
   mostProfitableMix(rows,Vall);
+  protectBestSaleRoute(rows,Vall);
   // v111: plan elegido. r.auto = lo que elige el plan óptimo. Si el usuario elige un plan (p. ej. todo a Jita),
   // cada item que admite esa opción la toma; el que no puede (sin precio, el Buyback no lo acepta…) sigue el óptimo.
   const M=S.planMode;
