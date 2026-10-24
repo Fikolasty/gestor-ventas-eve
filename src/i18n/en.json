@@ -2265,5 +2265,13 @@
   "reprocesarlo y vender en ": "reprocess it and sell in ",
   "Sin refinar": "Unrefined",
   "vende el ore en ": "sell the ore in ",
-  " y vende los minerales en ": " and sell the minerals in "
+  " y vende los minerales en ": " and sell the minerals in ",
+  "la API pidió esperar (límite de peticiones)": "the API requested a pause (rate limit)",
+  "El envío a Jita es más caro que ": "Shipping to Jita costs more than ",
+  "la mejor venta local": "the best local sale",
+  "Precio respaldado o sin anomalías claras": "Supported price or no obvious anomalies",
+  "Nivel respaldado por varias órdenes y mayor volumen": "Price level supported by multiple orders and higher volume",
+  " (isótopos a Jita Buy)": " (isotopes at Jita Buy)",
+  "precio local manual": "manual local price",
+  "Contar envío": "Include shipping"
 }
