@@ -46,7 +46,7 @@ $('vPlan').addEventListener('click',e=>{
     if(repaintPlanGroup)repaintPlanGroup(section);return;
   }
   const c=e.target.closest('.cp');if(c&&c.dataset.v){const v=c.dataset.v,done=()=>{c.classList.add('done');setTimeout(()=>c.classList.remove('done'),900);};
-    if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(v).then(done,()=>prompt('Copia:',v));else prompt('Copia:',v);}
+    if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(v).then(done,()=>prompt(tx('shared.copyPrompt'),v));else prompt(tx('shared.copyPrompt'),v);}
 });
 // Foco estable: buscar dentro de la misma recomendación no reconstruye su campo de texto.
 $('vPlan').addEventListener('input',e=>{
