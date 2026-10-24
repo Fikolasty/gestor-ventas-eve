@@ -522,5 +522,13 @@
   "sales.modeHeading": {
     "es": "Operación",
     "en": "Operation"
+  },
+  "sales.modeSell": {
+    "es": "Vender Ítems",
+    "en": "Sell Items"
+  },
+  "sales.modeTrade": {
+    "es": "Comercio Jita",
+    "en": "Jita Trading"
   }
 }
