@@ -18,10 +18,9 @@ class TranslationContract(unittest.TestCase):
                 self.assertEqual(slots(entry['es']),slots(entry['en']))
     def test_all_static_message_references_exist(self):
         catalog=json.loads((SRC/'i18n/ui.json').read_text(encoding='utf-8'))
-        paths=[
-            SRC/'js/ui/plan-picker.js',SRC/'js/ui/selling-results.js',
-            SRC/'js/ui/settings.js',
-        ]
+        # All JS source modules, not just the three initial renderers. This
+        # blocks new tx(key) typos in login, shipping, settings and mining.
+        paths=sorted(SRC.rglob('*.js'))
         keys=set()
         for path in paths:
             data=path.read_text(encoding='utf-8')
