@@ -38,9 +38,15 @@ class ThemeBrowserTests(unittest.TestCase):
 
     def setUp(self):
         self.page = self.browser.new_page(viewport={"width": 1440, "height": 900}, reduced_motion="reduce")
+        page_errors = []
+        self.page.on("pageerror", lambda error: page_errors.append(str(error)))
         self.page.goto(INDEX.as_uri(), wait_until="domcontentloaded")
-        self.page.wait_for_selector(".top.mm-ho-root")
-        self.page.wait_for_selector(".hero>.hero-referral")
+        try:
+            self.page.wait_for_selector(".top.mm-ho-root", timeout=5000)
+            self.page.wait_for_selector(".hero>.hero-referral", timeout=5000)
+        except Exception as error:
+            raise AssertionError("Market Moves+ did not bootstrap: "
+                                 + repr(page_errors[-5:])) from error
 
     def tearDown(self):
         self.page.close()
