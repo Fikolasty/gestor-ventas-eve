@@ -323,8 +323,8 @@ class ThemeBrowserTests(unittest.TestCase):
             paintPicker(lastP);
         }""")
         self.assertIn("no cuenta como la ruta automática",self.page.locator("#pkOpportunity").inner_text())
-        self.page.evaluate("setLang('en')")
-        self.page.evaluate("paintPicker(lastP)")
+        self.page.evaluate("window.__playerManualExample=lastP; setLang('en')")
+        self.page.evaluate("paintPicker(window.__playerManualExample)")
         self.assertIn("does not count as the automatic",self.page.locator("#pkOpportunity").inner_text())
 
     def test_discord_offer_preview_and_copy_do_not_show_price_formula(self):
