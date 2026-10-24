@@ -23,7 +23,7 @@ function stRestore(){let o=null;try{o=JSON.parse(localStorage.getItem(ST_KEY)||'
   finally{stBusy=false;}}
 $('settings').addEventListener('input',stSave);$('settings').addEventListener('change',stSave);
 $('themeLight').addEventListener('change',stSave);
-$('stReset').addEventListener('click',()=>{if(!confirm('¿Volver todos los Ajustes a los valores de fábrica?'))return;
+$('stReset').addEventListener('click',()=>{if(!confirm(tx('settings.resetConfirm')))return;
   try{localStorage.removeItem(ST_KEY);}catch(e){}stBusy=true;location.reload();});
 addEventListener('pagehide',()=>{if(stT){clearTimeout(stT);stSaveNow();}});
 
