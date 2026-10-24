@@ -48,12 +48,35 @@ class ThemeBrowserTests(unittest.TestCase):
     def color(self, selector, attribute="backgroundColor"):
         return self.page.locator(selector).first.evaluate("(el,prop)=>getComputedStyle(el)[prop]", attribute)
 
+    def assert_referral_text_only(self, mode):
+        """Enforce the design contract in both themes, at rest and on hover."""
+        pill = self.page.locator(".hero>.hero-referral-pill")
+        self.assertEqual(pill.count(), 1)
+        styles = pill.evaluate("""el => {
+            const s = getComputedStyle(el);
+            const r = el.getBoundingClientRect();
+            const hero = el.parentElement.getBoundingClientRect();
+            return {
+                background: s.backgroundColor,
+                borderTop: s.borderTopWidth,
+                shadow: s.boxShadow,
+                centerDelta: Math.abs((r.left + r.right)/2 - (hero.left + hero.right)/2),
+                width: r.width,
+                text: el.innerText
+            };
+        }""")
+        self.assertEqual(styles["background"], "rgba(0, 0, 0, 0)", f"{mode}: referral has background")
+        self.assertEqual(styles["borderTop"], "0px", f"{mode}: referral has border")
+        self.assertEqual(styles["shadow"], "none", f"{mode}: referral has shadow")
+        self.assertLess(styles["centerDelta"], 3, f"{mode}: referral not centered")
+        self.assertIn("1,000,000 SP", styles["text"])
+        self.assertGreater(styles["width"], 0)
+
     def test_light_header_and_referral_are_light_without_hover(self):
         self.page.evaluate("document.documentElement.classList.add('light')")
         header = self.color("header.top.mm-ho-root")
-        ticker = self.color(".hero>.hero-referral")
         self.assertGreater(brightness(header), 180, f"Light header dark: {header}")
-        self.assertGreater(brightness(ticker), 180, f"Light ticker dark at rest: {ticker}")
+        self.assert_referral_text_only("Light at rest")
         for selector in ["header .brand-wordmark", "header #evePilotName", ".hero>.hero-referral .hero-referral-kicker"]:
             color = self.color(selector, "color")
             self.assertLess(brightness(color), 130, f"Text contrast failure at {selector}: {color}")
@@ -63,19 +86,18 @@ class ThemeBrowserTests(unittest.TestCase):
         self.page.evaluate("document.documentElement.classList.add('light')")
         for width, height in [(1440, 900), (390, 844)]:
             self.page.set_viewport_size({"width": width, "height": height})
-            ticker = self.page.locator(".hero>.hero-referral")
-            # Previous regression: dark background at rest, light on :hover.
+            referral = self.page.locator(".hero>.hero-referral-pill")
             self.page.mouse.move(1, 1)
-            self.assertGreater(brightness(self.color(".hero>.hero-referral")), 180)
-            self.assertLess(brightness(self.color(".hero>.hero-referral .hero-referral-kicker", "color")), 130)
-            ticker.hover()
-            self.assertGreater(brightness(self.color(".hero>.hero-referral")), 180)
-            self.assertLess(brightness(self.color(".hero>.hero-referral .hero-referral-kicker", "color")), 130)
+            self.assert_referral_text_only(f"Light {width}px at rest")
+            self.assertLess(brightness(self.color(".hero-referral-kicker", "color")), 130)
+            referral.hover()
+            self.assert_referral_text_only(f"Light {width}px hovered")
+            self.assertLess(brightness(self.color(".hero-referral-kicker", "color")), 130)
 
     def test_dark_mode_still_uses_dark_surfaces(self):
         self.page.evaluate("document.documentElement.classList.remove('light')")
         self.assertLess(brightness(self.color("header.top.mm-ho-root")), 120)
-        self.assertLess(brightness(self.color(".hero>.hero-referral")), 120)
+        self.assert_referral_text_only("Dark at rest")
 
     def test_light_inventory_and_shipping_surfaces(self):
         self.page.evaluate("document.documentElement.classList.add('light')")
@@ -101,10 +123,10 @@ class ThemeBrowserTests(unittest.TestCase):
         self.page.set_viewport_size({"width": 390, "height": 844})
         self.page.evaluate("document.documentElement.classList.add('light')")
         self.assertGreater(brightness(self.color("header.top.mm-ho-root")), 180)
-        self.assertGreater(brightness(self.color(".hero>.hero-referral")), 180)
+        self.assert_referral_text_only("Mobile Light")
         self.page.evaluate("document.documentElement.classList.remove('light')")
         self.assertLess(brightness(self.color("header.top.mm-ho-root")), 120)
-        self.assertLess(brightness(self.color(".hero>.hero-referral")), 120)
+        self.assert_referral_text_only("Mobile Dark")
 
     def test_guide_ticker_settings_and_skills_tabs_translate_both_ways(self):
         self.page.evaluate("setLang('en')")
