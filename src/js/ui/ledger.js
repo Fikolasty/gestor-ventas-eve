@@ -96,7 +96,7 @@ let refinedCopyTimer=0;
 function copyPriceValue(b){
   const v=b.dataset.v,done=()=>{if(!b.isConnected)return;const t=b.textContent;
     b.textContent='Copiado';setTimeout(()=>{if(b.isConnected)b.textContent=t;},900);};
-  if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(v).then(done,()=>prompt('Copia:',v));else prompt('Copia:',v);
+  if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(v).then(done,()=>prompt(tx('shared.copyPrompt'),v));else prompt(tx('shared.copyPrompt'),v);
 }
 document.addEventListener('click',e=>{
   const b=e.target.closest('button.copy');if(!b||!b.dataset.v)return;
