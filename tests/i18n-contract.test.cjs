@@ -52,7 +52,7 @@ test('new dynamic Spanish UI literals must be registered before shipping',()=>{
     for(const m of src.matchAll(/(['"`])((?:(?!\1)[^\\\r\n]|\\.){8,230})\1/g)){
       const literal=m[2];
       // JS regex fragments are implementation, not UI messages.
-      if(!/[ÁÉÍÓÚáéíóúñÑ¿¡]/.test(literal)||literal.includes(').replace(')||/[{}=<>]/.test(literal))continue;
+      if(!(/[ÁÉÍÓÚáéíóúñÑ¿¡]/.test(literal)||/\\b(?:mercado|vender|compra|comprar|precios|precio|envío|enviar|volumen|impuestos|órdenes|ajustes|guía|sin|con|para|tienes|tiempo|ganancias|coste|impuesto|días|vende|venta|cantidad|mostrar|ver|planeta|nuevo|restablecer)\\b/i.test(literal))||literal.includes(').replace(')||/[{}=<>]/.test(literal))continue;
       if(!Object.hasOwn(en,literal))issues.push(file+': '+literal.slice(0,120));
     }
   }
