@@ -2180,5 +2180,17 @@
   "No se pudo renovar la sesión de EVE: ": "Could not renew EVE session: ",
   "Catálogo ESI HTTP ": "ESI catalog HTTP ",
   "Token emitido para otra aplicación.": "Token issued for another application.",
-  "EVE no concedió el permiso de lectura de skills.": "EVE did not grant permission to read skills."
+  "EVE no concedió el permiso de lectura de skills.": "EVE did not grant permission to read skills.",
+  "Ajustes de habilidades, impuestos, precios, envío y Buyback": "Configure skills, taxes, prices, shipping and Buyback",
+  "Navegación de Market Moves+": "Market Moves+ navigation",
+  "Tipo de negocio": "Business type",
+  "Escenario de mercado": "Market scenario",
+  "Opciones de importación": "Import options",
+  "Destino de importación: HY-RWO": "Import destination: HY-RWO",
+  "Cómo comprar en Jita": "How to buy in Jita",
+  "Enviar: utiliza SIGMA Freight para llevar los items a HY-RWO. No enviar: venderás los items en Jita sin contabilizar transporte.": "Ship: use SIGMA Freight to move items to HY-RWO. Do not ship: sell items in Jita without freight.",
+  "Módulos de Market Moves+": "Market Moves+ modules",
+  "Acciones de ajustes": "Settings actions",
+  "Guía de industria planetaria": "Planetary Industry guide",
+  "Índice de PI": "PI contents"
 }
