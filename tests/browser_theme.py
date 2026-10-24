@@ -179,7 +179,7 @@ class ThemeBrowserTests(unittest.TestCase):
         self.assertEqual(self.page.evaluate(
             "getComputedStyle(document.documentElement).getPropertyValue('--mm-i18n-volume').trim()"),
             '"Volume"')
-        self.assertIn("Set your skills, taxes and selling rules",
+        self.assertIn("Adjust skills, taxes and markets.",
                       self.page.locator("#settings").text_content())
         self.assertIn("The most profitable plan combines routes",
                       self.page.locator("#help").text_content())
@@ -194,12 +194,51 @@ class ThemeBrowserTests(unittest.TestCase):
         self.assertEqual(self.page.evaluate(
             "getComputedStyle(document.documentElement).getPropertyValue('--mm-i18n-volume').trim()"),
             '"Volumen"')
-        self.assertIn("Configura las skills, impuestos y reglas de venta",
+        self.assertIn("Ajusta habilidades, impuestos y mercados.",
                       self.page.locator("#settings").text_content())
         self.assertIn("La Industria Planetaria (PI) te permite extraer recursos",
                       self.page.locator("#pi").text_content())
         expect(self.page.locator("#mining .mn-ship-bonus-title").first).to_have_text(
             "Bonificaciones de nave y habilidades", timeout=10000)
+
+    def test_sales_operation_dropdown_preserves_live_trading_controls(self):
+        from playwright.sync_api import expect
+        self.page.evaluate("selectAppModule('ventas')")
+        picker=self.page.locator(".mm-sales-mode-picker")
+        trigger=self.page.locator("#salesModeTrigger")
+        self.assertEqual(self.page.locator(".top.mm-ho-context").count(),0)
+        expect(trigger).to_be_visible()
+        expect(self.page.locator("#businessSwitch")).to_be_hidden()
+        trigger.click()
+        expect(self.page.locator("#modeTrading")).to_be_visible()
+        self.page.locator("#modeTrading").click()
+        expect(picker).not_to_have_attribute("open", "")
+        self.assertTrue(self.page.evaluate("S.flip"))
+        expect(self.page.locator("#importControls")).to_be_visible()
+        expect(self.page.locator("#tradePurchaseMode")).to_be_visible()
+        self.assertEqual(self.page.locator("#salesModeCurrent").inner_text(),"Comercio Jita")
+        self.page.evaluate("setLang('en')")
+        self.assertEqual(self.page.locator("#salesModeCurrent").inner_text(),"Jita Trading")
+        trigger.click()
+        self.page.locator("#modeLiquidation").click()
+        self.assertFalse(self.page.evaluate("S.flip"))
+        expect(self.page.locator("#importControls")).to_be_hidden()
+        self.assertEqual(self.page.locator("#salesModeCurrent").inner_text(),"Sell Items")
+        self.page.evaluate("setLang('es')")
+        self.assertEqual(self.page.locator("#salesModeCurrent").inner_text(),"Vender Ítems")
+
+    def test_settings_navigation_and_compact_intro(self):
+        self.page.evaluate("setLang('en')")
+        self.assertEqual(self.page.locator("#settings>.lead").inner_text(),
+                         "Adjust skills, taxes and markets. Changes are saved in this browser.")
+        self.assertEqual(self.page.locator("#stLanguageLabel").inner_text(),"LANGUAGE")
+        tabs=self.page.locator("#settings .st-wrap>.modern-tabs .modern-tab")
+        self.assertGreaterEqual(tabs.count(),5)
+        self.assertEqual(self.page.locator("#settings .st-wrap>.modern-panel").count(),tabs.count())
+        self.page.evaluate("setLang('es')")
+        self.assertEqual(self.page.locator("#settings>.lead").inner_text(),
+                         "Ajusta habilidades, impuestos y mercados. Los cambios se guardan en este navegador.")
+        self.assertEqual(self.page.locator("#stLanguageLabel").inner_text(),"IDIOMA")
 
     def test_skill_plan_iframe_language_roundtrip(self):
         from playwright.sync_api import expect
