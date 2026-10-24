@@ -389,6 +389,9 @@ class ThemeBrowserTests(unittest.TestCase):
         self.page.evaluate("selectAppModule('mining')")
         expect(self.page.locator("#mnReadingTitle")).to_have_text(
             "De tu primera barge a tu primera Omega")
+        # Editorial lead belongs to the Mining page, not inside its toolbar.
+        self.assertTrue(self.page.evaluate(
+            "document.querySelector('.mn-reading-path').parentElement.id==='mnRoot'"))
         self.assertIn("no siempre descuentan",self.page.locator(".mn-reading-caution").inner_text())
         buttons=self.page.locator("[data-mining-jump]")
         self.assertEqual(buttons.count(),3)
