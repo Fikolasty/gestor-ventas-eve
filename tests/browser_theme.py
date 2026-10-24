@@ -48,18 +48,18 @@ class ThemeBrowserTests(unittest.TestCase):
     def color(self, selector, attribute="backgroundColor"):
         return self.page.locator(selector).first.evaluate("(el,prop)=>getComputedStyle(el)[prop]", attribute)
 
-    def test_light_header_and_ticker_are_light_without_hover(self):
+    def test_light_header_and_referral_are_light_without_hover(self):
         self.page.evaluate("document.documentElement.classList.add('light')")
         header = self.color("header.top.mm-ho-root")
         ticker = self.color(".hero>.hero-referral")
         self.assertGreater(brightness(header), 180, f"Light header dark: {header}")
         self.assertGreater(brightness(ticker), 180, f"Light ticker dark at rest: {ticker}")
-        for selector in ["header .brand-wordmark", "header #evePilotName", ".hero>.hero-referral .tk-i"]:
+        for selector in ["header .brand-wordmark", "header #evePilotName", ".hero>.hero-referral .hero-referral-kicker"]:
             color = self.color(selector, "color")
             self.assertLess(brightness(color), 130, f"Text contrast failure at {selector}: {color}")
         self.assertGreater(float(self.page.evaluate("getComputedStyle(document.body,'::before').opacity")), 0.2)
 
-    def test_light_ticker_readability_at_rest_and_hover_on_desktop_and_mobile(self):
+    def test_light_referral_readability_at_rest_and_hover_on_desktop_and_mobile(self):
         self.page.evaluate("document.documentElement.classList.add('light')")
         for width, height in [(1440, 900), (390, 844)]:
             self.page.set_viewport_size({"width": width, "height": height})
@@ -67,10 +67,10 @@ class ThemeBrowserTests(unittest.TestCase):
             # Previous regression: dark background at rest, light on :hover.
             self.page.mouse.move(1, 1)
             self.assertGreater(brightness(self.color(".hero>.hero-referral")), 180)
-            self.assertLess(brightness(self.color(".hero>.hero-referral .tk-i", "color")), 130)
+            self.assertLess(brightness(self.color(".hero>.hero-referral .hero-referral-kicker", "color")), 130)
             ticker.hover()
             self.assertGreater(brightness(self.color(".hero>.hero-referral")), 180)
-            self.assertLess(brightness(self.color(".hero>.hero-referral .tk-i", "color")), 130)
+            self.assertLess(brightness(self.color(".hero>.hero-referral .hero-referral-kicker", "color")), 130)
 
     def test_dark_mode_still_uses_dark_surfaces(self):
         self.page.evaluate("document.documentElement.classList.remove('light')")
@@ -111,14 +111,14 @@ class ThemeBrowserTests(unittest.TestCase):
         self.page.wait_for_function(
             "() => document.querySelector('#mmTabSkills .mm-mod-label')?.textContent.trim()==='Skill Plans'"
         )
-        self.assertIn("New to EVE?", self.page.locator(".hero-referral").inner_text())
+        self.assertIn("1,000,000 SP", self.page.locator(".hero-referral").inner_text())
         self.assertIn("Getting started", self.page.locator("#help .modern-tabs").text_content())
         self.assertIn("Home market", self.page.locator("#settings").text_content())
         self.page.evaluate("setLang('es')")
         self.page.wait_for_function(
             "() => document.querySelector('#mmTabSkills .mm-mod-label')?.textContent.trim()==='Planes de habilidades'"
         )
-        self.assertIn("¿Nuevo en EVE?", self.page.locator(".hero-referral").inner_text())
+        self.assertIn("1,000,000 SP", self.page.locator(".hero-referral").inner_text())
         self.assertIn("Primeros pasos", self.page.locator("#help .modern-tabs").inner_text())
 
     def test_canonical_finance_strings_switch_languages(self):
