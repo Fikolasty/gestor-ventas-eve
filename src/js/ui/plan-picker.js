@@ -80,12 +80,12 @@ function paintPicker(P){
   detail.addEventListener('toggle',()=>{pkView.opportunityOpen=detail.open;});
 
   const maxNet=Math.max(...list.map(x=>x.t.net),1);
-  // Decision-focused summary. Longer route explanations belong in User Guide.
-  bar.hidden=false;bar.replaceChildren();
+  // Optimal is already identified by the section subtitle and the opportunity
+  // comparison. Repeating that claim as an all-caps paragraph adds visual noise.
+  // Show a compact, actionable difference only when a different route is chosen.
+  bar.hidden=chosen.m==='auto';bar.replaceChildren();
   const delta=chosen.t.net-opt;
-  if(chosen.m==='auto'){
-    bar.append(tx('picker.optimalSummary'));
-  }else{
+  if(chosen.m!=='auto'){
     bar.append(planMark(chosen.m),' · ',
       Math.abs(delta)<.5?tx('picker.selectedSame'):
       tx('picker.selectedDifference',{difference:(delta>0?'+':'−')+fmt(Math.abs(delta))}));
