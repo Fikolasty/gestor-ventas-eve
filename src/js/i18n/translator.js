@@ -101,6 +101,10 @@ function setLang(l){
     i18nObs.observe(document.documentElement,{subtree:true,childList:true,characterData:true,attributes:true,attributeFilter:I18N_ATTR});
   }else{i18nRestore();i18nKeyed(document.documentElement);I18N_RE=null;} // ES restored from source catalog
   syncMarketCopy();syncBusinessMode();
+  // Mining has its own stateful renderer; rebuild the visible view in the new
+  // language so previously generated English labels also return to Spanish.
+  // Do not mount or recalculate a hidden module.
+  if(document.body.classList.contains('mm-mining')&&typeof MineUI!=='undefined')MineUI.shown();
   if(lastP)refreshNow();}
 $('langSel').addEventListener('change',e=>setLang(e.target.value));
 $('langButtons').addEventListener('click',event=>{
