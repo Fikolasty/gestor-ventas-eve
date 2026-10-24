@@ -76,11 +76,11 @@ test('browser dialogs use the catalog rather than hard-coded Spanish',()=>{
   ];
   for(const p of files){
     const source=read(p);
-    assert.doesNotMatch(source,/\\b(?:confirm|prompt)\\(['"][ÁÉÍÓÚáéíóúñÑ¿¡]/,
+    assert.doesNotMatch(source,/\b(?:confirm|prompt)\(['"][^'"]*[ÁÉÍÓÚáéíóúñÑ¿¡]/,
       'Unlocalized browser dialog in '+p);
   }
-  assert.match(read('src/js/app/settings-persistence.js'),/tx\\('settings.resetConfirm'\\)/);
-  assert.match(read('src/js/auth/eve-sso.js'),/tx\\('sso.missingClient'\\)/);
+  assert.match(read('src/js/app/settings-persistence.js'),/tx\('settings.resetConfirm'\)/);
+  assert.match(read('src/js/auth/eve-sso.js'),/tx\('sso.missingClient'\)/);
 });
 
 
