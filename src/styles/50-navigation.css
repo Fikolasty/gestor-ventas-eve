@@ -58,7 +58,7 @@ body .top.mm-ho-root .mm-ho-main .mm-mod{
   color:var(--mut,#c2c0b6)!important;white-space:nowrap!important;
   transition:background .15s,color .15s;
 }
-body .top.mm-ho-root .mm-ho-main .mm-home::after{content:"Home"}
+body .top.mm-ho-root .mm-ho-main .mm-home::after{content:var(--mm-i18n-home, "")}
 body .top.mm-ho-root .mm-ho-main .mm-home .ic,
 body .top.mm-ho-root .mm-ho-main .mm-mod .ic,
 body .top.mm-ho-root .mm-ho-main .mm-mining-icon,
