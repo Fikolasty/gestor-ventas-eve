@@ -269,8 +269,13 @@ function paintVerdict(P){
   function renderPlanTable(section,k,g){
     const id=section.dataset.sortId,sort=vSort[id]||{k:null,d:1};
     const oldTable=section.querySelector('.pl');
-    if(oldTable)poolIcons(oldTable); // reutiliza imágenes de EVE cuando sea posible
-    const groupTable=el('div','pl');const toolbar=section.querySelector('.stp-acts');if(toolbar)groupTable.append(toolbar);groupTable.append(mkHead(sort));tableTarget=groupTable;
+    if(oldTable)poolIcons(oldTable); // reusable EVE item icons
+    // Rebuild ROWS inside the existing table. Never remove, replace, or
+    // re-parent the toolbar: doing so blurs the active search after one letter.
+    const groupTable=oldTable||el('div','pl'),toolbar=section.querySelector('.stp-acts');
+    if(toolbar&&toolbar.parentElement!==groupTable)groupTable.prepend(toolbar);
+    [...groupTable.children].filter(node=>node!==toolbar).forEach(node=>node.remove());
+    groupTable.append(mkHead(sort));tableTarget=groupTable;
     const query=(vQuery[id]||'').trim().toLocaleLowerCase();
     const filtered=query?g.filter(r=>r.o.name.toLocaleLowerCase().includes(query)||(r.mins||[]).some(m=>m.m.toLocaleLowerCase().includes(query))):g;
     const count=section.querySelector('.pl-match');if(count)count.textContent=query?(S.lang==='en'?filtered.length+' of '+g.length+' items':filtered.length+' de '+g.length+' ítems'):' ';
@@ -294,7 +299,7 @@ function paintVerdict(P){
     if(gs.length>lim){const hid=gs.slice(lim),sum=hid.reduce((a,r)=>a+r.g[k]-r.prod,0);
       const b=el('button','pl-moreb','Ver '+(hid.length===1?'el item restante':'los '+hid.length+' items restantes')+' · '+fmt(sum)+' ▾');b.type='button';b.dataset.more=id;b.dataset.n='99999';groupTable.append(b);}
     else if(lim>5&&gs.length>5){const b=el('button','pl-moreb','Mostrar menos ▴');b.type='button';b.dataset.more=id;b.dataset.n='5';groupTable.append(b);}
-    if(oldTable)oldTable.replaceWith(groupTable);else (section.querySelector('.stp-main')||section).append(groupTable);
+    if(!oldTable)(section.querySelector('.stp-main')||section).append(groupTable);
   }
   // Cierre sobre la pestaña actual: una interacción no recalcula ni repinta el resto del análisis.
   repaintPlanGroup=section=>{
@@ -378,9 +383,23 @@ function paintVerdict(P){
     const {box,main}=stepBox(k,i+1,title,where,sub,groupGross,S.flip?(SHIPS[k]?'antes del envío y la inversión':'antes de la inversión'):(SHIPS[k]?'antes del envío':'netos, ya con taxes'));
     box.classList.add('pl-section');box.dataset.sortId='all:'+k;box.dataset.action=k;
     const acts=el('div','stp-acts');
-    const cb=copyBtn(g.map(r=>r.o.name+'\t'+Math.round(r.q)).join('\n'),'Copiar '+g.length+(g.length>1?' items':' item'));cb.classList.add('cp-all');acts.append(cb);
-    if(g.length>8){const search=el('input','pl-search');search.type='search';search.autocomplete='off';search.placeholder='Buscar item';
-      search.value=vQuery['all:'+k]||'';search.setAttribute('aria-label','Buscar item en '+title);acts.append(search,el('span','pl-match'));}
+    const context=el('span','pl-toolbar-context',tx('sales.itemCount',{count:g.length}));
+    const cb=copyBtn(g.map(r=>r.o.name+'\t'+Math.round(r.q)).join('\n'),tx('sales.copyItems',{count:g.length}));
+    cb.classList.add('cp-all');acts.append(context,cb);
+    if(g.length>8){
+      const id='pl-suggest-'+k;
+      const search=el('input','pl-search');search.type='search';search.autocomplete='off';
+      search.placeholder=tx('sales.searchItem');search.setAttribute('aria-label',tx('sales.searchItem'));
+      search.setAttribute('data-i18n-placeholder','sales.searchItem');
+      search.setAttribute('data-i18n-aria-label','sales.searchItem');
+      search.value=vQuery['all:'+k]||'';search.setAttribute('list',id);
+      const suggestions=el('datalist');suggestions.id=id;
+      [...new Set(g.flatMap(r=>[r.o.name,...(r.mins||[]).map(m=>m.m)]))]
+        .sort((a,b)=>a.localeCompare(b)).forEach(name=>{
+          const option=document.createElement('option');option.value=name;suggestions.append(option);
+        });
+      acts.append(search,suggestions,el('span','pl-match'));
+    }
     main.append(acts);pl.append(box);
     renderPlanTable(box,k,g);
   });

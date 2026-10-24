@@ -14,6 +14,7 @@ CSS_PARTS = (
     "50-navigation.css",
     "60-final-layout.css",
     "70-typography.css",
+    "80-product-ux.css",
 )
 # Light theme order intentionally mirrors the former single light_extra.css.
 LIGHT_PARTS = (

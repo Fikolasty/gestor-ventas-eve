@@ -594,5 +594,17 @@
   "player.lastResortGuide": {
     "es": "Último recurso: crea una oferta WTS si las rutas normales no te convienen. El precio depende de que otro jugador acepte.",
     "en": "Last resort: create a WTS offer if standard routes do not work for you. Another player must accept the price."
+  },
+  "sales.copyItems": {
+    "es": "Copiar {count} ítems",
+    "en": "Copy {count} items"
+  },
+  "sales.itemCount": {
+    "es": "{count} ítems en esta ruta",
+    "en": "{count} items in this route"
+  },
+  "sales.searchItem": {
+    "es": "Buscar un ítem…",
+    "en": "Search items…"
   }
 }
