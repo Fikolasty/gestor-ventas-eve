@@ -218,7 +218,10 @@ $('themeLight').addEventListener('change',e=>{document.documentElement.classList
   modeChevron.setAttribute('aria-hidden','true');
   modeTrigger.append(modeLabel,modeChevron);
   modePicker.append(modeTrigger,$('businessSwitch'));
-  salesToolbar.append(modePicker,$('importControls'));
+  // Task selector belongs to the inventory card, sharing its text-area track.
+  // Import controls stay in the workspace and appear only in Jita Trading.
+  $('heroIntro').querySelector('.paste-head').append(modePicker);
+  salesToolbar.append($('importControls'));
   $('heroIntro').before(salesToolbar);
   modePicker.addEventListener('click',event=>{
     if(event.target.closest('button[data-business]'))modePicker.open=false;

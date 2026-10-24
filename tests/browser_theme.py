@@ -231,7 +231,7 @@ class ThemeBrowserTests(unittest.TestCase):
         expect(self.page.locator("#importControls")).to_be_hidden()
         self.assertEqual(self.page.locator("#salesModeCurrent").inner_text(),"Sell Items")
         self.page.evaluate("setLang('es')")
-        self.assertEqual(self.page.locator("#salesModeCurrent").inner_text(),"Vender Ítems")
+        self.assertEqual(self.page.locator("#salesModeCurrent").inner_text(),"Vender Items")
 
     def test_settings_navigation_and_compact_intro(self):
         self.page.evaluate("setLang('en')")
@@ -365,7 +365,7 @@ class ThemeBrowserTests(unittest.TestCase):
             expect(trigger).to_be_visible()
             edges=self.page.evaluate("""() => {
                 const t=document.querySelector('#salesModeTrigger').getBoundingClientRect();
-                const b=document.querySelector('#salesModeToolbar').getBoundingClientRect();
+                const b=document.querySelector('#heroIntro .paste textarea').getBoundingClientRect();
                 return {gap:b.right-t.right,overflow:t.right-innerWidth};
             }""")
             self.assertLess(abs(edges['gap']),6,edges)

@@ -118,7 +118,8 @@ assert.equal((salesHTML.match(/id="eveIdentity"/g)||[]).length,1,'Only one EVE p
 assert(salesJS.includes("const identity=$('eveIdentity');if(identity)profile.append(identity)"));
 assert(salesJS.includes("headerMain.append($('navHome'),group)"));
 assert(salesJS.includes("modePicker.append(modeTrigger,$('businessSwitch'))"),'Original Sales buttons must move into operation menu');
-assert(salesJS.includes("salesToolbar.append(modePicker,$('importControls'))"),'Keep original trade and courier inputs together');
+assert(salesJS.includes("$('heroIntro').querySelector('.paste-head').append(modePicker)"),'Mode selector must align to paste input inside inventory heading');
+assert(salesJS.includes("salesToolbar.append($('importControls'))"),'Original import controls remain in the workspace');
 assert(salesJS.includes("$('heroIntro').before(salesToolbar)"),'Sales mode belongs in the workspace');
 assert(!salesJS.includes("headerContext.append($('businessSwitch')"),'No duplicate Sales navigation in header');
 assert(salesJS.includes('topActions.insertBefore(theme,profile)'),'Theme must live beside Settings, Guide and the EVE pilot');

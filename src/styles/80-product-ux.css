@@ -181,3 +181,40 @@ html.light #settings .mm-market-option.is-selected{background:rgba(161,86,55,.11
 @media(prefers-reduced-motion:reduce){
   #settings .mm-market-trigger,#settings .mm-market-chevron{transition:none}
 }
+
+/* Sales task selector is inside the inventory heading, aligned with the input
+   instead of floating in the hero background. Keep the original state/handlers. */
+.hero #heroIntro .paste{overflow:visible}
+.hero #heroIntro .paste .paste-head{
+  position:relative;z-index:30;display:flex!important;align-items:center!important;
+  gap:8px 14px!important;min-height:45px!important;height:auto!important;
+  flex:0 0 auto!important;margin-bottom:10px!important;padding-bottom:7px!important;
+}
+.hero #heroIntro .paste .paste-head .status{
+  flex:1 1 auto;margin:0!important;max-width:none!important;
+  min-width:0;text-align:left!important;font-size:.74rem!important;
+}
+.hero #heroIntro .paste .paste-head .mm-sales-mode-picker{
+  flex:0 0 auto;margin-left:auto;order:3;position:relative;z-index:30;
+}
+.hero #heroIntro .paste .paste-head .mm-sales-mode-trigger{
+  min-width:184px;min-height:39px;
+  font:550 .83rem/1.35 var(--f-ui)!important;
+  padding:9px 12px;border-radius:8px;gap:13px;
+}
+.hero #heroIntro .paste .paste-head #businessSwitch{
+  left:auto!important;right:0!important;min-width:205px;
+  max-width:min(270px,calc(100vw - 40px));box-sizing:border-box;
+}
+.hero #heroIntro .paste .paste-head .mm-sales-mode-picker .mm-business-tab{
+  font:550 .83rem/1.35 var(--f-ui)!important;min-height:39px!important;
+}
+.hero .mm-sales-toolbar:has(>#importControls[hidden]){display:none!important}
+.hero .mm-sales-toolbar:not(:has(>#importControls[hidden])){
+  margin:0 0 12px!important;justify-content:flex-start!important
+}
+@media(max-width:550px){
+ .hero #heroIntro .paste .paste-head{flex-wrap:wrap}
+ .hero #heroIntro .paste .paste-head .status{order:4;flex-basis:100%}
+ .hero #heroIntro .paste .paste-head .mm-sales-mode-trigger{min-width:154px}
+}
