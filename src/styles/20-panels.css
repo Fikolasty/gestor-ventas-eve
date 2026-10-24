@@ -298,9 +298,9 @@ img.ti:not([src]){visibility:hidden}
  .sh-t tr{display:flex;flex-wrap:wrap;gap:4px 16px;padding:8px 0;border-top:1px solid rgba(255,255,255,.06)}
  .sh-t td{border:0;padding:0;text-align:left!important;font-size:.8rem}
  .sh-t td:first-child{flex:1 1 100%;max-width:none;width:auto;white-space:normal;font-weight:600;font-size:.86rem}
- .sh-t td:nth-child(2)::before{content:"Volumen";display:block;font-size:.66rem;color:var(--dim);text-transform:uppercase}
- .sh-t td:nth-child(3)::before{content:"Envío";display:block;font-size:.66rem;color:var(--dim);text-transform:uppercase}
- .sh-t td:nth-child(4)::before{content:"Gana extra";display:block;font-size:.66rem;color:var(--dim);text-transform:uppercase}
+ .sh-t td:nth-child(2)::before{content:var(--mm-i18n-volume, "");display:block;font-size:.66rem;color:var(--dim);text-transform:uppercase}
+ .sh-t td:nth-child(3)::before{content:var(--mm-i18n-shipping, "");display:block;font-size:.66rem;color:var(--dim);text-transform:uppercase}
+ .sh-t td:nth-child(4)::before{content:var(--mm-i18n-extra-gain, "");display:block;font-size:.66rem;color:var(--dim);text-transform:uppercase}
  .sh-t td[colspan]{flex:1 1 100%;font-weight:400}
  .sh-t td[colspan]::before{content:none}
  .sh-big{font-size:1.55rem}.sh-leg{grid-template-columns:1fr}.sh-kpi{grid-template-columns:1fr 1fr}.cz-pos{min-width:52px}}
@@ -397,7 +397,7 @@ details.panel>summary .sum{font-size:1.1rem;color:#d6d4cb}
   .rx{grid-template-columns:minmax(0,1fr)}
   .rt-h{display:none}.rt-row{grid-template-columns:minmax(0,1fr) minmax(0,1fr);row-gap:4px;column-gap:14px}.rt-n{font-size:.78rem}.rt-t{grid-column:1/-1}.rt-d{grid-column:1/-1;text-align:left}
   .rt-n{text-align:left}.rt-n::before{display:block;font-size:.68rem;color:var(--dim);font-weight:400;text-transform:uppercase;letter-spacing:.5px}
-  .rt-row .rt-n:nth-child(2)::before{content:"Reprocesado"}.rt-row .rt-n:nth-child(3)::before{content:"Sin reprocesar"}
+  .rt-row .rt-n:nth-child(2)::before{content:var(--mm-i18n-reprocessed, "")}.rt-row .rt-n:nth-child(3)::before{content:var(--mm-i18n-unprocessed, "")}
   .scn{grid-template-columns:minmax(0,1fr)}
   body::before{opacity:.7}.rep-sc .amt{text-align:left;margin-left:21px}
   .receipt.rep li.rep-it{grid-template-areas:"pill amt" "who who" "sc sc";grid-template-columns:minmax(0,1fr) auto}.receipt.rep li.rep-it>.rep-sc{grid-area:sc}.receipt.rep li.rep-it>.amt{grid-area:amt}
@@ -405,7 +405,7 @@ details.panel>summary .sum{font-size:1.1rem;color:#d6d4cb}
   .pl-row{grid-template-columns:minmax(0,1fr) auto;grid-template-areas:"n q" "p a";row-gap:6px;padding:10px 14px}
   .pl-row>.n{grid-area:n}.pl-row>.q{grid-area:q}.pl-row>.p{grid-area:p;text-align:left}.pl-row>.a{grid-area:a}
   .pl-row .p .copy{text-align:left}
-  .pl-row>.q::after{content:" u.";color:var(--dim);font-weight:400}
+  .pl-row>.q::after{content:var(--mm-i18n-units, "");color:var(--dim);font-weight:400}
   .pl-row.cost,.pl-row.miss{grid-template-areas:"n a"}
   .pl-row.cost>.q,.pl-row.cost>.p,.pl-row.miss>.q,.pl-row.miss>.p{display:none}
   details.thin>summary .status{margin-left:0;flex-basis:100%}
