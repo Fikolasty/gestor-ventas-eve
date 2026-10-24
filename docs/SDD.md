@@ -815,3 +815,17 @@ User provided screenshots showing misaligned Selling Steps toolbar/header, incon
 - No finance engine formulas were changed during this UX pass. Existing `1.0.120` stays until an integrated economic release meets the tests; version `1.1.0` is reserved for shared net-route support.
 
 Use pricing provenance (Jita ESI / authenticated Upwell / manual / local estimate), true buy-order depth, logistics on full lots, fee-on-ISK and exact yield, not guesses. The result UI should prioritize **ISK received, cost to sell, whether to refine**, with deep technical detail under expandable “How it was calculated”.
+
+
+## 24-Oct-2026 — Premium Home Market dropdown in Settings
+
+User spotted mismatched native OS select menu: text/options grew wider than the closed trigger, causing a misaligned, cheap-looking control. The implementation uses a progressive-enhancement **single custom listbox** inside the existing Settings form:
+
+- `src/shell.html`: `#nullMarketMode` remains the *one canonical* selected value and is left intact for persisted settings, ESI alliance auto-detection, route labels, calculator updates and native fallback if JavaScript initialization fails. Visible `#marketTrigger` and `#marketOptions` are a keyboard-accessible listbox, not a new stored preference. The text of C-J6MT's UI option is shortened to **C-J6MT · Goonswarm**; the alliance's official source identifier remains `Goonswarm Federation` in core alliance metadata for detection.
+- `src/js/ui/settings.js`: `initMarketPicker` and `syncMarketPicker` synchronize against the original select. Clicking an option dispatches its original `change` event, reusing all calculations, localStorage and ESI binding. Includes ArrowUp/Down, Home/End, Enter/Space, Escape/Tab, outside click, selected state, focus recovery and resize closing.
+- `src/script.js::refreshMarketControls`: updates the presentation when ESI changes alliance/system programmatically; avoids drift.
+- `src/styles/80-product-ux.css`: exact same trigger/list width, text font/line-height, min-height 44px and padding; sufficient responsive layout space; no OS-native popup width mismatch; supports dark and light themes.
+- `src/i18n/ui.json`: five stable translation keys in ES/EN, accessible selected label and short alliance labels.
+- `tests/browser_theme.py`: verifies geometry of trigger/list, equal typographic metrics, keyboard and mouse choice, backend select value, label synchronization ES→EN→ES, dark/light and 390px mobile clipping.
+
+**Rule:** Future custom selectors must have a single source of persisted value and one consistent visual geometry across collapsed/expanded states. Never duplicate the original input's economic handlers. No economic formula was modified.
