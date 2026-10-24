@@ -625,3 +625,77 @@ html.light #mining :is(.mn-card,.mn-price,.mn-bst,.mn-kpi>div,.mn-price-editor,.
   color:var(--txt)!important;
 }
 @media(max-width:620px){#mining .mn{gap:10px}}
+
+
+/* Product Design: editorial entry and interactive progression in Mining.
+   All actions reuse the existing simulator; no duplicate calculations. */
+#mining .mn-reading-path{
+  padding:clamp(16px,2vw,26px);margin:0 0 18px;border-radius:14px;
+  border:1px solid var(--line2);background:var(--surface-card);min-width:0;
+}
+#mining .mn-reading-eyebrow{
+  display:block;margin:0 0 8px;color:var(--mut);
+  font:650 .7rem/1.4 var(--f-ui);letter-spacing:.08em;
+}
+#mining .mn-reading-path>h2{
+  font:675 clamp(1.21rem,2vw,1.65rem)/1.24 var(--f-ui)!important;
+  color:var(--txt)!important;letter-spacing:-.025em;margin:0 0 9px;
+}
+#mining .mn-reading-intro{
+  max-width:68ch;margin:0 0 18px;
+  color:var(--mut);font:400 .88rem/1.65 var(--f-ui)!important;
+  text-wrap:pretty;
+}
+#mining .mn-reading-chapters{
+  list-style:none;padding:0;margin:0;
+  display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;
+}
+#mining .mn-reading-chapters>li{
+  display:grid;grid-template-columns:26px minmax(0,1fr);
+  align-content:start;gap:8px 10px;min-width:0;
+  border:1px solid var(--line2);border-radius:10px;
+  padding:13px;background:var(--surface-panel);
+}
+#mining .mn-reading-index{
+  width:26px;height:26px;display:grid;place-items:center;
+  border-radius:8px;border:1px solid var(--line2);
+  color:var(--mut);font:650 .72rem/1 var(--f-num);
+}
+#mining .mn-reading-chapters h3{
+  margin:2px 0 5px;font:660 .87rem/1.35 var(--f-ui)!important;
+  color:var(--txt)!important;letter-spacing:0;
+}
+#mining .mn-reading-chapters p{
+  margin:0;color:var(--mut);
+  font:400 .8rem/1.55 var(--f-ui)!important;text-wrap:pretty;
+}
+#mining .mn-reading-chapters button{
+  grid-column:2;justify-self:start;align-self:end;
+  background:transparent!important;border:0;border-bottom:1px solid currentColor;
+  border-radius:0;box-shadow:none;padding:6px 0;margin-top:5px;
+  color:var(--txt);font:600 .78rem/1.3 var(--f-ui)!important;cursor:pointer;
+}
+#mining .mn-reading-chapters button::after{content:" →";color:var(--mut)}
+#mining .mn-reading-chapters button:is(:hover,[aria-current="step"]){color:var(--ion)}
+#mining .mn-reading-chapters button:focus-visible{outline:2px solid var(--ion);outline-offset:3px}
+#mining .mn-reading-caution{
+  max-width:91ch;margin:15px 0 0;padding:10px 12px;
+  color:var(--mut);background:rgba(217,119,87,.055);
+  border-left:2px solid var(--ion);border-radius:0 6px 6px 0;
+  font:450 .78rem/1.55 var(--f-ui)!important;text-wrap:pretty;
+}
+#mining .mn-toolbar{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:9px 16px}
+#mining .mn-views .pk-fb{
+  padding:8px 12px!important;border-radius:8px!important;
+  font:570 .8rem/1.34 var(--f-ui)!important;letter-spacing:0!important;
+}
+#mining .mn-guide-copy p{max-width:72ch;line-height:1.6}
+@media(max-width:930px){
+  #mining .mn-reading-chapters{grid-template-columns:minmax(0,1fr)}
+  #mining .mn-reading-chapters>li{grid-template-columns:26px minmax(0,1fr) auto}
+  #mining .mn-reading-chapters button{grid-column:3;grid-row:1 / span 2;align-self:center}
+}
+@media(max-width:550px){
+  #mining .mn-reading-chapters>li{grid-template-columns:26px minmax(0,1fr)}
+  #mining .mn-reading-chapters button{grid-column:2;grid-row:auto}
+}
