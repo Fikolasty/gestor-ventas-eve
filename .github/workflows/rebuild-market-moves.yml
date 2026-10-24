@@ -40,6 +40,8 @@ jobs:
           grep -q 'EVE7 theme ownership' index.html
           grep -q 'Login' index.html
           grep -q 'v1.0.120' index.html
+          grep -Fq 'class="hero-referral-offer">1,000,000 SP GRATIS</span>' index.html
+          ! grep -Fq 'class="tk-track"' index.html
           ! grep -q '/\\*__STYLE_SOURCES__\\*/' index.html
       - name: Legacy EVE market, mining and skills regressions on assembled sources
         id: domain_checks
@@ -194,18 +196,18 @@ jobs:
       - name: Publish verified Pages artifact
         id: pages_deployment
         uses: actions/deploy-pages@v4
-      - name: Verify the public site serves v1.0.120
+      - name: Verify the public site serves the static SP banner
         env:
           PAGES_URL: ${{ steps.pages_deployment.outputs.page_url }}
         run: |
           test -n "$PAGES_URL"
           for attempt in $(seq 1 15); do
-            if curl -fLsS --connect-timeout 10 --max-time 20 "${PAGES_URL}?verified=${GITHUB_RUN_ID}" | grep -Fq '<span class="ver">v1.0.120</span>'; then
-              echo "Public GitHub Pages footer confirms v1.0.120 at $PAGES_URL"
+            if curl -fLsS --connect-timeout 10 --max-time 20 "${PAGES_URL}?verified=${GITHUB_RUN_ID}" | grep -Fq 'class="hero-referral-offer">1,000,000 SP GRATIS</span>'; then
+              echo "Public GitHub Pages confirms static SP banner at $PAGES_URL"
               exit 0
             fi
             echo "Waiting for Pages CDN to serve v1.0.120 (attempt $attempt of 15)"
             sleep 6
           done
-          echo "Pages deployment did not serve the validated v1.0.120 footer."
+          echo "Pages deployment did not serve the validated static SP banner."
           exit 1
