@@ -308,6 +308,11 @@ class ThemeBrowserTests(unittest.TestCase):
         trigger.click()
         expect(menu).to_be_visible()
         self.page.set_viewport_size({"width":390,"height":844})
+        # Resizing intentionally dismisses a floating menu. Reopen it in the
+        # new viewport before checking its width and alignment.
+        expect(menu).to_be_hidden()
+        trigger.click()
+        expect(menu).to_be_visible()
         bounds=self.page.evaluate("""() => {
             const t=document.querySelector('#marketTrigger').getBoundingClientRect();
             const m=document.querySelector('#marketOptions').getBoundingClientRect();
