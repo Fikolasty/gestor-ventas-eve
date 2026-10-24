@@ -223,6 +223,7 @@ function initMarketPicker(){
   window.addEventListener('resize',()=>{if(!menu.hidden)close(false);});
 }
 initMarketPicker();
+window.mmSyncMarketPicker=syncMarketPicker;
 
 // v1.0.8: cada grupo de Ajustes es desplegable (empiezan cerrados); se abren con clic o Enter en su título
 document.querySelectorAll('#settings fieldset.st').forEach(f=>{const l=f.querySelector('legend');if(!l)return;f.classList.add('closed');
