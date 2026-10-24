@@ -88,8 +88,24 @@ function syncLanguageChoices(){
     b.setAttribute('aria-pressed',String(selected));
   });
 }
+// CSS-generated responsive captions cannot be seen by a DOM text observer.
+// The same UI_TEXT catalog supplies their CSS content strings, in both locales.
+const I18N_CSS_KEYS={
+  '--mm-i18n-volume':'css.volume',
+  '--mm-i18n-shipping':'css.shipping',
+  '--mm-i18n-extra-gain':'css.extraGain',
+  '--mm-i18n-reprocessed':'css.reprocessed',
+  '--mm-i18n-unprocessed':'css.unprocessed',
+  '--mm-i18n-units':'css.units',
+  '--mm-i18n-home':'css.home'
+};
+function syncCssLocale(){
+  const style=document.documentElement.style;
+  for(const [property,key] of Object.entries(I18N_CSS_KEYS))
+    style.setProperty(property,JSON.stringify(tx(key)));
+}
 function setLang(l){
-  S.lang=l==='en'?'en':'es';document.documentElement.lang=S.lang;syncLanguageChoices();SkillUI.setLanguage(S.lang);syncShipSwitch();syncBusinessMode();
+  S.lang=l==='en'?'en':'es';document.documentElement.lang=S.lang;syncLanguageChoices();syncCssLocale();SkillUI.setLanguage(S.lang);syncShipSwitch();syncBusinessMode();
   if(i18nObs){i18nObs.disconnect();i18nObs=null;}
   if(S.lang==='en'){
     i18nWalk(document.documentElement);
@@ -116,4 +132,5 @@ $('langButtons').addEventListener('click',event=>{
   select.dispatchEvent(new Event('change',{bubbles:true}));
 });
 syncLanguageChoices();
+syncCssLocale();
 
