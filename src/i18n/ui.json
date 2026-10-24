@@ -678,5 +678,33 @@
   "market.cj6mt": {
     "es": "C-J6MT · Goonswarm",
     "en": "C-J6MT · Goonswarm"
+  },
+  "refinery.feeLabel": {
+    "es": "Tarifa de refinería %",
+    "en": "Refinery fee %"
+  },
+  "refinery.feeHelp": {
+    "es": "Lo que cobra la estación. Se guarda en Ajustes.",
+    "en": "Facility charge, saved in Settings."
+  },
+  "refinery.feeSource": {
+    "es": "Tarifa en Ajustes → Refinería:",
+    "en": "Fee under Settings → Refinery:"
+  },
+  "refinery.profileNote": {
+    "es": "Rendimiento estimado según habilidades, estructura, rig e implante",
+    "en": "Estimated yield based on skills, structure, rig and implant"
+  },
+  "refinery.miningSummary": {
+    "es": "Tu refinería",
+    "en": "Your refinery"
+  },
+  "refinery.miningFee": {
+    "es": "Tarifa: {percent}%",
+    "en": "Fee: {percent}%"
+  },
+  "refinery.marketSelected": {
+    "es": "Venta local: {market}",
+    "en": "Local market: {market}"
   }
 }

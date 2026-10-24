@@ -33,6 +33,7 @@ JS_PARTS = (
     ("/*__MODULE_INVENTORY_PARSER__*/", ("js", "inventory", "parser.js")),
     ("/*__MODULE_ESI__*/", ("js", "services", "esi.js")),
     ("/*__MODULE_REFINING__*/", ("js", "domain", "refining.js")),
+    ("/*__MODULE_MATERIAL_ECONOMICS__*/", ("js", "domain", "material-economics.js")),
     ("/*__MODULE_PLANNING__*/", ("js", "domain", "planning.js")),
     ("/*__MODULE_LEDGER_UI__*/", ("js", "ui", "ledger.js")),
     ("/*__MODULE_SELLING_RESULTS__*/", ("js", "ui", "selling-results.js")),

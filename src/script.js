@@ -286,7 +286,7 @@ function verify(o,allowDeduce){
   if(a.buys&&a.buys.length&&o.qty>0){const w=walkBuys(a,o.qty);if(w.filled<o.qty)ch.push(['Jita solo compra '+fmtQ(w.filled)+' de '+fmtQ(o.qty)+' al instante','warn','Las órdenes de compra de Jita 4-4 no cubren toda tu cantidad.']);}
 }
 
-/*__MODULE_REFINING__*//*__MODULE_PLANNING__*/// ================= Guía práctica (puro) =================
+/*__MODULE_REFINING__*//*__MODULE_MATERIAL_ECONOMICS__*//*__MODULE_PLANNING__*/// ================= Guía práctica (puro) =================
 // Piso = precio por unidad en el que esta opción gana lo mismo que la siguiente mejor opción.
 function guideFor(r,Vall){
   const k=r.best;if(!k)return null;const o=r.o,q=r.q;

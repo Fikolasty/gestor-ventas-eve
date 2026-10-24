@@ -233,6 +233,16 @@ const MineUI=(()=>{
   // Precios locales enlazados a Settings de Market Moves+. No se cambian C ni sus fórmulas.
   const ICE_PROD_ID={'Heavy Water':16272,'Liquid Ozone':16273,'Strontium Clathrates':16275,
     'Helium Isotopes':16274,'Hydrogen Isotopes':17889,'Oxygen Isotopes':17887,'Nitrogen Isotopes':17888};
+  function paintRefineryStatus(){
+    if(!root)return;
+    const panel=$q('.mn-refinery-status'),mat=matItem(S.mat),
+      ore=mat&&resolveOre(mat.n);
+    panel.hidden=!ore;
+    if(!ore)return;
+    $q('.mn-refinery-status-yield').textContent=NF2.format(yieldOf(ore).y)+'%';
+    $q('.mn-refinery-status-fee').textContent=tx('refinery.miningFee',{percent:NF2.format(Number($('rTax').value)||0)});
+    $q('.mn-refinery-status-market').textContent=tx('refinery.marketSelected',{market:nullSystem()});
+  }
   function iceUnitPrice(){
     const m=matItem('ice');if(!m)return null;
     if(S.iceLoc==='jita')return quote(matPriceId('ice'),S.base);
@@ -312,6 +322,7 @@ const MineUI=(()=>{
     '<a class="mn-sp-cta" href="https://www.eveonline.com/recruit" target="_blank" rel="noopener noreferrer" title="Programa oficial de EVE. Reclamar el bono requiere una invitación válida.">FREE 1 Million SP! <span aria-hidden="true">↗</span></a>'+
   '</div>'+
 '</div>'+
+   '<div class="mn-refinery-status" hidden><span class="mn-refinery-status-label" data-i18n="refinery.miningSummary">Tu refinería</span><strong class="mn-refinery-status-yield">—</strong><span class="mn-refinery-status-fee">—</span><span class="mn-refinery-status-market"></span></div>'+
    '<div class="mn-shared-intro"><strong>Ajustes compartidos</strong>'+INFO('shared')+'</div>'+
    '<div class="mn-shared-layout">'+
    '<div class="mn-ice-settings" hidden><label for="mnIceMarket">Hielo · valor según Ajustes</label>'+
@@ -1273,7 +1284,7 @@ const MineUI=(()=>{
     $q('.mn-ice-note').textContent=note;
   }
 
-  function paint(){if(!root)return;scheduleMiningSave();S.cmpv=S.cmp?'1':'0';seg();
+  function paint(){if(!root)return;scheduleMiningSave();S.cmpv=S.cmp?'1':'0';seg();paintRefineryStatus();
     root.querySelectorAll('[data-mining-jump]').forEach(b=>b.setAttribute('aria-current',b.dataset.miningJump===S.view?'step':'false'));
     paintPriceEditor();paintIceSettings();const scenario=$q('.mn-scenario-now');if(scenario)scenario.textContent=
       (S.shipClass==='exhumer'?'Exhumers':'Barges')+' · '+MATL[S.mat]+' · '+TL[S.tier]+' · Skills '+['','I','II','III','IV','V'][S.lv]+

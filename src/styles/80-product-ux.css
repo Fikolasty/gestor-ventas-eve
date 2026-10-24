@@ -218,3 +218,19 @@ html.light #settings .mm-market-option.is-selected{background:rgba(161,86,55,.11
  .hero #heroIntro .paste .paste-head .status{order:4;flex-basis:100%}
  .hero #heroIntro .paste .paste-head .mm-sales-mode-trigger{min-width:154px}
 }
+
+/* Refinery profile lives in Settings and is reflected in Mining. */
+#settings .mm-refinery-preview,
+#mining .mn-refinery-status{
+  display:flex;align-items:center;flex-wrap:wrap;gap:7px 14px;
+  padding:11px 14px;margin-top:12px;background:var(--surface-card);
+  border:1px solid var(--line2);border-radius:10px;
+  font:450 .8rem/1.45 var(--f-ui);color:var(--mut);
+}
+#settings .mm-refinery-preview strong,
+#mining .mn-refinery-status-yield{font:700 1.12rem/1.3 var(--f-num);color:var(--gain)}
+#mining .mn-refinery-status{margin:0 0 15px}
+#mining .mn-refinery-status[hidden]{display:none!important}
+#mining .mn-refinery-status-label{color:var(--txt);font-weight:600}
+#pRepro .refine-fee-reference{padding:9px 12px;border:1px solid var(--line2);border-radius:8px;color:var(--mut);font-size:.8rem}
+#pRepro #rFeeInline{color:var(--txt)}

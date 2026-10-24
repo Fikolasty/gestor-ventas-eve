@@ -66,8 +66,19 @@ function paintAppraisal(){
   }
   appraisalRenderKey=key;
 }
+// Settings and Mining use one refinery profile, so yield responds to the
+// actual refiner skill levels, structure rig and implant. Fee never affects it.
+function paintRefineryProfile(){
+  const display=$('refineryYieldLive'),feeLabel=$('rFeeInline');
+  if(!display&&!feeLabel)return;
+  const ore=resolveOre($('rOre')?.value||'Monazite')||resolveOre('Monazite');
+  const fee=Number($('rTax').value);
+  if(display&&ore)display.textContent=NF2.format(yieldOf(ore).y)+'%';
+  if(feeLabel)feeLabel.textContent=NF2.format(Number.isFinite(fee)?fee:0.5)+'%';
+}
 function refreshNow(){
   if(refQ){cancelAnimationFrame(refQ);refQ=0;}
+  paintRefineryProfile();
   if(S.loading)return; // se pinta al terminar la carga
   document.body.classList.toggle('in-jita',IN_JITA()); // v1.0.22: oculta lo que no aplica con los items ya en Jita
   if(!S.repro.dirty&&!$('pRepro').hidden)fillFromItem();
