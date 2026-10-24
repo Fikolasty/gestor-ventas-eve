@@ -42,11 +42,13 @@ html.light .hero>.hero-referral .tk-i{
  background:transparent!important;color:#332c25!important;
 }
 html.light .hero>.hero-referral .tk-i b{color:#a34d2c!important}
-/* Static referral uses explicit Light colors; legacy ticker selectors remain inert. */
+/* Light referral must remain text-only, matching Dark mode. */
 html.light .hero>.hero-referral-pill,
 html.light .hero>.hero-referral-pill:hover{
- background:var(--ticker-surface)!important;
- border-color:rgba(161,86,55,.32)!important;
+ background:transparent!important;
+ border:0!important;
+ border-radius:0!important;
+ box-shadow:none!important;
  color:#332c25!important;
 }
 html.light .hero>.hero-referral-pill .hero-referral-kicker{color:#554a40!important}
