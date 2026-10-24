@@ -246,6 +246,79 @@ class ThemeBrowserTests(unittest.TestCase):
                          "Ajusta habilidades, impuestos y mercados. Los cambios se guardan en este navegador.")
         self.assertEqual(self.page.locator("#stLanguageLabel").inner_text(),"IDIOMA")
 
+    def test_market_dropdown_is_aligned_keyboard_accessible_and_bilingual(self):
+        from playwright.sync_api import expect
+        self.page.evaluate("""() => {
+            togglePanel('settings',true);
+            const section=document.querySelector('#marketPicker').closest('fieldset.st');
+            if(section.classList.contains('closed'))section.querySelector('legend').click();
+        }""")
+        trigger=self.page.locator("#marketTrigger")
+        native=self.page.locator("#nullMarketMode")
+        menu=self.page.locator("#marketOptions")
+        expect(trigger).to_be_visible()
+        expect(native).to_be_hidden()
+        expect(trigger).to_have_text("Automático según alianza")
+        self.assertIn("Goonswarm",self.page.locator("#marketOptions").text_content())
+        self.assertNotIn("Federation",self.page.locator("#marketOptions").text_content())
+        trigger.click()
+        expect(menu).to_be_visible()
+        metrics=self.page.evaluate("""() => {
+            const a=document.querySelector('#marketTrigger');
+            const b=document.querySelector('#marketOptions');
+            const c=document.querySelector('#marketOptions .mm-market-option');
+            const ra=a.getBoundingClientRect(),rb=b.getBoundingClientRect();
+            const sa=getComputedStyle(a),sc=getComputedStyle(c);
+            return {
+                left:Math.abs(ra.left-rb.left),right:Math.abs(ra.right-rb.right),
+                fontEqual:sa.fontSize===sc.fontSize&&sa.lineHeight===sc.lineHeight,
+                triggerHeight:ra.height,optionHeight:c.getBoundingClientRect().height,
+                optionsWidth:rb.width
+            };
+        }""")
+        self.assertLess(metrics["left"],2,metrics)
+        self.assertLess(metrics["right"],2,metrics)
+        self.assertTrue(metrics["fontEqual"],metrics)
+        self.assertGreaterEqual(metrics["triggerHeight"],43)
+        self.assertGreaterEqual(metrics["optionHeight"],43)
+        self.page.locator('[data-market-option="C-J6MT"]').click()
+        expect(menu).to_be_hidden()
+        expect(native).to_have_value("C-J6MT")
+        expect(trigger).to_have_text("C-J6MT · Goonswarm")
+        self.assertEqual(self.page.evaluate("nullSystem()"),"C-J6MT")
+        self.page.evaluate("setLang('en')")
+        expect(self.page.locator("#marketPickerLabel")).to_have_text("Home market")
+        expect(trigger).to_have_text("C-J6MT · Goonswarm")
+        trigger.press("ArrowDown")
+        expect(menu).to_be_visible()
+        focused=self.page.evaluate("document.activeElement.dataset.marketOption")
+        self.assertEqual(focused,"C-J6MT")
+        self.page.locator('[data-market-option="C-J6MT"]').press("Home")
+        self.assertEqual(self.page.evaluate("document.activeElement.dataset.marketOption"),"auto")
+        self.page.locator('[data-market-option="auto"]').press("Enter")
+        expect(native).to_have_value("auto")
+        expect(trigger).to_have_text("Automatic based on alliance")
+        trigger.click()
+        self.page.locator('[data-market-option="auto"]').press("Escape")
+        expect(menu).to_be_hidden()
+        expect(trigger).to_be_focused()
+        self.page.evaluate("setLang('es')")
+        expect(trigger).to_have_text("Automático según alianza")
+        self.page.evaluate("document.documentElement.classList.add('light')")
+        trigger.click()
+        expect(menu).to_be_visible()
+        self.page.set_viewport_size({"width":390,"height":844})
+        bounds=self.page.evaluate("""() => {
+            const t=document.querySelector('#marketTrigger').getBoundingClientRect();
+            const m=document.querySelector('#marketOptions').getBoundingClientRect();
+            return {left:Math.abs(t.left-m.left),right:Math.abs(t.right-m.right),
+                overflowRight:m.right-innerWidth,overflowLeft:-m.left};
+        }""")
+        self.assertLess(bounds["left"],2,bounds)
+        self.assertLess(bounds["right"],2,bounds)
+        self.assertLessEqual(bounds["overflowRight"],1,bounds)
+        self.assertLessEqual(bounds["overflowLeft"],1,bounds)
+
     def test_quicker_sale_preview_keeps_highest_isk_plan_selected(self):
         from playwright.sync_api import expect
         def fixture():
