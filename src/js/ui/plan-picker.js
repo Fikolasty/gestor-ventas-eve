@@ -59,7 +59,7 @@ function paintPicker(P){
       el('small',null,tx('picker.simpleQuickSub')));
     const method=el('div','pk-shortcut-method');
     method.append(el('span','pk-shortcut-name',modeName(shortcut.m)),
-      el('strong','pk-shortcut-isk num',fmt(shortcut.t.net)+' ISK'),
+      el('strong','pk-shortcut-isk num',fmt(shortcut.t.net)),
       el('span','pk-shortcut-loss',tx('picker.simpleLoss',{amount:fmt(Math.max(0,opt-shortcut.t.net))})));
     const caption=el('p','pk-shortcut-note',
       tx(pkShips(shortcut.m,P)?'picker.simpleShip':'picker.simpleNoShip'));

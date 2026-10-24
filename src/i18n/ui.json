@@ -540,8 +540,8 @@
     "en": "This option avoids waiting for a sell order, but leaves you with less ISK."
   },
   "picker.simpleLoss": {
-    "es": "{amount} ISK menos",
-    "en": "{amount} ISK less"
+    "es": "{amount} menos",
+    "en": "{amount} less"
   },
   "picker.simpleView": {
     "es": "Ver esta alternativa",
