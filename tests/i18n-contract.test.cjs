@@ -44,7 +44,10 @@ test('new dynamic Spanish UI literals must be registered before shipping',()=>{
     'src/js/ui/ledger.js','src/js/ui/selling-results.js',
     'src/js/ui/plan-picker.js','src/js/ui/fulfillment.js',
     'src/js/ui/refining-view.js','src/js/ui/settings.js',
-    'src/js/auth/eve-sso.js'
+    'src/js/auth/eve-sso.js','src/js/services/esi.js',
+    'src/js/domain/planning.js','src/js/domain/market-pricing.js',
+    'src/js/domain/refining.js','src/js/domain/courier.js',
+    'src/js/app/settings-persistence.js'
   ];
   const issues=[];
   for(const file of files){
@@ -66,3 +69,17 @@ test('referral text and accessibility are keyed, not dependent on phrase matchin
   assert.notEqual(ui['referral.newPilot'].en,ui['referral.newPilot'].es);
   assert.notEqual(ui['referral.freeSp'].en,ui['referral.freeSp'].es);
 });
+test('browser dialogs use the catalog rather than hard-coded Spanish',()=>{
+  const files=[
+    'src/js/app/settings-persistence.js','src/js/ui/ledger.js',
+    'src/js/ui/selling-results.js','src/js/auth/eve-sso.js'
+  ];
+  for(const p of files){
+    const source=read(p);
+    assert.doesNotMatch(source,/\\b(?:confirm|prompt)\\(['"][ÁÉÍÓÚáéíóúñÑ¿¡]/,
+      'Unlocalized browser dialog in '+p);
+  }
+  assert.match(read('src/js/app/settings-persistence.js'),/tx\\('settings.resetConfirm'\\)/);
+  assert.match(read('src/js/auth/eve-sso.js'),/tx\\('sso.missingClient'\\)/);
+});
+
