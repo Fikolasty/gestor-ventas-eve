@@ -124,6 +124,8 @@ function syncBusinessMode(){
   }
   a.querySelector('span:last-child').textContent=en?'Sell Items':'Vender Ítems';
   b.querySelector('span:last-child').textContent=en?'Jita Trading':'Comercio Jita';
+  const current=document.getElementById('salesModeCurrent');
+  if(current)current.textContent=S.flip?(en?'Jita Trading':'Comercio Jita'):(en?'Sell Items':'Vender Ítems');
   // No redundant lateral description column. The buttons carry contextual
   // native tooltips, updated for language and the active alliance market.
   const descriptions=[
@@ -187,12 +189,41 @@ $('themeLight').addEventListener('change',e=>{document.documentElement.classList
   const header=document.querySelector('header.top');
   const headerMain=document.createElement('div');headerMain.className='mm-ho-main';
   headerMain.append($('navHome'),group);
-  const headerContext=document.createElement('div');headerContext.className='mm-ho-context';
-  headerContext.append($('businessSwitch'),$('importControls'));
+  // Sales is a single workspace, not a second global-navigation row.
+  // Re-parent the existing business buttons and import controls (never clone
+  // their listeners or duplicate financial state).
+  const salesToolbar=document.createElement('div');
+  salesToolbar.className='mm-sales-toolbar';
+  salesToolbar.id='salesModeToolbar';
+  const modePicker=document.createElement('details');
+  modePicker.className='mm-sales-mode-picker';
+  const modeTrigger=document.createElement('summary');
+  modeTrigger.className='mm-sales-mode-trigger';
+  modeTrigger.id='salesModeTrigger';
+  modeTrigger.setAttribute('data-i18n-aria-label','sales.modeSelectAria');
+  modeTrigger.setAttribute('aria-label',tx('sales.modeSelectAria'));
+  const modeLabel=el('span','mm-sales-mode-current',S.flip?'Comercio Jita':'Vender Ítems');
+  modeLabel.id='salesModeCurrent';
+  const modeChevron=el('span','mm-sales-mode-chevron','⌄');
+  modeChevron.setAttribute('aria-hidden','true');
+  modeTrigger.append(modeLabel,modeChevron);
+  modePicker.append(modeTrigger,$('businessSwitch'));
+  salesToolbar.append(modePicker,$('importControls'));
+  $('heroIntro').before(salesToolbar);
+  modePicker.addEventListener('click',event=>{
+    if(event.target.closest('button[data-business]'))modePicker.open=false;
+  });
+  modePicker.addEventListener('keydown',event=>{
+    if(event.key==='Escape'){modePicker.open=false;modeTrigger.focus();}
+  });
+  document.addEventListener('pointerdown',event=>{
+    if(modePicker.open&&!modePicker.contains(event.target))modePicker.open=false;
+  });
+  syncBusinessMode();
   topActions.insertBefore(theme,profile); // Light/Dark shares the right-side action group
   const headerLegacy=document.createElement('div');headerLegacy.className='mm-ho-legacy';
   headerLegacy.append(rightGroup); // retains the internal #bFlip route control and its listener
-  bar.append(headerMain,headerContext,headerLegacy);
+  bar.append(headerMain,headerLegacy);
   header.classList.add('mm-ho-root');
   header.insertBefore(bar,topActions);
 })();;
