@@ -129,3 +129,28 @@ html.light .hero-intro:not(.no-appr)>.paste{
 #help .hp-t b,#help .hp-c b{color:var(--txt)!important}
 #help .modern-tab{font-family:var(--f-ui)!important}
 @media(max-width:760px){#help .hp,#help .hp-t{grid-template-columns:minmax(0,1fr)}#help .hp-c,#help .hp-t>div{padding:13px 14px!important}}
+
+
+/* Discord selling guide — dark surfaces aligned with contract cards.
+   Scoped to dark mode; light palette remains unchanged. */
+body:not(.light) #pDisc .discord-content .guide{
+  background:rgba(13,14,15,.86);
+  border:1px solid var(--line2);
+  border-radius:12px;
+}
+body:not(.light) #pDisc .discord-content .guide li{
+  background:transparent;
+  border-color:var(--line2);
+}
+body:not(.light) #pDisc .discord-content .dests .dest{
+  background:rgba(18,19,20,.92);
+  border-color:var(--line2);
+}
+body:not(.light) #pDisc .discord-content .dests .dest[aria-pressed="true"]{
+  background:rgba(32,33,34,.95);
+  border-color:var(--ion);
+}
+body:not(.light) #pDisc .discord-content .msg{
+  background:rgba(12,13,14,.94);
+  border-color:var(--line2);
+}
