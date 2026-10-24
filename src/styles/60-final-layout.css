@@ -154,3 +154,17 @@ body:not(.light) #pDisc .discord-content .msg{
   background:rgba(12,13,14,.94);
   border-color:var(--line2);
 }
+
+
+/* Contract item list and selected Discord destination: match the darkest inputs. */
+body:not(.light) #pCtr .ce-l .cz .items,
+body:not(.light) #pCtr .ce-l .cz .ct-items,
+body:not(.light) #pCtr .ce-l .cz .ct-list,
+body:not(.light) #pCtr .ce-l .cz .ct-its{
+  background:rgba(12,13,14,.94);
+  border-color:var(--line2);
+}
+body:not(.light) #pDisc .dests .dest[aria-pressed="true"]{
+  background:rgba(12,13,14,.94);
+  border-color:var(--line2);
+}
