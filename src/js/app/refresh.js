@@ -122,13 +122,18 @@ function syncBusinessMode(){
   for(const [button,active] of [[a,!S.flip],[b,S.flip]]){
     button.classList.toggle('on',active);button.setAttribute('aria-pressed',String(active));
   }
-  a.querySelector('span:last-child').textContent=tx('sales.modeSell');
-  b.querySelector('span:last-child').textContent=tx('sales.modeTrade');
-  const current=$('salesModeCurrent');
-  if(current){
-    const key=S.flip?'sales.modeTrade':'sales.modeSell';
-    current.setAttribute('data-i18n',key);
-    current.textContent=tx(key);
+  // refreshMarketControls() runs before the catalog module is initialized
+  // in the legacy single-file startup. Only translate once the catalog is ready.
+  // Initial HTML already carries correct Spanish labels.
+  if(typeof MM_UI_CATALOG_READY!=='undefined'&&MM_UI_CATALOG_READY){
+    a.querySelector('span:last-child').textContent=tx('sales.modeSell');
+    b.querySelector('span:last-child').textContent=tx('sales.modeTrade');
+    const current=$('salesModeCurrent');
+    if(current){
+      const key=S.flip?'sales.modeTrade':'sales.modeSell';
+      current.setAttribute('data-i18n',key);
+      current.textContent=tx(key);
+    }
   }
   // No redundant lateral description column. The buttons carry contextual
   // native tooltips, updated for language and the active alliance market.
