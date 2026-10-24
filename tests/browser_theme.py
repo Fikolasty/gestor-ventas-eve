@@ -176,6 +176,9 @@ class ThemeBrowserTests(unittest.TestCase):
         self.page.evaluate("setLang('en')")
         self.assertEqual(self.page.locator(".hero-referral-kicker").inner_text(), "NEW PILOT")
         self.assertEqual(self.page.locator(".hero-referral-offer").inner_text(), "1,000,000 FREE SP")
+        self.assertEqual(self.page.evaluate(
+            "getComputedStyle(document.documentElement).getPropertyValue('--mm-i18n-volume').trim()"),
+            '"Volume"')
         self.assertIn("Set your skills, taxes and selling rules",
                       self.page.locator("#settings").text_content())
         self.assertIn("The most profitable plan combines routes",
@@ -188,6 +191,9 @@ class ThemeBrowserTests(unittest.TestCase):
         self.page.evaluate("setLang('es')")
         self.assertEqual(self.page.locator(".hero-referral-kicker").inner_text(), "NUEVO PILOTO")
         self.assertEqual(self.page.locator(".hero-referral-offer").inner_text(), "1,000,000 SP GRATIS")
+        self.assertEqual(self.page.evaluate(
+            "getComputedStyle(document.documentElement).getPropertyValue('--mm-i18n-volume').trim()"),
+            '"Volumen"')
         self.assertIn("Configura las skills, impuestos y reglas de venta",
                       self.page.locator("#settings").text_content())
         self.assertIn("La Industria Planetaria (PI) te permite extraer recursos",
