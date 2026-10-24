@@ -502,9 +502,11 @@ class ThemeBrowserTests(unittest.TestCase):
                 el.dispatchEvent(new Event(event,{bubbles:true}));
             }""",{"id":id,"value":value,"event":event})
         set_setting("refImp","0")
+        self.page.evaluate("paintRefineryProfile()")
         no_implant=float(self.page.locator("#refineryYieldLive").inner_text().rstrip("%"))
         self.assertLess(no_implant,first)
         set_setting("skRep","3")
+        self.page.evaluate("paintRefineryProfile()")
         less_skill=float(self.page.locator("#refineryYieldLive").inner_text().rstrip("%"))
         self.assertLess(less_skill,no_implant)
         set_setting("rTax","2","input")
@@ -514,7 +516,9 @@ class ThemeBrowserTests(unittest.TestCase):
         self.page.evaluate("setLang('en')")
         expect(self.page.locator('#refineryProfile')).to_contain_text('Estimated yield')
         set_setting("skRep","5")
+        self.page.evaluate("paintRefineryProfile()")
         set_setting("refImp","0.04")
+        self.page.evaluate("paintRefineryProfile()")
         final=float(self.page.locator("#refineryYieldLive").inner_text().rstrip("%"))
         self.assertAlmostEqual(final,first,delta=.02)
         # Changing a fee is a cost change, never a change of profile yield.
