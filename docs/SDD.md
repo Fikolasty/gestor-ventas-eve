@@ -785,3 +785,13 @@ Verified public references:
 
 Do not assume a globally guaranteed best route until an exhaustive/certified optimization
 is available with liquidity, partial fills and accurate location prices.
+
+
+## Sales operation placement and manual player offers — 24 Oct 2026
+
+User review corrected three shortcomings:
+1. `Sell Items / Jita Trading` must sit on the right edge of its Sales toolbar in both desktop and mobile; import controls remain at the left and retain the original DOM elements, handlers and calculations.
+2. `Sell to another player` / Discord WTS is a **last resort**, not a guaranteed market order. The pricing default remains **100% Jita Buy**, configurable in Settings; the optimizer continues to use it only when no normal market/Buyback route exists. It must sort last in the expanded comparison, even when a guessed asking price is higher. The "highest ISK" benchmark excludes unconfirmed player offers; a manual player selection displays an explicit uncertainty explanation.
+3. Discord's public offer preview and its `Copy Message` clipboard payload show only the **final ISK asking price**, not the private pricing formula (e.g. `100% Jita Buy`). It is still used internally to calculate the amount. WTS labels now follow actual ES/EN language rather than the Discord destination.
+
+Implemented in `src/styles/70-typography.css`, `src/js/ui/plan-picker.js`, `src/js/ui/fulfillment.js`, and `src/i18n/ui.json`; regression tests in `tests/browser_theme.py` verify right alignment at 1440/390 px, manual player quote ordering, non-recommendation and matching formula-free preview/copy. No finance formula, taxes, ESI, shipping or buyback calculation changed. The manual WTS alternative remains available to users explicitly.
