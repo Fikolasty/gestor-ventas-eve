@@ -133,14 +133,18 @@ class ThemeBrowserTests(unittest.TestCase):
         self.page.wait_for_function(
             "() => document.querySelector('#mmTabSkills .mm-mod-label')?.textContent.trim()==='Skill Plans'"
         )
-        self.assertIn("1,000,000 SP", self.page.locator(".hero-referral").inner_text())
+        self.assertIn("NEW PILOT", self.page.locator(".hero-referral").inner_text())
+        self.assertIn("1,000,000 FREE SP", self.page.locator(".hero-referral").inner_text())
+        self.assertIn("one million free Skill Points", self.page.locator(".hero-referral").get_attribute("aria-label"))
         self.assertIn("Getting started", self.page.locator("#help .modern-tabs").text_content())
         self.assertIn("Home market", self.page.locator("#settings").text_content())
         self.page.evaluate("setLang('es')")
         self.page.wait_for_function(
             "() => document.querySelector('#mmTabSkills .mm-mod-label')?.textContent.trim()==='Planes de habilidades'"
         )
-        self.assertIn("1,000,000 SP", self.page.locator(".hero-referral").inner_text())
+        self.assertIn("NUEVO PILOTO", self.page.locator(".hero-referral").inner_text())
+        self.assertIn("1,000,000 SP GRATIS", self.page.locator(".hero-referral").inner_text())
+        self.assertIn("un millón de Skill Points gratis", self.page.locator(".hero-referral").get_attribute("aria-label"))
         self.assertIn("Primeros pasos", self.page.locator("#help .modern-tabs").inner_text())
 
     def test_canonical_finance_strings_switch_languages(self):
