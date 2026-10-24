@@ -3,6 +3,10 @@
 // rather than concatenating translated fragments or maintaining parallel strings.
 // The build embeds src/i18n/ui.json here (no network request or extra script).
 const UI_TEXT=/*__UI_CATALOG__*/{};
+// The legacy script calls some initial route sync functions before this module
+// is evaluated. This var is hoisted (undefined until initialized), allowing
+// those early calls to defer catalog-driven UI labels without a TDZ error.
+var MM_UI_CATALOG_READY=true;
 function tx(key,params={}){
   const record=UI_TEXT[key];
   if(!record)return key;
