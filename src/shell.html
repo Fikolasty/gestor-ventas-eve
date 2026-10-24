@@ -93,7 +93,7 @@
   <section class="panel" id="settings" hidden>
     <div class="x-wrap"><button type="button" class="x-close" data-close="settings" aria-label="Cerrar Ajustes" title="Cerrar Ajustes"></button></div>
     <h2><span class="ic i-gear" aria-hidden="true"></span>Ajustes</h2>
-    <p class="lead">Configura las skills, impuestos y reglas de venta para reflejar tu situación en EVE. Los resultados se recalculan al cambiar un valor. Se guardan solos en este navegador y se cargan la próxima vez. El botón Restablecer vuelve a los valores de fábrica.</p>
+    <p class="lead" data-i18n="settings.overview">Ajusta habilidades, impuestos y mercados. Los cambios se guardan en este navegador.</p>
     <div class="st-tools" role="group" aria-label="Acciones de ajustes"><div class="st-tools-group"><button type="button" class="st-tool-btn" id="stOpenAll"><span class="st-tool-icon" aria-hidden="true">▾</span>Abrir Todo</button><button type="button" class="st-tool-btn" id="stCloseAll"><span class="st-tool-icon st-tool-up" aria-hidden="true">▾</span>Cerrar Todo</button></div><button type="button" class="st-tool-btn st-tool-reset" id="stReset" title="Borra los Ajustes guardados en este navegador y vuelve a los valores de fábrica."><span class="st-tool-reset-icon" aria-hidden="true">↺</span>Restablecer</button></div>
     <div class="st-wrap">
       <!-- Mercado independiente: no modifica automáticamente la refinería ni el courier. -->
@@ -109,8 +109,7 @@
            the sole persisted value for backward compatibility with existing Settings. -->
       <div class="st-sec st-language" role="group" aria-labelledby="stLanguageLabel">
         <div class="st-language-copy">
-          <h3 class="st-sec-t" id="stLanguageLabel">Idioma / Language</h3>
-          <p class="st-sec-i">Elige el idioma de la interfaz.</p>
+          <h3 class="st-sec-t" id="stLanguageLabel" data-i18n="settings.languageHeading">IDIOMA</h3>
         </div>
         <div class="st-language-actions" id="langButtons" role="group" data-i18n-aria-label="settings.languageAria" aria-label="Idioma de la interfaz">
           <button type="button" class="st-lang-option on" data-lang="es" aria-pressed="true">ES <span>Español</span></button>
