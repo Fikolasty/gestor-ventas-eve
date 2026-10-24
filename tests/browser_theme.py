@@ -345,6 +345,68 @@ class ThemeBrowserTests(unittest.TestCase):
         self.assertIn("Price: 100,000 ISK",self.page.locator("#dMsg").inner_text())
         self.assertNotIn("Jita Buy",self.page.locator("#dCopyMsg").get_attribute("data-v"))
 
+    def test_sales_search_keeps_focus_and_uses_item_autocomplete(self):
+        from playwright.sync_api import expect
+        self.page.evaluate("""() => {
+            selectAppModule('ventas');
+            const rows=Array.from({length:12},(_,i)=>{
+                const name='Datacore - Sample '+String(i+1).padStart(2,'0');
+                return {o:{name,jita:{buy:100,sell:125,topBuy:100,topSell:125},m3u:1},
+                    q:1,qd:0,best:'null',auto:'null',np:130,g:{null:120},
+                    ship:{},vol:1,coll:125,prod:0,rep:null,fast:null};
+            });
+            S.items=rows.map(r=>({...r.o,qty:r.q}));
+            stepOpen=new Set(['null']);
+            document.querySelector('#deep').hidden=false;
+            paintVerdict({rows,missing:[],mode:null,best:1440,Vs:0,shipCost:0});
+        }""")
+        field=self.page.locator("#vPlan .pl-search")
+        expect(field).to_be_visible()
+        self.assertEqual(self.page.locator("#vPlan datalist option").count(),12)
+        field.click()
+        self.page.evaluate("window.__searchBefore=document.querySelector('#vPlan .pl-search')")
+        field.press_sequentially("Datacore - Sample 12",delay=10)
+        expect(field).to_have_value("Datacore - Sample 12")
+        expect(field).to_be_focused()
+        self.assertTrue(self.page.evaluate(
+            "window.__searchBefore===document.querySelector('#vPlan .pl-search')"))
+        expect(self.page.locator("#vPlan .pl-section .pl-row")).to_have_count(1)
+        self.assertIn("1 de 12",self.page.locator("#vPlan .pl-match").inner_text())
+        field.fill("")
+        expect(self.page.locator("#vPlan .pl-section .pl-row")).to_have_count(5)
+        expect(field).to_be_focused()
+        self.page.set_viewport_size({"width":390,"height":844})
+        expect(field).to_be_visible()
+        no_overflow=self.page.evaluate("""() => {
+            const a=document.querySelector('#vPlan .stp-acts').getBoundingClientRect();
+            const b=document.querySelector('#vPlan .pl-search').getBoundingClientRect();
+            return b.right<=a.right+1&&b.left>=a.left-1;
+        }""")
+        self.assertTrue(no_overflow)
+
+    def test_mining_editorial_guide_navigates_calculators_bilingually(self):
+        from playwright.sync_api import expect
+        self.page.evaluate("selectAppModule('mining')")
+        expect(self.page.locator("#mnReadingTitle")).to_have_text(
+            "De tu primera barge a tu primera Omega")
+        self.assertIn("no siempre descuentan",self.page.locator(".mn-reading-caution").inner_text())
+        buttons=self.page.locator("[data-mining-jump]")
+        self.assertEqual(buttons.count(),3)
+        self.page.locator('[data-mining-jump="plan"]').click()
+        expect(self.page.locator(".mn-v-plan")).to_be_visible()
+        self.page.locator('[data-mining-jump="max"]').click()
+        expect(self.page.locator(".mn-v-max")).to_be_visible()
+        self.page.locator('[data-mining-jump="ships"]').click()
+        expect(self.page.locator(".mn-v-ships")).to_be_visible()
+        self.page.evaluate("setLang('en')")
+        expect(self.page.locator("#mnReadingTitle")).to_have_text(
+            "From your first barge to your first Omega")
+        self.assertIn("not necessarily final profit",
+                      self.page.locator(".mn-reading-caution").inner_text())
+        self.page.evaluate("setLang('es')")
+        expect(self.page.locator("#mnReadingTitle")).to_have_text(
+            "De tu primera barge a tu primera Omega")
+
     def test_skill_plan_iframe_language_roundtrip(self):
         from playwright.sync_api import expect
         self.page.evaluate("selectAppModule('skills')")
