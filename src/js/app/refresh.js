@@ -122,10 +122,14 @@ function syncBusinessMode(){
   for(const [button,active] of [[a,!S.flip],[b,S.flip]]){
     button.classList.toggle('on',active);button.setAttribute('aria-pressed',String(active));
   }
-  a.querySelector('span:last-child').textContent=en?'Sell Items':'Vender Ítems';
-  b.querySelector('span:last-child').textContent=en?'Jita Trading':'Comercio Jita';
+  a.querySelector('span:last-child').textContent=tx('sales.modeSell');
+  b.querySelector('span:last-child').textContent=tx('sales.modeTrade');
   const current=$('salesModeCurrent');
-  if(current)current.textContent=S.flip?(en?'Jita Trading':'Comercio Jita'):(en?'Sell Items':'Vender Ítems');
+  if(current){
+    const key=S.flip?'sales.modeTrade':'sales.modeSell';
+    current.setAttribute('data-i18n',key);
+    current.textContent=tx(key);
+  }
   // No redundant lateral description column. The buttons carry contextual
   // native tooltips, updated for language and the active alliance market.
   const descriptions=[
@@ -202,8 +206,9 @@ $('themeLight').addEventListener('change',e=>{document.documentElement.classList
   modeTrigger.id='salesModeTrigger';
   modeTrigger.setAttribute('data-i18n-aria-label','sales.modeSelectAria');
   modeTrigger.setAttribute('aria-label',tx('sales.modeSelectAria'));
-  const modeLabel=el('span','mm-sales-mode-current',S.flip?'Comercio Jita':'Vender Ítems');
+  const modeLabel=el('span','mm-sales-mode-current',tx(S.flip?'sales.modeTrade':'sales.modeSell'));
   modeLabel.id='salesModeCurrent';
+  modeLabel.setAttribute('data-i18n',S.flip?'sales.modeTrade':'sales.modeSell');
   const modeChevron=el('span','mm-sales-mode-chevron','⌄');
   modeChevron.setAttribute('aria-hidden','true');
   modeTrigger.append(modeLabel,modeChevron);
