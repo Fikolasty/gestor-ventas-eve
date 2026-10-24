@@ -462,5 +462,21 @@
   "referral.externalLink": {
     "es": "Abrir promoción",
     "en": "Open offer"
+  },
+  "settings.resetConfirm": {
+    "es": "¿Volver todos los Ajustes a los valores de fábrica?",
+    "en": "Reset all Settings to their defaults?"
+  },
+  "shared.copyPrompt": {
+    "es": "Copia:",
+    "en": "Copy:"
+  },
+  "sso.missingClient": {
+    "es": "El acceso oficial de EVE todavía no está configurado: Market Moves+ necesita su Client ID público de CCP.",
+    "en": "Official EVE login is not configured yet: Market Moves+ needs its public CCP Client ID."
+  },
+  "sso.loginOpenFailed": {
+    "es": "No se pudo abrir el login oficial de EVE: {error}",
+    "en": "Could not open the official EVE login: {error}"
   }
 }
