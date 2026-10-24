@@ -442,5 +442,25 @@
   "freight.missingQuote": {
     "es": "Precio base no disponible",
     "en": "Base price unavailable"
+  },
+  "referral.newPilot": {
+    "es": "NUEVO PILOTO",
+    "en": "NEW PILOT"
+  },
+  "referral.freeSp": {
+    "es": "1,000,000 SP GRATIS",
+    "en": "1,000,000 FREE SP"
+  },
+  "referral.linkAria": {
+    "es": "Abrir enlace de referido de EVE Online: un millón de Skill Points gratis",
+    "en": "Open EVE Online referral link: one million free Skill Points"
+  },
+  "settings.languageAria": {
+    "es": "Idioma de la interfaz",
+    "en": "Interface language"
+  },
+  "referral.externalLink": {
+    "es": "Abrir promoción",
+    "en": "Open offer"
   }
 }
