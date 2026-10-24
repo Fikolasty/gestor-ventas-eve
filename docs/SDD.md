@@ -730,3 +730,58 @@ La ejecución `39918683797` confirmó `compile: success` y `Deploy verified Mark
 7. Antes de aprobar, correr pruebas matemáticas, Minería, navegador real, ES/EN y tamaño móvil. No afirmar publicación hasta éxito de Actions/Pages.
 
 **Estado:** cambios de fuente subidos a `main` y validados por GitHub Actions según su ejecución más reciente; mantener la confirmación de despliegue separada del push. No cambian `computePlan`, brokerage/tax, Buyback, import margin, couriers, ESI ni ninguna fórmula monetaria.
+
+## Decision UX and profit-floor verification — 24-oct-2026
+
+User wants plain-language, best-ISK-first choices for nullsec players, not accountant-like
+terminology or a fast route silently reducing income. The calculation remains the verified
+Market Moves+ engine.
+
+- `src/js/domain/planning.js::protectBestSaleRoute` checks the proposed mixed route
+  against every supported uniform route (Jita sell/instant, local, Buyback, reprocess,
+  imports), accounting for the entire courier bill and its contract thresholds.
+  It changes the automatic choice only when a tested uniform candidate returns
+  at least 0.01 more ISK. It does **not** claim a globally exact combinatorial optimum.
+  High-risk/unconfirmed direct-player sale `disc` remains excluded from the automatic
+  fallback as previously specified. Explicitly user-selected routes are preserved.
+- `src/js/ui/plan-picker.js` presents a contextual quick alternative using existing
+  `modeTotal` net/profit outcomes; it never charges freight twice or recomputes
+  market tax. It only describes routes that do not require waiting for a *sell order*,
+  and notes that courier/Buyback payments are not guaranteed. Partial item coverage
+  is disclosed. This is a preview, not an automatic downgrade; users can expand
+  the old selectable plan comparison if they choose.
+- `src/i18n/ui.json` centralizes the copy in ES/EN. High-volume terms say ISK,
+  getting paid, speed, shipping, and what is lost compared to the best choice.
+- `tests/plan-decision.test.cjs` verifies full freight thresholds, no unjustified
+  switch, and incomplete route support. Economic core fee calculations unchanged.
+
+Research-backed roadmap:
+1. Route economics is downstream from income *source*: ratting and exploration loot
+   inventory enters the same sales engine. Corporation bounty tax is NOT a sales tax.
+2. Mining compares raw vs compressed vs reprocessed vs local/Jita/Buyback; yield
+   depends on rigs, skills, implants; 0.5% is a configured refiner fee, not universal.
+3. PI uses P0–P4 schematics and POCO import/export tax. Owner POCO tax is local and
+   should be configured separately per customs office where relevant.
+4. Industry needs CCP SDE blueprints, actual materials, structure rig bonuses,
+   location-specific installation fees and time, before comparing buy-vs-build-vs-sell.
+5. Trading has purchase cost: distinguish ISK received from profit after investing.
+6. Authenticated Upwell structure market orders need a character with structure
+   access and `esi-markets.structure_markets.v1`; unlike Jita public orders these
+   must never be represented as live without auth. ESI market orders have 5-minute
+   cache and rate limits since February 24, 2026; respect Retry-After and ETag.
+7. Future source badges: live Jita order, authenticated structure order, manually
+   configured rate, estimated local price; never show all as equivalent certainty.
+
+Verified public references:
+- https://support.eveonline.com/hc/en-us/articles/203218962-Broker-Fee-and-Sales-Tax
+- https://wiki.eveuniversity.org/Market
+- https://wiki.eveuniversity.org/Reprocessing
+- https://wiki.eveuniversity.org/Planetary_Industry
+- https://wiki.eveuniversity.org/Tax
+- https://docs.esi.evetech.net/docs/scenarios/structure_markets.html
+- https://developers.eveonline.com/blog/market-orders-rate-limit-rolls-out-on-february-24-2026
+- https://www.nngroup.com/articles/progressive-disclosure/
+- https://www.nngroup.com/articles/ux-writing-faqs/
+
+Do not assume a globally guaranteed best route until an exhaustive/certified optimization
+is available with liquidity, partial fills and accurate location prices.

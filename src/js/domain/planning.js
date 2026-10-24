@@ -107,7 +107,9 @@ function protectBestSaleRoute(rows,Vall){
   if(betterMode){
     active.forEach(r=>{
       if(!Number.isFinite(r.g[betterMode]))return;
-      r.best=betterMode;r.fast=null;r.tightPick=false;r.noShip=!r.ship[betterMode];
+      const wasShipped=!!r.ship[r.best];
+      r.best=betterMode;r.fast=null;r.tightPick=false;
+      r.noShip=wasShipped&&!r.ship[betterMode];
       r.guide=guideFor(r,Vall);
     });
   }

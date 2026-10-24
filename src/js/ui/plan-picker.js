@@ -37,6 +37,40 @@ function paintPicker(P){
   const opportunity=$('pkOpportunity');
   opportunity.replaceChildren();
   const valid=all.filter(x=>Number.isFinite(x.t.net));
+  // Plain-language decision aid. These are the EXACT plan comparison totals,
+  // including taxes and one shared courier bill, not a second price engine.
+  // Quick means no waiting for a sell order; delivery/payment is not promised.
+  const shortcutPanel=$('pkShortcut');
+  shortcutPanel.replaceChildren();shortcutPanel.hidden=true;
+  const activeRows=P.rows.filter(r=>r.q>0&&r.auto);
+  const quickCandidates=cur==='auto'?valid.filter(x=>
+    PK_FAST.has(x.m)&&x.t.net<opt-.5&&Number.isFinite(x.t.net)):[];
+  const covered=x=>activeRows.filter(r=>Number.isFinite(r.g[x.m])).length;
+  quickCandidates.sort((a,b)=>{
+    const aFull=covered(a)===activeRows.length,bFull=covered(b)===activeRows.length;
+    return Number(bFull)-Number(aFull)
+      ||Number(pkShips(a.m,P))-Number(pkShips(b.m,P))
+      ||b.t.net-a.t.net;
+  });
+  const shortcut=quickCandidates[0]||null;
+  if(shortcut){
+    const heading=el('div','pk-shortcut-heading');
+    heading.append(el('strong',null,tx('picker.simpleQuick')),
+      el('small',null,tx('picker.simpleQuickSub')));
+    const method=el('div','pk-shortcut-method');
+    method.append(el('span','pk-shortcut-name',modeName(shortcut.m)),
+      el('strong','pk-shortcut-isk num',fmt(shortcut.t.net)+' ISK'),
+      el('span','pk-shortcut-loss',tx('picker.simpleLoss',{amount:fmt(Math.max(0,opt-shortcut.t.net))})));
+    const caption=el('p','pk-shortcut-note',
+      tx(pkShips(shortcut.m,P)?'picker.simpleShip':'picker.simpleNoShip'));
+    const count=covered(shortcut);
+    if(count<activeRows.length)caption.append(' · ',
+      tx('picker.simplePartial',{count,total:activeRows.length}));
+    const button=el('button','pk-shortcut-action',tx('picker.simpleView'));
+    button.type='button';button.dataset.pkShortcut=shortcut.m;
+    shortcutPanel.append(heading,method,caption,button);
+    shortcutPanel.hidden=false;
+  }
   if(valid.length>1&&valid.some(x=>x.m===cur)){
     const benchmark=valid.reduce((best,x)=>x.t.net>best.t.net?x:best);
     const gap=Math.max(0,benchmark.t.net-chosen.t.net);
@@ -104,6 +138,7 @@ function paintPicker(P){
     const d=t.net-opt;
     const b=el('button','pk-o'+(selected?' on':'')+(m==='auto'?' best':''));
     b.type='button';
+    if(shortcut&&m===shortcut.m&&!selected)b.classList.add('pk-shortcut-highlight');
     if(!selected){b.dataset.m=m;b.setAttribute('aria-pressed','false');}
     else{
       b.dataset.pkToggle='true';
@@ -161,6 +196,12 @@ $('pk').addEventListener('click',e=>{
   if(pkView.open)focusOnly('plans');
   paintPicker(lastP);
   if(pkView.open)fadeIn([...$('pkOthers').querySelectorAll('.pk-o')]);
+});
+$('pkShortcut').addEventListener('click',e=>{
+  const b=e.target.closest('[data-pk-shortcut]');if(!b||!lastP)return;
+  pkView.open=true;pkView.filter='all';paintPicker(lastP);
+  const target=[...$('pkOthers').querySelectorAll('[data-m]')].find(x=>x.dataset.m===b.dataset.pkShortcut);
+  if(target)target.scrollIntoView({block:'nearest',behavior:'smooth'});
 });
 $('pkOthers').addEventListener('click',e=>{const b=e.target.closest('[data-m]');if(!b)return;
   S.planMode=b.dataset.m==='auto'?null:b.dataset.m;pkView.open=false;pkView.filter='all';czIdx=0;refreshNow();});
