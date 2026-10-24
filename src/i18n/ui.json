@@ -606,5 +606,57 @@
   "sales.searchItem": {
     "es": "Buscar un ítem…",
     "en": "Search items…"
+  },
+  "mining.guideEyebrow": {
+    "es": "GUÍA INTERACTIVA · MINERÍA EN NULLSEC",
+    "en": "INTERACTIVE GUIDE · NULLSEC MINING"
+  },
+  "mining.guideTitle": {
+    "es": "De tu primera barge a tu primera Omega",
+    "en": "From your first barge to your first Omega"
+  },
+  "mining.guideIntro": {
+    "es": "Empieza con tu nave, compara tus números y descubre cuándo podrías pagar Omega. No son ingresos garantizados.",
+    "en": "Start with your ship, compare your numbers and see when you could afford Omega. Income is not guaranteed."
+  },
+  "mining.guideOne": {
+    "es": "Tu primera nave",
+    "en": "Your first ship"
+  },
+  "mining.guideOneText": {
+    "es": "Compara skills, fitting, producción y viajes.",
+    "en": "Compare skills, fittings, production and trips."
+  },
+  "mining.guideOneAction": {
+    "es": "Comparar naves",
+    "en": "Compare ships"
+  },
+  "mining.guideTwo": {
+    "es": "Tu primera Omega",
+    "en": "Your first Omega"
+  },
+  "mining.guideTwoText": {
+    "es": "Calcula horas, cuentas, PLEX y entrenamiento.",
+    "en": "Calculate hours, accounts, PLEX and training."
+  },
+  "mining.guideTwoAction": {
+    "es": "Plan Omega",
+    "en": "Omega plan"
+  },
+  "mining.guideThree": {
+    "es": "Tu siguiente mejora",
+    "en": "Your next upgrade"
+  },
+  "mining.guideThreeText": {
+    "es": "Compara el potencial de naves avanzadas.",
+    "en": "Compare the potential of advanced ships."
+  },
+  "mining.guideThreeAction": {
+    "es": "Ver naves avanzadas",
+    "en": "Explore advanced ships"
+  },
+  "mining.grossWarning": {
+    "es": "Los ISK/h mostrados no siempre descuentan impuestos, refinería o transporte: son estimaciones de producción, no necesariamente ganancia final.",
+    "en": "ISK/h may not include selling tax, reprocessing fees or shipping: it estimates production value, not necessarily final profit."
   }
 }
