@@ -478,5 +478,33 @@
   "sso.loginOpenFailed": {
     "es": "No se pudo abrir el login oficial de EVE: {error}",
     "en": "Could not open the official EVE login: {error}"
+  },
+  "css.volume": {
+    "es": "Volumen",
+    "en": "Volume"
+  },
+  "css.shipping": {
+    "es": "Envío",
+    "en": "Shipping"
+  },
+  "css.extraGain": {
+    "es": "Gana extra",
+    "en": "Extra gain"
+  },
+  "css.reprocessed": {
+    "es": "Reprocesado",
+    "en": "Reprocessed"
+  },
+  "css.unprocessed": {
+    "es": "Sin reprocesar",
+    "en": "Unprocessed"
+  },
+  "css.units": {
+    "es": " u.",
+    "en": " units"
+  },
+  "css.home": {
+    "es": "Inicio",
+    "en": "Home"
   }
 }
