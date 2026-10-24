@@ -46,13 +46,12 @@ html.light .hero-intro:not(.no-appr)>.paste{
 @media(max-width:1260px){
   body .top.mm-ho-root{
     grid-template-columns:minmax(0,1fr) auto!important;
-    grid-template-areas:"brand actions" "main main" "context context"!important;
+    grid-template-areas:"brand actions" "main main"!important;
     gap:0 14px!important;padding:9px 20px 0!important;
   }
   body .top.mm-ho-root #mmTabs>.mm-ho-main{
     justify-self:center!important;margin-top:7px!important;
   }
-  body .top.mm-ho-root #mmTabs>.mm-ho-context{margin-top:5px!important}
 }
 @media(max-width:860px){
   .hero-intro:not(.no-appr){grid-template-columns:minmax(0,1fr)!important;grid-auto-rows:auto!important}
@@ -84,9 +83,6 @@ html.light .hero-intro:not(.no-appr)>.paste{
   body .top.mm-ho-root .mm-ho-main .mm-mod{
     height:33px!important;min-height:33px!important;font-size:12px!important;
   }
-  body .top.mm-ho-root #mmTabs>.mm-ho-context{padding:3px 0!important;gap:5px 12px!important}
-  body .top.mm-ho-root .mm-ho-context .mm-business-tabs{gap:15px!important}
-  body .top.mm-ho-root .mm-ho-context .mm-business-tab{font-size:11px!important}
   .hero>.hero-referral{height:35px!important;min-height:35px!important;margin-top:12px!important}
   .hero>.hero-referral .tk-i{font-size:12px!important}
 }
