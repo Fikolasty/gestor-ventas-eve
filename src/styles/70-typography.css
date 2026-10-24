@@ -210,3 +210,33 @@
   .mm-freight-meta{text-align:left}
   #unitCourierTotal{white-space:normal;text-align:right}
 }
+
+/* Consistent left edge: remove decorative heading dashes and their reserved column. */
+.mm-section-head{
+  grid-template-columns:minmax(0,1fr)!important;
+  column-gap:0!important;
+}
+.mm-section-head::before{
+  content:none!important;display:none!important;
+}
+.mm-section-head>.mm-title,
+.mm-section-head>.mm-section-sub{
+  grid-column:1!important;
+  margin-left:0!important;
+}
+.mm-section-head>.mm-title{grid-row:1!important}
+.mm-section-head>.mm-section-sub{grid-row:2!important}
+/* Referral stays text-only, centered and easier to read. */
+.hero>.hero-referral-pill .hero-referral-kicker{
+  font-size:12px!important;
+}
+.hero>.hero-referral-pill .hero-referral-offer{
+  font-size:15px!important;
+}
+.hero>.hero-referral-pill .hero-referral-arrow{
+  font-size:16px!important;
+}
+@media(max-width:540px){
+  .hero>.hero-referral-pill .hero-referral-kicker{font-size:10px!important}
+  .hero>.hero-referral-pill .hero-referral-offer{font-size:13px!important}
+}
