@@ -51,10 +51,10 @@ function i18nKeyed(root){
   const selector='[data-i18n],[data-i18n-title],[data-i18n-aria-label],[data-i18n-placeholder]';
   const apply=el=>{
     const key=el.getAttribute('data-i18n');
-    if(key&&Object.prototype.hasOwnProperty.call(UI_TEXT,key))el.textContent=tx(key);
+    if(key&&Object.prototype.hasOwnProperty.call(UI_TEXT,key)&&el.textContent!==tx(key))el.textContent=tx(key);
     for(const [marker,attribute] of Object.entries(I18N_KEYED_ATTRS)){
       const k=el.getAttribute(marker);
-      if(k&&Object.prototype.hasOwnProperty.call(UI_TEXT,k))el.setAttribute(attribute,tx(k));
+      if(k&&Object.prototype.hasOwnProperty.call(UI_TEXT,k)&&el.getAttribute(attribute)!==tx(k))el.setAttribute(attribute,tx(k));
     }
   };
   if(root.matches(selector))apply(root);
