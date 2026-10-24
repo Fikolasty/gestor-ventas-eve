@@ -2829,6 +2829,20 @@ body:not(.light) #pDisc .discord-content .msg{
   background:rgba(12,13,14,.94);
   border-color:var(--line2);
 }
+
+
+/* Contract item list and selected Discord destination: match the darkest inputs. */
+body:not(.light) #pCtr .ce-l .cz .items,
+body:not(.light) #pCtr .ce-l .cz .ct-items,
+body:not(.light) #pCtr .ce-l .cz .ct-list,
+body:not(.light) #pCtr .ce-l .cz .ct-its{
+  background:rgba(12,13,14,.94);
+  border-color:var(--line2);
+}
+body:not(.light) #pDisc .dests .dest[aria-pressed="true"]{
+  background:rgba(12,13,14,.94);
+  border-color:var(--line2);
+}
 /* Market Moves+ visual type scale — one system for Sales, Mining, Skills and Guide.
    The iframe receives the same body font and theme tokens via its bridge.
    Only use existing theme variables; do not invent per-module accent colors. */
@@ -3584,6 +3598,8 @@ html.light body:not(.light) #pDisc .discord-content .guide{background:rgba(240,2
 html.light body:not(.light) #pDisc .discord-content .dests .dest{background:rgba(240,237,229,0.92)}
 html.light body:not(.light) #pDisc .discord-content .dests .dest[aria-pressed="true"]{background:rgba(240,237,229,0.95)}
 html.light body:not(.light) #pDisc .discord-content .msg{background:rgba(240,237,229,0.94)}
+html.light body:not(.light) #pCtr .ce-l .cz .items,html.light body:not(.light) #pCtr .ce-l .cz .ct-items,html.light body:not(.light) #pCtr .ce-l .cz .ct-list,html.light body:not(.light) #pCtr .ce-l .cz .ct-its{background:rgba(240,237,229,0.94)}
+html.light body:not(.light) #pDisc .dests .dest[aria-pressed="true"]{background:rgba(240,237,229,0.94)}
 .i-rock{--i:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 15l3-8 7-3 6 5-1 8-7 3-6-2z'/%3E%3Cpath d='M9 10l3 2 4-2M12 12v5'/%3E%3C/svg%3E")}
 /* Scope moderno para no contaminar el gestor de ventas. */
 @scope (#mining) {
