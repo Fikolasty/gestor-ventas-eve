@@ -43,7 +43,24 @@ const trS=s=>{
   }
   return s.replace(i18nRe(),i18nValue);
 };
-function i18nSkip(n){const p=n.parentElement;return !p||p.closest('script,style,textarea,.lot-name,.no-tr');}
+// Catalog-keyed elements are deterministic and independent of Spanish source wording.
+// A single ES/EN catalog drives both their text and accessible labels.
+const I18N_KEYED_ATTRS={'data-i18n-title':'title','data-i18n-aria-label':'aria-label','data-i18n-placeholder':'placeholder'};
+function i18nKeyed(root){
+  if(!root||root.nodeType!==1)return;
+  const selector='[data-i18n],[data-i18n-title],[data-i18n-aria-label],[data-i18n-placeholder]';
+  const apply=el=>{
+    const key=el.getAttribute('data-i18n');
+    if(key&&Object.prototype.hasOwnProperty.call(UI_TEXT,key))el.textContent=tx(key);
+    for(const [marker,attribute] of Object.entries(I18N_KEYED_ATTRS)){
+      const k=el.getAttribute(marker);
+      if(k&&Object.prototype.hasOwnProperty.call(UI_TEXT,k))el.setAttribute(attribute,tx(k));
+    }
+  };
+  if(root.matches(selector))apply(root);
+  root.querySelectorAll(selector).forEach(apply);
+}
+function i18nSkip(n){const p=n.parentElement;return !p||p.closest('script,style,textarea,[contenteditable],.lot-name,.no-tr,[data-i18n]');}
 function i18nText(n){if(i18nSkip(n))return;const v=n.nodeValue,o=TXT0.get(n);
   if(o!==undefined&&o.en===v)return; // ya traducido
   const t=trS(v);if(t!==v){TXT0.set(n,{es:v,en:t});n.nodeValue=t;}}
@@ -52,6 +69,7 @@ function i18nAttrs(el){if(el.closest('script,style'))return;let m=ATT0.get(el);
     const t=trS(v);if(t!==v){if(!m)ATT0.set(el,m={});m[a]={es:v,en:t};el.setAttribute(a,t);}}}
 function i18nWalk(root){
   if(root.nodeType===3){i18nText(root);return;}if(root.nodeType!==1)return;
+  i18nKeyed(root);
   const w=document.createTreeWalker(root,NodeFilter.SHOW_TEXT);let n;while(n=w.nextNode())i18nText(n);
   if(root.matches('[title],[aria-label],[placeholder]'))i18nAttrs(root);
   root.querySelectorAll('[title],[aria-label],[placeholder]').forEach(i18nAttrs);}
@@ -81,7 +99,7 @@ function setLang(l){
         else if(m.type==='characterData')i18nText(m.target);
         else if(m.type==='attributes')i18nAttrs(m.target);}}finally{i18nBusy=false;}});
     i18nObs.observe(document.documentElement,{subtree:true,childList:true,characterData:true,attributes:true,attributeFilter:I18N_ATTR});
-  }else{i18nRestore();I18N_RE=null;} // suelta la regex grande (se rehace si vuelves a English)
+  }else{i18nRestore();i18nKeyed(document.documentElement);I18N_RE=null;} // ES restored from source catalog
   syncMarketCopy();syncBusinessMode();
   if(lastP)refreshNow();}
 $('langSel').addEventListener('change',e=>setLang(e.target.value));
