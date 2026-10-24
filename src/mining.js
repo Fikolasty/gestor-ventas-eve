@@ -289,9 +289,6 @@ const MineUI=(()=>{
   };
   const INFO=(key)=>'<details class="mn-info"><summary aria-label="Información: '+key+'" title="Información · pasar el mouse o pulsar">ⓘ</summary><div class="mn-info-popup" role="note">'+HINTS[key]+'</div></details>';
   const HTML=
-   '<div class="mn-toolbar">'+
-  '<div class="mn-views">'+SEG('view',[['ships','Rendimiento Nave'],['plan','Plan Omega'],['max','Nave Maxeada']])+'</div>'+
-
   '<section class="mn-reading-path" aria-labelledby="mnReadingTitle">'+
     '<span class="mn-reading-eyebrow" data-i18n="mining.guideEyebrow">GUÍA INTERACTIVA · MINERÍA EN NULLSEC</span>'+
     '<h2 id="mnReadingTitle" data-i18n="mining.guideTitle">De tu primera barge a tu primera Omega</h2>'+
@@ -303,6 +300,9 @@ const MineUI=(()=>{
     '</ol>'+
     '<p class="mn-reading-caution" data-i18n="mining.grossWarning">Los ISK/h mostrados no siempre descuentan impuestos, refinería o transporte: son estimaciones de producción, no necesariamente ganancia final.</p>'+
   '</section>'+
+   '<div class="mn-toolbar">'+
+  '<div class="mn-views">'+SEG('view',[['ships','Rendimiento Nave'],['plan','Plan Omega'],['max','Nave Maxeada']])+'</div>'+
+
   '<div class="mn-omega-tools" hidden>'+
     '<label class="mn-sp-toggle" for="mnFreeSpSwitch" title="Se necesita un enlace de invitación válido para reclamar los SP">'+
       '<input type="checkbox" id="mnFreeSpSwitch" class="mn-sp-checkbox" checked>'+
