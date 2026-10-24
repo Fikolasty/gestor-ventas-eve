@@ -795,3 +795,23 @@ User review corrected three shortcomings:
 3. Discord's public offer preview and its `Copy Message` clipboard payload show only the **final ISK asking price**, not the private pricing formula (e.g. `100% Jita Buy`). It is still used internally to calculate the amount. WTS labels now follow actual ES/EN language rather than the Discord destination.
 
 Implemented in `src/styles/70-typography.css`, `src/js/ui/plan-picker.js`, `src/js/ui/fulfillment.js`, and `src/i18n/ui.json`; regression tests in `tests/browser_theme.py` verify right alignment at 1440/390 px, manual player quote ordering, non-recommendation and matching formula-free preview/copy. No finance formula, taxes, ESI, shipping or buyback calculation changed. The manual WTS alternative remains available to users explicitly.
+
+
+## 24-Oct-2026 — Selling Steps polish, search focus regression and Mining guide
+
+User provided screenshots showing misaligned Selling Steps toolbar/header, inconsistent Copy/Search controls and a broken search input that lost focus after one character. Also requested a high-quality, article-like Mining/Omega progression and a truly net-of-cost reprocessing decision shared with the Sales module.
+
+**Implemented and live:**
+- `src/js/ui/selling-results.js::renderPlanTable` now reuses the existing `.pl` element and NEVER removes/reparents the focused `.stp-acts` toolbar while updating search results, sort order or pagination. The original implementation moved the toolbar into a new table and replaced the old table, disconnecting the input every keystroke. The input now has a native `datalist` of actual inventory names/refined products (per action group), translation-keyed search labels and a matching count.
+- The Selling Steps controls use shared compact spacing and typography, aligned head/body columns, a searchable icon input, matching Copy button with icon, balanced padding and responsive Dark/Light surfaces. New dedicated `src/styles/80-product-ux.css` is LAST in `CSS_PARTS`, with source-order tests updated. The old financial display and copy payload are unchanged.
+- `src/mining.js` now adds an editorial interactive progression: first mining ship → first Omega → advanced ships. Each chapter switches `S.view` to an EXISTING simulation, never duplicates a calculation. Content is fully bilingual through catalog entries. Styling resides in `src/mining.css` and is responsive.
+- A clear note differentiates gross/estimated ISK/h from take-home profit until market fee/reprocessing/courier handling is unified.
+- `tests/browser_theme.py` covers 12-item search with per-character typing, preserved input node and focus, datalist, pagination, mobile layout, and Mining chapter navigation with ES/EN/ES. Python, JS, legacy finance and Chromium workflows verified.
+
+**Financial audit and recommended implementation (not yet released):**
+- The currently shared ice valuation is partial; `src/mining.js::iceUnitPrice` does not consistently cover full-lot courier, order execution/market depth and station ISK fees. Do NOT relabel all displayed ISK/h as net.
+- Current `reproNets` reduces *mineral quantities* by `rTax`, while the reprocessing equipment fee is documented as a percentage of estimated material value paid as ISK. Correct this only in a properly tested, versioned shared engine; preserve the 90.628% null-Tatara perfect refiner yield separately from its configurable fee.
+- Full engine contract, acceptance cases, rollout and v1.1.0 milestone: `docs/MINING_REFINING_DESIGN.md`. Refiner skills may belong to a different character from the miner, batches/scraps and compressed logistics matter, as do local Ice discounts in Settings.
+- No finance engine formulas were changed during this UX pass. Existing `1.0.120` stays until an integrated economic release meets the tests; version `1.1.0` is reserved for shared net-route support.
+
+Use pricing provenance (Jita ESI / authenticated Upwell / manual / local estimate), true buy-order depth, logistics on full lots, fee-on-ISK and exact yield, not guesses. The result UI should prioritize **ISK received, cost to sell, whether to refine**, with deep technical detail under expandable “How it was calculated”.
