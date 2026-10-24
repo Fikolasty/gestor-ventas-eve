@@ -171,6 +171,41 @@ class ThemeBrowserTests(unittest.TestCase):
         self.assertEqual(self.page.evaluate("modeName('auto')"),'Plan óptimo')
         self.assertIn('Importar y vender en ',self.page.evaluate("modeName('fN')"))
 
+    def test_settings_guide_pi_mining_and_referral_roundtrip(self):
+        from playwright.sync_api import expect
+        self.page.evaluate("setLang('en')")
+        self.assertEqual(self.page.locator(".hero-referral-kicker").inner_text(), "NEW PILOT")
+        self.assertEqual(self.page.locator(".hero-referral-offer").inner_text(), "1,000,000 FREE SP")
+        self.assertIn("Set your skills, taxes and selling rules",
+                      self.page.locator("#settings").text_content())
+        self.assertIn("The most profitable plan combines routes",
+                      self.page.locator("#help").text_content())
+        self.assertIn("Planetary Industry (PI) lets you extract",
+                      self.page.locator("#pi").text_content())
+        self.page.evaluate("selectAppModule('mining')")
+        expect(self.page.locator("#mining .mn-ship-bonus-title").first).to_have_text(
+            "Ship and skill bonuses", timeout=10000)
+        self.page.evaluate("setLang('es')")
+        self.assertEqual(self.page.locator(".hero-referral-kicker").inner_text(), "NUEVO PILOTO")
+        self.assertEqual(self.page.locator(".hero-referral-offer").inner_text(), "1,000,000 SP GRATIS")
+        self.assertIn("Configura las skills, impuestos y reglas de venta",
+                      self.page.locator("#settings").text_content())
+        self.assertIn("La Industria Planetaria (PI) te permite extraer recursos",
+                      self.page.locator("#pi").text_content())
+        expect(self.page.locator("#mining .mn-ship-bonus-title").first).to_have_text(
+            "Bonificaciones de nave y habilidades", timeout=10000)
+
+    def test_skill_plan_iframe_language_roundtrip(self):
+        from playwright.sync_api import expect
+        self.page.evaluate("selectAppModule('skills')")
+        frame = self.page.frame_locator("#skillRoot iframe.skills-app-frame")
+        title = frame.locator("#catTitle")
+        title.wait_for(state="visible", timeout=10000)
+        self.page.evaluate("setLang('en')")
+        expect(title).to_have_text("CORE SKILLS", timeout=10000)
+        self.page.evaluate("setLang('es')")
+        expect(title).to_have_text("HABILIDADES BÁSICAS", timeout=10000)
+
     def test_skills_inherits_parent_fonts_and_dark_light_surfaces(self):
         from playwright.sync_api import expect
         import re
