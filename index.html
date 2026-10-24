@@ -3082,6 +3082,36 @@ body:not(.light) #pDisc .dests .dest[aria-pressed="true"]{
   .mm-freight-meta{text-align:left}
   #unitCourierTotal{white-space:normal;text-align:right}
 }
+
+/* Consistent left edge: remove decorative heading dashes and their reserved column. */
+.mm-section-head{
+  grid-template-columns:minmax(0,1fr)!important;
+  column-gap:0!important;
+}
+.mm-section-head::before{
+  content:none!important;display:none!important;
+}
+.mm-section-head>.mm-title,
+.mm-section-head>.mm-section-sub{
+  grid-column:1!important;
+  margin-left:0!important;
+}
+.mm-section-head>.mm-title{grid-row:1!important}
+.mm-section-head>.mm-section-sub{grid-row:2!important}
+/* Referral stays text-only, centered and easier to read. */
+.hero>.hero-referral-pill .hero-referral-kicker{
+  font-size:12px!important;
+}
+.hero>.hero-referral-pill .hero-referral-offer{
+  font-size:15px!important;
+}
+.hero>.hero-referral-pill .hero-referral-arrow{
+  font-size:16px!important;
+}
+@media(max-width:540px){
+  .hero>.hero-referral-pill .hero-referral-kicker{font-size:10px!important}
+  .hero>.hero-referral-pill .hero-referral-offer{font-size:13px!important}
+}
 /* ===== tema claro (generado desde el oscuro por light.py) ===== */
 html.light{--header-surface:rgba(240,237,229,0.96);--ticker-surface:rgba(240,237,229,0.91);--ticker-hover:rgba(240,237,229,0.96);--surface-card:rgba(240,237,229,0.9);--surface-result:linear-gradient(180deg,rgba(240,237,229,0.91),rgba(240,237,229,0.96));--surface-panel:rgba(240,237,229,0.96);--void:#e4e3dd;--hull:#e2e0da;--hull2:#e0ded8;--line:rgba(31,30,29,0.114);--line2:rgba(31,30,29,0.125);--txt:#1c1c1a;--mut:#54524d;--dim:#6c6a64;--ion:#413f3c;--blue:#a39d8b;--clay:#c96442;--thrust:#a67526;--gain:#418b62;--loss:#a92c23}
 html.light body::after{background:repeating-linear-gradient(180deg,rgba(31,30,29,0.011) 0 1px,transparent 1px 3px),
@@ -4633,11 +4663,13 @@ html.light .hero>.hero-referral .tk-i{
  background:transparent!important;color:#332c25!important;
 }
 html.light .hero>.hero-referral .tk-i b{color:#a34d2c!important}
-/* Static referral uses explicit Light colors; legacy ticker selectors remain inert. */
+/* Light referral must remain text-only, matching Dark mode. */
 html.light .hero>.hero-referral-pill,
 html.light .hero>.hero-referral-pill:hover{
- background:var(--ticker-surface)!important;
- border-color:rgba(161,86,55,.32)!important;
+ background:transparent!important;
+ border:0!important;
+ border-radius:0!important;
+ box-shadow:none!important;
  color:#332c25!important;
 }
 html.light .hero>.hero-referral-pill .hero-referral-kicker{color:#554a40!important}
