@@ -704,3 +704,29 @@ La ejecución `39918683797` confirmó `compile: success` y `Deploy verified Mark
 **Límite conocido:** el traductor heredado por fragmentos persiste en gran parte del HTML anterior y las pruebas estáticas usan heurísticas, por lo que no constituyen una demostración matemática de 100% de cobertura para todo dato posible. La migración progresiva a claves es necesaria para eliminar esa deuda técnica de manera segura. Las traducciones en el iframe de Skills mantienen su catálogo ES/EN interno y el idioma se comunica por `postMessage` sin acceso a tokens del piloto.
 
 **Impacto financiero:** ninguno. No se modificaron `market-pricing.js`, `planning.js`, `courier.js`, `refining.js` ni sus fórmulas. El workflow de publicación sigue exigiendo pruebas y despliegue verificado.
+
+
+## UX / Product Design: jerarquía, operación de Ventas y lectura bilingüe — 24-oct-2026
+
+**Diagnóstico desde capturas del usuario:** el header combinaba navegación global (Home, Sales, Mining, Skill Plans) con una segunda fila de operaciones de Ventas (Vender Ítems / Comercio Jita) y controles de importación. Aumentaba altura, competía con la navegación principal y dificultaba entender qué era un módulo versus un modo de cálculo. El texto largo de Settings ocupaba todo el ancho en tipografía de lectura, la instrucción «Elige el idioma de la interfaz» repetía lo evidente y un párrafo largo en mayúsculas junto a ELIGE TU PLAN quedaba desalineado y redundante.
+
+**Decisión de Information Architecture:**
+- **Global:** una única barra de navegación para Home / Sales / Mining / Skill Plans. No añadir un sidebar global redundante con solo estos módulos.
+- **Ventas:** el control original `#businessSwitch` conserva sus dos botones/IDs/handlers, pero pasa dentro de un dropdown semántico `<details>` en `#salesModeToolbar`, arriba del inventario y fuera del header global. El indicador `#salesModeCurrent` refleja el modo activo ES/EN mediante claves `tx('sales.modeSell')` / `tx('sales.modeTrade')`. La acción se cierra al seleccionar, pulsar Escape o hacer clic fuera. `#importControls` se reubica en la misma área y solo aparece para Comercio Jita; se mantienen `#tradePurchaseMode`, `#shipOn`, `#fImpM`, `#cImpM` y `S.flip`. **Nunca clonar inputs ni bifurcar cálculos**.
+- **Settings:** navegación local vertical dentro de Ajustes en escritorio ancho (seis categorías); horizontal con desplazamiento en pantallas menores o móviles. No depende de sidebar global. El mismo formulario se mueve en el DOM una sola vez por el constructor de pestañas existente.
+- **Copy:** introducción breve de Settings desde `settings.overview` con persistencia explícita; elimina instrucción redundante del idioma. `settings.languageHeading` cambia ES/EN. La explicación del plan óptimo se omite cuando ya es obvia por título y comparación: `#pkNote` solo aparece al elegir otra ruta y muestra su diferencia pertinente, debajo del título y en cuerpo de lectura.
+- **Guide:** lectura de párrafos a tamaño y altura de línea consistentes, limitar longitud de línea, jerarquía de títulos sin frases largas en mayúsculas. Las explicaciones exhaustivas se conservan en Guía, no se duplican en paneles de decisión.
+- **Estilo:** reglas al final de `src/styles/70-typography.css` para evitar cambios dispersos a las fórmulas, controles de foco visibles, responsive y variantes Light/Dark; se eliminan reglas específicas del antiguo `.mm-ho-context` y la segunda pista del grid en `src/styles/50-navigation.css`.
+
+**Pruebas:** `tests/market-scenarios.cjs` confirma que se mueven los nodos originales, no se crean controles alternos, que solo existe una fila principal y el margen de importación permanece en Ajustes. `tests/browser_theme.py` comprueba con Chromium abrir/cerrar la operación, alternar entre ventas y comercio con `S.flip`, mostrar/ocultar importación y cambiar ES/EN/ES, además del texto abreviado de Settings y las pestañas. `tests/test_i18n_catalog.py` deja de exigir en el renderer el eslogan óptimo eliminado. El mock VM de las regresiones financieras recibe `tx` desde el catálogo real: nunca se añade fallback hardcodeado a producción solo para satisfacer el test.
+
+**Reglas futuras del design system (Product Design + UX Writing + UI):**
+1. Navegación global solo para módulos; controles de tarea dentro de su contexto. Un sidebar se justifica para muchas categorías (p. ej., Ajustes), no para duplicar cuatro módulos.
+2. Cada sección debe responder «¿qué hago aquí?» mediante título corto, estado resumido y acción principal. Evitar tres sinónimos del mismo resultado.
+3. Párrafos de explicación largos van en Guía o ayuda contextual; titulares y etiquetas no deben ser bloques en mayúsculas.
+4. Basar espaciado y tipografía en tokens existentes y simetría de columnas; mantener rango legible de línea en ambas lenguas y permitir que EN ocupe más espacio.
+5. Elementos interactivos identificables por teclado, con `aria`, `hidden`, foco y Light/Dark. Nunca sacrificar lógica por rediseño cosmético.
+6. Cualquier texto nuevo debe entrar al catálogo bilingüe `ui.json`, sin traducción por coincidencias heurísticas cuando se crea un componente nuevo.
+7. Antes de aprobar, correr pruebas matemáticas, Minería, navegador real, ES/EN y tamaño móvil. No afirmar publicación hasta éxito de Actions/Pages.
+
+**Estado:** cambios de fuente subidos a `main` y validados por GitHub Actions según su ejecución más reciente; mantener la confirmación de despliegue separada del push. No cambian `computePlan`, brokerage/tax, Buyback, import margin, couriers, ESI ni ninguna fórmula monetaria.
