@@ -40,7 +40,6 @@ function paintPicker(P){
   if(valid.length>1&&valid.some(x=>x.m===cur)){
     const benchmark=valid.reduce((best,x)=>x.t.net>best.t.net?x:best);
     const gap=Math.max(0,benchmark.t.net-chosen.t.net);
-    const title=el('div','pk-opp-head',tx('picker.why'));
     const grid=el('div','pk-opp-grid');
     const stat=(label,value,cl='')=>{
       const node=el('div','pk-opp-stat');
@@ -58,11 +57,10 @@ function paintPicker(P){
       stat(tx('picker.gap'),'−'+fmt(gap),'neg');
       stat(tx('picker.higherNet'),(S.lang==='en'?trS(benchmark.l):benchmark.l)+' · '+fmt(benchmark.t.net));
     }
-    opportunity.append(title,grid);opportunity.hidden=false;
+    opportunity.append(grid);opportunity.hidden=false;
   }else{
     opportunity.hidden=false;
-    opportunity.append(el('div','pk-opp-head',tx('picker.why')),
-      el('p','pk-opp-explain',tx('picker.insufficient')));
+    opportunity.append(el('p','pk-opp-explain',tx('picker.insufficient')));
   }
 
   // Keep the detailed plan comparison accessible without using vertical space
