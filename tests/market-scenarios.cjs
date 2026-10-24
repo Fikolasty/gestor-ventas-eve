@@ -143,7 +143,7 @@ assert(salesHTML.includes('class="brand-wordmark">SIGMA GRINDSET</span>'));
 assert(!salesHTML.includes('SIGMA GRINDSET <small>EVE Online</small>'));
 assert(!salesHTML.includes('Herramienta para gestionar tus planes de mercado.'));
 assert(salesHTML.includes('class="hero-referral hero-referral-pill"'),'Static referral pill is present');
-assert(salesHTML.includes('class="hero-referral-offer">1,000,000 SP GRATIS</span>'),'Static SP offer is present');
+assert(salesHTML.includes('class="hero-referral-offer" data-i18n="referral.freeSp">1,000,000 SP GRATIS</span>'),'Keyed static SP offer is present');
 assert(!salesHTML.includes('class="tk-track"'),'Legacy scrolling ticker is absent');
 assert(!salesHTML.includes('class="ref-tag">Gratis</span>'),'No Gratis badge in referral');
 assert.equal((salesHTML.match(/data-link="referral"/g)||[]).length,1,'Unique referral link');
