@@ -291,6 +291,18 @@ const MineUI=(()=>{
   const HTML=
    '<div class="mn-toolbar">'+
   '<div class="mn-views">'+SEG('view',[['ships','Rendimiento Nave'],['plan','Plan Omega'],['max','Nave Maxeada']])+'</div>'+
+
+  '<section class="mn-reading-path" aria-labelledby="mnReadingTitle">'+
+    '<span class="mn-reading-eyebrow" data-i18n="mining.guideEyebrow">GUÍA INTERACTIVA · MINERÍA EN NULLSEC</span>'+
+    '<h2 id="mnReadingTitle" data-i18n="mining.guideTitle">De tu primera barge a tu primera Omega</h2>'+
+    '<p class="mn-reading-intro" data-i18n="mining.guideIntro">Empieza con tu nave, compara tus números y descubre cuándo podrías pagar Omega. No son ingresos garantizados.</p>'+
+    '<ol class="mn-reading-chapters">'+
+      '<li><span class="mn-reading-index">01</span><div><h3 data-i18n="mining.guideOne">Tu primera nave</h3><p data-i18n="mining.guideOneText">Compara skills, fitting, producción y viajes.</p></div><button type="button" data-mining-jump="ships" data-i18n="mining.guideOneAction">Comparar naves</button></li>'+
+      '<li><span class="mn-reading-index">02</span><div><h3 data-i18n="mining.guideTwo">Tu primera Omega</h3><p data-i18n="mining.guideTwoText">Calcula horas, cuentas, PLEX y entrenamiento.</p></div><button type="button" data-mining-jump="plan" data-i18n="mining.guideTwoAction">Plan Omega</button></li>'+
+      '<li><span class="mn-reading-index">03</span><div><h3 data-i18n="mining.guideThree">Tu siguiente mejora</h3><p data-i18n="mining.guideThreeText">Compara el potencial de naves avanzadas.</p></div><button type="button" data-mining-jump="max" data-i18n="mining.guideThreeAction">Ver naves avanzadas</button></li>'+
+    '</ol>'+
+    '<p class="mn-reading-caution" data-i18n="mining.grossWarning">Los ISK/h mostrados no siempre descuentan impuestos, refinería o transporte: son estimaciones de producción, no necesariamente ganancia final.</p>'+
+  '</section>'+
   '<div class="mn-omega-tools" hidden>'+
     '<label class="mn-sp-toggle" for="mnFreeSpSwitch" title="Se necesita un enlace de invitación válido para reclamar los SP">'+
       '<input type="checkbox" id="mnFreeSpSwitch" class="mn-sp-checkbox" checked>'+
@@ -1261,7 +1273,9 @@ const MineUI=(()=>{
     $q('.mn-ice-note').textContent=note;
   }
 
-  function paint(){if(!root)return;scheduleMiningSave();S.cmpv=S.cmp?'1':'0';seg();paintPriceEditor();paintIceSettings();const scenario=$q('.mn-scenario-now');if(scenario)scenario.textContent=
+  function paint(){if(!root)return;scheduleMiningSave();S.cmpv=S.cmp?'1':'0';seg();
+    root.querySelectorAll('[data-mining-jump]').forEach(b=>b.setAttribute('aria-current',b.dataset.miningJump===S.view?'step':'false'));
+    paintPriceEditor();paintIceSettings();const scenario=$q('.mn-scenario-now');if(scenario)scenario.textContent=
       (S.shipClass==='exhumer'?'Exhumers':'Barges')+' · '+MATL[S.mat]+' · '+TL[S.tier]+' · Skills '+['','I','II','III','IV','V'][S.lv]+
       ' · Implantes '+(S.lv===3?'Sin':S.imp?S.imp+'%':'Sin')+' · '+(S.boost||'Sin boost')+' · '+(S.met==='isk'?'ISK/h':'m³/h');
     $q('.mn-omega-tools').hidden=S.view!=='plan';$q('.mn-v-ships').hidden=S.view!=='ships';$q('.mn-v-plan').hidden=S.view!=='plan';$q('.mn-v-max').hidden=S.view!=='max';
@@ -1360,6 +1374,12 @@ const MineUI=(()=>{
       if(!id)return;setManual(id,mat?S.base:'sell',null);paint();
     });
 
+    root.addEventListener('click',e=>{
+      const b=e.target.closest('[data-mining-jump]');if(!b)return;
+      if(!['ships','plan','max'].includes(b.dataset.miningJump))return;
+      S.view=b.dataset.miningJump;paint();needPrices();
+      $q('.mn-toolbar').scrollIntoView({behavior:'smooth',block:'start'});
+    });
     $q('.mn-skills-reload').addEventListener('click',()=>loadSkillBooks(true));
     $q('.mn-ice-market').addEventListener('change',e=>{S.iceLoc=e.target.value;paint();needPrices();});
     const unload=$q('#mnUnloadSec');
