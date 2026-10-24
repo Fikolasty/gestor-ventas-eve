@@ -142,6 +142,88 @@ document.querySelectorAll('[data-go-home]').forEach(node=>{
   updateModuleSidebar();
 })();
 
+// The market selector enhances the ORIGINAL #nullMarketMode select.
+// It never creates a second setting or bypasses the legacy change handler.
+const MARKET_OPTION_I18N=Object.freeze({
+  auto:'market.auto','HY-RWO':'market.hyrwo','UALX-3':'market.ualx','C-J6MT':'market.cj6mt'
+});
+function syncMarketPicker(){
+  const picker=$('marketPicker'),select=$('nullMarketMode'),current=$('marketCurrent');
+  if(!picker||!select||!current)return;
+  const value=Object.hasOwn(MARKET_OPTION_I18N,select.value)?select.value:'auto';
+  const key=MARKET_OPTION_I18N[value];
+  if(current.getAttribute('data-i18n')!==key)current.setAttribute('data-i18n',key);
+  const label=tx(key);
+  if(current.textContent!==label)current.textContent=label;
+  picker.querySelectorAll('[data-market-option]').forEach(option=>{
+    const selected=option.dataset.marketOption===value;
+    option.setAttribute('aria-selected',String(selected));
+    option.classList.toggle('is-selected',selected);
+  });
+}
+function initMarketPicker(){
+  const picker=$('marketPicker'),select=$('nullMarketMode'),
+        trigger=$('marketTrigger'),menu=$('marketOptions');
+  if(!picker||!select||!trigger||!menu||picker.dataset.ready)return;
+  picker.dataset.ready='true';
+  const options=[...menu.querySelectorAll('[data-market-option]')];
+  const close=(restoreFocus=false)=>{
+    menu.hidden=true;trigger.setAttribute('aria-expanded','false');
+    picker.classList.remove('is-open');
+    if(restoreFocus)trigger.focus();
+  };
+  const open=(focusSelected=false)=>{
+    menu.hidden=false;trigger.setAttribute('aria-expanded','true');
+    picker.classList.add('is-open');
+    if(focusSelected){
+      const selected=options.find(x=>x.dataset.marketOption===select.value)||options[0];
+      selected.focus();
+    }
+  };
+  const choose=option=>{
+    if(!option)return;
+    const value=option.dataset.marketOption;
+    if(!Object.hasOwn(MARKET_OPTION_I18N,value))return;
+    close(true);
+    if(select.value!==value){
+      select.value=value;
+      select.dispatchEvent(new Event('change',{bubbles:true}));
+    }else syncMarketPicker();
+  };
+  // Native fallback is kept if script fails before this exact point.
+  syncMarketPicker();
+  select.hidden=true;select.tabIndex=-1;trigger.hidden=false;
+  trigger.addEventListener('click',()=>menu.hidden?open(false):close(false));
+  trigger.addEventListener('keydown',event=>{
+    if(['ArrowDown','ArrowUp','Enter',' '].includes(event.key)){
+      event.preventDefault();open(true);
+      if(event.key==='ArrowUp')options.at(-1).focus();
+    }else if(event.key==='Escape'&&!menu.hidden){event.preventDefault();close(true);}
+  });
+  menu.addEventListener('click',event=>{
+    choose(event.target.closest('[data-market-option]'));
+  });
+  menu.addEventListener('keydown',event=>{
+    const pos=options.indexOf(document.activeElement);
+    const next=(index)=>options[(index+options.length)%options.length].focus();
+    if(event.key==='ArrowDown'){event.preventDefault();next(pos+1);}
+    else if(event.key==='ArrowUp'){event.preventDefault();next(pos-1);}
+    else if(event.key==='Home'){event.preventDefault();next(0);}
+    else if(event.key==='End'){event.preventDefault();next(options.length-1);}
+    else if(event.key==='Enter'||event.key===' '){
+      event.preventDefault();choose(document.activeElement.closest('[data-market-option]'));
+    }else if(event.key==='Escape'){event.preventDefault();close(true);}
+    else if(event.key==='Tab')close(false);
+  });
+  document.addEventListener('pointerdown',event=>{
+    if(!menu.hidden&&!picker.contains(event.target))close(false);
+  });
+  select.addEventListener('change',syncMarketPicker);
+  // Keep the popup attached to its trigger when modal scrolling changes layout.
+  window.addEventListener('resize',()=>{if(!menu.hidden)close(false);});
+}
+initMarketPicker();
+
 // v1.0.8: cada grupo de Ajustes es desplegable (empiezan cerrados); se abren con clic o Enter en su título
 document.querySelectorAll('#settings fieldset.st').forEach(f=>{const l=f.querySelector('legend');if(!l)return;f.classList.add('closed');
   l.tabIndex=0;l.setAttribute('role','button');l.setAttribute('aria-expanded','false');

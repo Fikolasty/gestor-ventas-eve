@@ -100,8 +100,23 @@
       <div class="st-sec"><h3 class="st-sec-t">Mercado principal</h3><p class="st-sec-i">Selecciona el mercado para los escenarios de venta local. Los destinos de envío y la refinería se configuran por separado.</p></div>
       <fieldset class="st"><legend><span class="st-tt">Mercado principal<small class="st-sum">Automático o manual</small></span></legend>
         <p class="st-i">El modo automático utiliza la alianza del personaje conectado. Puedes elegir otro mercado manualmente. Por ahora, cambiar de sistema adapta las rutas y etiquetas; los precios locales siguen siendo estimaciones según tus Ajustes, no cotizaciones directas de esas estructuras.</p>
-        <div class="st-g">
-          <label class="st-f"><span class="st-l">Selección del mercado</span><select id="nullMarketMode"><option value="auto">Automático según alianza</option><option value="HY-RWO">HY-RWO · SIGMA</option><option value="UALX-3">UALX-3 · BRAVE</option><option value="C-J6MT">C-J6MT · Goonswarm Federation</option></select></label>
+        <div class="st-g mm-market-grid">
+          <div class="st-f mm-market-field">
+            <span class="st-l" id="marketPickerLabel" data-i18n="market.pickerLabel">Mercado principal</span>
+            <div class="mm-market-picker" id="marketPicker">
+              <select id="nullMarketMode" aria-labelledby="marketPickerLabel"><option value="auto">Automático según alianza</option><option value="HY-RWO">HY-RWO · SIGMA</option><option value="UALX-3">UALX-3 · BRAVE</option><option value="C-J6MT">C-J6MT · Goonswarm</option></select>
+              <button class="mm-market-trigger" id="marketTrigger" type="button" aria-haspopup="listbox" aria-expanded="false" aria-controls="marketOptions" aria-labelledby="marketPickerLabel marketCurrent" hidden>
+                <span id="marketCurrent" class="mm-market-current" data-i18n="market.auto">Automático según alianza</span>
+                <span class="mm-market-chevron" aria-hidden="true"></span>
+              </button>
+              <div id="marketOptions" class="mm-market-options" role="listbox" aria-labelledby="marketPickerLabel" hidden>
+                <div class="mm-market-option" role="option" tabindex="-1" data-market-option="auto" data-i18n="market.auto" aria-selected="true">Automático según alianza</div>
+                <div class="mm-market-option" role="option" tabindex="-1" data-market-option="HY-RWO" data-i18n="market.hyrwo" aria-selected="false">HY-RWO · SIGMA</div>
+                <div class="mm-market-option" role="option" tabindex="-1" data-market-option="UALX-3" data-i18n="market.ualx" aria-selected="false">UALX-3 · BRAVE</div>
+                <div class="mm-market-option" role="option" tabindex="-1" data-market-option="C-J6MT" data-i18n="market.cj6mt" aria-selected="false">C-J6MT · Goonswarm</div>
+              </div>
+            </div>
+          </div>
           <div class="st-f"><span class="st-l">Mercado activo</span><strong id="nullMarketActive">HY-RWO</strong><small id="nullMarketNote">Mercado predeterminado hasta detectar una alianza.</small></div>
         </div>
       </fieldset>

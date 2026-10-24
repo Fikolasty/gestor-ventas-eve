@@ -82,6 +82,9 @@ const nullSystem=()=>NULL_MARKETS[activeNullMarket()].system;
 const refreshMarketControls=()=>{
   const sel=document.getElementById('nullMarketMode');if(!sel)return;
   sel.value=marketChoice;
+  // The original select remains the single saved setting and event source.
+  // Its visual enhancement must follow changes made by ESI/alliance detection.
+  if(typeof syncMarketPicker==='function')syncMarketPicker();
   document.getElementById('nullMarketActive').textContent=nullSystem();
   const importLabel=document.getElementById('importMarketLabel');if(importLabel)importLabel.textContent=nullSystem();
   const topMarket=document.querySelector('#mmTabs .mm-route-right');if(topMarket)topMarket.textContent=nullSystem();

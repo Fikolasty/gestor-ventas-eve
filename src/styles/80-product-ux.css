@@ -110,3 +110,74 @@ html.light #stepsPanel .stp-acts .pl-search{background-color:var(--surface-card)
   #stepsPanel .stp-main .pl-row>.p{grid-area:p;text-align:left}
   #stepsPanel .stp-main .pl-row>.a{grid-area:a}
 }
+
+/* Market selector — designed as one field, not mismatched native OS menus.
+   Native select remains the persisted source of truth when JS is unavailable. */
+#settings .st-market-grid{grid-template-columns:minmax(286px,1.18fr) minmax(210px,1fr)!important;gap:12px 14px!important}
+#settings .mm-market-field{min-width:0;overflow:visible!important;position:relative;z-index:3}
+#settings .mm-market-field .st-l{display:block;margin:0 0 9px;font:600 .78rem/1.38 var(--f-ui)!important;letter-spacing:0!important}
+#settings .mm-market-picker{position:relative;min-width:0;width:100%;isolation:isolate}
+#settings .mm-market-picker>select[hidden]{display:none!important}
+#settings .mm-market-trigger{
+  width:100%;min-width:0;min-height:44px;
+  display:flex;align-items:center;justify-content:space-between;gap:12px;
+  box-sizing:border-box;margin:0;padding:10px 13px;
+  border:1px solid var(--line2);border-radius:9px;
+  background:var(--surface-panel);color:var(--txt);
+  text-align:left;box-shadow:none;cursor:pointer;
+  font:500 .86rem/1.4 var(--f-ui);letter-spacing:0;
+  transition:border-color .15s ease,background-color .15s ease;
+}
+#settings .mm-market-trigger[hidden]{display:none!important}
+#settings .mm-market-trigger:hover,
+#settings .mm-market-picker.is-open .mm-market-trigger{
+  border-color:var(--ion);background:var(--surface-card);
+}
+#settings .mm-market-trigger:focus-visible{
+  outline:2px solid var(--ion);outline-offset:2px;
+}
+#settings .mm-market-current{display:block;min-width:0;white-space:normal;overflow-wrap:break-word}
+#settings .mm-market-chevron{
+  flex:0 0 8px;width:8px;height:8px;align-self:center;margin-right:3px;
+  border-right:1.5px solid currentColor;border-bottom:1.5px solid currentColor;
+  transform:rotate(45deg) translateY(-2px);opacity:.7;transition:transform .15s ease;
+}
+#settings .mm-market-picker.is-open .mm-market-chevron{transform:rotate(225deg) translate(-2px,0)}
+#settings .mm-market-options{
+  position:absolute;top:calc(100% + 5px);left:0;right:0;z-index:80;
+  min-width:100%;box-sizing:border-box;display:grid;gap:2px;
+  padding:5px;margin:0;border:1px solid var(--line2);border-radius:10px;
+  background:var(--surface-panel);box-shadow:0 16px 32px rgba(0,0,0,.24);
+  max-height:min(290px,45vh);overflow-y:auto;overscroll-behavior:contain;
+}
+#settings .mm-market-options[hidden]{display:none!important}
+#settings .mm-market-option{
+  width:100%;box-sizing:border-box;display:flex;align-items:center;
+  padding:10px 13px;min-height:44px;border:1px solid transparent;
+  border-radius:7px;cursor:pointer;color:var(--txt);
+  font:500 .86rem/1.4 var(--f-ui);letter-spacing:0;
+  white-space:normal;overflow-wrap:break-word;
+  background:transparent;outline:none;
+}
+#settings .mm-market-option:hover,
+#settings .mm-market-option:focus-visible{background:rgba(217,119,87,.09);border-color:rgba(217,119,87,.20)}
+#settings .mm-market-option.is-selected{
+  color:var(--txt);background:rgba(217,119,87,.12);
+}
+#settings .mm-market-option.is-selected:after{
+  content:"✓";margin-left:auto;padding-left:9px;font-weight:650;color:var(--ion);
+}
+html.light #settings .mm-market-trigger,
+html.light #settings .mm-market-options{background:#faf8f5;color:#322a25;border-color:rgba(68,55,47,.18)}
+html.light #settings .mm-market-trigger:hover,
+html.light #settings .mm-market-picker.is-open .mm-market-trigger{background:#fff}
+html.light #settings .mm-market-options{box-shadow:0 16px 32px rgba(48,37,29,.16)}
+html.light #settings .mm-market-option{color:#322a25}
+html.light #settings .mm-market-option.is-selected{background:rgba(161,86,55,.11)}
+@media(max-width:740px){
+  #settings .st-market-grid{grid-template-columns:minmax(0,1fr)!important}
+  #settings .mm-market-field{width:100%}
+}
+@media(prefers-reduced-motion:reduce){
+  #settings .mm-market-trigger,#settings .mm-market-chevron{transition:none}
+}

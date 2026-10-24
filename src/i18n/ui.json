@@ -658,5 +658,25 @@
   "mining.grossWarning": {
     "es": "Los ISK/h mostrados no siempre descuentan impuestos, refinería o transporte: son estimaciones de producción, no necesariamente ganancia final.",
     "en": "ISK/h may not include selling tax, reprocessing fees or shipping: it estimates production value, not necessarily final profit."
+  },
+  "market.pickerLabel": {
+    "es": "Mercado principal",
+    "en": "Home market"
+  },
+  "market.auto": {
+    "es": "Automático según alianza",
+    "en": "Automatic based on alliance"
+  },
+  "market.hyrwo": {
+    "es": "HY-RWO · SIGMA",
+    "en": "HY-RWO · SIGMA"
+  },
+  "market.ualx": {
+    "es": "UALX-3 · BRAVE",
+    "en": "UALX-3 · BRAVE"
+  },
+  "market.cj6mt": {
+    "es": "C-J6MT · Goonswarm",
+    "en": "C-J6MT · Goonswarm"
   }
 }
