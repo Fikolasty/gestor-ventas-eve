@@ -76,8 +76,10 @@ const user={flip:false,lang:'es'};
 const makeButton=()=>({classList:{toggle(){}},setAttribute(k,v){this[k]=v},querySelector(){return {textContent:''}}});
 const caption={replaceChildren(...nodes){written=nodes.map(x=>x.textContent).join('')},set textContent(value){written=String(value)},get textContent(){return written}};
 const controls={modeLiquidation:makeButton(),modeTrading:makeButton(),businessCaption:caption};
+const catalog=JSON.parse(fs.readFileSync('src/i18n/ui.json','utf8'));
 const renderBusiness=vm.runInNewContext(renderBody+'\nsyncBusinessMode;',{
   S:user,$:id=>controls[id],nullSystem:()=>currentHub,
+  tx:key=>catalog[key][user.lang],
   document:{createTextNode:text=>({textContent:text}),createElement:()=>({textContent:'',className:''})}
 });
 for(const hub of ['HY-RWO','UALX-3','C-J6MT']){
