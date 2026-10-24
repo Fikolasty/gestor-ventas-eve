@@ -5,7 +5,7 @@ const vm=require('node:vm');
 const assert=require('node:assert/strict');
 const source=fs.readFileSync('src/js/domain/planning.js','utf8');
 const start=source.indexOf('function mostProfitableMix(rows,Vall){');
-const end=source.indexOf('function computePlan(){',start);
+const end=source.indexOf('function protectBestSaleRoute(rows,Vall){',start);
 assert(start>=0&&end>start,'Expected reusable highest-net route optimizer');
 const body=source.slice(start,end);
 const freight=(volume,collateral)=>volume>0?300+0.01*volume+0.001*collateral:0;
