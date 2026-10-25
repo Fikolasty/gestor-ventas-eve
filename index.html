@@ -7,7 +7,7 @@
 <meta name="referrer" content="no-referrer">
 <title>Market Moves+ · SIGMA GRINDSET</title>
 <style>
-/* ================= Market Moves+ v1.0.126 =================
+/* ================= Market Moves+ v1.0.127 =================
    Paleta: azul de base, naranja = acción, verde/rojo = ganancia/pérdida.
    Sin backdrop-filter: el vidrio se finge con rgba + bordes. */
 *{box-sizing:border-box;margin:0;padding:0}
@@ -3884,6 +3884,105 @@ body:not(.is-flip) .fact-buy-order{display:none!important}
   margin:0;padding:14px 16px;border:1px solid var(--line2);border-radius:8px;
   background:var(--surface-card);color:var(--txt);font:500 .85rem/1.55 var(--f-ui);
 }
+
+/* v1.0.127 · Stage B.2 — quiet, keyboard-visible filters. This is only the
+   Sales plan selector; similarly named Mining controls keep their own styles. */
+#pSum .pk-tools .pk-flt{
+  display:inline-flex;align-items:stretch;gap:3px;min-width:0;max-width:100%;
+  padding:3px;border:1px solid var(--line2);border-radius:9px;
+  background:var(--surface-panel);box-shadow:none;
+}
+#pSum .pk-tools .pk-fb{
+  display:inline-flex;align-items:center;justify-content:center;gap:6px;
+  min-height:37px;padding:7px 11px;border:1px solid transparent;
+  border-radius:6px;background:transparent;color:var(--mut);
+  box-shadow:none;font:550 .79rem/1.25 var(--f-ui);
+  transition:background-color .15s ease,border-color .15s ease,color .15s ease;
+}
+#pSum .pk-tools .pk-fb small{
+  margin:0;color:var(--dim);font:500 .72rem/1 var(--f-num);
+}
+#pSum .pk-tools .pk-fb:not(.on):hover{
+  background:var(--hull);color:var(--txt);
+}
+#pSum .pk-tools .pk-fb.on{
+  background:var(--hull);color:var(--txt);border-color:var(--line2);
+  box-shadow:none;
+}
+#pSum .pk-tools .pk-fb.on small{color:var(--mut)}
+#pSum .pk-tools .pk-fb:focus-visible{
+  outline:2px solid var(--ion);outline-offset:2px;
+}
+
+/* Same native-select enhancement strategy used in Settings: a single
+   canonical #tradePurchaseMode with a neutral popup and native fallback. */
+.hero #heroIntro>#importControls{position:relative;z-index:40}
+.hero #heroIntro #importControls .mm-buy-basis{min-width:0}
+.hero #heroIntro #importControls .mm-trade-picker{
+  position:relative;min-width:132px;z-index:41;
+}
+.hero #heroIntro #importControls .mm-trade-picker>select[hidden]{display:none!important}
+.hero #heroIntro #importControls .mm-trade-trigger{
+  display:flex;align-items:center;justify-content:space-between;gap:13px;
+  width:100%;min-height:40px;padding:8px 12px;margin:0;
+  border:1px solid var(--line2);border-radius:8px;
+  background:var(--surface-panel);color:var(--txt);box-shadow:none;
+  font:550 .81rem/1.25 var(--f-ui);text-align:left;white-space:nowrap;
+  cursor:pointer;transition:border-color .15s ease,background-color .15s ease;
+}
+.hero #heroIntro #importControls .mm-trade-trigger[hidden]{display:none!important}
+.hero #heroIntro #importControls .mm-trade-trigger:hover,
+.hero #heroIntro #importControls .mm-trade-picker.is-open .mm-trade-trigger{
+  border-color:var(--mut);background:var(--hull);
+}
+.hero #heroIntro #importControls .mm-trade-trigger:focus-visible,
+.hero #heroIntro #importControls .mm-trade-option:focus-visible{
+  outline:2px solid var(--ion);outline-offset:2px;
+}
+.hero #heroIntro #importControls .mm-trade-chevron{
+  display:inline-block;flex:0 0 var(--mm-chevron-size);
+  width:var(--mm-chevron-size);height:var(--mm-chevron-size);
+  margin-right:3px;border-right:var(--mm-chevron-stroke) solid currentColor;
+  border-bottom:var(--mm-chevron-stroke) solid currentColor;
+  color:var(--mut);transform:rotate(45deg);transition:transform .18s ease;
+}
+.hero #heroIntro #importControls .mm-trade-picker.is-open .mm-trade-chevron{
+  transform:rotate(225deg);
+}
+.hero #heroIntro #importControls .mm-trade-options{
+  position:absolute;top:calc(100% + 5px);left:0;right:0;
+  z-index:80;display:grid;gap:2px;padding:5px;margin:0;
+  border:1px solid var(--line2);border-radius:8px;
+  background:var(--surface-panel);box-shadow:0 12px 24px rgba(0,0,0,.22);
+}
+.hero #heroIntro #importControls .mm-trade-options[hidden]{display:none!important}
+.hero #heroIntro #importControls .mm-trade-option{
+  display:flex;align-items:center;justify-content:space-between;
+  width:100%;min-height:40px;padding:8px 10px;
+  border:1px solid transparent;border-radius:6px;
+  background:transparent;color:var(--txt);box-shadow:none;
+  font:500 .81rem/1.25 var(--f-ui);text-align:left;white-space:nowrap;cursor:pointer;
+}
+.hero #heroIntro #importControls .mm-trade-option:hover,
+.hero #heroIntro #importControls .mm-trade-option:focus-visible{
+  background:var(--hull);
+}
+.hero #heroIntro #importControls .mm-trade-option.is-selected{
+  background:var(--hull);border-color:var(--line2);
+}
+.hero #heroIntro #importControls .mm-trade-option.is-selected::after{
+  content:"✓";margin-left:10px;color:var(--mut);font-weight:650;
+}
+@media(max-width:760px){
+  /* Every available route filter stays discoverable without sideways scrolling. */
+  #pSum .pk-tools{max-width:100%;overflow:visible;justify-content:flex-start}
+  #pSum .pk-tools .pk-flt{flex:1 1 auto;width:100%;flex-wrap:wrap}
+  #pSum .pk-tools .pk-fb{flex:1 1 auto;min-width:0}
+}
+@media(prefers-reduced-motion:reduce){
+  #pSum .pk-tools .pk-fb,.hero #heroIntro #importControls .mm-trade-trigger,
+  .hero #heroIntro #importControls .mm-trade-chevron{transition:none}
+}
 /* ===== tema claro (generado desde el oscuro por light.py) ===== */
 html.light{--header-surface:rgba(240,237,229,0.96);--ticker-surface:rgba(240,237,229,0.91);--ticker-hover:rgba(240,237,229,0.96);--surface-card:rgba(240,237,229,0.9);--surface-result:linear-gradient(180deg,rgba(240,237,229,0.91),rgba(240,237,229,0.96));--surface-panel:rgba(240,237,229,0.96);--void:#e4e3dd;--hull:#e2e0da;--hull2:#e0ded8;--line:rgba(31,30,29,0.114);--line2:rgba(31,30,29,0.125);--txt:#1c1c1a;--mut:#54524d;--dim:#6c6a64;--ion:#413f3c;--blue:#a39d8b;--clay:#c96442;--thrust:#a67526;--gain:#418b62;--loss:#a92c23}
 html.light body::after{background:repeating-linear-gradient(180deg,rgba(31,30,29,0.011) 0 1px,transparent 1px 3px),
@@ -4442,6 +4541,7 @@ html.light #pSum .pk-owner-guard{background:rgba(92,186,134,0.075)}
 html.light #pSum .pk-compress-action{border:1px solid rgba(217,119,87,0.463);background:rgba(217,119,87,0.112)}
 html.light #pSum .pk-compress-action:hover{background:rgba(217,119,87,0.2)}
 html.light #ledger{box-shadow:0 3px 9px rgba(0,0,0,0.029)!important}
+html.light .hero #heroIntro #importControls .mm-trade-options{box-shadow:0 12px 24px rgba(0,0,0,0.035)}
 .i-rock{--i:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 15l3-8 7-3 6 5-1 8-7 3-6-2z'/%3E%3Cpath d='M9 10l3 2 4-2M12 12v5'/%3E%3C/svg%3E")}
 /* Scope moderno para no contaminar el gestor de ventas. */
 @scope (#mining) {
@@ -5633,7 +5733,16 @@ html.light #help :is(.hp-c p,.hp-t>div>span){color:var(--mut)!important}
           <small id="importHelp" hidden>Elige si transportas los ítems desde Jita y ajusta el margen de venta en <span data-market-system>HY-RWO</span>.</small>
         </div>
         <div class="mm-import-actions">
-        <label class="mm-buy-basis" for="tradePurchaseMode"><span id="tradePurchaseLabel">Comprar a</span><select id="tradePurchaseMode" aria-label="Cómo comprar en Jita"><option value="sell">Jita Sell</option><option value="buy">Buy Order</option></select></label>
+        <div class="mm-buy-basis"><span id="tradePurchaseLabel">Comprar a</span>
+          <div class="mm-trade-picker" id="tradePurchasePicker">
+            <select id="tradePurchaseMode" aria-labelledby="tradePurchaseLabel"><option value="sell">Jita Sell</option><option value="buy">Buy Order</option></select>
+            <button type="button" class="mm-trade-trigger" id="tradePurchaseTrigger" aria-haspopup="listbox" aria-expanded="false" aria-controls="tradePurchaseOptions" aria-labelledby="tradePurchaseLabel tradePurchaseCurrent" hidden><span id="tradePurchaseCurrent">Jita Sell</span><span class="mm-trade-chevron" aria-hidden="true"></span></button>
+            <div class="mm-trade-options" id="tradePurchaseOptions" role="listbox" aria-labelledby="tradePurchaseLabel" hidden>
+              <button type="button" class="mm-trade-option" role="option" data-trade-option="sell" aria-selected="true">Jita Sell</button>
+              <button type="button" class="mm-trade-option" role="option" data-trade-option="buy" aria-selected="false">Buy Order</button>
+            </div>
+          </div>
+        </div>
         <label class="sw" id="shipLab" hidden title="Enviar: utiliza SIGMA Freight para llevar los items a HY-RWO. No enviar: venderás los items en Jita sin contabilizar transporte."><input type="checkbox" id="shipOn" checked><span class="sw-t" aria-hidden="true"></span><span id="shipTxt">Enviar</span></label>
         <label class="route-m" id="rtM" hidden title="Margen de importación: cuánto más que Jita Sell cobras en HY-RWO (neto, ya con taxes)."><span class="rm-l">Margen</span><span class="rm-f"><span class="rm-s">+</span><input type="number" id="fImpM" min="0" step="0.5" value="15" inputmode="decimal" aria-label="Margen al vender en HY-RWO, % neto sobre Jita Sell"><span class="rm-s">%</span></span></label>
         </div>
@@ -5993,13 +6102,13 @@ Contraband Freight = no</textarea><small>Una regla por línea: Nombre = tax tota
 <button type="button" class="totop" id="toTop" aria-label="Volver arriba" title="Volver arriba (Inicio)" hidden><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 14l6-6 6 6"/></svg></button>
 <footer class="foot">
   <p class="foot-sec"><span class="ic i-lock" aria-hidden="true"></span>Tu inventario no se guarda: al cerrar o recargar se borra. Solo tus Ajustes quedan en este navegador.</p>
-  <div class="foot-by">Creado por <b>Fiko McGivert</b> · Vanguardia DR · SIGMA GRINDSET · <span class="ver">v1.0.126</span></div>
+  <div class="foot-by">Creado por <b>Fiko McGivert</b> · Vanguardia DR · SIGMA GRINDSET · <span class="ver">v1.0.127</span></div>
 </footer>
 
 <script>
 'use strict';
 /* ============================================================
-   Market Moves+ v1.0.126 — SIGMA GRINDSET / Vanguardia DR
+   Market Moves+ v1.0.127 — SIGMA GRINDSET / Vanguardia DR
    Flujo:  pegado → items → carga (ESI: precios, volúmenes, historial) → verificación → plan → vista
      1. Pegado      parsePaste(): parser posicional de columnas de EVE (Name · Quantity · … · Volume · Est. Price).
      2. Carga       esiItems(): trae todo lo que falta; mientras carga, refresh() NO pinta (S.loading).
@@ -8852,7 +8961,13 @@ function paintPicker(P){
   if(!rest.length)others.append(el('p','pk-empty',tx('picker.empty')));
 }
 // Orden y filtro: solo repintan el selector, sin recalcular ISK.
-$('pkTools').addEventListener('click',e=>{const b=e.target.closest('[data-pkf]');if(!b||!lastP)return;pkView.filter=b.dataset.pkf;paintPicker(lastP);});
+$('pkTools').addEventListener('click',e=>{
+  const b=e.target.closest('[data-pkf]');if(!b||!lastP)return;
+  const hadFocus=document.activeElement===b;
+  pkView.filter=b.dataset.pkf;paintPicker(lastP);
+  // paintPicker replaces the controls: preserve keyboard focus on its live twin.
+  if(hadFocus)$('pkTools').querySelector('.pk-fb.on')?.focus({preventScroll:true});
+});
 $('pk').addEventListener('click',e=>{const b=e.target.closest('[data-pks]');if(!b||!lastP)return;e.stopPropagation();const k=b.dataset.pks;
   pkView=pkView.sort===k?{...pkView,dir:-pkView.dir}:{...pkView,sort:k,dir:k==='name'||k==='speed'||k==='ship'?1:-1};paintPicker(lastP);});
 $('pk').addEventListener('click',e=>{
@@ -9204,6 +9319,8 @@ function syncShipSwitch(){
   $('shipLab').title=S.lang==='en'?'Include alliance freight or compare sales without shipping.':'Incluye el courier de la alianza o compara ventas sin transportar.';
   $('tradePurchaseLabel').textContent=S.lang==='en'?'Purchase at':'Comprar a';
   $('tradePurchaseMode').title=S.lang==='en'?'Price used for purchases in Jita':'Precio utilizado para comprar en Jita';
+  syncTradePurchasePicker();
+  if(!isImport)closeTradePurchasePicker();
 }
 function setFlip(on){
   S.flip=!!on;S.planMode=null;czIdx=0;C.shipOn=true;$('shipOn').checked=true; // cambiar de ruta vuelve a contar el courier
@@ -9251,9 +9368,77 @@ $('businessSwitch').addEventListener('click',e=>{
 });
 $('tradePurchaseMode').addEventListener('change',e=>{
   if(!['buy','sell'].includes(e.target.value))return;
-  C.buyMode=e.target.value;refresh();
+  C.buyMode=e.target.value;syncTradePurchasePicker();refresh();
 });
 $('tradePurchaseMode').value=C.buyMode;
+/* Stage B.2: enhance the existing native select, never duplicate buyMode.
+   The select remains visible if enhancement fails and still receives change. */
+function syncTradePurchasePicker(){
+  const select=$('tradePurchaseMode'),trigger=$('tradePurchaseTrigger');
+  if(!select||!trigger)return;
+  const value=select.value==='buy'?'buy':'sell';
+  $('tradePurchaseCurrent').textContent=value==='buy'?'Buy Order':'Jita Sell';
+  trigger.title=select.title;
+  $('tradePurchaseOptions').querySelectorAll('[data-trade-option]').forEach(option=>{
+    const selected=option.dataset.tradeOption===value;
+    option.classList.toggle('is-selected',selected);
+    option.setAttribute('aria-selected',String(selected));
+  });
+}
+function closeTradePurchasePicker(restoreFocus=false){
+  const picker=$('tradePurchasePicker'),menu=$('tradePurchaseOptions'),trigger=$('tradePurchaseTrigger');
+  if(!picker||!menu||!trigger||menu.hidden)return;
+  menu.hidden=true;picker.classList.remove('is-open');
+  trigger.setAttribute('aria-expanded','false');
+  if(restoreFocus)trigger.focus();
+}
+function initTradePurchasePicker(){
+  const picker=$('tradePurchasePicker'),select=$('tradePurchaseMode'),
+    trigger=$('tradePurchaseTrigger'),menu=$('tradePurchaseOptions');
+  if(!picker||!select||!trigger||!menu||picker.dataset.ready)return;
+  const options=[...menu.querySelectorAll('[data-trade-option]')];
+  if(options.length!==2)return;
+  picker.dataset.ready='true';
+  const open=(focusSelected=false)=>{
+    menu.hidden=false;picker.classList.add('is-open');
+    trigger.setAttribute('aria-expanded','true');
+    if(focusSelected)(options.find(x=>x.dataset.tradeOption===select.value)||options[0]).focus();
+  };
+  const choose=option=>{
+    if(!option||!['buy','sell'].includes(option.dataset.tradeOption))return;
+    closeTradePurchasePicker(true);
+    if(select.value!==option.dataset.tradeOption){
+      select.value=option.dataset.tradeOption;
+      select.dispatchEvent(new Event('change',{bubbles:true}));
+    }else syncTradePurchasePicker();
+  };
+  syncTradePurchasePicker();
+  select.hidden=true;select.tabIndex=-1;trigger.hidden=false;
+  trigger.addEventListener('click',()=>menu.hidden?open():closeTradePurchasePicker());
+  trigger.addEventListener('keydown',event=>{
+    if(['ArrowDown','ArrowUp','Enter',' '].includes(event.key)){
+      event.preventDefault();open(true);
+      if(event.key==='ArrowUp')options.at(-1).focus();
+    }else if(event.key==='Escape'&&!menu.hidden){event.preventDefault();closeTradePurchasePicker(true);}
+  });
+  menu.addEventListener('click',event=>choose(event.target.closest('[data-trade-option]')));
+  menu.addEventListener('keydown',event=>{
+    const pos=options.indexOf(document.activeElement);
+    const focusAt=index=>options[(index+options.length)%options.length].focus();
+    if(event.key==='ArrowDown'){event.preventDefault();focusAt(pos+1);}
+    else if(event.key==='ArrowUp'){event.preventDefault();focusAt(pos-1);}
+    else if(event.key==='Home'){event.preventDefault();focusAt(0);}
+    else if(event.key==='End'){event.preventDefault();focusAt(options.length-1);}
+    else if(event.key==='Enter'||event.key===' '){event.preventDefault();choose(document.activeElement.closest('[data-trade-option]'));}
+    else if(event.key==='Escape'){event.preventDefault();closeTradePurchasePicker(true);}
+    else if(event.key==='Tab')closeTradePurchasePicker();
+  });
+  document.addEventListener('pointerdown',event=>{
+    if(!menu.hidden&&!picker.contains(event.target))closeTradePurchasePicker();
+  });
+  window.addEventListener('resize',()=>closeTradePurchasePicker());
+}
+initTradePurchasePicker();
 syncBusinessMode();
 $('shipOn').addEventListener('change',e=>{C.shipOn=e.target.checked;syncShipSwitch();S.planMode=null;czIdx=0;if(S.items.length)refreshNow();});
 const impSync=(src,dst)=>{const v=parseFloat($(src).value);if(!(v>=0))return;C.impM=v/100;$(dst).value=String(v);refresh();};
