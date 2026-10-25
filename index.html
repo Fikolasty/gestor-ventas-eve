@@ -7,7 +7,7 @@
 <meta name="referrer" content="no-referrer">
 <title>Market Moves+ · SIGMA GRINDSET</title>
 <style>
-/* ================= Market Moves+ v1.0.128 =================
+/* ================= Market Moves+ v1.0.129 =================
    Paleta: azul de base, naranja = acción, verde/rojo = ganancia/pérdida.
    Sin backdrop-filter: el vidrio se finge con rgba + bordes. */
 *{box-sizing:border-box;margin:0;padding:0}
@@ -4018,6 +4018,223 @@ body:not(.is-flip) .fact-buy-order{display:none!important}
   #pSum #pk>.pk-o::after,#pSum #flipBuy .fb2-more>summary::after,
   #vPlan .stp-chev,#ledger .lot-head .chev,.top .eve-identity-arrow{transition:none}
 }
+
+/* B.4 · Plan comparison lives in the header, on the same information axis as
+   the main route result. The card below is reserved for actual risk notices. */
+#pSum>.mm-plan-heading{
+  display:grid!important;grid-template-columns:minmax(0,1fr) minmax(260px,.93fr)!important;
+  grid-template-rows:auto!important;align-items:center!important;
+  column-gap:clamp(20px,3vw,38px)!important;row-gap:12px!important;
+  margin-bottom:19px!important;padding-bottom:17px;border-bottom:1px solid var(--line2);
+}
+#pSum>.mm-plan-heading::before{display:none!important;content:none!important}
+#pSum .mm-plan-heading-copy{min-width:0;grid-column:1}
+#pSum .mm-plan-heading-copy>.mm-title{
+  margin:0!important;font:800 var(--mm-type-heading)/1.2 var(--f-ui)!important;
+  letter-spacing:.035em!important;color:var(--txt);
+}
+#pSum .mm-plan-heading-copy>.mm-section-sub{
+  margin:5px 0 0!important;font:700 var(--mm-type-label)/1.45 var(--f-ui)!important;
+  letter-spacing:.075em!important;color:var(--mut)!important;
+}
+#pSum .mm-plan-heading-copy>.pk-summary{margin:7px 0 0!important;max-width:none}
+#pSum .mm-plan-comparison{
+  grid-column:2;min-width:0;padding:4px 0 4px 21px;
+  border-left:1px solid var(--line2);align-self:center;
+}
+#pSum .pk-headline-grid{display:grid;gap:7px}
+#pSum .pk-headline-stat{min-width:0}
+#pSum .pk-headline-stat small{
+  display:block;color:var(--mut);font:700 .7rem/1.4 var(--f-ui);
+  letter-spacing:.045em;text-transform:uppercase;
+}
+#pSum .pk-headline-stat strong{
+  display:block;margin-top:2px;font:750 clamp(.95rem,1.5vw,1.32rem)/1.3 var(--f-num);
+  color:var(--txt);overflow-wrap:anywhere;
+}
+#pSum .pk-headline-stat:first-child strong.pos{color:var(--gain)}
+#pSum .pk-headline-stat:first-child strong.neg{color:var(--loss)}
+#pSum .pk-headline-stat+.pk-headline-stat strong{font-size:.81rem;font-weight:600;line-height:1.45}
+#pSum .pk-headline-note{margin:0;color:var(--mut);font:500 .8rem/1.5 var(--f-ui)}
+#pSum #pkOpportunity .pk-opp-head{margin-bottom:8px!important}
+#pSum .mm-decision-grid:has(>#pkOpportunity[hidden]):has(>#unitCourierBox[hidden]){display:none}
+@media(max-width:760px){
+  #pSum>.mm-plan-heading{grid-template-columns:minmax(0,1fr)!important;row-gap:14px!important}
+  #pSum .mm-plan-comparison{grid-column:1;border-left:0;padding:13px 0 0;border-top:1px solid var(--line2)}
+  #pSum .pk-headline-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+}
+@media(max-width:480px){
+  #pSum .pk-headline-grid{grid-template-columns:minmax(0,1fr)}
+  #pSum .pk-headline-stat+.pk-headline-stat{padding-top:8px;border-top:1px solid var(--line)}
+}
+
+/* B.4 · Registered items: clean rows, meaningful action hierarchy and a
+   contract-inspired inset surface only for the unit price that can be copied.
+   All fine-detail controls remain lazy and behind native disclosures. */
+#ledger{--mm-item-inset:#1c1b1a}
+#ledger .ledger-tools{justify-content:space-between;margin:15px 0 13px}
+#ledger .ledger-tools .lead{flex:1 1 370px;max-width:68ch;font:450 .82rem/1.55 var(--f-ui)}
+#ledger .ledger-head{
+  display:flex!important;align-items:center!important;flex-wrap:wrap;justify-content:flex-start;
+  gap:5px 9px!important;grid-template-columns:none!important;
+  padding:8px 0 11px!important;border-bottom:1px solid var(--line2);
+}
+#ledger .ledger-sort-title{margin-right:6px;color:var(--mut);font:700 .69rem/1.4 var(--f-ui);letter-spacing:.055em}
+#ledger .ledger-head .ledger-sort{
+  display:inline-flex!important;flex:0 1 auto;width:auto;min-height:34px;
+  padding:6px 10px;border:1px solid transparent;border-radius:7px;
+  justify-content:center!important;text-align:center!important;
+  font:600 .76rem/1.3 var(--f-ui);white-space:nowrap;
+}
+#ledger .ledger-head .ledger-sort[data-active="true"]{border-color:var(--line2);background:var(--hull)}
+#ledger .ledger-head .ledger-sort:focus-visible{outline:2px solid var(--ion);outline-offset:1px}
+#ledger #lots .lot{
+  grid-template-columns:minmax(0,1fr) 36px;min-width:0;
+  border-bottom:1px solid var(--line2);padding:4px 0;
+}
+#ledger #lots .lot-head{
+  display:grid!important;grid-template-columns:minmax(0,1.35fr) minmax(150px,.9fr) minmax(145px,.95fr)!important;
+  grid-template-areas:none!important;align-items:center;gap:clamp(12px,2vw,25px)!important;
+  padding:11px 8px 11px 2px!important;cursor:default!important;min-width:0;
+  background:transparent!important;
+}
+#ledger #lots .lot-open{
+  display:grid;grid-template-columns:minmax(0,1fr) 11px;gap:12px;
+  align-items:center;min-width:0;width:100%;text-align:left;
+  background:transparent;border:0;color:var(--txt);padding:5px 2px;
+  cursor:pointer;border-radius:7px;
+}
+#ledger #lots .lot-open:hover .lot-name b{color:var(--ion)}
+#ledger #lots .lot-open:focus-visible{outline:2px solid var(--ion);outline-offset:2px}
+#ledger #lots .lot-info{display:flex;flex-direction:column;align-items:flex-start;gap:7px;min-width:0}
+#ledger #lots .lot-name{grid-area:auto!important;display:flex;align-items:center;flex-wrap:wrap;gap:3px 9px;min-width:0;width:100%}
+#ledger #lots .lot-name b{display:inline-flex;align-items:center;gap:10px;font:650 .96rem/1.35 var(--f-ui);min-width:0;overflow-wrap:anywhere}
+#ledger #lots .lot-name img.ti{width:34px;height:34px;max-width:none;flex:none;margin:0;border-radius:7px}
+#ledger #lots .lot-name .tag{margin:0;font-size:.68rem}
+#ledger #lots .lot-meta{display:flex;flex-wrap:wrap;gap:6px 12px;align-items:center;min-width:0}
+#ledger #lots .lot-qty{font:500 .79rem/1.4 var(--f-ui);color:var(--mut);white-space:nowrap}
+#ledger #lots .lot-dest{
+  justify-self:start;padding:2px 7px;border-radius:6px!important;
+  font:.72rem/1.4 var(--f-ui);white-space:normal;overflow-wrap:anywhere;
+  background:var(--hull)!important;border:1px solid var(--line2)!important;color:var(--txt)!important;
+}
+#ledger #lots .lot-dest.p-none{color:var(--loss)!important}
+#ledger #lots .lot-open .chev{grid-area:auto;justify-self:center;flex:none}
+#ledger #lots .lot-k{display:block;margin:0 0 7px;color:var(--mut);font:700 .68rem/1.35 var(--f-ui);letter-spacing:.035em}
+#ledger #lots .lot-pp{grid-area:auto!important;display:block;justify-self:stretch!important;min-width:0}
+#ledger #lots .lot-pp .copy{
+  width:100%!important;min-height:44px;margin:0!important;padding:9px 12px!important;
+  display:flex;align-items:center;justify-content:space-between;gap:10px;
+  color:var(--txt)!important;background:var(--mm-item-inset)!important;
+  border:1px solid var(--line2)!important;border-radius:8px!important;
+  font:650 .88rem/1.35 var(--f-num)!important;text-align:left!important;
+  white-space:normal!important;overflow-wrap:anywhere;cursor:copy;
+}
+#ledger #lots .lot-pp .copy::after{
+  content:"";width:17px;height:17px;flex:0 0 17px;opacity:.7;
+  background:currentColor;
+  -webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='8' y='8' width='12' height='12' rx='2'/%3E%3Cpath d='M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2'/%3E%3C/svg%3E") center/contain no-repeat;
+  mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='8' y='8' width='12' height='12' rx='2'/%3E%3Cpath d='M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2'/%3E%3C/svg%3E") center/contain no-repeat;
+}
+#ledger #lots .lot-pp .copy:hover:not(:disabled){background:var(--hull2)!important;border-color:var(--ion)!important}
+#ledger #lots .lot-pp .copy:focus-visible{outline:2px solid var(--ion);outline-offset:2px}
+#ledger #lots .lot-pp .copy:disabled{cursor:default;opacity:.65}
+#ledger #lots .lot-financial{min-width:0;display:block;text-align:right}
+#ledger #lots .lot-net{display:block;font:700 clamp(.87rem,1.15vw,1.03rem)/1.38 var(--f-num);overflow-wrap:anywhere}
+#ledger #lots .lot-net.pos{color:var(--txt)}
+#ledger #lots .lot-x{justify-self:end;align-self:center;margin:0;min-height:34px;min-width:34px}
+#ledger #lots .lot-body{
+  display:grid!important;grid-template-columns:minmax(0,1fr)!important;
+  gap:10px!important;padding:2px 14px 18px 9px!important;
+}
+#ledger #lots .lot-body>*{grid-column:1!important;grid-row:auto!important;min-width:0}
+#ledger #lots .lot-body>.lot-verdict[hidden]{display:none!important}
+#ledger #lots .lot-body>.prices,#ledger #lots .lot-detail-section{
+  border:1px solid var(--line2);border-radius:8px;background:var(--surface-panel);
+  padding:0!important;margin:0!important;overflow:hidden;
+}
+#ledger #lots .lot-body>.prices>summary,#ledger #lots .lot-detail-section>summary{
+  display:flex;align-items:center;gap:12px;list-style:none;cursor:pointer;
+  min-height:45px;padding:11px 14px!important;margin:0!important;
+  color:var(--txt)!important;font:650 .83rem/1.4 var(--f-ui)!important;
+}
+#ledger #lots .lot-body>.prices>summary::-webkit-details-marker,#ledger #lots .lot-detail-section>summary::-webkit-details-marker{display:none}
+#ledger #lots .lot-body>.prices>summary::after,#ledger #lots .lot-detail-section>summary::after{
+  content:"";margin-left:auto;width:var(--mm-chevron-size);height:var(--mm-chevron-size);
+  border-right:var(--mm-chevron-stroke) solid var(--mut);border-bottom:var(--mm-chevron-stroke) solid var(--mut);
+  transform:rotate(45deg);transition:transform .15s ease;
+}
+#ledger #lots .lot-body>.prices[open]>summary::after,#ledger #lots .lot-detail-section[open]>summary::after{transform:rotate(225deg)}
+#ledger #lots .lot-body>.prices>summary:focus-visible,#ledger #lots .lot-detail-section>summary:focus-visible{outline:2px solid var(--ion);outline-offset:-3px}
+#ledger #lots .lot-body>.prices[open]>summary,#ledger #lots .lot-detail-section[open]>summary{border-bottom:1px solid var(--line2)}
+#ledger #lots .lot-analysis .opts{display:grid;padding:13px 15px;gap:10px}
+#ledger #lots .lot-adjustments>.facts{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:13px!important;padding:15px!important;min-width:0}
+#ledger #lots .lot-adjustments>.facts>.fact{min-width:0;display:flex;flex-direction:column;gap:7px;color:var(--mut);font:.8rem/1.4 var(--f-ui)}
+#ledger #lots .lot-adjustments>.facts input{width:100%;height:40px;min-width:0;text-align:right}
+#ledger #lots .lot-adjustments>.facts b{color:var(--txt);font:650 .92rem var(--f-num)}
+#ledger #lots .lot-adjustments .gwrap{margin:0 15px 15px!important}
+#ledger #lots .lot-adjustments .gwrap>summary{color:var(--txt)!important;font:650 .78rem/1.4 var(--f-ui)!important}
+#ledger #lots .lot-adjustments .gwrap>summary::after{
+  width:var(--mm-chevron-size);height:var(--mm-chevron-size);
+  border-right:var(--mm-chevron-stroke) solid var(--mut);border-bottom:var(--mm-chevron-stroke) solid var(--mut);
+}
+#ledger #lots .lot-body>.prices{overflow-x:auto}
+#ledger #lots .lot-body>.prices table{min-width:600px}
+#ledger #lots .lot-body>.checks{margin:7px 0 0}
+html.light #ledger{--mm-item-inset:#eeece8}
+html.light #ledger #lots .lot-body>.prices,html.light #ledger #lots .lot-detail-section{background:var(--surface-card)}
+html.light #ledger #lots .lot-pp .copy{background:var(--mm-item-inset)!important;box-shadow:none!important}
+html.light #ledger #lots .lot-pp .copy:hover:not(:disabled){background:#e3e0da!important}
+@media(max-width:980px){
+  #ledger #lots .lot-head{grid-template-columns:minmax(0,1fr) minmax(155px,.9fr)!important;gap:12px!important}
+  #ledger #lots .lot-financial{grid-column:1/-1;display:flex;align-items:baseline;justify-content:flex-end;gap:12px;text-align:right}
+  #ledger #lots .lot-financial .lot-k{margin:0}
+}
+@media(max-width:600px){
+  #ledger #lots .lot-head{grid-template-columns:minmax(0,1fr)!important;grid-template-areas:none!important;padding:10px 7px 12px 2px!important}
+  #ledger #lots .lot-pp{justify-self:stretch!important}
+  #ledger #lots .lot-financial{grid-column:1;flex-direction:column;justify-content:flex-start;align-items:flex-start;gap:4px;text-align:left}
+  #ledger #lots .lot-adjustments>.facts{grid-template-columns:minmax(0,1fr)!important}
+  #ledger #lots .lot-body{padding:2px 6px 13px!important}
+  #ledger .ledger-sort-title{flex:1 1 100%}
+  /* Price routes become readable single-column records, not a clipped desktop table. */
+  #ledger #lots .lot-body>.prices{overflow-x:hidden}
+  #ledger #lots .lot-body>.prices table{min-width:0;width:100%;display:block}
+  #ledger #lots .lot-body>.prices tbody{display:block;width:100%}
+  #ledger #lots .lot-body>.prices .pr-h{display:none}
+  #ledger #lots .lot-body>.prices tr.pr-route{
+    display:grid;grid-template-columns:minmax(0,1fr);
+    gap:8px;padding:13px 12px;border-bottom:1px solid var(--line2);
+  }
+  #ledger #lots .lot-body>.prices tr.pr-route>td{
+    display:block;min-width:0;padding:0!important;border:0!important;
+    text-align:left!important;white-space:normal!important;
+  }
+  #ledger #lots .lot-body>.prices tr.pr-route>td:first-child{grid-column:1;font-size:.86rem}
+  #ledger #lots .lot-body>.prices tr.pr-route>td:nth-child(2){grid-column:1;grid-row:2}
+  #ledger #lots .lot-body>.prices tr.pr-route>td:nth-child(4){grid-column:1;grid-row:3;font-weight:650}
+  #ledger #lots .lot-body>.prices tr.pr-route>td:nth-child(3){grid-column:1;grid-row:4;font-size:.74rem;line-height:1.5;color:var(--mut)}
+  #ledger #lots .lot-body>.prices tr.pr-route>td[data-label]::before{
+    content:attr(data-label);display:block;margin-bottom:5px;
+    color:var(--mut);font:700 .62rem/1.4 var(--f-ui);letter-spacing:.025em;
+  }
+  #ledger #lots .lot-body>.prices tr.pr-route .copy{
+    display:block;width:100%!important;min-width:0!important;text-align:left!important;
+    padding:8px!important;white-space:normal;overflow-wrap:anywhere;
+    background:var(--mm-item-inset)!important;
+  }
+  #ledger #lots .lot-body>.prices tr.pr-route>td:nth-child(4){overflow-wrap:anywhere}
+  #ledger #lots .lot-body>.prices tr.pr-route.pr-best{background:rgba(92,186,134,.045)!important}
+  #ledger #lots .lot-body>.prices tr.pr-local-manual,
+  #ledger #lots .lot-body>.prices tr.pr-local-manual>td{display:block;width:100%}
+  #ledger #lots .lot-body>.prices .pr-manual-editor{padding:13px 12px}
+  #ledger #lots .lot-body>.prices .pr-manual-editor label{flex:1 1 100%}
+  #ledger #lots .lot-body>.prices .pr-manual-editor input{flex:1 1 112px;width:auto}
+  #ledger #lots .lot-body>.prices tr:not(.pr-route) td[colspan="4"]{display:block;white-space:normal;padding:10px 12px}
+}
+@media(prefers-reduced-motion:reduce){
+  #ledger #lots .lot-body>.prices>summary::after,#ledger #lots .lot-detail-section>summary::after{transition:none}
+}
 /* ===== tema claro (generado desde el oscuro por light.py) ===== */
 html.light{--header-surface:rgba(240,237,229,0.96);--ticker-surface:rgba(240,237,229,0.91);--ticker-hover:rgba(240,237,229,0.96);--surface-card:rgba(240,237,229,0.9);--surface-result:linear-gradient(180deg,rgba(240,237,229,0.91),rgba(240,237,229,0.96));--surface-panel:rgba(240,237,229,0.96);--void:#e4e3dd;--hull:#e2e0da;--hull2:#e0ded8;--line:rgba(31,30,29,0.114);--line2:rgba(31,30,29,0.125);--txt:#1c1c1a;--mut:#54524d;--dim:#6c6a64;--ion:#413f3c;--blue:#a39d8b;--clay:#c96442;--thrust:#a67526;--gain:#418b62;--loss:#a92c23}
 html.light body::after{background:repeating-linear-gradient(180deg,rgba(31,30,29,0.011) 0 1px,transparent 1px 3px),
@@ -4577,6 +4794,8 @@ html.light #pSum .pk-compress-action{border:1px solid rgba(217,119,87,0.463);bac
 html.light #pSum .pk-compress-action:hover{background:rgba(217,119,87,0.2)}
 html.light #ledger{box-shadow:0 3px 9px rgba(0,0,0,0.029)!important}
 html.light .hero #heroIntro #importControls .mm-trade-options{box-shadow:0 12px 24px rgba(0,0,0,0.035)}
+html.light #ledger{--mm-item-inset:#e7e5e1}
+@media(max-width:600px){html.light #ledger #lots .lot-body>.prices tr.pr-route.pr-best{background:rgba(92,186,134,0.056)!important}}
 .i-rock{--i:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 15l3-8 7-3 6 5-1 8-7 3-6-2z'/%3E%3Cpath d='M9 10l3 2 4-2M12 12v5'/%3E%3C/svg%3E")}
 /* Scope moderno para no contaminar el gestor de ventas. */
 @scope (#mining) {
@@ -5953,18 +6172,17 @@ Contraband Freight = no</textarea><small>Una regla por línea: Nombre = tax tota
   <details class="panel thin fold" id="ledger" hidden>
     <summary><h2 class="mm-title">LISTADO DE ITEMS REGISTRADOS</h2><span class="cnt" id="lCount"></span><span class="mm-missing" id="missCount" hidden></span><span class="status" id="esiStatus" role="status"></span></summary>
     <div class="ledger-tools">
-      <p class="lead">Abre un item para consultar la guía, comparar mercados o cambiar sus datos. Haz clic en un encabezado para ordenar la lista.</p>
+      <p class="lead" data-i18n="ledger.intro">Consulta la mejor ruta de cada ítem. Copia el precio por unidad o abre sus opciones para comparar y ajustar.</p>
       <button class="ghost" id="bEsi"><span class="ic i-sync" aria-hidden="true"></span>Actualizar Precios</button>
     </div>
     <!-- v103: ordenar el ledger es independiente de los filtros por recomendación de Qué Hacer.
          Los botones aplican orden al libro completo; nunca recalculan ISK ni cambian el plan. -->
     <div class="ledger-head" role="group" aria-label="Ordenar tus items">
-      <button type="button" class="ledger-sort" data-lsort="n" aria-label="Ordenar por nombre">Item <span class="sort-arrow" aria-hidden="true"></span></button>
-      <span class="ledger-col">Precio Unidad</span>
-      <button type="button" class="ledger-sort" data-lsort="q" aria-label="Ordenar por cantidad">Cantidad <span class="sort-arrow" aria-hidden="true"></span></button>
-      <button type="button" class="ledger-sort" data-lsort="d" aria-label="Ordenar por destino de venta">Qué Hacer <span class="sort-arrow" aria-hidden="true"></span></button>
-      <button type="button" class="ledger-sort" data-lsort="a" aria-label="Ordenar por ISK netos">Ganancia <span class="sort-arrow" aria-hidden="true"></span></button>
-      <span></span>
+      <span class="ledger-sort-title" data-i18n="ledger.sortBy">ORDENAR POR</span>
+      <button type="button" class="ledger-sort" data-lsort="n" aria-label="Ordenar por nombre"><span data-i18n="ledger.name">Nombre</span> <span class="sort-arrow" aria-hidden="true"></span></button>
+      <button type="button" class="ledger-sort" data-lsort="q" aria-label="Ordenar por cantidad"><span data-i18n="ledger.quantity">Cantidad</span> <span class="sort-arrow" aria-hidden="true"></span></button>
+      <button type="button" class="ledger-sort" data-lsort="d" aria-label="Ordenar por destino de venta"><span data-i18n="ledger.route">Ruta</span> <span class="sort-arrow" aria-hidden="true"></span></button>
+      <button type="button" class="ledger-sort" data-lsort="a" aria-label="Ordenar por ISK netos"><span data-i18n="ledger.netSort">Neto del lote</span> <span class="sort-arrow" aria-hidden="true"></span></button>
     </div>
     <div id="lots"></div>
   </details>
@@ -5989,7 +6207,7 @@ Contraband Freight = no</textarea><small>Una regla por línea: Nombre = tax tota
 
   <!-- 1. Resultado simple -->
   <section class="summary res mm-plan-area" id="pSum" hidden>
-    <header class="mm-section-head"><h2 class="mm-title">ELIGE TU PLAN</h2><p class="mm-section-sub">COMPARA LAS OTRAS RUTAS Y ELIGE LA QUE TE CONVIENE</p><p class="pk-summary" id="pkNote" aria-live="polite"></p></header>
+    <header class="mm-section-head mm-plan-heading"><div class="mm-plan-heading-copy"><h2 class="mm-title">ELIGE TU PLAN</h2><p class="mm-section-sub">COMPARA LAS OTRAS RUTAS Y ELIGE LA QUE TE CONVIENE</p><p class="pk-summary" id="pkNote" aria-live="polite"></p></div><div class="mm-plan-comparison" id="pkHeadline" aria-live="polite" hidden></div></header>
     <div class="fb2" id="flipBuy" hidden></div>
     <div class="pk-w">
       <div class="pk" id="pk" role="group" aria-label="Plan seleccionado"></div>
@@ -6144,13 +6362,13 @@ Contraband Freight = no</textarea><small>Una regla por línea: Nombre = tax tota
 <button type="button" class="totop" id="toTop" aria-label="Volver arriba" title="Volver arriba (Inicio)" hidden><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 14l6-6 6 6"/></svg></button>
 <footer class="foot">
   <p class="foot-sec"><span class="ic i-lock" aria-hidden="true"></span>Tu inventario no se guarda: al cerrar o recargar se borra. Solo tus Ajustes quedan en este navegador.</p>
-  <div class="foot-by">Creado por <b>Fiko McGivert</b> · Vanguardia DR · SIGMA GRINDSET · <span class="ver">v1.0.128</span></div>
+  <div class="foot-by">Creado por <b>Fiko McGivert</b> · Vanguardia DR · SIGMA GRINDSET · <span class="ver">v1.0.129</span></div>
 </footer>
 
 <script>
 'use strict';
 /* ============================================================
-   Market Moves+ v1.0.128 — SIGMA GRINDSET / Vanguardia DR
+   Market Moves+ v1.0.129 — SIGMA GRINDSET / Vanguardia DR
    Flujo:  pegado → items → carga (ESI: precios, volúmenes, historial) → verificación → plan → vista
      1. Pegado      parsePaste(): parser posicional de columnas de EVE (Name · Quantity · … · Volume · Est. Price).
      2. Carga       esiItems(): trae todo lo que falta; mientras carga, refresh() NO pinta (S.loading).
@@ -6271,7 +6489,7 @@ refreshMarketControls();
 // Central ES/EN catalog. All newly authored dynamic labels should use tx()
 // rather than concatenating translated fragments or maintaining parallel strings.
 // The build embeds src/i18n/ui.json here (no network request or extra script).
-const UI_TEXT={"verdict.recommendedRoute":{"es":"Ruta recomendada","en":"Recommended route"},"verdict.selectedRoute":{"es":"Ruta elegida","en":"Selected route"},"verdict.estimateSale":{"es":"Estimación según cotizaciones y ajustes; una orden puede tardar en venderse.","en":"Estimate based on quotes and settings; sell orders may take time to fill."},"verdict.estimateTrade":{"es":"Beneficio estimado tras compra y gastos; las órdenes podrían no completarse.","en":"Estimated profit after purchase and costs; orders may not fill."},"verdict.inspectBreakdown":{"es":"Ver distribución de ingresos y destinos","en":"See proceeds and destinations breakdown"},"verdict.showSteps":{"es":"Ver pasos para vender","en":"View selling steps"},"verdict.stepsDescription":{"es":"Contratos, destinos y precios por ítem","en":"Contracts, destinations and item prices"},"freight.noCost":{"es":"0 ISK · sin courier","en":"0 ISK · no courier"},"freight.noShipment":{"es":"La ruta seleccionada no tiene gastos de courier asignados.","en":"The selected route has no allocated courier charges."},"freight.unallocated":{"es":"Hay un coste de envío, pero no se pudo distribuir entre los ítems. Consulta el plan detallado.","en":"Shipping has a cost, but it could not be allocated to items. Check the detailed plan."},"freight.showOthers":{"es":"Ver {count} ítems enviados más","en":"Show {count} more shipped items"},"refinery.missingQuote":{"es":"Faltan precios del ore o de los productos, o no hay una tarifa válida. Revisa Ajustes y actualiza precios.","en":"Ore or product prices are missing, or the refinery fee is invalid. Check Settings and refresh prices."},"refinery.estimatedFee":{"es":"− Tarifa estimada de refinería ({percent}%)","en":"− Estimated refinery fee ({percent}%)"},"refinery.rawEstimate":{"es":"Cantidad recuperada según rendimiento ({yield}%); tarifa de {refinery} estimada al {fee}% del valor de referencia de los minerales y descontada en ISK. Sin impuestos de mercado ni envío.","en":"Recovered quantities use the {yield}% yield; {refinery}'s fee is estimated at {fee}% of the minerals' reference value, deducted in ISK. Excludes market taxes and shipping."},"refinery.ledgerEstimate":{"es":"Valor estimado a Jita Sell (tarifa de refinería en ISK, {fee}%): ore {ore} → productos {products} ({diff}, {percent}%).","en":"Estimated Jita Sell value (refinery fee in ISK, {fee}%): ore {ore} → products {products} ({diff}, {percent}%)."},"picker.plan":{"es":"PLAN","en":"PLAN"},"picker.speed":{"es":"RAPIDEZ","en":"SPEED"},"picker.shipping":{"es":"ENVÍO","en":"SHIPPING"},"picker.value":{"es":"VALOR","en":"VALUE"},"picker.total":{"es":"TOTAL","en":"TOTAL"},"picker.profit":{"es":"BENEFICIO","en":"PROFIT"},"picker.difference":{"es":"VS. ÓPTIMO","en":"VS. OPTIMAL"},"picker.optimal":{"es":"Óptimo","en":"Optimal"},"picker.same":{"es":"Igual","en":"Same"},"picker.recommended":{"es":"MÁS ISK","en":"MOST ISK"},"picker.yes":{"es":"Sí","en":"Yes"},"picker.no":{"es":"No","en":"No"},"picker.fast":{"es":"Inmediato","en":"Immediate"},"picker.mixed":{"es":"Mixto","en":"Mixed"},"picker.uncertain":{"es":"Incierto","en":"Uncertain"},"picker.days":{"es":"Días","en":"Days"},"picker.shippingDays":{"es":"Envío + días","en":"Shipping + days"},"picker.shippingRange":{"es":"Envío {range} d","en":"Shipping {range} d"},"picker.shippingWeeks":{"es":"Envío + 1–2 semanas","en":"Shipping + 1–2 weeks"},"picker.weeks":{"es":"1–2 semanas","en":"1–2 weeks"},"picker.approxOneDay":{"es":"~1 día","en":"~1 day"},"picker.selected":{"es":"Plan seleccionado","en":"Selected plan"},"picker.showAlternatives":{"es":"Ver otras rutas","en":"Show other routes"},"picker.hideAlternatives":{"es":"Ocultar otras rutas","en":"Hide other routes"},"picker.sortBy":{"es":"Ordenar por {label}","en":"Sort by {label}"},"picker.filters":{"es":"Filtrar planes","en":"Filter plans"},"picker.empty":{"es":"Ninguna ruta coincide con este filtro.","en":"No routes match this filter."},"picker.all":{"es":"Todos","en":"All"},"picker.fastFilter":{"es":"Rápidos","en":"Fast"},"picker.noShipping":{"es":"Sin envío","en":"No shipping"},"picker.reprocessing":{"es":"Con reproceso","en":"Reprocessing"},"picker.bestDesc":{"es":"La combinación que te deja más ISK según los precios y gastos disponibles.","en":"The mix that leaves you with the most ISK based on available prices and costs."},"picker.localDesc":{"es":"Venta local sin courier.","en":"Local sale without freight."},"picker.jitaOrdersDesc":{"es":"Órdenes de venta en Jita.","en":"Jita sell orders."},"picker.instantDesc":{"es":"Venta inmediata en Jita.","en":"Immediate sale in Jita."},"picker.buybackDesc":{"es":"Contrato de Buyback.","en":"Buyback contract."},"picker.playerDesc":{"es":"Oferta manual en Discord. No es una venta confirmada.","en":"Manual Discord offer. No confirmed buyer."},"picker.reprocessLocalDesc":{"es":"Reprocesar y vender localmente.","en":"Reprocess and sell locally."},"picker.reprocessJitaDesc":{"es":"Reprocesar y vender en Jita.","en":"Reprocess and sell in Jita."},"picker.compressOrderDesc":{"es":"Comprimir en origen, enviar y publicar orden en Jita.","en":"Compress at origin, ship and list in Jita."},"picker.compressInstantDesc":{"es":"Comprimir, enviar y vender a compras disponibles en Jita.","en":"Compress, ship and sell into available Jita buy orders."},"picker.compression":{"es":"Comprimido","en":"Compressed"},"picker.ownerGuard":{"es":"Se evitó enviar {name}: flete {freight} frente a una mejora para ti de solo {extra}. Se prioriza tu ganancia sobre el coste logístico.","en":"Shipping {name} was avoided: freight {freight} versus just {extra} of extra proceeds for you. Your gain takes priority over logistics costs."},"picker.importDesc":{"es":"Importar desde Jita.","en":"Import from Jita."},"picker.optimalSummary":{"es":"MÁXIMO NETO ESTIMADO · Elige otra ruta para comparar ingresos, tiempo y transporte.","en":"HIGHEST ESTIMATED NET · Select another route to compare proceeds, time and freight."},"picker.selectedSame":{"es":"MISMO NETO ESTIMADO QUE EL ÓPTIMO.","en":"SAME ESTIMATED NET AS OPTIMAL."},"picker.selectedDifference":{"es":"{difference} frente a la opción de más ISK.","en":"{difference} compared with the most-ISK option."},"picker.fallbackOne":{"es":"1 ítem no admite esta ruta; conserva su mejor alternativa.","en":"1 item cannot use this route and keeps its best alternative."},"picker.fallbackMany":{"es":"{count} ítems no admiten esta ruta; conservan su mejor alternativa.","en":"{count} items cannot use this route and keep their best alternatives."},"picker.nextBest":{"es":"OTRA FORMA DE VENDER","en":"ANOTHER WAY TO SELL"},"picker.why":{"es":"VER DIFERENCIAS DE ISK","en":"SEE ISK DIFFERENCES"},"picker.gap":{"es":"ISK QUE DEJAS DE GANAR","en":"ISK YOU GIVE UP"},"picker.gain":{"es":"ISK EXTRA","en":"EXTRA ISK"},"picker.advantage":{"es":"RENDIMIENTO ADICIONAL","en":"ADDITIONAL RETURN"},"picker.higherNet":{"es":"RUTA QUE DA MÁS ISK","en":"ROUTE THAT PAYS MORE"},"picker.insufficient":{"es":"No hay suficientes cotizaciones para comparar estas rutas.","en":"Not enough quoted prices to compare these routes."},"picker.quickNote":{"es":"La rapidez solo desempata rutas con ingresos prácticamente iguales.","en":"Speed breaks ties only when net proceeds are effectively equal."},"verdict.netSales":{"es":"VENTAS NETAS DESPUÉS DE TASAS","en":"NET SALES AFTER FEES"},"verdict.freight":{"es":"COSTE DE ENVÍO","en":"SHIPPING COST"},"verdict.investment":{"es":"INVERSIÓN DE COMPRA","en":"PURCHASE INVESTMENT"},"verdict.planTitle":{"es":"LA RUTA MÁS RENTABLE","en":"MOST PROFITABLE ROUTE"},"verdict.selectedTitle":{"es":"TU RUTA DE VENTA","en":"YOUR SELLING ROUTE"},"verdict.planSubtitle":{"es":"MÁXIMO INGRESO NETO ESTIMADO","en":"HIGHEST ESTIMATED NET PROCEEDS"},"verdict.selectedSubtitle":{"es":"INGRESOS NETOS DEL PLAN ELEGIDO","en":"SELECTED PLAN NET PROCEEDS"},"verdict.pending":{"es":"Esperando cotizaciones de Jita.","en":"Waiting for Jita quotes."},"verdict.accounting":{"es":"DESGLOSE DEL PLAN","en":"PLAN ACCOUNTING"},"module.sales":{"es":"Ventas","en":"Sales"},"module.mining":{"es":"Minería","en":"Mining"},"module.skills":{"es":"Planes de habilidades","en":"Skill Plans"},"module.settings":{"es":"Ajustes","en":"Settings"},"module.guide":{"es":"Guía de Uso","en":"User Guide"},"guide.gettingStarted":{"es":"Primeros pasos","en":"Getting started"},"guide.routes":{"es":"Rutas de venta","en":"Selling routes"},"guide.glossary":{"es":"Glosario","en":"Glossary"},"guide.privacy":{"es":"Privacidad y acceso a EVE","en":"Privacy and EVE access"},"units.isk":{"es":"ISK","en":"ISK"},"mining.outproduces":{"es":" produce más ({value}). Mayor autonomía: ","en":" produces more ({value}). Best capacity: "},"mining.minutesFill":{"es":" ({minutes} min hasta llenar).","en":" ({minutes} min until full)."},"mining.moreAutonomy":{"es":"Más autonomía: ","en":"Greater capacity: "},"mining.mostProfitable":{"es":"★ Más rentable","en":"★ Most profitable"},"mining.resultOne":{"es":"Resultado para 1 cuenta","en":"Result for 1 account"},"mining.resultMany":{"es":"Resultado para {count} cuentas","en":"Result for {count} accounts"},"mining.loading":{"es":"Consultando precios…","en":"Checking prices…"},"mining.noPrice":{"es":"Sin cotizaciones no se puede calcular; revisa ESI.","en":"Cannot calculate without quotes; check ESI."},"mining.priceMissing":{"es":"Faltan cotizaciones; puedes introducir precios manualmente.","en":"Some prices are missing; you can enter manual quotes."},"mining.priceReady":{"es":"Precios ESI/manuales. ESI se actualiza cada 5 minutos.","en":"ESI/manual prices. ESI refreshes every 5 minutes."},"mining.esiLoading":{"es":"Consultando precios de ESI…","en":"Loading ESI prices…"},"mining.unknown":{"es":"—","en":"—"},"route.auto":{"es":"Plan óptimo","en":"Optimal plan"},"route.fN":{"es":"Importar y vender en {system}","en":"Import and sell in {system}"},"route.fJ":{"es":"Vender con órdenes en Jita","en":"Sell with Jita orders"},"route.fJI":{"es":"Venta inmediata en Jita","en":"Instant sale in Jita"},"route.null":{"es":"Vender en {system}","en":"Sell in {system}"},"route.jOrd":{"es":"Vender con órdenes en Jita","en":"Sell with Jita orders"},"route.jInst":{"es":"Venta inmediata en Jita","en":"Instant sale in Jita"},"route.cOrd":{"es":"Comprimir y vender con orden en Jita","en":"Compress and list in Jita"},"route.cInst":{"es":"Comprimir y vender al instante en Jita","en":"Compress and sell instantly in Jita"},"route.bb":{"es":"Vender al Buyback","en":"Sell to Buyback"},"route.rNull":{"es":"Reprocesar y vender en {system}","en":"Reprocess and sell in {system}"},"route.rJita":{"es":"Reprocesar y vender en Jita","en":"Reprocess and sell in Jita"},"route.disc":{"es":"Vender a otro jugador","en":"Sell to another player"},"route.prefix":{"es":"la ruta «{name}»","en":"the “{name}” route"},"route.optimalPhrase":{"es":"el plan óptimo","en":"the optimal plan"},"picker.partial":{"es":" · {selected} de {total} ítems admiten esta ruta.","en":" · {selected} of {total} items support this route."},"freight.heading":{"es":"COSTE REAL DEL ENVÍO","en":"ACTUAL FREIGHT COST"},"freight.contractOne":{"es":"1 contrato","en":"1 contract"},"freight.contractMany":{"es":"{count} contratos","en":"{count} contracts"},"freight.qty":{"es":"{count} unidades","en":"{count} units"},"freight.base":{"es":"NETO ANTES DE ENVÍO / UD.","en":"NET BEFORE FREIGHT / UNIT"},"freight.increment":{"es":"ENVÍO / UD.","en":"FREIGHT / UNIT"},"freight.landed":{"es":"TE QUEDA / UD.","en":"YOU KEEP / UNIT"},"freight.totalLot":{"es":"TE QUEDA POR EL LOTE","en":"YOU KEEP FOR THE LOT"},"freight.totalCost":{"es":"Envío del lote: {amount}","en":"Lot freight: {amount}"},"freight.volume":{"es":"Carga transportada: {volume}","en":"Shipped cargo: {volume}"},"freight.derived":{"es":"Importe por cada unidad original: incluye procesamiento, tasas y envío. El producto transformado se cotiza por separado.","en":"Per original unit: includes processing, fees and shipping. The transformed product has its own market quote."},"freight.reference":{"es":"Recibes = venta neta tras tasas y proceso − envío real asignado. Una orden de venta no garantiza comprador inmediato.","en":"You keep = net sale after fees and processing − allocated actual freight. A sell order does not guarantee an immediate buyer."},"freight.more":{"es":"Ver cálculo por unidad","en":"See per-unit calculation"},"compress.settingsTitle":{"es":"Compresión de hielo","en":"Ice compression"},"compress.settingsHelp":{"es":"Esta ruta requiere compresión real disponible en origen. La cotización del hielo comprimido procede de ESI y no se supone igual al precio original.","en":"This route requires actual compression access at origin. Compressed ice uses its own ESI quote, never the original ice price."},"compress.enabled":{"es":"Puedo comprimir antes del envío","en":"I can compress before shipping"},"compress.enabledHelp":{"es":"Desactivado hasta que confirmes acceso a compresión.","en":"Off until you confirm compression access."},"compress.cost":{"es":"Coste de compresión por unidad (ISK)","en":"Compression cost per unit (ISK)"},"compress.costHelp":{"es":"0 significa compresión propia sin cargo; añade costes de servicio o combustible cuando correspondan.","en":"0 assumes no fee for your own compression; include service or fuel costs where applicable."},"compress.suggestion":{"es":"Hay cotización para hielo comprimido. Podría reducir considerablemente el envío; confirma acceso para que el motor lo compare.","en":"Compressed ice has a market quote. It may cut freight substantially; confirm access to include it in the comparison."},"compress.action":{"es":"Puedo comprimir · comparar","en":"I can compress · compare"},"compress.unitNote":{"es":"Compresión: {cost} por lote antes de enviar","en":"Compression: {cost} per lot before shipping"},"compress.orderQuote":{"es":"Orden de hielo comprimido en Jita","en":"Compressed ice sell order in Jita"},"compress.instantQuote":{"es":"Compra inmediata de hielo comprimido en Jita","en":"Immediate compressed ice buy order in Jita"},"compress.stepTitle":{"es":"Comprimir hielo antes del envío","en":"Compress ice before shipping"},"compress.stepBody":{"es":"Convierte cada unidad original en una unidad de hielo comprimido. Confirma acceso al servicio y su coste en Ajustes antes de crear el contrato.","en":"Turn each original unit into one compressed ice unit. Confirm access and cost in Settings before creating the courier contract."},"compress.arrivalTitle":{"es":"Al llegar: vender hielo comprimido","en":"On arrival: sell compressed ice"},"compress.arrivalBody":{"es":"Vende el producto comprimido, no el hielo original; verifica liquidez y precio al ejecutar.","en":"Sell the compressed product, not the original ice; verify liquidity and price before execution."},"compress.beforeFreight":{"es":"antes del transporte","en":"before freight"},"freight.missingQuote":{"es":"Precio base no disponible","en":"Base price unavailable"},"referral.newPilot":{"es":"NUEVO PILOTO","en":"NEW PILOT"},"referral.freeSp":{"es":"1,000,000 SP GRATIS","en":"1,000,000 FREE SP"},"referral.linkAria":{"es":"Abrir enlace de referido de EVE Online: un millón de Skill Points gratis","en":"Open EVE Online referral link: one million free Skill Points"},"settings.languageAria":{"es":"Idioma de la interfaz","en":"Interface language"},"referral.externalLink":{"es":"Abrir promoción","en":"Open offer"},"settings.resetConfirm":{"es":"¿Volver todos los Ajustes a los valores de fábrica?","en":"Reset all Settings to their defaults?"},"shared.copyPrompt":{"es":"Copia:","en":"Copy:"},"sso.missingClient":{"es":"El acceso oficial de EVE todavía no está configurado: Market Moves+ necesita su Client ID público de CCP.","en":"Official EVE login is not configured yet: Market Moves+ needs its public CCP Client ID."},"sso.loginOpenFailed":{"es":"No se pudo abrir el login oficial de EVE: {error}","en":"Could not open the official EVE login: {error}"},"css.volume":{"es":"Volumen","en":"Volume"},"css.shipping":{"es":"Envío","en":"Shipping"},"css.extraGain":{"es":"Gana extra","en":"Extra gain"},"css.reprocessed":{"es":"Reprocesado","en":"Reprocessed"},"css.unprocessed":{"es":"Sin reprocesar","en":"Unprocessed"},"css.units":{"es":" u.","en":" units"},"css.home":{"es":"Inicio","en":"Home"},"settings.overview":{"es":"Ajusta habilidades, impuestos y mercados. Los cambios se guardan en este navegador.","en":"Adjust skills, taxes and markets. Changes are saved in this browser."},"settings.languageHeading":{"es":"IDIOMA","en":"LANGUAGE"},"sales.modeSelectAria":{"es":"Seleccionar operación de ventas","en":"Choose sales operation"},"sales.modeHeading":{"es":"Operación","en":"Operation"},"sales.modeSell":{"es":"Vender Items","en":"Sell Items"},"sales.modeTrade":{"es":"Comercio Jita","en":"Jita Trading"},"picker.simpleQuick":{"es":"¿Quieres cobrar con menos espera?","en":"Want a quicker way to get paid?"},"picker.simpleQuickSub":{"es":"Esta opción evita esperar una orden de venta, pero deja menos ISK.","en":"This option avoids waiting for a sell order, but leaves you with less ISK."},"picker.simpleLoss":{"es":"{amount} menos","en":"{amount} less"},"picker.simpleView":{"es":"Ver esta alternativa","en":"See this alternative"},"picker.simpleShip":{"es":"Primero hay que enviar los ítems. El transporte también toma tiempo.","en":"Items must be shipped first. Delivery still takes time."},"picker.simpleNoShip":{"es":"Sin envío adicional. El pago depende de las órdenes o del Buyback.","en":"No extra shipping. Payment depends on orders or Buyback."},"picker.simplePartial":{"es":"Sirve para {count} de {total} ítems; los demás siguen su mejor ruta.","en":"Works for {count} of {total} items; the rest keep their best route."},"picker.simpleCurrent":{"es":"Ya tienes seleccionada una ruta rápida.","en":"You're already using a quick route."},"picker.netMeaningSell":{"es":"ISK que recibirías tras tasas y envío estimados.","en":"ISK you'd receive after estimated fees and shipping."},"picker.netMeaningTrade":{"es":"ISK que ganarías después de comprar y pagar los gastos estimados.","en":"ISK you'd earn after buying and paying estimated expenses."},"picker.bestEasy":{"es":"MÁS ISK","en":"MOST ISK"},"picker.quickTag":{"es":"COBRAR ANTES","en":"GET PAID SOONER"},"picker.quickFull":{"es":"Puede requerir envío; el plazo depende del mercado.","en":"May require shipping; timing depends on the market."},"picker.playerUnconfirmed":{"es":"Esta oferta depende de encontrar comprador. Aunque el importe sea mayor, no cuenta como la ruta automática de más ISK.","en":"This offer requires finding a buyer. Even if the asking price is higher, it does not count as the automatic most-ISK route."},"player.lastResortNames":{"es":"Último recurso: ofrecer a otro jugador los ítems {items}. La venta no está garantizada.","en":"Last resort: offer {items} to another player. The sale is not guaranteed."},"player.lastResortGuide":{"es":"Último recurso: crea una oferta WTS si las rutas normales no te convienen. El precio depende de que otro jugador acepte.","en":"Last resort: create a WTS offer if standard routes do not work for you. Another player must accept the price."},"sales.copyItems":{"es":"Copiar {count} ítems","en":"Copy {count} items"},"sales.itemCount":{"es":"{count} ítems en esta ruta","en":"{count} items in this route"},"sales.searchItem":{"es":"Buscar un ítem…","en":"Search items…"},"mining.guideEyebrow":{"es":"GUÍA INTERACTIVA · MINERÍA EN NULLSEC","en":"INTERACTIVE GUIDE · NULLSEC MINING"},"mining.guideTitle":{"es":"De tu primera barge a tu primera Omega","en":"From your first barge to your first Omega"},"mining.guideIntro":{"es":"Empieza con tu nave, compara tus números y descubre cuándo podrías pagar Omega. No son ingresos garantizados.","en":"Start with your ship, compare your numbers and see when you could afford Omega. Income is not guaranteed."},"mining.guideOne":{"es":"Tu primera nave","en":"Your first ship"},"mining.guideOneText":{"es":"Compara skills, fitting, producción y viajes.","en":"Compare skills, fittings, production and trips."},"mining.guideOneAction":{"es":"Comparar naves","en":"Compare ships"},"mining.guideTwo":{"es":"Tu primera Omega","en":"Your first Omega"},"mining.guideTwoText":{"es":"Calcula horas, cuentas, PLEX y entrenamiento.","en":"Calculate hours, accounts, PLEX and training."},"mining.guideTwoAction":{"es":"Plan Omega","en":"Omega plan"},"mining.guideThree":{"es":"Tu siguiente mejora","en":"Your next upgrade"},"mining.guideThreeText":{"es":"Compara el potencial de naves avanzadas.","en":"Compare the potential of advanced ships."},"mining.guideThreeAction":{"es":"Ver naves avanzadas","en":"Explore advanced ships"},"mining.grossWarning":{"es":"Los ISK/h mostrados no siempre descuentan impuestos, refinería o transporte: son estimaciones de producción, no necesariamente ganancia final.","en":"ISK/h may not include selling tax, reprocessing fees or shipping: it estimates production value, not necessarily final profit."},"market.pickerLabel":{"es":"Mercado principal","en":"Home market"},"market.auto":{"es":"Automático según alianza","en":"Automatic based on alliance"},"market.hyrwo":{"es":"HY-RWO · SIGMA","en":"HY-RWO · SIGMA"},"market.ualx":{"es":"UALX-3 · BRAVE","en":"UALX-3 · BRAVE"},"market.cj6mt":{"es":"C-J6MT · Goonswarm","en":"C-J6MT · Goonswarm"},"refinery.feeLabel":{"es":"Tarifa de refinería %","en":"Refinery fee %"},"refinery.feeHelp":{"es":"Lo que cobra la estación. Se guarda en Ajustes.","en":"Facility charge, saved in Settings."},"refinery.feeSource":{"es":"Tarifa en Ajustes → Refinería:","en":"Fee under Settings → Refinery:"},"refinery.profileNote":{"es":"Rendimiento estimado según habilidades, estructura, rig e implante","en":"Estimated yield based on skills, structure, rig and implant"},"refinery.miningSummary":{"es":"Tu refinería","en":"Your refinery"},"refinery.miningFee":{"es":"Tarifa: {percent}%","en":"Fee: {percent}%"},"refinery.marketSelected":{"es":"Venta local: {market}","en":"Local market: {market}"},"refinery.implantHelp":{"es":"Implante de tu personaje refinador.","en":"Implant equipped on your reprocessing character."},"trade.buyOrderUnitOverride":{"es":"Mi precio Buy Order por unidad (opcional)","en":"My Buy Order price per unit (optional)"},"trade.buyOrderBasis":{"es":"La inversión usa la mejor Buy Order publicada en Jita o tu precio manual; incluye broker. La orden puede tardar en completarse.","en":"Investment uses the top posted Jita Buy Order or your manual price, including broker. Your order may take time to fill."},"trade.buyOrderIntro":{"es":"Presupuestas una Buy Order en Jita, transportas con SIGMA Freight y proyectas vender en {market} a Jita Sell +{margin}% neto.","en":"Budget a Jita Buy Order, ship with SIGMA Freight and target sales in {market} at Jita Sell +{margin}% net."},"trade.sellIntro":{"es":"Compras a Jita Sell, transportas con SIGMA Freight y proyectas vender en {market} a Jita Sell +{margin}% neto.","en":"Buy at Jita Sell, ship with SIGMA Freight and target sales in {market} at Jita Sell +{margin}% net."},"trade.buyBasisDetail":{"es":"Compra: {quantity} × {unit} + broker {broker}% (precio de referencia, no compra garantizada).","en":"Purchase: {quantity} × {unit} + {broker}% broker (reference price, not a guaranteed fill)."},"trade.sellBasisDetail":{"es":"Compra: {quantity} × {unit} a Jita Sell, sujeta a profundidad de órdenes.","en":"Purchase: {quantity} × {unit} at Jita Sell, subject to order-book depth."},"trade.purchaseUnavailable":{"es":"Beneficio no calculable: falta un precio de compra válido en Jita. Actualiza precios o abre el ítem del Listado para introducir tu precio Buy Order por unidad. No se utilizarán precios filtrados de venta como coste de compra.","en":"Profit unavailable: no valid Jita purchase quote. Refresh market prices or open the item in Registered Items to enter your Buy Order unit price. Filtered sell-to-bid prices cannot be used as a purchase budget."},"trade.purchaseUnavailableShort":{"es":"Falta un precio de compra confiable; todavía no se puede estimar tu beneficio.","en":"No reliable purchase quote is available yet; your profit cannot be estimated."},"trade.profitUnavailable":{"es":"BENEFICIO SIN COTIZACIÓN DE COMPRA","en":"PROFIT NEEDS A PURCHASE QUOTE"},"trade.tradeSubtitle":{"es":"BENEFICIO TRAS COMPRA, IMPUESTOS Y ENVÍO","en":"PROFIT AFTER PURCHASE, TAXES AND SHIPPING"},"trade.proceedsOnly":{"es":"Los importes de los planes son ingresos netos de venta; falta el capital de compra para calcular beneficio.","en":"Plan amounts are net selling proceeds; a purchase quote is needed to calculate profit."}};
+const UI_TEXT={"verdict.recommendedRoute":{"es":"Ruta recomendada","en":"Recommended route"},"verdict.selectedRoute":{"es":"Ruta elegida","en":"Selected route"},"verdict.estimateSale":{"es":"Estimación según cotizaciones y ajustes; una orden puede tardar en venderse.","en":"Estimate based on quotes and settings; sell orders may take time to fill."},"verdict.estimateTrade":{"es":"Beneficio estimado tras compra y gastos; las órdenes podrían no completarse.","en":"Estimated profit after purchase and costs; orders may not fill."},"verdict.inspectBreakdown":{"es":"Ver distribución de ingresos y destinos","en":"See proceeds and destinations breakdown"},"verdict.showSteps":{"es":"Ver pasos para vender","en":"View selling steps"},"verdict.stepsDescription":{"es":"Contratos, destinos y precios por ítem","en":"Contracts, destinations and item prices"},"freight.noCost":{"es":"0 ISK · sin courier","en":"0 ISK · no courier"},"freight.noShipment":{"es":"La ruta seleccionada no tiene gastos de courier asignados.","en":"The selected route has no allocated courier charges."},"freight.unallocated":{"es":"Hay un coste de envío, pero no se pudo distribuir entre los ítems. Consulta el plan detallado.","en":"Shipping has a cost, but it could not be allocated to items. Check the detailed plan."},"freight.showOthers":{"es":"Ver {count} ítems enviados más","en":"Show {count} more shipped items"},"refinery.missingQuote":{"es":"Faltan precios del ore o de los productos, o no hay una tarifa válida. Revisa Ajustes y actualiza precios.","en":"Ore or product prices are missing, or the refinery fee is invalid. Check Settings and refresh prices."},"refinery.estimatedFee":{"es":"− Tarifa estimada de refinería ({percent}%)","en":"− Estimated refinery fee ({percent}%)"},"refinery.rawEstimate":{"es":"Cantidad recuperada según rendimiento ({yield}%); tarifa de {refinery} estimada al {fee}% del valor de referencia de los minerales y descontada en ISK. Sin impuestos de mercado ni envío.","en":"Recovered quantities use the {yield}% yield; {refinery}'s fee is estimated at {fee}% of the minerals' reference value, deducted in ISK. Excludes market taxes and shipping."},"refinery.ledgerEstimate":{"es":"Valor estimado a Jita Sell (tarifa de refinería en ISK, {fee}%): ore {ore} → productos {products} ({diff}, {percent}%).","en":"Estimated Jita Sell value (refinery fee in ISK, {fee}%): ore {ore} → products {products} ({diff}, {percent}%)."},"picker.plan":{"es":"PLAN","en":"PLAN"},"picker.speed":{"es":"RAPIDEZ","en":"SPEED"},"picker.shipping":{"es":"ENVÍO","en":"SHIPPING"},"picker.value":{"es":"VALOR","en":"VALUE"},"picker.total":{"es":"TOTAL","en":"TOTAL"},"picker.profit":{"es":"BENEFICIO","en":"PROFIT"},"picker.difference":{"es":"VS. ÓPTIMO","en":"VS. OPTIMAL"},"picker.optimal":{"es":"Óptimo","en":"Optimal"},"picker.same":{"es":"Igual","en":"Same"},"picker.recommended":{"es":"MÁS ISK","en":"MOST ISK"},"picker.yes":{"es":"Sí","en":"Yes"},"picker.no":{"es":"No","en":"No"},"picker.fast":{"es":"Inmediato","en":"Immediate"},"picker.mixed":{"es":"Mixto","en":"Mixed"},"picker.uncertain":{"es":"Incierto","en":"Uncertain"},"picker.days":{"es":"Días","en":"Days"},"picker.shippingDays":{"es":"Envío + días","en":"Shipping + days"},"picker.shippingRange":{"es":"Envío {range} d","en":"Shipping {range} d"},"picker.shippingWeeks":{"es":"Envío + 1–2 semanas","en":"Shipping + 1–2 weeks"},"picker.weeks":{"es":"1–2 semanas","en":"1–2 weeks"},"picker.approxOneDay":{"es":"~1 día","en":"~1 day"},"picker.selected":{"es":"Plan seleccionado","en":"Selected plan"},"picker.showAlternatives":{"es":"Ver otras rutas","en":"Show other routes"},"picker.hideAlternatives":{"es":"Ocultar otras rutas","en":"Hide other routes"},"picker.sortBy":{"es":"Ordenar por {label}","en":"Sort by {label}"},"picker.filters":{"es":"Filtrar planes","en":"Filter plans"},"picker.empty":{"es":"Ninguna ruta coincide con este filtro.","en":"No routes match this filter."},"picker.all":{"es":"Todos","en":"All"},"picker.fastFilter":{"es":"Rápidos","en":"Fast"},"picker.noShipping":{"es":"Sin envío","en":"No shipping"},"picker.reprocessing":{"es":"Con reproceso","en":"Reprocessing"},"picker.bestDesc":{"es":"La combinación que te deja más ISK según los precios y gastos disponibles.","en":"The mix that leaves you with the most ISK based on available prices and costs."},"picker.localDesc":{"es":"Venta local sin courier.","en":"Local sale without freight."},"picker.jitaOrdersDesc":{"es":"Órdenes de venta en Jita.","en":"Jita sell orders."},"picker.instantDesc":{"es":"Venta inmediata en Jita.","en":"Immediate sale in Jita."},"picker.buybackDesc":{"es":"Contrato de Buyback.","en":"Buyback contract."},"picker.playerDesc":{"es":"Oferta manual en Discord. No es una venta confirmada.","en":"Manual Discord offer. No confirmed buyer."},"picker.reprocessLocalDesc":{"es":"Reprocesar y vender localmente.","en":"Reprocess and sell locally."},"picker.reprocessJitaDesc":{"es":"Reprocesar y vender en Jita.","en":"Reprocess and sell in Jita."},"picker.compressOrderDesc":{"es":"Comprimir en origen, enviar y publicar orden en Jita.","en":"Compress at origin, ship and list in Jita."},"picker.compressInstantDesc":{"es":"Comprimir, enviar y vender a compras disponibles en Jita.","en":"Compress, ship and sell into available Jita buy orders."},"picker.compression":{"es":"Comprimido","en":"Compressed"},"picker.ownerGuard":{"es":"Se evitó enviar {name}: flete {freight} frente a una mejora para ti de solo {extra}. Se prioriza tu ganancia sobre el coste logístico.","en":"Shipping {name} was avoided: freight {freight} versus just {extra} of extra proceeds for you. Your gain takes priority over logistics costs."},"picker.importDesc":{"es":"Importar desde Jita.","en":"Import from Jita."},"picker.optimalSummary":{"es":"MÁXIMO NETO ESTIMADO · Elige otra ruta para comparar ingresos, tiempo y transporte.","en":"HIGHEST ESTIMATED NET · Select another route to compare proceeds, time and freight."},"picker.selectedSame":{"es":"MISMO NETO ESTIMADO QUE EL ÓPTIMO.","en":"SAME ESTIMATED NET AS OPTIMAL."},"picker.selectedDifference":{"es":"{difference} frente a la opción de más ISK.","en":"{difference} compared with the most-ISK option."},"picker.fallbackOne":{"es":"1 ítem no admite esta ruta; conserva su mejor alternativa.","en":"1 item cannot use this route and keeps its best alternative."},"picker.fallbackMany":{"es":"{count} ítems no admiten esta ruta; conservan su mejor alternativa.","en":"{count} items cannot use this route and keep their best alternatives."},"ledger.intro":{"es":"Consulta la mejor ruta de cada ítem. Copia el precio por unidad o abre sus opciones para comparar y ajustar.","en":"Check each item's best route. Copy the unit price or open its options to compare and adjust."},"ledger.sortBy":{"es":"ORDENAR POR","en":"SORT BY"},"ledger.name":{"es":"Nombre","en":"Name"},"ledger.quantity":{"es":"Cantidad","en":"Quantity"},"ledger.route":{"es":"Ruta","en":"Route"},"ledger.netSort":{"es":"Neto del lote","en":"Lot net proceeds"},"ledger.unitPrice":{"es":"PRECIO POR UNIDAD · ISK","en":"UNIT PRICE · ISK"},"ledger.netSales":{"es":"NETO ESTIMADO DEL LOTE","en":"ESTIMATED LOT NET PROCEEDS"},"ledger.netUnit":{"es":"NETO POR UNIDAD · ISK","en":"NET PER UNIT · ISK"},"ledger.saleNetHint":{"es":"Ingresos netos estimados de venta; no son beneficios de Trading.","en":"Estimated net sale proceeds; not Trading profit."},"ledger.tradeNetHint":{"es":"Neto estimado de la venta, antes de descontar la inversión en la compra. Consulta el beneficio en la ruta principal.","en":"Estimated sale proceeds before subtracting purchase investment. See profit in the main route summary."},"ledger.units":{"es":"{count} unidades","en":"{count} units"},"ledger.copyUnit":{"es":"Copiar {price} ISK por unidad de {item}","en":"Copy {price} ISK per unit of {item}"},"ledger.noUnitPrice":{"es":"No hay precio por unidad copiable para esta ruta. Abre el ítem para consultar los detalles.","en":"No copyable unit price for this route. Open the item to see details."},"ledger.removeItem":{"es":"Quitar {item} del lote","en":"Remove {item} from the lot"},"ledger.prices":{"es":"Precios por ruta · copiar valores","en":"Prices by route · copy values"},"ledger.compare":{"es":"Comparar rutas de venta","en":"Compare selling routes"},"ledger.adjust":{"es":"Ajustes del ítem","en":"Item settings"},"ledger.guide":{"es":"Guía para vender este ítem","en":"Guide to selling this item"},"picker.noticeHeading":{"es":"AVISOS DEL PLAN","en":"PLAN NOTICES"},"picker.nextBest":{"es":"OTRA FORMA DE VENDER","en":"ANOTHER WAY TO SELL"},"picker.why":{"es":"VER DIFERENCIAS DE ISK","en":"SEE ISK DIFFERENCES"},"picker.gap":{"es":"ISK QUE DEJAS DE GANAR","en":"ISK YOU GIVE UP"},"picker.gain":{"es":"ISK EXTRA","en":"EXTRA ISK"},"picker.advantage":{"es":"RENDIMIENTO ADICIONAL","en":"ADDITIONAL RETURN"},"picker.higherNet":{"es":"RUTA QUE DA MÁS ISK","en":"ROUTE THAT PAYS MORE"},"picker.insufficient":{"es":"No hay suficientes cotizaciones para comparar estas rutas.","en":"Not enough quoted prices to compare these routes."},"picker.quickNote":{"es":"La rapidez solo desempata rutas con ingresos prácticamente iguales.","en":"Speed breaks ties only when net proceeds are effectively equal."},"verdict.netSales":{"es":"VENTAS NETAS DESPUÉS DE TASAS","en":"NET SALES AFTER FEES"},"verdict.freight":{"es":"COSTE DE ENVÍO","en":"SHIPPING COST"},"verdict.investment":{"es":"INVERSIÓN DE COMPRA","en":"PURCHASE INVESTMENT"},"verdict.planTitle":{"es":"LA RUTA MÁS RENTABLE","en":"MOST PROFITABLE ROUTE"},"verdict.selectedTitle":{"es":"TU RUTA DE VENTA","en":"YOUR SELLING ROUTE"},"verdict.planSubtitle":{"es":"MÁXIMO INGRESO NETO ESTIMADO","en":"HIGHEST ESTIMATED NET PROCEEDS"},"verdict.selectedSubtitle":{"es":"INGRESOS NETOS DEL PLAN ELEGIDO","en":"SELECTED PLAN NET PROCEEDS"},"verdict.pending":{"es":"Esperando cotizaciones de Jita.","en":"Waiting for Jita quotes."},"verdict.accounting":{"es":"DESGLOSE DEL PLAN","en":"PLAN ACCOUNTING"},"module.sales":{"es":"Ventas","en":"Sales"},"module.mining":{"es":"Minería","en":"Mining"},"module.skills":{"es":"Planes de habilidades","en":"Skill Plans"},"module.settings":{"es":"Ajustes","en":"Settings"},"module.guide":{"es":"Guía de Uso","en":"User Guide"},"guide.gettingStarted":{"es":"Primeros pasos","en":"Getting started"},"guide.routes":{"es":"Rutas de venta","en":"Selling routes"},"guide.glossary":{"es":"Glosario","en":"Glossary"},"guide.privacy":{"es":"Privacidad y acceso a EVE","en":"Privacy and EVE access"},"units.isk":{"es":"ISK","en":"ISK"},"mining.outproduces":{"es":" produce más ({value}). Mayor autonomía: ","en":" produces more ({value}). Best capacity: "},"mining.minutesFill":{"es":" ({minutes} min hasta llenar).","en":" ({minutes} min until full)."},"mining.moreAutonomy":{"es":"Más autonomía: ","en":"Greater capacity: "},"mining.mostProfitable":{"es":"★ Más rentable","en":"★ Most profitable"},"mining.resultOne":{"es":"Resultado para 1 cuenta","en":"Result for 1 account"},"mining.resultMany":{"es":"Resultado para {count} cuentas","en":"Result for {count} accounts"},"mining.loading":{"es":"Consultando precios…","en":"Checking prices…"},"mining.noPrice":{"es":"Sin cotizaciones no se puede calcular; revisa ESI.","en":"Cannot calculate without quotes; check ESI."},"mining.priceMissing":{"es":"Faltan cotizaciones; puedes introducir precios manualmente.","en":"Some prices are missing; you can enter manual quotes."},"mining.priceReady":{"es":"Precios ESI/manuales. ESI se actualiza cada 5 minutos.","en":"ESI/manual prices. ESI refreshes every 5 minutes."},"mining.esiLoading":{"es":"Consultando precios de ESI…","en":"Loading ESI prices…"},"mining.unknown":{"es":"—","en":"—"},"route.auto":{"es":"Plan óptimo","en":"Optimal plan"},"route.fN":{"es":"Importar y vender en {system}","en":"Import and sell in {system}"},"route.fJ":{"es":"Vender con órdenes en Jita","en":"Sell with Jita orders"},"route.fJI":{"es":"Venta inmediata en Jita","en":"Instant sale in Jita"},"route.null":{"es":"Vender en {system}","en":"Sell in {system}"},"route.jOrd":{"es":"Vender con órdenes en Jita","en":"Sell with Jita orders"},"route.jInst":{"es":"Venta inmediata en Jita","en":"Instant sale in Jita"},"route.cOrd":{"es":"Comprimir y vender con orden en Jita","en":"Compress and list in Jita"},"route.cInst":{"es":"Comprimir y vender al instante en Jita","en":"Compress and sell instantly in Jita"},"route.bb":{"es":"Vender al Buyback","en":"Sell to Buyback"},"route.rNull":{"es":"Reprocesar y vender en {system}","en":"Reprocess and sell in {system}"},"route.rJita":{"es":"Reprocesar y vender en Jita","en":"Reprocess and sell in Jita"},"route.disc":{"es":"Vender a otro jugador","en":"Sell to another player"},"route.prefix":{"es":"la ruta «{name}»","en":"the “{name}” route"},"route.optimalPhrase":{"es":"el plan óptimo","en":"the optimal plan"},"picker.partial":{"es":" · {selected} de {total} ítems admiten esta ruta.","en":" · {selected} of {total} items support this route."},"freight.heading":{"es":"COSTE REAL DEL ENVÍO","en":"ACTUAL FREIGHT COST"},"freight.contractOne":{"es":"1 contrato","en":"1 contract"},"freight.contractMany":{"es":"{count} contratos","en":"{count} contracts"},"freight.qty":{"es":"{count} unidades","en":"{count} units"},"freight.base":{"es":"NETO ANTES DE ENVÍO / UD.","en":"NET BEFORE FREIGHT / UNIT"},"freight.increment":{"es":"ENVÍO / UD.","en":"FREIGHT / UNIT"},"freight.landed":{"es":"TE QUEDA / UD.","en":"YOU KEEP / UNIT"},"freight.totalLot":{"es":"TE QUEDA POR EL LOTE","en":"YOU KEEP FOR THE LOT"},"freight.totalCost":{"es":"Envío del lote: {amount}","en":"Lot freight: {amount}"},"freight.volume":{"es":"Carga transportada: {volume}","en":"Shipped cargo: {volume}"},"freight.derived":{"es":"Importe por cada unidad original: incluye procesamiento, tasas y envío. El producto transformado se cotiza por separado.","en":"Per original unit: includes processing, fees and shipping. The transformed product has its own market quote."},"freight.reference":{"es":"Recibes = venta neta tras tasas y proceso − envío real asignado. Una orden de venta no garantiza comprador inmediato.","en":"You keep = net sale after fees and processing − allocated actual freight. A sell order does not guarantee an immediate buyer."},"freight.more":{"es":"Ver cálculo por unidad","en":"See per-unit calculation"},"compress.settingsTitle":{"es":"Compresión de hielo","en":"Ice compression"},"compress.settingsHelp":{"es":"Esta ruta requiere compresión real disponible en origen. La cotización del hielo comprimido procede de ESI y no se supone igual al precio original.","en":"This route requires actual compression access at origin. Compressed ice uses its own ESI quote, never the original ice price."},"compress.enabled":{"es":"Puedo comprimir antes del envío","en":"I can compress before shipping"},"compress.enabledHelp":{"es":"Desactivado hasta que confirmes acceso a compresión.","en":"Off until you confirm compression access."},"compress.cost":{"es":"Coste de compresión por unidad (ISK)","en":"Compression cost per unit (ISK)"},"compress.costHelp":{"es":"0 significa compresión propia sin cargo; añade costes de servicio o combustible cuando correspondan.","en":"0 assumes no fee for your own compression; include service or fuel costs where applicable."},"compress.suggestion":{"es":"Hay cotización para hielo comprimido. Podría reducir considerablemente el envío; confirma acceso para que el motor lo compare.","en":"Compressed ice has a market quote. It may cut freight substantially; confirm access to include it in the comparison."},"compress.action":{"es":"Puedo comprimir · comparar","en":"I can compress · compare"},"compress.unitNote":{"es":"Compresión: {cost} por lote antes de enviar","en":"Compression: {cost} per lot before shipping"},"compress.orderQuote":{"es":"Orden de hielo comprimido en Jita","en":"Compressed ice sell order in Jita"},"compress.instantQuote":{"es":"Compra inmediata de hielo comprimido en Jita","en":"Immediate compressed ice buy order in Jita"},"compress.stepTitle":{"es":"Comprimir hielo antes del envío","en":"Compress ice before shipping"},"compress.stepBody":{"es":"Convierte cada unidad original en una unidad de hielo comprimido. Confirma acceso al servicio y su coste en Ajustes antes de crear el contrato.","en":"Turn each original unit into one compressed ice unit. Confirm access and cost in Settings before creating the courier contract."},"compress.arrivalTitle":{"es":"Al llegar: vender hielo comprimido","en":"On arrival: sell compressed ice"},"compress.arrivalBody":{"es":"Vende el producto comprimido, no el hielo original; verifica liquidez y precio al ejecutar.","en":"Sell the compressed product, not the original ice; verify liquidity and price before execution."},"compress.beforeFreight":{"es":"antes del transporte","en":"before freight"},"freight.missingQuote":{"es":"Precio base no disponible","en":"Base price unavailable"},"referral.newPilot":{"es":"NUEVO PILOTO","en":"NEW PILOT"},"referral.freeSp":{"es":"1,000,000 SP GRATIS","en":"1,000,000 FREE SP"},"referral.linkAria":{"es":"Abrir enlace de referido de EVE Online: un millón de Skill Points gratis","en":"Open EVE Online referral link: one million free Skill Points"},"settings.languageAria":{"es":"Idioma de la interfaz","en":"Interface language"},"referral.externalLink":{"es":"Abrir promoción","en":"Open offer"},"settings.resetConfirm":{"es":"¿Volver todos los Ajustes a los valores de fábrica?","en":"Reset all Settings to their defaults?"},"shared.copyPrompt":{"es":"Copia:","en":"Copy:"},"sso.missingClient":{"es":"El acceso oficial de EVE todavía no está configurado: Market Moves+ necesita su Client ID público de CCP.","en":"Official EVE login is not configured yet: Market Moves+ needs its public CCP Client ID."},"sso.loginOpenFailed":{"es":"No se pudo abrir el login oficial de EVE: {error}","en":"Could not open the official EVE login: {error}"},"css.volume":{"es":"Volumen","en":"Volume"},"css.shipping":{"es":"Envío","en":"Shipping"},"css.extraGain":{"es":"Gana extra","en":"Extra gain"},"css.reprocessed":{"es":"Reprocesado","en":"Reprocessed"},"css.unprocessed":{"es":"Sin reprocesar","en":"Unprocessed"},"css.units":{"es":" u.","en":" units"},"css.home":{"es":"Inicio","en":"Home"},"settings.overview":{"es":"Ajusta habilidades, impuestos y mercados. Los cambios se guardan en este navegador.","en":"Adjust skills, taxes and markets. Changes are saved in this browser."},"settings.languageHeading":{"es":"IDIOMA","en":"LANGUAGE"},"sales.modeSelectAria":{"es":"Seleccionar operación de ventas","en":"Choose sales operation"},"sales.modeHeading":{"es":"Operación","en":"Operation"},"sales.modeSell":{"es":"Vender Items","en":"Sell Items"},"sales.modeTrade":{"es":"Comercio Jita","en":"Jita Trading"},"picker.simpleQuick":{"es":"¿Quieres cobrar con menos espera?","en":"Want a quicker way to get paid?"},"picker.simpleQuickSub":{"es":"Esta opción evita esperar una orden de venta, pero deja menos ISK.","en":"This option avoids waiting for a sell order, but leaves you with less ISK."},"picker.simpleLoss":{"es":"{amount} menos","en":"{amount} less"},"picker.simpleView":{"es":"Ver esta alternativa","en":"See this alternative"},"picker.simpleShip":{"es":"Primero hay que enviar los ítems. El transporte también toma tiempo.","en":"Items must be shipped first. Delivery still takes time."},"picker.simpleNoShip":{"es":"Sin envío adicional. El pago depende de las órdenes o del Buyback.","en":"No extra shipping. Payment depends on orders or Buyback."},"picker.simplePartial":{"es":"Sirve para {count} de {total} ítems; los demás siguen su mejor ruta.","en":"Works for {count} of {total} items; the rest keep their best route."},"picker.simpleCurrent":{"es":"Ya tienes seleccionada una ruta rápida.","en":"You're already using a quick route."},"picker.netMeaningSell":{"es":"ISK que recibirías tras tasas y envío estimados.","en":"ISK you'd receive after estimated fees and shipping."},"picker.netMeaningTrade":{"es":"ISK que ganarías después de comprar y pagar los gastos estimados.","en":"ISK you'd earn after buying and paying estimated expenses."},"picker.bestEasy":{"es":"MÁS ISK","en":"MOST ISK"},"picker.quickTag":{"es":"COBRAR ANTES","en":"GET PAID SOONER"},"picker.quickFull":{"es":"Puede requerir envío; el plazo depende del mercado.","en":"May require shipping; timing depends on the market."},"picker.playerUnconfirmed":{"es":"Esta oferta depende de encontrar comprador. Aunque el importe sea mayor, no cuenta como la ruta automática de más ISK.","en":"This offer requires finding a buyer. Even if the asking price is higher, it does not count as the automatic most-ISK route."},"player.lastResortNames":{"es":"Último recurso: ofrecer a otro jugador los ítems {items}. La venta no está garantizada.","en":"Last resort: offer {items} to another player. The sale is not guaranteed."},"player.lastResortGuide":{"es":"Último recurso: crea una oferta WTS si las rutas normales no te convienen. El precio depende de que otro jugador acepte.","en":"Last resort: create a WTS offer if standard routes do not work for you. Another player must accept the price."},"sales.copyItems":{"es":"Copiar {count} ítems","en":"Copy {count} items"},"sales.itemCount":{"es":"{count} ítems en esta ruta","en":"{count} items in this route"},"sales.searchItem":{"es":"Buscar un ítem…","en":"Search items…"},"mining.guideEyebrow":{"es":"GUÍA INTERACTIVA · MINERÍA EN NULLSEC","en":"INTERACTIVE GUIDE · NULLSEC MINING"},"mining.guideTitle":{"es":"De tu primera barge a tu primera Omega","en":"From your first barge to your first Omega"},"mining.guideIntro":{"es":"Empieza con tu nave, compara tus números y descubre cuándo podrías pagar Omega. No son ingresos garantizados.","en":"Start with your ship, compare your numbers and see when you could afford Omega. Income is not guaranteed."},"mining.guideOne":{"es":"Tu primera nave","en":"Your first ship"},"mining.guideOneText":{"es":"Compara skills, fitting, producción y viajes.","en":"Compare skills, fittings, production and trips."},"mining.guideOneAction":{"es":"Comparar naves","en":"Compare ships"},"mining.guideTwo":{"es":"Tu primera Omega","en":"Your first Omega"},"mining.guideTwoText":{"es":"Calcula horas, cuentas, PLEX y entrenamiento.","en":"Calculate hours, accounts, PLEX and training."},"mining.guideTwoAction":{"es":"Plan Omega","en":"Omega plan"},"mining.guideThree":{"es":"Tu siguiente mejora","en":"Your next upgrade"},"mining.guideThreeText":{"es":"Compara el potencial de naves avanzadas.","en":"Compare the potential of advanced ships."},"mining.guideThreeAction":{"es":"Ver naves avanzadas","en":"Explore advanced ships"},"mining.grossWarning":{"es":"Los ISK/h mostrados no siempre descuentan impuestos, refinería o transporte: son estimaciones de producción, no necesariamente ganancia final.","en":"ISK/h may not include selling tax, reprocessing fees or shipping: it estimates production value, not necessarily final profit."},"market.pickerLabel":{"es":"Mercado principal","en":"Home market"},"market.auto":{"es":"Automático según alianza","en":"Automatic based on alliance"},"market.hyrwo":{"es":"HY-RWO · SIGMA","en":"HY-RWO · SIGMA"},"market.ualx":{"es":"UALX-3 · BRAVE","en":"UALX-3 · BRAVE"},"market.cj6mt":{"es":"C-J6MT · Goonswarm","en":"C-J6MT · Goonswarm"},"refinery.feeLabel":{"es":"Tarifa de refinería %","en":"Refinery fee %"},"refinery.feeHelp":{"es":"Lo que cobra la estación. Se guarda en Ajustes.","en":"Facility charge, saved in Settings."},"refinery.feeSource":{"es":"Tarifa en Ajustes → Refinería:","en":"Fee under Settings → Refinery:"},"refinery.profileNote":{"es":"Rendimiento estimado según habilidades, estructura, rig e implante","en":"Estimated yield based on skills, structure, rig and implant"},"refinery.miningSummary":{"es":"Tu refinería","en":"Your refinery"},"refinery.miningFee":{"es":"Tarifa: {percent}%","en":"Fee: {percent}%"},"refinery.marketSelected":{"es":"Venta local: {market}","en":"Local market: {market}"},"refinery.implantHelp":{"es":"Implante de tu personaje refinador.","en":"Implant equipped on your reprocessing character."},"trade.buyOrderUnitOverride":{"es":"Mi precio Buy Order por unidad (opcional)","en":"My Buy Order price per unit (optional)"},"trade.buyOrderBasis":{"es":"La inversión usa la mejor Buy Order publicada en Jita o tu precio manual; incluye broker. La orden puede tardar en completarse.","en":"Investment uses the top posted Jita Buy Order or your manual price, including broker. Your order may take time to fill."},"trade.buyOrderIntro":{"es":"Presupuestas una Buy Order en Jita, transportas con SIGMA Freight y proyectas vender en {market} a Jita Sell +{margin}% neto.","en":"Budget a Jita Buy Order, ship with SIGMA Freight and target sales in {market} at Jita Sell +{margin}% net."},"trade.sellIntro":{"es":"Compras a Jita Sell, transportas con SIGMA Freight y proyectas vender en {market} a Jita Sell +{margin}% neto.","en":"Buy at Jita Sell, ship with SIGMA Freight and target sales in {market} at Jita Sell +{margin}% net."},"trade.buyBasisDetail":{"es":"Compra: {quantity} × {unit} + broker {broker}% (precio de referencia, no compra garantizada).","en":"Purchase: {quantity} × {unit} + {broker}% broker (reference price, not a guaranteed fill)."},"trade.sellBasisDetail":{"es":"Compra: {quantity} × {unit} a Jita Sell, sujeta a profundidad de órdenes.","en":"Purchase: {quantity} × {unit} at Jita Sell, subject to order-book depth."},"trade.purchaseUnavailable":{"es":"Beneficio no calculable: falta un precio de compra válido en Jita. Actualiza precios o abre el ítem del Listado para introducir tu precio Buy Order por unidad. No se utilizarán precios filtrados de venta como coste de compra.","en":"Profit unavailable: no valid Jita purchase quote. Refresh market prices or open the item in Registered Items to enter your Buy Order unit price. Filtered sell-to-bid prices cannot be used as a purchase budget."},"trade.purchaseUnavailableShort":{"es":"Falta un precio de compra confiable; todavía no se puede estimar tu beneficio.","en":"No reliable purchase quote is available yet; your profit cannot be estimated."},"trade.profitUnavailable":{"es":"BENEFICIO SIN COTIZACIÓN DE COMPRA","en":"PROFIT NEEDS A PURCHASE QUOTE"},"trade.tradeSubtitle":{"es":"BENEFICIO TRAS COMPRA, IMPUESTOS Y ENVÍO","en":"PROFIT AFTER PURCHASE, TAXES AND SHIPPING"},"trade.proceedsOnly":{"es":"Los importes de los planes son ingresos netos de venta; falta el capital de compra para calcular beneficio.","en":"Plan amounts are net selling proceeds; a purchase quote is needed to calculate profit."}};
 // The legacy script calls some initial route sync functions before this module
 // is evaluated. This var is hoisted (undefined until initialized), allowing
 // those early calls to defer catalog-driven UI labels without a TDZ error.
@@ -7476,19 +7694,22 @@ function toggleLot(o){const ui=o.ui;if(!ui)return;const open=ui.body.hidden;
 $('lots').addEventListener('click',e=>{const lot=e.target.closest('.lot'),o=lot&&LOT_OF.get(lot);if(!o)return;
   if(e.target.closest('.lot-x')){removeFromPaste(o.name);return;}
   if(e.target.closest('.copy'))return;
-  if(e.target.closest('.lot-head'))toggleLot(o);});
-$('lots').addEventListener('keydown',e=>{if((e.key==='Enter'||e.key===' ')&&e.target.classList.contains('lot-head')){const o=LOT_OF.get(e.target.parentNode);if(o){e.preventDefault();toggleLot(o);}}});
+  if(e.target.closest('.lot-open'))toggleLot(o);});
+let lotDetailId=0;
 function buildLot(o){
   // v102: solo creamos la cabecera para cada item; los controles pesados se construyen bajo demanda.
   // Importante: o.ui.last se actualiza en paintLot() aun con el detalle cerrado.
-  const lot=el('article','lot'),head=el('div','lot-head');head.tabIndex=0;head.setAttribute('role','button');head.setAttribute('aria-expanded','false'); // v1.0.8: div para poder llevar dentro el botón de copiar precio
+  const lot=el('article','lot'),head=el('div','lot-head');
+  const toggle=el('button','lot-open');toggle.type='button';toggle.setAttribute('aria-expanded','false');
   const nm=el('span','lot-name');nm.append(el('b',null,o.name));const tag=el('span','tag');nm.append(tag);
-  const qty=el('span','lot-qty'),dest=el('span','lot-dest'),net=el('span','lot-net'),chev=el('span','chev');chev.setAttribute('aria-hidden','true');
-  const pp=el('span','lot-pp'),ppB=copyBtn('','—');ppB.classList.add('cp-n');ppB.title='Precio por unidad sugerido: clic para copiar';pp.append(ppB);
-  head.append(nm,pp,qty,dest,net,chev);
-  const body=el('div','lot-body');body.hidden=true;
-  const ui={nm,lot,head,tag,qty,dest,net,body,ppB,detailsReady:false};
-  const x=el('button','lot-x');x.type='button';x.title='Quitar del lote';x.setAttribute('aria-label','Quitar '+o.name+' del lote');
+  const qty=el('span','lot-qty'),dest=el('span','lot-dest'),chev=el('span','chev');chev.setAttribute('aria-hidden','true');
+  const info=el('span','lot-info'),meta=el('span','lot-meta');meta.append(qty,dest);info.append(nm,meta);toggle.append(info,chev);
+  const pp=el('span','lot-pp'),ppLabel=el('span','lot-k',tx('ledger.unitPrice')),ppB=copyBtn('','—');ppB.classList.add('cp-n');pp.append(ppLabel,ppB);
+  const netBox=el('span','lot-financial'),netLabel=el('span','lot-k',tx('ledger.netSales')),net=el('span','lot-net');netBox.append(netLabel,net);
+  head.append(toggle,pp,netBox);
+  const body=el('div','lot-body');body.hidden=true;body.id='lot-detail-'+(++lotDetailId);toggle.setAttribute('aria-controls',body.id);
+  const ui={nm,lot,head:toggle,tag,qty,dest,net,netLabel,ppLabel,body,ppB,detailsReady:false};
+  const x=el('button','lot-x');x.type='button';x.title=tx('ledger.removeItem',{item:o.name});x.setAttribute('aria-label',x.title);
   o.ui=ui;lot.append(head,x,body);LOT_OF.set(lot,o); // v1.0.8: sin listeners por fila; un solo manejador en #lots
   return lot;
 }
@@ -7497,7 +7718,7 @@ function buildLotDetails(o,ui){
   // Los inputs se preservan durante paintLot para que escribir no pierda foco.
   const body=ui.body;
   const rcall=el('div','call rcall'),rcB=el('b'),rcS=el('small'),rcR=el('small','rcr');rcall.append(rcB,rcS,rcR);rcall.hidden=true;
-  const gwrap=el('details','gwrap lot-fold'),guide=el('ol','guide');gwrap.append(el('summary','sub-h','Guía para vender este ítem'),guide);
+  const gwrap=el('details','gwrap lot-fold'),guide=el('ol','guide'),guideSummary=el('summary','sub-h',tx('ledger.guide'));guideSummary.dataset.i18n='ledger.guide';gwrap.append(guideSummary,guide);
   const opts=el('div','opts');Object.assign(ui,{opt:{},rcall,rcB,rcS,rcR,guide});
   OPTS.forEach(([k,l])=>{
     const r=el('div','opt'),lab=el('span','opt-l',k==='null'?'':optionMarketText(l)),bar=el('span','opt-bar'),fill=el('i'),v=el('span','opt-v'),h=el('span','opt-h');
@@ -7530,13 +7751,14 @@ function buildLotDetails(o,ui){
   fSk.append(iSk);
   facts.append(fQty,fBuy,fBuyOrder,fRef,fSeen,fM3,fVol,fSk);
   const prices=el('details','prices lot-fold'),pBody=el('tbody'),pt=el('table');pt.append(pBody);
-  prices.append(el('summary','sub-h','Precios para publicar'),pt);
+  const pricesSummary=el('summary','sub-h',tx('ledger.prices'));pricesSummary.dataset.i18n='ledger.prices';prices.append(pricesSummary,pt);
   const checks=el('ul','checks'),foot=el('div','lot-foot'),del=el('button','link danger','Quitar del lote');del.type='button';
   del.addEventListener('click',()=>removeFromPaste(o.name));foot.append(del);
   const verdict=el('section','lot-verdict');verdict.append(rcall);
-  const analysis=el('div','lot-analysis');analysis.append(opts);
-  body.append(gwrap,verdict,analysis,facts,prices,checks,foot);
-  Object.assign(ui,{iRef,iBuyOrder,iM3,bBuy,bVol,pBody,checks,detailsReady:true});
+  const analysis=el('details','lot-analysis lot-detail-section'),analysisSummary=el('summary','sub-h',tx('ledger.compare'));analysisSummary.dataset.i18n='ledger.compare';analysis.append(analysisSummary,opts);
+  const adjustments=el('details','lot-adjustments lot-detail-section'),adjustmentsSummary=el('summary','sub-h',tx('ledger.adjust'));adjustmentsSummary.dataset.i18n='ledger.adjust';adjustments.append(adjustmentsSummary,facts,gwrap);
+  body.append(verdict,prices,analysis,adjustments,checks,foot);
+  Object.assign(ui,{iRef,iBuyOrder,iM3,bBuy,bVol,pBody,checks,verdict,detailsReady:true});
 }
 // copia el valor limpio: números con máx. 2 decimales y sin "ISK" (listo para pegar en el juego)
 const isNumTxt=t=>/^[−+\-]?\s*[\d][\d,.\s]*(\s*(ISK|m³|m3|%|días?|u))?$/i.test(String(t).trim());
@@ -7612,9 +7834,9 @@ document.addEventListener('keydown',e=>{
 // fila de precios: Dónde · precio por unidad (copiable) · nota
 // fila: dónde · precio por unidad (copiable) · cómo se calcula · lo que te queda por unidad (neto)
 function priceRow(tb,where,unit,note,net,best){
-  const tr=el('tr',best?'pr-best':'');const t0=el('td');t0.append(el('b',null,where));if(best)t0.append(el('span','pill p-null pr-tag','Tu plan'));tr.append(t0);
-  const td=el('td','r');if(unit!=null)td.append(copyBtn(unit,fmtP(unit)));else td.append(el('span','muted','—'));
-  const tn=el('td','r pr-net '+sgn(net),net==null?'—':fmtP(net));
+  const tr=el('tr',(best?'pr-best ':'')+'pr-route');const t0=el('td');t0.append(el('b',null,where));if(best)t0.append(el('span','pill p-null pr-tag','Tu plan'));tr.append(t0);
+  const td=el('td','r');td.dataset.label=tx('ledger.unitPrice');if(unit!=null)td.append(copyBtn(unit,fmtP(unit)));else td.append(el('span','muted','—'));
+  const tn=el('td','r pr-net '+sgn(net),net==null?'—':fmtP(net));tn.dataset.label=tx('ledger.netUnit');
   tr.append(td,el('td','muted',note||''),tn);tb.append(tr);
 }
 /* ================= v103: ordenación independiente de Listado de Items Registrados =================
@@ -7675,7 +7897,10 @@ function suggUnit(r){const k=r.best,a=r.o.jita;
 function paintLot(r){
   const o=r.o,u=o.ui;if(!u)return;
   if(!u.ic){const ic=iconFor(o.name);if(ic){u.nm.querySelector('b').prepend(ic);u.ic=ic;}} // ícono cuando ya se conoce el type_id
-  u.qty.textContent=fmtQ(r.q);
+  u.qty.textContent=tx('ledger.units',{count:fmtQ(r.q)});
+  u.ppLabel.textContent=tx('ledger.unitPrice');
+  u.netLabel.textContent=tx('ledger.netSales');
+  u.net.title=S.flip?tx('ledger.tradeNetHint'):tx('ledger.saleNetHint');
   const warn=(o.checks||[]).filter(c=>c[1]==='warn').length,ok=(o.checks||[]).length&&!warn;
   setText(u.tag,warn?warn+(S.lang==='en'?(warn>1?' warnings':' warning'):(warn>1?' avisos':' aviso')):(ok?(S.lang==='en'?'verified':'verificado'):''),'tag '+(warn?'warn':ok?'ok':''));u.tag.hidden=!warn&&!ok;
   if(!u.skT){u.skT=el('span','tag sk');u.nm.append(u.skT);}u.skT.hidden=!o.skew;if(o.skew)u.skT.textContent='ajuste '+(o.skew>0?'+':'−')+pctS(Math.abs(o.skew))+'%';
@@ -7683,11 +7908,13 @@ function paintLot(r){
   else setText(u.dest,'Falta Precio','lot-dest pill p-none');
   setText(u.net,r.best?fmt(r.net[r.best]):'—','lot-net '+(r.best?sgn(r.net[r.best]):''));
   {const up=suggUnit(r),b=u.ppB;const t=up==null?'—':fmtP(up);if(b.textContent!==t)b.textContent=t;b.dataset.v=up==null?'':String(Math.round(up*100)/100);b.disabled=up==null;
-   b.title=up==null?(r.best==='rNull'||r.best==='rJita'?'Se venden los minerales: ábrelo para ver sus precios':'Sin precio'):'Precio por unidad sugerido ('+(OPTS.find(x=>x[0]===r.best)||['',''])[1]+'): clic para copiar';}
+   b.title=up==null?tx('ledger.noUnitPrice'):tx('ledger.copyUnit',{item:o.name,price:t});
+   b.setAttribute('aria-label',b.title);}
   // rendimiento: el cuerpo (opciones, guía, precios, verificación) solo se pinta si la fila está abierta
   u.last=r;if(u.body.hidden)return;
   paintGuide(u.guide,r);
   u.rcall.hidden=!r.rep;
+  u.verdict.hidden=!r.rep;
   if(r.rep){const w=r.raw&&r.raw.sell;u.rcR.textContent=w?tx('refinery.ledgerEstimate',{fee:parseFloat($('rTax').value)||0,ore:fmt(w.ore),products:fmt(w.prod),diff:(w.diff>=0?'+':'')+fmt(w.diff),percent:(w.pct>=0?'+':'')+pct(w.pct)}):'';u.rcR.hidden=!w;}
   if(r.rep){const lab=k=>k==='null'?nullLabel(o.name):optionMarketText(OPTS.find(x=>x[0]===k)[1]);
     if(r.rep.missing){setText(u.rcB,'¿Reprocesar? Faltan precios','');u.rcS.textContent='Trae los precios de los minerales para saberlo.';}
@@ -8829,8 +9056,8 @@ function paintPicker(P){
 
   // Benchmark is the largest estimated net across feasible plan selections, not necessarily Plan Óptimo.
   // Financial opportunity and time/liquidity are reported separately; no fabricated days or returns.
-  const opportunity=$('pkOpportunity');
-  opportunity.replaceChildren();
+  const opportunity=$('pkOpportunity'),headline=$('pkHeadline');
+  opportunity.replaceChildren();headline.replaceChildren();
   const valid=all.filter(x=>Number.isFinite(x.t.net));
   // Selling to an unknown player is a WTS offer, not an executable quote.
   // It can be manually selected, but must not define the highest-ISK
@@ -8872,14 +9099,13 @@ function paintPicker(P){
     shortcutPanel.hidden=false;
   }
   if(chosen.m==='disc'){
-    opportunity.append(el('p','pk-opp-explain',tx('picker.playerUnconfirmed')));
-    opportunity.hidden=false;
+    headline.append(el('p','pk-headline-note',tx('picker.playerUnconfirmed')));
   }else if(financial.length>1&&financial.some(x=>x.m===cur)){
     const benchmark=financial.reduce((best,x)=>x.t.net>best.t.net?x:best);
     const gap=Math.max(0,benchmark.t.net-chosen.t.net);
-    const grid=el('div','pk-opp-grid');
+    const grid=el('div','pk-headline-grid');
     const stat=(label,value,cl='')=>{
-      const node=el('div','pk-opp-stat');
+      const node=el('div','pk-headline-stat');
       node.append(el('small',null,label),el('strong',cl,value));grid.append(node);
     };
     if(gap<.5){
@@ -8894,15 +9120,14 @@ function paintPicker(P){
       stat(tx('picker.gap'),'−'+fmt(gap),'neg');
       stat(tx('picker.higherNet'),(S.lang==='en'?trS(benchmark.l):benchmark.l)+' · '+fmt(benchmark.t.net));
     }
-    opportunity.append(grid);opportunity.hidden=false;
+    headline.append(grid);
   }else{
-    opportunity.hidden=false;
-    opportunity.append(el('p','pk-opp-explain',tx('picker.insufficient')));
+    headline.append(el('p','pk-headline-note',tx('picker.insufficient')));
   }
+  headline.hidden=false;
 
-  // Decision at a glance: visible next to the freight result. Only secondary
-  // calculations are disclosed on demand inside each freight item.
-  opportunity.prepend(el('h3','pk-opp-head',tx('picker.why')));
+  // Financial comparison belongs to the plan header. Keep non-numeric
+  // protections below the plans; never discard warnings to save screen space.
   if(S.flip&&!showProfit&&P.rows.some(r=>r.q>0&&r.best)){
     opportunity.insertBefore(el('p','pk-owner-guard',tx('trade.proceedsOnly')),opportunity.children[1]||null);
   }
@@ -8921,6 +9146,8 @@ function paintPicker(P){
     action.type='button';action.dataset.enableCompression='true';prompt.append(action);
     opportunity.append(prompt);
   }
+  opportunity.hidden=!opportunity.childElementCount;
+  if(!opportunity.hidden)opportunity.prepend(el('h3','pk-opp-head',tx('picker.noticeHeading')));
 
   const maxNet=Math.max(...list.filter(x=>x.m!=='disc').map(x=>x.t.net),1);
   // Optimal is already identified by the section subtitle and the opportunity
