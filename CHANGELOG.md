@@ -1,7 +1,7 @@
-## v1.0.131 — 2026-10-25 [ChatGPT] · Legibilidad contextual B.5a antes de C.1 (candidato)
+## v1.0.131 — 2026-10-25 [ChatGPT] · Legibilidad contextual B.5a, publicada y verificada en GitHub Pages
 
 - Mejora focalizada de las preguntas y explicaciones de Ventas: preguntas desplegables y FAQ a **16 px**, subtítulos a **~15 px**, párrafos explicativos a **~14,7 px**, textos de fuentes **~13,4 px**, mayor contraste y aire entre líneas. Reprocesamiento y notas de costos también ganan legibilidad sin alterar importes, fórmulas ni los controles existentes.
-- CSS modular `src/styles/80-product-ux.css`, versión del ensamblado y workflows `1.0.131`, test estático de escala y Chromium con tamaños computados en ES/EN, Dark/Light y 390/630/1440. **Candidato hasta confirmar QA, GitHub Actions y GitHub Pages; v1.0.130 continúa siendo la última versión pública verificada**.
+- CSS modular `src/styles/80-product-ux.css`, build/workflows `1.0.131`, test estático de escala y Chromium con tamaños computados en ES/EN, Dark/Light y 390/630/1440. **QA y publicación confirmados:** 20 Node, 16 Python, 8 legacy, 37 Chromium; Fiko/Fikolasty, `expected_sha` y sin force en fuente `38f53189`; build `c532def7`; cuatro Actions `success` (Rebuild/Chromium/Pages `40242376437`). Descarga HTTPS pública v1.0.131 de **2.257.122 bytes**, blob `43ef5d8b` idéntico al HTML local y GitHub. **LIVE.**
 
 ## v1.0.130 — 2026-10-25 [ChatGPT] · B.5 publicada y verificada en GitHub Pages
 - «LA MEJOR RUTA»: muestra impuestos y comisiones, envío, tarifa de refinería y otros costes **ya incluidos** en el resultado neto. Un desplegable explica tasas efectivas configuradas, Accounting, broker/SCC, relists, courier y origen de las cifras, sin afirmar que las habilidades manuales provienen de un piloto verificado. Import `fN` incorpora tasas en su precio neto: se marca como desglose parcial/no separable, no un falso cero.

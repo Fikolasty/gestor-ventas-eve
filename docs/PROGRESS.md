@@ -1,10 +1,12 @@
 # PROGRESS — Market Moves+
 
-## 2026-10-25 — B.5a legibilidad del contenido contextual (v1.0.131 en preparación)
+## 2026-10-25 — B.5a legibilidad contextual, v1.0.131 LIVE y verificada
 
 **Observación de Geiner antes de C.1:** las preguntas y explicaciones económicas de B.5 parecen secundarias por su letra pequeña y bajo énfasis. Corrección acotada en `src/styles/80-product-ux.css`: preguntas FAQ/disclosures a 16px, títulos interiores ~15px, explicaciones ~14,7px con interlineado 1.65 y contraste neutro mejorado; pistas de fuente ~13,4px, notas de reprocesado ~14px. Sin cambios en datos, ESI/SSO, i18n, cálculos, DOM ni comportamiento de acordeones.
 
 **Criterio de salida:** nueva compilación v1.0.131; pruebas financieras, funcionales y Chromium ES/EN, Dark/Light, 390/630/1440 sin overflow; publicar solamente mediante Fiko con HEAD esperado y sin force; certificar cuatro Actions y HTML servido por Pages antes de declarar LIVE. **Base certificada al inicio: v1.0.130**, `main=7271a78882036e830783c048aed8eff375c489a1`, clon de trabajo nuevo y limpio aislado de los respaldos previos. C.1 permanece pendiente.
+
+**Cierre real:** 20 Node, 16 Python, 8 legacy, 37 Chromium, build v1.0.131 y diff limpio. Comparación visual Dark/Light ES/EN, móvil y escritorio, con tamaños computados y sin overflow. Conector GitHub **Fiko/Fikolasty** transfirió 11 blobs SHA exactos, árbol `0ddb2094bffcc952a436c05a88d98116c46aae16`, commit fuente **`38f531898fb721d44357810d450cbe1fd523a29e`** contra HEAD esperado sin force. CI bot compiló HTML y QA en **`c532def72592847241a32a3a4847f50449574f1a`**. Las **cuatro Actions** concluyeron `success`: Minería `40242376385`, Versiones `40242376393`, Build `40242376433`, Rebuild/Chromium/Pages **`40242376437`**. Página HTTPS independiente con `v1.0.131`: **2.257.122 bytes**, blob `43ef5d8bcb7bf1b5ad0b73779c670ad3c0fe3bef`, byte por byte igual a GitHub y build local; banner original intacto. **v1.0.131 LIVE**, Geiner avisado. C.1 pendiente; SSO/ESI reales y órdenes efectivas no cubiertas por fixtures.
 
 ## 2026-10-25 — v1.0.130 LIVE: B.5, CI/Pages/HTTPS confirmados
 

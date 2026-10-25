@@ -1,6 +1,6 @@
 # DSS — Design Standards & Session Handoff · Market Moves+
 
-**Última actualización:** 2026-10-25 · **ÚLTIMA VERSIÓN LIVE CERTIFICADA: v1.0.130 — B.5 decisiones claras y FAQ contextuales**. Fuente `910d8f950ce4f93cede56df13df8735196ec0403`, build CI `ff842ec9ff03079a888009784b78bed7d660b8b5`, **cuatro Actions `success`** incluido Rebuild/Chromium/Pages `40240791939`; HTML GitHub y Pages idénticos al local: **blob `e3aaec13676552cf0e104e90bbf299708ddc2d94`, 2.256.976 bytes**. Ver §§14–15. Publicación exclusivamente mediante Fiko (`Fikolasty`), sin force y con SHA esperado. C.1 y D pendientes; EVE SSO/ESI reales no han sido certificados.
+**Última actualización:** 2026-10-25 · **ÚLTIMA VERSIÓN LIVE CERTIFICADA: v1.0.131 — B.5a legibilidad de preguntas y explicaciones**. Fuente `38f531898fb721d44357810d450cbe1fd523a29e`, build CI `c532def72592847241a32a3a4847f50449574f1a`, **cuatro Actions `success`** incluido Rebuild/Chromium/Pages `40242376437`; HTML GitHub y Pages idénticos al local: **blob `43ef5d8bcb7bf1b5ad0b73779c670ad3c0fe3bef`, 2.257.122 bytes**. Ver §16. Publicación exclusivamente mediante Fiko (`Fikolasty`), sin force y con SHA esperado. C.1 y D pendientes; EVE SSO/ESI reales no han sido certificados.
 
 **Continuidad de versión:** la release anterior v1.0.126 (P0 Paladin + A+B.1) quedó verificada con fuente `205ec9fa`, build `c716f7aa`, Actions/Pages `40215891182`, blob `9601d5f8`; ver §9. La etapa B.2 se implementó inicialmente **local** sobre `dcdb6195` (§10) y posteriormente se publicó tras autorización expresa y QA (§11). El usuario concedió también **autorización continua de publicación de mejoras incrementales bien probadas**, registrada en §1.8.
 
@@ -301,7 +301,7 @@ El usuario contestó **«Sí»** a la aprobación de la corrección económica y
 
 **Siguiente fase:** el contenido de B.5 solicitado antes de C.1 está publicado. C.1 solo podrá sanear CSS focalizadamente con capturas de antes/después y pruebas; D requiere perfiles reales de rendimiento. Mantener el camino GitHub Fiko, SHA protegido, tests financieros y verificación HTTP, sin reescritura ni autenticaciones nuevas por defecto.
 
-## 16. B.5a — jerarquía tipográfica y preguntas fáciles de leer (v1.0.131 candidato)
+## 16. B.5a — jerarquía tipográfica y preguntas fáciles de leer (v1.0.131 LIVE)
 
 **Solicitud de Geiner:** antes de C.1, hacer los textos explicativos y las preguntas más visibles; en su captura de B.5 se leen demasiado pequeños, aunque las cifras de ISK sí destacan. Aprobación y publicación incremental cubiertas por la petición actual y el permiso continuo del §1.8. No se altera la lógica económica ni se expande a un rediseño general.
 
@@ -309,4 +309,12 @@ El usuario contestó **«Sí»** a la aprobación de la corrección económica y
 
 **Archivos:** `src/styles/80-product-ux.css`, `tests/b5-readable-typography.test.cjs`, ampliación de `tests/browser_theme.py`, `CHANGELOG.md`, `docs/PROGRESS.md`, `docs/SDD.md`, `docs/PRODUCT_DESIGN_REFINEMENT.md`, `AGENTS.md`, y workflows de build/Pages versionados a **v1.0.131**. `index.html` solo se regenera mediante `build.py`. Todos los resultados de 7 Paladin, facturación, impuestos y flete siguen en sus funciones existentes; SSO/ESI/traducciones y almacenamiento sin modificar.
 
-**Gate de salida:** pruebas Node/Python/legacy, `python3 build.py 1.0.131`, Chromium con inspección de fuentes realmente computadas y capturas, `git diff --check`, identidad Fiko, `main` actualizado de manera protegida (`expected_sha`, `force:false`), cuatro Actions y verificación independiente del blob HTML servido por GitHub Pages. Hasta completar y registrar esos pasos, **la última versión certificada sigue siendo v1.0.130**, fuente `910d8f95`, Pages `40240791939`, blob `e3aaec13`, cierre documental `7271a788`.
+**Gate de salida fijado antes de publicar:** pruebas Node/Python/legacy, `python3 build.py 1.0.131`, Chromium con inspección de fuentes computadas y capturas, `git diff --check`, identidad Fiko, `main` actualizado de manera protegida (`expected_sha`, `force:false`), cuatro Actions y verificación independiente del HTML Pages. Durante el desarrollo **v1.0.130 seguía siendo la versión certificada** (fuente `910d8f95`, Pages `40240791939`, blob `e3aaec13`, cierre documental `7271a788`). Todos los gates se cumplieron para v1.0.131 en el registro siguiente.
+
+### Cierre de B.5a — publicación certificada el 2026-10-25
+
+**QA local:** 20/20 Node, 16/16 Python, 8/8 regresiones legacy, 37/37 Chromium (ES/EN, Dark/Light, 390/630/1440; tipografía computada y sin overflow), build v1.0.131, `git diff --check` limpio y capturas móviles/escritorio inspeccionadas. Chromium necesitó permisos propios del entorno; se ejecutó realmente con Chrome Headless Shell, no se omitió el gate. Los cálculos y los módulos sensibles no se modificaron.
+
+**Integridad de publicación:** Fiko autenticada `Fikolasty`, `main=7271a78882036e830783c048aed8eff375c489a1` confirmado justo antes del envío; **11 blobs locales SHA idénticos** transferidos por API (sin incluir `index.html` generado ni capturas) al árbol `0ddb2094bffcc952a436c05a88d98116c46aae16` y commit fuente **`38f531898fb721d44357810d450cbe1fd523a29e`**. Avance protegido con `expected_sha` y `force:false`. El bot de Actions creó `index.html`/QA en commit **`c532def72592847241a32a3a4847f50449574f1a`**, hijo directo del commit fuente.
+
+**CI y sitio público:** cuatro workflows `success`: Build `40242376433`, Minería `40242376385`, Versiones `40242376393`, Rebuild/Chromium/Pages **`40242376437`**, cuyos jobs de compilación y despliegue pasaron. Descarga HTTPS **independiente** de <https://fikolasty.github.io/gestor-ventas-eve/?verified=40242376437-b5a> con `v1.0.131` y banner original, **2.257.122 bytes**, Git blob **`43ef5d8bcb7bf1b5ad0b73779c670ad3c0fe3bef`**; `cmp` confirma igualdad exacta con el ensamblado local y el blob remoto `index.html`. **v1.0.131 LIVE**, Geiner informado. EVE SSO/ESI end-to-end, transacciones reales y revisión humana de todos los dispositivos no se certifican mediante tests sintéticos. Siguiente C.1 selectivo, D profiling posterior.
