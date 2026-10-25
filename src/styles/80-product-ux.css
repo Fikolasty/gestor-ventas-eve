@@ -790,3 +790,220 @@ body:not(.is-flip) .fact-buy-order{display:none!important}
   #pSum #pk>.pk-o::after,#pSum #flipBuy .fb2-more>summary::after,
   #vPlan .stp-chev,#ledger .lot-head .chev,.top .eve-identity-arrow{transition:none}
 }
+
+/* B.4 · Plan comparison lives in the header, on the same information axis as
+   the main route result. The card below is reserved for actual risk notices. */
+#pSum>.mm-plan-heading{
+  display:grid!important;grid-template-columns:minmax(0,1fr) minmax(260px,.93fr)!important;
+  grid-template-rows:auto!important;align-items:center!important;
+  column-gap:clamp(20px,3vw,38px)!important;row-gap:12px!important;
+  margin-bottom:19px!important;padding-bottom:17px;border-bottom:1px solid var(--line2);
+}
+#pSum>.mm-plan-heading::before{display:none!important;content:none!important}
+#pSum .mm-plan-heading-copy{min-width:0;grid-column:1}
+#pSum .mm-plan-heading-copy>.mm-title{
+  margin:0!important;font:800 var(--mm-type-heading)/1.2 var(--f-ui)!important;
+  letter-spacing:.035em!important;color:var(--txt);
+}
+#pSum .mm-plan-heading-copy>.mm-section-sub{
+  margin:5px 0 0!important;font:700 var(--mm-type-label)/1.45 var(--f-ui)!important;
+  letter-spacing:.075em!important;color:var(--mut)!important;
+}
+#pSum .mm-plan-heading-copy>.pk-summary{margin:7px 0 0!important;max-width:none}
+#pSum .mm-plan-comparison{
+  grid-column:2;min-width:0;padding:4px 0 4px 21px;
+  border-left:1px solid var(--line2);align-self:center;
+}
+#pSum .pk-headline-grid{display:grid;gap:7px}
+#pSum .pk-headline-stat{min-width:0}
+#pSum .pk-headline-stat small{
+  display:block;color:var(--mut);font:700 .7rem/1.4 var(--f-ui);
+  letter-spacing:.045em;text-transform:uppercase;
+}
+#pSum .pk-headline-stat strong{
+  display:block;margin-top:2px;font:750 clamp(.95rem,1.5vw,1.32rem)/1.3 var(--f-num);
+  color:var(--txt);overflow-wrap:anywhere;
+}
+#pSum .pk-headline-stat:first-child strong.pos{color:var(--gain)}
+#pSum .pk-headline-stat:first-child strong.neg{color:var(--loss)}
+#pSum .pk-headline-stat+.pk-headline-stat strong{font-size:.81rem;font-weight:600;line-height:1.45}
+#pSum .pk-headline-note{margin:0;color:var(--mut);font:500 .8rem/1.5 var(--f-ui)}
+#pSum #pkOpportunity .pk-opp-head{margin-bottom:8px!important}
+#pSum .mm-decision-grid:has(>#pkOpportunity[hidden]):has(>#unitCourierBox[hidden]){display:none}
+@media(max-width:760px){
+  #pSum>.mm-plan-heading{grid-template-columns:minmax(0,1fr)!important;row-gap:14px!important}
+  #pSum .mm-plan-comparison{grid-column:1;border-left:0;padding:13px 0 0;border-top:1px solid var(--line2)}
+  #pSum .pk-headline-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+}
+@media(max-width:480px){
+  #pSum .pk-headline-grid{grid-template-columns:minmax(0,1fr)}
+  #pSum .pk-headline-stat+.pk-headline-stat{padding-top:8px;border-top:1px solid var(--line)}
+}
+
+/* B.4 · Registered items: clean rows, meaningful action hierarchy and a
+   contract-inspired inset surface only for the unit price that can be copied.
+   All fine-detail controls remain lazy and behind native disclosures. */
+#ledger{--mm-item-inset:#1c1b1a}
+#ledger .ledger-tools{justify-content:space-between;margin:15px 0 13px}
+#ledger .ledger-tools .lead{flex:1 1 370px;max-width:68ch;font:450 .82rem/1.55 var(--f-ui)}
+#ledger .ledger-head{
+  display:flex!important;align-items:center!important;flex-wrap:wrap;justify-content:flex-start;
+  gap:5px 9px!important;grid-template-columns:none!important;
+  padding:8px 0 11px!important;border-bottom:1px solid var(--line2);
+}
+#ledger .ledger-sort-title{margin-right:6px;color:var(--mut);font:700 .69rem/1.4 var(--f-ui);letter-spacing:.055em}
+#ledger .ledger-head .ledger-sort{
+  display:inline-flex!important;flex:0 1 auto;width:auto;min-height:34px;
+  padding:6px 10px;border:1px solid transparent;border-radius:7px;
+  justify-content:center!important;text-align:center!important;
+  font:600 .76rem/1.3 var(--f-ui);white-space:nowrap;
+}
+#ledger .ledger-head .ledger-sort[data-active="true"]{border-color:var(--line2);background:var(--hull)}
+#ledger .ledger-head .ledger-sort:focus-visible{outline:2px solid var(--ion);outline-offset:1px}
+#ledger #lots .lot{
+  grid-template-columns:minmax(0,1fr) 36px;min-width:0;
+  border-bottom:1px solid var(--line2);padding:4px 0;
+}
+#ledger #lots .lot-head{
+  display:grid!important;grid-template-columns:minmax(0,1.35fr) minmax(150px,.9fr) minmax(145px,.95fr)!important;
+  grid-template-areas:none!important;align-items:center;gap:clamp(12px,2vw,25px)!important;
+  padding:11px 8px 11px 2px!important;cursor:default!important;min-width:0;
+  background:transparent!important;
+}
+#ledger #lots .lot-open{
+  display:grid;grid-template-columns:minmax(0,1fr) 11px;gap:12px;
+  align-items:center;min-width:0;width:100%;text-align:left;
+  background:transparent;border:0;color:var(--txt);padding:5px 2px;
+  cursor:pointer;border-radius:7px;
+}
+#ledger #lots .lot-open:hover .lot-name b{color:var(--ion)}
+#ledger #lots .lot-open:focus-visible{outline:2px solid var(--ion);outline-offset:2px}
+#ledger #lots .lot-info{display:flex;flex-direction:column;align-items:flex-start;gap:7px;min-width:0}
+#ledger #lots .lot-name{grid-area:auto!important;display:flex;align-items:center;flex-wrap:wrap;gap:3px 9px;min-width:0;width:100%}
+#ledger #lots .lot-name b{display:inline-flex;align-items:center;gap:10px;font:650 .96rem/1.35 var(--f-ui);min-width:0;overflow-wrap:anywhere}
+#ledger #lots .lot-name img.ti{width:34px;height:34px;max-width:none;flex:none;margin:0;border-radius:7px}
+#ledger #lots .lot-name .tag{margin:0;font-size:.68rem}
+#ledger #lots .lot-meta{display:flex;flex-wrap:wrap;gap:6px 12px;align-items:center;min-width:0}
+#ledger #lots .lot-qty{font:500 .79rem/1.4 var(--f-ui);color:var(--mut);white-space:nowrap}
+#ledger #lots .lot-dest{
+  justify-self:start;padding:2px 7px;border-radius:6px!important;
+  font:.72rem/1.4 var(--f-ui);white-space:normal;overflow-wrap:anywhere;
+  background:var(--hull)!important;border:1px solid var(--line2)!important;color:var(--txt)!important;
+}
+#ledger #lots .lot-dest.p-none{color:var(--loss)!important}
+#ledger #lots .lot-open .chev{grid-area:auto;justify-self:center;flex:none}
+#ledger #lots .lot-k{display:block;margin:0 0 7px;color:var(--mut);font:700 .68rem/1.35 var(--f-ui);letter-spacing:.035em}
+#ledger #lots .lot-pp{grid-area:auto!important;display:block;justify-self:stretch!important;min-width:0}
+#ledger #lots .lot-pp .copy{
+  width:100%!important;min-height:44px;margin:0!important;padding:9px 12px!important;
+  display:flex;align-items:center;justify-content:space-between;gap:10px;
+  color:var(--txt)!important;background:var(--mm-item-inset)!important;
+  border:1px solid var(--line2)!important;border-radius:8px!important;
+  font:650 .88rem/1.35 var(--f-num)!important;text-align:left!important;
+  white-space:normal!important;overflow-wrap:anywhere;cursor:copy;
+}
+#ledger #lots .lot-pp .copy::after{
+  content:"";width:17px;height:17px;flex:0 0 17px;opacity:.7;
+  background:currentColor;
+  -webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='8' y='8' width='12' height='12' rx='2'/%3E%3Cpath d='M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2'/%3E%3C/svg%3E") center/contain no-repeat;
+  mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='8' y='8' width='12' height='12' rx='2'/%3E%3Cpath d='M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2'/%3E%3C/svg%3E") center/contain no-repeat;
+}
+#ledger #lots .lot-pp .copy:hover:not(:disabled){background:var(--hull2)!important;border-color:var(--ion)!important}
+#ledger #lots .lot-pp .copy:focus-visible{outline:2px solid var(--ion);outline-offset:2px}
+#ledger #lots .lot-pp .copy:disabled{cursor:default;opacity:.65}
+#ledger #lots .lot-financial{min-width:0;display:block;text-align:right}
+#ledger #lots .lot-net{display:block;font:700 clamp(.87rem,1.15vw,1.03rem)/1.38 var(--f-num);overflow-wrap:anywhere}
+#ledger #lots .lot-net.pos{color:var(--txt)}
+#ledger #lots .lot-x{justify-self:end;align-self:center;margin:0;min-height:34px;min-width:34px}
+#ledger #lots .lot-body{
+  display:grid!important;grid-template-columns:minmax(0,1fr)!important;
+  gap:10px!important;padding:2px 14px 18px 9px!important;
+}
+#ledger #lots .lot-body>*{grid-column:1!important;grid-row:auto!important;min-width:0}
+#ledger #lots .lot-body>.lot-verdict[hidden]{display:none!important}
+#ledger #lots .lot-body>.prices,#ledger #lots .lot-detail-section{
+  border:1px solid var(--line2);border-radius:8px;background:var(--surface-panel);
+  padding:0!important;margin:0!important;overflow:hidden;
+}
+#ledger #lots .lot-body>.prices>summary,#ledger #lots .lot-detail-section>summary{
+  display:flex;align-items:center;gap:12px;list-style:none;cursor:pointer;
+  min-height:45px;padding:11px 14px!important;margin:0!important;
+  color:var(--txt)!important;font:650 .83rem/1.4 var(--f-ui)!important;
+}
+#ledger #lots .lot-body>.prices>summary::-webkit-details-marker,#ledger #lots .lot-detail-section>summary::-webkit-details-marker{display:none}
+#ledger #lots .lot-body>.prices>summary::after,#ledger #lots .lot-detail-section>summary::after{
+  content:"";margin-left:auto;width:var(--mm-chevron-size);height:var(--mm-chevron-size);
+  border-right:var(--mm-chevron-stroke) solid var(--mut);border-bottom:var(--mm-chevron-stroke) solid var(--mut);
+  transform:rotate(45deg);transition:transform .15s ease;
+}
+#ledger #lots .lot-body>.prices[open]>summary::after,#ledger #lots .lot-detail-section[open]>summary::after{transform:rotate(225deg)}
+#ledger #lots .lot-body>.prices>summary:focus-visible,#ledger #lots .lot-detail-section>summary:focus-visible{outline:2px solid var(--ion);outline-offset:-3px}
+#ledger #lots .lot-body>.prices[open]>summary,#ledger #lots .lot-detail-section[open]>summary{border-bottom:1px solid var(--line2)}
+#ledger #lots .lot-analysis .opts{display:grid;padding:13px 15px;gap:10px}
+#ledger #lots .lot-adjustments>.facts{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:13px!important;padding:15px!important;min-width:0}
+#ledger #lots .lot-adjustments>.facts>.fact{min-width:0;display:flex;flex-direction:column;gap:7px;color:var(--mut);font:.8rem/1.4 var(--f-ui)}
+#ledger #lots .lot-adjustments>.facts input{width:100%;height:40px;min-width:0;text-align:right}
+#ledger #lots .lot-adjustments>.facts b{color:var(--txt);font:650 .92rem var(--f-num)}
+#ledger #lots .lot-adjustments .gwrap{margin:0 15px 15px!important}
+#ledger #lots .lot-adjustments .gwrap>summary{color:var(--txt)!important;font:650 .78rem/1.4 var(--f-ui)!important}
+#ledger #lots .lot-adjustments .gwrap>summary::after{
+  width:var(--mm-chevron-size);height:var(--mm-chevron-size);
+  border-right:var(--mm-chevron-stroke) solid var(--mut);border-bottom:var(--mm-chevron-stroke) solid var(--mut);
+}
+#ledger #lots .lot-body>.prices{overflow-x:auto}
+#ledger #lots .lot-body>.prices table{min-width:600px}
+#ledger #lots .lot-body>.checks{margin:7px 0 0}
+html.light #ledger{--mm-item-inset:#eeece8}
+html.light #ledger #lots .lot-body>.prices,html.light #ledger #lots .lot-detail-section{background:var(--surface-card)}
+html.light #ledger #lots .lot-pp .copy{background:var(--mm-item-inset)!important;box-shadow:none!important}
+html.light #ledger #lots .lot-pp .copy:hover:not(:disabled){background:#e3e0da!important}
+@media(max-width:980px){
+  #ledger #lots .lot-head{grid-template-columns:minmax(0,1fr) minmax(155px,.9fr)!important;gap:12px!important}
+  #ledger #lots .lot-financial{grid-column:1/-1;display:flex;align-items:baseline;justify-content:flex-end;gap:12px;text-align:right}
+  #ledger #lots .lot-financial .lot-k{margin:0}
+}
+@media(max-width:600px){
+  #ledger #lots .lot-head{grid-template-columns:minmax(0,1fr)!important;grid-template-areas:none!important;padding:10px 7px 12px 2px!important}
+  #ledger #lots .lot-pp{justify-self:stretch!important}
+  #ledger #lots .lot-financial{grid-column:1;flex-direction:column;justify-content:flex-start;align-items:flex-start;gap:4px;text-align:left}
+  #ledger #lots .lot-adjustments>.facts{grid-template-columns:minmax(0,1fr)!important}
+  #ledger #lots .lot-body{padding:2px 6px 13px!important}
+  #ledger .ledger-sort-title{flex:1 1 100%}
+  /* Price routes become readable single-column records, not a clipped desktop table. */
+  #ledger #lots .lot-body>.prices{overflow-x:hidden}
+  #ledger #lots .lot-body>.prices table{min-width:0;width:100%;display:block}
+  #ledger #lots .lot-body>.prices tbody{display:block;width:100%}
+  #ledger #lots .lot-body>.prices .pr-h{display:none}
+  #ledger #lots .lot-body>.prices tr.pr-route{
+    display:grid;grid-template-columns:minmax(0,1fr);
+    gap:8px;padding:13px 12px;border-bottom:1px solid var(--line2);
+  }
+  #ledger #lots .lot-body>.prices tr.pr-route>td{
+    display:block;min-width:0;padding:0!important;border:0!important;
+    text-align:left!important;white-space:normal!important;
+  }
+  #ledger #lots .lot-body>.prices tr.pr-route>td:first-child{grid-column:1;font-size:.86rem}
+  #ledger #lots .lot-body>.prices tr.pr-route>td:nth-child(2){grid-column:1;grid-row:2}
+  #ledger #lots .lot-body>.prices tr.pr-route>td:nth-child(4){grid-column:1;grid-row:3;font-weight:650}
+  #ledger #lots .lot-body>.prices tr.pr-route>td:nth-child(3){grid-column:1;grid-row:4;font-size:.74rem;line-height:1.5;color:var(--mut)}
+  #ledger #lots .lot-body>.prices tr.pr-route>td[data-label]::before{
+    content:attr(data-label);display:block;margin-bottom:5px;
+    color:var(--mut);font:700 .62rem/1.4 var(--f-ui);letter-spacing:.025em;
+  }
+  #ledger #lots .lot-body>.prices tr.pr-route .copy{
+    display:block;width:100%!important;min-width:0!important;text-align:left!important;
+    padding:8px!important;white-space:normal;overflow-wrap:anywhere;
+    background:var(--mm-item-inset)!important;
+  }
+  #ledger #lots .lot-body>.prices tr.pr-route>td:nth-child(4){overflow-wrap:anywhere}
+  #ledger #lots .lot-body>.prices tr.pr-route.pr-best{background:rgba(92,186,134,.045)!important}
+  #ledger #lots .lot-body>.prices tr.pr-local-manual,
+  #ledger #lots .lot-body>.prices tr.pr-local-manual>td{display:block;width:100%}
+  #ledger #lots .lot-body>.prices .pr-manual-editor{padding:13px 12px}
+  #ledger #lots .lot-body>.prices .pr-manual-editor label{flex:1 1 100%}
+  #ledger #lots .lot-body>.prices .pr-manual-editor input{flex:1 1 112px;width:auto}
+  #ledger #lots .lot-body>.prices tr:not(.pr-route) td[colspan="4"]{display:block;white-space:normal;padding:10px 12px}
+}
+@media(prefers-reduced-motion:reduce){
+  #ledger #lots .lot-body>.prices>summary::after,#ledger #lots .lot-detail-section>summary::after{transition:none}
+}

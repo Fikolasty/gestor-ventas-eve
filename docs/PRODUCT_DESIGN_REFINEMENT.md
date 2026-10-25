@@ -1,6 +1,6 @@
 # Market Moves+ — propuesta de refinamiento visual y saneamiento progresivo
 
-**Fecha:** 2026-10-25 · **Estado:** **A+B.1 publicadas en v1.0.126, B.2 en v1.0.127 y B.3 publicada y verificada en v1.0.128**. C y D pendientes. **Versión pública verificada:** v1.0.128, fuente `f4e4f57c`, build `3a2783a4`, Actions/Pages `40225807322`; HTML público exacto `c7eb9d60`. B.3 aprobó 33 Chromium, 17 archivos Node/60 casos, 16 Python y 8 heredadas locales, más los gates remotos. Ver `DSS.md` §13.
+**Fecha:** 2026-10-25 · **Estado:** **A+B.1 publicadas en v1.0.126, B.2 en v1.0.127 y B.3 publicada en v1.0.128. B.4a/B.4b aprobadas e implementadas como candidato local v1.0.129**. C y D pendientes. **Última versión pública verificada al iniciar B.4:** v1.0.128, fuente `f4e4f57c`, build `3a2783a4`, Actions/Pages `40225807322`; HTML público exacto `c7eb9d60`. Ver `DSS.md` §§13–14.
 
 **P0 económico resuelto en el candidato antes de B.2/C/D:** la captura de 7 Paladin con Buy Order evidenciaba una inversión de solo 27,59 M frente a Tasación de 6,3–6,4 B y beneficios absurdos. La corrección y sus regresiones ya fueron aprobadas y añadidas a v1.0.126; ver `TRADE_PROFIT_AUDIT_2026-10-25.md`. Incluye pruebas reales de navegador, pero las proyecciones siguen sin garantizar llenado de órdenes ni ventas efectivas.
 
@@ -55,7 +55,7 @@ En orden seguro:
 | Fase | Entrega | QA obligatorio |
 | --- | --- | --- |
 | A — Retícula **(código listo localmente)** | Header, importación derecha, simetría Tasación/Inventario, alineación ruta, guiones decorativos fuera | Node/Python/escenarios aprobados; captura y prueba de navegador aún pendientes. |
-| B — Componentes **(B.1/B.2/B.3 publicadas)** | B.1: Listado gris y flechas. B.2: filtros Rápidos y Jita. B.3: acordeones Minería/Skills y disclosures residuales; iconos de ayuda, ordenación y selects nativos excluidos | B.1: 29 Chromium+Pages; B.2: 31 Chromium+Pages; **B.3: 17 archivos Node/60 casos, 16 Python, 8 legacy y 33 Chromium+Pages PASS** tras corregir wrapping móvil. |
+| B — Componentes **(B.1/B.2/B.3 publicadas, B.4 local)** | B.1: Listado gris y flechas. B.2: filtros Rápidos y Jita. B.3: acordeones Minería/Skills. **B.4a:** cabecera de comparación ISK. **B.4b:** Listado de ítems en filas con iconos/copia y detalle progresivo. | B.1: 29 Chromium+Pages; B.2: 31 Chromium+Pages; B.3: 33 Chromium+Pages. **B.4:** nueva cobertura Node/Chromium, release pendiente de QA final y verificación remota. |
 | C — Saneamiento controlado | CSS contradicho documentado/retirado por módulo; helpers reutilizables solo si preservan contratos; comentarios útiles y tests | Node/Python, builds equivalentes, regresiones financieras y Chromium/Firefox si disponibles, sin diferencias de resultados. |
 | D — Rendimiento | Optimizaciones con medición real previa | Perfil antes/después, ESI sin más peticiones, memoria estable, sin degradación de UX. |
 
@@ -98,3 +98,9 @@ QA local final: build v1.0.128; 17 archivos Node (60 casos), 16 Python, ocho pru
 ### Cierre de B.3 — publicada y comprobada como v1.0.128, 2026-10-25
 
 Los pasos históricos anteriores se completaron. Fiko/Fikolasty creó 13 blobs exactos, árbol `760faabd`, commit fuente `f4e4f57c` sobre `main=9e480bf7` con protección de SHA y sin forzar. Las cuatro Actions terminaron `success` (Rebuild/Chromium/Pages **`40225807322`**); el bot generó `3a2783a4` y QA v1.0.128. El HTML público se descargó por HTTPS independiente: contiene `v1.0.128` y el banner estático, con blob Git **`c7eb9d60` idéntico al compilado local y a GitHub**. Se confirmó expresamente al propietario que v1.0.128 está LIVE. Las fases **C y D** quedan pendientes bajo el enfoque reversible y basado en mediciones; no se convierten en permiso de rediseño amplio. Mantener siempre Fiko, QA y evidencia HTTP; autenticar/consultar EVE en vivo sigue fuera de lo probado.
+
+### B.4a / B.4b — prioridad visual autorizada antes de C.1 (candidato v1.0.129)
+
+Geiner prefiere la comparación de ISK como dato integrado en el título «ELIGE TU PLAN», en lugar de una tarjeta duplicada bajo los planes, y pide rediseñar completamente cómo se presentan los registros del «LISTADO DE ÍTEMS REGISTRADOS». Ha aprobado reutilizar con moderación los fondos de copia numérica de Contrato y conservar iconos EVE y precios unitarios copiables. Se mantiene consistencia con Ventas y una jerarquía neutra: cada registro enseña el ítem/cantidad, ruta, precio unitario y neto del lote, mientras los precios por mercado, comparación y ajustes se abren cuando se necesitan.
+
+Protección económica: el neto estimado del lote es valor neto de la venta sin restar la inversión original de Trading; jamás llamarlo beneficio financiero. `paintPicker` sigue empleando el mismo benchmark y no inventa comparaciones. Se preservan acciones, Type ID, ordenación, almacenamiento, ESI/SSO, idioma y tema. La primera inspección Chromium de 390px detectó una columna implícita creada por `grid-area` heredada, corregida en el CSS final; el detalle de precios también apila sus filas en móvil. B.4 se comprueba en Chromium 390/630/1440 ES/EN Dark/Light y en regresiones de cálculos/copiar. No iniciar C.1 hasta cerrar pruebas y publicación de esta iteración. Ver el registro de QA en DSS §14.

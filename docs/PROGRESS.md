@@ -1,5 +1,13 @@
 # PROGRESS — Market Moves+
 
+## 2026-10-25 — B.4 aprobada, v1.0.129 en preparación
+
+**Decisión de Geiner:** antes de C.1, la comparación económica de «Elige tu plan» pasa a su propio encabezado siguiendo «La ruta más rentable», y el «Listado de ítems registrados» adopta filas compactas, iconos EVE, recuadros neutros copiables como Contrato y desglose progresivo. Se preservan cálculos, copia numérica, entradas, ordenación, controles de edición y EVE SSO/ESI. Esta etapa se autorizó de forma expresa, junto con el permiso de publicar mejoras correctamente probadas desde **Fiko/Fikolasty**.
+
+**Cambios:** `#pkHeadline` ahora recibe la comparación calculada existente, mientras `#pkOpportunity` solo contiene advertencias reales. Los lotes se expanden con botón semántico y detalle diferido; se distingue **neto estimado de venta** de la **ganancia de Trading tras inversión**. Precios alternativos se presentan verticalmente a ≤600 px. Se añadieron etiquetas ES/EN y suites de regresión B.4; versiones de workflows listas para v1.0.129. La captura móvil detectó una columna fantasma por `grid-area` heredada, corregida y comprobada visualmente. Base Fiko/main: `76b9ad585cc6821e3d08375d960606b761c04ef8`, pública v1.0.128 al comenzar.
+
+**Estado de este registro:** preparación local y QA de cierre; no significa todavía push ni Pages v1.0.129. Tras gates completos, comparar SHA, publicar sin force usando Fiko, verificar cuatro workflows y HTML real servido; dejar SHA y resultados en la documentación. Véase `docs/DSS.md` §14 y `docs/PRODUCT_DESIGN_REFINEMENT.md`.
+
 ## 2026-10-25 — v1.0.128 publicada, GitHub Pages/HTML verificados
 
 **B.3 LIVE:** <https://fikolasty.github.io/gestor-ventas-eve/> sirve ahora **v1.0.128**. Se avanzó el `main` remoto desde `9e480bf77c912e87110c63f1dbb6dd088c087550` a commit fuente **`f4e4f57cff8447b0670e74104572adab5c67b4b7`** usando exclusivamente GitHub «Fiko» (`Fikolasty`), los 13 blobs comparados con los hashes locales, árbol `760faabd090fb40f53721ee8157840be535290aa`, condición de SHA esperado y `force:false`.

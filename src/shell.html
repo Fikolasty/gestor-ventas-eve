@@ -250,18 +250,17 @@ Contraband Freight = no</textarea><small>Una regla por línea: Nombre = tax tota
   <details class="panel thin fold" id="ledger" hidden>
     <summary><h2 class="mm-title">LISTADO DE ITEMS REGISTRADOS</h2><span class="cnt" id="lCount"></span><span class="mm-missing" id="missCount" hidden></span><span class="status" id="esiStatus" role="status"></span></summary>
     <div class="ledger-tools">
-      <p class="lead">Abre un item para consultar la guía, comparar mercados o cambiar sus datos. Haz clic en un encabezado para ordenar la lista.</p>
+      <p class="lead" data-i18n="ledger.intro">Consulta la mejor ruta de cada ítem. Copia el precio por unidad o abre sus opciones para comparar y ajustar.</p>
       <button class="ghost" id="bEsi"><span class="ic i-sync" aria-hidden="true"></span>Actualizar Precios</button>
     </div>
     <!-- v103: ordenar el ledger es independiente de los filtros por recomendación de Qué Hacer.
          Los botones aplican orden al libro completo; nunca recalculan ISK ni cambian el plan. -->
     <div class="ledger-head" role="group" aria-label="Ordenar tus items">
-      <button type="button" class="ledger-sort" data-lsort="n" aria-label="Ordenar por nombre">Item <span class="sort-arrow" aria-hidden="true"></span></button>
-      <span class="ledger-col">Precio Unidad</span>
-      <button type="button" class="ledger-sort" data-lsort="q" aria-label="Ordenar por cantidad">Cantidad <span class="sort-arrow" aria-hidden="true"></span></button>
-      <button type="button" class="ledger-sort" data-lsort="d" aria-label="Ordenar por destino de venta">Qué Hacer <span class="sort-arrow" aria-hidden="true"></span></button>
-      <button type="button" class="ledger-sort" data-lsort="a" aria-label="Ordenar por ISK netos">Ganancia <span class="sort-arrow" aria-hidden="true"></span></button>
-      <span></span>
+      <span class="ledger-sort-title" data-i18n="ledger.sortBy">ORDENAR POR</span>
+      <button type="button" class="ledger-sort" data-lsort="n" aria-label="Ordenar por nombre"><span data-i18n="ledger.name">Nombre</span> <span class="sort-arrow" aria-hidden="true"></span></button>
+      <button type="button" class="ledger-sort" data-lsort="q" aria-label="Ordenar por cantidad"><span data-i18n="ledger.quantity">Cantidad</span> <span class="sort-arrow" aria-hidden="true"></span></button>
+      <button type="button" class="ledger-sort" data-lsort="d" aria-label="Ordenar por destino de venta"><span data-i18n="ledger.route">Ruta</span> <span class="sort-arrow" aria-hidden="true"></span></button>
+      <button type="button" class="ledger-sort" data-lsort="a" aria-label="Ordenar por ISK netos"><span data-i18n="ledger.netSort">Neto del lote</span> <span class="sort-arrow" aria-hidden="true"></span></button>
     </div>
     <div id="lots"></div>
   </details>
@@ -286,7 +285,7 @@ Contraband Freight = no</textarea><small>Una regla por línea: Nombre = tax tota
 
   <!-- 1. Resultado simple -->
   <section class="summary res mm-plan-area" id="pSum" hidden>
-    <header class="mm-section-head"><h2 class="mm-title">ELIGE TU PLAN</h2><p class="mm-section-sub">COMPARA LAS OTRAS RUTAS Y ELIGE LA QUE TE CONVIENE</p><p class="pk-summary" id="pkNote" aria-live="polite"></p></header>
+    <header class="mm-section-head mm-plan-heading"><div class="mm-plan-heading-copy"><h2 class="mm-title">ELIGE TU PLAN</h2><p class="mm-section-sub">COMPARA LAS OTRAS RUTAS Y ELIGE LA QUE TE CONVIENE</p><p class="pk-summary" id="pkNote" aria-live="polite"></p></div><div class="mm-plan-comparison" id="pkHeadline" aria-live="polite" hidden></div></header>
     <div class="fb2" id="flipBuy" hidden></div>
     <div class="pk-w">
       <div class="pk" id="pk" role="group" aria-label="Plan seleccionado"></div>

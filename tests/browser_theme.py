@@ -583,15 +583,15 @@ class ThemeBrowserTests(unittest.TestCase):
         self.assertIsNone(self.page.evaluate("S.planMode"))
         choices=self.page.locator("#pkOthers [data-m]")
         self.assertEqual(choices.last.get_attribute("data-m"),"disc")
-        self.assertNotIn("160,000",self.page.locator("#pkOpportunity").inner_text())
+        self.assertNotIn("160,000",self.page.locator("#pkHeadline").inner_text())
         self.page.evaluate("""() => {
             lastP.mode='disc';
             paintPicker(lastP);
         }""")
-        self.assertIn("no cuenta como la ruta automática",self.page.locator("#pkOpportunity").inner_text())
+        self.assertIn("no cuenta como la ruta automática",self.page.locator("#pkHeadline").inner_text())
         self.page.evaluate("window.__playerManualExample=lastP; setLang('en')")
         self.page.evaluate("paintPicker(window.__playerManualExample)")
-        self.assertIn("does not count as the automatic",self.page.locator("#pkOpportunity").inner_text())
+        self.assertIn("does not count as the automatic",self.page.locator("#pkHeadline").inner_text())
 
     def test_discord_offer_preview_and_copy_do_not_show_price_formula(self):
         self.page.evaluate("""() => {
@@ -971,7 +971,7 @@ class ThemeBrowserTests(unittest.TestCase):
                 for light in (False,True):
                     self.page.evaluate('(on)=>document.documentElement.classList.toggle("light",on)',light)
                     bounds=self.page.evaluate("""() => {
-                        const ids=['verdict','pSum','pkOpportunity','unitCourierBox','bDeep'];
+                        const ids=['verdict','pSum','pkHeadline','unitCourierBox','bDeep'];
                         return ids.map(id=>{
                             const r=document.getElementById(id).getBoundingClientRect();
                             return {id,left:r.left,right:r.right,width:r.width};
@@ -981,15 +981,136 @@ class ThemeBrowserTests(unittest.TestCase):
                         self.assertGreater(rect['width'],0,rect)
                         self.assertGreaterEqual(rect['left'],-1,rect)
                         self.assertLessEqual(rect['right'],width+1,rect)
-                    pair=bounds[2:4]
-                    if width==1440:
-                        self.assertLess(abs(pair[0]['width']-pair[1]['width']),3,pair)
-                        self.assertLess(abs(pair[0]['left']-pair[1]['left']),width,pair)
-                    else:
-                        self.assertLess(abs(pair[0]['left']-pair[1]['left']),3,pair)
+                    heading=self.page.locator('#pSum>.mm-plan-heading').bounding_box()
+                    comparison=self.page.locator('#pkHeadline').bounding_box()
+                    self.assertLessEqual(comparison['x']+comparison['width'],heading['x']+heading['width']+1)
+                    self.assertGreaterEqual(comparison['x'],heading['x']-1)
                 out=INDEX.parent/'tests'/'artifacts'/'theme'
                 out.mkdir(parents=True,exist_ok=True)
                 self.page.screenshot(path=str(out/f'pilot-{language}-{width}.png'),animations='disabled')
+
+    def test_b4_plan_comparison_in_header_tracks_selected_route(self):
+        from playwright.sync_api import expect
+        for language in ('es','en'):
+            self.page.evaluate('setLang',language)
+            self.page.evaluate("""() => {
+                S.flip=false;S.planMode=null;C.bb.on=false;C.disc.on=false;
+                const o={name:'Paladin',qty:7};
+                const row={o,q:7,auto:'null',best:'null',prod:0,ship:{},
+                    g:{null:15370696854,jOrd:14809306756},net:{null:15370696854},
+                    np:2195813836,vol:350000};
+                window.__b4Plan={rows:[row],best:15370696854,mode:null,
+                    shipCost:0,Vs:0,missing:[],toBB:[]};
+                document.querySelector('#verdict').hidden=false;
+                document.querySelector('#pSum').hidden=false;
+                paintPicker(window.__b4Plan);
+                paintCourierUnits(window.__b4Plan);
+            }""")
+            expect(self.page.locator('#pkHeadline')).to_be_visible()
+            self.assertIn('561,390,098',self.page.locator('#pkHeadline').inner_text())
+            self.assertTrue(self.page.locator('#pkOpportunity').is_hidden(),
+                            'A comparison-only card would duplicate the new header')
+            self.page.evaluate("window.__b4Plan.mode='jOrd';paintPicker(window.__b4Plan)")
+            self.assertIn('−561,390,098',self.page.locator('#pkHeadline').inner_text())
+            self.page.evaluate("window.__b4Plan.mode=null;paintPicker(window.__b4Plan)")
+            for width in (1440, 630, 390):
+                self.page.set_viewport_size({'width':width,'height':900})
+                for light in (False,True):
+                    self.page.evaluate('(on)=>document.documentElement.classList.toggle("light",on)',light)
+                    data=self.page.evaluate("""() => {
+                        const heading=document.querySelector('#pSum>.mm-plan-heading').getBoundingClientRect();
+                        const compare=document.querySelector('#pkHeadline').getBoundingClientRect();
+                        return {containerRight:heading.right,compareRight:compare.right,
+                            compareLeft:compare.left,headingLeft:heading.left};
+                    }""")
+                    self.assertLessEqual(data['compareRight'],data['containerRight']+1,data)
+                    self.assertGreaterEqual(data['compareLeft'],data['headingLeft']-1,data)
+                    out=INDEX.parent/'tests'/'artifacts'/'theme'
+                    out.mkdir(parents=True,exist_ok=True)
+                    self.page.locator('#pSum').screenshot(
+                        path=str(out/f"b4-plan-{language}-{width}-{'light' if light else 'dark'}.png"),
+                        animations='disabled')
+
+    def test_b4_ledger_unit_copy_and_lazy_disclosures(self):
+        from playwright.sync_api import expect
+        for language in ('es','en'):
+            self.page.evaluate('setLang',language)
+            self.page.evaluate("""() => {
+                S.flip=false;S.api['paladin']={id:28659};
+                const o={name:'Paladin',qty:7,m3u:50000,ref:917800000,checks:[],
+                    jita:{buy:905400000,topBuy:905400000,sell:917800000,topSell:917800000}};
+                const r={o,q:7,best:'null',auto:'null',np:1060000000,jl:917800000,
+                    g:{null:7140000000,jOrd:6000000000},net:{null:7140000000,jOrd:6000000000},
+                    ship:{},prod:0,vol:350000,qd:0,hint:{},courierAllocated:0};
+                document.querySelector('#lots').replaceChildren();
+                S.items=[o];document.querySelector('#lots').append(buildLot(o));
+                paintLot(r);document.querySelector('#ledger').hidden=false;
+                document.querySelector('#ledger').open=true;
+                Object.defineProperty(navigator,'clipboard',{configurable:true,
+                    value:{writeText:v=>{window.__b4Copy=v;return Promise.resolve();}}});
+            }""")
+            expect(self.page.locator('#lots .lot-open')).to_have_attribute('aria-expanded','false')
+            self.assertEqual(self.page.locator('#lots .lot-body').locator(':scope > *').count(),0)
+            expect(self.page.locator('#lots img.ti')).to_have_attribute('data-tid','28659')
+            price=self.page.locator('#lots .lot-pp button.copy')
+            expect(price).to_be_enabled()
+            self.assertEqual(price.get_attribute('data-v'),'1060000000')
+            self.page.set_viewport_size({'width':390,'height':900})
+            out=INDEX.parent/'tests'/'artifacts'/'theme'
+            out.mkdir(parents=True,exist_ok=True)
+            self.page.locator('#ledger').screenshot(
+                path=str(out/f'b4-ledger-row-{language}-390-dark.png'),animations='disabled')
+            self.page.set_viewport_size({'width':1440,'height':900})
+            price.click()
+            self.assertEqual(self.page.evaluate('window.__b4Copy'),'1060000000')
+            self.assertEqual(self.page.locator('#lots .lot-open').get_attribute('aria-expanded'),'false')
+            self.page.locator('#lots .lot-open').focus()
+            self.page.keyboard.press('Enter')
+            expect(self.page.locator('#lots .lot-open')).to_have_attribute('aria-expanded','true')
+            for selector in ('#lots .prices','#lots .lot-analysis','#lots .lot-adjustments'):
+                expect(self.page.locator(selector)).to_be_visible()
+                self.page.locator(selector+'>summary').click()
+                expect(self.page.locator(selector)).to_have_attribute('open','')
+            self.assertEqual(self.page.locator('#lots .lot-adjustments input').count(),6)
+            for width in (1440, 630, 390):
+                self.page.set_viewport_size({'width':width,'height':900})
+                for light in (False,True):
+                    self.page.evaluate('(on)=>document.documentElement.classList.toggle("light",on)',light)
+                    coords=self.page.evaluate("""() => {
+                        const r=document.querySelector('#lots .lot').getBoundingClientRect();
+                        const p=document.querySelector('#lots .lot-pp .copy').getBoundingClientRect();
+                        return {rowRight:r.right,copyRight:p.right,copyLeft:p.left,rowLeft:r.left};
+                    }""")
+                    self.assertLessEqual(coords['copyRight'],coords['rowRight']+1,coords)
+                    self.assertGreaterEqual(coords['copyLeft'],coords['rowLeft']-1,coords)
+                    if width==390:
+                        sizing=self.page.evaluate("""() => {
+                            const names=['#lots .lot','#lots .lot-head','#lots .lot-open',
+                                '#lots .lot-info','#lots .lot-name','#lots .lot-financial'];
+                            return names.map(sel=>{const el=document.querySelector(sel),s=getComputedStyle(el),b=el.getBoundingClientRect();
+                                return {sel,w:b.width,cols:s.gridTemplateColumns,area:s.gridArea,display:s.display};});
+                        }""")
+                        self.assertGreater(sizing[2]['w'],95,sizing)
+                        prices_width=self.page.evaluate("""() => {
+                            const n=document.querySelector('#lots .lot-body>.prices');
+                            return {scroll:n.scrollWidth,client:n.clientWidth};
+                        }""")
+                        self.assertLessEqual(prices_width['scroll'],prices_width['client']+1,prices_width)
+                    out=INDEX.parent/'tests'/'artifacts'/'theme'
+                    out.mkdir(parents=True,exist_ok=True)
+                    self.page.locator('#ledger').screenshot(
+                        path=str(out/f"b4-ledger-{language}-{width}-{'light' if light else 'dark'}.png"),
+                        animations='disabled')
+            self.page.evaluate("""() => {
+                const o={name:'Unknown Synthetic Item',qty:1,checks:[],jita:{}};
+                S.items.push(o);document.querySelector('#lots').append(buildLot(o));
+                paintLot({o,q:1,best:null,net:{},hint:{},ship:{},g:{},prod:0,vol:0,qd:0});
+            }""")
+            expect(self.page.locator('#lots .lot').last.locator('.lot-pp .copy')).to_be_disabled()
+            self.page.evaluate("S.flip=true;paintLot(S.items[0].ui.last)")
+            expected='antes de descontar la inversión' if language=='es' else 'before subtracting purchase investment'
+            self.assertIn(expected,self.page.locator('#lots .lot').first.locator('.lot-net').get_attribute('title'))
+
 
     def test_paladin_trading_profit_requires_real_purchase_capital(self):
         """P0 regression: 7 Paladin, filtered bid anomaly, both languages and themes."""

@@ -34,8 +34,8 @@ function paintPicker(P){
 
   // Benchmark is the largest estimated net across feasible plan selections, not necessarily Plan Óptimo.
   // Financial opportunity and time/liquidity are reported separately; no fabricated days or returns.
-  const opportunity=$('pkOpportunity');
-  opportunity.replaceChildren();
+  const opportunity=$('pkOpportunity'),headline=$('pkHeadline');
+  opportunity.replaceChildren();headline.replaceChildren();
   const valid=all.filter(x=>Number.isFinite(x.t.net));
   // Selling to an unknown player is a WTS offer, not an executable quote.
   // It can be manually selected, but must not define the highest-ISK
@@ -77,14 +77,13 @@ function paintPicker(P){
     shortcutPanel.hidden=false;
   }
   if(chosen.m==='disc'){
-    opportunity.append(el('p','pk-opp-explain',tx('picker.playerUnconfirmed')));
-    opportunity.hidden=false;
+    headline.append(el('p','pk-headline-note',tx('picker.playerUnconfirmed')));
   }else if(financial.length>1&&financial.some(x=>x.m===cur)){
     const benchmark=financial.reduce((best,x)=>x.t.net>best.t.net?x:best);
     const gap=Math.max(0,benchmark.t.net-chosen.t.net);
-    const grid=el('div','pk-opp-grid');
+    const grid=el('div','pk-headline-grid');
     const stat=(label,value,cl='')=>{
-      const node=el('div','pk-opp-stat');
+      const node=el('div','pk-headline-stat');
       node.append(el('small',null,label),el('strong',cl,value));grid.append(node);
     };
     if(gap<.5){
@@ -99,15 +98,14 @@ function paintPicker(P){
       stat(tx('picker.gap'),'−'+fmt(gap),'neg');
       stat(tx('picker.higherNet'),(S.lang==='en'?trS(benchmark.l):benchmark.l)+' · '+fmt(benchmark.t.net));
     }
-    opportunity.append(grid);opportunity.hidden=false;
+    headline.append(grid);
   }else{
-    opportunity.hidden=false;
-    opportunity.append(el('p','pk-opp-explain',tx('picker.insufficient')));
+    headline.append(el('p','pk-headline-note',tx('picker.insufficient')));
   }
+  headline.hidden=false;
 
-  // Decision at a glance: visible next to the freight result. Only secondary
-  // calculations are disclosed on demand inside each freight item.
-  opportunity.prepend(el('h3','pk-opp-head',tx('picker.why')));
+  // Financial comparison belongs to the plan header. Keep non-numeric
+  // protections below the plans; never discard warnings to save screen space.
   if(S.flip&&!showProfit&&P.rows.some(r=>r.q>0&&r.best)){
     opportunity.insertBefore(el('p','pk-owner-guard',tx('trade.proceedsOnly')),opportunity.children[1]||null);
   }
@@ -126,6 +124,8 @@ function paintPicker(P){
     action.type='button';action.dataset.enableCompression='true';prompt.append(action);
     opportunity.append(prompt);
   }
+  opportunity.hidden=!opportunity.childElementCount;
+  if(!opportunity.hidden)opportunity.prepend(el('h3','pk-opp-head',tx('picker.noticeHeading')));
 
   const maxNet=Math.max(...list.filter(x=>x.m!=='disc').map(x=>x.t.net),1);
   // Optimal is already identified by the section subtitle and the opportunity

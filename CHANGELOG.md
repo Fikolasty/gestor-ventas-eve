@@ -1,3 +1,9 @@
+## v1.0.129 — 2026-10-25 [ChatGPT] · B.4, candidato de publicación
+- «ELIGE TU PLAN»: la comparación de ISK adicionales o neto alternativo se integra en el encabezado, como en «LA RUTA MÁS RENTABLE», utilizando los mismos importes y rutas. Las advertencias importantes permanecen debajo; no se inventan ganancias con precios incompletos ni ventas a jugadores sin cotización firme.
+- «LISTADO DE ÍTEMS REGISTRADOS»: filas con iconos EVE, cantidad, ruta, **precio unitario copiable** en recuadro neutro de Contrato y **neto estimado del lote** diferenciado de la ganancia tras inversión. Detalles diferidos de precios/guía/ajustes/comparación, expansión por teclado y datos móviles verticales sin desbordamiento.
+- Traducciones ES/EN y nuevas regresiones B.4; pruebas de navegador 390/630/1440, Dark/Light. Preparados los workflows de v1.0.129, sin cambios económicos ni en EVE SSO/ESI o persistencia.
+- **Estado inicial:** candidato local en QA; no supone publicación verificada. Ver `docs/DSS.md` §14.
+
 ## v1.0.128 — 2026-10-25 [ChatGPT] · Publicado y verificado en GitHub Pages
 - Consolida las flechas de los acordeones de Minería y los planes/filas de Skills con el mismo contrato ya aprobado de Ventas: 9 px, trazo CSS 1,75 px, color neutro y giro al abrir. Minería mantiene el icono «ⓘ» como ayuda y Skills sigue aislado en su iframe y sincronizado con tema/idioma.
 - Extiende el indicador compartido a tarjetas de planes, detalle por ítem, pasos de venta, filas del Listado y menú de identidad; no modifica las flechas de ordenación ni los `<select>` nativos.

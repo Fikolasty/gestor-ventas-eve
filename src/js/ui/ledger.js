@@ -35,19 +35,22 @@ function toggleLot(o){const ui=o.ui;if(!ui)return;const open=ui.body.hidden;
 $('lots').addEventListener('click',e=>{const lot=e.target.closest('.lot'),o=lot&&LOT_OF.get(lot);if(!o)return;
   if(e.target.closest('.lot-x')){removeFromPaste(o.name);return;}
   if(e.target.closest('.copy'))return;
-  if(e.target.closest('.lot-head'))toggleLot(o);});
-$('lots').addEventListener('keydown',e=>{if((e.key==='Enter'||e.key===' ')&&e.target.classList.contains('lot-head')){const o=LOT_OF.get(e.target.parentNode);if(o){e.preventDefault();toggleLot(o);}}});
+  if(e.target.closest('.lot-open'))toggleLot(o);});
+let lotDetailId=0;
 function buildLot(o){
   // v102: solo creamos la cabecera para cada item; los controles pesados se construyen bajo demanda.
   // Importante: o.ui.last se actualiza en paintLot() aun con el detalle cerrado.
-  const lot=el('article','lot'),head=el('div','lot-head');head.tabIndex=0;head.setAttribute('role','button');head.setAttribute('aria-expanded','false'); // v1.0.8: div para poder llevar dentro el botón de copiar precio
+  const lot=el('article','lot'),head=el('div','lot-head');
+  const toggle=el('button','lot-open');toggle.type='button';toggle.setAttribute('aria-expanded','false');
   const nm=el('span','lot-name');nm.append(el('b',null,o.name));const tag=el('span','tag');nm.append(tag);
-  const qty=el('span','lot-qty'),dest=el('span','lot-dest'),net=el('span','lot-net'),chev=el('span','chev');chev.setAttribute('aria-hidden','true');
-  const pp=el('span','lot-pp'),ppB=copyBtn('','—');ppB.classList.add('cp-n');ppB.title='Precio por unidad sugerido: clic para copiar';pp.append(ppB);
-  head.append(nm,pp,qty,dest,net,chev);
-  const body=el('div','lot-body');body.hidden=true;
-  const ui={nm,lot,head,tag,qty,dest,net,body,ppB,detailsReady:false};
-  const x=el('button','lot-x');x.type='button';x.title='Quitar del lote';x.setAttribute('aria-label','Quitar '+o.name+' del lote');
+  const qty=el('span','lot-qty'),dest=el('span','lot-dest'),chev=el('span','chev');chev.setAttribute('aria-hidden','true');
+  const info=el('span','lot-info'),meta=el('span','lot-meta');meta.append(qty,dest);info.append(nm,meta);toggle.append(info,chev);
+  const pp=el('span','lot-pp'),ppLabel=el('span','lot-k',tx('ledger.unitPrice')),ppB=copyBtn('','—');ppB.classList.add('cp-n');pp.append(ppLabel,ppB);
+  const netBox=el('span','lot-financial'),netLabel=el('span','lot-k',tx('ledger.netSales')),net=el('span','lot-net');netBox.append(netLabel,net);
+  head.append(toggle,pp,netBox);
+  const body=el('div','lot-body');body.hidden=true;body.id='lot-detail-'+(++lotDetailId);toggle.setAttribute('aria-controls',body.id);
+  const ui={nm,lot,head:toggle,tag,qty,dest,net,netLabel,ppLabel,body,ppB,detailsReady:false};
+  const x=el('button','lot-x');x.type='button';x.title=tx('ledger.removeItem',{item:o.name});x.setAttribute('aria-label',x.title);
   o.ui=ui;lot.append(head,x,body);LOT_OF.set(lot,o); // v1.0.8: sin listeners por fila; un solo manejador en #lots
   return lot;
 }
@@ -56,7 +59,7 @@ function buildLotDetails(o,ui){
   // Los inputs se preservan durante paintLot para que escribir no pierda foco.
   const body=ui.body;
   const rcall=el('div','call rcall'),rcB=el('b'),rcS=el('small'),rcR=el('small','rcr');rcall.append(rcB,rcS,rcR);rcall.hidden=true;
-  const gwrap=el('details','gwrap lot-fold'),guide=el('ol','guide');gwrap.append(el('summary','sub-h','Guía para vender este ítem'),guide);
+  const gwrap=el('details','gwrap lot-fold'),guide=el('ol','guide'),guideSummary=el('summary','sub-h',tx('ledger.guide'));guideSummary.dataset.i18n='ledger.guide';gwrap.append(guideSummary,guide);
   const opts=el('div','opts');Object.assign(ui,{opt:{},rcall,rcB,rcS,rcR,guide});
   OPTS.forEach(([k,l])=>{
     const r=el('div','opt'),lab=el('span','opt-l',k==='null'?'':optionMarketText(l)),bar=el('span','opt-bar'),fill=el('i'),v=el('span','opt-v'),h=el('span','opt-h');
@@ -89,13 +92,14 @@ function buildLotDetails(o,ui){
   fSk.append(iSk);
   facts.append(fQty,fBuy,fBuyOrder,fRef,fSeen,fM3,fVol,fSk);
   const prices=el('details','prices lot-fold'),pBody=el('tbody'),pt=el('table');pt.append(pBody);
-  prices.append(el('summary','sub-h','Precios para publicar'),pt);
+  const pricesSummary=el('summary','sub-h',tx('ledger.prices'));pricesSummary.dataset.i18n='ledger.prices';prices.append(pricesSummary,pt);
   const checks=el('ul','checks'),foot=el('div','lot-foot'),del=el('button','link danger','Quitar del lote');del.type='button';
   del.addEventListener('click',()=>removeFromPaste(o.name));foot.append(del);
   const verdict=el('section','lot-verdict');verdict.append(rcall);
-  const analysis=el('div','lot-analysis');analysis.append(opts);
-  body.append(gwrap,verdict,analysis,facts,prices,checks,foot);
-  Object.assign(ui,{iRef,iBuyOrder,iM3,bBuy,bVol,pBody,checks,detailsReady:true});
+  const analysis=el('details','lot-analysis lot-detail-section'),analysisSummary=el('summary','sub-h',tx('ledger.compare'));analysisSummary.dataset.i18n='ledger.compare';analysis.append(analysisSummary,opts);
+  const adjustments=el('details','lot-adjustments lot-detail-section'),adjustmentsSummary=el('summary','sub-h',tx('ledger.adjust'));adjustmentsSummary.dataset.i18n='ledger.adjust';adjustments.append(adjustmentsSummary,facts,gwrap);
+  body.append(verdict,prices,analysis,adjustments,checks,foot);
+  Object.assign(ui,{iRef,iBuyOrder,iM3,bBuy,bVol,pBody,checks,verdict,detailsReady:true});
 }
 // copia el valor limpio: números con máx. 2 decimales y sin "ISK" (listo para pegar en el juego)
 const isNumTxt=t=>/^[−+\-]?\s*[\d][\d,.\s]*(\s*(ISK|m³|m3|%|días?|u))?$/i.test(String(t).trim());
@@ -171,9 +175,9 @@ document.addEventListener('keydown',e=>{
 // fila de precios: Dónde · precio por unidad (copiable) · nota
 // fila: dónde · precio por unidad (copiable) · cómo se calcula · lo que te queda por unidad (neto)
 function priceRow(tb,where,unit,note,net,best){
-  const tr=el('tr',best?'pr-best':'');const t0=el('td');t0.append(el('b',null,where));if(best)t0.append(el('span','pill p-null pr-tag','Tu plan'));tr.append(t0);
-  const td=el('td','r');if(unit!=null)td.append(copyBtn(unit,fmtP(unit)));else td.append(el('span','muted','—'));
-  const tn=el('td','r pr-net '+sgn(net),net==null?'—':fmtP(net));
+  const tr=el('tr',(best?'pr-best ':'')+'pr-route');const t0=el('td');t0.append(el('b',null,where));if(best)t0.append(el('span','pill p-null pr-tag','Tu plan'));tr.append(t0);
+  const td=el('td','r');td.dataset.label=tx('ledger.unitPrice');if(unit!=null)td.append(copyBtn(unit,fmtP(unit)));else td.append(el('span','muted','—'));
+  const tn=el('td','r pr-net '+sgn(net),net==null?'—':fmtP(net));tn.dataset.label=tx('ledger.netUnit');
   tr.append(td,el('td','muted',note||''),tn);tb.append(tr);
 }
 /* ================= v103: ordenación independiente de Listado de Items Registrados =================
@@ -234,7 +238,10 @@ function suggUnit(r){const k=r.best,a=r.o.jita;
 function paintLot(r){
   const o=r.o,u=o.ui;if(!u)return;
   if(!u.ic){const ic=iconFor(o.name);if(ic){u.nm.querySelector('b').prepend(ic);u.ic=ic;}} // ícono cuando ya se conoce el type_id
-  u.qty.textContent=fmtQ(r.q);
+  u.qty.textContent=tx('ledger.units',{count:fmtQ(r.q)});
+  u.ppLabel.textContent=tx('ledger.unitPrice');
+  u.netLabel.textContent=tx('ledger.netSales');
+  u.net.title=S.flip?tx('ledger.tradeNetHint'):tx('ledger.saleNetHint');
   const warn=(o.checks||[]).filter(c=>c[1]==='warn').length,ok=(o.checks||[]).length&&!warn;
   setText(u.tag,warn?warn+(S.lang==='en'?(warn>1?' warnings':' warning'):(warn>1?' avisos':' aviso')):(ok?(S.lang==='en'?'verified':'verificado'):''),'tag '+(warn?'warn':ok?'ok':''));u.tag.hidden=!warn&&!ok;
   if(!u.skT){u.skT=el('span','tag sk');u.nm.append(u.skT);}u.skT.hidden=!o.skew;if(o.skew)u.skT.textContent='ajuste '+(o.skew>0?'+':'−')+pctS(Math.abs(o.skew))+'%';
@@ -242,11 +249,13 @@ function paintLot(r){
   else setText(u.dest,'Falta Precio','lot-dest pill p-none');
   setText(u.net,r.best?fmt(r.net[r.best]):'—','lot-net '+(r.best?sgn(r.net[r.best]):''));
   {const up=suggUnit(r),b=u.ppB;const t=up==null?'—':fmtP(up);if(b.textContent!==t)b.textContent=t;b.dataset.v=up==null?'':String(Math.round(up*100)/100);b.disabled=up==null;
-   b.title=up==null?(r.best==='rNull'||r.best==='rJita'?'Se venden los minerales: ábrelo para ver sus precios':'Sin precio'):'Precio por unidad sugerido ('+(OPTS.find(x=>x[0]===r.best)||['',''])[1]+'): clic para copiar';}
+   b.title=up==null?tx('ledger.noUnitPrice'):tx('ledger.copyUnit',{item:o.name,price:t});
+   b.setAttribute('aria-label',b.title);}
   // rendimiento: el cuerpo (opciones, guía, precios, verificación) solo se pinta si la fila está abierta
   u.last=r;if(u.body.hidden)return;
   paintGuide(u.guide,r);
   u.rcall.hidden=!r.rep;
+  u.verdict.hidden=!r.rep;
   if(r.rep){const w=r.raw&&r.raw.sell;u.rcR.textContent=w?tx('refinery.ledgerEstimate',{fee:parseFloat($('rTax').value)||0,ore:fmt(w.ore),products:fmt(w.prod),diff:(w.diff>=0?'+':'')+fmt(w.diff),percent:(w.pct>=0?'+':'')+pct(w.pct)}):'';u.rcR.hidden=!w;}
   if(r.rep){const lab=k=>k==='null'?nullLabel(o.name):optionMarketText(OPTS.find(x=>x[0]===k)[1]);
     if(r.rep.missing){setText(u.rcB,'¿Reprocesar? Faltan precios','');u.rcS.textContent='Trae los precios de los minerales para saberlo.';}

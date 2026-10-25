@@ -255,6 +255,86 @@
     "es": "{count} ítems no admiten esta ruta; conservan su mejor alternativa.",
     "en": "{count} items cannot use this route and keep their best alternatives."
   },
+  "ledger.intro": {
+    "es": "Consulta la mejor ruta de cada ítem. Copia el precio por unidad o abre sus opciones para comparar y ajustar.",
+    "en": "Check each item's best route. Copy the unit price or open its options to compare and adjust."
+  },
+  "ledger.sortBy": {
+    "es": "ORDENAR POR",
+    "en": "SORT BY"
+  },
+  "ledger.name": {
+    "es": "Nombre",
+    "en": "Name"
+  },
+  "ledger.quantity": {
+    "es": "Cantidad",
+    "en": "Quantity"
+  },
+  "ledger.route": {
+    "es": "Ruta",
+    "en": "Route"
+  },
+  "ledger.netSort": {
+    "es": "Neto del lote",
+    "en": "Lot net proceeds"
+  },
+  "ledger.unitPrice": {
+    "es": "PRECIO POR UNIDAD · ISK",
+    "en": "UNIT PRICE · ISK"
+  },
+  "ledger.netSales": {
+    "es": "NETO ESTIMADO DEL LOTE",
+    "en": "ESTIMATED LOT NET PROCEEDS"
+  },
+  "ledger.netUnit": {
+    "es": "NETO POR UNIDAD · ISK",
+    "en": "NET PER UNIT · ISK"
+  },
+  "ledger.saleNetHint": {
+    "es": "Ingresos netos estimados de venta; no son beneficios de Trading.",
+    "en": "Estimated net sale proceeds; not Trading profit."
+  },
+  "ledger.tradeNetHint": {
+    "es": "Neto estimado de la venta, antes de descontar la inversión en la compra. Consulta el beneficio en la ruta principal.",
+    "en": "Estimated sale proceeds before subtracting purchase investment. See profit in the main route summary."
+  },
+  "ledger.units": {
+    "es": "{count} unidades",
+    "en": "{count} units"
+  },
+  "ledger.copyUnit": {
+    "es": "Copiar {price} ISK por unidad de {item}",
+    "en": "Copy {price} ISK per unit of {item}"
+  },
+  "ledger.noUnitPrice": {
+    "es": "No hay precio por unidad copiable para esta ruta. Abre el ítem para consultar los detalles.",
+    "en": "No copyable unit price for this route. Open the item to see details."
+  },
+  "ledger.removeItem": {
+    "es": "Quitar {item} del lote",
+    "en": "Remove {item} from the lot"
+  },
+  "ledger.prices": {
+    "es": "Precios por ruta · copiar valores",
+    "en": "Prices by route · copy values"
+  },
+  "ledger.compare": {
+    "es": "Comparar rutas de venta",
+    "en": "Compare selling routes"
+  },
+  "ledger.adjust": {
+    "es": "Ajustes del ítem",
+    "en": "Item settings"
+  },
+  "ledger.guide": {
+    "es": "Guía para vender este ítem",
+    "en": "Guide to selling this item"
+  },
+  "picker.noticeHeading": {
+    "es": "AVISOS DEL PLAN",
+    "en": "PLAN NOTICES"
+  },
   "picker.nextBest": {
     "es": "OTRA FORMA DE VENDER",
     "en": "ANOTHER WAY TO SELL"
