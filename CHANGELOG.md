@@ -1,3 +1,9 @@
+## v1.0.132 — 2026-10-25 [ChatGPT] · B.5b armonización tipográfica de Ventas (candidato)
+
+- Escala tipográfica compartida y limitada a las secciones de Ventas (`#verdict`, `#pSum`, `#ledger`): preguntas/disclosures **13,5 px**, explicaciones **13 px**, etiquetas secundarias **12,5 px**. Se armonizan FAQ, deducciones, reproceso, desglose de courier, nota de precios y pequeños textos de Listado/selector de plan.
+- Sin cambiar cifras ISK, encabezados protagonistas, precios unitarios copiables, botones de acción, flechas, DOM, cálculo económico, ESI/SSO, almacenamiento, temas ni traducciones. `src/styles/80-product-ux.css` mantiene los tokens en un único alcance; nuevas aserciones estáticas y de Chromium protegen tamaños computados ES/EN, Dark/Light, 390/630/1440 y no herencia hacia Minería.
+- Versión de build y workflows **v1.0.132**. **Candidato local:** v1.0.131 sigue siendo la versión pública verificada hasta aprobar pruebas, CI, GitHub Pages y descarga HTTPS independiente.
+
 ## v1.0.131 — 2026-10-25 [ChatGPT] · Legibilidad contextual B.5a, publicada y verificada en GitHub Pages
 
 - Mejora focalizada de las preguntas y explicaciones de Ventas: preguntas desplegables y FAQ a **16 px**, subtítulos a **~15 px**, párrafos explicativos a **~14,7 px**, textos de fuentes **~13,4 px**, mayor contraste y aire entre líneas. Reprocesamiento y notas de costos también ganan legibilidad sin alterar importes, fórmulas ni los controles existentes.

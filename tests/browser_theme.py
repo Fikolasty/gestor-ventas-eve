@@ -1060,16 +1060,32 @@ class ThemeBrowserTests(unittest.TestCase):
                             repAnswer:px('#vCap .mm-rep-answer'),
                             repSub:px('#vCap .mm-rep-sub'),
                             faqQuestion:px('#pSum>.mm-inline-faq>summary'),
-                            faqAnswer:px('#pSum>.mm-inline-faq>p')
+                            faqAnswer:px('#pSum>.mm-inline-faq>p'),
+                            ledgerQuestion:px('#ledger>.mm-inline-faq>summary'),
+                            ledgerExplanation:px('#ledger>.mm-inline-faq>p'),
+                            financeQuestion:px('#verdict #vFinanceDetails>summary'),
+                            netContext:px('#verdict .mm-net-context'),
+                            sortLabel:px('#ledger .ledger-sort-title'),
+                            primaryISK:px('#verdict .v-isk')
                         };
                     }""")
-                    for label,minimum in {
-                        'question':16,'subheading':15,'explanation':14.5,
-                        'source':13,'included':13.5,'repQuestion':14,
-                        'repAnswer':16,'repSub':14,'faqQuestion':16,'faqAnswer':14.5
+                    for label,expected in {
+                        'question':13.5,'explanation':13,
+                        'source':13,'included':13,'repQuestion':13.5,
+                        'repSub':13,'faqQuestion':13.5,'faqAnswer':13,
+                        'ledgerQuestion':13.5,'ledgerExplanation':13,
+                        'financeQuestion':13.5,'netContext':13,'sortLabel':12.5
                     }.items():
-                        self.assertGreaterEqual(type_scale[label],minimum,
-                                                f'{language}/{width}/{light} {label}: {type_scale}')
+                        self.assertAlmostEqual(type_scale[label],expected,places=2,
+                                               msg=f'{language}/{width}/{light} {label}: {type_scale}')
+                    # The economic headline and the internal explanation heading
+                    # keep their original roles and never inherit the small copy scale.
+                    self.assertGreaterEqual(type_scale['primaryISK'],32)
+                    self.assertGreaterEqual(type_scale['repAnswer'],16)
+                    self.assertGreaterEqual(type_scale['subheading'],15)
+                    self.assertEqual(self.page.evaluate("""() =>
+                        getComputedStyle(document.querySelector('#mining'))
+                            .getPropertyValue('--mm-sales-question-size').trim()"""),'')
                     dims=self.page.locator('#vCap').evaluate("""el => {
                         const root=el.getBoundingClientRect(),wide=[...el.querySelectorAll('*')]
                             .filter(n=>n.getBoundingClientRect().right>innerWidth+2).length;

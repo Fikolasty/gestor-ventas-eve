@@ -1,5 +1,13 @@
 # PROGRESS — Market Moves+
 
+## 2026-10-25 — B.5b escala tipográfica de Ventas, candidato local v1.0.132
+
+**Aprobación:** después de revisar la legibilidad de v1.0.131, Geiner propuso preguntas a **13,5 px** y explicaciones a **13 px**, sin cambiar la jerarquía visual del resto. Tras dialogar sobre un sistema consistente sin uniformarlo todo, aprobó aplicar la armonización **primero a toda la sección Ventas**. Se define escala de preguntas/disclosures 13,5px, explicaciones/ayudas 13px, etiquetas 12,5px, preservando los títulos, importes ISK, controles principales y precios copiables. No se extiende a Minería, Skills ni Guía; adaptar esos módulos requerirá su propia revisión.
+
+**Implementación acotada:** `src/styles/80-product-ux.css` declara tres tokens solo bajo `#verdict,#pSum,#ledger`; reutilizados en FAQ, deducciones, reprocesado, notas de resultados, detalles de flete, listado y selector. Sin cambios JS, finanzas, Type IDs, ES/EN, EVE SSO/ESI, storage, temas ni semántica. `tests/b5-readable-typography.test.cjs` comprueba tokens y preservación de cifras; `tests/browser_theme.py` verifica tamaños computados y que no se heredan a Minería, Dark/Light, 390/630/1440, ES/EN, sin overflow. Build y workflows pasan a 1.0.132.
+
+**Gates pendientes antes de publicar:** Node, Python, 8 legacy y 37 Chromium, build, diff, capturas, identidad Fiko y lease de SHA, cuatro Actions y HTTPS público byte por byte. Base limpia `main=373bf2c5be85f027f2db1d579068781f2cda11df`, **v1.0.131 LIVE** al empezar. No informar v1.0.132 LIVE hasta completar esos gates. C.1/D siguen pendientes.
+
 ## 2026-10-25 — B.5a legibilidad contextual, v1.0.131 LIVE y verificada
 
 **Observación de Geiner antes de C.1:** las preguntas y explicaciones económicas de B.5 parecen secundarias por su letra pequeña y bajo énfasis. Corrección acotada en `src/styles/80-product-ux.css`: preguntas FAQ/disclosures a 16px, títulos interiores ~15px, explicaciones ~14,7px con interlineado 1.65 y contraste neutro mejorado; pistas de fuente ~13,4px, notas de reprocesado ~14px. Sin cambios en datos, ESI/SSO, i18n, cálculos, DOM ni comportamiento de acordeones.
