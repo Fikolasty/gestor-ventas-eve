@@ -1,12 +1,19 @@
 # PROGRESS — Market Moves+
 
+## v1.0.122 — publicación completada, 2026-10-25
+
+- Publicados con la conexión GitHub autorizada **«Fiko»/`Fikolasty`** los seis cambios de desarrollo pendientes y el séptimo commit de ajuste del workflow/DSS. Avance de `main` desde `0cc24e1` a `d0561d8` sin force push; GitHub Actions publicó `12e7852` con la versión 1.0.122.
+- **Cuatro workflows de GitHub Actions completados con éxito:** Build Market Moves+, Verificación minera, Versiones y Rebuild Market Moves distributable. La reconstrucción pasó Chromium (Light/Dark y traducción/login), publicó GitHub Pages y verificó contenido HTTP: <https://github.com/Fikolasty/gestor-ventas-eve/actions/runs/40162419218>.
+- El árbol final publicado antes del build coincidió byte a byte con el árbol local. Los SHA remotos son distintos porque GitHub recreó los commits con su API; el mapeo completo se documentó en `docs/DSS.md`. La conexión **Fiko** es obligatoria para futuros pushes, no usar `git push` de esta terminal sin autenticación.
+- Pendientes: evaluación humana del diseño real, sesión EVE SSO/ESI y validación de la base de tarifa de refinería. Una prueba Chromium automatizada no sustituye aprobación visual manual.
+
 ## v1.0.122 — recuperación del acabado visual, 2026-10-24
 
 - Conforme a captura y requisitos explícitos: Inicio se expresa como icono de casa; se elimina pseudo-texto. Navegación y acciones dejan de ser pastillas; Ajustes/Guía conservan botones accesibles pero muestran solo iconos; identidad del piloto/login se ve como texto sin cápsula; selector Vender Ítems usa chevron geométrico y header deja espacio inferior regular.
 - Fuente `src/styles/80-product-ux.css`; sin reemplazar nodos DOM, sin tocar ESI, motores, persistencia o event listeners. `index.html` compilado v1.0.122.
 - DSS de continuidad creado: `docs/DSS.md`, que debe actualizarse **en cada cambio/commit/push futuro**. Referencia cruzada en SDD.
 - Pruebas: 18 suites Node, 16 Python, build y `git diff --check` aprobados. QA visual real desktop/móvil, dark/light, login/no-login pendiente por ausencia de Chromium local. No atribuir validez visual a la imagen conceptual.
-- La publicación sigue bloqueada por autenticación GitHub; cambios locales pendientes de sincronizar con `main` remoto.
+- **Nota histórica:** este punto describía la preparación local. La publicación quedó completada el 2026-10-25; consultar la sección nueva de arriba y el DSS para los SHA remotos verificados.
 
 ## v1.0.121 — integración del reproceso, 2026-10-24
 

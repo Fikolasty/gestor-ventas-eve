@@ -1,6 +1,6 @@
 # DSS — Design Standards & Session Handoff · Market Moves+
 
-**Última actualización:** 2026-10-24 · **Preparación local:** v1.0.122 (header completado, pendiente QA visual) · **Estado remoto verificado:** `main` v1.0.120 (`0cc24e1`).
+**Última actualización:** 2026-10-25 · **Versión publicada:** v1.0.122 · **Estado remoto verificado:** compilación de GitHub Actions `12e7852` en `main`, con despliegue de Pages exitoso. Revisión visual humana y sesión EVE real pendientes.
 
 Este DSS es el respaldo prioritario de **decisiones visuales, estado verificable y traspaso entre chats**. Léelo junto con `docs/SDD.md`, `docs/SPEC.md`, `docs/PROGRESS.md` y `CHANGELOG.md`. No confundir código probado localmente con publicación en GitHub.
 
@@ -47,17 +47,21 @@ Este DSS es el respaldo prioritario de **decisiones visuales, estado verificable
 
 ## 4. Estado de desarrollo recuperado
 
-| SHA local | Trabajo | Pruebas | Publicación |
+| SHA local → SHA publicado | Trabajo | Pruebas | Publicación |
 |---|---|---|---|
-| `ac90f52` | Cotización de minerales y tarifa de refinería en ISK | Node/Python aprobadas | No publicado |
-| `8970211` | Integración del coste separado en Ventas y Minería (v1.0.121) | Node/Python aprobadas | No publicado |
-| `0111e1d` | Corrige sincronización de Reprocessing en preview + regresión del fallo CI | Node/Python aprobadas; Chromium no disponible local | No publicado |
-| `c168e54` | Comparador compartido de cuatro rutas y guardas de tarifa | 17 suites Node + 16 Python | No publicado |
-| `5b490a7` | Recuperación gráfica del header v1.0.122 + DSS | 18 suites Node + 16 Python; Chromium local no disponible | No publicado |
+| `ac90f52` → `f2ce37c` | Cotización de minerales y tarifa de refinería en ISK | Node/Python aprobadas | `main`, 2026-10-25 |
+| `8970211` → `90700a9` | Integración del coste separado en Ventas y Minería (v1.0.121) | Node/Python aprobadas | `main`, 2026-10-25 |
+| `0111e1d` → `2401b01` | Corrige sincronización de Reprocessing en preview + regresión del fallo CI | Node/Python y Chromium remoto aprobados | `main`, 2026-10-25 |
+| `c168e54` → `b843889` | Comparador compartido de cuatro rutas y guardas de tarifa | 17 suites Node + 16 Python | `main`, 2026-10-25 |
+| `5b490a7` → `82ce7f2` | Recuperación gráfica del header v1.0.122 + DSS | 18 suites Node + 16 Python; Chromium remoto aprobado | `main`, 2026-10-25 |
+| `e0b7902` → `a7b4a20` | Respaldo Git portable y guía de recuperación en DSS | Git bundle verificado | `main`, 2026-10-25 |
+| `2bb48b7` → `d0561d8` | Actualiza workflow de v1.0.120 a v1.0.122; impone conexión GitHub «Fiko» para cada push futuro | 18 suites Node, 16 Python, build y Actions aprobados | `main`, 2026-10-25 |
 
-**Acceso recuperado el 2026-10-25:** la conexión **GitHub «Fiko» (`Fikolasty`)** responde y confirma administración/escritura del repositorio. El `git push` de la terminal sigue sin credenciales; usar el conector autorizado. **Publicación de los seis commits y del parche de CI en preparación**; no afirmar que se ha completado hasta confirmar `main` y sus Actions.
+**Publicación confirmada el 2026-10-25:** conexión autorizada **GitHub «Fiko» (`Fikolasty`)**, permisos `admin`/`push`. Se enviaron siete commits sin forzar, avanzando `main` desde `0cc24e1` a `d0561d8`; la fuente, tests y artefacto final coincidieron exactamente con el árbol local `b4008d6`. Como el conector recreó objetos Git en vez de transferir un pack, los **SHA publicados difieren de los SHA locales**; se preservaron el orden, los siete mensajes y el contenido final. Los `index.html` intermedios, generados, no se duplicaron en cada commit remoto; el `index.html` final v1.0.122 sí se incluyó y coincidió byte a byte. GitHub Actions publicó luego la compilación y evidencia QA en `12e7852`.
 
-**Calidad/limitaciones:** el fee de estructura 0.5% es coste ISK separado del yield 90.63%; se estima con precios de referencia, no valoración interna certificada de EVE. El pipeline `compile` remoto v1.0.120 falló 1/25 pruebas del preview por valor de skill obsoleto; arreglo preparado pero todavía sin prueba Chromium CI tras push. Las pruebas locales Chromium no corren porque falta Playwright; no inventar validación visual.
+**Verificación remota:** las cuatro ejecuciones disparadas por `d0561d8` terminaron en éxito (Versiones, Verificación minera, Build Market Moves+, Rebuild Market Moves distributable). En la última, las pruebas Chromium Light/Dark y traducciones/login EVE, el build v1.0.122, el despliegue GitHub Pages y la verificación HTTP del sitio público terminaron correctamente; ejecución <https://github.com/Fikolasty/gestor-ventas-eve/actions/runs/40162419218>. No confundir esto con aprobación humana completa del diseño ni con EVE SSO vivo.
+
+**Calidad/limitaciones:** el fee de estructura 0.5% es coste ISK separado del yield 90.63%; se estima con precios de referencia, no valoración interna certificada de EVE. El fallo previo `compile` de v1.0.120 (skill de reproceso no sincronizada) está corregido; Chromium remoto pasó en v1.0.122. En el entorno local Chromium todavía no está disponible; falta revisión humana visual y EVE/ESI real.
 
 ## 5. Procedimiento para siguiente chat
 
@@ -72,12 +76,13 @@ Este DSS es el respaldo prioritario de **decisiones visuales, estado verificable
 | Fecha | Cambio | Estado |
 |---|---|---|
 | 2026-10-24 | Creado DSS de continuidad y restaurados estándares visuales expresos del usuario. Implementado acabado del header v1.0.122, pruebas estáticas y build. | 18 suites Node + 16 Python; sin publicación ni QA visual real |
-| 2026-10-25 | El usuario ordena publicar todo y establece que cada push futuro use imperativamente el conector GitHub «Fiko»/`Fikolasty`. Conexión `admin`/`push` y base remota `0cc24e1` confirmadas; se corrige el workflow que recompilaba una versión obsoleta (1.0.120 → 1.0.122). | Preparación de publicación; verificar GitHub Actions y Pages después de actualizar `main`. |
+| 2026-10-25 | El usuario ordena publicar todo y establece que cada push futuro use imperativamente el conector GitHub «Fiko»/`Fikolasty`. Conexión `admin`/`push` y base remota `0cc24e1` confirmadas; se corrige el workflow que recompilaba una versión obsoleta (1.0.120 → 1.0.122). | Publicados siete commits en `main` hasta `d0561d8`; CI compiló y publicó v1.0.122 en `12e7852`. Todas las Actions, incluida Pages/Chromium, exitosas. |
+| 2026-10-25 | Documentación posterior al push: mapeo de SHA locales/remotos, URL de la ejecución CI, estado final, protocolo de conexión obligatoria y respaldo histórico. | Cambio documental; no alterar motores ni estilos. |
 
 **Regla permanente:** añadir una fila aquí con cada nuevo cambio/commit/push de ChatGPT.
 
-## 7. Respaldo de código si se cambia de chat antes del push
+## 7. Respaldo histórico de la etapa anterior a la publicación
 
-- Archivo complementario: `MarketMoves-pending-2026-10-24.bundle`, respaldo Git verificable de los commits locales pendientes sobre `origin/main` de `0cc24e1`. Está guardado junto a una copia de este DSS en el proyecto «1. RAULITO FILES».
-- En un nuevo chat, **adjuntar tanto el DSS como el bundle**. El bundle no es un despliegue: permite traer la rama local y sus commits a un clon del repositorio original. Comprobar primero si GitHub ya recibió cambios para evitar sobrescribir trabajo remoto ajeno.
-- Recuperación técnica en un clon limpio (sin forzar): `git fetch /ruta/al/MarketMoves-pending-2026-10-24.bundle main:refs/heads/chatgpt-respaldo`; inspeccionar con `git log --oneline main..chatgpt-respaldo` y reconciliar antes de llevarlo a `main`.
+- Archivo histórico: `MarketMoves-pending-2026-10-24.bundle`, respaldo Git verificable de los commits que estuvieron pendientes sobre `0cc24e1`, guardado con una copia anterior del DSS en «1. RAULITO FILES».
+- **Ya no está pendiente de publicación:** `main` remoto tiene los siete cambios desde 2026-10-25. **Usar GitHub como fuente autoritativa al iniciar otro chat**; no volver a empujar/importar el bundle antiguo a `main`, porque duplicaría historial. El bundle solo sirve para recuperar la versión local original o auditar SHA.
+- Consulta histórica sin modificar `main`: `git fetch /ruta/al/MarketMoves-pending-2026-10-24.bundle main:refs/heads/chatgpt-respaldo`, seguida de comparación de los commits originales con los publicados. Nunca forzar la rama remota para que coincida con los SHA originales.
