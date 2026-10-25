@@ -182,6 +182,19 @@ body{background:transparent!important;color:var(--mm-txt)!important;font-family:
 .plan.is-complete .step-heading strong,.plan.is-complete .step-heading small{color:var(--mm-gain)!important}
 .book-card,.stat{min-height:0}
 .footer{display:none!important}
+/* B.3: the sandboxed Skills frame cannot inherit CSS classes from its parent;
+   it uses the same neutral 9px / 1.75px disclosure arrow locally. */
+.steps>details>summary>.chev,.skill-row>summary>.chev{
+  flex:none;width:9px;height:9px;
+  border-right:1.75px solid var(--mm-mut);border-bottom:1.75px solid var(--mm-mut);
+  transform:rotate(45deg);transition:transform .18s ease;
+}
+.steps>details[open]>summary>.chev,.skill-row[open]>summary>.chev{
+  transform:rotate(225deg);
+}
+@media(prefers-reduced-motion:reduce){
+  .steps>details>summary>.chev,.skill-row>summary>.chev{transition:none}
+}
 @media(max-width:750px){
   .wrap{padding:0 1px 18px!important}
   .main{padding:12px!important}

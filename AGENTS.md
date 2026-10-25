@@ -4,7 +4,7 @@ Antes de analizar o modificar este proyecto, leer completos y en este orden:
 
 1. `docs/EVE_PRODUCT_DESIGN_PROTOCOL.md` — reglas maestras de producto, UX/UI, ingeniería, dominio EVE, localización y verificación.
 2. `docs/DSS.md` — decisiones visuales vigentes, continuidad, publicación y límites del proyecto.
-3. `docs/PRODUCT_DESIGN_REFINEMENT.md` — continuidad del refinamiento: A+B.1 publicadas en v1.0.126; B.2 local en v1.0.127 (filtros y selector Jita), sin despliegue; chevrons restantes, saneamiento y profiling pendientes de aprobación por alcance.
+3. `docs/PRODUCT_DESIGN_REFINEMENT.md` — continuidad del refinamiento: A+B.1 publicadas en v1.0.126, B.2 publicada en v1.0.127; B.3 de chevrons Minería/Skills y disclosures residuales preparada como v1.0.128, su publicación requiere QA y comprobación HTTP. C y D permanecen pendientes.
 4. `docs/ARCHITECTURE.md`, `docs/SDD.md` y la parte pertinente de `docs/SPEC.md` — arquitectura, contratos de cálculo e historia técnica. Si un documento antiguo discrepa, comprobar el código y los tests actuales.
 
 ## Principios operativos

@@ -755,3 +755,38 @@ body:not(.is-flip) .fact-buy-order{display:none!important}
   #pSum .pk-tools .pk-fb,.hero #heroIntro #importControls .mm-trade-trigger,
   .hero #heroIntro #importControls .mm-trade-chevron{transition:none}
 }
+
+/* B.3: remaining expandable UI uses one neutral arrow. These are disclosure
+   indicators, not table sorting, directional links or the native select icon. */
+#pSum #pk>.pk-o::after,
+#pSum #flipBuy .fb2-more>summary::after,
+#vPlan .stp-chev,
+#ledger .lot-head .chev,
+.top .eve-identity-arrow{
+  content:"";
+  width:var(--mm-chevron-size)!important;height:var(--mm-chevron-size)!important;
+  border-right:var(--mm-chevron-stroke) solid var(--mut)!important;
+  border-bottom:var(--mm-chevron-stroke) solid var(--mut)!important;
+  font-size:0!important;transition:transform .18s ease;
+}
+#pSum #pk>.pk-o::after{
+  right:15px;top:50%;transform:translateY(-50%) rotate(45deg);
+}
+#pSum #pk>.pk-o[aria-expanded="true"]::after{
+  transform:translateY(-50%) rotate(225deg);
+}
+#pSum #flipBuy .fb2-more>summary::after{
+  display:inline-block;float:right;margin:4px 7px 0 8px;
+  transform:rotate(45deg);
+}
+#pSum #flipBuy .fb2-more[open]>summary::after{transform:rotate(225deg)}
+#vPlan .stp-chev{transform:rotate(45deg)!important}
+#vPlan .stp.open .stp-chev{transform:rotate(225deg)!important}
+#ledger .lot-head .chev{transform:rotate(45deg)!important}
+#ledger .lot.open .lot-head .chev{transform:rotate(225deg)!important}
+.top .eve-identity-arrow{transform:rotate(45deg)}
+.top .eve-identity-button[aria-expanded="true"] .eve-identity-arrow{transform:rotate(225deg)}
+@media(prefers-reduced-motion:reduce){
+  #pSum #pk>.pk-o::after,#pSum #flipBuy .fb2-more>summary::after,
+  #vPlan .stp-chev,#ledger .lot-head .chev,.top .eve-identity-arrow{transition:none}
+}

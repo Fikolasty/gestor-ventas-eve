@@ -1,5 +1,15 @@
 # PROGRESS — Market Moves+
 
+## 2026-10-25 — B.3 acotada: v1.0.128 local antes de publicación
+
+**Recomendación aceptada por alcance delegado:** seguir refinando consistencia de controles antes de comenzar limpieza CSS o optimizaciones sin perfiles. La base GitHub Fiko `main=9e480bf77c912e87110c63f1dbb6dd088c087550` coincide con el checkout v1.0.127 publicado, sin cambios ajenos que integrar. Se evita un rediseño amplio.
+
+**Implementación:** `src/mining.css` hace coincidir geometría y giro de disclosures nativos de Minería con la familia aprobada, pero excluye el botón de ayuda «ⓘ». `src/skills_preview.html` aplica el patrón al iframe Skills usando tokens sincronizados con el tema. `src/styles/80-product-ux.css` extiende el patrón a opciones de planes, detalles por ítem, pasos, lotes de inventario y despliegue de identidad, sin tocar ordenación, enlaces direccionales ni selects nativos. Son CSS y pruebas: sin variación económica, datos, traducciones, SSO/ESI ni persistencia.
+
+**Pruebas ejecutadas:** build v1.0.128; Node **17 archivos, 60 casos** (nuevo `tests/refinement-stage-b3.test.cjs`), Python **16/16**, ocho suites legacy **8/8**, Chromium B.3 focalizado **2/2** y **suite completa final 33/33** en ES/EN, Dark/Light, 390/1440 y teclado. Se estabilizaron fixtures de resumen anidado/re-render asíncrono de Skills y comparación contra el borde fraccionario computado de Ventas. La captura de Minería Light 390 detectó una flecha que envolvía con el subtítulo; se corrigió con un anclaje centrado limitado a ese editor y se volvió a pasar la suite entera. Gates CI preparados; **sin push ni Pages nuevos en este punto**. Ver `docs/DSS.md` §12. Se mantiene verificada LIVE solo v1.0.127 hasta prueba HTTP contraria.
+
+**Siguiente:** cerrar QA, usar exclusivamente conector Fiko y `expected_sha`/no force para publicar; verificar CI, commit de build, hash HTML público y crear ZIP exacto del HEAD remoto. Después C saneamiento de cascada por evidencia y D perfiles reales; flujos EVE SSO/ESI con cuenta siguen sin probar extremo a extremo.
+
 ## v1.0.122 — publicación completada, 2026-10-25
 
 - Publicados con la conexión GitHub autorizada **«Fiko»/`Fikolasty`** los seis cambios de desarrollo pendientes y el séptimo commit de ajuste del workflow/DSS. Avance de `main` desde `0cc24e1` a `d0561d8` sin force push; GitHub Actions publicó `12e7852` con la versión 1.0.122.

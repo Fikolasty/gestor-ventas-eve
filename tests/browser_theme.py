@@ -736,6 +736,109 @@ class ThemeBrowserTests(unittest.TestCase):
             self.assertLess(geometry['rightDifference'],4,geometry)
             self.assertLessEqual(geometry['overflow'],1,geometry)
 
+    def test_mining_b3_disclosures_and_info_icons(self):
+        """Native Mining accordions keep keyboard behavior and never dress help as a menu."""
+        from playwright.sync_api import expect
+        self.page.evaluate("selectAppModule('mining')")
+        editor = self.page.locator('#mining .mn-price-editor')
+        editor.wait_for(state='attached', timeout=10000)
+        for light in (False, True):
+            self.page.evaluate('(value)=>document.documentElement.classList.toggle("light",value)', light)
+            for width in (1440, 390):
+                self.page.set_viewport_size({'width': width, 'height': 900})
+                editor.evaluate('(el)=>el.open=false')
+                sales_arrow = self.page.locator('.mm-sales-mode-chevron').evaluate(
+                    'el=>getComputedStyle(el).borderRightWidth')
+                data = editor.evaluate("""el => {
+                    const summary=el.querySelector('summary');
+                    const arrow=getComputedStyle(summary,'::after');
+                    const help=document.querySelector('#mining .mn-info>summary');
+                    const helpArrow=help&&getComputedStyle(help,'::after');
+                    return {size:[arrow.width,arrow.height,arrow.borderRightWidth],
+                        summaryDisplay:getComputedStyle(summary).display,
+                        helpArrow:helpArrow?.content,
+                        helpLabel:help?.getAttribute('aria-label'),
+                        arrowColor:arrow.borderRightColor,
+                        borderRight:arrow.borderRight,
+                        stroke:getComputedStyle(document.documentElement).getPropertyValue('--mm-chevron-stroke').trim(),
+                        neutral:getComputedStyle(document.documentElement).getPropertyValue('--mut').trim(),
+                        closed:arrow.transform};
+                }""")
+                # Chromium snaps fractional borders to physical pixels at DPR=1;
+                # compare computed geometry with the existing Sales reference.
+                self.assertEqual(data['size'], ['9px', '9px', sales_arrow], data)
+                self.assertEqual(data['stroke'], '1.75px', data)
+                self.assertEqual(data['summaryDisplay'], 'flex', data)
+                self.assertEqual(data['helpArrow'], 'none', data)
+                self.assertTrue(data['helpLabel'], data)
+                editor.locator(':scope > summary').focus()
+                editor.locator(':scope > summary').press('Enter')
+                expect(editor).to_have_attribute('open', '')
+                if (width == 1440 and not light) or (width == 390 and light):
+                    out = INDEX.parent / 'tests' / 'artifacts' / 'theme'
+                    out.mkdir(parents=True, exist_ok=True)
+                    editor.locator(':scope > summary').screenshot(
+                        path=str(out / f'b3-mining-{"light-390" if light else "dark-1440"}.png'),
+                        animations='disabled')
+                opened = editor.evaluate('el=>getComputedStyle(el.querySelector("summary"),"::after").transform')
+                self.assertNotEqual(data['closed'], opened)
+                editor.locator(':scope > summary').press('Enter')
+                expect(editor).not_to_have_attribute('open', '')
+
+    def test_skills_b3_plan_and_skill_chevrons_follow_shared_geometry(self):
+        """Sandboxed Skills inherits the same neutral arrow in both themes and languages."""
+        from playwright.sync_api import expect
+        import re
+        self.page.evaluate("selectAppModule('skills')")
+        frame = self.page.frame_locator('#skillRoot iframe.skills-app-frame')
+        plan = frame.locator('.steps>details').first
+        expect(plan).to_be_visible(timeout=10000)
+        for light in (False, True):
+            self.page.evaluate("""(value) => {
+                const sw=document.querySelector('#themeLight');
+                sw.checked=!value;
+                sw.dispatchEvent(new Event('change',{bubbles:true}));
+            }""", light)
+            self.page.evaluate("setLang('en')" if light else "setLang('es')")
+            expect(frame.locator('#catTitle')).to_have_text(
+                'CORE SKILLS' if light else 'HABILIDADES BÁSICAS')
+            for width in (1440, 390):
+                self.page.set_viewport_size({'width': width, 'height': 900})
+                expect(plan).to_be_visible()
+                sales_arrow = self.page.locator('.mm-sales-mode-chevron').evaluate(
+                    'el=>getComputedStyle(el).borderRightWidth')
+                chev = plan.locator(':scope > summary > .chev')
+                expect(chev).to_have_css('width', '9px')
+                expect(chev).to_have_css('height', '9px')
+                expect(chev).to_have_css('border-right-width', sales_arrow)
+                expect(chev).to_have_css('transform', re.compile(r'matrix\(0\.7071'))
+                plan.locator(':scope > summary').focus()
+                plan.locator(':scope > summary').press('Enter')
+                expect(plan).to_have_attribute('open', '')
+                expect(chev).to_have_css('transform', re.compile(r'matrix\(-0\.7071'))
+                if (width == 1440 and not light) or (width == 390 and light):
+                    out = INDEX.parent / 'tests' / 'artifacts' / 'theme'
+                    out.mkdir(parents=True, exist_ok=True)
+                    plan.locator(':scope > summary').screenshot(
+                        path=str(out / f'b3-skills-{"light-390" if light else "dark-1440"}.png'),
+                        animations='disabled')
+                skill = plan.locator('.skill-row').first
+                expect(skill).to_be_visible()
+                skill_chev=skill.locator(':scope > summary > .chev')
+                expect(skill_chev).to_have_css('width','9px')
+                expect(skill_chev).to_have_css('height','9px')
+                expect(skill_chev).to_have_css('border-right-width',sales_arrow)
+                # Skills can repaint on an asynchronous quote completion;
+                # test the native summary click and open state in one DOM turn.
+                skill_opened = skill.evaluate("""el => {
+                    el.open=false;
+                    el.querySelector(':scope > summary').click();
+                    return el.open;
+                }""")
+                self.assertTrue(skill_opened, 'Nested Skills disclosure did not open')
+                plan.locator(':scope > summary').press('Enter')
+                expect(plan).not_to_have_attribute('open', '')
+
     def test_skill_plan_iframe_language_roundtrip(self):
         from playwright.sync_api import expect
         self.page.evaluate("selectAppModule('skills')")
