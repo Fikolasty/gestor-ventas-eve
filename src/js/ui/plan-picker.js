@@ -208,7 +208,13 @@ function paintPicker(P){
   if(!rest.length)others.append(el('p','pk-empty',tx('picker.empty')));
 }
 // Orden y filtro: solo repintan el selector, sin recalcular ISK.
-$('pkTools').addEventListener('click',e=>{const b=e.target.closest('[data-pkf]');if(!b||!lastP)return;pkView.filter=b.dataset.pkf;paintPicker(lastP);});
+$('pkTools').addEventListener('click',e=>{
+  const b=e.target.closest('[data-pkf]');if(!b||!lastP)return;
+  const hadFocus=document.activeElement===b;
+  pkView.filter=b.dataset.pkf;paintPicker(lastP);
+  // paintPicker replaces the controls: preserve keyboard focus on its live twin.
+  if(hadFocus)$('pkTools').querySelector('.pk-fb.on')?.focus({preventScroll:true});
+});
 $('pk').addEventListener('click',e=>{const b=e.target.closest('[data-pks]');if(!b||!lastP)return;e.stopPropagation();const k=b.dataset.pks;
   pkView=pkView.sort===k?{...pkView,dir:-pkView.dir}:{...pkView,sort:k,dir:k==='name'||k==='speed'||k==='ship'?1:-1};paintPicker(lastP);});
 $('pk').addEventListener('click',e=>{

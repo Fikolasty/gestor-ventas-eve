@@ -656,3 +656,102 @@ body:not(.is-flip) .fact-buy-order{display:none!important}
   margin:0;padding:14px 16px;border:1px solid var(--line2);border-radius:8px;
   background:var(--surface-card);color:var(--txt);font:500 .85rem/1.55 var(--f-ui);
 }
+
+/* v1.0.127 · Stage B.2 — quiet, keyboard-visible filters. This is only the
+   Sales plan selector; similarly named Mining controls keep their own styles. */
+#pSum .pk-tools .pk-flt{
+  display:inline-flex;align-items:stretch;gap:3px;min-width:0;max-width:100%;
+  padding:3px;border:1px solid var(--line2);border-radius:9px;
+  background:var(--surface-panel);box-shadow:none;
+}
+#pSum .pk-tools .pk-fb{
+  display:inline-flex;align-items:center;justify-content:center;gap:6px;
+  min-height:37px;padding:7px 11px;border:1px solid transparent;
+  border-radius:6px;background:transparent;color:var(--mut);
+  box-shadow:none;font:550 .79rem/1.25 var(--f-ui);
+  transition:background-color .15s ease,border-color .15s ease,color .15s ease;
+}
+#pSum .pk-tools .pk-fb small{
+  margin:0;color:var(--dim);font:500 .72rem/1 var(--f-num);
+}
+#pSum .pk-tools .pk-fb:not(.on):hover{
+  background:var(--hull);color:var(--txt);
+}
+#pSum .pk-tools .pk-fb.on{
+  background:var(--hull);color:var(--txt);border-color:var(--line2);
+  box-shadow:none;
+}
+#pSum .pk-tools .pk-fb.on small{color:var(--mut)}
+#pSum .pk-tools .pk-fb:focus-visible{
+  outline:2px solid var(--ion);outline-offset:2px;
+}
+
+/* Same native-select enhancement strategy used in Settings: a single
+   canonical #tradePurchaseMode with a neutral popup and native fallback. */
+.hero #heroIntro>#importControls{position:relative;z-index:40}
+.hero #heroIntro #importControls .mm-buy-basis{min-width:0}
+.hero #heroIntro #importControls .mm-trade-picker{
+  position:relative;min-width:132px;z-index:41;
+}
+.hero #heroIntro #importControls .mm-trade-picker>select[hidden]{display:none!important}
+.hero #heroIntro #importControls .mm-trade-trigger{
+  display:flex;align-items:center;justify-content:space-between;gap:13px;
+  width:100%;min-height:40px;padding:8px 12px;margin:0;
+  border:1px solid var(--line2);border-radius:8px;
+  background:var(--surface-panel);color:var(--txt);box-shadow:none;
+  font:550 .81rem/1.25 var(--f-ui);text-align:left;white-space:nowrap;
+  cursor:pointer;transition:border-color .15s ease,background-color .15s ease;
+}
+.hero #heroIntro #importControls .mm-trade-trigger[hidden]{display:none!important}
+.hero #heroIntro #importControls .mm-trade-trigger:hover,
+.hero #heroIntro #importControls .mm-trade-picker.is-open .mm-trade-trigger{
+  border-color:var(--mut);background:var(--hull);
+}
+.hero #heroIntro #importControls .mm-trade-trigger:focus-visible,
+.hero #heroIntro #importControls .mm-trade-option:focus-visible{
+  outline:2px solid var(--ion);outline-offset:2px;
+}
+.hero #heroIntro #importControls .mm-trade-chevron{
+  display:inline-block;flex:0 0 var(--mm-chevron-size);
+  width:var(--mm-chevron-size);height:var(--mm-chevron-size);
+  margin-right:3px;border-right:var(--mm-chevron-stroke) solid currentColor;
+  border-bottom:var(--mm-chevron-stroke) solid currentColor;
+  color:var(--mut);transform:rotate(45deg);transition:transform .18s ease;
+}
+.hero #heroIntro #importControls .mm-trade-picker.is-open .mm-trade-chevron{
+  transform:rotate(225deg);
+}
+.hero #heroIntro #importControls .mm-trade-options{
+  position:absolute;top:calc(100% + 5px);left:0;right:0;
+  z-index:80;display:grid;gap:2px;padding:5px;margin:0;
+  border:1px solid var(--line2);border-radius:8px;
+  background:var(--surface-panel);box-shadow:0 12px 24px rgba(0,0,0,.22);
+}
+.hero #heroIntro #importControls .mm-trade-options[hidden]{display:none!important}
+.hero #heroIntro #importControls .mm-trade-option{
+  display:flex;align-items:center;justify-content:space-between;
+  width:100%;min-height:40px;padding:8px 10px;
+  border:1px solid transparent;border-radius:6px;
+  background:transparent;color:var(--txt);box-shadow:none;
+  font:500 .81rem/1.25 var(--f-ui);text-align:left;white-space:nowrap;cursor:pointer;
+}
+.hero #heroIntro #importControls .mm-trade-option:hover,
+.hero #heroIntro #importControls .mm-trade-option:focus-visible{
+  background:var(--hull);
+}
+.hero #heroIntro #importControls .mm-trade-option.is-selected{
+  background:var(--hull);border-color:var(--line2);
+}
+.hero #heroIntro #importControls .mm-trade-option.is-selected::after{
+  content:"✓";margin-left:10px;color:var(--mut);font-weight:650;
+}
+@media(max-width:760px){
+  /* Every available route filter stays discoverable without sideways scrolling. */
+  #pSum .pk-tools{max-width:100%;overflow:visible;justify-content:flex-start}
+  #pSum .pk-tools .pk-flt{flex:1 1 auto;width:100%;flex-wrap:wrap}
+  #pSum .pk-tools .pk-fb{flex:1 1 auto;min-width:0}
+}
+@media(prefers-reduced-motion:reduce){
+  #pSum .pk-tools .pk-fb,.hero #heroIntro #importControls .mm-trade-trigger,
+  .hero #heroIntro #importControls .mm-trade-chevron{transition:none}
+}

@@ -119,6 +119,8 @@ function syncShipSwitch(){
   $('shipLab').title=S.lang==='en'?'Include alliance freight or compare sales without shipping.':'Incluye el courier de la alianza o compara ventas sin transportar.';
   $('tradePurchaseLabel').textContent=S.lang==='en'?'Purchase at':'Comprar a';
   $('tradePurchaseMode').title=S.lang==='en'?'Price used for purchases in Jita':'Precio utilizado para comprar en Jita';
+  syncTradePurchasePicker();
+  if(!isImport)closeTradePurchasePicker();
 }
 function setFlip(on){
   S.flip=!!on;S.planMode=null;czIdx=0;C.shipOn=true;$('shipOn').checked=true; // cambiar de ruta vuelve a contar el courier
@@ -166,9 +168,77 @@ $('businessSwitch').addEventListener('click',e=>{
 });
 $('tradePurchaseMode').addEventListener('change',e=>{
   if(!['buy','sell'].includes(e.target.value))return;
-  C.buyMode=e.target.value;refresh();
+  C.buyMode=e.target.value;syncTradePurchasePicker();refresh();
 });
 $('tradePurchaseMode').value=C.buyMode;
+/* Stage B.2: enhance the existing native select, never duplicate buyMode.
+   The select remains visible if enhancement fails and still receives change. */
+function syncTradePurchasePicker(){
+  const select=$('tradePurchaseMode'),trigger=$('tradePurchaseTrigger');
+  if(!select||!trigger)return;
+  const value=select.value==='buy'?'buy':'sell';
+  $('tradePurchaseCurrent').textContent=value==='buy'?'Buy Order':'Jita Sell';
+  trigger.title=select.title;
+  $('tradePurchaseOptions').querySelectorAll('[data-trade-option]').forEach(option=>{
+    const selected=option.dataset.tradeOption===value;
+    option.classList.toggle('is-selected',selected);
+    option.setAttribute('aria-selected',String(selected));
+  });
+}
+function closeTradePurchasePicker(restoreFocus=false){
+  const picker=$('tradePurchasePicker'),menu=$('tradePurchaseOptions'),trigger=$('tradePurchaseTrigger');
+  if(!picker||!menu||!trigger||menu.hidden)return;
+  menu.hidden=true;picker.classList.remove('is-open');
+  trigger.setAttribute('aria-expanded','false');
+  if(restoreFocus)trigger.focus();
+}
+function initTradePurchasePicker(){
+  const picker=$('tradePurchasePicker'),select=$('tradePurchaseMode'),
+    trigger=$('tradePurchaseTrigger'),menu=$('tradePurchaseOptions');
+  if(!picker||!select||!trigger||!menu||picker.dataset.ready)return;
+  const options=[...menu.querySelectorAll('[data-trade-option]')];
+  if(options.length!==2)return;
+  picker.dataset.ready='true';
+  const open=(focusSelected=false)=>{
+    menu.hidden=false;picker.classList.add('is-open');
+    trigger.setAttribute('aria-expanded','true');
+    if(focusSelected)(options.find(x=>x.dataset.tradeOption===select.value)||options[0]).focus();
+  };
+  const choose=option=>{
+    if(!option||!['buy','sell'].includes(option.dataset.tradeOption))return;
+    closeTradePurchasePicker(true);
+    if(select.value!==option.dataset.tradeOption){
+      select.value=option.dataset.tradeOption;
+      select.dispatchEvent(new Event('change',{bubbles:true}));
+    }else syncTradePurchasePicker();
+  };
+  syncTradePurchasePicker();
+  select.hidden=true;select.tabIndex=-1;trigger.hidden=false;
+  trigger.addEventListener('click',()=>menu.hidden?open():closeTradePurchasePicker());
+  trigger.addEventListener('keydown',event=>{
+    if(['ArrowDown','ArrowUp','Enter',' '].includes(event.key)){
+      event.preventDefault();open(true);
+      if(event.key==='ArrowUp')options.at(-1).focus();
+    }else if(event.key==='Escape'&&!menu.hidden){event.preventDefault();closeTradePurchasePicker(true);}
+  });
+  menu.addEventListener('click',event=>choose(event.target.closest('[data-trade-option]')));
+  menu.addEventListener('keydown',event=>{
+    const pos=options.indexOf(document.activeElement);
+    const focusAt=index=>options[(index+options.length)%options.length].focus();
+    if(event.key==='ArrowDown'){event.preventDefault();focusAt(pos+1);}
+    else if(event.key==='ArrowUp'){event.preventDefault();focusAt(pos-1);}
+    else if(event.key==='Home'){event.preventDefault();focusAt(0);}
+    else if(event.key==='End'){event.preventDefault();focusAt(options.length-1);}
+    else if(event.key==='Enter'||event.key===' '){event.preventDefault();choose(document.activeElement.closest('[data-trade-option]'));}
+    else if(event.key==='Escape'){event.preventDefault();closeTradePurchasePicker(true);}
+    else if(event.key==='Tab')closeTradePurchasePicker();
+  });
+  document.addEventListener('pointerdown',event=>{
+    if(!menu.hidden&&!picker.contains(event.target))closeTradePurchasePicker();
+  });
+  window.addEventListener('resize',()=>closeTradePurchasePicker());
+}
+initTradePurchasePicker();
 syncBusinessMode();
 $('shipOn').addEventListener('change',e=>{C.shipOn=e.target.checked;syncShipSwitch();S.planMode=null;czIdx=0;if(S.items.length)refreshNow();});
 const impSync=(src,dst)=>{const v=parseFloat($(src).value);if(!(v>=0))return;C.impM=v/100;$(dst).value=String(v);refresh();};

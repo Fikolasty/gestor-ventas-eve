@@ -221,7 +221,8 @@ class ThemeBrowserTests(unittest.TestCase):
         expect(picker).not_to_have_attribute("open", "")
         self.assertTrue(self.page.evaluate("S.flip"))
         expect(self.page.locator("#importControls")).to_be_visible()
-        expect(self.page.locator("#tradePurchaseMode")).to_be_visible()
+        expect(self.page.locator("#tradePurchaseMode")).to_be_hidden()
+        expect(self.page.locator("#tradePurchaseTrigger")).to_be_visible()
         self.assertEqual(self.page.locator("#salesModeCurrent").inner_text(),"Comercio Jita")
         self.page.evaluate("setLang('en')")
         self.assertEqual(self.page.locator("#salesModeCurrent").inner_text(),"Jita Trading")
@@ -232,6 +233,109 @@ class ThemeBrowserTests(unittest.TestCase):
         self.assertEqual(self.page.locator("#salesModeCurrent").inner_text(),"Sell Items")
         self.page.evaluate("setLang('es')")
         self.assertEqual(self.page.locator("#salesModeCurrent").inner_text(),"Vender Items")
+
+    def test_trading_purchase_popup_keeps_original_select_and_keyboard_contract(self):
+        from playwright.sync_api import expect
+        self.page.evaluate("selectAppModule('ventas')")
+        self.page.locator('#salesModeTrigger').click()
+        self.page.locator('#modeTrading').click()
+        native=self.page.locator('#tradePurchaseMode')
+        trigger=self.page.locator('#tradePurchaseTrigger')
+        menu=self.page.locator('#tradePurchaseOptions')
+        for width in (1440,390):
+            self.page.set_viewport_size({'width':width,'height':900})
+            for light in (False,True):
+                self.page.evaluate('(on)=>document.documentElement.classList.toggle("light",on)',light)
+                for lang in ('es','en'):
+                    self.page.evaluate('setLang',lang)
+                    expect(trigger).to_be_visible()
+                    expect(native).to_be_hidden()
+                    self.assertEqual(trigger.get_attribute('aria-expanded'),'false')
+                    trigger.focus()
+                    trigger.press('ArrowDown')
+                    expect(menu).to_be_visible()
+                    self.assertEqual(self.page.evaluate('document.activeElement.dataset.tradeOption'),native.input_value())
+                    self.page.keyboard.press('Escape')
+                    expect(menu).to_be_hidden()
+                    self.assertEqual(self.page.evaluate('document.activeElement.id'),'tradePurchaseTrigger')
+                    trigger.click()
+                    expect(menu).to_be_visible()
+                    if width==1440 and not light and lang=='es':
+                        out=INDEX.parent/'tests'/'artifacts'/'theme'
+                        out.mkdir(parents=True,exist_ok=True)
+                        self.page.screenshot(path=str(out/'b2-jita-popup-dark-1440.png'),animations='disabled')
+                    self.page.locator('[data-trade-option="buy"]').click()
+                    self.assertEqual(native.input_value(),'buy')
+                    self.assertEqual(self.page.evaluate('C.buyMode'),'buy')
+                    self.assertEqual(trigger.get_attribute('aria-expanded'),'false')
+                    self.assertEqual(self.page.locator('#tradePurchaseCurrent').inner_text(),'Buy Order')
+                    self.assertEqual(self.page.locator('[data-trade-option="buy"]').get_attribute('aria-selected'),'true')
+                    # The original change handler still accepts programmatic native changes.
+                    self.page.evaluate("""() => {const n=document.querySelector('#tradePurchaseMode');
+                        n.value='sell';n.dispatchEvent(new Event('change',{bubbles:true}));}""")
+                    self.assertEqual(self.page.evaluate('C.buyMode'),'sell')
+                    self.assertEqual(self.page.locator('#tradePurchaseCurrent').inner_text(),'Jita Sell')
+                    self.assertLessEqual(self.page.evaluate('document.documentElement.scrollWidth-innerWidth'),1)
+                    geometry=self.page.evaluate("""() => {
+                        const arrow=getComputedStyle(document.querySelector('.mm-trade-chevron'));
+                        const reference=getComputedStyle(document.querySelector('.mm-sales-mode-chevron'));
+                        return [arrow.width,arrow.borderRightWidth,reference.width,reference.borderRightWidth];}""")
+                    self.assertEqual(geometry[:2],geometry[2:],geometry)
+        trigger.click()
+        expect(menu).to_be_visible()
+        self.page.locator('#tradePurchaseLabel').click(position={'x':1,'y':1})
+        expect(menu).to_be_hidden()
+
+    def test_quick_plan_filters_are_neutral_and_keep_keyboard_focus(self):
+        from playwright.sync_api import expect
+        self.page.evaluate("selectAppModule('ventas')")
+        self.page.evaluate("""() => {
+            C.bb.on=true;S.flip=false;S.planMode=null;
+            const row={o:{name:'Synthetic Filter Item'},q:1,auto:'null',best:'null',
+                g:{null:100000,bb:95000,jInst:92000,jOrd:104000,rJita:90000},
+                ship:{},prod:0,net:{},cant:false};
+            lastP=window.__filterMock={mode:null,rows:[row],Vs:0,shipCost:0,best:100000};
+            document.querySelector('#verdict').hidden=false;
+            document.querySelector('#pSum').hidden=false;
+            pkView.open=true;pkView.filter='all';paintPicker(lastP);
+        }""")
+        for width in (1440,390):
+            self.page.set_viewport_size({'width':width,'height':900})
+            for lang in ('es','en'):
+                self.page.evaluate('setLang',lang)
+                self.page.evaluate("lastP=window.__filterMock;pkView.open=true;pkView.filter='all';document.querySelector('#verdict').hidden=false;document.querySelector('#pSum').hidden=false;paintPicker(lastP)")
+                for light in (False,True):
+                    self.page.evaluate('(on)=>document.documentElement.classList.toggle("light",on)',light)
+                    self.assertTrue(self.page.locator('[data-pkf="fast"]').is_visible(),
+                        self.page.evaluate("""() => {
+                            let el=document.querySelector('[data-pkf="fast"]'), a=[];
+                            while(el&&a.length<9){a.push([el.id||el.className||el.tagName,
+                                getComputedStyle(el).display,el.hidden]);el=el.parentElement;}
+                            return a;
+                        }"""))
+                    self.page.locator('[data-pkf="fast"]').focus()
+                    self.page.keyboard.press('Enter')
+                    focused=self.page.evaluate('document.activeElement.dataset.pkf')
+                    debug=self.page.evaluate("""() => ({filter:pkView.filter,
+                        active:document.activeElement.outerHTML.slice(0,220),
+                        selected:[...document.querySelectorAll('#pkTools .pk-fb.on')].map(el=>el.dataset.pkf)})""")
+                    self.assertEqual(focused,'fast',(width,lang,light,debug))
+                    expect(self.page.locator('[data-pkf="fast"]')).to_have_attribute('aria-pressed','true')
+                    self.assertEqual(self.page.locator('#pkOthers [data-m="jInst"]').count(),1)
+                    self.assertEqual(self.page.locator('#pkOthers [data-m="jOrd"]').count(),0)
+                    style=self.page.locator('#pkTools .pk-fb.on').evaluate("""el=>{
+                        const s=getComputedStyle(el);return [s.backgroundImage,s.boxShadow];}""")
+                    self.assertEqual(style,['none','none'],(width,lang,light,style))
+                    if width==390 and light and lang=='en':
+                        out=INDEX.parent/'tests'/'artifacts'/'theme'
+                        out.mkdir(parents=True,exist_ok=True)
+                        self.page.screenshot(path=str(out/'b2-quick-filters-light-390.png'),animations='disabled')
+                    self.page.locator('[data-pkf="all"]').click()
+                    self.assertEqual(self.page.locator('#pkOthers [data-m="jOrd"]').count(),1)
+                    self.assertLessEqual(self.page.evaluate('document.documentElement.scrollWidth-innerWidth'),1)
+                    self.assertTrue(self.page.evaluate("""() => [...document.querySelectorAll('#pkTools .pk-fb')]
+                        .every(el=>el.getBoundingClientRect().right<=innerWidth+1)"""),
+                        (width,lang,light,'route filters overflow the screen'))
 
     def test_settings_navigation_and_compact_intro(self):
         self.page.evaluate("setLang('en')")
