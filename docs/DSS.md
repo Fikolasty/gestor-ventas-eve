@@ -10,7 +10,9 @@ Este DSS es el respaldo prioritario de **decisiones visuales, estado verificable
 2. **Cada solicitud que produzca un cambio, cada commit y cada push debe actualizar este DSS**: fecha, decisión, archivos, pruebas reales, SHA, publicación y pendientes. El DSS jamás debe asegurar un push sin confirmar el remoto y GitHub Actions.
 3. Preservar IDs de DOM, controles auténticos, listeners, accesibilidad, autenticación EVE SSO, idiomas ES/EN, persistencia y fórmulas de Ventas/Minería. Modificar fuente en `src/`; regenerar `index.html` con `python3 build.py <versión>`.
 4. Fuentes económicas sin inventar cotizaciones ni bases de tarifa confirmadas. Cambios de precio/rendimiento requieren tests antes/después. Este DSS resume diseño y continuidad; `docs/SDD.md` conserva detalles técnicos históricos.
-5. Si falta autenticación de escritura en GitHub, preparar commits y reportar el bloqueo; no sustituir el método de entrega ni buscar atajos. La cuenta autorizada es `Fikolasty`, nunca otra cuenta.
+5. **OBLIGATORIO PARA CADA PUSH EN TODOS LOS CHATS FUTUROS:** usar la conexión de la aplicación GitHub autorizada con nombre **«Fiko»**, identidad **`Fikolasty`**, que tiene permisos `admin`/`push` confirmados en `Fikolasty/gestor-ventas-eve`. Seleccionarla expresamente antes de operaciones de escritura; no usar la otra conexión «GitHub»/Geiner, ni un navegador remoto, ni Cloudflare, ni hosting alternativo.
+6. **No repetir el fallo de autenticación:** el `git push` de la terminal de ejecución carece de credenciales aunque el plugin GitHub «Fiko» sí está conectado. Usar los métodos autorizados del conector GitHub para publicar; no pedir tokens, claves ni crear atajos no autorizados. Si cambia el estado de la conexión, comprobarlo con una lectura inocua y detenerse si exige reconexión. La ausencia de credenciales de terminal no implica ausencia de permisos en GitHub.
+7. La conexión GitHub puede crear objetos Git (`blob`, `tree`, `commit`) y avanzar `refs/heads/main` usando una comprobación del SHA remoto esperado. Si el entorno no permite enviar un pack Git nativo, reconstruir los commits sin forzar ni sustituir el trabajo ajeno. Registrar diferencias de SHA e historial respecto al clon local. Publicar siempre tras confirmar que el remoto no avanzó y verificar GitHub Actions y la URL de Pages.
 
 ## 2. Estándar gráfico vigente
 
@@ -53,7 +55,7 @@ Este DSS es el respaldo prioritario de **decisiones visuales, estado verificable
 | `c168e54` | Comparador compartido de cuatro rutas y guardas de tarifa | 17 suites Node + 16 Python | No publicado |
 | `5b490a7` | Recuperación gráfica del header v1.0.122 + DSS | 18 suites Node + 16 Python; Chromium local no disponible | No publicado |
 
-**Bloqueo:** el clon local puede leer GitHub, pero `git push origin main` no recibió credenciales; el conector de GitHub tampoco proporcionó identificador de conexión en intentos anteriores. No afirmar sincronización. Mantener cambios en commits locales hasta habilitar escritura legítimamente.
+**Acceso recuperado el 2026-10-25:** la conexión **GitHub «Fiko» (`Fikolasty`)** responde y confirma administración/escritura del repositorio. El `git push` de la terminal sigue sin credenciales; usar el conector autorizado. **Publicación de los seis commits y del parche de CI en preparación**; no afirmar que se ha completado hasta confirmar `main` y sus Actions.
 
 **Calidad/limitaciones:** el fee de estructura 0.5% es coste ISK separado del yield 90.63%; se estima con precios de referencia, no valoración interna certificada de EVE. El pipeline `compile` remoto v1.0.120 falló 1/25 pruebas del preview por valor de skill obsoleto; arreglo preparado pero todavía sin prueba Chromium CI tras push. Las pruebas locales Chromium no corren porque falta Playwright; no inventar validación visual.
 
@@ -62,7 +64,7 @@ Este DSS es el respaldo prioritario de **decisiones visuales, estado verificable
 1. Leer este DSS completo y el final de `docs/PROGRESS.md`; revisar `git status -sb`, `git log -8 --oneline`, `git remote -v` y diferencias con `origin/main`.
 2. Recuperar todas las decisiones **sin restablecer/revertir commits**; verificar si el remoto avanzó por otros agentes. Si avanzó, reconciliar con cuidado antes de publicar.
 3. Para cualquier tarea: registrar aquí la decisión y criterios; editar fuente mínima; compilar y ejecutar `node --test tests/*.cjs`, `python3 -m unittest discover -s tests -p 'test_*.py'`, `git diff --check`. Ejecutar Chromium/QA visual cuando el entorno realmente lo permita.
-4. Actualizar DSS, PROGRESS, CHANGELOG, SDD/SPEC cuando corresponda. Commit `[ChatGPT]` con SHA. Publicar únicamente con acceso autenticado y autorización; verificar Actions y GitHub Pages.
+4. Actualizar DSS, PROGRESS, CHANGELOG, SDD/SPEC cuando corresponda. Commit `[ChatGPT]` con SHA. **Para publicar: elegir siempre la conexión GitHub «Fiko» del usuario `Fikolasty`**; no depender del `git push` sin credenciales de la terminal. Comprobar el SHA de `main`, publicar con precondición de SHA y verificar Actions y GitHub Pages.
 5. Informar con claridad lo terminado, lo estimado, lo pendiente y lo no publicado. Nunca transformar un mockup en evidencia de despliegue.
 
 ## 6. Registro de cambios del DSS
@@ -70,6 +72,7 @@ Este DSS es el respaldo prioritario de **decisiones visuales, estado verificable
 | Fecha | Cambio | Estado |
 |---|---|---|
 | 2026-10-24 | Creado DSS de continuidad y restaurados estándares visuales expresos del usuario. Implementado acabado del header v1.0.122, pruebas estáticas y build. | 18 suites Node + 16 Python; sin publicación ni QA visual real |
+| 2026-10-25 | El usuario ordena publicar todo y establece que cada push futuro use imperativamente el conector GitHub «Fiko»/`Fikolasty`. Conexión `admin`/`push` y base remota `0cc24e1` confirmadas; se corrige el workflow que recompilaba una versión obsoleta (1.0.120 → 1.0.122). | Preparación de publicación; verificar GitHub Actions y Pages después de actualizar `main`. |
 
 **Regla permanente:** añadir una fila aquí con cada nuevo cambio/commit/push de ChatGPT.
 
