@@ -335,8 +335,16 @@ function paintCourierUnits(P){
   poolIcons(host);
   host.replaceChildren();
   const rows=P.rows.filter(r=>r.courierAllocated>0&&r.q>0);
-  box.hidden=!rows.length;
-  if(!rows.length)return;
+  // Shipping has a decision value even when it costs zero: make that explicit
+  // next to the route comparison, without altering the courier calculation.
+  box.hidden=false;
+  if(!rows.length){
+    $('unitCourierHeading').textContent=tx('freight.heading');
+    const unallocated=Number.isFinite(P.shipCost)&&P.shipCost>0;
+    $('unitCourierTotal').textContent=unallocated?'−'+fmt(P.shipCost):tx('freight.noCost');
+    host.append(el('p','mm-freight-empty',tx(unallocated?'freight.unallocated':'freight.noShipment')));
+    return;
+  }
   const count=trips(P.Vs);
   $('unitCourierHeading').textContent=tx('freight.heading');
   $('unitCourierTotal').textContent='−'+fmt(P.shipCost)+' · '+
@@ -347,7 +355,12 @@ function paintCourierUnits(P){
       el('strong','num',amount==null?'—':fmtP(amount)));
     return item;
   };
-  rows.forEach(r=>{
+  const more=rows.length>2?el('details','mm-freight-extra'):null;
+  if(more){
+    const summary=el('summary',null,tx('freight.showOthers',{count:rows.length-2}));
+    more.append(summary);
+  }
+  rows.forEach((r,index)=>{
     const costs=courierUnitPresentation(r);
     const card=el('article','mm-unit-row');
     const title=el('div','mm-freight-item');
@@ -380,8 +393,9 @@ function paintCourierUnits(P){
       const caution=el('small','mm-freight-source',tx('freight.derived'));
       details.append(caution);
     }
-    host.append(card);
+    (more&&index>=2?more:host).append(card);
   });
+  if(more)host.append(more);
   // A display-only reference; the plan result remains authoritative after
   // market fees and courier. Keep the fee caveat visible instead of tooltip-only.
   host.append(el('p','mm-freight-note',tx('freight.reference')));

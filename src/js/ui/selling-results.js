@@ -164,6 +164,9 @@ function paintVerdict(P){
   if(!has){clearViews();return;}
   const none=P.missing.length===P.rows.length,flipAcct=flipPlanAccounting(P),v=none?null:flipAcct?flipAcct.profit:P.best;
   const metric=$('vMetric');metric.hidden=!!none;metric.textContent=flipAcct?(S.lang==='en'?'ESTIMATED NET PROFIT':'GANANCIA NETA ESTIMADA'):(S.lang==='en'?'NET SALES PROCEEDS':'INGRESOS NETOS POR VENTA');
+  const estimate=$('vEstimate');estimate.hidden=!!none;
+  const estimateKey=flipAcct?'verdict.estimateTrade':'verdict.estimateSale';
+  estimate.dataset.i18n=estimateKey;estimate.textContent=tx(estimateKey);
   const amount=$('vIsk');
   amount.textContent='';amount.append(document.createTextNode(v==null?'—':Math.round(v).toLocaleString('en-US')),el('span',null,'ISK'));
   amount.className='v-isk num '+sgn(v);
@@ -184,7 +187,10 @@ function paintVerdict(P){
    const sums={};P.rows.forEach(r=>{if(r.best)sums[r.best]=(sums[r.best]||0)+r.g[r.best]-r.prod;});
    const ks=Object.keys(sums).sort((a,b)=>sums[b]-sums[a]);
    $('vWhat').dataset.k=ks[0]||'';
-   $('vWhat').textContent=none||!ks.length?'':W(ks[0])+(ks.length>1?' + '+(ks.length-1)+(ks.length>2?' más':' más'):'');}
+   $('vWhat').textContent=none||!ks.length?'':W(ks[0])+(ks.length>1?' + '+(ks.length-1)+(ks.length>2?' más':' más'):'');
+   $('vRouteW').hidden=none||!ks.length;
+   const routeKey=P.mode?'verdict.selectedRoute':'verdict.recommendedRoute';
+   $('vRouteCaption').dataset.i18n=routeKey;$('vRouteCaption').textContent=tx(routeKey);}
   {const fa=!P.mode&&P.rows.some(r=>r.fast);
     $('vTitle').textContent=tx(P.mode?'verdict.selectedTitle':'verdict.planTitle');
     $('vSubtitle').textContent=tx(P.mode?'verdict.selectedSubtitle':'verdict.planSubtitle');
@@ -212,7 +218,8 @@ function paintVerdict(P){
   // Los indicadores están en el resumen visible, no dentro de Pasos a seguir.
   const vTot=P.rows.reduce((a,r)=>a+(r.vol||0),0),cTot=P.rows.reduce((a,r)=>a+(r.coll||0),0);
   $('vsN').textContent=String(S.items.length);$('vsV').textContent=fmtV(Math.round(vTot*10)/10);
-  if($('deep').hidden)return; // El desglose pesado solo se pinta cuando se abre.
+  // El reparto económico alimenta el detalle voluntario del resultado, incluso
+  // si Pasos para vender permanece cerrado. Los pasos pesados siguen diferidos.
   {const u=P.rows.reduce((a,r)=>a+(r.q||0),0),n=vTot>0?trips(vTot):0;
    $('vsNs').textContent=fmtQ(u)+(u===1?' unidad':' unidades');
    $('vsVs').textContent=n&&SH()?'Si lo envías todo: '+n+(n>1?' contratos':' contrato'):'';}
@@ -234,6 +241,7 @@ function paintVerdict(P){
      segs.forEach(([l,v,c,k])=>{const i=el('i');i.style.width=(v/sum*100)+'%';i.style.background=c;i.title=l+': '+fmt(v);bar.append(i);
        const d=el('div',k),sw=el('span','ov-sw');sw.style.background=c;d.append(sw,el('b',null,(k==='cost'?'−':'')+fmt(v)),el('small',null,l+' · '+pct(v/sum)+'%'));lg.append(d);});
      fb.append(hd,bar,lg);}}
+  if($('deep').hidden)return; // Contratos y tablas detalladas siguen siendo bajo demanda.
   // v1.0.19: sin pestañas por tipo; los pasos cubren el plan completo
   const rowsIn=P.rows;
   // plan: por acción, la recomendación y luego cada item con su precio por unidad

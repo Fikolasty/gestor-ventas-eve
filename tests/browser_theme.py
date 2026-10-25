@@ -635,6 +635,68 @@ class ThemeBrowserTests(unittest.TestCase):
         self.assertIn("NETO ANTES DE ENVÍO",result["spanish"]["equation"])
         self.assertTrue(result["moved"],"Unit freight panel must be after plan comparison")
 
+    def test_sales_pilot_prioritizes_owner_proceeds_and_exposes_optional_details(self):
+        from playwright.sync_api import expect
+        # Fixed fixture: verify layout and copy without trusting a live ESI price.
+        for language in ('es','en'):
+            self.page.evaluate('setLang',language)
+            self.page.evaluate("""() => {
+                const oldItems=S.items,oldP=lastP;
+                try {
+                    const item={name:'Tritanium',qty:2,m3u:1,
+                        jita:{buy:100,topBuy:100,sell:130,topSell:130}};
+                    S.items=[item];
+                    const row={o:item,q:2,auto:'null',best:'null',np:150,
+                        g:{null:280},ship:{},prod:0,vol:2,coll:200};
+                    const P={rows:[row],missing:[],mode:null,best:280,
+                        Vs:0,shipCost:0,toBB:[]};
+                    paintVerdict(P);
+                    document.querySelector('#pSum').hidden=false;
+                    paintPicker(P);
+                    paintCourierUnits(P);
+                } finally {S.items=oldItems;lastP=oldP;}
+            }""")
+            expect(self.page.locator('#vIsk')).to_contain_text('280')
+            expect(self.page.locator('#vRouteW')).to_be_visible()
+            expect(self.page.locator('#unitCourierBox')).to_be_visible()
+            self.assertIn('0 ISK',self.page.locator('#unitCourierTotal').inner_text())
+            expect(self.page.locator('#vFinanceDetails')).not_to_have_attribute('open','')
+            if language=='es':
+                expect(self.page.locator('#vRouteCaption')).to_have_text('Ruta recomendada')
+                self.assertIn('una orden puede tardar',self.page.locator('#vEstimate').inner_text())
+                expect(self.page.locator('#bDeep .step-toggle-copy strong')).to_have_text('Ver pasos para vender')
+            else:
+                expect(self.page.locator('#vRouteCaption')).to_have_text('Recommended route')
+                self.assertIn('orders may take time',self.page.locator('#vEstimate').inner_text())
+                expect(self.page.locator('#bDeep .step-toggle-copy strong')).to_have_text('View selling steps')
+            self.page.locator('#vFinanceDetails>summary').click()
+            expect(self.page.locator('#vFinanceDetails')).to_have_attribute('open','')
+            self.assertIn('280 ISK',self.page.locator('#ovFlow').inner_text())
+            for width,height in [(1440,900),(390,844)]:
+                self.page.set_viewport_size({'width':width,'height':height})
+                for light in (False,True):
+                    self.page.evaluate('(on)=>document.documentElement.classList.toggle("light",on)',light)
+                    bounds=self.page.evaluate("""() => {
+                        const ids=['verdict','pSum','pkOpportunity','unitCourierBox','bDeep'];
+                        return ids.map(id=>{
+                            const r=document.getElementById(id).getBoundingClientRect();
+                            return {id,left:r.left,right:r.right,width:r.width};
+                        });
+                    }""")
+                    for rect in bounds:
+                        self.assertGreater(rect['width'],0,rect)
+                        self.assertGreaterEqual(rect['left'],-1,rect)
+                        self.assertLessEqual(rect['right'],width+1,rect)
+                    pair=bounds[2:4]
+                    if width==1440:
+                        self.assertLess(abs(pair[0]['width']-pair[1]['width']),3,pair)
+                        self.assertLess(abs(pair[0]['left']-pair[1]['left']),width,pair)
+                    else:
+                        self.assertLess(abs(pair[0]['left']-pair[1]['left']),3,pair)
+                out=INDEX.parent/'tests'/'artifacts'/'theme'
+                out.mkdir(parents=True,exist_ok=True)
+                self.page.screenshot(path=str(out/f'pilot-{language}-{width}.png'),animations='disabled')
+
     def test_appraisal_rerenders_only_for_changed_market_data(self):
         result = self.page.evaluate("""() => {
             const oldItems = S.items, oldTax = C.tax;

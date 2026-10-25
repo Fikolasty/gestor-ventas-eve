@@ -260,11 +260,13 @@ Contraband Freight = no</textarea><small>Una regla por línea: Nombre = tax tota
     <!-- v1.0.22: resumen del plan (overview): total, a dónde va el ISK, datos clave, tu lote en Jita y dónde se vende -->
     <div class="ov">
       <div class="ov-hd">
-        <div class="ov-ttl"><header class="mm-section-head"><h2 class="mm-title" id="vTitle">LA MEJOR RUTA DE VENTA</h2><p class="mm-section-sub" id="vSubtitle">REVISA TU RUTA Y CUÁNTO RECIBIRÍAS</p></header></div>
-        <div class="mm-net"><span class="mm-net-label" id="vMetric" hidden>INGRESOS NETOS POR VENTA</span><p class="v-isk num" id="vIsk"></p></div>
-        <div class="v-cap" id="vCap">Aquí verás los componentes económicos del plan elegido.</div><span class="v-what" id="vWhat" hidden></span>
+        <div class="ov-ttl"><header class="mm-section-head"><h2 class="mm-title" id="vTitle">LA MEJOR RUTA DE VENTA</h2><p class="mm-section-sub" id="vSubtitle">REVISA TU RUTA Y CUÁNTO RECIBIRÍAS</p></header>
+          <div class="mm-route-choice" id="vRouteW" hidden><span class="mm-route-caption" id="vRouteCaption" data-i18n="verdict.recommendedRoute">Ruta recomendada</span><span class="v-what" id="vWhat"></span></div>
+        </div>
+        <div class="mm-net"><span class="mm-net-label" id="vMetric" hidden>INGRESOS NETOS POR VENTA</span><p class="v-isk num" id="vIsk"></p><small class="mm-net-context" id="vEstimate" hidden></small></div>
       </div>
-      <div class="ov-card ov-flow"><h4>DE DÓNDE SALE TU ISK</h4><div id="ovFlow"></div><div class="mm-dest-inline" id="ovDestW"><h4>DÓNDE SE VENDE</h4><div id="ovDest"></div></div></div>
+      <div class="v-cap" id="vCap">Aquí verás los componentes económicos del plan elegido.</div>
+      <details class="ov-card ov-flow mm-finance-details" id="vFinanceDetails"><summary data-i18n="verdict.inspectBreakdown">Ver distribución de ingresos y destinos</summary><div class="mm-finance-details-body"><h4>DE DÓNDE SALE TU ISK</h4><div id="ovFlow"></div><div class="mm-dest-inline" id="ovDestW"><h4>DÓNDE SE VENDE</h4><div id="ovDest"></div></div></div></details>
       <!-- Cifras usadas por el motor, sin tarjetas repetidas en la UI. -->
       <div hidden aria-hidden="true"><span id="vsN"></span><span id="vsNs"></span><span id="vsV"></span><span id="vsVs"></span></div>
       <div class="mm-legacy" hidden aria-hidden="true">
@@ -279,7 +281,6 @@ Contraband Freight = no</textarea><small>Una regla por línea: Nombre = tax tota
     <div class="fb2" id="flipBuy" hidden></div>
     <div class="pk-w">
       <div class="pk" id="pk" role="group" aria-label="Plan seleccionado"></div>
-      <aside class="pk-shortcut" id="pkShortcut" aria-live="polite" hidden></aside>
       <div class="pk-tools" id="pkTools"></div>
       <div class="pk" id="pkOthers" role="group" aria-label="Otros planes" hidden></div></div>
     <div class="mm-decision-grid" id="decisionGrid">
@@ -289,8 +290,9 @@ Contraband Freight = no</textarea><small>Una regla por línea: Nombre = tax tota
         <div id="unitCourierRows"></div>
       </section>
     </div>
+    <aside class="pk-shortcut" id="pkShortcut" aria-live="polite" hidden></aside>
     <!-- v1.0.50: justo debajo de los planes. Al abrir el desglose, los planes se pliegan y el desglose pasa a ser lo principal -->
-    <button type="button" class="more-btn step-toggle" id="bDeep" aria-expanded="false" aria-controls="deep"><span class="step-toggle-icon ic i-list" aria-hidden="true"></span><span class="step-toggle-copy"><strong>ABRIR PASOS A SEGUIR</strong><small>Destinos, precios y costes de cada paso.</small></span><span class="step-toggle-chevron" aria-hidden="true"></span></button>
+    <button type="button" class="more-btn step-toggle" id="bDeep" aria-expanded="false" aria-controls="deep"><span class="step-toggle-icon ic i-list" aria-hidden="true"></span><span class="step-toggle-copy"><strong data-i18n="verdict.showSteps">Ver pasos para vender</strong><small data-i18n="verdict.stepsDescription">Contratos, destinos y precios por ítem</small></span><span class="step-toggle-chevron" aria-hidden="true"></span></button>
   </section>
 
 </section>

@@ -416,3 +416,97 @@ html.light body .top.mm-ho-root .mm-top-actions .mm-theme{background:transparent
   #pSum #unitCourierTotal{flex-basis:100%;margin-left:26px;text-align:left!important}
   #pSum .mm-freight-result{align-items:flex-start;flex-direction:column;gap:4px}
 }
+
+/* v1.0.125 · Sales pilot: net decision -> route -> transparent costs -> action.
+   Scope is limited to the existing result and picker; no financial rules change. */
+#verdict .ov{gap:12px}
+#verdict .ov-hd{
+  grid-template-columns:minmax(0,1.2fr) minmax(280px,.8fr)!important;
+  align-items:center!important;gap:16px 24px!important;margin:0!important;
+}
+#verdict .ov-ttl{align-items:flex-start;justify-content:center;gap:12px}
+#verdict .ov-hd .mm-section-head{margin:0!important}
+#verdict .mm-route-choice{display:flex;flex-wrap:wrap;align-items:center;gap:7px 11px;min-width:0;margin-left:38px}
+#verdict .mm-route-choice[hidden]{display:none!important}
+#verdict .mm-route-caption{color:var(--mut);font:600 .76rem/1.4 var(--f-ui)}
+#verdict .mm-route-choice .v-what{
+  display:inline-block;margin:0!important;padding:5px 9px!important;
+  border-radius:6px!important;vertical-align:baseline!important;
+  font:650 .82rem/1.35 var(--f-ui)!important;white-space:normal;overflow-wrap:anywhere;
+}
+#verdict .mm-net{max-width:100%;gap:5px;justify-content:center}
+#verdict .mm-net-label{display:block!important;color:var(--mut)!important;font:650 .7rem/1.4 var(--f-ui)!important;letter-spacing:.07em!important}
+#verdict .mm-net-label[hidden]{display:none!important}
+#verdict .v-isk{font-size:clamp(2rem,3.5vw,3.45rem)!important;letter-spacing:-.04em;white-space:normal!important;overflow-wrap:anywhere}
+#verdict .v-isk span{font-size:.38em!important;letter-spacing:0!important;white-space:nowrap}
+#verdict .mm-net-context{display:block;max-width:39ch;color:var(--mut);font:450 .73rem/1.5 var(--f-ui);text-align:right}
+#verdict .v-cap{width:100%;margin:0!important;max-width:none!important;padding:0!important;color:var(--txt)!important}
+#verdict .v-finance{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,215px),1fr));gap:0;margin:0;padding:0;border:1px solid var(--line2);border-radius:8px;background:var(--surface-card)}
+#verdict .v-finance-item{flex:none;min-width:0;gap:6px;padding:14px 17px!important;border-right:1px solid var(--line2);border-bottom:0}
+#verdict .v-finance-item:last-child{border-right:0}
+#verdict .v-finance-item small{letter-spacing:.025em!important;text-transform:none!important;font-size:.74rem!important}
+#verdict .v-finance-item strong{font-size:clamp(.94rem,1.2vw,1.08rem)!important}
+#verdict #vFinanceDetails{
+  margin:0!important;padding:0!important;background:var(--surface-card)!important;
+  border:1px solid var(--line2)!important;border-radius:8px!important;box-shadow:none!important;
+}
+#verdict #vFinanceDetails>summary{
+  display:flex;align-items:center;justify-content:space-between;gap:12px;
+  min-height:44px;padding:11px 16px;cursor:pointer;list-style:none;
+  color:var(--mut);font:600 .78rem/1.45 var(--f-ui);
+}
+#verdict #vFinanceDetails>summary::-webkit-details-marker{display:none}
+#verdict #vFinanceDetails>summary::after{content:'⌄';font-size:1.06rem;line-height:1;transition:transform .15s}
+#verdict #vFinanceDetails[open]>summary::after{transform:rotate(180deg)}
+#verdict #vFinanceDetails>summary:hover{color:var(--txt)}
+#verdict #vFinanceDetails>summary:focus-visible{outline:2px solid var(--ion);outline-offset:-3px}
+#verdict .mm-finance-details-body{padding:14px 16px 17px;border-top:1px solid var(--line2)}
+#verdict .mm-finance-details-body h4{color:var(--mut);font-size:.73rem}
+#verdict .mm-finance-details-body .ov-bar{height:10px}
+
+#pSum .mm-decision-grid{gap:12px;margin:16px 0 12px}
+#pSum .mm-decision-card{padding:16px 18px!important}
+#pSum #unitCourierBox{margin:0!important}
+#pSum #pkOpportunity .pk-opp-head{margin-bottom:13px!important}
+#pSum #pkOpportunity .pk-opp-grid{gap:0}
+#pSum #pkOpportunity .pk-opp-stat{padding:2px 14px 2px 0;border:0;background:none}
+#pSum #pkOpportunity .pk-opp-stat+.pk-opp-stat{padding-left:14px;padding-right:0;border-left:1px solid var(--line2)}
+#pSum #pkOpportunity .pk-opp-stat small{display:block;margin-bottom:4px}
+#pSum .pk-shortcut{margin:12px 0!important;border-radius:8px;padding:13px 16px}
+#pSum #bDeep{
+  min-height:64px!important;margin:15px 0 0!important;padding:13px 17px!important;
+  border:1px solid var(--line2)!important;border-left:3px solid var(--clay)!important;
+  border-radius:8px!important;background:var(--surface-card)!important;
+  transition:border-color .16s,background .16s;
+}
+#pSum #bDeep:hover,#pSum #bDeep[aria-expanded="true"]{border-color:var(--clay)!important;background:var(--surface-panel)!important}
+#pSum #bDeep .step-toggle-copy strong{font-size:.88rem!important;letter-spacing:0!important;text-transform:none!important}
+#pSum #bDeep .step-toggle-copy small{font-size:.76rem!important}
+#pSum #unitCourierRows .mm-freight-empty{color:var(--mut);font:500 .8rem/1.55 var(--f-ui);margin:0}
+#pSum .mm-freight-extra{border-top:1px solid var(--line2);padding-top:10px}
+#pSum .mm-freight-extra>summary{min-height:32px;cursor:pointer;color:var(--txt);font:650 .77rem/1.45 var(--f-ui);list-style:none}
+#pSum .mm-freight-extra>summary::-webkit-details-marker{display:none}
+#pSum .mm-freight-extra>summary::after{content:'⌄';display:inline-block;margin-left:8px;transition:transform .15s}
+#pSum .mm-freight-extra[open]>summary::after{transform:rotate(180deg)}
+#pSum .mm-freight-extra>.mm-unit-row{padding-top:12px!important;margin-top:9px;border-top:1px solid var(--line2)!important}
+#pSum .mm-freight-extra>summary:focus-visible{outline:2px solid var(--ion);outline-offset:2px}
+
+@media(max-width:980px){
+  #verdict .ov-hd{grid-template-columns:minmax(0,1fr)!important;gap:13px!important}
+  #verdict .mm-net{align-items:flex-start!important;text-align:left!important}
+  #verdict .mm-net-label,#verdict .mm-net-context{text-align:left!important}
+  #pSum .mm-decision-grid{grid-template-columns:minmax(0,1fr)}
+}
+@media(max-width:560px){
+  #verdict .mm-route-choice{margin-left:0}
+  #verdict .v-finance{grid-template-columns:minmax(0,1fr)}
+  #verdict .v-finance-item{border-right:0;border-bottom:1px solid var(--line2);padding:11px 14px!important}
+  #verdict .v-finance-item:last-child{border-bottom:0}
+  #verdict #vFinanceDetails>summary{padding:12px 13px}
+  #pSum .mm-decision-card{padding:14px!important}
+  #pSum #pkOpportunity .pk-opp-grid{grid-template-columns:minmax(0,1fr);gap:9px}
+  #pSum #pkOpportunity .pk-opp-stat+.pk-opp-stat{padding:9px 0 0;border-left:0;border-top:1px solid var(--line2)}
+}
+@media(prefers-reduced-motion:reduce){
+  #verdict #vFinanceDetails>summary::after,#pSum .mm-freight-extra>summary::after{transition:none}
+}

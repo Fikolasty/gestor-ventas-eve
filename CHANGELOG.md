@@ -1,3 +1,10 @@
+## v1.0.125 — 2026-10-25 [ChatGPT]
+- Primera pantalla piloto aprobada: el resultado de Ventas ordena la lectura como ingreso neto/beneficio estimado → ruta elegida → costes visibles → pasos de ejecución. Añade contexto honesto sobre órdenes y estimaciones, sin presentar el ingreso por ítems propios como beneficio contable.
+- El detalle de distribución de ISK/destinos se abre solo cuando el usuario lo pide. El cálculo del gráfico se mantiene actualizado aunque los pasos operativos estén cerrados; los pasos costosos siguen cargándose bajo demanda.
+- Conserva dos tarjetas de decisión simétricas: comparación de rutas y coste real de courier. Si el plan no tiene transporte asignado, la segunda explica el coste de 0 ISK. Para lotes grandes se ven dos ítems y el resto se expande con un control accesible.
+- Lleva la alternativa rápida detrás del análisis principal y aclara «Ver pasos para vender», reutilizando los controles originales; incorpora microcopy y atributos bilingües mediante `src/i18n/ui.json`, soporte Dark/Light y responsive.
+- Añade regresión estática `tests/sales-pilot.test.cjs` y validación de navegador con fixture sintético en `tests/browser_theme.py`; versiones de workflows actualizadas a 1.0.125. No cambia `src/js/domain/*`, ESI, SSO, persistencia ni las fórmulas de ISK.
+
 ## v1.0.124 — 2026-10-25 [ChatGPT]
 - Corrige la recomendación para 1.400–1.520 unidades de hielo Krystallos: el plan compara valor neto del dueño después de impuestos, reproceso, compresión y tarifa real SIGMA Freight (incluidos los saltos de contratos de 350.000 m³). La ruta comprimida cotiza **Compressed Krystallos** como item distinto en ESI, con volumen verificado y liquidez propia; la opción se activa solo si el piloto confirma acceso a compresión y su coste.
 - Protección logística para hielo: si el flete marginal captura más ISK que el beneficio adicional del dueño frente a la mejor venta sin envío, se recomienda quedarse localmente; una elección manual puede prevalecer. No equivale a estimar coste de adquisición ni garantiza que una orden se complete.

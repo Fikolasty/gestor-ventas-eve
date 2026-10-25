@@ -1,4 +1,48 @@
 {
+  "verdict.recommendedRoute": {
+    "es": "Ruta recomendada",
+    "en": "Recommended route"
+  },
+  "verdict.selectedRoute": {
+    "es": "Ruta elegida",
+    "en": "Selected route"
+  },
+  "verdict.estimateSale": {
+    "es": "Estimación según cotizaciones y ajustes; una orden puede tardar en venderse.",
+    "en": "Estimate based on quotes and settings; sell orders may take time to fill."
+  },
+  "verdict.estimateTrade": {
+    "es": "Beneficio estimado tras compra y gastos; las órdenes podrían no completarse.",
+    "en": "Estimated profit after purchase and costs; orders may not fill."
+  },
+  "verdict.inspectBreakdown": {
+    "es": "Ver distribución de ingresos y destinos",
+    "en": "See proceeds and destinations breakdown"
+  },
+  "verdict.showSteps": {
+    "es": "Ver pasos para vender",
+    "en": "View selling steps"
+  },
+  "verdict.stepsDescription": {
+    "es": "Contratos, destinos y precios por ítem",
+    "en": "Contracts, destinations and item prices"
+  },
+  "freight.noCost": {
+    "es": "0 ISK · sin courier",
+    "en": "0 ISK · no courier"
+  },
+  "freight.noShipment": {
+    "es": "La ruta seleccionada no tiene gastos de courier asignados.",
+    "en": "The selected route has no allocated courier charges."
+  },
+  "freight.unallocated": {
+    "es": "Hay un coste de envío, pero no se pudo distribuir entre los ítems. Consulta el plan detallado.",
+    "en": "Shipping has a cost, but it could not be allocated to items. Check the detailed plan."
+  },
+  "freight.showOthers": {
+    "es": "Ver {count} ítems enviados más",
+    "en": "Show {count} more shipped items"
+  },
   "refinery.missingQuote": {
     "es": "Faltan precios del ore o de los productos, o no hay una tarifa válida. Revisa Ajustes y actualiza precios.",
     "en": "Ore or product prices are missing, or the refinery fee is invalid. Check Settings and refresh prices."
