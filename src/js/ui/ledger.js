@@ -237,7 +237,7 @@ function paintLot(r){
   u.last=r;if(u.body.hidden)return;
   paintGuide(u.guide,r);
   u.rcall.hidden=!r.rep;
-  if(r.rep){const w=r.raw&&r.raw.sell;u.rcR.textContent=w?'Valor bruto a Jita Sell (solo '+(parseFloat($('rTax').value)||0)+'% de tax de refinería): ore '+fmt(w.ore)+' → productos '+fmt(w.prod)+' ('+(w.diff>=0?'+':'')+fmt(w.diff)+', '+(w.pct>=0?'+':'')+pct(w.pct)+'%).':'';u.rcR.hidden=!w;}
+  if(r.rep){const w=r.raw&&r.raw.sell;u.rcR.textContent=w?tx('refinery.ledgerEstimate',{fee:parseFloat($('rTax').value)||0,ore:fmt(w.ore),products:fmt(w.prod),diff:(w.diff>=0?'+':'')+fmt(w.diff),percent:(w.pct>=0?'+':'')+pct(w.pct)}):'';u.rcR.hidden=!w;}
   if(r.rep){const lab=k=>k==='null'?nullLabel(o.name):optionMarketText(OPTS.find(x=>x[0]===k)[1]);
     if(r.rep.missing){setText(u.rcB,'¿Reprocesar? Faltan precios','');u.rcS.textContent='Trae los precios de los minerales para saberlo.';}
     else if(r.rep.diff>0){setText(u.rcB,'Sí vale la pena reprocesar: +'+fmt(r.rep.diff),'pos');u.rcS.textContent=lab(r.rep.kr)+' gana a '+lab(r.rep.kn)+'.';}

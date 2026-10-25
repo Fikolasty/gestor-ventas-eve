@@ -1,4 +1,20 @@
 {
+  "refinery.missingQuote": {
+    "es": "Faltan precios del ore o de los productos, o no hay una tarifa válida. Revisa Ajustes y actualiza precios.",
+    "en": "Ore or product prices are missing, or the refinery fee is invalid. Check Settings and refresh prices."
+  },
+  "refinery.estimatedFee": {
+    "es": "− Tarifa estimada de refinería ({percent}%)",
+    "en": "− Estimated refinery fee ({percent}%)"
+  },
+  "refinery.rawEstimate": {
+    "es": "Cantidad recuperada según rendimiento ({yield}%); tarifa de {refinery} estimada al {fee}% del valor de referencia de los minerales y descontada en ISK. Sin impuestos de mercado ni envío.",
+    "en": "Recovered quantities use the {yield}% yield; {refinery}'s fee is estimated at {fee}% of the minerals' reference value, deducted in ISK. Excludes market taxes and shipping."
+  },
+  "refinery.ledgerEstimate": {
+    "es": "Valor estimado a Jita Sell (tarifa de refinería en ISK, {fee}%): ore {ore} → productos {products} ({diff}, {percent}%).",
+    "en": "Estimated Jita Sell value (refinery fee in ISK, {fee}%): ore {ore} → products {products} ({diff}, {percent}%)."
+  },
   "picker.plan": {
     "es": "PLAN",
     "en": "PLAN"

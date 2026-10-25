@@ -164,12 +164,12 @@ function computePlan(){
     const ore=resolveOre(o.name);
     if(ore&&q>0){
       row.raw=rawRepro(ore,q,ref,a&&a.buy);
-      const nets=reproNets(ore,q);let ok=true,val=0,nul=0,v=0;row.mins=[];
+      const nets=reproNets(ore,q),fee=refineryFee(ore,q,nets);let ok=fee!=null,val=0,nul=0,v=0;row.mins=[];
       Object.keys(nets).forEach(m=>{
         const p=minPrice(m),b=S.api[m.toLowerCase()]?S.api[m.toLowerCase()].buy:null,np=p!=null?nullList(m,p,b,null,nets[m]):null,jl=jitaList(m,p,b,nets[m]);
         v+=nets[m]*prodVol(m);row.mins.push({m,n:nets[m],p:jl,np,qd:qtyDisc(m,nets[m])});
         if(p==null||np==null){ok=false;return;}val+=nets[m]*jl;nul+=nets[m]*np*rN;});
-      if(ok){row.g.rJita=val*rJ;row.ship.rJita={v,c:val};row.g.rNull=nul;}
+      if(ok){row.g.rJita=val*rJ-fee;row.ship.rJita={v,c:val};row.g.rNull=nul-fee;}
       else row.hint.rJita=row.hint.rNull='faltan precios de minerales';
     }
     return row;

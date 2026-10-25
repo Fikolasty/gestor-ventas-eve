@@ -1,3 +1,9 @@
+## v1.0.121 — 2026-10-24 [ChatGPT]
+- Separa el rendimiento efectivo del reproceso de la tarifa de refinería: cantidades enteras por lotes, sobrantes sin procesar y tarifa estimada en ISK.
+- Integra el cargo independiente en las rutas de Ventas, las comparaciones del panel de reproceso y la valoración del hielo en Minería. Los impuestos de ventas se calculan sobre ingresos brutos, antes del cargo de estructura.
+- La base de tarifa utiliza precios de referencia disponibles y **no está verificada** frente a la valoración interna de EVE; las decisiones siguen siendo estimaciones, no garantías de ejecución.
+- Añade pruebas unitarias de invariancia de minerales al cambiar tarifas y traducciones ES/EN. Pruebas de navegador pendientes donde Playwright no está instalado.
+
 ## v1.0.111 — 2026-10-22
 - Layout inspirado en YouTube: marca compacta, navegación en cápsula central y controles reales a la derecha.
 - Franja contextual de comercio separada y oculta para Minería/Skill Plan; responsive hasta móvil.

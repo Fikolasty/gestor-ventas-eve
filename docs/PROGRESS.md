@@ -1,5 +1,12 @@
 # PROGRESS — Market Moves+
 
+## v1.0.121 — integración del reproceso, 2026-10-24
+
+- Integrado `reproNets` con `MaterialEconomy.recover`: lotes completos, minerales enteros y remanentes; la tarifa ya no reduce cantidades.
+- `refineryFee` usa una base monetaria estimada mediante precios de referencia disponibles, separada del yield. El coste se descuenta de ambas rutas de minerales de Ventas, comparaciones de reproceso y precio de hielo refinado en Minería; se mantiene el sistema nullsec configurable.
+- Regresiones Node: 15 archivos aprobados; Python: 16 pruebas aprobadas; `build.py 1.0.121` correcto. Las pruebas visuales headless no se ejecutaron por faltar la dependencia local `playwright`.
+- **Pendiente de QA y ajuste:** contrastar la base de tarifa contra EVE, cubrir validación de mercados y contratos con casos ESI simulados, revisar visualmente ES/EN Dark/Light antes de declarar publicación lista. El motor completo de rentabilidad minera neta/ISK-hora de `MINING_REFINING_DESIGN.md` no se considera terminado.
+
 ## Continuación 2026-10-24 — cotización de reproceso por separado
 
 - Recuperada `main` en `0cc24e1` tras la interrupción de la sesión anterior.

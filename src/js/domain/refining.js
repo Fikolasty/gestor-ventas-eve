@@ -21,20 +21,31 @@ function yieldOf(r){
   return{y:(50+Rm)*(1+Sec)*(1+Sm)*(1+.03*R)*(1+.02*Re)*(1+.02*op)*(1+F.imp),R,Re,op,Rm,Sec,Sm};
 }
 const refName=()=>C.ref.name||'tu refinería';
-// Valor bruto al reprocesar: sin ventas, taxes de mercado ni courier; los productos ya restan rendimiento y tax de refinería
+// Base estimada de la tarifa: valoración de referencia de los minerales
+// recuperados (precio manual si existe, o cotización disponible de Jita).
+// El cargo exacto de EVE puede depender de su valoración interna; se presenta como estimación.
+function refineryFee(r,q,nets=reproNets(r,q)){
+  let base=0;
+  for(const [m,n] of Object.entries(nets)){
+    const p=minPrice(m);
+    if(p==null||!Number.isFinite(p)||p<0)return null;
+    base+=n*p;
+  }
+  return MaterialEconomy.feeISK(base,Number($('rTax').value));
+}
+// Valor estimado al reprocesar: sin taxes de mercado ni courier; fee en ISK independiente.
 function rawRepro(r,q,oreSell,oreBuy){
-  const nets=reproNets(r,q),out={};
+  const nets=reproNets(r,q),fee=refineryFee(r,q,nets),out={};
   [['sell',oreSell],['buy',oreBuy]].forEach(([k,op])=>{
     let prod=0,ok=true;
     Object.keys(nets).forEach(m=>{const a=S.api[m.toLowerCase()],p=k==='sell'?minPrice(m):(a?a.buy:null);if(p==null)ok=false;else prod+=nets[m]*p;});
-    out[k]=ok&&op!=null&&op>0?{ore:q*op,prod,diff:prod-q*op,pct:(prod-q*op)/(q*op)}:null;
+    const after=fee==null?null:prod-fee;
+    out[k]=ok&&after!=null&&op!=null&&op>0?{ore:q*op,prod:after,fee,diff:after-q*op,pct:(after-q*op)/(q*op)}:null;
   });
   return out;
 }
 function reproNets(r,q){
-  const tax=(parseFloat($('rTax').value)||0)/100,{y}=yieldOf(r),nets={};
-  Object.keys(r.d.out).forEach(m=>{nets[m]=q*r.mult*(r.d.out[m]/r.d.batch)*(y/100)*(1-tax);});
-  return nets;
+  return MaterialEconomy.recover(r,q,yieldOf(r).y)?.output||{};
 }
 const itemByName=n=>S.items.find(o=>o.name.toLowerCase()===(n||'').toLowerCase());
 function minPrice(m){

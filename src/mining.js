@@ -268,7 +268,8 @@ const MineUI=(()=>{
         if(local==null)return null;
         total+=count*local;
       }
-      return total*rateNull();
+      const fee=refineryFee(ore,1,products);
+      return fee==null?null:total*rateNull()-fee;
     }
     return null;
   }

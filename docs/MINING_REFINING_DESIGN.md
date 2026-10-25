@@ -1,6 +1,6 @@
 # Market Moves+ — Minería, reproceso y rentabilidad compartida
 
-**Estado:** arquitectura propuesta y comprobaciones económicas; no confundir con una calculadora neta ya implementada.
+**Estado:** cálculo de rendimiento y tarifa en ISK conectado a Ventas y al precio de hielo en Minería (v1.0.121). La base de tarifa es una estimación por precio de referencia; quedan pendientes la comprobación contra la valoración de EVE, las órdenes y el motor integral ISK/h neto.
 **Fecha:** 2026-10-24.
 **Principio:** una sola función económica reutilizada por **Ventas** y **Minería**, con dos maneras de presentar los mismos resultados: decisión de vender (Ventas) y progresión/ISK por hora/Omega (Minería).
 
@@ -8,7 +8,7 @@
 
 - `src/mining.js` ya implementa perfiles de Barges/Exhumers, skills III/IV/V, fittings T1/T2/Facción, implantes, boost, viajes, ESI y proyección de Omega. `iceUnitPrice()` usa las reglas de hielo compartidas de Ajustes para mercado local, Buyback y reproceso, pero su estimación por unidad no modela de manera uniforme contratos, gastos de transacción y costes por lote. **ISK/h no debe denominarse ganancia neta general.**
 - `src/js/domain/refining.js::yieldOf` representa el rendimiento por estructura, rig, espacio, habilidades e implante. En una Tatara nullsec con rig T2, niveles V y RX-804, el máximo teórico es `53 × 1.12 × 1.055 × 1.15 × 1.10 × 1.10 × 1.04 = 90.628…%`. No presupone que el piloto minero tenga también el personaje reprocesador perfecto.
-- El código actual `reproNets` aplica la entrada `rTax` como `(1-tax)` a **cantidades producidas**. La documentación de EVE University describe el equipment tax como **cargo sobre el valor estimado de los materiales reprocessados**, no como reducción adicional del yield. La simulación financiera debe migrar a **coste ISK separado**, después de validar cómo se cobra en la estructura concreta y la base de valor utilizada. **No modificar esa fórmula a ciegas** sin un conjunto de pruebas de contratos, recetas, salida/ISK y retrocompatibilidad.
+- Hasta v1.0.120 `reproNets` aplicaba `rTax` como `(1-tax)` a **cantidades producidas**. En v1.0.121 se cambia a coste ISK independiente, con pruebas de cantidades, batches y tarifas. La base monetaria sigue siendo **estimada**, no la valoración verificada de EVE. El motor integral de rutas aún está pendiente.
 - Los lotes de ore/comprimido, ice, moon y gas no son equivalentes: respetar batch size, redondeo de materiales recuperados y sobras sin procesar. Las condiciones de compresión y transporte también cambian por tipo.
 - La tarifa `0.5%` de la refinería referida por el usuario es **configuración de su estructura**, no impuesto universal. SCC `0.5%` corresponde a publicar órdenes Upwell; no es el mismo cargo.
 

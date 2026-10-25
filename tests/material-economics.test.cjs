@@ -39,3 +39,19 @@ test('quote refuses unknown fee basis and incomplete prices',()=>{
  assert.equal(M.quote(ore,100,90,{Tritanium:10,Pyerite:20},.5,undefined),null);
  assert.equal(M.quote(ore,100,90,{Tritanium:10,Pyerite:20},-1,100000),null);
 });
+test('the production refinery helpers keep recovered minerals independent of fees',()=>{
+ const source=fs.readFileSync('src/js/domain/refining.js','utf8');
+ const part=(start,end)=>source.slice(source.indexOf(start),source.indexOf(end,source.indexOf(start)));
+ let fee=0.5;
+ const context={MaterialEconomy:M,yieldOf:()=>({y:90}),
+   minPrice:name=>({Tritanium:10,Pyerite:20})[name],
+   $:()=>({get value(){return String(fee)}})};
+ const helpers=vm.runInNewContext(part('function refineryFee(', '// Valor estimado')+
+   part('function reproNets(', 'const itemByName')+'\n({reproNets,refineryFee});',context);
+ const minerals=helpers.reproNets(ore,199);
+ assert.equal(minerals.Tritanium,360);
+ assert.equal(helpers.refineryFee(ore,199,minerals),36);
+ fee=2;
+ assert.equal(helpers.reproNets(ore,199).Tritanium,360);
+ assert.equal(helpers.refineryFee(ore,199,minerals),144);
+});

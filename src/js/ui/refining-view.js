@@ -5,25 +5,25 @@
 //  Refinado además paga la tarifa de la refinería (tax % del valor de lo refinado).
 function paintRefCmp(r,q,nets){
   const box=$('rx'),fin=$('rxFinal');box.textContent='';fin.textContent='';
-  const sys=nullSystem(),tax=(parseFloat($('rTax').value)||0)/100;
+  const sys=nullSystem(),tax=Number($('rTax').value)/100,fee=refineryFee(r,q,nets);
   const it=itemByName(r.key),oa=S.api[r.key.toLowerCase()],ja=it&&it.jita?it.jita:oa;
   const oS=parseFloat($('rOrePrice').value)||(ja&&ja.sell)||0,oB=ja&&ja.buy,oV=parseFloat($('rOreVol').value)||(ja&&ja.vol)||0;
   const ms=Object.keys(nets);let ok=oS>0&&oB!=null;
-  const P=ms.map(m=>{const a=S.api[m.toLowerCase()],p=minPrice(m),b=a?a.buy:null;if(p==null||b==null)ok=false;return{m,n:nets[m],n0:tax<1?nets[m]/(1-tax):nets[m],p,b};});
-  if(!ok){box.append(el('p','muted','Faltan precios del ore o de los productos: tráelos con el botón de arriba.'));return;}
+  const P=ms.map(m=>{const a=S.api[m.toLowerCase()],p=minPrice(m),b=a?a.buy:null;if(p==null||b==null)ok=false;return{m,n:nets[m],p,b};});
+  if(!ok||fee==null){box.append(el('p','muted',tx('refinery.missingQuote')));return;}
   const bN=C.brokerNull+C.scc;
   // un "lado": bruto, deducciones y neto
-  const side=(gross,fee,broker,ship)=>{const st=C.tax*(gross-fee),bk=broker*(gross-fee),rl=relist(broker)*(gross-fee);return{gross,fee,st,bk,rl,ship,net:gross-fee-st-bk-rl-ship};};
+  const side=(gross,fee,broker,ship)=>{const st=C.tax*gross,bk=broker*gross,rl=relist(broker)*gross;return{gross,fee,st,bk,rl,ship,net:gross-fee-st-bk-rl-ship};};
   // Null
   const uNo=nullList(r.key,oS,oB,it?it.nullSeen:null,q);
   const nNo=side(q*uNo,0,bN,0);
-  let gNr=0,fNr=0;P.forEach(x=>{const u=nullList(x.m,x.p,x.b,null,x.n);gNr+=x.n0*u;fNr+=(x.n0-x.n)*u;});
-  const nRe=side(gNr,fNr,bN,0);
+  let gNr=0;P.forEach(x=>{const u=nullList(x.m,x.p,x.b,null,x.n);gNr+=x.n*u;});
+  const nRe=side(gNr,fee,bN,0);
   // Jita
   const uJo=jitaList(r.key,oS,oB,q),shO=oV>0?courierCost(q*oV,q*oS):0;
   const jNo=side(q*uJo,0,C.broker,shO);
-  let gJr=0,fJr=0,vJ=0,cJ=0;P.forEach(x=>{const u=jitaList(x.m,x.p,x.b,x.n);gJr+=x.n0*u;fJr+=(x.n0-x.n)*u;vJ+=x.n*prodVol(x.m);cJ+=x.n*x.p;});
-  const jRe=side(gJr,fJr,C.broker,courierCost(vJ,cJ));
+  let gJr=0,vJ=0,cJ=0;P.forEach(x=>{const u=jitaList(x.m,x.p,x.b,x.n);gJr+=x.n*u;vJ+=x.n*prodVol(x.m);cJ+=x.n*x.p;});
+  const jRe=side(gJr,fee,C.broker,courierCost(vJ,cJ));
   const card=(title,priceNo,priceRe,A,B,hasShip,where)=>{
     const d=el('div','rx-c '+(B.net>A.net?'yes':'no'));
     // titular grande: la respuesta de este mercado
@@ -33,7 +33,7 @@ function paintRefCmp(r,q,nets){
     const row=(l,a,b,cls)=>{const tr=el('tr',cls||'');tr.append(el('td',null,l),el('td',cls==='p'?'':(l.startsWith('−')?'ded':''),a),el('td',cls==='p'?'':(l.startsWith('−')?'ded':''),b));t.append(tr);};
     row('Precio',priceNo,priceRe,'p');
     row('Venta bruta',fmt(A.gross),fmt(B.gross));
-    row('− Tarifa de refinería ('+pct(tax)+'%)','—','−'+fmt(B.fee));
+    row(tx('refinery.estimatedFee',{percent:pct(tax)}),'—','−'+fmt(B.fee));
     row('− Sales tax ('+pct(C.tax)+'%)','−'+fmt(A.st),'−'+fmt(B.st));
     if(hasShip)row('− Broker de Jita ('+pct(C.broker)+'%)','−'+fmt(A.bk),'−'+fmt(B.bk));
     else{ // en la estructura: broker del dueño + SCC (impuesto de CONCORD), cada uno aparte
@@ -104,7 +104,7 @@ function paintRepro(){
   $('rSkillSrc').textContent='De Ajustes → Tus Skills.';
   $('rSum').textContent='rendimiento '+y.toFixed(1)+'%';
   $('rRef').textContent=refName()+' · '+({tatara:'Tatara',athanor:'Athanor'})[C.ref.struct]+' · Rig '+({none:'Ninguno',t1:'T1',t2:'T2'})[C.ref.rig]+' · '+({high:'Highsec',low:'Lowsec',null:'Nullsec'})[C.ref.sec]+' · Implante '+pct(C.ref.imp)+'%';
-  $('rBreak').textContent='Rendimiento: '+(50+Rm)+' × '+(1+Sec).toFixed(2)+' × '+(1+Sm).toFixed(3)+' × '+(1+.03*R).toFixed(2)+' × '+(1+.02*Re).toFixed(2)+' × '+(1+.02*op).toFixed(2)+' × '+(1+C.ref.imp).toFixed(2)+' = '+y.toFixed(2)+'%, menos '+(tax*100).toFixed(1)+'% de tax de refinería. Lote de '+r.d.batch+' u.'+(r.mult>1?'; 1 comprimida = '+r.mult+' u. base.':'');
+  $('rBreak').textContent='Rendimiento: '+(50+Rm)+' × '+(1+Sec).toFixed(2)+' × '+(1+Sm).toFixed(3)+' × '+(1+.03*R).toFixed(2)+' × '+(1+.02*Re).toFixed(2)+' × '+(1+.02*op).toFixed(2)+' × '+(1+C.ref.imp).toFixed(2)+' = '+y.toFixed(2)+'%. Tarifa estimada aparte: '+(tax*100).toFixed(1)+'% en ISK, sin pérdida adicional de minerales. Lote de '+r.d.batch+' u.'+(r.mult>1?'; 1 comprimida = '+r.mult+' u. base.':'');
   let total=0,totJ=0,nul=0,ok=true;
   Object.keys(r.d.out).forEach(m=>{
     const row=S.repro.rows[m],p=minPrice(m);row.tq.textContent=fmtQ(nets[m]);
@@ -124,11 +124,11 @@ function paintRepro(){
       else tr.append(el('td','r',fmt(w.ore)),el('td','r',fmt(w.prod)),el('td','r '+sgn(w.diff),(w.diff>=0?'+':'')+fmt(w.diff)),el('td','r '+sgn(w.diff),(w.pct>=0?'+':'')+pct(w.pct)+'%'));
       tb.append(tr);
     });
-    $('rRawNote').textContent='Solo resta el rendimiento ('+yieldOf(r).y.toFixed(1)+'%) y el '+(tax*100).toFixed(1)+'% de tax de '+refName()+'. Sin ventas, sin taxes de mercado y sin envío.';
+    $('rRawNote').textContent=tx('refinery.rawEstimate',{yield:yieldOf(r).y.toFixed(1),refinery:refName(),fee:(tax*100).toFixed(1)});
   }
   paintRefCmp(r,q,nets);
   // ---- ¿Refinar o vender el ore? Sin y con courier ----
-  const orePr=parseFloat($('rOrePrice').value)||0,oreVol=parseFloat($('rOreVol').value)||0;
+  const orePr=parseFloat($('rOrePrice').value)||0,oreVol=parseFloat($('rOreVol').value)||0,fee=refineryFee(r,q,nets);
   let minV=0;Object.keys(nets).forEach(m=>minV+=nets[m]*prodVol(m));
   const oreColl=q*orePr,cOre=oreVol>0&&orePr>0?courierCost(q*oreVol,oreColl):null,cMin=ok&&total>0?courierCost(minV,total):null;
   const oreIt=itemByName(r.key),oreA=S.api[r.key.toLowerCase()],oreBuy=oreIt&&oreIt.jita?oreIt.jita.buy:(oreA?oreA.buy:null);
@@ -136,8 +136,8 @@ function paintRepro(){
   const opts=[ // [nombre, sin courier, costo courier (null = no viaja)]
     {k:'oN',l:nullLabel(r.key).replace('Vender en HY-RWO','Vender ore en HY-RWO'),a:npOre!=null?q*npOre*rateNull():null,c:0},
     {k:'oJ',l:jitaLabel(r.key).replace('Orden en Jita','Ore a Jita'),a:orePr>0?q*jitaList(r.key,orePr,oreBuy,q)*rateJita():null,c:cOre,ship:1},
-    {k:'mN',l:nullLabel(Object.keys(nets)[0]).replace('Vender en HY-RWO','Minerales en HY-RWO'),a:ok&&total>0?nul:null,c:0},
-    {k:'mJ',l:jitaLabel(Object.keys(nets)[0]).replace('Orden en Jita','Minerales a Jita'),a:ok&&total>0?totJ*rateJita():null,c:cMin,ship:1}];
+    {k:'mN',l:nullLabel(Object.keys(nets)[0]).replace('Vender en HY-RWO','Minerales en HY-RWO'),a:ok&&total>0&&fee!=null?nul-fee:null,c:0},
+    {k:'mJ',l:jitaLabel(Object.keys(nets)[0]).replace('Orden en Jita','Minerales a Jita'),a:ok&&total>0&&fee!=null?totJ*rateJita()-fee:null,c:cMin,ship:1}];
   opts.forEach(o=>{o.b=o.a==null?null:(o.ship?(o.c==null?null:o.a-o.c):o.a);});
   const best=key=>opts.filter(o=>o[key]!=null).reduce((x,o)=>x==null||o[key]>x[key]?o:x,null);
   const b1=best('a'),b2=best('b'),tb=$('tRcmp').querySelector('tbody');tb.textContent='';
