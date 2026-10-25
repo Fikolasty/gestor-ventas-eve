@@ -1,5 +1,13 @@
 # PROGRESS — Market Moves+
 
+## 2026-10-25 — v1.0.130 LIVE: B.5, CI/Pages/HTTPS confirmados
+
+**Publicado por la identidad correcta Fiko/Fikolasty:** `main` seguía en `d5023d6ab7d5e02c8bd321ac18bb5e8ee7c02948`. Se validaron **15 blobs fuente** por `git hash-object` y API de GitHub, con árbol `2b12d6715c2e61580b44a4ebc0cef21846edcc91`, commit **`910d8f950ce4f93cede56df13df8735196ec0403`**, protección `expected_sha` y `force:false`. Se excluyeron del árbol el HTML generado y las capturas locales. El bot CI creó el compilado **`ff842ec9ff03079a888009784b78bed7d660b8b5`**, hijo de la fuente, con `index.html` y `docs/QA_STATUS.md` actualizado.
+
+**Gates:** 19/19 Node, 16/16 Python, 8/8 legacy, 37/37 Chromium y build v1.0.130 locales; el job Chromium CI también resultó `success`. Cuatro Actions `success`: Minería `40240791941`, Versiones `40240791901`, Build `40240791891`, **Rebuild/Chromium/Pages `40240791939`** (su job de despliegue aprobó el gate HTTP de banner y versión). GitHub y una **segunda descarga independiente HTTPS** de <https://fikolasty.github.io/gestor-ventas-eve/?verified=40240791939-b5> devolvieron **2.256.976 bytes**, literal `v1.0.130`, banner original y blob Git **`e3aaec13676552cf0e104e90bbf299708ddc2d94`** idéntico al `index.html` local. **LIVE verificado**, Geiner avisado.
+
+**Alcance y continuidad:** B.5.1 resultado y deducciones claras; B.5.2 Sí/No reprocesar con coste marginal del courier real y datos faltantes; B.5.3 ayuda escondida por sección y colateral sin descuento ficticio; B.5.4 QA visual/económica. Próximo **C.1 saneamiento CSS selectivo**, sin reescritura general, y luego **D mediciones de rendimiento**. No se certifica EVE SSO/ESI real, liquidez futura de órdenes ni ejecución de contratos por los escenarios sintéticos.
+
 ## 2026-10-25 — B.5 aprobada integralmente, v1.0.130 en validación local
 
 **Permiso expreso:** Geiner dijo «apruebo todo demosle» tras revisar la propuesta de responder las cuatro dudas iniciales y ofrecer explicaciones opcionales por sección. B.5 precede a C.1; se mantienen las restricciones económicas, identidad Fiko, QA y publicación protegida. Base pública verificada **v1.0.129**, clon limpio separado del respaldo anterior; `main=d5023d6ab7d5e02c8bd321ac18bb5e8ee7c02948` al comenzar, con trabajo del propietario preservado.
