@@ -248,6 +248,8 @@ $('qdOn').addEventListener('change',e=>{C.qd.on=e.target.checked;refresh();});
 $('cFast').addEventListener('input',e=>{C.fast=Math.max(0,(parseFloat(e.target.value)||0)/100);refresh();});
 $('qdMax').addEventListener('input',e=>{C.qd.max=Math.max(0,(parseFloat(e.target.value)||0)/100);refresh();});
 $('iceOn').addEventListener('change',e=>{C.ice.on=e.target.checked;refresh();});
+$('compressOn').addEventListener('change',e=>{C.compress.on=e.target.checked;refresh();});
+$('compressCost').addEventListener('input',e=>{const v=Number(e.target.value);C.compress.cost=Number.isFinite(v)?Math.max(0,v):0;refresh();});
 $('refName').addEventListener('input',e=>{C.ref.name=e.target.value.trim();refresh();});
 [['refStruct','struct'],['refRig','rig'],['refSec','sec']].forEach(([id,k])=>$(id).addEventListener('change',e=>{C.ref[k]=e.target.value;refresh();}));
 $('refImp').addEventListener('change',e=>{C.ref.imp=parseFloat(e.target.value)||0;refresh();});

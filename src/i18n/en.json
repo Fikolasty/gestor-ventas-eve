@@ -2273,5 +2273,20 @@
   "Nivel respaldado por varias órdenes y mayor volumen": "Price level supported by multiple orders and higher volume",
   " (isótopos a Jita Buy)": " (isotopes at Jita Buy)",
   "precio local manual": "manual local price",
-  "Contar envío": "Include shipping"
+  "Contar envío": "Include shipping",
+  "Solo considera esta ruta si tienes acceso real a compresión. El precio del hielo comprimido se consulta aparte en ESI.": "Only consider this route if you really have access to compression. The compressed ice price is quoted separately through ESI.",
+  "Puedo comprimir hielo antes del envío": "I can compress ice before shipping",
+  "Desactivado hasta confirmar acceso a compresión.": "Off until compression access is confirmed.",
+  "Coste por unidad comprimida (ISK)": "Cost per compressed unit (ISK)",
+  "0 significa compresión sin cargo. Incluye costes del servicio o combustible si aplican.": "0 assumes no compression fee. Include service or fuel costs where applicable.",
+  "Coste del envío": "Freight cost",
+  "Comparación de rutas": "Route comparison",
+  "Envío del plan": "Plan freight",
+  "Comprimir → Orden en Jita": "Compress → Jita sell order",
+  "Comprimir → Venta rápida en Jita": "Compress → instant sale in Jita",
+  "comprime el hielo y pon una orden en Jita": "compress the ice and place a sell order in Jita",
+  "comprime el hielo y véndelo al instante en Jita": "compress the ice and sell it instantly in Jita",
+  "Compresión": "Compression",
+  "Comprimir hielo y venderlo en Jita": "Compress ice and sell it in Jita",
+  "Comprimir hielo y venderlo al instante en Jita": "Compress ice and sell it instantly in Jita"
 }

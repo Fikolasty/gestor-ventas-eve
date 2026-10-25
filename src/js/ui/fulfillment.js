@@ -7,6 +7,9 @@ function packCouriers(P){
   const ent=[];
   P.rows.forEach(r=>{const k=r.best;if(!k||!SHIPS[k]||!r.ship[k])return;
     if(k==='rJita'&&r.mins)r.mins.forEach(x=>{const u=prodVol(x.m);if(x.n>0)ent.push({n:x.m,q:x.n,u,c:(x.p||0)});});
+    else if(['cOrd','cInst'].includes(k)&&r.comp){
+      ent.push({n:r.comp.name,q:r.q,u:r.comp.vol/r.q,c:r.comp.coll/r.q});
+    }
     else{const q=r.q;if(q>0)ent.push({n:r.o.name,q,u:r.ship[k].v/q,c:appraisalSell(r.o)});}});
   ent.sort((a,b)=>b.u*b.q-a.u*a.q);
   const cap=C.maxVol>0?C.maxVol:Infinity,out=[];let cur=null;
@@ -153,7 +156,7 @@ function paintShip(P,cs){
   const t=el('table','sh-t'),th=el('thead'),hr=el('tr');
   [['Qué viaja',''],['Volumen','r'],['Envío','r'],['Gana extra','r']].forEach(([l,c])=>hr.append(el('th',c||null,l)));th.append(hr);t.append(th);
   const tb=el('tbody');
-  ship.sort((a,b)=>b.cost-a.cost).slice(0,8).forEach(x=>{const tr=el('tr'),nm=(x.r.best==='rJita'?(isIce(x.r.o.name)?'Productos de ':'Minerales de '):'')+x.r.o.name,td=el('td',null,nm);td.title=nm;
+  ship.sort((a,b)=>b.cost-a.cost).slice(0,8).forEach(x=>{const tr=el('tr'),nm=['cOrd','cInst'].includes(x.r.best)&&x.r.comp?x.r.comp.name:(x.r.best==='rJita'?(isIce(x.r.o.name)?'Productos de ':'Minerales de '):'')+x.r.o.name,td=el('td',null,nm);td.title=nm;
     tr.append(td,el('td','r',fmtV(Math.round(x.s.v*100)/100)),el('td','r','−'+fmt(x.cost)),el('td','r '+sgn(x.extra),x.extra==null?'—':(x.extra>=0?'+':'−')+fmt(Math.abs(x.extra))));tb.append(tr);});
   if(ship.length>8){const tr=el('tr'),td=el('td','muted',S.lang==='en'?'and '+(ship.length-8)+' more items':'y '+(ship.length-8)+' ítems más');td.colSpan=4;tr.append(td);tb.append(tr);}
   t.append(tb);b.append(t);
@@ -219,7 +222,7 @@ function paintScenarios(P){
   const box=$('fScn');box.textContent='';
   const build=(title,pick)=>{let V=0,Cc=0,G=0;const list=[],miss=[];
     P.rows.forEach(r=>{const k=pick(r);if(!k||r.g[k]==null||!r.ship[k]){miss.push(r.o.name);return;}
-      V+=r.ship[k].v;Cc+=r.ship[k].c;G+=r.g[k]-r.prod;list.push([(k==='rJita'?(isIce(r.o.name)?'Productos de ':'Minerales de '):'')+r.o.name,r.ship[k].v]);});
+      V+=r.ship[k].v;Cc+=r.ship[k].c;G+=r.g[k]-r.prod;list.push([['cOrd','cInst'].includes(k)&&r.comp?r.comp.name:(k==='rJita'?(isIce(r.o.name)?'Productos de ':'Minerales de '):'')+r.o.name,r.ship[k].v]);});
     const cost=V>0?courierCost(V,Cc):0;return{title,V,Cc,G,cost,net:G-cost,list,miss,n:V>0?trips(V):0};};
   const anyOre=P.rows.some(r=>r.g.rJita!=null);
   const allRef=P.rows.length&&P.rows.every(r=>ORE_PRODUCTS.has(r.o.name.toLowerCase())||ICE_PRODUCTS.has(r.o.name.toLowerCase()));

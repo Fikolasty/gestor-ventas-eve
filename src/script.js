@@ -54,7 +54,7 @@ const FORGE=10000002,JITA44=60003760;
 const S={
   planMode:null,
   flip:false,    // v1.0.5: false = HY-RWO → Jita (normal); true = Jita → HY-RWO (importar a Null). Solo memoria. // v111: plan elegido por el usuario (null = óptimo). Solo en memoria.
-  cfg:{disc:{on:true,base:'buy',pct:1,days:3},ref:{name:'HY-RWO - Metal Exchange',struct:'tatara',rig:'t2',sec:'null',imp:.04},ice:{on:true,nullMode:'jbuy',nullDisc:.025,jitaMode:'under',nullDays:14,refLoss:.55},under:.001,underTk:1,baitTk:5,spreadTk:2,nullDays:7,tax:.03375,broker:.015,brokerNull:.01,scc:.005,margin:0,prod:0,relists:1,abr:0,umbral:1000000,cDays:[1,3],fast:.05,impM:.15,shipOn:true,skew:{inst:-.0016,ord:0,nul:0},discEdge:.1,relistOn:false,nullNonMod:.9,nullBulk:.45,buyMode:'sell',tick:true,qd:{on:true,max:.05},stdFac:0,stdCorp:0,
+  cfg:{disc:{on:true,base:'buy',pct:1,days:3},ref:{name:'HY-RWO - Metal Exchange',struct:'tatara',rig:'t2',sec:'null',imp:.04},ice:{on:true,nullMode:'jbuy',nullDisc:.025,jitaMode:'under',nullDays:14,refLoss:.55},compress:{on:false,cost:0},under:.001,underTk:1,baitTk:5,spreadTk:2,nullDays:7,tax:.03375,broker:.015,brokerNull:.01,scc:.005,margin:0,prod:0,relists:1,abr:0,umbral:1000000,cDays:[1,3],fast:.05,impM:.15,shipOn:true,skew:{inst:-.0016,ord:0,nul:0},discEdge:.1,relistOn:false,nullNonMod:.9,nullBulk:.45,buyMode:'sell',tick:true,qd:{on:true,max:.05},stdFac:0,stdCorp:0,
        base:10000000,perM3:653,collPct:.01,maxVol:350000,coll:null,
        bb:{on:true,tax:.05,base:'buy',special:{}}},
   items:[],      // {name,qty,srcQty,qtyCol,qtyDeduced,pasteRef,pasteTotal,pasteM3u,pasteM3tot,refMan,m3uMan,jita,ref,m3u,checks,notFound,ui}
@@ -204,7 +204,8 @@ function pruneCaches(){
 }
 // ¿falta algún precio de la API (items o minerales de sus ores)?
 function needsFetch(){
-  return S.items.some(o=>!o.jita&&!o.notFound)||S.items.some(o=>{const r=resolveOre(o.name);return r&&Object.keys(r.d.out).some(m=>!S.api[m.toLowerCase()]);});
+  return S.items.some(o=>!o.jita&&!o.notFound)||S.items.some(o=>{const r=resolveOre(o.name);return r&&(Object.keys(r.d.out).some(m=>!S.api[m.toLowerCase()])||
+    (r.d.cat==='ice'&&!/^compressed\s/i.test(o.name)&&!S.api[('Compressed '+r.base).toLowerCase()]));});
 }
 let scrollAfter=false;
 // Carga: oculta los resultados (o los atenúa si ya había) hasta tener todos los datos
@@ -304,7 +305,7 @@ function guideFor(r,Vall){
   }else if((k==='rNull'||k==='rJita')&&altNet!=null&&r.g[k]>0)g.tol=1-(altNet+r.prod+share)/r.g[k];
   return g;
 }
-const ACT={fN:'llévalo a HY-RWO y véndelo allí',fJ:'pon orden en Jita',fJI:'véndelo al instante en Jita',disc:'véndeselo a un jugador por Discord',null:'véndelo en HY-RWO',bb:'véndeselo al Buyback',jOrd:'pon orden en Jita',jInst:'véndelo al instante en Jita',rNull:'reprocésalo y vende los minerales en HY-RWO',rJita:'reprocésalo y lleva los minerales a Jita'};
+const ACT={fN:'llévalo a HY-RWO y véndelo allí',fJ:'pon orden en Jita',fJI:'véndelo al instante en Jita',disc:'véndeselo a un jugador por Discord',null:'véndelo en HY-RWO',bb:'véndeselo al Buyback',jOrd:'pon orden en Jita',jInst:'véndelo al instante en Jita',cOrd:'comprime el hielo y pon una orden en Jita',cInst:'comprime el hielo y véndelo al instante en Jita',rNull:'reprocésalo y vende los minerales en HY-RWO',rJita:'reprocésalo y lleva los minerales a Jita'};
 const actionText=k=>(ACT[k]||'compara las alternativas').replaceAll('HY-RWO',nullSystem());
 function cadence(days,isNull){
   if(isNull)return days>7?'Mercado lento: revisa cada 2–3 días y no persigas cada Undercut.':'Revisa una vez al día.';

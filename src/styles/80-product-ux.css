@@ -339,3 +339,80 @@ html.light body .top.mm-ho-root .mm-top-actions .mm-theme{background:transparent
 #mining .mn-refinery-status-label{color:var(--txt);font-weight:600}
 #pRepro .refine-fee-reference{padding:9px 12px;border:1px solid var(--line2);border-radius:8px;color:var(--mut);font-size:.8rem}
 #pRepro #rFeeInline{color:var(--txt)}
+
+/* v1.0.124 · Decision first: two equal financial cards, both visible.
+   Detail stays behind a small per-item disclosure, never behind the card. */
+#pSum .mm-decision-grid{
+  display:grid;grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:14px;align-items:stretch;margin:16px 0 20px;
+}
+#pSum .mm-decision-grid:has(>#unitCourierBox[hidden]){grid-template-columns:minmax(0,1fr)}
+#pSum .mm-decision-grid>[hidden]{display:none!important}
+#pSum .mm-decision-card{
+  min-width:0;margin:0!important;padding:18px 19px!important;
+  background:var(--surface-card)!important;border:1px solid var(--line2)!important;
+  border-radius:9px!important;box-shadow:none!important;color:var(--txt);
+}
+#pSum #pkOpportunity .pk-opp-head{
+  margin:0 0 15px!important;font:700 .76rem/1.4 var(--f-ui)!important;
+  letter-spacing:.055em;color:var(--mut)!important;
+}
+#pSum #pkOpportunity .pk-opp-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+#pSum #pkOpportunity .pk-opp-stat{
+  padding:13px 14px;border:1px solid var(--line2);border-radius:7px;
+  background:transparent;min-width:0;
+}
+#pSum #pkOpportunity .pk-opp-stat small{font-size:.73rem;line-height:1.45;color:var(--mut)}
+#pSum #pkOpportunity .pk-opp-stat strong{
+  display:block;font:700 clamp(.83rem,1.12vw,1.03rem)/1.38 var(--f-num);
+  overflow-wrap:anywhere;
+}
+#pSum .pk-owner-guard{
+  margin:13px 0 0;padding:10px 12px;
+  border-left:2px solid var(--gain);background:rgba(92,186,134,.06);
+  border-radius:0 6px 6px 0;color:var(--txt);
+  font:500 .77rem/1.5 var(--f-ui);
+}
+#pSum .pk-compress-prompt{border-top:1px solid var(--line2);margin-top:14px;padding-top:12px}
+#pSum .pk-compress-prompt p{margin:0 0 11px;font:450 .77rem/1.5 var(--f-ui);color:var(--mut)}
+#pSum .pk-compress-action{
+  min-height:38px;padding:8px 12px;border:1px solid rgba(217,119,87,.37);
+  border-radius:7px;background:rgba(217,119,87,.09);color:var(--txt);
+  font:650 .76rem/1.3 var(--f-ui);cursor:pointer;
+}
+#pSum .pk-compress-action:hover{border-color:var(--ion);background:rgba(217,119,87,.16)}
+#pSum .pk-compress-action:focus-visible{outline:2px solid var(--ion);outline-offset:2px}
+#pSum #unitCourierBox .mm-decision-head{
+  display:flex;align-items:center;flex-wrap:wrap;gap:9px;
+  min-height:22px;margin:0 0 15px;padding:0;border:0;
+}
+#pSum #unitCourierBox .mm-decision-head .ic{width:17px;height:17px;flex:0 0 17px;color:var(--mut)}
+#pSum #unitCourierHeading{font:700 .76rem/1.4 var(--f-ui)!important;letter-spacing:.055em;color:var(--mut)!important}
+#pSum #unitCourierTotal{margin-left:auto;color:var(--txt)!important;font:700 .78rem/1.4 var(--f-num)!important}
+#pSum #unitCourierRows{display:flex;flex-direction:column;gap:12px;padding:0;border:0}
+#pSum #unitCourierRows .mm-unit-row{display:flex;gap:10px;padding:0;border:0;border-radius:0;background:transparent;box-shadow:none}
+#pSum #unitCourierRows .mm-unit-row+.mm-unit-row{padding-top:12px;border-top:1px solid var(--line2)}
+#pSum #unitCourierRows .mm-freight-item{padding:0;border:0}
+#pSum #unitCourierRows .mm-freight-ident b{font:650 .84rem/1.4 var(--f-ui)}
+#pSum .mm-freight-result{display:flex;justify-content:space-between;gap:14px;align-items:baseline;padding-top:2px}
+#pSum .mm-freight-result span{color:var(--mut);font:500 .76rem/1.3 var(--f-ui)}
+#pSum .mm-freight-result strong{font:750 clamp(.93rem,1.2vw,1.1rem)/1.32 var(--f-num);color:var(--gain);text-align:right}
+#pSum .mm-freight-result strong.neg{color:var(--loss)}
+#pSum .mm-freight-detail{border-top:1px solid var(--line2);padding-top:8px}
+#pSum .mm-freight-detail>summary{list-style:none;cursor:pointer;color:var(--mut);font:600 .74rem/1.4 var(--f-ui)}
+#pSum .mm-freight-detail>summary::-webkit-details-marker{display:none}
+#pSum .mm-freight-detail>summary::after{content:'⌄';display:inline-block;margin-left:8px;transition:transform .15s}
+#pSum .mm-freight-detail[open]>summary::after{transform:rotate(180deg)}
+#pSum .mm-freight-detail .mm-freight-equation{margin-top:12px}
+#pSum .mm-freight-detail .mm-freight-foot{margin-top:12px}
+#pSum #unitCourierRows .mm-freight-note{padding-top:4px;font:450 .74rem/1.5 var(--f-ui)}
+@media(max-width:980px){
+  #pSum .mm-decision-grid{grid-template-columns:minmax(0,1fr)}
+  #pSum .mm-decision-card{padding:17px!important}
+}
+@media(max-width:560px){
+  #pSum #pkOpportunity .pk-opp-grid{grid-template-columns:minmax(0,1fr)}
+  #pSum #unitCourierBox .mm-decision-head{align-items:flex-start}
+  #pSum #unitCourierTotal{flex-basis:100%;margin-left:26px;text-align:left!important}
+  #pSum .mm-freight-result{align-items:flex-start;flex-direction:column;gap:4px}
+}

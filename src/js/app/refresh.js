@@ -122,7 +122,7 @@ function syncShipSwitch(){
 }
 function setFlip(on){
   S.flip=!!on;S.planMode=null;czIdx=0;C.shipOn=true;$('shipOn').checked=true; // cambiar de ruta vuelve a contar el courier
-  SHIPS=S.flip?{fN:1}:{jOrd:1,jInst:1,rJita:1};
+  SHIPS=S.flip?{fN:1}:{jOrd:1,jInst:1,cOrd:1,cInst:1,rJita:1};
   $('bFlip').setAttribute('aria-pressed',String(S.flip));syncNullRouteLabels();
   syncShipSwitch();syncBusinessMode();document.body.classList.toggle('is-flip',S.flip);
   if(S.items.length)refreshNow();

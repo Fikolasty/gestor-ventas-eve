@@ -129,6 +129,12 @@ async function esiItems(all){
     const names=new Set();
     S.items.forEach(o=>{if(all||!o.jita)names.add(o.name);});
     S.items.forEach(o=>{const r=resolveOre(o.name);if(r)Object.keys(r.d.out).forEach(m=>{if(all||!S.api[m.toLowerCase()])names.add(m);});});
+    // Quote the actual compressed ice item as a separate executable market route.
+    // One ice block becomes one compressed block; volume is read from ESI types.
+    S.items.forEach(o=>{const r=resolveOre(o.name);if(r?.d.cat==='ice'&&!/^compressed\s/i.test(o.name)){
+      const compressed='Compressed '+r.base;
+      if(all||!S.api[compressed.toLowerCase()])names.add(compressed);
+    }});
     if(!names.size){status('esiStatus','Precios al día.','ok');return;}
     status('esiStatus','Buscando '+names.size+' item(s) en la API de EVE…');
     if(S.loading)setLoading(true,'Buscando '+names.size+' item(s) en la API de EVE…',.05,document.body.classList.contains('is-updating'));

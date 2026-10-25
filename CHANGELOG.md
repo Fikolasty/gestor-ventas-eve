@@ -1,3 +1,10 @@
+## v1.0.124 — 2026-10-25 [ChatGPT]
+- Corrige la recomendación para 1.400–1.520 unidades de hielo Krystallos: el plan compara valor neto del dueño después de impuestos, reproceso, compresión y tarifa real SIGMA Freight (incluidos los saltos de contratos de 350.000 m³). La ruta comprimida cotiza **Compressed Krystallos** como item distinto en ESI, con volumen verificado y liquidez propia; la opción se activa solo si el piloto confirma acceso a compresión y su coste.
+- Protección logística para hielo: si el flete marginal captura más ISK que el beneficio adicional del dueño frente a la mejor venta sin envío, se recomienda quedarse localmente; una elección manual puede prevalecer. No equivale a estimar coste de adquisición ni garantiza que una orden se complete.
+- Corrige el desglose de envío por unidad: muestra **lo que recibes**, restando el courier del neto tras comisiones, en vez de sumarle el transporte al precio aparente. El volumen mostrado corresponde al contenido físico que realmente viaja; los contratos listan hielo comprimido cuando corresponde.
+- «Ver diferencias de ISK» y «Coste real del envío» son tarjetas abiertas, gemelas y adaptables, en dos columnas para escritorio y una en móvil; solo la aritmética secundaria se despliega a petición.
+- Actualiza traducciones ES/EN, Ajustes persistentes, instrucciones de venta y pruebas de regresión económicas sintéticas para 1.400 y 1.520 unidades; sin cambios en EVE SSO, Minería ni Skill Plan.
+
 ## v1.0.123 — 2026-10-25 [ChatGPT]
 - Retira el icono de lista situado a la izquierda de «Ventas» en el header, según la captura marcada por el usuario. Mantiene el botón original `#mmTabVentas`, su texto, semántica accesible, selección y comportamiento sin cambiar módulos ni fórmulas.
 - Añade regresión de estructura del tab y actualiza el workflow de compilación a v1.0.123. Fuente `8f9514a`, build `c41fb9c` y Pages verificados con Actions `40165679157`. Revisión visual Dark/escritorio aceptada parcialmente por el usuario; pendientes Light/móvil manual y EVE SSO/ESI end-to-end.

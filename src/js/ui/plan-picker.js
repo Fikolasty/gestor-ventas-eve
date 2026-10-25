@@ -5,7 +5,7 @@
 // la ruta (flip) y el switch de envío actuales: aquí no se calcula nada nuevo, solo se ordena y se pinta.
 // Elegir un plan recalcula (S.planMode → refreshNow). Orden y filtro viven en memoria (pkView) y se vacían al limpiar.
 let pkView={sort:'net',dir:-1,filter:'all',open:false}; // v1.0.49: open = mostrar todos los planes
-const PK_FAST=new Set(['jInst','fJI','bb']);                 // cobras el mismo día (sin contar el envío)
+const PK_FAST=new Set(['jInst','cInst','fJI','bb']);         // cobras el mismo día (sin contar el envío)
 const PK_REP=new Set(['rNull','rJita']);
 function pkSpeed(m,P){const ship=pkShips(m,P);
   if(m==='auto')return P.rows.every(r=>!r.best||PK_FAST.has(r.best))?(ship?tx('picker.shippingRange',{range:C.cDays[0]+'–'+C.cDays[1]}):tx('picker.fast')):tx('picker.mixed');
@@ -16,7 +16,7 @@ function pkSpeed(m,P){const ship=pkShips(m,P);
 // rango para ordenar por rapidez (menor = más rápido)
 const pkSpeedRank=(m,P)=>m==='auto'?1.5:(PK_FAST.has(m)?0:m==='disc'?4:(m==='null'||m==='rNull'||m==='fN')?3:2)+(pkShips(m,P)?.5:0);
 function pkShips(m,P){if(!SH())return false;if(m==='auto')return P.Vs>0;return !!SHIPS[m];}
-const PK_FILTERS=[['all','picker.all'],['fast','picker.fastFilter'],['noship','picker.noShipping'],['rep','picker.reprocessing']];
+const PK_FILTERS=[['all','picker.all'],['fast','picker.fastFilter'],['noship','picker.noShipping'],['rep','picker.reprocessing'],['comp','picker.compression']];
 const PK_COLS=[['name','picker.plan'],['speed','picker.speed'],['ship','picker.shipping'],['net','picker.value'],['net','picker.total'],['diff','picker.difference']];
 function paintPicker(P){
   const box=$('pk'),bar=$('pkNote'),tools=$('pkTools'),others=$('pkOthers');
@@ -105,22 +105,23 @@ function paintPicker(P){
     opportunity.append(el('p','pk-opp-explain',tx('picker.insufficient')));
   }
 
-  // Keep the detailed plan comparison accessible without using vertical space
-  // unless the user explicitly expands it. Preserve open state across recalcs.
-  if(chosen.m!=='disc'){
-  const detail=el('details','pk-opp-details');
-  detail.open=!!pkView.opportunityOpen;
-  const summary=el('summary','pk-opp-brief');
-  summary.append(el('span',null,tx('picker.why')));
-  const closest=valid.filter(x=>x.m!==chosen.m).sort((a,b)=>b.t.net-a.t.net)[0];
-  if(closest){
-    const diff=chosen.t.net-closest.t.net;
-    summary.append(el('strong',diff>=0?'pos':'neg',(diff>=0?'+':'−')+fmt(Math.abs(diff))));
+  // Decision at a glance: visible next to the freight result. Only secondary
+  // calculations are disclosed on demand inside each freight item.
+  opportunity.prepend(el('h3','pk-opp-head',tx('picker.why')));
+  const protectedIce=P.rows.filter(r=>r.freightGuard);
+  if(protectedIce.length){
+    const guard=protectedIce[0],detail=guard.freightGuard;
+    const note=el('p','pk-owner-guard',tx('picker.ownerGuard',{
+      name:guard.o.name,freight:fmt(detail.cost),extra:fmt(Math.max(0,detail.ownerExtra))}));
+    opportunity.append(note);
   }
-  detail.append(summary);
-  while(opportunity.firstChild)detail.append(opportunity.firstChild);
-  opportunity.append(detail);
-  detail.addEventListener('toggle',()=>{pkView.opportunityOpen=detail.open;});
+  if(!C.compress.on&&P.rows.some(r=>r.comp&&
+      (Number.isFinite(r.comp.api.sell)&&r.comp.api.sell>0||Number.isFinite(r.comp.api.buy)&&r.comp.api.buy>0))){
+    const prompt=el('div','pk-compress-prompt');
+    prompt.append(el('p',null,tx('compress.suggestion')));
+    const action=el('button','pk-compress-action',tx('compress.action'));
+    action.type='button';action.dataset.enableCompression='true';prompt.append(action);
+    opportunity.append(prompt);
   }
 
   const maxNet=Math.max(...list.filter(x=>x.m!=='disc').map(x=>x.t.net),1);
@@ -165,6 +166,7 @@ function paintPicker(P){
       jInst:'picker.instantDesc',fJI:'picker.instantDesc',
       bb:'picker.buybackDesc',disc:'picker.playerDesc',
       rNull:'picker.reprocessLocalDesc',rJita:'picker.reprocessJitaDesc',
+      cOrd:'picker.compressOrderDesc',cInst:'picker.compressInstantDesc',
       fN:'picker.importDesc'};
     txt.append(nm);
     if(!selected)txt.append(el('small','pk-e',tx(short[m]||'picker.bestDesc')+part));
@@ -178,7 +180,7 @@ function paintPicker(P){
     return b;
   }
   if(!pkView.open)box.append(row(chosen,true));
-  const pass={all:()=>true,fast:x=>PK_FAST.has(x.m),noship:x=>!pkShips(x.m,P),rep:x=>PK_REP.has(x.m)};
+  const pass={all:()=>true,fast:x=>PK_FAST.has(x.m),noship:x=>!pkShips(x.m,P),rep:x=>PK_REP.has(x.m),comp:x=>x.m==='cOrd'||x.m==='cInst'};
   const available=list.filter(x=>x.m!==chosen.m);
   const expandedList=pkView.open?[...list]:available;
   const fl=PK_FILTERS.filter(([f])=>f==='all'||(f!=='noship'||SH())&&available.some(x=>pass[f](x)));
@@ -221,6 +223,10 @@ $('pkShortcut').addEventListener('click',e=>{
 });
 $('pkOthers').addEventListener('click',e=>{const b=e.target.closest('[data-m]');if(!b)return;
   S.planMode=b.dataset.m==='auto'?null:b.dataset.m;pkView.open=false;pkView.filter='all';czIdx=0;refreshNow();});
+$('pkOpportunity').addEventListener('click',e=>{
+  const button=e.target.closest('[data-enable-compression]');if(!button)return;
+  const setting=$('compressOn');setting.checked=true;setting.dispatchEvent(new Event('change',{bubbles:true}));
+});
 // Reconcile investment, net receipts and profit against the ACTIVE plan. Never
 // replace P.best: all plan rankings and courier calculations still use net proceeds.
 // EVE Sell = fill existing ask immediately; Buy Order = *potential* purchase at
@@ -313,15 +319,15 @@ function paintFlipBuy(P){
 // Does not mutate selling-route prices, taxes or courier billing.
 function courierUnitPresentation(r){
   if(!(r.q>0))return null;
-  const quote=unitFor(r,r.best);
-  const hasQuote=quote&&Number.isFinite(quote.p)&&quote.p>=0;
-  const routeGross=r.g&&r.g[r.best];
-  // For reprocessing, the original item has no directly comparable sell quote:
-  // use the calculated net route value per original unit and label it as such.
-  const base=hasQuote?quote.p:(Number.isFinite(routeGross)?routeGross/r.q:null);
+  // The old UI ADDED freight to the quote and called it a sale price, which
+  // looked like revenue. Show actual net proceeds instead: after market and
+  // processing fees, then SUBTRACT the allocated courier cost exactly once.
+  const routeNet=r.g&&r.g[r.best];
+  const base=Number.isFinite(routeNet)?(routeNet-(Number.isFinite(r.prod)?r.prod:0))/r.q:null;
   const allocated=Math.max(0,r.courierAllocated||0);
-  return{base,freightUnit:allocated/r.q,unit:base==null?null:base+allocated/r.q,
-    total:base==null?null:base*r.q+allocated,allocated,derived:!hasQuote};
+  return{base,freightUnit:allocated/r.q,unit:base==null?null:base-allocated/r.q,
+    total:base==null?null:base*r.q-allocated,allocated,
+    derived:['rJita','cOrd','cInst'].includes(r.best)};
 }
 function paintCourierUnits(P){
   const box=$('unitCourierBox'),host=$('unitCourierRows');
@@ -347,27 +353,32 @@ function paintCourierUnits(P){
     const title=el('div','mm-freight-item');
     const pic=iconFor(r.o.name);if(pic)title.append(pic);
     const identity=el('div','mm-freight-ident');
-    identity.append(el('b',null,r.o.name),
+    identity.append(el('b',null,r.comp&&['cOrd','cInst'].includes(r.best)?r.o.name+' → '+r.comp.name:r.o.name),
       el('small',null,tx('freight.qty',{count:fmtQ(r.q)})));
     title.append(identity);
     const math=el('div','mm-freight-equation');
     math.append(value('freight.base',costs.base),
-      el('span','mm-freight-op','+'),
+      el('span','mm-freight-op','−'),
       value('freight.increment',costs.freightUnit),
       el('span','mm-freight-op','='),
       value('freight.landed',costs.unit));
+    const key=el('div','mm-freight-result');
+    key.append(el('span',null,tx('freight.landed')),
+      el('strong','num '+sgn(costs.unit),costs.unit==null?'—':fmtP(costs.unit)));
     const foot=el('div','mm-freight-foot');
     const lot=el('div','mm-freight-lot');
     lot.append(el('small',null,tx('freight.totalLot')),
       el('strong','num',costs.total==null?tx('freight.missingQuote'):fmtP(costs.total)));
     const meta=el('div','mm-freight-meta');
     meta.append(el('span',null,tx('freight.totalCost',{amount:fmt(costs.allocated)})),
-      el('span',null,tx('freight.volume',{volume:fmtV(r.vol)})));
+      el('span',null,tx('freight.volume',{volume:fmtV(r.ship[r.best]?.v||0)})));
     foot.append(lot,meta);
-    card.append(title,math,foot);
+    const details=el('details','mm-freight-detail');
+    details.append(el('summary',null,tx('freight.more')),math,foot);
+    card.append(title,key,details);
     if(costs.derived){
       const caution=el('small','mm-freight-source',tx('freight.derived'));
-      card.append(caution);
+      details.append(caution);
     }
     host.append(card);
   });

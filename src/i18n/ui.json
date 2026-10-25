@@ -171,6 +171,22 @@
     "es": "Reprocesar y vender en Jita.",
     "en": "Reprocess and sell in Jita."
   },
+  "picker.compressOrderDesc": {
+    "es": "Comprimir en origen, enviar y publicar orden en Jita.",
+    "en": "Compress at origin, ship and list in Jita."
+  },
+  "picker.compressInstantDesc": {
+    "es": "Comprimir, enviar y vender a compras disponibles en Jita.",
+    "en": "Compress, ship and sell into available Jita buy orders."
+  },
+  "picker.compression": {
+    "es": "Comprimido",
+    "en": "Compressed"
+  },
+  "picker.ownerGuard": {
+    "es": "Se evitó enviar {name}: flete {freight} frente a una mejora para ti de solo {extra}. Se prioriza tu ganancia sobre el coste logístico.",
+    "en": "Shipping {name} was avoided: freight {freight} versus just {extra} of extra proceeds for you. Your gain takes priority over logistics costs."
+  },
   "picker.importDesc": {
     "es": "Importar desde Jita.",
     "en": "Import from Jita."
@@ -379,6 +395,14 @@
     "es": "Venta inmediata en Jita",
     "en": "Instant sale in Jita"
   },
+  "route.cOrd": {
+    "es": "Comprimir y vender con orden en Jita",
+    "en": "Compress and list in Jita"
+  },
+  "route.cInst": {
+    "es": "Comprimir y vender al instante en Jita",
+    "en": "Compress and sell instantly in Jita"
+  },
   "route.bb": {
     "es": "Vender al Buyback",
     "en": "Sell to Buyback"
@@ -408,8 +432,8 @@
     "en": " · {selected} of {total} items support this route."
   },
   "freight.heading": {
-    "es": "PRECIO UNITARIO CON ENVÍO",
-    "en": "UNIT PRICE WITH FREIGHT"
+    "es": "COSTE REAL DEL ENVÍO",
+    "en": "ACTUAL FREIGHT COST"
   },
   "freight.contractOne": {
     "es": "1 contrato",
@@ -424,36 +448,104 @@
     "en": "{count} units"
   },
   "freight.base": {
-    "es": "PRECIO BASE / UD.",
-    "en": "BASE PRICE / UNIT"
+    "es": "NETO ANTES DE ENVÍO / UD.",
+    "en": "NET BEFORE FREIGHT / UNIT"
   },
   "freight.increment": {
     "es": "ENVÍO / UD.",
     "en": "FREIGHT / UNIT"
   },
   "freight.landed": {
-    "es": "PRECIO CON ENVÍO / UD.",
-    "en": "PRICE WITH FREIGHT / UNIT"
+    "es": "TE QUEDA / UD.",
+    "en": "YOU KEEP / UNIT"
   },
   "freight.totalLot": {
-    "es": "TOTAL DEL LOTE CON ENVÍO",
-    "en": "LOT TOTAL WITH FREIGHT"
+    "es": "TE QUEDA POR EL LOTE",
+    "en": "YOU KEEP FOR THE LOT"
   },
   "freight.totalCost": {
     "es": "Envío del lote: {amount}",
     "en": "Lot freight: {amount}"
   },
   "freight.volume": {
-    "es": "Volumen: {volume}",
-    "en": "Volume: {volume}"
+    "es": "Carga transportada: {volume}",
+    "en": "Shipped cargo: {volume}"
   },
   "freight.derived": {
-    "es": "Referencia neta estimada para esta ruta de reproceso, no una cotización de venta del ítem original.",
-    "en": "Estimated net value for this reprocessing route, not a sell quote for the original item."
+    "es": "Importe por cada unidad original: incluye procesamiento, tasas y envío. El producto transformado se cotiza por separado.",
+    "en": "Per original unit: includes processing, fees and shipping. The transformed product has its own market quote."
   },
   "freight.reference": {
-    "es": "Precio de referencia + envío asignado. Las tasas de venta sobre cualquier aumento se calculan por separado.",
-    "en": "Reference price + allocated freight. Sales fees on any price increase are calculated separately."
+    "es": "Recibes = venta neta tras tasas y proceso − envío real asignado. Una orden de venta no garantiza comprador inmediato.",
+    "en": "You keep = net sale after fees and processing − allocated actual freight. A sell order does not guarantee an immediate buyer."
+  },
+  "freight.more": {
+    "es": "Ver cálculo por unidad",
+    "en": "See per-unit calculation"
+  },
+  "compress.settingsTitle": {
+    "es": "Compresión de hielo",
+    "en": "Ice compression"
+  },
+  "compress.settingsHelp": {
+    "es": "Esta ruta requiere compresión real disponible en origen. La cotización del hielo comprimido procede de ESI y no se supone igual al precio original.",
+    "en": "This route requires actual compression access at origin. Compressed ice uses its own ESI quote, never the original ice price."
+  },
+  "compress.enabled": {
+    "es": "Puedo comprimir antes del envío",
+    "en": "I can compress before shipping"
+  },
+  "compress.enabledHelp": {
+    "es": "Desactivado hasta que confirmes acceso a compresión.",
+    "en": "Off until you confirm compression access."
+  },
+  "compress.cost": {
+    "es": "Coste de compresión por unidad (ISK)",
+    "en": "Compression cost per unit (ISK)"
+  },
+  "compress.costHelp": {
+    "es": "0 significa compresión propia sin cargo; añade costes de servicio o combustible cuando correspondan.",
+    "en": "0 assumes no fee for your own compression; include service or fuel costs where applicable."
+  },
+  "compress.suggestion": {
+    "es": "Hay cotización para hielo comprimido. Podría reducir considerablemente el envío; confirma acceso para que el motor lo compare.",
+    "en": "Compressed ice has a market quote. It may cut freight substantially; confirm access to include it in the comparison."
+  },
+  "compress.action": {
+    "es": "Puedo comprimir · comparar",
+    "en": "I can compress · compare"
+  },
+  "compress.unitNote": {
+    "es": "Compresión: {cost} por lote antes de enviar",
+    "en": "Compression: {cost} per lot before shipping"
+  },
+  "compress.orderQuote": {
+    "es": "Orden de hielo comprimido en Jita",
+    "en": "Compressed ice sell order in Jita"
+  },
+  "compress.instantQuote": {
+    "es": "Compra inmediata de hielo comprimido en Jita",
+    "en": "Immediate compressed ice buy order in Jita"
+  },
+  "compress.stepTitle": {
+    "es": "Comprimir hielo antes del envío",
+    "en": "Compress ice before shipping"
+  },
+  "compress.stepBody": {
+    "es": "Convierte cada unidad original en una unidad de hielo comprimido. Confirma acceso al servicio y su coste en Ajustes antes de crear el contrato.",
+    "en": "Turn each original unit into one compressed ice unit. Confirm access and cost in Settings before creating the courier contract."
+  },
+  "compress.arrivalTitle": {
+    "es": "Al llegar: vender hielo comprimido",
+    "en": "On arrival: sell compressed ice"
+  },
+  "compress.arrivalBody": {
+    "es": "Vende el producto comprimido, no el hielo original; verifica liquidez y precio al ejecutar.",
+    "en": "Sell the compressed product, not the original ice; verify liquidity and price before execution."
+  },
+  "compress.beforeFreight": {
+    "es": "antes del transporte",
+    "en": "before freight"
   },
   "freight.missingQuote": {
     "es": "Precio base no disponible",

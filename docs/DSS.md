@@ -68,6 +68,14 @@ Este DSS es el respaldo prioritario de **decisiones visuales, estado verificable
 
 **Calidad/limitaciones:** el fee de estructura 0.5% es coste ISK separado del yield 90.63%; se estima con precios de referencia, no valoración interna certificada de EVE. El fallo previo `compile` de v1.0.120 (skill de reproceso no sincronizada) está corregido; Chromium remoto pasó en v1.0.122. En el entorno local Chromium todavía no está disponible; falta revisión humana visual y EVE/ESI real.
 
+### Diseño y economía v1.0.124 — Krystallos y columnas de decisión
+
+El usuario denunció que para un lote de ~1.400 Krystallos se proponía reprocesar y enviar a Jita, con una captura de 830,48 M ISK de courier en cuatro contratos; el coste beneficiaba desproporcionadamente al servicio logístico. El plan nuevo incorpora dos rutas de **hielo comprimido** (orden y venta inmediata de su **propio tipo ESI**, precio y volumen separados), con confirmación previa de acceso y coste de compresión en Ajustes, sin asumir capacidades o cotizaciones no verificadas. También agrega un veto conservador automático al envío de hielo cuando el cargo de courier marginal excede los ISK extra netos que el dueño obtendría respecto a la mejor venta local. El usuario conserva la opción de forzar el envío sabiendo su coste.
+
+En la interfaz, `#pkOpportunity` y `#unitCourierBox` aparecen en un grid simétrico de **dos columnas abiertas** en escritorio (una en móvil), mostrando decisión y neto por unidad primero; la fórmula solo se despliega si se desea. Se corrige el error de presentar `precio + flete` como valor de venta: el nuevo desglose calcula `neto − courier asignado`. Los manifiestos de contratos y pasos de ejecución llevan `Compressed Krystallos` cuando es la ruta escogida. Se mantienen ES/EN, Dark/Light, persistencia, EVE SSO, navegación, Minería y Skill Plan.
+
+**Pruebas de desarrollo:** 1.400/1.520 Krystallos sintéticos, límite de 350.000 m³, opt-in, tarifas extremas, cotización no disponible y override; Node/Python y regresiones previas. Estos tests **no** verifican precios ESI actuales ni costo/sitio real de compresión. Pendientes prueba Chromium CI y despliegue oficial v1.0.124, además de revisión humana completa.
+
 ## 5. Procedimiento para siguiente chat
 
 1. Leer este DSS completo y el final de `docs/PROGRESS.md`; revisar `git status -sb`, `git log -8 --oneline`, `git remote -v` y diferencias con `origin/main`.
@@ -84,6 +92,7 @@ Este DSS es el respaldo prioritario de **decisiones visuales, estado verificable
 | 2026-10-25 | El usuario ordena publicar todo y establece que cada push futuro use imperativamente el conector GitHub «Fiko»/`Fikolasty`. Conexión `admin`/`push` y base remota `0cc24e1` confirmadas; se corrige el workflow que recompilaba una versión obsoleta (1.0.120 → 1.0.122). | Publicados siete commits en `main` hasta `d0561d8`; CI compiló y publicó v1.0.122 en `12e7852`. Todas las Actions, incluida Pages/Chromium, exitosas. |
 | 2026-10-25 | Documentación posterior al push: mapeo de SHA locales/remotos, URL de la ejecución CI, estado final, protocolo de conexión obligatoria y respaldo histórico. | Cambio documental; no alterar motores ni estilos. |
 | 2026-10-25 | Captura revisada por el usuario: eliminar solo el icono de lista de «Ventas». El clon actual de `main` estaba en `b50557d` (incluye PR #16 de arbitraje industrial posterior al DSS), preservado. Fuente, test y workflow v1.0.123 publicados mediante conexión GitHub «Fiko». | Fuente `8f9514a`, build `c41fb9c`, Actions/Pages correctos (`40165679157`); revisión visual Dark/escritorio parcialmente aceptada; Light/móvil y EVE SSO/ESI real completos pendientes. |
+| 2026-10-25 | Se añade la opción de comprimir hielo con cotización ESI distinta, protección de beneficio incremental del usuario contra flete desproporcionado, dos tarjetas financieras simétricas abiertas y desglose de neto unitario correcto. Se actualizan fuentes, regresión para Krystallos 1400/1520, ES/EN, documentación y workflow v1.0.124. | Tests locales aprobados; publicación y QA visual Chromium pendientes al momento de redactar; los importes de regresión son sintéticos. |
 
 **Regla permanente:** añadir una fila aquí con cada nuevo cambio/commit/push de ChatGPT.
 

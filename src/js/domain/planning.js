@@ -1,9 +1,24 @@
 // ================= Motor: ¿dónde vendo? (puro) =================
-const OPTS=[['null','Vender en HY-RWO'],['bb','Venderle al Buyback'],['jOrd','Orden en Jita'],['jInst','Venta Rápida en Jita'],['rNull','Reprocesar → HY-RWO'],['rJita','Reprocesar → Jita'],['disc','Venta a Jugador'],
+const OPTS=[['null','Vender en HY-RWO'],['bb','Venderle al Buyback'],['jOrd','Orden en Jita'],['jInst','Venta Rápida en Jita'],['cOrd','Comprimir → Orden en Jita'],['cInst','Comprimir → Venta rápida en Jita'],['rNull','Reprocesar → HY-RWO'],['rJita','Reprocesar → Jita'],['disc','Venta a Jugador'],
   ['fN','Llevar a HY-RWO'],['fJ','Orden en Jita'],['fJI','Venta Rápida en Jita']]; // f* = modo Jita → HY-RWO
 const optionMarketText=value=>String(value||'').replaceAll('HY-RWO',nullSystem()).replace(/\bNull\b/g,nullSystem());
 const FLIPK={fN:1,fJ:1,fJI:1};
-let SHIPS={jOrd:1,jInst:1,rJita:1}; // qué opciones viajan en courier (cambia con la dirección)
+let SHIPS={jOrd:1,jInst:1,cOrd:1,cInst:1,rJita:1}; // qué opciones viajan en courier (cambia con la dirección)
+// Compression is only considered when the user confirms access. A real ESI
+// compressed-item quote and volume are mandatory; absent data never becomes a
+// zero-price route or a fictional market offer. Cost is user-configured ISK/unit.
+function compressedIceOffer(o,q){
+  const ore=resolveOre(o.name);
+  if(!ore||ore.d.cat!=='ice'||/^compressed\s/i.test(o.name)||!(q>0))return null;
+  const name='Compressed '+ore.base,a=S.api[name.toLowerCase()];
+  if(!a||!(Number.isFinite(a.vol)&&a.vol>0)||
+     (Number.isFinite(o.m3u)&&o.m3u>0&&a.vol>=o.m3u))return null;
+  const price=Number.isFinite(a.sell)&&a.sell>0?a.sell:0;
+  const collateral=price||((Number.isFinite(a.buy)&&a.buy>0)?a.buy:0);
+  if(!(collateral>0))return null;
+  const cost=q*Math.max(0,Number(C.compress.cost)||0);
+  return{name,api:a,q,vol:a.vol*q,coll:collateral*q,cost};
+}
 // Highest-net selling combination. Courier is assessed against the ENTIRE
 // shipment, including contract thresholds; per-item allocated fees are not
 // sufficient for choosing the global maximum. Speed only breaks ~ISK ties.
@@ -17,7 +32,7 @@ function mostProfitableMix(rows,Vall){
     return regular.length?regular:keys; // Player sale only when nothing else works
   };
   const candidates=active.map(choices);
-  const speed=k=>({jInst:0,fJI:0,bb:1,jOrd:3,fJ:3,null:4,rNull:5,rJita:5,fN:6,disc:9})[k]??7;
+  const speed=k=>({jInst:0,cInst:0,fJI:0,bb:1,jOrd:3,cOrd:3,fJ:3,null:4,rNull:5,rJita:5,fN:6,disc:9})[k]??7;
   const ship=(r,k)=>k&&r.ship[k]?r.ship[k]:null;
   const totals=keys=>{
     let gross=0,V=0,coll=0,wait=0;
@@ -98,7 +113,7 @@ function protectBestSaleRoute(rows,Vall){
     return gross-(volume>0?courierCost(volume,collateral):0);
   };
   let bestNet=saleValue(r=>r.best),betterMode=null;
-  const modes=['null','bb','jOrd','jInst','rNull','rJita','fN','fJ','fJI'];
+  const modes=['null','bb','jOrd','jInst','cOrd','cInst','rNull','rJita','fN','fJ','fJI'];
   for(const mode of modes){
     if(!active.some(r=>Number.isFinite(r.g[mode])))continue;
     const value=saleValue(r=>Number.isFinite(r.g[mode])?mode:r.best);
@@ -160,6 +175,21 @@ function computePlan(){
     if(C.disc.on&&q>0&&a){
       const base=C.disc.base==='sell'?a.sell:C.disc.base==='split'?(a.buy!=null&&a.sell!=null?(a.buy+a.sell)/2:null):a.buy;
       if(base!=null){row.discUnit=base*C.disc.pct;row.g.disc=row.discUnit*q;}
+    }
+    row.comp=compressedIceOffer(o,q);
+    if(row.comp&&C.compress.on){
+      const comp=row.comp,book=comp.api,quote=jitaList(comp.name,book.sell,book.buy,q,false);
+      if(Number.isFinite(quote)&&quote>0){
+        row.cOrdPrice=quote;row.g.cOrd=quote*q*rJ-comp.cost;
+        row.ship.cOrd={v:comp.vol,c:comp.coll};
+      }
+      if(Number.isFinite(book.buy)&&book.buy>0){
+        const fill=book.buys?walkBuys(book,q):{filled:q,value:book.buy*q};
+        if(fill.filled>=q){const factor=skf(o,'inst');
+          row.cInstAvg=fill.value*factor/q;row.g.cInst=fill.value*factor*rI-comp.cost;
+          row.ship.cInst={v:comp.vol,c:comp.coll};
+        }else row.hint.cInst='Jita solo compra '+fmtQ(fill.filled)+' de '+fmtQ(q)+' comprimidos';
+      }
     }
     const ore=resolveOre(o.name);
     if(ore&&q>0){
@@ -233,7 +263,7 @@ function computePlan(){
       let changed=false;
       moving.forEach(r=>{
         if(!isIce(r.o.name))return;
-        const choices=['bb','null','rNull'].filter(k=>r.g[k]!=null);
+      const choices=['bb','null','rNull'].filter(k=>r.g[k]!=null);
         if(!choices.length)return;
         const alt=choices.reduce((a,b)=>r.g[b]>r.g[a]?b:a);
         const travelling=r.ship[r.best];
@@ -252,6 +282,37 @@ function computePlan(){
   // Optimize the FINAL shared-courier bill before optional user-forced routes.
   mostProfitableMix(rows,Vall);
   protectBestSaleRoute(rows,Vall);
+  // Ice logistics safety: positive ISK uplift alone can still funnel most of
+  // the opportunity to a courier (e.g. Krystallos: 830m freight for 260m
+  // extra owner receipts). Automatic shipping requires the OWNER's additional
+  // receipts, *after freight*, to exceed the freight bill attributable to
+  // that ice. A manually selected route can override this conservative rule.
+  // Compute marginal freight against the OTHER selected cargo so that mixed
+  // loads share their contract base honestly rather than counting it twice.
+  if(!S.flip&&!S.planMode&&C.shipOn){
+    for(let pass=0;pass<rows.length;pass++){
+      const moving=rows.filter(r=>r.best&&r.ship[r.best]);
+      const ice=moving.filter(r=>isIce(r.o.name));
+      const totalV=moving.reduce((a,r)=>a+r.ship[r.best].v,0);
+      const totalC=moving.reduce((a,r)=>a+r.ship[r.best].c,0);
+      const totalFreight=courierCost(totalV,totalC);
+      let changed=false;
+      for(const r of ice){
+        const local=['null','bb','rNull'].filter(k=>Number.isFinite(r.g[k]));
+        if(!local.length)continue;
+        const alternative=local.reduce((a,b)=>r.g[b]>r.g[a]?b:a);
+        const sh=r.ship[r.best];
+        const marginal=Math.max(0,totalFreight-courierCost(Math.max(0,totalV-sh.v),Math.max(0,totalC-sh.c)));
+        const ownerExtra=r.g[r.best]-marginal-r.g[alternative];
+        if(marginal>ownerExtra+.01){
+          r.freightGuard={cost:marginal,ownerExtra,alternative};
+          r.best=alternative;r.noShip=true;r.fast=null;
+          r.guide=guideFor(r,Vall);changed=true;break;
+        }
+      }
+      if(!changed)break;
+    }
+  }
   // v111: plan elegido. r.auto = lo que elige el plan óptimo. Si el usuario elige un plan (p. ej. todo a Jita),
   // cada item que admite esa opción la toma; el que no puede (sin precio, el Buyback no lo acepta…) sigue el óptimo.
   const M=S.planMode;
@@ -304,7 +365,7 @@ function modeTotal(P,m){let g=0,V=0,Cc=0,n=0;
   P.rows.forEach(r=>{const k=m==='auto'?r.auto:(r.g[m]!=null?(n++,m):r.auto);if(!k)return;g+=r.g[k]-r.prod;const s=r.ship[k];if(s){V+=s.v;Cc+=s.c;}});
   return{net:g-(V>0?courierCost(V,Cc):0),n};}
 // Codes remain stable for persisted settings; visible route copy comes from ui.json.
-const MODES=['auto','fN','fJ','fJI','null','jOrd','jInst','bb','rNull','rJita','disc']
+const MODES=['auto','fN','fJ','fJI','null','jOrd','jInst','cOrd','cInst','bb','rNull','rJita','disc']
   .map(m=>[m,'route.'+m]);
 const modeName=m=>tx((MODES.find(x=>x[0]===(m||'auto'))||MODES[0])[1],{system:nullSystem()});
 const planPhrase=m=>m==='auto'?tx('route.optimalPhrase'):tx('route.prefix',{name:modeName(m)});
