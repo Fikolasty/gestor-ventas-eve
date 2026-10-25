@@ -650,6 +650,9 @@ class ThemeBrowserTests(unittest.TestCase):
                         g:{null:280},ship:{},prod:0,vol:2,coll:200};
                     const P={rows:[row],missing:[],mode:null,best:280,
                         Vs:0,shipCost:0,toBB:[]};
+                    // Each language fixture begins in the same closed state;
+                    // ordinary language switches intentionally preserve disclosure state.
+                    document.querySelector('#vFinanceDetails').open=false;
                     paintVerdict(P);
                     document.querySelector('#pSum').hidden=false;
                     paintPicker(P);

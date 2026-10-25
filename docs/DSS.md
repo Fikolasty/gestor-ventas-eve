@@ -97,6 +97,8 @@ El propietario aprobó la dirección y pidió comenzar y avisar cuando los cambi
 
 **Pruebas realmente ejecutadas en local:** `python3 build.py 1.0.125`; 12 tests `*.test.cjs` correctos, 16 pruebas Python, y los ocho scripts heredados de minería, mercado y Skill Plan correctos. Test estático nuevo `tests/sales-pilot.test.cjs`. `tests/browser_theme.py` incorpora fixture financiero sintético y checks de jerarquía, traducción, Light/Dark, 390/1440 y ausencia de desborde, pero **Chromium local no está disponible**: hasta validar el run remoto es código de test, no evidencia de éxito. Publicación pendiente de CI y confirmación de Pages.
 
+**Primer gate remoto:** fuente `5df575a459eed38a4001bfe0ddb69acf1c507644` publicada vía Fiko sin forzar. En la ejecución `40170921285`, 25 de 26 pruebas Chromium pasaron. La nueva prueba del piloto falló al ejecutar el segundo idioma porque mantenía `details#vFinanceDetails` abierto desde el primer idioma, algo permitido y deseado para la UI, pero el test exigía que volviera a estar cerrado. Se corrige **solo la preparación de la fixture**, reiniciando explícitamente `open=false` al comenzar cada caso; ningún cálculo ni comportamiento de usuario requiere modificación. La publicación de Pages se bloqueó correctamente, por lo que v1.0.124 continúa como versión pública hasta el siguiente run exitoso.
+
 ## 5. Procedimiento para siguiente chat
 
 1. Leer este DSS completo y el final de `docs/PROGRESS.md`; revisar `git status -sb`, `git log -8 --oneline`, `git remote -v` y diferencias con `origin/main`.
