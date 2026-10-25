@@ -1,5 +1,13 @@
 # PROGRESS — Market Moves+
 
+## 2026-10-25 — v1.0.128 publicada, GitHub Pages/HTML verificados
+
+**B.3 LIVE:** <https://fikolasty.github.io/gestor-ventas-eve/> sirve ahora **v1.0.128**. Se avanzó el `main` remoto desde `9e480bf77c912e87110c63f1dbb6dd088c087550` a commit fuente **`f4e4f57cff8447b0670e74104572adab5c67b4b7`** usando exclusivamente GitHub «Fiko» (`Fikolasty`), los 13 blobs comparados con los hashes locales, árbol `760faabd090fb40f53721ee8157840be535290aa`, condición de SHA esperado y `force:false`.
+
+**CI completo:** cuatro Actions `success`: Build `40225807330`, Versiones `40225807410`, Verificación minera `40225807363` y Rebuild/Chromium/Pages **`40225807322`**. El bot compiló y creó `3a2783a4803a90773ceedb07aab1d2b4bcd6b31c`, actualizando `docs/QA_STATUS.md`. El job Pages finalizó su comprobación real de banner+literal v1.0.128. La descarga independiente por HTTPS de Pages (2.213.491 bytes), el build local y el archivo remoto Git comparten **blob `c7eb9d60ae1f562a409690a1f158c4bb7ea97f66`**, con `v1.0.128` presente. Se informó al usuario que ya puede abrir/recargar la web.
+
+**QA y limitaciones:** 17 archivos Node (60 casos), 16 Python, 8 heredadas, **33 Chromium** (ES/EN, Dark/Light, 390/1440) y capturas revisadas; un fallo estético real de wrap del chevron en Minería móvil se corrigió antes de publicar. No se tocaron motores ni EVE SSO/ESI, tampoco se certifica acceso real a mercado o autenticación. La fase B.3 está cerrada; siguen C consolidación CSS selectiva y D mediciones de rendimiento, sin iniciar grandes rediseños sin aprobación.
+
 ## 2026-10-25 — B.3 acotada: v1.0.128 local antes de publicación
 
 **Recomendación aceptada por alcance delegado:** seguir refinando consistencia de controles antes de comenzar limpieza CSS o optimizaciones sin perfiles. La base GitHub Fiko `main=9e480bf77c912e87110c63f1dbb6dd088c087550` coincide con el checkout v1.0.127 publicado, sin cambios ajenos que integrar. Se evita un rediseño amplio.
