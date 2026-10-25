@@ -371,7 +371,7 @@ function paintCourierUnits(P){
       el('strong','num',costs.total==null?tx('freight.missingQuote'):fmtP(costs.total)));
     const meta=el('div','mm-freight-meta');
     meta.append(el('span',null,tx('freight.totalCost',{amount:fmt(costs.allocated)})),
-      el('span',null,tx('freight.volume',{volume:fmtV(r.ship[r.best]?.v||0)})));
+      el('span',null,tx('freight.volume',{volume:fmtV(r.ship?.[r.best]?.v||0)})));
     foot.append(lot,meta);
     const details=el('details','mm-freight-detail');
     details.append(el('summary',null,tx('freight.more')),math,foot);

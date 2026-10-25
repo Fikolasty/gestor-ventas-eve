@@ -30,7 +30,7 @@ jobs:
           fi
       - name: Compile site
         run: |
-          python build.py 1.0.115
+          python build.py 1.0.124
       - name: JavaScript syntax check
         run: |
           node --check src/script.js
@@ -52,7 +52,7 @@ jobs:
           assert 'function bulkNullMaterial(name,q)' in s
           assert 'syncLanguageChoices' in s
           assert "if(!SH()){delete row.g.fN;delete row.ship.fN;}" in s
-          assert "SHIPS=S.flip?{fN:1}:{jOrd:1,jInst:1,rJita:1}" in s
+          assert "SHIPS=S.flip?{fN:1}:{jOrd:1,jInst:1,cOrd:1,cInst:1,rJita:1}" in s
           assert "!Number.isFinite(r.net[k])" in s
           assert "#mmTabs #shipLab[hidden]" in s
           assert "' Los precios de '+nullSystem()+' se estiman" in s

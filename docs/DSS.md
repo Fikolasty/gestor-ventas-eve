@@ -76,6 +76,8 @@ En la interfaz, `#pkOpportunity` y `#unitCourierBox` aparecen en un grid simétr
 
 **Pruebas de desarrollo:** 1.400/1.520 Krystallos sintéticos, límite de 350.000 m³, opt-in, tarifas extremas, cotización no disponible y override; Node/Python y regresiones previas. Estos tests **no** verifican precios ESI actuales ni costo/sitio real de compresión. Pendientes prueba Chromium CI y despliegue oficial v1.0.124, además de revisión humana completa.
 
+**Seguimiento de Actions v1.0.124:** fuente publicada en `7daec387` mediante Fiko. El workflow secundario «Build Market Moves+» falló en su verificación estática porque comparaba literalmente la lista de rutas anterior, sin `cOrd/cInst` (build y sintaxis JavaScript sí pasaron). El workflow principal validó fuentes, Node, build y pruebas anteriores, pero falló en la prueba visual `test_freight_unit_cards_show_quote_uplift_and_icon_in_both_languages`, que exigía el viejo error `precio + flete`, y construía una fila mock sin `ship`. Corregir `.github/workflows/build-site.yml`, actualizar el test Chromium a `neto - flete` y robustecer el acceso opcional `r.ship?.[r.best]`; volver a publicar y verificar. Ambos fallos de contrato de tests impiden declarar CI totalmente verde.
+
 ## 5. Procedimiento para siguiente chat
 
 1. Leer este DSS completo y el final de `docs/PROGRESS.md`; revisar `git status -sb`, `git log -8 --oneline`, `git remote -v` y diferencias con `origin/main`.
@@ -93,6 +95,7 @@ En la interfaz, `#pkOpportunity` y `#unitCourierBox` aparecen en un grid simétr
 | 2026-10-25 | Documentación posterior al push: mapeo de SHA locales/remotos, URL de la ejecución CI, estado final, protocolo de conexión obligatoria y respaldo histórico. | Cambio documental; no alterar motores ni estilos. |
 | 2026-10-25 | Captura revisada por el usuario: eliminar solo el icono de lista de «Ventas». El clon actual de `main` estaba en `b50557d` (incluye PR #16 de arbitraje industrial posterior al DSS), preservado. Fuente, test y workflow v1.0.123 publicados mediante conexión GitHub «Fiko». | Fuente `8f9514a`, build `c41fb9c`, Actions/Pages correctos (`40165679157`); revisión visual Dark/escritorio parcialmente aceptada; Light/móvil y EVE SSO/ESI real completos pendientes. |
 | 2026-10-25 | Se añade la opción de comprimir hielo con cotización ESI distinta, protección de beneficio incremental del usuario contra flete desproporcionado, dos tarjetas financieras simétricas abiertas y desglose de neto unitario correcto. Se actualizan fuentes, regresión para Krystallos 1400/1520, ES/EN, documentación y workflow v1.0.124. | Tests locales aprobados; publicación y QA visual Chromium pendientes al momento de redactar; los importes de regresión son sintéticos. |
+| 2026-10-25 | Fuente v1.0.124 publicada en `7daec387` con conexión GitHub Fiko. El workflow auxiliar falló por assertion obsoleta de rutas SHIPS y Chromium por afirmar erróneamente que el precio subía al sumar flete. Se actualizan ambos tests y el mock opcional. | Correcciones pendientes de segundo push y validación de Actions; se mantiene el gate de Pages sin saltárselo. |
 
 **Regla permanente:** añadir una fila aquí con cada nuevo cambio/commit/push de ChatGPT.
 

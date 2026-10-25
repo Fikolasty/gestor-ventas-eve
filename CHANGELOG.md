@@ -4,6 +4,8 @@
 - Corrige el desglose de envío por unidad: muestra **lo que recibes**, restando el courier del neto tras comisiones, en vez de sumarle el transporte al precio aparente. El volumen mostrado corresponde al contenido físico que realmente viaja; los contratos listan hielo comprimido cuando corresponde.
 - «Ver diferencias de ISK» y «Coste real del envío» son tarjetas abiertas, gemelas y adaptables, en dos columnas para escritorio y una en móvil; solo la aritmética secundaria se despliega a petición.
 - Actualiza traducciones ES/EN, Ajustes persistentes, instrucciones de venta y pruebas de regresión económicas sintéticas para 1.400 y 1.520 unidades; sin cambios en EVE SSO, Minería ni Skill Plan.
+- Alinea el workflow secundario `Build Market Moves+` con las nuevas rutas `cOrd/cInst` y con la compilación v1.0.124; la comprobación textual antigua falló tras el primer commit de fuente.
+- Actualiza el test visual Chromium que todavía esperaba el cálculo viejo `precio + envío` para que valide `neto − envío` y el resumen visible, dejando los detalles secundarios cerrados.
 
 ## v1.0.123 — 2026-10-25 [ChatGPT]
 - Retira el icono de lista situado a la izquierda de «Ventas» en el header, según la captura marcada por el usuario. Mantiene el botón original `#mmTabVentas`, su texto, semántica accesible, selección y comportamiento sin cambiar módulos ni fórmulas.

@@ -40,7 +40,7 @@ test('absent quote does not invent a base price or lot target',()=>{
 });
 test('rendered volume and shipping labels do not duplicate m³ or ISK suffixes',()=>{
   const render=source.slice(end,source.indexOf('function paintSummary(P){',end));
-  assert.match(render,/tx\('freight\.volume',\{volume:fmtV\(r\.ship\[r\.best\]\?\.v\|\|0\)\}\)/);
+  assert.match(render,/tx\('freight\.volume',\{volume:fmtV\(r\.ship\?\.\[r\.best\]\?\.v\|\|0\)\}\)/);
   assert.doesNotMatch(render,/tx\('freight\.volume',\{volume:fmtV\(r\.vol\)\}\)/);
   assert.match(render,/iconFor\(r\.o\.name\)/);
 });
