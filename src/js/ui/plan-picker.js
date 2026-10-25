@@ -108,6 +108,9 @@ function paintPicker(P){
   // Decision at a glance: visible next to the freight result. Only secondary
   // calculations are disclosed on demand inside each freight item.
   opportunity.prepend(el('h3','pk-opp-head',tx('picker.why')));
+  if(S.flip&&!showProfit&&P.rows.some(r=>r.q>0&&r.best)){
+    opportunity.insertBefore(el('p','pk-owner-guard',tx('trade.proceedsOnly')),opportunity.children[1]||null);
+  }
   const protectedIce=P.rows.filter(r=>r.freightGuard);
   if(protectedIce.length){
     const guard=protectedIce[0],detail=guard.freightGuard;
@@ -229,10 +232,24 @@ $('pkOpportunity').addEventListener('click',e=>{
 });
 // Reconcile investment, net receipts and profit against the ACTIVE plan. Never
 // replace P.best: all plan rankings and courier calculations still use net proceeds.
-// EVE Sell = fill existing ask immediately; Buy Order = *potential* purchase at
-// current Jita bid and broker on order placement. Bid fill is NOT guaranteed.
+// EVE Sell = fill an existing ask; Buy Order = *potential* purchase at the
+// best posted Jita Buy reference (or an explicit manual budget), plus broker.
+// The sanitized jita.buy quote is a SELL-TO-BIDS estimate: its 5-percentile
+// anti-bait fallback may be hundreds of times smaller than an executable
+// Paladin buy order. NEVER reuse it as the acquisition price (2026-10-25 P0).
+// Neither quote guarantees depth/fill or a sale at the target Null price.
 function tradePurchaseUnit(r){
-  const u=C.buyMode==='buy'?r.o.jita?.buy:r.o.ref;
+  const o=r.o;
+  const manual=o.buyMan;
+  const isManual=Number.isFinite(manual)&&manual>0;
+  const u=C.buyMode==='buy'?(isManual?manual:o.jita?.topBuy):o.ref;
+  if(C.buyMode==='buy'&&!isManual&&Number.isFinite(u)&&u>0){
+    const ask=o.jita?.topSell;
+    // Conservative PRODUCT policy, not an EVE rule: a 4x+ gap to best ask
+    // or crossed buy/ask book should not silently create a giant ROI. Let
+    // the pilot enter a deliberate price per unit to model a speculative bid.
+    if(Number.isFinite(ask)&&ask>0&&(u<ask*.25||u>ask*1.01))return null;
+  }
   return Number.isFinite(u)&&u>0?u:null;
 }
 function tradePurchaseCost(r){
@@ -241,8 +258,12 @@ function tradePurchaseCost(r){
 }
 function flipPlanAccounting(P){
   if(!S.flip)return null;
-  const rows=P.rows.filter(r=>r.best&&r.q>0);
-  if(!rows.length||rows.some(r=>tradePurchaseUnit(r)==null||!Number.isFinite(r.g[r.best])))return null;
+  // A partially priced inventory is not a fully financed trade. Omitting an
+  // unsold row here would understate the capital required for the whole lot.
+  const rows=P.rows.filter(r=>r.q>0);
+  if(!rows.length||!Number.isFinite(P.best)||rows.some(r=>
+    !r.best||tradePurchaseUnit(r)==null||!Number.isFinite(r.g[r.best])
+  ))return null;
   const basis=C.buyMode==='buy'?'buy':'sell';
   const fee=basis==='buy'?C.broker:0; // placing a buy order incurs broker fee, no sales tax on purchase
   const buy=rows.reduce((sum,r)=>sum+tradePurchaseCost(r),0);
@@ -261,20 +282,26 @@ function flipPlanAccounting(P){
 function paintFlipBuy(P){
   const box=$('flipBuy');box.replaceChildren();box.hidden=!S.flip;if(!S.flip)return;
   const d=flipPlanAccounting(P);
-  if(!d){box.hidden=true;return;}
+  if(!d){
+    box.hidden=!P.rows.some(r=>r.q>0&&r.best);
+    if(!box.hidden)box.append(el('p','fb2-capital-warning',tx('trade.purchaseUnavailable')));
+    return;
+  }
   const en=S.lang==='en',sys=nullSystem(),n=d.rows.length;
   const context=d.allNull?(en?'Buy in Jita and sell in '+sys:'Comprar en Jita y vender en '+sys)
     :d.allJita?(en?'Buy and sell in Jita':'Comprar y vender en Jita')
     :(en?'Jita purchases — selected selling plan':'Compras en Jita — plan de venta seleccionado');
-  const basisNote=C.buyMode==='buy'?
-    (en?' Buy Orders may take time to fill; prices include placement broker.':' Las Buy Orders podrían tardar en completarse; la compra incluye el broker de publicación.'):
+  const basisNote=C.buyMode==='buy'?' '+tx('trade.buyOrderBasis'):
     (en?' Purchases use Jita Sell orders.':' Las compras se valoran a Jita Sell.');
   const intro=d.allNull
-    ?(en?'Buying '+n+' '+(n===1?'item':'items')+' at Jita Sell, shipping with SIGMA Freight and selling in '+sys+' at Jita Sell +'+pct(C.impM)+'% net.'
-        :'Si compras '+(n===1?'este ítem':'estos '+n+' ítems')+' en Jita al Sell, los llevas con SIGMA Freight y los vendes en '+sys+' a Jita Sell +'+pct(C.impM)+'% neto.')
+    ?tx(C.buyMode==='buy'?'trade.buyOrderIntro':'trade.sellIntro',{market:sys,margin:pct(C.impM)})
     :(en?'Based on the actual selected plan: '+d.nNull+' '+(d.nNull===1?'item shipped':'items shipped')+' to '+sys+' and '+d.nJita+' sold in Jita. Transport is charged only on shipped items.'
        :'Según el plan seleccionado: '+d.nNull+' '+(d.nNull===1?'ítem enviado':'ítems enviados')+' a '+sys+' y '+d.nJita+' vendidos en Jita. El envío solo se cobra a los ítems transportados.');
   box.append(el('h4',null,context),el('p','fb2-s',intro+basisNote));
+  if(d.rows.length===1){
+    const row=d.rows[0],parameters={quantity:fmtQ(row.q),unit:fmtP(tradePurchaseUnit(row)),broker:pct(C.broker)};
+    box.append(el('p','fb2-cost-basis',tx(C.buyMode==='buy'?'trade.buyBasisDetail':'trade.sellBasisDetail',parameters)));
+  }
   const big=el('div','fb2-big');
   big.append(el('b','num '+sgn(d.profit),(d.profit>=0?'+':'−')+fmt(Math.abs(d.profit))),
     el('span',null,(en?(d.profit>=0?'estimated net profit':'estimated net loss'):(d.profit>=0?'de ganancia neta estimada':'de pérdida neta estimada'))+
@@ -406,6 +433,9 @@ function paintSummary(P){
   if(box.hidden)return;
   paintPicker(P);paintCourierUnits(P);
   const active=flipPlanAccounting(P);
-  document.title=compactIsk(active?active.profit:P.best)+' ISK · Market Moves+';
+  // Never put sales proceeds in the browser title as an apparent Trading
+  // profit while the purchase basis is unknown.
+  document.title=S.flip&&!active?'Market Moves+ · '+tx('trade.profitUnavailable'):
+    compactIsk(active?active.profit:P.best)+' ISK · Market Moves+';
   paintFlipBuy(P);
 }

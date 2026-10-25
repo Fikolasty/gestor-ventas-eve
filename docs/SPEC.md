@@ -1,7 +1,7 @@
 # SPEC — Market Moves+
 
 **Estado:** especificación viva para desarrollo y pruebas.
-**Base de auditoría original:** main, v1.0.66 (15-10-2026), commit 2df3197c02ea156f8c56c772a9a49972a2ea966f. **Versión funcional actual:** v1.0.98 (21-10-2026); nuevas decisiones y límites en [SDD](SDD.md).
+**Base de auditoría original:** main, v1.0.66 (15-10-2026), commit 2df3197c02ea156f8c56c772a9a49972a2ea966f. **Hito histórico de esta especificación:** v1.0.98 (21-10-2026); el estado real y el candidato v1.0.126 constan en [SDD](SDD.md) y [DSS](DSS.md).
 **Alcance:** aplicación web de EVE Online para comparar destinos de venta y estimar ISK netos.
 **Responsable de aprobar cambios funcionales:** propietario del repositorio Fikolasty.
 
@@ -249,3 +249,13 @@ La denominación Ice Harvesting Drone I es prefijo de Ice Harvesting Drone II. A
 **Comparación:** nombres de rutas acentuados, diferencias + verdes y − rojas, oportunidad de elegir una ruta frente a otra, detalle a través de acordeón. En Trading, los planes se muestran como beneficio cuando hay información de adquisición; en Liquidación, como neto recibido. El motor heurístico heredado **no equivale** a una búsqueda exhaustiva de todas las combinaciones globales: preservar esta distinción en UI/documentación.
 
 **Pruebas:** `tests/market-scenarios.cjs` y `tests/financial-accounting.cjs` se añaden al workflow v1.0.98, además del suite de Skills existente. Sin datos reales no puede certificarse liquidez del mercado Null ni ejecución de Buy Orders. El [SDD maestro](SDD.md) documenta invariantes y riesgos de cálculo más extensamente.
+
+## 23. Capital y beneficio de Trading, P0 aprobado (candidato v1.0.126)
+
+**Contrato económico aprobado por el propietario:** el capital de una adquisición mediante Buy Order debe usar el precio manual positivo por unidad cuando exista y, por defecto, el mejor `jita.topBuy` **bruto** que también muestra Tasación. El `jita.buy` filtrado contra órdenes de venta engañosas sirve para vender a bids; nunca es presupuesto de adquisición. En modo Jita Sell, la compra sigue la cotización Sell de referencia del ítem. La inversión Buy incluye broker de creación configurado una sola vez.
+
+Para toda fila activa del plan seleccionado, el sistema necesita ruta de venta y precio de compra confiable. Si falta alguno, **no se muestra beneficio/ROI como si el lote estuviera financiado**; ingresos netos pueden mostrarse como tales, con aviso. Una discrepancia automática extrema contra el ask puede invalidar la referencia bajo una política de seguridad del producto (umbral documentado en [auditoría Paladin](TRADE_PROFIT_AUDIT_2026-10-25.md)); una cotización manual del usuario es intencional, sin sobreescribir datos ESI ni persistir inventario. Mantener plan `P.best`, selección y tarifas de venta existentes.
+
+Fórmulas: `Inversión_Buy = ∑(q × precioBuy × (1 + broker))`, `Inversión_Sell = ∑(q × precioSell)`, `Beneficio = P.best − Inversión`, `ROI = Beneficio / Inversión` para inversión positiva. `P.best` ya incorpora venta neta y transporte, por lo que no se debe volver a descontar el courier en `Beneficio`. **Presupuesto y objetivo no son liquidez o llenado real de órdenes**, y el margen configurado de HY-RWO no debe presentarse como venta confirmada.
+
+**Regresión ilustrativa:** 7 Paladin a Jita Buy 905,4 M/u, broker hipotético 1,5 %, inversión 6.432.867.000 y beneficio 655.549.500 a partir de los ingresos/flete de la captura del propietario. `tests/trade-purchase-capital.test.cjs` comprueba la fórmula y las guardas. Chromium y EVE ESI real siguen pendientes; lanzamiento público v1.0.126 **no comprobado ni efectuado** por falta de acceso operativo al conector GitHub Fiko, aunque la autorización de push del propietario ya existe.

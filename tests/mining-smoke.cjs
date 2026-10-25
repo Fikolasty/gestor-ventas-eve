@@ -59,7 +59,8 @@ assert(sales.includes('cap.append(bridge)'));
 assert(!sales.includes("el('div','stp-balance')"));
 assert(!html.includes('id="stepHead"'));
 assert(html.includes('.v-finance-item'));
-assert(sales.includes("facts.append(fQty,fBuy,fRef,fSeen,fM3,fVol,fSk)"));
+assert(sales.includes("facts.append(fQty,fBuy,fBuyOrder,fRef,fSeen,fM3,fVol,fSk)"),
+  'Per-item accounting retains all existing detail fields and adds the optional Trading budget');
 assert(sales.includes("iSk.removeAttribute('min')"));
 assert(!sales.includes("fSk.append(el('small','fact-h'"));
 assert(sales.includes("iSk.setAttribute('aria-description',skewHint)"));

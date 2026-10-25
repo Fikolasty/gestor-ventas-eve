@@ -162,10 +162,17 @@ function paintVerdict(P){
     $('deep').dataset.uiReady='1'; // Pasos a seguir permanece cerrado hasta que el usuario lo abra.
   }
   if(!has){clearViews();return;}
-  const none=P.missing.length===P.rows.length,flipAcct=flipPlanAccounting(P),v=none?null:flipAcct?flipAcct.profit:P.best;
-  const metric=$('vMetric');metric.hidden=!!none;metric.textContent=flipAcct?(S.lang==='en'?'ESTIMATED NET PROFIT':'GANANCIA NETA ESTIMADA'):(S.lang==='en'?'NET SALES PROCEEDS':'INGRESOS NETOS POR VENTA');
+  const none=P.missing.length===P.rows.length,flipAcct=flipPlanAccounting(P);
+  const purchaseUnknown=S.flip&&!flipAcct&&!none;
+  // Trading must never present net sales proceeds as profit when the purchase
+  // quote is missing or rejected (7 Paladin acquisition-cost P0).
+  const v=none?null:S.flip?(flipAcct?flipAcct.profit:null):P.best;
+  const metric=$('vMetric');metric.hidden=!!none;
+  metric.textContent=purchaseUnknown?tx('trade.profitUnavailable'):
+    flipAcct?(S.lang==='en'?'ESTIMATED NET PROFIT':'GANANCIA NETA ESTIMADA'):
+    (S.lang==='en'?'NET SALES PROCEEDS':'INGRESOS NETOS POR VENTA');
   const estimate=$('vEstimate');estimate.hidden=!!none;
-  const estimateKey=flipAcct?'verdict.estimateTrade':'verdict.estimateSale';
+  const estimateKey=purchaseUnknown?'trade.purchaseUnavailableShort':flipAcct?'verdict.estimateTrade':'verdict.estimateSale';
   estimate.dataset.i18n=estimateKey;estimate.textContent=tx(estimateKey);
   const amount=$('vIsk');
   amount.textContent='';amount.append(document.createTextNode(v==null?'—':Math.round(v).toLocaleString('en-US')),el('span',null,'ISK'));
@@ -193,7 +200,7 @@ function paintVerdict(P){
    $('vRouteCaption').dataset.i18n=routeKey;$('vRouteCaption').textContent=tx(routeKey);}
   {const fa=!P.mode&&P.rows.some(r=>r.fast);
     $('vTitle').textContent=tx(P.mode?'verdict.selectedTitle':'verdict.planTitle');
-    $('vSubtitle').textContent=tx(P.mode?'verdict.selectedSubtitle':'verdict.planSubtitle');
+    $('vSubtitle').textContent=tx(S.flip?'trade.tradeSubtitle':P.mode?'verdict.selectedSubtitle':'verdict.planSubtitle');
     if(fa&&$('vWhat').textContent)$('vWhat').textContent+=' · por rapidez';
     const cap=$('vCap');cap.replaceChildren();
     if(none){cap.textContent=tx('verdict.pending');}
@@ -204,12 +211,14 @@ function paintVerdict(P){
       bridge.setAttribute('role','group');bridge.setAttribute('aria-label',tx('verdict.accounting'));
       const card=(label,number,cost)=>{
         const item=el('div','v-finance-item');
-        item.append(el('small',null,label),el('strong','num '+(cost?'neg':'pos'),(cost&&number>0?'−':'')+fmt(Math.abs(number))));
+        const valid=Number.isFinite(number);
+        item.append(el('small',null,label),el('strong','num '+(valid?(cost?'neg':'pos'):'muted'),
+          valid?(cost&&number>0?'−':'')+fmt(Math.abs(number)):'—'));
         bridge.append(item);
       };
       card(tx('verdict.netSales'),fig.sales,false);
       card(tx('verdict.freight'),fig.shipping,true);
-      if(flipAcct)card(tx('verdict.investment'),fig.investment,true);
+      if(S.flip)card(tx('verdict.investment'),fig.investment,true);
       cap.append(bridge);
     }
   }

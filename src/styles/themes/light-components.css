@@ -41,6 +41,11 @@ html.light #settings{
   background:linear-gradient(180deg,#fff,#f8f6f2)!important;
   border-color:rgba(70,55,43,.16)!important;
 }
+/* The registered-item ledger is a neutral fold in both themes, not a card gradient. */
+html.light #ledger{
+  background:var(--void)!important;
+  border-color:var(--line2)!important;
+}
 html.light #verdict .ov-flow,
 html.light #verdict .ov-kpi>div,
 html.light #pkOpportunity,

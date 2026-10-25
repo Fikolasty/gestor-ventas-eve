@@ -378,6 +378,90 @@ class ThemeBrowserTests(unittest.TestCase):
             self.page.locator("#modeLiquidation").click()
             self.assertFalse(self.page.evaluate("S.flip"))
 
+    def test_import_above_inventory_preserves_two_card_alignment(self):
+        """Use synthetic item data to inspect geometry without ESI requests."""
+        from playwright.sync_api import expect
+        self.page.evaluate("selectAppModule('ventas')")
+        self.page.locator('#salesModeTrigger').click()
+        self.page.locator('#modeTrading').click()
+        expect(self.page.locator('#importControls')).to_be_visible()
+        self.assertEqual(self.page.locator('#importControls').evaluate('el=>el.parentElement.id'),'heroIntro')
+        self.page.evaluate("""() => {
+            S.items=[{name:'Synthetic Layout Item',qty:1,m3u:1,
+                jita:{id:34,topBuy:100,topSell:120}}];
+            paintAppraisal();
+        }""")
+        expect(self.page.locator('#appr')).to_be_visible()
+        for width in (1440,1260,980,860,630,390):
+            self.page.set_viewport_size({'width':width,'height':900})
+            for language in ('es','en'):
+                self.page.evaluate('setLang',language)
+                for light in (False,True):
+                    self.page.evaluate('(on)=>document.documentElement.classList.toggle("light",on)',light)
+                    rect=self.page.evaluate("""() => {
+                        const r=s=>document.querySelector(s).getBoundingClientRect();
+                        const a=r('#appr'),i=r('#importControls'),p=r('#heroIntro>.paste');
+                        const brand=r('.top .brand'),profile=r('#eveIdentityButton');
+                        return {aTop:a.top,aBottom:a.bottom,pTop:p.top,pLeft:p.left,pRight:p.right,
+                            iTop:i.top,iBottom:i.bottom,iLeft:i.left,iRight:i.right,
+                            aLeft:a.left,aRight:a.right,brandLeft:brand.left,profileRight:profile.right,
+                            overflow:document.documentElement.scrollWidth-innerWidth};
+                    }""")
+                    self.assertLessEqual(rect['overflow'],1,(width,language,light,rect))
+                    if width>860:
+                        self.assertLess(abs(rect['aTop']-rect['pTop']),3,rect)
+                        self.assertGreaterEqual(rect['iLeft'],rect['pLeft']-3,rect)
+                        self.assertLessEqual(rect['iRight'],rect['pRight']+3,rect)
+                        self.assertLessEqual(rect['iBottom'],rect['pTop']+1,rect)
+                    else:
+                        self.assertLessEqual(rect['aBottom'],rect['iTop']+1,rect)
+                        self.assertLessEqual(rect['iBottom'],rect['pTop']+1,rect)
+                    if width>1260:
+                        self.assertLess(abs(rect['brandLeft']-rect['aLeft']),4,rect)
+                        self.assertLess(abs(rect['profileRight']-rect['pRight']),7,rect)
+
+    def test_ledger_neutral_surface_and_shared_disclosure_chevrons(self):
+        """CSS geometry and native open/close, no live prices or EVE API needed."""
+        from playwright.sync_api import expect
+        self.page.evaluate("""() => {
+            document.body.classList.remove('is-loading');
+            const ledger=document.querySelector('#ledger');
+            ledger.hidden=false;
+            ledger.open=false;
+        }""")
+        for light in (False,True):
+            self.page.evaluate('(on)=>document.documentElement.classList.toggle("light",on)',light)
+            for width in (1440,390):
+                self.page.set_viewport_size({'width':width,'height':900})
+                styles=self.page.evaluate("""() => {
+                    const ledger=document.querySelector('#ledger');
+                    const sum=ledger.querySelector('summary');
+                    const shell=getComputedStyle(ledger);
+                    const chev=getComputedStyle(sum,'::after');
+                    const finance=getComputedStyle(document.querySelector('#vFinanceDetails>summary'),'::after');
+                    const business=getComputedStyle(document.querySelector('.mm-sales-mode-chevron'));
+                    return {
+                        backgroundImage:shell.backgroundImage,
+                        backgroundColor:shell.backgroundColor,
+                        border:shell.borderLeftColor,
+                        insetShadow:shell.boxShadow.includes('inset'),
+                        arrow:[chev.width,chev.height,chev.borderRightWidth],
+                        finance:[finance.width,finance.height,finance.borderRightWidth],
+                        business:[business.width,business.height,business.borderRightWidth]
+                    };
+                }""")
+                self.assertEqual(styles['backgroundImage'],'none',styles)
+                self.assertFalse(styles['insetShadow'],styles)
+                self.assertNotIn('217, 119, 87',styles['border'])
+                self.assertEqual(styles['arrow'],styles['finance'],styles)
+                self.assertEqual(styles['arrow'],styles['business'],styles)
+                expect(self.page.locator('#ledger')).to_be_visible()
+                self.page.locator('#ledger>summary').click()
+                expect(self.page.locator('#ledger')).to_have_attribute('open','')
+                self.page.locator('#ledger>summary').click()
+                expect(self.page.locator('#ledger')).not_to_have_attribute('open','')
+
+
     def test_manual_player_offer_stays_last_and_does_not_redefine_best_isk(self):
         from playwright.sync_api import expect
         self.page.evaluate("""() => {
@@ -699,6 +783,59 @@ class ThemeBrowserTests(unittest.TestCase):
                 out=INDEX.parent/'tests'/'artifacts'/'theme'
                 out.mkdir(parents=True,exist_ok=True)
                 self.page.screenshot(path=str(out/f'pilot-{language}-{width}.png'),animations='disabled')
+
+    def test_paladin_trading_profit_requires_real_purchase_capital(self):
+        """P0 regression: 7 Paladin, filtered bid anomaly, both languages and themes."""
+        from playwright.sync_api import expect
+        for language in ('es','en'):
+            self.page.evaluate('setLang',language)
+            self.page.evaluate("""() => {
+                S.flip=true;document.body.classList.add('is-flip');C.buyMode='buy';
+                C.broker=.015;
+                const o={name:'Paladin',qty:7,m3u:50000,ref:917800000,
+                    jita:{buy:3882840,topBuy:905400000,topSell:917800000}};
+                const r={o,q:7,best:'fN',auto:'fN',g:{fN:7391212500},
+                    prod:0,vol:350000,coll:6337800000,ship:{fN:{v:350000,c:302796000}},
+                    np:1060000000,net:{fN:7391212500}};
+                S.items=[o];
+                window.__paladinP0={rows:[r],missing:[],mode:null,best:7088416500,
+                    Vs:350000,shipCost:302796000,toBB:[]};
+                paintVerdict(window.__paladinP0);
+                paintSummary(window.__paladinP0);
+            }""")
+            expect(self.page.locator('#vIsk')).to_contain_text('655,549,500')
+            expect(self.page.locator('#flipBuy')).to_contain_text('6,432,867,000')
+            self.assertIn('655,549,500',self.page.locator('#flipBuy').inner_text())
+            self.assertNotIn('27,587,580',self.page.locator('#flipBuy').inner_text())
+            self.assertIn('655,5 M',self.page.title())
+            for width in (1440,390):
+                self.page.set_viewport_size({'width':width,'height':900})
+                for light in (False,True):
+                    self.page.evaluate('(v)=>document.documentElement.classList.toggle("light",v)',light)
+                    overflow=self.page.evaluate('document.documentElement.scrollWidth-innerWidth')
+                    self.assertLessEqual(overflow,1,(language,width,light,overflow))
+            self.page.evaluate("""() => {
+                window.__paladinP0.rows[0].o.jita.topBuy=null;
+                paintVerdict(window.__paladinP0);
+                paintSummary(window.__paladinP0);
+            }""")
+            expect(self.page.locator('#vIsk')).to_contain_text('—')
+            expect(self.page.locator('#flipBuy .fb2-capital-warning')).to_be_visible()
+            self.assertTrue(self.page.title().startswith('Market Moves+'))
+            self.page.evaluate("""() => {
+                window.__paladinP0.rows[0].o.buyMan=910000000;
+                paintVerdict(window.__paladinP0);
+                paintSummary(window.__paladinP0);
+            }""")
+            expect(self.page.locator('#vIsk')).to_contain_text('622,866,500')
+            expect(self.page.locator('#flipBuy')).to_contain_text('6,465,550,000')
+            self.page.evaluate("""() => {
+                C.buyMode='sell';
+                paintVerdict(window.__paladinP0);
+                paintSummary(window.__paladinP0);
+            }""")
+            expect(self.page.locator('#vIsk')).to_contain_text('663,816,500')
+            expect(self.page.locator('#flipBuy')).to_contain_text('6,424,600,000')
 
     def test_appraisal_rerenders_only_for_changed_market_data(self):
         result = self.page.evaluate("""() => {

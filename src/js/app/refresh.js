@@ -214,11 +214,7 @@ $('themeLight').addEventListener('change',e=>{document.documentElement.classList
   const headerMain=document.createElement('div');headerMain.className='mm-ho-main';
   headerMain.append($('navHome'),group);
   // Sales is a single workspace, not a second global-navigation row.
-  // Re-parent the existing business buttons and import controls (never clone
-  // their listeners or duplicate financial state).
-  const salesToolbar=document.createElement('div');
-  salesToolbar.className='mm-sales-toolbar';
-  salesToolbar.id='salesModeToolbar';
+  // Re-parent original controls, preserving their IDs, listeners and state.
   const modePicker=document.createElement('details');
   modePicker.className='mm-sales-mode-picker';
   const modeTrigger=document.createElement('summary');
@@ -233,11 +229,12 @@ $('themeLight').addEventListener('change',e=>{document.documentElement.classList
   modeChevron.setAttribute('aria-hidden','true');
   modeTrigger.append(modeLabel,modeChevron);
   modePicker.append(modeTrigger,$('businessSwitch'));
-  // Task selector belongs to the inventory card, sharing its text-area track.
-  // Import controls stay in the workspace and appear only in Jita Trading.
-  $('heroIntro').querySelector('.paste-head').append(modePicker);
-  salesToolbar.append($('importControls'));
-  $('heroIntro').before(salesToolbar);
+  // Task selector stays in the inventory heading. In Trading, its purchase and
+  // shipping controls occupy the grid cell immediately above Inventory, while
+  // Appraisal and Inventory remain aligned in the row below. Never clone inputs.
+  const salesIntro=$('heroIntro');
+  salesIntro.querySelector('.paste-head').append(modePicker);
+  salesIntro.insertBefore($('importControls'),salesIntro.querySelector('.paste'));
   modePicker.addEventListener('click',event=>{
     if(event.target.closest('button[data-business]'))modePicker.open=false;
   });

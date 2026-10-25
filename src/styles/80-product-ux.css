@@ -209,10 +209,6 @@ html.light #settings .mm-market-option.is-selected{background:rgba(161,86,55,.11
 .hero #heroIntro .paste .paste-head .mm-sales-mode-picker .mm-business-tab{
   font:550 .83rem/1.35 var(--f-ui)!important;min-height:39px!important;
 }
-.hero .mm-sales-toolbar:has(>#importControls[hidden]){display:none!important}
-.hero .mm-sales-toolbar:not(:has(>#importControls[hidden])){
-  margin:0 0 12px!important;justify-content:flex-start!important
-}
 @media(max-width:550px){
  .hero #heroIntro .paste .paste-head{flex-wrap:wrap}
  .hero #heroIntro .paste .paste-head .status{order:4;flex-basis:100%}
@@ -509,4 +505,154 @@ html.light body .top.mm-ho-root .mm-top-actions .mm-theme{background:transparent
 }
 @media(prefers-reduced-motion:reduce){
   #verdict #vFinanceDetails>summary::after,#pSum .mm-freight-extra>summary::after{transition:none}
+}
+
+/* v1.0.126 · Stage A — shared page geometry, no financial or input changes.
+   The inner edges of .hero and main are determined by min(1360px,94vw)
+   with 20px horizontal padding. Match that exact reference in the header. */
+@media(min-width:861px){
+  body .top.mm-ho-root{
+    padding-left:calc((100vw - min(1360px,94vw))/2 + 20px)!important;
+    padding-right:calc((100vw - min(1360px,94vw))/2 + 20px)!important;
+  }
+}
+@media(min-width:1261px){
+  body .top.mm-ho-root{
+    grid-template-columns:minmax(0,1fr) auto minmax(0,1fr)!important;
+    grid-template-areas:"brand main actions"!important;
+  }
+}
+
+/* Decorative dashes are a legacy visual accent, not a data indicator. Their
+   former grid slot was already removed from .mm-section-head in typography. */
+.mm-title::before,.mm-section-head::before,.sub-h::before,
+#settings .st-sec-t::before{content:none!important;display:none!important}
+
+/* Keep the live #importControls node immediately above Inventory, never above
+   Appraisal. With a real appraisal both cards share the second grid row. */
+.hero #heroIntro>#importControls:not([hidden]){
+  display:flex!important;align-items:center;justify-content:flex-start!important;
+  flex-wrap:wrap;align-self:end;min-width:0;min-height:40px;
+  gap:8px 12px;margin:0!important;padding:0 1px!important;
+  border:0!important;border-radius:0!important;
+  background:transparent!important;box-shadow:none!important;
+}
+.hero #heroIntro>#importControls .mm-import-intro{min-width:0}
+.hero #heroIntro>#importControls .mm-import-intro strong{
+  font:700 .74rem/1.35 var(--f-ui);letter-spacing:.02em;
+}
+.hero #heroIntro>#importControls .mm-import-intro small{display:none!important}
+.hero #heroIntro>#importControls #rtM{display:none!important}
+.hero #heroIntro>#importControls .mm-import-actions{
+  display:flex;align-items:center;justify-content:flex-start!important;
+  flex-wrap:wrap;gap:8px 12px;min-width:0;margin:0!important;
+}
+.hero #heroIntro:not(.no-appr):has(>#importControls:not([hidden])){
+  grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  grid-template-areas:". import" "appraisal inventory"!important;
+  grid-template-rows:auto minmax(224px,1fr)!important;
+  grid-auto-rows:auto!important;
+  gap:12px 14px!important;
+}
+.hero #heroIntro:not(.no-appr):has(>#importControls:not([hidden]))>.appr{grid-area:appraisal}
+.hero #heroIntro:not(.no-appr):has(>#importControls:not([hidden]))>.paste{grid-area:inventory}
+.hero #heroIntro:not(.no-appr):has(>#importControls:not([hidden]))>#importControls{grid-area:import}
+
+/* Matching title tracks: the Inventory mode selector must not push its title
+   lower than the dynamic Appraisal title. Both card bodies start together. */
+.hero #heroIntro:not(.no-appr)>.appr .appr-title,
+.hero #heroIntro:not(.no-appr)>.paste .paste-head{
+  display:flex!important;align-items:center!important;flex:0 0 auto!important;
+  min-height:45px!important;height:auto!important;
+  margin:0 0 10px!important;padding:0 0 7px!important;
+}
+
+/* The recommended route shares the title's left edge, with no phantom space
+   once title ornaments have been removed. Monetary columns stay tabular. */
+#verdict .mm-route-choice{margin-left:0!important}
+#verdict .v-cap{margin-left:0!important}
+
+@media(max-width:860px){
+  .hero #heroIntro:not(.no-appr):has(>#importControls:not([hidden])){
+    grid-template-columns:minmax(0,1fr)!important;
+    grid-template-areas:"appraisal" "import" "inventory"!important;
+    grid-template-rows:auto auto auto!important;
+    gap:10px!important;
+  }
+}
+
+/* v1.0.126 · Stage B.1 — Listado uses the same solid gray palette as the
+   rest of the product, in both themes and in both disclosure states. Scope is
+   deliberate: other fold panels may still use meaningful warning accents. */
+#ledger{
+  background:var(--void)!important;
+  border:1px solid var(--line2)!important;
+  box-shadow:0 3px 9px rgba(0,0,0,.18)!important;
+}
+#ledger:not([open]):hover{
+  background:var(--hull)!important;
+  border-color:var(--line2)!important;
+}
+html.light #ledger{box-shadow:0 2px 10px rgba(25,20,17,.08)!important}
+#ledger>summary:focus-visible{
+  outline:2px solid var(--ion);outline-offset:-3px;border-radius:8px;
+}
+
+/* Stage B.1 — one disclosure-chevron geometry across the four controls shown
+   in the annotated screenshot, plus equivalent financial detail disclosures.
+   Sort direction arrows are intentionally excluded. */
+:root{--mm-chevron-size:9px;--mm-chevron-stroke:1.75px}
+.hero #heroIntro .paste .paste-head .mm-sales-mode-chevron,
+#settings .mm-market-chevron,
+details.panel>summary>.fold-chevron,
+#pSum #bDeep .step-toggle-chevron{
+  display:inline-block!important;
+  width:var(--mm-chevron-size)!important;height:var(--mm-chevron-size)!important;
+  flex:0 0 var(--mm-chevron-size)!important;
+  border-right:var(--mm-chevron-stroke) solid currentColor!important;
+  border-bottom:var(--mm-chevron-stroke) solid currentColor!important;
+  color:var(--mut)!important;font-size:0!important;line-height:0!important;
+  transform:rotate(45deg)!important;transition:transform .18s ease;
+}
+.hero #heroIntro .paste .paste-head .mm-sales-mode-picker[open] .mm-sales-mode-chevron,
+#settings .mm-market-picker.is-open .mm-market-chevron,
+details.panel[open]>summary>.fold-chevron,
+#pSum #bDeep[aria-expanded="true"] .step-toggle-chevron{
+  transform:rotate(225deg)!important;
+}
+details.panel>summary:not(:has(.fold-chevron))::after,
+#verdict #vFinanceDetails>summary::after,
+#pSum .mm-freight-detail>summary::after,
+#pSum .mm-freight-extra>summary::after{
+  content:""!important;display:inline-block!important;
+  width:var(--mm-chevron-size)!important;height:var(--mm-chevron-size)!important;
+  flex:0 0 var(--mm-chevron-size)!important;
+  border-right:var(--mm-chevron-stroke) solid var(--mut)!important;
+  border-bottom:var(--mm-chevron-stroke) solid var(--mut)!important;
+  font-size:0!important;line-height:0!important;
+  transform:rotate(45deg)!important;transition:transform .18s ease;
+}
+details.panel[open]>summary:not(:has(.fold-chevron))::after,
+#verdict #vFinanceDetails[open]>summary::after,
+#pSum .mm-freight-detail[open]>summary::after,
+#pSum .mm-freight-extra[open]>summary::after{
+  transform:rotate(225deg)!important;
+}
+@media(prefers-reduced-motion:reduce){
+  .hero #heroIntro .paste .paste-head .mm-sales-mode-chevron,
+  #settings .mm-market-chevron,details.panel>summary>.fold-chevron,
+  #pSum #bDeep .step-toggle-chevron,
+  details.panel>summary:not(:has(.fold-chevron))::after,
+  #verdict #vFinanceDetails>summary::after,
+  #pSum .mm-freight-detail>summary::after,
+  #pSum .mm-freight-extra>summary::after{transition:none!important}
+}
+
+/* v1.0.126 · P0: manual Buy Order acquisition price is progressive disclosure,
+   scoped to the original per-item ledger. It is never an ESI override. */
+body:not(.is-flip) .fact-buy-order{display:none!important}
+#flipBuy .fb2-cost-basis{margin:2px 0 11px;color:var(--mut);font:500 .78rem/1.5 var(--f-ui)}
+#flipBuy .fb2-capital-warning{
+  margin:0;padding:14px 16px;border:1px solid var(--line2);border-radius:8px;
+  background:var(--surface-card);color:var(--txt);font:500 .85rem/1.55 var(--f-ui);
 }

@@ -4,7 +4,8 @@ Antes de analizar o modificar este proyecto, leer completos y en este orden:
 
 1. `docs/EVE_PRODUCT_DESIGN_PROTOCOL.md` — reglas maestras de producto, UX/UI, ingeniería, dominio EVE, localización y verificación.
 2. `docs/DSS.md` — decisiones visuales vigentes, continuidad, publicación y límites del proyecto.
-3. `docs/ARCHITECTURE.md`, `docs/SDD.md` y la parte pertinente de `docs/SPEC.md` — arquitectura, contratos de cálculo e historia técnica. Si un documento antiguo discrepa, comprobar el código y los tests actuales.
+3. `docs/PRODUCT_DESIGN_REFINEMENT.md` — propuesta vigente de simetría, importación sobre Inventario, Listado gris, chevrons compartidos y saneamiento progresivo; **pendiente de aprobación**.
+4. `docs/ARCHITECTURE.md`, `docs/SDD.md` y la parte pertinente de `docs/SPEC.md` — arquitectura, contratos de cálculo e historia técnica. Si un documento antiguo discrepa, comprobar el código y los tests actuales.
 
 ## Principios operativos
 
@@ -16,5 +17,6 @@ Antes de analizar o modificar este proyecto, leer completos y en este orden:
 - Preservar cambios del usuario y el historial Git. No usar `git reset --hard`, no forzar commits ni reemplazar instrucciones existentes.
 - **No publicar ni desplegar sin autorización específica del usuario para la entrega.** Si la solicita, usar exclusivamente la conexión GitHub **«Fiko» (`Fikolasty`)**; comprobar la rama remota y verificar GitHub Actions/Pages antes de afirmar éxito.
 - Actualizar `docs/DSS.md` cuando se tomen decisiones de diseño o se implementen cambios; registrar verificaciones, limitaciones y el estado real de publicación.
+- En **cada petición de desarrollo**, entregar enlaces/archivos del DSS y documentación de continuidad modificada; registrar expresamente aprobación pendiente, estado local, pruebas reales y publicación. No asumir que documentación local está en GitHub.
 
 **Orden de trabajo:** comprender → diagnosticar y proponer → acordar → implementar en incrementos → verificar → documentar y entregar.

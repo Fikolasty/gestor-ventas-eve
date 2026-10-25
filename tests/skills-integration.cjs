@@ -43,7 +43,8 @@ assert.match(app,/SkillUI\.setPilot\(\{name:session\.name,skills:data\.skills\}\
 assert.match(app,/SkillUI\.setPilot\(null\)/);
 assert.match(app,/SkillUI\.setLanguage\(S\.lang\)/);
 assert.match(app,/flipPlanAccounting\(P\)/);
-assert.match(app,/flipAcct\?flipAcct\.profit:P\.best/);
+assert.match(app,/S\.flip\?\(flipAcct\?flipAcct\.profit:null\):P\.best/,
+  'Missing purchase capital must not be displayed as net profit');
 assert.match(app,/sessionEpoch\+\+/);
 assert.match(app,/if\(epoch!==sessionEpoch\|\|session\?\.id!==pilotId\)return/);
 assert.match(app,/window\.cancelIdleCallback/);

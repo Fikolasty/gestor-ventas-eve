@@ -118,9 +118,11 @@ assert.equal((salesHTML.match(/id="eveIdentity"/g)||[]).length,1,'Only one EVE p
 assert(salesJS.includes("const identity=$('eveIdentity');if(identity)profile.append(identity)"));
 assert(salesJS.includes("headerMain.append($('navHome'),group)"));
 assert(salesJS.includes("modePicker.append(modeTrigger,$('businessSwitch'))"),'Original Sales buttons must move into operation menu');
-assert(salesJS.includes("$('heroIntro').querySelector('.paste-head').append(modePicker)"),'Mode selector must align to paste input inside inventory heading');
-assert(salesJS.includes("salesToolbar.append($('importControls'))"),'Original import controls remain in the workspace');
-assert(salesJS.includes("$('heroIntro').before(salesToolbar)"),'Sales mode belongs in the workspace');
+assert(salesJS.includes("salesIntro.querySelector('.paste-head').append(modePicker)"),
+  'Mode selector must align to paste input inside inventory heading');
+assert(salesJS.includes("salesIntro.insertBefore($('importControls'),salesIntro.querySelector('.paste'))"),
+  'Original import controls belong directly above Inventory, never cloned');
+assert(!salesJS.includes('salesToolbar.append('),'Obsolete import toolbar must not be rendered');
 assert(!salesJS.includes("headerContext.append($('businessSwitch')"),'No duplicate Sales navigation in header');
 assert(salesJS.includes('topActions.insertBefore(theme,profile)'),'Theme must live beside Settings, Guide and the EVE pilot');
 assert(salesJS.includes("headerLegacy.append(rightGroup)"),'Original internal route control must survive');
@@ -140,9 +142,11 @@ assert(salesHTML.includes('grid-template-areas:"brand actions" "main main"!impor
 assert(!salesHTML.includes("body.mm-mining .top.mm-ho-root #mmTabs>.mm-ho-context"));
 assert(!salesHTML.includes("/* v1.0.110 · Cabecera compacta"));
 
-assert(salesHTML.includes('.hero .mm-sales-toolbar>#importControls[hidden]'),'Import controls stay hidden outside Trading');
-assert(salesHTML.includes('.hero .mm-sales-toolbar>#importControls #shipLab[hidden]'),'Ship control respects hidden state');
-assert(salesHTML.includes('.hero .mm-sales-toolbar>#importControls #rtM{display:none!important}'),'Import margin remains in Settings only');
+assert(salesHTML.includes('.hero #heroIntro>#importControls:not([hidden])'),
+  'Import controls are styled only when active');
+assert(salesHTML.includes('.hero #heroIntro>#importControls #rtM{display:none!important}'),
+  'Import margin remains in Settings only');
+assert(salesJS.includes("$('shipLab').hidden=!isImport"),'Ship control respects trading state');
 assert(salesHTML.includes('@media(max-width:1190px)')&&salesHTML.includes('@media(max-width:520px)'));
 assert(!salesHTML.includes('/* v1.0.106: ONE balanced navigation row:'));
 assert(!salesHTML.includes('/* v1.0.107 — compact Jita import bar.'));

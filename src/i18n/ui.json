@@ -862,5 +862,49 @@
   "refinery.implantHelp": {
     "es": "Implante de tu personaje refinador.",
     "en": "Implant equipped on your reprocessing character."
+  },
+  "trade.buyOrderUnitOverride": {
+    "es": "Mi precio Buy Order por unidad (opcional)",
+    "en": "My Buy Order price per unit (optional)"
+  },
+  "trade.buyOrderBasis": {
+    "es": "La inversión usa la mejor Buy Order publicada en Jita o tu precio manual; incluye broker. La orden puede tardar en completarse.",
+    "en": "Investment uses the top posted Jita Buy Order or your manual price, including broker. Your order may take time to fill."
+  },
+  "trade.buyOrderIntro": {
+    "es": "Presupuestas una Buy Order en Jita, transportas con SIGMA Freight y proyectas vender en {market} a Jita Sell +{margin}% neto.",
+    "en": "Budget a Jita Buy Order, ship with SIGMA Freight and target sales in {market} at Jita Sell +{margin}% net."
+  },
+  "trade.sellIntro": {
+    "es": "Compras a Jita Sell, transportas con SIGMA Freight y proyectas vender en {market} a Jita Sell +{margin}% neto.",
+    "en": "Buy at Jita Sell, ship with SIGMA Freight and target sales in {market} at Jita Sell +{margin}% net."
+  },
+  "trade.buyBasisDetail": {
+    "es": "Compra: {quantity} × {unit} + broker {broker}% (precio de referencia, no compra garantizada).",
+    "en": "Purchase: {quantity} × {unit} + {broker}% broker (reference price, not a guaranteed fill)."
+  },
+  "trade.sellBasisDetail": {
+    "es": "Compra: {quantity} × {unit} a Jita Sell, sujeta a profundidad de órdenes.",
+    "en": "Purchase: {quantity} × {unit} at Jita Sell, subject to order-book depth."
+  },
+  "trade.purchaseUnavailable": {
+    "es": "Beneficio no calculable: falta un precio de compra válido en Jita. Actualiza precios o abre el ítem del Listado para introducir tu precio Buy Order por unidad. No se utilizarán precios filtrados de venta como coste de compra.",
+    "en": "Profit unavailable: no valid Jita purchase quote. Refresh market prices or open the item in Registered Items to enter your Buy Order unit price. Filtered sell-to-bid prices cannot be used as a purchase budget."
+  },
+  "trade.purchaseUnavailableShort": {
+    "es": "Falta un precio de compra confiable; todavía no se puede estimar tu beneficio.",
+    "en": "No reliable purchase quote is available yet; your profit cannot be estimated."
+  },
+  "trade.profitUnavailable": {
+    "es": "BENEFICIO SIN COTIZACIÓN DE COMPRA",
+    "en": "PROFIT NEEDS A PURCHASE QUOTE"
+  },
+  "trade.tradeSubtitle": {
+    "es": "BENEFICIO TRAS COMPRA, IMPUESTOS Y ENVÍO",
+    "en": "PROFIT AFTER PURCHASE, TAXES AND SHIPPING"
+  },
+  "trade.proceedsOnly": {
+    "es": "Los importes de los planes son ingresos netos de venta; falta el capital de compra para calcular beneficio.",
+    "en": "Plan amounts are net selling proceeds; a purchase quote is needed to calculate profit."
   }
 }

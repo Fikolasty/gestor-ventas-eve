@@ -67,6 +67,16 @@ function buildLotDetails(o,ui){
   const iRef=numIn(o.refMan,'',v=>{const x=parseFloat(v);o.refMan=isNaN(x)?null:x;derive(o);refresh();},'Jita Sell por unidad');
   const fRef=el('label','fact','Jita Sell por unidad');fRef.append(iRef);
   const fBuy=el('div','fact','Jita Buy por unidad'),bBuy=el('b');fBuy.append(bBuy);
+  // Optional acquisition budget for Trading only. This never overwrites ESI
+  // and intentionally lives only in the current inventory/session.
+  const buyKey='trade.buyOrderUnitOverride';
+  const fBuyOrder=el('label','fact fact-buy-order');
+  const buyCaption=el('span',null,tx(buyKey));buyCaption.dataset.i18n=buyKey;
+  const iBuyOrder=numIn(o.buyMan,'',v=>{
+    const x=Number(v);o.buyMan=v.trim()!==''&&Number.isFinite(x)&&x>0?x:null;refresh();
+  },tx(buyKey));
+  iBuyOrder.dataset.i18nAriaLabel=buyKey;
+  fBuyOrder.append(buyCaption,iBuyOrder);
   const fSeen=el('label','fact','Precio Unidad que ves en '+nullSystem());fSeen.append(numIn(o.nullSeen,'Opcional',v=>{const x=parseFloat(v);o.nullSeen=isNaN(x)||x<=0?null:x;refresh();},'Precio que ves listado en '+nullSystem()));
   const iM3=numIn(o.m3uMan,'',v=>{const x=parseFloat(v);o.m3uMan=isNaN(x)?null:x;derive(o);refresh();},'m³ por unidad');
   const fM3=el('label','fact','m³ por unidad');fM3.append(iM3);
@@ -77,7 +87,7 @@ function buildLotDetails(o,ui){
   const skewHint='Se suma al ajuste general. Ej.: −2 = lo vendes 2% más barato.';
   fSk.title=skewHint;iSk.title=skewHint;iSk.setAttribute('aria-description',skewHint);
   fSk.append(iSk);
-  facts.append(fQty,fBuy,fRef,fSeen,fM3,fVol,fSk);
+  facts.append(fQty,fBuy,fBuyOrder,fRef,fSeen,fM3,fVol,fSk);
   const prices=el('details','prices lot-fold'),pBody=el('tbody'),pt=el('table');pt.append(pBody);
   prices.append(el('summary','sub-h','Precios para publicar'),pt);
   const checks=el('ul','checks'),foot=el('div','lot-foot'),del=el('button','link danger','Quitar del lote');del.type='button';
@@ -85,7 +95,7 @@ function buildLotDetails(o,ui){
   const verdict=el('section','lot-verdict');verdict.append(rcall);
   const analysis=el('div','lot-analysis');analysis.append(opts);
   body.append(gwrap,verdict,analysis,facts,prices,checks,foot);
-  Object.assign(ui,{iRef,iM3,bBuy,bVol,pBody,checks,detailsReady:true});
+  Object.assign(ui,{iRef,iBuyOrder,iM3,bBuy,bVol,pBody,checks,detailsReady:true});
 }
 // copia el valor limpio: números con máx. 2 decimales y sin "ISK" (listo para pegar en el juego)
 const isNumTxt=t=>/^[−+\-]?\s*[\d][\d,.\s]*(\s*(ISK|m³|m3|%|días?|u))?$/i.test(String(t).trim());
@@ -256,8 +266,12 @@ function paintLot(r){
     p.h.textContent=r.hint[k]||(v==null&&o.ref==null?'sin precio':'');p.h.hidden=!p.h.textContent;
   });
   if(document.activeElement!==u.iRef)u.iRef.placeholder=o.ref!=null&&o.refMan==null?String(o.ref)+(o.jita&&o.jita.sell!=null?' (Jita)':' (pegado)'):'0';
+  if(document.activeElement!==u.iBuyOrder)u.iBuyOrder.placeholder=o.jita&&Number.isFinite(o.jita.topBuy)?String(o.jita.topBuy)+' (Jita Buy)':'—';
   if(document.activeElement!==u.iM3)u.iM3.placeholder=o.m3u!=null&&o.m3uMan==null?String(o.m3u)+(o.jita&&o.jita.vol!=null?' (API)':' (pegado)'):'m³';
-  u.bBuy.textContent=o.jita&&o.jita.buy!=null?fmtP(o.jita.buy):'—';
+  // "Jita Buy" in the item detail must match the unfiltered Appraisal quote.
+  // The separate sanitized .buy remains untouched for the quick-sell route.
+  const postedBuy=o.jita?.topBuy??o.jita?.buy;
+  u.bBuy.textContent=postedBuy!=null?fmtP(postedBuy):'—';
   u.bVol.textContent=o.m3u!=null?fmtV(o.m3u*r.q):'—';
   // Precios para Listar: lo que pones en cada mercado, por unidad
   const tb=u.pBody;tb.textContent='';const a=o.jita;

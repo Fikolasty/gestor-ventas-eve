@@ -243,10 +243,6 @@
 
 /* Product UX: one global navigation level; Sales context belongs to its workspace.
    Existing business mode buttons and shipping inputs are re-parented, not cloned. */
-.hero .mm-sales-toolbar{
-  display:flex;align-items:center;justify-content:flex-start;flex-wrap:wrap;
-  gap:10px 16px;min-width:0;margin:3px 0 13px;padding:0;
-}
 .hero .mm-sales-mode-picker{position:relative;flex:0 0 auto;min-width:0}
 .hero .mm-sales-mode-picker>.mm-sales-mode-trigger{
   display:inline-flex;align-items:center;justify-content:space-between;gap:16px;
@@ -294,26 +290,6 @@
 .hero .mm-sales-mode-picker #businessSwitch .mm-business-tab .ic{
   display:inline-block!important;width:16px;height:16px;flex:0 0 16px;
 }
-.hero .mm-sales-toolbar>#importControls{
-  display:flex;flex:1 1 380px;align-items:center;justify-content:flex-start;
-  min-width:0;min-height:37px;gap:10px 14px;
-  margin:0!important;padding:0!important;border:0!important;
-  background:transparent!important;box-shadow:none!important;
-}
-.hero .mm-sales-toolbar>#importControls[hidden],
-.hero .mm-sales-toolbar>#importControls #shipLab[hidden]{display:none!important}
-.hero .mm-sales-toolbar>#importControls #rtM{display:none!important}
-.hero .mm-sales-toolbar>#importControls .mm-import-intro strong{
-  font:700 .74rem/1.3 var(--f-ui);letter-spacing:.02em;
-}
-.hero .mm-sales-toolbar>#importControls .mm-import-intro small{display:none!important}
-.hero .mm-sales-toolbar>#importControls .mm-import-actions{
-  display:flex;align-items:center;flex-wrap:wrap;gap:8px 12px;
-  justify-content:flex-start!important;margin:0!important;
-}
-body.mm-mining .hero .mm-sales-toolbar,
-body.mm-skills .hero .mm-sales-toolbar,
-body.mm-pi .hero .mm-sales-toolbar{display:none!important}
 html.light .hero .mm-sales-mode-picker #businessSwitch{
   background:#faf8f5!important;box-shadow:0 12px 26px rgba(66,51,39,.15)!important;
 }
@@ -321,9 +297,6 @@ html.light .hero .mm-sales-mode-picker>.mm-sales-mode-trigger{
   background:rgba(250,248,245,.92);color:var(--txt);
 }
 @media(max-width:690px){
-  .hero .mm-sales-toolbar{margin:4px 0 12px}
-  .hero .mm-sales-toolbar>#importControls{flex:1 1 100%;gap:7px 12px;flex-wrap:wrap}
-  .hero .mm-sales-toolbar>#importControls .mm-import-actions{flex:1 1 auto}
   .hero .mm-sales-mode-picker>.mm-sales-mode-trigger{min-height:39px}
 }
 
@@ -449,18 +422,4 @@ html.light .hero .mm-sales-mode-picker>.mm-sales-mode-trigger{
   #pSum .pk-shortcut{grid-template-columns:minmax(0,1fr);
     grid-template-areas:"heading" "method" "note" "action"}
   #pSum .pk-shortcut-action{justify-self:stretch;text-align:center}
-}
-
-/* The Sales operation is a task control, aligned at the far right of the
-   Sales workspace. Import controls retain their live inputs on the left. */
-.hero .mm-sales-toolbar{justify-content:flex-end!important;}
-.hero .mm-sales-toolbar>.mm-sales-mode-picker{
-  order:2!important;margin-left:auto!important;flex:0 0 auto!important;
-}
-.hero .mm-sales-toolbar>#importControls{
-  order:1!important;justify-content:flex-start!important;
-}
-@media(max-width:690px){
-  .hero .mm-sales-toolbar{justify-content:flex-end!important}
-  .hero .mm-sales-toolbar>.mm-sales-mode-picker{margin-left:auto!important}
 }
