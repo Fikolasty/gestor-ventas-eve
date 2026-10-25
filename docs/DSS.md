@@ -1,6 +1,6 @@
 # DSS — Design Standards & Session Handoff · Market Moves+
 
-**Última actualización:** 2026-10-25 · **Versión publicada:** v1.0.122 · **Estado remoto verificado:** compilación de GitHub Actions `12e7852` en `main`, con despliegue de Pages exitoso. Revisión visual humana y sesión EVE real pendientes.
+**Última actualización:** 2026-10-25 · **Versión publicada según último QA confirmado:** v1.0.122 · **Cambio v1.0.123 en preparación:** retiro del icono de lista en la pestaña superior «Ventas». La publicación v1.0.123 aún requiere comprobar GitHub Actions y Pages. Revisión visual humana parcial; prueba EVE SSO/ESI real completa pendiente.
 
 Este DSS es el respaldo prioritario de **decisiones visuales, estado verificable y traspaso entre chats**. Léelo junto con `docs/SDD.md`, `docs/SPEC.md`, `docs/PROGRESS.md` y `CHANGELOG.md`. No confundir código probado localmente con publicación en GitHub.
 
@@ -45,6 +45,8 @@ Este DSS es el respaldo prioritario de **decisiones visuales, estado verificable
 
 **Referencia de estilo:** se preparó una imagen de concepto durante el chat (no es una captura verificada del sitio ni asset de producción). El código CSS es la fuente real de la entrega.
 
+**Revisión del usuario 2026-10-25:** en captura real del encabezado Dark de escritorio, el usuario indicó que el diseño «se ve bien», excepto el icono de lista marcado a la izquierda de «Ventas». Esta aceptación es parcial: no verifica Light, móvil ni todas las vistas. Se elimina únicamente ese `span.ic.i-list` del botón `#mmTabVentas`, conservando texto, ARIA, control y listeners. La captura incluye retrato/nombre del piloto, pero no prueba por sí sola el ciclo real completo de EVE SSO/ESI.
+
 ## 4. Estado de desarrollo recuperado
 
 | SHA local → SHA publicado | Trabajo | Pruebas | Publicación |
@@ -78,6 +80,7 @@ Este DSS es el respaldo prioritario de **decisiones visuales, estado verificable
 | 2026-10-24 | Creado DSS de continuidad y restaurados estándares visuales expresos del usuario. Implementado acabado del header v1.0.122, pruebas estáticas y build. | 18 suites Node + 16 Python; sin publicación ni QA visual real |
 | 2026-10-25 | El usuario ordena publicar todo y establece que cada push futuro use imperativamente el conector GitHub «Fiko»/`Fikolasty`. Conexión `admin`/`push` y base remota `0cc24e1` confirmadas; se corrige el workflow que recompilaba una versión obsoleta (1.0.120 → 1.0.122). | Publicados siete commits en `main` hasta `d0561d8`; CI compiló y publicó v1.0.122 en `12e7852`. Todas las Actions, incluida Pages/Chromium, exitosas. |
 | 2026-10-25 | Documentación posterior al push: mapeo de SHA locales/remotos, URL de la ejecución CI, estado final, protocolo de conexión obligatoria y respaldo histórico. | Cambio documental; no alterar motores ni estilos. |
+| 2026-10-25 | Captura revisada por el usuario: eliminar solo el icono de lista de «Ventas». El clon actual de `main` estaba en `b50557d` (incluye PR #16 de arbitraje industrial posterior al DSS), preservado. Fuente, test y workflow se preparan para v1.0.123 mediante conexión GitHub «Fiko». | Publicación/CI v1.0.123 aún por confirmar; revisión visual de Dark escritorio parcialmente aceptada; Light/móvil y EVE SSO/ESI real completos pendientes. |
 
 **Regla permanente:** añadir una fila aquí con cada nuevo cambio/commit/push de ChatGPT.
 

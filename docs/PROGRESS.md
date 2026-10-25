@@ -325,3 +325,9 @@ En CI de v1.0.77 falló mining-types (0 != 34). Causa: la comparación de prefij
 ## 2026-10-22 — v1.0.109 · Header oficial y mantenimiento prudente
 
 Se publicó el header aprobado sin sustituir la aplicación. Los elementos originales se reagrupan a través del código original, sin un segundo motor financiero ni perfiles duplicados. Se retiraron estilos contradictorios exclusivos del antiguo navbar, preservando paneles y funcionalidad. Margen de importación en Ajustes, incluso fuera de Comercio Jita; el campo oculto `#fImpM` sigue sincronizado con `#cImpM`. Se actualizó el HTML distribuible y las comprobaciones estáticas. Pendientes: validación real de ESI/SSO y verificación visual manual en Firefox/Light/Móvil.
+
+## 2026-10-25 — v1.0.123: Ventas sin icono de lista en la barra superior
+
+El usuario compartió una captura Dark/escritorio y marcó el icono de lista junto a «Ventas» para retirarlo; indicó que el resto del diseño se ve bien. La aceptación visual es parcial y no sustituye pruebas Light/móvil. Se preserva `#mmTabVentas` con texto, `role="tab"`, `aria-controls`, `aria-selected` y todos los listeners. Únicamente se retira el `span.ic.i-list` de la pestaña superior, no de los botones internos de negocio ni otros módulos. `tests/header-design.test.cjs` agrega una regresión dedicada y el workflow pasa a compilar 1.0.123. Cero cambios financieros, EVE/ESI o i18n. La captura muestra un piloto aparentemente conectado; falta confirmar el flujo real completo de EVE SSO/ESI.
+
+Al retomar este chat, `main` se encontraba en `b50557d`, posterior al DSS original, e incluía el merge `8a90352` de arbitraje industrial; se preservaron esos commits. Publicación v1.0.123 y verificación de GitHub Actions/Pages pendientes de cerrar.

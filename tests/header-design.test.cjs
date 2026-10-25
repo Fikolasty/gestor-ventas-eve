@@ -27,3 +27,11 @@ test('sales selector preserves native summary and uses a CSS chevron',()=>{
   assert.match(js,/\.querySelector\('\.paste-head'\)\.append\(modePicker\)/);
   assert.match(css,/\.mm-sales-mode-chevron\{[^}]*border-right:1\.5px solid currentColor/);
 });
+
+test('Ventas header tab displays its text without a leading list icon',()=>{
+  const button=html.match(/<button\b[^>]*id="mmTabVentas"[^>]*>(.*?)<\/button>/s);
+  assert.ok(button,'original accessible Ventas tab exists');
+  assert.match(button[0],/role="tab"[^>]*aria-controls="salesBody"/);
+  assert.match(button[1],/<span class="mm-mod-label">Ventas<\/span>/);
+  assert.doesNotMatch(button[1],/class="ic i-list"/);
+});

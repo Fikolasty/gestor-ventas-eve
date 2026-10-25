@@ -1,3 +1,7 @@
+## v1.0.123 — 2026-10-25 [ChatGPT]
+- Retira el icono de lista situado a la izquierda de «Ventas» en el header, según la captura marcada por el usuario. Mantiene el botón original `#mmTabVentas`, su texto, semántica accesible, selección y comportamiento sin cambiar módulos ni fórmulas.
+- Añade regresión de estructura del tab y actualiza el workflow de compilación a v1.0.123. Revisión visual Dark/escritorio aceptada parcialmente por el usuario; pendiente confirmar build/Pages, Light/móvil y EVE SSO/ESI end-to-end.
+
 ## v1.0.122 — 2026-10-24 [ChatGPT]
 - Recupera el acabado gráfico del header: Inicio con icono de casa, navegación y acciones con radio pequeño, Ajustes/Guía solo iconos, identidad/login como texto sin cápsula, margen inferior equilibrado y chevron fino en «Vender Ítems».
 - Conserva los controles originales, EVE SSO, idiomas, Dark/Light, flujos comerciales y datos. Se añade `docs/DSS.md` para estándares gráficos y continuidad obligatoria por commit.
