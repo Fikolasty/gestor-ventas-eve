@@ -1,5 +1,12 @@
 # PROGRESS — Market Moves+
 
+## Continuación 2026-10-24 — cotización de reproceso por separado
+
+- Recuperada `main` en `0cc24e1` tras la interrupción de la sesión anterior.
+- Añadido `MaterialEconomy.quote` como cálculo puro y conservador: cantidades recuperadas por lotes, valor de materiales, tarifa de estructura **en ISK** y valor neto tras esa tarifa. Exige precios completos y una base explícita para cobrar la tarifa; no inventa datos faltantes.
+- Pruebas de separación tarifa/yield, sobrantes, precio incompleto y base de cargo ausente; 15 archivos de pruebas Node y 16 pruebas Python aprobados. `build.py` regeneró `index.html`.
+- **Pendiente:** integrar la cotización con `reproNets`, el planificador, la comparación de Minería/Ventas y el precio/base de la tarifa de la estructura. El código heredado aún resta `rTax` de las cantidades; esta entrega no cambia la lógica pública hasta reconciliar todas las rutas. No declarar la tarifa de EVE verificada sin contrastar la base de cobro con la refinería real.
+
 **Actualizado:** 2026-10-22 (v1.0.111). La auditoría v1.0.66 que sigue debajo es la base histórica.
 **Estado v1.0.111:** header inspirado en YouTube: navegación central en cápsula, herramientas alineadas y subbarra contextual; se preservan el ticker bajo MARKET MOVES+ y la simetría entre TASACIÓN e INVENTARIO. Despliegue sujeto a generación de index.html. Sin modificaciones al motor financiero; detalles y pendientes de QA en [SDD](SDD.md).
 **Repositorio autorizado:** Fikolasty/gestor-ventas-eve; no operar con la cuenta Geiner.

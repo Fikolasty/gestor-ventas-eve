@@ -22,3 +22,20 @@ test('compare only available routes after costs and refuse invented profit',()=>
  assert.equal(M.recover(ore,-1,90),null);assert.equal(M.feeISK(-1,.5),null);
  assert.equal(M.choose([]).best,null);
 });
+test('quote applies refinery fee only in ISK, never to recovered quantities',()=>{
+ const prices={Tritanium:10,Pyerite:20};
+ const noFee=M.quote(ore,199,90,prices,0,100000);
+ const withFee=M.quote(ore,199,90,prices,.5,100000);
+ assert.equal(noFee.output.Tritanium,withFee.output.Tritanium);
+ assert.equal(noFee.output.Pyerite,withFee.output.Pyerite);
+ assert.equal(withFee.unused,99);
+ assert.equal(withFee.recoveredValueISK,7200);
+ assert.equal(withFee.refineryFeeISK,500);
+ assert.equal(withFee.afterRefineryFeeISK,6700);
+ assert.equal(noFee.afterRefineryFeeISK,7200);
+});
+test('quote refuses unknown fee basis and incomplete prices',()=>{
+ assert.equal(M.quote(ore,100,90,{Tritanium:10},.5,100000),null);
+ assert.equal(M.quote(ore,100,90,{Tritanium:10,Pyerite:20},.5,undefined),null);
+ assert.equal(M.quote(ore,100,90,{Tritanium:10,Pyerite:20},-1,100000),null);
+});
