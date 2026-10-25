@@ -1007,3 +1007,111 @@ html.light #ledger #lots .lot-pp .copy:hover:not(:disabled){background:#e3e0da!i
 @media(prefers-reduced-motion:reduce){
   #ledger #lots .lot-body>.prices>summary::after,#ledger #lots .lot-detail-section>summary::after{transition:none}
 }
+
+/* B.5: answer the four money/reprocessing questions at a glance; keep
+   explanations available but collapsed. Compatible with both themes. */
+#verdict #vCap .v-finance-item.mm-cost-item{background:var(--surface-panel)}
+#verdict #vCap .mm-cost-included{
+  margin:8px 0 5px;color:var(--mut);font:500 .76rem/1.55 var(--f-ui)
+}
+#verdict #vCap .mm-context-help{
+  margin:7px 0 0;border:1px solid var(--line2);border-radius:8px;
+  background:var(--surface-card);overflow:hidden
+}
+#verdict #vCap .mm-context-help>summary{
+  list-style:none;display:flex;align-items:center;gap:12px;
+  padding:12px 14px;cursor:pointer;color:var(--txt);
+  font:650 .79rem/1.45 var(--f-ui)
+}
+#verdict #vCap .mm-context-help>summary::-webkit-details-marker{display:none}
+#verdict #vCap .mm-context-help>summary::after{
+  content:"";width:var(--mm-chevron-size);height:var(--mm-chevron-size);
+  flex:0 0 var(--mm-chevron-size);margin-left:auto;
+  border-right:var(--mm-chevron-stroke) solid var(--mut);
+  border-bottom:var(--mm-chevron-stroke) solid var(--mut);
+  transform:rotate(45deg);transition:transform .15s ease
+}
+#verdict #vCap .mm-context-help[open]>summary::after{transform:rotate(225deg)}
+#verdict #vCap .mm-context-help>summary:focus-visible{outline:2px solid var(--ion);outline-offset:-3px}
+#verdict #vCap .mm-context-body{
+  padding:5px 14px 14px;border-top:1px solid var(--line2);min-width:0
+}
+#verdict #vCap .mm-context-part{padding:11px 0;border-bottom:1px solid var(--line2)}
+#verdict #vCap .mm-context-part:last-of-type{border-bottom:0}
+#verdict #vCap .mm-context-part>strong{
+  display:block;color:var(--txt);font:650 .79rem/1.45 var(--f-ui)
+}
+#verdict #vCap .mm-context-part>p{
+  margin:5px 0 0;color:var(--mut);font:450 .78rem/1.6 var(--f-ui)
+}
+#verdict #vCap .mm-cost-source{
+  margin:12px 0;color:var(--mut);font:450 .73rem/1.5 var(--f-ui)
+}
+#verdict #vCap .mm-cost-settings{
+  display:inline-flex;min-height:36px;align-items:center;
+  padding:7px 13px;color:var(--txt);background:var(--surface-panel);
+  border:1px solid var(--line2);border-radius:7px;
+  font:650 .78rem/1.4 var(--f-ui);cursor:pointer
+}
+#verdict #vCap .mm-cost-settings:hover{border-color:var(--ion)}
+#verdict #vCap .mm-cost-settings:focus-visible{outline:2px solid var(--ion);outline-offset:2px}
+#verdict #vCap .mm-rep-decision{
+  display:grid;gap:4px;min-width:0;margin:13px 0 0;
+  padding:14px 16px;background:var(--surface-panel);
+  border:1px solid var(--line2);border-radius:9px
+}
+#verdict #vCap .mm-rep-question{color:var(--mut);font:650 .73rem/1.4 var(--f-ui)}
+#verdict #vCap .mm-rep-answer{
+  color:var(--txt);font:720 clamp(.87rem,1.2vw,1.04rem)/1.45 var(--f-ui);
+  overflow-wrap:anywhere
+}
+#verdict #vCap .mm-rep-sub{
+  margin:2px 0 0;color:var(--mut);font:500 .77rem/1.5 var(--f-ui)
+}
+#verdict #vCap .mm-rep-decision .mm-rep-help{margin-top:9px}
+html.light #verdict #vCap .mm-rep-decision,
+html.light #verdict #vCap .v-finance-item.mm-cost-item{background:var(--surface-panel)}
+/* Same compact, optional help contract in Listado, plan chooser and courier. */
+#ledger>.mm-inline-faq,#pSum>.mm-inline-faq,#unitCourierBox>.mm-inline-faq{
+  max-width:100%;margin:10px 0 13px;background:var(--surface-panel);
+  border:1px solid var(--line2);border-radius:8px;overflow:hidden
+}
+#ledger>.mm-inline-faq{margin:0 15px 13px}
+#pSum>.mm-inline-faq{margin:10px 0 13px}
+#unitCourierBox>.mm-inline-faq{margin:12px 0 0}
+#ledger>.mm-inline-faq>summary,#pSum>.mm-inline-faq>summary,
+#unitCourierBox>.mm-inline-faq>summary{
+  display:flex;align-items:center;gap:10px;cursor:pointer;list-style:none;
+  color:var(--txt);padding:11px 13px;font:650 .77rem/1.5 var(--f-ui)
+}
+#ledger>.mm-inline-faq>summary::-webkit-details-marker,
+#pSum>.mm-inline-faq>summary::-webkit-details-marker,
+#unitCourierBox>.mm-inline-faq>summary::-webkit-details-marker{display:none}
+#ledger>.mm-inline-faq>summary::after,#pSum>.mm-inline-faq>summary::after,
+#unitCourierBox>.mm-inline-faq>summary::after{
+  content:"";margin-left:auto;flex:0 0 var(--mm-chevron-size);
+  width:var(--mm-chevron-size);height:var(--mm-chevron-size);
+  border-right:var(--mm-chevron-stroke) solid var(--mut);
+  border-bottom:var(--mm-chevron-stroke) solid var(--mut);
+  transform:rotate(45deg);transition:transform .15s ease
+}
+#ledger>.mm-inline-faq[open]>summary::after,#pSum>.mm-inline-faq[open]>summary::after,
+#unitCourierBox>.mm-inline-faq[open]>summary::after{transform:rotate(225deg)}
+#ledger>.mm-inline-faq>p,#pSum>.mm-inline-faq>p,
+#unitCourierBox>.mm-inline-faq>p{
+  margin:0;border-top:1px solid var(--line2);padding:12px 13px;
+  color:var(--mut);font:450 .78rem/1.65 var(--f-ui)
+}
+#ledger>.mm-inline-faq>summary:focus-visible,#pSum>.mm-inline-faq>summary:focus-visible,
+#unitCourierBox>.mm-inline-faq>summary:focus-visible{outline:2px solid var(--ion);outline-offset:-3px}
+@media(max-width:600px){
+  #verdict #vCap .mm-context-help>summary{padding:12px}
+  #verdict #vCap .mm-context-body{padding:4px 12px 12px}
+  #verdict #vCap .mm-rep-decision{padding:12px}
+  #ledger>.mm-inline-faq{margin:0 7px 12px}
+}
+@media(prefers-reduced-motion:reduce){
+  #verdict #vCap .mm-context-help>summary::after,
+  #ledger>.mm-inline-faq>summary::after,#pSum>.mm-inline-faq>summary::after,
+  #unitCourierBox>.mm-inline-faq>summary::after{transition:none}
+}

@@ -1,6 +1,6 @@
 # Market Moves+ — propuesta de refinamiento visual y saneamiento progresivo
 
-**Fecha:** 2026-10-25 · **Estado:** **A+B.1 publicadas en v1.0.126, B.2 en v1.0.127, B.3 en v1.0.128 y B.4a/B.4b aprobadas, publicadas y verificadas en v1.0.129**. C y D pendientes. **Última versión pública verificada:** v1.0.129, fuente `3779d79e`, build `0258f38f`, Actions/Pages `40231430480` y HTML público exacto `1af23167`. Ver `DSS.md` §14.
+**Fecha:** 2026-10-25 · **Estado:** **A+B.1 publicadas en v1.0.126, B.2 en v1.0.127, B.3 en v1.0.128 y B.4a/B.4b publicadas en v1.0.129; B.5 integralmente aprobada y en QA como v1.0.130 local**. C y D pendientes. **Última versión pública verificada:** v1.0.129, fuente `3779d79e`, build `0258f38f`, Actions/Pages `40231430480` y HTML público exacto `1af23167`. Ver `DSS.md` §§14–15.
 
 **P0 económico resuelto en el candidato antes de B.2/C/D:** la captura de 7 Paladin con Buy Order evidenciaba una inversión de solo 27,59 M frente a Tasación de 6,3–6,4 B y beneficios absurdos. La corrección y sus regresiones ya fueron aprobadas y añadidas a v1.0.126; ver `TRADE_PROFIT_AUDIT_2026-10-25.md`. Incluye pruebas reales de navegador, pero las proyecciones siguen sin garantizar llenado de órdenes ni ventas efectivas.
 
@@ -108,3 +108,13 @@ Protección económica: el neto estimado del lote es valor neto de la venta sin 
 ### Cierre de B.4 — v1.0.129 publicada y comprobada
 
 El cierre pendiente del registro anterior se completó: **18 Node, 16 Python, 8 legacy, 35/35 Chromium**, más cuatro workflows `success`. La fuente `3779d79e` se publicó desde Fiko/Fikolasty sin force, contra SHA esperado; el build remoto `0258f38f` generó `index.html` y QA actualizado. Rebuild/Chromium/Pages `40231430480` verificó el banner y `v1.0.129` en Pages. Descarga HTTPS independiente: **2.231.495 bytes**, Git blob `1af23167779fc322cf168006a0e14641929fbd0d` idéntico al build local y remoto. La web está LIVE, Geiner avisado. Esperar comentario humano sobre estética en dispositivo real antes de C.1; no expandir alcance ni deducir que las pruebas sintéticas validan SSO/ESI reales.
+
+### B.5 — preguntas naturales y respuesta en capas, aprobada antes de C.1 (candidato v1.0.130)
+
+**Primera mirada:** (1) resultado neto del plan — o beneficio real solo en Trading con inversión válida; (2) cuánto se descuenta por taxes/comisiones y envío; (3) si el hielo u ore se debe reprocesar; (4) cuánto más deja hacerlo o no. Importes del plan `P.best`, `verdictFinance` y desglose vigente, sin motor contable duplicado. No se vuelve a restar ningún gasto. Import `fN` ya contiene tasas en neto: se señala subtotal parcial en lugar de inventar cargos separados.
+
+**Al pedir explicación:** desplegable de impuestos (Accounting configurado, tasa efectiva, orden vs instantáneo, broker NPC frente a estructura Upwell, SCC/relists), envío (volumen, contratos, tarifa base, colateral) y refinería (tarifa estimada). La coincidencia de porcentaje con un nivel de habilidad no verifica al piloto por SSO. El colateral es garantía, no otro coste entero. FAQ ocultas en Listado, planes y courier explican origen y liquidez de precios ESI, rapidez contra ISK y flete.
+
+**Reprocesamiento defendible:** se espera hasta elegir rutas finales para calcular `r.rep` con `assessReprocessing(P)`. Por ítem se comparan mejores rutas procesadas `rNull/rJita` frente a raw/buyback/compresión, manteniendo otros ítems en sus rutas y recalculando con `courierCost` un solo envío compartido, incluyendo nuevos contratos. Comparación marginal **condicionada al plan**, no segundo óptimo global; si faltan cotizaciones no se recomienda reproceso. Se muestra ruta y diferencia concreta sin cambiar selección manual ni confundir ingresos netos y beneficio sobre inversión.
+
+**Diseño/test/release:** `src/js/ui/selling-results.js`, `src/js/domain/planning.js`, `src/i18n/ui.json`, `src/shell.html`, `src/styles/80-product-ux.css`, `tests/decision-stage-b5.test.cjs`, un escenario Chromium nuevo en `tests/browser_theme.py`. `<details>` con foco/chevron compartidos, Dark/Light, ES/EN y 390/630/1440 px. Al redactar **v1.0.130 es candidato local**, v1.0.129 la última versión HTTP verificada. Próximos pasos: **C.1** limpieza CSS focalizada y **D** rendimiento medido; no cambiar ESI/SSO/persistencia ni prometer venta garantizada.

@@ -131,6 +131,38 @@ function protectBestSaleRoute(rows,Vall){
   return {net:bestNet,mode:betterMode};
 }
 
+// Compare reprocessing vs selling raw with the OTHER selected routes held
+// fixed. Each counterfactual uses the canonical courierCost() for the full
+// remaining shipment, including new contracts and collateral. Comparing
+// row.net (first-pass distributed freight) here can reverse the recommendation.
+// This is an actionable marginal comparison, not a global second optimizer.
+function assessReprocessing(P){
+  if(S.flip)return;
+  P.rows.forEach(r=>{
+    if(!(r.q>0&&resolveOre(r.o.name)))return;
+    const original=r.best&&r.ship[r.best];
+    const restVolume=Math.max(0,P.Vs-(original?.v||0));
+    const restCollateral=Math.max(0,P.Cs-(original?.c||0));
+    const restFreight=restVolume>0?courierCost(restVolume,restCollateral):0;
+    const routeNet={};
+    Object.keys(r.g).forEach(k=>{
+      if(!Number.isFinite(r.g[k]))return;
+      const sh=r.ship[k],volume=restVolume+(sh?.v||0),collateral=restCollateral+(sh?.c||0);
+      const marginalFreight=(volume>0?courierCost(volume,collateral):0)-restFreight;
+      routeNet[k]=r.g[k]-r.prod-marginalFreight;
+    });
+    const pick=keys=>keys.filter(k=>Number.isFinite(routeNet[k]))
+      .reduce((a,k)=>a==null||routeNet[k]>routeNet[a]?k:a,null);
+    const kr=pick(['rNull','rJita']);
+    // Compression and buyback are valid alternatives to reprocessing.
+    // Player WTS is speculative and remains a last resort, as in computePlan.
+    const kn=pick(['null','bb','jOrd','jInst','cOrd','cInst'])||pick(['disc']);
+    r.rep=kr&&kn?{kr,kn,diff:routeNet[kr]-routeNet[kn],
+      netRef:routeNet[kr],netRaw:routeNet[kn],routeNet,scope:'selected-other-routes'}:
+      {missing:true,reason:!kr?'refined-quotes':'raw-quotes'};
+  });
+}
+
 function computePlan(){
   const rJ=rateJita(),rN=rateNull(),rI=rateInst();
   const rows=S.items.map(o=>{
@@ -199,7 +231,7 @@ function computePlan(){
         const p=minPrice(m),b=S.api[m.toLowerCase()]?S.api[m.toLowerCase()].buy:null,np=p!=null?nullList(m,p,b,null,nets[m]):null,jl=jitaList(m,p,b,nets[m]);
         v+=nets[m]*prodVol(m);row.mins.push({m,n:nets[m],p:jl,np,qd:qtyDisc(m,nets[m])});
         if(p==null||np==null){ok=false;return;}val+=nets[m]*jl;nul+=nets[m]*np*rN;});
-      if(ok){row.g.rJita=val*rJ-fee;row.ship.rJita={v,c:val};row.g.rNull=nul-fee;}
+      if(ok){row.refiningCost=fee;row.g.rJita=val*rJ-fee;row.ship.rJita={v,c:val};row.g.rNull=nul-fee;}
       else row.hint.rJita=row.hint.rNull='faltan precios de minerales';
     }
     return row;
@@ -230,12 +262,6 @@ function computePlan(){
       const oth=Object.keys(r.net).filter(k=>k!==JO&&k!=='disc'&&r.net[k]!=null).reduce((a,k)=>a==null||r.net[k]>r.net[a]?k:a,null);
       best=oth||JI;}
     r.best=best;r.guide=guideFor(r,Vall);
-    // ¿Vale la pena reprocesar? mejor opción reprocesando vs mejor opción sin reprocesar
-    if(!S.flip&&resolveOre(r.o.name)){
-      const pick=ks2=>ks2.filter(k=>r.net[k]!=null).reduce((a,k)=>a==null||r.net[k]>r.net[a]?k:a,null);
-      const kr=pick(['rNull','rJita']),kn=pick(['null','bb','jOrd','jInst']);
-      r.rep=kr&&kn?{kr,kn,diff:r.net[kr]-r.net[kn]}:{missing:true};
-    }
   });
   // Envío real: el 1er paso reparte el precio base del contrato entre TODO el volumen. Si al final viaja poco,
   // el envío real (precio base completo) puede costar más de lo que se gana. Si es así, eso no viaja.
@@ -340,6 +366,7 @@ function computePlan(){
   const toBB=rows.filter(r=>r.best==='bb'),bbGross=toBB.reduce((a,r)=>a+r.g.bb,0);
   const result={mode:M,allBB,nBBno:rows.filter(r=>r.hint.bb==='el Buyback no lo acepta').length,toBB,bbGross,rows,Vs,Cs:coll,shipCost,best:gross-shipCost,valShip,valStay,allNull,allJita,allJitaCost,VJ,
     nShip:rows.filter(r=>r.best&&SHIPS[r.best]).length,nStay:rows.filter(r=>r.best&&!SHIPS[r.best]).length,missing:rows.filter(r=>!r.best)};
+  assessReprocessing(result);
   allocateCourier(result);
   return result;
 }

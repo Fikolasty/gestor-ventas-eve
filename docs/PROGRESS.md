@@ -1,5 +1,13 @@
 # PROGRESS — Market Moves+
 
+## 2026-10-25 — B.5 aprobada integralmente, v1.0.130 en validación local
+
+**Permiso expreso:** Geiner dijo «apruebo todo demosle» tras revisar la propuesta de responder las cuatro dudas iniciales y ofrecer explicaciones opcionales por sección. B.5 precede a C.1; se mantienen las restricciones económicas, identidad Fiko, QA y publicación protegida. Base pública verificada **v1.0.129**, clon limpio separado del respaldo anterior; `main=d5023d6ab7d5e02c8bd321ac18bb5e8ee7c02948` al comenzar, con trabajo del propietario preservado.
+
+**Implementación candidata:** `#vCap` enseña impuestos, comisiones, flete y cargos extra que el motor ya descuenta. Detalle de porcentajes voluntario, fuentes y límites de habilidades manuales/SSO; en Import `fN` no inventa separación inexistente del neto. Decisión de reprocesar contra otras rutas del ítem usando **coste marginal real del courier compartido en todo el lote**, tarifas y saltos de contrato, tras elegir el plan definitivo; no modifica `P.best`, rutas ni inversión. Respuesta corta, justificación por ítem plegada, faltantes explícitos. Listado, «Elige tu plan» y courier tienen FAQ ocultas sobre colateral y cotizaciones no garantizadas. Traducciones ES/EN, chevrons consistentes, Light/Dark y responsive.
+
+**QA local final:** build `1.0.130`, **19/19 Node**, **16/16 Python**, **8/8 regresiones legacy**, **37/37 Chromium** (ES/EN, Dark/Light, 390/630/1440, documentos y pruebas de importación con desglose parcial); `git diff --check` correcto. La primera prueba Chromium tenía una suposición falsa sobre el estado de acordeones tras traducir; se corrigió el test porque el producto preserva deliberadamente las ayudas abiertas. El test de traducción detectó textos fallback HTML que diferían del catálogo ES exacto: fueron sincronizados. Inspeccionadas capturas reales ES/EN Dark/Light en 390/1440. CDN de Playwright bloqueado/vacío en este entorno: Chrome Headless Shell v1234 oficial se descargó desde Google, sin omitir pruebas. **Ningún commit remoto ni Pages v1.0.130 confirmado en este registro**; gate de publicación pendiente.
+
 ## 2026-10-25 — v1.0.129 LIVE: cierre de B.4 y certificación HTTPS
 
 **Publicación completada por Fiko/Fikolasty:** `main=76b9ad58` coincidió con la base verificada; se enviaron 15 blobs SHA idénticos a archivos locales, se creó árbol `e38cef710224bc234d87f028a845fac250cf53cc`, commit fuente `[ChatGPT] feat: B.4 ...` **`3779d79e749f84a76fccee76196dbf673d434860`** con `expected_sha` y `force:false`, sin incluir artefactos de capturas. El bot publicó `index.html` v1.0.129 y `docs/QA_STATUS.md` en commit **`0258f38f7b1a53f9835b3dc2d4f5947b8b282192`**.

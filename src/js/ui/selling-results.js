@@ -152,6 +152,93 @@ function verdictFinance(P,tradeAccounting){
   };
 }
 
+// B.5: explain ONLY the same charges already used by the selected plan.
+// The caller passes the totals from the existing financial overview; this
+// component never feeds amounts back into computePlan or creates a new quote.
+function paintCostExplanation(P,cost,expanded){
+  const cap=$('vCap'),grid=cap.querySelector('.v-finance');if(!grid)return;
+  const add=(label,value)=>{
+    const item=el('div','v-finance-item mm-cost-item');
+    item.append(el('small',null,label),el('strong','num '+(value==null?'muted':value>0.5?'neg':'muted'),
+      value==null?'—':value>0.5?'−'+fmt(value):'0 ISK'));
+    grid.append(item);
+  };
+  // Import (fN) already contains the market fees in its target net price.
+  // An itemized figure cannot be recovered from that net target truthfully.
+  add(tx(cost.importIncluded?'decision.marketChargesPartial':'decision.marketCharges'),
+    cost.importIncluded&&cost.marketVolume<=0?null:cost.tax+cost.brk+cost.rel);
+  if(cost.refinery>0.5)add(tx('decision.refiningFee'),cost.refinery);
+  if(cost.compression+cost.production>0.5)add(tx('decision.otherCharges'),cost.compression+cost.production);
+  const note=el('p','mm-cost-included',tx('decision.includedInNet'));cap.append(note);
+  const disclosure=el('details','mm-context-help'),summary=el('summary',null,tx('decision.costsWhy'));
+  disclosure.open=expanded;disclosure.append(summary);
+  const body=el('div','mm-context-body');
+  const explain=(heading,message)=>{const section=el('section','mm-context-part');section.append(el('strong',null,heading),el('p',null,message));body.append(section);};
+  if(cost.marketVolume>0){
+    const level=parseInt($('skAcc').value,10),expected=Number.isInteger(level)?taxOf(level):null;
+    const accounting=expected!=null&&Math.abs(expected-C.tax)<.000005
+      ?tx('decision.accountingConfigured',{level,rate:pct(C.tax)})
+      :tx('decision.accountingCustom',{rate:pct(C.tax)});
+    explain(tx('decision.salesTax'),accounting);
+    if(cost.jitaVolume>0)explain(tx('decision.brokerJita'),tx('decision.brokerJitaBody',{rate:pct(C.broker)}));
+    if(cost.nullVolume>0)explain(tx('decision.brokerStructure'),tx('decision.brokerStructureBody',{market:nullSystem(),broker:pct(C.brokerNull),scc:pct(C.scc)}));
+    if(cost.rel>0.5)explain(tx('decision.relisting'),tx('decision.relistingBody',{amount:fmt(cost.rel)}));
+  }else if(!cost.importIncluded)explain(tx('decision.marketCharges'),tx('decision.marketNone'));
+  if(cost.importIncluded)explain(tx('decision.importNetTarget'),tx('decision.importNetTargetBody'));
+  explain(tx('decision.shipping'),cost.ship>0.5?
+    tx('decision.shippingBody',{amount:fmt(cost.ship),contracts:trips(P.Vs),volume:fmtV(P.Vs),base:fmt(C.base),unit:fmt(C.perM3),collateral:pct(C.collPct)}):tx('decision.shippingNone'));
+  if(cost.refinery>0.5)explain(tx('decision.refiningFee'),tx('decision.refiningBody',{amount:fmt(cost.refinery),rate:pct(Number($('rTax').value)/100)}));
+  if(cost.compression>0.5)explain(tx('decision.compression'),tx('decision.compressionBody',{amount:fmt(cost.compression)}));
+  if(cost.production>0.5)explain(tx('decision.production'),tx('decision.productionBody',{amount:fmt(cost.production)}));
+  const origin=el('p','mm-cost-source',tx('decision.costsSource'));
+  const settings=el('button','mm-cost-settings',tx('decision.reviewSettings'));settings.type='button';
+  settings.addEventListener('click',()=>togglePanel('settings',true));body.append(origin,settings);
+  disclosure.append(body);cap.append(disclosure);
+}
+
+function paintReprocessingDecision(P,expanded){
+  if(S.flip)return;
+  const candidates=P.rows.filter(r=>r.q>0&&resolveOre(r.o.name));
+  if(!candidates.length)return;
+  const known=candidates.filter(r=>r.rep&&!r.rep.missing),yes=known.filter(r=>r.rep.diff>.5);
+  const pending=candidates.length-known.length;
+  const panel=el('section','mm-rep-decision');
+  panel.append(el('small','mm-rep-question',tx('decision.shouldRefine')));
+  const verdict=el('strong','mm-rep-answer');
+  if(candidates.length===1){
+    const r=candidates[0];
+    verdict.textContent=!known.length?tx('decision.refineUnknown'):
+      r.rep.diff>.5?tx('decision.refineYes',{name:r.o.name,amount:fmt(r.rep.diff)}):
+      Math.abs(r.rep.diff)<=.5?tx('decision.refineTie',{name:r.o.name}):
+      tx('decision.refineNo',{name:r.o.name,amount:fmt(-r.rep.diff)});
+  }else verdict.textContent=tx('decision.refineBatch',{yes:yes.length,total:candidates.length,pending});
+  panel.append(verdict);
+  if(known.length){
+    panel.append(el('p','mm-rep-sub',candidates.length===1?
+      tx('decision.refineChosenRoute',{route:modeName(known[0].rep.diff>.5?known[0].rep.kr:known[0].rep.kn)}):
+      tx('decision.refineItemHelp')));
+  }else panel.append(el('p','mm-rep-sub',tx('decision.refineMissingQuotes')));
+  const disclosure=el('details','mm-context-help mm-rep-help');
+  disclosure.open=expanded;
+  disclosure.append(el('summary',null,tx('decision.refineWhy')));
+  const body=el('div','mm-context-body');
+  candidates.forEach(r=>{
+    const entry=el('section','mm-context-part');
+    entry.append(el('strong',null,r.o.name));
+    if(!r.rep||r.rep.missing)entry.append(el('p',null,tx('decision.refineMissingQuotes')));
+    else{
+      const rep=r.rep,better=rep.diff>.5?rep.kr:rep.kn;
+      entry.append(el('p',null,tx('decision.refineComparison',{
+        best:modeName(better),reprocessed:fmt(rep.netRef),raw:fmt(rep.netRaw),
+        delta:(rep.diff>=0?'+':'−')+fmt(Math.abs(rep.diff))})));
+    }
+    body.append(entry);
+  });
+  body.append(el('p','mm-cost-source',tx('decision.refineMethod')));
+  disclosure.append(body);panel.append(disclosure);
+  $('vCap').append(panel);
+}
+
 let activeRep=0;
 function paintVerdict(P){
   const has=S.items.length>0;$('verdict').hidden=!has;$('ledger').hidden=!has;$('lCount').textContent=has?'· '+S.items.length+(S.items.length>1?' items':' item'):'';
@@ -202,7 +289,9 @@ function paintVerdict(P){
     $('vTitle').textContent=tx(P.mode?'verdict.selectedTitle':'verdict.planTitle');
     $('vSubtitle').textContent=tx(S.flip?'trade.tradeSubtitle':P.mode?'verdict.selectedSubtitle':'verdict.planSubtitle');
     if(fa&&$('vWhat').textContent)$('vWhat').textContent+=' · por rapidez';
-    const cap=$('vCap');cap.replaceChildren();
+    const cap=$('vCap'),costHelpExpanded=!!cap.querySelector('.mm-context-help:not(.mm-rep-help)[open]'),
+      repHelpExpanded=!!cap.querySelector('.mm-rep-help[open]');cap.replaceChildren();
+    cap.dataset.costHelpExpanded=String(costHelpExpanded);cap.dataset.repHelpExpanded=String(repHelpExpanded);
     if(none){cap.textContent=tx('verdict.pending');}
     else{
       // Top-level financial breakdown replaces duplicate plan narration.
@@ -212,7 +301,7 @@ function paintVerdict(P){
       const card=(label,number,cost)=>{
         const item=el('div','v-finance-item');
         const valid=Number.isFinite(number);
-        item.append(el('small',null,label),el('strong','num '+(valid?(cost?'neg':'pos'):'muted'),
+        item.append(el('small',null,label),el('strong','num '+(valid?(cost?(number>.5?'neg':'muted'):'pos'):'muted'),
           valid?(cost&&number>0?'−':'')+fmt(Math.abs(number)):'—'));
         bridge.append(item);
       };
@@ -245,6 +334,13 @@ function paintVerdict(P){
    const ship=SH()&&P.Vs>0?P.shipCost:0,prod=P.rows.reduce((a,r)=>a+(r.best?r.prod:0),0),compression=P.rows.reduce((a,r)=>a+(['cOrd','cInst'].includes(r.best)?r.comp?.cost||0:0),0);
    const segs=[['Te queda',P.best,'#5cba86','net'],['Sales Tax',tax,'#e8746c','cost'],['Broker'+(bN>0&&Gn>0?' y SCC':''),brk,'#e0a84f','cost'],['Relists',rel,'#c98bd8','cost'],['Envío',ship,'#6aa8d8','cost'],['Compresión',compression,'#a49ed8','cost'],['Producción',prod,'#9c9a92','cost']].filter(x=>x[1]>0.5);
    const sum=segs.reduce((a,x)=>a+x[1],0),fb=$('ovFlow');fb.textContent='';
+   if(!none){
+     const refinery=P.rows.reduce((a,r)=>a+(r.best==='rNull'||r.best==='rJita'?r.refiningCost||0:0),0);
+     paintCostExplanation(P,{tax,brk,rel,ship,refinery,compression,production:prod,
+       importIncluded:P.rows.some(r=>r.best==='fN'),
+       marketVolume:Gn+Gj+Gi,jitaVolume:Gj,nullVolume:Gn},$('vCap').dataset.costHelpExpanded==='true');
+     paintReprocessingDecision(P,$('vCap').dataset.repHelpExpanded==='true');
+   }
    if(!none&&sum>0){const hd=el('div','ov-sum');hd.append(el('span',null,'Valor de venta del plan'),el('b',null,fmt(sum)));
      const bar=el('div','ov-bar'),lg=el('div','ov-leg');
      segs.forEach(([l,v,c,k])=>{const i=el('i');i.style.width=(v/sum*100)+'%';i.style.background=c;i.title=l+': '+fmt(v);bar.append(i);
@@ -468,7 +564,7 @@ function paintVerdict(P){
     rl._activateRep=()=>activate(activeRep);
   }
   // por escenario: enviarlo a Jita, venderlo en Null, o a un jugador a precio de Jita (sin taxes ni envío)
-  reps.forEach(r=>{const n=r.net,ice=catOf(r.o.name)==='ice',noun=ice?'el hielo':'el ore';
+  reps.forEach(r=>{const n=r.rep.routeNet,ice=catOf(r.o.name)==='ice',noun=ice?'el hielo':'el ore';
     const best=(...ks)=>ks.map(k=>n[k]).filter(v=>v!=null).reduce((a,v)=>a==null||v>a?v:a,null);
     const nJ=best('jOrd','jInst'),dJ=n.rJita!=null&&nJ!=null?n.rJita-nJ:null;
     const dN=n.rNull!=null&&n.null!=null?n.rNull-n.null:null;

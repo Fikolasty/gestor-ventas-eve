@@ -989,6 +989,105 @@ class ThemeBrowserTests(unittest.TestCase):
                 out.mkdir(parents=True,exist_ok=True)
                 self.page.screenshot(path=str(out/f'pilot-{language}-{width}.png'),animations='disabled')
 
+    def test_b5_cost_sources_and_refining_answer_are_progressive_bilingual_and_responsive(self):
+        from playwright.sync_api import expect
+        for language in ('es', 'en'):
+            self.page.evaluate('setLang', language)
+            self.page.evaluate("""() => {
+                const oldItems=S.items,oldP=lastP;
+                try {
+                    S.flip=false;S.planMode=null;
+                    const item={name:'Krystallos',qty:1,m3u:40,
+                        jita:{buy:4000,topBuy:4000,sell:5000,topSell:5000}};
+                    S.items=[item];
+                    const refinedGross=9000, rawGross=4000;
+                    const row={o:item,q:1,auto:'rNull',best:'rNull',np:rawGross,
+                        jl:rawGross,prod:0,vol:40,coll:5000,refiningCost:100,
+                        mins:[{n:1,np:refinedGross,p:refinedGross}],
+                        g:{null:rawGross*rateNull(),jOrd:rawGross*rateJita(),
+                            rNull:refinedGross*rateNull()-100,
+                            rJita:refinedGross*rateJita()-100},
+                        ship:{jOrd:{v:40,c:5000},rJita:{v:20,c:9000}}};
+                    const P={rows:[row],missing:[],mode:null,best:row.g.rNull,
+                        Vs:0,Cs:0,shipCost:0,toBB:[]};
+                    assessReprocessing(P);
+                    window.__b5Fixture={item,P};
+                    paintVerdict(P);
+                } finally {S.items=oldItems;lastP=oldP;}
+            }""")
+            summary=self.page.locator('#vCap .mm-context-help:not(.mm-rep-help) > summary')
+            expect(summary).to_have_count(1)
+            if language=='es':
+                self.assertFalse(self.page.locator('#vCap .mm-context-help').first.evaluate('(d)=>d.open'))
+            else:
+                # Language changes preserve the reader's open explanations.
+                self.assertTrue(self.page.locator('#vCap .mm-context-help').first.evaluate('(d)=>d.open'))
+            answer=self.page.locator('#vCap .mm-rep-answer')
+            self.assertIn('Sí' if language=='es' else 'Yes',answer.inner_text())
+            self.assertGreaterEqual(self.page.locator('#vCap .mm-cost-item').count(),2)
+            if language=='es':
+                summary.click()
+            self.assertIn('Accounting' if language=='en' else 'Accounting',
+                          self.page.locator('#vCap .mm-context-body').first.inner_text())
+            self.assertEqual(self.page.locator('#vCap .mm-cost-settings').count(),1)
+            if language=='es':
+                self.page.locator('#vCap .mm-rep-help>summary').click()
+            self.assertIn('courier' if language=='en' else 'courier',
+                          self.page.locator('#vCap .mm-rep-help').inner_text().lower())
+            # Reactively repainting must retain each independently open disclosure.
+            self.page.evaluate("""() => {
+                const old=S.items; S.items=[window.__b5Fixture.item];
+                paintVerdict(window.__b5Fixture.P); S.items=old;
+            }""")
+            self.assertEqual(self.page.locator('#vCap .mm-context-help[open]').count(),2)
+            for width in (390,630,1440):
+                self.page.set_viewport_size({'width':width,'height':900})
+                for light in (False,True):
+                    self.page.evaluate('(on)=>document.documentElement.classList.toggle("light",on)',light)
+                    dims=self.page.locator('#vCap').evaluate("""el => {
+                        const root=el.getBoundingClientRect(),wide=[...el.querySelectorAll('*')]
+                            .filter(n=>n.getBoundingClientRect().right>innerWidth+2).length;
+                        return {left:root.left,right:root.right,overflow:wide};
+                    }""")
+                    self.assertGreaterEqual(dims['left'],-1,dims)
+                    self.assertLessEqual(dims['right'],width+1,dims)
+                    self.assertEqual(dims['overflow'],0,dims)
+                    if width in (390,1440) and not light:
+                        out=INDEX.parent/'tests'/'artifacts'/'theme'
+                        out.mkdir(parents=True,exist_ok=True)
+                        self.page.screenshot(path=str(out/f'b5-{language}-{width}.png'),animations='disabled',full_page=True)
+                    if width==390 and light:
+                        out=INDEX.parent/'tests'/'artifacts'/'theme'
+                        out.mkdir(parents=True,exist_ok=True)
+                        self.page.screenshot(path=str(out/f'b5-{language}-390-light.png'),animations='disabled',full_page=True)
+
+    def test_b5_trading_import_net_target_does_not_invent_market_tax(self):
+        from playwright.sync_api import expect
+        self.page.evaluate('setLang','en')
+        self.page.evaluate("""() => {
+            const oldItems=S.items,oldP=lastP,oldFlip=S.flip;
+            try {
+                S.flip=true;
+                const item={name:'Paladin',qty:1,m3u:1,
+                    jita:{sell:1000,topSell:1000,buy:900,topBuy:900}};
+                S.items=[item];
+                const row={o:item,q:1,best:'fN',auto:'fN',np:1200,jl:1000,
+                    g:{fN:1100,fJ:925},ship:{fN:{v:1,c:1000}},
+                    prod:0,vol:1,coll:1000};
+                const freight=courierCost(1,1000);
+                const P={rows:[row],mode:null,missing:[],best:1100-freight,
+                    Vs:1,Cs:1000,shipCost:freight,toBB:[]};
+                paintVerdict(P);
+            } finally {S.items=oldItems;lastP=oldP;S.flip=oldFlip;}
+        }""")
+        charge=self.page.locator('#vCap .mm-cost-item').first
+        self.assertIn('known subtotal', charge.inner_text())
+        self.assertEqual(charge.locator('strong').inner_text(),'—')
+        self.page.locator('#vCap .mm-context-help:not(.mm-rep-help)>summary').click()
+        expect(self.page.locator('#vCap .mm-context-body').first).to_contain_text(
+            'charges cannot be truthfully itemized')
+        self.assertEqual(self.page.locator('#vCap .mm-rep-decision').count(),0)
+
     def test_b4_plan_comparison_in_header_tracks_selected_route(self):
         from playwright.sync_api import expect
         for language in ('es','en'):
