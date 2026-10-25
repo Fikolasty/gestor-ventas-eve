@@ -2,6 +2,8 @@
 
 ## v1.0.121 — integración del reproceso, 2026-10-24
 
+- Corrección de CI antiguo: `paintRefineryProfile` sincroniza `readSkills(false)` antes del cálculo, eliminando la lectura obsoleta de `S.sk` cuando el control `skRep` cambia. Prueba de regresión Node añadida; prueba Chromium existente ampliada para verificar nivel 3.
+
 - Integrado `reproNets` con `MaterialEconomy.recover`: lotes completos, minerales enteros y remanentes; la tarifa ya no reduce cantidades.
 - `refineryFee` usa una base monetaria estimada mediante precios de referencia disponibles, separada del yield. El coste se descuenta de ambas rutas de minerales de Ventas, comparaciones de reproceso y precio de hielo refinado en Minería; se mantiene el sistema nullsec configurable.
 - Regresiones Node: 15 archivos aprobados; Python: 16 pruebas aprobadas; `build.py 1.0.121` correcto. Las pruebas visuales headless no se ejecutaron por faltar la dependencia local `playwright`.

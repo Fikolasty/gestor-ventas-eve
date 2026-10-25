@@ -71,6 +71,10 @@ function paintAppraisal(){
 function paintRefineryProfile(){
   const display=$('refineryYieldLive'),feeLabel=$('rFeeInline');
   if(!display&&!feeLabel)return;
+  // Native Settings controls are the source of truth. A scripted select change,
+  // restored setting or skill-rank widget may paint before its change handler.
+  // Read current values before computing the live yield, without touching taxes.
+  readSkills(false);
   const ore=resolveOre($('rOre')?.value||'Monazite')||resolveOre('Monazite');
   const fee=Number($('rTax').value);
   if(display&&ore)display.textContent=NF2.format(yieldOf(ore).y)+'%';

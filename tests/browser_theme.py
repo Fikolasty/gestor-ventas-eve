@@ -509,6 +509,7 @@ class ThemeBrowserTests(unittest.TestCase):
         self.page.evaluate("paintRefineryProfile()")
         less_skill=float(self.page.locator("#refineryYieldLive").inner_text().rstrip("%"))
         self.assertLess(less_skill,no_implant)
+        self.assertEqual(self.page.evaluate("S.sk.Reprocessing"),3)
         set_setting("rTax","2","input")
         self.page.evaluate("stSaveNow()")
         stored=self.page.evaluate("""() => JSON.parse(localStorage.getItem('gestorVentas.ajustes.v1')).f.rTax""")

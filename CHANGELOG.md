@@ -1,4 +1,5 @@
 ## v1.0.121 — 2026-10-24 [ChatGPT]
+- Corrige la sincronización del rendimiento al cambiar Reprocessing en Ajustes: la vista toma los niveles actuales antes de pintar, aunque el evento de cambio esté pendiente. Añade regresión específica del fallo de CI v1.0.120.
 - Separa el rendimiento efectivo del reproceso de la tarifa de refinería: cantidades enteras por lotes, sobrantes sin procesar y tarifa estimada en ISK.
 - Integra el cargo independiente en las rutas de Ventas, las comparaciones del panel de reproceso y la valoración del hielo en Minería. Los impuestos de ventas se calculan sobre ingresos brutos, antes del cargo de estructura.
 - La base de tarifa utiliza precios de referencia disponibles y **no está verificada** frente a la valoración interna de EVE; las decisiones siguen siendo estimaciones, no garantías de ejecución.
