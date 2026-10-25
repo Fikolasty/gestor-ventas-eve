@@ -4,7 +4,7 @@
 
 **Actualizado:** 2026-10-25 · **Estado:** documento vivo de Spec-Driven Development (SDD); las secciones históricas describen el estado de su fecha y pueden haber sido sustituidas.
 **Repositorio:** [Fikolasty/gestor-ventas-eve](https://github.com/Fikolasty/gestor-ventas-eve) · **Entrega:** rama `main` · **App:** https://fikolasty.github.io/gestor-ventas-eve/
-**Base pública vigente:** v1.0.125 (GitHub Pages, ejecución `40171076176`); piloto financiero de Ventas, hielo Krystallos comprimido, Minería y Skill Plan. **Candidato local sin publicar:** v1.0.126 (Etapa A de retícula). Ver `DSS.md` para el último estado y las decisiones aprobadas. Las menciones a builds 1.0.99/1.0.120 en entradas anteriores son historial, no la versión actual.
+**Base pública vigente verificada:** **v1.0.126** (GitHub Pages, ejecución `40215891182`, fuente `205ec9fa`, build `c716f7aa`); incluye P0 de beneficio/capital Buy Order, Etapa A, B.1 y piloto financiero previo. Ver `DSS.md` para estado y decisiones. Las menciones anteriores a v1.0.125 y builds 1.0.99/1.0.120 son historial.
 **Propósito:** conservar decisiones, requisitos, evidencia de pruebas y estado verificable al cambiar de conversación.
 
 > Este documento es el **punto de entrada** para retomar el proyecto. **No sustituye** [SPEC.md](SPEC.md), [PROGRESS.md](PROGRESS.md), [MINING.md](MINING.md) ni el [CHANGELOG](../CHANGELOG.md). `SPEC.txt` es historial antiguo y no debe prevalecer sobre el comportamiento y las decisiones actuales. Ante un conflicto, confirmar en el código y registrar la resolución, no inferirla.
@@ -903,3 +903,13 @@ Las cuatro flechas principales, además del selector de mercado de Ajustes y dis
 - Se instaló Chromium 141/Playwright 1.56.0 en entorno temporal y se ejecutaron los tests visuales, que antes no habían podido correr: primera pasada **28/29**, con fallo en el Listado Light. Causa: `html.light #ledger` en `src/styles/themes/light-components.css` imponía un gradiente después del CSS de Etapa B.1. Se añadió override neutral exclusivo de ese ID y assertion en `tests/ledger-chevron-stage-b.test.cjs`. **Segunda pasada completa 29/29 Chromium OK.** No se cambian los cálculos por apariencia.
 - El workflow de Pages valida un solo cuerpo HTTP público contra el banner fijo y el literal de versión `v1.0.126`, para no confundir disponibilidad del sitio viejo con despliegue del candidato.
 - **No presentar como publicado hasta confirmar:** commit sin forzar por la conexión «Fiko», workflow de build, Chromium CI y Pages, `index.html` actualizado en la rama, y verificación externa del contenido servido. Las cifras financieras son proyecciones; falta EVE SSO/ESI end-to-end y revisión visual humana integral.
+
+## v1.0.126 — Publicación remota comprobada (2026-10-25)
+
+**Integridad Git:** commit de fuente `205ec9fa848527e59b212e0458133279a42ae6f2` construido desde `main=fbf5b00f` sin force mediante conector autorizado Fiko. Los 27 blobs del delta igualaron sus hashes locales; los archivos remotos no afectados y el historial permanecieron intactos.
+
+**Integridad CI:** las cuatro GitHub Actions finalizaron correctamente (Versiones `40215891151`, Verificación minera `40215891150`, Build `40215891230`, Rebuild/Pages `40215891182`). El workflow principal aprobó Python/Node, regresiones antiguas, Chromium Light/Dark y ambos idiomas, creó `docs/QA_STATUS.md` v1.0.126 y el artefacto compilado en `c716f7aad165bd3fa4354bd28fd6aad7f8a23bf2`.
+
+**Integridad HTTP:** la respuesta HTTPS real de <https://fikolasty.github.io/gestor-ventas-eve/> incluye `v1.0.126`; su Git blob coincide exactamente con el HTML local (y remoto en `main`): `9601d5f848f9652fb2594809862e42ea775ce61d`. El deploy Pages y su gate reforzado de banner+versión fueron `success`. El propietario ya fue avisado de que la web está live.
+
+**Limitaciones y próximos criterios:** CI y mocks de Paladin no garantizan profundidad de mercado, ejecución/fill, objetivo HY-RWO, ni autenticación EVE real. Continúan B.2 (Rápidos, Jita y chevrons restantes), C (saneamiento CSS con capturas) y D (rendimiento con perfiles) sin autorización para cambios amplios automáticos.

@@ -1,6 +1,6 @@
 # Market Moves+ — propuesta de refinamiento visual y saneamiento progresivo
 
-**Fecha:** 2026-10-25 · **Estado:** **Etapa A y revisión B.1 de Listado/flechas implementadas y verificadas localmente**; el resto de B, C y D permanece pendiente. **Último código público verificado:** v1.0.125. **Candidato local:** v1.0.126, con publicación autorizada y QA local Chromium completada; pendiente de confirmación remota.
+**Fecha:** 2026-10-25 · **Estado:** **Etapa A y revisión B.1 de Listado/flechas implementadas, verificadas y publicadas en v1.0.126**; el resto de B, C y D permanece pendiente. **Versión pública verificada:** v1.0.126, fuente `205ec9fa`, build `c716f7aa`, Actions/Pages `40215891182`. Pruebas 29 Chromium locales y CI/HTTP correcto; ver `DSS.md` §9.
 
 **P0 económico resuelto en el candidato antes de B.2/C/D:** la captura de 7 Paladin con Buy Order evidenciaba una inversión de solo 27,59 M frente a Tasación de 6,3–6,4 B y beneficios absurdos. La corrección y sus regresiones ya fueron aprobadas y añadidas a v1.0.126; ver `TRADE_PROFIT_AUDIT_2026-10-25.md`. Incluye pruebas reales de navegador, pero las proyecciones siguen sin garantizar llenado de órdenes ni ventas efectivas.
 
@@ -74,3 +74,7 @@ El propietario respondió **«sí, perfecto, me gustó, vamos a darle»** y qued
 El propietario aprobó expresamente la corrección de inversión/beneficio Buy Order (caso 7 Paladin) y pidió **push** de lo corregido, seguido de continuidad hacia UX y secciones nuevas. **La autorización de publicación de v1.0.126 existe ahora**. El P0 está corregido localmente junto con A+B.1, con 15 Node + 16 Python + 8 heredadas y build correcto; `docs/TRADE_PROFIT_AUDIT_2026-10-25.md` documenta fórmulas y alertas de ejecución. El conector GitHub obligatorio **Fiko/Fikolasty** se anuncia como instalado, pero no atiende ninguna acción (`Unknown tool`), por lo que todavía **no se ha pusheado ni desplegado** y el gate visual de Chromium sigue pendiente.
 
 **Siguiente secuencia una vez accesible Fiko:** comprobar SHA remoto sin sobreescrituras → publicar A+B.1+P0 con workflows v1.0.126 → exigir Chromium en español/inglés, ambos temas y desktop/móvil → comprobar Actions/Pages reales. Después continuar B.2 con un componente de selector Jita accesible y filtros/switches neutros, sin cambiar los valores auténticos de `C.buyMode` ni el motor. C/D solo tras mediciones y aislamiento de reglas reales. Mantener simbología, alturas y retícula uniformes, evitando añadir controles redundantes.
+
+### Publicación y cierre de la etapa v1.0.126 — 2026-10-25
+
+Los pasos de conexión, comparación, pruebas, push y Pages anteriores se completaron mediante Fiko: fuente `205ec9fa`, build `c716f7aa`, cuatro workflows exitosos, descarga pública con versión `v1.0.126` y hash idéntico al build local (`9601d5f8`). Un fallo visual real del Listado Light se corrigió antes del push y **29/29 Chromium** pasaron. La lista de B.2, C y D sigue como trabajo futuro a revisar con el propietario, **no** como permiso de rediseño amplio automático. La secuencia anterior queda preservada como plan histórico, no pendiente de publicación.
