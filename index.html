@@ -7,7 +7,7 @@
 <meta name="referrer" content="no-referrer">
 <title>Market Moves+ · SIGMA GRINDSET</title>
 <style>
-/* ================= Market Moves+ v1.0.131 =================
+/* ================= Market Moves+ v1.0.132 =================
    Paleta: azul de base, naranja = acción, verde/rojo = ganancia/pérdida.
    Sin backdrop-filter: el vidrio se finge con rgba + bordes. */
 *{box-sizing:border-box;margin:0;padding:0}
@@ -3595,10 +3595,10 @@ html.light body .top.mm-ho-root .mm-top-actions .mm-theme{background:transparent
   margin:13px 0 0;padding:10px 12px;
   border-left:2px solid var(--gain);background:rgba(92,186,134,.06);
   border-radius:0 6px 6px 0;color:var(--txt);
-  font:500 .77rem/1.5 var(--f-ui);
+  font:500 var(--mm-sales-explanation-size)/1.6 var(--f-ui);
 }
 #pSum .pk-compress-prompt{border-top:1px solid var(--line2);margin-top:14px;padding-top:12px}
-#pSum .pk-compress-prompt p{margin:0 0 11px;font:450 .77rem/1.5 var(--f-ui);color:var(--mut)}
+#pSum .pk-compress-prompt p{margin:0 0 11px;font:450 var(--mm-sales-explanation-size)/1.6 var(--f-ui);color:var(--mut)}
 #pSum .pk-compress-action{
   min-height:38px;padding:8px 12px;border:1px solid rgba(217,119,87,.37);
   border-radius:7px;background:rgba(217,119,87,.09);color:var(--txt);
@@ -3619,17 +3619,17 @@ html.light body .top.mm-ho-root .mm-top-actions .mm-theme{background:transparent
 #pSum #unitCourierRows .mm-freight-item{padding:0;border:0}
 #pSum #unitCourierRows .mm-freight-ident b{font:650 .84rem/1.4 var(--f-ui)}
 #pSum .mm-freight-result{display:flex;justify-content:space-between;gap:14px;align-items:baseline;padding-top:2px}
-#pSum .mm-freight-result span{color:var(--mut);font:500 .76rem/1.3 var(--f-ui)}
+#pSum .mm-freight-result span{color:var(--mut);font:500 var(--mm-sales-label-size)/1.4 var(--f-ui)}
 #pSum .mm-freight-result strong{font:750 clamp(.93rem,1.2vw,1.1rem)/1.32 var(--f-num);color:var(--gain);text-align:right}
 #pSum .mm-freight-result strong.neg{color:var(--loss)}
 #pSum .mm-freight-detail{border-top:1px solid var(--line2);padding-top:8px}
-#pSum .mm-freight-detail>summary{list-style:none;cursor:pointer;color:var(--mut);font:600 .74rem/1.4 var(--f-ui)}
+#pSum .mm-freight-detail>summary{list-style:none;cursor:pointer;color:var(--mut);font:600 var(--mm-sales-question-size)/1.45 var(--f-ui)}
 #pSum .mm-freight-detail>summary::-webkit-details-marker{display:none}
 #pSum .mm-freight-detail>summary::after{content:'⌄';display:inline-block;margin-left:8px;transition:transform .15s}
 #pSum .mm-freight-detail[open]>summary::after{transform:rotate(180deg)}
 #pSum .mm-freight-detail .mm-freight-equation{margin-top:12px}
 #pSum .mm-freight-detail .mm-freight-foot{margin-top:12px}
-#pSum #unitCourierRows .mm-freight-note{padding-top:4px;font:450 .74rem/1.5 var(--f-ui)}
+#pSum #unitCourierRows .mm-freight-note{padding-top:4px;font:450 var(--mm-sales-explanation-size)/1.6 var(--f-ui)}
 @media(max-width:980px){
   #pSum .mm-decision-grid{grid-template-columns:minmax(0,1fr)}
   #pSum .mm-decision-card{padding:17px!important}
@@ -3652,7 +3652,7 @@ html.light body .top.mm-ho-root .mm-top-actions .mm-theme{background:transparent
 #verdict .ov-hd .mm-section-head{margin:0!important}
 #verdict .mm-route-choice{display:flex;flex-wrap:wrap;align-items:center;gap:7px 11px;min-width:0;margin-left:38px}
 #verdict .mm-route-choice[hidden]{display:none!important}
-#verdict .mm-route-caption{color:var(--mut);font:600 .76rem/1.4 var(--f-ui)}
+#verdict .mm-route-caption{color:var(--mut);font:600 var(--mm-sales-label-size)/1.4 var(--f-ui)}
 #verdict .mm-route-choice .v-what{
   display:inline-block;margin:0!important;padding:5px 9px!important;
   border-radius:6px!important;vertical-align:baseline!important;
@@ -3663,12 +3663,12 @@ html.light body .top.mm-ho-root .mm-top-actions .mm-theme{background:transparent
 #verdict .mm-net-label[hidden]{display:none!important}
 #verdict .v-isk{font-size:clamp(2rem,3.5vw,3.45rem)!important;letter-spacing:-.04em;white-space:normal!important;overflow-wrap:anywhere}
 #verdict .v-isk span{font-size:.38em!important;letter-spacing:0!important;white-space:nowrap}
-#verdict .mm-net-context{display:block;max-width:39ch;color:var(--mut);font:450 .73rem/1.5 var(--f-ui);text-align:right}
+#verdict .mm-net-context{display:block;max-width:39ch;color:var(--mut);font:450 var(--mm-sales-explanation-size)/1.6 var(--f-ui);text-align:right}
 #verdict .v-cap{width:100%;margin:0!important;max-width:none!important;padding:0!important;color:var(--txt)!important}
 #verdict .v-finance{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,215px),1fr));gap:0;margin:0;padding:0;border:1px solid var(--line2);border-radius:8px;background:var(--surface-card)}
 #verdict .v-finance-item{flex:none;min-width:0;gap:6px;padding:14px 17px!important;border-right:1px solid var(--line2);border-bottom:0}
 #verdict .v-finance-item:last-child{border-right:0}
-#verdict .v-finance-item small{letter-spacing:.025em!important;text-transform:none!important;font-size:.74rem!important}
+#verdict .v-finance-item small{letter-spacing:.025em!important;text-transform:none!important;font-size:var(--mm-sales-label-size)!important}
 #verdict .v-finance-item strong{font-size:clamp(.94rem,1.2vw,1.08rem)!important}
 #verdict #vFinanceDetails{
   margin:0!important;padding:0!important;background:var(--surface-card)!important;
@@ -3677,7 +3677,7 @@ html.light body .top.mm-ho-root .mm-top-actions .mm-theme{background:transparent
 #verdict #vFinanceDetails>summary{
   display:flex;align-items:center;justify-content:space-between;gap:12px;
   min-height:44px;padding:11px 16px;cursor:pointer;list-style:none;
-  color:var(--mut);font:600 .78rem/1.45 var(--f-ui);
+  color:var(--mut);font:600 var(--mm-sales-question-size)/1.45 var(--f-ui);
 }
 #verdict #vFinanceDetails>summary::-webkit-details-marker{display:none}
 #verdict #vFinanceDetails>summary::after{content:'⌄';font-size:1.06rem;line-height:1;transition:transform .15s}
@@ -3685,7 +3685,7 @@ html.light body .top.mm-ho-root .mm-top-actions .mm-theme{background:transparent
 #verdict #vFinanceDetails>summary:hover{color:var(--txt)}
 #verdict #vFinanceDetails>summary:focus-visible{outline:2px solid var(--ion);outline-offset:-3px}
 #verdict .mm-finance-details-body{padding:14px 16px 17px;border-top:1px solid var(--line2)}
-#verdict .mm-finance-details-body h4{color:var(--mut);font-size:.73rem}
+#verdict .mm-finance-details-body h4{color:var(--mut);font-size:var(--mm-sales-label-size)}
 #verdict .mm-finance-details-body .ov-bar{height:10px}
 
 #pSum .mm-decision-grid{gap:12px;margin:16px 0 12px}
@@ -3706,9 +3706,9 @@ html.light body .top.mm-ho-root .mm-top-actions .mm-theme{background:transparent
 #pSum #bDeep:hover,#pSum #bDeep[aria-expanded="true"]{border-color:var(--clay)!important;background:var(--surface-panel)!important}
 #pSum #bDeep .step-toggle-copy strong{font-size:.88rem!important;letter-spacing:0!important;text-transform:none!important}
 #pSum #bDeep .step-toggle-copy small{font-size:.76rem!important}
-#pSum #unitCourierRows .mm-freight-empty{color:var(--mut);font:500 .8rem/1.55 var(--f-ui);margin:0}
+#pSum #unitCourierRows .mm-freight-empty{color:var(--mut);font:500 var(--mm-sales-explanation-size)/1.6 var(--f-ui);margin:0}
 #pSum .mm-freight-extra{border-top:1px solid var(--line2);padding-top:10px}
-#pSum .mm-freight-extra>summary{min-height:32px;cursor:pointer;color:var(--txt);font:650 .77rem/1.45 var(--f-ui);list-style:none}
+#pSum .mm-freight-extra>summary{min-height:32px;cursor:pointer;color:var(--txt);font:650 var(--mm-sales-question-size)/1.45 var(--f-ui);list-style:none}
 #pSum .mm-freight-extra>summary::-webkit-details-marker{display:none}
 #pSum .mm-freight-extra>summary::after{content:'⌄';display:inline-block;margin-left:8px;transition:transform .15s}
 #pSum .mm-freight-extra[open]>summary::after{transform:rotate(180deg)}
@@ -4045,7 +4045,7 @@ body:not(.is-flip) .fact-buy-order{display:none!important}
 #pSum .pk-headline-grid{display:grid;gap:7px}
 #pSum .pk-headline-stat{min-width:0}
 #pSum .pk-headline-stat small{
-  display:block;color:var(--mut);font:700 .7rem/1.4 var(--f-ui);
+  display:block;color:var(--mut);font:700 var(--mm-sales-label-size)/1.4 var(--f-ui);
   letter-spacing:.045em;text-transform:uppercase;
 }
 #pSum .pk-headline-stat strong{
@@ -4055,7 +4055,7 @@ body:not(.is-flip) .fact-buy-order{display:none!important}
 #pSum .pk-headline-stat:first-child strong.pos{color:var(--gain)}
 #pSum .pk-headline-stat:first-child strong.neg{color:var(--loss)}
 #pSum .pk-headline-stat+.pk-headline-stat strong{font-size:.81rem;font-weight:600;line-height:1.45}
-#pSum .pk-headline-note{margin:0;color:var(--mut);font:500 .8rem/1.5 var(--f-ui)}
+#pSum .pk-headline-note{margin:0;color:var(--mut);font:500 var(--mm-sales-explanation-size)/1.6 var(--f-ui)}
 #pSum #pkOpportunity .pk-opp-head{margin-bottom:8px!important}
 #pSum .mm-decision-grid:has(>#pkOpportunity[hidden]):has(>#unitCourierBox[hidden]){display:none}
 @media(max-width:760px){
@@ -4073,13 +4073,13 @@ body:not(.is-flip) .fact-buy-order{display:none!important}
    All fine-detail controls remain lazy and behind native disclosures. */
 #ledger{--mm-item-inset:#1c1b1a}
 #ledger .ledger-tools{justify-content:space-between;margin:15px 0 13px}
-#ledger .ledger-tools .lead{flex:1 1 370px;max-width:68ch;font:450 .82rem/1.55 var(--f-ui)}
+#ledger .ledger-tools .lead{flex:1 1 370px;max-width:68ch;font:450 var(--mm-sales-explanation-size)/1.6 var(--f-ui)}
 #ledger .ledger-head{
   display:flex!important;align-items:center!important;flex-wrap:wrap;justify-content:flex-start;
   gap:5px 9px!important;grid-template-columns:none!important;
   padding:8px 0 11px!important;border-bottom:1px solid var(--line2);
 }
-#ledger .ledger-sort-title{margin-right:6px;color:var(--mut);font:700 .69rem/1.4 var(--f-ui);letter-spacing:.055em}
+#ledger .ledger-sort-title{margin-right:6px;color:var(--mut);font:700 var(--mm-sales-label-size)/1.4 var(--f-ui);letter-spacing:.055em}
 #ledger .ledger-head .ledger-sort{
   display:inline-flex!important;flex:0 1 auto;width:auto;min-height:34px;
   padding:6px 10px;border:1px solid transparent;border-radius:7px;
@@ -4112,15 +4112,15 @@ body:not(.is-flip) .fact-buy-order{display:none!important}
 #ledger #lots .lot-name img.ti{width:34px;height:34px;max-width:none;flex:none;margin:0;border-radius:7px}
 #ledger #lots .lot-name .tag{margin:0;font-size:.68rem}
 #ledger #lots .lot-meta{display:flex;flex-wrap:wrap;gap:6px 12px;align-items:center;min-width:0}
-#ledger #lots .lot-qty{font:500 .79rem/1.4 var(--f-ui);color:var(--mut);white-space:nowrap}
+#ledger #lots .lot-qty{font:500 var(--mm-sales-label-size)/1.4 var(--f-ui);color:var(--mut);white-space:nowrap}
 #ledger #lots .lot-dest{
   justify-self:start;padding:2px 7px;border-radius:6px!important;
-  font:.72rem/1.4 var(--f-ui);white-space:normal;overflow-wrap:anywhere;
+  font:var(--mm-sales-label-size)/1.4 var(--f-ui);white-space:normal;overflow-wrap:anywhere;
   background:var(--hull)!important;border:1px solid var(--line2)!important;color:var(--txt)!important;
 }
 #ledger #lots .lot-dest.p-none{color:var(--loss)!important}
 #ledger #lots .lot-open .chev{grid-area:auto;justify-self:center;flex:none}
-#ledger #lots .lot-k{display:block;margin:0 0 7px;color:var(--mut);font:700 .68rem/1.35 var(--f-ui);letter-spacing:.035em}
+#ledger #lots .lot-k{display:block;margin:0 0 7px;color:var(--mut);font:700 var(--mm-sales-label-size)/1.4 var(--f-ui);letter-spacing:.035em}
 #ledger #lots .lot-pp{grid-area:auto!important;display:block;justify-self:stretch!important;min-width:0}
 #ledger #lots .lot-pp .copy{
   width:100%!important;min-height:44px;margin:0!important;padding:9px 12px!important;
@@ -4156,7 +4156,7 @@ body:not(.is-flip) .fact-buy-order{display:none!important}
 #ledger #lots .lot-body>.prices>summary,#ledger #lots .lot-detail-section>summary{
   display:flex;align-items:center;gap:12px;list-style:none;cursor:pointer;
   min-height:45px;padding:11px 14px!important;margin:0!important;
-  color:var(--txt)!important;font:650 .83rem/1.4 var(--f-ui)!important;
+  color:var(--txt)!important;font:650 var(--mm-sales-question-size)/1.45 var(--f-ui)!important;
 }
 #ledger #lots .lot-body>.prices>summary::-webkit-details-marker,#ledger #lots .lot-detail-section>summary::-webkit-details-marker{display:none}
 #ledger #lots .lot-body>.prices>summary::after,#ledger #lots .lot-detail-section>summary::after{
@@ -4169,11 +4169,11 @@ body:not(.is-flip) .fact-buy-order{display:none!important}
 #ledger #lots .lot-body>.prices[open]>summary,#ledger #lots .lot-detail-section[open]>summary{border-bottom:1px solid var(--line2)}
 #ledger #lots .lot-analysis .opts{display:grid;padding:13px 15px;gap:10px}
 #ledger #lots .lot-adjustments>.facts{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:13px!important;padding:15px!important;min-width:0}
-#ledger #lots .lot-adjustments>.facts>.fact{min-width:0;display:flex;flex-direction:column;gap:7px;color:var(--mut);font:.8rem/1.4 var(--f-ui)}
+#ledger #lots .lot-adjustments>.facts>.fact{min-width:0;display:flex;flex-direction:column;gap:7px;color:var(--mut);font:var(--mm-sales-label-size)/1.4 var(--f-ui)}
 #ledger #lots .lot-adjustments>.facts input{width:100%;height:40px;min-width:0;text-align:right}
 #ledger #lots .lot-adjustments>.facts b{color:var(--txt);font:650 .92rem var(--f-num)}
 #ledger #lots .lot-adjustments .gwrap{margin:0 15px 15px!important}
-#ledger #lots .lot-adjustments .gwrap>summary{color:var(--txt)!important;font:650 .78rem/1.4 var(--f-ui)!important}
+#ledger #lots .lot-adjustments .gwrap>summary{color:var(--txt)!important;font:650 var(--mm-sales-question-size)/1.45 var(--f-ui)!important}
 #ledger #lots .lot-adjustments .gwrap>summary::after{
   width:var(--mm-chevron-size);height:var(--mm-chevron-size);
   border-right:var(--mm-chevron-stroke) solid var(--mut);border-bottom:var(--mm-chevron-stroke) solid var(--mut);
@@ -4213,10 +4213,10 @@ html.light #ledger #lots .lot-pp .copy:hover:not(:disabled){background:#e3e0da!i
   #ledger #lots .lot-body>.prices tr.pr-route>td:first-child{grid-column:1;font-size:.86rem}
   #ledger #lots .lot-body>.prices tr.pr-route>td:nth-child(2){grid-column:1;grid-row:2}
   #ledger #lots .lot-body>.prices tr.pr-route>td:nth-child(4){grid-column:1;grid-row:3;font-weight:650}
-  #ledger #lots .lot-body>.prices tr.pr-route>td:nth-child(3){grid-column:1;grid-row:4;font-size:.74rem;line-height:1.5;color:var(--mut)}
+  #ledger #lots .lot-body>.prices tr.pr-route>td:nth-child(3){grid-column:1;grid-row:4;font-size:var(--mm-sales-explanation-size);line-height:1.6;color:var(--mut)}
   #ledger #lots .lot-body>.prices tr.pr-route>td[data-label]::before{
     content:attr(data-label);display:block;margin-bottom:5px;
-    color:var(--mut);font:700 .62rem/1.4 var(--f-ui);letter-spacing:.025em;
+    color:var(--mut);font:700 var(--mm-sales-label-size)/1.4 var(--f-ui);letter-spacing:.025em;
   }
   #ledger #lots .lot-body>.prices tr.pr-route .copy{
     display:block;width:100%!important;min-width:0!important;text-align:left!important;
@@ -4236,12 +4236,19 @@ html.light #ledger #lots .lot-pp .copy:hover:not(:disabled){background:#e3e0da!i
   #ledger #lots .lot-body>.prices>summary::after,#ledger #lots .lot-detail-section>summary::after{transition:none}
 }
 
+/* B.5b: semantic typography shared by Sales sections only. Question/answer
+   density must not resize primary headings, ISK results or action controls. */
+#verdict,#pSum,#ledger{
+  --mm-sales-question-size:.84375rem;    /* 13.5px at the default root size */
+  --mm-sales-explanation-size:.8125rem; /* 13px */
+  --mm-sales-label-size:.78125rem;      /* 12.5px */
+}
 /* B.5: answer the four money/reprocessing questions at a glance; keep
    explanations available but collapsed. Compatible with both themes. */
 #verdict #vCap .v-finance-item.mm-cost-item{background:var(--surface-panel)}
 #verdict #vCap .mm-cost-included{
   margin:10px 0 8px;color:var(--txt);opacity:.82;
-  font:500 .87rem/1.6 var(--f-ui)
+  font:500 var(--mm-sales-explanation-size)/1.6 var(--f-ui)
 }
 #verdict #vCap .mm-context-help{
   margin:7px 0 0;border:1px solid var(--line2);border-radius:8px;
@@ -4250,7 +4257,7 @@ html.light #ledger #lots .lot-pp .copy:hover:not(:disabled){background:#e3e0da!i
 #verdict #vCap .mm-context-help>summary{
   list-style:none;display:flex;align-items:center;gap:12px;
   min-height:47px;padding:13px 16px;cursor:pointer;color:var(--txt);
-  font:650 1rem/1.45 var(--f-ui)
+  font:650 var(--mm-sales-question-size)/1.45 var(--f-ui)
 }
 #verdict #vCap .mm-context-help>summary::-webkit-details-marker{display:none}
 #verdict #vCap .mm-context-help>summary::after{
@@ -4272,11 +4279,11 @@ html.light #ledger #lots .lot-pp .copy:hover:not(:disabled){background:#e3e0da!i
 }
 #verdict #vCap .mm-context-part>p{
   max-width:100ch;margin:7px 0 0;color:var(--txt);opacity:.86;
-  font:450 .92rem/1.65 var(--f-ui)
+  font:450 var(--mm-sales-explanation-size)/1.65 var(--f-ui)
 }
 #verdict #vCap .mm-cost-source{
   max-width:100ch;margin:15px 0;color:var(--txt);opacity:.76;
-  font:450 .84rem/1.6 var(--f-ui)
+  font:450 var(--mm-sales-explanation-size)/1.6 var(--f-ui)
 }
 #verdict #vCap .mm-cost-settings{
   display:inline-flex;min-height:40px;align-items:center;
@@ -4291,13 +4298,13 @@ html.light #ledger #lots .lot-pp .copy:hover:not(:disabled){background:#e3e0da!i
   padding:14px 16px;background:var(--surface-panel);
   border:1px solid var(--line2);border-radius:9px
 }
-#verdict #vCap .mm-rep-question{color:var(--txt);opacity:.8;font:650 .89rem/1.45 var(--f-ui)}
+#verdict #vCap .mm-rep-question{color:var(--txt);opacity:.8;font:650 var(--mm-sales-question-size)/1.45 var(--f-ui)}
 #verdict #vCap .mm-rep-answer{
   color:var(--txt);font:700 clamp(1.04rem,1.3vw,1.18rem)/1.45 var(--f-ui);
   overflow-wrap:anywhere
 }
 #verdict #vCap .mm-rep-sub{
-  margin:4px 0 0;color:var(--txt);opacity:.82;font:500 .9rem/1.6 var(--f-ui)
+  margin:4px 0 0;color:var(--txt);opacity:.82;font:500 var(--mm-sales-explanation-size)/1.6 var(--f-ui)
 }
 #verdict #vCap .mm-rep-decision .mm-rep-help{margin-top:9px}
 html.light #verdict #vCap .mm-rep-decision,
@@ -4313,7 +4320,8 @@ html.light #verdict #vCap .v-finance-item.mm-cost-item{background:var(--surface-
 #ledger>.mm-inline-faq>summary,#pSum>.mm-inline-faq>summary,
 #unitCourierBox>.mm-inline-faq>summary{
   display:flex;align-items:center;gap:10px;cursor:pointer;list-style:none;
-  color:var(--txt);min-height:47px;padding:13px 15px;font:650 1rem/1.5 var(--f-ui)
+  color:var(--txt);min-height:47px;padding:13px 15px;
+  font:650 var(--mm-sales-question-size)/1.5 var(--f-ui)
 }
 #ledger>.mm-inline-faq>summary::-webkit-details-marker,
 #pSum>.mm-inline-faq>summary::-webkit-details-marker,
@@ -4331,7 +4339,7 @@ html.light #verdict #vCap .v-finance-item.mm-cost-item{background:var(--surface-
 #ledger>.mm-inline-faq>p,#pSum>.mm-inline-faq>p,
 #unitCourierBox>.mm-inline-faq>p{
   margin:0;border-top:1px solid var(--line2);padding:14px 15px;
-  color:var(--txt);opacity:.86;font:450 .92rem/1.65 var(--f-ui)
+  color:var(--txt);opacity:.86;font:450 var(--mm-sales-explanation-size)/1.65 var(--f-ui)
 }
 #ledger>.mm-inline-faq>summary:focus-visible,#pSum>.mm-inline-faq>summary:focus-visible,
 #unitCourierBox>.mm-inline-faq>summary:focus-visible{outline:2px solid var(--ion);outline-offset:-3px}
@@ -6476,13 +6484,13 @@ Contraband Freight = no</textarea><small>Una regla por línea: Nombre = tax tota
 <button type="button" class="totop" id="toTop" aria-label="Volver arriba" title="Volver arriba (Inicio)" hidden><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 14l6-6 6 6"/></svg></button>
 <footer class="foot">
   <p class="foot-sec"><span class="ic i-lock" aria-hidden="true"></span>Tu inventario no se guarda: al cerrar o recargar se borra. Solo tus Ajustes quedan en este navegador.</p>
-  <div class="foot-by">Creado por <b>Fiko McGivert</b> · Vanguardia DR · SIGMA GRINDSET · <span class="ver">v1.0.131</span></div>
+  <div class="foot-by">Creado por <b>Fiko McGivert</b> · Vanguardia DR · SIGMA GRINDSET · <span class="ver">v1.0.132</span></div>
 </footer>
 
 <script>
 'use strict';
 /* ============================================================
-   Market Moves+ v1.0.131 — SIGMA GRINDSET / Vanguardia DR
+   Market Moves+ v1.0.132 — SIGMA GRINDSET / Vanguardia DR
    Flujo:  pegado → items → carga (ESI: precios, volúmenes, historial) → verificación → plan → vista
      1. Pegado      parsePaste(): parser posicional de columnas de EVE (Name · Quantity · … · Volume · Est. Price).
      2. Carga       esiItems(): trae todo lo que falta; mientras carga, refresh() NO pinta (S.loading).
