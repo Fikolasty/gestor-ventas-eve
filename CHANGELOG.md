@@ -1,3 +1,8 @@
+## v1.0.131 — 2026-10-25 [ChatGPT] · Legibilidad contextual B.5a antes de C.1 (candidato)
+
+- Mejora focalizada de las preguntas y explicaciones de Ventas: preguntas desplegables y FAQ a **16 px**, subtítulos a **~15 px**, párrafos explicativos a **~14,7 px**, textos de fuentes **~13,4 px**, mayor contraste y aire entre líneas. Reprocesamiento y notas de costos también ganan legibilidad sin alterar importes, fórmulas ni los controles existentes.
+- CSS modular `src/styles/80-product-ux.css`, versión del ensamblado y workflows `1.0.131`, test estático de escala y Chromium con tamaños computados en ES/EN, Dark/Light y 390/630/1440. **Candidato hasta confirmar QA, GitHub Actions y GitHub Pages; v1.0.130 continúa siendo la última versión pública verificada**.
+
 ## v1.0.130 — 2026-10-25 [ChatGPT] · B.5 publicada y verificada en GitHub Pages
 - «LA MEJOR RUTA»: muestra impuestos y comisiones, envío, tarifa de refinería y otros costes **ya incluidos** en el resultado neto. Un desplegable explica tasas efectivas configuradas, Accounting, broker/SCC, relists, courier y origen de las cifras, sin afirmar que las habilidades manuales provienen de un piloto verificado. Import `fN` incorpora tasas en su precio neto: se marca como desglose parcial/no separable, no un falso cero.
 - «¿DEBO REPROCESAR?»: respuesta visible Sí/No/datos insuficientes, justificación y diferencias en ISK. La comparación marginal **usa el courier real del plan completo** y recalcula saltos de contrato/colateral manteniendo los demás ítems en sus rutas; sustituye la comparación preliminar basada en flete prorrateado. No cambia la ruta del motor ni fuerza planes manuales.

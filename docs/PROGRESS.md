@@ -1,5 +1,11 @@
 # PROGRESS — Market Moves+
 
+## 2026-10-25 — B.5a legibilidad del contenido contextual (v1.0.131 en preparación)
+
+**Observación de Geiner antes de C.1:** las preguntas y explicaciones económicas de B.5 parecen secundarias por su letra pequeña y bajo énfasis. Corrección acotada en `src/styles/80-product-ux.css`: preguntas FAQ/disclosures a 16px, títulos interiores ~15px, explicaciones ~14,7px con interlineado 1.65 y contraste neutro mejorado; pistas de fuente ~13,4px, notas de reprocesado ~14px. Sin cambios en datos, ESI/SSO, i18n, cálculos, DOM ni comportamiento de acordeones.
+
+**Criterio de salida:** nueva compilación v1.0.131; pruebas financieras, funcionales y Chromium ES/EN, Dark/Light, 390/630/1440 sin overflow; publicar solamente mediante Fiko con HEAD esperado y sin force; certificar cuatro Actions y HTML servido por Pages antes de declarar LIVE. **Base certificada al inicio: v1.0.130**, `main=7271a78882036e830783c048aed8eff375c489a1`, clon de trabajo nuevo y limpio aislado de los respaldos previos. C.1 permanece pendiente.
+
 ## 2026-10-25 — v1.0.130 LIVE: B.5, CI/Pages/HTTPS confirmados
 
 **Publicado por la identidad correcta Fiko/Fikolasty:** `main` seguía en `d5023d6ab7d5e02c8bd321ac18bb5e8ee7c02948`. Se validaron **15 blobs fuente** por `git hash-object` y API de GitHub, con árbol `2b12d6715c2e61580b44a4ebc0cef21846edcc91`, commit **`910d8f950ce4f93cede56df13df8735196ec0403`**, protección `expected_sha` y `force:false`. Se excluyeron del árbol el HTML generado y las capturas locales. El bot CI creó el compilado **`ff842ec9ff03079a888009784b78bed7d660b8b5`**, hijo de la fuente, con `index.html` y `docs/QA_STATUS.md` actualizado.

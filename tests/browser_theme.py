@@ -1044,6 +1044,32 @@ class ThemeBrowserTests(unittest.TestCase):
                 self.page.set_viewport_size({'width':width,'height':900})
                 for light in (False,True):
                     self.page.evaluate('(on)=>document.documentElement.classList.toggle("light",on)',light)
+                    type_scale=self.page.evaluate("""() => {
+                        const px=selector=>{
+                            const element=document.querySelector(selector);
+                            if(!element) throw new Error('Missing B.5 typography: '+selector);
+                            return parseFloat(getComputedStyle(element).fontSize);
+                        };
+                        return {
+                            question:px('#vCap .mm-context-help>summary'),
+                            subheading:px('#vCap .mm-context-part>strong'),
+                            explanation:px('#vCap .mm-context-part>p'),
+                            source:px('#vCap .mm-cost-source'),
+                            included:px('#vCap .mm-cost-included'),
+                            repQuestion:px('#vCap .mm-rep-question'),
+                            repAnswer:px('#vCap .mm-rep-answer'),
+                            repSub:px('#vCap .mm-rep-sub'),
+                            faqQuestion:px('#pSum>.mm-inline-faq>summary'),
+                            faqAnswer:px('#pSum>.mm-inline-faq>p')
+                        };
+                    }""")
+                    for label,minimum in {
+                        'question':16,'subheading':15,'explanation':14.5,
+                        'source':13,'included':13.5,'repQuestion':14,
+                        'repAnswer':16,'repSub':14,'faqQuestion':16,'faqAnswer':14.5
+                    }.items():
+                        self.assertGreaterEqual(type_scale[label],minimum,
+                                                f'{language}/{width}/{light} {label}: {type_scale}')
                     dims=self.page.locator('#vCap').evaluate("""el => {
                         const root=el.getBoundingClientRect(),wide=[...el.querySelectorAll('*')]
                             .filter(n=>n.getBoundingClientRect().right>innerWidth+2).length;
