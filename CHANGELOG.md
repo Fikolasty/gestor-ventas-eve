@@ -4,6 +4,7 @@
 - Conserva dos tarjetas de decisión simétricas: comparación de rutas y coste real de courier. Si el plan no tiene transporte asignado, la segunda explica el coste de 0 ISK. Para lotes grandes se ven dos ítems y el resto se expande con un control accesible.
 - Lleva la alternativa rápida detrás del análisis principal y aclara «Ver pasos para vender», reutilizando los controles originales; incorpora microcopy y atributos bilingües mediante `src/i18n/ui.json`, soporte Dark/Light y responsive.
 - Añade regresión estática `tests/sales-pilot.test.cjs` y validación de navegador con fixture sintético en `tests/browser_theme.py`; versiones de workflows actualizadas a 1.0.125. No cambia `src/js/domain/*`, ESI, SSO, persistencia ni las fórmulas de ISK.
+- Publicación confirmada: fuente `5df575a4`, corrección de fixture de test `0dba2dc8`, compilación `6721fc31`, 26 Chromium y GitHub Pages correctos en la ejecución `40171076176`. Primer intento bloqueado por una expectativa de test equivocada, sin despliegue parcial; blob final exacto `97db1a66`.
 
 ## v1.0.124 — 2026-10-25 [ChatGPT]
 - Corrige la recomendación para 1.400–1.520 unidades de hielo Krystallos: el plan compara valor neto del dueño después de impuestos, reproceso, compresión y tarifa real SIGMA Freight (incluidos los saltos de contratos de 350.000 m³). La ruta comprimida cotiza **Compressed Krystallos** como item distinto en ESI, con volumen verificado y liquidez propia; la opción se activa solo si el piloto confirma acceso a compresión y su coste.

@@ -1,6 +1,6 @@
 # Market Moves+ — propuesta de pantalla piloto (revisión antes de implementar)
 
-**Fecha:** 2026-10-25 · **Estado:** dirección aprobada por el propietario; piloto v1.0.125 implementado localmente, pendiente de QA Chromium y publicación verificada.
+**Fecha:** 2026-10-25 · **Estado:** dirección aprobada por el propietario; piloto v1.0.125 publicado y CI/Pages verificados en `40171076176`.
 
 **Normas:** `EVE_PRODUCT_DESIGN_PROTOCOL.md`, `DSS.md`, `ARCHITECTURE.md`. La aprobación recibida cubre esta pantalla piloto, no una reforma global de las demás vistas.
 
@@ -53,4 +53,6 @@ Pantalla piloto: **Ventas / Resultado y selección de plan**, desde `#verdict` h
 
 **Implementación local:** `#vWhat` se muestra dentro de `#vRouteW` sin duplicar rutas; `#vEstimate` distingue estimación de ganancia. El contenido original `#ovFlow`/`#ovDest` permanece dentro de `#vFinanceDetails`, abierto por acción del usuario y calculado desde el mismo `P`. `#pkShortcut` queda después de la comparación principal; `#unitCourierBox` explica también la ausencia de coste, y agrupa ítems a partir del tercero bajo `details`. Se preservan `#bDeep`, `aria-controls`, DOM financiero, localización ES/EN y cálculos existentes.
 
-**QA local:** `python3 build.py 1.0.125`, 12 tests Node, 16 tests Python, suites heredadas de Minería/Skills/mercados y `git diff --check` aprobados. Chromium/Light/Dark/móvil se verificará en el workflow remoto; hasta entonces no debe declararse apto para live.
+**QA local:** `python3 build.py 1.0.125`, 12 tests Node, 16 tests Python, suites heredadas de Minería/Skills/mercados y `git diff --check` aprobados. Chromium no está disponible en el entorno local; su ejecución remota y la publicación quedan documentadas a continuación.
+
+**Resultado de entrega:** el segundo gate remoto aprobó 26 tests Chromium en ES/EN, Dark/Light y 1440/390 px, y el despliegue de Pages finalizó correctamente. Fuente `0dba2dc8`, build `6721fc31`, blob `index.html` idéntico a reconstrucción local (`97db1a66`). El primer intento se detuvo por una fixture que no reiniciaba un `<details>` al cambiar de idioma, corregida sin modificar aplicación ni cálculos. El piloto puede evaluarse ahora en <https://fikolasty.github.io/gestor-ventas-eve/>. Sigue pendiente aceptación humana visual, SSO y precios ESI reales.
