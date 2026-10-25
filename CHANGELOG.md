@@ -1,8 +1,8 @@
-## v1.0.129 — 2026-10-25 [ChatGPT] · B.4, candidato de publicación
+## v1.0.129 — 2026-10-25 [ChatGPT] · B.4 publicada y verificada en GitHub Pages
 - «ELIGE TU PLAN»: la comparación de ISK adicionales o neto alternativo se integra en el encabezado, como en «LA RUTA MÁS RENTABLE», utilizando los mismos importes y rutas. Las advertencias importantes permanecen debajo; no se inventan ganancias con precios incompletos ni ventas a jugadores sin cotización firme.
 - «LISTADO DE ÍTEMS REGISTRADOS»: filas con iconos EVE, cantidad, ruta, **precio unitario copiable** en recuadro neutro de Contrato y **neto estimado del lote** diferenciado de la ganancia tras inversión. Detalles diferidos de precios/guía/ajustes/comparación, expansión por teclado y datos móviles verticales sin desbordamiento.
 - Traducciones ES/EN y nuevas regresiones B.4; pruebas de navegador 390/630/1440, Dark/Light. Preparados los workflows de v1.0.129, sin cambios económicos ni en EVE SSO/ESI o persistencia.
-- **Estado inicial:** candidato local en QA; no supone publicación verificada. Ver `docs/DSS.md` §14.
+- **QA y publicación confirmados:** 18 Node, 16 Python, 8 legacy, 35/35 Chromium y build; 15 blobs fuente por Fiko/Fikolasty, commit `3779d79e`, compilado CI `0258f38f`, cuatro Actions `success` (Pages `40231430480`). GitHub y web pública sirven el HTML `v1.0.129` con blob `1af23167` idéntico al build local (2.231.495 bytes). Ver `docs/DSS.md` §14. SSO/ESI reales y cotizaciones ejecutables continúan sin certificado end-to-end.
 
 ## v1.0.128 — 2026-10-25 [ChatGPT] · Publicado y verificado en GitHub Pages
 - Consolida las flechas de los acordeones de Minería y los planes/filas de Skills con el mismo contrato ya aprobado de Ventas: 9 px, trazo CSS 1,75 px, color neutro y giro al abrir. Minería mantiene el icono «ⓘ» como ayuda y Skills sigue aislado en su iframe y sincronizado con tema/idioma.

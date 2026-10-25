@@ -1,5 +1,13 @@
 # PROGRESS — Market Moves+
 
+## 2026-10-25 — v1.0.129 LIVE: cierre de B.4 y certificación HTTPS
+
+**Publicación completada por Fiko/Fikolasty:** `main=76b9ad58` coincidió con la base verificada; se enviaron 15 blobs SHA idénticos a archivos locales, se creó árbol `e38cef710224bc234d87f028a845fac250cf53cc`, commit fuente `[ChatGPT] feat: B.4 ...` **`3779d79e749f84a76fccee76196dbf673d434860`** con `expected_sha` y `force:false`, sin incluir artefactos de capturas. El bot publicó `index.html` v1.0.129 y `docs/QA_STATUS.md` en commit **`0258f38f7b1a53f9835b3dc2d4f5947b8b282192`**.
+
+**Gates completos:** 18 Node, 16 Python, 8 regresiones legacy, 35/35 Chromium ES/EN Dark/Light 390/630/1440 y build 1.0.129 locales; CI también pasó. Las **cuatro Actions** son `success`: Minería `40231430415`, Build `40231430538`, Versiones `40231430561`, **Rebuild/Chromium/Pages `40231430480`**. La comprobación HTTP del job Pages y una descarga HTTPS separada de <https://fikolasty.github.io/gestor-ventas-eve/?verified=40231430480> confirman literal `v1.0.129`, 2.231.495 bytes y Git blob **`1af23167779fc322cf168006a0e14641929fbd0d` idéntico** al HTML local y GitHub. El propietario recibió aviso de disponibilidad live.
+
+**Continuidad:** B.4a cabecera y B.4b Listado ya publicados; esperar impresión visual de Geiner, luego C.1 depuración CSS focalizada y medible, después D rendimiento con perfiles reales. La ganancia de Trading sigue diferenciada del neto de venta. No se afirman cotizaciones ESI en tiempo real, SSO con piloto ni órdenes ejecutadas.
+
 ## 2026-10-25 — B.4 aprobada, v1.0.129 en preparación
 
 **Decisión de Geiner:** antes de C.1, la comparación económica de «Elige tu plan» pasa a su propio encabezado siguiendo «La ruta más rentable», y el «Listado de ítems registrados» adopta filas compactas, iconos EVE, recuadros neutros copiables como Contrato y desglose progresivo. Se preservan cálculos, copia numérica, entradas, ordenación, controles de edición y EVE SSO/ESI. Esta etapa se autorizó de forma expresa, junto con el permiso de publicar mejoras correctamente probadas desde **Fiko/Fikolasty**.
