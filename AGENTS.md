@@ -4,7 +4,7 @@ Antes de analizar o modificar este proyecto, leer completos y en este orden:
 
 1. `docs/EVE_PRODUCT_DESIGN_PROTOCOL.md` — reglas maestras de producto, UX/UI, ingeniería, dominio EVE, localización y verificación.
 2. `docs/DSS.md` — decisiones visuales vigentes, continuidad, publicación y límites del proyecto.
-3. `docs/PRODUCT_DESIGN_REFINEMENT.md` — continuidad del refinamiento: A+B.1 v1.0.126, B.2 v1.0.127, B.3 v1.0.128, B.4 v1.0.129, **B.5 v1.0.130**, **B.5a v1.0.131 LIVE** y **B.5b tipografía consistente de Ventas candidata v1.0.132**. C.1 y D pendientes; consultar DSS §§14–17 para QA/CI/Pages, tamaños tipográficos y límites económicos.
+3. `docs/PRODUCT_DESIGN_REFINEMENT.md` — continuidad del refinamiento: A+B.1 v1.0.126, B.2 v1.0.127, B.3 v1.0.128, B.4 v1.0.129, B.5 v1.0.130, B.5a v1.0.131 y **B.5b armonización tipográfica de Ventas v1.0.132 LIVE**. C.1 y D pendientes; consultar DSS §§14–17 para QA/CI/Pages, tamaños tipográficos y límites económicos.
 4. `docs/ARCHITECTURE.md`, `docs/SDD.md` y la parte pertinente de `docs/SPEC.md` — arquitectura, contratos de cálculo e historia técnica. Si un documento antiguo discrepa, comprobar el código y los tests actuales.
 
 ## Principios operativos

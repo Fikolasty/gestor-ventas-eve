@@ -1,8 +1,8 @@
-## v1.0.132 — 2026-10-25 [ChatGPT] · B.5b armonización tipográfica de Ventas (candidato)
+## v1.0.132 — 2026-10-25 [ChatGPT] · B.5b armonización tipográfica de Ventas, LIVE verificada
 
 - Escala tipográfica compartida y limitada a las secciones de Ventas (`#verdict`, `#pSum`, `#ledger`): preguntas/disclosures **13,5 px**, explicaciones **13 px**, etiquetas secundarias **12,5 px**. Se armonizan FAQ, deducciones, reproceso, desglose de courier, nota de precios y pequeños textos de Listado/selector de plan.
 - Sin cambiar cifras ISK, encabezados protagonistas, precios unitarios copiables, botones de acción, flechas, DOM, cálculo económico, ESI/SSO, almacenamiento, temas ni traducciones. `src/styles/80-product-ux.css` mantiene los tokens en un único alcance; nuevas aserciones estáticas y de Chromium protegen tamaños computados ES/EN, Dark/Light, 390/630/1440 y no herencia hacia Minería.
-- Versión de build y workflows **v1.0.132**. **Candidato local:** v1.0.131 sigue siendo la versión pública verificada hasta aprobar pruebas, CI, GitHub Pages y descarga HTTPS independiente.
+- Versión de build y workflows **v1.0.132**. **Publicación certificada:** 20 Node, 16 Python, 8 legacy y 37 Chromium; fuente `14a86d62245a8e63c1b8d676d4e1317088348868` por Fiko/Fikolasty con lease y sin force; CI bot `06cef2e1ca9b38586d073559645eadaa6c7bfad5`, cuatro Actions `success` (Rebuild/Pages `40243816765`). HTML de HTTPS público v1.0.132, **2.258.241 bytes**, blob `b52bdeb59dfd9bb6c7b2ee8fe100f856f224c7ab` igual al build local y GitHub. **LIVE.**
 
 ## v1.0.131 — 2026-10-25 [ChatGPT] · Legibilidad contextual B.5a, publicada y verificada en GitHub Pages
 

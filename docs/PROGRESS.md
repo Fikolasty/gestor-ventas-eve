@@ -1,12 +1,14 @@
 # PROGRESS — Market Moves+
 
-## 2026-10-25 — B.5b escala tipográfica de Ventas, candidato local v1.0.132
+## 2026-10-25 — B.5b escala tipográfica de Ventas, v1.0.132 LIVE y verificada
 
 **Aprobación:** después de revisar la legibilidad de v1.0.131, Geiner propuso preguntas a **13,5 px** y explicaciones a **13 px**, sin cambiar la jerarquía visual del resto. Tras dialogar sobre un sistema consistente sin uniformarlo todo, aprobó aplicar la armonización **primero a toda la sección Ventas**. Se define escala de preguntas/disclosures 13,5px, explicaciones/ayudas 13px, etiquetas 12,5px, preservando los títulos, importes ISK, controles principales y precios copiables. No se extiende a Minería, Skills ni Guía; adaptar esos módulos requerirá su propia revisión.
 
 **Implementación acotada:** `src/styles/80-product-ux.css` declara tres tokens solo bajo `#verdict,#pSum,#ledger`; reutilizados en FAQ, deducciones, reprocesado, notas de resultados, detalles de flete, listado y selector. Sin cambios JS, finanzas, Type IDs, ES/EN, EVE SSO/ESI, storage, temas ni semántica. `tests/b5-readable-typography.test.cjs` comprueba tokens y preservación de cifras; `tests/browser_theme.py` verifica tamaños computados y que no se heredan a Minería, Dark/Light, 390/630/1440, ES/EN, sin overflow. Build y workflows pasan a 1.0.132.
 
 **Gates pendientes antes de publicar:** Node, Python, 8 legacy y 37 Chromium, build, diff, capturas, identidad Fiko y lease de SHA, cuatro Actions y HTTPS público byte por byte. Base limpia `main=373bf2c5be85f027f2db1d579068781f2cda11df`, **v1.0.131 LIVE** al empezar. No informar v1.0.132 LIVE hasta completar esos gates. C.1/D siguen pendientes.
+
+**Cierre de gates — todos correctos:** 20 Node, 16 Python, 8 scripts legacy, 37 Chromium y build v1.0.132; CSS computado ES/EN, Dark/Light, 390/630/1440 con 13,5/13/12,5px según función, sin overflow ni herencia a Minería. Revisión de capturas móvil/escritorio realizada. GitHub Fiko/Fikolasty publicó **11 blobs SHA exactos**, árbol `8d1986777e410861c6cb28bdbfd4584cd74a49de`, fuente **`14a86d62245a8e63c1b8d676d4e1317088348868`** contra SHA esperado, sin force ni incluir artefactos generados. Bot CI publicó HTML/QA en **`06cef2e1ca9b38586d073559645eadaa6c7bfad5`**. Cuatro Actions `success`: Build `40243816904`, Minería `40243816777`, Versiones `40243816787` y **Rebuild/Chromium/Pages `40243816765`**. Descarga HTTPS independiente v1.0.132, banner intacto, **2.258.241 bytes**, blob **`b52bdeb59dfd9bb6c7b2ee8fe100f856f224c7ab`**, idéntico por `cmp` al build local y el GitHub remoto. **v1.0.132 LIVE**, Geiner avisado. EVE SSO/ESI real, órdenes, contratos y revisión humana universal no certificados por fixtures. C.1/D pendientes.
 
 ## 2026-10-25 — B.5a legibilidad contextual, v1.0.131 LIVE y verificada
 
