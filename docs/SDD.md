@@ -1,5 +1,7 @@
 # Market Moves+ — SDD / Bitácora maestra
 
+**Estándar gráfico y traspaso entre chats:** ver [DSS.md](DSS.md); actualizarlo obligatoriamente con cada cambio/commit/push.
+
 **Actualizado:** 2026-10-22 · **Estado:** documento vivo de Spec-Driven Development (SDD).
 **Repositorio:** [Fikolasty/gestor-ventas-eve](https://github.com/Fikolasty/gestor-ventas-eve) · **Entrega:** rama `main` · **App:** https://fikolasty.github.io/gestor-ventas-eve/
 **Base funcional vigente:** compilación `1.0.99` (GitHub Actions, commit generado `dbdbf0e5e22c`); dos modos de Ventas, escenario de materiales, coste de courier por unidad, Skills/Mining y regresiones. Quedan pruebas visuales y de mercado real pendientes; ver sección v1.0.98.

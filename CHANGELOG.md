@@ -1,3 +1,8 @@
+## v1.0.122 — 2026-10-24 [ChatGPT]
+- Recupera el acabado gráfico del header: Inicio con icono de casa, navegación y acciones con radio pequeño, Ajustes/Guía solo iconos, identidad/login como texto sin cápsula, margen inferior equilibrado y chevron fino en «Vender Ítems».
+- Conserva los controles originales, EVE SSO, idiomas, Dark/Light, flujos comerciales y datos. Se añade `docs/DSS.md` para estándares gráficos y continuidad obligatoria por commit.
+- Pruebas Node/Python aprobadas; validación visual Chromium pendiente porque no existe navegador de pruebas local.
+
 ## v1.0.121 — 2026-10-24 [ChatGPT]
 - Las cuatro rutas del panel de reproceso usan ahora el comparador compartido y pruebas contractuales confirman que el cargo ISK solo afecta rutas refinadas.
 - Corrige la sincronización del rendimiento al cambiar Reprocessing en Ajustes: la vista toma los niveles actuales antes de pintar, aunque el evento de cambio esté pendiente. Añade regresión específica del fallo de CI v1.0.120.

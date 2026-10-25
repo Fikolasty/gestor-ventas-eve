@@ -1,5 +1,13 @@
 # PROGRESS — Market Moves+
 
+## v1.0.122 — recuperación del acabado visual, 2026-10-24
+
+- Conforme a captura y requisitos explícitos: Inicio se expresa como icono de casa; se elimina pseudo-texto. Navegación y acciones dejan de ser pastillas; Ajustes/Guía conservan botones accesibles pero muestran solo iconos; identidad del piloto/login se ve como texto sin cápsula; selector Vender Ítems usa chevron geométrico y header deja espacio inferior regular.
+- Fuente `src/styles/80-product-ux.css`; sin reemplazar nodos DOM, sin tocar ESI, motores, persistencia o event listeners. `index.html` compilado v1.0.122.
+- DSS de continuidad creado: `docs/DSS.md`, que debe actualizarse **en cada cambio/commit/push futuro**. Referencia cruzada en SDD.
+- Pruebas: 18 suites Node, 16 Python, build y `git diff --check` aprobados. QA visual real desktop/móvil, dark/light, login/no-login pendiente por ausencia de Chromium local. No atribuir validez visual a la imagen conceptual.
+- La publicación sigue bloqueada por autenticación GitHub; cambios locales pendientes de sincronizar con `main` remoto.
+
 ## v1.0.121 — integración del reproceso, 2026-10-24
 
 - La tabla final de cuatro alternativas en Reproceso ordena rutas mediante `MaterialEconomy.choose`, el mismo comparador puro del motor. Añadidas regresiones de rutas: tarifa solo en reproceso, impuestos sobre bruto y coste en Minería. Resultado actualizado: 17 suites Node + 16 pruebas Python aprobadas.
