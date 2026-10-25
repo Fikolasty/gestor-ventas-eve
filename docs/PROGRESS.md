@@ -2,6 +2,7 @@
 
 ## v1.0.121 — integración del reproceso, 2026-10-24
 
+- La tabla final de cuatro alternativas en Reproceso ordena rutas mediante `MaterialEconomy.choose`, el mismo comparador puro del motor. Añadidas regresiones de rutas: tarifa solo en reproceso, impuestos sobre bruto y coste en Minería. Resultado actualizado: 17 suites Node + 16 pruebas Python aprobadas.
 - Corrección de CI antiguo: `paintRefineryProfile` sincroniza `readSkills(false)` antes del cálculo, eliminando la lectura obsoleta de `S.sk` cuando el control `skRep` cambia. Prueba de regresión Node añadida; prueba Chromium existente ampliada para verificar nivel 3.
 
 - Integrado `reproNets` con `MaterialEconomy.recover`: lotes completos, minerales enteros y remanentes; la tarifa ya no reduce cantidades.

@@ -50,7 +50,13 @@ function paintRefCmp(r,q,nets){
   card('En '+sys+' (Null)',(iceN?iceNullTxt():nullBaseTxt(r.key)),pct(C.nullNonMod)+'% de Jita Buy',nNo,nRe,false,'vendes en '+sys);
   card('En Jita (orden de venta)',(iceN&&C.ice.jitaMode==='split'?'Split':'Jita Sell'+(iceN?' −'+pct(C.under)+'%':'')),'Jita Sell'+(P.some(x=>isIce(x.m))&&C.ice.on?' −'+pct(C.under)+'%':''),jNo,jRe,true,'envías a Jita');
   // resultado final: las 4 opciones ordenadas
-  const all=[['Refinado en '+sys,nRe.net],['Sin Refinar en '+sys,nNo.net],['Refinado a Jita',jRe.net],['Sin Refinar a Jita',jNo.net]].sort((a,b)=>b[1]-a[1]);
+  const ranked=MaterialEconomy.choose([
+    {key:'refinedLocal',label:'Refinado en '+sys,net:nRe.net},
+    {key:'wholeLocal',label:'Sin Refinar en '+sys,net:nNo.net},
+    {key:'refinedJita',label:'Refinado a Jita',net:jRe.net},
+    {key:'wholeJita',label:'Sin Refinar a Jita',net:jNo.net}
+  ]);
+  const all=ranked.routes.map(x=>[x.label,x.net]);
   // conclusión: 4 tarjetas de la peor a la mejor (la última es la ganadora), con barra proporcional
   fin.append(el('h4','rx-fh',isIce(r.key)?'Conclusión: ¿Qué Hago con el Hielo?':'Conclusión: ¿Qué Hago con el Ore?'));
   const up=[...all].reverse(),mx=Math.max(1,...all.map(a=>a[1])),grid=el('div','rx-pod');
