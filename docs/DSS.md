@@ -51,6 +51,7 @@ Este DSS es el respaldo prioritario de **decisiones visuales, estado verificable
 | `8970211` | Integración del coste separado en Ventas y Minería (v1.0.121) | Node/Python aprobadas | No publicado |
 | `0111e1d` | Corrige sincronización de Reprocessing en preview + regresión del fallo CI | Node/Python aprobadas; Chromium no disponible local | No publicado |
 | `c168e54` | Comparador compartido de cuatro rutas y guardas de tarifa | 17 suites Node + 16 Python | No publicado |
+| `5b490a7` | Recuperación gráfica del header v1.0.122 + DSS | 18 suites Node + 16 Python; Chromium local no disponible | No publicado |
 
 **Bloqueo:** el clon local puede leer GitHub, pero `git push origin main` no recibió credenciales; el conector de GitHub tampoco proporcionó identificador de conexión en intentos anteriores. No afirmar sincronización. Mantener cambios en commits locales hasta habilitar escritura legítimamente.
 
@@ -71,3 +72,9 @@ Este DSS es el respaldo prioritario de **decisiones visuales, estado verificable
 | 2026-10-24 | Creado DSS de continuidad y restaurados estándares visuales expresos del usuario. Implementado acabado del header v1.0.122, pruebas estáticas y build. | 18 suites Node + 16 Python; sin publicación ni QA visual real |
 
 **Regla permanente:** añadir una fila aquí con cada nuevo cambio/commit/push de ChatGPT.
+
+## 7. Respaldo de código si se cambia de chat antes del push
+
+- Archivo complementario: `MarketMoves-pending-2026-10-24.bundle`, respaldo Git verificable de los commits locales pendientes sobre `origin/main` de `0cc24e1`. Está guardado junto a una copia de este DSS en el proyecto «1. RAULITO FILES».
+- En un nuevo chat, **adjuntar tanto el DSS como el bundle**. El bundle no es un despliegue: permite traer la rama local y sus commits a un clon del repositorio original. Comprobar primero si GitHub ya recibió cambios para evitar sobrescribir trabajo remoto ajeno.
+- Recuperación técnica en un clon limpio (sin forzar): `git fetch /ruta/al/MarketMoves-pending-2026-10-24.bundle main:refs/heads/chatgpt-respaldo`; inspeccionar con `git log --oneline main..chatgpt-respaldo` y reconciliar antes de llevarlo a `main`.
