@@ -7,7 +7,7 @@
 <meta name="referrer" content="no-referrer">
 <title>Market Moves+ · SIGMA GRINDSET</title>
 <style>
-/* ================= Market Moves+ v1.0.134 =================
+/* ================= Market Moves+ v1.0.135 =================
    Paleta: azul de base, naranja = acción, verde/rojo = ganancia/pérdida.
    Sin backdrop-filter: el vidrio se finge con rgba + bordes. */
 *{box-sizing:border-box;margin:0;padding:0}
@@ -42,6 +42,9 @@ body::after{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;tra
 :focus-visible{outline:2px solid var(--ion);outline-offset:2px;border-radius:6px}
 .num{font-family:var(--f-num);font-variant-numeric:tabular-nums}
 .pos{color:var(--gain)} .neg{color:var(--loss)}
+/* Semantic ISK amounts across every section and both themes. Signed values
+   override decorative/neutral text rules; zero and missing quotes stay neutral. */
+.isk-pos{color:var(--gain)!important}.isk-neg{color:var(--loss)!important}
 
 /* ---------- barra superior ---------- */
 .top{display:flex;align-items:center;justify-content:space-between;gap:12px;max-width:min(1360px,94vw);margin:0 auto;padding:18px 20px}
@@ -4057,7 +4060,7 @@ body:not(.is-flip) .fact-buy-order{display:none!important}
 #pSum .pk-headline-stat+.pk-headline-stat strong{font-size:.81rem;font-weight:600;line-height:1.45}
 #pSum .pk-headline-note{margin:0;color:var(--mut);font:500 var(--mm-sales-explanation-size)/1.6 var(--f-ui)}
 #pSum #pkOpportunity .pk-opp-head{margin-bottom:8px!important}
-#pSum .mm-decision-grid:has(>#pkOpportunity[hidden]):has(>#unitCourierBox[hidden]){display:none}
+#pSum .mm-decision-grid:has(>#pkOpportunity[hidden]):has(>#unitCourierBox[hidden]):has(>#pkSpeedBox[hidden]){display:none}
 @media(max-width:760px){
   #pSum>.mm-plan-heading{grid-template-columns:minmax(0,1fr)!important;row-gap:14px!important}
   #pSum .mm-plan-comparison{grid-column:1;border-left:0;padding:13px 0 0;border-top:1px solid var(--line2)}
@@ -4141,7 +4144,9 @@ body:not(.is-flip) .fact-buy-order{display:none!important}
 #ledger #lots .lot-pp .copy:disabled{cursor:default;opacity:.65}
 #ledger #lots .lot-financial{min-width:0;display:block;text-align:right}
 #ledger #lots .lot-net{display:block;font:700 clamp(.87rem,1.15vw,1.03rem)/1.38 var(--f-num);overflow-wrap:anywhere}
-#ledger #lots .lot-net.pos{color:var(--txt)}
+#ledger #lots .lot-net.pos{color:var(--gain)}
+#ledger #lots .lot-pp .copy.isk-pos{color:var(--gain)!important}
+#ledger #lots .lot-pp .copy.isk-neg{color:var(--loss)!important}
 #ledger #lots .lot-x{justify-self:end;align-self:center;margin:0;min-height:34px;min-width:34px}
 #ledger #lots .lot-body{
   display:grid!important;grid-template-columns:minmax(0,1fr)!important;
@@ -4423,7 +4428,10 @@ html.light #verdict #vCap .v-finance-item.mm-cost-item{background:var(--surface-
 #pSum .pk-o .pk-tx{grid-column:2!important;grid-row:1/3!important;min-width:0!important}
 #pSum .pk-o .pk-l{display:flex;flex-wrap:wrap;min-width:0;font:650 var(--mm-sales-question-size)/1.4 var(--f-ui)!important;overflow-wrap:anywhere}
 #pSum .pk-o .pk-v{grid-column:3!important;grid-row:1!important;justify-self:end;min-width:0;font:650 clamp(.76rem,1vw,.9rem)/1.4 var(--f-num)!important;white-space:normal!important;overflow-wrap:anywhere;text-align:right}
-#pSum #pkOthers .pk-o:not(.best) .pk-v.pos{color:var(--txt)!important}
+#pSum #pkOthers .pk-o:not(.best) .pk-v.pos{color:var(--gain)!important}
+#pSum .pk-o .pk-v.neg{color:var(--loss)!important}
+#pSum .pk-o .pk-d.pos{color:var(--gain)!important}
+#pSum .pk-o .pk-d.neg{color:var(--loss)!important}
 #pSum .pk-o .pk-d{grid-column:3!important;grid-row:2!important;justify-self:end;font:600 .72rem/1.4 var(--f-num)!important;white-space:normal!important;overflow-wrap:anywhere;text-align:right}
 #pSum #pk>.pk-o::after{right:12px}
 @media(max-width:1050px){
@@ -4438,6 +4446,91 @@ html.light #verdict #vCap .v-finance-item.mm-cost-item{background:var(--surface-
   #pSum #pk>.pk-o,#pSum #pkOthers>.pk-o{grid-template-columns:16px minmax(0,1fr) minmax(95px,auto)!important;gap:3px 6px!important;padding:10px 9px!important}
   #pSum #pk>.pk-o{padding-right:26px!important}
   #pSum #vFinanceDetails .ov-leg{grid-template-columns:minmax(0,1fr)}
+}
+
+/* B.6a · Decision content earns its space. The hero net value is shown only
+   once; reprocessing help precedes the tax help, matching right-hand charges.
+   Preserve the real plan buttons/handlers but make them read as one radio-like
+   list with separators, not a collection of bordered action cards. */
+#pSum .mm-plan-options .pk-w{
+  overflow:hidden;border:1px solid var(--line2);border-radius:8px;
+  background:var(--surface-panel)
+}
+#pSum #pk,#pSum #pkOthers{gap:0!important;margin:0!important}
+#pSum #pk>.pk-o,#pSum #pkOthers>.pk-o{
+  min-height:48px!important;padding:8px 12px!important;
+  border:0!important;border-bottom:1px solid var(--line2)!important;
+  border-radius:0!important;background:transparent!important;
+  box-shadow:none!important;transition:background-color .14s ease
+}
+#pSum #pk>.pk-o.on{
+  box-shadow:inset 2px 0 0 var(--clay)!important;
+  background:var(--surface-card)!important
+}
+#pSum #pkOthers>.pk-o:hover{background:var(--surface-card)!important}
+#pSum .pk-w .pk-o.best{margin:0!important}
+#pSum #pkOthers>.pk-o:last-child{border-bottom:0!important}
+#pSum .pk-w:has(>#pkOthers[hidden]) #pk>.pk-o{border-bottom:0!important}
+#pSum .pk-w .pk-dot{width:12px;height:12px}
+#pSum .pk-w .pk-o .pk-l{font-weight:600!important}
+#pSum .pk-w .pk-o .pk-v{font-weight:650!important}
+
+/* Courier costs only warrant a detailed card when incurred. The faster option
+   shares its row when available, with its why-question nested inside. */
+#pSum .mm-decision-grid{align-items:start;gap:12px;margin-top:13px}
+#pSum .mm-decision-grid:has(>#pkSpeedBox[hidden]):has(>#pkOpportunity[hidden]){grid-template-columns:minmax(0,1fr)}
+#pSum .mm-decision-grid:has(>#pkSpeedBox:not([hidden])) #pkOpportunity{grid-column:1/-1}
+#pSum #pkSpeedBox{min-width:0;padding:15px 18px!important}
+#pSum #pkSpeedBox .pk-shortcut{
+  display:grid;grid-template-columns:minmax(0,1fr) auto;
+  grid-template-areas:"heading heading" "method action" "note note";
+  align-items:center;gap:7px 12px;margin:0!important;padding:0!important;
+  border:0!important;border-radius:0!important;background:transparent!important
+}
+#pSum #pkSpeedBox .pk-shortcut-heading>strong{font-size:var(--mm-sales-question-size);font-weight:650}
+#pSum #pkSpeedBox .pk-shortcut-method{gap:3px}
+#pSum #pkSpeedBox .pk-shortcut-isk{font-size:clamp(.9rem,1.18vw,1.05rem)}
+#pSum #pkSpeedBox .pk-shortcut-isk.pos{color:var(--gain)}
+#pSum #pkSpeedBox .pk-shortcut-isk.neg,
+#pSum #pkSpeedBox .pk-shortcut-loss{color:var(--loss)}
+#pSum #unitCourierTotal.isk-neg{color:var(--loss)!important}
+#pSum #pkSpeedBox .pk-shortcut-action{
+  min-height:36px;justify-self:end;padding:7px 2px;
+  border:0;border-radius:4px;background:transparent;color:var(--clay);
+  font-size:var(--mm-sales-explanation-size)
+}
+#pSum #pkSpeedBox .pk-shortcut-action:hover{background:var(--surface-panel);text-decoration:underline}
+#pSum #pkSpeedBox>.mm-picker-faq{
+  margin:12px 0 0;border-top:1px solid var(--line2)
+}
+#pSum #pkSpeedBox>.mm-picker-faq>summary{
+  display:flex;align-items:center;gap:9px;min-height:40px;padding:11px 0 3px;
+  list-style:none;cursor:pointer;color:var(--txt);
+  font:650 var(--mm-sales-question-size)/1.5 var(--f-ui)
+}
+#pSum #pkSpeedBox>.mm-picker-faq>summary::-webkit-details-marker{display:none}
+#pSum #pkSpeedBox>.mm-picker-faq>summary::after{
+  content:"";margin-left:auto;flex:0 0 var(--mm-chevron-size);
+  width:var(--mm-chevron-size);height:var(--mm-chevron-size);
+  border-right:var(--mm-chevron-stroke) solid var(--mut);
+  border-bottom:var(--mm-chevron-stroke) solid var(--mut);
+  transform:rotate(45deg);transition:transform .15s ease
+}
+#pSum #pkSpeedBox>.mm-picker-faq[open]>summary::after{transform:rotate(225deg)}
+#pSum #pkSpeedBox>.mm-picker-faq>p{
+  margin:0;padding:11px 0;color:var(--txt);opacity:.86;
+  font:450 var(--mm-sales-explanation-size)/1.65 var(--f-ui)
+}
+#pSum #pkSpeedBox>.mm-picker-faq>summary:focus-visible{outline:2px solid var(--ion);outline-offset:-2px}
+@media(max-width:980px){#pSum .mm-decision-grid{grid-template-columns:minmax(0,1fr)}}
+@media(max-width:560px){
+  #pSum #pk>.pk-o,#pSum #pkOthers>.pk-o{min-height:46px!important;padding:8px 9px!important}
+  #pSum #pkSpeedBox{padding:13px!important}
+  #pSum #pkSpeedBox .pk-shortcut{grid-template-columns:minmax(0,1fr);grid-template-areas:"heading" "method" "note" "action"}
+  #pSum #pkSpeedBox .pk-shortcut-action{justify-self:start}
+}
+@media(prefers-reduced-motion:reduce){
+  #pSum .pk-w .pk-o,#pSum #pkSpeedBox>.mm-picker-faq>summary::after{transition:none}
 }
 /* ===== tema claro (generado desde el oscuro por light.py) ===== */
 html.light{--header-surface:rgba(240,237,229,0.96);--ticker-surface:rgba(240,237,229,0.91);--ticker-hover:rgba(240,237,229,0.96);--surface-card:rgba(240,237,229,0.9);--surface-result:linear-gradient(180deg,rgba(240,237,229,0.91),rgba(240,237,229,0.96));--surface-panel:rgba(240,237,229,0.96);--void:#e4e3dd;--hull:#e2e0da;--hull2:#e0ded8;--line:rgba(31,30,29,0.114);--line2:rgba(31,30,29,0.125);--txt:#1c1c1a;--mut:#54524d;--dim:#6c6a64;--ion:#413f3c;--blue:#a39d8b;--clay:#c96442;--thrust:#a67526;--gain:#418b62;--loss:#a92c23}
@@ -5384,7 +5477,7 @@ html.light #mining .mn-kpi .mn-kpi-winner{background:rgba(224,170,79,.12)}
 #mining .mn-fit-budget th:first-child,#mining .mn-editor-budget-table th:first-child{width:46%}
 #mining .mn-fit-manual td:first-child{color:var(--ion)}
 #mining .mn-fit-total,#mining .mn-edit-budget-total{display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-top:10px;padding:12px 14px;border:1px solid rgba(222,220,209,.12);border-radius:8px;background:rgba(255,255,255,.025);font-weight:650;color:var(--txt)}
-#mining .mn-fit-total strong{font:700 1.15rem var(--f-num);color:var(--gain)}
+#mining .mn-fit-total strong{font:700 1.15rem var(--f-num);color:var(--loss)}
 #mining .mn-price-editor .mn-edit-controls label,#mining .mn-price-editor .mn-edit-cost label{font-size:.9rem;font-weight:650;color:var(--txt)}
 #mining .mn-price-editor .mn-edit-title{font-size:.94rem}
 #mining .mn-price-editor .mn-edit-material,#mining .mn-price-editor .mn-edit-controls select,#mining .mn-price-editor .mn-edit-cost select{font-size:.92rem;min-height:36px}
@@ -6438,15 +6531,17 @@ Contraband Freight = no</textarea><small>Una regla por línea: Nombre = tax tota
       </section>
     </div>
     <div class="mm-decision-grid" id="decisionGrid">
-      <section class="pk-opportunity mm-decision-card" id="pkOpportunity" aria-label="Comparación de rutas" hidden></section>
       <section class="mm-unit-courier mm-decision-card" id="unitCourierBox" aria-label="Envío del plan" hidden>
         <header class="mm-decision-head"><span class="ic i-ship" aria-hidden="true"></span><strong id="unitCourierHeading">Coste del envío</strong><span class="mm-unit-courier-total" id="unitCourierTotal"></span></header>
         <div id="unitCourierRows"></div>
         <details class="mm-inline-faq mm-courier-faq"><summary data-i18n="decision.collateralQ">¿El colateral es otro coste de envío?</summary><p data-i18n="decision.collateralA">No. En un contrato courier, el colateral es una garantía que se devuelve al completar el trabajo; no se resta entero como tarifa. El servicio sí puede calcular su precio usando el colateral y el volumen transportados. SIGMA resta la tarifa estimada, no el colateral.</p></details>
       </section>
+      <section class="mm-speed-card mm-decision-card" id="pkSpeedBox" hidden>
+        <aside class="pk-shortcut" id="pkShortcut" aria-live="polite" hidden></aside>
+        <details class="mm-inline-faq mm-picker-faq"><summary data-i18n="decision.planMethodQ">¿Por qué este plan y no el más rápido?</summary><p data-i18n="decision.planMethodA">Comparamos ingresos netos después de las comisiones y un único envío compartido. Las opciones rápidas pueden sacrificar ISK: una orden tarda en completarse y la venta inmediata depende de compras reales suficientes. En Trading hablamos de ganancia solo si hay un coste de compra válido.</p></details>
+      </section>
+      <section class="pk-opportunity mm-decision-card" id="pkOpportunity" aria-label="Comparación de rutas" hidden></section>
     </div>
-    <aside class="pk-shortcut" id="pkShortcut" aria-live="polite" hidden></aside>
-    <details class="mm-inline-faq mm-picker-faq"><summary data-i18n="decision.planMethodQ">¿Por qué este plan y no el más rápido?</summary><p data-i18n="decision.planMethodA">Comparamos ingresos netos después de las comisiones y un único envío compartido. Las opciones rápidas pueden sacrificar ISK: una orden tarda en completarse y la venta inmediata depende de compras reales suficientes. En Trading hablamos de ganancia solo si hay un coste de compra válido.</p></details>
     <!-- v1.0.50: justo debajo de los planes. Al abrir el desglose, los planes se pliegan y el desglose pasa a ser lo principal -->
     <button type="button" class="more-btn step-toggle" id="bDeep" aria-expanded="false" aria-controls="deep"><span class="step-toggle-icon ic i-list" aria-hidden="true"></span><span class="step-toggle-copy"><strong data-i18n="verdict.showSteps">Ver pasos para vender</strong><small data-i18n="verdict.stepsDescription">Contratos, destinos y precios por ítem</small></span><span class="step-toggle-chevron" aria-hidden="true"></span></button>
   </section>
@@ -6588,13 +6683,13 @@ Contraband Freight = no</textarea><small>Una regla por línea: Nombre = tax tota
 <button type="button" class="totop" id="toTop" aria-label="Volver arriba" title="Volver arriba (Inicio)" hidden><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 14l6-6 6 6"/></svg></button>
 <footer class="foot">
   <p class="foot-sec"><span class="ic i-lock" aria-hidden="true"></span>Tu inventario no se guarda: al cerrar o recargar se borra. Solo tus Ajustes quedan en este navegador.</p>
-  <div class="foot-by">Creado por <b>Fiko McGivert</b> · Vanguardia DR · SIGMA GRINDSET · <span class="ver">v1.0.134</span></div>
+  <div class="foot-by">Creado por <b>Fiko McGivert</b> · Vanguardia DR · SIGMA GRINDSET · <span class="ver">v1.0.135</span></div>
 </footer>
 
 <script>
 'use strict';
 /* ============================================================
-   Market Moves+ v1.0.134 — SIGMA GRINDSET / Vanguardia DR
+   Market Moves+ v1.0.135 — SIGMA GRINDSET / Vanguardia DR
    Flujo:  pegado → items → carga (ESI: precios, volúmenes, historial) → verificación → plan → vista
      1. Pegado      parsePaste(): parser posicional de columnas de EVE (Name · Quantity · … · Volume · Est. Price).
      2. Carga       esiItems(): trae todo lo que falta; mientras carga, refresh() NO pinta (S.loading).
@@ -6746,6 +6841,16 @@ function compactIsk(value){
 const fmtP=n=>n==null||isNaN(n)?'—':(Math.abs(n)<10000?NF2.format(n):NF0.format(Math.round(n)))+' ISK';
 const fmtQ=n=>n==null||isNaN(n)?'—':NF1.format(Math.round(n*10)/10);
 const fmtV=v=>NFV.format(v||0)+' m³';
+// Presentation-only currency token: apply a tone only to an entire ISK value,
+// never to a sentence, item name, percentage or estimated quantity. Labels
+// distinguish net proceeds from true investment-adjusted profit separately.
+function iskToneText(value){
+  const m=/^([+\-−]?)\s*(\d[\d,]*(?:\.\d+)?)\s+ISK$/i.exec(String(value??'').trim());
+  if(!m)return '';
+  const amount=Number(m[2].replace(/,/g,''));
+  if(!Number.isFinite(amount)||!amount)return '';
+  return m[1]==='-'||m[1]==='−'?'isk-neg':'isk-pos';
+}
 const pct=v=>(Math.round(v*1000)/10).toString();
 const pctQ=v=>(Math.round(v*10000)/100).toString(); // descuento por cantidad con 2 decimales
 const r2=v=>v==null?null:Math.round(v*100)/100;
@@ -7933,7 +8038,16 @@ function loadIcon(id){ // v1.0.16: <img> directo al servidor de imágenes de EVE
 }
 
 // ================= Vista: filas del libro (se construyen una vez) =================
-function el(tag,cls,txt){const e=document.createElement(tag);if(cls)e.className=cls;if(txt!=null)e.textContent=txt;return e;}
+function el(tag,cls,txt){const e=document.createElement(tag);if(cls)e.className=cls;
+  if(txt!=null){e.textContent=txt;
+    // A monetary delta may render its absolute magnitude but carry an explicit
+    // semantic neg/pos class from the original signed calculation. Respect it.
+    if(!e.classList.contains('pos')&&!e.classList.contains('neg')&&
+        !e.classList.contains('isk-pos')&&!e.classList.contains('isk-neg')){
+      const tone=iskToneText(txt);if(tone)e.classList.add(tone);
+    }
+  }
+  return e;}
 function numIn(val,ph,on,label){
   const i=el('input');i.type='number';i.min='0';i.step='any';i.placeholder=ph||'';i.autocomplete='off';if(label)i.setAttribute('aria-label',label);
   if(val!=null)i.value=val;i.addEventListener('input',()=>on(i.value));return i;
@@ -8015,7 +8129,13 @@ function buildLotDetails(o,ui){
 }
 // copia el valor limpio: números con máx. 2 decimales y sin "ISK" (listo para pegar en el juego)
 const isNumTxt=t=>/^[−+\-]?\s*[\d][\d,.\s]*(\s*(ISK|m³|m3|%|días?|u))?$/i.test(String(t).trim());
-function copyBtn(v,label){const b=el('button','copy'+(isNumTxt(label)?' cp-n':''),label);b.type='button';b.dataset.v=typeof v==='number'?String(Math.round(v*100)/100):String(v);b.title='Clic para copiar';return b;}
+function copyBtn(v,label){const b=el('button','copy'+(isNumTxt(label)?' cp-n':''),label);
+  // Mixed labels such as "Jita 500 ISK" do not match a bare currency token.
+  if(typeof label==='string'&&/\bISK\b/.test(label)&&Number.isFinite(v)){
+    b.classList.remove('isk-pos','isk-neg');
+    if(v!==0)b.classList.add(v<0?'isk-neg':'isk-pos');
+  }
+  b.type='button';b.dataset.v=typeof v==='number'?String(Math.round(v*100)/100):String(v);b.title='Clic para copiar';return b;}
 // Los precios editables esperan brevemente para distinguir clic (copiar) de doble clic (editar).
 // Los demás botones de copiar conservan su comportamiento inmediato.
 let refinedCopyTimer=0;
@@ -8161,6 +8281,7 @@ function paintLot(r){
   else setText(u.dest,'Falta Precio','lot-dest pill p-none');
   setText(u.net,r.best?fmt(r.net[r.best]):'—','lot-net '+(r.best?sgn(r.net[r.best]):''));
   {const up=suggUnit(r),b=u.ppB;const t=up==null?'—':fmtP(up);if(b.textContent!==t)b.textContent=t;b.dataset.v=up==null?'':String(Math.round(up*100)/100);b.disabled=up==null;
+   b.classList.toggle('isk-pos',up!=null&&up>0);b.classList.toggle('isk-neg',up!=null&&up<0);
    b.title=up==null?tx('ledger.noUnitPrice'):tx('ledger.copyUnit',{item:o.name,price:t});
    b.setAttribute('aria-label',b.title);}
   // rendimiento: el cuerpo (opciones, guía, precios, verificación) solo se pinta si la fila está abierta
@@ -8535,7 +8656,11 @@ function paintReprocessingDecision(P,expanded){
     body.append(entry);
   });
   body.append(el('p','mm-cost-source',tx('decision.refineMethod')));
-  disclosure.append(body);($('vCap').querySelector('.mm-explanation-grid')||$('vCap')).append(disclosure);
+  disclosure.append(body);
+  const helpGrid=$('vCap').querySelector('.mm-explanation-grid');
+  // B.6a: refining on the left, deductions under their right-hand cost metric.
+  if(helpGrid)helpGrid.prepend(disclosure);
+  else $('vCap').append(disclosure);
 }
 
 let activeRep=0;
@@ -8604,7 +8729,8 @@ function paintVerdict(P){
           valid?(cost&&number>0?'−':'')+fmt(Math.abs(number)):'—'));
         bridge.append(item);
       };
-      card(tx('verdict.netSales'),fig.sales,false);
+      // The prominent green amount already owns the plan proceeds; repeating
+      // it inside the financial strip obscures shipping and deductions.
       card(tx('verdict.freight'),fig.shipping,true);
       if(S.flip)card(tx('verdict.investment'),fig.investment,true);
       cap.append(bridge);
@@ -9467,6 +9593,7 @@ function paintPicker(P){
   // Quick means no waiting for a sell order; delivery/payment is not promised.
   const shortcutPanel=$('pkShortcut');
   shortcutPanel.replaceChildren();shortcutPanel.hidden=true;
+  $('pkSpeedBox').hidden=true;
   const activeRows=P.rows.filter(r=>r.q>0&&r.auto);
   const quickCandidates=cur==='auto'?valid.filter(x=>
     PK_FAST.has(x.m)&&x.t.net<opt-.5&&Number.isFinite(x.t.net)):[];
@@ -9484,8 +9611,8 @@ function paintPicker(P){
       el('small',null,tx('picker.simpleQuickSub')));
     const method=el('div','pk-shortcut-method');
     method.append(el('span','pk-shortcut-name',modeName(shortcut.m)),
-      el('strong','pk-shortcut-isk num',fmt(shortcut.t.net)),
-      el('span','pk-shortcut-loss',tx('picker.simpleLoss',{amount:fmt(Math.max(0,opt-shortcut.t.net))})));
+      el('strong','pk-shortcut-isk num '+sgn(shortcut.t.net),fmt(shortcut.t.net)),
+      el('span','pk-shortcut-loss isk-neg',tx('picker.simpleLoss',{amount:fmt(Math.max(0,opt-shortcut.t.net))})));
     const caption=el('p','pk-shortcut-note',
       tx(pkShips(shortcut.m,P)?'picker.simpleShip':'picker.simpleNoShip'));
     const count=covered(shortcut);
@@ -9495,6 +9622,7 @@ function paintPicker(P){
     button.type='button';button.dataset.pkShortcut=shortcut.m;
     shortcutPanel.append(heading,method,caption,button);
     shortcutPanel.hidden=false;
+    $('pkSpeedBox').hidden=false;
   }
   if(chosen.m==='disc'){
     headline.append(el('p','pk-headline-note',tx('picker.playerUnconfirmed')));
@@ -9504,7 +9632,9 @@ function paintPicker(P){
     const grid=el('div','pk-headline-grid');
     const stat=(label,value,cl='')=>{
       const node=el('div','pk-headline-stat');
-      node.append(el('small',null,label),el('strong',cl,value));grid.append(node);
+      const amount=el('strong',cl);
+      if(typeof value==='string')amount.textContent=value;else amount.append(value);
+      node.append(el('small',null,label),amount);grid.append(node);
     };
     if(gap<.5){
       const runner=financial.filter(x=>x.m!==chosen.m&&x.t.net<chosen.t.net-.5)
@@ -9512,11 +9642,15 @@ function paintPicker(P){
       if(runner){
         const advantage=chosen.t.net-runner.t.net;
         stat(tx('picker.gain'),'+'+fmt(advantage),'pos');
-        stat(tx('picker.nextBest'),(S.lang==='en'?trS(runner.l):runner.l)+' · '+fmt(runner.t.net));
+        const other=el('span',null,(S.lang==='en'?trS(runner.l):runner.l)+' · ');
+        other.append(el('span','isk-'+(runner.t.net<0?'neg':'pos'),fmt(runner.t.net)));
+        stat(tx('picker.nextBest'),other);
       }else stat(tx('picker.gain'),tx('picker.same'));
     }else{
       stat(tx('picker.gap'),'−'+fmt(gap),'neg');
-      stat(tx('picker.higherNet'),(S.lang==='en'?trS(benchmark.l):benchmark.l)+' · '+fmt(benchmark.t.net));
+      const higher=el('span',null,(S.lang==='en'?trS(benchmark.l):benchmark.l)+' · ');
+      higher.append(el('span','isk-'+(benchmark.t.net<0?'neg':'pos'),fmt(benchmark.t.net)));
+      stat(tx('picker.higherNet'),higher);
     }
     headline.append(grid);
   }else{
@@ -9777,13 +9911,15 @@ function paintCourierUnits(P){
   poolIcons(host);
   host.replaceChildren();
   const rows=P.rows.filter(r=>r.courierAllocated>0&&r.q>0);
-  // Shipping has a decision value even when it costs zero: make that explicit
-  // next to the route comparison, without altering the courier calculation.
-  box.hidden=false;
+  // B.6a: zero freight is already explicit in the financial header and plan
+  // result. Only show the detailed courier card when a real cost applies.
+  const hasCourierCost=Number.isFinite(P.shipCost)&&P.shipCost>0.5;
+  box.hidden=!rows.length&&!hasCourierCost;
   if(!rows.length){
     $('unitCourierHeading').textContent=tx('freight.heading');
     const unallocated=Number.isFinite(P.shipCost)&&P.shipCost>0;
     $('unitCourierTotal').textContent=unallocated?'−'+fmt(P.shipCost):tx('freight.noCost');
+    $('unitCourierTotal').classList.toggle('isk-neg',unallocated);
     host.append(el('p','mm-freight-empty',tx(unallocated?'freight.unallocated':'freight.noShipment')));
     return;
   }
@@ -9791,10 +9927,11 @@ function paintCourierUnits(P){
   $('unitCourierHeading').textContent=tx('freight.heading');
   $('unitCourierTotal').textContent='−'+fmt(P.shipCost)+' · '+
     tx(count===1?'freight.contractOne':'freight.contractMany',{count});
-  const value=(key,amount)=>{
+  $('unitCourierTotal').classList.add('isk-neg');
+  const value=(key,amount,isDeduction=false)=>{
     const item=el('div','mm-freight-metric');
     item.append(el('small',null,tx(key)),
-      el('strong','num',amount==null?'—':fmtP(amount)));
+      el('strong','num'+(isDeduction&&amount>0?' isk-neg':''),amount==null?'—':fmtP(amount)));
     return item;
   };
   const more=rows.length>2?el('details','mm-freight-extra'):null;
@@ -9814,7 +9951,7 @@ function paintCourierUnits(P){
     const math=el('div','mm-freight-equation');
     math.append(value('freight.base',costs.base),
       el('span','mm-freight-op','−'),
-      value('freight.increment',costs.freightUnit),
+      value('freight.increment',costs.freightUnit,true),
       el('span','mm-freight-op','='),
       value('freight.landed',costs.unit));
     const key=el('div','mm-freight-result');
@@ -9825,7 +9962,9 @@ function paintCourierUnits(P){
     lot.append(el('small',null,tx('freight.totalLot')),
       el('strong','num',costs.total==null?tx('freight.missingQuote'):fmtP(costs.total)));
     const meta=el('div','mm-freight-meta');
-    meta.append(el('span',null,tx('freight.totalCost',{amount:fmt(costs.allocated)})),
+    const costLine=el('span');
+    costLine.append(tx('freight.totalCost',{amount:''}),el('b','isk-neg',fmt(costs.allocated)));
+    meta.append(costLine,
       el('span',null,tx('freight.volume',{volume:fmtV(r.ship?.[r.best]?.v||0)})));
     foot.append(lot,meta);
     const details=el('details','mm-freight-detail');
@@ -10703,7 +10842,17 @@ const MineUI=(()=>{
   // ---------- utilidades de dibujo ----------
   const NS='http://www.w3.org/2000/svg';
   const el=(t,a,txt)=>{const e=document.createElementNS(NS,t);for(const k in a)e.setAttribute(k,a[k]);if(txt!=null)e.textContent=txt;return e;};
-  const h=(t,cls,txt)=>{const e=document.createElement(t);if(cls)e.className=cls;if(txt!=null)e.textContent=txt;return e;};
+  const h=(t,cls,txt)=>{const e=document.createElement(t);if(cls)e.className=cls;
+    if(txt!=null){e.textContent=txt;
+      // Match the shared signed-ISK palette without a second money formula.
+      // Standalone Mining previews can render without the sales formatter.
+      if(!e.classList.contains('isk-neg')&&!e.classList.contains('isk-pos')&&
+          !e.classList.contains('neg')&&!e.classList.contains('pos')&&
+          typeof iskToneText==='function'){
+        const tone=iskToneText(txt);if(tone)e.classList.add(tone);
+      }
+    }
+    return e;};
   function tip(box){let t=box.querySelector('.mn-tt');if(!t){t=h('div','mn-tt');box.appendChild(t);}
     return{show(ev,head,lines){t.replaceChildren(h('div','h',head),...lines.map(l=>h('div','',l)));t.style.opacity=1;
         const r=box.getBoundingClientRect();let x=ev.clientX-r.left+12;if(x+t.offsetWidth>r.width)x=Math.max(0,ev.clientX-r.left-t.offsetWidth-12);
@@ -10963,7 +11112,7 @@ const MineUI=(()=>{
       card.append(table);
       const fallback=fittedTierNotice(r);
       if(fallback)card.append(h('p','mn-fit-fallback','ⓘ '+fallback));
-      const total=h('div','mn-fit-total');total.append(h('span','',document.documentElement.lang==='en'?'Total fitting investment':'Inversión total del fit'),h('strong','',complete?cmpISK(sum)+' ISK':(document.documentElement.lang==='en'?'Missing quotes':'Faltan cotizaciones')));
+      const total=h('div','mn-fit-total');total.append(h('span','',document.documentElement.lang==='en'?'Total fitting investment':'Inversión total del fit'),h('strong',complete?'isk-neg':'',complete?cmpISK(sum)+' ISK':(document.documentElement.lang==='en'?'Missing quotes':'Faltan cotizaciones')));
       card.append(total);
       if(S.lv===3||S.imp===4)card.append(h('p','mn-note','Escenario aproximado: '+(S.lv===3?'componentes del fit IV de referencia; ':'')+(S.imp===4?'implante 4% no incluido en el coste.':'')));
       if(r.notes.length)card.append(h('p','mn-note','⚠ '+r.notes.join(' · ')));
