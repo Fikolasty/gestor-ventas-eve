@@ -829,7 +829,7 @@ body:not(.is-flip) .fact-buy-order{display:none!important}
 #pSum .pk-headline-stat+.pk-headline-stat strong{font-size:.81rem;font-weight:600;line-height:1.45}
 #pSum .pk-headline-note{margin:0;color:var(--mut);font:500 var(--mm-sales-explanation-size)/1.6 var(--f-ui)}
 #pSum #pkOpportunity .pk-opp-head{margin-bottom:8px!important}
-#pSum .mm-decision-grid:has(>#pkOpportunity[hidden]):has(>#unitCourierBox[hidden]){display:none}
+#pSum .mm-decision-grid:has(>#pkOpportunity[hidden]):has(>#unitCourierBox[hidden]):has(>#pkSpeedBox[hidden]){display:none}
 @media(max-width:760px){
   #pSum>.mm-plan-heading{grid-template-columns:minmax(0,1fr)!important;row-gap:14px!important}
   #pSum .mm-plan-comparison{grid-column:1;border-left:0;padding:13px 0 0;border-top:1px solid var(--line2)}
@@ -913,7 +913,9 @@ body:not(.is-flip) .fact-buy-order{display:none!important}
 #ledger #lots .lot-pp .copy:disabled{cursor:default;opacity:.65}
 #ledger #lots .lot-financial{min-width:0;display:block;text-align:right}
 #ledger #lots .lot-net{display:block;font:700 clamp(.87rem,1.15vw,1.03rem)/1.38 var(--f-num);overflow-wrap:anywhere}
-#ledger #lots .lot-net.pos{color:var(--txt)}
+#ledger #lots .lot-net.pos{color:var(--gain)}
+#ledger #lots .lot-pp .copy.isk-pos{color:var(--gain)!important}
+#ledger #lots .lot-pp .copy.isk-neg{color:var(--loss)!important}
 #ledger #lots .lot-x{justify-self:end;align-self:center;margin:0;min-height:34px;min-width:34px}
 #ledger #lots .lot-body{
   display:grid!important;grid-template-columns:minmax(0,1fr)!important;
@@ -1195,7 +1197,10 @@ html.light #verdict #vCap .v-finance-item.mm-cost-item{background:var(--surface-
 #pSum .pk-o .pk-tx{grid-column:2!important;grid-row:1/3!important;min-width:0!important}
 #pSum .pk-o .pk-l{display:flex;flex-wrap:wrap;min-width:0;font:650 var(--mm-sales-question-size)/1.4 var(--f-ui)!important;overflow-wrap:anywhere}
 #pSum .pk-o .pk-v{grid-column:3!important;grid-row:1!important;justify-self:end;min-width:0;font:650 clamp(.76rem,1vw,.9rem)/1.4 var(--f-num)!important;white-space:normal!important;overflow-wrap:anywhere;text-align:right}
-#pSum #pkOthers .pk-o:not(.best) .pk-v.pos{color:var(--txt)!important}
+#pSum #pkOthers .pk-o:not(.best) .pk-v.pos{color:var(--gain)!important}
+#pSum .pk-o .pk-v.neg{color:var(--loss)!important}
+#pSum .pk-o .pk-d.pos{color:var(--gain)!important}
+#pSum .pk-o .pk-d.neg{color:var(--loss)!important}
 #pSum .pk-o .pk-d{grid-column:3!important;grid-row:2!important;justify-self:end;font:600 .72rem/1.4 var(--f-num)!important;white-space:normal!important;overflow-wrap:anywhere;text-align:right}
 #pSum #pk>.pk-o::after{right:12px}
 @media(max-width:1050px){
@@ -1210,4 +1215,89 @@ html.light #verdict #vCap .v-finance-item.mm-cost-item{background:var(--surface-
   #pSum #pk>.pk-o,#pSum #pkOthers>.pk-o{grid-template-columns:16px minmax(0,1fr) minmax(95px,auto)!important;gap:3px 6px!important;padding:10px 9px!important}
   #pSum #pk>.pk-o{padding-right:26px!important}
   #pSum #vFinanceDetails .ov-leg{grid-template-columns:minmax(0,1fr)}
+}
+
+/* B.6a · Decision content earns its space. The hero net value is shown only
+   once; reprocessing help precedes the tax help, matching right-hand charges.
+   Preserve the real plan buttons/handlers but make them read as one radio-like
+   list with separators, not a collection of bordered action cards. */
+#pSum .mm-plan-options .pk-w{
+  overflow:hidden;border:1px solid var(--line2);border-radius:8px;
+  background:var(--surface-panel)
+}
+#pSum #pk,#pSum #pkOthers{gap:0!important;margin:0!important}
+#pSum #pk>.pk-o,#pSum #pkOthers>.pk-o{
+  min-height:48px!important;padding:8px 12px!important;
+  border:0!important;border-bottom:1px solid var(--line2)!important;
+  border-radius:0!important;background:transparent!important;
+  box-shadow:none!important;transition:background-color .14s ease
+}
+#pSum #pk>.pk-o.on{
+  box-shadow:inset 2px 0 0 var(--clay)!important;
+  background:var(--surface-card)!important
+}
+#pSum #pkOthers>.pk-o:hover{background:var(--surface-card)!important}
+#pSum .pk-w .pk-o.best{margin:0!important}
+#pSum #pkOthers>.pk-o:last-child{border-bottom:0!important}
+#pSum .pk-w:has(>#pkOthers[hidden]) #pk>.pk-o{border-bottom:0!important}
+#pSum .pk-w .pk-dot{width:12px;height:12px}
+#pSum .pk-w .pk-o .pk-l{font-weight:600!important}
+#pSum .pk-w .pk-o .pk-v{font-weight:650!important}
+
+/* Courier costs only warrant a detailed card when incurred. The faster option
+   shares its row when available, with its why-question nested inside. */
+#pSum .mm-decision-grid{align-items:start;gap:12px;margin-top:13px}
+#pSum .mm-decision-grid:has(>#pkSpeedBox[hidden]):has(>#pkOpportunity[hidden]){grid-template-columns:minmax(0,1fr)}
+#pSum .mm-decision-grid:has(>#pkSpeedBox:not([hidden])) #pkOpportunity{grid-column:1/-1}
+#pSum #pkSpeedBox{min-width:0;padding:15px 18px!important}
+#pSum #pkSpeedBox .pk-shortcut{
+  display:grid;grid-template-columns:minmax(0,1fr) auto;
+  grid-template-areas:"heading heading" "method action" "note note";
+  align-items:center;gap:7px 12px;margin:0!important;padding:0!important;
+  border:0!important;border-radius:0!important;background:transparent!important
+}
+#pSum #pkSpeedBox .pk-shortcut-heading>strong{font-size:var(--mm-sales-question-size);font-weight:650}
+#pSum #pkSpeedBox .pk-shortcut-method{gap:3px}
+#pSum #pkSpeedBox .pk-shortcut-isk{font-size:clamp(.9rem,1.18vw,1.05rem)}
+#pSum #pkSpeedBox .pk-shortcut-isk.pos{color:var(--gain)}
+#pSum #pkSpeedBox .pk-shortcut-isk.neg,
+#pSum #pkSpeedBox .pk-shortcut-loss{color:var(--loss)}
+#pSum #unitCourierTotal.isk-neg{color:var(--loss)!important}
+#pSum #pkSpeedBox .pk-shortcut-action{
+  min-height:36px;justify-self:end;padding:7px 2px;
+  border:0;border-radius:4px;background:transparent;color:var(--clay);
+  font-size:var(--mm-sales-explanation-size)
+}
+#pSum #pkSpeedBox .pk-shortcut-action:hover{background:var(--surface-panel);text-decoration:underline}
+#pSum #pkSpeedBox>.mm-picker-faq{
+  margin:12px 0 0;border-top:1px solid var(--line2)
+}
+#pSum #pkSpeedBox>.mm-picker-faq>summary{
+  display:flex;align-items:center;gap:9px;min-height:40px;padding:11px 0 3px;
+  list-style:none;cursor:pointer;color:var(--txt);
+  font:650 var(--mm-sales-question-size)/1.5 var(--f-ui)
+}
+#pSum #pkSpeedBox>.mm-picker-faq>summary::-webkit-details-marker{display:none}
+#pSum #pkSpeedBox>.mm-picker-faq>summary::after{
+  content:"";margin-left:auto;flex:0 0 var(--mm-chevron-size);
+  width:var(--mm-chevron-size);height:var(--mm-chevron-size);
+  border-right:var(--mm-chevron-stroke) solid var(--mut);
+  border-bottom:var(--mm-chevron-stroke) solid var(--mut);
+  transform:rotate(45deg);transition:transform .15s ease
+}
+#pSum #pkSpeedBox>.mm-picker-faq[open]>summary::after{transform:rotate(225deg)}
+#pSum #pkSpeedBox>.mm-picker-faq>p{
+  margin:0;padding:11px 0;color:var(--txt);opacity:.86;
+  font:450 var(--mm-sales-explanation-size)/1.65 var(--f-ui)
+}
+#pSum #pkSpeedBox>.mm-picker-faq>summary:focus-visible{outline:2px solid var(--ion);outline-offset:-2px}
+@media(max-width:980px){#pSum .mm-decision-grid{grid-template-columns:minmax(0,1fr)}}
+@media(max-width:560px){
+  #pSum #pk>.pk-o,#pSum #pkOthers>.pk-o{min-height:46px!important;padding:8px 9px!important}
+  #pSum #pkSpeedBox{padding:13px!important}
+  #pSum #pkSpeedBox .pk-shortcut{grid-template-columns:minmax(0,1fr);grid-template-areas:"heading" "method" "note" "action"}
+  #pSum #pkSpeedBox .pk-shortcut-action{justify-self:start}
+}
+@media(prefers-reduced-motion:reduce){
+  #pSum .pk-w .pk-o,#pSum #pkSpeedBox>.mm-picker-faq>summary::after{transition:none}
 }

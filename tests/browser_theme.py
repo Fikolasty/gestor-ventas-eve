@@ -952,7 +952,7 @@ class ThemeBrowserTests(unittest.TestCase):
             }""")
             expect(self.page.locator('#vIsk')).to_contain_text('280')
             expect(self.page.locator('#vRouteW')).to_be_visible()
-            expect(self.page.locator('#unitCourierBox')).to_be_visible()
+            expect(self.page.locator('#unitCourierBox')).to_be_hidden()
             self.assertIn('0 ISK',self.page.locator('#unitCourierTotal').inner_text())
             expect(self.page.locator('#vFinanceDetails')).not_to_have_attribute('open','')
             if language=='es':
@@ -971,7 +971,7 @@ class ThemeBrowserTests(unittest.TestCase):
                 for light in (False,True):
                     self.page.evaluate('(on)=>document.documentElement.classList.toggle("light",on)',light)
                     bounds=self.page.evaluate("""() => {
-                        const ids=['verdict','pSum','pkHeadline','unitCourierBox','bDeep'];
+                        const ids=['verdict','pSum','pkHeadline','bDeep'];
                         return ids.map(id=>{
                             const r=document.getElementById(id).getBoundingClientRect();
                             return {id,left:r.left,right:r.right,width:r.width};
@@ -1018,10 +1018,10 @@ class ThemeBrowserTests(unittest.TestCase):
             summary=self.page.locator('#vCap .mm-context-help:not(.mm-rep-help) > summary')
             expect(summary).to_have_count(1)
             if language=='es':
-                self.assertFalse(self.page.locator('#vCap .mm-context-help').first.evaluate('(d)=>d.open'))
+                self.assertFalse(self.page.locator('#vCap .mm-context-help:not(.mm-rep-help)').evaluate('(d)=>d.open'))
             else:
                 # Language changes preserve the reader's open explanations.
-                self.assertTrue(self.page.locator('#vCap .mm-context-help').first.evaluate('(d)=>d.open'))
+                self.assertTrue(self.page.locator('#vCap .mm-context-help:not(.mm-rep-help)').evaluate('(d)=>d.open'))
             rep_disclosure=self.page.locator('#vCap .mm-explanation-grid>.mm-rep-help')
             expect(rep_disclosure).to_have_count(1)
             self.assertEqual(rep_disclosure.evaluate('(d)=>d.open'),language=='en')
@@ -1039,7 +1039,7 @@ class ThemeBrowserTests(unittest.TestCase):
             if language=='es':
                 summary.click()
             self.assertIn('Accounting' if language=='en' else 'Accounting',
-                          self.page.locator('#vCap .mm-context-body').first.inner_text())
+                          self.page.locator('#vCap .mm-context-help:not(.mm-rep-help) .mm-context-body').inner_text())
             self.assertEqual(self.page.locator('#vCap .mm-cost-settings').count(),1)
             if language=='es':
                 self.page.locator('#vCap .mm-rep-help>summary').click()
@@ -1064,8 +1064,8 @@ class ThemeBrowserTests(unittest.TestCase):
                 for light in (False,True):
                     self.page.evaluate('(on)=>document.documentElement.classList.toggle("light",on)',light)
                     panels=self.page.evaluate("""() => {
-                        const left=document.querySelector('#vCap .mm-context-help:not(.mm-rep-help)').getBoundingClientRect();
-                        const right=document.querySelector('#vCap .mm-rep-help').getBoundingClientRect();
+                        const left=document.querySelector('#vCap .mm-rep-help').getBoundingClientRect();
+                        const right=document.querySelector('#vCap .mm-context-help:not(.mm-rep-help)').getBoundingClientRect();
                         const answer=document.querySelector('#vCap .mm-rep-answer');
                         const costNumber=document.querySelector('#vCap .mm-context-number');
                         return {left:{x:left.x,y:left.y,right:left.right,bottom:left.bottom},
@@ -1094,8 +1094,8 @@ class ThemeBrowserTests(unittest.TestCase):
                             repQuestion:px('#vCap .mm-rep-help>summary'),
                             repAnswer:px('#vCap .mm-rep-answer'),
                             repSub:px('#vCap .mm-rep-sub'),
-                            faqQuestion:px('#pSum>.mm-inline-faq>summary'),
-                            faqAnswer:px('#pSum>.mm-inline-faq>p'),
+                            faqQuestion:px('#pSum #pkSpeedBox>.mm-inline-faq>summary'),
+                            faqAnswer:px('#pSum #pkSpeedBox>.mm-inline-faq>p'),
                             ledgerQuestion:px('#ledger>.mm-inline-faq>summary'),
                             ledgerExplanation:px('#ledger>.mm-inline-faq>p'),
                             financeQuestion:px('#verdict #vFinanceDetails>summary'),
@@ -1195,7 +1195,7 @@ class ThemeBrowserTests(unittest.TestCase):
         self.assertIn('known subtotal', charge.inner_text())
         self.assertEqual(charge.locator('strong').inner_text(),'—')
         self.page.locator('#vCap .mm-context-help:not(.mm-rep-help)>summary').click()
-        expect(self.page.locator('#vCap .mm-context-body').first).to_contain_text(
+        expect(self.page.locator('#vCap .mm-context-help:not(.mm-rep-help) .mm-context-body')).to_contain_text(
             'charges cannot be truthfully itemized')
         self.assertEqual(self.page.locator('#vCap .mm-explanation-grid>.mm-rep-help').count(),0)
 
@@ -1312,6 +1312,110 @@ class ThemeBrowserTests(unittest.TestCase):
                         animations='disabled')
             self.page.evaluate('refreshNow=window.__b6RefreshOriginal')
 
+    def test_b6a_lightweight_plan_list_and_contextual_decision_cards(self):
+        from playwright.sync_api import expect
+        for language in ('es','en'):
+            self.page.evaluate('setLang',language)
+            self.page.evaluate("""() => {
+                S.flip=false;S.planMode=null;C.bb.on=true;C.disc.on=false;
+                const item={name:'Tritanium',qty:10,m3u:1,
+                    jita:{buy:80000,topBuy:80000,sell:90000,topSell:90000}};
+                S.items=[item];
+                const row={o:item,q:10,auto:'null',best:'null',np:110000,jl:95000,
+                    g:{null:1050000,jOrd:900000,jInst:810000,bb:790000},
+                    prod:0,vol:10,coll:1000000,ship:{},net:{},courierAllocated:0};
+                const P={rows:[row],best:1050000,mode:null,shipCost:0,Vs:0,
+                    missing:[],toBB:[]};
+                window.__b6aFixture={P,row};
+                paintVerdict(P);document.querySelector('#pSum').hidden=false;
+                paintPicker(P);paintCourierUnits(P);
+            }""")
+            expect(self.page.locator('#pkSpeedBox')).to_be_visible()
+            expect(self.page.locator('#pkShortcut')).to_be_visible()
+            expect(self.page.locator('#unitCourierBox')).to_be_hidden()
+            self.assertEqual(self.page.evaluate("iskToneText('−120,000 ISK')"), 'isk-neg')
+            self.assertEqual(self.page.evaluate("iskToneText('790,000 ISK')"), 'isk-pos')
+            self.assertTrue(self.page.locator('#pkSpeedBox .mm-picker-faq').is_visible())
+            self.assertFalse(self.page.locator('#pkSpeedBox .mm-picker-faq').evaluate('(d)=>d.open'))
+            self.assertEqual(self.page.locator('#pkShortcut').evaluate('(el)=>el.closest("#decisionGrid")?.id'), 'decisionGrid')
+            self.assertNotIn('VENTAS NETAS DESPUÉS DE TASAS',
+                self.page.locator('#vCap .v-finance').inner_text().upper())
+            row_style=self.page.locator('#pkOthers>.pk-o').first.evaluate("""el=>{
+                const s=getComputedStyle(el),parent=getComputedStyle(el.closest('.pk-w'));
+                return {borderLeft:s.borderLeftWidth,groupBorder:parent.borderLeftWidth,
+                    bottom:s.borderBottomWidth,height:el.getBoundingClientRect().height};
+            }""")
+            self.assertEqual(row_style['borderLeft'],'0px')
+            self.assertEqual(row_style['groupBorder'],'1px')
+            self.assertEqual(row_style['bottom'],'1px')
+            self.assertGreaterEqual(row_style['height'],40)
+            for width in (1440,390):
+                self.page.set_viewport_size({'width':width,'height':900})
+                for light in (False,True):
+                    self.page.evaluate('(on)=>document.documentElement.classList.toggle("light",on)',light)
+                    tones=self.page.evaluate("""() => {
+                        const probe=document.createElement('span');
+                        document.body.append(probe);
+                        probe.style.color='var(--gain)';const gain=getComputedStyle(probe).color;
+                        probe.style.color='var(--loss)';const loss=getComputedStyle(probe).color;
+                        probe.remove();
+                        const color=selector=>getComputedStyle(document.querySelector(selector)).color;
+                        return {gain,loss,selected:color('#pk>.pk-o .pk-v'),
+                          other:color('#pkOthers>.pk-o .pk-v'),
+                          slower:color('#pkOthers>.pk-o .pk-d.neg'),
+                          quick:color('#pkSpeedBox .pk-shortcut-isk'),
+                          sacrificed:color('#pkSpeedBox .pk-shortcut-loss')};
+                    }""")
+                    self.assertEqual(tones['selected'],tones['gain'],tones)
+                    self.assertEqual(tones['other'],tones['gain'],tones)
+                    self.assertEqual(tones['slower'],tones['loss'],tones)
+                    self.assertEqual(tones['quick'],tones['gain'],tones)
+                    self.assertEqual(tones['sacrificed'],tones['loss'],tones)
+                    dims=self.page.evaluate("""() => {
+                        const courier=document.querySelector('#unitCourierBox');
+                        const speed=document.querySelector('#pkSpeedBox').getBoundingClientRect();
+                        const group=document.querySelector('#decisionGrid').getBoundingClientRect();
+                        return {courierHidden:courier.hidden,speedLeft:speed.left,
+                            speedRight:speed.right,groupRight:group.right};
+                    }""")
+                    self.assertTrue(dims['courierHidden'])
+                    self.assertLessEqual(dims['speedRight'],width+1,dims)
+                    self.assertLessEqual(dims['groupRight'],width+1,dims)
+                    if width==1440 and not light:
+                        out=INDEX.parent/'tests'/'artifacts'/'theme'
+                        out.mkdir(parents=True,exist_ok=True)
+                        self.page.locator('#verdict').screenshot(
+                            path=str(out/f'b6a-summary-{language}-1440-dark.png'),animations='disabled')
+                    out=INDEX.parent/'tests'/'artifacts'/'theme'
+                    out.mkdir(parents=True,exist_ok=True)
+                    self.page.locator('#pSum').screenshot(
+                        path=str(out/f'b6a-light-list-{language}-{width}-{"light" if light else "dark"}.png'),
+                        animations='disabled')
+            self.page.evaluate("""() => {
+                const {P,row}=window.__b6aFixture;
+                row.courierAllocated=120000;row.ship.null={v:10,c:120000};
+                P.Vs=10;P.shipCost=120000;
+                paintCourierUnits(P);
+            }""")
+            expect(self.page.locator('#unitCourierBox')).to_be_visible()
+            self.assertEqual(self.color('#unitCourierTotal','color'),
+                self.page.evaluate("""() => {const el=document.createElement('i');
+                  el.style.color='var(--loss)';document.body.append(el);
+                  const color=getComputedStyle(el).color;el.remove();return color;}"""))
+            self.page.set_viewport_size({'width':1440,'height':900})
+            geom=self.page.evaluate("""() => {
+                const a=document.querySelector('#unitCourierBox').getBoundingClientRect();
+                const b=document.querySelector('#pkSpeedBox').getBoundingClientRect();
+                return {aRight:a.right,aY:a.y,bX:b.x,bY:b.y};
+            }""")
+            self.assertLessEqual(geom['aRight'],geom['bX']+1,geom)
+            self.assertAlmostEqual(geom['aY'],geom['bY'],delta=2)
+            if language=='es':
+                self.page.evaluate('document.documentElement.classList.remove("light")')
+                self.page.locator('#decisionGrid').screenshot(
+                    path=str(INDEX.parent/'tests'/'artifacts'/'theme'/'b6a-dual-decisions-es-1440-dark.png'),
+                    animations='disabled')
+
     def test_b4_ledger_unit_copy_and_lazy_disclosures(self):
         from playwright.sync_api import expect
         for language in ('es','en'):
@@ -1336,6 +1440,9 @@ class ThemeBrowserTests(unittest.TestCase):
             price=self.page.locator('#lots .lot-pp button.copy')
             expect(price).to_be_enabled()
             self.assertEqual(price.get_attribute('data-v'),'1060000000')
+            self.assertIn('isk-pos',price.get_attribute('class'))
+            self.assertEqual(self.color('#lots .lot-pp button.copy','color'),
+                self.color('#lots .lot-net','color'))
             self.page.set_viewport_size({'width':390,'height':900})
             out=INDEX.parent/'tests'/'artifacts'/'theme'
             out.mkdir(parents=True,exist_ok=True)

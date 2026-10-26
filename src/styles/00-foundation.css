@@ -34,4 +34,7 @@ body::after{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;tra
 :focus-visible{outline:2px solid var(--ion);outline-offset:2px;border-radius:6px}
 .num{font-family:var(--f-num);font-variant-numeric:tabular-nums}
 .pos{color:var(--gain)} .neg{color:var(--loss)}
+/* Semantic ISK amounts across every section and both themes. Signed values
+   override decorative/neutral text rules; zero and missing quotes stay neutral. */
+.isk-pos{color:var(--gain)!important}.isk-neg{color:var(--loss)!important}
 

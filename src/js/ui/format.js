@@ -33,6 +33,16 @@ function compactIsk(value){
 const fmtP=n=>n==null||isNaN(n)?'—':(Math.abs(n)<10000?NF2.format(n):NF0.format(Math.round(n)))+' ISK';
 const fmtQ=n=>n==null||isNaN(n)?'—':NF1.format(Math.round(n*10)/10);
 const fmtV=v=>NFV.format(v||0)+' m³';
+// Presentation-only currency token: apply a tone only to an entire ISK value,
+// never to a sentence, item name, percentage or estimated quantity. Labels
+// distinguish net proceeds from true investment-adjusted profit separately.
+function iskToneText(value){
+  const m=/^([+\-−]?)\s*(\d[\d,]*(?:\.\d+)?)\s+ISK$/i.exec(String(value??'').trim());
+  if(!m)return '';
+  const amount=Number(m[2].replace(/,/g,''));
+  if(!Number.isFinite(amount)||!amount)return '';
+  return m[1]==='-'||m[1]==='−'?'isk-neg':'isk-pos';
+}
 const pct=v=>(Math.round(v*1000)/10).toString();
 const pctQ=v=>(Math.round(v*10000)/100).toString(); // descuento por cantidad con 2 decimales
 const r2=v=>v==null?null:Math.round(v*100)/100;

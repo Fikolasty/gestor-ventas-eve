@@ -67,6 +67,7 @@ function paintPicker(P){
   // Quick means no waiting for a sell order; delivery/payment is not promised.
   const shortcutPanel=$('pkShortcut');
   shortcutPanel.replaceChildren();shortcutPanel.hidden=true;
+  $('pkSpeedBox').hidden=true;
   const activeRows=P.rows.filter(r=>r.q>0&&r.auto);
   const quickCandidates=cur==='auto'?valid.filter(x=>
     PK_FAST.has(x.m)&&x.t.net<opt-.5&&Number.isFinite(x.t.net)):[];
@@ -84,8 +85,8 @@ function paintPicker(P){
       el('small',null,tx('picker.simpleQuickSub')));
     const method=el('div','pk-shortcut-method');
     method.append(el('span','pk-shortcut-name',modeName(shortcut.m)),
-      el('strong','pk-shortcut-isk num',fmt(shortcut.t.net)),
-      el('span','pk-shortcut-loss',tx('picker.simpleLoss',{amount:fmt(Math.max(0,opt-shortcut.t.net))})));
+      el('strong','pk-shortcut-isk num '+sgn(shortcut.t.net),fmt(shortcut.t.net)),
+      el('span','pk-shortcut-loss isk-neg',tx('picker.simpleLoss',{amount:fmt(Math.max(0,opt-shortcut.t.net))})));
     const caption=el('p','pk-shortcut-note',
       tx(pkShips(shortcut.m,P)?'picker.simpleShip':'picker.simpleNoShip'));
     const count=covered(shortcut);
@@ -95,6 +96,7 @@ function paintPicker(P){
     button.type='button';button.dataset.pkShortcut=shortcut.m;
     shortcutPanel.append(heading,method,caption,button);
     shortcutPanel.hidden=false;
+    $('pkSpeedBox').hidden=false;
   }
   if(chosen.m==='disc'){
     headline.append(el('p','pk-headline-note',tx('picker.playerUnconfirmed')));
@@ -104,7 +106,9 @@ function paintPicker(P){
     const grid=el('div','pk-headline-grid');
     const stat=(label,value,cl='')=>{
       const node=el('div','pk-headline-stat');
-      node.append(el('small',null,label),el('strong',cl,value));grid.append(node);
+      const amount=el('strong',cl);
+      if(typeof value==='string')amount.textContent=value;else amount.append(value);
+      node.append(el('small',null,label),amount);grid.append(node);
     };
     if(gap<.5){
       const runner=financial.filter(x=>x.m!==chosen.m&&x.t.net<chosen.t.net-.5)
@@ -112,11 +116,15 @@ function paintPicker(P){
       if(runner){
         const advantage=chosen.t.net-runner.t.net;
         stat(tx('picker.gain'),'+'+fmt(advantage),'pos');
-        stat(tx('picker.nextBest'),(S.lang==='en'?trS(runner.l):runner.l)+' · '+fmt(runner.t.net));
+        const other=el('span',null,(S.lang==='en'?trS(runner.l):runner.l)+' · ');
+        other.append(el('span','isk-'+(runner.t.net<0?'neg':'pos'),fmt(runner.t.net)));
+        stat(tx('picker.nextBest'),other);
       }else stat(tx('picker.gain'),tx('picker.same'));
     }else{
       stat(tx('picker.gap'),'−'+fmt(gap),'neg');
-      stat(tx('picker.higherNet'),(S.lang==='en'?trS(benchmark.l):benchmark.l)+' · '+fmt(benchmark.t.net));
+      const higher=el('span',null,(S.lang==='en'?trS(benchmark.l):benchmark.l)+' · ');
+      higher.append(el('span','isk-'+(benchmark.t.net<0?'neg':'pos'),fmt(benchmark.t.net)));
+      stat(tx('picker.higherNet'),higher);
     }
     headline.append(grid);
   }else{
@@ -377,13 +385,15 @@ function paintCourierUnits(P){
   poolIcons(host);
   host.replaceChildren();
   const rows=P.rows.filter(r=>r.courierAllocated>0&&r.q>0);
-  // Shipping has a decision value even when it costs zero: make that explicit
-  // next to the route comparison, without altering the courier calculation.
-  box.hidden=false;
+  // B.6a: zero freight is already explicit in the financial header and plan
+  // result. Only show the detailed courier card when a real cost applies.
+  const hasCourierCost=Number.isFinite(P.shipCost)&&P.shipCost>0.5;
+  box.hidden=!rows.length&&!hasCourierCost;
   if(!rows.length){
     $('unitCourierHeading').textContent=tx('freight.heading');
     const unallocated=Number.isFinite(P.shipCost)&&P.shipCost>0;
     $('unitCourierTotal').textContent=unallocated?'−'+fmt(P.shipCost):tx('freight.noCost');
+    $('unitCourierTotal').classList.toggle('isk-neg',unallocated);
     host.append(el('p','mm-freight-empty',tx(unallocated?'freight.unallocated':'freight.noShipment')));
     return;
   }
@@ -391,10 +401,11 @@ function paintCourierUnits(P){
   $('unitCourierHeading').textContent=tx('freight.heading');
   $('unitCourierTotal').textContent='−'+fmt(P.shipCost)+' · '+
     tx(count===1?'freight.contractOne':'freight.contractMany',{count});
-  const value=(key,amount)=>{
+  $('unitCourierTotal').classList.add('isk-neg');
+  const value=(key,amount,isDeduction=false)=>{
     const item=el('div','mm-freight-metric');
     item.append(el('small',null,tx(key)),
-      el('strong','num',amount==null?'—':fmtP(amount)));
+      el('strong','num'+(isDeduction&&amount>0?' isk-neg':''),amount==null?'—':fmtP(amount)));
     return item;
   };
   const more=rows.length>2?el('details','mm-freight-extra'):null;
@@ -414,7 +425,7 @@ function paintCourierUnits(P){
     const math=el('div','mm-freight-equation');
     math.append(value('freight.base',costs.base),
       el('span','mm-freight-op','−'),
-      value('freight.increment',costs.freightUnit),
+      value('freight.increment',costs.freightUnit,true),
       el('span','mm-freight-op','='),
       value('freight.landed',costs.unit));
     const key=el('div','mm-freight-result');
@@ -425,7 +436,9 @@ function paintCourierUnits(P){
     lot.append(el('small',null,tx('freight.totalLot')),
       el('strong','num',costs.total==null?tx('freight.missingQuote'):fmtP(costs.total)));
     const meta=el('div','mm-freight-meta');
-    meta.append(el('span',null,tx('freight.totalCost',{amount:fmt(costs.allocated)})),
+    const costLine=el('span');
+    costLine.append(tx('freight.totalCost',{amount:''}),el('b','isk-neg',fmt(costs.allocated)));
+    meta.append(costLine,
       el('span',null,tx('freight.volume',{volume:fmtV(r.ship?.[r.best]?.v||0)})));
     foot.append(lot,meta);
     const details=el('details','mm-freight-detail');

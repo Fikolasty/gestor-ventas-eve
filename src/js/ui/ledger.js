@@ -21,7 +21,16 @@ function loadIcon(id){ // v1.0.16: <img> directo al servidor de imágenes de EVE
 }
 
 // ================= Vista: filas del libro (se construyen una vez) =================
-function el(tag,cls,txt){const e=document.createElement(tag);if(cls)e.className=cls;if(txt!=null)e.textContent=txt;return e;}
+function el(tag,cls,txt){const e=document.createElement(tag);if(cls)e.className=cls;
+  if(txt!=null){e.textContent=txt;
+    // A monetary delta may render its absolute magnitude but carry an explicit
+    // semantic neg/pos class from the original signed calculation. Respect it.
+    if(!e.classList.contains('pos')&&!e.classList.contains('neg')&&
+        !e.classList.contains('isk-pos')&&!e.classList.contains('isk-neg')){
+      const tone=iskToneText(txt);if(tone)e.classList.add(tone);
+    }
+  }
+  return e;}
 function numIn(val,ph,on,label){
   const i=el('input');i.type='number';i.min='0';i.step='any';i.placeholder=ph||'';i.autocomplete='off';if(label)i.setAttribute('aria-label',label);
   if(val!=null)i.value=val;i.addEventListener('input',()=>on(i.value));return i;
@@ -103,7 +112,13 @@ function buildLotDetails(o,ui){
 }
 // copia el valor limpio: números con máx. 2 decimales y sin "ISK" (listo para pegar en el juego)
 const isNumTxt=t=>/^[−+\-]?\s*[\d][\d,.\s]*(\s*(ISK|m³|m3|%|días?|u))?$/i.test(String(t).trim());
-function copyBtn(v,label){const b=el('button','copy'+(isNumTxt(label)?' cp-n':''),label);b.type='button';b.dataset.v=typeof v==='number'?String(Math.round(v*100)/100):String(v);b.title='Clic para copiar';return b;}
+function copyBtn(v,label){const b=el('button','copy'+(isNumTxt(label)?' cp-n':''),label);
+  // Mixed labels such as "Jita 500 ISK" do not match a bare currency token.
+  if(typeof label==='string'&&/\bISK\b/.test(label)&&Number.isFinite(v)){
+    b.classList.remove('isk-pos','isk-neg');
+    if(v!==0)b.classList.add(v<0?'isk-neg':'isk-pos');
+  }
+  b.type='button';b.dataset.v=typeof v==='number'?String(Math.round(v*100)/100):String(v);b.title='Clic para copiar';return b;}
 // Los precios editables esperan brevemente para distinguir clic (copiar) de doble clic (editar).
 // Los demás botones de copiar conservan su comportamiento inmediato.
 let refinedCopyTimer=0;
@@ -249,6 +264,7 @@ function paintLot(r){
   else setText(u.dest,'Falta Precio','lot-dest pill p-none');
   setText(u.net,r.best?fmt(r.net[r.best]):'—','lot-net '+(r.best?sgn(r.net[r.best]):''));
   {const up=suggUnit(r),b=u.ppB;const t=up==null?'—':fmtP(up);if(b.textContent!==t)b.textContent=t;b.dataset.v=up==null?'':String(Math.round(up*100)/100);b.disabled=up==null;
+   b.classList.toggle('isk-pos',up!=null&&up>0);b.classList.toggle('isk-neg',up!=null&&up<0);
    b.title=up==null?tx('ledger.noUnitPrice'):tx('ledger.copyUnit',{item:o.name,price:t});
    b.setAttribute('aria-label',b.title);}
   // rendimiento: el cuerpo (opciones, guía, precios, verificación) solo se pinta si la fila está abierta

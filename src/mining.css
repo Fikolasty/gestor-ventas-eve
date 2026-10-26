@@ -382,7 +382,7 @@ html.light #mining .mn-kpi .mn-kpi-winner{background:rgba(224,170,79,.12)}
 #mining .mn-fit-budget th:first-child,#mining .mn-editor-budget-table th:first-child{width:46%}
 #mining .mn-fit-manual td:first-child{color:var(--ion)}
 #mining .mn-fit-total,#mining .mn-edit-budget-total{display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-top:10px;padding:12px 14px;border:1px solid rgba(222,220,209,.12);border-radius:8px;background:rgba(255,255,255,.025);font-weight:650;color:var(--txt)}
-#mining .mn-fit-total strong{font:700 1.15rem var(--f-num);color:var(--gain)}
+#mining .mn-fit-total strong{font:700 1.15rem var(--f-num);color:var(--loss)}
 #mining .mn-price-editor .mn-edit-controls label,#mining .mn-price-editor .mn-edit-cost label{font-size:.9rem;font-weight:650;color:var(--txt)}
 #mining .mn-price-editor .mn-edit-title{font-size:.94rem}
 #mining .mn-price-editor .mn-edit-material,#mining .mn-price-editor .mn-edit-controls select,#mining .mn-price-editor .mn-edit-cost select{font-size:.92rem;min-height:36px}

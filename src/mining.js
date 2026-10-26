@@ -519,7 +519,17 @@ const MineUI=(()=>{
   // ---------- utilidades de dibujo ----------
   const NS='http://www.w3.org/2000/svg';
   const el=(t,a,txt)=>{const e=document.createElementNS(NS,t);for(const k in a)e.setAttribute(k,a[k]);if(txt!=null)e.textContent=txt;return e;};
-  const h=(t,cls,txt)=>{const e=document.createElement(t);if(cls)e.className=cls;if(txt!=null)e.textContent=txt;return e;};
+  const h=(t,cls,txt)=>{const e=document.createElement(t);if(cls)e.className=cls;
+    if(txt!=null){e.textContent=txt;
+      // Match the shared signed-ISK palette without a second money formula.
+      // Standalone Mining previews can render without the sales formatter.
+      if(!e.classList.contains('isk-neg')&&!e.classList.contains('isk-pos')&&
+          !e.classList.contains('neg')&&!e.classList.contains('pos')&&
+          typeof iskToneText==='function'){
+        const tone=iskToneText(txt);if(tone)e.classList.add(tone);
+      }
+    }
+    return e;};
   function tip(box){let t=box.querySelector('.mn-tt');if(!t){t=h('div','mn-tt');box.appendChild(t);}
     return{show(ev,head,lines){t.replaceChildren(h('div','h',head),...lines.map(l=>h('div','',l)));t.style.opacity=1;
         const r=box.getBoundingClientRect();let x=ev.clientX-r.left+12;if(x+t.offsetWidth>r.width)x=Math.max(0,ev.clientX-r.left-t.offsetWidth-12);
@@ -779,7 +789,7 @@ const MineUI=(()=>{
       card.append(table);
       const fallback=fittedTierNotice(r);
       if(fallback)card.append(h('p','mn-fit-fallback','ⓘ '+fallback));
-      const total=h('div','mn-fit-total');total.append(h('span','',document.documentElement.lang==='en'?'Total fitting investment':'Inversión total del fit'),h('strong','',complete?cmpISK(sum)+' ISK':(document.documentElement.lang==='en'?'Missing quotes':'Faltan cotizaciones')));
+      const total=h('div','mn-fit-total');total.append(h('span','',document.documentElement.lang==='en'?'Total fitting investment':'Inversión total del fit'),h('strong',complete?'isk-neg':'',complete?cmpISK(sum)+' ISK':(document.documentElement.lang==='en'?'Missing quotes':'Faltan cotizaciones')));
       card.append(total);
       if(S.lv===3||S.imp===4)card.append(h('p','mn-note','Escenario aproximado: '+(S.lv===3?'componentes del fit IV de referencia; ':'')+(S.imp===4?'implante 4% no incluido en el coste.':'')));
       if(r.notes.length)card.append(h('p','mn-note','⚠ '+r.notes.join(' · ')));

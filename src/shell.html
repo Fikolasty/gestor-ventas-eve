@@ -312,15 +312,17 @@ Contraband Freight = no</textarea><small>Una regla por línea: Nombre = tax tota
       </section>
     </div>
     <div class="mm-decision-grid" id="decisionGrid">
-      <section class="pk-opportunity mm-decision-card" id="pkOpportunity" aria-label="Comparación de rutas" hidden></section>
       <section class="mm-unit-courier mm-decision-card" id="unitCourierBox" aria-label="Envío del plan" hidden>
         <header class="mm-decision-head"><span class="ic i-ship" aria-hidden="true"></span><strong id="unitCourierHeading">Coste del envío</strong><span class="mm-unit-courier-total" id="unitCourierTotal"></span></header>
         <div id="unitCourierRows"></div>
         <details class="mm-inline-faq mm-courier-faq"><summary data-i18n="decision.collateralQ">¿El colateral es otro coste de envío?</summary><p data-i18n="decision.collateralA">No. En un contrato courier, el colateral es una garantía que se devuelve al completar el trabajo; no se resta entero como tarifa. El servicio sí puede calcular su precio usando el colateral y el volumen transportados. SIGMA resta la tarifa estimada, no el colateral.</p></details>
       </section>
+      <section class="mm-speed-card mm-decision-card" id="pkSpeedBox" hidden>
+        <aside class="pk-shortcut" id="pkShortcut" aria-live="polite" hidden></aside>
+        <details class="mm-inline-faq mm-picker-faq"><summary data-i18n="decision.planMethodQ">¿Por qué este plan y no el más rápido?</summary><p data-i18n="decision.planMethodA">Comparamos ingresos netos después de las comisiones y un único envío compartido. Las opciones rápidas pueden sacrificar ISK: una orden tarda en completarse y la venta inmediata depende de compras reales suficientes. En Trading hablamos de ganancia solo si hay un coste de compra válido.</p></details>
+      </section>
+      <section class="pk-opportunity mm-decision-card" id="pkOpportunity" aria-label="Comparación de rutas" hidden></section>
     </div>
-    <aside class="pk-shortcut" id="pkShortcut" aria-live="polite" hidden></aside>
-    <details class="mm-inline-faq mm-picker-faq"><summary data-i18n="decision.planMethodQ">¿Por qué este plan y no el más rápido?</summary><p data-i18n="decision.planMethodA">Comparamos ingresos netos después de las comisiones y un único envío compartido. Las opciones rápidas pueden sacrificar ISK: una orden tarda en completarse y la venta inmediata depende de compras reales suficientes. En Trading hablamos de ganancia solo si hay un coste de compra válido.</p></details>
     <!-- v1.0.50: justo debajo de los planes. Al abrir el desglose, los planes se pliegan y el desglose pasa a ser lo principal -->
     <button type="button" class="more-btn step-toggle" id="bDeep" aria-expanded="false" aria-controls="deep"><span class="step-toggle-icon ic i-list" aria-hidden="true"></span><span class="step-toggle-copy"><strong data-i18n="verdict.showSteps">Ver pasos para vender</strong><small data-i18n="verdict.stepsDescription">Contratos, destinos y precios por ítem</small></span><span class="step-toggle-chevron" aria-hidden="true"></span></button>
   </section>

@@ -1,0 +1,46 @@
+'use strict';
+const test=require('node:test');
+const assert=require('node:assert/strict');
+const fs=require('node:fs');
+
+const shell=fs.readFileSync('src/shell.html','utf8');
+const verdict=fs.readFileSync('src/js/ui/selling-results.js','utf8');
+const chooser=fs.readFileSync('src/js/ui/plan-picker.js','utf8');
+const css=fs.readFileSync('src/styles/80-product-ux.css','utf8');
+
+test('B.6a displays estimated net proceeds once and aligns help with deductions',()=>{
+  assert.doesNotMatch(verdict,/card\(tx\('verdict\.netSales'\)/);
+  assert.match(verdict,/card\(tx\('verdict\.freight'\),fig\.shipping,true\)/);
+  assert.match(verdict,/if\(helpGrid\)helpGrid\.prepend\(disclosure\)/);
+  assert.match(verdict,/costHelpExpanded=!!cap\.querySelector/);
+  assert.match(verdict,/repHelpExpanded=!!cap\.querySelector/);
+  assert.match(shell,/id="vIsk"/);
+  assert.match(css,/#verdict #vCap \.mm-explanation-grid:has\(>\.mm-rep-help\)/);
+});
+
+test('B.6a places the fast-route rationale beside freight and hides irrelevant zero-courier detail',()=>{
+  for(const id of ['unitCourierBox','pkShortcut','pkSpeedBox','pkOpportunity','decisionGrid']){
+    assert.equal((shell.match(new RegExp('id="'+id+'"','g'))||[]).length,1,id);
+  }
+  const left=shell.indexOf('id="unitCourierBox"');
+  const right=shell.indexOf('id="pkSpeedBox"');
+  const fast=shell.indexOf('id="pkShortcut"');
+  const why=shell.indexOf('class="mm-inline-faq mm-picker-faq"');
+  const opportunities=shell.indexOf('id="pkOpportunity"');
+  assert.ok(left<right&&right<fast&&fast<why&&why<opportunities);
+  assert.match(chooser,/box\.hidden=!rows\.length&&!hasCourierCost/);
+  assert.match(chooser,/\$\('pkSpeedBox'\)\.hidden=false/);
+  assert.match(css,/#pSum \.mm-decision-grid:has\(>#pkSpeedBox\[hidden\]\):has\(>#pkOpportunity\[hidden\]\)/);
+  assert.match(css,/#pSum #pkSpeedBox>\.mm-picker-faq>summary:focus-visible/);
+});
+
+test('B.6a uses one light plan list, preserving the real controls and financial calculations',()=>{
+  assert.match(css,/#pSum \.mm-plan-options \.pk-w\{/);
+  assert.match(css,/#pSum #pk>\.pk-o,#pSum #pkOthers>\.pk-o\{[\s\S]*?border:0!important/);
+  assert.match(css,/#pSum #pk>.pk-o.on\{/);
+  assert.match(css,/@media\(max-width:560px\)/);
+  assert.match(chooser,/S\.planMode=b\.dataset\.m==='auto'\?null:b\.dataset\.m/);
+  assert.match(chooser,/modeTotal\(P,m\)/);
+  assert.match(chooser,/refreshNow\(\)/);
+  assert.doesNotMatch(shell,/class="pk-hd"/);
+});

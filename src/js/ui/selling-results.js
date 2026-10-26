@@ -265,7 +265,11 @@ function paintReprocessingDecision(P,expanded){
     body.append(entry);
   });
   body.append(el('p','mm-cost-source',tx('decision.refineMethod')));
-  disclosure.append(body);($('vCap').querySelector('.mm-explanation-grid')||$('vCap')).append(disclosure);
+  disclosure.append(body);
+  const helpGrid=$('vCap').querySelector('.mm-explanation-grid');
+  // B.6a: refining on the left, deductions under their right-hand cost metric.
+  if(helpGrid)helpGrid.prepend(disclosure);
+  else $('vCap').append(disclosure);
 }
 
 let activeRep=0;
@@ -334,7 +338,8 @@ function paintVerdict(P){
           valid?(cost&&number>0?'−':'')+fmt(Math.abs(number)):'—'));
         bridge.append(item);
       };
-      card(tx('verdict.netSales'),fig.sales,false);
+      // The prominent green amount already owns the plan proceeds; repeating
+      // it inside the financial strip obscures shipping and deductions.
       card(tx('verdict.freight'),fig.shipping,true);
       if(S.flip)card(tx('verdict.investment'),fig.investment,true);
       cap.append(bridge);

@@ -28,7 +28,8 @@ class TranslationContract(unittest.TestCase):
         self.assertFalse(keys-set(catalog),'Untranslated UI messages: '+repr(keys-set(catalog)))
         self.assertIn('picker.estimatedProfit',keys)
         self.assertIn('picker.feesPartial',keys)
-        self.assertIn('verdict.netSales',keys)
+        self.assertIn('verdict.freight',keys)
+        self.assertIn('decision.marketCharges',keys)
     def test_build_consumes_exactly_one_catalog(self):
         script=(SRC/'js/ui/format.js').read_text(encoding='utf-8')
         builder=(ROOT/'build.py').read_text(encoding='utf-8')
