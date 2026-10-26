@@ -85,3 +85,18 @@ html.light #help .hp-c,html.light #help .hp-t>div{
 }
 html.light #help :is(.hp-c h3,.hp-t>div>b,.hp-c b){color:var(--txt)!important}
 html.light #help :is(.hp-c p,.hp-t>div>span){color:var(--mut)!important}
+
+/* B.12: remove the large nested gray Discord sheet in Light. */
+html.light #pCtr .discord-side,
+html.light #pCtr .discord-content{background:transparent!important;border:0!important;box-shadow:none!important}
+html.light #pCtr .discord-content .disc-steps{
+  background:#f7f5f1!important;border:1px solid var(--line)!important;box-shadow:none!important
+}
+html.light #pCtr .discord-content .dests .dest{
+  background:#fff!important;border-color:var(--line)!important;box-shadow:none!important
+}
+html.light #pCtr .discord-content .dests .dest[aria-pressed="true"]{
+  background:#fff8f3!important;border-color:#a45134!important;box-shadow:0 0 0 1px rgba(164,81,52,.18)!important
+}
+html.light #pCtr .disc-preview{background:#f7f5f1;border-color:var(--line)}
+html.light #pCtr .disc-preview .msg{background:#fff!important;border-top:1px solid var(--line)!important;box-shadow:none!important}

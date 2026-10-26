@@ -1025,6 +1025,46 @@
     "es": "Último recurso: crea una oferta WTS si las rutas normales no te convienen. El precio depende de que otro jugador acepte.",
     "en": "Last resort: create a WTS offer if standard routes do not work for you. Another player must accept the price."
   },
+  "extras.postDiscord": {
+    "es": "PUBLICAR EN DISCORD",
+    "en": "POST ON DISCORD"
+  },
+  "extras.askingPrice": {
+    "es": "PRECIO DE OFERTA ESTIMADO",
+    "en": "ESTIMATED ASKING PRICE"
+  },
+  "extras.selectedOffer": {
+    "es": "Tu plan incluye {count} ítems para vender a jugadores. Debes encontrar comprador; no es ingreso confirmado.",
+    "en": "Your plan includes {count} items for player sales. You must find a buyer; this is not confirmed income."
+  },
+  "extras.selectedOfferOne": {
+    "es": "Tu plan incluye 1 ítem para vender a jugadores. Debes encontrar comprador; no es ingreso confirmado.",
+    "en": "Your plan includes 1 item for player sale. You must find a buyer; this is not confirmed income."
+  },
+  "extras.alternativeOffer": {
+    "es": "Alternativa manual para {count} ítems; no sustituye la ruta automática elegida y requiere comprador.",
+    "en": "Manual alternative for {count} items; it does not replace the selected automatic route and requires a buyer."
+  },
+  "extras.alternativeOfferOne": {
+    "es": "Alternativa manual para 1 ítem; no sustituye la ruta automática elegida y requiere comprador.",
+    "en": "Manual alternative for 1 item; it does not replace the selected automatic route and requires a buyer."
+  },
+  "extras.noOffer": {
+    "es": "No hay ítems con precio disponible para preparar una oferta a jugadores.",
+    "en": "No items have an available price for preparing a player offer."
+  },
+  "extras.afterAcceptance": {
+    "es": "Si alguien acepta:",
+    "en": "If someone accepts:"
+  },
+  "extras.closeAfterBuyer": {
+    "es": "Crea un Item Exchange a nombre del comprador en {location} por {price}. Si no se vende en ~{days} días, reconsidera tu mejor ruta.",
+    "en": "Create an Item Exchange addressed to the buyer at {location} for {price}. If unsold after ~{days} days, reconsider your best route."
+  },
+  "extras.messagePreview": {
+    "es": "Ver mensaje preparado para Discord",
+    "en": "Preview the Discord message"
+  },
   "sales.copyItems": {
     "es": "Copiar {count} ítems",
     "en": "Copy {count} items"

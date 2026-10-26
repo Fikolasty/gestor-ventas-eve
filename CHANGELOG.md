@@ -1,3 +1,10 @@
+## v1.0.145 — 2026-10-26 [ChatGPT] · B.12: Extras/Discord sin huecos ni redundancias — CI/Pages pendiente
+
+- **Aprobación expresa de Raulito:** corregir el fallo visual de Light y auditar la utilidad de «Contratos y Discord». Las dos columnas conservan 50/50 de anchura en escritorio, pero los contratos terminan a su altura natural, sin relleno artificial hasta el pie de Discord.
+- Se elimina el resumen inferior que repetía número de contratos, Buyback y envío. Su etiqueta EN «YOUR BUYBACK PROFIT» era impropia para `P.bbGross`, que representa ingreso, no beneficio; el valor y los controles de copia se conservan dentro de la ficha. La oferta Discord se identifica como **precio de oferta estimado**, no venta confirmada; se distingue entre ruta elegida y alternativa manual.
+- Discord conserva destinos SIGMA/Vanguardia, lista y enlace Janice, mensaje WTS copiable, enlace del canal y advertencias de cierre. La guía se reduce a tres pasos y nota contextual; la vista previa se pliega de entrada y es operable por teclado. Light elimina el gran contenedor gris interior; ES/EN, Dark/Light, 1440/630/390 verificados.
+- **QA local:** build `1.0.145`, 30/30 Node, 16/16 Python, 8/8 scripts heredados y 46/46 Chromium (~55 s), incluida nueva regresión B.12. Sin cambios en `r.g.disc`, `P.bbGross`, cálculo, ESI/SSO ni persistencia. **Al preparar esta fuente aún no existe publicación remota v1.0.145**; verificar cuatro Actions, Pages y HTTP antes de declarar LIVE. D.1 pendiente.
+
 ## v1.0.144 — 2026-10-26 [ChatGPT] · B.11: listado compacto con cuatro paneles simétricos — LIVE verificada por CI/Pages
 
 - **Aprobación expresa de Raulito:** reemplazar el detalle repetitivo del Listado por cuatro paneles plegables de igual ancho: «Precios por ruta», «Comparar rutas», «Ajustes del ítem» y «Cómo venderlo». Dos columnas independientes impiden que el panel de precios deje un espacio vacío artificial debajo de la comparación; en móvil los cuatro paneles se apilan en orden natural.

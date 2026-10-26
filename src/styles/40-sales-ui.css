@@ -418,15 +418,16 @@ select{appearance:none;-webkit-appearance:none;padding-right:30px!important;back
 @media(max-width:680px){#mmTabs.mm-modnav{gap:8px;padding:8px 10px 8px 12px;min-height:58px}#mmTabs .mm-home{flex-basis:32px;width:32px;height:36px}#mmTabs .mm-modgroup{gap:1px;padding:3px;min-width:0;overflow-x:auto}#mmTabs .mm-mod{font-size:.78rem;padding:8px 10px;min-height:34px}}
 
 /* Igualdad visual: encabezados de contratos y Discord en el mismo nivel. */
-#pCtr .ce{grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;align-items:stretch}
-#pCtr .ce-l,#pCtr .ce-r{min-width:0}
-#pCtr .discord-side{padding:0;border:0;background:transparent;border-radius:0;display:flex;flex-direction:column;flex:1;min-width:0}
+#pCtr .ce{grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;align-items:start}
+#pCtr .ce-l,#pCtr .ce-r{min-width:0;align-self:start}
+#pCtr .ce-l .cz,#pCtr .ce-l .cz>.ct{flex:none}
+#pCtr .discord-side{padding:0;border:0;background:transparent;border-radius:0;display:flex;flex-direction:column;flex:none;min-width:0}
 #pCtr .ce-l>.ce-h,#pCtr .discord-side>.ce-h{box-sizing:border-box;display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:46px;height:46px;margin:0 0 10px;padding:0 6px;flex-wrap:nowrap}
 #pCtr .ce-l>.ce-h .sub-h,#pCtr .discord-side>.ce-h .sub-h{font:700 .88rem/1.25 var(--f-ui);letter-spacing:.015em;text-transform:uppercase;display:flex;gap:10px;align-items:center;white-space:nowrap;min-width:0}
 #pCtr .ce-l>.ce-h .sub-h .ic,#pCtr .discord-side>.ce-h .sub-h .ic{flex:none;width:16px;height:16px}
 #pCtr .discord-side>.ce-h .sum{font:600 .82rem/1.2 var(--f-num);color:var(--mut);white-space:nowrap;text-align:right;margin-left:auto}
 #pCtr .ce-l>.ce-h .cz-ctl{margin-left:auto;flex:none}
-#pCtr .discord-content{padding:14px;border:1px solid var(--line);border-radius:var(--r-md);background:var(--panel,#252523);flex:1;min-width:0}
+#pCtr .discord-content{padding:0;border:0;border-radius:0;background:transparent;flex:none;min-width:0}
 @media(max-width:860px){#pCtr .ce{grid-template-columns:minmax(0,1fr)}}
 @media(max-width:540px){#pCtr .ce-l>.ce-h,#pCtr .discord-side>.ce-h{padding:0 2px;gap:6px}#pCtr .discord-side>.ce-h .sum{font-size:.72rem}}
 
@@ -502,11 +503,6 @@ select{appearance:none;-webkit-appearance:none;padding-right:30px!important;back
 @media(max-width:680px){#mmTabs .mm-modgroup .mm-mod{min-width:0}}
 
 /* Contract summary: all metrics align regardless of heading length. */
-#ctrTot.ct-sum{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));align-items:stretch;gap:8px}
-#ctrTot.ct-sum>div{min-width:0;display:flex;flex-direction:column;justify-content:space-between;gap:7px}
-#ctrTot.ct-sum>div>span{display:block;font-size:.72rem;line-height:1.2;min-height:2.4em;overflow-wrap:normal}
-#ctrTot.ct-sum>div>b{display:block;white-space:nowrap;font-size:clamp(.76rem,1vw,.9rem);line-height:1.25;font-variant-numeric:tabular-nums}
-@media(max-width:560px){#ctrTot.ct-sum{grid-template-columns:repeat(auto-fit,minmax(110px,1fr))}}
 
 /* Registered item editing: fixed single-column rows with controls aligned
    to the right. Original input IDs and listeners are unchanged. */

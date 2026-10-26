@@ -112,7 +112,7 @@ const bestLabel=()=>$('vWhat').textContent.replace(/ · por rapidez$/,'').replac
 // Sin items: vacía todo lo pintado y suelta referencias (así el navegador libera la memoria de lotes grandes)
 function clearViews(){
   document.title='Market Moves+ · SIGMA GRINDSET';
-  ['vPlan','vRepList','ctrList','czDots','ctrTot','shBody','fScn','rx','rxFinal','dMsg'].forEach(id=>{const e=$(id);if(e)e.textContent='';});
+  ['vPlan','vRepList','ctrList','czDots','shBody','fScn','rx','rxFinal','dMsg'].forEach(id=>{const e=$(id);if(e)e.textContent='';});
   ['pCtr','pSum'].forEach(id=>{const e=$(id);if(e)e.hidden=true;});
   $('deep').hidden=true;delete $('deep').dataset.uiReady;
   lastP=null;repaintPlanGroup=null;paintAppraisal();discRows=[];czCards=[];lastCs=[];czIdx=0;S.planMode=null;ICON_POOL={};

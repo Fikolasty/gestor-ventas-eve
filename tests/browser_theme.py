@@ -691,6 +691,59 @@ class ThemeBrowserTests(unittest.TestCase):
         self.assertIn("Price: 100,000 ISK",self.page.locator("#dMsg").inner_text())
         self.assertNotIn("Jita Buy",self.page.locator("#dCopyMsg").get_attribute("data-v"))
 
+    def test_b12_extras_have_natural_height_clear_manual_price_and_accessible_preview(self):
+        """B.12: no forced equal heights, duplicate amounts or misleading WTS promise."""
+        from playwright.sync_api import expect
+        self.page.evaluate("""() => {
+            selectAppModule('ventas');C.disc.on=true;C.shipOn=false;S.flip=false;
+            S.items=[{name:'Tritanium',qty:50}];
+            const row={best:'bb',o:{name:'Tritanium'},q:50,
+                g:{bb:500000,disc:650000},ship:{}};
+            window.__b12P={rows:[row],toBB:[row],bbGross:500000};
+            const ctr=document.querySelector('#pCtr');ctr.hidden=false;ctr.open=true;
+            paintContracts(window.__b12P);paintDisc(window.__b12P);
+        }""")
+        self.assertEqual(self.page.locator('#ctrTot').count(),0)
+        self.assertEqual(self.page.locator('#dCopyMsg').get_attribute('data-v'),
+                         self.page.locator('#dMsg').text_content())
+        self.assertNotIn('YOUR BUYBACK PROFIT',self.page.locator('#pCtr').inner_text())
+        expect(self.page.locator('#dPreview')).not_to_have_attribute('open','')
+        for lang in ('es','en'):
+            self.page.evaluate('setLang',lang)
+            self.page.evaluate('paintDisc(window.__b12P)')
+            if lang=='en':
+                self.assertIn('ESTIMATED ASKING PRICE',self.page.locator('.disc-offer-row').inner_text())
+                self.assertIn('requires a buyer',self.page.locator('#dLead').inner_text())
+                self.assertIn('Item Exchange',self.page.locator('#dClose').inner_text())
+            else:
+                self.assertIn('PRECIO DE OFERTA ESTIMADO',self.page.locator('.disc-offer-row').inner_text())
+                self.assertIn('requiere comprador',self.page.locator('#dLead').inner_text())
+            for light in (False,True):
+                self.page.evaluate('(on)=>document.documentElement.classList.toggle("light",on)',light)
+                for width in (1440,630,390):
+                    self.page.set_viewport_size({'width':width,'height':900})
+                    measure=self.page.evaluate("""() => {
+                        const r=s=>document.querySelector(s).getBoundingClientRect();
+                        const left=r('#pCtr .ce-l .ct'),right=r('#pCtr .discord-side');
+                        const h=document.querySelector('#pCtr>summary h2');
+                        return {leftBottom:left.bottom,rightBottom:right.bottom,
+                            bg:getComputedStyle(document.querySelector('#pCtr .discord-content')).backgroundColor,
+                            overflow:document.documentElement.scrollWidth-innerWidth,
+                            headingOverflow:h.scrollWidth-h.clientWidth};
+                    }""")
+                    self.assertLessEqual(measure['overflow'],1,(lang,light,width,measure))
+                    self.assertLessEqual(measure['headingOverflow'],2,(lang,light,width,measure))
+                    self.assertEqual(measure['bg'],'rgba(0, 0, 0, 0)')
+                    if width==1440:
+                        self.assertLess(measure['leftBottom']+25,measure['rightBottom'])
+        self.page.locator('#dPreview>summary').focus()
+        self.page.keyboard.press('Enter')
+        expect(self.page.locator('#dPreview')).to_have_attribute('open','')
+        self.assertEqual(self.page.locator('#dMsg').text_content(),
+                         self.page.locator('#dCopyMsg').get_attribute('data-v'))
+        self.page.locator('#dPreview>summary').press('Space')
+        expect(self.page.locator('#dPreview')).not_to_have_attribute('open','')
+
     def test_sales_search_keeps_focus_and_uses_item_autocomplete(self):
         from playwright.sync_api import expect
         self.page.evaluate("""() => {

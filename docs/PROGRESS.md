@@ -648,3 +648,9 @@ La revisión visual final detectó que CSS Grid estiraba la tarjeta interior cer
 
 
 **Cierre B.11 — v1.0.144 (2026-10-26):** Fiko publicó la fuente `1f0b91386e4761bff46b0563cf3dfc160a7e07c5` sobre `main` con SHA esperado y `force:false`; el bot generó `42e23ceb2cf83cfdc9c0c058fa258f262ed98dec` y `index.html` v1.0.144 (2.306.688 bytes, blob Git `6c42291d83c0c605bd62df9ddeb56fe9fe4ba80c`). Cuatro Actions `success`: Versiones `40376261734`, Minería `40376261614`, Build `40376261710`, Rebuild/Chromium/Pages `40376261674`, con comprobación HTTP del banner público en Pages. No hubo descarga independiente byte a byte desde este entorno; EVE SSO/ESI real no se probó. D.1 perfilado pendiente.
+
+## 2026-10-26 — B.12 v1.0.145: Extras y Discord claros y sin alturas artificiales
+
+Raulito aprobó revisar la captura Light y la información redundante de «Contratos y Discord». Diagnóstico: grid `align-items:stretch` y controles `flex:1` alargaban el contrato hasta el pie de Discord. Ahora cada columna conserva la mitad del ancho y su propia altura; Light elimina el contenedor gris superpuesto, y el título se adapta en móvil. El resumen inferior duplicaba contrato/Buyback/envío y llamaba *profit* al `P.bbGross` en inglés: se retira sin perder los importes de la ficha. La oferta WTS aparece etiquetada como propuesta no garantizada y alternativa manual cuando corresponde. Janice, copiar, enlace, destino, instrucciones de cierre y mensaje WTS siguen operativos; este último queda plegado por defecto con teclado.
+
+**QA local:** Node **30/30**, Python **16/16**, ocho scripts heredados y **46/46 Chromium**, build v1.0.145 y capturas Light/Dark/ES/EN, escritorio/móvil inspeccionadas, sin desbordes ni diferencias entre preview y texto copiado. Fórmulas, selección, ESI/SSO y storage sin cambios. **Estado: solo local, aún no LIVE;** publicar exclusivamente vía Fiko/Fikolasty con HEAD/`expected_sha`/`force:false`, esperar cuatro Actions y cotejo público. D.1 pendiente.

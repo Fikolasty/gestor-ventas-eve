@@ -87,15 +87,9 @@ function paintContracts(P){
   czCards=cards;
   const dots=$('czDots');dots.textContent='';
   cards.forEach((c,i)=>{const d=el('button','cz-d '+c.cls,String(i+1));d.type='button';d.dataset.i=i;d.title='Contrato '+(i+1)+' · '+c.lab;d.setAttribute('aria-label',d.title);dots.append(d);});
-  const tot=$('ctrTot');tot.textContent='';tot.hidden=!cards.length;
   if(!cards.length){$('ctrList').textContent='';$('ctrList').append(el('p','sh-none','Tu plan no necesita contratos: lo vendes con órdenes en '+nullSystem()+' o al instante.'));$('czDots').hidden=true;}
-  else{
-    const add=(l,v,cls)=>{const d=el('div');d.append(el('span',null,l),el('b','num '+(cls||''),v));tot.append(d);};
-    add('Contratos',String(cards.length));
-    if(P.toBB.length)add(S.lang==='en'?'YOUR BUYBACK PROFIT':'TU INGRESO DEL BUYBACK',fmt(P.bbGross),'pos');
-    if(cs.length)add('Envío a Jita','−'+fmt(shipR),'neg');
-    if(dr.length)add('Recibes de jugadores',fmt(dr.reduce((a,r)=>a+(r.g.disc||0),0)),'pos');
-  }
+  // B.12: the removed footer repeated the header totals and the exact amounts
+  // already present in each copyable contract. Never label proceeds as profit.
   // El análisis de envío permanece fuera de la UI; el courier sigue calculándose en el motor.
   if(cards.length)czShow(czIdx,0);
 }
@@ -176,10 +170,11 @@ function paintDisc(P){
   const chosen=P.rows.filter(r=>r.best==='disc');
   discRows=chosen.length?chosen:P.rows.filter(r=>r.g.disc!=null);
   const tot=discRows.reduce((a,r)=>a+(r.g.disc||0),0);
-  $('dSum').textContent=discRows.length?fmt(tot):'';
-  $('dLead').textContent=chosen.length
-    ?tx('player.lastResortNames',{items:chosen.map(r=>r.o.name).join(', ')})
-    :tx('player.lastResortGuide');
+  $('dSum').textContent=discRows.length?fmt(tot):'—';
+  $('dSum').classList.toggle('is-empty',!discRows.length);
+  $('dLead').textContent=!discRows.length?tx('extras.noOffer'):
+    chosen.length?tx(chosen.length===1?'extras.selectedOfferOne':'extras.selectedOffer',{count:chosen.length}):
+      tx(discRows.length===1?'extras.alternativeOfferOne':'extras.alternativeOffer',{count:discRows.length});
   const link=$('dLink').value.trim(),okLink=link.startsWith(JANICE);
   $('dLinkErr').textContent=link&&!okLink?'Ese link no es de janice.e-351.com.':'';
   const es=discDest==='vg',loc=$('discLoc').value||'—',n=discRows.length;
@@ -202,7 +197,7 @@ function paintDisc(P){
   $('dMsg').textContent=lines.join('\n');
   $('dCopyMsg').dataset.v=lines.join('\n');
   $('dCopyList').dataset.v=discRows.map(r=>r.o.name+'\t'+r.q).join('\n');
-  $('dClose').textContent='Cuando alguien acepte: contrato Item Exchange a su nombre, en '+($('discLoc').value||'tu estructura')+', por '+fmt(tot)+'. Si en ~'+C.disc.days+' días nadie lo toma, vuelve a tu mejor opción.';
+  $('dClose').textContent=tx('extras.closeAfterBuyer',{location:loc,price:fmt(tot),days:C.disc.days});
 }
 $('dOpenJ').addEventListener('click',()=>window.open(JANICE,'_blank','noopener,noreferrer'));
 // link del canal #market-trade de SIGMA (solo en memoria): solo se aceptan links de Discord

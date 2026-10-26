@@ -361,24 +361,26 @@ Contraband Freight = no</textarea><small>Una regla por línea: Nombre = tax tota
         <div class="ce-h"><h3 class="sub-h"><span class="ic i-list" aria-hidden="true"></span>Tus Contratos</h3>
           <div class="cz-ctl"><div class="cz-dots" id="czDots" role="group" aria-label="Seleccionar contrato" hidden></div></div></div>
         <div class="cz" id="ctrList" tabindex="-1"></div>
-        <div class="ct-sum" id="ctrTot"></div>
       </div>
       <div class="ce-r" id="discordColumn">
   <div class="discord-side" id="pDisc" hidden>
-    <div class="ce-h"><h3 class="sub-h"><span class="ic i-list" aria-hidden="true"></span>VENTA EN DISCORD</h3><span class="sum" id="dSum"></span></div>
+    <div class="ce-h"><h3 class="sub-h"><span class="ic i-list" aria-hidden="true"></span><span data-i18n="extras.postDiscord">PUBLICAR EN DISCORD</span></h3></div>
     <div class="discord-content">
-    <p class="lead" id="dLead">Último recurso: véndelo a alguien de tu alianza o corporación por Discord.</p>
+    <div class="disc-offer" role="note">
+      <div class="disc-offer-row"><span data-i18n="extras.askingPrice">PRECIO DE OFERTA ESTIMADO</span><strong class="num" id="dSum"></strong></div>
+      <p class="no-tr" id="dLead"></p>
+    </div>
     <div class="dests" role="group" aria-label="Dónde publicar">
       <button type="button" class="dest" data-d="sigma" aria-pressed="true"><span class="logo sig" aria-hidden="true"></span><span><b>SIGMA GRINDSET</b><small>Alianza · #market-trade · en inglés</small></span></button>
       <button type="button" class="dest" data-d="vg" aria-pressed="false"><span class="logo vg" aria-hidden="true"></span><span><b>Vanguardia DR</b><small>Corporación · #💰-mercado-local · en español</small></span></button>
     </div>
-    <ol class="guide" style="margin-top:14px">
+    <ol class="guide disc-steps">
       <li><b>Tasación en Janice</b><span>Copia tu lista, ábrela en Janice, pégala y copia el link que te da. <button class="copy" type="button" id="dCopyList">Copiar Lista</button> <button class="copy" type="button" id="dOpenJ">Abrir Janice</button></span></li>
       <li><b>Pega el Link</b><span><input type="text" id="dLink" autocomplete="off" spellcheck="false" placeholder="https://janice.e-351.com/a/…" aria-label="Link de tu tasación en Janice"><small class="rc-miss" id="dLinkErr"></small></span></li>
       <li><b>Publica el Mensaje</b><span><span id="dWhere">Cópialo y publícalo en SIGMA GRINDSET › trade › #market-trade.</span> <button class="copy" type="button" id="dCopyMsg">Copiar Mensaje</button> <button class="copy lnk" type="button" id="dOpenD" data-link="sigmaTrade">Abrir #market-trade</button><small class="lnk-note" id="dOpenNote"></small><span id="dTradeWrap" hidden><input type="text" id="dTrade" autocomplete="off" spellcheck="false" placeholder="https://discord.com/channels/…" aria-label="Link del canal market-trade de SIGMA"><small class="rc-miss" id="dTradeErr"></small></span></span></li>
-      <li><b>Cierra la Venta</b><span id="dClose"></span></li>
     </ol>
-    <pre class="msg" id="dMsg"></pre>
+    <p class="disc-after"><strong data-i18n="extras.afterAcceptance">Si alguien acepta:</strong> <span class="no-tr" id="dClose"></span></p>
+    <details class="disc-preview" id="dPreview"><summary data-i18n="extras.messagePreview">Ver mensaje preparado para Discord</summary><pre class="msg no-tr" id="dMsg"></pre></details>
     </div>
   </div>
       </div>
