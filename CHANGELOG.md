@@ -1,3 +1,10 @@
+## v1.0.142 — 2026-10-26 [ChatGPT] · B.9: un solo desplegable de explicaciones simétricas (QA/Pages pendiente)
+
+- **Aprobación expresa:** Raulito pidió «simetría perfecta», cero subdesplegables dentro de ambas respuestas y preservar todos los cálculos; confirmó «sí» a cabecera única, flecha única y estado cerrado por defecto.
+- **Presentación:** `paintDecisionExplanations` pone «¿Por qué reprocesar o no?» y «¿De dónde salen estas deducciones?» en la misma barra, ancho 50/50 y divisor alineado píxel a píxel con sus respuestas al abrir. Un solo `<details>` nativo y dos cuerpos planos; en móvil se apilan las dos preguntas y sus respuestas sin overflow. Cuando no hay ruta de reproceso válida, solo se muestra el coste explicado, a ancho completo. ES/EN y Dark/Light, foco y Space/Enter conservados.
+- **Integridad:** no cambia el cálculo original de `assessReprocessing`, `computePlan`, fees, ESI/SSO, almacenamiento ni reparto courier. Se mantienen cifras y advertencias existentes (tasas, refinería, ventas estimadas) y se corrige una instrucción obsoleta «Abre el detalle». `vCap` conserva un único estado abierto en refrescos; no hay `details` anidados en las respuestas. Playwright detectó un `gap` de 12 px que creaba 6 px de desalineación y fue corregido.
+- **QA local completa:** build v1.0.142, **29/29 Node, 16/16 Python, 8/8 legacy y 43/43 Chromium** (≈51 s), incluyendo 390/630/1440, temas/idiomas, foco, teclas y comparación exacta de ejes. Solo CI/Pages y descarga HTTPS independiente pendientes para afirmar LIVE; sin prueba EVE SSO/ESI real.
+
 ## v1.0.141 — 2026-10-26 [ChatGPT] · B.8 tabla compacta de coste real del envío — LIVE verificada
 
 - **Aprobación de Raulito («me encanta»):** segundo mockup con los ítems enviados completos, nombre/cantidad y tres columnas **ANTES DEL ENVÍO − ENVÍO = TOTAL FINAL**; sin «te queda», «unidad», expansiones por ítem ni fila de «Ver más». Subtítulo exacto «Aquí se refleja la reducción real por unidad de cada ítem». Coste total de contratos preservado en cabecera.

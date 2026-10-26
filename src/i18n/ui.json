@@ -34,7 +34,7 @@
   "decision.refineTie": {"es": "Reprocesar el {name} prácticamente no cambia tus ingresos netos.", "en": "Reprocessing {name} makes virtually no difference to your net proceeds."},
   "decision.refineBatch": {"es": "Conviene reprocesar {yes} de {total} tipos; sin datos suficientes: {pending}.", "en": "Reprocessing helps for {yes} of {total} item types; insufficient data: {pending}."},
   "decision.refineChosenRoute": {"es": "Mejor alternativa evaluada para este ítem: {route}.", "en": "Best evaluated route for this item: {route}."},
-  "decision.refineItemHelp": {"es": "Abre el detalle para ver la razón y el ISK de cada ítem.", "en": "Open the details for each item's reason and ISK difference."},
+  "decision.refineItemHelp": {"es": "Compara la razón y la diferencia en ISK de cada ítem.", "en": "Compare the reason and ISK difference for each item."},
   "decision.refineMissingQuotes": {"es": "Faltan precios válidos del ore, hielo o productos reprocesados. No suponemos precios inexistentes ni una tarifa de refinería cero.", "en": "Valid ore, ice or reprocessed-product quotes are missing. No fictional price or zero refinery fee is assumed."},
   "decision.refineWhy": {"es": "¿Por qué reprocesar o no?", "en": "Why reprocess or not?"},
   "decision.refineComparison": {"es": "Con los otros ítems como están en el plan elegido, {best} deja más ISK. Reprocesado: {reprocessed}; sin reprocesar: {raw}; diferencia a favor del reproceso: {delta}.", "en": "Keeping other items on their selected routes, {best} leaves more ISK. Reprocessed: {reprocessed}; raw: {raw}; difference in favor of reprocessing: {delta}."},

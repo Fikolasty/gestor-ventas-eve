@@ -46,7 +46,7 @@ test('B.6c removes redundant note/settings action but preserves financial and ac
   assert.doesNotMatch(result,/el\('button','mm-cost-settings'/);
   assert.match(result,/body\.append\(origin\)/);
   assert.match(result,/paintCostExplanation\(P,/);
-  assert.match(result,/const costHelpExpanded=|costHelpExpanded=!!cap\.querySelector/);
+  assert.match(result,/const cap=\$\('vCap'\),explanationExpanded=!!cap\.querySelector/);
   assert.match(picker,/modeTotal\(P,m\)/);
   assert.match(picker,/flipPlanAccounting\(P\)/);
   assert.match(picker,/S\.planMode=b\.dataset\.m==='auto'\?null:b\.dataset\.m/);

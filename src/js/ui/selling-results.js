@@ -166,7 +166,7 @@ function appendCostFigures(node,message){
 // B.5: explain ONLY the same charges already used by the selected plan.
 // The caller passes the totals from the existing financial overview; this
 // component never feeds amounts back into computePlan or creates a new quote.
-function paintCostExplanation(P,cost,expanded){
+function paintCostExplanation(P,cost){
   const cap=$('vCap'),grid=cap.querySelector('.v-finance');if(!grid)return;
   const add=(label,value)=>{
     const item=el('div','v-finance-item mm-cost-item');
@@ -180,9 +180,7 @@ function paintCostExplanation(P,cost,expanded){
     cost.importIncluded&&cost.marketVolume<=0?null:cost.tax+cost.brk+cost.rel);
   if(cost.refinery>0.5)add(tx('decision.refiningFee'),cost.refinery);
   if(cost.compression+cost.production>0.5)add(tx('decision.otherCharges'),cost.compression+cost.production);
-  const disclosure=el('details','mm-context-help'),summary=el('summary',null,tx('decision.costsWhy'));
-  disclosure.open=expanded;disclosure.append(summary);
-  const body=el('div','mm-context-body');
+  const body=el('div','mm-context-body mm-cost-answer-panel');
   const explain=(heading,message)=>{const section=el('section','mm-context-part'),paragraph=el('p');
     appendCostFigures(paragraph,message);section.append(el('strong',null,heading),paragraph);body.append(section);};
   if(cost.marketVolume>0){
@@ -203,22 +201,18 @@ function paintCostExplanation(P,cost,expanded){
   if(cost.production>0.5)explain(tx('decision.production'),tx('decision.productionBody',{amount:fmt(cost.production)}));
   const origin=el('p','mm-cost-source',tx('decision.costsSource'));
   body.append(origin);
-  disclosure.append(body);
-  const helpGrid=el('div','mm-explanation-grid');helpGrid.append(disclosure);cap.append(helpGrid);
+  return body;
 }
 
-function paintReprocessingDecision(P,expanded){
-  if(S.flip)return;
+function paintReprocessingDecision(P){
+  if(S.flip)return null;
   const candidates=P.rows.filter(r=>r.q>0&&resolveOre(r.o.name));
-  if(!candidates.length)return;
+  if(!candidates.length)return null;
   const known=candidates.filter(r=>r.rep&&!r.rep.missing),yes=known.filter(r=>r.rep.diff>.5);
   const pending=candidates.length-known.length;
-  // One progressive disclosure, like the deductions above. Keep its open state
-  // across recomputation; the precise economic answer remains inside.
-  const disclosure=el('details','mm-context-help mm-rep-help');
-  disclosure.open=expanded;
-  disclosure.append(el('summary',null,tx('decision.refineWhy')));
-  const body=el('div','mm-context-body'),intro=el('div','mm-rep-main');
+  // The precise economic explanation lives beside the deductions in one
+  // shared disclosure. These panels are content, never nested accordions.
+  const body=el('div','mm-context-body mm-rep-answer-panel'),intro=el('div','mm-rep-main');
   const verdict=el('strong','mm-rep-answer');
   if(candidates.length===1){
     const r=candidates[0];
@@ -263,11 +257,23 @@ function paintReprocessingDecision(P,expanded){
     body.append(entry);
   });
   body.append(el('p','mm-cost-source',tx('decision.refineMethod')));
-  disclosure.append(body);
-  const helpGrid=$('vCap').querySelector('.mm-explanation-grid');
-  // B.6a: refining on the left, deductions under their right-hand cost metric.
-  if(helpGrid)helpGrid.prepend(disclosure);
-  else $('vCap').append(disclosure);
+  return body;
+}
+
+function paintDecisionExplanations(refineBody,costBody,expanded){
+  // B.9: a single native toggle controls both answers. Preserve 50/50 columns
+  // only when an actual reprocessing decision exists; never render an empty half.
+  const paired=!!refineBody;
+  const details=el('details','mm-context-help mm-explanation-pair'+(paired?' has-refining':''));
+  details.open=expanded;
+  const summary=el('summary','mm-explanation-head');
+  if(paired)summary.append(el('span','mm-explanation-question',tx('decision.refineWhy')));
+  summary.append(el('span','mm-explanation-question',tx('decision.costsWhy')));
+  const answers=el('div','mm-explanation-answers');
+  if(paired)answers.append(refineBody);
+  answers.append(costBody);
+  details.append(summary,answers);
+  const wrap=el('div','mm-explanation-grid');wrap.append(details);$('vCap').append(wrap);
 }
 
 let activeRep=0;
@@ -326,9 +332,9 @@ function paintVerdict(P){
     $('vTitle').textContent=tx(P.mode?'verdict.selectedTitle':'verdict.planTitle');
     $('vSubtitle').textContent=tx(S.flip?'trade.tradeSubtitle':P.mode?'verdict.selectedSubtitle':'verdict.planSubtitle');
     if(fa&&$('vWhat').textContent)$('vWhat').textContent+=' · por rapidez';
-    const cap=$('vCap'),costHelpExpanded=!!cap.querySelector('.mm-context-help:not(.mm-rep-help)[open]'),
-      repHelpExpanded=!!cap.querySelector('.mm-rep-help[open]');cap.replaceChildren();
-    cap.dataset.costHelpExpanded=String(costHelpExpanded);cap.dataset.repHelpExpanded=String(repHelpExpanded);
+    const cap=$('vCap'),explanationExpanded=!!cap.querySelector('.mm-explanation-pair[open]');
+    cap.replaceChildren();
+    cap.dataset.explanationExpanded=String(explanationExpanded);
     if(none){cap.textContent=tx('verdict.pending');}
     else{
       // Top-level financial breakdown replaces duplicate plan narration.
@@ -374,10 +380,11 @@ function paintVerdict(P){
    const sum=segs.reduce((a,x)=>a+x[1],0),fb=$('ovFlow');fb.textContent='';
    if(!none){
      const refinery=P.rows.reduce((a,r)=>a+(r.best==='rNull'||r.best==='rJita'?r.refiningCost||0:0),0);
-     paintCostExplanation(P,{tax,brk,rel,ship,refinery,compression,production:prod,
+     const costAnswer=paintCostExplanation(P,{tax,brk,rel,ship,refinery,compression,production:prod,
        importIncluded:P.rows.some(r=>r.best==='fN'),
-       marketVolume:Gn+Gj+Gi,jitaVolume:Gj,nullVolume:Gn},$('vCap').dataset.costHelpExpanded==='true');
-     paintReprocessingDecision(P,$('vCap').dataset.repHelpExpanded==='true');
+       marketVolume:Gn+Gj+Gi,jitaVolume:Gj,nullVolume:Gn});
+     paintDecisionExplanations(paintReprocessingDecision(P),costAnswer,
+       $('vCap').dataset.explanationExpanded==='true');
    }
    if(!none&&sum>0){const hd=el('div','ov-sum');hd.append(el('span',null,'Valor de venta del plan'),el('b',null,fmt(sum)));
      const bar=el('div','ov-bar'),lg=el('div','ov-leg');

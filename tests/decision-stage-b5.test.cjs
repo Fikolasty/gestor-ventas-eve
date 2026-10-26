@@ -71,11 +71,11 @@ test('B.5 financial explanations show source/uncertainty, a neutral breakdown an
   }
   assert.match(resultView,/paintCostExplanation\(P,/);
   assert.match(resultView,/importIncluded:P\.rows\.some\(r=>r\.best==='fN'\)/);
-  assert.match(resultView,/paintReprocessingDecision\(P,/);
+  assert.match(resultView,/paintReprocessingDecision\(P\)/);
   assert.match(resultView,/r\.rep\.routeNet/);
-  assert.match(resultView,/querySelector\('\.mm-rep-help\[open\]'\)/);
-  assert.match(resultView,/el\('details','mm-context-help mm-rep-help'\)/);
-  assert.match(resultView,/el\('summary',null,tx\('decision\.refineWhy'\)\)/);
+  assert.match(resultView,/querySelector\('\.mm-explanation-pair\[open\]'\)/);
+  assert.match(resultView,/el\('details','mm-context-help mm-explanation-pair'/);
+  assert.match(resultView,/el\('span','mm-explanation-question',tx\('decision\.refineWhy'\)\)/);
   assert.doesNotMatch(resultView,/el\('section','mm-rep-decision'\)/);
   assert.match(resultView,/document\.createTextNode\(sentence\.slice/);
   assert.match(resultView,/el\('span','mm-rep-delta '\+\(positive\?'pos':'neg'\)/);
@@ -86,7 +86,7 @@ test('B.5 financial explanations show source/uncertainty, a neutral breakdown an
   assert.doesNotMatch(resultView,/el\('p','mm-cost-included'/);
   assert.match(resultView,/body\.append\(origin\)/);
   assert.match(styling,/#verdict #vCap \.mm-context-help>summary:focus-visible/);
-  assert.match(styling,/html\.light #verdict #vCap \.mm-context-help\.mm-rep-help/);
+  assert.match(styling,/#verdict #vCap \.mm-explanation-pair\.has-refining \.mm-cost-answer-panel/);
   assert.match(styling,/#verdict #vCap \.mm-rep-delta\.pos\{color:var\(--gain\)\}/);
   assert.match(styling,/#verdict #vCap \.mm-rep-delta\.neg\{color:var\(--loss\)\}/);
   assert.match(shell,/class="mm-inline-faq mm-ledger-faq"/);

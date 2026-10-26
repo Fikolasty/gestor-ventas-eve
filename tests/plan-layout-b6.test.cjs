@@ -41,12 +41,12 @@ test('B.6 preserves actual plan accounting, sorting, filters, selected-route ref
   assert.doesNotMatch(html,/class="pk-hd"/);
 });
 
-test('B.6 keeps two context disclosures responsive and colors explanatory deltas semantically',()=>{
+test('B.6 context answers share one B.9 disclosure and color explanatory deltas semantically',()=>{
   assert.match(view,/el\('div','mm-explanation-grid'\)/);
   assert.match(view,/appendCostFigures\(paragraph,message\)/);
   assert.match(view,/el\('span','mm-rep-delta '\+\(rep\.diff>=0\?'pos':'neg'\)/);
-  assert.match(css,/@media\(min-width:960px\)/);
-  assert.match(css,/#verdict #vCap \.mm-explanation-grid:has\(>\.mm-rep-help\)/);
+  assert.match(css,/#verdict #vCap \.mm-explanation-pair\.has-refining \.mm-explanation-answers/);
+  assert.match(css,/@media\(max-width:959px\)/);
   assert.match(css,/#verdict #vCap \.mm-rep-answer\{font:600 var\(--mm-sales-explanation-size\)/);
   assert.match(css,/#verdict #vCap \.mm-context-number\.pos\{color:var\(--gain\)\}/);
   assert.match(css,/#verdict #vCap \.mm-context-number\.neg\{color:var\(--loss\)\}/);

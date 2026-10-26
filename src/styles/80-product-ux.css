@@ -1045,9 +1045,6 @@ html.light #ledger #lots .lot-pp .copy:hover:not(:disabled){background:#e3e0da!i
   max-width:100ch;margin:15px 0;color:var(--txt);opacity:.76;
   font:450 var(--mm-sales-explanation-size)/1.6 var(--f-ui)
 }
-#verdict #vCap .mm-context-help.mm-rep-help{
-  margin:13px 0 0;background:var(--surface-panel)
-}
 #verdict #vCap .mm-rep-main{
   display:grid;gap:4px;padding:11px 0 14px;
   border-bottom:1px solid var(--line2)
@@ -1061,7 +1058,6 @@ html.light #ledger #lots .lot-pp .copy:hover:not(:disabled){background:#e3e0da!i
 #verdict #vCap .mm-rep-sub{
   margin:4px 0 0;color:var(--txt);opacity:.82;font:500 var(--mm-sales-explanation-size)/1.6 var(--f-ui)
 }
-html.light #verdict #vCap .mm-context-help.mm-rep-help,
 html.light #verdict #vCap .v-finance-item.mm-cost-item{background:var(--surface-card)}
 /* Same compact, optional help contract in Listado, plan chooser and courier. */
 #ledger>.mm-inline-faq,#pSum>.mm-inline-faq,#unitCourierBox>.mm-inline-faq{
@@ -1109,8 +1105,7 @@ html.light #verdict #vCap .v-finance-item.mm-cost-item{background:var(--surface-
   #unitCourierBox>.mm-inline-faq>summary::after{transition:none}
 }
 
-/* B.6 · The two optional explanations share one row only when both exist.
-   Let their own content determine height; avoid an empty half-card for loot. */
+/* B.6 · One host for financial explanations. B.9 owns its inner symmetry. */
 #verdict #vCap .mm-explanation-grid{display:grid;grid-template-columns:minmax(0,1fr);align-items:stretch;gap:13px;margin:9px 0 0}
 #verdict #vCap .mm-explanation-grid .mm-context-help{min-width:0;margin:0}
 #verdict #vCap .mm-rep-answer{font:600 var(--mm-sales-explanation-size)/1.6 var(--f-ui)}
@@ -1118,8 +1113,57 @@ html.light #verdict #vCap .v-finance-item.mm-cost-item{background:var(--surface-
 #verdict #vCap .mm-context-number.pos{color:var(--gain)}
 #verdict #vCap .mm-context-number.neg{color:var(--loss)}
 #verdict #vCap .mm-rep-delta{font-weight:700;font-variant-numeric:tabular-nums}
-@media(min-width:960px){
-  #verdict #vCap .mm-explanation-grid:has(>.mm-rep-help){grid-template-columns:repeat(2,minmax(0,1fr))}
+
+/* B.9 · One shared, initially closed disclosure: two exact equal halves, no
+   nested accordions, and one arrow. The content can grow without fake cards. */
+#verdict #vCap .mm-explanation-grid .mm-explanation-pair{
+  width:100%;background:var(--surface-card)
+}
+#verdict #vCap .mm-explanation-pair>summary{
+  display:grid;grid-template-columns:minmax(0,1fr);
+  position:relative;padding:0;gap:0;align-items:stretch
+}
+#verdict #vCap .mm-explanation-pair.has-refining>summary{
+  grid-template-columns:repeat(2,minmax(0,1fr))
+}
+#verdict #vCap .mm-explanation-pair .mm-explanation-question{
+  display:flex;align-items:center;min-width:0;padding:13px 17px;
+  overflow-wrap:anywhere
+}
+#verdict #vCap .mm-explanation-pair .mm-explanation-question:last-child{padding-right:42px}
+#verdict #vCap .mm-explanation-pair.has-refining .mm-explanation-question+.mm-explanation-question{
+  border-left:1px solid var(--line2)
+}
+#verdict #vCap .mm-explanation-pair>summary::after{
+  position:absolute;right:19px;top:calc(50% - 5px);margin-left:0
+}
+#verdict #vCap .mm-explanation-pair .mm-explanation-answers{
+  display:grid;grid-template-columns:minmax(0,1fr);
+  align-items:stretch;border-top:1px solid var(--line2)
+}
+#verdict #vCap .mm-explanation-pair.has-refining .mm-explanation-answers{
+  grid-template-columns:repeat(2,minmax(0,1fr))
+}
+#verdict #vCap .mm-explanation-pair .mm-context-body{
+  min-width:0;border-top:0;padding:5px 17px 17px;
+  background:transparent
+}
+#verdict #vCap .mm-explanation-pair.has-refining .mm-cost-answer-panel{
+  border-left:1px solid var(--line2)
+}
+@media(max-width:959px){
+  #verdict #vCap .mm-explanation-pair.has-refining>summary,
+  #verdict #vCap .mm-explanation-pair.has-refining .mm-explanation-answers{
+    grid-template-columns:minmax(0,1fr)
+  }
+  #verdict #vCap .mm-explanation-pair.has-refining .mm-explanation-question+.mm-explanation-question{
+    border-left:0;border-top:1px solid var(--line2)
+  }
+  #verdict #vCap .mm-explanation-pair.has-refining .mm-cost-answer-panel{
+    border-left:0;border-top:1px solid var(--line2)
+  }
+  #verdict #vCap .mm-explanation-pair>summary::after{top:auto;bottom:calc(25% - 4px)}
+  #verdict #vCap .mm-explanation-pair:not(.has-refining)>summary::after{top:calc(50% - 5px);bottom:auto}
 }
 
 /* B.6c · The real plan engine still supplies every number. The 2x2 grid

@@ -1166,19 +1166,16 @@ class ThemeBrowserTests(unittest.TestCase):
                     paintVerdict(P);
                 } finally {S.items=oldItems;lastP=oldP;}
             }""")
-            summary=self.page.locator('#vCap .mm-context-help:not(.mm-rep-help) > summary')
-            expect(summary).to_have_count(1)
-            if language=='es':
-                self.assertFalse(self.page.locator('#vCap .mm-context-help:not(.mm-rep-help)').evaluate('(d)=>d.open'))
-            else:
-                # Language changes preserve the reader's open explanations.
-                self.assertTrue(self.page.locator('#vCap .mm-context-help:not(.mm-rep-help)').evaluate('(d)=>d.open'))
-            rep_disclosure=self.page.locator('#vCap .mm-explanation-grid>.mm-rep-help')
-            expect(rep_disclosure).to_have_count(1)
-            self.assertEqual(rep_disclosure.evaluate('(d)=>d.open'),language=='en')
-            self.assertEqual(self.page.locator('#vCap .mm-rep-question').count(),0)
-            self.assertIn('¿Por qué reprocesar o no?' if language=='es' else 'Why reprocess or not?',
-                          rep_disclosure.locator('summary').first.inner_text())
+            disclosure=self.page.locator('#vCap .mm-explanation-pair')
+            expect(disclosure).to_have_count(1)
+            expect(disclosure).to_have_class(re.compile('has-refining'))
+            self.assertEqual(disclosure.evaluate('(d)=>d.open'),language=='en')
+            summary=disclosure.locator(':scope > summary')
+            titles=summary.locator('.mm-explanation-question').all_inner_texts()
+            self.assertEqual(titles,['¿Por qué reprocesar o no?','¿De dónde salen estas deducciones?']
+                             if language=='es' else ['Why reprocess or not?','Where do these deductions come from?'])
+            self.assertEqual(disclosure.locator('details').count(),0)
+            self.assertEqual(self.page.locator('#vCap .mm-context-help').count(),1)
             answer=self.page.locator('#vCap .mm-rep-answer')
             if language=='es':
                 self.assertTrue(answer.is_hidden())
@@ -1189,12 +1186,11 @@ class ThemeBrowserTests(unittest.TestCase):
             self.assertGreaterEqual(self.page.locator('#vCap .mm-cost-item').count(),2)
             if language=='es':
                 summary.click()
-            self.assertIn('Accounting' if language=='en' else 'Accounting',
-                          self.page.locator('#vCap .mm-context-help:not(.mm-rep-help) .mm-context-body').inner_text())
+            expect(disclosure).to_have_attribute('open','')
+            self.assertIn('Accounting',
+                          self.page.locator('#vCap .mm-cost-answer-panel').inner_text())
             self.assertEqual(self.page.locator('#vCap .mm-cost-settings').count(),0)
             self.assertEqual(self.page.locator('#vCap .mm-cost-included').count(),0)
-            if language=='es':
-                self.page.locator('#vCap .mm-rep-help>summary').click()
             expect(answer).to_be_visible()
             self.assertIn('Reprocesa el' if language=='es' else 'Reprocess',answer.inner_text())
             positive_delta=self.page.locator('#vCap .mm-rep-answer .mm-rep-delta.pos')
@@ -1204,24 +1200,28 @@ class ThemeBrowserTests(unittest.TestCase):
             self.assertGreater(channels(positive_delta.evaluate('(el)=>getComputedStyle(el).color'))[1],
                                channels(positive_delta.evaluate('(el)=>getComputedStyle(el).color'))[0])
             self.assertIn('courier' if language=='en' else 'courier',
-                          self.page.locator('#vCap .mm-rep-help').inner_text().lower())
-            # Reactively repainting must retain each independently open disclosure.
+                          self.page.locator('#vCap .mm-rep-answer-panel').inner_text().lower())
+            # Repainting retains the single expanded state and all exact values.
             self.page.evaluate("""() => {
                 const old=S.items; S.items=[window.__b5Fixture.item];
                 paintVerdict(window.__b5Fixture.P); S.items=old;
             }""")
-            self.assertEqual(self.page.locator('#vCap .mm-context-help[open]').count(),2)
+            self.assertEqual(self.page.locator('#vCap .mm-explanation-pair[open]').count(),1)
             for width in (390,630,1440):
                 self.page.set_viewport_size({'width':width,'height':900})
                 for light in (False,True):
                     self.page.evaluate('(on)=>document.documentElement.classList.toggle("light",on)',light)
                     panels=self.page.evaluate("""() => {
-                        const left=document.querySelector('#vCap .mm-rep-help').getBoundingClientRect();
-                        const right=document.querySelector('#vCap .mm-context-help:not(.mm-rep-help)').getBoundingClientRect();
+                        const left=document.querySelector('#vCap .mm-rep-answer-panel').getBoundingClientRect();
+                        const right=document.querySelector('#vCap .mm-cost-answer-panel').getBoundingClientRect();
+                        const heads=[...document.querySelectorAll('#vCap .mm-explanation-question')]
+                            .map(x=>x.getBoundingClientRect());
                         const answer=document.querySelector('#vCap .mm-rep-answer');
                         const costNumber=document.querySelector('#vCap .mm-context-number');
-                        return {left:{x:left.x,y:left.y,right:left.right,bottom:left.bottom},
-                            right:{x:right.x,y:right.y,bottom:right.bottom},font:parseFloat(getComputedStyle(answer).fontSize),
+                        return {left:{x:left.x,y:left.y,right:left.right,bottom:left.bottom,width:left.width},
+                            right:{x:right.x,y:right.y,bottom:right.bottom,width:right.width},
+                            heads:heads.map(r=>({width:r.width,y:r.y,bottom:r.bottom,right:r.right})),
+                            font:parseFloat(getComputedStyle(answer).fontSize),
                             numbers:!!costNumber};
                     }""")
                     self.assertAlmostEqual(panels['font'],13,delta=.05, msg=str(panels))
@@ -1230,8 +1230,13 @@ class ThemeBrowserTests(unittest.TestCase):
                         self.assertLessEqual(panels['left']['right'],panels['right']['x']+1,panels)
                         self.assertAlmostEqual(panels['left']['y'],panels['right']['y'],delta=2)
                         self.assertAlmostEqual(panels['left']['bottom'],panels['right']['bottom'],delta=2)
+                        self.assertAlmostEqual(panels['left']['width'],panels['right']['width'],delta=1, msg=str(panels))
+                        self.assertAlmostEqual(panels['heads'][0]['width'],panels['heads'][1]['width'],delta=1)
+                        self.assertAlmostEqual(panels['heads'][0]['y'],panels['heads'][1]['y'],delta=1)
+                        self.assertAlmostEqual(panels['heads'][0]['right'],panels['left']['right'],delta=1, msg=str(panels))
                     else:
                         self.assertGreaterEqual(panels['right']['y'],panels['left']['bottom']-1,panels)
+                        self.assertGreaterEqual(panels['heads'][1]['y'],panels['heads'][0]['bottom']-1,panels)
                     type_scale=self.page.evaluate("""() => {
                         const px=selector=>{
                             const element=document.querySelector(selector);
@@ -1239,11 +1244,11 @@ class ThemeBrowserTests(unittest.TestCase):
                             return parseFloat(getComputedStyle(element).fontSize);
                         };
                         return {
-                            question:px('#vCap .mm-context-help>summary'),
+                            question:px('#vCap .mm-explanation-pair>summary'),
                             subheading:px('#vCap .mm-context-part>strong'),
                             explanation:px('#vCap .mm-context-part>p'),
                             source:px('#vCap .mm-cost-source'),
-                            repQuestion:px('#vCap .mm-rep-help>summary'),
+                            repQuestion:px('#vCap .mm-explanation-question:first-child'),
                             repAnswer:px('#vCap .mm-rep-answer'),
                             repSub:px('#vCap .mm-rep-sub'),
                             faqQuestion:px('#pSum #pkSpeedBox>.mm-inline-faq>summary'),
@@ -1285,7 +1290,12 @@ class ThemeBrowserTests(unittest.TestCase):
                         out=INDEX.parent/'tests'/'artifacts'/'theme'
                         out.mkdir(parents=True,exist_ok=True)
                         self.page.locator('#vCap .mm-explanation-grid').screenshot(
-                            path=str(out/'b6-explanations-es-1440-dark.png'),animations='disabled')
+                            path=str(out/'b9-explanations-es-1440-dark.png'),animations='disabled')
+                    if language=='es' and width==390 and light:
+                        out=INDEX.parent/'tests'/'artifacts'/'theme'
+                        out.mkdir(parents=True,exist_ok=True)
+                        self.page.locator('#vCap .mm-explanation-grid').screenshot(
+                            path=str(out/'b9-explanations-es-390-light.png'),animations='disabled')
                     if width in (390,1440) and not light:
                         out=INDEX.parent/'tests'/'artifacts'/'theme'
                         out.mkdir(parents=True,exist_ok=True)
@@ -1294,6 +1304,16 @@ class ThemeBrowserTests(unittest.TestCase):
                         out=INDEX.parent/'tests'/'artifacts'/'theme'
                         out.mkdir(parents=True,exist_ok=True)
                         self.page.screenshot(path=str(out/f'b5-{language}-390-light.png'),animations='disabled',full_page=True)
+            summary=self.page.locator('#vCap .mm-explanation-pair>summary')
+            summary.focus()
+            self.page.keyboard.press('Space')
+            expect(self.page.locator('#vCap .mm-explanation-pair')).not_to_have_attribute('open','')
+            expect(self.page.locator('#vCap .mm-rep-answer-panel')).to_be_hidden()
+            expect(self.page.locator('#vCap .mm-cost-answer-panel')).to_be_hidden()
+            self.page.keyboard.press('Enter')
+            expect(self.page.locator('#vCap .mm-explanation-pair')).to_have_attribute('open','')
+            expect(self.page.locator('#vCap .mm-rep-answer-panel')).to_be_visible()
+            expect(self.page.locator('#vCap .mm-cost-answer-panel')).to_be_visible()
             if language=='es':
                 self.page.evaluate("""() => {
                     const old=S.items,r=window.__b5Fixture.P.rows[0];
@@ -1346,10 +1366,12 @@ class ThemeBrowserTests(unittest.TestCase):
         charge=self.page.locator('#vCap .mm-cost-item').first
         self.assertIn('known subtotal', charge.inner_text())
         self.assertEqual(charge.locator('strong').inner_text(),'—')
-        self.page.locator('#vCap .mm-context-help:not(.mm-rep-help)>summary').click()
-        expect(self.page.locator('#vCap .mm-context-help:not(.mm-rep-help) .mm-context-body')).to_contain_text(
+        self.page.locator('#vCap .mm-explanation-pair>summary').click()
+        expect(self.page.locator('#vCap .mm-cost-answer-panel')).to_contain_text(
             'charges cannot be truthfully itemized')
-        self.assertEqual(self.page.locator('#vCap .mm-explanation-grid>.mm-rep-help').count(),0)
+        self.assertEqual(self.page.locator('#vCap .mm-explanation-pair .mm-explanation-question').count(),1)
+        self.assertEqual(self.page.locator('#vCap .mm-rep-answer-panel').count(),0)
+        self.assertEqual(self.page.locator('#vCap .mm-explanation-pair details').count(),0)
 
     def test_b4_plan_comparison_in_result_tracks_selected_route(self):
         from playwright.sync_api import expect

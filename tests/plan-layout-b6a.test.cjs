@@ -11,11 +11,10 @@ const css=fs.readFileSync('src/styles/80-product-ux.css','utf8');
 test('B.6a displays estimated net proceeds once and aligns help with deductions',()=>{
   assert.doesNotMatch(verdict,/card\(tx\('verdict\.netSales'\)/);
   assert.match(verdict,/card\(tx\('verdict\.freight'\),fig\.shipping,true\)/);
-  assert.match(verdict,/if\(helpGrid\)helpGrid\.prepend\(disclosure\)/);
-  assert.match(verdict,/costHelpExpanded=!!cap\.querySelector/);
-  assert.match(verdict,/repHelpExpanded=!!cap\.querySelector/);
+  assert.match(verdict,/paintDecisionExplanations\(paintReprocessingDecision\(P\),costAnswer,/);
+  assert.match(verdict,/explanationExpanded=!!cap\.querySelector\('\.mm-explanation-pair\[open\]'\)/);
   assert.match(shell,/id="vIsk"/);
-  assert.match(css,/#verdict #vCap \.mm-explanation-grid:has\(>\.mm-rep-help\)/);
+  assert.match(css,/#verdict #vCap \.mm-explanation-pair\.has-refining \.mm-explanation-answers/);
 });
 
 test('B.6c keeps the fast-route rationale in the plan grid and hides zero-courier detail',()=>{
