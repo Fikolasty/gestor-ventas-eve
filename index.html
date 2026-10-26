@@ -7,7 +7,7 @@
 <meta name="referrer" content="no-referrer">
 <title>Market Moves+ · SIGMA GRINDSET</title>
 <style>
-/* ================= Market Moves+ v1.0.146 =================
+/* ================= Market Moves+ v1.0.147 =================
    Paleta: azul de base, naranja = acción, verde/rojo = ganancia/pérdida.
    Sin backdrop-filter: el vidrio se finge con rgba + bordes. */
 *{box-sizing:border-box;margin:0;padding:0}
@@ -7534,13 +7534,13 @@ Contraband Freight = no</textarea><small>Una regla por línea: Nombre = tax tota
 <button type="button" class="totop" id="toTop" aria-label="Volver arriba" title="Volver arriba (Inicio)" hidden><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 14l6-6 6 6"/></svg></button>
 <footer class="foot">
   <p class="foot-sec"><span class="ic i-lock" aria-hidden="true"></span>Tu inventario no se guarda: al cerrar o recargar se borra. Solo tus Ajustes quedan en este navegador.</p>
-  <div class="foot-by">Creado por <b>Fiko McGivert</b> · Vanguardia DR · SIGMA GRINDSET · <span class="ver">v1.0.146</span></div>
+  <div class="foot-by">Creado por <b>Fiko McGivert</b> · Vanguardia DR · SIGMA GRINDSET · <span class="ver">v1.0.147</span></div>
 </footer>
 
 <script>
 'use strict';
 /* ============================================================
-   Market Moves+ v1.0.146 — SIGMA GRINDSET / Vanguardia DR
+   Market Moves+ v1.0.147 — SIGMA GRINDSET / Vanguardia DR
    Flujo:  pegado → items → carga (ESI: precios, volúmenes, historial) → verificación → plan → vista
      1. Pegado      parsePaste(): parser posicional de columnas de EVE (Name · Quantity · … · Volume · Est. Price).
      2. Carga       esiItems(): trae todo lo que falta; mientras carga, refresh() NO pinta (S.loading).
@@ -9224,32 +9224,50 @@ function suggUnit(r){const k=r.best,a=r.o.jita;
   if(k==='null'||k==='fN')return r.np;if(k==='jOrd'||k==='fJ')return r.jl;
   if(k==='jInst'||k==='fJI')return r.instAvg!=null?r.instAvg:(a&&a.buy!=null?a.buy:null);
   if(k==='bb')return r.bbUnit;if(k==='disc')return r.discUnit;return null;}
+// D.2: collapsed lot headers repaint often when only unrelated settings change.
+// Avoid replacing existing text nodes or reassigning equal attributes: those
+// writes can trigger observers and invalidation in hundreds of otherwise
+// unchanged rows. This helper is intentionally scoped to plain-text lot leaves;
+// NEVER use it for composite nodes that own icons, inputs or focusable children.
+function setLotLeafText(node,txt,cls){
+  const next=String(txt);
+  if(node.textContent!==next)node.textContent=next;
+  if(cls!==undefined&&node.className!==cls)node.className=cls;
+}
+function setLotAttr(node,name,value){
+  const next=String(value);
+  if(node.getAttribute(name)!==next)node.setAttribute(name,next);
+}
 function paintLot(r){
   const o=r.o,u=o.ui;if(!u)return;
   const removeButton=u.removeButton;
   if(removeButton){const label=tx('ledger.removeItem',{item:o.name});
-    removeButton.title=label;removeButton.setAttribute('aria-label',label);}
+    setLotAttr(removeButton,'title',label);setLotAttr(removeButton,'aria-label',label);}
   if(!u.ic){const ic=iconFor(o.name);if(ic){u.nm.querySelector('b').prepend(ic);u.ic=ic;}} // ícono cuando ya se conoce el type_id
-  u.qty.textContent=tx('ledger.units',{count:fmtQ(r.q)});
-  u.ppLabel.textContent=tx('ledger.lotUnitPrice');
-  u.netLabel.textContent=tx('ledger.netSales');
+  setLotLeafText(u.qty,tx('ledger.units',{count:fmtQ(r.q)}));
+  setLotLeafText(u.ppLabel,tx('ledger.lotUnitPrice'));
+  setLotLeafText(u.netLabel,tx('ledger.netSales'));
   const netValue=r.best?r.net[r.best]:null,hasNet=Number.isFinite(netValue);
   const netText=hasNet?fmt(netValue):'—';
   const netCopyLabel=tx('ledger.copyLotNet',{item:o.name,price:netText});
-  u.net.title=(S.flip?tx('ledger.tradeNetHint'):tx('ledger.saleNetHint'))+(hasNet?' · '+netCopyLabel:'');
-  u.net.setAttribute('aria-label',hasNet?netCopyLabel:tx('ledger.noLotNet'));
-  u.net.dataset.v=hasNet?String(Math.round(netValue*100)/100):'';
-  u.net.disabled=!hasNet;
+  setLotAttr(u.net,'title',(S.flip?tx('ledger.tradeNetHint'):tx('ledger.saleNetHint'))+(hasNet?' · '+netCopyLabel:''));
+  setLotAttr(u.net,'aria-label',hasNet?netCopyLabel:tx('ledger.noLotNet'));
+  setLotAttr(u.net,'data-v',hasNet?String(Math.round(netValue*100)/100):'');
+  if(u.net.disabled===hasNet)u.net.disabled=!hasNet;
   const warn=(o.checks||[]).filter(c=>c[1]==='warn').length,ok=(o.checks||[]).length&&!warn;
-  setText(u.tag,warn?warn+(S.lang==='en'?(warn>1?' warnings':' warning'):(warn>1?' avisos':' aviso')):(ok?(S.lang==='en'?'verified':'verificado'):''),'tag '+(warn?'warn':ok?'ok':''));u.tag.hidden=!warn&&!ok;
-  if(!u.skT){u.skT=el('span','tag sk');u.nm.append(u.skT);}u.skT.hidden=!o.skew;if(o.skew)u.skT.textContent='ajuste '+(o.skew>0?'+':'−')+pctS(Math.abs(o.skew))+'%';
-  if(r.best){const l=OPTS.find(x=>x[0]===r.best)[1].replaceAll('HY-RWO',nullSystem()).replace(/\bNull\b/g,nullSystem());setText(u.dest,l,'lot-dest pill k-'+r.best+' '+(r.best==='disc'?'p-disc':SHIPS[r.best]?'p-jita':'p-null'));}
-  else setText(u.dest,'Falta Precio','lot-dest pill p-none');
-  setText(u.net,netText,'lot-net copy cp-n '+(hasNet?sgn(netValue):''));
-  {const up=suggUnit(r),b=u.ppB;const t=up==null?'—':fmtP(up);if(b.textContent!==t)b.textContent=t;b.dataset.v=up==null?'':String(Math.round(up*100)/100);b.disabled=up==null;
+  setLotLeafText(u.tag,warn?warn+(S.lang==='en'?(warn>1?' warnings':' warning'):(warn>1?' avisos':' aviso')):(ok?(S.lang==='en'?'verified':'verificado'):''),'tag '+(warn?'warn':ok?'ok':''));
+  if(u.tag.hidden!==(!warn&&!ok))u.tag.hidden=!warn&&!ok;
+  if(!u.skT){u.skT=el('span','tag sk');u.nm.append(u.skT);}
+  if(u.skT.hidden!==!o.skew)u.skT.hidden=!o.skew;
+  if(o.skew)setLotLeafText(u.skT,'ajuste '+(o.skew>0?'+':'−')+pctS(Math.abs(o.skew))+'%');
+  if(r.best){const l=OPTS.find(x=>x[0]===r.best)[1].replaceAll('HY-RWO',nullSystem()).replace(/\bNull\b/g,nullSystem());setLotLeafText(u.dest,l,'lot-dest pill k-'+r.best+' '+(r.best==='disc'?'p-disc':SHIPS[r.best]?'p-jita':'p-null'));}
+  else setLotLeafText(u.dest,'Falta Precio','lot-dest pill p-none');
+  setLotLeafText(u.net,netText,'lot-net copy cp-n '+(hasNet?sgn(netValue):''));
+  {const up=suggUnit(r),b=u.ppB;const t=up==null?'—':fmtP(up);setLotLeafText(b,t);setLotAttr(b,'data-v',up==null?'':String(Math.round(up*100)/100));
+   if(b.disabled!==(up==null))b.disabled=up==null;
    b.classList.toggle('isk-pos',up!=null&&up>0);b.classList.toggle('isk-neg',up!=null&&up<0);
-   b.title=up==null?tx('ledger.noUnitPrice'):tx('ledger.copyUnit',{item:o.name,price:t});
-   b.setAttribute('aria-label',b.title);}
+   const label=up==null?tx('ledger.noUnitPrice'):tx('ledger.copyUnit',{item:o.name,price:t});
+   setLotAttr(b,'title',label);setLotAttr(b,'aria-label',label);}
   // rendimiento: el cuerpo (opciones, guía, precios, verificación) solo se pinta si la fila está abierta
   u.last=r;if(u.body.hidden)return;
   paintGuide(u.guide,r);
