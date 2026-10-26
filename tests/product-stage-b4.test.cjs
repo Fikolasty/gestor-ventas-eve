@@ -46,6 +46,8 @@ test('B.4 all new labels, financial caveats and disclosures are translated',()=>
     assert.ok(catalog[key].es.trim()&&catalog[key].en.trim(),key);
     assert.notEqual(catalog[key].es,catalog[key].en,key);
   }
-  assert.match(shell,/data-i18n="ledger\.intro"/);
+  assert.doesNotMatch(shell,/data-i18n="ledger\.intro"/);
+  assert.match(shell,/id="ledgerPriceHelp"/);
+  assert.match(shell,/data-i18n-aria-label="decision\.priceSourceQ"/);
   assert.match(shell,/data-i18n="ledger\.netSort"/);
 });

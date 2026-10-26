@@ -1257,8 +1257,8 @@ class ThemeBrowserTests(unittest.TestCase):
                             repSub:px('#vCap .mm-rep-sub'),
                             faqQuestion:px('#pSum #pkSpeedBox>.mm-inline-faq>summary'),
                             faqAnswer:px('#pSum #pkSpeedBox>.mm-inline-faq>p'),
-                            ledgerQuestion:px('#ledger>.mm-inline-faq>summary'),
-                            ledgerExplanation:px('#ledger>.mm-inline-faq>p'),
+                            ledgerQuestion:px('#ledger #ledgerPriceHelp .mm-ledger-info-glyph'),
+                            ledgerExplanation:px('#ledger #ledgerPriceHelp>p'),
                             financeQuestion:px('#verdict #vFinanceDetails>summary'),
                             netContext:px('#verdict .mm-net-context'),
                             sortLabel:px('#ledger .ledger-sort-title'),
@@ -1269,8 +1269,8 @@ class ThemeBrowserTests(unittest.TestCase):
                         'question':13.5,'explanation':13,
                         'source':13,'repQuestion':13.5,
                         'repSub':13,'faqQuestion':13.5,'faqAnswer':13,
-                        'ledgerQuestion':13.5,'ledgerExplanation':13,
-                        'financeQuestion':13.5,'netContext':13,'sortLabel':12.5
+                        'ledgerQuestion':11,'ledgerExplanation':13,
+                        'financeQuestion':13.5,'netContext':13,'sortLabel':11.68
                     }.items():
                         self.assertAlmostEqual(type_scale[label],expected,places=2,
                                                msg=f'{language}/{width}/{light} {label}: {type_scale}')
@@ -1897,7 +1897,7 @@ class ThemeBrowserTests(unittest.TestCase):
                         }""")
                         self.assertGreater(sizing[2]['w'],95,sizing)
                         prices_width=self.page.evaluate("""() => {
-                            const n=document.querySelector('#lots .lot-body>.prices');
+                            const n=document.querySelector('#lots .lot-panel-grid .prices');
                             return {scroll:n.scrollWidth,client:n.clientWidth};
                         }""")
                         self.assertLessEqual(prices_width['scroll'],prices_width['client']+1,prices_width)
@@ -1915,6 +1915,94 @@ class ThemeBrowserTests(unittest.TestCase):
             self.page.evaluate("S.flip=true;paintLot(S.items[0].ui.last)")
             expected='antes de descontar la inversión' if language=='es' else 'before subtracting purchase investment'
             self.assertIn(expected,self.page.locator('#lots .lot').first.locator('.lot-net').get_attribute('title'))
+
+    def test_b11_ledger_item_arrow_really_hides_body_and_supports_keyboard(self):
+        """The old grid !important must not override the native hidden state."""
+        from playwright.sync_api import expect
+        self.page.evaluate("""() => {
+            const o={name:'Synthetic Arrow Item',qty:7,m3u:1,ref:1000,checks:[],
+                jita:{buy:900,topBuy:900,sell:1000,topSell:1000}};
+            const r={o,q:7,best:'null',auto:'null',np:800,jl:1000,
+                g:{null:5000,jOrd:4500},net:{null:5000,jOrd:4500},
+                ship:{},prod:0,vol:7,qd:0,hint:{},courierAllocated:0};
+            S.items=[o];document.querySelector('#lots').replaceChildren(buildLot(o));
+            const ledger=document.querySelector('#ledger');ledger.hidden=false;ledger.open=true;
+            paintLot(r);
+        }""")
+        toggle=self.page.locator('#lots .lot-open')
+        body=self.page.locator('#lots .lot-body')
+        expect(toggle).to_have_attribute('aria-expanded','false')
+        expect(body).to_be_hidden()
+        toggle.focus()
+        self.page.keyboard.press('Enter')
+        expect(toggle).to_have_attribute('aria-expanded','true')
+        expect(body).to_be_visible()
+        toggle.focus()
+        self.page.keyboard.press('Space')
+        expect(toggle).to_have_attribute('aria-expanded','false')
+        expect(body).to_be_hidden()
+
+    def test_b11_ledger_four_equal_columns_and_independent_disclosures(self):
+        """Four cards, no nested guide, truthful missing routes, narrow-screen order."""
+        from playwright.sync_api import expect
+        self.page.evaluate("""() => {
+            const o={name:'Synthetic Layout Item',qty:7,m3u:1,ref:1000,checks:[],
+                jita:{buy:900,topBuy:900,sell:1000,topSell:1000}};
+            const r={o,q:7,best:'null',auto:'null',np:800,jl:1000,
+                g:{null:5000,jOrd:4500},net:{null:5000,jOrd:4500},
+                guide:{k:'null',unit:800,relistFee:75,days:3},
+                ship:{},prod:0,vol:7,qd:0,hint:{},courierAllocated:0};
+            S.items=[o];document.querySelector('#lots').replaceChildren(buildLot(o));
+            const ledger=document.querySelector('#ledger');ledger.hidden=false;ledger.open=true;
+            paintLot(r);
+        }""")
+        self.page.locator('#lots .lot-open').click()
+        panels=self.page.locator('#lots .lot-panel-grid')
+        expect(panels).to_be_visible()
+        self.assertEqual(panels.locator('details').count(),4)
+        self.assertEqual(self.page.locator('#lots .lot-guide details').count(),0)
+        for cls in ('prices','lot-analysis','lot-adjustments','lot-guide'):
+            expect(self.page.locator('#lots .'+cls)).not_to_have_attribute('open','')
+            self.page.locator('#lots .'+cls+'>summary').click()
+            expect(self.page.locator('#lots .'+cls)).to_have_attribute('open','')
+        # 2 available paths only. The old display:grid!important wrongly
+        # rendered the other ten hidden empty routes.
+        self.assertEqual(self.page.locator('#lots .lot-analysis .opt:visible').count(),2)
+        expect(self.page.locator('#lots .lot-guide .mm-guide-money.isk-pos').first).to_be_visible()
+        expect(self.page.locator('#lots .lot-guide .mm-guide-money.isk-neg').first).to_be_visible()
+        geometry=self.page.evaluate("""() => {
+            const r=s=>document.querySelector('#lots .'+s).getBoundingClientRect();
+            const p=r('prices'),a=r('lot-analysis'),adj=r('lot-adjustments'),g=r('lot-guide');
+            return {left:p.left,right:a.left,pw:p.width,aw:a.width,
+                adjustsLeft:adj.left,guideLeft:g.left,guideTop:g.top,analysisBottom:a.bottom};
+        }""")
+        self.assertAlmostEqual(geometry['pw'],geometry['aw'],delta=1.5)
+        self.assertAlmostEqual(geometry['left'],geometry['adjustsLeft'],delta=1.5)
+        self.assertAlmostEqual(geometry['right'],geometry['guideLeft'],delta=1.5)
+        self.assertLess(geometry['guideTop']-geometry['analysisBottom'],20)
+        out=INDEX.parent/'tests'/'artifacts'/'theme'
+        out.mkdir(parents=True,exist_ok=True)
+        self.page.evaluate('document.documentElement.classList.add("light")')
+        self.page.locator('#ledger').screenshot(
+            path=str(out/'b11-four-panels-1440-light.png'),animations='disabled')
+        self.page.locator('#lots .lot-analysis>summary').click()
+        expect(self.page.locator('#lots .lot-analysis')).not_to_have_attribute('open','')
+        expect(self.page.locator('#lots .prices')).to_have_attribute('open','')
+        for width in (630,390):
+            self.page.set_viewport_size({'width':width,'height':900})
+            positions=self.page.evaluate("""() => {
+                const names=['prices','lot-analysis','lot-adjustments','lot-guide'];
+                return names.map(c=>{const r=document.querySelector('#lots .'+c).getBoundingClientRect();
+                    return {top:r.top,left:r.left,right:r.right,width:r.width};});
+            }""")
+            self.assertEqual([p['top'] for p in positions],sorted(p['top'] for p in positions))
+            self.assertTrue(all(abs(p['width']-positions[0]['width'])<1.5 for p in positions),positions)
+        expect(self.page.locator('#ledgerPriceHelp summary')).to_have_attribute('aria-label',
+            '¿De dónde vienen los precios de cada ítem?')
+        self.page.evaluate("""() => {setLang('en');paintLot(S.items[0].ui.last);}""")
+        expect(self.page.locator('#lots .lot-guide>summary')).to_have_text('How to sell')
+        self.assertIn('per unit',self.page.locator('#lots .lot-guide>.guide').inner_text())
+        self.assertIn('to modify the order',self.page.locator('#lots .lot-guide>.guide').inner_text())
 
 
     def test_paladin_trading_profit_requires_real_purchase_capital(self):

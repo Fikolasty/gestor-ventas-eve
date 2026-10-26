@@ -317,13 +317,17 @@ function cadence(days,isNull){
 function paintGuide(ol,r){
   ol.textContent='';const g=r.guide;if(!g){ol.hidden=true;return;}ol.hidden=false;
   const o=r.o,step=(t,...parts)=>{const li=el('li');li.append(el('b',null,t));const sp=el('span');parts.forEach(x=>sp.append(typeof x==='string'?document.createTextNode(x):x));li.append(sp);ol.append(li);};
+  // Actual values are separate tabular-number tokens: positive proceeds are
+  // green; a fee is red. This is visual only; no economic input is modified.
+  const money=(v,cost=false)=>el('strong','mm-guide-money'+
+    (Number.isFinite(v)&&v!==0?' '+(cost||v<0?'isk-neg':'isk-pos'):''),fmt(v));
   const altLab=g.alt?(g.alt==='null'?nullLabel(o.name):g.alt==='jOrd'?jitaLabel(o.name):OPTS.find(x=>x[0]===g.alt)[1]):null;
   if(g.k==='fN'||g.k==='fJ'||g.k==='fJI'){ // modo Jita → HY-RWO
     const isN=g.k==='fN';
     if(g.k==='fJI'){step('Qué Hacer','Véndelo en Jita 4-4 directamente a las buy orders.');
       step('Precio Medio de Venta','Aproximadamente '+fmtP(r.instAvg)+' por unidad, recorriendo las buy orders para tu cantidad.');return;}
     step('Qué Hacer',isN?'Mándalo de Jita a '+nullSystem()+' con SIGMA Freight y publica una sell order allí. El envío ya está restado.':'Publica una sell order en Jita 4-4.');
-    step('Cómo Listarlo',copyBtn(g.unit,fmtP(g.unit)),' por unidad (haz clic para copiar). Publica '+fmtQ(r.q)+' unidades; valor de la orden: '+fmt(g.unit*r.q)+'.'+(isN?' Es Jita Sell +'+pct(C.impM)+'% neto, ya con Sales Tax, Broker y SCC.':''));
+    step('Cómo Listarlo',copyBtn(g.unit,fmtP(g.unit)),tx('ledger.guideUnitQuantity',{count:fmtQ(r.q)}),money(g.unit*r.q),isN?tx('ledger.guideFees'):'.');
     step('Cuándo Revisar',cadence(g.days,isN));
     if(g.floor!=null&&g.unit>g.floor)step('Precio Mínimo Recomendado','Evita bajar de ',copyBtn(g.floor,fmtP(g.floor)),' por unidad. Más abajo, '+altLab+' deja más ISK.');
     return;
@@ -331,7 +335,7 @@ function paintGuide(ol,r){
   if(g.k==='null'||g.k==='jOrd'){
     const isN=g.k==='null';
     step('Qué Hacer',isN?'Publica una sell order en '+nullSystem()+'. No necesitas envío a Jita.':'Manda el item a Jita 4-4 mediante un envío y crea una sell order. El envío está incluido en la comparación.');
-    step('Cómo Listarlo',copyBtn(g.unit,fmtP(g.unit)),' por unidad (haz clic para copiar). Publica '+fmtQ(r.q)+' unidades; valor de la orden: '+fmt(g.unit*r.q)+'. Duración sugerida: 3 meses'+
+    step('Cómo Listarlo',copyBtn(g.unit,fmtP(g.unit)),tx('ledger.guideUnitQuantity',{count:fmtQ(r.q)}),money(g.unit*r.q),tx('ledger.guideDuration')+
       (isN&&o.nullSeen?' · Undercut de '+pct(C.under)+'% al precio que ves':'')+
       (!isN&&C.ice.on&&isIce(o.name)?(C.ice.jitaMode==='split'?' · precio Split':' · Undercut de '+pct(C.under)+'% a Jita Sell'):'')+
       (isN&&C.ice.on&&isIce(o.name)&&!o.nullSeen&&C.ice.nullMode==='jbuy'?' · Jita Buy −'+pct(C.ice.nullDisc)+'%':'')+'.');
@@ -342,15 +346,15 @@ function paintGuide(ol,r){
       else step('Precio Mínimo Recomendado','Tu precio ya está en el punto de equilibrio frente a '+altLab+'. Otro undercut podría hacer menos conveniente esta venta.');
       step('Cuándo Cambiar de Plan','Si el mercado baja de '+fmtP(g.floor)+(g.days!=null?' o la orden sigue sin venderse después de unos '+Math.max(1,Math.round(g.days*1.5))+' días':'')+', vuelve a comparar las opciones: puede convenir '+actionText(g.alt)+'.');
     }else if(altLab)step('Cuándo Cancelar',(g.days!=null?'Si pasan ~'+Math.max(1,Math.round(g.days*1.5))+' días sin vender, ':'Si no se vende, ')+'cancela y '+actionText(g.alt)+'.');
-    step('Costo de un Relist','Aproximadamente '+fmt(g.relistFee)+' por modificar el precio de esta orden, según tu configuración. Antes de hacer undercut, comprueba que el cambio compense.');
+    step('Costo de un Relist',money(g.relistFee,true),tx('ledger.guideRelistCost'));
   }else if(g.k==='jInst'){
     step('Qué Hacer','Envíalo a Jita 4-4 y vende directamente a las buy orders disponibles, sin esperar a que se complete una sell order.');
     step('Precio Medio de Venta','Aproximadamente '+fmtP(r.instAvg)+' por unidad. Se calcula recorriendo las buy orders disponibles para la cantidad que tienes.');
     if(r.tightPick&&r.tight)step('Por Qué Venta Rápida','Tu orden sería de '+fmtP(r.tight.jl)+' y la mejor compra paga '+fmtP(r.tight.buy)+': solo '+r.tight.ticks+' tick'+(r.tight.ticks===1?'':'s')+' de diferencia. Vender al instante cobra casi lo mismo y sin esperar.');
-    else if(r.net.jOrd!=null)step('Por Qué Venta Rápida','La sell order dejaría '+fmt(r.net.jOrd)+'. La diferencia no supera tu umbral configurado para esperar una venta.');
+    else if(r.net.jOrd!=null)step('Por Qué Venta Rápida',tx('ledger.guideSellOrderWould'),money(r.net.jOrd),tx('ledger.guideWaitThreshold'));
   }else if(g.k==='disc'){
     step('Qué Hacer','Prepara una oferta WTS en Discord (SIGMA o Vanguardia DR). Adjunta una tasación de Janice para que el comprador verifique el precio.');
-    step('Precio',copyBtn(r.discUnit,fmtP(r.discUnit)),' por unidad ('+pct(C.disc.pct)+'% de Jita '+({buy:'Buy',split:'Split',sell:'Sell'})[C.disc.base]+') · total '+fmt(r.g.disc)+'.');
+    step('Precio',copyBtn(r.discUnit,fmtP(r.discUnit)),' por unidad ('+pct(C.disc.pct)+'% de Jita '+({buy:'Buy',split:'Split',sell:'Sell'})[C.disc.base]+') · total ',money(r.g.disc),'.');
     step('Cómo','Sigue los pasos de "Vender a Jugadores" al final de la página.');
     if(g.alt)step('Si Nadie Compra','Si en ~'+C.disc.days+' días nadie lo toma, '+actionText(g.alt)+'.');
   }else if(g.k==='bb'){

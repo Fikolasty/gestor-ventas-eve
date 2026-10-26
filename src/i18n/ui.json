@@ -410,8 +410,8 @@
     "en": "Check each item's best route. Copy the unit price or open its options to compare and adjust."
   },
   "ledger.sortBy": {
-    "es": "ORDENAR POR",
-    "en": "SORT BY"
+    "es": "Ordenar:",
+    "en": "Sort:"
   },
   "ledger.name": {
     "es": "Nombre",
@@ -434,8 +434,8 @@
     "en": "UNIT PRICE · ISK"
   },
   "ledger.netSales": {
-    "es": "NETO ESTIMADO DEL LOTE",
-    "en": "ESTIMATED LOT NET PROCEEDS"
+    "es": "NETO DEL LOTE",
+    "en": "LOT NET PROCEEDS"
   },
   "ledger.netUnit": {
     "es": "NETO POR UNIDAD · ISK",
@@ -466,20 +466,44 @@
     "en": "Remove {item} from the lot"
   },
   "ledger.prices": {
-    "es": "Precios por ruta · copiar valores",
-    "en": "Prices by route · copy values"
+    "es": "Precios por ruta",
+    "en": "Prices by route"
   },
   "ledger.compare": {
-    "es": "Comparar rutas de venta",
-    "en": "Compare selling routes"
+    "es": "Comparar rutas",
+    "en": "Compare routes"
   },
   "ledger.adjust": {
     "es": "Ajustes del ítem",
     "en": "Item settings"
   },
   "ledger.guide": {
-    "es": "Guía para vender este ítem",
-    "en": "Guide to selling this item"
+    "es": "Cómo venderlo",
+    "en": "How to sell"
+  },
+  "ledger.guideUnitQuantity": {
+    "es": " por unidad · {count} unidades · total ",
+    "en": " per unit · {count} units · total "
+  },
+  "ledger.guideFees": {
+    "es": ". Precio con Sales Tax, Broker y SCC descontados.",
+    "en": ". Price after Sales Tax, Broker and SCC."
+  },
+  "ledger.guideDuration": {
+    "es": ". Duración: 3 meses",
+    "en": ". Duration: 3 months"
+  },
+  "ledger.guideRelistCost": {
+    "es": " por modificar la orden, según tus ajustes. Verifica que el cambio compense.",
+    "en": " to modify the order under your settings. Check that the change pays off."
+  },
+  "ledger.guideSellOrderWould": {
+    "es": "La sell order dejaría ",
+    "en": "The sell order would yield "
+  },
+  "ledger.guideWaitThreshold": {
+    "es": ". La diferencia no supera tu umbral para esperar una venta.",
+    "en": ". The difference does not exceed your threshold for waiting to sell."
   },
   "picker.noticeHeading": {
     "es": "AVISOS DEL PLAN",

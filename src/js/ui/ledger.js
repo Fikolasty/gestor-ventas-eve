@@ -68,7 +68,11 @@ function buildLotDetails(o,ui){
   // Los inputs se preservan durante paintLot para que escribir no pierda foco.
   const body=ui.body;
   const rcall=el('div','call rcall'),rcB=el('b'),rcS=el('small'),rcR=el('small','rcr');rcall.append(rcB,rcS,rcR);rcall.hidden=true;
-  const gwrap=el('details','gwrap lot-fold'),guide=el('ol','guide'),guideSummary=el('summary','sub-h',tx('ledger.guide'));guideSummary.dataset.i18n='ledger.guide';gwrap.append(guideSummary,guide);
+  // B.11: guide is a peer of prices, comparison and adjustments, not a nested
+  // disclosure inside an already expanded adjustments panel.
+  const guidePanel=el('details','lot-guide lot-detail-section'),guide=el('ol','guide');
+  const guideSummary=el('summary','sub-h',tx('ledger.guide'));
+  guideSummary.dataset.i18n='ledger.guide';guidePanel.append(guideSummary,guide);
   const opts=el('div','opts');Object.assign(ui,{opt:{},rcall,rcB,rcS,rcR,guide});
   OPTS.forEach(([k,l])=>{
     const r=el('div','opt'),lab=el('span','opt-l',k==='null'?'':optionMarketText(l)),bar=el('span','opt-bar'),fill=el('i'),v=el('span','opt-v'),h=el('span','opt-h');
@@ -106,8 +110,13 @@ function buildLotDetails(o,ui){
   del.addEventListener('click',()=>removeFromPaste(o.name));foot.append(del);
   const verdict=el('section','lot-verdict');verdict.append(rcall);
   const analysis=el('details','lot-analysis lot-detail-section'),analysisSummary=el('summary','sub-h',tx('ledger.compare'));analysisSummary.dataset.i18n='ledger.compare';analysis.append(analysisSummary,opts);
-  const adjustments=el('details','lot-adjustments lot-detail-section'),adjustmentsSummary=el('summary','sub-h',tx('ledger.adjust'));adjustmentsSummary.dataset.i18n='ledger.adjust';adjustments.append(adjustmentsSummary,facts,gwrap);
-  body.append(verdict,prices,analysis,adjustments,checks,foot);
+  const adjustments=el('details','lot-adjustments lot-detail-section'),adjustmentsSummary=el('summary','sub-h',tx('ledger.adjust'));adjustmentsSummary.dataset.i18n='ledger.adjust';adjustments.append(adjustmentsSummary,facts);
+  // Independent vertical stacks prevent a tall prices panel from leaving a
+  // dead zone under the comparison panel. Each stack occupies exactly 50%.
+  const panels=el('div','lot-panel-grid'),left=el('div','lot-panel-column lot-panel-left'),right=el('div','lot-panel-column lot-panel-right');
+  left.append(prices,adjustments);right.append(analysis,guidePanel);
+  panels.append(left,right);
+  body.append(verdict,panels,checks,foot);
   Object.assign(ui,{iRef,iBuyOrder,iM3,bBuy,bVol,pBody,checks,verdict,detailsReady:true});
 }
 // copia el valor limpio: números con máx. 2 decimales y sin "ISK" (listo para pegar en el juego)
@@ -297,6 +306,8 @@ function paintLot(r){
   // The separate sanitized .buy remains untouched for the quick-sell route.
   const postedBuy=o.jita?.topBuy??o.jita?.buy;
   u.bBuy.textContent=postedBuy!=null?fmtP(postedBuy):'—';
+  u.bBuy.classList.toggle('isk-pos',postedBuy!=null&&postedBuy>0);
+  u.bBuy.classList.toggle('isk-neg',postedBuy!=null&&postedBuy<0);
   u.bVol.textContent=o.m3u!=null?fmtV(o.m3u*r.q):'—';
   // Precios para Listar: lo que pones en cada mercado, por unidad
   const tb=u.pBody;tb.textContent='';const a=o.jita;
@@ -309,14 +320,12 @@ function paintLot(r){
       priceRow(tb,'Vender en '+sys+' (importado)',r.np,'Jita Sell ('+js+') +'+pct(C.impM)+'% neto. Paga Sales Tax, Broker y SCC; resta su parte del envío.',nu('fN'),r.best==='fN');
       priceRow(tb,'Orden de venta en Jita',r.jl,'Jita Sell ('+js+').',nu('fJ'),r.best==='fJ');
       priceRow(tb,'Venta rápida en Jita',r.instAvg!=null?r.instAvg:(a&&a.buy!=null?a.buy:null),'Jita Buy.',nu('fJI'),r.best==='fJI');
-      const n=el('tr');const nt=el('td','muted pr-foot');nt.colSpan=4;nt.textContent='Clic en un precio para copiarlo. En el juego se lista por unidad: pon este precio y la cantidad ('+fmtQ(r.q)+').';n.append(nt);tb.append(n);
     }else{
     priceRow(tb,'Vender en '+sys+' (Keepstar)',r.np,nullTxt+qdN+'. Paga Sales Tax, Broker y SCC.',nu('null'),r.best==='null');
     if(C.bb.on)priceRow(tb,'Buyback de la alianza',r.bbUnit,r.bbUnit!=null?pct(1-r.bbTax)+'% de Jita '+({buy:'Buy',split:'Split',sell:'Sell'})[C.bb.base]+' (tax '+pct(r.bbTax)+'%'+(C.bb.special[o.name.toLowerCase()]!=null?', especial de este item':'')+'). Sin Sales Tax ni envío.':(r.hint.bb||''),nu('bb'),r.best==='bb');
     if(C.disc.on)priceRow(tb,'Venta a jugador',r.discUnit,pct(C.disc.pct)+'% de Jita '+(C.disc.base==='split'?'Split':'Buy')+'. Sin taxes ni envío.',nu('disc'),r.best==='disc');
     priceRow(tb,'Orden de venta en Jita',r.jl,(C.ice.on&&isIce(o.name)?(C.ice.jitaMode==='split'?'Split':'Jita Sell −'+pct(C.under)+'%'):(o.refMan!=null?'Tu precio':'Jita Sell'+(C.underTk>0?' −'+C.underTk+' tick'+(C.underTk===1?'':'s'):'')))+' ('+js+'). Resta envío, Sales Tax y Broker.',nu('jOrd'),r.best==='jOrd');
     priceRow(tb,'Venta rápida en Jita',r.instAvg!=null?r.instAvg:(a&&a.buy!=null?a.buy:null),'Jita Buy'+(r.instAvg!=null&&a&&r.instAvg<a.buy*.995?' (promedio al vender todo)':'')+'. Resta envío y Sales Tax.',nu('jInst'),r.best==='jInst');
-    const n=el('tr');const nt=el('td','muted pr-foot');nt.colSpan=4;nt.textContent='Clic en un precio para copiarlo. En el juego se lista por unidad: pon este precio y la cantidad ('+fmtQ(r.q)+').';n.append(nt);tb.append(n);
   }}
   // User-entered Null sell price is authoritative; no public local-market API.
   // Keeps input in memory per item; never modifies the reference Jita price.
