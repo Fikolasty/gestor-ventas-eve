@@ -25,10 +25,10 @@ test('B.4 registered items separate disclosure, copy and removal as native butto
   assert.match(ledger,/e\.target\.closest\('\.lot-open'\)/);
   assert.match(ledger,/if\(open&&!ui\.detailsReady\)buildLotDetails\(o,ui\)/);
   assert.match(ledger,/const ic=iconFor\(o\.name\)/);
-  assert.match(ledger,/u\.netLabel\.textContent=tx\('ledger\.netSales'\)/);
-  assert.match(ledger,/u\.net\.title=\(S\.flip\?tx\('ledger\.tradeNetHint'\):tx\('ledger\.saleNetHint'\)\)/);
+  assert.match(ledger,/setLotLeafText\(u\.netLabel,tx\('ledger\.netSales'\)\)/);
+  assert.match(ledger,/setLotAttr\(u\.net,'title',\(S\.flip\?tx\('ledger\.tradeNetHint'\):tx\('ledger\.saleNetHint'\)\)/);
   assert.match(ledger,/net=copyBtn\('','—'\)/);
-  assert.match(ledger,/u\.net\.dataset\.v=hasNet/);
+  assert.match(ledger,/setLotAttr\(u\.net,'data-v',hasNet/);
   assert.match(ledger,/const analysis=el\('details','lot-analysis lot-detail-section'\)/);
   assert.match(ledger,/const adjustments=el\('details','lot-adjustments lot-detail-section'\)/);
   assert.match(ledger,/\+'pr-route'/);

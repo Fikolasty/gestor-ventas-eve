@@ -2592,5 +2592,46 @@ class ThemeBrowserTests(unittest.TestCase):
         self.assertEqual(len(times), 15)
         print(f"Idle refresh (headless Chromium, no inventory): median={times[7]:.2f}ms, p95={times[14]:.2f}ms")
 
+    def test_d2_collapsed_lot_headers_do_not_mutate_when_data_is_identical(self):
+        """D.2: no wasted DOM writes; changed amounts and ES/EN must still paint."""
+        for language in ('es', 'en'):
+            self.page.evaluate("lang => setLang(lang)", language)
+            result = self.page.evaluate("""() => {
+                S.flip=false;C.bb.on=false;C.disc.on=false;
+                const o={name:'D2 Synthetic Cargo',qty:5,srcQty:5,ref:10000,m3u:5,
+                    skew:0,checks:[],refMan:null,m3uMan:null,
+                    jita:{buy:9200,sell:10000,topBuy:9200,topSell:10000,vol:5}};
+                S.items=[o];syncLots();
+                const ledger=document.querySelector('#ledger');ledger.hidden=false;ledger.open=true;
+                refreshNow();
+                const ui=o.ui;
+                const leaves=[ui.removeButton,ui.qty,ui.ppLabel,ui.netLabel,ui.net,
+                    ui.dest,ui.tag,ui.skT,ui.ppB];
+                const observers=leaves.map(node=>{
+                    const ob=new MutationObserver(()=>{});
+                    ob.observe(node,{attributes:true,childList:true,characterData:true,subtree:true});
+                    return ob;
+                });
+                refreshNow();refreshNow();
+                const redundant=observers.map(ob=>{const count=ob.takeRecords().length;ob.disconnect();return count;});
+                const beforeQty=ui.qty.textContent,beforeNet=ui.net.dataset.v;
+                o.qty=9;refreshNow();
+                const afterQty=ui.qty.textContent,afterNet=ui.net.dataset.v;
+                const originalTax=C.tax;
+                C.tax=originalTax+0.03;refreshNow();const changedTaxNet=ui.net.dataset.v;
+                C.tax=originalTax;refreshNow();
+                return {redundant,beforeQty,afterQty,beforeNet,afterNet,changedTaxNet,
+                    lotCount:document.querySelectorAll('#lots>.lot').length,
+                    copyButtons:[ui.ppB.disabled,ui.net.disabled],
+                    unitAria:ui.ppB.getAttribute('aria-label')};
+            }""")
+            self.assertEqual(result['redundant'], [0] * 9, (language, result))
+            self.assertEqual(result['lotCount'], 1)
+            self.assertNotEqual(result['beforeQty'], result['afterQty'])
+            self.assertNotEqual(result['beforeNet'], result['afterNet'])
+            self.assertNotEqual(result['afterNet'], result['changedTaxNet'])
+            self.assertEqual(result['copyButtons'], [False, False])
+            self.assertIn('D2 Synthetic Cargo', result['unitAria'])
+
 if __name__ == "__main__":
     unittest.main()
