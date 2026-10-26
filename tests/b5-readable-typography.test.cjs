@@ -26,9 +26,10 @@ test('B.5b Sales typography uses shared, scoped question/answer/label tokens',()
 });
 
 test('B.5 keeps native disclosure questions, independent of theme and language',()=>{
-  for(const classname of ['mm-ledger-faq','mm-picker-faq','mm-courier-faq']){
+  for(const classname of ['mm-ledger-faq','mm-picker-faq']){
     assert.match(html,new RegExp('<details class="mm-inline-faq '+classname+'"'));
   }
+  assert.match(html,/<details class="mm-freight-help" id="unitCourierHelp">/);
   assert.match(css,/#verdict #vCap \.mm-context-help>summary:focus-visible/);
   assert.match(css,/#pSum>\.mm-inline-faq>summary:focus-visible/);
   assert.match(css,/#verdict #vCap \.mm-context-help\[open\]>summary::after/);

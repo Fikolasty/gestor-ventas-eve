@@ -15,7 +15,7 @@ assert(shell.includes('<section class="pk-opportunity mm-decision-card"'),'Finan
 assert(shell.includes('<section class="mm-unit-courier mm-decision-card"'),'Freight comparison visible without expansion');
 assert(styles.includes('grid-template-columns:repeat(2,minmax(0,1fr))'),'Symmetric equal-width columns');
 assert(styles.includes('@media(max-width:980px)'),'Responsive single column');
-assert(styles.includes('.mm-freight-detail'),'Extra per-unit information on demand');
+assert(styles.includes('.mm-freight-columns'),'Shipped items compare all three actual financial values');
 
 function fixture(q,options={}){
   const compPrice=options.compPrice===undefined?700000:options.compPrice;

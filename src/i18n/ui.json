@@ -701,6 +701,30 @@
     "es": "COSTE REAL DEL ENVÍO",
     "en": "ACTUAL FREIGHT COST"
   },
+  "freight.subtitle": {
+    "es": "Aquí se refleja la reducción real por unidad de cada ítem.",
+    "en": "This shows the actual reduction per unit for each shipped item."
+  },
+  "freight.infoLabel": {
+    "es": "Información sobre el envío y el colateral",
+    "en": "Information about freight and collateral"
+  },
+  "freight.itemColumn": {
+    "es": "ÍTEM ENVIADO",
+    "en": "SHIPPED ITEM"
+  },
+  "freight.beforeColumn": {
+    "es": "ANTES DEL ENVÍO",
+    "en": "BEFORE FREIGHT"
+  },
+  "freight.freightColumn": {
+    "es": "ENVÍO",
+    "en": "FREIGHT"
+  },
+  "freight.finalColumn": {
+    "es": "TOTAL FINAL",
+    "en": "FINAL TOTAL"
+  },
   "freight.contractOne": {
     "es": "1 contrato",
     "en": "1 contract"

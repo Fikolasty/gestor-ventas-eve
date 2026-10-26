@@ -581,7 +581,7 @@ class ThemeBrowserTests(unittest.TestCase):
                 expect(self.page.locator('#ledger')).not_to_have_attribute('open','')
 
     def test_c1b_sales_disclosure_chevrons_keep_shared_geometry_and_native_toggle(self):
-        """One B.1 chevron source owns finance and both freight disclosure types."""
+        """Finance keeps its chevron; B.8 replaces freight details with one info help."""
         from playwright.sync_api import expect
         self.page.evaluate("""() => {
             const item=n=>({o:{name:'Tritanium '+n,jita:{buy:5000,sell:7000}},
@@ -598,9 +598,9 @@ class ThemeBrowserTests(unittest.TestCase):
                 self.page.set_viewport_size({'width':width,'height':900})
                 for light in (False,True):
                     self.page.evaluate('(on)=>document.documentElement.classList.toggle("light",on)',light)
-                    controls=['#vFinanceDetails','#unitCourierRows .mm-freight-detail',
-                              '#unitCourierRows .mm-freight-extra']
-                    for selector in controls:
+                    self.assertEqual(self.page.locator('#unitCourierRows .mm-freight-detail').count(),0)
+                    self.assertEqual(self.page.locator('#unitCourierRows .mm-freight-extra').count(),0)
+                    for selector in ['#vFinanceDetails']:
                         node=self.page.locator(selector).first
                         expect(node).to_be_visible()
                         node.evaluate('(el)=>el.open=false')
@@ -621,6 +621,18 @@ class ThemeBrowserTests(unittest.TestCase):
                         self.assertNotEqual(expanded,initial['rotation'])
                         summary.click()
                         expect(node).not_to_have_attribute('open','')
+                    help_node=self.page.locator('#unitCourierHelp')
+                    expect(help_node).to_be_visible()
+                    help_node.evaluate('(el)=>el.open=false')
+                    help_summary=help_node.locator(':scope > summary')
+                    self.assertEqual(help_summary.locator('.mm-freight-info-glyph').inner_text(),'i')
+                    self.assertEqual(help_summary.evaluate(
+                        "el=>getComputedStyle(el,'::after').display"),'none')
+                    help_summary.click()
+                    expect(help_node).to_have_attribute('open','')
+                    expect(help_node.locator('.mm-freight-collateral')).to_be_visible()
+                    help_summary.click()
+                    expect(help_node).not_to_have_attribute('open','')
                     self.assertLessEqual(self.page.evaluate(
                         'document.documentElement.scrollWidth-innerWidth'),1)
                     if language=='es' and width==1440 and not light:
@@ -949,7 +961,7 @@ class ThemeBrowserTests(unittest.TestCase):
         dark = iframe.locator(".main").evaluate("el=>getComputedStyle(el).backgroundColor")
         self.assertLess(brightness(dark), 120, dark)
 
-    def test_freight_unit_cards_show_owner_net_and_icon_in_both_languages(self):
+    def test_freight_unit_table_shows_owner_net_and_icon_in_both_languages(self):
         result = self.page.evaluate("""() => {
             const oldLang=S.lang, oldApi=S.api['synthetic circuit'];
             try {
@@ -962,15 +974,17 @@ class ThemeBrowserTests(unittest.TestCase):
                 S.lang='en';paintCourierUnits(list);
                 const node=document.querySelector('#unitCourierRows .mm-unit-row');
                 const english={head:document.querySelector('#unitCourierHeading').textContent,
-                    values:Array.from(node.querySelectorAll('.mm-freight-metric strong'),x=>x.textContent),
-                    lot:node.querySelector('.mm-freight-lot strong').textContent,
+                    values:Array.from(node.querySelectorAll('.mm-freight-cell strong'),x=>x.textContent),
+                    headings:Array.from(document.querySelectorAll('#unitCourierRows .mm-freight-columns span'),x=>x.textContent),
                     icon:node.querySelector('img.ti')?.dataset.tid,
-                    volume:node.querySelector('.mm-freight-meta').textContent,
-                    primary:node.querySelector('.mm-freight-result').textContent,
-                    detailClosed:!node.querySelector('.mm-freight-detail').open};
+                    qty:node.querySelector('.mm-freight-ident small').textContent,
+                    note:document.querySelector('#unitCourierSubtitle').textContent,
+                    help:document.querySelector('#unitCourierHelp summary').getAttribute('aria-label')};
                 S.lang='es';paintCourierUnits(list);
                 const spanish={head:document.querySelector('#unitCourierHeading').textContent,
-                    equation:document.querySelector('#unitCourierRows .mm-freight-equation').textContent};
+                    headings:Array.from(document.querySelectorAll('#unitCourierRows .mm-freight-columns span'),x=>x.textContent),
+                    note:document.querySelector('#unitCourierSubtitle').textContent,
+                    help:document.querySelector('#unitCourierHelp summary').getAttribute('aria-label')};
                 const panel=document.querySelector('#unitCourierBox');
                 const plans=document.querySelector('#pSum .pk-w');
                 return {english,spanish,moved:!!(plans.compareDocumentPosition(panel)&Node.DOCUMENT_POSITION_FOLLOWING)};
@@ -981,15 +995,85 @@ class ThemeBrowserTests(unittest.TestCase):
             }
         }""")
         self.assertEqual(result["english"]["head"],"ACTUAL FREIGHT COST")
-        self.assertEqual(result["english"]["values"],["6,500.00 ISK","2,000.00 ISK","4,500.00 ISK"])
-        self.assertEqual(result["english"]["lot"],"270,000 ISK")
-        self.assertIn("4,500.00 ISK",result["english"]["primary"])
-        self.assertTrue(result["english"]["detailClosed"])
+        self.assertEqual(result["english"]["values"],["6,500.00 ISK","−2,000.00 ISK","4,500.00 ISK"])
+        self.assertEqual(result["english"]["headings"],["SHIPPED ITEM","BEFORE FREIGHT","FREIGHT","FINAL TOTAL"])
+        self.assertEqual(result["english"]["qty"],"60")
+        self.assertIn("reduction per unit",result["english"]["note"])
+        self.assertIn("collateral",result["english"]["help"])
         self.assertEqual(result["english"]["icon"],"34")
-        self.assertEqual(result["english"]["volume"].count("m³"),1)
         self.assertEqual(result["spanish"]["head"],"COSTE REAL DEL ENVÍO")
-        self.assertIn("NETO ANTES DE ENVÍO",result["spanish"]["equation"])
+        self.assertEqual(result["spanish"]["headings"],["ÍTEM ENVIADO","ANTES DEL ENVÍO","ENVÍO","TOTAL FINAL"])
+        self.assertEqual(result["spanish"]["note"],"Aquí se refleja la reducción real por unidad de cada ítem.")
+        self.assertIn("colateral",result["spanish"]["help"])
         self.assertTrue(result["moved"],"Unit freight panel must be after plan comparison")
+
+    def test_b8_freight_table_is_compact_responsive_and_keeps_real_allocation(self):
+        """Only shipped items, authentic unit net−freight=final, contextual help."""
+        from playwright.sync_api import expect
+        self.page.evaluate("""() => {
+            const data=[
+                ['Promethium',10,55000,0,10000],
+                ['Dysprosium',12,240000,24000,12000],
+                ['Morphite',20,400000,0,40000],
+                ['Cadmium',25,250000,0,25000]
+            ];
+            const rows=data.map(([name,q,g,prod,allocated])=>({
+                o:{name},q,best:'jOrd',g:{jOrd:g},prod,
+                courierAllocated:allocated,ship:{jOrd:{v:q,c:allocated}}
+            }));
+            window.__b8Freight={rows,Vs:67,shipCost:87000};
+            document.querySelector('#verdict').hidden=false;
+            document.querySelector('#pSum').hidden=false;
+            document.querySelector('#pkPlanContent').hidden=false;
+            paintCourierUnits(window.__b8Freight);
+        }""")
+        expect(self.page.locator('#unitCourierBox')).to_be_visible()
+        self.assertEqual(self.page.locator('#unitCourierRows .mm-unit-row').count(),4)
+        self.assertEqual(self.page.locator('#unitCourierRows .mm-freight-extra').count(),0)
+        self.assertEqual(self.page.locator('#unitCourierRows .mm-freight-detail').count(),0)
+        self.assertEqual(self.page.locator('#unitCourierRows .mm-freight-cell strong').first.inner_text(),'5,500.00 ISK')
+        self.assertEqual(self.page.locator('#unitCourierRows .mm-freight-cell strong').nth(1).inner_text(),'−1,000.00 ISK')
+        self.assertEqual(self.page.locator('#unitCourierRows .mm-freight-cell strong').nth(2).inner_text(),'4,500.00 ISK')
+        for lang in ('es','en'):
+            self.page.evaluate('(lang)=>{setLang(lang);paintCourierUnits(window.__b8Freight)}',lang)
+            expect(self.page.locator('#unitCourierSubtitle')).to_contain_text(
+                'reducción real por unidad' if lang=='es' else 'actual reduction per unit')
+            expect(self.page.locator('#unitCourierHelp summary')).to_have_attribute(
+                'aria-label','Información sobre el envío y el colateral' if lang=='es'
+                else 'Information about freight and collateral')
+            for width,light in ((1440,False),(630,True),(390,True)):
+                self.page.set_viewport_size({'width':width,'height':900})
+                self.page.evaluate('(light)=>document.documentElement.classList.toggle("light",light)',light)
+                names=self.page.locator('#unitCourierRows .mm-freight-ident b').all_inner_texts()
+                self.assertEqual(names,['Promethium','Dysprosium','Morphite','Cadmium'])
+                geometry=self.page.locator('#unitCourierBox').evaluate("""el => ({
+                    height:el.getBoundingClientRect().height,
+                    rowDisplay:getComputedStyle(el.querySelector('.mm-unit-row')).display,
+                    headDisplay:getComputedStyle(el.querySelector('.mm-freight-columns')).display,
+                    mobileLabel:getComputedStyle(el.querySelector('.mm-freight-cell-label')).display,
+                    extent:document.documentElement.scrollWidth-innerWidth
+                })""")
+                self.assertEqual(geometry['rowDisplay'],'grid',geometry)
+                self.assertLessEqual(geometry['extent'],1,geometry)
+                self.assertLess(geometry['height'],720,geometry)
+                if width==1440:
+                    self.assertEqual(geometry['mobileLabel'],'none',geometry)
+                    self.assertEqual(geometry['headDisplay'],'grid',geometry)
+                else:
+                    self.assertNotEqual(geometry['mobileLabel'],'none',geometry)
+                    self.assertEqual(geometry['headDisplay'],'none',geometry)
+                if lang=='es' and width in (1440,390):
+                    out=INDEX.parent/'tests'/'artifacts'/'theme'
+                    out.mkdir(parents=True,exist_ok=True)
+                    self.page.locator('#unitCourierBox').screenshot(
+                        path=str(out/f'b8-freight-{width}-{"light" if light else "dark"}.png'),animations='disabled')
+            info=self.page.locator('#unitCourierHelp summary')
+            info.click()
+            expect(self.page.locator('#unitCourierHelp .mm-freight-collateral')).to_be_visible()
+            expect(self.page.locator('#unitCourierHelp .mm-freight-reference')).to_be_visible()
+            info.focus()
+            self.page.keyboard.press('Enter')
+            expect(self.page.locator('#unitCourierHelp .mm-freight-collateral')).to_be_hidden()
 
     def test_sales_pilot_prioritizes_owner_proceeds_and_exposes_optional_details(self):
         from playwright.sync_api import expect

@@ -29,10 +29,11 @@ test('detail disclosure and freight summary do not modify financial models',()=>
   const defer=view.indexOf("if($('deep').hidden)return;",overview);
   assert.ok(overview>=0&&defer>overview,'Overview breakdown must render before deferring steps');
   assert.match(picker,/if\(!rows\.length\)\{/);
-  assert.match(picker,/rows\.length>2\?el\('details','mm-freight-extra'\)/);
-  assert.match(picker,/more&&index>=2\?more:host/);
+  assert.match(picker,/host\.append\(columns\)/);
+  assert.match(picker,/rows\.forEach\(r=>\{/);
+  assert.doesNotMatch(picker,/more&&index>=2\?more:host/);
   assert.match(css,/#verdict #vFinanceDetails>summary:focus-visible/);
-  assert.match(css,/#pSum \.mm-freight-extra>summary:focus-visible/);
+  assert.match(css,/#pSum #unitCourierHelp>summary:focus-visible/);
   assert.match(css,/@media\(prefers-reduced-motion:reduce\)/);
 });
 

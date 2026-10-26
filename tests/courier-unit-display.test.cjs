@@ -38,9 +38,12 @@ test('absent quote does not invent a base price or lot target',()=>{
   assert.equal(v.total,null);
   assert.equal(v.freightUnit,150);
 });
-test('rendered volume and shipping labels do not duplicate m³ or ISK suffixes',()=>{
+test('new freight table uses original per-unit accounting for every shipped item',()=>{
   const render=source.slice(end,source.indexOf('function paintSummary(P){',end));
-  assert.match(render,/tx\('freight\.volume',\{volume:fmtV\(r\.ship\?\.\[r\.best\]\?\.v\|\|0\)\}\)/);
-  assert.doesNotMatch(render,/tx\('freight\.volume',\{volume:fmtV\(r\.vol\)\}\)/);
+  assert.match(render,/rows=P\.rows\.filter\(r=>r\.courierAllocated>0&&r\.q>0\)/);
+  assert.match(render,/value\('freight\.beforeColumn',costs\.base\)/);
+  assert.match(render,/value\('freight\.freightColumn',costs\.freightUnit,true\)/);
+  assert.match(render,/value\('freight\.finalColumn',costs\.unit\)/);
+  assert.doesNotMatch(render,/mm-freight-detail|mm-freight-extra|freight\.landed/);
   assert.match(render,/iconFor\(r\.o\.name\)/);
 });

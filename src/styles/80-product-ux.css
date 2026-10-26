@@ -1366,3 +1366,100 @@ html.light #verdict #vCap .v-finance-item.mm-cost-item{background:var(--surface-
 @media(prefers-reduced-motion:reduce){
   #pSum>.mm-plan-heading .mm-plan-toggle,#pSum .mm-plan-toggle-chevron{transition:none}
 }
+
+/* B.8 · Approved freight review: only shipped items, actual before − freight
+   = final per original unit. The economic engine already supplies all three. */
+#pSum #unitCourierBox{position:relative;container:freight-box / inline-size}
+#pSum #unitCourierBox .mm-decision-head{flex-wrap:wrap;margin-bottom:3px}
+#pSum #unitCourierHeading{
+  font:800 clamp(.98rem,1.25vw,1.19rem)/1.3 var(--f-ui)!important;
+  letter-spacing:.018em!important;color:var(--txt)!important
+}
+#pSum #unitCourierTotal{font:700 clamp(.8rem,.95vw,.97rem)/1.3 var(--f-num)!important}
+#pSum #unitCourierSubtitle{
+  margin:6px 0 15px;color:var(--mut);
+  font:500 var(--mm-sales-explanation-size)/1.5 var(--f-ui)
+}
+#pSum #unitCourierHelp{flex:0 0 auto}
+#pSum #unitCourierHelp>summary{
+  display:grid;place-items:center;width:28px;height:28px;
+  padding:0;border:0;border-radius:50%;background:transparent;
+  color:var(--mut);font:700 1.18rem/1 var(--f-ui);cursor:pointer;list-style:none
+}
+#pSum #unitCourierHelp>summary::-webkit-details-marker{display:none}
+#pSum #unitCourierHelp>summary::after{content:none!important;display:none!important}
+#pSum #unitCourierHelp>summary:hover{color:var(--txt);background:var(--surface-panel)}
+#pSum #unitCourierHelp>summary:focus-visible{outline:2px solid var(--ion);outline-offset:2px}
+#pSum #unitCourierHelp .mm-freight-info-glyph{
+  display:grid;place-items:center;width:16px;height:16px;
+  border:1.5px solid currentColor;border-radius:50%;
+  font:800 11px/1 var(--f-ui)
+}
+#pSum #unitCourierHelp .mm-freight-help-content{
+  position:absolute;top:52px;left:16px;right:16px;z-index:20;
+  padding:13px 16px;border:1px solid var(--line2);border-radius:9px;
+  background:var(--surface-panel);color:var(--txt);
+  box-shadow:0 12px 28px rgba(0,0,0,.24)
+}
+#pSum #unitCourierHelp .mm-freight-help-content p{
+  margin:0;font:500 var(--mm-sales-explanation-size)/1.55 var(--f-ui)
+}
+#pSum #unitCourierHelp .mm-freight-help-content p+p{
+  margin-top:10px;padding-top:10px;border-top:1px solid var(--line2)
+}
+#pSum #unitCourierRows{display:block;gap:0;margin:0;padding:0;border:0}
+#pSum #unitCourierRows .mm-freight-columns,
+#pSum #unitCourierRows .mm-unit-row{
+  display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,.9fr) minmax(0,.7fr) minmax(0,.9fr);
+  column-gap:15px;align-items:center;min-width:0
+}
+#pSum #unitCourierRows .mm-freight-columns{
+  padding:8px 0 12px;border-bottom:1px solid var(--line2);
+  color:var(--mut);font:750 .69rem/1.4 var(--f-ui);letter-spacing:.035em
+}
+#pSum #unitCourierRows .mm-freight-columns>span:not(:first-child){text-align:right}
+#pSum #unitCourierRows .mm-unit-row{
+  min-height:63px;gap:0 15px;padding:10px 0;
+  border:0;border-bottom:1px solid var(--line2);border-radius:0;
+  background:transparent;box-shadow:none
+}
+html.light #pSum #unitCourierRows .mm-unit-row{background:transparent!important}
+#pSum #unitCourierRows .mm-unit-row+.mm-unit-row{padding-top:10px;border-top:0}
+#pSum #unitCourierRows .mm-unit-row:last-child{border-bottom:0}
+#pSum #unitCourierRows .mm-freight-item{min-width:0;padding:0;border:0}
+#pSum #unitCourierRows .mm-freight-ident{gap:3px}
+#pSum #unitCourierRows .mm-freight-ident b{font:700 .85rem/1.35 var(--f-ui)}
+#pSum #unitCourierRows .mm-freight-ident small{font:450 .75rem/1.35 var(--f-ui)}
+#pSum #unitCourierRows .mm-freight-cell{text-align:right;min-width:0}
+#pSum #unitCourierRows .mm-freight-cell-label{display:none}
+#pSum #unitCourierRows .mm-freight-cell strong{
+  display:block;font:750 clamp(.75rem,1vw,1rem)/1.35 var(--f-num);
+  font-variant-numeric:tabular-nums;overflow-wrap:anywhere
+}
+#pSum #unitCourierRows .mm-freight-cell strong.isk-pos{color:var(--gain)}
+#pSum #unitCourierRows .mm-freight-cell strong.isk-neg{color:var(--loss)}
+
+@container freight-box (max-width:760px){
+  #pSum #unitCourierBox .mm-decision-head{
+    display:grid;grid-template-columns:18px minmax(0,1fr) 28px;
+    gap:7px;align-items:center
+  }
+  #pSum #unitCourierTotal{grid-column:1/-1;justify-self:start;text-align:left!important}
+  #pSum #unitCourierRows .mm-freight-columns{display:none}
+  #pSum #unitCourierRows .mm-unit-row{
+    grid-template-columns:minmax(0,1fr) minmax(0,.85fr) minmax(0,1fr);
+    grid-template-rows:auto auto;row-gap:10px;column-gap:8px;padding:12px 0
+  }
+  #pSum #unitCourierRows .mm-freight-item{grid-column:1/-1}
+  #pSum #unitCourierRows .mm-freight-cell{text-align:left}
+  #pSum #unitCourierRows .mm-freight-cell-label{
+    display:block;margin-bottom:4px;color:var(--mut);
+    font:700 .62rem/1.3 var(--f-ui);letter-spacing:.02em
+  }
+  #pSum #unitCourierRows .mm-freight-cell strong{font-size:clamp(.71rem,1.9vw,.87rem)}
+}
+@media(max-width:560px){
+  #pSum #unitCourierBox .mm-decision-head{align-items:center}
+  #pSum #unitCourierTotal{flex-basis:100%;margin-left:0;text-align:left!important}
+  #pSum #unitCourierHelp .mm-freight-help-content{top:83px;left:12px;right:12px}
+}

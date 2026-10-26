@@ -1,3 +1,10 @@
+## v1.0.141 — 2026-10-26 [ChatGPT] · B.8 tabla compacta de coste real del envío (QA/Pages en verificación)
+
+- **Aprobación de Raulito («me encanta»):** segundo mockup con los ítems enviados completos, nombre/cantidad y tres columnas **ANTES DEL ENVÍO − ENVÍO = TOTAL FINAL**; sin «te queda», «unidad», expansiones por ítem ni fila de «Ver más». Subtítulo exacto «Aquí se refleja la reducción real por unidad de cada ítem». Coste total de contratos preservado en cabecera.
+- **Código sin cambios de fórmulas:** `paintCourierUnits(P)` utiliza las cifras existentes de `courierUnitPresentation(r)` y conserva la selección real de ítems enviados y el caso de coste no asignado. Cargo courier rojo con signo negativo visible, antes/final positivos verdes; cero o desconocido neutro. Tabla de cuatro columnas responsiva por container query y con roles/etiquetas accesibles. La explicación íntegra del colateral y la advertencia de ingreso estimado pasan a un solo icono informativo desplegable al lado del título, ES/EN y Dark/Light, teclado y foco.
+- **QA completa:** build `1.0.141`, **28/28 Node**, **16/16 Python**, **8/8 legacy** y **43/43 Chromium** PASS (~49,2 s), incluido B.8 **2/2** y capturas 1440 Dark y 390 Light revisadas; solo CI/Pages por confirmar antes de afirmar LIVE. Ningún test de transacciones reales EVE SSO/ESI.
+- **B.9 por separado, no aprobado:** propuesta UX de un acordeón único para «¿Por qué reprocesar o no?» y «¿De dónde salen estas deducciones?»; cabecera con ambas preguntas, una flecha y respuestas 50/50 al abrir (móvil apilado). Sin implementación ni cambios contables en este release.
+
 ## v1.0.140 — 2026-10-26 [ChatGPT] · B.7a corrección del plegado integral — LIVE verificada
 
 - **Aclaración visual de Raulito:** su captura rodea con una línea azul las cuatro tarjetas de «ELIGE TU PLAN» — «Tu resultado», «Planes disponibles», «Ver distribución de ingresos y destinos» y «¿Quieres cobrar con menos espera?» —, no solo el lado derecho. Al pulsar la flecha superior debe desaparecer todo ese bloque, dejando visibles la cabecera y «Ver pasos para vender». No cambia el diseño interior abierto.

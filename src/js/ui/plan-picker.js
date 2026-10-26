@@ -401,6 +401,13 @@ function paintCourierUnits(P){
   // Return icon elements to the common Registered Items pool before repaint.
   poolIcons(host);
   host.replaceChildren();
+  host.removeAttribute('role');host.removeAttribute('aria-label');
+  $('unitCourierSubtitle').textContent=tx('freight.subtitle');
+  const help=$('unitCourierHelp'),helpButton=help.querySelector('summary');
+  helpButton.setAttribute('aria-label',tx('freight.infoLabel'));
+  helpButton.title=tx('freight.infoLabel');
+  help.querySelector('.mm-freight-collateral').textContent=tx('decision.collateralA');
+  help.querySelector('.mm-freight-reference').textContent=tx('freight.reference');
   const rows=P.rows.filter(r=>r.courierAllocated>0&&r.q>0);
   // B.6a: zero freight is already explicit in the financial header and plan
   // result. Only show the detailed courier card when a real cost applies.
@@ -419,58 +426,35 @@ function paintCourierUnits(P){
   $('unitCourierTotal').textContent='−'+fmt(P.shipCost)+' · '+
     tx(count===1?'freight.contractOne':'freight.contractMany',{count});
   $('unitCourierTotal').classList.add('isk-neg');
-  const value=(key,amount,isDeduction=false)=>{
-    const item=el('div','mm-freight-metric');
-    item.append(el('small',null,tx(key)),
-      el('strong','num'+(isDeduction&&amount>0?' isk-neg':''),amount==null?'—':fmtP(amount)));
-    return item;
+  const headers=['freight.itemColumn','freight.beforeColumn','freight.freightColumn','freight.finalColumn'];
+  const columns=el('div','mm-freight-columns');columns.setAttribute('role','row');
+  headers.forEach(key=>{const heading=el('span',null,tx(key));heading.setAttribute('role','columnheader');columns.append(heading);});
+  host.setAttribute('role','table');
+  host.setAttribute('aria-label',tx('freight.heading'));
+  host.append(columns);
+  const value=(key,amount,freight=false)=>{
+    const cell=el('div','mm-freight-cell');cell.setAttribute('role','cell');
+    cell.append(el('span','mm-freight-cell-label',tx(key)));
+    const tone=amount==null?'':freight&&amount>0?' isk-neg':amount>0?' isk-pos':amount<0?' isk-neg':'';
+    const shown=amount==null?'—':(freight&&amount>0?'−':'')+fmtP(amount);
+    cell.append(el('strong','num'+tone,shown));
+    return cell;
   };
-  const more=rows.length>2?el('details','mm-freight-extra'):null;
-  if(more){
-    const summary=el('summary',null,tx('freight.showOthers',{count:rows.length-2}));
-    more.append(summary);
-  }
-  rows.forEach((r,index)=>{
+  rows.forEach(r=>{
     const costs=courierUnitPresentation(r);
-    const card=el('article','mm-unit-row');
+    const card=el('div','mm-unit-row');card.setAttribute('role','row');
     const title=el('div','mm-freight-item');
+    title.setAttribute('role','cell');
     const pic=iconFor(r.o.name);if(pic)title.append(pic);
     const identity=el('div','mm-freight-ident');
     identity.append(el('b',null,r.comp&&['cOrd','cInst'].includes(r.best)?r.o.name+' → '+r.comp.name:r.o.name),
-      el('small',null,tx('freight.qty',{count:fmtQ(r.q)})));
+      el('small',null,fmtQ(r.q)));
     title.append(identity);
-    const math=el('div','mm-freight-equation');
-    math.append(value('freight.base',costs.base),
-      el('span','mm-freight-op','−'),
-      value('freight.increment',costs.freightUnit,true),
-      el('span','mm-freight-op','='),
-      value('freight.landed',costs.unit));
-    const key=el('div','mm-freight-result');
-    key.append(el('span',null,tx('freight.landed')),
-      el('strong','num '+sgn(costs.unit),costs.unit==null?'—':fmtP(costs.unit)));
-    const foot=el('div','mm-freight-foot');
-    const lot=el('div','mm-freight-lot');
-    lot.append(el('small',null,tx('freight.totalLot')),
-      el('strong','num',costs.total==null?tx('freight.missingQuote'):fmtP(costs.total)));
-    const meta=el('div','mm-freight-meta');
-    const costLine=el('span');
-    costLine.append(tx('freight.totalCost',{amount:''}),el('b','isk-neg',fmt(costs.allocated)));
-    meta.append(costLine,
-      el('span',null,tx('freight.volume',{volume:fmtV(r.ship?.[r.best]?.v||0)})));
-    foot.append(lot,meta);
-    const details=el('details','mm-freight-detail');
-    details.append(el('summary',null,tx('freight.more')),math,foot);
-    card.append(title,key,details);
-    if(costs.derived){
-      const caution=el('small','mm-freight-source',tx('freight.derived'));
-      details.append(caution);
-    }
-    (more&&index>=2?more:host).append(card);
+    card.append(title,value('freight.beforeColumn',costs.base),
+      value('freight.freightColumn',costs.freightUnit,true),
+      value('freight.finalColumn',costs.unit));
+    host.append(card);
   });
-  if(more)host.append(more);
-  // A display-only reference; the plan result remains authoritative after
-  // market fees and courier. Keep the fee caveat visible instead of tooltip-only.
-  host.append(el('p','mm-freight-note',tx('freight.reference')));
 }
 function paintSummary(P){
   const box=$('pSum'),none=!P.rows.length||P.missing.length===P.rows.length;

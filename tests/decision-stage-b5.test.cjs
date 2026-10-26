@@ -91,5 +91,5 @@ test('B.5 financial explanations show source/uncertainty, a neutral breakdown an
   assert.match(styling,/#verdict #vCap \.mm-rep-delta\.neg\{color:var\(--loss\)\}/);
   assert.match(shell,/class="mm-inline-faq mm-ledger-faq"/);
   assert.match(shell,/class="mm-inline-faq mm-picker-faq"/);
-  assert.match(shell,/class="mm-inline-faq mm-courier-faq"/);
+  assert.match(shell,/class="mm-freight-help" id="unitCourierHelp"/);
 });
