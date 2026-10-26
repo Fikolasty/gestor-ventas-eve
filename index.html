@@ -7,7 +7,7 @@
 <meta name="referrer" content="no-referrer">
 <title>Market Moves+ · SIGMA GRINDSET</title>
 <style>
-/* ================= Market Moves+ v1.0.137 =================
+/* ================= Market Moves+ v1.0.138 =================
    Paleta: azul de base, naranja = acción, verde/rojo = ganancia/pérdida.
    Sin backdrop-filter: el vidrio se finge con rgba + bordes. */
 *{box-sizing:border-box;margin:0;padding:0}
@@ -3628,8 +3628,7 @@ html.light body .top.mm-ho-root .mm-top-actions .mm-theme{background:transparent
 #pSum .mm-freight-detail{border-top:1px solid var(--line2);padding-top:8px}
 #pSum .mm-freight-detail>summary{list-style:none;cursor:pointer;color:var(--mut);font:600 var(--mm-sales-question-size)/1.45 var(--f-ui)}
 #pSum .mm-freight-detail>summary::-webkit-details-marker{display:none}
-#pSum .mm-freight-detail>summary::after{content:'⌄';display:inline-block;margin-left:8px;transition:transform .15s}
-#pSum .mm-freight-detail[open]>summary::after{transform:rotate(180deg)}
+#pSum .mm-freight-detail>summary::after{margin-left:8px}
 #pSum .mm-freight-detail .mm-freight-equation{margin-top:12px}
 #pSum .mm-freight-detail .mm-freight-foot{margin-top:12px}
 #pSum #unitCourierRows .mm-freight-note{padding-top:4px;font:450 var(--mm-sales-explanation-size)/1.6 var(--f-ui)}
@@ -3683,8 +3682,6 @@ html.light body .top.mm-ho-root .mm-top-actions .mm-theme{background:transparent
   color:var(--mut);font:600 var(--mm-sales-question-size)/1.45 var(--f-ui);
 }
 #verdict #vFinanceDetails>summary::-webkit-details-marker{display:none}
-#verdict #vFinanceDetails>summary::after{content:'⌄';font-size:1.06rem;line-height:1;transition:transform .15s}
-#verdict #vFinanceDetails[open]>summary::after{transform:rotate(180deg)}
 #verdict #vFinanceDetails>summary:hover{color:var(--txt)}
 #verdict #vFinanceDetails>summary:focus-visible{outline:2px solid var(--ion);outline-offset:-3px}
 #verdict .mm-finance-details-body{padding:14px 16px 17px;border-top:1px solid var(--line2)}
@@ -3713,8 +3710,7 @@ html.light body .top.mm-ho-root .mm-top-actions .mm-theme{background:transparent
 #pSum .mm-freight-extra{border-top:1px solid var(--line2);padding-top:10px}
 #pSum .mm-freight-extra>summary{min-height:32px;cursor:pointer;color:var(--txt);font:650 var(--mm-sales-question-size)/1.45 var(--f-ui);list-style:none}
 #pSum .mm-freight-extra>summary::-webkit-details-marker{display:none}
-#pSum .mm-freight-extra>summary::after{content:'⌄';display:inline-block;margin-left:8px;transition:transform .15s}
-#pSum .mm-freight-extra[open]>summary::after{transform:rotate(180deg)}
+#pSum .mm-freight-extra>summary::after{margin-left:8px}
 #pSum .mm-freight-extra>.mm-unit-row{padding-top:12px!important;margin-top:9px;border-top:1px solid var(--line2)!important}
 #pSum .mm-freight-extra>summary:focus-visible{outline:2px solid var(--ion);outline-offset:2px}
 
@@ -3734,10 +3730,6 @@ html.light body .top.mm-ho-root .mm-top-actions .mm-theme{background:transparent
   #pSum #pkOpportunity .pk-opp-grid{grid-template-columns:minmax(0,1fr);gap:9px}
   #pSum #pkOpportunity .pk-opp-stat+.pk-opp-stat{padding:9px 0 0;border-left:0;border-top:1px solid var(--line2)}
 }
-@media(prefers-reduced-motion:reduce){
-  #verdict #vFinanceDetails>summary::after,#pSum .mm-freight-extra>summary::after{transition:none}
-}
-
 /* v1.0.126 · Stage A — shared page geometry, no financial or input changes.
    The inner edges of .hero and main are determined by min(1360px,94vw)
    with 20px horizontal padding. Match that exact reference in the header. */
@@ -6677,13 +6669,13 @@ Contraband Freight = no</textarea><small>Una regla por línea: Nombre = tax tota
 <button type="button" class="totop" id="toTop" aria-label="Volver arriba" title="Volver arriba (Inicio)" hidden><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 14l6-6 6 6"/></svg></button>
 <footer class="foot">
   <p class="foot-sec"><span class="ic i-lock" aria-hidden="true"></span>Tu inventario no se guarda: al cerrar o recargar se borra. Solo tus Ajustes quedan en este navegador.</p>
-  <div class="foot-by">Creado por <b>Fiko McGivert</b> · Vanguardia DR · SIGMA GRINDSET · <span class="ver">v1.0.137</span></div>
+  <div class="foot-by">Creado por <b>Fiko McGivert</b> · Vanguardia DR · SIGMA GRINDSET · <span class="ver">v1.0.138</span></div>
 </footer>
 
 <script>
 'use strict';
 /* ============================================================
-   Market Moves+ v1.0.137 — SIGMA GRINDSET / Vanguardia DR
+   Market Moves+ v1.0.138 — SIGMA GRINDSET / Vanguardia DR
    Flujo:  pegado → items → carga (ESI: precios, volúmenes, historial) → verificación → plan → vista
      1. Pegado      parsePaste(): parser posicional de columnas de EVE (Name · Quantity · … · Volume · Est. Price).
      2. Carga       esiItems(): trae todo lo que falta; mientras carga, refresh() NO pinta (S.loading).
