@@ -285,7 +285,8 @@ Contraband Freight = no</textarea><small>Una regla por línea: Nombre = tax tota
 
   <!-- 1. Resultado simple -->
   <section class="summary res mm-plan-area" id="pSum" hidden>
-    <header class="mm-section-head mm-plan-heading"><div class="mm-plan-heading-copy"><h2 class="mm-title" data-i18n="picker.chooseTitle">ELIGE TU PLAN</h2><p class="mm-section-sub" data-i18n="picker.chooseSubtitle">COMPARA LAS RUTAS Y DESCUBRE CUÁNTO RECIBIRÍAS</p></div><button type="button" class="mm-plan-toggle" id="pkPlanToggle" aria-controls="pkPlanOptions" aria-expanded="true" aria-label="Ocultar planes" title="Ocultar planes"><span class="mm-plan-toggle-chevron" aria-hidden="true"></span></button></header>
+    <header class="mm-section-head mm-plan-heading"><div class="mm-plan-heading-copy"><h2 class="mm-title" data-i18n="picker.chooseTitle">ELIGE TU PLAN</h2><p class="mm-section-sub" data-i18n="picker.chooseSubtitle">COMPARA LAS RUTAS Y DESCUBRE CUÁNTO RECIBIRÍAS</p></div><button type="button" class="mm-plan-toggle" id="pkPlanToggle" aria-controls="pkPlanContent" aria-expanded="true" aria-label="Ocultar toda la sección" title="Ocultar toda la sección"><span class="mm-plan-toggle-chevron" aria-hidden="true"></span></button></header>
+    <div id="pkPlanContent" class="mm-plan-content">
     <div class="fb2" id="flipBuy" hidden></div>
     <div class="mm-plan-layout">
       <section class="mm-plan-result" id="pkResult" aria-label="Resultado del plan seleccionado" data-i18n-aria-label="picker.resultAria" aria-live="polite">
@@ -322,6 +323,7 @@ Contraband Freight = no</textarea><small>Una regla por línea: Nombre = tax tota
         <details class="mm-inline-faq mm-courier-faq"><summary data-i18n="decision.collateralQ">¿El colateral es otro coste de envío?</summary><p data-i18n="decision.collateralA">No. En un contrato courier, el colateral es una garantía que se devuelve al completar el trabajo; no se resta entero como tarifa. El servicio sí puede calcular su precio usando el colateral y el volumen transportados. SIGMA resta la tarifa estimada, no el colateral.</p></details>
       </section>
       <section class="pk-opportunity mm-decision-card" id="pkOpportunity" aria-label="Comparación de rutas" hidden></section>
+    </div>
     </div>
     <!-- v1.0.50: justo debajo de los planes. Al abrir el desglose, los planes se pliegan y el desglose pasa a ser lo principal -->
     <button type="button" class="more-btn step-toggle" id="bDeep" aria-expanded="false" aria-controls="deep"><span class="step-toggle-icon ic i-list" aria-hidden="true"></span><span class="step-toggle-copy"><strong data-i18n="verdict.showSteps">Ver pasos para vender</strong><small data-i18n="verdict.stepsDescription">Contratos, destinos y precios por ítem</small></span><span class="step-toggle-chevron" aria-hidden="true"></span></button>

@@ -290,12 +290,12 @@
     "en": "Hide other routes"
   },
   "picker.hidePlans": {
-    "es": "Ocultar planes",
-    "en": "Hide plans"
+    "es": "Ocultar toda la sección",
+    "en": "Collapse entire section"
   },
   "picker.showPlans": {
-    "es": "Mostrar planes",
-    "en": "Show plans"
+    "es": "Mostrar toda la sección",
+    "en": "Expand entire section"
   },
   "picker.sortBy": {
     "es": "Ordenar por {label}",

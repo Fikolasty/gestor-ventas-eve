@@ -4,7 +4,7 @@ Antes de analizar o modificar este proyecto, leer completos y en este orden:
 
 1. `docs/EVE_PRODUCT_DESIGN_PROTOCOL.md` — reglas maestras de producto, UX/UI, ingeniería, dominio EVE, localización y verificación.
 2. `docs/DSS.md` — decisiones visuales vigentes, continuidad, publicación y límites del proyecto.
-3. `docs/PRODUCT_DESIGN_REFINEMENT.md` — continuidad: A+B.1 v1.0.126, B.2 v1.0.127, B.3 v1.0.128, B.4 v1.0.129, B.5 v1.0.130, B.5a v1.0.131, B.5b v1.0.132, B.5c v1.0.133, B.6 v1.0.134, B.6a+B.6b v1.0.135, **C.1a CSS v1.0.136 LIVE**, **B.6c v1.0.137 LIVE**, **C.1b v1.0.138 LIVE** y **B.7 v1.0.139 planes compactos LIVE, cuatro Actions y Pages verificados**. D.1 pendiente; consultar DSS §§19–29 para QA/CI/Pages y límites económicos.
+3. `docs/PRODUCT_DESIGN_REFINEMENT.md` — continuidad: A+B.1 v1.0.126, B.2 v1.0.127, B.3 v1.0.128, B.4 v1.0.129, B.5 v1.0.130, B.5a v1.0.131, B.5b v1.0.132, B.5c v1.0.133, B.6 v1.0.134, B.6a+B.6b v1.0.135, **C.1a CSS v1.0.136 LIVE**, **B.6c v1.0.137 LIVE**, **C.1b v1.0.138 LIVE**, **B.7 v1.0.139 LIVE** y **B.7a v1.0.140: flecha pliega TODA la sección de cuatro tarjetas, QA local completa y publicación pendiente hasta certificar Actions/Pages**. D.1 pendiente; consultar DSS §§19–30 para QA/CI/Pages y límites económicos.
 4. `docs/ARCHITECTURE.md`, `docs/SDD.md` y la parte pertinente de `docs/SPEC.md` — arquitectura, contratos de cálculo e historia técnica. Si un documento antiguo discrepa, comprobar el código y los tests actuales.
 
 ## Principios operativos

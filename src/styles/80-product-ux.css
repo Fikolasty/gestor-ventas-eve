@@ -1314,8 +1314,7 @@ html.light #verdict #vCap .v-finance-item.mm-cost-item{background:var(--surface-
   transition:transform .16s
 }
 #pSum .mm-plan-toggle[aria-expanded="false"] .mm-plan-toggle-chevron{transform:rotate(45deg)}
-#pSum #pkPlanOptions[hidden]{display:none!important}
-#pSum .mm-plan-layout.mm-plans-collapsed>#pkResult{grid-column:1/-1}
+#pSum #pkPlanContent[hidden]{display:none!important}
 
 /* Text tabs keep real button semantics/ARIA, but shed the old segmented shell. */
 #pSum .mm-plan-controls .pk-tools{overflow-x:auto;overflow-y:hidden;scrollbar-width:thin}

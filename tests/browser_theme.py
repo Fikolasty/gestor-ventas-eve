@@ -1552,7 +1552,7 @@ class ThemeBrowserTests(unittest.TestCase):
             expect(self.page.locator('#vFinanceDetails')).to_be_visible()
 
     def test_b7_compact_plans_icon_toggle_and_flat_filters(self):
-        """Presentation-only collapse preserves selected mode, filter, money and i18n."""
+        """The icon folds all plan cards but not the heading or selling steps."""
         from playwright.sync_api import expect
         self.page.evaluate("""() => {
             S.flip=false;S.planMode=null;C.bb.on=true;C.disc.on=false;
@@ -1571,7 +1571,7 @@ class ThemeBrowserTests(unittest.TestCase):
         }""")
         toggle=self.page.locator('#pkPlanToggle')
         self.assertEqual(toggle.inner_text().strip(),'')
-        self.assertEqual(toggle.get_attribute('aria-controls'),'pkPlanOptions')
+        self.assertEqual(toggle.get_attribute('aria-controls'),'pkPlanContent')
         expect(toggle).to_have_attribute('aria-expanded','true')
         for language in ('es','en'):
             self.page.evaluate('setLang',language)
@@ -1581,7 +1581,7 @@ class ThemeBrowserTests(unittest.TestCase):
                 paintPicker(P);paintCourierUnits(P);
             }""")
             expect(toggle).to_have_attribute('aria-label',
-                'Ocultar planes' if language=='es' else 'Hide plans')
+                'Ocultar toda la sección' if language=='es' else 'Collapse entire section')
             for width in (1440,390):
                 self.page.set_viewport_size({'width':width,'height':900})
                 for light in (False,True):
@@ -1634,6 +1634,27 @@ class ThemeBrowserTests(unittest.TestCase):
                         out.mkdir(parents=True,exist_ok=True)
                         self.page.locator('#pkPlanOptions').screenshot(
                             path=str(out/'b7-compact-plans-es-390-light.png'),animations='disabled')
+                    before_height=self.page.locator('#pSum').evaluate('(el)=>el.getBoundingClientRect().height')
+                    toggle.click()
+                    expect(toggle).to_have_attribute('aria-expanded','false')
+                    expect(self.page.locator('#pkPlanContent')).to_be_hidden()
+                    for section in ('#pkResult','#pkPlanOptions','#vFinanceDetails','#pkSpeedBox','#decisionGrid'):
+                        expect(self.page.locator(section)).to_be_hidden()
+                    expect(self.page.locator('#pSum>.mm-plan-heading')).to_be_visible()
+                    expect(self.page.locator('#bDeep')).to_be_visible()
+                    self.assertLess(self.page.locator('#pSum').evaluate(
+                        '(el)=>el.getBoundingClientRect().height'),before_height/2)
+                    if language=='es' and width==1440 and not light:
+                        self.page.locator('#pSum').screenshot(
+                            path=str(out/'b7-folded-section-es-1440-dark.png'),animations='disabled')
+                    if language=='es' and width==390 and light:
+                        self.page.locator('#pSum').screenshot(
+                            path=str(out/'b7-folded-section-es-390-light.png'),animations='disabled')
+                    self.page.evaluate('paintPicker(window.__b7Fixture);paintCourierUnits(window.__b7Fixture)')
+                    expect(self.page.locator('#pkPlanContent')).to_be_hidden()
+                    toggle.click()
+                    expect(self.page.locator('#pkResult')).to_be_visible()
+                    expect(self.page.locator('#vFinanceDetails')).to_be_visible()
             self.page.set_viewport_size({'width':1440,'height':900})
             self.page.evaluate('document.documentElement.classList.remove("light")')
             self.page.locator('#pkTools [data-pkf="fast"]').click()
@@ -1642,14 +1663,17 @@ class ThemeBrowserTests(unittest.TestCase):
             before=self.page.evaluate('({mode:S.planMode,filter:pkView.filter,sort:pkView.sort})')
             toggle.click()
             expect(toggle).to_have_attribute('aria-expanded','false')
+            expect(self.page.locator('#pkPlanContent')).to_be_hidden()
             expect(self.page.locator('#pkPlanOptions')).to_be_hidden()
-            expect(self.page.locator('#pkResult')).to_be_visible()
-            self.assertEqual(self.page.locator('#pkResult').evaluate(
-                '(el)=>getComputedStyle(el).gridColumnEnd'),'-1')
+            expect(self.page.locator('#pkResult')).to_be_hidden()
+            expect(self.page.locator('#vFinanceDetails')).to_be_hidden()
+            expect(self.page.locator('#bDeep')).to_be_visible()
             self.assertEqual(before,self.page.evaluate('({mode:S.planMode,filter:pkView.filter,sort:pkView.sort})'))
             toggle.focus()
             self.page.keyboard.press('Enter')
             expect(toggle).to_have_attribute('aria-expanded','true')
+            expect(self.page.locator('#pkResult')).to_be_visible()
+            expect(self.page.locator('#vFinanceDetails')).to_be_visible()
             expect(self.page.locator('#pkPlanOptions')).to_be_visible()
             expect(self.page.locator('#pkTools .pk-fb.on')).to_have_attribute('data-pkf','fast')
             self.assertEqual(self.page.locator('#pkSort').input_value(),'speed:1')

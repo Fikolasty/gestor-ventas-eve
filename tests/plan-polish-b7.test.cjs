@@ -1,4 +1,4 @@
-// B.7: visual density and an independent accessible plan-card disclosure.
+// B.7: visual density and an accessible full-plan disclosure.
 const test=require('node:test');
 const assert=require('node:assert/strict');
 const fs=require('node:fs');
@@ -11,14 +11,16 @@ const keys=JSON.parse(src('i18n/ui.json'));
 test('the header has exactly one icon-only disclosure with bilingual accessible names',()=>{
   assert.equal((html.match(/id="pkPlanToggle"/g)||[]).length,1);
   assert.equal((html.match(/id="pkPlanOptions"/g)||[]).length,1);
-  assert.match(html,/<button[^>]*id="pkPlanToggle"[^>]*aria-controls="pkPlanOptions"[^>]*aria-expanded="true"[^>]*><span[^>]*aria-hidden="true"><\/span><\/button>/);
-  assert.deepEqual(keys['picker.hidePlans'],{es:'Ocultar planes',en:'Hide plans'});
-  assert.deepEqual(keys['picker.showPlans'],{es:'Mostrar planes',en:'Show plans'});
+  assert.equal((html.match(/id="pkPlanContent"/g)||[]).length,1);
+  assert.match(html,/<button[^>]*id="pkPlanToggle"[^>]*aria-controls="pkPlanContent"[^>]*aria-expanded="true"[^>]*><span[^>]*aria-hidden="true"><\/span><\/button>/);
+  assert.match(html,/<div id="pkPlanContent" class="mm-plan-content">[\s\S]*?<div class="fb2" id="flipBuy"[\s\S]*?<div class="mm-plan-layout">[\s\S]*?<div class="mm-decision-grid" id="decisionGrid">[\s\S]*?<\/div>\s*<\/div>\s*<!-- v1\.0\.50/);
+  assert.deepEqual(keys['picker.hidePlans'],{es:'Ocultar toda la sección',en:'Collapse entire section'});
+  assert.deepEqual(keys['picker.showPlans'],{es:'Mostrar toda la sección',en:'Expand entire section'});
   assert.match(picker,/pkPanelCollapsed=!pkPanelCollapsed/);
+  assert.match(picker,/const panel=\$\('pkPlanContent'\),toggle=\$\('pkPlanToggle'\)/);
   assert.match(picker,/toggle\.setAttribute\('aria-expanded',String\(!pkPanelCollapsed\)\)/);
   assert.match(picker,/pkPanelCollapsed=false;\s*pkView\.open=true/);
-  assert.match(css,/#pSum #pkPlanOptions\[hidden\]\{display:none!important\}/);
-  assert.match(css,/#pSum \.mm-plan-layout\.mm-plans-collapsed>#pkResult\{grid-column:1\/-1\}/);
+  assert.match(css,/#pSum #pkPlanContent\[hidden\]\{display:none!important\}/);
 });
 
 test('finance disclosure retains ordinary estimation context and exceptional warnings remain visible',()=>{

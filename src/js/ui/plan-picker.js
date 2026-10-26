@@ -5,11 +5,10 @@
 // la ruta (flip) y el switch de envío actuales: aquí no se calcula nada nuevo, solo se ordena y se pinta.
 // Elegir un plan recalcula (S.planMode → refreshNow). Orden y filtro viven en memoria (pkView) y se vacían al limpiar.
 let pkView={sort:'net',dir:-1,filter:'all',open:true}; // B.6: mostrar alternativas desde el inicio
-let pkPanelCollapsed=false; // B.7: independent presentation-only collapse; keep the active plan/filter intact
+let pkPanelCollapsed=false; // B.7 follow-up: fold the whole decision area, keeping plan, filter and detail state
 function syncPlanPanel(){
-  const panel=$('pkPlanOptions'),toggle=$('pkPlanToggle');
+  const panel=$('pkPlanContent'),toggle=$('pkPlanToggle');
   panel.hidden=pkPanelCollapsed;
-  panel.parentElement.classList.toggle('mm-plans-collapsed',pkPanelCollapsed);
   toggle.setAttribute('aria-expanded',String(!pkPanelCollapsed));
   const label=tx(pkPanelCollapsed?'picker.showPlans':'picker.hidePlans');
   toggle.setAttribute('aria-label',label);toggle.title=label;
