@@ -5,13 +5,19 @@
 // la ruta (flip) y el switch de envío actuales: aquí no se calcula nada nuevo, solo se ordena y se pinta.
 // Elegir un plan recalcula (S.planMode → refreshNow). Orden y filtro viven en memoria (pkView) y se vacían al limpiar.
 let pkView={sort:'net',dir:-1,filter:'all',open:true}; // B.6: mostrar alternativas desde el inicio
-let pkPanelCollapsed=false; // B.7 follow-up: fold the whole decision area, keeping plan, filter and detail state
+let pkPanelCollapsed=true; // B.10: keep the entire decision area folded until the pilot opens it
+let pkOptionsCollapsed=true; // B.10: the plan list folds independently of the result
 function syncPlanPanel(){
   const panel=$('pkPlanContent'),toggle=$('pkPlanToggle');
   panel.hidden=pkPanelCollapsed;
   toggle.setAttribute('aria-expanded',String(!pkPanelCollapsed));
   const label=tx(pkPanelCollapsed?'picker.showPlans':'picker.hidePlans');
   toggle.setAttribute('aria-label',label);toggle.title=label;
+  const options=$('pkOptionsContent'),optionsToggle=$('pkOptionsToggle');
+  options.hidden=pkOptionsCollapsed;
+  optionsToggle.setAttribute('aria-expanded',String(!pkOptionsCollapsed));
+  const optionsLabel=tx(pkOptionsCollapsed?'picker.showAvailablePlans':'picker.hideAvailablePlans');
+  optionsToggle.setAttribute('aria-label',optionsLabel);optionsToggle.title=optionsLabel;
 }
 const PK_FAST=new Set(['jInst','cInst','fJI','bb']);         // cobras el mismo día (sin contar el envío)
 const PK_REP=new Set(['rNull','rJita']);
@@ -235,6 +241,10 @@ $('pkPlanToggle').addEventListener('click',()=>{
   pkPanelCollapsed=!pkPanelCollapsed;
   syncPlanPanel();
 });
+$('pkOptionsToggle').addEventListener('click',()=>{
+  pkOptionsCollapsed=!pkOptionsCollapsed;
+  syncPlanPanel();
+});
 $('pkTools').addEventListener('click',e=>{
   const b=e.target.closest('[data-pkf]');if(!b||!lastP)return;
   const hadFocus=document.activeElement===b;
@@ -260,6 +270,7 @@ $('pk').addEventListener('click',e=>{
 $('pkShortcut').addEventListener('click',e=>{
   const b=e.target.closest('[data-pk-shortcut]');if(!b||!lastP)return;
   pkPanelCollapsed=false;
+  pkOptionsCollapsed=false;
   pkView.open=true;pkView.filter='all';paintPicker(lastP);
   const target=[...$('pkOthers').querySelectorAll('[data-m]')].find(x=>x.dataset.m===b.dataset.pkShortcut);
   if(target)target.scrollIntoView({block:'nearest',behavior:'smooth'});

@@ -859,7 +859,9 @@ body:not(.is-flip) .fact-buy-order{display:none!important}
 #ledger #lots .lot-head{
   display:grid!important;grid-template-columns:minmax(0,1.35fr) minmax(150px,.9fr) minmax(145px,.95fr)!important;
   grid-template-areas:none!important;align-items:center;gap:clamp(12px,2vw,25px)!important;
-  padding:11px 8px 11px 2px!important;cursor:default!important;min-width:0;
+  /* Reserve the absolute-positioned remove button's whole hit area: the
+     earlier 8px right inset let it overlap the lot-net heading. */
+  padding:11px 52px 11px 2px!important;cursor:default!important;min-width:0;
   background:transparent!important;
 }
 #ledger #lots .lot-open{
@@ -1343,15 +1345,16 @@ html.light #verdict #vCap .v-finance-item.mm-cost-item{background:var(--surface-
 }
 #pSum #vFinanceDetails .mm-finance-estimate[hidden]{display:none}
 #pSum>.mm-plan-heading{grid-template-columns:minmax(0,1fr) auto!important}
-#pSum>.mm-plan-heading .mm-plan-toggle{
-  grid-column:2;justify-self:end;display:grid;place-items:center;
+#pSum .mm-plan-toggle{
+  justify-self:end;display:grid;place-items:center;
   width:38px;height:38px;min-width:38px;padding:0;
   border:1px solid var(--line2);border-radius:8px;
   color:var(--mut);background:var(--surface-panel);cursor:pointer;
   transition:background-color .15s,border-color .15s
 }
-#pSum>.mm-plan-heading .mm-plan-toggle:hover{color:var(--txt);background:var(--hull);border-color:var(--mut)}
-#pSum>.mm-plan-heading .mm-plan-toggle:focus-visible{outline:2px solid var(--ion);outline-offset:2px}
+#pSum>.mm-plan-heading .mm-plan-toggle{grid-column:2}
+#pSum .mm-plan-toggle:hover{color:var(--txt);background:var(--hull);border-color:var(--mut)}
+#pSum .mm-plan-toggle:focus-visible{outline:2px solid var(--ion);outline-offset:2px}
 #pSum .mm-plan-toggle-chevron{
   width:9px;height:9px;border-right:1.75px solid currentColor;
   border-bottom:1.75px solid currentColor;transform:rotate(225deg);
@@ -1359,6 +1362,10 @@ html.light #verdict #vCap .v-finance-item.mm-cost-item{background:var(--surface-
 }
 #pSum .mm-plan-toggle[aria-expanded="false"] .mm-plan-toggle-chevron{transform:rotate(45deg)}
 #pSum #pkPlanContent[hidden]{display:none!important}
+#pSum .mm-plan-options-heading{display:flex;align-items:center;justify-content:space-between;gap:12px}
+#pSum .mm-plan-options-heading .mm-plan-card-title{margin:0}
+#pSum .mm-plan-options-heading:has(+ #pkOptionsContent:not([hidden])){margin-bottom:15px}
+#pSum #pkOptionsContent[hidden]{display:none!important}
 
 /* Text tabs keep real button semantics/ARIA, but shed the old segmented shell. */
 #pSum .mm-plan-controls .pk-tools{overflow-x:auto;overflow-y:hidden;scrollbar-width:thin}

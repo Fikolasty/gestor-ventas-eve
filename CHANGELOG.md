@@ -1,3 +1,10 @@
+## v1.0.143 — 2026-10-26 [ChatGPT] · B.10: dos secciones de planes minimizadas por defecto (publicación pendiente)
+
+- **Aprobación de Raulito:** el bloque «ELIGE TU PLAN» y la sección interna «Planes disponibles» arrancan ambos minimizados. Abrir el bloque principal muestra la tarjeta «Tu resultado» y una cabecera compacta de «Planes disponibles»; una flecha independiente despliega su lista, filtros y ordenamiento.
+- Los dos controles son iconográficos sin texto visual, con etiquetas accesibles ES/EN, `aria-expanded` y `aria-controls`. Cada apertura conserva su estado en repintados y cambios de idioma; la acción contextual de ruta rápida abre ambas cuando necesita revelar un plan.
+- CSS responsive y Dark/Light reutiliza el chevrón B.7. No se modifican `modeTotal`, `computePlan`, importes, filtros, orden, SSO/ESI ni almacenamiento. **QA: 29/29 Node, 16/16 Python, 8/8 legacy y 43/43 Chromium, build 1.0.143 y diff sin errores**; publicación vía GitHub Fiko pendiente de certificar.
+- **Corrección visual añadida desde captura:** el botón «X» de quitar un ítem dispone de 52 px reservados en la cabecera del Listado; ya no invade «Neto del lote» ni su cifra. Una regresión de navegador compara la geometría en escritorio/móvil y ambos temas.
+
 ## v1.0.142 — 2026-10-26 [ChatGPT] · B.9: un solo desplegable de explicaciones simétricas — LIVE verificada
 
 - **Aprobación expresa:** Raulito pidió «simetría perfecta», cero subdesplegables dentro de ambas respuestas y preservar todos los cálculos; confirmó «sí» a cabecera única, flecha única y estado cerrado por defecto.

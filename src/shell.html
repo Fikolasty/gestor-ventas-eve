@@ -285,8 +285,8 @@ Contraband Freight = no</textarea><small>Una regla por línea: Nombre = tax tota
 
   <!-- 1. Resultado simple -->
   <section class="summary res mm-plan-area" id="pSum" hidden>
-    <header class="mm-section-head mm-plan-heading"><div class="mm-plan-heading-copy"><h2 class="mm-title" data-i18n="picker.chooseTitle">ELIGE TU PLAN</h2><p class="mm-section-sub" data-i18n="picker.chooseSubtitle">COMPARA LAS RUTAS Y DESCUBRE CUÁNTO RECIBIRÍAS</p></div><button type="button" class="mm-plan-toggle" id="pkPlanToggle" aria-controls="pkPlanContent" aria-expanded="true" aria-label="Ocultar toda la sección" title="Ocultar toda la sección"><span class="mm-plan-toggle-chevron" aria-hidden="true"></span></button></header>
-    <div id="pkPlanContent" class="mm-plan-content">
+    <header class="mm-section-head mm-plan-heading"><div class="mm-plan-heading-copy"><h2 class="mm-title" data-i18n="picker.chooseTitle">ELIGE TU PLAN</h2><p class="mm-section-sub" data-i18n="picker.chooseSubtitle">COMPARA LAS RUTAS Y DESCUBRE CUÁNTO RECIBIRÍAS</p></div><button type="button" class="mm-plan-toggle" id="pkPlanToggle" aria-controls="pkPlanContent" aria-expanded="false" aria-label="Mostrar toda la sección" title="Mostrar toda la sección"><span class="mm-plan-toggle-chevron" aria-hidden="true"></span></button></header>
+    <div id="pkPlanContent" class="mm-plan-content" hidden>
     <div class="fb2" id="flipBuy" hidden></div>
     <div class="mm-plan-layout">
       <section class="mm-plan-result" id="pkResult" aria-label="Resultado del plan seleccionado" data-i18n-aria-label="picker.resultAria" aria-live="polite">
@@ -303,12 +303,14 @@ Contraband Freight = no</textarea><small>Una regla por línea: Nombre = tax tota
         <p class="mm-plan-result-warning" id="pkResultWarning" hidden></p>
       </section>
       <section class="mm-plan-options" id="pkPlanOptions" aria-label="Planes disponibles" data-i18n-aria-label="picker.availablePlans">
-        <h3 class="mm-plan-card-title" data-i18n="picker.availablePlans">Planes disponibles</h3>
+        <div class="mm-plan-options-heading"><h3 class="mm-plan-card-title" data-i18n="picker.availablePlans">Planes disponibles</h3><button type="button" class="mm-plan-toggle mm-options-toggle" id="pkOptionsToggle" aria-controls="pkOptionsContent" aria-expanded="false" aria-label="Mostrar planes disponibles" title="Mostrar planes disponibles"><span class="mm-plan-toggle-chevron" aria-hidden="true"></span></button></div>
+        <div id="pkOptionsContent" hidden>
         <div class="mm-plan-controls">
           <div class="pk-tools" id="pkTools"></div>
           <label class="mm-plan-sort"><span data-i18n="picker.sortLabel">Ordenar</span><select id="pkSort" aria-label="Ordenar planes" data-i18n-aria-label="picker.sortAria"><option value="net:-1" data-i18n="picker.sortMost">Más ISK</option><option value="net:1" data-i18n="picker.sortLeast">Menos ISK</option><option value="speed:1" data-i18n="picker.sortFast">Más rápidos</option><option value="ship:1" data-i18n="picker.sortNoShip">Sin envío primero</option><option value="name:1" data-i18n="picker.sortName">Nombre A–Z</option></select></label>
         </div>
         <div class="pk-w"><div class="pk" id="pk" role="group" aria-label="Plan seleccionado"></div><div class="pk" id="pkOthers" role="group" aria-label="Otros planes"></div></div>
+        </div>
       </section>
       <details class="ov-card ov-flow mm-finance-details" id="vFinanceDetails"><summary data-i18n="verdict.inspectBreakdown">Ver distribución de ingresos y destinos</summary><div class="mm-finance-details-body"><h4 data-i18n="picker.moneyOrigin">DE DÓNDE SALE TU ISK</h4><div id="ovFlow"></div><div class="mm-dest-inline" id="ovDestW"><h4 data-i18n="picker.salesDestinationUpper">DÓNDE SE VENDE</h4><div id="ovDest"></div></div><p class="mm-finance-estimate" id="vEstimateHelp" hidden></p></div></details>
       <section class="mm-speed-card mm-decision-card" id="pkSpeedBox" hidden>

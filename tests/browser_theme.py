@@ -297,6 +297,7 @@ class ThemeBrowserTests(unittest.TestCase):
             lastP=window.__filterMock={mode:null,rows:[row],Vs:0,shipCost:0,best:100000};
             document.querySelector('#verdict').hidden=false;
             document.querySelector('#pSum').hidden=false;
+            pkPanelCollapsed=false;pkOptionsCollapsed=false;
             pkView.open=true;pkView.filter='all';paintPicker(lastP);
         }""")
         for width in (1440,390):
@@ -457,7 +458,7 @@ class ThemeBrowserTests(unittest.TestCase):
                 lastP={mode:null,rows:[row],Vs:0,shipCost:0,best:10000000};
                 document.querySelector('#verdict').hidden=false;
                 document.querySelector('#pSum').hidden=false;
-                paintPicker(lastP);
+                pkPanelCollapsed=false;paintPicker(lastP);
             }""")
         fixture()
         shortcut=self.page.locator("#pkShortcut")
@@ -590,6 +591,7 @@ class ThemeBrowserTests(unittest.TestCase):
             paintCourierUnits({rows:[item(1),item(2),item(3)],Vs:18,shipCost:360000});
             document.querySelector('#verdict').hidden=false;
             document.querySelector('#pSum').hidden=false;
+            pkPanelCollapsed=false;syncPlanPanel();
             document.querySelector('#vFinanceDetails').open=false;
         }""")
         for language in ('es','en'):
@@ -654,6 +656,7 @@ class ThemeBrowserTests(unittest.TestCase):
             };
             lastP={mode:null,rows:[row],Vs:0,shipCost:0,best:100000};
             document.querySelector('#pSum').hidden=false;
+            pkPanelCollapsed=false;pkOptionsCollapsed=false;
             pkView.open=true;pkView.filter='all';
             paintPicker(lastP);
         }""")
@@ -1095,6 +1098,7 @@ class ThemeBrowserTests(unittest.TestCase):
                     document.querySelector('#vFinanceDetails').open=false;
                     paintVerdict(P);
                     document.querySelector('#pSum').hidden=false;
+                    pkPanelCollapsed=false;
                     paintPicker(P);
                     paintCourierUnits(P);
                 } finally {S.items=oldItems;lastP=oldP;}
@@ -1387,6 +1391,7 @@ class ThemeBrowserTests(unittest.TestCase):
                     shipCost:0,Vs:0,missing:[],toBB:[]};
                 document.querySelector('#verdict').hidden=false;
                 document.querySelector('#pSum').hidden=false;
+                pkPanelCollapsed=false;
                 paintPicker(window.__b4Plan);
                 paintCourierUnits(window.__b4Plan);
             }""")
@@ -1432,6 +1437,7 @@ class ThemeBrowserTests(unittest.TestCase):
                 window.__b6Plan=P;
                 const detail=document.querySelector('#vFinanceDetails');detail.open=false;
                 paintVerdict(P);document.querySelector('#pSum').hidden=false;
+                pkPanelCollapsed=false;pkOptionsCollapsed=false;
                 pkView.open=true;pkView.filter='all';pkView.sort='net';pkView.dir=-1;
                 paintPicker(P);
                 window.__b6RefreshOriginal=refreshNow;
@@ -1502,6 +1508,7 @@ class ThemeBrowserTests(unittest.TestCase):
                     missing:[],toBB:[]};
                 window.__b6aFixture={P,row};
                 paintVerdict(P);document.querySelector('#pSum').hidden=false;
+                pkPanelCollapsed=false;pkOptionsCollapsed=false;
                 paintPicker(P);paintCourierUnits(P);
             }""")
             expect(self.page.locator('#pkSpeedBox')).to_be_visible()
@@ -1608,6 +1615,7 @@ class ThemeBrowserTests(unittest.TestCase):
                     missing:[],toBB:[]};
                 window.__b6cFixture={P,row};
                 paintVerdict(P);document.querySelector('#pSum').hidden=false;
+                pkPanelCollapsed=false;pkOptionsCollapsed=false;
                 paintPicker(P);paintCourierUnits(P);
             }""")
             expect(self.page.locator('#pkSpeedBox')).to_be_visible()
@@ -1676,9 +1684,20 @@ class ThemeBrowserTests(unittest.TestCase):
             paintVerdict(P);paintPicker(P);paintCourierUnits(P);
         }""")
         toggle=self.page.locator('#pkPlanToggle')
+        options_toggle=self.page.locator('#pkOptionsToggle')
         self.assertEqual(toggle.inner_text().strip(),'')
         self.assertEqual(toggle.get_attribute('aria-controls'),'pkPlanContent')
+        expect(toggle).to_have_attribute('aria-expanded','false')
+        expect(self.page.locator('#pkPlanContent')).to_be_hidden()
+        expect(self.page.locator('#bDeep')).to_be_visible()
+        toggle.click()
         expect(toggle).to_have_attribute('aria-expanded','true')
+        expect(options_toggle).to_have_attribute('aria-expanded','false')
+        expect(self.page.locator('#pkPlanOptions')).to_be_visible()
+        expect(self.page.locator('#pkResult')).to_be_visible()
+        expect(self.page.locator('#pkOptionsContent')).to_be_hidden()
+        options_toggle.click()
+        expect(self.page.locator('#pkOptionsContent')).to_be_visible()
         for language in ('es','en'):
             self.page.evaluate('setLang',language)
             self.page.evaluate("""() => {
@@ -1784,6 +1803,22 @@ class ThemeBrowserTests(unittest.TestCase):
             expect(self.page.locator('#pkTools .pk-fb.on')).to_have_attribute('data-pkf','fast')
             self.assertEqual(self.page.locator('#pkSort').input_value(),'speed:1')
             self.page.evaluate('pkView.filter="all";paintPicker(lastP)')
+        # Each accordion remembers its state across repaints and independently
+        # controls visibility. The amount shown in the result stays unchanged.
+        self.page.locator('#pkTools [data-pkf="fast"]').click()
+        original_value=self.page.locator('#pkResultValue').inner_text()
+        options_toggle.focus()
+        self.page.keyboard.press('Enter')
+        expect(options_toggle).to_have_attribute('aria-expanded','false')
+        expect(self.page.locator('#pkOptionsContent')).to_be_hidden()
+        expect(self.page.locator('#pkResult')).to_be_visible()
+        self.page.evaluate('paintPicker(window.__b7Fixture)')
+        expect(self.page.locator('#pkOptionsContent')).to_be_hidden()
+        self.assertEqual(self.page.locator('#pkResultValue').inner_text(),original_value)
+        expect(options_toggle).to_have_attribute('aria-label','Show available plans')
+        options_toggle.click()
+        expect(self.page.locator('#pkTools .pk-fb.on')).to_have_attribute('data-pkf','fast')
+        expect(self.page.locator('#pkOptionsContent')).to_be_visible()
 
     def test_b4_ledger_unit_copy_and_lazy_disclosures(self):
         from playwright.sync_api import expect
@@ -1840,6 +1875,16 @@ class ThemeBrowserTests(unittest.TestCase):
                     }""")
                     self.assertLessEqual(coords['copyRight'],coords['rowRight']+1,coords)
                     self.assertGreaterEqual(coords['copyLeft'],coords['rowLeft']-1,coords)
+                    # Remove control must never cover the right-side net label or amount.
+                    overlap=self.page.evaluate("""() => {
+                        const close=document.querySelector('#lots .lot-x').getBoundingClientRect();
+                        return ['#lots .lot-financial .lot-k','#lots .lot-financial .lot-net'].map(sel=>{
+                            const r=document.querySelector(sel).getBoundingClientRect();
+                            return {sel,overlap:Math.max(0,Math.min(r.right,close.right)-Math.max(r.left,close.left))*
+                                Math.max(0,Math.min(r.bottom,close.bottom)-Math.max(r.top,close.top))};
+                        });
+                    }""")
+                    self.assertTrue(all(cell['overlap']==0 for cell in overlap),overlap)
                     if width==390:
                         sizing=self.page.evaluate("""() => {
                             const names=['#lots .lot','#lots .lot-head','#lots .lot-open',
@@ -1885,6 +1930,7 @@ class ThemeBrowserTests(unittest.TestCase):
                 S.items=[o];
                 window.__paladinP0={rows:[r],missing:[],mode:null,best:7088416500,
                     Vs:350000,shipCost:302796000,toBB:[]};
+                pkPanelCollapsed=false;
                 paintVerdict(window.__paladinP0);
                 paintSummary(window.__paladinP0);
             }""")

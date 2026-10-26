@@ -31,6 +31,7 @@ test('B.4 registered items separate disclosure, copy and removal as native butto
   assert.match(ledger,/const adjustments=el\('details','lot-adjustments lot-detail-section'\)/);
   assert.match(ledger,/\+'pr-route'/);
   assert.match(css,/#ledger #lots \.lot-pp \.copy/);
+  assert.match(css,/padding:11px 52px 11px 2px!important/);
   assert.match(css,/html\.light #ledger/);
 });
 

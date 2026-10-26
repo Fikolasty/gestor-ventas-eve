@@ -2,6 +2,10 @@
 
 **Estándar gráfico y traspaso entre chats:** ver [DSS.md](DSS.md); actualizarlo obligatoriamente con cada cambio/commit/push.
 
+**B.10 v1.0.143 (2026-10-26; release por verificar):** dos superficies independientes del selector comercial empiezan plegadas (`pkPanelCollapsed`, `pkOptionsCollapsed` verdaderos): `#pkPlanToggle` controla todo `#pkPlanContent` y `#pkOptionsToggle` controla `#pkOptionsContent` dentro de `#pkPlanOptions`. Los dos `button` conservan `<span>` de chevrón sin texto visible, `aria-controls`, `aria-expanded` y etiquetas ES/EN dinámicas. `paintPicker` no reinicia ninguno. La acción de ruta rápida despliega ambos para que el destino sea visible. La cabecera del bloque y el botón `#bDeep` permanecen accesibles; el motor `modeTotal/computePlan` y la persistencia/ESI/SSO no cambian. QA/Pages en `DSS.md` §37; D.1 profiling aún no iniciado.
+
+**Detalle del Listado v1.0.143:** `#ledger #lots .lot-head` conserva `padding-right:52px!important` para el control `.lot-x` con posición absoluta (`right:9px`) y objetivo táctil de 34 px. Evita solapamiento con `.lot-financial` sin tocar `removeFromPaste`, datos o precios. La reestructuración futura de cuatro paneles permanece pendiente de decisión del propietario.
+
 **Actualizado:** 2026-10-25 · **Estado:** documento vivo de Spec-Driven Development (SDD); las secciones históricas describen el estado de su fecha y pueden haber sido sustituidas.
 **Repositorio:** [Fikolasty/gestor-ventas-eve](https://github.com/Fikolasty/gestor-ventas-eve) · **Entrega:** rama `main` · **App:** https://fikolasty.github.io/gestor-ventas-eve/
 **Base pública vigente verificada:** **v1.0.133** (GitHub Pages/Chromium `40247756569`, fuente `91e5dbe8`, build `fd779e0d`, HTML público/local/remoto blob `8a062a1d`, 2.258.784 bytes); B.5/B.5a/B.5b y **B.5c LIVE**, ayuda de reproceso plegable y texto natural sin tocar fórmulas. C.1 pendiente. `docs/QA_STATUS.md` actualizado por CI. Ver `DSS.md` §§15–18.

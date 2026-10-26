@@ -12,15 +12,29 @@ test('the header has exactly one icon-only disclosure with bilingual accessible 
   assert.equal((html.match(/id="pkPlanToggle"/g)||[]).length,1);
   assert.equal((html.match(/id="pkPlanOptions"/g)||[]).length,1);
   assert.equal((html.match(/id="pkPlanContent"/g)||[]).length,1);
-  assert.match(html,/<button[^>]*id="pkPlanToggle"[^>]*aria-controls="pkPlanContent"[^>]*aria-expanded="true"[^>]*><span[^>]*aria-hidden="true"><\/span><\/button>/);
-  assert.match(html,/<div id="pkPlanContent" class="mm-plan-content">[\s\S]*?<div class="fb2" id="flipBuy"[\s\S]*?<div class="mm-plan-layout">[\s\S]*?<div class="mm-decision-grid" id="decisionGrid">[\s\S]*?<\/div>\s*<\/div>\s*<!-- v1\.0\.50/);
+  assert.match(html,/<button[^>]*id="pkPlanToggle"[^>]*aria-controls="pkPlanContent"[^>]*aria-expanded="false"[^>]*><span[^>]*aria-hidden="true"><\/span><\/button>/);
+  assert.match(html,/<div id="pkPlanContent" class="mm-plan-content" hidden>[\s\S]*?<div class="fb2" id="flipBuy"[\s\S]*?<div class="mm-plan-layout">[\s\S]*?<div class="mm-decision-grid" id="decisionGrid">[\s\S]*?<\/div>\s*<\/div>\s*<!-- v1\.0\.50/);
   assert.deepEqual(keys['picker.hidePlans'],{es:'Ocultar toda la sección',en:'Collapse entire section'});
   assert.deepEqual(keys['picker.showPlans'],{es:'Mostrar toda la sección',en:'Expand entire section'});
   assert.match(picker,/pkPanelCollapsed=!pkPanelCollapsed/);
   assert.match(picker,/const panel=\$\('pkPlanContent'\),toggle=\$\('pkPlanToggle'\)/);
   assert.match(picker,/toggle\.setAttribute\('aria-expanded',String\(!pkPanelCollapsed\)\)/);
-  assert.match(picker,/pkPanelCollapsed=false;\s*pkView\.open=true/);
+  assert.match(picker,/pkPanelCollapsed=false;\s*pkOptionsCollapsed=false;\s*pkView\.open=true/);
   assert.match(css,/#pSum #pkPlanContent\[hidden\]\{display:none!important\}/);
+});
+
+test('available plans has its own icon-only control and begins folded, without suppressing calculations',()=>{
+  assert.equal((html.match(/id="pkOptionsToggle"/g)||[]).length,1);
+  assert.equal((html.match(/id="pkOptionsContent"/g)||[]).length,1);
+  assert.match(html,/<button[^>]*id="pkOptionsToggle"[^>]*aria-controls="pkOptionsContent"[^>]*aria-expanded="false"[^>]*><span[^>]*aria-hidden="true"><\/span><\/button>/);
+  assert.match(html,/<div id="pkOptionsContent" hidden>[\s\S]*?id="pkTools"[\s\S]*?id="pkSort"[\s\S]*?id="pkOthers"/);
+  assert.deepEqual(keys['picker.showAvailablePlans'],{es:'Mostrar planes disponibles',en:'Show available plans'});
+  assert.deepEqual(keys['picker.hideAvailablePlans'],{es:'Ocultar planes disponibles',en:'Hide available plans'});
+  assert.match(picker,/let pkPanelCollapsed=true/);
+  assert.match(picker,/let pkOptionsCollapsed=true/);
+  assert.match(picker,/options\.hidden=pkOptionsCollapsed/);
+  assert.match(picker,/pkOptionsCollapsed=!pkOptionsCollapsed/);
+  assert.match(css,/#pSum #pkOptionsContent\[hidden\]\{display:none!important\}/);
 });
 
 test('finance disclosure retains ordinary estimation context and exceptional warnings remain visible',()=>{

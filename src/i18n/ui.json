@@ -297,6 +297,14 @@
     "es": "Mostrar toda la sección",
     "en": "Expand entire section"
   },
+  "picker.showAvailablePlans": {
+    "es": "Mostrar planes disponibles",
+    "en": "Show available plans"
+  },
+  "picker.hideAvailablePlans": {
+    "es": "Ocultar planes disponibles",
+    "en": "Hide available plans"
+  },
   "picker.sortBy": {
     "es": "Ordenar por {label}",
     "en": "Sort by {label}"
