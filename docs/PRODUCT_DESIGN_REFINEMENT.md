@@ -1,6 +1,6 @@
 # Market Moves+ — propuesta de refinamiento visual y saneamiento progresivo
 
-**Fecha:** 2026-10-26 · **Estado vigente:** **B.12 v1.0.145 LIVE y verificada por CI/Pages/HTTPS** (fuente `e2cad1cb`, build `298ac823`, Pages `40383448358`, blob `bf6d1f44`); B.11 v1.0.144 permanece cerrada. **D.1 aún pendiente de perfilado.** El GitHub autorizado es exclusivamente **Fiko/Fikolasty**; ver `DSS.md` §§39–40. Los registros históricos de bloqueo se conservan como tales.
+**Fecha:** 2026-10-26 · **Estado vigente:** **B.13 v1.0.146 LIVE**, aprobada por Raulito y verificada por cuatro Actions, Pages y HTTPS independiente (fuente `3232b726`, build `7ccf8e94`, Pages `40416434387`, blob `12092a4d`, **2.339.758 bytes**); B.12 v1.0.145 permanece cerrada. **D.1 iniciado y medido localmente** sobre 0–250 Items sintéticos en Chromium; `PERFORMANCE_BASELINE_D1.md`. No se ha optimizado código. El GitHub autorizado es exclusivamente **Fiko/Fikolasty**; ver `DSS.md` §§50–51. Los registros históricos de bloqueo se conservan como tales.
 
 **P0 económico resuelto en el candidato antes de B.2/C/D:** la captura de 7 Paladin con Buy Order evidenciaba una inversión de solo 27,59 M frente a Tasación de 6,3–6,4 B y beneficios absurdos. La corrección y sus regresiones ya fueron aprobadas y añadidas a v1.0.126; ver `TRADE_PROFIT_AUDIT_2026-10-25.md`. Incluye pruebas reales de navegador, pero las proyecciones siguen sin garantizar llenado de órdenes ni ventas efectivas.
 
