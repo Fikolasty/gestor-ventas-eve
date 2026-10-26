@@ -1,5 +1,13 @@
 # PROGRESS — Market Moves+
 
+## 2026-10-25 — B.5c reprocesamiento compacto, candidato local v1.0.133
+
+**Observación con captura real de Geiner:** bajo «¿De dónde salen estas deducciones?» la tarjeta «¿Debo reprocesar mi hielo u ore?» quedaba siempre expandida y tenía otro disclosure anidado «¿Por qué reprocesar o no?». Geiner aprobó minimizar el bloque igual que el de deducciones, subir la pregunta interior al exterior, quitar «mi hielo u ore», usar español natural con artículo («No reproceses el Compressed Krystallos») y marcar ISK positivo verde/negativo rojo. El cambio precede C.1, sin afectar cálculos.
+
+**Implementación:** `paintReprocessingDecision` produce un solo `<details.mm-rep-help>` con título «¿Por qué reprocesar o no?». Abierto, muestra recomendación, ruta superior, desglose marginal y metodología; cerrado, solo ocupa una línea. Conserva `open` durante repintado, tipo EVE, ESI, ES/EN y acceso de teclado. Mensajes «Reprocesa el {name}. Ganarías {amount}…» / «No reproceses el {name}. Si lo haces, perderías {amount}…»; solo el `<span.mm-rep-delta>` toma `var(--gain)` o `var(--loss)` según el **signo real de `r.rep.diff`**, sin insertar HTML de nombres externos. Comparación completa conserva signo y método económico originales. QA Chromium amplía prueba positiva/negativa y captura estado cerrado; Node protege semántica y colores; workflows v1.0.133.
+
+**Base limpia al empezar:** `main=9aee2803f533f50964ef6caaf80a32b361d520f8`, **v1.0.132 LIVE**; no sobrescribir ni subir artefactos generados. Faltan aún gates completos Node/Python/legacy/Chromium, push por Fiko con SHA esperado, cuatro Actions y descarga HTTPS independiente. C.1/D pendientes; ninguna autorización de rediseño amplio ni de cambio económico.
+
 ## 2026-10-25 — B.5b escala tipográfica de Ventas, v1.0.132 LIVE y verificada
 
 **Aprobación:** después de revisar la legibilidad de v1.0.131, Geiner propuso preguntas a **13,5 px** y explicaciones a **13 px**, sin cambiar la jerarquía visual del resto. Tras dialogar sobre un sistema consistente sin uniformarlo todo, aprobó aplicar la armonización **primero a toda la sección Ventas**. Se define escala de preguntas/disclosures 13,5px, explicaciones/ayudas 13px, etiquetas 12,5px, preservando los títulos, importes ISK, controles principales y precios copiables. No se extiende a Minería, Skills ni Guía; adaptar esos módulos requerirá su propia revisión.

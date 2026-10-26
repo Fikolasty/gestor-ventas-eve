@@ -1,3 +1,9 @@
+## v1.0.133 — 2026-10-25 [ChatGPT] · B.5c reprocesamiento plegable y textos naturales (candidato)
+
+- La recomendación de reprocesamiento deja de ocupar una tarjeta siempre abierta: ahora es **un único `<details>` plegado por defecto** con «¿Por qué reprocesar o no?» como pregunta exterior, equivalente a la explicación de deducciones superior. Mantiene estado abierto al recalcular, teclado, foco y chevron; dentro conserva respuesta, mejor alternativa y desglose marginal por ítem.
+- ES/EN más naturales: «Reprocesa el {ítem}. Ganarías…» o «No reproceses el {ítem}. Si lo haces, perderías…». Se retira «mi hielo u ore»; importe del **beneficio positivo verde** y **pérdida negativa roja** usando tokens semánticos existentes, sin colorear la tarjeta ni modificar cifras financieras/optimización. Las cifras y nombres se insertan como nodos de texto seguros.
+- Fuente `src/js/ui/selling-results.js`, traducciones `src/i18n/ui.json`, CSS focalizado `src/styles/80-product-ux.css`, tests Node/Chromium y workflows/build v1.0.133. **Candidato hasta terminar gates y Pages; última LIVE certificada v1.0.132.**
+
 ## v1.0.132 — 2026-10-25 [ChatGPT] · B.5b armonización tipográfica de Ventas, LIVE verificada
 
 - Escala tipográfica compartida y limitada a las secciones de Ventas (`#verdict`, `#pSum`, `#ledger`): preguntas/disclosures **13,5 px**, explicaciones **13 px**, etiquetas secundarias **12,5 px**. Se armonizan FAQ, deducciones, reproceso, desglose de courier, nota de precios y pequeños textos de Listado/selector de plan.

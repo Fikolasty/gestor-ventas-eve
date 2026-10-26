@@ -202,26 +202,36 @@ function paintReprocessingDecision(P,expanded){
   if(!candidates.length)return;
   const known=candidates.filter(r=>r.rep&&!r.rep.missing),yes=known.filter(r=>r.rep.diff>.5);
   const pending=candidates.length-known.length;
-  const panel=el('section','mm-rep-decision');
-  panel.append(el('small','mm-rep-question',tx('decision.shouldRefine')));
-  const verdict=el('strong','mm-rep-answer');
-  if(candidates.length===1){
-    const r=candidates[0];
-    verdict.textContent=!known.length?tx('decision.refineUnknown'):
-      r.rep.diff>.5?tx('decision.refineYes',{name:r.o.name,amount:fmt(r.rep.diff)}):
-      Math.abs(r.rep.diff)<=.5?tx('decision.refineTie',{name:r.o.name}):
-      tx('decision.refineNo',{name:r.o.name,amount:fmt(-r.rep.diff)});
-  }else verdict.textContent=tx('decision.refineBatch',{yes:yes.length,total:candidates.length,pending});
-  panel.append(verdict);
-  if(known.length){
-    panel.append(el('p','mm-rep-sub',candidates.length===1?
-      tx('decision.refineChosenRoute',{route:modeName(known[0].rep.diff>.5?known[0].rep.kr:known[0].rep.kn)}):
-      tx('decision.refineItemHelp')));
-  }else panel.append(el('p','mm-rep-sub',tx('decision.refineMissingQuotes')));
+  // One progressive disclosure, like the deductions above. Keep its open state
+  // across recomputation; the precise economic answer remains inside.
   const disclosure=el('details','mm-context-help mm-rep-help');
   disclosure.open=expanded;
   disclosure.append(el('summary',null,tx('decision.refineWhy')));
-  const body=el('div','mm-context-body');
+  const body=el('div','mm-context-body'),intro=el('div','mm-rep-main');
+  const verdict=el('strong','mm-rep-answer');
+  if(candidates.length===1){
+    const r=candidates[0];
+    if(!known.length)verdict.textContent=tx('decision.refineUnknown');
+    else if(Math.abs(r.rep.diff)<=.5)verdict.textContent=tx('decision.refineTie',{name:r.o.name});
+    else{
+      const positive=r.rep.diff>.5,token='__MM_REPROCESS_DELTA__';
+      const sentence=tx(positive?'decision.refineYes':'decision.refineNo',{
+        name:r.o.name,amount:token});
+      const pivot=sentence.indexOf(token);
+      // Never interpolate ESI item names into HTML: append safe text nodes.
+      if(pivot<0)verdict.textContent=sentence;
+      else verdict.append(document.createTextNode(sentence.slice(0,pivot)),
+        el('span','mm-rep-delta '+(positive?'pos':'neg'),fmt(Math.abs(r.rep.diff))),
+        document.createTextNode(sentence.slice(pivot+token.length)));
+    }
+  }else verdict.textContent=tx('decision.refineBatch',{yes:yes.length,total:candidates.length,pending});
+  intro.append(verdict);
+  if(known.length){
+    intro.append(el('p','mm-rep-sub',candidates.length===1?
+      tx('decision.refineChosenRoute',{route:modeName(known[0].rep.diff>.5?known[0].rep.kr:known[0].rep.kn)}):
+      tx('decision.refineItemHelp')));
+  }else intro.append(el('p','mm-rep-sub',tx('decision.refineMissingQuotes')));
+  body.append(intro);
   candidates.forEach(r=>{
     const entry=el('section','mm-context-part');
     entry.append(el('strong',null,r.o.name));
@@ -235,8 +245,7 @@ function paintReprocessingDecision(P,expanded){
     body.append(entry);
   });
   body.append(el('p','mm-cost-source',tx('decision.refineMethod')));
-  disclosure.append(body);panel.append(disclosure);
-  $('vCap').append(panel);
+  disclosure.append(body);$('vCap').append(disclosure);
 }
 
 let activeRep=0;

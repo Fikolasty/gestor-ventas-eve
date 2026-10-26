@@ -1022,8 +1022,19 @@ class ThemeBrowserTests(unittest.TestCase):
             else:
                 # Language changes preserve the reader's open explanations.
                 self.assertTrue(self.page.locator('#vCap .mm-context-help').first.evaluate('(d)=>d.open'))
+            rep_disclosure=self.page.locator('#vCap>.mm-rep-help')
+            expect(rep_disclosure).to_have_count(1)
+            self.assertEqual(rep_disclosure.evaluate('(d)=>d.open'),language=='en')
+            self.assertEqual(self.page.locator('#vCap .mm-rep-question').count(),0)
+            self.assertIn('¿Por qué reprocesar o no?' if language=='es' else 'Why reprocess or not?',
+                          rep_disclosure.locator('summary').first.inner_text())
             answer=self.page.locator('#vCap .mm-rep-answer')
-            self.assertIn('Sí' if language=='es' else 'Yes',answer.inner_text())
+            if language=='es':
+                self.assertTrue(answer.is_hidden())
+                out=INDEX.parent/'tests'/'artifacts'/'theme'
+                out.mkdir(parents=True,exist_ok=True)
+                self.page.screenshot(path=str(out/'b5c-collapsed-es-1440.png'),
+                                     animations='disabled',full_page=True)
             self.assertGreaterEqual(self.page.locator('#vCap .mm-cost-item').count(),2)
             if language=='es':
                 summary.click()
@@ -1032,6 +1043,13 @@ class ThemeBrowserTests(unittest.TestCase):
             self.assertEqual(self.page.locator('#vCap .mm-cost-settings').count(),1)
             if language=='es':
                 self.page.locator('#vCap .mm-rep-help>summary').click()
+            expect(answer).to_be_visible()
+            self.assertIn('Reprocesa el' if language=='es' else 'Reprocess',answer.inner_text())
+            positive_delta=self.page.locator('#vCap .mm-rep-delta.pos')
+            expect(positive_delta).to_have_count(1)
+            self.assertIn('4,656',positive_delta.inner_text())
+            self.assertGreater(channels(positive_delta.evaluate('(el)=>getComputedStyle(el).color'))[1],
+                               channels(positive_delta.evaluate('(el)=>getComputedStyle(el).color'))[0])
             self.assertIn('courier' if language=='en' else 'courier',
                           self.page.locator('#vCap .mm-rep-help').inner_text().lower())
             # Reactively repainting must retain each independently open disclosure.
@@ -1056,7 +1074,7 @@ class ThemeBrowserTests(unittest.TestCase):
                             explanation:px('#vCap .mm-context-part>p'),
                             source:px('#vCap .mm-cost-source'),
                             included:px('#vCap .mm-cost-included'),
-                            repQuestion:px('#vCap .mm-rep-question'),
+                            repQuestion:px('#vCap .mm-rep-help>summary'),
                             repAnswer:px('#vCap .mm-rep-answer'),
                             repSub:px('#vCap .mm-rep-sub'),
                             faqQuestion:px('#pSum>.mm-inline-faq>summary'),
@@ -1102,6 +1120,34 @@ class ThemeBrowserTests(unittest.TestCase):
                         out=INDEX.parent/'tests'/'artifacts'/'theme'
                         out.mkdir(parents=True,exist_ok=True)
                         self.page.screenshot(path=str(out/f'b5-{language}-390-light.png'),animations='disabled',full_page=True)
+            if language=='es':
+                self.page.evaluate("""() => {
+                    const old=S.items,r=window.__b5Fixture.P.rows[0];
+                    window.__b5Fixture.previousDiff=r.rep.diff;
+                    r.rep.diff=-645382184;
+                    S.items=[window.__b5Fixture.item];
+                    paintVerdict(window.__b5Fixture.P);
+                    S.items=old;
+                }""")
+                loss=self.page.locator('#vCap .mm-rep-delta.neg')
+                expect(loss).to_have_count(1)
+                self.assertIn('645,382,184',loss.inner_text())
+                self.assertIn('No reproceses el Krystallos.',self.page.locator('#vCap .mm-rep-answer').inner_text())
+                self.assertIn('perderías',self.page.locator('#vCap .mm-rep-answer').inner_text())
+                self.assertGreater(channels(loss.evaluate('(el)=>getComputedStyle(el).color'))[0],
+                                   channels(loss.evaluate('(el)=>getComputedStyle(el).color'))[1])
+                out=INDEX.parent/'tests'/'artifacts'/'theme'
+                out.mkdir(parents=True,exist_ok=True)
+                self.page.set_viewport_size({'width':390,'height':900})
+                self.page.screenshot(path=str(out/'b5c-negative-es-390.png'),
+                                     animations='disabled',full_page=True)
+                self.page.evaluate("""() => {
+                    const old=S.items;
+                    window.__b5Fixture.P.rows[0].rep.diff=window.__b5Fixture.previousDiff;
+                    S.items=[window.__b5Fixture.item];
+                    paintVerdict(window.__b5Fixture.P);
+                    S.items=old;
+                }""")
 
     def test_b5_trading_import_net_target_does_not_invent_market_tax(self):
         from playwright.sync_api import expect
@@ -1128,7 +1174,7 @@ class ThemeBrowserTests(unittest.TestCase):
         self.page.locator('#vCap .mm-context-help:not(.mm-rep-help)>summary').click()
         expect(self.page.locator('#vCap .mm-context-body').first).to_contain_text(
             'charges cannot be truthfully itemized')
-        self.assertEqual(self.page.locator('#vCap .mm-rep-decision').count(),0)
+        self.assertEqual(self.page.locator('#vCap>.mm-rep-help').count(),0)
 
     def test_b4_plan_comparison_in_header_tracks_selected_route(self):
         from playwright.sync_api import expect

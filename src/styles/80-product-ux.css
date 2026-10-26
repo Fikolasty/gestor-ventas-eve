@@ -1065,21 +1065,23 @@ html.light #ledger #lots .lot-pp .copy:hover:not(:disabled){background:#e3e0da!i
 }
 #verdict #vCap .mm-cost-settings:hover{border-color:var(--ion)}
 #verdict #vCap .mm-cost-settings:focus-visible{outline:2px solid var(--ion);outline-offset:2px}
-#verdict #vCap .mm-rep-decision{
-  display:grid;gap:4px;min-width:0;margin:13px 0 0;
-  padding:14px 16px;background:var(--surface-panel);
-  border:1px solid var(--line2);border-radius:9px
+#verdict #vCap .mm-context-help.mm-rep-help{
+  margin:13px 0 0;background:var(--surface-panel)
 }
-#verdict #vCap .mm-rep-question{color:var(--txt);opacity:.8;font:650 var(--mm-sales-question-size)/1.45 var(--f-ui)}
+#verdict #vCap .mm-rep-main{
+  display:grid;gap:4px;padding:11px 0 14px;
+  border-bottom:1px solid var(--line2)
+}
 #verdict #vCap .mm-rep-answer{
   color:var(--txt);font:700 clamp(1.04rem,1.3vw,1.18rem)/1.45 var(--f-ui);
   overflow-wrap:anywhere
 }
+#verdict #vCap .mm-rep-delta.pos{color:var(--gain)}
+#verdict #vCap .mm-rep-delta.neg{color:var(--loss)}
 #verdict #vCap .mm-rep-sub{
   margin:4px 0 0;color:var(--txt);opacity:.82;font:500 var(--mm-sales-explanation-size)/1.6 var(--f-ui)
 }
-#verdict #vCap .mm-rep-decision .mm-rep-help{margin-top:9px}
-html.light #verdict #vCap .mm-rep-decision,
+html.light #verdict #vCap .mm-context-help.mm-rep-help,
 html.light #verdict #vCap .v-finance-item.mm-cost-item{background:var(--surface-panel)}
 /* Same compact, optional help contract in Listado, plan chooser and courier. */
 #ledger>.mm-inline-faq,#pSum>.mm-inline-faq,#unitCourierBox>.mm-inline-faq{
@@ -1118,7 +1120,7 @@ html.light #verdict #vCap .v-finance-item.mm-cost-item{background:var(--surface-
 @media(max-width:600px){
   #verdict #vCap .mm-context-help>summary{padding:13px 12px}
   #verdict #vCap .mm-context-body{padding:4px 13px 14px}
-  #verdict #vCap .mm-rep-decision{padding:12px}
+  #verdict #vCap .mm-rep-main{padding:8px 0 12px}
   #ledger>.mm-inline-faq{margin:0 7px 12px}
 }
 @media(prefers-reduced-motion:reduce){
