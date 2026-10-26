@@ -1287,3 +1287,83 @@ html.light #verdict #vCap .v-finance-item.mm-cost-item{background:var(--surface-
 @media(prefers-reduced-motion:reduce){
   #pSum .pk-w .pk-o,#pSum #pkSpeedBox>.mm-picker-faq>summary::after{transition:none}
 }
+
+/* B.7 · Approved decision-screen polish: a quiet one-icon plan disclosure,
+   flat route filters and one-line money comparisons. Financial values are the
+   original plan engine's; this layer only changes their presentation. */
+#verdict #vRouteCaption{display:none}
+#verdict #vCap .v-finance{overflow:hidden;border-radius:9px}
+#pSum #vFinanceDetails .mm-finance-estimate{
+  margin:13px 0 0;padding:11px 0 0;border-top:1px solid var(--line2);
+  color:var(--mut);font:500 var(--mm-sales-explanation-size)/1.55 var(--f-ui)
+}
+#pSum #vFinanceDetails .mm-finance-estimate[hidden]{display:none}
+#pSum>.mm-plan-heading{grid-template-columns:minmax(0,1fr) auto!important}
+#pSum>.mm-plan-heading .mm-plan-toggle{
+  grid-column:2;justify-self:end;display:grid;place-items:center;
+  width:38px;height:38px;min-width:38px;padding:0;
+  border:1px solid var(--line2);border-radius:8px;
+  color:var(--mut);background:var(--surface-panel);cursor:pointer;
+  transition:background-color .15s,border-color .15s
+}
+#pSum>.mm-plan-heading .mm-plan-toggle:hover{color:var(--txt);background:var(--hull);border-color:var(--mut)}
+#pSum>.mm-plan-heading .mm-plan-toggle:focus-visible{outline:2px solid var(--ion);outline-offset:2px}
+#pSum .mm-plan-toggle-chevron{
+  width:9px;height:9px;border-right:1.75px solid currentColor;
+  border-bottom:1.75px solid currentColor;transform:rotate(225deg);
+  transition:transform .16s
+}
+#pSum .mm-plan-toggle[aria-expanded="false"] .mm-plan-toggle-chevron{transform:rotate(45deg)}
+#pSum #pkPlanOptions[hidden]{display:none!important}
+#pSum .mm-plan-layout.mm-plans-collapsed>#pkResult{grid-column:1/-1}
+
+/* Text tabs keep real button semantics/ARIA, but shed the old segmented shell. */
+#pSum .mm-plan-controls .pk-tools{overflow-x:auto;overflow-y:hidden;scrollbar-width:thin}
+#pSum .pk-tools .pk-flt{
+  width:max-content!important;max-width:none;flex:0 0 auto!important;
+  flex-wrap:nowrap!important;gap:19px!important;padding:0!important;
+  border:0!important;border-radius:0!important;background:transparent!important;
+  box-shadow:none!important
+}
+#pSum .pk-tools .pk-fb{
+  position:relative;flex:0 0 auto!important;min-width:max-content!important;
+  min-height:37px!important;padding:7px 0 10px!important;
+  border:0!important;border-radius:0!important;background:transparent!important;
+  color:var(--mut);box-shadow:none!important;font-weight:550
+}
+#pSum .pk-tools .pk-fb:not(.on):hover{background:transparent!important;color:var(--txt)}
+#pSum .pk-tools .pk-fb.on{color:var(--txt)!important;background:transparent!important;border:0!important;box-shadow:none!important}
+#pSum .pk-tools .pk-fb.on::after{content:"";position:absolute;left:0;right:0;bottom:0;height:2px;background:var(--clay)}
+#pSum .pk-tools .pk-fb small{color:var(--mut)}
+
+/* Align positive total and negative opportunity gap as adjacent columns. */
+#pSum #pk>.pk-o,#pSum #pkOthers>.pk-o{
+  grid-template-columns:18px minmax(0,1fr) minmax(82px,auto) minmax(65px,auto)!important;
+  grid-template-rows:auto!important;gap:0 12px!important;
+  min-height:40px!important;padding:6px 10px!important
+}
+#pSum #pk>.pk-o{padding-right:32px!important}
+#pSum .pk-o .pk-dot{grid-column:1!important;grid-row:1!important}
+#pSum .pk-o .pk-tx{grid-column:2!important;grid-row:1!important}
+#pSum .pk-o .pk-v{grid-column:3!important;grid-row:1!important;white-space:nowrap!important}
+#pSum .pk-o .pk-d{grid-column:4!important;grid-row:1!important;white-space:nowrap!important}
+@media(max-width:760px){
+  #pSum>.mm-plan-heading{grid-template-columns:minmax(0,1fr) auto!important}
+  #pSum .pk-tools .pk-flt{width:max-content!important;flex-wrap:nowrap!important}
+  #pSum .pk-tools .pk-fb{flex:0 0 auto!important}
+}
+@media(max-width:560px){
+  #pSum #pk>.pk-o,#pSum #pkOthers>.pk-o{
+    grid-template-columns:16px minmax(0,1fr) auto auto!important;
+    grid-template-rows:auto auto!important;gap:2px 8px!important;
+    min-height:47px!important;padding:6px 9px!important
+  }
+  #pSum #pk>.pk-o{padding-right:27px!important}
+  #pSum .pk-o .pk-dot{grid-row:1/3!important}
+  #pSum .pk-o .pk-tx{grid-column:2/5!important;grid-row:1!important}
+  #pSum .pk-o .pk-v{grid-column:3!important;grid-row:2!important}
+  #pSum .pk-o .pk-d{grid-column:4!important;grid-row:2!important}
+}
+@media(prefers-reduced-motion:reduce){
+  #pSum>.mm-plan-heading .mm-plan-toggle,#pSum .mm-plan-toggle-chevron{transition:none}
+}

@@ -289,6 +289,14 @@
     "es": "Ocultar otras rutas",
     "en": "Hide other routes"
   },
+  "picker.hidePlans": {
+    "es": "Ocultar planes",
+    "en": "Hide plans"
+  },
+  "picker.showPlans": {
+    "es": "Mostrar planes",
+    "en": "Show plans"
+  },
   "picker.sortBy": {
     "es": "Ordenar por {label}",
     "en": "Sort by {label}"

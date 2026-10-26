@@ -289,9 +289,15 @@ function paintVerdict(P){
   metric.textContent=purchaseUnknown?tx('trade.profitUnavailable'):
     flipAcct?(S.lang==='en'?'ESTIMATED NET PROFIT':'GANANCIA NETA ESTIMADA'):
     (S.lang==='en'?'NET SALES PROCEEDS':'INGRESOS NETOS POR VENTA');
-  const estimate=$('vEstimate');estimate.hidden=!!none;
+  const estimate=$('vEstimate');estimate.hidden=!!none||!purchaseUnknown;
   const estimateKey=purchaseUnknown?'trade.purchaseUnavailableShort':flipAcct?'verdict.estimateTrade':'verdict.estimateSale';
   estimate.dataset.i18n=estimateKey;estimate.textContent=tx(estimateKey);
+  // The ordinary estimate caveat remains auditable inside financial details,
+  // without competing with the large net figure. Missing purchase basis stays visible.
+  const estimateHelp=$('vEstimateHelp');
+  estimateHelp.hidden=!!none||purchaseUnknown;
+  estimateHelp.dataset.i18n=estimateKey;
+  estimateHelp.textContent=tx(estimateKey);
   const amount=$('vIsk');
   amount.textContent='';amount.append(document.createTextNode(v==null?'—':Math.round(v).toLocaleString('en-US')),el('span',null,'ISK'));
   amount.className='v-isk num '+sgn(v);

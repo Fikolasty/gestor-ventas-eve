@@ -285,7 +285,7 @@ Contraband Freight = no</textarea><small>Una regla por línea: Nombre = tax tota
 
   <!-- 1. Resultado simple -->
   <section class="summary res mm-plan-area" id="pSum" hidden>
-    <header class="mm-section-head mm-plan-heading"><div class="mm-plan-heading-copy"><h2 class="mm-title" data-i18n="picker.chooseTitle">ELIGE TU PLAN</h2><p class="mm-section-sub" data-i18n="picker.chooseSubtitle">COMPARA LAS RUTAS Y DESCUBRE CUÁNTO RECIBIRÍAS</p></div></header>
+    <header class="mm-section-head mm-plan-heading"><div class="mm-plan-heading-copy"><h2 class="mm-title" data-i18n="picker.chooseTitle">ELIGE TU PLAN</h2><p class="mm-section-sub" data-i18n="picker.chooseSubtitle">COMPARA LAS RUTAS Y DESCUBRE CUÁNTO RECIBIRÍAS</p></div><button type="button" class="mm-plan-toggle" id="pkPlanToggle" aria-controls="pkPlanOptions" aria-expanded="true" aria-label="Ocultar planes" title="Ocultar planes"><span class="mm-plan-toggle-chevron" aria-hidden="true"></span></button></header>
     <div class="fb2" id="flipBuy" hidden></div>
     <div class="mm-plan-layout">
       <section class="mm-plan-result" id="pkResult" aria-label="Resultado del plan seleccionado" data-i18n-aria-label="picker.resultAria" aria-live="polite">
@@ -301,7 +301,7 @@ Contraband Freight = no</textarea><small>Una regla por línea: Nombre = tax tota
         </dl>
         <p class="mm-plan-result-warning" id="pkResultWarning" hidden></p>
       </section>
-      <section class="mm-plan-options" aria-label="Planes disponibles" data-i18n-aria-label="picker.availablePlans">
+      <section class="mm-plan-options" id="pkPlanOptions" aria-label="Planes disponibles" data-i18n-aria-label="picker.availablePlans">
         <h3 class="mm-plan-card-title" data-i18n="picker.availablePlans">Planes disponibles</h3>
         <div class="mm-plan-controls">
           <div class="pk-tools" id="pkTools"></div>
@@ -309,7 +309,7 @@ Contraband Freight = no</textarea><small>Una regla por línea: Nombre = tax tota
         </div>
         <div class="pk-w"><div class="pk" id="pk" role="group" aria-label="Plan seleccionado"></div><div class="pk" id="pkOthers" role="group" aria-label="Otros planes"></div></div>
       </section>
-      <details class="ov-card ov-flow mm-finance-details" id="vFinanceDetails"><summary data-i18n="verdict.inspectBreakdown">Ver distribución de ingresos y destinos</summary><div class="mm-finance-details-body"><h4 data-i18n="picker.moneyOrigin">DE DÓNDE SALE TU ISK</h4><div id="ovFlow"></div><div class="mm-dest-inline" id="ovDestW"><h4 data-i18n="picker.salesDestinationUpper">DÓNDE SE VENDE</h4><div id="ovDest"></div></div></div></details>
+      <details class="ov-card ov-flow mm-finance-details" id="vFinanceDetails"><summary data-i18n="verdict.inspectBreakdown">Ver distribución de ingresos y destinos</summary><div class="mm-finance-details-body"><h4 data-i18n="picker.moneyOrigin">DE DÓNDE SALE TU ISK</h4><div id="ovFlow"></div><div class="mm-dest-inline" id="ovDestW"><h4 data-i18n="picker.salesDestinationUpper">DÓNDE SE VENDE</h4><div id="ovDest"></div></div><p class="mm-finance-estimate" id="vEstimateHelp" hidden></p></div></details>
       <section class="mm-speed-card mm-decision-card" id="pkSpeedBox" hidden>
         <aside class="pk-shortcut" id="pkShortcut" aria-live="polite" hidden></aside>
         <details class="mm-inline-faq mm-picker-faq"><summary data-i18n="decision.planMethodQ">¿Por qué este plan y no el más rápido?</summary><p data-i18n="decision.planMethodA">Comparamos ingresos netos después de las comisiones y un único envío compartido. Las opciones rápidas pueden sacrificar ISK: una orden tarda en completarse y la venta inmediata depende de compras reales suficientes. En Trading hablamos de ganancia solo si hay un coste de compra válido.</p></details>

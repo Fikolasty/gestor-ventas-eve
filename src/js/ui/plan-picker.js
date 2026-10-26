@@ -5,6 +5,15 @@
 // la ruta (flip) y el switch de envío actuales: aquí no se calcula nada nuevo, solo se ordena y se pinta.
 // Elegir un plan recalcula (S.planMode → refreshNow). Orden y filtro viven en memoria (pkView) y se vacían al limpiar.
 let pkView={sort:'net',dir:-1,filter:'all',open:true}; // B.6: mostrar alternativas desde el inicio
+let pkPanelCollapsed=false; // B.7: independent presentation-only collapse; keep the active plan/filter intact
+function syncPlanPanel(){
+  const panel=$('pkPlanOptions'),toggle=$('pkPlanToggle');
+  panel.hidden=pkPanelCollapsed;
+  panel.parentElement.classList.toggle('mm-plans-collapsed',pkPanelCollapsed);
+  toggle.setAttribute('aria-expanded',String(!pkPanelCollapsed));
+  const label=tx(pkPanelCollapsed?'picker.showPlans':'picker.hidePlans');
+  toggle.setAttribute('aria-label',label);toggle.title=label;
+}
 const PK_FAST=new Set(['jInst','cInst','fJI','bb']);         // cobras el mismo día (sin contar el envío)
 const PK_REP=new Set(['rNull','rJita']);
 function pkSpeed(m,P){const ship=pkShips(m,P);
@@ -19,6 +28,7 @@ function pkShips(m,P){if(!SH())return false;if(m==='auto')return P.Vs>0;return !
 const PK_FILTERS=[['all','picker.all'],['fast','picker.fastFilter'],['noship','picker.noShipping'],['rep','picker.reprocessing'],['comp','picker.compression']];
 function paintPicker(P){
   const box=$('pk'),bar=$('pkNote'),tools=$('pkTools'),others=$('pkOthers');
+  syncPlanPanel();
   box.textContent='';bar.textContent='';tools.textContent='';others.textContent='';
   const investment=S.flip?flipPlanAccounting(P)?.buy:null;
   const showProfit=investment!=null;
@@ -222,12 +232,19 @@ function paintPicker(P){
   if(!rest.length)others.append(el('p','pk-empty',tx('picker.empty')));
 }
 // Orden y filtro: solo repintan el selector, sin recalcular ISK.
+$('pkPlanToggle').addEventListener('click',()=>{
+  pkPanelCollapsed=!pkPanelCollapsed;
+  syncPlanPanel();
+});
 $('pkTools').addEventListener('click',e=>{
   const b=e.target.closest('[data-pkf]');if(!b||!lastP)return;
   const hadFocus=document.activeElement===b;
   pkView.filter=b.dataset.pkf;paintPicker(lastP);
   // paintPicker replaces the controls: preserve keyboard focus on its live twin.
   if(hadFocus)$('pkTools').querySelector('.pk-fb.on')?.focus({preventScroll:true});
+});
+$('pkTools').addEventListener('focusin',e=>{
+  if(e.target.matches('.pk-fb'))e.target.scrollIntoView({block:'nearest',inline:'nearest'});
 });
 $('pkSort').addEventListener('change',e=>{if(!lastP)return;
   const [sort,direction]=e.target.value.split(':');
@@ -243,6 +260,7 @@ $('pk').addEventListener('click',e=>{
 });
 $('pkShortcut').addEventListener('click',e=>{
   const b=e.target.closest('[data-pk-shortcut]');if(!b||!lastP)return;
+  pkPanelCollapsed=false;
   pkView.open=true;pkView.filter='all';paintPicker(lastP);
   const target=[...$('pkOthers').querySelectorAll('[data-m]')].find(x=>x.dataset.m===b.dataset.pkShortcut);
   if(target)target.scrollIntoView({block:'nearest',behavior:'smooth'});

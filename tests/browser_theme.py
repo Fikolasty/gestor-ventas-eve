@@ -333,9 +333,24 @@ class ThemeBrowserTests(unittest.TestCase):
                     self.page.locator('[data-pkf="all"]').click()
                     self.assertEqual(self.page.locator('#pkOthers [data-m="jOrd"]').count(),1)
                     self.assertLessEqual(self.page.evaluate('document.documentElement.scrollWidth-innerWidth'),1)
-                    self.assertTrue(self.page.evaluate("""() => [...document.querySelectorAll('#pkTools .pk-fb')]
-                        .every(el=>el.getBoundingClientRect().right<=innerWidth+1)"""),
-                        (width,lang,light,'route filters overflow the screen'))
+                    # B.7: filters may scroll *inside their own strip* on mobile;
+                    # the document never gains horizontal overflow and every tab stays reachable.
+                    if width==390:
+                        last=self.page.locator('#pkTools .pk-fb').last
+                        last.focus()
+                        reach=last.evaluate("""el=>{
+                            const scroller=document.querySelector('#pkTools'),
+                                r=el.getBoundingClientRect(),c=scroller.getBoundingClientRect();
+                            return {visible:r.left>=c.left-1&&r.right<=c.right+1,
+                                left:r.left,right:r.right,scrollerLeft:c.left,scrollerRight:c.right,
+                                scrollLeft:scroller.scrollLeft,scrollWidth:scroller.scrollWidth,
+                                clientWidth:scroller.clientWidth,overflowX:getComputedStyle(scroller).overflowX};
+                        }""")
+                        self.assertTrue(reach['visible'],(width,lang,light,reach))
+                    else:
+                        self.assertTrue(self.page.evaluate("""() => [...document.querySelectorAll('#pkTools .pk-fb')]
+                            .every(el=>el.getBoundingClientRect().right<=innerWidth+1)"""),
+                            (width,lang,light,'desktop filters overflow the screen'))
 
     def test_settings_navigation_and_compact_intro(self):
         self.page.evaluate("setLang('en')")
@@ -1007,11 +1022,13 @@ class ThemeBrowserTests(unittest.TestCase):
             expect(self.page.locator('#vFinanceDetails')).not_to_have_attribute('open','')
             if language=='es':
                 expect(self.page.locator('#vRouteCaption')).to_have_text('Ruta recomendada')
-                self.assertIn('una orden puede tardar',self.page.locator('#vEstimate').inner_text())
+                expect(self.page.locator('#vEstimate')).to_be_hidden()
+                self.assertIn('una orden puede tardar',self.page.locator('#vEstimateHelp').text_content())
                 expect(self.page.locator('#bDeep .step-toggle-copy strong')).to_have_text('Ver pasos para vender')
             else:
                 expect(self.page.locator('#vRouteCaption')).to_have_text('Recommended route')
-                self.assertIn('orders may take time',self.page.locator('#vEstimate').inner_text())
+                expect(self.page.locator('#vEstimate')).to_be_hidden()
+                self.assertIn('orders may take time',self.page.locator('#vEstimateHelp').text_content())
                 expect(self.page.locator('#bDeep .step-toggle-copy strong')).to_have_text('View selling steps')
             self.page.locator('#vFinanceDetails>summary').click()
             expect(self.page.locator('#vFinanceDetails')).to_have_attribute('open','')
@@ -1533,6 +1550,110 @@ class ThemeBrowserTests(unittest.TestCase):
             self.assertEqual(self.page.locator('#vFinanceDetails').evaluate(
                 '(el)=>getComputedStyle(el).gridColumnEnd'), '-1')
             expect(self.page.locator('#vFinanceDetails')).to_be_visible()
+
+    def test_b7_compact_plans_icon_toggle_and_flat_filters(self):
+        """Presentation-only collapse preserves selected mode, filter, money and i18n."""
+        from playwright.sync_api import expect
+        self.page.evaluate("""() => {
+            S.flip=false;S.planMode=null;C.bb.on=true;C.disc.on=false;
+            const item={name:'Tritanium',qty:10,m3u:1,
+                jita:{buy:80000,topBuy:80000,sell:90000,topSell:90000}};
+            S.items=[item];
+            const row={o:item,q:10,auto:'null',best:'null',np:110000,jl:95000,
+                g:{null:1050000,jOrd:900000,jInst:810000,bb:790000,rNull:720000,rJita:680000},
+                prod:0,vol:10,coll:1000000,ship:{},net:{},courierAllocated:0};
+            const P={rows:[row],best:1050000,mode:null,shipCost:0,Vs:0,
+                missing:[],toBB:[]};
+            window.__b7Fixture=P;
+            document.querySelector('#verdict').hidden=false;
+            document.querySelector('#pSum').hidden=false;
+            paintVerdict(P);paintPicker(P);paintCourierUnits(P);
+        }""")
+        toggle=self.page.locator('#pkPlanToggle')
+        self.assertEqual(toggle.inner_text().strip(),'')
+        self.assertEqual(toggle.get_attribute('aria-controls'),'pkPlanOptions')
+        expect(toggle).to_have_attribute('aria-expanded','true')
+        for language in ('es','en'):
+            self.page.evaluate('setLang',language)
+            self.page.evaluate("""() => {
+                const P=window.__b7Fixture;
+                paintVerdict(P);document.querySelector('#pSum').hidden=false;
+                paintPicker(P);paintCourierUnits(P);
+            }""")
+            expect(toggle).to_have_attribute('aria-label',
+                'Ocultar planes' if language=='es' else 'Hide plans')
+            for width in (1440,390):
+                self.page.set_viewport_size({'width':width,'height':900})
+                for light in (False,True):
+                    self.page.evaluate('(on)=>document.documentElement.classList.toggle("light",on)',light)
+                    expect(self.page.locator('#pkPlanOptions')).to_be_visible()
+                    expect(self.page.locator('#vRouteCaption')).to_be_hidden()
+                    expect(self.page.locator('#vEstimate')).to_be_hidden()
+                    expect(self.page.locator('#vEstimateHelp')).to_be_attached()
+                    finance=self.page.locator('#vCap .v-finance').evaluate("""el=>{
+                        const s=getComputedStyle(el);
+                        return {overflow:s.overflow,bottomRight:s.borderBottomRightRadius};
+                    }""")
+                    self.assertEqual(finance['overflow'],'hidden',finance)
+                    self.assertEqual(finance['bottomRight'],'9px',finance)
+                    filters=self.page.locator('#pkTools .pk-flt')
+                    expect(filters).to_be_visible()
+                    strip=filters.evaluate("""el=>{
+                        const s=getComputedStyle(el),active=el.querySelector('.pk-fb.on');
+                        const a=getComputedStyle(active),u=getComputedStyle(active,'::after');
+                        return {border:s.borderTopWidth,bg:s.backgroundColor,
+                            activeBg:a.backgroundColor,underline:u.height};
+                    }""")
+                    self.assertEqual(strip['border'],'0px',strip)
+                    self.assertEqual(strip['bg'],'rgba(0, 0, 0, 0)',strip)
+                    self.assertEqual(strip['activeBg'],'rgba(0, 0, 0, 0)',strip)
+                    self.assertEqual(strip['underline'],'2px',strip)
+                    row=self.page.locator('#pkOthers>.pk-o').first
+                    geometry=row.evaluate("""el=>{
+                        const r=el.getBoundingClientRect(),a=el.querySelector('.pk-v').getBoundingClientRect(),
+                              b=el.querySelector('.pk-d').getBoundingClientRect();
+                        return {height:r.height,posY:(a.top+a.bottom)/2,
+                            negY:(b.top+b.bottom)/2,posRight:a.right,negLeft:b.left};
+                    }""")
+                    self.assertLess(abs(geometry['posY']-geometry['negY']),3,geometry)
+                    self.assertLess(geometry['posRight'],geometry['negLeft'],geometry)
+                    self.assertLessEqual(geometry['height'],72 if width==390 else 44,geometry)
+                    self.assertLessEqual(self.page.evaluate(
+                        'document.documentElement.scrollWidth-innerWidth'),1)
+                    if language=='es' and width==1440 and not light:
+                        out=INDEX.parent/'tests'/'artifacts'/'theme'
+                        out.mkdir(parents=True,exist_ok=True)
+                        self.page.mouse.move(0,0)
+                        self.page.wait_for_timeout(180)
+                        self.page.locator('#pSum').screenshot(
+                            path=str(out/'b7-compact-plans-es-1440-dark.png'),animations='disabled')
+                        self.page.locator('#verdict>.ov').screenshot(
+                            path=str(out/'b7-financial-strip-es-1440-dark.png'),animations='disabled')
+                    if language=='es' and width==390 and light:
+                        out=INDEX.parent/'tests'/'artifacts'/'theme'
+                        out.mkdir(parents=True,exist_ok=True)
+                        self.page.locator('#pkPlanOptions').screenshot(
+                            path=str(out/'b7-compact-plans-es-390-light.png'),animations='disabled')
+            self.page.set_viewport_size({'width':1440,'height':900})
+            self.page.evaluate('document.documentElement.classList.remove("light")')
+            self.page.locator('#pkTools [data-pkf="fast"]').click()
+            expect(self.page.locator('#pkTools .pk-fb.on')).to_have_attribute('data-pkf','fast')
+            self.page.locator('#pkSort').select_option('speed:1')
+            before=self.page.evaluate('({mode:S.planMode,filter:pkView.filter,sort:pkView.sort})')
+            toggle.click()
+            expect(toggle).to_have_attribute('aria-expanded','false')
+            expect(self.page.locator('#pkPlanOptions')).to_be_hidden()
+            expect(self.page.locator('#pkResult')).to_be_visible()
+            self.assertEqual(self.page.locator('#pkResult').evaluate(
+                '(el)=>getComputedStyle(el).gridColumnEnd'),'-1')
+            self.assertEqual(before,self.page.evaluate('({mode:S.planMode,filter:pkView.filter,sort:pkView.sort})'))
+            toggle.focus()
+            self.page.keyboard.press('Enter')
+            expect(toggle).to_have_attribute('aria-expanded','true')
+            expect(self.page.locator('#pkPlanOptions')).to_be_visible()
+            expect(self.page.locator('#pkTools .pk-fb.on')).to_have_attribute('data-pkf','fast')
+            self.assertEqual(self.page.locator('#pkSort').input_value(),'speed:1')
+            self.page.evaluate('pkView.filter="all";paintPicker(lastP)')
 
     def test_b4_ledger_unit_copy_and_lazy_disclosures(self):
         from playwright.sync_api import expect
