@@ -1366,6 +1366,9 @@ html.light #verdict #vCap .v-finance-item.mm-cost-item{background:var(--surface-
 #pSum .mm-plan-options-heading .mm-plan-card-title{margin:0}
 #pSum .mm-plan-options-heading:has(+ #pkOptionsContent:not([hidden])){margin-bottom:15px}
 #pSum #pkOptionsContent[hidden]{display:none!important}
+/* A folded right-side card must actually shrink: the two-column parent
+   otherwise stretches its empty surface to the full height of Tu resultado. */
+#pSum .mm-plan-options:has(> #pkOptionsContent[hidden]){align-self:start}
 
 /* Text tabs keep real button semantics/ARIA, but shed the old segmented shell. */
 #pSum .mm-plan-controls .pk-tools{overflow-x:auto;overflow-y:hidden;scrollbar-width:thin}

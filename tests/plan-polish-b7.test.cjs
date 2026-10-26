@@ -35,6 +35,7 @@ test('available plans has its own icon-only control and begins folded, without s
   assert.match(picker,/options\.hidden=pkOptionsCollapsed/);
   assert.match(picker,/pkOptionsCollapsed=!pkOptionsCollapsed/);
   assert.match(css,/#pSum #pkOptionsContent\[hidden\]\{display:none!important\}/);
+  assert.match(css,/#pSum \.mm-plan-options:has\(> #pkOptionsContent\[hidden\]\)\{align-self:start\}/);
 });
 
 test('finance disclosure retains ordinary estimation context and exceptional warnings remain visible',()=>{

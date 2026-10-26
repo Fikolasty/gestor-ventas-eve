@@ -1696,6 +1696,9 @@ class ThemeBrowserTests(unittest.TestCase):
         expect(self.page.locator('#pkPlanOptions')).to_be_visible()
         expect(self.page.locator('#pkResult')).to_be_visible()
         expect(self.page.locator('#pkOptionsContent')).to_be_hidden()
+        # A collapsed card is header-sized even next to a tall result card.
+        self.assertLess(self.page.locator('#pkPlanOptions').evaluate(
+            '(el)=>el.getBoundingClientRect().height'),100)
         options_toggle.click()
         expect(self.page.locator('#pkOptionsContent')).to_be_visible()
         for language in ('es','en'):
