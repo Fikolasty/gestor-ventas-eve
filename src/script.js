@@ -108,7 +108,7 @@ function syncMarketCopy(){
   if(margin)margin.title=en?'Net resale margin in '+hub+'.':'Margen neto de reventa en '+hub+'.';
   if(input)input.setAttribute('aria-label',en?'Resale margin in '+hub+', %':'Margen al vender en '+hub+', % neto sobre Jita Sell');
   const help=document.getElementById('importHelp');
-  if(help)help.textContent=en?'Choose whether to ship items from Jita and set your selling margin in '+hub+'.':'Elige si transportas los ítems desde Jita y ajusta el margen de venta en '+hub+'.';
+  if(help)help.textContent=en?'Choose whether to ship items from Jita and set your selling margin in '+hub+'.':'Elige si transportas los items desde Jita y ajusta el margen de venta en '+hub+'.';
 }
 // Las etiquetas de ruta dependen del hub comercial, nunca de la refinería.
 function syncNullRouteLabels(){
@@ -319,30 +319,27 @@ function paintGuide(ol,r){
   const o=r.o,step=(t,...parts)=>{const li=el('li');li.append(el('b',null,t));const sp=el('span');parts.forEach(x=>sp.append(typeof x==='string'?document.createTextNode(x):x));li.append(sp);ol.append(li);};
   // Actual values are separate tabular-number tokens: positive proceeds are
   // green; a fee is red. This is visual only; no economic input is modified.
-  const money=(v,cost=false)=>el('strong','mm-guide-money'+
-    (Number.isFinite(v)&&v!==0?' '+(cost||v<0?'isk-neg':'isk-pos'):''),fmt(v));
-  const altLab=g.alt?(g.alt==='null'?nullLabel(o.name):g.alt==='jOrd'?jitaLabel(o.name):OPTS.find(x=>x[0]===g.alt)[1]):null;
+  const money=(v,cost=false,perUnit=false)=>el('strong','mm-guide-money'+
+    (Number.isFinite(v)&&v!==0?' '+(cost||v<0?'isk-neg':'isk-pos'):''),perUnit?fmtP(v):fmt(v));
+  const altLab=g.alt?lotRouteDisplay(g.alt):null;
   if(g.k==='fN'||g.k==='fJ'||g.k==='fJI'){ // modo Jita → HY-RWO
     const isN=g.k==='fN';
     if(g.k==='fJI'){step('Qué Hacer','Véndelo en Jita 4-4 directamente a las buy orders.');
       step('Precio Medio de Venta','Aproximadamente '+fmtP(r.instAvg)+' por unidad, recorriendo las buy orders para tu cantidad.');return;}
     step('Qué Hacer',isN?'Mándalo de Jita a '+nullSystem()+' con SIGMA Freight y publica una sell order allí. El envío ya está restado.':'Publica una sell order en Jita 4-4.');
-    step('Cómo Listarlo',copyBtn(g.unit,fmtP(g.unit)),tx('ledger.guideUnitQuantity',{count:fmtQ(r.q)}),money(g.unit*r.q),isN?tx('ledger.guideFees'):'.');
+    step('Cómo Listarlo',money(g.unit,false,true),tx('ledger.guideUnitQuantity',{count:fmtQ(r.q)}),money(g.unit*r.q),isN?tx('ledger.guideFees'):'.');
     step('Cuándo Revisar',cadence(g.days,isN));
-    if(g.floor!=null&&g.unit>g.floor)step('Precio Mínimo Recomendado','Evita bajar de ',copyBtn(g.floor,fmtP(g.floor)),' por unidad. Más abajo, '+altLab+' deja más ISK.');
+    if(g.floor!=null&&g.unit>g.floor)step('Precio Mínimo Recomendado','Evita bajar de ',money(g.floor,false,true),' por unidad. Más abajo, '+altLab+' deja más ISK.');
     return;
   }
   if(g.k==='null'||g.k==='jOrd'){
     const isN=g.k==='null';
     step('Qué Hacer',isN?'Publica una sell order en '+nullSystem()+'. No necesitas envío a Jita.':'Manda el item a Jita 4-4 mediante un envío y crea una sell order. El envío está incluido en la comparación.');
-    step('Cómo Listarlo',copyBtn(g.unit,fmtP(g.unit)),tx('ledger.guideUnitQuantity',{count:fmtQ(r.q)}),money(g.unit*r.q),tx('ledger.guideDuration')+
-      (isN&&o.nullSeen?' · Undercut de '+pct(C.under)+'% al precio que ves':'')+
-      (!isN&&C.ice.on&&isIce(o.name)?(C.ice.jitaMode==='split'?' · precio Split':' · Undercut de '+pct(C.under)+'% a Jita Sell'):'')+
-      (isN&&C.ice.on&&isIce(o.name)&&!o.nullSeen&&C.ice.nullMode==='jbuy'?' · Jita Buy −'+pct(C.ice.nullDisc)+'%':'')+'.');
+    step('Cómo Listarlo',money(g.unit,false,true),tx('ledger.guideUnitQuantity',{count:fmtQ(r.q)}),money(g.unit*r.q),tx('ledger.guideDuration')+'.');
     step('Cuándo Revisar',cadence(g.days,isN)+' Puedes modificar una orden como máximo cada 5 minutos; eso no significa que convenga hacerlo tan seguido.');
     if(g.floor!=null){
       const und=g.unit>0?1-g.floor/g.unit:0;
-      if(und>0)step('Precio Mínimo Recomendado','Evita bajar de ',copyBtn(g.floor,fmtP(g.floor)),' por unidad ('+pct(und)+'% por debajo de tu precio actual). Con un precio menor, la alternativa '+altLab+' dejaría más ISK según los valores actuales.');
+      if(und>0)step('Precio Mínimo Recomendado','Evita bajar de ',money(g.floor,false,true),' por unidad. Con un precio menor, la alternativa '+altLab+' dejaría más ISK según los valores actuales.');
       else step('Precio Mínimo Recomendado','Tu precio ya está en el punto de equilibrio frente a '+altLab+'. Otro undercut podría hacer menos conveniente esta venta.');
       step('Cuándo Cambiar de Plan','Si el mercado baja de '+fmtP(g.floor)+(g.days!=null?' o la orden sigue sin venderse después de unos '+Math.max(1,Math.round(g.days*1.5))+' días':'')+', vuelve a comparar las opciones: puede convenir '+actionText(g.alt)+'.');
     }else if(altLab)step('Cuándo Cancelar',(g.days!=null?'Si pasan ~'+Math.max(1,Math.round(g.days*1.5))+' días sin vender, ':'Si no se vende, ')+'cancela y '+actionText(g.alt)+'.');
@@ -354,12 +351,12 @@ function paintGuide(ol,r){
     else if(r.net.jOrd!=null)step('Por Qué Venta Rápida',tx('ledger.guideSellOrderWould'),money(r.net.jOrd),tx('ledger.guideWaitThreshold'));
   }else if(g.k==='disc'){
     step('Qué Hacer','Prepara una oferta WTS en Discord (SIGMA o Vanguardia DR). Adjunta una tasación de Janice para que el comprador verifique el precio.');
-    step('Precio',copyBtn(r.discUnit,fmtP(r.discUnit)),' por unidad ('+pct(C.disc.pct)+'% de Jita '+({buy:'Buy',split:'Split',sell:'Sell'})[C.disc.base]+') · total ',money(r.g.disc),'.');
+    step('Precio',money(r.discUnit,false,true),tx('ledger.guideUnitTotal'),money(r.g.disc),'.');
     step('Cómo','Sigue los pasos de "Vender a Jugadores" al final de la página.');
     if(g.alt)step('Si Nadie Compra','Si en ~'+C.disc.days+' días nadie lo toma, '+actionText(g.alt)+'.');
   }else if(g.k==='bb'){
     step('Qué Hacer','Usa el Buyback de tu alianza. Crea un contrato Item Exchange con el destinatario y la ubicación definidos en Ajustes.');
-    step('Pago del Buyback',copyBtn(r.bbUnit,fmtP(r.bbUnit)),' por unidad, con el tax del programa ('+pct(r.bbTax)+'%) ya descontado. Esta ruta no incluye envío ni Sales Tax de mercado.');
+    step('Pago del Buyback',money(r.bbUnit,false,true),tx('ledger.guideBuybackCharges'));
     step('Cómo Crear el Contrato','Copia los datos del contrato que salen en este paso o en Contratos y Envío. Verifica que el Buyback acepte el item antes de enviarlo.');
   }else{
     const toJ=g.k==='rJita';

@@ -177,7 +177,6 @@ details.panel>summary h2 .logo+.logo{margin-left:-4px}
 .checks li.warn::before{content:"!";color:var(--thrust)}
 .checks li.info::before{content:"i";color:var(--ion);font-style:italic}
 .checks li b{color:var(--txt);font-weight:600}
-.lot-foot{grid-column:1/-1;display:flex;justify-content:flex-end}
 .empty{color:var(--mut);padding:18px 14px;font-size:.92rem}
 
 /* ---------- cuadrículas de controles ---------- */

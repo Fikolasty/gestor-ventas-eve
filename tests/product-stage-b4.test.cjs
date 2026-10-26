@@ -26,7 +26,9 @@ test('B.4 registered items separate disclosure, copy and removal as native butto
   assert.match(ledger,/if\(open&&!ui\.detailsReady\)buildLotDetails\(o,ui\)/);
   assert.match(ledger,/const ic=iconFor\(o\.name\)/);
   assert.match(ledger,/u\.netLabel\.textContent=tx\('ledger\.netSales'\)/);
-  assert.match(ledger,/u\.net\.title=S\.flip\?tx\('ledger\.tradeNetHint'\)/);
+  assert.match(ledger,/u\.net\.title=\(S\.flip\?tx\('ledger\.tradeNetHint'\):tx\('ledger\.saleNetHint'\)\)/);
+  assert.match(ledger,/net=copyBtn\('','—'\)/);
+  assert.match(ledger,/u\.net\.dataset\.v=hasNet/);
   assert.match(ledger,/const analysis=el\('details','lot-analysis lot-detail-section'\)/);
   assert.match(ledger,/const adjustments=el\('details','lot-adjustments lot-detail-section'\)/);
   assert.match(ledger,/\+'pr-route'/);
@@ -37,8 +39,8 @@ test('B.4 registered items separate disclosure, copy and removal as native butto
 
 test('B.4 all new labels, financial caveats and disclosures are translated',()=>{
   const keys=['ledger.intro','ledger.sortBy','ledger.name','ledger.quantity',
-    'ledger.route','ledger.netSort','ledger.unitPrice','ledger.netSales','ledger.netUnit',
-    'ledger.saleNetHint','ledger.tradeNetHint','ledger.units','ledger.copyUnit',
+    'ledger.route','ledger.netSort','ledger.unitPrice','ledger.lotUnitPrice','ledger.netSales','ledger.netUnit',
+    'ledger.saleNetHint','ledger.tradeNetHint','ledger.units','ledger.copyUnit','ledger.copyLotNet','ledger.noLotNet',
     'ledger.noUnitPrice','ledger.removeItem','ledger.prices','ledger.compare',
     'ledger.adjust','ledger.guide','picker.noticeHeading'];
   for(const key of keys){

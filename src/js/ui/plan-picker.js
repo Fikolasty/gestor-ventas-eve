@@ -347,7 +347,7 @@ function paintFlipBuy(P){
   const intro=d.allNull
     ?tx(C.buyMode==='buy'?'trade.buyOrderIntro':'trade.sellIntro',{market:sys,margin:pct(C.impM)})
     :(en?'Based on the actual selected plan: '+d.nNull+' '+(d.nNull===1?'item shipped':'items shipped')+' to '+sys+' and '+d.nJita+' sold in Jita. Transport is charged only on shipped items.'
-       :'Según el plan seleccionado: '+d.nNull+' '+(d.nNull===1?'ítem enviado':'ítems enviados')+' a '+sys+' y '+d.nJita+' vendidos en Jita. El envío solo se cobra a los ítems transportados.');
+       :'Según el plan seleccionado: '+d.nNull+' '+(d.nNull===1?'item enviado':'items enviados')+' a '+sys+' y '+d.nJita+' vendidos en Jita. El envío solo se cobra a los items transportados.');
   box.append(el('h4',null,context),el('p','fb2-s',intro+basisNote));
   if(d.rows.length===1){
     const row=d.rows[0],parameters={quantity:fmtQ(row.q),unit:fmtP(tradePurchaseUnit(row)),broker:pct(C.broker)};
@@ -366,7 +366,7 @@ function paintFlipBuy(P){
   add(en?'Estimated net profit':'Ganancia neta estimada',(d.profit>=0?'+':'−')+fmt(Math.abs(d.profit)),sgn(d.profit));
   box.append(l);
   const t=el('table'),th=el('thead'),hr=el('tr');
-  (en?['Item','Purchase per unit','Sale route','Shipping','Profit','Margin']:['Ítem','Compra por unidad','Ruta de venta','Envío','Ganancia','Margen']).forEach((label,i)=>{const cell=el('th',i?'r':null,label);hr.append(cell);});th.append(hr);t.append(th);
+  (en?['Item','Purchase per unit','Sale route','Shipping','Profit','Margin']:['Item','Compra por unidad','Ruta de venta','Envío','Ganancia','Margen']).forEach((label,i)=>{const cell=el('th',i?'r':null,label);hr.append(cell);});th.append(hr);t.append(th);
   const tb=el('tbody');
   const allocated=d.rows.map(r=>{
     const k=r.best,price=tradePurchaseCost(r),share=r.courierAllocated||0;
@@ -385,9 +385,9 @@ function paintFlipBuy(P){
     ['','Compra por unidad','Ruta de venta','Envío','Ganancia','Margen'].forEach((label,i)=>{if(label)cells[i].dataset.l=label;});
     tr.append(...cells);tb.append(tr);
   });
-  if(allocated.length>10){const tr=el('tr'),td=el('td','muted',(en?'and ':'y ')+(allocated.length-10)+(en?' more items':' ítems más'));td.colSpan=6;tr.append(td);tb.append(tr);}
+  if(allocated.length>10){const tr=el('tr'),td=el('td','muted',(en?'and ':'y ')+(allocated.length-10)+(en?' more items':' items más'));td.colSpan=6;tr.append(td);tb.append(tr);}
   t.append(tb);
-  const detail=el('details','fb2-more'),head=el('summary',null,en?'Inspect per-item returns':'Ver beneficio de cada ítem');
+  const detail=el('details','fb2-more'),head=el('summary',null,en?'Inspect per-item returns':'Ver beneficio de cada item');
   detail.append(head,t,el('p','fb2-n',en
     ?'Jita Sell or Buy Order investment; buy orders include placement broker and may not fill. Profit = plan net proceeds − investment.'
     :'Inversión a Jita Sell o Buy Order; las Buy Orders incluyen broker y podrían no completarse. Beneficio = ingresos netos − inversión.'));

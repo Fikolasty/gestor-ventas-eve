@@ -152,4 +152,39 @@ html.light .hero-intro:not(.no-appr)>.paste textarea{
   #verdict .ov-hd .mm-net{grid-column:1!important;grid-row:2!important;text-align:left!important}
 }
 
+/* B.13 Light/Dark geometry parity: light.py re-generates a legacy tinted
+   mm-ho-main wrapper after the newer transparent navigation rule. Override
+   it here, after generated CSS, so only the three individual tabs have a
+   visible border/surface, exactly as in Dark. This is theme-only styling. */
+html.light body .top.mm-ho-root #mmTabs>.mm-ho-main,
+html.light body .top.mm-ho-root #mmTabs>.mm-ho-main .mm-modgroup{
+  background:transparent!important;border:0!important;box-shadow:none!important
+}
+html.light body .top.mm-ho-root #mmTabs>.mm-ho-main .mm-modgroup .mm-mod{
+  background:transparent!important;
+  border:1px solid rgba(70,55,43,.27)!important;
+  border-radius:8px!important;
+  color:#3f352f!important;
+  box-shadow:none!important
+}
+html.light body .top.mm-ho-root #mmTabs>.mm-ho-main .mm-modgroup .mm-mod:hover{
+  background:rgba(115,76,52,.075)!important;
+  border-color:rgba(115,76,52,.4)!important
+}
+html.light body .top.mm-ho-root #mmTabs>.mm-ho-main .mm-modgroup .mm-mod[aria-selected="true"]{
+  background:rgba(217,119,87,.14)!important;
+  border-color:rgba(161,86,55,.43)!important;
+  color:#713c29!important;
+  box-shadow:none!important
+}
+html.light body .top.mm-ho-root #mmTabs>.mm-ho-main .mm-modgroup .mm-mod:focus-visible{
+  outline:2px solid var(--ion)!important;outline-offset:2px!important
+}
+
+/* Volume is neutral, not green. Keep the Light read-only field on its
+   existing light-neutral surface while Dark uses the same dark field tone. */
+html.light #ledger #lots .lot-panel-grid>.lot-adjustments>.facts>.fact-item-data>.fact>b{
+  background:rgba(0,0,0,.055)!important
+}
+
 

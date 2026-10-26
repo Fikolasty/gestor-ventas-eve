@@ -18,7 +18,7 @@
   "decision.relistingBody": {"es": "Tienes activada la provisión de cambios de precio. El plan reserva {amount} según la cantidad de relists y Advanced Broker Relations configurados.", "en": "Your price-change allowance is enabled. The plan reserves {amount} based on the configured relist count and Advanced Broker Relations."},
   "decision.marketNone": {"es": "Esta ruta no utiliza una venta gravada en el mercado de EVE. Un Buyback puede aplicar su propio descuento contractual, que no es Sales Tax.", "en": "This route does not use a taxed EVE market sale. A buyback may apply its own contract discount, which is not sales tax."},
   "decision.shipping": {"es": "Coste de envío", "en": "Shipping cost"},
-  "decision.shippingBody": {"es": "Envío estimado {amount}, calculado para {contracts} contratos y {volume}: tarifa base {base} por contrato + {unit} por m³ + {collateral} % del colateral. El coste se comparte entre los ítems del mismo envío.", "en": "Estimated shipping is {amount} for {contracts} contracts and {volume}: base fee {base} per contract + {unit} per m³ + {collateral}% of collateral. The cost is shared among items on the same shipment."},
+  "decision.shippingBody": {"es": "Envío estimado {amount}, calculado para {contracts} contratos y {volume}: tarifa base {base} por contrato + {unit} por m³ + {collateral} % del colateral. El coste se comparte entre los items del mismo envío.", "en": "Estimated shipping is {amount} for {contracts} contracts and {volume}: base fee {base} per contract + {unit} per m³ + {collateral}% of collateral. The cost is shared among items on the same shipment."},
   "decision.shippingNone": {"es": "El plan asigna 0 ISK a courier: no requiere envío o tienes el courier desactivado. Transportar por tu cuenta puede tener otros costes.", "en": "Estimated courier charges are 0 ISK. The chosen route may stay local, or delivery pricing may be switched off. Self-hauling may have other costs."},
   "decision.refiningBody": {"es": "Al elegir una ruta de reproceso, el motor resta {amount} por la tarifa estimada ({rate} %) de la refinería configurada. La base de valoración de EVE puede diferir de la estimación.", "en": "For a reprocessing route, the engine deducts {amount} as the configured refinery's estimated fee ({rate}%). EVE's valuation basis may differ from the estimate."},
   "decision.compression": {"es": "Compresión", "en": "Compression"},
@@ -33,18 +33,18 @@
   "decision.refineNo": {"es": "No reproceses el {name}. Si lo haces, perderías {amount} frente a venderlo directamente.", "en": "Do not reprocess {name}. Doing so would cost you {amount} compared with selling it raw."},
   "decision.refineTie": {"es": "Reprocesar el {name} prácticamente no cambia tus ingresos netos.", "en": "Reprocessing {name} makes virtually no difference to your net proceeds."},
   "decision.refineBatch": {"es": "Conviene reprocesar {yes} de {total} tipos; sin datos suficientes: {pending}.", "en": "Reprocessing helps for {yes} of {total} item types; insufficient data: {pending}."},
-  "decision.refineChosenRoute": {"es": "Mejor alternativa evaluada para este ítem: {route}.", "en": "Best evaluated route for this item: {route}."},
-  "decision.refineItemHelp": {"es": "Compara la razón y la diferencia en ISK de cada ítem.", "en": "Compare the reason and ISK difference for each item."},
+  "decision.refineChosenRoute": {"es": "Mejor alternativa evaluada para este item: {route}.", "en": "Best evaluated route for this item: {route}."},
+  "decision.refineItemHelp": {"es": "Compara la razón y la diferencia en ISK de cada item.", "en": "Compare the reason and ISK difference for each item."},
   "decision.refineMissingQuotes": {"es": "Faltan precios válidos del ore, hielo o productos reprocesados. No suponemos precios inexistentes ni una tarifa de refinería cero.", "en": "Valid ore, ice or reprocessed-product quotes are missing. No fictional price or zero refinery fee is assumed."},
   "decision.refineWhy": {"es": "¿Por qué reprocesar o no?", "en": "Why reprocess or not?"},
-  "decision.refineComparison": {"es": "Con los otros ítems como están en el plan elegido, {best} deja más ISK. Reprocesado: {reprocessed}; sin reprocesar: {raw}; diferencia a favor del reproceso: {delta}.", "en": "Keeping other items on their selected routes, {best} leaves more ISK. Reprocessed: {reprocessed}; raw: {raw}; difference in favor of reprocessing: {delta}."},
-  "decision.refineMethod": {"es": "Se comparan alternativas de este ítem con las tasas de mercado, tarifa estimada de refinería y el cambio real en un único courier compartido (incluidos saltos de contrato). Los demás ítems mantienen su ruta. Son estimaciones, no garantías; un plan manual no se modifica automáticamente.", "en": "Alternatives for this item account for market charges, estimated refinery fee and the real change to one shared courier bill (including contract thresholds). Other items keep their routes. These are estimates, not guarantees; manually selected plans are not changed automatically."},
-  "decision.priceSourceQ": {"es": "¿De dónde vienen los precios de cada ítem?", "en": "Where do each item's prices come from?"},
-  "decision.priceSourceA": {"es": "SIGMA usa las cotizaciones disponibles de ESI para Jita, tus precios manuales y las tarifas configuradas. Una cotización puede quedar desactualizada; el volumen anunciado no garantiza compradores para todo el lote. Si falta precio, verás una advertencia y no se inventará la venta.", "en": "SIGMA uses available Jita ESI quotes, your manual prices and configured fees. A quote can become stale; displayed volume cannot guarantee enough buyers for your entire lot. Missing prices trigger a warning rather than a fictional sale."},
+  "decision.refineComparison": {"es": "Con los otros items como están en el plan elegido, {best} deja más ISK. Reprocesado: {reprocessed}; sin reprocesar: {raw}; diferencia a favor del reproceso: {delta}.", "en": "Keeping other items on their selected routes, {best} leaves more ISK. Reprocessed: {reprocessed}; raw: {raw}; difference in favor of reprocessing: {delta}."},
+  "decision.refineMethod": {"es": "Se comparan alternativas de este item con las tasas de mercado, tarifa estimada de refinería y el cambio real en un único courier compartido (incluidos saltos de contrato). Los demás items mantienen su ruta. Son estimaciones, no garantías; un plan manual no se modifica automáticamente.", "en": "Alternatives for this item account for market charges, estimated refinery fee and the real change to one shared courier bill (including contract thresholds). Other items keep their routes. These are estimates, not guarantees; manually selected plans are not changed automatically."},
+  "decision.priceSourceQ": {"es": "¿De dónde vienen los precios de cada item?", "en": "Where do each item's prices come from?"},
+  "decision.priceSourceA": {"es": "Market Moves+ utiliza cotizaciones disponibles de Jita mediante ESI y los precios que introduces manualmente. Las tarifas configuradas afectan las estimaciones netas, no los precios del mercado. Las cotizaciones pueden desactualizarse y el volumen mostrado no garantiza compradores para todo el lote. Si falta un precio, se muestra una advertencia sin asumir una venta.", "en": "Market Moves+ uses available Jita quotes through ESI and the prices you enter manually. Configured fees affect estimated net proceeds, not market prices. Quotes may become stale, and displayed volume does not guarantee buyers for an entire lot. Missing prices are flagged without assuming a sale."},
   "decision.planMethodQ": {"es": "¿Por qué este plan y no el más rápido?", "en": "Why this plan instead of the fastest one?"},
   "decision.planMethodA": {"es": "Comparamos ingresos netos después de las comisiones y un único envío compartido. Las opciones rápidas pueden sacrificar ISK: una orden tarda en completarse y la venta inmediata depende de compras reales suficientes. En Trading hablamos de ganancia solo si hay un coste de compra válido.", "en": "We compare net proceeds after fees and one shared shipment. Faster options may sacrifice ISK: sell orders take time and instant sales need sufficient real buy orders. In Trading, we show profit only with a valid purchase cost."},
   "decision.collateralQ": {"es": "¿El colateral es otro coste de envío?", "en": "Is collateral another shipping cost?"},
-  "decision.collateralA": {"es": "No. En un contrato courier, el colateral es una garantía que se devuelve al completar el trabajo; no se resta entero como tarifa. El servicio sí puede calcular su precio usando el colateral y el volumen transportados. SIGMA resta la tarifa estimada, no el colateral.", "en": "No. In a courier contract, collateral is security returned when the work is completed; it is not deducted in full as a fee. The service may use collateral and cargo volume to price its transport. SIGMA deducts the estimated freight fee, not the collateral."},
+  "decision.collateralA": {"es": "No. En un contrato courier, el colateral es una garantía que se devuelve al completar el trabajo; no se resta entero como tarifa. El transportista puede calcular su precio usando el colateral y el volumen transportados. Market Moves+ descuenta del resultado la tarifa de envío estimada, no el colateral.", "en": "No. In a courier contract, collateral is security returned when the job is completed; the full collateral is not deducted as a fee. The carrier may base its fee on collateral and cargo volume. Market Moves+ deducts the estimated freight fee from proceeds, not the collateral."},
   "verdict.recommendedRoute": {
     "es": "Ruta recomendada",
     "en": "Recommended route"
@@ -70,7 +70,7 @@
     "en": "View selling steps"
   },
   "verdict.stepsDescription": {
-    "es": "Contratos, destinos y precios por ítem",
+    "es": "Contratos, destinos y precios por item",
     "en": "Contracts, destinations and item prices"
   },
   "freight.noCost": {
@@ -82,11 +82,11 @@
     "en": "The selected route has no allocated courier charges."
   },
   "freight.unallocated": {
-    "es": "Hay un coste de envío, pero no se pudo distribuir entre los ítems. Consulta el plan detallado.",
+    "es": "Hay un coste de envío, pero no se pudo distribuir entre los items. Consulta el plan detallado.",
     "en": "Shipping has a cost, but it could not be allocated to items. Check the detailed plan."
   },
   "freight.showOthers": {
-    "es": "Ver {count} ítems enviados más",
+    "es": "Ver {count} items enviados más",
     "en": "Show {count} more shipped items"
   },
   "refinery.missingQuote": {
@@ -398,15 +398,15 @@
     "en": "{difference} compared with the most-ISK option."
   },
   "picker.fallbackOne": {
-    "es": "1 ítem no admite esta ruta; conserva su mejor alternativa.",
+    "es": "1 item no admite esta ruta; conserva su mejor alternativa.",
     "en": "1 item cannot use this route and keeps its best alternative."
   },
   "picker.fallbackMany": {
-    "es": "{count} ítems no admiten esta ruta; conservan su mejor alternativa.",
+    "es": "{count} items no admiten esta ruta; conservan su mejor alternativa.",
     "en": "{count} items cannot use this route and keep their best alternatives."
   },
   "ledger.intro": {
-    "es": "Consulta la mejor ruta de cada ítem. Copia el precio por unidad o abre sus opciones para comparar y ajustar.",
+    "es": "Consulta la mejor ruta de cada item. Copia el precio por unidad o abre sus opciones para comparar y ajustar.",
     "en": "Check each item's best route. Copy the unit price or open its options to compare and adjust."
   },
   "ledger.sortBy": {
@@ -433,13 +433,25 @@
     "es": "PRECIO POR UNIDAD · ISK",
     "en": "UNIT PRICE · ISK"
   },
+  "ledger.lotUnitPrice": {
+    "es": "Precio unitario",
+    "en": "Unit price"
+  },
   "ledger.netSales": {
     "es": "NETO DEL LOTE",
     "en": "LOT NET PROCEEDS"
   },
   "ledger.netUnit": {
-    "es": "NETO POR UNIDAD · ISK",
-    "en": "NET PER UNIT · ISK"
+    "es": "Neto estimado · ISK/u",
+    "en": "Estimated net · ISK/u"
+  },
+  "ledger.priceColumn": {
+    "es": "Precio · ISK/u",
+    "en": "Price · ISK/u"
+  },
+  "ledger.netColumn": {
+    "es": "Neto · ISK/u",
+    "en": "Net · ISK/u"
   },
   "ledger.saleNetHint": {
     "es": "Ingresos netos estimados de venta; no son beneficios de Trading.",
@@ -454,11 +466,19 @@
     "en": "{count} units"
   },
   "ledger.copyUnit": {
-    "es": "Copiar {price} ISK por unidad de {item}",
-    "en": "Copy {price} ISK per unit of {item}"
+    "es": "Copiar precio unitario de {item}: {price}",
+    "en": "Copy unit price for {item}: {price}"
+  },
+  "ledger.copyLotNet": {
+    "es": "Copiar neto estimado del lote de {item}: {price}",
+    "en": "Copy estimated lot net proceeds for {item}: {price}"
+  },
+  "ledger.noLotNet": {
+    "es": "Neto del lote no disponible para copiar",
+    "en": "Lot net proceeds unavailable to copy"
   },
   "ledger.noUnitPrice": {
-    "es": "No hay precio por unidad copiable para esta ruta. Abre el ítem para consultar los detalles.",
+    "es": "No hay precio por unidad copiable para esta ruta. Abre el item para consultar los detalles.",
     "en": "No copyable unit price for this route. Open the item to see details."
   },
   "ledger.removeItem": {
@@ -469,12 +489,228 @@
     "es": "Precios por ruta",
     "en": "Prices by route"
   },
+  "ledger.priceContextTitle": {
+    "es": "Cómo leer estos importes",
+    "en": "How to read these amounts"
+  },
+  "ledger.jitaBuyReference": {
+    "es": "Referencia · Jita Buy",
+    "en": "Reference · Jita Buy"
+  },
+  "ledger.buyOrderShort": {
+    "es": "Tu Buy Order",
+    "en": "Your buy order"
+  },
+  "ledger.priceContextBody": {
+    "es": "Cada ruta muestra un precio por unidad y el ingreso neto estimado tras cargos y transporte, cuando apliquen. El neto no es beneficio: no descuenta el coste de compra. Pulsa un precio o neto de esta tabla para copiarlo.",
+    "en": "Each route shows its per-unit price and estimated net proceeds after applicable fees and transport. Net proceeds are not profit: purchase costs are not deducted. Select a price or net amount in this table to copy it."
+  },
+  "ledger.listingPrice": {
+    "es": "Precio de ruta · ISK/u",
+    "en": "Route price · ISK/u"
+  },
+  "ledger.calculation": {
+    "es": "Referencia y deducciones",
+    "en": "Reference and deductions"
+  },
+  "ledger.mineralsTitle": {
+    "es": "Productos del reprocesamiento",
+    "en": "Reprocessing outputs"
+  },
+  "ledger.mineralsNote": {
+    "es": "Cantidades resultantes y precios estimados por unidad para cada destino; los valores de nullsec no son órdenes verificadas en ESI.",
+    "en": "Resulting quantities and estimated per-unit prices by destination; nullsec values are not ESI-verified orders."
+  },
+  "ledger.mineral": {
+    "es": "Material",
+    "en": "Material"
+  },
+  "ledger.nullEstimate": {
+    "es": "Nullsec · ISK/u estimados",
+    "en": "Nullsec · est. ISK/u"
+  },
+  "ledger.jitaEstimate": {
+    "es": "Jita · ISK/u estimados",
+    "en": "Jita · est. ISK/u"
+  },
+  "ledger.copyMineralEstimate": {
+    "es": "Copiar estimación de {item} en {market}: {price} por unidad",
+    "en": "Copy estimated {item} price in {market}: {price} per unit"
+  },
+  "ledger.observedNullPrice": {
+    "es": "Orden visible",
+    "en": "Visible order"
+  },
+  "ledger.observedNullAria": {
+    "es": "Orden visible en {market} · ISK/u (precio de otro vendedor)",
+    "en": "Visible order in {market} · ISK/u (another seller's price)"
+  },
+  "ledger.observedNullHelp": {
+    "es": "Precio de otra orden visible: sirve de referencia para calcular una rebaja automática (undercut). No reemplaza tu precio manual de publicación.",
+    "en": "A visible competing order price used to calculate an automatic undercut. It does not replace your manually entered listing price."
+  },
+  "ledger.optionalPrice": {
+    "es": "Opcional",
+    "en": "Optional"
+  },
+  "ledger.manualNullPrice": {
+    "es": "Manual · ISK/u",
+    "en": "Manual · ISK/u"
+  },
+  "ledger.sourceJita": {
+    "es": "Referencia obtenida de Jita. Puedes introducir otro valor sin cambiar la cotización original.",
+    "en": "Reference from Jita. You can enter another value without changing the original quote."
+  },
+  "ledger.sourcePasted": {
+    "es": "Valor obtenido del inventario pegado. Puedes introducir una corrección manual.",
+    "en": "Value from pasted inventory. You can enter a manual correction."
+  },
+  "ledger.sourceApi": {
+    "es": "Volumen consultado en la API de EVE. Puedes introducir una corrección manual.",
+    "en": "Volume from the EVE API. You can enter a manual correction."
+  },
+  "ledger.itemData": {
+    "es": "Inventario",
+    "en": "Inventory"
+  },
+  "ledger.marketReferences": {
+    "es": "Referencias",
+    "en": "References"
+  },
+  "ledger.pricingStrategy": {
+    "es": "Tu precio · {market}",
+    "en": "Your price · {market}"
+  },
+  "ledger.manualResetShort": {
+    "es": "Usar automático",
+    "en": "Use automatic"
+  },
+  "ledger.volumeUnit": {
+    "es": "Volumen/u",
+    "en": "Volume/unit"
+  },
+  "ledger.volumeTotal": {
+    "es": "Volumen total",
+    "en": "Total volume"
+  },
+  "ledger.jitaBuy": {
+    "es": "Jita Buy",
+    "en": "Jita Buy"
+  },
+  "ledger.jitaSell": {
+    "es": "Jita Sell",
+    "en": "Jita Sell"
+  },
+  "ledger.jitaSellInput": {
+    "es": "Precio Jita Sell por unidad",
+    "en": "Jita Sell price per unit"
+  },
+  "ledger.volumeUnitInput": {
+    "es": "Volumen en m³ por unidad",
+    "en": "Volume in m³ per unit"
+  },
+  "ledger.adjustPctInput": {
+    "es": "Ajuste de precio de este item en porcentaje",
+    "en": "This item's price adjustment in percent"
+  },
+  "ledger.adjustPct": {
+    "es": "Ajuste (%)",
+    "en": "Adjustment (%)"
+  },
+  "ledger.yourPlan": {
+    "es": "Tu plan",
+    "en": "Your plan"
+  },
+  "ledger.copyListingUnit": {
+    "es": "Copiar precio a publicar para {route}: {price}",
+    "en": "Copy listing price for {route}: {price}"
+  },
+  "ledger.copyNetUnit": {
+    "es": "Copiar neto estimado por unidad para {route}: {price}",
+    "en": "Copy estimated net per unit for {route}: {price}"
+  },
+  "ledger.routeName.null": {
+    "es": "Vender en {market}",
+    "en": "Sell in {market}"
+  },
+  "ledger.priceRoute.null": {
+    "es": "{market}",
+    "en": "{market}"
+  },
+  "ledger.priceRoute.bb": {
+    "es": "Buyback de alianza",
+    "en": "Alliance Buyback"
+  },
+  "ledger.priceRoute.fN": {
+    "es": "Importar · {market}",
+    "en": "Import · {market}"
+  },
+  "ledger.routeName.bb": {
+    "es": "Buyback de la alianza",
+    "en": "Alliance Buyback"
+  },
+  "ledger.routeName.disc": {
+    "es": "Venta a jugador",
+    "en": "Player sale"
+  },
+  "ledger.routeName.jOrd": {
+    "es": "Orden en Jita",
+    "en": "Jita sell order"
+  },
+  "ledger.routeName.jInst": {
+    "es": "Venta rápida en Jita",
+    "en": "Quick sale in Jita"
+  },
+  "ledger.routeName.cOrd": {
+    "es": "Comprimir → Orden en Jita",
+    "en": "Compress → Jita sell order"
+  },
+  "ledger.routeName.cInst": {
+    "es": "Comprimir → Venta rápida en Jita",
+    "en": "Compress → Quick sale in Jita"
+  },
+  "ledger.routeName.rNull": {
+    "es": "Reprocesar → {market}",
+    "en": "Reprocess → {market}"
+  },
+  "ledger.routeName.rJita": {
+    "es": "Reprocesar → Jita",
+    "en": "Reprocess → Jita"
+  },
+  "ledger.routeName.fN": {
+    "es": "Llevar y vender en {market}",
+    "en": "Ship and sell in {market}"
+  },
+  "ledger.routeName.fJ": {
+    "es": "Orden en Jita",
+    "en": "Jita sell order"
+  },
+  "ledger.routeName.fJI": {
+    "es": "Venta rápida en Jita",
+    "en": "Quick sale in Jita"
+  },
+  "ledger.manualNullInput": {
+    "es": "Precio manual de publicación de {item} en {market} por unidad",
+    "en": "Manual listing price for {item} in {market} per unit"
+  },
+  "ledger.manualNullReset": {
+    "es": "Quitar precio manual y volver a la estimación automática",
+    "en": "Clear the manual price and return to the automatic estimate"
+  },
+  "ledger.manualNullActive": {
+    "es": "Precio manual activo",
+    "en": "Manual price active"
+  },
+  "ledger.manualNullEstimate": {
+    "es": "Precio automático",
+    "en": "Automatic price"
+  },
   "ledger.compare": {
     "es": "Comparar rutas",
     "en": "Compare routes"
   },
   "ledger.adjust": {
-    "es": "Ajustes del ítem",
+    "es": "Ajustes del Item",
     "en": "Item settings"
   },
   "ledger.guide": {
@@ -484,6 +720,14 @@
   "ledger.guideUnitQuantity": {
     "es": " por unidad · {count} unidades · total ",
     "en": " per unit · {count} units · total "
+  },
+  "ledger.guideUnitTotal": {
+    "es": " por unidad · total ",
+    "en": " per unit · total "
+  },
+  "ledger.guideBuybackCharges": {
+    "es": " por unidad, con la comisión del programa ya descontada. Esta ruta no incluye envío ni Sales Tax de mercado.",
+    "en": " per unit, after the program fee. This route has no freight or market Sales Tax."
   },
   "ledger.guideFees": {
     "es": ". Precio con Sales Tax, Broker y SCC descontados.",
@@ -726,7 +970,7 @@
     "en": "the optimal plan"
   },
   "picker.partial": {
-    "es": " · {selected} de {total} ítems admiten esta ruta.",
+    "es": " · {selected} de {total} items admiten esta ruta.",
     "en": " · {selected} of {total} items support this route."
   },
   "freight.heading": {
@@ -734,7 +978,7 @@
     "en": "ACTUAL FREIGHT COST"
   },
   "freight.subtitle": {
-    "es": "Aquí se refleja la reducción real por unidad de cada ítem.",
+    "es": "Aquí se refleja la reducción real por unidad de cada item.",
     "en": "This shows the actual reduction per unit for each shipped item."
   },
   "freight.infoLabel": {
@@ -742,7 +986,7 @@
     "en": "Information about freight and collateral"
   },
   "freight.itemColumn": {
-    "es": "ÍTEM ENVIADO",
+    "es": "ITEM ENVIADO",
     "en": "SHIPPED ITEM"
   },
   "freight.beforeColumn": {
@@ -978,7 +1222,7 @@
     "en": "See this alternative"
   },
   "picker.simpleShip": {
-    "es": "Primero hay que enviar los ítems. El transporte también toma tiempo.",
+    "es": "Primero hay que enviar los items. El transporte también toma tiempo.",
     "en": "Items must be shipped first. Delivery still takes time."
   },
   "picker.simpleNoShip": {
@@ -986,7 +1230,7 @@
     "en": "No extra shipping. Payment depends on orders or Buyback."
   },
   "picker.simplePartial": {
-    "es": "Sirve para {count} de {total} ítems; los demás siguen su mejor ruta.",
+    "es": "Sirve para {count} de {total} items; los demás siguen su mejor ruta.",
     "en": "Works for {count} of {total} items; the rest keep their best route."
   },
   "picker.simpleCurrent": {
@@ -1018,7 +1262,7 @@
     "en": "This offer requires finding a buyer. Even if the asking price is higher, it does not count as the automatic most-ISK route."
   },
   "player.lastResortNames": {
-    "es": "Último recurso: ofrecer a otro jugador los ítems {items}. La venta no está garantizada.",
+    "es": "Último recurso: ofrecer a otro jugador los items {items}. La venta no está garantizada.",
     "en": "Last resort: offer {items} to another player. The sale is not guaranteed."
   },
   "player.lastResortGuide": {
@@ -1034,23 +1278,23 @@
     "en": "ESTIMATED ASKING PRICE"
   },
   "extras.selectedOffer": {
-    "es": "Tu plan incluye {count} ítems para vender a jugadores. Debes encontrar comprador; no es ingreso confirmado.",
+    "es": "Tu plan incluye {count} items para vender a jugadores. Debes encontrar comprador; no es ingreso confirmado.",
     "en": "Your plan includes {count} items for player sales. You must find a buyer; this is not confirmed income."
   },
   "extras.selectedOfferOne": {
-    "es": "Tu plan incluye 1 ítem para vender a jugadores. Debes encontrar comprador; no es ingreso confirmado.",
+    "es": "Tu plan incluye 1 item para vender a jugadores. Debes encontrar comprador; no es ingreso confirmado.",
     "en": "Your plan includes 1 item for player sale. You must find a buyer; this is not confirmed income."
   },
   "extras.alternativeOffer": {
-    "es": "Alternativa manual para {count} ítems; no sustituye la ruta automática elegida y requiere comprador.",
+    "es": "Alternativa manual para {count} items; no sustituye la ruta automática elegida y requiere comprador.",
     "en": "Manual alternative for {count} items; it does not replace the selected automatic route and requires a buyer."
   },
   "extras.alternativeOfferOne": {
-    "es": "Alternativa manual para 1 ítem; no sustituye la ruta automática elegida y requiere comprador.",
+    "es": "Alternativa manual para 1 item; no sustituye la ruta automática elegida y requiere comprador.",
     "en": "Manual alternative for 1 item; it does not replace the selected automatic route and requires a buyer."
   },
   "extras.noOffer": {
-    "es": "No hay ítems con precio disponible para preparar una oferta a jugadores.",
+    "es": "No hay items con precio disponible para preparar una oferta a jugadores.",
     "en": "No items have an available price for preparing a player offer."
   },
   "extras.afterAcceptance": {
@@ -1066,15 +1310,15 @@
     "en": "Preview the Discord message"
   },
   "sales.copyItems": {
-    "es": "Copiar {count} ítems",
+    "es": "Copiar {count} items",
     "en": "Copy {count} items"
   },
   "sales.itemCount": {
-    "es": "{count} ítems en esta ruta",
+    "es": "{count} items en esta ruta",
     "en": "{count} items in this route"
   },
   "sales.searchItem": {
-    "es": "Buscar un ítem…",
+    "es": "Buscar un item…",
     "en": "Search items…"
   },
   "mining.guideEyebrow": {
@@ -1206,7 +1450,7 @@
     "en": "Purchase: {quantity} × {unit} at Jita Sell, subject to order-book depth."
   },
   "trade.purchaseUnavailable": {
-    "es": "Beneficio no calculable: falta un precio de compra válido en Jita. Actualiza precios o abre el ítem del Listado para introducir tu precio Buy Order por unidad. No se utilizarán precios filtrados de venta como coste de compra.",
+    "es": "Beneficio no calculable: falta un precio de compra válido en Jita. Actualiza precios o abre el item del Listado para introducir tu precio Buy Order por unidad. No se utilizarán precios filtrados de venta como coste de compra.",
     "en": "Profit unavailable: no valid Jita purchase quote. Refresh market prices or open the item in Registered Items to enter your Buy Order unit price. Filtered sell-to-bid prices cannot be used as a purchase budget."
   },
   "trade.purchaseUnavailableShort": {

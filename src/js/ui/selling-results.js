@@ -128,7 +128,7 @@ function paintWhereSold(P,none){
    if(tot>0){const bar=el('div','ov-bar'),lg=el('div','ov-leg');
      ks.forEach(k=>{const v=sums[k],i=el('i');i.style.width=(v/tot*100)+'%';i.style.background=DC[k]||'#9c9a92';i.title=(PLAN_L[k]||k)+': '+fmt(v);bar.append(i);
        const n=rowsIn.filter(r=>r.best===k).length,d=el('div'),sw=el('span','ov-sw');sw.style.background=DC[k]||'#9c9a92';
-       d.append(sw,el('b',null,v/tot>0&&v/tot<.005?'<1%':pct(v/tot)+'%'),el('small',null,routeSummaryName(k)+' · '+n+(S.lang==='en'?(n===1?' item':' items'):(n===1?' ítem':' ítems'))));lg.append(d);});
+       d.append(sw,el('b',null,v/tot>0&&v/tot<.005?'<1%':pct(v/tot)+'%'),el('small',null,routeSummaryName(k)+' · '+n+(S.lang==='en'?(n===1?' item':' items'):(n===1?' item':' items'))));lg.append(d);});
      if(ks.length>1)box.append(bar);
      box.append(lg);}}
 }
@@ -439,7 +439,7 @@ function paintVerdict(P){
     groupTable.append(mkHead(sort));tableTarget=groupTable;
     const query=(vQuery[id]||'').trim().toLocaleLowerCase();
     const filtered=query?g.filter(r=>r.o.name.toLocaleLowerCase().includes(query)||(r.mins||[]).some(m=>m.m.toLocaleLowerCase().includes(query))):g;
-    const count=section.querySelector('.pl-match');if(count)count.textContent=query?(S.lang==='en'?filtered.length+' of '+g.length+' items':filtered.length+' de '+g.length+' ítems'):' ';
+    const count=section.querySelector('.pl-match');if(count)count.textContent=query?(S.lang==='en'?filtered.length+' of '+g.length+' items':filtered.length+' de '+g.length+' items'):' ';
     // Orden y “mostrar más” solo aplican al listado filtrado, nunca al total financiero.
     const key=x=>sort.k==='n'?x.o.name.toLowerCase():sort.k==='q'?x.q:sort.k==='p'?(unitFor(x,k).p||0):(x.g[k]-x.prod);
     const gs=sort.k?[...filtered].sort((a,b)=>{const A=key(a),B=key(b);return (A<B?-1:A>B?1:0)*sort.d;}):filtered;

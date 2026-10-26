@@ -16,7 +16,7 @@ test('approved freight table and subtitle exist only once, with contextual help'
   assert.match(html,/data-i18n="freight.reference"/);
   assert.doesNotMatch(html,/class="mm-inline-faq mm-courier-faq"/);
   assert.deepEqual(keys['freight.subtitle'],{
-    es:'Aquí se refleja la reducción real por unidad de cada ítem.',
+    es:'Aquí se refleja la reducción real por unidad de cada item.',
     en:'This shows the actual reduction per unit for each shipped item.'});
   for(const key of ['freight.infoLabel','freight.itemColumn','freight.beforeColumn',
     'freight.freightColumn','freight.finalColumn']){

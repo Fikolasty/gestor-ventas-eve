@@ -17,10 +17,10 @@ test('the earlier B.6 row grid no longer competes with the final B.6a surfaces',
 });
 
 test('copied ISK gets the shared color token without a competing !important gray rule',()=>{
-  const start=css.indexOf('#ledger #lots .lot-pp .copy{');
+  const start=css.indexOf('#ledger #lots .lot-pp .copy,\n#ledger #lots .lot-financial .lot-net{');
   const end=css.indexOf('#ledger #lots .lot-pp .copy::after',start);
   assert.ok(start>=0&&end>start);
-  assert.match(css.slice(start,end),/color:var\(--txt\);background/);
+  assert.match(css.slice(start,end),/color:var\(--txt\);background:transparent/);
   assert.doesNotMatch(css,/#ledger #lots \.lot-pp \.copy\.isk-(?:pos|neg)/);
   assert.match(css,/#ledger #lots \.lot-net\.pos\{color:var\(--gain\)\}/);
 });

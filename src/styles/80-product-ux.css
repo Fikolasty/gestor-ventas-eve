@@ -832,8 +832,7 @@ body:not(.is-flip) .fact-buy-order{display:none!important}
   #pSum .pk-headline-stat+.pk-headline-stat{padding-top:8px;border-top:1px solid var(--line)}
 }
 
-/* B.4 · Registered items: clean rows, meaningful action hierarchy and a
-   contract-inspired inset surface only for the unit price that can be copied.
+/* B.4/B.13 · Registered items: clean rows and accessible headline actions.
    All fine-detail controls remain lazy and behind native disclosures. */
 #ledger{--mm-item-inset:#1c1b1a}
 #ledger .ledger-tools{justify-content:space-between;margin:15px 0 13px}
@@ -880,33 +879,41 @@ body:not(.is-flip) .fact-buy-order{display:none!important}
 #ledger #lots .lot-meta{display:flex;flex-wrap:wrap;gap:6px 12px;align-items:center;min-width:0}
 #ledger #lots .lot-qty{font:500 var(--mm-sales-label-size)/1.4 var(--f-ui);color:var(--mut);white-space:nowrap}
 #ledger #lots .lot-dest{
-  justify-self:start;padding:2px 7px;border-radius:6px!important;
+  justify-self:start;padding:0;border-radius:0!important;
   font:var(--mm-sales-label-size)/1.4 var(--f-ui);white-space:normal;overflow-wrap:anywhere;
-  background:var(--hull)!important;border:1px solid var(--line2)!important;color:var(--txt)!important;
+  background:transparent!important;border:0!important;color:var(--mut)!important;
 }
 #ledger #lots .lot-dest.p-none{color:var(--loss)!important}
 #ledger #lots .lot-open .chev{grid-area:auto;justify-self:center;flex:none}
-#ledger #lots .lot-k{display:block;margin:0 0 7px;color:var(--mut);font:700 var(--mm-sales-label-size)/1.4 var(--f-ui);letter-spacing:.035em}
+#ledger #lots .lot-k{display:block;margin:0 0 7px;color:var(--mut);font:700 var(--mm-sales-label-size)/1.4 var(--f-ui);letter-spacing:.035em;text-transform:uppercase}
 #ledger #lots .lot-pp{grid-area:auto!important;display:block;justify-self:stretch!important;min-width:0}
-#ledger #lots .lot-pp .copy{
-  width:100%!important;min-height:44px;margin:0!important;padding:9px 12px!important;
-  display:flex;align-items:center;justify-content:space-between;gap:10px;
-  color:var(--txt);background:var(--mm-item-inset)!important;
-  border:1px solid var(--line2)!important;border-radius:8px!important;
-  font:650 .88rem/1.35 var(--f-num)!important;text-align:left!important;
-  white-space:normal!important;overflow-wrap:anywhere;cursor:copy;
+#ledger #lots .lot-pp .copy,
+#ledger #lots .lot-financial .lot-net{
+  width:auto;max-width:100%;min-height:42px;margin:0!important;padding:5px 0!important;
+  display:inline-flex;align-items:center;justify-content:flex-start;gap:9px;
+  color:var(--txt);background:transparent!important;
+  border:0!important;border-radius:5px!important;box-shadow:none!important;
+  font:700 clamp(.92rem,1.18vw,1.04rem)/1.35 var(--f-num)!important;
+  text-align:left!important;white-space:normal!important;overflow-wrap:anywhere;cursor:copy;
 }
-#ledger #lots .lot-pp .copy::after{
-  content:"";width:17px;height:17px;flex:0 0 17px;opacity:.7;
+#ledger #lots .lot-pp .copy::after,
+#ledger #lots .lot-financial .lot-net::after{
+  content:"";width:15px;height:15px;flex:0 0 15px;opacity:.52;
   background:currentColor;
   -webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='8' y='8' width='12' height='12' rx='2'/%3E%3Cpath d='M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2'/%3E%3C/svg%3E") center/contain no-repeat;
   mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='8' y='8' width='12' height='12' rx='2'/%3E%3Cpath d='M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2'/%3E%3C/svg%3E") center/contain no-repeat;
 }
-#ledger #lots .lot-pp .copy:hover:not(:disabled){background:var(--hull2)!important;border-color:var(--ion)!important}
-#ledger #lots .lot-pp .copy:focus-visible{outline:2px solid var(--ion);outline-offset:2px}
-#ledger #lots .lot-pp .copy:disabled{cursor:default;opacity:.65}
+#ledger #lots .lot-pp .copy:hover:not(:disabled),
+#ledger #lots .lot-financial .lot-net:hover:not(:disabled){
+  background:transparent!important;text-decoration:underline;text-underline-offset:3px
+}
+#ledger #lots .lot-pp .copy:focus-visible,
+#ledger #lots .lot-financial .lot-net:focus-visible{outline:2px solid var(--ion);outline-offset:3px}
+#ledger #lots .lot-pp .copy:disabled,
+#ledger #lots .lot-financial .lot-net:disabled{cursor:default;opacity:.65}
 #ledger #lots .lot-financial{min-width:0;display:block;text-align:right}
-#ledger #lots .lot-net{display:block;font:700 clamp(.87rem,1.15vw,1.03rem)/1.38 var(--f-num);overflow-wrap:anywhere}
+#ledger #lots .lot-financial .lot-net{justify-content:flex-end;margin-left:auto!important}
+#ledger #lots .lot-net{overflow-wrap:anywhere}
 #ledger #lots .lot-net.pos{color:var(--gain)}
 #ledger #lots .lot-x{justify-self:end;align-self:center;margin:0;min-height:34px;min-width:34px}
 #ledger #lots .lot-body{
@@ -949,8 +956,10 @@ body:not(.is-flip) .fact-buy-order{display:none!important}
 #ledger #lots .lot-body>.checks{margin:7px 0 0}
 html.light #ledger{--mm-item-inset:#eeece8}
 html.light #ledger #lots .lot-body>.prices,html.light #ledger #lots .lot-detail-section{background:var(--surface-card)}
-html.light #ledger #lots .lot-pp .copy{background:var(--mm-item-inset)!important;box-shadow:none!important}
-html.light #ledger #lots .lot-pp .copy:hover:not(:disabled){background:#e3e0da!important}
+html.light #ledger #lots .lot-pp .copy,
+html.light #ledger #lots .lot-financial .lot-net{background:transparent!important;box-shadow:none!important}
+html.light #ledger #lots .lot-pp .copy:hover:not(:disabled),
+html.light #ledger #lots .lot-financial .lot-net:hover:not(:disabled){background:transparent!important}
 @media(max-width:980px){
   #ledger #lots .lot-head{grid-template-columns:minmax(0,1fr) minmax(155px,.9fr)!important;gap:12px!important}
   #ledger #lots .lot-financial{grid-column:1/-1;display:flex;align-items:baseline;justify-content:flex-end;gap:12px;text-align:right}
@@ -1565,28 +1574,8 @@ html.light #pSum #unitCourierRows .mm-unit-row{background:transparent!important}
   grid-column:1/-1!important;display:grid;
   grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;align-items:start;min-width:0
 }
-#ledger #lots .lot-panel-column{display:flex;flex-direction:column;gap:12px;min-width:0}
-#ledger #lots .lot-panel-column>.prices,
-#ledger #lots .lot-panel-column>.lot-analysis,
-#ledger #lots .lot-panel-column>.lot-adjustments,
-#ledger #lots .lot-panel-column>.lot-guide{
-  display:block!important;width:100%!important;box-sizing:border-box;
-  grid-column:auto!important;grid-row:auto!important;
-  align-self:start;min-width:0;max-width:100%;margin:0!important;
-  border:1px solid var(--line2);border-radius:9px;background:var(--surface-card);
-  overflow:hidden
-}
 #ledger #lots .lot-body>.lot-verdict,
-#ledger #lots .lot-body>.checks,
-#ledger #lots .lot-body>.lot-foot{grid-column:1/-1!important}
-#ledger #lots .lot-panel-column>.prices>summary,
-#ledger #lots .lot-panel-column>.lot-detail-section>summary{
-  min-height:49px;padding:12px 15px!important;
-  font:700 var(--mm-sales-question-size)/1.4 var(--f-ui)!important;
-  letter-spacing:0!important;color:var(--txt)!important
-}
-#ledger #lots .lot-panel-column>.prices[open]>summary,
-#ledger #lots .lot-panel-column>.lot-detail-section[open]>summary{border-bottom:1px solid var(--line2)}
+#ledger #lots .lot-body>.checks{grid-column:1/-1!important}
 #ledger #lots .lot-body>.lot-verdict .rcall{
   margin:0;padding:10px 13px;border:1px solid var(--line2);border-radius:8px;
   background:var(--surface-panel)
@@ -1595,61 +1584,6 @@ html.light #pSum #unitCourierRows .mm-unit-row{background:transparent!important}
 #ledger #lots .lot-verdict .rcall b.pos{color:var(--gain)}
 #ledger #lots .lot-verdict .rcall b.neg{color:var(--loss)}
 #ledger #lots .lot-verdict .rcall small{font:450 var(--mm-sales-explanation-size)/1.5 var(--f-ui)}
-
-/* A readable two-column route comparison INSIDE a half-width card, keeping
-   the exact original table rows and copy/edit controls. */
-#ledger #lots .lot-panel-column>.prices{overflow-x:hidden}
-#ledger #lots .lot-panel-column>.prices table,
-#ledger #lots .lot-panel-column>.prices tbody{display:block;min-width:0;width:100%}
-#ledger #lots .lot-panel-column>.prices .pr-h{display:none}
-#ledger #lots .lot-panel-column>.prices tr.pr-route{
-  display:grid;grid-template-columns:minmax(0,1fr) minmax(0,auto);
-  gap:6px 10px;align-items:start;padding:11px 13px;
-  border-bottom:1px solid var(--line2)
-}
-#ledger #lots .lot-panel-column>.prices tr.pr-route>td{
-  display:block;min-width:0;padding:0!important;text-align:left!important;
-  border:0!important;white-space:normal!important;overflow-wrap:anywhere
-}
-#ledger #lots .lot-panel-column>.prices tr.pr-route>td:first-child{
-  grid-column:1;grid-row:1;font:650 .81rem/1.35 var(--f-ui)
-}
-#ledger #lots .lot-panel-column>.prices tr.pr-route>td:nth-child(4){
-  grid-column:2;grid-row:1;align-self:center;justify-self:end;
-  text-align:right!important;font:700 .83rem/1.4 var(--f-num)!important;
-  font-variant-numeric:tabular-nums
-}
-#ledger #lots .lot-panel-column>.prices tr.pr-route>td:nth-child(2){grid-column:1/-1;grid-row:2}
-#ledger #lots .lot-panel-column>.prices tr.pr-route>td:nth-child(3){
-  grid-column:1/-1;grid-row:3;color:var(--mut);
-  font:450 .74rem/1.45 var(--f-ui)!important
-}
-#ledger #lots .lot-panel-column>.prices tr.pr-route>td[data-label]::before{display:none!important}
-#ledger #lots .lot-panel-column>.prices tr.pr-route .copy{
-  display:inline-flex!important;align-items:center;justify-content:center;
-  min-height:33px;width:auto!important;max-width:100%;padding:6px 9px!important;
-  border:1px solid var(--line2)!important;border-radius:6px;
-  background:var(--mm-item-inset)!important;
-  color:var(--gain)!important;font:700 .79rem/1.3 var(--f-num)!important;
-  font-variant-numeric:tabular-nums;white-space:normal!important;overflow-wrap:anywhere
-}
-#ledger #lots .lot-panel-column>.prices tr.pr-route .copy.isk-neg{color:var(--loss)!important}
-#ledger #lots .lot-panel-column>.prices tr.pr-route .pr-net.pos{color:var(--gain)!important}
-#ledger #lots .lot-panel-column>.prices tr.pr-route .pr-net.neg{color:var(--loss)!important}
-#ledger #lots .lot-panel-column>.prices tr.pr-local-manual,
-#ledger #lots .lot-panel-column>.prices tr.pr-local-manual>td,
-#ledger #lots .lot-panel-column>.prices tr.pr-unit-courier,
-#ledger #lots .lot-panel-column>.prices tr.pr-unit-courier>td{display:block;width:100%;box-sizing:border-box}
-#ledger #lots .lot-panel-column>.prices .pr-manual-editor{
-  display:flex;flex-wrap:wrap;gap:7px;align-items:center;padding:10px 12px
-}
-#ledger #lots .lot-panel-column>.prices .pr-manual-editor label{flex:1 1 100%;font-size:.75rem}
-#ledger #lots .lot-panel-column>.prices .pr-manual-editor input{
-  flex:1 1 110px;width:auto;min-height:35px;font:600 .81rem var(--f-num)
-}
-#ledger #lots .lot-panel-column>.prices tr:not(.pr-route) td[colspan="4"]{
-  display:block;min-width:0;white-space:normal;padding:9px 12px
-}
 
 #ledger #lots .lot-analysis .opts{padding:9px 12px;gap:0}
 #ledger #lots .lot-analysis .opt[hidden]{display:none!important}
@@ -1725,16 +1659,6 @@ html.light #pSum #unitCourierRows .mm-unit-row{background:transparent!important}
 #ledger #lots .lot-guide .guide .mm-guide-money.isk-neg{color:var(--loss)!important}
 #ledger #lots .lot-net.neg{color:var(--loss)!important}
 
-@media(max-width:980px){
-  #ledger #lots .lot-body>.lot-panel-grid{display:flex;flex-direction:column;gap:10px}
-  #ledger #lots .lot-panel-column{display:contents}
-  #ledger #lots .lot-panel-grid>.lot-panel-column>.prices{order:1}
-  #ledger #lots .lot-panel-grid>.lot-panel-column>.lot-analysis{order:2}
-  #ledger #lots .lot-panel-grid>.lot-panel-column>.lot-adjustments{order:3}
-  #ledger #lots .lot-panel-grid>.lot-panel-column>.lot-guide{order:4}
-  #ledger #lots .lot-panel-grid .prices,
-  #ledger #lots .lot-panel-grid .lot-detail-section{width:100%;box-sizing:border-box}
-}
 @media(max-width:600px){
   #ledger #lots .lot-body{padding:6px 7px 12px!important;gap:9px!important}
   #ledger>summary{flex-wrap:nowrap!important;align-items:flex-start!important;gap:7px!important}
@@ -1745,18 +1669,7 @@ html.light #pSum #unitCourierRows .mm-unit-row{background:transparent!important}
   }
   #ledger .ledger-sort-title{flex:0 0 auto!important;margin-right:0}
   #ledger .ledger-head .ledger-sort{flex:0 0 auto!important;white-space:nowrap}
-  #ledger #lots .lot-adjustments>.facts{grid-template-columns:minmax(0,1fr)!important}
-  #ledger #lots .lot-panel-column>.prices tr.pr-route{grid-template-columns:minmax(0,1fr)!important}
-  #ledger #lots .lot-panel-column>.prices tr.pr-route>td:nth-child(4){
-    grid-column:1;grid-row:2;justify-self:start;text-align:left!important
-  }
-  #ledger #lots .lot-panel-column>.prices tr.pr-route>td:nth-child(2){grid-row:3}
-  #ledger #lots .lot-panel-column>.prices tr.pr-route>td:nth-child(3){grid-row:4}
   #ledger .ledger-head{justify-content:flex-start}
-}
-@media(prefers-reduced-motion:reduce){
-  #ledger #lots .lot-panel-column>.prices>summary::after,
-  #ledger #lots .lot-panel-column>.lot-detail-section>summary::after{transition:none}
 }
 
 /* B.12 — Extras: natural-height contract columns and an actionable WTS guide. */
@@ -1789,3 +1702,406 @@ html.light #pSum #unitCourierRows .mm-unit-row{background:transparent!important}
   #pCtr .disc-steps li>span{grid-column:2}
 }
 @media(prefers-reduced-motion:reduce){#pCtr .disc-preview>summary::after{transition:none}}
+
+/* B.13 revised candidate — Raulito requires 2×2 even when every panel opens.
+   Rows align when opened; closed siblings retain natural height rather than
+   painting an empty card. No fixed heights or nested mineral accordion. */
+#ledger .ledger-controls{
+  display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;
+  gap:7px 18px;margin:1px 14px 10px;min-width:0
+}
+#ledger .ledger-controls>.ledger-head{
+  display:flex!important;order:2;align-items:center;justify-content:flex-end;
+  flex:1 1 auto;min-width:0;gap:5px!important;
+  margin:0;padding:0!important;border:0
+}
+#ledger .ledger-controls>.ledger-head .ledger-sort{flex:0 0 auto;white-space:nowrap}
+#ledger .ledger-controls>.ledger-tools{
+  order:1;flex:0 0 auto;justify-content:flex-start;
+  margin:0;padding:0;min-height:36px;gap:8px
+}
+@media(max-width:1100px){
+  #ledger .ledger-controls>.ledger-tools{order:1;margin-right:auto}
+  #ledger .ledger-controls>.ledger-head{
+    order:2;flex-basis:100%;justify-content:flex-start;overflow-x:auto;scrollbar-width:thin;
+    overscroll-behavior-x:contain
+  }
+}
+#ledger #lots .lot-body>.lot-panel-grid{
+  display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:12px;align-items:stretch;min-width:0
+}
+#ledger #lots .lot-panel-grid>details{
+  display:block!important;align-self:stretch;grid-column:auto!important;width:100%;min-width:0;
+  box-sizing:border-box;margin:0!important;padding:0!important;
+  border:1px solid var(--line2);border-radius:9px;
+  background:var(--surface-card);overflow:hidden
+}
+/* A closed card only contains its summary: never paint an enormous empty
+   card when its neighbor in the same row is expanded. */
+#ledger #lots .lot-panel-grid>details:not([open]){align-self:start}
+#ledger #lots .lot-panel-grid>details>summary{
+  display:flex;align-items:center;gap:12px;box-sizing:border-box;
+  min-height:49px;padding:12px 15px!important;margin:0!important;
+  color:var(--txt)!important;font:700 var(--mm-sales-question-size)/1.4 var(--f-ui)!important;
+  cursor:pointer;list-style:none
+}
+#ledger #lots .lot-panel-grid>details>summary::-webkit-details-marker{display:none}
+#ledger #lots .lot-panel-grid>details>summary::after{
+  content:"";flex:none;margin-left:auto;
+  width:var(--mm-chevron-size);height:var(--mm-chevron-size);
+  border-right:var(--mm-chevron-stroke) solid var(--mut);
+  border-bottom:var(--mm-chevron-stroke) solid var(--mut);
+  transform:rotate(45deg);transition:transform .15s ease
+}
+#ledger #lots .lot-panel-grid>details[open]>summary::after{transform:rotate(225deg)}
+#ledger #lots .lot-panel-grid>details>summary:focus-visible{
+  outline:2px solid var(--ion);outline-offset:-3px
+}
+#ledger #lots .lot-panel-grid>details[open]>summary{border-bottom:1px solid var(--line2)}
+
+/* One readable desktop row per route: route / unit price / estimated net.
+   Mobile may stack the route above the two amounts. Copy and calculation
+   descriptions remain unchanged and keyboard accessible. */
+#ledger #lots .lot-panel-grid>.prices table,
+#ledger #lots .lot-panel-grid>.prices thead,
+#ledger #lots .lot-panel-grid>.prices tbody{
+  display:block!important;width:100%;min-width:0;box-sizing:border-box
+}
+#ledger #lots .lot-panel-grid>.prices .pr-h,
+#ledger #lots .lot-panel-grid>.prices tr.pr-route{
+  display:grid!important;
+  grid-template-columns:minmax(0,1.14fr) minmax(0,1fr) minmax(0,1fr);
+  gap:6px 10px;align-items:center;box-sizing:border-box;width:100%;min-width:0
+}
+#ledger #lots .lot-panel-grid>.prices .pr-h{
+  padding:10px 13px 9px;margin:0;background:var(--surface-panel);
+  border-bottom:1px solid var(--line2)
+}
+#ledger #lots .lot-panel-grid>.prices .pr-h th{
+  display:block;padding:0!important;text-align:left!important;
+  color:var(--mut);font:700 .76rem/1.35 var(--f-ui);letter-spacing:.045em;
+  text-transform:uppercase;overflow-wrap:anywhere;
+  border:0!important;box-shadow:none!important;text-decoration:none!important
+}
+#ledger #lots .lot-panel-grid>.prices .pr-h th:nth-child(2),
+#ledger #lots .lot-panel-grid>.prices .pr-h th:nth-child(4){padding-left:7px!important}
+#ledger #lots .lot-panel-grid>.prices[open]{display:flex!important;flex-direction:column}
+#ledger #lots .lot-panel-grid>.prices[open]::details-content{
+  display:flex;flex-direction:column;flex:1 1 auto;min-height:0
+}
+#ledger #lots .lot-panel-grid>.prices[open]>table{
+  flex:1 1 auto;display:flex!important;flex-direction:column
+}
+#ledger #lots .lot-panel-grid>.prices[open]>table>thead{flex:0 0 auto}
+#ledger #lots .lot-panel-grid>.prices[open]>table>tbody{
+  display:flex!important;flex:1 1 auto;flex-direction:column
+}
+#ledger #lots .lot-panel-grid>.prices[open]>table>tbody>tr.pr-route{
+  flex:1 1 auto;min-height:51px
+}
+#ledger #lots .lot-panel-grid>.prices .pr-context{
+  box-sizing:border-box;margin-top:auto;padding:13px 15px 15px;
+  border-top:1px solid var(--line2);background:var(--surface-panel)
+}
+#ledger #lots .lot-panel-grid>.prices .pr-buy-reference{
+  display:flex;align-items:center;justify-content:space-between;
+  gap:8px;min-width:0;margin:0 0 11px;padding:0 0 10px;
+  border-bottom:1px solid var(--line2)
+}
+#ledger #lots .lot-panel-grid>.prices .pr-buy-reference>span{
+  color:var(--mut);font:600 .77rem/1.4 var(--f-ui)
+}
+#ledger #lots .lot-panel-grid>.prices .pr-buy-reference>b{
+  color:var(--txt);font:700 .84rem/1.4 var(--f-num);
+  font-variant-numeric:tabular-nums;white-space:nowrap
+}
+#ledger #lots .lot-panel-grid>.prices .pr-buy-reference>b.isk-pos{color:var(--gain)}
+#ledger #lots .lot-panel-grid>.prices .pr-buy-reference>b.isk-neg{color:var(--loss)}
+body:not(.is-flip) #ledger #lots .lot-panel-grid>.prices .pr-buy-reference{
+  display:none!important
+}
+#ledger #lots .lot-panel-grid>.prices .pr-context-title{
+  display:block;margin:0 0 7px;color:var(--txt);
+  font:700 1rem/1.4 var(--f-ui);letter-spacing:.04em;
+  text-transform:uppercase
+}
+#ledger #lots .lot-panel-grid>.prices .pr-context p{
+  margin:0;color:var(--mut);font:450 .93rem/1.55 var(--f-ui)
+}
+#ledger #lots .lot-panel-grid>.prices .pr-h th:nth-child(3){
+  position:absolute;width:1px;height:1px;padding:0;margin:-1px;
+  border:0;overflow:hidden;clip-path:inset(50%);white-space:nowrap
+}
+#ledger #lots .lot-panel-grid>.prices .pr-h th:first-child{grid-column:1}
+#ledger #lots .lot-panel-grid>.prices .pr-h th:nth-child(2){grid-column:2}
+#ledger #lots .lot-panel-grid>.prices .pr-h th:nth-child(4){grid-column:3;text-align:left!important}
+#ledger #lots .lot-panel-grid>.prices tr.pr-route{
+  padding:9px 13px;border-bottom:1px solid var(--line2);
+  background:transparent!important
+}
+#ledger #lots .lot-panel-grid>.prices tr.pr-best>td{
+  background:transparent!important
+}
+#ledger #lots .lot-panel-grid>.prices tr.pr-best .pr-tag{
+  color:var(--txt)!important;background:var(--surface-panel)!important;
+  border-color:var(--line2)!important;box-shadow:none!important
+}
+#ledger #lots .lot-panel-grid>.prices tr.pr-route>td{
+  display:block;
+  min-width:0;padding:0!important;text-align:left!important;border:0!important;
+  white-space:normal!important;overflow-wrap:anywhere
+}
+#ledger #lots .lot-panel-grid>.prices tr.pr-route>td:first-child{
+  grid-column:1!important;grid-row:1!important;
+  display:flex;align-items:center;flex-wrap:wrap;gap:4px 6px;
+  margin-bottom:0;font:650 .82rem/1.4 var(--f-ui)
+}
+#ledger #lots .lot-panel-grid>.prices tr.pr-route>td:nth-child(2){
+  grid-column:2!important;grid-row:1!important
+}
+#ledger #lots .lot-panel-grid>.prices tr.pr-route>td:nth-child(3){
+  position:absolute;width:1px;height:1px;padding:0;margin:-1px;
+  border:0;overflow:hidden;clip-path:inset(50%);white-space:nowrap
+}
+#ledger #lots .lot-panel-grid>.prices tr.pr-route>td:nth-child(4){
+  grid-column:3!important;grid-row:1!important;
+  justify-self:stretch;text-align:left!important;font:700 .86rem/1.4 var(--f-num);
+  font-variant-numeric:tabular-nums;min-width:0
+}
+#ledger #lots .lot-panel-grid>.prices tr.pr-route>td[data-label]::before{display:none!important}
+#ledger #lots .lot-panel-grid>.prices tr.pr-route .copy{
+  display:flex;align-items:center;justify-content:space-between;gap:8px;
+  box-sizing:border-box;width:100%;max-width:100%;min-width:0;
+  min-height:37px;padding:5px 7px!important;margin:0!important;
+  border:1px solid transparent!important;border-radius:6px;
+  color:var(--txt)!important;background:transparent!important;box-shadow:none!important;
+  font:700 .86rem/1.35 var(--f-num)!important;font-variant-numeric:tabular-nums;
+  white-space:normal;overflow-wrap:anywhere;text-align:left!important;cursor:copy
+}
+#ledger #lots .lot-panel-grid>.prices tr.pr-route .copy::after{
+  content:"";width:15px;height:15px;flex:0 0 15px;opacity:.6;background:currentColor;
+  -webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='8' y='8' width='12' height='12' rx='2'/%3E%3Cpath d='M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0-2 2v8a2 2 0 0-2 2h2'/%3E%3C/svg%3E") center/contain no-repeat;
+  mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='8' y='8' width='12' height='12' rx='2'/%3E%3Cpath d='M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0-2 2v8a2 2 0 0-2 2h2'/%3E%3C/svg%3E") center/contain no-repeat
+}
+#ledger #lots .lot-panel-grid>.prices tr.pr-route .copy:hover{
+  background:var(--surface-panel)!important;border-color:var(--line2)!important
+}
+#ledger #lots .lot-panel-grid>.prices tr.pr-route .copy:focus-visible{outline:2px solid var(--ion);outline-offset:0}
+#ledger #lots .lot-panel-grid>.prices tr.pr-route .copy.isk-pos{color:var(--gain)!important}
+#ledger #lots .lot-panel-grid>.prices tr.pr-route .copy.isk-neg{color:var(--loss)!important}
+#ledger #lots .lot-panel-grid>.prices tr.pr-route .pr-net.pos{color:var(--gain)!important}
+#ledger #lots .lot-panel-grid>.prices tr.pr-route .pr-net.neg{color:var(--loss)!important}
+#ledger #lots .lot-panel-grid>.prices tr.pr-unit-courier,
+#ledger #lots .lot-panel-grid>.prices tr.pr-unit-courier>td{
+  display:block;width:100%;box-sizing:border-box
+}
+
+/* Route values share one scale. The mineral breakdown belongs here, next to
+   reprocessing options, and is shown without a fifth disclosure. */
+#ledger #lots .lot-panel-grid>.lot-analysis .opts{padding:5px 13px;gap:0}
+#ledger #lots .lot-panel-grid>.lot-analysis .opt{
+  grid-template-columns:minmax(0,1fr) auto!important;
+  gap:3px 12px!important;padding:3px 0
+}
+#ledger #lots .lot-panel-grid>.lot-analysis .opt[hidden]{display:none!important}
+#ledger #lots .lot-minerals[hidden]{display:none!important}
+#ledger #lots .lot-minerals{padding:8px 13px 9px;border-top:1px solid var(--line2)}
+#ledger #lots .lot-minerals h4{
+  margin:0;color:var(--txt);font:700 .85rem/1.45 var(--f-ui)
+}
+#ledger #lots .lot-minerals p{
+  margin:4px 0 7px;color:var(--mut);font:450 .78rem/1.45 var(--f-ui)
+}
+#ledger #lots .lot-minerals-table{width:100%;border-collapse:collapse;table-layout:fixed}
+#ledger #lots .lot-minerals-table th{
+  padding:4px 8px;text-align:left;border-bottom:1px solid var(--line2);
+  color:var(--mut);font:650 .73rem/1.35 var(--f-ui)
+}
+#ledger #lots .lot-minerals-table td{
+  padding:4px 8px;border-bottom:1px solid var(--line2);
+  color:var(--txt);font:450 .81rem/1.4 var(--f-ui);overflow-wrap:anywhere
+}
+#ledger #lots .lot-minerals-table tr:last-child td{border-bottom:0}
+#ledger #lots .lot-minerals-table th:first-child{width:34%}
+#ledger #lots .lot-minerals-table td:nth-child(2){font-variant-numeric:tabular-nums}
+#ledger #lots .lot-minerals-table td:nth-child(n+3) .copy{
+  display:inline-flex;justify-content:center;min-height:34px;align-items:center;
+  padding:6px 9px;border:1px solid var(--line2);border-radius:6px;
+  background:var(--mm-item-inset);color:var(--gain);font:650 .79rem var(--f-num)
+}
+#ledger #lots .lot-minerals-table .r{text-align:right}
+#ledger #lots .lot-minerals-table th:not(:first-child){text-align:right}
+
+/* Three semantic groups: balanced inventory/references, then one full-width
+   publishing strategy band. Short labels are visually quiet but remain real. */
+#ledger #lots .lot-panel-grid>.lot-adjustments>.facts{
+  display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  gap:0!important;padding:0!important;align-items:stretch
+}
+#ledger #lots .lot-panel-grid>.lot-adjustments>.facts>.fact-group{
+  min-width:0;display:flex;flex-direction:column;align-items:stretch;
+  gap:10px;padding:13px;box-sizing:border-box
+}
+#ledger #lots .lot-panel-grid>.lot-adjustments>.facts>.fact-market-references{border-left:1px solid var(--line2)}
+#ledger #lots .lot-panel-grid>.lot-adjustments>.facts>.fact-strategy{
+  grid-column:1/-1;border-top:1px solid var(--line2);
+  display:grid;grid-template-columns:repeat(2,minmax(0,1fr));
+  align-content:start;gap:8px 14px
+}
+#ledger #lots .lot-panel-grid>.lot-adjustments>.facts>.fact-strategy>h4{grid-column:1/-1}
+#ledger #lots .lot-panel-grid>.lot-adjustments>.facts>.fact-strategy>.pr-manual-editor{grid-column:1}
+#ledger #lots .lot-panel-grid>.lot-adjustments>.facts>.fact-strategy>.fact-price-adjust{grid-column:2}
+#ledger #lots .lot-panel-grid>.lot-adjustments>.facts>.fact-group>h4{
+  margin:0 0 2px;padding:0 0 9px;border-bottom:1px solid var(--line2);
+  color:var(--txt);font:700 .81rem/1.35 var(--f-ui);letter-spacing:.06em;
+  text-transform:uppercase
+}
+#ledger #lots .lot-panel-grid>.lot-adjustments>.facts .fact{min-width:0;gap:5px}
+#ledger #lots .lot-panel-grid>.lot-adjustments>.facts .fact input{
+  width:100%;box-sizing:border-box;min-width:0
+}
+/* Compact reading rows within each top group: label left, field right.
+   The publishing strategy below intentionally keeps its own two columns. */
+#ledger #lots .lot-panel-grid>.lot-adjustments>.facts>.fact-group:not(.fact-strategy)>.fact{
+  display:grid!important;grid-template-columns:minmax(0,.9fr) minmax(0,1.6fr);
+  gap:9px!important;align-items:center;min-height:40px;margin:0
+}
+body:not(.is-flip) #ledger #lots .lot-panel-grid>.lot-adjustments>.facts>.fact-market-references>.fact-buy-order{
+  display:none!important
+}
+body.is-flip #ledger #lots .lot-panel-grid>.lot-adjustments>.facts>.fact-market-references>.fact-buy-reference{
+  display:none!important
+}
+#ledger #lots .lot-panel-grid>.lot-adjustments>.facts>.fact-group:not(.fact-strategy)>.fact>span{
+  display:block;min-width:0;color:var(--mut);font:500 .8rem/1.3 var(--f-ui);
+  overflow-wrap:normal
+}
+#ledger #lots .lot-panel-grid>.lot-adjustments>.facts>.fact-group:not(.fact-strategy)>.fact>input{
+  min-width:0;width:100%;height:36px;text-align:right
+}
+#ledger #lots .lot-panel-grid>.lot-adjustments>.facts>.fact-item-data>.fact>b{
+  box-sizing:border-box;display:flex;align-items:center;justify-content:flex-end;
+  min-width:0;height:36px;margin:0;padding:6px 9px;
+  border:1px solid var(--line2);border-radius:6px;
+  background:rgba(0,0,0,.35);color:var(--txt)!important;text-align:right
+}
+#ledger #lots .lot-panel-grid>.lot-adjustments>.facts>.fact-market-references>.fact>b{
+  display:block;min-width:0;padding:6px 0;text-align:right;overflow-wrap:anywhere
+}
+#ledger #lots .lot-panel-grid>.lot-adjustments .pr-manual-editor{
+  display:flex;flex-direction:column;align-items:stretch;gap:6px;min-width:0
+}
+#ledger #lots .lot-panel-grid>.lot-adjustments .pr-manual-editor label{
+  font:550 .8rem/1.4 var(--f-ui);color:var(--mut)
+}
+#ledger #lots .lot-panel-grid>.lot-adjustments .pr-manual-actions{
+  display:flex;align-items:center;gap:6px;flex-wrap:wrap;min-width:0
+}
+#ledger #lots .lot-panel-grid>.lot-adjustments .pr-manual-actions input{
+  min-width:100px;flex:1 1 110px;height:36px;padding:7px 9px;
+  font:600 .85rem/1.35 var(--f-num)
+}
+#ledger #lots .lot-panel-grid>.lot-adjustments .pr-manual-reset{
+  flex:0 0 auto;min-height:36px;padding:6px 8px;border:1px solid var(--line2);
+  border-radius:6px;background:var(--surface-panel);color:var(--txt);
+  font:650 .73rem/1.25 var(--f-ui);cursor:pointer
+}
+#ledger #lots .lot-panel-grid>.lot-adjustments .pr-manual-reset:hover{border-color:var(--mut)}
+#ledger #lots .lot-panel-grid>.lot-adjustments .pr-manual-reset:focus-visible{outline:2px solid var(--ion);outline-offset:2px}
+#ledger #lots .lot-panel-grid>.lot-adjustments .pr-manual-editor small{
+  color:var(--mut);font:450 .7rem/1.35 var(--f-ui)
+}
+
+/* How to sell explains amounts, never offers competing copy controls. */
+#ledger #lots .lot-panel-grid>.lot-guide .guide .mm-guide-money{
+  padding:0!important;margin:0 2px 0 0!important;border:0!important;
+  border-radius:0!important;background:transparent!important;box-shadow:none!important;
+  font:700 .82rem/1.4 var(--f-num)!important
+}
+
+/* Guide remains in two columns within its half-width card on desktop. */
+#ledger #lots .lot-panel-grid>.lot-guide>.guide{
+  display:grid;grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:0 14px;padding:4px 13px 9px
+}
+#ledger #lots .lot-panel-grid>.lot-guide .guide>li{min-width:0;padding:9px 0}
+
+/* Remove is a single native button, not a second text link. A real 44px
+   pointer target remains discoverable on keyboard/touch in both themes. */
+#ledger #lots .lot-head{padding-right:60px!important}
+#ledger #lots .lot-x{
+  right:6px;top:5px;width:44px;height:44px;min-width:44px;min-height:44px;
+  opacity:.8
+}
+#ledger #lots .lot-x:hover,#ledger #lots .lot-x:focus-visible{opacity:1}
+
+@media(max-width:1000px){
+  #ledger #lots .lot-panel-grid>.lot-guide>.guide{grid-template-columns:minmax(0,1fr)}
+}
+@media(max-width:600px){
+  #ledger #lots .lot-panel-grid>.prices .pr-h,
+  #ledger #lots .lot-panel-grid>.prices tr.pr-route{
+    grid-template-columns:repeat(2,minmax(0,1fr))
+  }
+  #ledger #lots .lot-panel-grid>.prices .pr-h th:first-child{
+    position:absolute;width:1px;height:1px;margin:-1px;border:0;
+    overflow:hidden;clip-path:inset(50%);white-space:nowrap
+  }
+  #ledger #lots .lot-panel-grid>.prices .pr-h th:nth-child(2){grid-column:1}
+  #ledger #lots .lot-panel-grid>.prices .pr-h th:nth-child(4){grid-column:2}
+  #ledger #lots .lot-panel-grid>.prices tr.pr-route>td:first-child{
+    grid-column:1/-1!important;grid-row:1!important
+  }
+  #ledger #lots .lot-panel-grid>.prices tr.pr-route>td:nth-child(4){
+    grid-column:2!important;grid-row:2!important
+  }
+  #ledger #lots .lot-panel-grid>.prices tr.pr-route>td:nth-child(2){
+    grid-column:1!important;grid-row:2!important
+  }
+  #ledger #lots .lot-panel-grid>.prices tr.pr-route>td:nth-child(3){
+    grid-column:auto!important;grid-row:auto!important
+  }
+}
+@media(max-width:980px){
+  #ledger #lots .lot-body>.lot-panel-grid{grid-template-columns:minmax(0,1fr)}
+}
+@media(max-width:560px){
+  #ledger #lots .lot-panel-grid>.lot-adjustments>.facts{grid-template-columns:minmax(0,1fr)!important}
+  #ledger #lots .lot-panel-grid>.lot-adjustments>.facts>.fact-market-references{
+    border-left:0;border-top:1px solid var(--line2)
+  }
+  #ledger #lots .lot-panel-grid>.lot-adjustments>.facts>.fact-strategy{
+    grid-column:1;grid-template-columns:minmax(0,1fr)
+  }
+  #ledger #lots .lot-panel-grid>.lot-adjustments>.facts>.fact-strategy>.fact-price-adjust{grid-column:1}
+  #ledger #lots .lot-panel-grid>.prices tr.pr-route>td:nth-child(2){
+    grid-column:1!important;grid-row:2!important
+  }
+  #ledger #lots .lot-panel-grid>.prices tr.pr-route>td:nth-child(3){
+    grid-column:auto!important;grid-row:auto!important
+  }
+  #ledger #lots .lot-panel-grid>.lot-adjustments>.facts{grid-template-columns:minmax(0,1fr)!important}
+  #ledger #lots .lot-minerals-table{table-layout:auto}
+  #ledger #lots .lot-minerals-table thead{
+    position:absolute;width:1px;height:1px;padding:0;overflow:hidden;
+    clip-path:inset(50%);white-space:nowrap
+  }
+  #ledger #lots .lot-minerals-table tr{
+    display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:4px 9px;
+    padding:8px 0;border-bottom:1px solid var(--line2)
+  }
+  #ledger #lots .lot-minerals-table tr:last-child{border:0}
+  #ledger #lots .lot-minerals-table td{padding:2px 0;border:0}
+  #ledger #lots .lot-minerals-table td:first-child{grid-column:1;font-weight:650}
+  #ledger #lots .lot-minerals-table td:nth-child(2){grid-column:2;text-align:right}
+  #ledger #lots .lot-minerals-table td:nth-child(3){grid-column:1}
+  #ledger #lots .lot-minerals-table td:nth-child(4){grid-column:2}
+  #ledger #lots .lot-minerals-table td:nth-child(n+3)::before{
+    content:attr(data-market);display:block;margin-bottom:3px;
+    color:var(--mut);font:600 .67rem var(--f-ui)
+  }
+}
+@media(prefers-reduced-motion:reduce){
+  #ledger #lots .lot-panel-grid>details>summary::after{transition:none}
+}

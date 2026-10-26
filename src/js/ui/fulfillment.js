@@ -152,7 +152,7 @@ function paintShip(P,cs){
   const tb=el('tbody');
   ship.sort((a,b)=>b.cost-a.cost).slice(0,8).forEach(x=>{const tr=el('tr'),nm=['cOrd','cInst'].includes(x.r.best)&&x.r.comp?x.r.comp.name:(x.r.best==='rJita'?(isIce(x.r.o.name)?'Productos de ':'Minerales de '):'')+x.r.o.name,td=el('td',null,nm);td.title=nm;
     tr.append(td,el('td','r',fmtV(Math.round(x.s.v*100)/100)),el('td','r','−'+fmt(x.cost)),el('td','r '+sgn(x.extra),x.extra==null?'—':(x.extra>=0?'+':'−')+fmt(Math.abs(x.extra))));tb.append(tr);});
-  if(ship.length>8){const tr=el('tr'),td=el('td','muted',S.lang==='en'?'and '+(ship.length-8)+' more items':'y '+(ship.length-8)+' ítems más');td.colSpan=4;tr.append(td);tb.append(tr);}
+  if(ship.length>8){const tr=el('tr'),td=el('td','muted',S.lang==='en'?'and '+(ship.length-8)+' more items':'y '+(ship.length-8)+' items más');td.colSpan=4;tr.append(td);tb.append(tr);}
   t.append(tb);b.append(t);
   b.append(el('small','sh-rates',S.flip?'Gana extra = lo que deja en '+nullSystem()+', ya con taxes y su parte del envío, menos lo que dejaría vendido en Jita.':'Gana extra = lo que deja en Jita, ya con taxes y su parte del envío, menos lo que dejaría sin viajar ('+nullSystem()+' o Buyback).'));
 }

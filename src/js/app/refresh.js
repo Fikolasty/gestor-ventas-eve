@@ -61,7 +61,7 @@ function paintAppraisal(){
   }else if(!ok){
     const note=el('p','appr-no-price',its.some(o=>o.jita&&o.jita.id)
       ?'Sin órdenes Buy/Sell disponibles en Jita 4-4 para este inventario. Prueba hielo comprimido, reproceso o Buyback.'
-      :'Todavía no hay precios de Jita disponibles para estos ítems. Revisa el estado de la API y sus nombres.');
+      :'Todavía no hay precios de Jita disponibles para estos items. Revisa el estado de la API y sus nombres.');
     note.setAttribute('role','status');box.append(note);
   }
   appraisalRenderKey=key;
@@ -111,7 +111,7 @@ function syncShipSwitch(){
   $('rtM').hidden=!isImport;
   $('importMarketLabel').textContent=nullSystem();
   $('importHeadingPrefix').textContent=S.lang==='en'?'IMPORT TO':'IMPORTACIÓN A';
-  $('importHelp').textContent=S.lang==='en'?'Choose whether to ship items from Jita and set your selling margin in '+nullSystem()+'.':'Elige si transportas los ítems desde Jita y ajusta el margen de venta en '+nullSystem()+'.';
+  $('importHelp').textContent=S.lang==='en'?'Choose whether to ship items from Jita and set your selling margin in '+nullSystem()+'.':'Elige si transportas los items desde Jita y ajusta el margen de venta en '+nullSystem()+'.';
   // The destination is a compact chip. Keep its full meaning discoverable,
   // in both languages and across the three configurable local-market hubs.
   $('importDestination').title=S.lang==='en'?'Import destination: '+nullSystem():'Destino de importación: '+nullSystem();

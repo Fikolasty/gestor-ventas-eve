@@ -124,6 +124,50 @@ class ThemeBrowserTests(unittest.TestCase):
         self.page.evaluate("setLang('es')")
         self.page.wait_for_function("document.querySelector('#evePilotName')?.textContent.trim()==='Iniciar sesión'")
 
+    def test_b13_main_navigation_tabs_have_identical_light_dark_geometry(self):
+        """Theme parity: three rounded buttons, never a Light-only gray bar."""
+        from playwright.sync_api import expect
+        out=INDEX.parent/'tests'/'artifacts'/'theme'
+        out.mkdir(parents=True,exist_ok=True)
+        for width in (1440,720,390):
+            self.page.set_viewport_size({'width':width,'height':900})
+            for language in ('es','en'):
+                self.page.evaluate('(v)=>setLang(v)',language)
+                variants=[]
+                for light in (False,True):
+                    self.page.evaluate('(v)=>document.documentElement.classList.toggle("light",v)',light)
+                    styles=self.page.evaluate("""() => {
+                        const specs=['#mmTabs>.mm-ho-main','#mmTabs>.mm-ho-main .mm-modgroup',
+                          '#mmTabVentas','#mmTabMining','#mmTabSkills'];
+                        return specs.map(sel=>{const e=document.querySelector(sel),s=getComputedStyle(e),r=e.getBoundingClientRect();
+                          return {background:s.backgroundColor,borderWidth:s.borderTopWidth,
+                            radius:parseFloat(s.borderTopLeftRadius),
+                            left:r.left,right:r.right,top:r.top,bottom:r.bottom,width:r.width,height:r.height};});
+                    }""")
+                    self.assertEqual(len(styles),5)
+                    for group in styles[:2]:
+                        self.assertEqual(group['background'],'rgba(0, 0, 0, 0)',(width,language,light,group))
+                        self.assertEqual(group['borderWidth'],'0px',(width,language,light,group))
+                    for tab in styles[2:]:
+                        self.assertGreaterEqual(float(tab['borderWidth'][:-2]),1)
+                        self.assertGreaterEqual(tab['radius'],7)
+                        self.assertGreaterEqual(tab['height'],34)
+                    variants.append(styles)
+                    if width==1440 or (width==390 and language=='en'):
+                        suffix=('390-' if width==390 else '')+language
+                        self.page.locator('#mmTabs>.mm-ho-main').screenshot(
+                            path=str(out/f'b13-nav-{"light" if light else "dark"}-{suffix}.png'),
+                            animations='disabled')
+                for dark,light in zip(*variants):
+                    for axis in ('left','right','top','bottom','width','height'):
+                        self.assertAlmostEqual(dark[axis],light[axis],delta=1.5,
+                            msg=f'{width}px {language}: theme shifts {axis} of navigation')
+                self.assertLessEqual(self.page.evaluate('document.documentElement.scrollWidth-innerWidth'),1)
+        self.page.locator('#mmTabMining').click()
+        expect(self.page.locator('#mmTabMining')).to_have_attribute('aria-selected','true')
+        self.page.locator('#mmTabVentas').click()
+        expect(self.page.locator('#mmTabVentas')).to_have_attribute('aria-selected','true')
+
 
     def test_mobile_light_surfaces_and_navigation_contrast(self):
         self.page.set_viewport_size({"width": 390, "height": 844})
@@ -1058,8 +1102,8 @@ class ThemeBrowserTests(unittest.TestCase):
         self.assertIn("collateral",result["english"]["help"])
         self.assertEqual(result["english"]["icon"],"34")
         self.assertEqual(result["spanish"]["head"],"COSTE REAL DEL ENVÍO")
-        self.assertEqual(result["spanish"]["headings"],["ÍTEM ENVIADO","ANTES DEL ENVÍO","ENVÍO","TOTAL FINAL"])
-        self.assertEqual(result["spanish"]["note"],"Aquí se refleja la reducción real por unidad de cada ítem.")
+        self.assertEqual(result["spanish"]["headings"],["ITEM ENVIADO","ANTES DEL ENVÍO","ENVÍO","TOTAL FINAL"])
+        self.assertEqual(result["spanish"]["note"],"Aquí se refleja la reducción real por unidad de cada item.")
         self.assertIn("colateral",result["spanish"]["help"])
         self.assertTrue(result["moved"],"Unit freight panel must be after plan comparison")
 
@@ -1901,6 +1945,10 @@ class ThemeBrowserTests(unittest.TestCase):
             expect(price).to_be_enabled()
             self.assertEqual(price.get_attribute('data-v'),'1060000000')
             self.assertIn('isk-pos',price.get_attribute('class'))
+            net_copy=self.page.locator('#lots .lot-financial button.lot-net.copy')
+            expect(net_copy).to_be_enabled()
+            self.assertEqual(net_copy.get_attribute('data-v'),'7140000000')
+            self.assertIn('Paladin',net_copy.get_attribute('aria-label'))
             self.assertEqual(self.color('#lots .lot-pp button.copy','color'),
                 self.color('#lots .lot-net','color'))
             self.page.set_viewport_size({'width':390,'height':900})
@@ -1911,6 +1959,8 @@ class ThemeBrowserTests(unittest.TestCase):
             self.page.set_viewport_size({'width':1440,'height':900})
             price.click()
             self.assertEqual(self.page.evaluate('window.__b4Copy'),'1060000000')
+            net_copy.click()
+            self.assertEqual(self.page.evaluate('window.__b4Copy'),'7140000000')
             self.assertEqual(self.page.locator('#lots .lot-open').get_attribute('aria-expanded'),'false')
             self.page.locator('#lots .lot-open').focus()
             self.page.keyboard.press('Enter')
@@ -1919,11 +1969,17 @@ class ThemeBrowserTests(unittest.TestCase):
                 expect(self.page.locator(selector)).to_be_visible()
                 self.page.locator(selector+'>summary').click()
                 expect(self.page.locator(selector)).to_have_attribute('open','')
-            self.assertEqual(self.page.locator('#lots .lot-adjustments input').count(),6)
+            self.assertEqual(self.page.locator('#lots .lot-adjustments input').count(),7)
             for width in (1440, 630, 390):
                 self.page.set_viewport_size({'width':width,'height':900})
                 for light in (False,True):
                     self.page.evaluate('(on)=>document.documentElement.classList.toggle("light",on)',light)
+                    surfaces=self.page.locator('#lots .lot-pp .copy, #lots .lot-financial .lot-net').evaluate_all('''es=>es.map(e=>{
+                      const s=getComputedStyle(e);return {background:s.backgroundColor,border:s.borderTopWidth,
+                        radius:s.borderTopLeftRadius,padding:s.paddingLeft,font:s.fontSize};})''')
+                    self.assertEqual(surfaces[0]['background'],surfaces[1]['background'],surfaces)
+                    self.assertEqual(surfaces[0]['border'],surfaces[1]['border'],surfaces)
+                    self.assertEqual(surfaces[0]['padding'],surfaces[1]['padding'],surfaces)
                     coords=self.page.evaluate("""() => {
                         const r=document.querySelector('#lots .lot').getBoundingClientRect();
                         const p=document.querySelector('#lots .lot-pp .copy').getBoundingClientRect();
@@ -1995,8 +2051,8 @@ class ThemeBrowserTests(unittest.TestCase):
         expect(toggle).to_have_attribute('aria-expanded','false')
         expect(body).to_be_hidden()
 
-    def test_b11_ledger_four_equal_columns_and_independent_disclosures(self):
-        """Four cards, no nested guide, truthful missing routes, narrow-screen order."""
+    def test_b13_ledger_symmetry_in_collapsed_and_all_open_states(self):
+        """The four panels form aligned rows and columns even when all open."""
         from playwright.sync_api import expect
         self.page.evaluate("""() => {
             const o={name:'Synthetic Layout Item',qty:7,m3u:1,ref:1000,checks:[],
@@ -2012,8 +2068,42 @@ class ThemeBrowserTests(unittest.TestCase):
         self.page.locator('#lots .lot-open').click()
         panels=self.page.locator('#lots .lot-panel-grid')
         expect(panels).to_be_visible()
-        self.assertEqual(panels.locator('details').count(),4)
+        self.assertEqual(panels.locator(':scope > details').count(),4)
         self.assertEqual(self.page.locator('#lots .lot-guide details').count(),0)
+        closed=self.page.evaluate("""() => ['prices','lot-analysis','lot-adjustments','lot-guide']
+          .map(c=>{const r=document.querySelector('#lots .'+c).getBoundingClientRect();
+            return {top:r.top,left:r.left,right:r.right,width:r.width,height:r.height};})""")
+        self.assertAlmostEqual(closed[0]['top'],closed[1]['top'],delta=1.5,
+            msg=str({'positions':closed,'columns':panels.evaluate('(e)=>getComputedStyle(e).gridTemplateColumns'),
+                'opened':panels.locator(':scope > details[open]').count()}))
+        self.assertAlmostEqual(closed[2]['top'],closed[3]['top'],delta=1.5)
+        self.assertAlmostEqual(closed[0]['width'],closed[1]['width'],delta=1.5)
+        self.assertAlmostEqual(closed[2]['width'],closed[3]['width'],delta=1.5)
+        self.assertAlmostEqual(closed[0]['height'],closed[3]['height'],delta=1.5)
+        self.assertEqual(self.page.locator('#lots .lot-foot').count(),0)
+        out=INDEX.parent/'tests'/'artifacts'/'theme'
+        out.mkdir(parents=True,exist_ok=True)
+        self.page.evaluate('document.documentElement.classList.add("light")')
+        self.page.locator('#ledger').screenshot(
+            path=str(out/'b13-closed-1440-light-es.png'),animations='disabled')
+        self.page.evaluate("setLang('en')")
+        self.page.evaluate("paintLot(S.items[0].ui.last)")
+        self.page.set_viewport_size({'width':1000,'height':900})
+        at_1000=self.page.evaluate("""() => ['prices','lot-analysis','lot-adjustments','lot-guide']
+          .map(c=>{const r=document.querySelector('#lots .'+c).getBoundingClientRect();
+            return {top:r.top,width:r.width,height:r.height};})""")
+        self.assertAlmostEqual(at_1000[0]['top'],at_1000[1]['top'],delta=1.5)
+        self.assertAlmostEqual(at_1000[2]['top'],at_1000[3]['top'],delta=1.5)
+        self.assertAlmostEqual(at_1000[0]['height'],at_1000[1]['height'],delta=1.5)
+        self.page.set_viewport_size({'width':1440,'height':900})
+        self.page.evaluate("setLang('es')")
+        self.page.evaluate("paintLot(S.items[0].ui.last)")
+        self.page.locator('#lots .prices>summary').click()
+        self.assertLess(self.page.locator('#lots .lot-analysis').bounding_box()['height'],80,
+                        'A closed sibling must not become a tall empty card')
+        self.page.locator('#ledger').screenshot(
+            path=str(out/'b13-one-open-1440-light-es.png'),animations='disabled')
+        self.page.locator('#lots .prices>summary').click()
         for cls in ('prices','lot-analysis','lot-adjustments','lot-guide'):
             expect(self.page.locator('#lots .'+cls)).not_to_have_attribute('open','')
             self.page.locator('#lots .'+cls+'>summary').click()
@@ -2023,21 +2113,26 @@ class ThemeBrowserTests(unittest.TestCase):
         self.assertEqual(self.page.locator('#lots .lot-analysis .opt:visible').count(),2)
         expect(self.page.locator('#lots .lot-guide .mm-guide-money.isk-pos').first).to_be_visible()
         expect(self.page.locator('#lots .lot-guide .mm-guide-money.isk-neg').first).to_be_visible()
-        geometry=self.page.evaluate("""() => {
-            const r=s=>document.querySelector('#lots .'+s).getBoundingClientRect();
-            const p=r('prices'),a=r('lot-analysis'),adj=r('lot-adjustments'),g=r('lot-guide');
-            return {left:p.left,right:a.left,pw:p.width,aw:a.width,
-                adjustsLeft:adj.left,guideLeft:g.left,guideTop:g.top,analysisBottom:a.bottom};
-        }""")
-        self.assertAlmostEqual(geometry['pw'],geometry['aw'],delta=1.5)
-        self.assertAlmostEqual(geometry['left'],geometry['adjustsLeft'],delta=1.5)
-        self.assertAlmostEqual(geometry['right'],geometry['guideLeft'],delta=1.5)
-        self.assertLess(geometry['guideTop']-geometry['analysisBottom'],20)
-        out=INDEX.parent/'tests'/'artifacts'/'theme'
-        out.mkdir(parents=True,exist_ok=True)
+        geometry=self.page.evaluate("""() => ['prices','lot-analysis','lot-adjustments','lot-guide']
+          .map(c=>{const r=document.querySelector('#lots .'+c).getBoundingClientRect();
+            return {top:r.top,left:r.left,right:r.right,width:r.width,height:r.height};})""")
+        for idx,position in enumerate(geometry):
+            self.assertAlmostEqual(position['width'],geometry[0]['width'],delta=1.5)
+            if idx % 2 == 0:
+                self.assertAlmostEqual(position['left'],geometry[0]['left'],delta=1.5)
+            else:
+                self.assertAlmostEqual(position['left'],geometry[1]['left'],delta=1.5)
+        self.assertAlmostEqual(geometry[0]['top'],geometry[1]['top'],delta=1.5)
+        self.assertAlmostEqual(geometry[2]['top'],geometry[3]['top'],delta=1.5)
+        self.assertAlmostEqual(geometry[0]['height'],geometry[1]['height'],delta=1.5)
+        self.assertAlmostEqual(geometry[2]['height'],geometry[3]['height'],delta=1.5)
+        self.assertGreater(geometry[1]['left'],geometry[0]['right'])
+        self.assertGreaterEqual(geometry[2]['top'],geometry[0]['top']+geometry[0]['height'])
+        self.assertLess(geometry[2]['top']-geometry[0]['top']-geometry[0]['height'],20)
+        self.assertEqual(self.page.locator('#lots .lot-min-toggle').count(),0)
         self.page.evaluate('document.documentElement.classList.add("light")')
         self.page.locator('#ledger').screenshot(
-            path=str(out/'b11-four-panels-1440-light.png'),animations='disabled')
+            path=str(out/'b13-all-open-1440-light.png'),animations='disabled')
         self.page.locator('#lots .lot-analysis>summary').click()
         expect(self.page.locator('#lots .lot-analysis')).not_to_have_attribute('open','')
         expect(self.page.locator('#lots .prices')).to_have_attribute('open','')
@@ -2050,12 +2145,351 @@ class ThemeBrowserTests(unittest.TestCase):
             }""")
             self.assertEqual([p['top'] for p in positions],sorted(p['top'] for p in positions))
             self.assertTrue(all(abs(p['width']-positions[0]['width'])<1.5 for p in positions),positions)
+            self.assertLessEqual(self.page.evaluate('document.documentElement.scrollWidth'),width+1)
         expect(self.page.locator('#ledgerPriceHelp summary')).to_have_attribute('aria-label',
-            '¿De dónde vienen los precios de cada ítem?')
+            '¿De dónde vienen los precios de cada item?')
         self.page.evaluate("""() => {setLang('en');paintLot(S.items[0].ui.last);}""")
         expect(self.page.locator('#lots .lot-guide>summary')).to_have_text('How to sell')
         self.assertIn('per unit',self.page.locator('#lots .lot-guide>.guide').inner_text())
         self.assertIn('to modify the order',self.page.locator('#lots .lot-guide>.guide').inner_text())
+
+    def test_b13_minerals_are_inline_in_route_comparison_with_estimate_labels(self):
+        from playwright.sync_api import expect
+        self.page.evaluate("""() => {
+            S.flip=false;document.body.classList.remove('is-flip');
+            const o={name:'Compressed Krystallos',qty:1615,m3u:100,ref:690000,checks:[],
+                jita:{buy:615200,topBuy:615200,sell:690000,topSell:690000}};
+            const g={null:1059718184,bb:943870600,disc:993548000,jOrd:937651370,
+                jInst:837021681,rNull:182522727,rJita:431640498};
+            const r={o,q:1615,best:'null',auto:'null',np:689800,jl:689300,
+                bbUnit:584440,bbTax:.05,discUnit:615200,instAvg:614114,g,net:g,
+                guide:{k:'null',unit:689800,relistFee:8355203,days:21,
+                       floor:614392,alt:'bb'},
+                mins:[{m:'Heavy Water',n:253210,np:46.57,p:108.5},
+                      {m:'Liquid Ozone',n:1011377,np:36.44,p:84.67},
+                      {m:'Strontium Clathrates',n:253210,np:594.40,p:5015}],
+                ship:{},prod:0,vol:161500,qd:0,hint:{},courierAllocated:0};
+            S.items=[o];document.querySelector('#lots').replaceChildren(buildLot(o));
+            const ledger=document.querySelector('#ledger');ledger.hidden=false;ledger.open=true;
+            paintLot(r);
+        }""")
+        self.page.locator('#lots .lot-open').click()
+        out=INDEX.parent/'tests'/'artifacts'/'theme'
+        out.mkdir(parents=True,exist_ok=True)
+        self.page.evaluate('document.documentElement.classList.add("light")')
+        self.page.locator('#ledger').screenshot(
+            path=str(out/'b13-realistic-closed-1440-light-es.png'),animations='disabled')
+        self.page.locator('#lots .lot-analysis>summary').click()
+        self.assertLess(self.page.locator('#lots .prices').bounding_box()['height'],80,
+                        'Closed prices must not stretch into a blank card')
+        self.page.locator('#ledger').screenshot(
+            path=str(out/'b13-realistic-one-open-1440-light-es.png'),animations='disabled')
+        mineral=self.page.locator('#lots .lot-analysis .lot-minerals')
+        expect(mineral).to_be_visible()
+        self.assertEqual(mineral.locator('tbody tr').count(),3)
+        self.assertEqual(self.page.locator('#lots .prices .lot-minerals').count(),0)
+        self.assertEqual(self.page.locator('#lots .lot-min-toggle').count(),0)
+        expect(mineral).to_contain_text('precios estimados por unidad')
+        self.assertEqual(mineral.locator('tbody .copy').first.get_attribute('data-v'),'46.57')
+        expect(mineral.locator('tbody .copy').first).to_have_attribute('aria-label',
+            'Copiar estimación de Heavy Water en HY-RWO: 46.57 ISK por unidad')
+        self.page.locator('#ledgerPriceHelp>summary').click()
+        self.assertNotIn('SIGMA',self.page.locator('#ledgerPriceHelp>p').inner_text())
+        self.page.locator('#ledgerPriceHelp>summary').click()
+        for cls in ('prices','lot-adjustments','lot-guide'):
+            self.page.locator('#lots .'+cls+'>summary').click()
+        expect(self.page.locator('#lots .pr-manual-editor label')).to_have_text(
+            'Manual · ISK/u')
+        self.assertEqual(self.page.locator('#lots .prices .pr-manual-editor').count(),0)
+        self.assertEqual(self.page.locator('#lots .lot-adjustments .pr-manual-editor').count(),1)
+        self.assertEqual(self.page.locator('#lots .prices tr.pr-route').first.locator('button.copy').count(),2)
+        expect(self.page.locator('#lots .prices tr.pr-route').first.locator('td:first-child b')).to_have_text('HY-RWO')
+        expect(self.page.locator('#lots .prices tr.pr-route').first.locator('td:nth-child(2) button.copy')).to_have_text('689,800')
+        expect(self.page.locator('#lots .prices tr.pr-route').first.locator('td:nth-child(4) button.copy')).to_have_text('656,172')
+        expect(self.page.locator('#lots .prices tr.pr-route').first.locator('td:nth-child(2) button.copy')).to_have_attribute('data-v','689800')
+        self.assertIn('Vender en HY-RWO',
+            self.page.locator('#lots .prices tr.pr-route').first.locator('td:nth-child(2) button.copy').get_attribute('aria-label'))
+        self.assertEqual(self.page.locator('#lots .lot-guide button.copy').count(),0)
+        expect(self.page.locator('#lots .lot-adjustments .fact-group')).to_have_count(3)
+        expect(self.page.locator('#lots .lot-adjustments .fact-group>h4')).to_have_text(
+            ['Inventario','Referencias','Tu precio · HY-RWO'])
+        expect(self.page.locator('#lots .lot-adjustments .fact-buy-order')).to_be_hidden()
+        expect(self.page.locator('#lots .lot-adjustments .fact-buy-reference>span')).to_have_text('Jita Buy')
+        expect(self.page.locator('#lots .fact-market-references input[aria-label*="Jita Sell"]')).to_have_attribute('placeholder','690,000')
+        self.assertIn('Referencia obtenida de Jita',
+            self.page.locator('#lots .fact-market-references input[aria-label*="Jita Sell"]').get_attribute('aria-description'))
+        expect(self.page.locator('#lots .fact-item-data input[aria-label*="Volumen"]')).to_have_attribute('placeholder','100')
+        self.assertIn('inventario pegado',
+            self.page.locator('#lots .fact-item-data input[aria-label*="Volumen"]').get_attribute('aria-description'))
+        expect(self.page.locator('#lots .pr-manual-editor input')).to_have_attribute('placeholder','689,800')
+        expect(self.page.locator('#lots .prices .pr-buy-reference')).to_be_hidden()
+        self.assertEqual(self.page.locator('#lots .lot-adjustments .fact-market-references>.fact:visible').count(),3)
+        expect(self.page.locator('#lots .prices .pr-context-title')).to_have_text('Cómo leer estos importes')
+        expect(self.page.locator('#lots .prices .pr-h th').nth(1)).to_have_text('Precio · ISK/u')
+        expect(self.page.locator('#lots .prices .pr-h th').nth(3)).to_have_text('Neto · ISK/u')
+        headers=self.page.locator('#lots .prices .pr-h th').evaluate_all('''es=>
+          [es[0],es[1],es[3]].map(e=>{const s=getComputedStyle(e);return {
+            border:s.borderBottomWidth,shadow:s.boxShadow,caps:s.textTransform,top:e.getBoundingClientRect().top,
+            left:e.getBoundingClientRect().left};})''')
+        self.assertTrue(all(h['border']=='0px' and h['shadow']=='none' and h['caps']=='uppercase' for h in headers),headers)
+        self.assertTrue(all(abs(h['top']-headers[0]['top'])<1.5 for h in headers),headers)
+        row_heights=self.page.locator('#lots .prices tr.pr-route:visible').evaluate_all(
+            '(es)=>es.map(e=>e.getBoundingClientRect().height)')
+        self.assertTrue(all(50<=height<=78 for height in row_heights),
+            f'Route rows stretched into wasted space: {row_heights}')
+        label_sizes=self.page.locator('#lots .lot-adjustments .fact-group:not(.fact-strategy) .fact>span').evaluate_all(
+            '(es)=>es.filter(e=>getComputedStyle(e.parentElement).display!=="none").map(e=>parseFloat(getComputedStyle(e).fontSize))')
+        self.assertTrue(all(size>=12.6 for size in label_sizes),
+            f'Settings copy too small: {label_sizes}')
+        for group in ('fact-item-data','fact-market-references'):
+            alignment=self.page.locator(f'#lots .lot-adjustments .{group}>.fact').evaluate_all('''(rows)=>
+                rows.filter(e=>getComputedStyle(e).display!=='none').map(e=>{
+                    const label=e.querySelector(':scope > span').getBoundingClientRect();
+                    const value=e.querySelector(':scope > input, :scope > b').getBoundingClientRect();
+                    return {delta:Math.abs((label.top+label.bottom-value.top-value.bottom)/2),
+                        gap:value.left-label.right};
+                })''')
+            self.assertTrue(all(row['delta']<3 and row['gap']>=4 for row in alignment),
+                            (group,alignment))
+        vol_color=self.color('#lots .lot-adjustments .fact-item-data b','color')
+        buy_color=self.color('#lots .lot-adjustments .fact-market-references .fact-buy-reference>b','color')
+        self.assertNotEqual(vol_color,buy_color,'Volume must be neutral; Jita Buy is positive ISK')
+        row_alignment=self.page.evaluate("""() => {
+            const a=[...document.querySelectorAll('#lots .fact-item-data>.fact')];
+            const b=[...document.querySelectorAll('#lots .fact-market-references>.fact')]
+                .filter(e=>getComputedStyle(e).display!=='none');
+            return a.map((e,i)=>{
+                const x=e.getBoundingClientRect(),y=b[i].getBoundingClientRect();
+                const ac=e.querySelector(':scope > input, :scope > b');
+                const bc=b[i].querySelector(':scope > input, :scope > b');
+                return {top:Math.abs(x.top-y.top),bottom:Math.abs(x.bottom-y.bottom),
+                    aHeight:x.height,bHeight:y.height,
+                    aChild:ac.getBoundingClientRect().height,bChild:bc.getBoundingClientRect().height};
+            });
+        }""")
+        self.assertTrue(all(v['top']<2 and v['bottom']<2 for v in row_alignment),row_alignment)
+        self.assertTrue(all(x=='uppercase' for x in self.page.locator(
+            '#lots .lot-adjustments .fact-group>h4').evaluate_all(
+                '(es)=>es.map(e=>getComputedStyle(e).textTransform)')))
+        self.assertNotIn('Jita Buy −2.5%',self.page.locator('#lots .lot-analysis .opt-l').first.inner_text())
+        widths=self.page.locator('#lots .prices .pr-h th').evaluate_all(
+            '(es)=>es.map(e=>e.getBoundingClientRect().width)')
+        self.assertGreater(widths[0],70);self.assertLess(widths[2],2)
+        self.assertGreater(widths[1],70);self.assertGreater(widths[3],70)
+        expect(self.page.locator('#lots .lot-adjustments input[aria-label*="Orden visible"]')).to_have_attribute(
+            'aria-description',
+            'Precio de otra orden visible: sirve de referencia para calcular una rebaja automática (undercut). No reemplaza tu precio manual de publicación.')
+        out=INDEX.parent/'tests'/'artifacts'/'theme'
+        out.mkdir(parents=True,exist_ok=True)
+        self.page.evaluate('document.documentElement.classList.add("light")')
+        self.page.locator('#ledger').screenshot(
+            path=str(out/'b13-realistic-all-open-1440-light-es.png'),animations='disabled')
+        self.page.locator('#ledger').screenshot(
+            path=str(out/'b13-desktop-top-aligned-20261026-light-es.png'),animations='disabled')
+        self.page.locator('#lots .lot-head').screenshot(
+            path=str(out/'b13-desktop-top-detail-20261026-light-es.png'),animations='disabled')
+        self.page.locator('#lots .lot-panel-grid').screenshot(
+            path=str(out/'b13-four-panels-only-desktop-light-es-20261026.png'),animations='disabled')
+        self.page.locator('#lots .lot-panel-grid').screenshot(
+            path=str(out/'b13-four-panels-density-review-light-es-20261026.png'),animations='disabled')
+        self.page.locator('#lots .lot-panel-grid').screenshot(
+            path=str(out/'b13-four-panels-copy-refined-light-es-20261026.png'),animations='disabled')
+        self.page.locator('#lots .lot-panel-grid').screenshot(
+            path=str(out/'b13-four-panels-volume-header-light-es-20261026.png'),animations='disabled')
+        light_surfaces=self.page.evaluate('''() => {
+          const fact=document.querySelector('#lots .fact-item-data');
+          return {qty:getComputedStyle(fact.querySelector('input')).backgroundColor,
+                  volume:getComputedStyle(fact.querySelector('.fact>b')).backgroundColor};
+        }''')
+        self.assertEqual(light_surfaces['volume'],light_surfaces['qty'],light_surfaces)
+        self.page.locator('#lots .prices').screenshot(
+            path=str(out/'b13-panel-prices-refined-light-es-20261026.png'),animations='disabled')
+        self.page.locator('#lots .prices').screenshot(
+            path=str(out/'b13-panel-prices-volume-header-light-es-20261026.png'),animations='disabled')
+        self.page.locator('#lots .lot-adjustments').screenshot(
+            path=str(out/'b13-panel-settings-refined-light-es-20261026.png'),animations='disabled')
+        self.page.locator('#lots .lot-adjustments').screenshot(
+            path=str(out/'b13-panel-settings-volume-header-light-es-20261026.png'),animations='disabled')
+        self.page.locator('#lots .lot-adjustments').screenshot(
+            path=str(out/'b13-item-settings-detail-1440-light-es.png'),animations='disabled')
+        self.page.locator('#lots .prices').screenshot(
+            path=str(out/'b13-prices-detail-1440-light-es.png'),animations='disabled')
+        self.page.locator('#lots .prices').screenshot(
+            path=str(out/'b13-routes-three-column-1440-light-es.png'),animations='disabled')
+        self.page.evaluate('document.documentElement.classList.remove("light")')
+        dark_surfaces=self.page.evaluate('''() => {
+          const fact=document.querySelector('#lots .fact-item-data');
+          return {qty:getComputedStyle(fact.querySelector('input')).backgroundColor,
+                  volume:getComputedStyle(fact.querySelector('.fact>b')).backgroundColor};
+        }''')
+        self.assertEqual(dark_surfaces['volume'],dark_surfaces['qty'],dark_surfaces)
+        self.page.locator('#ledger').screenshot(
+            path=str(out/'b13-desktop-top-aligned-20261026-dark-es.png'),animations='disabled')
+        self.page.locator('#lots .lot-head').screenshot(
+            path=str(out/'b13-desktop-top-detail-20261026-dark-es.png'),animations='disabled')
+        self.page.locator('#lots .lot-panel-grid').screenshot(
+            path=str(out/'b13-four-panels-only-desktop-dark-es-20261026.png'),animations='disabled')
+        self.page.locator('#lots .lot-panel-grid').screenshot(
+            path=str(out/'b13-four-panels-density-review-dark-es-20261026.png'),animations='disabled')
+        self.page.locator('#lots .lot-panel-grid').screenshot(
+            path=str(out/'b13-four-panels-copy-refined-dark-es-20261026.png'),animations='disabled')
+        self.page.locator('#lots .lot-panel-grid').screenshot(
+            path=str(out/'b13-four-panels-volume-header-dark-es-20261026.png'),animations='disabled')
+        self.page.locator('#lots .prices').screenshot(
+            path=str(out/'b13-panel-prices-refined-dark-es-20261026.png'),animations='disabled')
+        self.page.locator('#lots .prices').screenshot(
+            path=str(out/'b13-panel-prices-volume-header-dark-es-20261026.png'),animations='disabled')
+        self.page.locator('#lots .lot-adjustments').screenshot(
+            path=str(out/'b13-panel-settings-refined-dark-es-20261026.png'),animations='disabled')
+        self.page.locator('#lots .lot-adjustments').screenshot(
+            path=str(out/'b13-panel-settings-volume-header-dark-es-20261026.png'),animations='disabled')
+        self.page.evaluate("setLang('en')")
+        self.page.evaluate("paintLot(S.items[0].ui.last)")
+        expect(mineral).to_contain_text('estimated per-unit prices')
+        self.assertNotIn('SIGMA',self.page.locator('#ledgerPriceHelp>p').inner_text())
+        expect(self.page.locator('#lots .pr-manual-editor label')).to_have_text(
+            'Manual · ISK/u')
+        expect(self.page.locator('#lots .lot-adjustments input[aria-label*="Visible order"]')).to_be_visible()
+        expect(self.page.locator('#lots .lot-adjustments .fact-buy-order')).to_be_hidden()
+        expect(self.page.locator('#lots .lot-adjustments .fact-buy-reference>span')).to_have_text('Jita Buy')
+        expect(self.page.locator('#lots .prices .pr-buy-reference')).to_be_hidden()
+        expect(self.page.locator('#lots .prices .pr-context-title')).to_have_text('How to read these amounts')
+        self.page.evaluate('document.documentElement.classList.remove("light")')
+        self.page.locator('#ledger').screenshot(
+            path=str(out/'b13-realistic-all-open-1440-dark-en.png'),animations='disabled')
+        self.page.locator('#lots .lot-adjustments').screenshot(
+            path=str(out/'b13-item-settings-detail-1440-dark-en.png'),animations='disabled')
+        self.page.locator('#lots .prices').screenshot(
+            path=str(out/'b13-prices-detail-1440-dark-en.png'),animations='disabled')
+        self.page.locator('#lots .prices').screenshot(
+            path=str(out/'b13-routes-three-column-1440-dark-en.png'),animations='disabled')
+        self.page.set_viewport_size({'width':390,'height':900})
+        self.page.locator('#ledger').screenshot(
+            path=str(out/'b13-realistic-all-open-390-dark-en.png'),animations='disabled')
+        self.page.locator('#lots .prices').screenshot(
+            path=str(out/'b13-routes-mobile-390-dark-en.png'),animations='disabled')
+        self.page.evaluate('document.documentElement.classList.add("light")')
+        self.page.evaluate("setLang('es')")
+        self.page.evaluate("paintLot(S.items[0].ui.last)")
+        self.page.locator('#ledger').screenshot(
+            path=str(out/'b13-realistic-all-open-390-light-es.png'),animations='disabled')
+        self.page.locator('#lots .prices').screenshot(
+            path=str(out/'b13-routes-mobile-390-light-es.png'),animations='disabled')
+        # Validate real 2×2 rows for all desktop locale/theme variants;
+        # mobile is one column. No panel or route row may overflow.
+        for width in (1440,1100,1024,1000,980,630,390):
+            self.page.set_viewport_size({'width':width,'height':900})
+            for language in ('es','en'):
+                self.page.evaluate('(l)=>setLang(l)',language)
+                self.page.evaluate('paintLot(S.items[0].ui.last)')
+                for light in (False,True):
+                    self.page.evaluate('(v)=>document.documentElement.classList.toggle("light",v)',light)
+                    positions=self.page.evaluate("""() => [...document.querySelectorAll(
+                        '#lots .lot-panel-grid>details')].map(e=>{
+                          const r=e.getBoundingClientRect();
+                          return {left:r.left,right:r.right,top:r.top,bottom:r.bottom};})""")
+                    self.assertEqual(len(positions),4)
+                    if width>980:
+                        for a,b in ((0,1),(2,3)):
+                            self.assertAlmostEqual(positions[a]['top'],positions[b]['top'],delta=1.5)
+                            self.assertAlmostEqual(positions[a]['bottom'],positions[b]['bottom'],delta=1.5)
+                            self.assertAlmostEqual(positions[a]['right']-positions[a]['left'],
+                                                   positions[b]['right']-positions[b]['left'],delta=1.5)
+                        for a,b in ((0,2),(1,3)):
+                            self.assertAlmostEqual(positions[a]['left'],positions[b]['left'],delta=1.5)
+                            self.assertAlmostEqual(positions[a]['right'],positions[b]['right'],delta=1.5)
+                        self.assertGreater(positions[1]['left'],positions[0]['right'])
+                        self.assertGreaterEqual(positions[2]['top'],positions[0]['bottom'])
+                    else:
+                        for i,p in enumerate(positions):
+                            self.assertAlmostEqual(p['left'],positions[0]['left'],delta=1.5)
+                            self.assertAlmostEqual(p['right'],positions[0]['right'],delta=1.5)
+                            if i:self.assertGreaterEqual(p['top'],positions[i-1]['bottom'])
+                    groups=self.page.evaluate("""() => [...document.querySelectorAll(
+                        '#lots .lot-adjustments .fact-group')].map(e=>{
+                          const r=e.getBoundingClientRect();
+                          return {left:r.left,right:r.right,top:r.top,bottom:r.bottom};})""")
+                    self.assertEqual(len(groups),3)
+                    if width>560:
+                        self.assertAlmostEqual(groups[0]['top'],groups[1]['top'],delta=1.5)
+                        self.assertAlmostEqual(groups[0]['bottom'],groups[1]['bottom'],delta=1.5)
+                        self.assertGreaterEqual(groups[2]['top'],groups[0]['bottom']-1.5)
+                        self.assertAlmostEqual(groups[2]['left'],groups[0]['left'],delta=1.5)
+                        self.assertAlmostEqual(groups[2]['right'],groups[1]['right'],delta=1.5)
+                    else:
+                        for g in groups:
+                            self.assertAlmostEqual(g['left'],groups[0]['left'],delta=1.5)
+                            self.assertAlmostEqual(g['right'],groups[0]['right'],delta=1.5)
+                        self.assertGreaterEqual(groups[1]['top'],groups[0]['bottom']-1.5)
+                        self.assertGreaterEqual(groups[2]['top'],groups[1]['bottom']-1.5)
+                    cells=self.page.evaluate("""() => [...document.querySelectorAll('#lots .pr-best > td')]
+                      .map(e=>getComputedStyle(e).backgroundColor)""")
+                    self.assertTrue(all(v=='rgba(0, 0, 0, 0)' for v in cells),cells)
+                    row_widths=self.page.evaluate("""() => [...document.querySelectorAll('#lots .prices tr.pr-route')]
+                      .map(e=>({scroll:e.scrollWidth,client:e.clientWidth}))""")
+                    self.assertTrue(all(v['scroll']<=v['client']+1 for v in row_widths),
+                                    (width,language,light,row_widths))
+                    route_layout=self.page.evaluate("""() => {
+                        const row=document.querySelector('#lots .prices tr.pr-route');
+                        if(!row)return null;
+                        const a=[row.children[0],row.children[1],row.children[3]].map(e=>{
+                            const r=e.getBoundingClientRect();
+                            return {left:r.left,top:r.top,bottom:r.bottom};});
+                        return a;
+                    }""")
+                    if route_layout:
+                        self.assertLess(route_layout[1]['left'],route_layout[2]['left'],
+                                        (width,language,light,route_layout))
+                        if width>600:
+                            self.assertLess(route_layout[0]['left'],route_layout[1]['left'],
+                                            (width,language,light,route_layout))
+                            self.assertLess(abs(route_layout[0]['top']-route_layout[1]['top']),20,
+                                            (width,language,light,route_layout))
+                        else:
+                            self.assertLess(route_layout[0]['top'],route_layout[1]['top'],
+                                            (width,language,light,route_layout))
+                    price_footer=self.page.evaluate("""() => {
+                        const panel=document.querySelector('#lots .prices');
+                        const table=panel.querySelector('table').getBoundingClientRect();
+                        const foot=panel.querySelector('.pr-context').getBoundingClientRect();
+                        const box=panel.getBoundingClientRect();
+                        return {above:foot.top-table.bottom,bottom:box.bottom-foot.bottom,
+                            font:parseFloat(getComputedStyle(panel.querySelector('.pr-h th:nth-child(2)')).fontSize)};
+                    }""")
+                    self.assertGreaterEqual(price_footer['above'],-1,(width,language,light,price_footer))
+                    self.assertLessEqual(abs(price_footer['bottom']),64,(width,language,light,price_footer))
+                    self.assertGreaterEqual(price_footer['font'],12,(width,language,light,price_footer))
+                    overflow=self.page.evaluate('document.documentElement.scrollWidth-innerWidth')
+                    self.assertLessEqual(overflow,1,(width,language,light,overflow))
+        x=self.page.locator('#lots .lot-x')
+        self.assertGreaterEqual(x.bounding_box()['width'],44)
+        expect(x).to_have_attribute('aria-label','Remove Compressed Krystallos from the lot')
+        # Sell uses Jita Buy as a third reference; Trading swaps it for the
+        # personal buy order and displays the market quote in the price guide.
+        self.page.set_viewport_size({'width':1440,'height':900})
+        self.page.evaluate("""() => {
+            setLang('es');document.documentElement.classList.add('light');
+            S.flip=false;document.body.classList.remove('is-flip');
+            paintLot(S.items[0].ui.last);
+        }""")
+        self.assertEqual(self.page.locator('#lots .fact-market-references>.fact:visible').count(),3)
+        self.assertEqual(self.page.locator('#lots .fact-item-data>.fact:visible').count(),3)
+        expect(self.page.locator('#lots .fact-market-references .fact-buy-reference>b')).to_have_text('615,200 ISK')
+        self.page.locator('#lots .lot-adjustments').screenshot(
+            path=str(out/'b13-item-settings-selling-1440-light-es.png'),animations='disabled')
+        self.page.evaluate("""() => {
+            S.flip=true;document.body.classList.add('is-flip');
+            paintLot(S.items[0].ui.last);
+        }""")
+        expect(self.page.locator('#lots .fact-market-references>.fact-buy-reference')).to_be_hidden()
+        expect(self.page.locator('#lots .fact-market-references>.fact-buy-order')).to_be_visible()
+        self.assertEqual(self.page.locator('#lots .fact-market-references>.fact:visible').count(),3)
+        expect(self.page.locator('#lots .prices .pr-buy-reference>span')).to_have_text('Referencia · Jita Buy')
+        expect(self.page.locator('#lots .prices .pr-buy-reference>b')).to_have_text('615,200 ISK')
+        self.assertEqual(self.color('#lots .prices .pr-buy-reference>b','color'),
+                         self.color('#lots .lot-net','color'))
+        self.page.locator('#lots .lot-adjustments').screenshot(
+            path=str(out/'b13-item-settings-trading-1440-light-es.png'),animations='disabled')
 
 
     def test_paladin_trading_profit_requires_real_purchase_capital(self):
