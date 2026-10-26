@@ -17,6 +17,9 @@ Este DSS es el respaldo prioritario de **decisiones visuales, estado verificable
 7. La conexión GitHub puede crear objetos Git (`blob`, `tree`, `commit`) y avanzar `refs/heads/main` usando una comprobación del SHA remoto esperado. Si el entorno no permite enviar un pack Git nativo, reconstruir los commits sin forzar ni sustituir el trabajo ajeno. Registrar diferencias de SHA e historial respecto al clon local. Publicar siempre tras confirmar que el remoto no avanzó y verificar GitHub Actions y la URL de Pages.
 8. **Permiso de publicación continuo confirmado por Geiner el 2026-10-25:** «Sí tienes mi aprobación y a futuro siempre súbelas si lo crees conveniente». Esto autoriza publicar nuevas **mejoras incrementales** después de pruebas satisfactorias, sin pedir aprobación individual para cada versión. No autoriza de manera anticipada rediseños amplios, alteraciones económicas no aprobadas, cambios destructivos o de autenticación/datos. Mantener exclusivamente Fiko/Fikolasty, protección del HEAD, CI y comprobación HTTP pública en **cada** release.
 
+
+9. **Reintentos GitHub/Fiko ante errores temporales (Raulito, 2026-10-26):** si hay timeout o fallo de conexión, identificar primero la etapa y consultar `refs/heads/main`, el objeto Git o el resultado remoto para descartar que la operación se haya completado. Si el problema es transitorio o no se puede diagnosticar, **esperar aproximadamente 30 segundos y reintentar el acceso con Fiko**. Nunca duplicar escrituras a ciegas: comprobar SHA, utilizar `expected_sha`, `force:false` y reconciliar cambios ajenos. Si expiró una aprobación o falta autenticación, solicitar la acción de usuario necesaria en vez de reintentar indefinidamente.
+
 ## 2. Estándar gráfico vigente
 
 - Producto: herramienta financiera EVE Online de tono sobrio, editorial y preciso, no un dashboard genérico de botones llamativos.
