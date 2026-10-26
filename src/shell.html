@@ -300,7 +300,6 @@ Contraband Freight = no</textarea><small>Una regla por línea: Nombre = tax tota
           <div><dt data-i18n="picker.salesDestination">Dónde se vende</dt><dd id="pkResultDestination"></dd></div>
         </dl>
         <p class="mm-plan-result-warning" id="pkResultWarning" hidden></p>
-        <details class="ov-card ov-flow mm-finance-details" id="vFinanceDetails"><summary data-i18n="verdict.inspectBreakdown">Ver distribución de ingresos y destinos</summary><div class="mm-finance-details-body"><h4 data-i18n="picker.moneyOrigin">DE DÓNDE SALE TU ISK</h4><div id="ovFlow"></div><div class="mm-dest-inline" id="ovDestW"><h4 data-i18n="picker.salesDestinationUpper">DÓNDE SE VENDE</h4><div id="ovDest"></div></div></div></details>
       </section>
       <section class="mm-plan-options" aria-label="Planes disponibles" data-i18n-aria-label="picker.availablePlans">
         <h3 class="mm-plan-card-title" data-i18n="picker.availablePlans">Planes disponibles</h3>
@@ -310,16 +309,17 @@ Contraband Freight = no</textarea><small>Una regla por línea: Nombre = tax tota
         </div>
         <div class="pk-w"><div class="pk" id="pk" role="group" aria-label="Plan seleccionado"></div><div class="pk" id="pkOthers" role="group" aria-label="Otros planes"></div></div>
       </section>
+      <details class="ov-card ov-flow mm-finance-details" id="vFinanceDetails"><summary data-i18n="verdict.inspectBreakdown">Ver distribución de ingresos y destinos</summary><div class="mm-finance-details-body"><h4 data-i18n="picker.moneyOrigin">DE DÓNDE SALE TU ISK</h4><div id="ovFlow"></div><div class="mm-dest-inline" id="ovDestW"><h4 data-i18n="picker.salesDestinationUpper">DÓNDE SE VENDE</h4><div id="ovDest"></div></div></div></details>
+      <section class="mm-speed-card mm-decision-card" id="pkSpeedBox" hidden>
+        <aside class="pk-shortcut" id="pkShortcut" aria-live="polite" hidden></aside>
+        <details class="mm-inline-faq mm-picker-faq"><summary data-i18n="decision.planMethodQ">¿Por qué este plan y no el más rápido?</summary><p data-i18n="decision.planMethodA">Comparamos ingresos netos después de las comisiones y un único envío compartido. Las opciones rápidas pueden sacrificar ISK: una orden tarda en completarse y la venta inmediata depende de compras reales suficientes. En Trading hablamos de ganancia solo si hay un coste de compra válido.</p></details>
+      </section>
     </div>
     <div class="mm-decision-grid" id="decisionGrid">
       <section class="mm-unit-courier mm-decision-card" id="unitCourierBox" aria-label="Envío del plan" hidden>
         <header class="mm-decision-head"><span class="ic i-ship" aria-hidden="true"></span><strong id="unitCourierHeading">Coste del envío</strong><span class="mm-unit-courier-total" id="unitCourierTotal"></span></header>
         <div id="unitCourierRows"></div>
         <details class="mm-inline-faq mm-courier-faq"><summary data-i18n="decision.collateralQ">¿El colateral es otro coste de envío?</summary><p data-i18n="decision.collateralA">No. En un contrato courier, el colateral es una garantía que se devuelve al completar el trabajo; no se resta entero como tarifa. El servicio sí puede calcular su precio usando el colateral y el volumen transportados. SIGMA resta la tarifa estimada, no el colateral.</p></details>
-      </section>
-      <section class="mm-speed-card mm-decision-card" id="pkSpeedBox" hidden>
-        <aside class="pk-shortcut" id="pkShortcut" aria-live="polite" hidden></aside>
-        <details class="mm-inline-faq mm-picker-faq"><summary data-i18n="decision.planMethodQ">¿Por qué este plan y no el más rápido?</summary><p data-i18n="decision.planMethodA">Comparamos ingresos netos después de las comisiones y un único envío compartido. Las opciones rápidas pueden sacrificar ISK: una orden tarda en completarse y la venta inmediata depende de compras reales suficientes. En Trading hablamos de ganancia solo si hay un coste de compra válido.</p></details>
       </section>
       <section class="pk-opportunity mm-decision-card" id="pkOpportunity" aria-label="Comparación de rutas" hidden></section>
     </div>

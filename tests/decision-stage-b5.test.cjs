@@ -82,7 +82,9 @@ test('B.5 financial explanations show source/uncertainty, a neutral breakdown an
   assert.match(catalog['decision.refineNo'].es,/No reproceses el \{name\}/);
   assert.match(catalog['decision.refineNo'].es,/perderías \{amount\}/);
   assert.match(catalog['decision.refineYes'].es,/Ganarías \{amount\}/);
-  assert.match(resultView,/togglePanel\('settings',true\)/);
+  assert.doesNotMatch(resultView,/el\('button','mm-cost-settings'/);
+  assert.doesNotMatch(resultView,/el\('p','mm-cost-included'/);
+  assert.match(resultView,/body\.append\(origin\)/);
   assert.match(styling,/#verdict #vCap \.mm-context-help>summary:focus-visible/);
   assert.match(styling,/html\.light #verdict #vCap \.mm-context-help\.mm-rep-help/);
   assert.match(styling,/#verdict #vCap \.mm-rep-delta\.pos\{color:var\(--gain\)\}/);

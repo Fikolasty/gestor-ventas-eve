@@ -829,7 +829,7 @@ body:not(.is-flip) .fact-buy-order{display:none!important}
 #pSum .pk-headline-stat+.pk-headline-stat strong{font-size:.81rem;font-weight:600;line-height:1.45}
 #pSum .pk-headline-note{margin:0;color:var(--mut);font:500 var(--mm-sales-explanation-size)/1.6 var(--f-ui)}
 #pSum #pkOpportunity .pk-opp-head{margin-bottom:8px!important}
-#pSum .mm-decision-grid:has(>#pkOpportunity[hidden]):has(>#unitCourierBox[hidden]):has(>#pkSpeedBox[hidden]){display:none}
+#pSum .mm-decision-grid:has(>#pkOpportunity[hidden]):has(>#unitCourierBox[hidden]){display:none}
 @media(max-width:760px){
   #pSum>.mm-plan-heading{grid-template-columns:minmax(0,1fr)!important;row-gap:14px!important}
   #pSum .mm-plan-comparison{grid-column:1;border-left:0;padding:13px 0 0;border-top:1px solid var(--line2)}
@@ -1017,11 +1017,7 @@ html.light #ledger #lots .lot-pp .copy:hover:not(:disabled){background:#e3e0da!i
 }
 /* B.5: answer the four money/reprocessing questions at a glance; keep
    explanations available but collapsed. Compatible with both themes. */
-#verdict #vCap .v-finance-item.mm-cost-item{background:var(--surface-panel)}
-#verdict #vCap .mm-cost-included{
-  margin:10px 0 8px;color:var(--txt);opacity:.82;
-  font:500 var(--mm-sales-explanation-size)/1.6 var(--f-ui)
-}
+#verdict #vCap .v-finance-item.mm-cost-item{background:var(--surface-card)}
 #verdict #vCap .mm-context-help{
   margin:7px 0 0;border:1px solid var(--line2);border-radius:8px;
   background:var(--surface-card);overflow:hidden
@@ -1057,14 +1053,6 @@ html.light #ledger #lots .lot-pp .copy:hover:not(:disabled){background:#e3e0da!i
   max-width:100ch;margin:15px 0;color:var(--txt);opacity:.76;
   font:450 var(--mm-sales-explanation-size)/1.6 var(--f-ui)
 }
-#verdict #vCap .mm-cost-settings{
-  display:inline-flex;min-height:40px;align-items:center;
-  padding:9px 14px;color:var(--txt);background:var(--surface-panel);
-  border:1px solid var(--line2);border-radius:7px;
-  font:650 .9rem/1.4 var(--f-ui);cursor:pointer
-}
-#verdict #vCap .mm-cost-settings:hover{border-color:var(--ion)}
-#verdict #vCap .mm-cost-settings:focus-visible{outline:2px solid var(--ion);outline-offset:2px}
 #verdict #vCap .mm-context-help.mm-rep-help{
   margin:13px 0 0;background:var(--surface-panel)
 }
@@ -1082,7 +1070,7 @@ html.light #ledger #lots .lot-pp .copy:hover:not(:disabled){background:#e3e0da!i
   margin:4px 0 0;color:var(--txt);opacity:.82;font:500 var(--mm-sales-explanation-size)/1.6 var(--f-ui)
 }
 html.light #verdict #vCap .mm-context-help.mm-rep-help,
-html.light #verdict #vCap .v-finance-item.mm-cost-item{background:var(--surface-panel)}
+html.light #verdict #vCap .v-finance-item.mm-cost-item{background:var(--surface-card)}
 /* Same compact, optional help contract in Listado, plan chooser and courier. */
 #ledger>.mm-inline-faq,#pSum>.mm-inline-faq,#unitCourierBox>.mm-inline-faq{
   max-width:100%;margin:10px 0 13px;background:var(--surface-panel);
@@ -1131,7 +1119,7 @@ html.light #verdict #vCap .v-finance-item.mm-cost-item{background:var(--surface-
 
 /* B.6 · The two optional explanations share one row only when both exist.
    Let their own content determine height; avoid an empty half-card for loot. */
-#verdict #vCap .mm-explanation-grid{display:grid;grid-template-columns:minmax(0,1fr);align-items:start;gap:13px;margin:9px 0 0}
+#verdict #vCap .mm-explanation-grid{display:grid;grid-template-columns:minmax(0,1fr);align-items:stretch;gap:13px;margin:9px 0 0}
 #verdict #vCap .mm-explanation-grid .mm-context-help{min-width:0;margin:0}
 #verdict #vCap .mm-rep-answer{font:600 var(--mm-sales-explanation-size)/1.6 var(--f-ui)}
 #verdict #vCap .mm-context-number{font-weight:650;font-variant-numeric:tabular-nums}
@@ -1142,13 +1130,12 @@ html.light #verdict #vCap .v-finance-item.mm-cost-item{background:var(--surface-
   #verdict #vCap .mm-explanation-grid:has(>.mm-rep-help){grid-template-columns:repeat(2,minmax(0,1fr))}
 }
 
-/* B.6 · The real plan engine still supplies every number. The chooser shows
-   only the decision; the companion card owns the former income/destination
-   disclosure and updates after the canonical plan selection/refresh cycle. */
+/* B.6c · The real plan engine still supplies every number. The 2x2 grid
+   reuses its finance disclosure and conditional quick-route explanation. */
 #pSum>.mm-plan-heading{grid-template-columns:minmax(0,1fr)!important;min-height:0;row-gap:0!important;margin-bottom:13px!important;padding-bottom:14px}
 #pSum>.mm-plan-heading .mm-plan-heading-copy{grid-column:1}
 #pSum>.mm-plan-heading .pk-summary{font:550 var(--mm-sales-explanation-size)/1.5 var(--f-ui)!important;color:var(--mut)!important}
-#pSum .mm-plan-layout{display:grid;grid-template-columns:minmax(0,.86fr) minmax(0,1.14fr);align-items:start;gap:14px;margin:0 0 14px}
+#pSum .mm-plan-layout{display:grid;grid-template-columns:minmax(0,.86fr) minmax(0,1.14fr);align-items:stretch;gap:14px;margin:0 0 14px}
 #pSum .mm-plan-result,#pSum .mm-plan-options{min-width:0;padding:17px 18px;border:1px solid var(--line2);border-radius:9px;background:var(--surface-card);box-shadow:none}
 #pSum .mm-plan-card-title{margin:0 0 15px;color:var(--txt);font:700 .91rem/1.45 var(--f-ui)}
 #pSum .mm-plan-result-label{display:block;color:var(--mut);font:600 var(--mm-sales-label-size)/1.45 var(--f-ui)}
@@ -1167,10 +1154,16 @@ html.light #verdict #vCap .v-finance-item.mm-cost-item{background:var(--surface-
 #pSum .mm-plan-facts dt{color:var(--mut);font:500 var(--mm-sales-label-size)/1.5 var(--f-ui)}
 #pSum .mm-plan-facts dd{margin:0;color:var(--txt);text-align:right;min-width:0;overflow-wrap:anywhere;font:650 var(--mm-sales-explanation-size)/1.5 var(--f-ui);font-variant-numeric:tabular-nums}
 #pSum .mm-plan-facts dd.neg{color:var(--loss)}
-#pSum .mm-plan-facts dd.zero{color:var(--gain)}
+#pSum .mm-plan-facts dd.zero{color:var(--mut)}
 #pSum .mm-plan-result-warning{font:550 var(--mm-sales-explanation-size)/1.6 var(--f-ui);color:var(--loss);margin:0 0 12px}
 #pSum .mm-plan-result-warning[hidden]{display:none}
-#pSum #vFinanceDetails{margin:0!important}
+#pSum #vFinanceDetails{
+  min-width:0;align-self:stretch;margin:0!important;
+  background:var(--surface-card)!important;border:1px solid var(--line2)!important;
+  border-radius:9px!important
+}
+#pSum .mm-plan-layout:has(>#pkSpeedBox[hidden])>#vFinanceDetails{grid-column:1/-1}
+#pSum .mm-plan-layout>#pkSpeedBox[hidden]{display:none!important}
 #pSum #vFinanceDetails .mm-finance-details-body{padding:11px 13px 13px}
 #pSum #vFinanceDetails .ov-leg{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
 #pSum #vFinanceDetails .ov-leg b{font-size:.79rem!important;overflow-wrap:anywhere}
@@ -1204,8 +1197,10 @@ html.light #verdict #vCap .v-finance-item.mm-cost-item{background:var(--surface-
 #pSum #pk>.pk-o::after{right:12px}
 @media(max-width:1050px){
   #pSum .mm-plan-layout{grid-template-columns:minmax(0,1fr)}
-  #pSum .mm-plan-options{grid-row:1}
-  #pSum .mm-plan-result{grid-row:2}
+  #pSum .mm-plan-options{grid-row:auto;order:1}
+  #pSum .mm-plan-result{grid-row:auto;order:2}
+  #pSum #vFinanceDetails{grid-column:1;order:3}
+  #pSum #pkSpeedBox{order:4}
 }
 @media(max-width:560px){
   #pSum .mm-plan-result,#pSum .mm-plan-options{padding:13px 12px}
@@ -1242,11 +1237,12 @@ html.light #verdict #vCap .v-finance-item.mm-cost-item{background:var(--surface-
 #pSum .pk-w .pk-dot{width:12px;height:12px}
 #pSum .pk-w .pk-o .pk-l{font-weight:600!important}
 
-/* Courier costs only warrant a detailed card when incurred. The faster option
-   shares its row when available, with its why-question nested inside. */
+/* B.6c: the fast alternative belongs in the fourth plan-grid slot; courier
+   and exceptional route warnings stay below without duplicating content. */
 #pSum .mm-decision-grid{align-items:start;gap:12px;margin-top:13px}
-#pSum .mm-decision-grid:has(>#pkSpeedBox[hidden]):has(>#pkOpportunity[hidden]){grid-template-columns:minmax(0,1fr)}
-#pSum .mm-decision-grid:has(>#pkSpeedBox:not([hidden])) #pkOpportunity{grid-column:1/-1}
+#pSum .mm-decision-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+#pSum .mm-decision-grid:has(>#unitCourierBox[hidden]),
+#pSum .mm-decision-grid:has(>#pkOpportunity[hidden]){grid-template-columns:minmax(0,1fr)}
 #pSum #pkSpeedBox{min-width:0;padding:15px 18px!important}
 #pSum #pkSpeedBox .pk-shortcut{
   display:grid;grid-template-columns:minmax(0,1fr) auto;

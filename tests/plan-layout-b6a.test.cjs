@@ -18,19 +18,20 @@ test('B.6a displays estimated net proceeds once and aligns help with deductions'
   assert.match(css,/#verdict #vCap \.mm-explanation-grid:has\(>\.mm-rep-help\)/);
 });
 
-test('B.6a places the fast-route rationale beside freight and hides irrelevant zero-courier detail',()=>{
+test('B.6c keeps the fast-route rationale in the plan grid and hides zero-courier detail',()=>{
   for(const id of ['unitCourierBox','pkShortcut','pkSpeedBox','pkOpportunity','decisionGrid']){
     assert.equal((shell.match(new RegExp('id="'+id+'"','g'))||[]).length,1,id);
   }
-  const left=shell.indexOf('id="unitCourierBox"');
+  const finance=shell.indexOf('id="vFinanceDetails"');
   const right=shell.indexOf('id="pkSpeedBox"');
   const fast=shell.indexOf('id="pkShortcut"');
   const why=shell.indexOf('class="mm-inline-faq mm-picker-faq"');
+  const left=shell.indexOf('id="unitCourierBox"');
   const opportunities=shell.indexOf('id="pkOpportunity"');
-  assert.ok(left<right&&right<fast&&fast<why&&why<opportunities);
+  assert.ok(finance<right&&right<fast&&fast<why&&why<left&&left<opportunities);
   assert.match(chooser,/box\.hidden=!rows\.length&&!hasCourierCost/);
   assert.match(chooser,/\$\('pkSpeedBox'\)\.hidden=false/);
-  assert.match(css,/#pSum \.mm-decision-grid:has\(>#pkSpeedBox\[hidden\]\):has\(>#pkOpportunity\[hidden\]\)/);
+  assert.match(css,/#pSum \.mm-plan-layout:has\(>#pkSpeedBox\[hidden\]\)>#vFinanceDetails/);
   assert.match(css,/#pSum #pkSpeedBox>\.mm-picker-faq>summary:focus-visible/);
 });
 

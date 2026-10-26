@@ -180,7 +180,6 @@ function paintCostExplanation(P,cost,expanded){
     cost.importIncluded&&cost.marketVolume<=0?null:cost.tax+cost.brk+cost.rel);
   if(cost.refinery>0.5)add(tx('decision.refiningFee'),cost.refinery);
   if(cost.compression+cost.production>0.5)add(tx('decision.otherCharges'),cost.compression+cost.production);
-  const note=el('p','mm-cost-included',tx('decision.includedInNet'));cap.append(note);
   const disclosure=el('details','mm-context-help'),summary=el('summary',null,tx('decision.costsWhy'));
   disclosure.open=expanded;disclosure.append(summary);
   const body=el('div','mm-context-body');
@@ -203,8 +202,7 @@ function paintCostExplanation(P,cost,expanded){
   if(cost.compression>0.5)explain(tx('decision.compression'),tx('decision.compressionBody',{amount:fmt(cost.compression)}));
   if(cost.production>0.5)explain(tx('decision.production'),tx('decision.productionBody',{amount:fmt(cost.production)}));
   const origin=el('p','mm-cost-source',tx('decision.costsSource'));
-  const settings=el('button','mm-cost-settings',tx('decision.reviewSettings'));settings.type='button';
-  settings.addEventListener('click',()=>togglePanel('settings',true));body.append(origin,settings);
+  body.append(origin);
   disclosure.append(body);
   const helpGrid=el('div','mm-explanation-grid');helpGrid.append(disclosure);cap.append(helpGrid);
 }

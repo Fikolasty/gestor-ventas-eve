@@ -15,9 +15,10 @@ test('B.6 moves the existing finance disclosure inside the result companion with
   }
   const layout=html.indexOf('class="mm-plan-layout"');
   const result=html.indexOf('id="pkResult"');
-  const detail=html.indexOf('id="vFinanceDetails"');
   const options=html.indexOf('class="mm-plan-options"');
-  assert.ok(layout>=0&&layout<result&&result<detail&&detail<options);
+  const detail=html.indexOf('id="vFinanceDetails"');
+  const fast=html.indexOf('id="pkSpeedBox"');
+  assert.ok(layout>=0&&layout<result&&result<options&&options<detail&&detail<fast);
   assert.match(html,/<select id="pkSort"/);
   assert.match(html,/id="bDeep" aria-expanded="false" aria-controls="deep"/);
 });
@@ -50,7 +51,7 @@ test('B.6 keeps two context disclosures responsive and colors explanatory deltas
   assert.match(css,/#verdict #vCap \.mm-context-number\.pos\{color:var\(--gain\)\}/);
   assert.match(css,/#verdict #vCap \.mm-context-number\.neg\{color:var\(--loss\)\}/);
   assert.match(css,/@media\(max-width:1050px\)/);
-  assert.match(css,/#pSum \.mm-plan-options\{grid-row:1\}/);
+  assert.match(css,/#pSum \.mm-plan-options\{grid-row:auto;order:1\}/);
   for(const key of ['picker.yourResult','picker.availablePlans','picker.estimatedProfit',
     'picker.netProceeds','picker.marketFees','picker.multipleRoutes','picker.sortMost',
     'picker.sortFast','picker.sortNoShip','picker.resultAria']){

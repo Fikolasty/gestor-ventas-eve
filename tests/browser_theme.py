@@ -1040,7 +1040,8 @@ class ThemeBrowserTests(unittest.TestCase):
                 summary.click()
             self.assertIn('Accounting' if language=='en' else 'Accounting',
                           self.page.locator('#vCap .mm-context-help:not(.mm-rep-help) .mm-context-body').inner_text())
-            self.assertEqual(self.page.locator('#vCap .mm-cost-settings').count(),1)
+            self.assertEqual(self.page.locator('#vCap .mm-cost-settings').count(),0)
+            self.assertEqual(self.page.locator('#vCap .mm-cost-included').count(),0)
             if language=='es':
                 self.page.locator('#vCap .mm-rep-help>summary').click()
             expect(answer).to_be_visible()
@@ -1069,7 +1070,7 @@ class ThemeBrowserTests(unittest.TestCase):
                         const answer=document.querySelector('#vCap .mm-rep-answer');
                         const costNumber=document.querySelector('#vCap .mm-context-number');
                         return {left:{x:left.x,y:left.y,right:left.right,bottom:left.bottom},
-                            right:{x:right.x,y:right.y},font:parseFloat(getComputedStyle(answer).fontSize),
+                            right:{x:right.x,y:right.y,bottom:right.bottom},font:parseFloat(getComputedStyle(answer).fontSize),
                             numbers:!!costNumber};
                     }""")
                     self.assertAlmostEqual(panels['font'],13,delta=.05, msg=str(panels))
@@ -1077,6 +1078,7 @@ class ThemeBrowserTests(unittest.TestCase):
                     if width>=960:
                         self.assertLessEqual(panels['left']['right'],panels['right']['x']+1,panels)
                         self.assertAlmostEqual(panels['left']['y'],panels['right']['y'],delta=2)
+                        self.assertAlmostEqual(panels['left']['bottom'],panels['right']['bottom'],delta=2)
                     else:
                         self.assertGreaterEqual(panels['right']['y'],panels['left']['bottom']-1,panels)
                     type_scale=self.page.evaluate("""() => {
@@ -1090,7 +1092,6 @@ class ThemeBrowserTests(unittest.TestCase):
                             subheading:px('#vCap .mm-context-part>strong'),
                             explanation:px('#vCap .mm-context-part>p'),
                             source:px('#vCap .mm-cost-source'),
-                            included:px('#vCap .mm-cost-included'),
                             repQuestion:px('#vCap .mm-rep-help>summary'),
                             repAnswer:px('#vCap .mm-rep-answer'),
                             repSub:px('#vCap .mm-rep-sub'),
@@ -1106,7 +1107,7 @@ class ThemeBrowserTests(unittest.TestCase):
                     }""")
                     for label,expected in {
                         'question':13.5,'explanation':13,
-                        'source':13,'included':13,'repQuestion':13.5,
+                        'source':13,'repQuestion':13.5,
                         'repSub':13,'faqQuestion':13.5,'faqAnswer':13,
                         'ledgerQuestion':13.5,'ledgerExplanation':13,
                         'financeQuestion':13.5,'netContext':13,'sortLabel':12.5
@@ -1271,7 +1272,7 @@ class ThemeBrowserTests(unittest.TestCase):
             }""")
             expect(self.page.locator('#pkOthers [data-m="jOrd"]')).to_be_visible()
             expect(self.page.locator('#pkResultValue')).to_contain_text('1,050,000 ISK')
-            self.assertEqual(self.page.locator('#vFinanceDetails').evaluate('(e)=>e.closest("#pkResult")?.id'),'pkResult')
+            self.assertEqual(self.page.locator('#vFinanceDetails').evaluate('(e)=>e.parentElement?.className'),'mm-plan-layout')
             self.page.locator('#pkSort').select_option('speed:1')
             self.assertEqual(self.page.locator('#pkSort').input_value(),'speed:1')
             self.page.locator('#vFinanceDetails>summary').click()
@@ -1337,7 +1338,7 @@ class ThemeBrowserTests(unittest.TestCase):
             self.assertEqual(self.page.evaluate("iskToneText('790,000 ISK')"), 'isk-pos')
             self.assertTrue(self.page.locator('#pkSpeedBox .mm-picker-faq').is_visible())
             self.assertFalse(self.page.locator('#pkSpeedBox .mm-picker-faq').evaluate('(d)=>d.open'))
-            self.assertEqual(self.page.locator('#pkShortcut').evaluate('(el)=>el.closest("#decisionGrid")?.id'), 'decisionGrid')
+            self.assertEqual(self.page.locator('#pkShortcut').evaluate('(el)=>el.closest(".mm-plan-layout")?.className'), 'mm-plan-layout')
             self.assertNotIn('VENTAS NETAS DESPUÉS DE TASAS',
                 self.page.locator('#vCap .v-finance').inner_text().upper())
             row_style=self.page.locator('#pkOthers>.pk-o').first.evaluate("""el=>{
@@ -1404,17 +1405,84 @@ class ThemeBrowserTests(unittest.TestCase):
                   const color=getComputedStyle(el).color;el.remove();return color;}"""))
             self.page.set_viewport_size({'width':1440,'height':900})
             geom=self.page.evaluate("""() => {
-                const a=document.querySelector('#unitCourierBox').getBoundingClientRect();
+                const a=document.querySelector('#vFinanceDetails').getBoundingClientRect();
                 const b=document.querySelector('#pkSpeedBox').getBoundingClientRect();
-                return {aRight:a.right,aY:a.y,bX:b.x,bY:b.y};
+                const c=document.querySelector('#unitCourierBox').getBoundingClientRect();
+                return {aRight:a.right,aY:a.y,bX:b.x,bY:b.y,bBottom:b.bottom,cY:c.y};
             }""")
             self.assertLessEqual(geom['aRight'],geom['bX']+1,geom)
             self.assertAlmostEqual(geom['aY'],geom['bY'],delta=2)
+            self.assertGreaterEqual(geom['cY'],geom['bBottom']-1,geom)
             if language=='es':
                 self.page.evaluate('document.documentElement.classList.remove("light")')
                 self.page.locator('#decisionGrid').screenshot(
                     path=str(INDEX.parent/'tests'/'artifacts'/'theme'/'b6a-dual-decisions-es-1440-dark.png'),
                     animations='disabled')
+
+    def test_b6c_four_panel_grid_and_conditional_fast_choice(self):
+        from playwright.sync_api import expect
+        for language in ('es', 'en'):
+            self.page.evaluate('setLang', language)
+            self.page.evaluate("""() => {
+                S.flip=false;S.planMode=null;C.bb.on=true;C.disc.on=false;
+                const item={name:'Tritanium',qty:10,m3u:1,
+                    jita:{buy:80000,topBuy:80000,sell:90000,topSell:90000}};
+                S.items=[item];
+                const row={o:item,q:10,auto:'null',best:'null',np:110000,jl:95000,
+                    g:{null:1050000,jOrd:900000,jInst:810000,bb:790000},
+                    prod:0,vol:10,coll:1000000,ship:{},net:{},courierAllocated:0};
+                const P={rows:[row],best:1050000,mode:null,shipCost:0,Vs:0,
+                    missing:[],toBB:[]};
+                window.__b6cFixture={P,row};
+                paintVerdict(P);document.querySelector('#pSum').hidden=false;
+                paintPicker(P);paintCourierUnits(P);
+            }""")
+            expect(self.page.locator('#pkSpeedBox')).to_be_visible()
+            self.assertEqual(self.page.locator('#vFinanceDetails').evaluate(
+                '(el)=>el.parentElement?.className'), 'mm-plan-layout')
+            self.assertEqual(self.page.locator('#pkSpeedBox').evaluate(
+                '(el)=>el.parentElement?.className'), 'mm-plan-layout')
+            self.assertEqual(self.page.locator('#unitCourierBox').evaluate(
+                '(el)=>el.parentElement?.id'), 'decisionGrid')
+            for width in (1440, 390):
+                self.page.set_viewport_size({'width':width,'height':900})
+                for light in (False, True):
+                    self.page.evaluate('(on)=>document.documentElement.classList.toggle("light",on)',light)
+                    rects=self.page.evaluate("""() => {
+                        const box=id=>{const r=document.querySelector(id).getBoundingClientRect();
+                            return {x:r.x,y:r.y,right:r.right,bottom:r.bottom,width:r.width};};
+                        return {result:box('#pkResult'),options:box('.mm-plan-options'),
+                            flow:box('#vFinanceDetails'),speed:box('#pkSpeedBox'),
+                            columns:getComputedStyle(document.querySelector('.mm-plan-layout')).gridTemplateColumns};
+                    }""")
+                    if width==1440:
+                        self.assertLess(rects['result']['x'],rects['options']['x'],rects)
+                        self.assertAlmostEqual(rects['result']['y'],rects['options']['y'],delta=2)
+                        self.assertLess(rects['flow']['x'],rects['speed']['x'],rects)
+                        self.assertAlmostEqual(rects['flow']['y'],rects['speed']['y'],delta=2)
+                        self.assertGreater(rects['flow']['y'],rects['result']['y'],rects)
+                        self.assertAlmostEqual(rects['flow']['bottom'],rects['speed']['bottom'],delta=2)
+                    else:
+                        sequence=[rects[name]['y'] for name in ('options','result','flow','speed')]
+                        self.assertEqual(sequence,sorted(sequence),rects)
+                        for name in ('options','result','flow','speed'):
+                            self.assertGreaterEqual(rects[name]['x'],-1,rects)
+                            self.assertLessEqual(rects[name]['right'],width+1,rects)
+                    if language=='es' and width==1440 and not light:
+                        out=INDEX.parent/'tests'/'artifacts'/'theme'
+                        out.mkdir(parents=True,exist_ok=True)
+                        self.page.locator('#pSum .mm-plan-layout').screenshot(
+                            path=str(out/'b6c-grid-es-1440-dark.png'),animations='disabled')
+            self.page.evaluate("""() => {
+                const {P,row}=window.__b6cFixture;
+                delete row.g.jInst;delete row.g.bb;delete row.g.jOrd;
+                paintPicker(P);
+            }""")
+            self.page.set_viewport_size({'width':1440,'height':900})
+            expect(self.page.locator('#pkSpeedBox')).to_be_hidden()
+            self.assertEqual(self.page.locator('#vFinanceDetails').evaluate(
+                '(el)=>getComputedStyle(el).gridColumnEnd'), '-1')
+            expect(self.page.locator('#vFinanceDetails')).to_be_visible()
 
     def test_b4_ledger_unit_copy_and_lazy_disclosures(self):
         from playwright.sync_api import expect
