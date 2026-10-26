@@ -1,3 +1,8 @@
+## v1.0.138 — 2026-10-26 [ChatGPT] · C.1b saneamiento CSS de tres desplegables financieros — EN VERIFICACIÓN
+
+- Segundo incremento acotado de C.1: las flechas de «Distribución de ingresos», «Ver cálculo por unidad» y «Ver otros ítems enviados» dejan de tener sus antiguos glifos, transformaciones `rotate(180deg)` y transiciones en reglas v124/v125. El contrato global B.1, posterior y prioritario, ya era el dueño de las flechas geométricas, giro abierto y reducción de movimiento. Se conservan márgenes y reglas de foco/hover; no se añaden overrides ni cambia ningún `!important`, HTML, JS, motor financiero, EVE SSO/ESI, persistencia o i18n.
+- Nuevo test estático `tests/css-c1b-chevron.test.cjs` y prueba Chromium de los tres desplegables con click nativo y geometría ES/EN, 390/1440, Dark/Light. Captura del courier en Dark 1440 **SHA-256 idéntico** antes/después (`936cab42d86bc9ea388bd276a4e91a1d77f424d2fbf0a1fa8fe5e56faf82f991`); build `1.0.138`, **26 Node, 16 Python, ocho heredadas y 41 Chromium completos PASS**, `git diff --check`. Los workflows apuntan a 1.0.138. Se requiere certificación remota antes de declarar LIVE. D requiere medir rendimiento, no se inicia por este CSS.
+
 ## v1.0.137 — 2026-10-26 [ChatGPT] · B.6c cuatro paneles de decisión y superficies coherentes — LIVE verificada
 
 - La pantalla «ELIGE TU PLAN» presenta cuatro piezas originales en dos filas: Resultado / Planes disponibles y Distribución de ingresos y destinos / Alternativa rápida. El segundo panel es condicional; si no existe ruta rápida adecuada, la Distribución ocupa el ancho completo. En ≤1050 px: Planes → Resultado → Distribución → Rapidez. IDs, detalles nativos, filtros, selección, costes e i18n ES/EN preservados.

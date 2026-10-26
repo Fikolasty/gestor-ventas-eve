@@ -565,6 +565,56 @@ class ThemeBrowserTests(unittest.TestCase):
                 self.page.locator('#ledger>summary').click()
                 expect(self.page.locator('#ledger')).not_to_have_attribute('open','')
 
+    def test_c1b_sales_disclosure_chevrons_keep_shared_geometry_and_native_toggle(self):
+        """One B.1 chevron source owns finance and both freight disclosure types."""
+        from playwright.sync_api import expect
+        self.page.evaluate("""() => {
+            const item=n=>({o:{name:'Tritanium '+n,jita:{buy:5000,sell:7000}},
+                q:60,best:'jOrd',jl:7000,g:{jOrd:390000},vol:6,
+                ship:{jOrd:{v:6,c:420000}},courierAllocated:120000,courierPerUnit:2000});
+            paintCourierUnits({rows:[item(1),item(2),item(3)],Vs:18,shipCost:360000});
+            document.querySelector('#verdict').hidden=false;
+            document.querySelector('#pSum').hidden=false;
+            document.querySelector('#vFinanceDetails').open=false;
+        }""")
+        for language in ('es','en'):
+            self.page.evaluate('setLang',language)
+            for width in (1440,390):
+                self.page.set_viewport_size({'width':width,'height':900})
+                for light in (False,True):
+                    self.page.evaluate('(on)=>document.documentElement.classList.toggle("light",on)',light)
+                    controls=['#vFinanceDetails','#unitCourierRows .mm-freight-detail',
+                              '#unitCourierRows .mm-freight-extra']
+                    for selector in controls:
+                        node=self.page.locator(selector).first
+                        expect(node).to_be_visible()
+                        node.evaluate('(el)=>el.open=false')
+                        summary=node.locator(':scope > summary')
+                        initial=summary.evaluate("""el=>{
+                            const s=getComputedStyle(el,'::after');
+                            return {content:s.content,width:s.width,height:s.height,
+                                stroke:s.borderRightWidth,rotation:s.transform};
+                        }""")
+                        self.assertEqual(initial['content'],'""',initial)
+                        self.assertEqual((initial['width'],initial['height']),
+                                         ('9px','9px'),initial)
+                        self.assertGreaterEqual(float(initial['stroke'].removesuffix('px')),1)
+                        summary.click()
+                        expect(node).to_have_attribute('open','')
+                        expanded=summary.evaluate(
+                            "el=>getComputedStyle(el,'::after').transform")
+                        self.assertNotEqual(expanded,initial['rotation'])
+                        summary.click()
+                        expect(node).not_to_have_attribute('open','')
+                    self.assertLessEqual(self.page.evaluate(
+                        'document.documentElement.scrollWidth-innerWidth'),1)
+                    if language=='es' and width==1440 and not light:
+                        out=INDEX.parent/'tests'/'artifacts'/'theme'
+                        out.mkdir(parents=True,exist_ok=True)
+                        self.page.locator('#unitCourierBox').screenshot(
+                            path=str(out/'c1b-courier-chevron-es-1440-dark.png'),
+                            animations='disabled')
+
 
     def test_manual_player_offer_stays_last_and_does_not_redefine_best_isk(self):
         from playwright.sync_api import expect
