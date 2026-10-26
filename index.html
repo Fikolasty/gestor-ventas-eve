@@ -7,7 +7,7 @@
 <meta name="referrer" content="no-referrer">
 <title>Market Moves+ · SIGMA GRINDSET</title>
 <style>
-/* ================= Market Moves+ v1.0.135 =================
+/* ================= Market Moves+ v1.0.136 =================
    Paleta: azul de base, naranja = acción, verde/rojo = ganancia/pérdida.
    Sin backdrop-filter: el vidrio se finge con rgba + bordes. */
 *{box-sizing:border-box;margin:0;padding:0}
@@ -4128,7 +4128,7 @@ body:not(.is-flip) .fact-buy-order{display:none!important}
 #ledger #lots .lot-pp .copy{
   width:100%!important;min-height:44px;margin:0!important;padding:9px 12px!important;
   display:flex;align-items:center;justify-content:space-between;gap:10px;
-  color:var(--txt)!important;background:var(--mm-item-inset)!important;
+  color:var(--txt);background:var(--mm-item-inset)!important;
   border:1px solid var(--line2)!important;border-radius:8px!important;
   font:650 .88rem/1.35 var(--f-num)!important;text-align:left!important;
   white-space:normal!important;overflow-wrap:anywhere;cursor:copy;
@@ -4145,8 +4145,6 @@ body:not(.is-flip) .fact-buy-order{display:none!important}
 #ledger #lots .lot-financial{min-width:0;display:block;text-align:right}
 #ledger #lots .lot-net{display:block;font:700 clamp(.87rem,1.15vw,1.03rem)/1.38 var(--f-num);overflow-wrap:anywhere}
 #ledger #lots .lot-net.pos{color:var(--gain)}
-#ledger #lots .lot-pp .copy.isk-pos{color:var(--gain)!important}
-#ledger #lots .lot-pp .copy.isk-neg{color:var(--loss)!important}
 #ledger #lots .lot-x{justify-self:end;align-self:center;margin:0;min-height:34px;min-width:34px}
 #ledger #lots .lot-body{
   display:grid!important;grid-template-columns:minmax(0,1fr)!important;
@@ -4417,12 +4415,13 @@ html.light #verdict #vCap .v-finance-item.mm-cost-item{background:var(--surface-
 #pSum .mm-plan-sort select{max-width:170px;min-height:34px;padding:5px 8px;border-radius:6px;border:1px solid var(--line2);background:var(--surface-panel);color:var(--txt);font:600 var(--mm-sales-explanation-size)/1.4 var(--f-ui)}
 #pSum .mm-plan-sort select:focus-visible{outline:2px solid var(--ion);outline-offset:2px}
 #pSum .mm-plan-options .pk-w{margin:0!important}
-#pSum #pk,#pSum #pkOthers{--pkc:18px minmax(0,1fr) auto;gap:6px}
-#pSum #pkOthers{margin:6px 0 0!important}
-#pSum #pk>.pk-o,#pSum #pkOthers>.pk-o{display:grid!important;grid-template-columns:18px minmax(0,1fr) minmax(112px,auto)!important;grid-template-rows:auto auto!important;align-items:center!important;gap:2px 9px!important;min-height:57px!important;padding:10px 13px!important;background:var(--surface-panel)!important;border:1px solid var(--line2)!important;border-radius:7px!important;box-shadow:none!important;min-width:0}
+#pSum #pk,#pSum #pkOthers{--pkc:18px minmax(0,1fr) auto}
+/* B.6a owns row surfaces, padding, border and min-height below; this base rule
+   owns only the grid geometry and keeps the existing button semantics. */
+#pSum #pk>.pk-o,#pSum #pkOthers>.pk-o{display:grid!important;grid-template-columns:18px minmax(0,1fr) minmax(112px,auto)!important;grid-template-rows:auto auto!important;align-items:center!important;gap:2px 9px!important;min-width:0}
 #pSum #pk>.pk-o{padding-right:34px!important;cursor:pointer!important}
-#pSum #pk>.pk-o.on{border-color:var(--clay)!important;background:var(--surface-panel)!important;box-shadow:inset 3px 0 0 var(--clay)!important}
-#pSum #pkOthers>.pk-o:hover{border-color:var(--clay)!important;background:var(--surface-card)!important}
+#pSum #pk>.pk-o.on{border-color:var(--clay)!important}
+#pSum #pkOthers>.pk-o:hover{border-color:var(--clay)!important}
 #pSum #pkOthers>.pk-o:focus-visible,#pSum #pk>.pk-o:focus-visible{outline:2px solid var(--ion);outline-offset:2px}
 #pSum .pk-o .pk-dot{grid-column:1!important;grid-row:1/3!important;align-self:center!important;margin-top:0!important}
 #pSum .pk-o .pk-tx{grid-column:2!important;grid-row:1/3!important;min-width:0!important}
@@ -4473,7 +4472,6 @@ html.light #verdict #vCap .v-finance-item.mm-cost-item{background:var(--surface-
 #pSum .pk-w:has(>#pkOthers[hidden]) #pk>.pk-o{border-bottom:0!important}
 #pSum .pk-w .pk-dot{width:12px;height:12px}
 #pSum .pk-w .pk-o .pk-l{font-weight:600!important}
-#pSum .pk-w .pk-o .pk-v{font-weight:650!important}
 
 /* Courier costs only warrant a detailed card when incurred. The faster option
    shares its row when available, with its why-question nested inside. */
@@ -6683,13 +6681,13 @@ Contraband Freight = no</textarea><small>Una regla por línea: Nombre = tax tota
 <button type="button" class="totop" id="toTop" aria-label="Volver arriba" title="Volver arriba (Inicio)" hidden><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 14l6-6 6 6"/></svg></button>
 <footer class="foot">
   <p class="foot-sec"><span class="ic i-lock" aria-hidden="true"></span>Tu inventario no se guarda: al cerrar o recargar se borra. Solo tus Ajustes quedan en este navegador.</p>
-  <div class="foot-by">Creado por <b>Fiko McGivert</b> · Vanguardia DR · SIGMA GRINDSET · <span class="ver">v1.0.135</span></div>
+  <div class="foot-by">Creado por <b>Fiko McGivert</b> · Vanguardia DR · SIGMA GRINDSET · <span class="ver">v1.0.136</span></div>
 </footer>
 
 <script>
 'use strict';
 /* ============================================================
-   Market Moves+ v1.0.135 — SIGMA GRINDSET / Vanguardia DR
+   Market Moves+ v1.0.136 — SIGMA GRINDSET / Vanguardia DR
    Flujo:  pegado → items → carga (ESI: precios, volúmenes, historial) → verificación → plan → vista
      1. Pegado      parsePaste(): parser posicional de columnas de EVE (Name · Quantity · … · Volume · Est. Price).
      2. Carga       esiItems(): trae todo lo que falta; mientras carga, refresh() NO pinta (S.loading).
