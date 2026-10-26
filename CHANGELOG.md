@@ -1,9 +1,11 @@
-## v1.0.145 — 2026-10-26 [ChatGPT] · B.12: Extras/Discord sin huecos ni redundancias — CI/Pages pendiente
+## v1.0.145 — 2026-10-26 [ChatGPT] · B.12: Extras/Discord sin huecos ni redundancias — LIVE certificada
 
 - **Aprobación expresa de Raulito:** corregir el fallo visual de Light y auditar la utilidad de «Contratos y Discord». Las dos columnas conservan 50/50 de anchura en escritorio, pero los contratos terminan a su altura natural, sin relleno artificial hasta el pie de Discord.
 - Se elimina el resumen inferior que repetía número de contratos, Buyback y envío. Su etiqueta EN «YOUR BUYBACK PROFIT» era impropia para `P.bbGross`, que representa ingreso, no beneficio; el valor y los controles de copia se conservan dentro de la ficha. La oferta Discord se identifica como **precio de oferta estimado**, no venta confirmada; se distingue entre ruta elegida y alternativa manual.
 - Discord conserva destinos SIGMA/Vanguardia, lista y enlace Janice, mensaje WTS copiable, enlace del canal y advertencias de cierre. La guía se reduce a tres pasos y nota contextual; la vista previa se pliega de entrada y es operable por teclado. Light elimina el gran contenedor gris interior; ES/EN, Dark/Light, 1440/630/390 verificados.
-- **QA local:** build `1.0.145`, 30/30 Node, 16/16 Python, 8/8 scripts heredados y 46/46 Chromium (~55 s), incluida nueva regresión B.12. Sin cambios en `r.g.disc`, `P.bbGross`, cálculo, ESI/SSO ni persistencia. **Al preparar esta fuente aún no existe publicación remota v1.0.145**; verificar cuatro Actions, Pages y HTTP antes de declarar LIVE. D.1 pendiente.
+- **QA local previo al despliegue:** build `1.0.145`, 30/30 Node, 16/16 Python, 8/8 scripts heredados y 46/46 Chromium (~55 s), incluida nueva regresión B.12. Sin cambios en `r.g.disc`, `P.bbGross`, cálculo, ESI/SSO ni persistencia. Las verificaciones de Actions, Pages y HTTP se completaron en el cierre remoto siguiente. D.1 pendiente.
+
+- **Cierre remoto LIVE:** Fiko publicó 17 blobs comprobados SHA, árbol `f209e6ff`, fuente `e2cad1cb5e629cf176a239db5b702516e5f93e3c` sobre `87d0cbfa` protegido (`expected_sha`, `force:false`), bot `298ac823f89deb9d1ef4bc21b512910db83226bb`. Las cuatro Actions fueron `success` (Versiones `40383422021`, Minería `40383422005`, Build `40383422146`, Rebuild/Pages `40383448358`). HTTPS independiente entregó **v1.0.145**, 2.311.398 bytes y blob Git `bf6d1f44c3a5c5f11753b79fec90bc7d1661892b` idéntico al local/remoto. No se certifican transacciones EVE ni SSO/ESI real end-to-end. D.1 perfilado sigue pendiente.
 
 ## v1.0.144 — 2026-10-26 [ChatGPT] · B.11: listado compacto con cuatro paneles simétricos — LIVE verificada por CI/Pages
 
