@@ -981,7 +981,7 @@ class ThemeBrowserTests(unittest.TestCase):
                         self.assertGreater(rect['width'],0,rect)
                         self.assertGreaterEqual(rect['left'],-1,rect)
                         self.assertLessEqual(rect['right'],width+1,rect)
-                    heading=self.page.locator('#pSum>.mm-plan-heading').bounding_box()
+                    heading=self.page.locator('#pSum .mm-plan-result').bounding_box()
                     comparison=self.page.locator('#pkHeadline').bounding_box()
                     self.assertLessEqual(comparison['x']+comparison['width'],heading['x']+heading['width']+1)
                     self.assertGreaterEqual(comparison['x'],heading['x']-1)
@@ -1022,7 +1022,7 @@ class ThemeBrowserTests(unittest.TestCase):
             else:
                 # Language changes preserve the reader's open explanations.
                 self.assertTrue(self.page.locator('#vCap .mm-context-help').first.evaluate('(d)=>d.open'))
-            rep_disclosure=self.page.locator('#vCap>.mm-rep-help')
+            rep_disclosure=self.page.locator('#vCap .mm-explanation-grid>.mm-rep-help')
             expect(rep_disclosure).to_have_count(1)
             self.assertEqual(rep_disclosure.evaluate('(d)=>d.open'),language=='en')
             self.assertEqual(self.page.locator('#vCap .mm-rep-question').count(),0)
@@ -1045,8 +1045,9 @@ class ThemeBrowserTests(unittest.TestCase):
                 self.page.locator('#vCap .mm-rep-help>summary').click()
             expect(answer).to_be_visible()
             self.assertIn('Reprocesa el' if language=='es' else 'Reprocess',answer.inner_text())
-            positive_delta=self.page.locator('#vCap .mm-rep-delta.pos')
+            positive_delta=self.page.locator('#vCap .mm-rep-answer .mm-rep-delta.pos')
             expect(positive_delta).to_have_count(1)
+            expect(self.page.locator('#vCap .mm-context-part .mm-rep-delta.pos')).to_have_count(1)
             self.assertIn('4,656',positive_delta.inner_text())
             self.assertGreater(channels(positive_delta.evaluate('(el)=>getComputedStyle(el).color'))[1],
                                channels(positive_delta.evaluate('(el)=>getComputedStyle(el).color'))[0])
@@ -1062,6 +1063,22 @@ class ThemeBrowserTests(unittest.TestCase):
                 self.page.set_viewport_size({'width':width,'height':900})
                 for light in (False,True):
                     self.page.evaluate('(on)=>document.documentElement.classList.toggle("light",on)',light)
+                    panels=self.page.evaluate("""() => {
+                        const left=document.querySelector('#vCap .mm-context-help:not(.mm-rep-help)').getBoundingClientRect();
+                        const right=document.querySelector('#vCap .mm-rep-help').getBoundingClientRect();
+                        const answer=document.querySelector('#vCap .mm-rep-answer');
+                        const costNumber=document.querySelector('#vCap .mm-context-number');
+                        return {left:{x:left.x,y:left.y,right:left.right,bottom:left.bottom},
+                            right:{x:right.x,y:right.y},font:parseFloat(getComputedStyle(answer).fontSize),
+                            numbers:!!costNumber};
+                    }""")
+                    self.assertAlmostEqual(panels['font'],13,delta=.05, msg=str(panels))
+                    self.assertTrue(panels['numbers'],panels)
+                    if width>=960:
+                        self.assertLessEqual(panels['left']['right'],panels['right']['x']+1,panels)
+                        self.assertAlmostEqual(panels['left']['y'],panels['right']['y'],delta=2)
+                    else:
+                        self.assertGreaterEqual(panels['right']['y'],panels['left']['bottom']-1,panels)
                     type_scale=self.page.evaluate("""() => {
                         const px=selector=>{
                             const element=document.querySelector(selector);
@@ -1096,10 +1113,10 @@ class ThemeBrowserTests(unittest.TestCase):
                     }.items():
                         self.assertAlmostEqual(type_scale[label],expected,places=2,
                                                msg=f'{language}/{width}/{light} {label}: {type_scale}')
-                    # The economic headline and the internal explanation heading
-                    # keep their original roles and never inherit the small copy scale.
+                    # The main ISK headline keeps its role; Geiner explicitly
+                    # reduced the optional reprocessing sentence to 13px in B.6.
                     self.assertGreaterEqual(type_scale['primaryISK'],32)
-                    self.assertGreaterEqual(type_scale['repAnswer'],16)
+                    self.assertAlmostEqual(type_scale['repAnswer'],13,places=2)
                     self.assertGreaterEqual(type_scale['subheading'],15)
                     self.assertEqual(self.page.evaluate("""() =>
                         getComputedStyle(document.querySelector('#mining'))
@@ -1112,6 +1129,11 @@ class ThemeBrowserTests(unittest.TestCase):
                     self.assertGreaterEqual(dims['left'],-1,dims)
                     self.assertLessEqual(dims['right'],width+1,dims)
                     self.assertEqual(dims['overflow'],0,dims)
+                    if language=='es' and width==1440 and not light:
+                        out=INDEX.parent/'tests'/'artifacts'/'theme'
+                        out.mkdir(parents=True,exist_ok=True)
+                        self.page.locator('#vCap .mm-explanation-grid').screenshot(
+                            path=str(out/'b6-explanations-es-1440-dark.png'),animations='disabled')
                     if width in (390,1440) and not light:
                         out=INDEX.parent/'tests'/'artifacts'/'theme'
                         out.mkdir(parents=True,exist_ok=True)
@@ -1129,7 +1151,8 @@ class ThemeBrowserTests(unittest.TestCase):
                     paintVerdict(window.__b5Fixture.P);
                     S.items=old;
                 }""")
-                loss=self.page.locator('#vCap .mm-rep-delta.neg')
+                loss=self.page.locator('#vCap .mm-rep-answer .mm-rep-delta.neg')
+                expect(self.page.locator('#vCap .mm-context-part .mm-rep-delta.neg')).to_have_count(1)
                 expect(loss).to_have_count(1)
                 self.assertIn('645,382,184',loss.inner_text())
                 self.assertIn('No reproceses el Krystallos.',self.page.locator('#vCap .mm-rep-answer').inner_text())
@@ -1174,9 +1197,9 @@ class ThemeBrowserTests(unittest.TestCase):
         self.page.locator('#vCap .mm-context-help:not(.mm-rep-help)>summary').click()
         expect(self.page.locator('#vCap .mm-context-body').first).to_contain_text(
             'charges cannot be truthfully itemized')
-        self.assertEqual(self.page.locator('#vCap>.mm-rep-help').count(),0)
+        self.assertEqual(self.page.locator('#vCap .mm-explanation-grid>.mm-rep-help').count(),0)
 
-    def test_b4_plan_comparison_in_header_tracks_selected_route(self):
+    def test_b4_plan_comparison_in_result_tracks_selected_route(self):
         from playwright.sync_api import expect
         for language in ('es','en'):
             self.page.evaluate('setLang',language)
@@ -1205,7 +1228,7 @@ class ThemeBrowserTests(unittest.TestCase):
                 for light in (False,True):
                     self.page.evaluate('(on)=>document.documentElement.classList.toggle("light",on)',light)
                     data=self.page.evaluate("""() => {
-                        const heading=document.querySelector('#pSum>.mm-plan-heading').getBoundingClientRect();
+                        const heading=document.querySelector('#pSum .mm-plan-result').getBoundingClientRect();
                         const compare=document.querySelector('#pkHeadline').getBoundingClientRect();
                         return {containerRight:heading.right,compareRight:compare.right,
                             compareLeft:compare.left,headingLeft:heading.left};
@@ -1217,6 +1240,77 @@ class ThemeBrowserTests(unittest.TestCase):
                     self.page.locator('#pSum').screenshot(
                         path=str(out/f"b4-plan-{language}-{width}-{'light' if light else 'dark'}.png"),
                         animations='disabled')
+
+    def test_b6_companion_result_changes_with_selected_plan_and_mobile_order(self):
+        from playwright.sync_api import expect
+        for language in ('es','en'):
+            self.page.evaluate('setLang', language)
+            self.page.evaluate("""() => {
+                S.flip=false;S.planMode=null;C.bb.on=true;C.disc.on=false;
+                const item={name:'Tritanium',qty:10,m3u:1,
+                    jita:{buy:80000,topBuy:80000,sell:90000,topSell:90000}};
+                S.items=[item];
+                const row={o:item,q:10,auto:'null',best:'null',np:110000,jl:95000,
+                    g:{null:1050000,jOrd:900000,jInst:810000,bb:790000},
+                    prod:0,vol:10,coll:1000000,ship:{},net:{},cant:false};
+                const P={rows:[row],best:1050000,mode:null,shipCost:0,Vs:0,
+                    missing:[],toBB:[]};
+                window.__b6Plan=P;
+                const detail=document.querySelector('#vFinanceDetails');detail.open=false;
+                paintVerdict(P);document.querySelector('#pSum').hidden=false;
+                pkView.open=true;pkView.filter='all';pkView.sort='net';pkView.dir=-1;
+                paintPicker(P);
+                window.__b6RefreshOriginal=refreshNow;
+                refreshNow=()=>{
+                    const choice=S.planMode||'auto';
+                    P.mode=S.planMode;
+                    row.best=choice==='auto'?'null':choice;
+                    P.best=choice==='auto'?row.g.null:row.g[choice];
+                    paintVerdict(P);paintPicker(P);
+                };
+            }""")
+            expect(self.page.locator('#pkOthers [data-m="jOrd"]')).to_be_visible()
+            expect(self.page.locator('#pkResultValue')).to_contain_text('1,050,000 ISK')
+            self.assertEqual(self.page.locator('#vFinanceDetails').evaluate('(e)=>e.closest("#pkResult")?.id'),'pkResult')
+            self.page.locator('#pkSort').select_option('speed:1')
+            self.assertEqual(self.page.locator('#pkSort').input_value(),'speed:1')
+            self.page.locator('#vFinanceDetails>summary').click()
+            expect(self.page.locator('#vFinanceDetails')).to_have_attribute('open','')
+            self.page.locator('#pkOthers [data-m="jOrd"]').click()
+            expect(self.page.locator('#pkResultValue')).to_contain_text('900,000 ISK')
+            self.assertEqual(self.page.evaluate('S.planMode'),'jOrd')
+            expect(self.page.locator('#vFinanceDetails')).to_have_attribute('open','')
+            self.assertIn('Jita',self.page.locator('#pkResultDestination').inner_text())
+            expect(self.page.locator('#pkOthers [data-m="auto"]')).to_be_visible()
+            # Full exact amount is visible on the left; the plan row is intentionally compact.
+            self.assertIn('900,000 ISK',self.page.locator('#pkResultValue').inner_text())
+            self.assertTrue(self.page.locator('#pkOthers [data-m="auto"] .pk-v').inner_text().strip().endswith('ISK'))
+            for width in (1440,630,390):
+                self.page.set_viewport_size({'width':width,'height':900})
+                for light in (False,True):
+                    self.page.evaluate('(on)=>document.documentElement.classList.toggle("light",on)',light)
+                    dims=self.page.evaluate("""() => {
+                        const left=document.querySelector('#pkResult').getBoundingClientRect();
+                        const right=document.querySelector('.mm-plan-options').getBoundingClientRect();
+                        const all=[left,right,document.querySelector('#pkSort').getBoundingClientRect()];
+                        return {left:{x:left.x,y:left.y,width:left.width},
+                            right:{x:right.x,y:right.y,width:right.width},
+                            overflow:all.some(r=>r.left<-1||r.right>innerWidth+1),
+                            font:parseFloat(getComputedStyle(document.querySelector('#pkResultMetric')).fontSize)};
+                    }""")
+                    self.assertFalse(dims['overflow'],dims)
+                    self.assertLessEqual(dims['font'],13.5,dims)
+                    if width>1050:
+                        self.assertLess(dims['left']['x'],dims['right']['x'],dims)
+                        self.assertAlmostEqual(dims['left']['y'],dims['right']['y'],delta=2)
+                    else:
+                        self.assertLess(dims['right']['y'],dims['left']['y'],dims)
+                    out=INDEX.parent/'tests'/'artifacts'/'theme'
+                    out.mkdir(parents=True,exist_ok=True)
+                    self.page.locator('#pSum').screenshot(
+                        path=str(out/f"b6-plan-{language}-{width}-{'light' if light else 'dark'}.png"),
+                        animations='disabled')
+            self.page.evaluate('refreshNow=window.__b6RefreshOriginal')
 
     def test_b4_ledger_unit_copy_and_lazy_disclosures(self):
         from playwright.sync_api import expect

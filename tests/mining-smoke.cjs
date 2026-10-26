@@ -84,10 +84,11 @@ assert(source.includes('chartResize.disconnect()'),'desconectar el ResizeObserve
 assert(!sales.includes('paintResGain('),'no calcular componentes de interfaz eliminados');
 assert(html.includes('class="mm-plan-area"')||html.includes('class="summary res mm-plan-area"'),'área unificada ausente');
 
-// v1.0.80: solo el plan seleccionado en vista cerrada; se cambia desde una acción única.
+// B.6: selected row plus immediate alternatives; expanded/collapsed is optional.
 assert(sales.includes('box.append(row(chosen,true))'),'debe mostrarse el plan elegido');
-assert(sales.includes("others.hidden=!pkView.open"),'las alternativas deben estar plegadas');
-assert(sales.includes("e.target.closest('[data-pk-toggle]')"),'la fila elegida debe desplegar las opciones');
+assert(sales.includes("open:true"),'alternativas inicialmente visibles');
+assert(sales.includes("others.hidden=!pkView.open"),'las alternativas conservan expansión opcional');
+assert(sales.includes("e.target.closest('[data-pk-toggle]')"),'la fila elegida sigue pudiendo plegar opciones');
 assert(sales.includes("aria-expanded',String(pkView.open)"),'el selector debe indicar si está abierto');
 assert(!sales.includes('pkChange'),'el botón Cambia de Plan ya no se usa');
 assert(sales.includes('El óptimo también se elige aquí'),'Plan Óptimo debe seguir seleccionable entre alternativas');

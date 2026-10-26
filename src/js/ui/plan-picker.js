@@ -1,10 +1,10 @@
 // ================= Vista: resumen final (el estudio en palabras) =================
 // ================= Elige un Plan (v111 → v1.0.21) =================
-// Una fila por plan con columnas (Plan · Rapidez · Envío · Valor · Total · vs Óptimo), orden por columna y filtros.
+// B.6: alternativas compactas a la derecha, con desglose fiel del plan activo a la izquierda.
 // El óptimo va SIEMPRE primero; los demás de mejor a peor por defecto. Todo sale de modeTotal() con los Ajustes,
 // la ruta (flip) y el switch de envío actuales: aquí no se calcula nada nuevo, solo se ordena y se pinta.
 // Elegir un plan recalcula (S.planMode → refreshNow). Orden y filtro viven en memoria (pkView) y se vacían al limpiar.
-let pkView={sort:'net',dir:-1,filter:'all',open:false}; // v1.0.49: open = mostrar todos los planes
+let pkView={sort:'net',dir:-1,filter:'all',open:true}; // B.6: mostrar alternativas desde el inicio
 const PK_FAST=new Set(['jInst','cInst','fJI','bb']);         // cobras el mismo día (sin contar el envío)
 const PK_REP=new Set(['rNull','rJita']);
 function pkSpeed(m,P){const ship=pkShips(m,P);
@@ -17,7 +17,6 @@ function pkSpeed(m,P){const ship=pkShips(m,P);
 const pkSpeedRank=(m,P)=>m==='auto'?1.5:(PK_FAST.has(m)?0:m==='disc'?4:(m==='null'||m==='rNull'||m==='fN')?3:2)+(pkShips(m,P)?.5:0);
 function pkShips(m,P){if(!SH())return false;if(m==='auto')return P.Vs>0;return !!SHIPS[m];}
 const PK_FILTERS=[['all','picker.all'],['fast','picker.fastFilter'],['noship','picker.noShipping'],['rep','picker.reprocessing'],['comp','picker.compression']];
-const PK_COLS=[['name','picker.plan'],['speed','picker.speed'],['ship','picker.shipping'],['net','picker.value'],['net','picker.total'],['diff','picker.difference']];
 function paintPicker(P){
   const box=$('pk'),bar=$('pkNote'),tools=$('pkTools'),others=$('pkOthers');
   box.textContent='';bar.textContent='';tools.textContent='';others.textContent='';
@@ -31,6 +30,27 @@ function paintPicker(P){
   // Mantener siempre visible el plan elegido, aunque su resultado sea idéntico al óptimo.
   const list=all.filter(x=>x.m===cur||!same.includes(x.m));
   const chosen=all.find(x=>x.m===cur)||all[0];
+  // Only reuse amounts from existing accounting and plan totals. No new
+  // pricing or profit formula is introduced by the result companion card.
+  const selectedNet=$('pkResultValue'),metric=$('pkResultMetric');
+  metric.textContent=tx(showProfit?'picker.estimatedProfit':'picker.netProceeds');
+  selectedNet.className='mm-plan-result-value num '+sgn(chosen.t.net);
+  selectedNet.textContent=(chosen.t.net<0?'−':showProfit?'+':'')+fmt(Math.abs(chosen.t.net));
+  const marketFees=$('vsCn').textContent;
+  const includesImport=P.rows.some(r=>r.best==='fN');
+  const onlyImport=includesImport&&P.rows.every(r=>!r.best||r.best==='fN');
+  const knownFees=marketFees&&marketFees!=='0 ISK'&&marketFees!=='—';
+  $('pkResultFees').textContent=onlyImport?tx('picker.feesIncluded'):
+    (knownFees?'−':'')+(marketFees||'—')+(includesImport?' · '+tx('picker.feesPartial'):'');
+  $('pkResultFees').className=knownFees&&!onlyImport?'neg':'';
+  $('pkResultShip').textContent=(P.shipCost>0.5?'−':'')+fmt(P.shipCost||0);
+  $('pkResultShip').className=P.shipCost>0.5?'neg':'zero';
+  const destinations=[...new Set(P.rows.filter(r=>r.q>0&&r.best).map(r=>r.best))];
+  $('pkResultDestination').textContent=destinations.length===1?modeName(destinations[0]):
+    destinations.length>1?tx('picker.multipleRoutes',{count:destinations.length}):'—';
+  const warning=$('pkResultWarning');warning.hidden=!(S.flip&&!showProfit);
+  warning.textContent=warning.hidden?'':tx('trade.proceedsOnly');
+  $('pkSort').value=pkView.sort+':'+pkView.dir;
 
   // Benchmark is the largest estimated net across feasible plan selections, not necessarily Plan Óptimo.
   // Financial opportunity and time/liquidity are reported separately; no fabricated days or returns.
@@ -127,27 +147,14 @@ function paintPicker(P){
   opportunity.hidden=!opportunity.childElementCount;
   if(!opportunity.hidden)opportunity.prepend(el('h3','pk-opp-head',tx('picker.noticeHeading')));
 
-  const maxNet=Math.max(...list.filter(x=>x.m!=='disc').map(x=>x.t.net),1);
-  // Optimal is already identified by the section subtitle and the opportunity
-  // comparison. Repeating that claim as an all-caps paragraph adds visual noise.
-  // Show a compact, actionable difference only when a different route is chosen.
-  bar.hidden=chosen.m==='auto';bar.replaceChildren();
-  const delta=chosen.t.net-opt;
-  if(chosen.m!=='auto'){
-    bar.append(planMark(chosen.m),' · ',
-      Math.abs(delta)<.5?tx('picker.selectedSame'):
-      tx('picker.selectedDifference',{difference:(delta>0?'+':'−')+fmt(Math.abs(delta))}));
-  }
+  // B.6: the left comparison owns the numeric delta. Keep this note ONLY
+  // for partial/manual fallback warnings instead of repeating the delta.
+  bar.replaceChildren();
   const cant=P.rows.filter(r=>r.cant);
   if(chosen.m!=='auto'&&cant.length)
-    bar.append(' · ',tx(cant.length===1?'picker.fallbackOne':'picker.fallbackMany',{count:cant.length}));
-  const hd=el('div','pk-hd');
-  PK_COLS.forEach(([k,t],i)=>{
-    const label=tx(showProfit&&i===4?'picker.profit':t);
-    const on=pkView.sort===k&&i!==3,b=el('button','pk-hc c'+i+(on?' on':''),label+(on?(pkView.dir>0?' ▲':' ▼'):''));
-    b.type='button';if(i===3){b.disabled=true;b.tabIndex=-1;}else{b.dataset.pks=k;b.title=tx('picker.sortBy',{label:tx(t).toLowerCase()});}hd.append(b);});
+    bar.append(tx(cant.length===1?'picker.fallbackOne':'picker.fallbackMany',{count:cant.length}));
+  bar.hidden=!bar.textContent;
   box.classList.toggle('pk-noship',!SH());others.classList.toggle('pk-noship',!SH());
-  box.append(hd);
   function row({m,l,t},selected){
     const d=t.net-opt;
     const b=el('button','pk-o'+(selected?' on':'')+(m==='auto'?' best':''));
@@ -156,6 +163,7 @@ function paintPicker(P){
     if(!selected){b.dataset.m=m;b.setAttribute('aria-pressed','false');}
     else{
       b.dataset.pkToggle='true';
+      b.setAttribute('aria-pressed','true');
       b.setAttribute('aria-current','true');
       b.setAttribute('aria-controls','pkOthers');
       b.setAttribute('aria-expanded',String(pkView.open));
@@ -172,20 +180,18 @@ function paintPicker(P){
       cOrd:'picker.compressOrderDesc',cInst:'picker.compressInstantDesc',
       fN:'picker.importDesc'};
     txt.append(nm);
-    if(!selected)txt.append(el('small','pk-e',tx(short[m]||'picker.bestDesc')+part));
-    const sp=el('span','pk-sp',pkSpeed(m,P)),sh=el('span','pk-sh'+(pkShips(m,P)?' y':''),tx(pkShips(m,P)?'picker.yes':'picker.no'));
-    const barW=el('span','pk-bar'),bi=el('i');bi.style.width=Math.max(2,Math.min(100,t.net/maxNet*100))+'%';barW.append(bi);
+    b.setAttribute('aria-label',l+'. '+(showProfit?tx('picker.estimatedProfit'):tx('picker.netProceeds'))+': '+fmt(t.net)+'. '+(selected?tx('picker.selected'):tx(short[m]||'picker.bestDesc')+part));
     const diff=m==='auto'?tx('picker.optimal'):Math.round(d)===0?tx('picker.same'):(d>0?'+':'−')+compactIsk(Math.abs(d));
-    b.append(el('span','pk-dot'),txt,sp,sh,barW,
-      el('b','pk-v num '+(showProfit?sgn(t.net):''),showProfit?(t.net>=0?'+':'−')+fmt(Math.abs(t.net)):fmt(t.net)),
+    const compact=compactIsk(Math.abs(t.net))+(Math.abs(t.net)>=1000?' ISK':'');
+    b.append(el('span','pk-dot'),txt,
+      el('b','pk-v num '+sgn(t.net),(t.net<0?'−':showProfit?'+':'')+compact),
       el('small','pk-d '+(m==='auto'||Math.round(d)===0?'':d>0?'pos':'neg'),diff));
     if(part)b.title=part.trim();
     return b;
   }
-  if(!pkView.open)box.append(row(chosen,true));
+  box.append(row(chosen,true));
   const pass={all:()=>true,fast:x=>PK_FAST.has(x.m),noship:x=>!pkShips(x.m,P),rep:x=>PK_REP.has(x.m),comp:x=>x.m==='cOrd'||x.m==='cInst'};
   const available=list.filter(x=>x.m!==chosen.m);
-  const expandedList=pkView.open?[...list]:available;
   const fl=PK_FILTERS.filter(([f])=>f==='all'||(f!=='noship'||SH())&&available.some(x=>pass[f](x)));
   if(!fl.some(([f])=>f===pkView.filter))pkView.filter='all';
   others.hidden=!pkView.open;
@@ -195,7 +201,7 @@ function paintPicker(P){
       const b=el('button','pk-fb'+(pkView.filter===f?' on':''),tx(t));b.type='button';b.dataset.pkf=f;b.setAttribute('aria-pressed',String(pkView.filter===f));b.append(el('small',null,String(n)));group.append(b);});
     tools.append(group);}
   const key={name:x=>x.l.toLowerCase(),speed:x=>pkSpeedRank(x.m,P),ship:x=>pkShips(x.m,P)?1:0,net:x=>x.t.net,diff:x=>x.t.net};
-  const rest=expandedList.filter(x=>x.m===chosen.m||pass[pkView.filter](x))
+  const rest=available.filter(x=>pass[pkView.filter](x))
     .sort((a,b)=>{
       // Manual WTS/Discord is always displayed LAST regardless of sort mode.
       if(a.m==='disc'&&b.m!=='disc')return 1;
@@ -204,7 +210,7 @@ function paintPicker(P){
       return (A<B?-1:A>B?1:0)*pkView.dir||b.t.net-a.t.net;
     });
   // El óptimo también se elige aquí: ya no necesita un botón Volver al óptimo.
-  rest.forEach(x=>{const entry=row(x,false);if(x.m===chosen.m){entry.classList.add('on');entry.setAttribute('aria-pressed','true');entry.setAttribute('aria-current','true');entry.title=tx('picker.selected');}others.append(entry);});
+  rest.forEach(x=>others.append(row(x,false)));
   if(!rest.length)others.append(el('p','pk-empty',tx('picker.empty')));
 }
 // Orden y filtro: solo repintan el selector, sin recalcular ISK.
@@ -215,8 +221,11 @@ $('pkTools').addEventListener('click',e=>{
   // paintPicker replaces the controls: preserve keyboard focus on its live twin.
   if(hadFocus)$('pkTools').querySelector('.pk-fb.on')?.focus({preventScroll:true});
 });
-$('pk').addEventListener('click',e=>{const b=e.target.closest('[data-pks]');if(!b||!lastP)return;e.stopPropagation();const k=b.dataset.pks;
-  pkView=pkView.sort===k?{...pkView,dir:-pkView.dir}:{...pkView,sort:k,dir:k==='name'||k==='speed'||k==='ship'?1:-1};paintPicker(lastP);});
+$('pkSort').addEventListener('change',e=>{if(!lastP)return;
+  const [sort,direction]=e.target.value.split(':');
+  if(!['net','name','speed','ship'].includes(sort))return;
+  pkView.sort=sort;pkView.dir=Number(direction)===1?1:-1;paintPicker(lastP);
+});
 $('pk').addEventListener('click',e=>{
   if(!e.target.closest('[data-pk-toggle]')||!lastP)return;
   pkView.open=!pkView.open;
@@ -231,7 +240,7 @@ $('pkShortcut').addEventListener('click',e=>{
   if(target)target.scrollIntoView({block:'nearest',behavior:'smooth'});
 });
 $('pkOthers').addEventListener('click',e=>{const b=e.target.closest('[data-m]');if(!b)return;
-  S.planMode=b.dataset.m==='auto'?null:b.dataset.m;pkView.open=false;pkView.filter='all';czIdx=0;refreshNow();});
+  S.planMode=b.dataset.m==='auto'?null:b.dataset.m;pkView.open=true;czIdx=0;refreshNow();});
 $('pkOpportunity').addEventListener('click',e=>{
   const button=e.target.closest('[data-enable-compression]');if(!button)return;
   const setting=$('compressOn');setting.checked=true;setting.dispatchEvent(new Event('change',{bubbles:true}));

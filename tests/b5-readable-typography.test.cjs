@@ -21,7 +21,8 @@ test('B.5b Sales typography uses shared, scoped question/answer/label tokens',()
   assert.match(css,/#pSum \.pk-headline-note\{[^}]*font:500 var\(--mm-sales-explanation-size\)\//);
   // Primary results remain independent of these contextual tokens.
   assert.match(css,/#verdict \.v-isk\{font-size:clamp\(2rem,3\.5vw,3\.45rem\)!important/);
-  assert.match(css,/#verdict #vCap \.mm-rep-answer\{[^}]*font:700 clamp\(1\.04rem,1\.3vw,1\.18rem\)/);
+  // B.6 intentionally brings the optional decision explanation down to 13px.
+  assert.match(css,/#verdict #vCap \.mm-rep-answer\{font:600 var\(--mm-sales-explanation-size\)\//);
 });
 
 test('B.5 keeps native disclosure questions, independent of theme and language',()=>{

@@ -109,6 +109,94 @@
     "es": "PLAN",
     "en": "PLAN"
   },
+  "picker.chooseTitle": {
+    "es": "ELIGE TU PLAN",
+    "en": "CHOOSE YOUR PLAN"
+  },
+  "picker.chooseSubtitle": {
+    "es": "COMPARA LAS RUTAS Y DESCUBRE CUÁNTO RECIBIRÍAS",
+    "en": "COMPARE ROUTES AND SEE WHAT YOU'D RECEIVE"
+  },
+  "picker.availablePlans": {
+    "es": "Planes disponibles",
+    "en": "Available plans"
+  },
+  "picker.yourResult": {
+    "es": "Tu resultado",
+    "en": "Your result"
+  },
+  "picker.resultAria": {
+    "es": "Resultado del plan seleccionado",
+    "en": "Selected plan result"
+  },
+  "picker.netProceeds": {
+    "es": "Ingreso neto estimado",
+    "en": "Estimated net proceeds"
+  },
+  "picker.estimatedProfit": {
+    "es": "Ganancia neta estimada",
+    "en": "Estimated net profit"
+  },
+  "picker.marketFees": {
+    "es": "Impuestos y comisiones",
+    "en": "Taxes and fees"
+  },
+  "picker.shippingCost": {
+    "es": "Envío estimado",
+    "en": "Estimated shipping"
+  },
+  "picker.feesIncluded": {
+    "es": "Incluidos en el precio objetivo",
+    "en": "Included in target price"
+  },
+  "picker.feesPartial": {
+    "es": "desglose parcial",
+    "en": "partial breakdown"
+  },
+  "picker.salesDestination": {
+    "es": "Dónde se vende",
+    "en": "Where it's sold"
+  },
+  "picker.salesDestinationUpper": {
+    "es": "DÓNDE SE VENDE",
+    "en": "WHERE IT'S SOLD"
+  },
+  "picker.moneyOrigin": {
+    "es": "DE DÓNDE SALE TU ISK",
+    "en": "WHERE YOUR ISK COMES FROM"
+  },
+  "picker.multipleRoutes": {
+    "es": "{count} rutas; ver distribución",
+    "en": "{count} routes; see breakdown"
+  },
+  "picker.sortLabel": {
+    "es": "Ordenar",
+    "en": "Sort"
+  },
+  "picker.sortAria": {
+    "es": "Ordenar planes",
+    "en": "Sort plans"
+  },
+  "picker.sortMost": {
+    "es": "Más ISK",
+    "en": "Most ISK"
+  },
+  "picker.sortLeast": {
+    "es": "Menos ISK",
+    "en": "Least ISK"
+  },
+  "picker.sortFast": {
+    "es": "Más rápidos",
+    "en": "Fastest"
+  },
+  "picker.sortNoShip": {
+    "es": "Sin envío primero",
+    "en": "No shipping first"
+  },
+  "picker.sortName": {
+    "es": "Nombre A–Z",
+    "en": "Name A–Z"
+  },
   "picker.speed": {
     "es": "RAPIDEZ",
     "en": "SPEED"

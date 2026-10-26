@@ -102,7 +102,7 @@ $('bDeep').addEventListener('click',()=>{
 // v1.0.54: modo foco. Al abrir una sección principal (planes, desglose, Listado, Contratos, Reproceso, Jugadores, Ajustes o Guía de Uso),
 // las demás se pliegan y la vista va a la que abriste.
 function focusOnly(k){
-  if(k!=='plans'&&pkView.open){pkView.open=false;if(lastP)paintPicker(lastP);}
+  // B.6: plan alternatives remain available beside the active result.
   if(k!=='deep'&&k!=='plans')setSect('deep',false);
   ['ledger','pCtr','pRepro','pDisc'].forEach(id=>{if(k!==id&&$(id).open)$(id).open=false;});
   ['settings','help','mining'].forEach(id=>{if(k!==id&&!$(id).hidden)togglePanel(id,false);});
@@ -116,7 +116,7 @@ function clearViews(){
   ['pCtr','pSum'].forEach(id=>{const e=$(id);if(e)e.hidden=true;});
   $('deep').hidden=true;delete $('deep').dataset.uiReady;
   lastP=null;repaintPlanGroup=null;paintAppraisal();discRows=[];czCards=[];lastCs=[];czIdx=0;S.planMode=null;ICON_POOL={};
-  stepOpen=null;vShow=Object.create(null);vSort=Object.create(null);vQuery=Object.create(null);pkView={sort:'net',dir:-1,filter:'all',open:false};if($('stepHead'))$('stepHead').textContent='';
+  stepOpen=null;vShow=Object.create(null);vSort=Object.create(null);vQuery=Object.create(null);pkView={sort:'net',dir:-1,filter:'all',open:true};if($('stepHead'))$('stepHead').textContent='';
 }
 function paintWhereSold(P,none){
   const rowsIn=P.rows;
@@ -129,7 +129,8 @@ function paintWhereSold(P,none){
      ks.forEach(k=>{const v=sums[k],i=el('i');i.style.width=(v/tot*100)+'%';i.style.background=DC[k]||'#9c9a92';i.title=(PLAN_L[k]||k)+': '+fmt(v);bar.append(i);
        const n=rowsIn.filter(r=>r.best===k).length,d=el('div'),sw=el('span','ov-sw');sw.style.background=DC[k]||'#9c9a92';
        d.append(sw,el('b',null,v/tot>0&&v/tot<.005?'<1%':pct(v/tot)+'%'),el('small',null,routeSummaryName(k)+' · '+n+(S.lang==='en'?(n===1?' item':' items'):(n===1?' ítem':' ítems'))));lg.append(d);});
-     box.append(bar,lg);}}
+     if(ks.length>1)box.append(bar);
+     box.append(lg);}}
 }
 // El texto del resumen se deriva de los items y del modo activos, nunca del nombre de una ruta fija.
 // Compact descriptions are per destination, never whole-lot plan names.
@@ -150,6 +151,16 @@ function verdictFinance(P,tradeAccounting){
     proceeds:P.best,
     investment:tradeAccounting?tradeAccounting.buy:null
   };
+}
+
+// Monetary and rate emphasis is strictly presentational. Neutral numbers
+// (skill levels, quantities and reference sale prices) keep their own color.
+function appendCostFigures(node,message){
+  String(message).split(/(\d[\d.,]*\s?%|\d[\d.,]*\s?ISK)/g).forEach(part=>{
+    if(!/\d[\d.,]*\s?(?:%|ISK)$/.test(part)){node.append(document.createTextNode(part));return;}
+    const beneficial=/^0(?:[.,]0+)?\s?ISK$/.test(part)||/^11\s?%$/.test(part);
+    node.append(el('span',beneficial?'mm-context-number pos':'mm-context-number neg',part));
+  });
 }
 
 // B.5: explain ONLY the same charges already used by the selected plan.
@@ -173,7 +184,8 @@ function paintCostExplanation(P,cost,expanded){
   const disclosure=el('details','mm-context-help'),summary=el('summary',null,tx('decision.costsWhy'));
   disclosure.open=expanded;disclosure.append(summary);
   const body=el('div','mm-context-body');
-  const explain=(heading,message)=>{const section=el('section','mm-context-part');section.append(el('strong',null,heading),el('p',null,message));body.append(section);};
+  const explain=(heading,message)=>{const section=el('section','mm-context-part'),paragraph=el('p');
+    appendCostFigures(paragraph,message);section.append(el('strong',null,heading),paragraph);body.append(section);};
   if(cost.marketVolume>0){
     const level=parseInt($('skAcc').value,10),expected=Number.isInteger(level)?taxOf(level):null;
     const accounting=expected!=null&&Math.abs(expected-C.tax)<.000005
@@ -193,7 +205,8 @@ function paintCostExplanation(P,cost,expanded){
   const origin=el('p','mm-cost-source',tx('decision.costsSource'));
   const settings=el('button','mm-cost-settings',tx('decision.reviewSettings'));settings.type='button';
   settings.addEventListener('click',()=>togglePanel('settings',true));body.append(origin,settings);
-  disclosure.append(body);cap.append(disclosure);
+  disclosure.append(body);
+  const helpGrid=el('div','mm-explanation-grid');helpGrid.append(disclosure);cap.append(helpGrid);
 }
 
 function paintReprocessingDecision(P,expanded){
@@ -238,14 +251,21 @@ function paintReprocessingDecision(P,expanded){
     if(!r.rep||r.rep.missing)entry.append(el('p',null,tx('decision.refineMissingQuotes')));
     else{
       const rep=r.rep,better=rep.diff>.5?rep.kr:rep.kn;
-      entry.append(el('p',null,tx('decision.refineComparison',{
+      const marker='__MM_REPROCESS_COMPARISON__';
+      const message=tx('decision.refineComparison',{
         best:modeName(better),reprocessed:fmt(rep.netRef),raw:fmt(rep.netRaw),
-        delta:(rep.diff>=0?'+':'−')+fmt(Math.abs(rep.diff))})));
+        delta:marker});
+      const paragraph=el('p'),pivot=message.indexOf(marker);
+      if(pivot<0)paragraph.textContent=message;
+      else paragraph.append(document.createTextNode(message.slice(0,pivot)),
+        el('span','mm-rep-delta '+(rep.diff>=0?'pos':'neg'),(rep.diff>=0?'+':'−')+fmt(Math.abs(rep.diff))),
+        document.createTextNode(message.slice(pivot+marker.length)));
+      entry.append(paragraph);
     }
     body.append(entry);
   });
   body.append(el('p','mm-cost-source',tx('decision.refineMethod')));
-  disclosure.append(body);$('vCap').append(disclosure);
+  disclosure.append(body);($('vCap').querySelector('.mm-explanation-grid')||$('vCap')).append(disclosure);
 }
 
 let activeRep=0;

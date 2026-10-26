@@ -1128,3 +1128,86 @@ html.light #verdict #vCap .v-finance-item.mm-cost-item{background:var(--surface-
   #ledger>.mm-inline-faq>summary::after,#pSum>.mm-inline-faq>summary::after,
   #unitCourierBox>.mm-inline-faq>summary::after{transition:none}
 }
+
+/* B.6 · The two optional explanations share one row only when both exist.
+   Let their own content determine height; avoid an empty half-card for loot. */
+#verdict #vCap .mm-explanation-grid{display:grid;grid-template-columns:minmax(0,1fr);align-items:start;gap:13px;margin:9px 0 0}
+#verdict #vCap .mm-explanation-grid .mm-context-help{min-width:0;margin:0}
+#verdict #vCap .mm-rep-answer{font:600 var(--mm-sales-explanation-size)/1.6 var(--f-ui)}
+#verdict #vCap .mm-context-number{font-weight:650;font-variant-numeric:tabular-nums}
+#verdict #vCap .mm-context-number.pos{color:var(--gain)}
+#verdict #vCap .mm-context-number.neg{color:var(--loss)}
+#verdict #vCap .mm-rep-delta{font-weight:700;font-variant-numeric:tabular-nums}
+@media(min-width:960px){
+  #verdict #vCap .mm-explanation-grid:has(>.mm-rep-help){grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+
+/* B.6 · The real plan engine still supplies every number. The chooser shows
+   only the decision; the companion card owns the former income/destination
+   disclosure and updates after the canonical plan selection/refresh cycle. */
+#pSum>.mm-plan-heading{grid-template-columns:minmax(0,1fr)!important;min-height:0;row-gap:0!important;margin-bottom:13px!important;padding-bottom:14px}
+#pSum>.mm-plan-heading .mm-plan-heading-copy{grid-column:1}
+#pSum>.mm-plan-heading .pk-summary{font:550 var(--mm-sales-explanation-size)/1.5 var(--f-ui)!important;color:var(--mut)!important}
+#pSum .mm-plan-layout{display:grid;grid-template-columns:minmax(0,.86fr) minmax(0,1.14fr);align-items:start;gap:14px;margin:0 0 14px}
+#pSum .mm-plan-result,#pSum .mm-plan-options{min-width:0;padding:17px 18px;border:1px solid var(--line2);border-radius:9px;background:var(--surface-card);box-shadow:none}
+#pSum .mm-plan-card-title{margin:0 0 15px;color:var(--txt);font:700 .91rem/1.45 var(--f-ui)}
+#pSum .mm-plan-result-label{display:block;color:var(--mut);font:600 var(--mm-sales-label-size)/1.45 var(--f-ui)}
+#pSum .mm-plan-result-value{display:block;margin:4px 0 11px;color:var(--gain);font:750 clamp(1.26rem,2.05vw,1.85rem)/1.3 var(--f-num);overflow-wrap:anywhere}
+#pSum .mm-plan-result-value.neg{color:var(--loss)}
+#pSum .mm-plan-result-value:empty{display:none}
+#pSum .mm-plan-result .mm-plan-comparison{padding:10px 0 11px;margin:0 0 10px;border-left:0;border-top:1px solid var(--line2);border-bottom:1px solid var(--line2)}
+#pSum .mm-plan-result .pk-headline-grid{grid-template-columns:minmax(0,1fr);gap:9px}
+#pSum .mm-plan-result .pk-headline-stat+.pk-headline-stat{padding-top:8px;border-top:1px solid var(--line2)}
+#pSum .mm-plan-result .pk-headline-stat strong{font-size:.95rem}
+#pSum .mm-plan-result .pk-headline-stat+.pk-headline-stat strong{font-size:.78rem}
+#pSum .mm-plan-result>.pk-summary{margin:0 0 9px!important;color:var(--loss)!important;font:550 var(--mm-sales-explanation-size)/1.55 var(--f-ui)!important}
+#pSum .mm-plan-result>.pk-summary[hidden]{display:none!important}
+#pSum .mm-plan-facts{margin:0 0 14px;display:grid;gap:0}
+#pSum .mm-plan-facts>div{display:flex;align-items:baseline;justify-content:space-between;gap:9px;padding:10px 0;border-bottom:1px solid var(--line2)}
+#pSum .mm-plan-facts dt{color:var(--mut);font:500 var(--mm-sales-label-size)/1.5 var(--f-ui)}
+#pSum .mm-plan-facts dd{margin:0;color:var(--txt);text-align:right;min-width:0;overflow-wrap:anywhere;font:650 var(--mm-sales-explanation-size)/1.5 var(--f-ui);font-variant-numeric:tabular-nums}
+#pSum .mm-plan-facts dd.neg{color:var(--loss)}
+#pSum .mm-plan-facts dd.zero{color:var(--gain)}
+#pSum .mm-plan-result-warning{font:550 var(--mm-sales-explanation-size)/1.6 var(--f-ui);color:var(--loss);margin:0 0 12px}
+#pSum .mm-plan-result-warning[hidden]{display:none}
+#pSum #vFinanceDetails{margin:0!important}
+#pSum #vFinanceDetails .mm-finance-details-body{padding:11px 13px 13px}
+#pSum #vFinanceDetails .ov-leg{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+#pSum #vFinanceDetails .ov-leg b{font-size:.79rem!important;overflow-wrap:anywhere}
+#pSum #vFinanceDetails .ov-leg small{font-size:var(--mm-sales-label-size);line-height:1.45}
+#pSum #vFinanceDetails .mm-dest-inline{margin-top:11px;padding-top:11px}
+#pSum .mm-plan-controls{display:flex;flex-wrap:wrap;align-items:flex-start;gap:9px 12px;margin:0 0 13px}
+#pSum .mm-plan-controls .pk-tools{margin:0!important;flex:1 1 260px;min-width:0;overflow:visible;justify-content:flex-start}
+#pSum .mm-plan-controls .pk-flt{flex-wrap:wrap;max-width:100%;box-shadow:none}
+#pSum .mm-plan-controls .pk-fb{font-size:.76rem;min-height:32px}
+#pSum .mm-plan-sort{display:flex;align-items:center;gap:7px;margin-left:auto;color:var(--mut);font:600 var(--mm-sales-label-size)/1.5 var(--f-ui)}
+#pSum .mm-plan-sort select{max-width:170px;min-height:34px;padding:5px 8px;border-radius:6px;border:1px solid var(--line2);background:var(--surface-panel);color:var(--txt);font:600 var(--mm-sales-explanation-size)/1.4 var(--f-ui)}
+#pSum .mm-plan-sort select:focus-visible{outline:2px solid var(--ion);outline-offset:2px}
+#pSum .mm-plan-options .pk-w{margin:0!important}
+#pSum #pk,#pSum #pkOthers{--pkc:18px minmax(0,1fr) auto;gap:6px}
+#pSum #pkOthers{margin:6px 0 0!important}
+#pSum #pk>.pk-o,#pSum #pkOthers>.pk-o{display:grid!important;grid-template-columns:18px minmax(0,1fr) minmax(112px,auto)!important;grid-template-rows:auto auto!important;align-items:center!important;gap:2px 9px!important;min-height:57px!important;padding:10px 13px!important;background:var(--surface-panel)!important;border:1px solid var(--line2)!important;border-radius:7px!important;box-shadow:none!important;min-width:0}
+#pSum #pk>.pk-o{padding-right:34px!important;cursor:pointer!important}
+#pSum #pk>.pk-o.on{border-color:var(--clay)!important;background:var(--surface-panel)!important;box-shadow:inset 3px 0 0 var(--clay)!important}
+#pSum #pkOthers>.pk-o:hover{border-color:var(--clay)!important;background:var(--surface-card)!important}
+#pSum #pkOthers>.pk-o:focus-visible,#pSum #pk>.pk-o:focus-visible{outline:2px solid var(--ion);outline-offset:2px}
+#pSum .pk-o .pk-dot{grid-column:1!important;grid-row:1/3!important;align-self:center!important;margin-top:0!important}
+#pSum .pk-o .pk-tx{grid-column:2!important;grid-row:1/3!important;min-width:0!important}
+#pSum .pk-o .pk-l{display:flex;flex-wrap:wrap;min-width:0;font:650 var(--mm-sales-question-size)/1.4 var(--f-ui)!important;overflow-wrap:anywhere}
+#pSum .pk-o .pk-v{grid-column:3!important;grid-row:1!important;justify-self:end;min-width:0;font:650 clamp(.76rem,1vw,.9rem)/1.4 var(--f-num)!important;white-space:normal!important;overflow-wrap:anywhere;text-align:right}
+#pSum #pkOthers .pk-o:not(.best) .pk-v.pos{color:var(--txt)!important}
+#pSum .pk-o .pk-d{grid-column:3!important;grid-row:2!important;justify-self:end;font:600 .72rem/1.4 var(--f-num)!important;white-space:normal!important;overflow-wrap:anywhere;text-align:right}
+#pSum #pk>.pk-o::after{right:12px}
+@media(max-width:1050px){
+  #pSum .mm-plan-layout{grid-template-columns:minmax(0,1fr)}
+  #pSum .mm-plan-options{grid-row:1}
+  #pSum .mm-plan-result{grid-row:2}
+}
+@media(max-width:560px){
+  #pSum .mm-plan-result,#pSum .mm-plan-options{padding:13px 12px}
+  #pSum .mm-plan-controls .pk-tools{flex:1 1 100%}
+  #pSum .mm-plan-sort{margin-left:0}
+  #pSum #pk>.pk-o,#pSum #pkOthers>.pk-o{grid-template-columns:16px minmax(0,1fr) minmax(95px,auto)!important;gap:3px 6px!important;padding:10px 9px!important}
+  #pSum #pk>.pk-o{padding-right:26px!important}
+  #pSum #vFinanceDetails .ov-leg{grid-template-columns:minmax(0,1fr)}
+}

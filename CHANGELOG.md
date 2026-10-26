@@ -1,3 +1,10 @@
+## v1.0.134 — 2026-10-25 [ChatGPT] · B.6 paneles laterales y selector de planes simplificado — candidato a publicar
+
+- Aprobado por Geiner: las explicaciones de deducciones y reprocesamiento comparten fila en escritorio y se apilan en móvil, manteniendo dos desplegables nativos. Respuesta de reprocesamiento a **13 px** y cifras semánticas: tasas y cargos rojos; reducción de Accounting, cero ISK y diferencia favorable verdes; importes de referencia neutrales.
+- «ELIGE TU PLAN»: resultado de la ruta seleccionada a la izquierda (neto estimado o beneficio real solo si Trading conoce el coste, impuestos/comisiones conocidos, envío, ruta y desglose de ingresos/destinos a petición), tarjetas compactas con valores abreviados a la derecha, alternativas abiertas, filtros y ordenación nativa preservados. En móvil se elige antes de ver el resumen; una ruta única evita la barra del 100 % redundante.
+- Se reutilizan `modeTotal`, `flipPlanAccounting`, `P.best`, `S.planMode` y `refreshNow`; **no** se cambian fórmulas financieras, ESI/SSO, almacenamiento o tarifas. En cada selección las cifras exactas son visibles en el resumen y accesibles en las filas. Fuentes: `src/shell.html`, `src/js/ui/plan-picker.js`, `selling-results.js`, `src/i18n/ui.json`, `src/styles/80-product-ux.css`, pruebas Node/Python/Chromium y workflows de v1.0.134.
+- Base remota limpia `main=be0e32d02d3d44ff324e5823626fb047e378abc3`, conexión Fiko/Fikolasty verificada. **Publicación pendiente de gates CI/Pages y descarga HTTPS independiente**; v1.0.133 es la última versión LIVE certificada hasta confirmar lo contrario. C.1/D siguen pendientes.
+
 ## v1.0.133 — 2026-10-25 [ChatGPT] · B.5c reprocesamiento plegable y textos naturales, LIVE
 
 - La recomendación de reprocesamiento deja de ocupar una tarjeta siempre abierta: ahora es **un único `<details>` plegado por defecto** con «¿Por qué reprocesar o no?» como pregunta exterior, equivalente a la explicación de deducciones superior. Mantiene estado abierto al recalcular, teclado, foco y chevron; dentro conserva respuesta, mejor alternativa y desglose marginal por ítem.
