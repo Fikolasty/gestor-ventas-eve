@@ -1,9 +1,11 @@
-## v1.0.143 — 2026-10-26 [ChatGPT] · B.10: dos secciones de planes minimizadas por defecto (publicación pendiente)
+## v1.0.143 — 2026-10-26 [ChatGPT] · B.10: dos secciones de planes minimizadas por defecto — LIVE certificada
 
 - **Aprobación de Raulito:** el bloque «ELIGE TU PLAN» y la sección interna «Planes disponibles» arrancan ambos minimizados. Abrir el bloque principal muestra la tarjeta «Tu resultado» y una cabecera compacta de «Planes disponibles»; una flecha independiente despliega su lista, filtros y ordenamiento.
 - Los dos controles son iconográficos sin texto visual, con etiquetas accesibles ES/EN, `aria-expanded` y `aria-controls`. Cada apertura conserva su estado en repintados y cambios de idioma; la acción contextual de ruta rápida abre ambas cuando necesita revelar un plan.
-- CSS responsive y Dark/Light reutiliza el chevrón B.7. No se modifican `modeTotal`, `computePlan`, importes, filtros, orden, SSO/ESI ni almacenamiento. **QA: 29/29 Node, 16/16 Python, 8/8 legacy y 43/43 Chromium, build 1.0.143 y diff sin errores**; publicación vía GitHub Fiko pendiente de certificar.
+- CSS responsive y Dark/Light reutiliza el chevrón B.7. No se modifican `modeTotal`, `computePlan`, importes, filtros, orden, SSO/ESI ni almacenamiento. **QA: 29/29 Node, 16/16 Python, 8/8 legacy y 43/43 Chromium, build 1.0.143 y diff sin errores**; publicación certificada por GitHub Fiko y HTTPS al final de esta entrada.
 - **Corrección visual añadida desde captura:** el botón «X» de quitar un ítem dispone de 52 px reservados en la cabecera del Listado; ya no invade «Neto del lote» ni su cifra. Una regresión de navegador compara la geometría en escritorio/móvil y ambos temas.
+- La tarjeta interior «Planes disponibles» no se estira al alto de «Tu resultado» mientras esté cerrada: ocupa únicamente su cabezal (Chromium confirma menos de 100 px); al abrir vuelve a mostrar contenido natural, sin crear espacios vacíos.
+- **LIVE verificada:** Fiko publicó fuente inicial `7d7da4b1` (15 blobs SHA), compilado automático `2e3d41c3`, afinación compacta `a6aa070b` y compilado final `2e458f1b`, todo con `expected_sha` y `force:false`. Cuatro Actions finalizadas en `success`: Minería `40364971664`, Versiones `40364966998`, Build `40364967016` y Rebuild/Chromium/Pages `40364966906`. HTML público v1.0.143: **2.292.948 bytes**, blob SHA Git `733c10ef83619c595f6e33c11f1d8185d8588501`, idéntico por `cmp` al build local y al `index.html` de GitHub. D.1 perfilado pendiente; sin test EVE SSO/ESI extremo a extremo.
 
 ## v1.0.142 — 2026-10-26 [ChatGPT] · B.9: un solo desplegable de explicaciones simétricas — LIVE verificada
 
