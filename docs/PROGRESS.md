@@ -1,12 +1,14 @@
 # PROGRESS — Market Moves+
 
-## 2026-10-25 — B.5c reprocesamiento compacto, candidato local v1.0.133
+## 2026-10-25 — B.5c reprocesamiento compacto, v1.0.133 LIVE y certificada
 
 **Observación con captura real de Geiner:** bajo «¿De dónde salen estas deducciones?» la tarjeta «¿Debo reprocesar mi hielo u ore?» quedaba siempre expandida y tenía otro disclosure anidado «¿Por qué reprocesar o no?». Geiner aprobó minimizar el bloque igual que el de deducciones, subir la pregunta interior al exterior, quitar «mi hielo u ore», usar español natural con artículo («No reproceses el Compressed Krystallos») y marcar ISK positivo verde/negativo rojo. El cambio precede C.1, sin afectar cálculos.
 
 **Implementación:** `paintReprocessingDecision` produce un solo `<details.mm-rep-help>` con título «¿Por qué reprocesar o no?». Abierto, muestra recomendación, ruta superior, desglose marginal y metodología; cerrado, solo ocupa una línea. Conserva `open` durante repintado, tipo EVE, ESI, ES/EN y acceso de teclado. Mensajes «Reprocesa el {name}. Ganarías {amount}…» / «No reproceses el {name}. Si lo haces, perderías {amount}…»; solo el `<span.mm-rep-delta>` toma `var(--gain)` o `var(--loss)` según el **signo real de `r.rep.diff`**, sin insertar HTML de nombres externos. Comparación completa conserva signo y método económico originales. QA Chromium amplía prueba positiva/negativa y captura estado cerrado; Node protege semántica y colores; workflows v1.0.133.
 
 **Base limpia al empezar:** `main=9aee2803f533f50964ef6caaf80a32b361d520f8`, **v1.0.132 LIVE**; no sobrescribir ni subir artefactos generados. Faltan aún gates completos Node/Python/legacy/Chromium, push por Fiko con SHA esperado, cuatro Actions y descarga HTTPS independiente. C.1/D pendientes; ninguna autorización de rediseño amplio ni de cambio económico.
+
+**Cierre certificado:** 20 Node, 16 Python, 8 legacy, 37 Chromium, build v1.0.133 y diff limpio. Capturas Dark/Light, ES/EN, móvil/escritorio y primera vista minimizada revisadas; verde para diferencia favorable y rojo para pérdida. Chrome Headless Shell restaurado y pruebas completas realizadas localmente. Fiko/Fikolasty transfirió **13 blobs SHA exactos**, árbol `b3f18bb3c8b9fdf76f3010b2eeadac1f6ea4f06a`, fuente **`91e5dbe8365a09084b92346f8761d06227338209`** mediante `expected_sha` y `force:false`. CI publicó HTML/QA en **`fd779e0d23dd3156c5b094771dfd78571ac23df7`**. Cuatro Actions `success`: Minería `40247756577`, Versiones `40247756582`, Build `40247756586` y Rebuild/Chromium/Pages **`40247756569`**. Descarga independiente HTTPS v1.0.133 con banner intacto: **2.258.784 bytes**, SHA Git `8a062a1d1895639ab72026f0c39bbe9de7c82f4a`, idéntico por `cmp` a build local y GitHub remoto. **v1.0.133 LIVE**, Geiner informado. EVE SSO/ESI y órdenes reales fuera de test end-to-end; C.1 sigue pendiente.
 
 ## 2026-10-25 — B.5b escala tipográfica de Ventas, v1.0.132 LIVE y verificada
 

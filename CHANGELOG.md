@@ -1,8 +1,8 @@
-## v1.0.133 — 2026-10-25 [ChatGPT] · B.5c reprocesamiento plegable y textos naturales (candidato)
+## v1.0.133 — 2026-10-25 [ChatGPT] · B.5c reprocesamiento plegable y textos naturales, LIVE
 
 - La recomendación de reprocesamiento deja de ocupar una tarjeta siempre abierta: ahora es **un único `<details>` plegado por defecto** con «¿Por qué reprocesar o no?» como pregunta exterior, equivalente a la explicación de deducciones superior. Mantiene estado abierto al recalcular, teclado, foco y chevron; dentro conserva respuesta, mejor alternativa y desglose marginal por ítem.
 - ES/EN más naturales: «Reprocesa el {ítem}. Ganarías…» o «No reproceses el {ítem}. Si lo haces, perderías…». Se retira «mi hielo u ore»; importe del **beneficio positivo verde** y **pérdida negativa roja** usando tokens semánticos existentes, sin colorear la tarjeta ni modificar cifras financieras/optimización. Las cifras y nombres se insertan como nodos de texto seguros.
-- Fuente `src/js/ui/selling-results.js`, traducciones `src/i18n/ui.json`, CSS focalizado `src/styles/80-product-ux.css`, tests Node/Chromium y workflows/build v1.0.133. **Candidato hasta terminar gates y Pages; última LIVE certificada v1.0.132.**
+- Fuente `src/js/ui/selling-results.js`, traducciones `src/i18n/ui.json`, CSS focalizado `src/styles/80-product-ux.css`, tests Node/Chromium y workflows/build v1.0.133. **QA/publicación confirmados:** 20 Node, 16 Python, 8 legacy y 37 Chromium; fuente GitHub Fiko `91e5dbe8365a09084b92346f8761d06227338209`, bot `fd779e0d23dd3156c5b094771dfd78571ac23df7`; cuatro Actions `success`, incluido Pages/Chromium `40247756569`. HTML servido por HTTPS **2.258.784 bytes**, blob `8a062a1d1895639ab72026f0c39bbe9de7c82f4a` idéntico al local y GitHub. **v1.0.133 LIVE.**
 
 ## v1.0.132 — 2026-10-25 [ChatGPT] · B.5b armonización tipográfica de Ventas, LIVE verificada
 
