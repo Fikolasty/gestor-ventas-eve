@@ -6,13 +6,32 @@ const idCache={},volCache={},volAlt={},grpOf={},catCache={};
 // (p. ej. límite de peticiones o un error pasajero). Se reintenta con espera (0,8 s → 1,6 s → 3,2 s) antes de rendirse.
 // Sin cache:'no-store' (no añade cabeceras extra; ESI ya cachea 5 min).
 const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+// Limit simultaneous network requests, not concurrent Items. One Item can
+// start up to nine extra order pages; ESI_POOL alone does not bound that burst.
+// This is a conservative client-side ceiling, NOT a substitute for ESI's
+// endpoint token buckets, Retry-After or the global error budget.
+const ESI_NETWORK_LIMIT=12;
+let esiNetworkActive=0;
+const esiNetworkQueue=[];
+async function esiNetworkFetch(url,opt){
+  if(esiNetworkActive>=ESI_NETWORK_LIMIT)
+    await new Promise(resolve=>esiNetworkQueue.push(resolve));
+  else esiNetworkActive++;
+  try{return await fetch(url,opt);}
+  finally{
+    // Pass the existing permit to the next waiter. Do not drop it until the
+    // queue is empty: otherwise a new caller could exceed the ceiling.
+    const next=esiNetworkQueue.shift();
+    if(next)next();else esiNetworkActive--;
+  }
+}
 async function esiFetch(path,opt){
   let last=null;
   for(let tryN=0;tryN<4;tryN++){
     if(tryN)await sleep(800*Math.pow(2,tryN-1));
     for(const b of (esiBase?[esiBase]:ESI_BASES)){
       try{
-        const r=await fetch(b+path,Object.assign({credentials:'omit',referrerPolicy:'no-referrer'},opt||{}));
+        const r=await esiNetworkFetch(b+path,Object.assign({credentials:'omit',referrerPolicy:'no-referrer'},opt||{}));
         if(r.ok){esiBase=b;return r;}
         if(r.status===401||r.status===403)throw new Error('acceso denegado ('+r.status+')');
         if(r.status===420||r.status===429){const h=Number(r.headers.get('Retry-After'));const wait=Number.isFinite(h)&&h>0?Math.min(h*1000,60000):Math.min(2000*Math.pow(2,tryN),16000);last=new Error('la API pidió esperar (límite de peticiones)');await sleep(wait);break;}
@@ -74,7 +93,15 @@ async function jitaBook(id){
   const r1=await esiFetch(url(1));let pages=parseInt(r1.headers.get('X-Pages')||'1',10)||1;
   const a1=await r1.json();take(a1);
   if(pages===1&&Array.isArray(a1)&&a1.length>=1000)pages=2;
-  if(pages>1){const rest=[];for(let pg=2;pg<=Math.min(pages,10);pg++)rest.push(esiFetch(url(pg)).then(r=>r.json()).then(take,()=>{}));await Promise.all(rest);}
+  if(pages>1){
+    const rest=[];
+    for(let pg=2;pg<=Math.min(pages,10);pg++)rest.push(esiFetch(url(pg)).then(r=>r.json()).then(take));
+    // A failed secondary page must not silently turn an incomplete order book
+    // into a valid-looking quote. Wait for every in-flight page, then report it.
+    const settled=await Promise.allSettled(rest);
+    const rejected=settled.find(result=>result.status==='rejected');
+    if(rejected)throw rejected.reason;
+  }
   buys.sort((a,b)=>b.p-a.p);sells.sort((a,b)=>a.p-b.p);
   const sellP5=pctPrice(sells,.05),buyP5=pctPrice(buys,.05),flags=[];
   const open=buys.filter(o=>o.min<=1); // Jita Buy = mejor compra que acepta cualquier cantidad

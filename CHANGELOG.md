@@ -1,8 +1,14 @@
-## v1.0.148 — 2026-10-26 [ChatGPT] · D.3: categorías sin ESI más rápidas — CANDIDATO LOCAL
+## v1.0.149 — 2026-10-26 [ChatGPT] · D.4: ráfagas ESI acotadas, cotizaciones íntegras — CANDIDATO LOCAL
+
+- **Servicio de mercado:** una cola FIFO limita a 12 las solicitudes `esiFetch` simultáneas (no toca SSO); páginas de órdenes secundarias fallidas ya no se ignoran para aparentar una cotización completa. Se mantienen reintentos, `Retry-After`, cálculos, UI B.13 y precios.
+- **Contraste sintético:** 50 Items/10 páginas con servidor ficticio de capacidad 12: **9.322→2.142 ms**, **137→0 respuestas 429 simuladas**, **490/500→500/500** páginas de órdenes. Sin restricción y con diez páginas, el límite cuesta ~1 s adicional; una página queda ~611 ms. La red ESI real usa otros límites y NO se midió. `docs/PERFORMANCE_D4_RESULTS.md`.
+- **QA local:** tres pruebas nuevas de cola/errores/completitud en Node, 34/34 suites Node, 16/16 Python, 8/8 scripts heredados y **49/49 Chromium PASS**. Capturas Dark/Light cuatro paneles 2×2 sin diferencia de píxel. Certificar Actions/Pages por Fiko antes de declarar LIVE.
+
+## v1.0.148 — 2026-10-26 [ChatGPT] · D.3: categorías sin ESI más rápidas — LIVE CERTIFICADA
 
 - **Alcance acotado:** `computePlan` indexa la primera coincidencia de nombre por ejecución; `isModule` recibe ese índice opcionalmente para no recorrer 500 Items al inferir Category sin ESI. Sin cambios a precio, fórmula, plan, copywriting, Light/Dark, ES/EN ni al diseño desktop B.13 2×2.
-- **Medición comparable:** 500 Items Selling sin categoría ESI: **18,6→5,6 ms** (−70 %); con categorías mixtas 13,8→8,6 ms. **18/18 SHA-256 financieros idénticos** entre v1.0.147 LIVE y v1.0.148 candidata, incluyendo Selling/Trading, 100/250/500 Items y tres estados de categorías. `docs/PERFORMANCE_D3_RESULTS.md` registra método, límites y ruido.
-- **Gates locales:** 33/33 Node, 16/16 Python, 8/8 heredadas y **49/49 Chromium** PASS. Desktop Dark/Light cuatro paneles 2×2 idénticos byte a byte a B.13. Solo Fiko con `expected_sha`/`force:false` y cuatro Actions/Pages/HTTPS para certificar.
+- **Medición comparable:** 500 Items Selling sin categoría ESI: **18,6→5,6 ms** (−70 %); con categorías mixtas 13,8→8,6 ms. **18/18 SHA-256 financieros idénticos** entre v1.0.147 y v1.0.148, incluyendo Selling/Trading, 100/250/500 Items y tres estados de categorías. `docs/PERFORMANCE_D3_RESULTS.md` registra método, límites y ruido.
+- **Gates locales y remotos:** 33/33 Node, 16/16 Python, 8/8 heredadas y **49/49 Chromium** PASS. Desktop Dark/Light cuatro paneles 2×2 idénticos byte a byte a B.13. Fiko publicó fuente `11e3fa4852cb414f496ab2a7f8a3bf1c5e735806` y ajuste CI `506c7f2773c3f9897d8239fa1823fab4eb154216`; commit de build `b51ef1ba06e9873fb525a6cce1115678f5e60a21`. Los cuatro Actions finalizaron correctamente (Rebuild/Pages `40425125255`); GitHub y Pages HTTPS comparten blob `1c75e331d21664103eb664c74bf7dbec203a7e2c` de 2.341.402 bytes. **D.3 LIVE certificada.**
 
 ## v1.0.147 — 2026-10-26 [ChatGPT] · D.2: cabeceras del Listado sin mutaciones redundantes — LIVE CERTIFICADA
 

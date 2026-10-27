@@ -9,6 +9,7 @@ real ESI requests, credentials, or persistent user data. Output JSON to stdout.
 
 import argparse
 import json
+import re
 from playwright.sync_api import sync_playwright
 
 from performance_baseline_d1 import INDEX, BENCHMARK_JS
@@ -90,13 +91,27 @@ CPU_TRACE = r"""({repeats, warmups}) => {
 }"""
 
 
-ESI_TRACE = r"""async ({count, latencyMs, pages, histories}) => {
+ESI_TRACE = r"""async ({count, latencyMs, pages, histories, rateLimitMax, clientConcurrency}) => {
   // Only window.fetch is replaced inside this disposable local browser tab.
   // Native Response and timing emulate endpoint shapes; absolutely NO ESI calls.
   const originalFetch = window.fetch, oldBase = esiBase, oldCcp = ccp;
+  const originalEsiFetch = window.esiFetch;
   const names = Array.from({length:count}, (_,i)=>`D1 Synthetic Market ${i+1}`);
   let inFlight = 0, peak = 0, total = 0;
   const byPath = {}, statuses = [];
+  let rateLimited = 0, successfulOrderPages = 0;
+  let activeClients = 0, maxActiveClients = 0;
+  const queued = [];
+  if(clientConcurrency>0){
+    // Prototype limiter for pre-D.4 measurement ONLY. With v1.0.149 the app
+    // itself already has a network limiter; leave --client-limit=0.
+    window.esiFetch = async function(path,opt){
+      if(activeClients>=clientConcurrency)await new Promise(resolve=>queued.push(resolve));
+      activeClients++;maxActiveClients=Math.max(maxActiveClients,activeClients);
+      try{return await originalEsiFetch(path,opt);}
+      finally{activeClients--;const resolve=queued.shift();if(resolve)resolve();}
+    };
+  }
   window.fetch = async (url, options = {}) => {
     const path = new URL(url).pathname;
     total++; inFlight++; peak = Math.max(peak, inFlight);
@@ -121,7 +136,16 @@ ESI_TRACE = r"""async ({count, latencyMs, pages, histories}) => {
         kind='history'; body=[{volume:100,average:4500}];
       }
       byPath[kind]=(byPath[kind]||0)+1;
+      // Optional synthetic 429 gate. Retry-After=0.01s speeds up this isolated
+      // experiment; it is NOT representative of real ESI backoff durations.
+      const throttled=rateLimitMax>0&&inFlight>rateLimitMax;
       await new Promise(resolve=>setTimeout(resolve, latencyMs));
+      if(throttled){
+        rateLimited++;statuses.push(429);
+        return new Response(JSON.stringify({error:'simulated 429'}),
+          {status:429,headers:{...headers,'Retry-After':'0.01'}});
+      }
+      if(kind==='market-order-page')successfulOrderPages++;
       statuses.push(200);
       return new Response(JSON.stringify(body),{status:200,headers});
     } finally {
@@ -131,14 +155,19 @@ ESI_TRACE = r"""async ({count, latencyMs, pages, histories}) => {
   try {
     // No caches from prior runs: the browser context is unique per scenario.
     const start = performance.now();
-    const unknown = await fetchTypes(names, n => histories);
+    let unknown=[],failure=null;
+    try{unknown=await fetchTypes(names, n => histories);}
+    catch(e){failure=String(e);}
     const elapsed = performance.now() - start;
     return {items:count,simulated_latency_ms:latencyMs,pages,histories,
       elapsed_ms:Math.round(elapsed),calls:total,peak_in_flight:peak,
-      by_path:byPath,unknown,completed:statuses.length,
+      client_limit:clientConcurrency,client_peak:maxActiveClients,
+      by_path:byPath,unknown,failure,rate_limited_responses:rateLimited,
+      successful_order_pages:successfulOrderPages,completed:statuses.length,
       api_items:names.filter(n=>S.api[n.toLowerCase()]).length};
   } finally {
-    window.fetch=originalFetch;esiBase=oldBase;ccp=oldCcp;
+    window.fetch=originalFetch;window.esiFetch=originalEsiFetch;
+    esiBase=oldBase;ccp=oldCcp;
   }
 }"""
 
@@ -180,7 +209,8 @@ def scenario(browser, *, theme, count, open_count=0, repeats=15):
     return result
 
 
-def esi_scenario(browser, *, count, latency, pages, histories):
+def esi_scenario(browser, *, count, latency, pages, histories,
+                 rate_limit_max, client_limit):
     context=browser.new_context(viewport={"width":1440,"height":900})
     page=context.new_page()
     errors=[]
@@ -189,7 +219,10 @@ def esi_scenario(browser, *, count, latency, pages, histories):
     page.route("https://**/*", lambda route:route.abort())
     page.goto(INDEX.as_uri(),wait_until="domcontentloaded")
     result=page.evaluate(ESI_TRACE,{"count":count,"latencyMs":latency,
-                                   "pages":pages,"histories":histories})
+                                   "pages":pages,"histories":histories,
+                                   "rateLimitMax":rate_limit_max,
+                                   "clientConcurrency":client_limit})
+    result["simulated_in_flight_limit"]=rate_limit_max
     result["errors"]=errors
     context.close()
     return result
@@ -203,9 +236,13 @@ def main():
     parser.add_argument("--latency-ms",type=int,default=40)
     parser.add_argument("--pages",nargs="+",type=int,default=[1,3,10],
                         help="Synthetic X-Pages values (client caps to 10)")
+    parser.add_argument("--limit",type=int,default=0,
+                        help="Optional mock 429 when pending fetches exceed this count; 0 disables")
+    parser.add_argument("--client-limit",type=int,default=0,
+                        help="Prototype ESI request semaphore in this page only; 0 disables")
     args=parser.parse_args()
     if not INDEX.is_file():
-        parser.error("First run python3 build.py 1.0.146")
+        parser.error("Build index.html with python3 build.py VERSION first")
     with sync_playwright() as p:
         browser=p.chromium.launch(headless=True,args=["--enable-precise-memory-info"])
         try:
@@ -217,14 +254,17 @@ def main():
                        for open_count in (0,1,10)]
             else:
                 cases=[esi_scenario(browser,count=count,latency=args.latency_ms,
-                                    pages=pages,histories=True)
+                                    pages=pages,histories=True,rate_limit_max=args.limit,
+                                    client_limit=args.client_limit)
                        for count in (args.counts or [10,50,100])
                        for pages in args.pages]
         finally:
             browser.close()
-    print(json.dumps({"mode":args.mode,"version":"1.0.146","cases":cases},
+    version=re.search(r'v(\d+\.\d+\.\d+)',INDEX.read_text(encoding='utf-8'))
+    print(json.dumps({"mode":args.mode,"version":version.group(1) if version else "unknown","cases":cases},
                      ensure_ascii=False,indent=2))
-    if any(c.get("errors") or (args.mode=="esi" and c["api_items"]!=c["items"])
+    if any(c.get("errors") or (args.mode=="esi" and not args.limit
+                             and c["api_items"]!=c["items"])
            for c in cases):
         raise SystemExit("Incomplete or invalid synthetic profiling run")
 
