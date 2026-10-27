@@ -14,7 +14,7 @@ assert(js.includes("isIceIsotope(name)"),'excepción de isótopos ausente');
 assert(js.includes('readBB();refresh();'),'Buyback no se actualiza desde su propio contrato');
 assert(js.includes("r.hint.iceShip="),'falta comparar envío caro con alternativa local');
 
-const nullStart=js.indexOf('function nullList(name,sell,buy,seen,q){');
+const nullStart=js.indexOf('function nullList(name,sell,buy,seen,q,firstItemByName){');
 const nullEnd=js.indexOf('\n}',nullStart);
 assert(nullStart>=0&&nullEnd>nullStart,'falta regla de precio local');
 const nullBody=js.slice(nullStart,nullEnd+2);

@@ -1,3 +1,9 @@
+## v1.0.148 — 2026-10-26 [ChatGPT] · D.3: categorías sin ESI más rápidas — CANDIDATO LOCAL
+
+- **Alcance acotado:** `computePlan` indexa la primera coincidencia de nombre por ejecución; `isModule` recibe ese índice opcionalmente para no recorrer 500 Items al inferir Category sin ESI. Sin cambios a precio, fórmula, plan, copywriting, Light/Dark, ES/EN ni al diseño desktop B.13 2×2.
+- **Medición comparable:** 500 Items Selling sin categoría ESI: **18,6→5,6 ms** (−70 %); con categorías mixtas 13,8→8,6 ms. **18/18 SHA-256 financieros idénticos** entre v1.0.147 LIVE y v1.0.148 candidata, incluyendo Selling/Trading, 100/250/500 Items y tres estados de categorías. `docs/PERFORMANCE_D3_RESULTS.md` registra método, límites y ruido.
+- **Gates locales:** 33/33 Node, 16/16 Python, 8/8 heredadas y **49/49 Chromium** PASS. Desktop Dark/Light cuatro paneles 2×2 idénticos byte a byte a B.13. Solo Fiko con `expected_sha`/`force:false` y cuatro Actions/Pages/HTTPS para certificar.
+
 ## v1.0.147 — 2026-10-26 [ChatGPT] · D.2: cabeceras del Listado sin mutaciones redundantes — LIVE CERTIFICADA
 
 - **Autorización expresa de Raulito:** tras D.1 aprobó continuar D.2–D.4 midiendo y contrastando cada mejora; se empieza por el render de Items, conservando intactos el 2×2, UX writing, accesibilidad, cálculos, ESI/SSO y precios.

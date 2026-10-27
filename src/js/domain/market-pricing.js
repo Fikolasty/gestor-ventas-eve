@@ -24,10 +24,10 @@ Object.values(REFINE).forEach(d=>{
   const target=d.cat==='moon'?MOON_MATERIALS:(d.cat==='ore'?ORE_MINERALS:null);
   if(target)Object.keys(d.out).forEach(m=>target.add(m.toLowerCase()));
 });
-function bulkNullMaterial(name,q){
+function bulkNullMaterial(name,q,firstItemByName){
   const key=String(name||'').toLowerCase(),ore=resolveOre(name);
   if(ore&&(ore.d.cat==='moon'||ore.d.cat==='mercoxit'||ore.d.cat==='ice'))return false;
-  if(MOON_MATERIALS.has(key)||ICE_ISOTOPES.has(key)||isModule(name))return false;
+  if(MOON_MATERIALS.has(key)||ICE_ISOTOPES.has(key)||isModule(name,firstItemByName))return false;
   if(ore?.d.cat==='ore'||ORE_MINERALS.has(key))return true;
   return q>=1000; // High-supply lots; estimate can always be overwritten per item.
 }
@@ -42,7 +42,7 @@ function tickDown(p){
   return Number((Math.floor(p/f+1e-9)*f).toPrecision(4));
 }
 // Precio a listar en Null: precio que ves (undercut) > regla de hielo (Jita Buy − %) > Jita Buy (+ margen opcional). Nunca Jita Sell.
-function nullList(name,sell,buy,seen,q){
+function nullList(name,sell,buy,seen,q,firstItemByName){
   // Un precio final escrito desde Pasos para Vender manda sobre descuentos locales.
   // Se mantiene aislado de Jita, Buyback y el precio original de ESI.
   const custom=S.refinedMan.null[String(name||'').toLowerCase()];
@@ -63,8 +63,8 @@ function nullList(name,sell,buy,seen,q){
   if(C.ice.on&&buy!=null&&isIceRefinedNonIsotope(name))return tickDown(buy*(1-C.ice.refLoss));
   // en Null nunca se vende a Jita Sell. Módulos: Jita Buy (+ margen). Todo lo demás (ore, minerales, productos,
   // commodities…): un % de Jita Buy (90% por defecto), que es lo que normalmente pagan en Null.
-  if(buy!=null&&bulkNullMaterial(name,q))return qdApply(tickDown(buy*C.nullBulk),name,q);
-  if(buy!=null&&!isModule(name))return qdApply(tickDown(buy*C.nullNonMod),name,q);
+  if(buy!=null&&bulkNullMaterial(name,q,firstItemByName))return qdApply(tickDown(buy*C.nullBulk),name,q);
+  if(buy!=null&&!isModule(name,firstItemByName))return qdApply(tickDown(buy*C.nullNonMod),name,q);
   return qdApply(nullPrice(buy,name),name,q);
 }
 // Descuento por cantidad, por tramos como un impuesto: cada 1,000 u. por encima de 1,000 baja el precio;
@@ -77,8 +77,11 @@ function qtyDisc(name,q){
 }
 function qdApply(p,name,q){const d=qtyDisc(name,q||0);return p==null||!d?p:tickDown(p*(1-d));}
 // ¿Es un módulo? Por la categoría de la API (7 = Module); si no se conoce, por la columna Category del pegado.
-function isModule(name){const a=S.api[String(name).toLowerCase()];if(a&&a.cat!=null)return a.cat===7;
-  const o=itemByName(name);return !!(o&&o.pasteCat&&/^module$/i.test(o.pasteCat));}
+function isModule(name,firstItemByName){const key=String(name).toLowerCase(),a=S.api[key];if(a&&a.cat!=null)return a.cat===7;
+  // computePlan can pass its snapshot index; otherwise preserve the original
+  // lookup. Keep the FIRST matching pasted row when duplicate names exist.
+  const o=firstItemByName?firstItemByName.get(key):itemByName(name);
+  return !!(o&&o.pasteCat&&/^module$/i.test(o.pasteCat));}
 // v1.0.17: tamaño del tick de EVE (4 cifras significativas) y "N ticks por debajo"
 const tsz=p=>Math.pow(10,Math.floor(Math.log10(p))+1-4);
 function tickBelow(p,k){if(p==null||!(p>0)||!(k>0))return p;let x=p;for(let i=0;i<k;i++){const n=x-tsz(x*(1-1e-9));if(!(n>0))break;x=Number(n.toPrecision(4));}return x;}

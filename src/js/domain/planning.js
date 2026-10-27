@@ -165,6 +165,12 @@ function assessReprocessing(P){
 
 function computePlan(){
   const rJ=rateJita(),rN=rateNull(),rI=rateInst();
+  // Missing ESI categories still fall back to the first pasted Category.
+  // Build this lookup only once per calculation instead of repeatedly
+  // searching the full inventory for every unknown type/route.
+  const firstItemByName=new Map();
+  if(!S.flip)S.items.forEach(o=>{const key=o.name.toLowerCase();
+    if(!firstItemByName.has(key))firstItemByName.set(key,o);});
   const rows=S.items.map(o=>{
     const q=o.qty||0,ref=o.ref,a=o.jita;
     const row={o,q,vol:(o.m3u||0)*q,coll:appraisalSell(o)*q,prod:ref!=null&&!S.flip?C.prod*ref*q:0,g:{},ship:{},hint:{}}; // bought-in-Jita goods do not incur a second fabrication cost
@@ -185,7 +191,7 @@ function computePlan(){
     }
     if(ref!=null&&q>0){
       row.qd=qtyDisc(o.name,q);const manual=S.refinedMan.null[String(o.name).toLowerCase()];
-      const np=manual!=null?manual:skTick(nullList(o.name,ref,a&&a.buy,o.nullSeen,q),o,'nul');if(np!=null){row.g.null=np*q*rN;row.np=np;}
+      const np=manual!=null?manual:skTick(nullList(o.name,ref,a&&a.buy,o.nullSeen,q,firstItemByName),o,'nul');if(np!=null){row.g.null=np*q*rN;row.np=np;}
       const jl=skTick(jitaList(o.name,ref,a&&a.buy,q,o.refMan!=null),o,'ord');row.jl=jl;row.g.jOrd=jl*q*rJ;row.tight=tightSpread(jl,a);row.ship.jOrd={v:row.vol,c:row.coll};
       if(a&&a.buy!=null){
         const w=a.buys?walkBuys(a,q):{filled:q,value:a.buy*q};
@@ -228,7 +234,7 @@ function computePlan(){
       row.raw=rawRepro(ore,q,ref,a&&a.buy);
       const nets=reproNets(ore,q),fee=refineryFee(ore,q,nets);let ok=fee!=null,val=0,nul=0,v=0;row.mins=[];
       Object.keys(nets).forEach(m=>{
-        const p=minPrice(m),b=S.api[m.toLowerCase()]?S.api[m.toLowerCase()].buy:null,np=p!=null?nullList(m,p,b,null,nets[m]):null,jl=jitaList(m,p,b,nets[m]);
+        const p=minPrice(m),b=S.api[m.toLowerCase()]?S.api[m.toLowerCase()].buy:null,np=p!=null?nullList(m,p,b,null,nets[m],firstItemByName):null,jl=jitaList(m,p,b,nets[m]);
         v+=nets[m]*prodVol(m);row.mins.push({m,n:nets[m],p:jl,np,qd:qtyDisc(m,nets[m])});
         if(p==null||np==null){ok=false;return;}val+=nets[m]*jl;nul+=nets[m]*np*rN;});
       if(ok){row.refiningCost=fee;row.g.rJita=val*rJ-fee;row.ship.rJita={v,c:val};row.g.rNull=nul-fee;}
