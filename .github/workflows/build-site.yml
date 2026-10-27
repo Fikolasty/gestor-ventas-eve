@@ -49,7 +49,7 @@ jobs:
           assert 'id="tradePurchaseMode"' in s and 'id="cBulkNull"' in s
           assert 'id="unitCourierBox"' in s
           assert 'function allocateCourier(P)' in s
-          assert 'function bulkNullMaterial(name,q)' in s
+          assert 'function bulkNullMaterial(name,q,firstItemByName)' in s
           assert 'syncLanguageChoices' in s
           assert "if(!SH()){delete row.g.fN;delete row.ship.fN;}" in s
           assert "SHIPS=S.flip?{fN:1}:{jOrd:1,jInst:1,cOrd:1,cInst:1,rJita:1}" in s
