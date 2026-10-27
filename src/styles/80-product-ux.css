@@ -520,35 +520,77 @@ html.light body .top.mm-ho-root .mm-top-actions .mm-theme{background:transparent
 .mm-title::before,.mm-section-head::before,.sub-h::before,
 #settings .st-sec-t::before{content:none!important;display:none!important}
 
-/* Keep the live #importControls node immediately above Inventory, never above
-   Appraisal. With a real appraisal both cards share the second grid row. */
-.hero #heroIntro>#importControls:not([hidden]){
-  display:flex!important;align-items:center;justify-content:flex-start!important;
-  flex-wrap:wrap;align-self:end;min-width:0;min-height:40px;
-  gap:8px 12px;margin:0!important;padding:0 1px!important;
-  border:0!important;border-radius:0!important;
-  background:transparent!important;box-shadow:none!important;
+/* B.17 · Persistent referral on the left, trade-only controls on the right.
+   One row above the exact Tasación/Inventario grid; no phantom empty grid
+   row or reparented/cloned financial controls inside either card. */
+.hero #salesUtilityRow{
+  display:grid;grid-template-columns:repeat(2,minmax(0,1fr));align-items:center;
+  gap:14px;margin:24px 0 0;position:relative;z-index:40;min-width:0;
 }
-.hero #heroIntro>#importControls .mm-import-intro{min-width:0}
-.hero #heroIntro>#importControls .mm-import-intro strong{
-  font:700 .74rem/1.35 var(--f-ui);letter-spacing:.02em;
+.hero #salesUtilityRow>.hero-referral-pill{
+  grid-column:1;display:flex!important;align-items:center;justify-content:flex-start!important;
+  gap:8px;min-height:42px;height:auto!important;width:100%!important;max-width:100%!important;
+  margin:0!important;padding:9px 15px!important;position:static!important;
+  left:auto!important;transform:none!important;
+  border:1px solid var(--line2)!important;border-radius:10px!important;
+  background:var(--glass)!important;box-shadow:0 2px 8px rgba(0,0,0,.14)!important;
+  color:var(--txt)!important;text-align:left;white-space:normal;
+  font:500 .86rem/1.35 var(--f-ui)!important;
+  transition:background-color .15s ease,border-color .15s ease;
 }
-.hero #heroIntro>#importControls .mm-import-intro small{display:none!important}
-.hero #heroIntro>#importControls #rtM{display:none!important}
-.hero #heroIntro>#importControls .mm-import-actions{
-  display:flex;align-items:center;justify-content:flex-start!important;
-  flex-wrap:wrap;gap:8px 12px;min-width:0;margin:0!important;
+.hero #salesUtilityRow>.hero-referral-pill:hover{
+  transform:none!important;opacity:1!important;background:var(--surface-panel)!important;
+  border-color:var(--mut)!important;
 }
-.hero #heroIntro:not(.no-appr):has(>#importControls:not([hidden])){
-  grid-template-columns:repeat(2,minmax(0,1fr))!important;
-  grid-template-areas:". import" "appraisal inventory"!important;
-  grid-template-rows:auto minmax(224px,1fr)!important;
-  grid-auto-rows:auto!important;
-  gap:12px 14px!important;
+.hero #salesUtilityRow>.hero-referral-pill:focus-visible{
+  outline:2px solid var(--ion);outline-offset:3px;
 }
-.hero #heroIntro:not(.no-appr):has(>#importControls:not([hidden]))>.appr{grid-area:appraisal}
-.hero #heroIntro:not(.no-appr):has(>#importControls:not([hidden]))>.paste{grid-area:inventory}
-.hero #heroIntro:not(.no-appr):has(>#importControls:not([hidden]))>#importControls{grid-area:import}
+.hero #salesUtilityRow .hero-referral-gift{
+  flex:0 0 19px;color:var(--thrust);width:19px;height:19px;
+}
+.hero #salesUtilityRow .hero-referral-kicker{
+  flex:0 1 auto;min-width:0;color:var(--txt)!important;
+  font:500 .86rem/1.35 var(--f-ui)!important;letter-spacing:0;
+}
+.hero #salesUtilityRow .hero-referral-offer{
+  flex:0 0 auto;color:#efbc8f!important;
+  font:750 .9rem/1.35 var(--f-ui)!important;white-space:nowrap;
+}
+.hero #salesUtilityRow .hero-referral-arrow{
+  flex:0 0 auto;margin-left:0;color:var(--mut)!important;font-size:17px!important;
+}
+.hero #salesUtilityRow>#importControls:not([hidden]){
+  grid-column:2;justify-self:end;display:inline-flex!important;align-items:center;
+  justify-content:flex-end!important;flex-wrap:nowrap;min-width:0;max-width:100%;
+  min-height:42px;margin:0!important;padding:3px!important;gap:0!important;
+  border:1px solid var(--line2)!important;border-radius:10px!important;
+  background:var(--glass)!important;box-shadow:0 2px 8px rgba(0,0,0,.14)!important;
+}
+.hero #salesUtilityRow #importControls .mm-import-intro{
+  flex:0 0 auto;min-width:0;margin:0;padding:8px 13px;
+  border-right:1px solid var(--line2);
+}
+.hero #salesUtilityRow #importControls .mm-import-intro strong{
+  font:650 .83rem/1.2 var(--f-ui)!important;letter-spacing:0;color:var(--mut);
+}
+.hero #salesUtilityRow #importControls .mm-import-intro strong .ic{color:var(--mut)}
+.hero #salesUtilityRow #importControls #importHeadingPrefix,
+.hero #salesUtilityRow #importControls .mm-import-intro small{display:none!important}
+.hero #salesUtilityRow #importControls #rtM{display:none!important}
+.hero #salesUtilityRow #importControls .mm-import-actions{
+  display:flex;align-items:center;justify-content:flex-end!important;
+  flex-wrap:nowrap;gap:0!important;min-width:0;margin:0!important;
+}
+.hero #salesUtilityRow #importControls .mm-buy-basis{display:flex;align-items:center;min-width:0}
+.hero #salesUtilityRow #importControls #tradePurchaseLabel{
+  position:absolute;width:1px;height:1px;overflow:hidden;white-space:nowrap;
+  clip-path:inset(50%);clip:rect(0,0,0,0);
+}
+.hero #salesUtilityRow #importControls #shipLab{
+  min-height:36px;margin:0;padding:6px 12px;gap:9px;flex:0 0 auto;
+  border:0;border-left:1px solid var(--line2);border-radius:0;
+  background:transparent;box-shadow:none;font-size:.82rem;
+}
 
 /* Matching title tracks: the Inventory mode selector must not push its title
    lower than the dynamic Appraisal title. Both card bodies start together. */
@@ -565,12 +607,22 @@ html.light body .top.mm-ho-root .mm-top-actions .mm-theme{background:transparent
 #verdict .v-cap{margin-left:0!important}
 
 @media(max-width:860px){
-  .hero #heroIntro:not(.no-appr):has(>#importControls:not([hidden])){
-    grid-template-columns:minmax(0,1fr)!important;
-    grid-template-areas:"appraisal" "import" "inventory"!important;
-    grid-template-rows:auto auto auto!important;
-    gap:10px!important;
+  .hero #salesUtilityRow{grid-template-columns:minmax(0,1fr);gap:9px;margin-top:17px}
+  .hero #salesUtilityRow>.hero-referral-pill,
+  .hero #salesUtilityRow>#importControls:not([hidden]){
+    grid-column:1;justify-self:stretch;width:100%!important;
   }
+  .hero #salesUtilityRow>#importControls:not([hidden]){justify-content:space-between!important}
+}
+@media(max-width:540px){
+  .hero #salesUtilityRow>.hero-referral-pill{gap:6px;padding:9px 10px!important}
+  .hero #salesUtilityRow .hero-referral-kicker{font-size:.74rem!important}
+  .hero #salesUtilityRow .hero-referral-offer{font-size:.78rem!important}
+  .hero #salesUtilityRow .hero-referral-gift{width:16px;height:16px;flex-basis:16px}
+  .hero #salesUtilityRow .hero-referral-arrow{font-size:14px!important}
+  .hero #salesUtilityRow>#importControls:not([hidden]){flex-wrap:wrap;justify-content:center!important}
+  .hero #salesUtilityRow #importControls .mm-import-intro{padding:7px 9px}
+  .hero #salesUtilityRow #importControls #shipLab{padding:6px 9px}
 }
 
 /* v1.0.126 · Stage B.1 — Listado uses the same solid gray palette as the
@@ -680,13 +732,13 @@ body:not(.is-flip) .fact-buy-order{display:none!important}
 
 /* Same native-select enhancement strategy used in Settings: a single
    canonical #tradePurchaseMode with a neutral popup and native fallback. */
-.hero #heroIntro>#importControls{position:relative;z-index:40}
-.hero #heroIntro #importControls .mm-buy-basis{min-width:0}
-.hero #heroIntro #importControls .mm-trade-picker{
+.hero #salesUtilityRow>#importControls{position:relative;z-index:40}
+.hero #salesUtilityRow #importControls .mm-buy-basis{min-width:0}
+.hero #salesUtilityRow #importControls .mm-trade-picker{
   position:relative;min-width:132px;z-index:41;
 }
-.hero #heroIntro #importControls .mm-trade-picker>select[hidden]{display:none!important}
-.hero #heroIntro #importControls .mm-trade-trigger{
+.hero #salesUtilityRow #importControls .mm-trade-picker>select[hidden]{display:none!important}
+.hero #salesUtilityRow #importControls .mm-trade-trigger{
   display:flex;align-items:center;justify-content:space-between;gap:13px;
   width:100%;min-height:40px;padding:8px 12px;margin:0;
   border:1px solid var(--line2);border-radius:8px;
@@ -694,48 +746,57 @@ body:not(.is-flip) .fact-buy-order{display:none!important}
   font:550 .81rem/1.25 var(--f-ui);text-align:left;white-space:nowrap;
   cursor:pointer;transition:border-color .15s ease,background-color .15s ease;
 }
-.hero #heroIntro #importControls .mm-trade-trigger[hidden]{display:none!important}
-.hero #heroIntro #importControls .mm-trade-trigger:hover,
-.hero #heroIntro #importControls .mm-trade-picker.is-open .mm-trade-trigger{
+.hero #salesUtilityRow #importControls .mm-trade-trigger[hidden]{display:none!important}
+.hero #salesUtilityRow #importControls .mm-trade-trigger:hover,
+.hero #salesUtilityRow #importControls .mm-trade-picker.is-open .mm-trade-trigger{
   border-color:var(--mut);background:var(--hull);
 }
-.hero #heroIntro #importControls .mm-trade-trigger:focus-visible,
-.hero #heroIntro #importControls .mm-trade-option:focus-visible{
+.hero #salesUtilityRow #importControls .mm-trade-trigger:focus-visible,
+.hero #salesUtilityRow #importControls .mm-trade-option:focus-visible{
   outline:2px solid var(--ion);outline-offset:2px;
 }
-.hero #heroIntro #importControls .mm-trade-chevron{
+.hero #salesUtilityRow #importControls .mm-trade-chevron{
   display:inline-block;flex:0 0 var(--mm-chevron-size);
   width:var(--mm-chevron-size);height:var(--mm-chevron-size);
   margin-right:3px;border-right:var(--mm-chevron-stroke) solid currentColor;
   border-bottom:var(--mm-chevron-stroke) solid currentColor;
   color:var(--mut);transform:rotate(45deg);transition:transform .18s ease;
 }
-.hero #heroIntro #importControls .mm-trade-picker.is-open .mm-trade-chevron{
+.hero #salesUtilityRow #importControls .mm-trade-picker.is-open .mm-trade-chevron{
   transform:rotate(225deg);
 }
-.hero #heroIntro #importControls .mm-trade-options{
+.hero #salesUtilityRow #importControls .mm-trade-options{
   position:absolute;top:calc(100% + 5px);left:0;right:0;
   z-index:80;display:grid;gap:2px;padding:5px;margin:0;
   border:1px solid var(--line2);border-radius:8px;
   background:var(--surface-panel);box-shadow:0 12px 24px rgba(0,0,0,.22);
 }
-.hero #heroIntro #importControls .mm-trade-options[hidden]{display:none!important}
-.hero #heroIntro #importControls .mm-trade-option{
+.hero #salesUtilityRow #importControls .mm-trade-options[hidden]{display:none!important}
+.hero #salesUtilityRow #importControls .mm-trade-option{
   display:flex;align-items:center;justify-content:space-between;
   width:100%;min-height:40px;padding:8px 10px;
   border:1px solid transparent;border-radius:6px;
   background:transparent;color:var(--txt);box-shadow:none;
   font:500 .81rem/1.25 var(--f-ui);text-align:left;white-space:nowrap;cursor:pointer;
 }
-.hero #heroIntro #importControls .mm-trade-option:hover,
-.hero #heroIntro #importControls .mm-trade-option:focus-visible{
+.hero #salesUtilityRow #importControls .mm-trade-option:hover,
+.hero #salesUtilityRow #importControls .mm-trade-option:focus-visible{
   background:var(--hull);
 }
-.hero #heroIntro #importControls .mm-trade-option.is-selected{
+.hero #salesUtilityRow #importControls .mm-trade-option.is-selected{
   background:var(--hull);border-color:var(--line2);
 }
-.hero #heroIntro #importControls .mm-trade-option.is-selected::after{
+.hero #salesUtilityRow #importControls .mm-trade-option.is-selected::after{
   content:"✓";margin-left:10px;color:var(--mut);font-weight:650;
+}
+/* B.17: the existing accessible picker is one segment of the same toolbar. */
+.hero #salesUtilityRow #importControls .mm-trade-trigger{
+  min-height:36px;padding:8px 12px;border:0;border-radius:7px;
+  background:var(--surface-panel);font-weight:600;font-size:.83rem;
+}
+.hero #salesUtilityRow #importControls .mm-trade-picker{min-width:132px}
+.hero #salesUtilityRow #importControls .mm-trade-trigger:focus-visible{
+  outline-offset:-2px;
 }
 @media(max-width:760px){
   /* Every available route filter stays discoverable without sideways scrolling. */
@@ -744,8 +805,8 @@ body:not(.is-flip) .fact-buy-order{display:none!important}
   #pSum .pk-tools .pk-fb{flex:1 1 auto;min-width:0}
 }
 @media(prefers-reduced-motion:reduce){
-  #pSum .pk-tools .pk-fb,.hero #heroIntro #importControls .mm-trade-trigger,
-  .hero #heroIntro #importControls .mm-trade-chevron{transition:none}
+  #pSum .pk-tools .pk-fb,.hero #salesUtilityRow #importControls .mm-trade-trigger,
+  .hero #salesUtilityRow #importControls .mm-trade-chevron{transition:none}
 }
 
 /* B.3: remaining expandable UI uses one neutral arrow. These are disclosure

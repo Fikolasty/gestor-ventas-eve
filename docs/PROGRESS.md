@@ -1,5 +1,11 @@
 # PROGRESS — Market Moves+
 
+## 2026-10-27 — B.17 anuncio persistente de SP y segmento Comercio Jita, v1.0.153
+
+**Aprobación de Raulito:** tras dos imágenes de propuesta, acepta el banner horizontal «¿Nuevo piloto? Consigue **1,000,000 SP GRATIS** ↗» a la izquierda de la fila de utilidades, alineado con Tasación, visible desde la pantalla inicial «Vender Items». En «Comercio Jita» se habilita, a la derecha, un control segmentado con destino, «Jita Sell / Buy Order» y «Enviar», sin textos redundantes visibles. Se preservan la base grafito cálido B.16, los dos temas, los dos idiomas, las cuatro tarjetas B.13 y todos los controles canónicos, sus eventos y resultados económicos.
+
+**Implementación y QA local final:** `src/shell.html`, `src/js/app/refresh.js`, `src/styles/80-product-ux.css`, `src/styles/themes/light-header-shipping.css`, `src/i18n/ui.json`; pruebas `tests/browser_theme.py`, `tests/layout-stage-a.test.cjs`, `tests/i18n-contract.test.cjs` y contrato legado `tests/market-scenarios.cjs`. Workflows v1.0.153. Build local terminado: **35/35 Node, 16/16 Python, 8/8 regresiones heredadas, 52/52 Chromium** PASS, con ES/EN, Dark/Light y 1440/630/390 px, sin overflow; capturas reales inicial/Jita 1440 Dark/Light revisadas. `git diff --check` limpio. Pendientes al redactar: publicación Fiko, 4 Actions y verificación HTTP independiente. **La última versión LIVE sigue siendo v1.0.152 hasta ese cierre.** Diseño fuente de verdad en DSS §59.
+
 ## 2026-10-27 — B.16 corrección de fondo Dark en Listado abierto, v1.0.152 candidata
 
 **Captura y petición directa de Raulito:** el gris sólido `#353533` detrás de los Items abiertos no combina con las otras tarjetas. Se sustituye **únicamente en Dark y con el Listado abierto** por `--glass`, grafito translúcido ya usado por `.panel`; estado cerrado, tarjetas de Item, altura 88 px, sorting y Light intactos. Test estático actualizado y nuevo contrato Chromium exige coincidencia de color con `#stepsPanel` y capturas B.16 de ambos estados Light/Dark. DSS §58 sustituye la antigua regla cromática del contenedor abierto. No se toca cálculo, ESI/SSO ni B.13.

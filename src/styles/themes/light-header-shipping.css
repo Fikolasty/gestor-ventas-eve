@@ -54,6 +54,23 @@ html.light .hero>.hero-referral-pill:hover{
 html.light .hero>.hero-referral-pill .hero-referral-kicker{color:#554a40!important}
 html.light .hero>.hero-referral-pill .hero-referral-offer,
 html.light .hero>.hero-referral-pill .hero-referral-arrow{color:#a34d2c!important}
+/* B.17: the approved two-column utility row uses existing warm Light tokens. */
+html.light .hero #salesUtilityRow>.hero-referral-pill,
+html.light .hero #salesUtilityRow>#importControls:not([hidden]){
+ background:var(--surface-card)!important;border-color:var(--edge)!important;
+ color:var(--txt)!important;box-shadow:0 2px 8px rgba(45,35,25,.08)!important;
+}
+html.light .hero #salesUtilityRow>.hero-referral-pill:hover{
+ background:#f5f2ed!important;border-color:var(--mut)!important;
+}
+html.light .hero #salesUtilityRow .hero-referral-kicker{color:var(--txt)!important}
+html.light .hero #salesUtilityRow .hero-referral-offer{color:#a34d2c!important}
+html.light .hero #salesUtilityRow .hero-referral-arrow,
+html.light .hero #salesUtilityRow #importControls .mm-import-intro strong,
+html.light .hero #salesUtilityRow #importControls .mm-import-intro strong .ic{color:var(--mut)!important}
+html.light .hero #salesUtilityRow #importControls .mm-trade-trigger{
+ background:#f5f2ed!important;color:var(--txt)!important;
+}
 html.light .hero-intro:not(.no-appr)>.appr,
 html.light .hero-intro:not(.no-appr)>.paste{
  background:var(--surface-card)!important;

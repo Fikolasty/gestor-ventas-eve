@@ -51,11 +51,6 @@
     <span class="logo-l vg" role="img" aria-label="Logo de Vanguardia DR"></span>
     <div><h1>Market Moves+</h1></div>
   </div>
-  <button type="button" class="hero-referral hero-referral-pill" data-link="referral" data-i18n-aria-label="referral.linkAria" aria-label="Abrir enlace de referido de EVE Online: un millón de Skill Points gratis">
-    <span class="hero-referral-kicker" data-i18n="referral.newPilot">NUEVO PILOTO</span>
-    <span class="hero-referral-offer" data-i18n="referral.freeSp">1,000,000 SP GRATIS</span>
-    <span class="hero-referral-arrow" aria-hidden="true">↗</span>
-  </button>
   <nav class="mm-modnav" id="mmTabs" aria-label="Navegación de Market Moves+">
     <button type="button" id="navHome" class="mm-home" title="HOME" aria-label="Volver al inicio"><span class="ic i-home" aria-hidden="true"></span></button>
     <!-- Both business modes occupy the formerly empty space beside Home. -->
@@ -230,6 +225,15 @@ Contraband Freight = no</textarea><small>Una regla por línea: Nombre = tax tota
     <h3 class="sub-h" style="margin-top:20px"><span class="ic i-lock" aria-hidden="true"></span>Seguridad</h3>
     <div class="hp-t"><div><b>Privacidad y acceso a EVE</b><span>Puedes consultar precios sin iniciar sesión. Si conectas tu personaje, la autenticación se realiza mediante EVE SSO; no se te pide la contraseña en Market Moves+. Los precios se consultan mediante ESI y los enlaces externos se abren por separado.</span></div></div>
   </section>
+  </div>
+  <!-- Shared utility row: referral always visible; import tools only in Jita Trading. -->
+  <div class="mm-sales-utility-row" id="salesUtilityRow">
+    <button type="button" class="hero-referral hero-referral-pill" data-link="referral" data-i18n-aria-label="referral.linkAria" aria-label="Abrir enlace de referido de EVE Online: un millón de Skill Points gratis">
+      <svg class="hero-referral-gift" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="8" width="18" height="13" rx="1.5"/><path d="M2 8h20M12 8v13M12 8H8a2.5 2.5 0 1 1 2.5-2.5C10.5 7 12 8 12 8ZM12 8h4a2.5 2.5 0 1 0-2.5-2.5C13.5 7 12 8 12 8Z"/></svg>
+      <span class="hero-referral-kicker" data-i18n="referral.newPilot">¿Nuevo piloto? Consigue</span>
+      <span class="hero-referral-offer" data-i18n="referral.freeSp">1,000,000 SP GRATIS</span>
+      <span class="hero-referral-arrow" aria-hidden="true">↗</span>
+    </button>
   </div>
   <!-- v1.0.62: Tasación a la izquierda y el recuadro para pegar a la derecha (sin items, el recuadro ocupa todo el ancho) -->
   <div class="hero-intro no-appr" id="heroIntro" role="tabpanel" aria-labelledby="mmTabVentas">

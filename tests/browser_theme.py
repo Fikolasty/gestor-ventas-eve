@@ -43,7 +43,7 @@ class ThemeBrowserTests(unittest.TestCase):
         self.page.goto(INDEX.as_uri(), wait_until="domcontentloaded")
         try:
             self.page.wait_for_selector(".top.mm-ho-root", timeout=5000)
-            self.page.wait_for_selector(".hero>.hero-referral", timeout=5000)
+            self.page.wait_for_selector("#salesUtilityRow>.hero-referral", timeout=5000)
         except Exception as error:
             raise AssertionError("Market Moves+ did not bootstrap: "
                                  + repr(page_errors[-5:])) from error
@@ -54,36 +54,38 @@ class ThemeBrowserTests(unittest.TestCase):
     def color(self, selector, attribute="backgroundColor"):
         return self.page.locator(selector).first.evaluate("(el,prop)=>getComputedStyle(el)[prop]", attribute)
 
-    def assert_referral_text_only(self, mode):
-        """Enforce the design contract in both themes, at rest and on hover."""
-        pill = self.page.locator(".hero>.hero-referral-pill")
+    def assert_referral_utility_row(self, mode):
+        """The referral is a readable, card-aligned utility strip in both themes."""
+        pill = self.page.locator("#salesUtilityRow>.hero-referral-pill")
         self.assertEqual(pill.count(), 1)
         styles = pill.evaluate("""el => {
             const s = getComputedStyle(el);
             const r = el.getBoundingClientRect();
-            const hero = el.parentElement.getBoundingClientRect();
+            const appraisal = document.querySelector('#heroIntro').getBoundingClientRect();
             return {
                 background: s.backgroundColor,
                 borderTop: s.borderTopWidth,
                 shadow: s.boxShadow,
-                centerDelta: Math.abs((r.left + r.right)/2 - (hero.left + hero.right)/2),
-                width: r.width,
+                leftDelta: Math.abs(r.left - appraisal.left),
+                width: r.width, height: r.height,
                 text: el.innerText
             };
         }""")
-        self.assertEqual(styles["background"], "rgba(0, 0, 0, 0)", f"{mode}: referral has background")
-        self.assertEqual(styles["borderTop"], "0px", f"{mode}: referral has border")
-        self.assertEqual(styles["shadow"], "none", f"{mode}: referral has shadow")
-        self.assertLess(styles["centerDelta"], 3, f"{mode}: referral not centered")
-        self.assertIn("1,000,000 SP", styles["text"])
+        self.assertNotEqual(styles["background"], "rgba(0, 0, 0, 0)", f"{mode}: missing graphite surface")
+        self.assertNotEqual(styles["borderTop"], "0px", f"{mode}: missing subtle border")
+        self.assertLess(styles["leftDelta"], 3, f"{mode}: referral misses Tasación alignment")
+        self.assertGreaterEqual(styles["height"], 40)
+        self.assertIn("1,000,000", styles["text"])
+        if 'en ' not in mode and 'EN' not in mode:
+            self.assertIn('GRATIS',styles['text'])
         self.assertGreater(styles["width"], 0)
 
     def test_light_header_and_referral_are_light_without_hover(self):
         self.page.evaluate("document.documentElement.classList.add('light')")
         header = self.color("header.top.mm-ho-root")
         self.assertGreater(brightness(header), 180, f"Light header dark: {header}")
-        self.assert_referral_text_only("Light at rest")
-        for selector in ["header .brand-wordmark", "header #evePilotName", ".hero>.hero-referral .hero-referral-kicker"]:
+        self.assert_referral_utility_row("Light at rest")
+        for selector in ["header .brand-wordmark", "header #evePilotName", "#salesUtilityRow .hero-referral-kicker"]:
             color = self.color(selector, "color")
             self.assertLess(brightness(color), 130, f"Text contrast failure at {selector}: {color}")
         self.assertGreater(float(self.page.evaluate("getComputedStyle(document.body,'::before').opacity")), 0.2)
@@ -92,18 +94,18 @@ class ThemeBrowserTests(unittest.TestCase):
         self.page.evaluate("document.documentElement.classList.add('light')")
         for width, height in [(1440, 900), (390, 844)]:
             self.page.set_viewport_size({"width": width, "height": height})
-            referral = self.page.locator(".hero>.hero-referral-pill")
+            referral = self.page.locator("#salesUtilityRow>.hero-referral-pill")
             self.page.mouse.move(1, 1)
-            self.assert_referral_text_only(f"Light {width}px at rest")
+            self.assert_referral_utility_row(f"Light {width}px at rest")
             self.assertLess(brightness(self.color(".hero-referral-kicker", "color")), 130)
             referral.hover()
-            self.assert_referral_text_only(f"Light {width}px hovered")
+            self.assert_referral_utility_row(f"Light {width}px hovered")
             self.assertLess(brightness(self.color(".hero-referral-kicker", "color")), 130)
 
     def test_dark_mode_still_uses_dark_surfaces(self):
         self.page.evaluate("document.documentElement.classList.remove('light')")
         self.assertLess(brightness(self.color("header.top.mm-ho-root")), 120)
-        self.assert_referral_text_only("Dark at rest")
+        self.assert_referral_utility_row("Dark at rest")
 
     def test_light_inventory_and_shipping_surfaces(self):
         self.page.evaluate("document.documentElement.classList.add('light')")
@@ -173,17 +175,17 @@ class ThemeBrowserTests(unittest.TestCase):
         self.page.set_viewport_size({"width": 390, "height": 844})
         self.page.evaluate("document.documentElement.classList.add('light')")
         self.assertGreater(brightness(self.color("header.top.mm-ho-root")), 180)
-        self.assert_referral_text_only("Mobile Light")
+        self.assert_referral_utility_row("Mobile Light")
         self.page.evaluate("document.documentElement.classList.remove('light')")
         self.assertLess(brightness(self.color("header.top.mm-ho-root")), 120)
-        self.assert_referral_text_only("Mobile Dark")
+        self.assert_referral_utility_row("Mobile Dark")
 
     def test_guide_ticker_settings_and_skills_tabs_translate_both_ways(self):
         self.page.evaluate("setLang('en')")
         self.page.wait_for_function(
             "() => document.querySelector('#mmTabSkills .mm-mod-label')?.textContent.trim()==='Skill Plans'"
         )
-        self.assertIn("NEW PILOT", self.page.locator(".hero-referral").inner_text())
+        self.assertIn("New pilot? Get", self.page.locator(".hero-referral").inner_text())
         self.assertIn("1,000,000 FREE SP", self.page.locator(".hero-referral").inner_text())
         self.assertIn("one million free Skill Points", self.page.locator(".hero-referral").get_attribute("aria-label"))
         self.assertIn("Getting started", self.page.locator("#help .modern-tabs").text_content())
@@ -192,7 +194,7 @@ class ThemeBrowserTests(unittest.TestCase):
         self.page.wait_for_function(
             "() => document.querySelector('#mmTabSkills .mm-mod-label')?.textContent.trim()==='Planes de habilidades'"
         )
-        self.assertIn("NUEVO PILOTO", self.page.locator(".hero-referral").inner_text())
+        self.assertIn("¿Nuevo piloto? Consigue", self.page.locator(".hero-referral").inner_text())
         self.assertIn("1,000,000 SP GRATIS", self.page.locator(".hero-referral").inner_text())
         self.assertIn("un millón de Skill Points gratis", self.page.locator(".hero-referral").get_attribute("aria-label"))
         self.assertIn("Primeros pasos", self.page.locator("#help .modern-tabs").inner_text())
@@ -224,7 +226,7 @@ class ThemeBrowserTests(unittest.TestCase):
     def test_settings_guide_pi_mining_and_referral_roundtrip(self):
         from playwright.sync_api import expect
         self.page.evaluate("setLang('en')")
-        self.assertEqual(self.page.locator(".hero-referral-kicker").inner_text(), "NEW PILOT")
+        self.assertEqual(self.page.locator(".hero-referral-kicker").inner_text(), "New pilot? Get")
         self.assertEqual(self.page.locator(".hero-referral-offer").inner_text(), "1,000,000 FREE SP")
         self.assertEqual(self.page.evaluate(
             "getComputedStyle(document.documentElement).getPropertyValue('--mm-i18n-volume').trim()"),
@@ -239,7 +241,7 @@ class ThemeBrowserTests(unittest.TestCase):
         expect(self.page.locator("#mining .mn-ship-bonus-title").first).to_have_text(
             "Ship and skill bonuses", timeout=10000)
         self.page.evaluate("setLang('es')")
-        self.assertEqual(self.page.locator(".hero-referral-kicker").inner_text(), "NUEVO PILOTO")
+        self.assertEqual(self.page.locator(".hero-referral-kicker").inner_text(), "¿Nuevo piloto? Consigue")
         self.assertEqual(self.page.locator(".hero-referral-offer").inner_text(), "1,000,000 SP GRATIS")
         self.assertEqual(self.page.evaluate(
             "getComputedStyle(document.documentElement).getPropertyValue('--mm-i18n-volume').trim()"),
@@ -327,7 +329,9 @@ class ThemeBrowserTests(unittest.TestCase):
                     self.assertEqual(geometry[:2],geometry[2:],geometry)
         trigger.click()
         expect(menu).to_be_visible()
-        self.page.locator('#tradePurchaseLabel').click(position={'x':1,'y':1})
+        # B.17: the descriptive label is visually clipped for compactness;
+        # clicking the input body below the popup is a genuine outside click.
+        self.page.locator('#heroIntro .paste textarea').click(position={'x':30,'y':50})
         expect(menu).to_be_hidden()
 
     def test_quick_plan_filters_are_neutral_and_keep_keyboard_focus(self):
@@ -549,7 +553,7 @@ class ThemeBrowserTests(unittest.TestCase):
         self.page.locator('#salesModeTrigger').click()
         self.page.locator('#modeTrading').click()
         expect(self.page.locator('#importControls')).to_be_visible()
-        self.assertEqual(self.page.locator('#importControls').evaluate('el=>el.parentElement.id'),'heroIntro')
+        self.assertEqual(self.page.locator('#importControls').evaluate('el=>el.parentElement.id'),'salesUtilityRow')
         self.page.evaluate("""() => {
             S.items=[{name:'Synthetic Layout Item',qty:1,m3u:1,
                 jita:{id:34,topBuy:100,topSell:120}}];
@@ -565,24 +569,67 @@ class ThemeBrowserTests(unittest.TestCase):
                     rect=self.page.evaluate("""() => {
                         const r=s=>document.querySelector(s).getBoundingClientRect();
                         const a=r('#appr'),i=r('#importControls'),p=r('#heroIntro>.paste');
+                        const referral=r('#salesUtilityRow>.hero-referral-pill');
                         const brand=r('.top .brand'),profile=r('#eveIdentityButton');
                         return {aTop:a.top,aBottom:a.bottom,pTop:p.top,pLeft:p.left,pRight:p.right,
                             iTop:i.top,iBottom:i.bottom,iLeft:i.left,iRight:i.right,
-                            aLeft:a.left,aRight:a.right,brandLeft:brand.left,profileRight:profile.right,
+                            aLeft:a.left,aRight:a.right,referralLeft:referral.left,
+                            brandLeft:brand.left,profileRight:profile.right,
                             overflow:document.documentElement.scrollWidth-innerWidth};
                     }""")
                     self.assertLessEqual(rect['overflow'],1,(width,language,light,rect))
                     if width>860:
                         self.assertLess(abs(rect['aTop']-rect['pTop']),3,rect)
+                        self.assertLess(abs(rect['aLeft']-rect['referralLeft']),3,rect)
                         self.assertGreaterEqual(rect['iLeft'],rect['pLeft']-3,rect)
                         self.assertLessEqual(rect['iRight'],rect['pRight']+3,rect)
                         self.assertLessEqual(rect['iBottom'],rect['pTop']+1,rect)
                     else:
-                        self.assertLessEqual(rect['aBottom'],rect['iTop']+1,rect)
+                        self.assertLessEqual(rect['iBottom'],rect['aTop']+1,rect)
                         self.assertLessEqual(rect['iBottom'],rect['pTop']+1,rect)
                     if width>1260:
                         self.assertLess(abs(rect['brandLeft']-rect['aLeft']),4,rect)
                         self.assertLess(abs(rect['profileRight']-rect['pRight']),7,rect)
+
+    def test_b17_referral_and_segmented_trade_bar_in_initial_and_jita_modes(self):
+        """The promo is always visible; real trade inputs appear only for Jita."""
+        from playwright.sync_api import expect
+        out=INDEX.parent/'tests'/'artifacts'/'theme'
+        out.mkdir(parents=True,exist_ok=True)
+        self.page.evaluate("""() => {
+            S.items=[{name:'Synthetic Layout Item',qty:1,m3u:1,
+                jita:{id:34,topBuy:100,topSell:120}}];
+            paintAppraisal();
+        }""")
+        for width in (1440,630,390):
+            self.page.set_viewport_size({'width':width,'height':900})
+            for language in ('es','en'):
+                self.page.evaluate('setLang',language)
+                for light in (False,True):
+                    self.page.evaluate('(on)=>document.documentElement.classList.toggle("light",on)',light)
+                    expect(self.page.locator('#salesUtilityRow .hero-referral-pill')).to_be_visible()
+                    expect(self.page.locator('#importControls')).to_be_hidden()
+                    initial_overflow=self.page.evaluate('document.documentElement.scrollWidth-innerWidth')
+                    self.assertLessEqual(initial_overflow,1,(width,language,light,'initial'))
+                    self.assert_referral_utility_row(f'{language} {"Light" if light else "Dark"}')
+                    if width==1440 and language=='es':
+                        self.page.locator('.hero').screenshot(path=str(out/
+                            f'b17-initial-hero-1440-{"light" if light else "dark"}.png'),animations='disabled')
+                    self.page.locator('#salesModeTrigger').click()
+                    self.page.locator('#modeTrading').click()
+                    expect(self.page.locator('#importControls')).to_be_visible()
+                    expect(self.page.locator('#importHeadingPrefix')).to_be_hidden()
+                    expect(self.page.locator('#tradePurchaseLabel')).to_be_visible()
+                    self.assertEqual(self.page.locator('#importControls').evaluate('el=>el.parentElement.id'),'salesUtilityRow')
+                    self.assertLessEqual(self.page.evaluate('document.documentElement.scrollWidth-innerWidth'),1,
+                        (width,language,light,'trade'))
+                    if width==1440 and language=='es':
+                        self.page.locator('.hero').screenshot(path=str(out/
+                            f'b17-jita-hero-1440-{"light" if light else "dark"}.png'),animations='disabled')
+                    self.page.locator('#salesModeTrigger').click()
+                    self.page.locator('#modeLiquidation').click()
+                    expect(self.page.locator('#importControls')).to_be_hidden()
+                    expect(self.page.locator('#salesUtilityRow .hero-referral-pill')).to_be_visible()
 
     def test_ledger_neutral_surface_and_shared_disclosure_chevrons(self):
         """CSS geometry and native open/close, no live prices or EVE API needed."""

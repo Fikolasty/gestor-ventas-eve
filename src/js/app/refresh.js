@@ -299,12 +299,11 @@ $('themeLight').addEventListener('change',e=>{document.documentElement.classList
   modeChevron.setAttribute('aria-hidden','true');
   modeTrigger.append(modeLabel,modeChevron);
   modePicker.append(modeTrigger,$('businessSwitch'));
-  // Task selector stays in the inventory heading. In Trading, its purchase and
-  // shipping controls occupy the grid cell immediately above Inventory, while
-  // Appraisal and Inventory remain aligned in the row below. Never clone inputs.
+  // Task selector stays in the inventory heading. Referral and the same live
+  // trade inputs now share a compact row aligned with the cards. No cloning.
   const salesIntro=$('heroIntro');
   salesIntro.querySelector('.paste-head').append(modePicker);
-  salesIntro.insertBefore($('importControls'),salesIntro.querySelector('.paste'));
+  $('salesUtilityRow').append($('importControls'));
   modePicker.addEventListener('click',event=>{
     if(event.target.closest('button[data-business]'))modePicker.open=false;
   });

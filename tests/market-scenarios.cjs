@@ -120,8 +120,9 @@ assert(salesJS.includes("headerMain.append($('navHome'),group)"));
 assert(salesJS.includes("modePicker.append(modeTrigger,$('businessSwitch'))"),'Original Sales buttons must move into operation menu');
 assert(salesJS.includes("salesIntro.querySelector('.paste-head').append(modePicker)"),
   'Mode selector must align to paste input inside inventory heading');
-assert(salesJS.includes("salesIntro.insertBefore($('importControls'),salesIntro.querySelector('.paste'))"),
-  'Original import controls belong directly above Inventory, never cloned');
+assert(salesHTML.includes('id="salesUtilityRow"'),'The shared utility row is in the Sales hero');
+assert(salesJS.includes("$('salesUtilityRow').append($('importControls'))"),
+  'Original import controls belong in the utility row above Inventory, never cloned');
 assert(!salesJS.includes('salesToolbar.append('),'Obsolete import toolbar must not be rendered');
 assert(!salesJS.includes("headerContext.append($('businessSwitch')"),'No duplicate Sales navigation in header');
 assert(salesJS.includes('topActions.insertBefore(theme,profile)'),'Theme must live beside Settings, Guide and the EVE pilot');
@@ -142,9 +143,9 @@ assert(salesHTML.includes('grid-template-areas:"brand actions" "main main"!impor
 assert(!salesHTML.includes("body.mm-mining .top.mm-ho-root #mmTabs>.mm-ho-context"));
 assert(!salesHTML.includes("/* v1.0.110 · Cabecera compacta"));
 
-assert(salesHTML.includes('.hero #heroIntro>#importControls:not([hidden])'),
+assert(salesHTML.includes('.hero #salesUtilityRow>#importControls:not([hidden])'),
   'Import controls are styled only when active');
-assert(salesHTML.includes('.hero #heroIntro>#importControls #rtM{display:none!important}'),
+assert(salesHTML.includes('.hero #salesUtilityRow #importControls #rtM{display:none!important}'),
   'Import margin remains in Settings only');
 assert(salesJS.includes("$('shipLab').hidden=!isImport"),'Ship control respects trading state');
 assert(salesHTML.includes('@media(max-width:1190px)')&&salesHTML.includes('@media(max-width:520px)'));

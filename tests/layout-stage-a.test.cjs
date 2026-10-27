@@ -6,23 +6,25 @@ const css=fs.readFileSync('src/styles/80-product-ux.css','utf8');
 const skills=fs.readFileSync('src/skills_preview.html','utf8');
 
 test('Sales retains unique live input IDs and moves only their real parent',()=>{
-  for(const id of ['heroIntro','appr','paste','importControls','tradePurchaseMode','shipOn','fImpM','salesModeTrigger']){
+  for(const id of ['heroIntro','salesUtilityRow','appr','paste','importControls','tradePurchaseMode','shipOn','fImpM','salesModeTrigger']){
     if(id==='salesModeTrigger')continue; // generated as one DOM node at runtime
     assert.equal((html.match(new RegExp('\\bid="'+id+'"','g'))||[]).length,1,id);
   }
-  assert.match(js,/salesIntro\.insertBefore\(\$\('importControls'\),salesIntro\.querySelector\('\.paste'\)\)/);
+  assert.match(js,/\$\('salesUtilityRow'\)\.append\(\$\('importControls'\)\)/);
   assert.doesNotMatch(js,/salesToolbar\.append|cloneNode|createElement\('select'\)/);
   assert.match(js,/\$\('tradePurchaseMode'\)\.addEventListener\('change'/);
   assert.match(js,/C\.buyMode=e\.target\.value/);
   assert.match(js,/\$\('shipOn'\)\.addEventListener\('change'/);
 });
 
-test('two-row import area keeps Appraisal and Inventory aligned only in Trading',()=>{
-  assert.match(css,/#heroIntro:not\(\.no-appr\):has\(>#importControls:not\(\[hidden\]\)\)/);
-  assert.match(css,/grid-template-areas:"\. import" "appraisal inventory"!important/);
-  assert.match(css,/grid-template-areas:"appraisal" "import" "inventory"!important/);
-  assert.match(css,/#heroIntro>#importControls:not\(\[hidden\]\)/);
-  assert.match(css,/\.hero #heroIntro>#importControls #rtM\{display:none!important\}/);
+test('persistent two-column utility area aligns promo and trade tools with cards',()=>{
+  assert.match(css,/#salesUtilityRow\{\s*display:grid;grid-template-columns:repeat\(2,minmax\(0,1fr\)\)/);
+  assert.match(css,/#salesUtilityRow>\.hero-referral-pill\{/);
+  assert.match(css,/#salesUtilityRow>#importControls:not\(\[hidden\]\)\{/);
+  assert.match(css,/#salesUtilityRow #importControls #importHeadingPrefix,/);
+  assert.match(css,/#salesUtilityRow #importControls #rtM\{display:none!important\}/);
+  assert.match(css,/#salesUtilityRow #importControls #tradePurchaseLabel\{/);
+  assert.match(html,/class="hero-referral-gift"/);
 });
 
 test('shared desktop grid and unindented result leave decorative dashes behind',()=>{

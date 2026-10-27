@@ -1,3 +1,9 @@
+## v1.0.153 — 2026-10-27 [ChatGPT] · B.17: banner de SP y controles compactos Jita — CANDIDATA A PUBLICACIÓN
+
+- Banner alargado **«¿Nuevo piloto? Consigue 1,000,000 SP GRATIS»** de fondo grafito alineado exactamente con Tasación; visible desde el modo inicial «Vender Items», sin desplazar el encabezado principal. «GRATIS» queda en mayúsculas y el inglés conserva «FREE SP».
+- Al elegir «Comercio Jita», destino, Jita Sell/Buy Order y «Enviar» aparecen como segmento compacto alineado con Inventario. Se ocultan redundancias «IMPORTACIÓN A»/«Comprar a» visualmente, preservando los mismos selectores originales, listeners, ayudas accesibles y estados.
+- ES/EN, Dark/Light, 1440/630/390 px y foco/teclado comprobados; sin cambios financieros, ESI/SSO, B.13 2×2 ni B.16. **QA local PASS: 35 Node, 16 Python, 8 heredadas y 52 Chromium**; capturas de ambos estados/temas inspeccionadas. Certificación externa de publicación en curso. DSS §59.
+
 ## v1.0.152 — 2026-10-27 [ChatGPT] · B.16: fondo grafito del Listado coherente con el resto — LIVE CERTIFICADA
 
 - Por nueva captura de Raulito, se elimina el gris opaco medio `--hull2` **del fondo del Listado abierto en Dark**. La bandeja usa `--glass`, el mismo grafito translúcido de los demás paneles; cerrado sigue `--surface-card` y las tarjetas de Items conservan su profundidad y altura compacta.

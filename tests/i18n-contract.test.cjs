@@ -68,6 +68,8 @@ test('referral text and accessibility are keyed, not dependent on phrase matchin
   assert.match(shell,/data-i18n-aria-label="referral.linkAria"/);
   assert.notEqual(ui['referral.newPilot'].en,ui['referral.newPilot'].es);
   assert.notEqual(ui['referral.freeSp'].en,ui['referral.freeSp'].es);
+  assert.equal(ui['referral.newPilot'].es,'¿Nuevo piloto? Consigue');
+  assert.equal(ui['referral.freeSp'].es,'1,000,000 SP GRATIS');
 });
 test('browser dialogs use the catalog rather than hard-coded Spanish',()=>{
   const files=[
