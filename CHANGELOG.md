@@ -1,8 +1,8 @@
-## v1.0.150 — 2026-10-26 [ChatGPT] · B.14: profundidad gris cálida del Listado — CANDIDATA LOCAL
+## v1.0.150 — 2026-10-26 [ChatGPT] · B.14: profundidad gris cálida del Listado — LIVE CERTIFICADA
 
 - **Diseño aprobado por Raulito:** contenedor gris cálido medio y tarjetas de Item grafito oscuro, exclusivamente con tokens neutros existentes; en Light se conserva idéntica jerarquía/retícula y se invierten luminancias. DSS §56 registra el patrón como referencia para próximas secciones (sin recolorear otras por iniciativa propia).
 - **Listado plegado:** identidad y cantidad, ruta elegida con estado, precio unitario y neto en columnas alineadas. Barra de ordenación segmentada, etiquetas mayores, sin palabra visual «Sort/Ordenar». Toda la fila abre/cierra el detalle por botón nativo accesible, sin chevron; copiar precio/neto y quitar Item siguen siendo acciones separadas.
-- No toca fórmulas, fuentes de mercado, ESI/SSO, los cuatro paneles B.13 2×2, persistencia ni cálculo de precios. Build v1.0.150 y QA local **35 Node, 16 Python, 8 heredadas, 50 Chromium + 4 focales** PASS, capturas desktop Dark/Light y móvil examinadas. **No declarar LIVE sin Actions y Pages verificados.**
+- No toca fórmulas, fuentes de mercado, ESI/SSO, los cuatro paneles B.13 2×2, persistencia ni cálculo de precios. Build y QA local **35 Node, 16 Python, 8 heredadas, 50 Chromium + 4 focales** PASS; capturas desktop Dark/Light y móvil examinadas. **LIVE por Fiko:** fuente `b5af720613dbc9f72df5ee30b2d5ee0c2eb378df`, CI `df68e18050c7938c081d95dce516f0e4d996be7b`, 4/4 Actions success (Rebuild/Pages `40448857455`). GitHub `index.html` y descarga pública HTTPS idénticos byte a byte al local: **2.351.180 bytes**, blob `5c1cb8ac5bad5ba8ab973638bf9f942af78f172e`. Sin pruebas reales ESI/SSO extremo a extremo.
 
 ## v1.0.149 — 2026-10-26 [ChatGPT] · D.4: ráfagas ESI acotadas, cotizaciones íntegras — LIVE CERTIFICADA
 

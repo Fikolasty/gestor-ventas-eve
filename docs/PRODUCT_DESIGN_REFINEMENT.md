@@ -8,6 +8,8 @@
 
 **B.14 aprobado como evolución puntual del Listado plegado (DSS §56):** se reutilizan los grises cálidos de la aplicación con **contenedor más claro y tarjeta de Item más oscura**. Las cuatro columnas de resumen son Item, ruta/estado, precio por unidad y neto; interacción en toda la fila sin botón de maximizar. Sort/Ordenar se conserva como nombre accesible del grupo, no como prefijo visible. El patrón cromático servirá como referencia de futuras secciones que Raulito revise, no se extiende automáticamente ni altera las tarjetas interiores B.13 2×2. Estado de publicación separado en DSS §56.
 
+**Certificación posterior:** B.14 es **v1.0.150 LIVE**, cuatro Actions correctas y web HTTPS equivalente al HTML local (fuente `b5af7206`, CI `df68e180`, blob `5c1cb8ac`). Ver trazabilidad completa en DSS §56 y `CHANGELOG.md`; no confundir referencias históricas anteriores de este documento con el estado actual.
+
 ## 1. Petición y preferencias del propietario
 
 1. Máxima simetría y misma retícula horizontal desde SIGMA GRINDSET/login hasta las tarjetas y el resultado, sin centrado indiscriminado de números.
