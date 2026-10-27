@@ -2,7 +2,9 @@
 
 ## 2026-10-27 — B.16 corrección de fondo Dark en Listado abierto, v1.0.152 candidata
 
-**Captura y petición directa de Raulito:** el gris sólido `#353533` detrás de los Items abiertos no combina con las otras tarjetas. Se sustituye **únicamente en Dark y con el Listado abierto** por `--glass`, grafito translúcido ya usado por `.panel`; estado cerrado, tarjetas de Item, altura 88 px, sorting y Light intactos. Test estático actualizado y nuevo contrato Chromium exige coincidencia de color con `#stepsPanel` y capturas B.16 de ambos estados Light/Dark. DSS §58 sustituye la antigua regla cromática del contenedor abierto. **Aún no se certifica publicación:** versión LIVE conocida v1.0.151 hasta nuevos gates Fiko/Actions/HTTPS. No se toca cálculo, ESI/SSO ni B.13.
+**Captura y petición directa de Raulito:** el gris sólido `#353533` detrás de los Items abiertos no combina con las otras tarjetas. Se sustituye **únicamente en Dark y con el Listado abierto** por `--glass`, grafito translúcido ya usado por `.panel`; estado cerrado, tarjetas de Item, altura 88 px, sorting y Light intactos. Test estático actualizado y nuevo contrato Chromium exige coincidencia de color con `#stepsPanel` y capturas B.16 de ambos estados Light/Dark. DSS §58 sustituye la antigua regla cromática del contenedor abierto. No se toca cálculo, ESI/SSO ni B.13.
+
+**Cierre B.16 LIVE v1.0.152:** 35 Node/16 Python/8 heredadas/**51 Chromium**, todos PASS, build local `index.html` de 2.351.455 bytes. Publicación Fiko protegida fuente `2d1141d6`, compilación CI `265f5739` y cuatro Actions `success` (Versiones `40467130551`, Minería `40467130678`, Build `40467130746`, Rebuild/Chromium/Pages `40467130743`). Página HTTPS cache-busted descargada de forma independiente; SHA Git `df5ba864ec7abf79d67249dbaff95025abf7a31a` y `cmp` son idénticos al compilado local y a GitHub. El color grafito translucido del Listado abierto está publicado, sin impacto en los motores.
 
 ## 2026-10-25 — B.5c reprocesamiento compacto, v1.0.133 LIVE y certificada
 

@@ -16,7 +16,7 @@
 
 **Certificación B.15:** v1.0.151 **LIVE** por Fiko, fuente `ac6cca06`, build `d37aafc9`, cuatro Actions success y HTTPS/blob local `8afc9be5` iguales; DSS §57 documenta el cierre. Las dos capturas del propietario determinaron únicamente los cambios de color plegado/abierto y densidad, sin alterar cálculos ni B.13.
 
-**B.16 corrección explícita de color en la bandeja abierta (DSS §58, v1.0.152 candidata):** Raulito muestra la v1.0.151 completa y rechaza el gris opaco `#353533` del Listado abierto, porque desentona con Tasación, Inventario y Resultado. La directriz más reciente prevalece sobre B.14/B.15 para este estado: el contenedor abierto Dark debe utilizar **exactamente** el grafito translúcido existente `--glass` compartido por `.panel`, manteniendo Items independientes oscuros, ordenación y altura compacta. Sin recolorear otros paneles ni alterar la geometría/Light por esta captura Dark. QA/Pages por certificar.
+**B.16 corrección explícita de color en la bandeja abierta (DSS §58, v1.0.152 LIVE):** Raulito muestra la v1.0.151 completa y rechaza el gris opaco `#353533` del Listado abierto, porque desentona con Tasación, Inventario y Resultado. La directriz más reciente prevalece sobre B.14/B.15 para este estado: el contenedor abierto Dark utiliza **exactamente** el grafito translúcido existente `--glass` compartido por `.panel`, manteniendo Items independientes oscuros, ordenación y altura compacta. Sin recolorear otros paneles ni alterar la geometría/Light por esta captura Dark. Fuente Fiko `2d1141d6`, CI `265f5739`, cuatro Actions success, HTTPS igual a local/GitHub (blob `df5ba864`); QA 35 Node/16 Python/8 heredadas/51 Chromium. Certificación completa DSS §58.
 
 ## 1. Petición y preferencias del propietario
 
