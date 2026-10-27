@@ -1,3 +1,8 @@
+## v1.0.152 — 2026-10-27 [ChatGPT] · B.16: fondo grafito del Listado coherente con el resto — CANDIDATA LOCAL
+
+- Por nueva captura de Raulito, se elimina el gris opaco medio `--hull2` **del fondo del Listado abierto en Dark**. La bandeja usa `--glass`, el mismo grafito translúcido de los demás paneles; cerrado sigue `--surface-card` y las tarjetas de Items conservan su profundidad y altura compacta.
+- No se alteran Light, cantidades, sort, interacciones, copia, precios, retícula 2×2 ni finanzas/ESI/SSO. Tests CSS y Chromium de ambos estados/temas actualizados; compilación y certificación remota pendientes de cierre. Detalles en DSS §58.
+
 ## v1.0.151 — 2026-10-27 [ChatGPT] · B.15: Listado cerrado en grafito oscuro y filas compactas — LIVE CERTIFICADA
 
 - **Corrección de color a petición de Raulito:** el gris medio se veía en la barra minimizada; ese tono corresponde al contenedor abierto. Cerrado Dark ahora usa el grafito profundo ya existente (`--surface-card`), abierto mantiene `--hull2`; Light usa una tarjeta clara cerrada y bandeja gris cálida abierta. No se introducen tonos azulados.

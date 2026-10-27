@@ -1921,8 +1921,8 @@ class ThemeBrowserTests(unittest.TestCase):
         expect(self.page.locator('#pkTools .pk-fb.on')).to_have_attribute('data-pkf','fast')
         expect(self.page.locator('#pkOptionsContent')).to_be_visible()
 
-    def test_b15_folded_ledger_uses_dark_card_and_open_ledger_uses_warm_parent(self):
-        """A closed Listado is a dark control, never its opened medium-gray tray."""
+    def test_b16_ledger_matches_adjacent_dark_panels_in_both_states(self):
+        """Both Listado states match the existing panel palette, with no flat gray tray."""
         from playwright.sync_api import expect
         self.page.evaluate("""() => {
             const o={name:'Pyerite',qty:20000,m3u:1,ref:15.74,checks:[],jita:{}};
@@ -1945,12 +1945,14 @@ class ThemeBrowserTests(unittest.TestCase):
                     '(el)=>getComputedStyle(el).backgroundImage'),'none')
                 if width==1440:
                     self.page.locator('#ledger').screenshot(path=str(out/
-                        f'b15-folded-ledger-es-1440-{"light" if light else "dark"}.png'),
+                        f'b16-folded-ledger-es-1440-{"light" if light else "dark"}.png'),
                         animations='disabled')
                 self.page.locator('#ledger>summary').click()
                 expect(self.page.locator('#ledger')).to_have_attribute('open','')
                 opened=self.color('#ledger')
-                self.assertEqual(opened,'rgb(231, 227, 220)' if light else 'rgb(53, 53, 51)')
+                self.assertEqual(opened,'rgb(231, 227, 220)' if light else 'rgba(21, 21, 21, 0.88)')
+                if not light:
+                    self.assertEqual(opened,self.color('#stepsPanel'), 'Listado should share the panel graphite')
                 self.assertNotEqual(opened,closed)
                 if width==1440:
                     item_height=self.page.locator('#lots .lot').evaluate(
@@ -1959,7 +1961,7 @@ class ThemeBrowserTests(unittest.TestCase):
                     self.assertLessEqual(item_height,95)
                 if width==1440:
                     self.page.locator('#ledger').screenshot(path=str(out/
-                        f'b15-open-ledger-es-1440-{"light" if light else "dark"}.png'),
+                        f'b16-open-ledger-es-1440-{"light" if light else "dark"}.png'),
                         animations='disabled')
                 self.page.locator('#ledger>summary').click()
                 expect(self.page.locator('#ledger')).not_to_have_attribute('open','')

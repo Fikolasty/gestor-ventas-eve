@@ -1,5 +1,9 @@
 # PROGRESS — Market Moves+
 
+## 2026-10-27 — B.16 corrección de fondo Dark en Listado abierto, v1.0.152 candidata
+
+**Captura y petición directa de Raulito:** el gris sólido `#353533` detrás de los Items abiertos no combina con las otras tarjetas. Se sustituye **únicamente en Dark y con el Listado abierto** por `--glass`, grafito translúcido ya usado por `.panel`; estado cerrado, tarjetas de Item, altura 88 px, sorting y Light intactos. Test estático actualizado y nuevo contrato Chromium exige coincidencia de color con `#stepsPanel` y capturas B.16 de ambos estados Light/Dark. DSS §58 sustituye la antigua regla cromática del contenedor abierto. **Aún no se certifica publicación:** versión LIVE conocida v1.0.151 hasta nuevos gates Fiko/Actions/HTTPS. No se toca cálculo, ESI/SSO ni B.13.
+
 ## 2026-10-25 — B.5c reprocesamiento compacto, v1.0.133 LIVE y certificada
 
 **Observación con captura real de Geiner:** bajo «¿De dónde salen estas deducciones?» la tarjeta «¿Debo reprocesar mi hielo u ore?» quedaba siempre expandida y tenía otro disclosure anidado «¿Por qué reprocesar o no?». Geiner aprobó minimizar el bloque igual que el de deducciones, subir la pregunta interior al exterior, quitar «mi hielo u ore», usar español natural con artículo («No reproceses el Compressed Krystallos») y marcar ISK positivo verde/negativo rojo. El cambio precede C.1, sin afectar cálculos.

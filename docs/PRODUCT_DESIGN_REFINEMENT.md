@@ -16,6 +16,8 @@
 
 **Certificación B.15:** v1.0.151 **LIVE** por Fiko, fuente `ac6cca06`, build `d37aafc9`, cuatro Actions success y HTTPS/blob local `8afc9be5` iguales; DSS §57 documenta el cierre. Las dos capturas del propietario determinaron únicamente los cambios de color plegado/abierto y densidad, sin alterar cálculos ni B.13.
 
+**B.16 corrección explícita de color en la bandeja abierta (DSS §58, v1.0.152 candidata):** Raulito muestra la v1.0.151 completa y rechaza el gris opaco `#353533` del Listado abierto, porque desentona con Tasación, Inventario y Resultado. La directriz más reciente prevalece sobre B.14/B.15 para este estado: el contenedor abierto Dark debe utilizar **exactamente** el grafito translúcido existente `--glass` compartido por `.panel`, manteniendo Items independientes oscuros, ordenación y altura compacta. Sin recolorear otros paneles ni alterar la geometría/Light por esta captura Dark. QA/Pages por certificar.
+
 ## 1. Petición y preferencias del propietario
 
 1. Máxima simetría y misma retícula horizontal desde SIGMA GRINDSET/login hasta las tarjetas y el resultado, sin centrado indiscriminado de números.

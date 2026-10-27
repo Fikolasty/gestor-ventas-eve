@@ -2106,10 +2106,9 @@ body.is-flip #ledger #lots .lot-panel-grid>.lot-adjustments>.facts>.fact-market-
   #ledger #lots .lot-panel-grid>details>summary::after{transition:none}
 }
 
-/* B.14/B.15 · Approved warm-graphite hierarchy. When the Listado is closed,
-   the whole disclosure IS the dark interactive card. The medium warm gray is
-   visible only behind the individual cards when the Listado is expanded. */
-html:not(.light) #ledger[open]{background:var(--hull2)!important}
+/* B.16 · The whole Listado shares the same translucent graphite as adjacent
+   panels in Dark. Its opened state must not become a solid medium-gray block. */
+html:not(.light) #ledger[open]{background:var(--glass)!important}
 html:not(.light) #ledger:not([open]){background:var(--surface-card)!important}
 html:not(.light) #ledger:not([open]):hover{background:var(--surface-panel)!important}
 #ledger .ledger-controls{margin:7px 18px 15px}
