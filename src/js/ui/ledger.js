@@ -52,6 +52,7 @@ const LOT_OF=new WeakMap();
 function toggleLot(o){const ui=o.ui;if(!ui)return;const open=ui.body.hidden;
   if(open&&!ui.detailsReady)buildLotDetails(o,ui); // una sola vez, nunca se destruye al cerrar
   slide(ui.body,open);ui.lot.classList.toggle('open',open);ui.head.setAttribute('aria-expanded',String(open));
+  ui.head.setAttribute('aria-label',tx(open?'ledger.closeItem':'ledger.openItem',{item:o.name}));
   if(open&&ui.last)paintLot(ui.last);}
 $('lots').addEventListener('click',e=>{const lot=e.target.closest('.lot'),o=lot&&LOT_OF.get(lot);if(!o)return;
   if(e.target.closest('.lot-x')){removeFromPaste(o.name);return;}
@@ -62,17 +63,22 @@ function buildLot(o){
   // v102: solo creamos la cabecera para cada item; los controles pesados se construyen bajo demanda.
   // Importante: o.ui.last se actualiza en paintLot() aun con el detalle cerrado.
   const lot=el('article','lot'),head=el('div','lot-head');
+  // The full row is one native keyboard-operable toggle; copy/remove remain
+  // separate actions above its transparent hit area, never nested buttons.
   const toggle=el('button','lot-open');toggle.type='button';toggle.setAttribute('aria-expanded','false');
-  const nm=el('span','lot-name');nm.append(el('b',null,o.name));const tag=el('span','tag');nm.append(tag);
-  const qty=el('span','lot-qty'),dest=el('span','lot-dest'),chev=el('span','chev');chev.setAttribute('aria-hidden','true');
-  const info=el('span','lot-info'),meta=el('span','lot-meta');meta.append(qty,dest);info.append(nm,meta);toggle.append(info,chev);
+  toggle.setAttribute('aria-label',tx('ledger.openItem',{item:o.name}));
+  const nm=el('span','lot-name');nm.append(el('b',null,o.name));const tag=el('span','tag');
+  const qty=el('span','lot-qty'),dest=el('span','lot-dest');
+  const info=el('span','lot-info'),meta=el('span','lot-meta');meta.append(qty);info.append(nm,meta);
+  const route=el('span','lot-route'),routeLabel=el('span','lot-k',tx('ledger.selectedRoute'));
+  const routeMain=el('span','lot-route-main');routeMain.append(dest,tag);route.append(routeLabel,routeMain);
   // Both headline amounts have the same quiet, keyboard-accessible copy
   // affordance. They differ only in meaning (unit price vs lot net).
   const pp=el('span','lot-pp'),ppLabel=el('span','lot-k',tx('ledger.lotUnitPrice')),ppB=copyBtn('','—');ppB.classList.add('cp-n');pp.append(ppLabel,ppB);
   const netBox=el('span','lot-financial'),netLabel=el('span','lot-k',tx('ledger.netSales')),net=copyBtn('','—');net.classList.add('lot-net','cp-n');net.disabled=true;netBox.append(netLabel,net);
-  head.append(toggle,pp,netBox);
+  head.append(toggle,info,route,pp,netBox);
   const body=el('div','lot-body');body.hidden=true;body.id='lot-detail-'+(++lotDetailId);toggle.setAttribute('aria-controls',body.id);
-  const ui={nm,lot,head:toggle,tag,qty,dest,net,netLabel,ppLabel,body,ppB,detailsReady:false};
+  const ui={nm,lot,head:toggle,tag,qty,dest,routeLabel,net,netLabel,ppLabel,body,ppB,detailsReady:false};
   const x=el('button','lot-x');x.type='button';x.title=tx('ledger.removeItem',{item:o.name});x.setAttribute('aria-label',x.title);
   ui.removeButton=x;
   o.ui=ui;lot.append(head,x,body);LOT_OF.set(lot,o); // v1.0.8: sin listeners por fila; un solo manejador en #lots
@@ -371,6 +377,7 @@ function setLotAttr(node,name,value){
 }
 function paintLot(r){
   const o=r.o,u=o.ui;if(!u)return;
+  setLotAttr(u.head,'aria-label',tx(u.body.hidden?'ledger.openItem':'ledger.closeItem',{item:o.name}));
   const removeButton=u.removeButton;
   if(removeButton){const label=tx('ledger.removeItem',{item:o.name});
     setLotAttr(removeButton,'title',label);setLotAttr(removeButton,'aria-label',label);}
@@ -378,6 +385,7 @@ function paintLot(r){
   setLotLeafText(u.qty,tx('ledger.units',{count:fmtQ(r.q)}));
   setLotLeafText(u.ppLabel,tx('ledger.lotUnitPrice'));
   setLotLeafText(u.netLabel,tx('ledger.netSales'));
+  setLotLeafText(u.routeLabel,tx('ledger.selectedRoute'));
   const netValue=r.best?r.net[r.best]:null,hasNet=Number.isFinite(netValue);
   const netText=hasNet?fmt(netValue):'—';
   const netCopyLabel=tx('ledger.copyLotNet',{item:o.name,price:netText});

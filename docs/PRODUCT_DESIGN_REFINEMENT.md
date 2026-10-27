@@ -6,6 +6,8 @@
 
 **Continuidad:** leer primero `EVE_PRODUCT_DESIGN_PROTOCOL.md`, `DSS.md` y `AGENTS.md`. La pantalla piloto de resultado publicada está descrita en `PRODUCT_DESIGN_PILOT.md`. Capturas de referencia: `upload/image(20261025-071446).png` y el recorte del filtro `upload/image(20261025-071533).png`, recibidos durante la sesión de producto. Hay un concepto visual generado a partir de la captura, pero **no es QA del sitio**.
 
+**B.14 aprobado como evolución puntual del Listado plegado (DSS §56):** se reutilizan los grises cálidos de la aplicación con **contenedor más claro y tarjeta de Item más oscura**. Las cuatro columnas de resumen son Item, ruta/estado, precio por unidad y neto; interacción en toda la fila sin botón de maximizar. Sort/Ordenar se conserva como nombre accesible del grupo, no como prefijo visible. El patrón cromático servirá como referencia de futuras secciones que Raulito revise, no se extiende automáticamente ni altera las tarjetas interiores B.13 2×2. Estado de publicación separado en DSS §56.
+
 ## 1. Petición y preferencias del propietario
 
 1. Máxima simetría y misma retícula horizontal desde SIGMA GRINDSET/login hasta las tarjetas y el resultado, sin centrado indiscriminado de números.

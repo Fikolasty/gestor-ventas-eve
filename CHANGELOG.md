@@ -1,3 +1,9 @@
+## v1.0.150 — 2026-10-26 [ChatGPT] · B.14: profundidad gris cálida del Listado — CANDIDATA LOCAL
+
+- **Diseño aprobado por Raulito:** contenedor gris cálido medio y tarjetas de Item grafito oscuro, exclusivamente con tokens neutros existentes; en Light se conserva idéntica jerarquía/retícula y se invierten luminancias. DSS §56 registra el patrón como referencia para próximas secciones (sin recolorear otras por iniciativa propia).
+- **Listado plegado:** identidad y cantidad, ruta elegida con estado, precio unitario y neto en columnas alineadas. Barra de ordenación segmentada, etiquetas mayores, sin palabra visual «Sort/Ordenar». Toda la fila abre/cierra el detalle por botón nativo accesible, sin chevron; copiar precio/neto y quitar Item siguen siendo acciones separadas.
+- No toca fórmulas, fuentes de mercado, ESI/SSO, los cuatro paneles B.13 2×2, persistencia ni cálculo de precios. Build v1.0.150 y QA local **35 Node, 16 Python, 8 heredadas, 50 Chromium + 4 focales** PASS, capturas desktop Dark/Light y móvil examinadas. **No declarar LIVE sin Actions y Pages verificados.**
+
 ## v1.0.149 — 2026-10-26 [ChatGPT] · D.4: ráfagas ESI acotadas, cotizaciones íntegras — LIVE CERTIFICADA
 
 - **Servicio de mercado:** una cola FIFO limita a 12 las solicitudes `esiFetch` simultáneas (no toca SSO); páginas de órdenes secundarias fallidas ya no se ignoran para aparentar una cotización completa. Se mantienen reintentos, `Retry-After`, cálculos, UI B.13 y precios.

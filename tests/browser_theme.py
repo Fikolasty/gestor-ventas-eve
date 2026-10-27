@@ -1358,7 +1358,7 @@ class ThemeBrowserTests(unittest.TestCase):
                             ledgerExplanation:px('#ledger #ledgerPriceHelp>p'),
                             financeQuestion:px('#verdict #vFinanceDetails>summary'),
                             netContext:px('#verdict .mm-net-context'),
-                            sortLabel:px('#ledger .ledger-sort-title'),
+                            sortLabel:px('#ledger .ledger-sort[data-lsort="n"]'),
                             primaryISK:px('#verdict .v-isk')
                         };
                     }""")
@@ -1367,10 +1367,11 @@ class ThemeBrowserTests(unittest.TestCase):
                         'source':13,'repQuestion':13.5,
                         'repSub':13,'faqQuestion':13.5,'faqAnswer':13,
                         'ledgerQuestion':11,'ledgerExplanation':13,
-                        'financeQuestion':13.5,'netContext':13,'sortLabel':11.68
+                        'financeQuestion':13.5,'netContext':13
                     }.items():
                         self.assertAlmostEqual(type_scale[label],expected,places=2,
                                                msg=f'{language}/{width}/{light} {label}: {type_scale}')
+                    self.assertGreaterEqual(type_scale['sortLabel'],12.2)
                     # The main ISK headline keeps its role; Geiner explicitly
                     # reduced the optional reprocessing sentence to 13px in B.6.
                     self.assertGreaterEqual(type_scale['primaryISK'],32)
@@ -1919,6 +1920,94 @@ class ThemeBrowserTests(unittest.TestCase):
         options_toggle.click()
         expect(self.page.locator('#pkTools .pk-fb.on')).to_have_attribute('data-pkf','fast')
         expect(self.page.locator('#pkOptionsContent')).to_be_visible()
+
+    def test_b14_collapsed_ledger_inverted_depth_row_activation_and_semantics(self):
+        """Approved four-column desktop cards; no decorative row toggle controls."""
+        from playwright.sync_api import expect
+        out=INDEX.parent/'tests'/'artifacts'/'theme'
+        out.mkdir(parents=True,exist_ok=True)
+        for language in ('es','en'):
+            self.page.evaluate('setLang',language)
+            self.page.evaluate("""() => {
+                const entries=[
+                    {name:'compressed Clear Icicle IV-Grade',qty:4050,id:28434,best:'bb',net:984190500,price:243010,checks:[['ok','ok']]},
+                    {name:'pyerite',qty:20000,id:35,best:'bb',net:314830,price:15.74,checks:[]},
+                    {name:'zydrine',qty:50000,id:39,best:'jOrd',net:46377157,price:992.9,
+                        checks:[['one','warn'],['two','warn']]}
+                ];
+                S.flip=false;S.items=[];S.api={};
+                const parent=document.querySelector('#lots');parent.replaceChildren();
+                for(const d of entries){
+                    const o={name:d.name,qty:d.qty,m3u:1,ref:d.price,checks:d.checks,jita:{}};
+                    S.items.push(o);S.api[d.name.toLowerCase()]={id:d.id};
+                    parent.append(buildLot(o));
+                    paintLot({o,q:d.qty,best:d.best,auto:d.best,np:d.price,jl:d.price,
+                        bbUnit:d.price,g:{[d.best]:d.net},net:{[d.best]:d.net},
+                        ship:{},prod:0,vol:d.qty,qd:0,hint:{},courierAllocated:0});
+                }
+                const ledger=document.querySelector('#ledger');ledger.hidden=false;ledger.open=true;
+                window.__b14Copies=[];
+                Object.defineProperty(navigator,'clipboard',{configurable:true,
+                    value:{writeText:v=>{window.__b14Copies.push(v);return Promise.resolve();}}});
+            }""")
+            self.assertEqual(self.page.locator('#ledger .ledger-sort-title').count(),0)
+            self.assertEqual(self.page.locator('#lots .lot-open .chev').count(),0)
+            self.assertEqual(self.page.locator('#lots .lot-route .lot-k').count(),3)
+            self.assertIn('zydrine',self.page.locator('#lots .lot').last.inner_text().lower())
+            self.assertIn('2 warnings' if language=='en' else '2 avisos',
+                self.page.locator('#lots .lot').last.locator('.lot-route-main').inner_text())
+            for width in (1440,980,630,390):
+                self.page.set_viewport_size({'width':width,'height':900})
+                for light in (False,True):
+                    self.page.evaluate('(on)=>document.documentElement.classList.toggle("light",on)',light)
+                    checks=self.page.evaluate("""() => {
+                        const row=document.querySelector('#lots .lot');
+                        const outer=document.querySelector('#ledger');
+                        const parts=['.lot-info','.lot-route','.lot-pp','.lot-financial']
+                            .map(sel=>row.querySelector(sel).getBoundingClientRect());
+                        const card=row.getBoundingClientRect();
+                        return {parent:getComputedStyle(outer).backgroundColor,
+                            card:getComputedStyle(row).backgroundColor,
+                            overflow:document.documentElement.scrollWidth-innerWidth,
+                            cardLeft:card.left,cardRight:card.right,
+                            slots:parts.map(r=>({left:r.left,right:r.right,top:r.top,bottom:r.bottom})),
+                            col:getComputedStyle(row.querySelector('.lot-head')).gridTemplateColumns,
+                            copies:[...row.querySelectorAll('.copy')].map(e=>({z:getComputedStyle(e).zIndex,
+                                r:e.getBoundingClientRect().right})),
+                            toggleZ:getComputedStyle(row.querySelector('.lot-open')).zIndex};
+                    }""")
+                    self.assertNotEqual(checks['parent'],checks['card'],checks)
+                    self.assertLessEqual(checks['overflow'],1,checks)
+                    self.assertEqual(checks['toggleZ'],'1')
+                    self.assertTrue(all(c['z']=='2' for c in checks['copies']),checks)
+                    self.assertTrue(all(c['r']<=checks['cardRight']+1 for c in checks['copies']),checks)
+                    if width==1440:
+                        self.assertTrue(all(abs((checks['slots'][0]['top']+checks['slots'][0]['bottom'])/2-
+                            (s['top']+s['bottom'])/2)<3 for s in checks['slots']),checks)
+                        self.assertTrue(all(checks['slots'][i]['right']<checks['slots'][i+1]['left']
+                            for i in range(3)),checks)
+                    if width==390:
+                        self.assertLess(checks['slots'][0]['top'],checks['slots'][1]['top'],checks)
+                    if width==1440:
+                        self.page.mouse.move(0,0)
+                        self.page.locator('#ledger').screenshot(path=str(out/
+                            f'b14-registered-items-{language}-1440-{"light" if light else "dark"}.png'),
+                            animations='disabled')
+            self.page.set_viewport_size({'width':1440,'height':900})
+            self.page.evaluate('document.documentElement.classList.remove("light")')
+            first=self.page.locator('#lots .lot').first
+            price=first.locator('.lot-pp .copy')
+            price.click()
+            self.assertEqual(first.locator('.lot-open').get_attribute('aria-expanded'),'false')
+            self.assertEqual(self.page.evaluate('window.__b14Copies.at(-1)'),'243010')
+            route_box=first.locator('.lot-route').bounding_box()
+            self.page.mouse.click(route_box['x']+14,route_box['y']+8)
+            expect(first.locator('.lot-open')).to_have_attribute('aria-expanded','true')
+            expect(first.locator('.lot-panel-grid')).to_be_visible()
+            first.locator('.lot-open').focus()
+            self.page.keyboard.press('Space')
+            expect(first.locator('.lot-open')).to_have_attribute('aria-expanded','false')
+            self.assertIn('icicle',first.locator('.lot-open').get_attribute('aria-label').lower())
 
     def test_b4_ledger_unit_copy_and_lazy_disclosures(self):
         from playwright.sync_api import expect

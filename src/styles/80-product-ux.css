@@ -2105,3 +2105,122 @@ body.is-flip #ledger #lots .lot-panel-grid>.lot-adjustments>.facts>.fact-market-
 @media(prefers-reduced-motion:reduce){
   #ledger #lots .lot-panel-grid>details>summary::after{transition:none}
 }
+
+/* B.14 · Approved warm-graphite collapsed ledger. This surface pairing is a
+   reusable DSS reference, not permission to recolor unrelated components.
+   The parent is lighter; each interactive Item is the deeper surface. */
+html:not(.light) #ledger{background:var(--hull2)!important}
+#ledger .ledger-controls{margin:7px 18px 15px}
+#ledger .ledger-controls>.ledger-head{
+  flex:0 1 auto;gap:0!important;border:1px solid var(--line2)!important;
+  border-radius:10px;padding:3px!important;background:var(--surface-card)
+}
+#ledger .ledger-controls>.ledger-head .ledger-sort{
+  min-height:41px;padding:8px 14px;border:1px solid transparent;
+  border-radius:7px;color:var(--mut);font:650 .84rem/1.3 var(--f-ui)
+}
+#ledger .ledger-controls>.ledger-head .ledger-sort:hover{color:var(--txt);background:rgba(222,220,209,.07)}
+#ledger .ledger-controls>.ledger-head .ledger-sort[data-active="true"]{
+  background:var(--hull);border-color:var(--line2);color:var(--txt)
+}
+#ledger #lots .lot{
+  grid-template-columns:minmax(0,1fr)!important;
+  position:relative;margin:0 17px 12px;padding:0;
+  background:var(--surface-card);border:1px solid var(--line2);
+  border-radius:11px;box-shadow:0 2px 8px rgba(0,0,0,.15)!important;
+  overflow:hidden
+}
+#ledger #lots .lot-head{
+  position:relative;grid-column:1!important;
+  grid-template-columns:minmax(0,1.7fr) minmax(0,1.27fr) minmax(0,.93fr) minmax(0,1.18fr)!important;
+  align-items:center;column-gap:clamp(14px,2vw,28px)!important;
+  min-height:112px;padding:18px 59px 18px 23px!important;cursor:pointer!important;
+  transition:background-color .14s ease
+}
+#ledger #lots .lot-head:hover,#ledger #lots .lot.open .lot-head{background:rgba(222,220,209,.042)!important}
+#ledger #lots .lot-open{
+  position:absolute;inset:0;z-index:1;display:block;
+  width:100%;height:100%;padding:0;border:0;border-radius:9px;
+  background:transparent;cursor:pointer
+}
+#ledger #lots .lot-open:focus-visible{outline:2px solid var(--ion);outline-offset:-4px}
+#ledger #lots .lot-info,#ledger #lots .lot-route{position:relative;min-width:0;pointer-events:none}
+#ledger #lots .lot-info{grid-column:1;gap:7px}
+#ledger #lots .lot-name b{font:700 clamp(.96rem,1.35vw,1.17rem)/1.3 var(--f-ui)}
+#ledger #lots .lot-name img.ti{width:48px;height:48px;margin-right:7px;border:1px solid var(--line2);border-radius:10px}
+#ledger #lots .lot-meta{padding-left:65px}
+#ledger #lots .lot-qty{font:500 .89rem/1.4 var(--f-ui)}
+#ledger #lots .lot-route{grid-column:2;display:flex;flex-direction:column;align-items:flex-start;gap:10px}
+#ledger #lots .lot-route-main{display:flex;align-items:center;flex-wrap:wrap;gap:7px 12px;min-width:0}
+#ledger #lots .lot-route .lot-dest{
+  color:var(--txt)!important;font:550 .93rem/1.4 var(--f-ui)
+}
+#ledger #lots .lot-route .lot-dest.p-none{color:var(--loss)!important}
+#ledger #lots .lot-route .tag:not([hidden]){display:inline-flex;margin:0;padding:4px 9px;border-radius:999px;font:600 .71rem/1.2 var(--f-ui)}
+#ledger #lots .lot-k{margin:0 0 9px;font:750 .75rem/1.35 var(--f-ui);letter-spacing:.025em}
+#ledger #lots .lot-route .lot-k{margin:0}
+#ledger #lots .lot-pp{grid-column:3;min-width:0}
+#ledger #lots .lot-financial{grid-column:4;display:block;text-align:left;min-width:0}
+#ledger #lots .lot-financial .lot-net{justify-content:flex-start;margin-left:0!important}
+#ledger #lots .lot-pp .copy,#ledger #lots .lot-financial .lot-net{
+  position:relative;z-index:2;pointer-events:auto;
+  min-height:35px;padding:2px 0!important;
+  font:750 clamp(.97rem,1.35vw,1.17rem)/1.3 var(--f-num)!important
+}
+#ledger #lots .lot-x{
+  z-index:3;right:7px;top:calc(50% - 22px);margin:0;
+  opacity:.32
+}
+#ledger #lots .lot:hover .lot-x,#ledger #lots .lot-x:focus-visible{opacity:1}
+#ledger #lots .lot-body{padding:4px 15px 18px!important}
+@media(max-width:1100px){
+  #ledger .ledger-controls>.ledger-head{flex:0 1 auto}
+}
+@media(max-width:980px){
+  #ledger #lots .lot-head{
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+    gap:14px 22px!important;padding:19px 60px 20px 19px!important
+  }
+  #ledger #lots .lot-info{grid-column:1}
+  #ledger #lots .lot-route{grid-column:2}
+  #ledger #lots .lot-pp{grid-column:1}
+  #ledger #lots .lot-financial{grid-column:2;text-align:left;display:block}
+  #ledger #lots .lot-financial .lot-k{margin:0 0 9px}
+  #ledger #lots .lot-meta{padding-left:0}
+}
+@media(max-width:600px){
+  #ledger .ledger-controls{margin:7px 10px 14px}
+  #ledger .ledger-controls>.ledger-head{max-width:100%;overflow-x:auto;flex-wrap:nowrap}
+  #ledger .ledger-controls>.ledger-head .ledger-sort{min-height:41px;padding:7px 10px;font-size:.77rem}
+  #ledger #lots .lot{margin:0 9px 11px}
+  #ledger #lots .lot-head{
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+    gap:15px 12px!important;padding:17px 43px 16px 15px!important
+  }
+  #ledger #lots .lot-info{grid-column:1/-1}
+  #ledger #lots .lot-route{grid-column:1/-1;gap:6px}
+  #ledger #lots .lot-pp{grid-column:1}
+  #ledger #lots .lot-financial{grid-column:2;align-self:start;gap:0}
+  #ledger #lots .lot-name b{font-size:1rem}
+  #ledger #lots .lot-name img.ti{width:37px;height:37px;margin-right:2px}
+  #ledger #lots .lot-route .lot-dest{font-size:.86rem}
+  #ledger #lots .lot-k{font-size:.67rem}
+  #ledger #lots .lot-pp .copy,#ledger #lots .lot-financial .lot-net{font-size:clamp(.76rem,3.4vw,.93rem)!important;gap:5px}
+  #ledger #lots .lot-pp .copy::after,#ledger #lots .lot-financial .lot-net::after{width:13px;height:13px;flex-basis:13px}
+  #ledger #lots .lot-x{right:1px;top:5px;opacity:.62}
+  #ledger #lots .lot-body{padding:3px 9px 13px!important}
+}
+@media(max-width:480px){
+  /* Keep complete ISK amounts readable, never split a number across two
+     narrow financial columns or hide sorting choices offscreen. */
+  #ledger .ledger-controls>.ledger-head{
+    display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;
+    flex:1 1 100%;width:100%;overflow:visible;gap:3px!important
+  }
+  #ledger .ledger-controls>.ledger-head .ledger-sort{min-width:0;width:100%;white-space:normal}
+  #ledger #lots .lot-head{grid-template-columns:minmax(0,1fr)!important}
+  #ledger #lots .lot-info,#ledger #lots .lot-route,
+  #ledger #lots .lot-pp,#ledger #lots .lot-financial{grid-column:1!important}
+  #ledger #lots .lot-pp .copy,#ledger #lots .lot-financial .lot-net{font-size:1rem!important}
+}
+@media(prefers-reduced-motion:reduce){#ledger #lots .lot-head{transition:none}}

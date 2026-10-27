@@ -413,6 +413,22 @@
     "es": "Ordenar:",
     "en": "Sort:"
   },
+  "ledger.sortGroup": {
+    "es": "Ordenar los items registrados",
+    "en": "Sort registered items"
+  },
+  "ledger.selectedRoute": {
+    "es": "Ruta elegida",
+    "en": "Selected route"
+  },
+  "ledger.openItem": {
+    "es": "Ver detalles de {item}",
+    "en": "Show details for {item}"
+  },
+  "ledger.closeItem": {
+    "es": "Ocultar detalles de {item}",
+    "en": "Hide details for {item}"
+  },
   "ledger.name": {
     "es": "Nombre",
     "en": "Name"

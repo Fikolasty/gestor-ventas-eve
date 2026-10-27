@@ -187,4 +187,24 @@ html.light #ledger #lots .lot-panel-grid>.lot-adjustments>.facts>.fact-item-data
   background:rgba(0,0,0,.055)!important
 }
 
+/* B.14: equal geometry to Dark, with the same warm-neutral inverted depth.
+   Defined after the generated Light conversion to prevent legacy tints. */
+html.light #ledger{background:#e7e3dc!important;border-color:rgba(70,55,43,.18)!important}
+html.light #ledger .ledger-controls>.ledger-head{
+  background:#f8f6f1!important;border-color:rgba(70,55,43,.2)!important
+}
+html.light #ledger .ledger-controls>.ledger-head .ledger-sort[data-active="true"]{
+  background:#e7e3dc!important;border-color:rgba(70,55,43,.2)!important
+}
+html.light #ledger #lots .lot{
+  background:#faf9f5!important;border-color:rgba(70,55,43,.19)!important;
+  box-shadow:0 2px 8px rgba(45,36,28,.075)!important
+}
+html.light #ledger #lots .lot-head:hover,html.light #ledger #lots .lot.open .lot-head{
+  background:rgba(70,55,43,.046)!important
+}
+html.light #ledger #lots .lot-open{background:transparent!important}
+html.light #ledger #lots .lot-route .lot-dest{color:var(--txt)!important}
+html.light #ledger #lots .lot-route .lot-dest.p-none{color:var(--loss)!important}
+
 
