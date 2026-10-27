@@ -7,7 +7,7 @@
 <meta name="referrer" content="no-referrer">
 <title>Market Moves+ · SIGMA GRINDSET</title>
 <style>
-/* ================= Market Moves+ v1.0.150 =================
+/* ================= Market Moves+ v1.0.151 =================
    Paleta: azul de base, naranja = acción, verde/rojo = ganancia/pérdida.
    Sin backdrop-filter: el vidrio se finge con rgba + bordes. */
 *{box-sizing:border-box;margin:0;padding:0}
@@ -5327,10 +5327,12 @@ body.is-flip #ledger #lots .lot-panel-grid>.lot-adjustments>.facts>.fact-market-
   #ledger #lots .lot-panel-grid>details>summary::after{transition:none}
 }
 
-/* B.14 · Approved warm-graphite collapsed ledger. This surface pairing is a
-   reusable DSS reference, not permission to recolor unrelated components.
-   The parent is lighter; each interactive Item is the deeper surface. */
-html:not(.light) #ledger{background:var(--hull2)!important}
+/* B.14/B.15 · Approved warm-graphite hierarchy. When the Listado is closed,
+   the whole disclosure IS the dark interactive card. The medium warm gray is
+   visible only behind the individual cards when the Listado is expanded. */
+html:not(.light) #ledger[open]{background:var(--hull2)!important}
+html:not(.light) #ledger:not([open]){background:var(--surface-card)!important}
+html:not(.light) #ledger:not([open]):hover{background:var(--surface-panel)!important}
 #ledger .ledger-controls{margin:7px 18px 15px}
 #ledger .ledger-controls>.ledger-head{
   flex:0 1 auto;gap:0!important;border:1px solid var(--line2)!important;
@@ -5346,7 +5348,7 @@ html:not(.light) #ledger{background:var(--hull2)!important}
 }
 #ledger #lots .lot{
   grid-template-columns:minmax(0,1fr)!important;
-  position:relative;margin:0 17px 12px;padding:0;
+  position:relative;margin:0 17px 9px;padding:0;
   background:var(--surface-card);border:1px solid var(--line2);
   border-radius:11px;box-shadow:0 2px 8px rgba(0,0,0,.15)!important;
   overflow:hidden
@@ -5355,7 +5357,7 @@ html:not(.light) #ledger{background:var(--hull2)!important}
   position:relative;grid-column:1!important;
   grid-template-columns:minmax(0,1.7fr) minmax(0,1.27fr) minmax(0,.93fr) minmax(0,1.18fr)!important;
   align-items:center;column-gap:clamp(14px,2vw,28px)!important;
-  min-height:112px;padding:18px 59px 18px 23px!important;cursor:pointer!important;
+  min-height:88px;padding:11px 59px 11px 20px!important;cursor:pointer!important;
   transition:background-color .14s ease
 }
 #ledger #lots .lot-head:hover,#ledger #lots .lot.open .lot-head{background:rgba(222,220,209,.042)!important}
@@ -5366,19 +5368,19 @@ html:not(.light) #ledger{background:var(--hull2)!important}
 }
 #ledger #lots .lot-open:focus-visible{outline:2px solid var(--ion);outline-offset:-4px}
 #ledger #lots .lot-info,#ledger #lots .lot-route{position:relative;min-width:0;pointer-events:none}
-#ledger #lots .lot-info{grid-column:1;gap:7px}
-#ledger #lots .lot-name b{font:700 clamp(.96rem,1.35vw,1.17rem)/1.3 var(--f-ui)}
-#ledger #lots .lot-name img.ti{width:48px;height:48px;margin-right:7px;border:1px solid var(--line2);border-radius:10px}
-#ledger #lots .lot-meta{padding-left:65px}
-#ledger #lots .lot-qty{font:500 .89rem/1.4 var(--f-ui)}
-#ledger #lots .lot-route{grid-column:2;display:flex;flex-direction:column;align-items:flex-start;gap:10px}
+#ledger #lots .lot-info{grid-column:1;gap:5px}
+#ledger #lots .lot-name b{font:700 clamp(.96rem,1.25vw,1.1rem)/1.3 var(--f-ui)}
+#ledger #lots .lot-name img.ti{width:44px;height:44px;margin-right:6px;border:1px solid var(--line2);border-radius:9px}
+#ledger #lots .lot-meta{padding-left:61px}
+#ledger #lots .lot-qty{font:500 .85rem/1.4 var(--f-ui)}
+#ledger #lots .lot-route{grid-column:2;display:flex;flex-direction:column;align-items:flex-start;gap:6px}
 #ledger #lots .lot-route-main{display:flex;align-items:center;flex-wrap:wrap;gap:7px 12px;min-width:0}
 #ledger #lots .lot-route .lot-dest{
   color:var(--txt)!important;font:550 .93rem/1.4 var(--f-ui)
 }
 #ledger #lots .lot-route .lot-dest.p-none{color:var(--loss)!important}
 #ledger #lots .lot-route .tag:not([hidden]){display:inline-flex;margin:0;padding:4px 9px;border-radius:999px;font:600 .71rem/1.2 var(--f-ui)}
-#ledger #lots .lot-k{margin:0 0 9px;font:750 .75rem/1.35 var(--f-ui);letter-spacing:.025em}
+#ledger #lots .lot-k{margin:0 0 6px;font:750 .75rem/1.35 var(--f-ui);letter-spacing:.025em}
 #ledger #lots .lot-route .lot-k{margin:0}
 #ledger #lots .lot-pp{grid-column:3;min-width:0}
 #ledger #lots .lot-financial{grid-column:4;display:block;text-align:left;min-width:0}
@@ -7091,7 +7093,9 @@ html.light #ledger #lots .lot-panel-grid>.lot-adjustments>.facts>.fact-item-data
 
 /* B.14: equal geometry to Dark, with the same warm-neutral inverted depth.
    Defined after the generated Light conversion to prevent legacy tints. */
-html.light #ledger{background:#e7e3dc!important;border-color:rgba(70,55,43,.18)!important}
+html.light #ledger[open]{background:#e7e3dc!important;border-color:rgba(70,55,43,.18)!important}
+html.light #ledger:not([open]){background:#faf9f5!important;border-color:rgba(70,55,43,.18)!important}
+html.light #ledger:not([open]):hover{background:#f5f2ed!important}
 html.light #ledger .ledger-controls>.ledger-head{
   background:#f8f6f1!important;border-color:rgba(70,55,43,.2)!important
 }
@@ -7675,13 +7679,13 @@ Contraband Freight = no</textarea><small>Una regla por línea: Nombre = tax tota
 <button type="button" class="totop" id="toTop" aria-label="Volver arriba" title="Volver arriba (Inicio)" hidden><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 14l6-6 6 6"/></svg></button>
 <footer class="foot">
   <p class="foot-sec"><span class="ic i-lock" aria-hidden="true"></span>Tu inventario no se guarda: al cerrar o recargar se borra. Solo tus Ajustes quedan en este navegador.</p>
-  <div class="foot-by">Creado por <b>Fiko McGivert</b> · Vanguardia DR · SIGMA GRINDSET · <span class="ver">v1.0.150</span></div>
+  <div class="foot-by">Creado por <b>Fiko McGivert</b> · Vanguardia DR · SIGMA GRINDSET · <span class="ver">v1.0.151</span></div>
 </footer>
 
 <script>
 'use strict';
 /* ============================================================
-   Market Moves+ v1.0.150 — SIGMA GRINDSET / Vanguardia DR
+   Market Moves+ v1.0.151 — SIGMA GRINDSET / Vanguardia DR
    Flujo:  pegado → items → carga (ESI: precios, volúmenes, historial) → verificación → plan → vista
      1. Pegado      parsePaste(): parser posicional de columnas de EVE (Name · Quantity · … · Volume · Est. Price).
      2. Carga       esiItems(): trae todo lo que falta; mientras carga, refresh() NO pinta (S.loading).
