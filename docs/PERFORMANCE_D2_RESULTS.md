@@ -1,6 +1,6 @@
 # Market Moves+ — D.2: menos repintados redundantes en el Listado
 
-**Fecha:** 2026-10-26 · **Candidata:** v1.0.147 · **Ámbito:** solo cabeceras de Items, sin diseño ni cálculos nuevos.
+**Fecha:** 2026-10-26 · **Certificada LIVE:** v1.0.147 · **Ámbito:** solo cabeceras de Items, sin diseño ni cálculos nuevos.
 
 ## Diagnóstico y cambio
 
@@ -30,4 +30,4 @@ Ejecutado con el mismo `benchmarks/performance_investigation_d1.py`, Chromium he
 - Chromium: **49/49** (incluye nueva prueba D.2 de `MutationObserver`: cero escrituras redundantes sobre nueve hojas de cabecera si no cambian datos, pero cantidad, neto, impuestos, botones de copia y ES/EN siguen reaccionando).
 - Comparación estricta de las capturas genuinas desktop Light ES/Dark ES de los cuatro paneles B.13: **`cmp` idéntico byte por byte** entre v1.0.146 y candidata v1.0.147. SHA-256 Dark `0a8de34abea6c8929a15470bf75f7304f6d779f6fa37f69c1c15795f26f9c052`; Light `4345fe599703dae9c8fb591d39a3719b6bf16893103780a25c16adec649faa67`.
 
-**Estado al preparar la entrega:** publicar por GitHub Fiko con HEAD esperado, `force:false`, verificar cuatro Actions y Pages/HTTPS antes de declarar LIVE. D.3 (perfil y optimización de cálculos) y D.4 (ESI) quedan independientes, posteriores a este cierre. El diseño B.13 aprobado por Raulito permanece cerrado.
+**Publicación certificada:** GitHub **Fiko/Fikolasty**, con `expected_sha` y `force:false`. Commit de fuente `b7109733d63a539fb3f9be3f786fed5364c179d8`, commit de Pages `8a8705e33cbb1d833eeb331ecc8dfb89ba2523e9`. Cuatro Actions **success**: versiones `40422313080`, build `40422313156`, minería `40422313126`, rebuild/Chromium/Pages `40422313218`. HTTPS público comprobado independientemente: su `index.html` coincide byte por byte con el build local y con el blob publicado `b9108594c7c0b3a93c32982b427fbe649d6c8d20`. **v1.0.147 LIVE.** D.3 (perfil y optimización de cálculos) y D.4 (ESI) quedan independientes, posteriores a este cierre. El diseño B.13 aprobado por Raulito permanece cerrado.

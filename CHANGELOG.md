@@ -1,9 +1,9 @@
-## v1.0.147 — 2026-10-26 [ChatGPT] · D.2: cabeceras del Listado sin mutaciones redundantes — CANDIDATO LOCAL
+## v1.0.147 — 2026-10-26 [ChatGPT] · D.2: cabeceras del Listado sin mutaciones redundantes — LIVE CERTIFICADA
 
 - **Autorización expresa de Raulito:** tras D.1 aprobó continuar D.2–D.4 midiendo y contrastando cada mejora; se empieza por el render de Items, conservando intactos el 2×2, UX writing, accesibilidad, cálculos, ESI/SSO y precios.
 - `src/js/ui/ledger.js` actualiza solo cuando realmente cambia texto/clase/atributo de una **hoja simple de cabecera**; las funciones generales y las tarjetas desplegadas no cambian. El botón de eliminar, ruta, cantidad, precio y neto mantienen textos, copia, nombres accesibles, idioma y estado; los resultados nuevos se siguen asignando a `u.last`.
 - **Benchmark comparable** con 100/250/500 Items, 0/1/10 abiertos, Dark/Light 1440 y 12 muestras: 500 Items plegados pasan de **35,2→25,0 ms Dark** (~29 %) y **35,9→28,5 ms Light** (~21 %). Layout CDP de repintado sin cambios ~33–36→~0,5 ms por iteración; no implica coste cero tras cambios reales. Comparación completa en `docs/PERFORMANCE_D2_RESULTS.md`.
-- **QA:** build local 1.0.147, 109/109 Node, 16/16 Python, 8/8 heredadas, 49/49 Chromium (nueva regresión de ausencia de mutación + actualización de cantidades/impuestos y ES/EN), diff/sintaxis PASS. Capturas desktop Light/Dark de los **cuatro paneles** visualmente aprobados son **idénticas byte a byte** a v1.0.146 (`cmp`, SHA-256 en informe). No publicación hasta comprobar Fiko/main/Actions/Pages. D.3 y D.4 todavía sin cambios.
+- **QA:** build local 1.0.147, 109/109 Node, 16/16 Python, 8/8 heredadas, 49/49 Chromium (nueva regresión de ausencia de mutación + actualización de cantidades/impuestos y ES/EN), diff/sintaxis PASS. Capturas desktop Light/Dark de los **cuatro paneles** visualmente aprobados son **idénticas byte a byte** a v1.0.146 (`cmp`, SHA-256 en informe). **Certificado en Fiko/main:** fuente `b7109733`, bot de build `8a8705e3`, 4/4 Actions success y HTTPS con hash de `index.html` `b9108594`. D.3 y D.4 todavía sin cambios en código de producción.
 
 ## v1.0.146 — 2026-10-26 [ChatGPT] · B.13: cierre visual del Listado — LIVE verificada
 
