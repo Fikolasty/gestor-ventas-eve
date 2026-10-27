@@ -7,7 +7,7 @@
 <meta name="referrer" content="no-referrer">
 <title>Market Moves+ · SIGMA GRINDSET</title>
 <style>
-/* ================= Market Moves+ v1.0.147 =================
+/* ================= Market Moves+ v1.0.148 =================
    Paleta: azul de base, naranja = acción, verde/rojo = ganancia/pérdida.
    Sin backdrop-filter: el vidrio se finge con rgba + bordes. */
 *{box-sizing:border-box;margin:0;padding:0}
@@ -7534,13 +7534,13 @@ Contraband Freight = no</textarea><small>Una regla por línea: Nombre = tax tota
 <button type="button" class="totop" id="toTop" aria-label="Volver arriba" title="Volver arriba (Inicio)" hidden><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 14l6-6 6 6"/></svg></button>
 <footer class="foot">
   <p class="foot-sec"><span class="ic i-lock" aria-hidden="true"></span>Tu inventario no se guarda: al cerrar o recargar se borra. Solo tus Ajustes quedan en este navegador.</p>
-  <div class="foot-by">Creado por <b>Fiko McGivert</b> · Vanguardia DR · SIGMA GRINDSET · <span class="ver">v1.0.147</span></div>
+  <div class="foot-by">Creado por <b>Fiko McGivert</b> · Vanguardia DR · SIGMA GRINDSET · <span class="ver">v1.0.148</span></div>
 </footer>
 
 <script>
 'use strict';
 /* ============================================================
-   Market Moves+ v1.0.147 — SIGMA GRINDSET / Vanguardia DR
+   Market Moves+ v1.0.148 — SIGMA GRINDSET / Vanguardia DR
    Flujo:  pegado → items → carga (ESI: precios, volúmenes, historial) → verificación → plan → vista
      1. Pegado      parsePaste(): parser posicional de columnas de EVE (Name · Quantity · … · Volume · Est. Price).
      2. Carga       esiItems(): trae todo lo que falta; mientras carga, refresh() NO pinta (S.loading).
@@ -7738,10 +7738,10 @@ Object.values(REFINE).forEach(d=>{
   const target=d.cat==='moon'?MOON_MATERIALS:(d.cat==='ore'?ORE_MINERALS:null);
   if(target)Object.keys(d.out).forEach(m=>target.add(m.toLowerCase()));
 });
-function bulkNullMaterial(name,q){
+function bulkNullMaterial(name,q,firstItemByName){
   const key=String(name||'').toLowerCase(),ore=resolveOre(name);
   if(ore&&(ore.d.cat==='moon'||ore.d.cat==='mercoxit'||ore.d.cat==='ice'))return false;
-  if(MOON_MATERIALS.has(key)||ICE_ISOTOPES.has(key)||isModule(name))return false;
+  if(MOON_MATERIALS.has(key)||ICE_ISOTOPES.has(key)||isModule(name,firstItemByName))return false;
   if(ore?.d.cat==='ore'||ORE_MINERALS.has(key))return true;
   return q>=1000; // High-supply lots; estimate can always be overwritten per item.
 }
@@ -7756,7 +7756,7 @@ function tickDown(p){
   return Number((Math.floor(p/f+1e-9)*f).toPrecision(4));
 }
 // Precio a listar en Null: precio que ves (undercut) > regla de hielo (Jita Buy − %) > Jita Buy (+ margen opcional). Nunca Jita Sell.
-function nullList(name,sell,buy,seen,q){
+function nullList(name,sell,buy,seen,q,firstItemByName){
   // Un precio final escrito desde Pasos para Vender manda sobre descuentos locales.
   // Se mantiene aislado de Jita, Buyback y el precio original de ESI.
   const custom=S.refinedMan.null[String(name||'').toLowerCase()];
@@ -7777,8 +7777,8 @@ function nullList(name,sell,buy,seen,q){
   if(C.ice.on&&buy!=null&&isIceRefinedNonIsotope(name))return tickDown(buy*(1-C.ice.refLoss));
   // en Null nunca se vende a Jita Sell. Módulos: Jita Buy (+ margen). Todo lo demás (ore, minerales, productos,
   // commodities…): un % de Jita Buy (90% por defecto), que es lo que normalmente pagan en Null.
-  if(buy!=null&&bulkNullMaterial(name,q))return qdApply(tickDown(buy*C.nullBulk),name,q);
-  if(buy!=null&&!isModule(name))return qdApply(tickDown(buy*C.nullNonMod),name,q);
+  if(buy!=null&&bulkNullMaterial(name,q,firstItemByName))return qdApply(tickDown(buy*C.nullBulk),name,q);
+  if(buy!=null&&!isModule(name,firstItemByName))return qdApply(tickDown(buy*C.nullNonMod),name,q);
   return qdApply(nullPrice(buy,name),name,q);
 }
 // Descuento por cantidad, por tramos como un impuesto: cada 1,000 u. por encima de 1,000 baja el precio;
@@ -7791,8 +7791,11 @@ function qtyDisc(name,q){
 }
 function qdApply(p,name,q){const d=qtyDisc(name,q||0);return p==null||!d?p:tickDown(p*(1-d));}
 // ¿Es un módulo? Por la categoría de la API (7 = Module); si no se conoce, por la columna Category del pegado.
-function isModule(name){const a=S.api[String(name).toLowerCase()];if(a&&a.cat!=null)return a.cat===7;
-  const o=itemByName(name);return !!(o&&o.pasteCat&&/^module$/i.test(o.pasteCat));}
+function isModule(name,firstItemByName){const key=String(name).toLowerCase(),a=S.api[key];if(a&&a.cat!=null)return a.cat===7;
+  // computePlan can pass its snapshot index; otherwise preserve the original
+  // lookup. Keep the FIRST matching pasted row when duplicate names exist.
+  const o=firstItemByName?firstItemByName.get(key):itemByName(name);
+  return !!(o&&o.pasteCat&&/^module$/i.test(o.pasteCat));}
 // v1.0.17: tamaño del tick de EVE (4 cifras significativas) y "N ticks por debajo"
 const tsz=p=>Math.pow(10,Math.floor(Math.log10(p))+1-4);
 function tickBelow(p,k){if(p==null||!(p>0)||!(k>0))return p;let x=p;for(let i=0;i<k;i++){const n=x-tsz(x*(1-1e-9));if(!(n>0))break;x=Number(n.toPrecision(4));}return x;}
@@ -8556,6 +8559,12 @@ function assessReprocessing(P){
 
 function computePlan(){
   const rJ=rateJita(),rN=rateNull(),rI=rateInst();
+  // Missing ESI categories still fall back to the first pasted Category.
+  // Build this lookup only once per calculation instead of repeatedly
+  // searching the full inventory for every unknown type/route.
+  const firstItemByName=new Map();
+  if(!S.flip)S.items.forEach(o=>{const key=o.name.toLowerCase();
+    if(!firstItemByName.has(key))firstItemByName.set(key,o);});
   const rows=S.items.map(o=>{
     const q=o.qty||0,ref=o.ref,a=o.jita;
     const row={o,q,vol:(o.m3u||0)*q,coll:appraisalSell(o)*q,prod:ref!=null&&!S.flip?C.prod*ref*q:0,g:{},ship:{},hint:{}}; // bought-in-Jita goods do not incur a second fabrication cost
@@ -8576,7 +8585,7 @@ function computePlan(){
     }
     if(ref!=null&&q>0){
       row.qd=qtyDisc(o.name,q);const manual=S.refinedMan.null[String(o.name).toLowerCase()];
-      const np=manual!=null?manual:skTick(nullList(o.name,ref,a&&a.buy,o.nullSeen,q),o,'nul');if(np!=null){row.g.null=np*q*rN;row.np=np;}
+      const np=manual!=null?manual:skTick(nullList(o.name,ref,a&&a.buy,o.nullSeen,q,firstItemByName),o,'nul');if(np!=null){row.g.null=np*q*rN;row.np=np;}
       const jl=skTick(jitaList(o.name,ref,a&&a.buy,q,o.refMan!=null),o,'ord');row.jl=jl;row.g.jOrd=jl*q*rJ;row.tight=tightSpread(jl,a);row.ship.jOrd={v:row.vol,c:row.coll};
       if(a&&a.buy!=null){
         const w=a.buys?walkBuys(a,q):{filled:q,value:a.buy*q};
@@ -8619,7 +8628,7 @@ function computePlan(){
       row.raw=rawRepro(ore,q,ref,a&&a.buy);
       const nets=reproNets(ore,q),fee=refineryFee(ore,q,nets);let ok=fee!=null,val=0,nul=0,v=0;row.mins=[];
       Object.keys(nets).forEach(m=>{
-        const p=minPrice(m),b=S.api[m.toLowerCase()]?S.api[m.toLowerCase()].buy:null,np=p!=null?nullList(m,p,b,null,nets[m]):null,jl=jitaList(m,p,b,nets[m]);
+        const p=minPrice(m),b=S.api[m.toLowerCase()]?S.api[m.toLowerCase()].buy:null,np=p!=null?nullList(m,p,b,null,nets[m],firstItemByName):null,jl=jitaList(m,p,b,nets[m]);
         v+=nets[m]*prodVol(m);row.mins.push({m,n:nets[m],p:jl,np,qd:qtyDisc(m,nets[m])});
         if(p==null||np==null){ok=false;return;}val+=nets[m]*jl;nul+=nets[m]*np*rN;});
       if(ok){row.refiningCost=fee;row.g.rJita=val*rJ-fee;row.ship.rJita={v,c:val};row.g.rNull=nul-fee;}
