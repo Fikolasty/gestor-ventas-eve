@@ -14,6 +14,8 @@
 
 **B.15 densidad aprobada por observación posterior:** una segunda captura muestra demasiado espacio vertical dentro de cada Item. Compactar solo las cabeceras de escritorio (112→88 px, iconos 48→44 px y márgenes entre tarjetas menores), preservando los cuatro bloques de datos, los botones de copia y el cuerpo expandido. En móvil prevalece la legibilidad de ISK sin cortes.
 
+**Certificación B.15:** v1.0.151 **LIVE** por Fiko, fuente `ac6cca06`, build `d37aafc9`, cuatro Actions success y HTTPS/blob local `8afc9be5` iguales; DSS §57 documenta el cierre. Las dos capturas del propietario determinaron únicamente los cambios de color plegado/abierto y densidad, sin alterar cálculos ni B.13.
+
 ## 1. Petición y preferencias del propietario
 
 1. Máxima simetría y misma retícula horizontal desde SIGMA GRINDSET/login hasta las tarjetas y el resultado, sin centrado indiscriminado de números.

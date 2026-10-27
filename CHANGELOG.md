@@ -1,8 +1,8 @@
-## v1.0.151 — 2026-10-27 [ChatGPT] · B.15: Listado cerrado en grafito oscuro — CANDIDATA LOCAL
+## v1.0.151 — 2026-10-27 [ChatGPT] · B.15: Listado cerrado en grafito oscuro y filas compactas — LIVE CERTIFICADA
 
 - **Corrección de color a petición de Raulito:** el gris medio se veía en la barra minimizada; ese tono corresponde al contenedor abierto. Cerrado Dark ahora usa el grafito profundo ya existente (`--surface-card`), abierto mantiene `--hull2`; Light usa una tarjeta clara cerrada y bandeja gris cálida abierta. No se introducen tonos azulados.
 - **Tarjetas de Items más compactas:** por segunda captura de Raulito, las cabeceras reducen su mínimo de 112 a 88 px y su padding vertical de 18 a 11 px; iconos 48→44 px, separación entre tarjetas 12→9 px. No afecta al contenido abierto ni al layout móvil apilado.
-- Sin cambios a cálculos, copy, datos, SSO/ESI ni tarjetas interiores 2×2. **QA local:** 35 Node, 16 Python, 8 heredadas y **51 Chromium PASS**, incluyendo estados plegado/abierto Light/Dark, anchos 390/1440 y altura compacta. Capturas genuinas inspeccionadas; ver DSS §57. Publicación Fiko/CI/Pages todavía pendiente.
+- Sin cambios a cálculos, copy, datos, SSO/ESI ni tarjetas interiores 2×2. **QA local:** 35 Node, 16 Python, 8 heredadas y **51 Chromium PASS**, incluyendo estados plegado/abierto Light/Dark, anchos 390/1440 y altura compacta. Capturas genuinas inspeccionadas; ver DSS §57. **LIVE por Fiko:** fuente `ac6cca060c370708292d247abd4403705e0351e1`, CI `d37aafc9db91152e5f6003f840888994af0cc3f2`, 4/4 Actions success (Rebuild/Pages `40464338792`). GitHub y Pages HTTPS idénticos byte a byte al build local: **2.351.528 bytes**, blob `8afc9be54272d3194f71300cabb2f67be5b7de0d`.
 
 ## v1.0.150 — 2026-10-26 [ChatGPT] · B.14: profundidad gris cálida del Listado — LIVE CERTIFICADA
 
