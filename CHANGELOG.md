@@ -1,8 +1,8 @@
-## v1.0.149 — 2026-10-26 [ChatGPT] · D.4: ráfagas ESI acotadas, cotizaciones íntegras — CANDIDATO LOCAL
+## v1.0.149 — 2026-10-26 [ChatGPT] · D.4: ráfagas ESI acotadas, cotizaciones íntegras — LIVE CERTIFICADA
 
 - **Servicio de mercado:** una cola FIFO limita a 12 las solicitudes `esiFetch` simultáneas (no toca SSO); páginas de órdenes secundarias fallidas ya no se ignoran para aparentar una cotización completa. Se mantienen reintentos, `Retry-After`, cálculos, UI B.13 y precios.
 - **Contraste sintético:** 50 Items/10 páginas con servidor ficticio de capacidad 12: **9.322→2.142 ms**, **137→0 respuestas 429 simuladas**, **490/500→500/500** páginas de órdenes. Sin restricción y con diez páginas, el límite cuesta ~1 s adicional; una página queda ~611 ms. La red ESI real usa otros límites y NO se midió. `docs/PERFORMANCE_D4_RESULTS.md`.
-- **QA local:** tres pruebas nuevas de cola/errores/completitud en Node, 34/34 suites Node, 16/16 Python, 8/8 scripts heredados y **49/49 Chromium PASS**. Capturas Dark/Light cuatro paneles 2×2 sin diferencia de píxel. Certificar Actions/Pages por Fiko antes de declarar LIVE.
+- **QA local y publicación:** tres pruebas nuevas de cola/errores/completitud en Node, 34/34 suites Node, 16/16 Python, 8/8 scripts heredados y **49/49 Chromium PASS**. Capturas Dark/Light cuatro paneles 2×2 idénticas byte a byte a B.13. Benchmark ESI repetido en la nueva conversación: 2.143 ms, 603 intentos, pico 12, 0 respuestas 429 artificiales y 500/500 páginas. **LIVE por Fiko:** fuente `d55ed801828e73a863956eed1ed69a34541b63ff`, build `6db5fd74e6f392ef442144f9b32e761dea326081`, cuatro Actions success (Rebuild/Chromium/Pages `40429810049`). HTTPS público e `index.html` de GitHub idénticos, **2.342.547 bytes**, blob `2a919800c4133c76f5f7bd4229ca9f0bc2a93b6e`. No se usó ESI real ni SSO.
 
 ## v1.0.148 — 2026-10-26 [ChatGPT] · D.3: categorías sin ESI más rápidas — LIVE CERTIFICADA
 

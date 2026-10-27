@@ -1,6 +1,6 @@
 # Market Moves+ — D.4: ráfagas ESI y libros de órdenes completos
 
-**Fecha:** 2026-10-26 · **Candidata:** v1.0.149 · **Ámbito:** cola interna ESI y fiabilidad de las páginas de órdenes; sin cambio en precios, reglas, SSO ni diseño.
+**Fecha:** 2026-10-26 · **LIVE certificada:** v1.0.149 · **Ámbito:** cola interna ESI y fiabilidad de las páginas de órdenes; sin cambio en precios, reglas, SSO ni diseño.
 
 ## Problema confirmado con simulación controlada
 
@@ -40,3 +40,12 @@ La [documentación oficial de ESI sobre límites](https://developers.eveonline.c
 ## Limitación restante
 
 El siguiente refinamiento, si datos **reales y voluntariamente autorizados** lo justifican, sería respetar anticipadamente el presupuesto de tokens de cada grupo y la caché ESI, no inventar mayores paralelismos. No se modifica la frecuencia de actualización de precios ni las reglas económicas.
+
+## Certificación de publicación
+
+- **Fuente:** `d55ed801828e73a863956eed1ed69a34541b63ff` mediante GitHub Fiko, `expected_sha` y `force:false`, con 10 blobs cotejados contra SHA locales.
+- **Build de CI:** `6db5fd74e6f392ef442144f9b32e761dea326081`, hijo directo de la fuente. Cuatro Actions `success`: Versiones `40429810019`, Build `40429810100`, Minería `40429810017`, Rebuild/Chromium/Pages `40429810049`.
+- **HTTPS público:** `https://fikolasty.github.io/gestor-ventas-eve/` entrega `v1.0.149`, **2.342.547 bytes**, hash Git `2a919800c4133c76f5f7bd4229ca9f0bc2a93b6e`, idéntico a `index.html` en GitHub.
+- **Repetición local en la nueva conversación:** 34/34 Node, 16/16 Python, 8/8 legacy, 49/49 Chromium; capturas B.13 Dark/Light SHA-256 idénticos a la aprobación; escenario artificial de 50 Items/10 páginas, 40 ms y umbral ficticio de 12: 2.143 ms, 603 solicitudes, máximo 12 en vuelo, cero 429 simulados y 500/500 páginas obtenidas.
+
+**Estado:** D.4 v1.0.149 LIVE certificada. No representa prueba de cotizaciones reales ESI, SSO, ventas ni de que el umbral de 12 corresponda a un límite de CCP.
