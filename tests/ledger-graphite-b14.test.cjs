@@ -22,9 +22,12 @@ test('B.14 full-row native disclosure preserves independent copy/remove actions'
 });
 
 test('B.14 approved inverted warm graphite hierarchy and translated sorting',()=>{
-  assert.match(css,/html:not\(\.light\) #ledger\{background:var\(--hull2\)!important\}/);
+  assert.match(css,/html:not\(\.light\) #ledger\[open\]\{background:var\(--hull2\)!important\}/);
+  assert.match(css,/html:not\(\.light\) #ledger:not\(\[open\]\)\{background:var\(--surface-card\)!important\}/);
+  assert.match(css,/min-height:88px;padding:11px 59px 11px 20px!important/);
   assert.match(css,/#ledger #lots \.lot\{[\s\S]*?background:var\(--surface-card\)/);
-  assert.match(light,/html\.light #ledger\{background:#e7e3dc!important/);
+  assert.match(light,/html\.light #ledger\[open\]\{background:#e7e3dc!important/);
+  assert.match(light,/html\.light #ledger:not\(\[open\]\)\{background:#faf9f5!important/);
   assert.match(light,/html\.light #ledger #lots \.lot\{\s*background:#faf9f5!important/);
   assert.doesNotMatch(shell,/class="ledger-sort-title"/);
   assert.match(shell,/data-i18n-aria-label="ledger\.sortGroup"/);

@@ -10,6 +10,10 @@
 
 **Certificación posterior:** B.14 es **v1.0.150 LIVE**, cuatro Actions correctas y web HTTPS equivalente al HTML local (fuente `b5af7206`, CI `df68e180`, blob `5c1cb8ac`). Ver trazabilidad completa en DSS §56 y `CHANGELOG.md`; no confundir referencias históricas anteriores de este documento con el estado actual.
 
+**B.15 corrección en revisión (DSS §57):** la captura pública de Raulito distinguió un defecto no detectado por las capturas de Items abiertos: el Listado *totalmente cerrado* tenía el gris medio del contenedor abierto. El elemento minimizado debe ser grafito profundo Dark (tarjeta clara Light), el gris cálido medio solo se muestra de fondo al abrirlo. Mantener sin cambios la disposición interna B.14 y los cuatro paneles 2×2 B.13. Versión 1.0.151, pendiente publicación y certificación.
+
+**B.15 densidad aprobada por observación posterior:** una segunda captura muestra demasiado espacio vertical dentro de cada Item. Compactar solo las cabeceras de escritorio (112→88 px, iconos 48→44 px y márgenes entre tarjetas menores), preservando los cuatro bloques de datos, los botones de copia y el cuerpo expandido. En móvil prevalece la legibilidad de ISK sin cortes.
+
 ## 1. Petición y preferencias del propietario
 
 1. Máxima simetría y misma retícula horizontal desde SIGMA GRINDSET/login hasta las tarjetas y el resultado, sin centrado indiscriminado de números.

@@ -189,7 +189,9 @@ html.light #ledger #lots .lot-panel-grid>.lot-adjustments>.facts>.fact-item-data
 
 /* B.14: equal geometry to Dark, with the same warm-neutral inverted depth.
    Defined after the generated Light conversion to prevent legacy tints. */
-html.light #ledger{background:#e7e3dc!important;border-color:rgba(70,55,43,.18)!important}
+html.light #ledger[open]{background:#e7e3dc!important;border-color:rgba(70,55,43,.18)!important}
+html.light #ledger:not([open]){background:#faf9f5!important;border-color:rgba(70,55,43,.18)!important}
+html.light #ledger:not([open]):hover{background:#f5f2ed!important}
 html.light #ledger .ledger-controls>.ledger-head{
   background:#f8f6f1!important;border-color:rgba(70,55,43,.2)!important
 }

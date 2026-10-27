@@ -1921,6 +1921,49 @@ class ThemeBrowserTests(unittest.TestCase):
         expect(self.page.locator('#pkTools .pk-fb.on')).to_have_attribute('data-pkf','fast')
         expect(self.page.locator('#pkOptionsContent')).to_be_visible()
 
+    def test_b15_folded_ledger_uses_dark_card_and_open_ledger_uses_warm_parent(self):
+        """A closed Listado is a dark control, never its opened medium-gray tray."""
+        from playwright.sync_api import expect
+        self.page.evaluate("""() => {
+            const o={name:'Pyerite',qty:20000,m3u:1,ref:15.74,checks:[],jita:{}};
+            const r={o,q:20000,best:'bb',auto:'bb',np:15.74,jl:15.74,bbUnit:15.74,
+                g:{bb:314800},net:{bb:314800},ship:{},prod:0,vol:20000,qd:0,hint:{},courierAllocated:0};
+            const ledger=document.querySelector('#ledger');ledger.hidden=false;ledger.open=true;
+            document.querySelector('#lots').replaceChildren(buildLot(o));paintLot(r);
+            ledger.open=false;
+        }""")
+        out=INDEX.parent/'tests'/'artifacts'/'theme'
+        out.mkdir(parents=True,exist_ok=True)
+        for width in (1440,390):
+            self.page.set_viewport_size({'width':width,'height':900})
+            for light in (False,True):
+                self.page.evaluate('(on)=>document.documentElement.classList.toggle("light",on)',light)
+                self.page.mouse.move(0,0)
+                closed=self.color('#ledger')
+                self.assertEqual(closed,'rgb(250, 249, 245)' if light else 'rgba(21, 21, 21, 0.9)')
+                self.assertEqual(self.page.locator('#ledger').evaluate(
+                    '(el)=>getComputedStyle(el).backgroundImage'),'none')
+                if width==1440:
+                    self.page.locator('#ledger').screenshot(path=str(out/
+                        f'b15-folded-ledger-es-1440-{"light" if light else "dark"}.png'),
+                        animations='disabled')
+                self.page.locator('#ledger>summary').click()
+                expect(self.page.locator('#ledger')).to_have_attribute('open','')
+                opened=self.color('#ledger')
+                self.assertEqual(opened,'rgb(231, 227, 220)' if light else 'rgb(53, 53, 51)')
+                self.assertNotEqual(opened,closed)
+                if width==1440:
+                    item_height=self.page.locator('#lots .lot').evaluate(
+                        '(el)=>el.getBoundingClientRect().height')
+                    self.assertGreaterEqual(item_height,80)
+                    self.assertLessEqual(item_height,95)
+                if width==1440:
+                    self.page.locator('#ledger').screenshot(path=str(out/
+                        f'b15-open-ledger-es-1440-{"light" if light else "dark"}.png'),
+                        animations='disabled')
+                self.page.locator('#ledger>summary').click()
+                expect(self.page.locator('#ledger')).not_to_have_attribute('open','')
+
     def test_b14_collapsed_ledger_inverted_depth_row_activation_and_semantics(self):
         """Approved four-column desktop cards; no decorative row toggle controls."""
         from playwright.sync_api import expect
