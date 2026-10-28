@@ -28,7 +28,7 @@ test('B.6 preserves actual plan accounting, sorting, filters, selected-route ref
   assert.match(picker,/const opt=planValue\(modeTotal\(P,'auto'\)\)\.net/);
   assert.match(picker,/box\.append\(row\(chosen,true\)\)/);
   assert.match(picker,/open:true/);
-  assert.match(picker,/others\.hidden=!pkView\.open/);
+  assert.match(picker,/others\.hidden=false/);
   assert.match(picker,/\$\('pkSort'\)\.addEventListener\('change'/);
   assert.match(picker,/\$\('pkTools'\)\.addEventListener\('click'/);
   assert.match(picker,/S\.planMode=b\.dataset\.m==='auto'\?null:b\.dataset\.m/);

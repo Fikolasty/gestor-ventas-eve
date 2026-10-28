@@ -19,23 +19,22 @@ test('the header has exactly one icon-only disclosure with bilingual accessible 
   assert.match(picker,/pkPanelCollapsed=!pkPanelCollapsed/);
   assert.match(picker,/const panel=\$\('pkPlanContent'\),toggle=\$\('pkPlanToggle'\)/);
   assert.match(picker,/toggle\.setAttribute\('aria-expanded',String\(!pkPanelCollapsed\)\)/);
-  assert.match(picker,/pkPanelCollapsed=false;\s*pkOptionsCollapsed=false;\s*pkView\.open=true/);
+  assert.match(picker,/pkPanelCollapsed=false;\s*pkOverviewCollapsed=false;\s*pkView\.open=true/);
   assert.match(css,/#pSum #pkPlanContent\[hidden\]\{display:none!important\}/);
 });
 
-test('available plans has its own icon-only control and begins folded, without suppressing calculations',()=>{
-  assert.equal((html.match(/id="pkOptionsToggle"/g)||[]).length,1);
+test('B.18 unifies available plans and result behind one full-width, two-column drawer header',()=>{
+  assert.equal((html.match(/id="pkOptionsToggle"/g)||[]).length,0);
   assert.equal((html.match(/id="pkOptionsContent"/g)||[]).length,1);
-  assert.match(html,/<button[^>]*id="pkOptionsToggle"[^>]*aria-controls="pkOptionsContent"[^>]*aria-expanded="false"[^>]*><span[^>]*aria-hidden="true"><\/span><\/button>/);
-  assert.match(html,/<div id="pkOptionsContent" hidden>[\s\S]*?id="pkTools"[\s\S]*?id="pkSort"[\s\S]*?id="pkOthers"/);
-  assert.deepEqual(keys['picker.showAvailablePlans'],{es:'Mostrar planes disponibles',en:'Show available plans'});
-  assert.deepEqual(keys['picker.hideAvailablePlans'],{es:'Ocultar planes disponibles',en:'Hide available plans'});
+  assert.match(html,/id="pkOverviewToggle" aria-controls="pkOverviewContent" aria-expanded="true"/);
+  assert.match(html,/<div class="mm-plan-drawer-body" id="pkOverviewContent">[\s\S]*?id="pkResult"[\s\S]*?id="pkPlanOptions"/);
+  assert.match(html,/<div id="pkOptionsContent">[\s\S]*?id="pkTools"[\s\S]*?id="pkSort"[\s\S]*?id="pkOthers"/);
   assert.match(picker,/let pkPanelCollapsed=true/);
-  assert.match(picker,/let pkOptionsCollapsed=true/);
-  assert.match(picker,/options\.hidden=pkOptionsCollapsed/);
-  assert.match(picker,/pkOptionsCollapsed=!pkOptionsCollapsed/);
+  assert.match(picker,/let pkOverviewCollapsed=false/);
+  assert.match(picker,/pkOverviewCollapsed=!pkOverviewCollapsed/);
+  assert.doesNotMatch(picker,/pkOptionsCollapsed/);
   assert.match(css,/#pSum #pkOptionsContent\[hidden\]\{display:none!important\}/);
-  assert.match(css,/#pSum \.mm-plan-options:has\(> #pkOptionsContent\[hidden\]\)\{align-self:start\}/);
+  assert.match(css,/#pSum \.mm-plan-drawer-body\[hidden\]\{display:none!important\}/);
 });
 
 test('finance disclosure retains ordinary estimation context and exceptional warnings remain visible',()=>{

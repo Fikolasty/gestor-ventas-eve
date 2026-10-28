@@ -2286,3 +2286,112 @@ html:not(.light) #ledger:not([open]):hover{background:var(--surface-panel)!impor
   #ledger #lots .lot-pp .copy,#ledger #lots .lot-financial .lot-net{font-size:1rem!important}
 }
 @media(prefers-reduced-motion:reduce){#ledger #lots .lot-head{transition:none}}
+
+/* B.18 · ELIGE TU PLAN: two real, synchronized drawers. One glass frame,
+   one full-width header and one recessed body for each pair. The middle is
+   only a hairline divider, never two separate cards or a shadowed seam. */
+#pSum .mm-plan-layout{
+  display:grid!important;grid-template-columns:minmax(0,1fr)!important;
+  gap:15px!important;align-items:stretch;margin:0 0 15px
+}
+#pSum .mm-plan-drawer{
+  min-width:0;padding:0 17px 13px;
+  border:1px solid var(--line2);border-radius:10px;
+  background:var(--glass);overflow:hidden
+}
+#pSum .mm-plan-drawer-head{
+  display:grid;grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:0;align-items:center;width:calc(100% + 34px);
+  min-height:46px;margin:0 -17px;padding:0 37px;
+  border:0;border-bottom:1px solid var(--line2);border-radius:0;
+  background:var(--surface-panel);color:var(--txt);
+  text-align:left;cursor:pointer;
+  font:750 clamp(.98rem,1.25vw,1.12rem)/1.35 var(--f-ui);
+  transition:background-color .16s ease
+}
+#pSum .mm-plan-drawer-head:hover{background:var(--surface-card)}
+#pSum .mm-plan-drawer-head:focus-visible{outline:2px solid var(--ion);outline-offset:-3px}
+#pSum .mm-plan-drawer-head>span{min-width:0;overflow-wrap:anywhere}
+#pSum .mm-plan-drawer-head>span+span{padding-left:17px}
+#pSum .mm-plan-drawer-body{
+  display:grid;grid-template-columns:repeat(2,minmax(0,1fr));
+  align-items:stretch;min-width:0;margin-top:0;
+  background:var(--surface-card);border:1px solid var(--line2);
+  border-top:0;border-radius:0 0 5px 5px;overflow:hidden
+}
+#pSum .mm-plan-drawer-body[hidden]{display:none!important}
+#pSum .mm-plan-drawer-body>[id]{min-width:0;align-self:stretch}
+#pSum .mm-plan-drawer-body>[id]+[id]{border-left:1px solid var(--line2)!important}
+#pSum #pkResult,#pSum #pkPlanOptions{
+  grid-row:auto!important;grid-column:auto!important;order:0!important;
+  margin:0!important;padding:17px 19px 18px!important;
+  border:0!important;border-radius:0!important;
+  box-shadow:none!important;background:transparent!important
+}
+#pSum #pkResult .mm-plan-facts{margin-bottom:0}
+#pSum #pkPlanOptions .mm-plan-controls{margin:0 0 10px}
+#pSum #pkPlanOptions .pk-w{border-radius:6px}
+#pSum #pk>.pk-o{padding-right:10px!important}
+#pSum #pk>.pk-o::after{display:none!important}
+#pSum #pkOptionsContent[hidden]{display:none!important}
+#pSum #vFinanceDetails{
+  grid-column:auto!important;order:0!important;display:block!important;
+  margin:0!important;padding:0!important;
+  border:0!important;border-radius:0!important;
+  box-shadow:none!important;background:transparent!important
+}
+#pSum #vFinanceDetails>summary{display:none!important}
+#pSum #vFinanceDetails .mm-finance-details-body{padding:15px 19px 17px!important}
+#pSum #vFinanceDetails .mm-finance-details-body>h4{margin-top:0}
+#pSum #pkSpeedBox{
+  grid-column:auto!important;order:0!important;min-width:0;
+  margin:0!important;padding:15px 19px 17px!important;
+  border:0!important;border-radius:0!important;
+  box-shadow:none!important;background:transparent!important
+}
+#pSum .mm-plan-drawer-body>#pkSpeedBox[hidden]{display:none!important}
+#pSum .mm-plan-drawer-body:has(>#pkSpeedBox[hidden])>#vFinanceDetails{
+  grid-column:1/-1!important
+}
+#pSum .mm-plan-drawer-body:has(>#pkSpeedBox[hidden])>#vFinanceDetails .mm-finance-details-body{max-width:none}
+#pSum #pkSpeedBox .pk-shortcut{
+  display:flex!important;flex-direction:column;align-items:stretch;gap:10px!important
+}
+#pSum #pkSpeedBox .pk-shortcut-heading>p{
+  margin:0;color:var(--mut);font:500 var(--mm-sales-explanation-size)/1.55 var(--f-ui)
+}
+#pSum #pkSpeedBox .pk-shortcut-compare{
+  display:grid;grid-template-columns:repeat(2,minmax(0,1fr));
+  border:1px solid var(--line2);border-radius:5px;overflow:hidden
+}
+#pSum #pkSpeedBox .pk-shortcut-choice{display:flex;flex-direction:column;gap:5px;min-width:0;padding:11px}
+#pSum #pkSpeedBox .pk-shortcut-choice+.pk-shortcut-choice{border-left:1px solid var(--line2)}
+#pSum #pkSpeedBox .pk-shortcut-name{color:var(--mut);font:550 var(--mm-sales-label-size)/1.5 var(--f-ui)}
+#pSum #pkSpeedBox .pk-shortcut-isk{font-size:clamp(.78rem,1.15vw,1.01rem);overflow-wrap:anywhere}
+#pSum #pkSpeedBox .pk-shortcut-meter{display:block;height:7px;margin-top:4px;overflow:hidden;border-radius:99px;background:var(--line2)}
+#pSum #pkSpeedBox .pk-shortcut-meter-fill{display:block;height:100%;border-radius:inherit;background:var(--gain)}
+#pSum #pkSpeedBox .pk-shortcut-loss{font:600 var(--mm-sales-label-size)/1.45 var(--f-num)}
+#pSum #pkSpeedBox .pk-shortcut-empty{margin:0;color:var(--mut);font:500 var(--mm-sales-explanation-size)/1.65 var(--f-ui)}
+#pSum #pkSpeedBox .pk-shortcut-action{justify-self:auto;align-self:flex-start;min-height:28px;padding:2px 0}
+#pSum #pkSpeedBox>.mm-picker-method{
+  margin:11px 0 0;padding:10px 0 0;border-top:1px solid var(--line2);
+  color:var(--mut);font:450 var(--mm-sales-label-size)/1.55 var(--f-ui)
+}
+#pSum #pkSpeedBox>.mm-picker-method[hidden]{display:none!important}
+@media(max-width:880px){
+  #pSum .mm-plan-drawer-head{padding:10px 20px;gap:6px;min-height:51px;font-size:.96rem}
+  #pSum .mm-plan-drawer-head>span+span{padding-left:10px}
+  #pSum .mm-plan-drawer-body{grid-template-columns:minmax(0,1fr)}
+  #pSum .mm-plan-drawer-body>[id]+[id]{border-left:0!important;border-top:1px solid var(--line2)!important}
+  #pSum .mm-plan-drawer-body>#pkResult,#pSum .mm-plan-drawer-body>#pkPlanOptions{padding:15px 16px!important}
+  #pSum #vFinanceDetails .mm-finance-details-body,#pSum #pkSpeedBox{padding:15px 16px!important}
+}
+@media(max-width:480px){
+  #pSum .mm-plan-drawer{padding:0 10px 10px}
+  #pSum .mm-plan-drawer-head{width:calc(100% + 20px);margin:0 -10px;grid-template-columns:minmax(0,1fr);gap:2px;padding:11px 16px}
+  #pSum .mm-plan-drawer-head>span+span{padding-left:0;color:var(--mut);font-size:.8rem}
+  #pSum #pkSpeedBox .pk-shortcut-compare{grid-template-columns:minmax(0,1fr)}
+  #pSum #pkSpeedBox .pk-shortcut-choice+.pk-shortcut-choice{border-left:0;border-top:1px solid var(--line2)}
+  #pSum #pkResult,#pSum #pkPlanOptions{padding:14px 11px!important}
+}
+@media(prefers-reduced-motion:reduce){#pSum .mm-plan-drawer-head{transition:none}}

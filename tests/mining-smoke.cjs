@@ -87,12 +87,12 @@ assert(source.includes('chartResize.disconnect()'),'desconectar el ResizeObserve
 assert(!sales.includes('paintResGain('),'no calcular componentes de interfaz eliminados');
 assert(html.includes('class="mm-plan-area"')||html.includes('class="summary res mm-plan-area"'),'área unificada ausente');
 
-// B.6: selected row plus immediate alternatives; expanded/collapsed is optional.
+// B.18: selected row and alternatives stay within the shared top drawer.
 assert(sales.includes('box.append(row(chosen,true))'),'debe mostrarse el plan elegido');
 assert(sales.includes("open:true"),'alternativas inicialmente visibles');
-assert(sales.includes("others.hidden=!pkView.open"),'las alternativas conservan expansión opcional');
-assert(sales.includes("e.target.closest('[data-pk-toggle]')"),'la fila elegida sigue pudiendo plegar opciones');
-assert(sales.includes("aria-expanded',String(pkView.open)"),'el selector debe indicar si está abierto');
+assert(sales.includes('others.hidden=false'),'las alternativas ya no tienen desplegable anidado');
+assert(!sales.includes("e.target.closest('[data-pk-toggle]')"),'la fila elegida no debe plegar opciones');
+assert(sales.includes("$('pkOverviewToggle').addEventListener('click'"),'la cabecera completa abre el plan');
 assert(!sales.includes('pkChange'),'el botón Cambia de Plan ya no se usa');
 assert(sales.includes('El óptimo también se elige aquí'),'Plan Óptimo debe seguir seleccionable entre alternativas');
 assert(!sales.includes("back.dataset.m='auto'"),'no debe reaparecer Volver al óptimo');

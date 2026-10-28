@@ -209,4 +209,23 @@ html.light #ledger #lots .lot-open{background:transparent!important}
 html.light #ledger #lots .lot-route .lot-dest{color:var(--txt)!important}
 html.light #ledger #lots .lot-route .lot-dest.p-none{color:var(--loss)!important}
 
+/* B.18: the same recessed gaveta geometry in Light, strictly using the
+   established warm surfaces. Theme conversion must not resurrect two cards. */
+html.light #pSum .mm-plan-drawer{
+  background:var(--glass)!important;border-color:var(--line2)!important
+}
+html.light #pSum .mm-plan-drawer-head{
+  background:var(--surface-panel)!important;border-color:var(--line2)!important
+}
+html.light #pSum .mm-plan-drawer-head:hover{background:var(--surface-card)!important}
+html.light #pSum .mm-plan-drawer-body{
+  background:var(--surface-card)!important;border-color:var(--line2)!important
+}
+html.light #pSum .mm-plan-drawer-body>#pkResult,
+html.light #pSum .mm-plan-drawer-body>#pkPlanOptions,
+html.light #pSum .mm-plan-drawer-body>#vFinanceDetails,
+html.light #pSum .mm-plan-drawer-body>#pkSpeedBox{
+  background:transparent!important;box-shadow:none!important
+}
+
 

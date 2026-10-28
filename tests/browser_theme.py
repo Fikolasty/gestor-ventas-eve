@@ -345,7 +345,7 @@ class ThemeBrowserTests(unittest.TestCase):
             lastP=window.__filterMock={mode:null,rows:[row],Vs:0,shipCost:0,best:100000};
             document.querySelector('#verdict').hidden=false;
             document.querySelector('#pSum').hidden=false;
-            pkPanelCollapsed=false;pkOptionsCollapsed=false;
+            pkPanelCollapsed=false;pkOverviewCollapsed=false;pkInsightsCollapsed=false;
             pkView.open=true;pkView.filter='all';paintPicker(lastP);
         }""")
         for width in (1440,390):
@@ -649,7 +649,7 @@ class ThemeBrowserTests(unittest.TestCase):
                     const sum=ledger.querySelector('summary');
                     const shell=getComputedStyle(ledger);
                     const chev=getComputedStyle(sum,'::after');
-                    const finance=getComputedStyle(document.querySelector('#vFinanceDetails>summary'),'::after');
+                    const finance=getComputedStyle(document.querySelector('#vFinanceDetails>summary'));
                     const business=getComputedStyle(document.querySelector('.mm-sales-mode-chevron'));
                     return {
                         backgroundImage:shell.backgroundImage,
@@ -657,14 +657,14 @@ class ThemeBrowserTests(unittest.TestCase):
                         border:shell.borderLeftColor,
                         insetShadow:shell.boxShadow.includes('inset'),
                         arrow:[chev.width,chev.height,chev.borderRightWidth],
-                        finance:[finance.width,finance.height,finance.borderRightWidth],
+                        financeDisplay:finance.display,
                         business:[business.width,business.height,business.borderRightWidth]
                     };
                 }""")
                 self.assertEqual(styles['backgroundImage'],'none',styles)
                 self.assertFalse(styles['insetShadow'],styles)
                 self.assertNotIn('217, 119, 87',styles['border'])
-                self.assertEqual(styles['arrow'],styles['finance'],styles)
+                self.assertEqual(styles['financeDisplay'],'none',styles)
                 self.assertEqual(styles['arrow'],styles['business'],styles)
                 expect(self.page.locator('#ledger')).to_be_visible()
                 self.page.locator('#ledger>summary').click()
@@ -673,7 +673,7 @@ class ThemeBrowserTests(unittest.TestCase):
                 expect(self.page.locator('#ledger')).not_to_have_attribute('open','')
 
     def test_c1b_sales_disclosure_chevrons_keep_shared_geometry_and_native_toggle(self):
-        """Finance keeps its chevron; B.8 replaces freight details with one info help."""
+        """B.18 finance has no nested disclosure; freight retains one info help."""
         from playwright.sync_api import expect
         self.page.evaluate("""() => {
             const item=n=>({o:{name:'Tritanium '+n,jita:{buy:5000,sell:7000}},
@@ -683,7 +683,7 @@ class ThemeBrowserTests(unittest.TestCase):
             document.querySelector('#verdict').hidden=false;
             document.querySelector('#pSum').hidden=false;
             pkPanelCollapsed=false;syncPlanPanel();
-            document.querySelector('#vFinanceDetails').open=false;
+            document.querySelector('#vFinanceDetails').open=true;
         }""")
         for language in ('es','en'):
             self.page.evaluate('setLang',language)
@@ -693,27 +693,16 @@ class ThemeBrowserTests(unittest.TestCase):
                     self.page.evaluate('(on)=>document.documentElement.classList.toggle("light",on)',light)
                     self.assertEqual(self.page.locator('#unitCourierRows .mm-freight-detail').count(),0)
                     self.assertEqual(self.page.locator('#unitCourierRows .mm-freight-extra').count(),0)
-                    for selector in ['#vFinanceDetails']:
-                        node=self.page.locator(selector).first
-                        expect(node).to_be_visible()
-                        node.evaluate('(el)=>el.open=false')
-                        summary=node.locator(':scope > summary')
-                        initial=summary.evaluate("""el=>{
-                            const s=getComputedStyle(el,'::after');
-                            return {content:s.content,width:s.width,height:s.height,
-                                stroke:s.borderRightWidth,rotation:s.transform};
-                        }""")
-                        self.assertEqual(initial['content'],'""',initial)
-                        self.assertEqual((initial['width'],initial['height']),
-                                         ('9px','9px'),initial)
-                        self.assertGreaterEqual(float(initial['stroke'].removesuffix('px')),1)
-                        summary.click()
-                        expect(node).to_have_attribute('open','')
-                        expanded=summary.evaluate(
-                            "el=>getComputedStyle(el,'::after').transform")
-                        self.assertNotEqual(expanded,initial['rotation'])
-                        summary.click()
-                        expect(node).not_to_have_attribute('open','')
+                    node=self.page.locator('#vFinanceDetails')
+                    expect(node).to_be_visible()
+                    self.assertEqual(node.locator(':scope > summary').evaluate(
+                        '(el)=>getComputedStyle(el).display'),'none')
+                    expect(node).to_have_attribute('open','')
+                    drawer=self.page.locator('#pkInsightsToggle')
+                    drawer.click()
+                    expect(node).to_be_hidden()
+                    drawer.click()
+                    expect(node).to_be_visible()
                     help_node=self.page.locator('#unitCourierHelp')
                     expect(help_node).to_be_visible()
                     help_node.evaluate('(el)=>el.open=false')
@@ -747,7 +736,7 @@ class ThemeBrowserTests(unittest.TestCase):
             };
             lastP={mode:null,rows:[row],Vs:0,shipCost:0,best:100000};
             document.querySelector('#pSum').hidden=false;
-            pkPanelCollapsed=false;pkOptionsCollapsed=false;
+            pkPanelCollapsed=false;pkOverviewCollapsed=false;pkInsightsCollapsed=false;
             pkView.open=true;pkView.filter='all';
             paintPicker(lastP);
         }""")
@@ -1251,7 +1240,7 @@ class ThemeBrowserTests(unittest.TestCase):
             expect(self.page.locator('#vRouteW')).to_be_visible()
             expect(self.page.locator('#unitCourierBox')).to_be_hidden()
             self.assertIn('0 ISK',self.page.locator('#unitCourierTotal').inner_text())
-            expect(self.page.locator('#vFinanceDetails')).not_to_have_attribute('open','')
+            expect(self.page.locator('#vFinanceDetails')).to_have_attribute('open','')
             if language=='es':
                 expect(self.page.locator('#vRouteCaption')).to_have_text('Ruta recomendada')
                 expect(self.page.locator('#vEstimate')).to_be_hidden()
@@ -1262,7 +1251,9 @@ class ThemeBrowserTests(unittest.TestCase):
                 expect(self.page.locator('#vEstimate')).to_be_hidden()
                 self.assertIn('orders may take time',self.page.locator('#vEstimateHelp').text_content())
                 expect(self.page.locator('#bDeep .step-toggle-copy strong')).to_have_text('View selling steps')
-            self.page.locator('#vFinanceDetails>summary').click()
+            self.page.locator('#pkInsightsToggle').click()
+            expect(self.page.locator('#vFinanceDetails')).to_be_hidden()
+            self.page.locator('#pkInsightsToggle').click()
             expect(self.page.locator('#vFinanceDetails')).to_have_attribute('open','')
             self.assertIn('280 ISK',self.page.locator('#ovFlow').inner_text())
             for width,height in [(1440,900),(390,844)]:
@@ -1399,11 +1390,9 @@ class ThemeBrowserTests(unittest.TestCase):
                             repQuestion:px('#vCap .mm-explanation-question:first-child'),
                             repAnswer:px('#vCap .mm-rep-answer'),
                             repSub:px('#vCap .mm-rep-sub'),
-                            faqQuestion:px('#pSum #pkSpeedBox>.mm-inline-faq>summary'),
-                            faqAnswer:px('#pSum #pkSpeedBox>.mm-inline-faq>p'),
+                            methodNote:px('#pSum #pkSpeedBox>.mm-picker-method'),
                             ledgerQuestion:px('#ledger #ledgerPriceHelp .mm-ledger-info-glyph'),
                             ledgerExplanation:px('#ledger #ledgerPriceHelp>p'),
-                            financeQuestion:px('#verdict #vFinanceDetails>summary'),
                             netContext:px('#verdict .mm-net-context'),
                             sortLabel:px('#ledger .ledger-sort[data-lsort="n"]'),
                             primaryISK:px('#verdict .v-isk')
@@ -1412,9 +1401,9 @@ class ThemeBrowserTests(unittest.TestCase):
                     for label,expected in {
                         'question':13.5,'explanation':13,
                         'source':13,'repQuestion':13.5,
-                        'repSub':13,'faqQuestion':13.5,'faqAnswer':13,
+                        'repSub':13,'methodNote':12.5,
                         'ledgerQuestion':11,'ledgerExplanation':13,
-                        'financeQuestion':13.5,'netContext':13
+                        'netContext':13
                     }.items():
                         self.assertAlmostEqual(type_scale[label],expected,places=2,
                                                msg=f'{language}/{width}/{light} {label}: {type_scale}')
@@ -1582,7 +1571,7 @@ class ThemeBrowserTests(unittest.TestCase):
                 window.__b6Plan=P;
                 const detail=document.querySelector('#vFinanceDetails');detail.open=false;
                 paintVerdict(P);document.querySelector('#pSum').hidden=false;
-                pkPanelCollapsed=false;pkOptionsCollapsed=false;
+                pkPanelCollapsed=false;pkOverviewCollapsed=false;pkInsightsCollapsed=false;
                 pkView.open=true;pkView.filter='all';pkView.sort='net';pkView.dir=-1;
                 paintPicker(P);
                 window.__b6RefreshOriginal=refreshNow;
@@ -1596,10 +1585,12 @@ class ThemeBrowserTests(unittest.TestCase):
             }""")
             expect(self.page.locator('#pkOthers [data-m="jOrd"]')).to_be_visible()
             expect(self.page.locator('#pkResultValue')).to_contain_text('1,050,000 ISK')
-            self.assertEqual(self.page.locator('#vFinanceDetails').evaluate('(e)=>e.parentElement?.className'),'mm-plan-layout')
+            self.assertEqual(self.page.locator('#vFinanceDetails').evaluate('(e)=>e.parentElement?.className'),'mm-plan-drawer-body')
             self.page.locator('#pkSort').select_option('speed:1')
             self.assertEqual(self.page.locator('#pkSort').input_value(),'speed:1')
-            self.page.locator('#vFinanceDetails>summary').click()
+            self.page.locator('#pkInsightsToggle').click()
+            expect(self.page.locator('#vFinanceDetails')).to_be_hidden()
+            self.page.locator('#pkInsightsToggle').click()
             expect(self.page.locator('#vFinanceDetails')).to_have_attribute('open','')
             self.page.locator('#pkOthers [data-m="jOrd"]').click()
             expect(self.page.locator('#pkResultValue')).to_contain_text('900,000 ISK')
@@ -1629,7 +1620,7 @@ class ThemeBrowserTests(unittest.TestCase):
                         self.assertLess(dims['left']['x'],dims['right']['x'],dims)
                         self.assertAlmostEqual(dims['left']['y'],dims['right']['y'],delta=2)
                     else:
-                        self.assertLess(dims['right']['y'],dims['left']['y'],dims)
+                        self.assertLess(dims['left']['y'],dims['right']['y'],dims)
                     out=INDEX.parent/'tests'/'artifacts'/'theme'
                     out.mkdir(parents=True,exist_ok=True)
                     self.page.locator('#pSum').screenshot(
@@ -1653,7 +1644,7 @@ class ThemeBrowserTests(unittest.TestCase):
                     missing:[],toBB:[]};
                 window.__b6aFixture={P,row};
                 paintVerdict(P);document.querySelector('#pSum').hidden=false;
-                pkPanelCollapsed=false;pkOptionsCollapsed=false;
+                pkPanelCollapsed=false;pkOverviewCollapsed=false;pkInsightsCollapsed=false;
                 paintPicker(P);paintCourierUnits(P);
             }""")
             expect(self.page.locator('#pkSpeedBox')).to_be_visible()
@@ -1661,8 +1652,8 @@ class ThemeBrowserTests(unittest.TestCase):
             expect(self.page.locator('#unitCourierBox')).to_be_hidden()
             self.assertEqual(self.page.evaluate("iskToneText('−120,000 ISK')"), 'isk-neg')
             self.assertEqual(self.page.evaluate("iskToneText('790,000 ISK')"), 'isk-pos')
-            self.assertTrue(self.page.locator('#pkSpeedBox .mm-picker-faq').is_visible())
-            self.assertFalse(self.page.locator('#pkSpeedBox .mm-picker-faq').evaluate('(d)=>d.open'))
+            self.assertTrue(self.page.locator('#pkSpeedBox .mm-picker-method').is_visible())
+            self.assertEqual(self.page.locator('#pkSpeedBox .mm-picker-faq').count(),0)
             self.assertEqual(self.page.locator('#pkShortcut').evaluate('(el)=>el.closest(".mm-plan-layout")?.className'), 'mm-plan-layout')
             self.assertNotIn('VENTAS NETAS DESPUÉS DE TASAS',
                 self.page.locator('#vCap .v-finance').inner_text().upper())
@@ -1760,14 +1751,14 @@ class ThemeBrowserTests(unittest.TestCase):
                     missing:[],toBB:[]};
                 window.__b6cFixture={P,row};
                 paintVerdict(P);document.querySelector('#pSum').hidden=false;
-                pkPanelCollapsed=false;pkOptionsCollapsed=false;
+                pkPanelCollapsed=false;pkOverviewCollapsed=false;pkInsightsCollapsed=false;
                 paintPicker(P);paintCourierUnits(P);
             }""")
             expect(self.page.locator('#pkSpeedBox')).to_be_visible()
             self.assertEqual(self.page.locator('#vFinanceDetails').evaluate(
-                '(el)=>el.parentElement?.className'), 'mm-plan-layout')
+                '(el)=>el.parentElement?.className'), 'mm-plan-drawer-body')
             self.assertEqual(self.page.locator('#pkSpeedBox').evaluate(
-                '(el)=>el.parentElement?.className'), 'mm-plan-layout')
+                '(el)=>el.parentElement?.className'), 'mm-plan-drawer-body')
             self.assertEqual(self.page.locator('#unitCourierBox').evaluate(
                 '(el)=>el.parentElement?.id'), 'decisionGrid')
             for width in (1440, 390):
@@ -1789,7 +1780,7 @@ class ThemeBrowserTests(unittest.TestCase):
                         self.assertGreater(rects['flow']['y'],rects['result']['y'],rects)
                         self.assertAlmostEqual(rects['flow']['bottom'],rects['speed']['bottom'],delta=2)
                     else:
-                        sequence=[rects[name]['y'] for name in ('options','result','flow','speed')]
+                        sequence=[rects[name]['y'] for name in ('result','options','flow','speed')]
                         self.assertEqual(sequence,sorted(sequence),rects)
                         for name in ('options','result','flow','speed'):
                             self.assertGreaterEqual(rects[name]['x'],-1,rects)
@@ -1805,13 +1796,14 @@ class ThemeBrowserTests(unittest.TestCase):
                 paintPicker(P);
             }""")
             self.page.set_viewport_size({'width':1440,'height':900})
-            expect(self.page.locator('#pkSpeedBox')).to_be_hidden()
+            expect(self.page.locator('#pkSpeedBox')).to_be_visible()
+            expect(self.page.locator('#pkShortcut .pk-shortcut-empty')).to_be_visible()
             self.assertEqual(self.page.locator('#vFinanceDetails').evaluate(
-                '(el)=>getComputedStyle(el).gridColumnEnd'), '-1')
+                '(el)=>getComputedStyle(el).gridColumnEnd'), 'auto')
             expect(self.page.locator('#vFinanceDetails')).to_be_visible()
 
     def test_b7_compact_plans_icon_toggle_and_flat_filters(self):
-        """The icon folds all plan cards but not the heading or selling steps."""
+        """The outer plan toggle and two shared drawers preserve original plan controls."""
         from playwright.sync_api import expect
         self.page.evaluate("""() => {
             S.flip=false;S.planMode=null;C.bb.on=true;C.disc.on=false;
@@ -1829,7 +1821,8 @@ class ThemeBrowserTests(unittest.TestCase):
             paintVerdict(P);paintPicker(P);paintCourierUnits(P);
         }""")
         toggle=self.page.locator('#pkPlanToggle')
-        options_toggle=self.page.locator('#pkOptionsToggle')
+        overview_toggle=self.page.locator('#pkOverviewToggle')
+        insights_toggle=self.page.locator('#pkInsightsToggle')
         self.assertEqual(toggle.inner_text().strip(),'')
         self.assertEqual(toggle.get_attribute('aria-controls'),'pkPlanContent')
         expect(toggle).to_have_attribute('aria-expanded','false')
@@ -1837,14 +1830,10 @@ class ThemeBrowserTests(unittest.TestCase):
         expect(self.page.locator('#bDeep')).to_be_visible()
         toggle.click()
         expect(toggle).to_have_attribute('aria-expanded','true')
-        expect(options_toggle).to_have_attribute('aria-expanded','false')
+        expect(overview_toggle).to_have_attribute('aria-expanded','true')
+        expect(insights_toggle).to_have_attribute('aria-expanded','true')
         expect(self.page.locator('#pkPlanOptions')).to_be_visible()
         expect(self.page.locator('#pkResult')).to_be_visible()
-        expect(self.page.locator('#pkOptionsContent')).to_be_hidden()
-        # A collapsed card is header-sized even next to a tall result card.
-        self.assertLess(self.page.locator('#pkPlanOptions').evaluate(
-            '(el)=>el.getBoundingClientRect().height'),100)
-        options_toggle.click()
         expect(self.page.locator('#pkOptionsContent')).to_be_visible()
         for language in ('es','en'):
             self.page.evaluate('setLang',language)
@@ -1951,22 +1940,103 @@ class ThemeBrowserTests(unittest.TestCase):
             expect(self.page.locator('#pkTools .pk-fb.on')).to_have_attribute('data-pkf','fast')
             self.assertEqual(self.page.locator('#pkSort').input_value(),'speed:1')
             self.page.evaluate('pkView.filter="all";paintPicker(lastP)')
-        # Each accordion remembers its state across repaints and independently
-        # controls visibility. The amount shown in the result stays unchanged.
+        # Each one-piece header controls both inner columns of its own drawer.
+        # The monetary result and filter choice persist across these transitions.
         self.page.locator('#pkTools [data-pkf="fast"]').click()
         original_value=self.page.locator('#pkResultValue').inner_text()
-        options_toggle.focus()
+        overview_toggle.focus()
         self.page.keyboard.press('Enter')
-        expect(options_toggle).to_have_attribute('aria-expanded','false')
-        expect(self.page.locator('#pkOptionsContent')).to_be_hidden()
-        expect(self.page.locator('#pkResult')).to_be_visible()
+        expect(overview_toggle).to_have_attribute('aria-expanded','false')
+        expect(self.page.locator('#pkOverviewContent')).to_be_hidden()
+        expect(self.page.locator('#pkInsightsContent')).to_be_visible()
         self.page.evaluate('paintPicker(window.__b7Fixture)')
-        expect(self.page.locator('#pkOptionsContent')).to_be_hidden()
+        expect(self.page.locator('#pkOverviewContent')).to_be_hidden()
+        overview_toggle.click()
+        expect(overview_toggle).to_have_attribute('aria-expanded','true')
         self.assertEqual(self.page.locator('#pkResultValue').inner_text(),original_value)
-        expect(options_toggle).to_have_attribute('aria-label','Show available plans')
-        options_toggle.click()
         expect(self.page.locator('#pkTools .pk-fb.on')).to_have_attribute('data-pkf','fast')
         expect(self.page.locator('#pkOptionsContent')).to_be_visible()
+        insights_toggle.click()
+        expect(insights_toggle).to_have_attribute('aria-expanded','false')
+        expect(self.page.locator('#vFinanceDetails')).to_be_hidden()
+        expect(self.page.locator('#pkSpeedBox')).to_be_hidden()
+        expect(self.page.locator('#pkResult')).to_be_visible()
+        insights_toggle.focus()
+        self.page.keyboard.press('Space')
+        expect(insights_toggle).to_have_attribute('aria-expanded','true')
+        expect(self.page.locator('#vFinanceDetails')).to_be_visible()
+        expect(self.page.locator('#pkSpeedBox')).to_be_visible()
+
+    def test_b18_two_drawers_have_overhanging_headers_and_one_shared_surface(self):
+        """Gaveta geometry is symmetric and the inner seam is only a hairline."""
+        from playwright.sync_api import expect
+        self.page.evaluate("""() => {
+            S.flip=false;S.planMode=null;C.bb.on=true;
+            const item={name:'Tritanium',qty:10,m3u:1};
+            S.items=[item];
+            const row={o:item,q:10,auto:'null',best:'null',np:110000,
+                g:{null:1050000,jOrd:900000,jInst:810000,bb:790000},
+                prod:0,vol:10,coll:1000000,ship:{},net:{}};
+            const P={rows:[row],best:1050000,mode:null,shipCost:0,Vs:0,missing:[],toBB:[]};
+            document.querySelector('#verdict').hidden=false;
+            document.querySelector('#pSum').hidden=false;
+            pkPanelCollapsed=false;pkOverviewCollapsed=false;pkInsightsCollapsed=false;
+            paintVerdict(P);paintPicker(P);
+        }""")
+        for language in ('es','en'):
+            self.page.evaluate('setLang',language)
+            for width in (1440,980,630,390):
+                self.page.set_viewport_size({'width':width,'height':900})
+                for light in (False,True):
+                    self.page.evaluate('(on)=>document.documentElement.classList.toggle("light",on)',light)
+                    geometry=self.page.evaluate("""() => {
+                        const rect=e=>{const r=e.getBoundingClientRect();return {x:r.x,y:r.y,
+                            right:r.right,bottom:r.bottom,width:r.width,height:r.height}};
+                        return ['Overview','Insights'].map(name=>{
+                            const box=document.querySelector('#pk'+name+'Drawer');
+                            const head=box.querySelector('.mm-plan-drawer-head');
+                            const body=box.querySelector('.mm-plan-drawer-body');
+                            const cols=[...body.children].map(rect);
+                            return {frame:rect(box),head:rect(head),body:rect(body),cols,
+                                outline:getComputedStyle(body.children[1]).borderLeftWidth,
+                                bg:getComputedStyle(body).backgroundColor};
+                        });
+                    }""")
+                    self.assertEqual(len(geometry),2)
+                    for drawer in geometry:
+                        self.assertGreater(drawer['head']['width'],drawer['body']['width']+10,drawer)
+                        self.assertAlmostEqual(drawer['head']['width'],drawer['frame']['width'],delta=2)
+                        self.assertGreater(drawer['frame']['bottom'],drawer['body']['bottom'],drawer)
+                        self.assertLessEqual(drawer['frame']['right'],width+1,drawer)
+                        if width>880:
+                            self.assertAlmostEqual(drawer['cols'][0]['width'],drawer['cols'][1]['width'],delta=2)
+                            self.assertAlmostEqual(drawer['cols'][0]['y'],drawer['cols'][1]['y'],delta=2)
+                            self.assertEqual(drawer['outline'],'1px')
+                        else:
+                            self.assertGreaterEqual(drawer['cols'][1]['y'],drawer['cols'][0]['bottom']-1)
+                    self.assertAlmostEqual(geometry[0]['head']['width'],geometry[1]['head']['width'],delta=1)
+                    self.assertAlmostEqual(geometry[0]['body']['width'],geometry[1]['body']['width'],delta=1)
+                    self.assertLessEqual(self.page.evaluate('document.documentElement.scrollWidth-innerWidth'),1)
+                    if width==1440 and language=='es' and not light:
+                        out=INDEX.parent/'tests'/'artifacts'/'theme'
+                        out.mkdir(parents=True,exist_ok=True)
+                        self.page.locator('#pSum .mm-plan-layout').screenshot(
+                            path=str(out/'b18-gavetas-1440-dark-es.png'),animations='disabled')
+        overview=self.page.locator('#pkOverviewToggle')
+        insights=self.page.locator('#pkInsightsToggle')
+        before=self.page.locator('#pkResultValue').inner_text()
+        overview.click()
+        expect(self.page.locator('#pkResult')).to_be_hidden()
+        expect(self.page.locator('#pkPlanOptions')).to_be_hidden()
+        expect(self.page.locator('#vFinanceDetails')).to_be_visible()
+        overview.click()
+        expect(self.page.locator('#pkResult')).to_be_visible()
+        insights.click()
+        expect(self.page.locator('#vFinanceDetails')).to_be_hidden()
+        expect(self.page.locator('#pkSpeedBox')).to_be_hidden()
+        insights.click()
+        expect(self.page.locator('#vFinanceDetails')).to_be_visible()
+        self.assertEqual(self.page.locator('#pkResultValue').inner_text(),before)
 
     def test_b16_ledger_matches_adjacent_dark_panels_in_both_states(self):
         """Both Listado states match the existing panel palette, with no flat gray tray."""

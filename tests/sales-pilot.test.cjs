@@ -15,7 +15,7 @@ test('sales pilot keeps original result, plan and execution controls',()=>{
     const n=html.match(new RegExp('\\bid="'+id+'"','g'))||[];
     assert.equal(n.length,1,`ID ${id} is missing or duplicated`);
   }
-  assert.match(html,/<details class="ov-card ov-flow mm-finance-details" id="vFinanceDetails">/);
+  assert.match(html,/<details class="ov-card ov-flow mm-finance-details" id="vFinanceDetails" open>/);
   assert.match(html,/id="bDeep" aria-expanded="false" aria-controls="deep"/);
   assert.ok(html.indexOf('id="vFinanceDetails"')<html.indexOf('id="pkShortcut"')
     &&html.indexOf('id="pkShortcut"')<html.indexOf('id="decisionGrid"'),

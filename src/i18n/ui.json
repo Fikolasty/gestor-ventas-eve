@@ -1,4 +1,10 @@
 {
+  "picker.distributionDestinations": {"es": "DISTRIBUCIÓN Y DESTINOS", "en": "DISTRIBUTION & DESTINATIONS"},
+  "picker.fastAlternative": {"es": "ALTERNATIVA MÁS RÁPIDA", "en": "FASTEST ALTERNATIVE"},
+  "picker.currentPlan": {"es": "Plan óptimo (seleccionado)", "en": "Optimal plan (selected)"},
+  "picker.fastComparedTo": {"es": "La alternativa rápida evita esperar una orden de venta, pero deja menos ISK.", "en": "The fast alternative avoids waiting for a sell order, but yields less ISK."},
+  "picker.fastMissing": {"es": "No hay una alternativa de cobro inmediato comparable con los precios disponibles.", "en": "No comparable immediate-payment alternative is available from the current quotes."},
+  "picker.fastSelectOptimal": {"es": "Selecciona el Plan óptimo para comparar una alternativa más rápida, cuando exista.", "en": "Select the optimal plan to compare a faster alternative when one is available."},
   "decision.marketCharges": {"es": "Impuestos y comisiones", "en": "Taxes and fees"},
   "decision.marketChargesPartial": {"es": "Impuestos y comisiones · subtotal conocido", "en": "Taxes and fees · known subtotal"},
   "decision.importNetTarget": {"es": "Importación con precio neto", "en": "Import at a net target price"},

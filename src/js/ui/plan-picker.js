@@ -6,18 +6,22 @@
 // Elegir un plan recalcula (S.planMode → refreshNow). Orden y filtro viven en memoria (pkView) y se vacían al limpiar.
 let pkView={sort:'net',dir:-1,filter:'all',open:true}; // B.6: mostrar alternativas desde el inicio
 let pkPanelCollapsed=true; // B.10: keep the entire decision area folded until the pilot opens it
-let pkOptionsCollapsed=true; // B.10: the plan list folds independently of the result
+// B.18: two symmetrical drawers; each header opens/closes both inner columns.
+let pkOverviewCollapsed=false;
+let pkInsightsCollapsed=false;
 function syncPlanPanel(){
   const panel=$('pkPlanContent'),toggle=$('pkPlanToggle');
   panel.hidden=pkPanelCollapsed;
   toggle.setAttribute('aria-expanded',String(!pkPanelCollapsed));
   const label=tx(pkPanelCollapsed?'picker.showPlans':'picker.hidePlans');
   toggle.setAttribute('aria-label',label);toggle.title=label;
-  const options=$('pkOptionsContent'),optionsToggle=$('pkOptionsToggle');
-  options.hidden=pkOptionsCollapsed;
-  optionsToggle.setAttribute('aria-expanded',String(!pkOptionsCollapsed));
-  const optionsLabel=tx(pkOptionsCollapsed?'picker.showAvailablePlans':'picker.hideAvailablePlans');
-  optionsToggle.setAttribute('aria-label',optionsLabel);optionsToggle.title=optionsLabel;
+  for(const [name,collapsed] of [['Overview',pkOverviewCollapsed],['Insights',pkInsightsCollapsed]]){
+    const content=$('pk'+name+'Content'),head=$('pk'+name+'Toggle');
+    content.hidden=collapsed;
+    head.setAttribute('aria-expanded',String(!collapsed));
+  }
+  // The finance breakdown is content of the lower drawer, not a third disclosure.
+  $('vFinanceDetails').open=true;
 }
 const PK_FAST=new Set(['jInst','cInst','fJI','bb']);         // cobras el mismo día (sin contar el envío)
 const PK_REP=new Set(['rNull','rJita']);
@@ -82,7 +86,7 @@ function paintPicker(P){
   // Quick means no waiting for a sell order; delivery/payment is not promised.
   const shortcutPanel=$('pkShortcut');
   shortcutPanel.replaceChildren();shortcutPanel.hidden=true;
-  $('pkSpeedBox').hidden=true;
+  $('pkSpeedBox').hidden=false;
   const activeRows=P.rows.filter(r=>r.q>0&&r.auto);
   const quickCandidates=cur==='auto'?valid.filter(x=>
     PK_FAST.has(x.m)&&x.t.net<opt-.5&&Number.isFinite(x.t.net)):[];
@@ -96,12 +100,24 @@ function paintPicker(P){
   const shortcut=quickCandidates[0]||null;
   if(shortcut){
     const heading=el('div','pk-shortcut-heading');
-    heading.append(el('strong',null,tx('picker.simpleQuick')),
-      el('small',null,tx('picker.simpleQuickSub')));
-    const method=el('div','pk-shortcut-method');
-    method.append(el('span','pk-shortcut-name',modeName(shortcut.m)),
+    heading.append(el('p',null,tx('picker.fastComparedTo')));
+    const method=el('div','pk-shortcut-compare');
+    const selected=el('div','pk-shortcut-choice');
+    selected.append(el('span','pk-shortcut-name',tx('picker.currentPlan')),
+      el('strong','pk-shortcut-isk num '+sgn(opt),fmt(opt)));
+    const faster=el('div','pk-shortcut-choice');
+    faster.append(el('span','pk-shortcut-name',modeName(shortcut.m)),
       el('strong','pk-shortcut-isk num '+sgn(shortcut.t.net),fmt(shortcut.t.net)),
       el('span','pk-shortcut-loss isk-neg',tx('picker.simpleLoss',{amount:fmt(Math.max(0,opt-shortcut.t.net))})));
+    // Relative bar lengths are presentational only; modeTotal supplies both ISK values.
+    if(opt>0&&shortcut.t.net>=0){
+      for(const [choice,net] of [[selected,opt],[faster,shortcut.t.net]]){
+        const track=el('span','pk-shortcut-meter'),fill=el('span','pk-shortcut-meter-fill');
+        fill.style.width=(Math.min(100,Math.max(0,net/opt*100)))+'%';
+        track.append(fill);choice.append(track);
+      }
+    }
+    method.append(selected,faster);
     const caption=el('p','pk-shortcut-note',
       tx(pkShips(shortcut.m,P)?'picker.simpleShip':'picker.simpleNoShip'));
     const count=covered(shortcut);
@@ -111,8 +127,11 @@ function paintPicker(P){
     button.type='button';button.dataset.pkShortcut=shortcut.m;
     shortcutPanel.append(heading,method,caption,button);
     shortcutPanel.hidden=false;
-    $('pkSpeedBox').hidden=false;
+  }else{
+    shortcutPanel.append(el('p','pk-shortcut-empty',tx(cur==='auto'?'picker.fastMissing':'picker.fastSelectOptimal')));
+    shortcutPanel.hidden=false;
   }
+  $('pkSpeedBox').querySelector('.mm-picker-method').hidden=!shortcut;
   if(chosen.m==='disc'){
     headline.append(el('p','pk-headline-note',tx('picker.playerUnconfirmed')));
   }else if(financial.length>1&&financial.some(x=>x.m===cur)){
@@ -185,12 +204,9 @@ function paintPicker(P){
     if(shortcut&&m===shortcut.m&&!selected)b.classList.add('pk-shortcut-highlight');
     if(!selected){b.dataset.m=m;b.setAttribute('aria-pressed','false');}
     else{
-      b.dataset.pkToggle='true';
       b.setAttribute('aria-pressed','true');
       b.setAttribute('aria-current','true');
-      b.setAttribute('aria-controls','pkOthers');
-      b.setAttribute('aria-expanded',String(pkView.open));
-      b.title=tx(pkView.open?'picker.hideAlternatives':'picker.showAlternatives');
+      b.title=tx('picker.selected');
     }
     const txt=el('span','pk-tx'),nm=el('span','pk-l',l);
     if(m==='auto')nm.append(el('em','pk-rec',tx('picker.recommended')));
@@ -217,8 +233,8 @@ function paintPicker(P){
   const available=list.filter(x=>x.m!==chosen.m);
   const fl=PK_FILTERS.filter(([f])=>f==='all'||(f!=='noship'||SH())&&available.some(x=>pass[f](x)));
   if(!fl.some(([f])=>f===pkView.filter))pkView.filter='all';
-  others.hidden=!pkView.open;
-  if(!pkView.open)return;
+  // B.18: alternatives belong to the shared drawer, not a nested accordion.
+  others.hidden=false;
   if(fl.length>2){const group=el('div','pk-flt');group.setAttribute('role','group');group.setAttribute('aria-label',tx('picker.filters'));
     fl.forEach(([f,t])=>{const n=f==='all'?available.length:available.filter(x=>pass[f](x)).length;
       const b=el('button','pk-fb'+(pkView.filter===f?' on':''),tx(t));b.type='button';b.dataset.pkf=f;b.setAttribute('aria-pressed',String(pkView.filter===f));b.append(el('small',null,String(n)));group.append(b);});
@@ -241,8 +257,12 @@ $('pkPlanToggle').addEventListener('click',()=>{
   pkPanelCollapsed=!pkPanelCollapsed;
   syncPlanPanel();
 });
-$('pkOptionsToggle').addEventListener('click',()=>{
-  pkOptionsCollapsed=!pkOptionsCollapsed;
+$('pkOverviewToggle').addEventListener('click',()=>{
+  pkOverviewCollapsed=!pkOverviewCollapsed;
+  syncPlanPanel();
+});
+$('pkInsightsToggle').addEventListener('click',()=>{
+  pkInsightsCollapsed=!pkInsightsCollapsed;
   syncPlanPanel();
 });
 $('pkTools').addEventListener('click',e=>{
@@ -260,17 +280,10 @@ $('pkSort').addEventListener('change',e=>{if(!lastP)return;
   if(!['net','name','speed','ship'].includes(sort))return;
   pkView.sort=sort;pkView.dir=Number(direction)===1?1:-1;paintPicker(lastP);
 });
-$('pk').addEventListener('click',e=>{
-  if(!e.target.closest('[data-pk-toggle]')||!lastP)return;
-  pkView.open=!pkView.open;
-  if(pkView.open)focusOnly('plans');
-  paintPicker(lastP);
-  if(pkView.open)fadeIn([...$('pkOthers').querySelectorAll('.pk-o')]);
-});
 $('pkShortcut').addEventListener('click',e=>{
   const b=e.target.closest('[data-pk-shortcut]');if(!b||!lastP)return;
   pkPanelCollapsed=false;
-  pkOptionsCollapsed=false;
+  pkOverviewCollapsed=false;
   pkView.open=true;pkView.filter='all';paintPicker(lastP);
   const target=[...$('pkOthers').querySelectorAll('[data-m]')].find(x=>x.dataset.m===b.dataset.pkShortcut);
   if(target)target.scrollIntoView({block:'nearest',behavior:'smooth'});
