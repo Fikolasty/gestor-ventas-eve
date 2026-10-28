@@ -1277,3 +1277,9 @@ Fuente `de9e13eb`, build GitHub Actions `a811f771`; 4/4 workflows aprobados y 55
 - Extras › PUBLICAR EN DISCORD: guía de tres pasos alineada con los números cobrizo sin cápsulas de VER PASOS PARA VENDER; filas y mensaje preparado más compactos en Light/Dark, sin alterar la columna TUS CONTRATOS.
 - El idioma del mensaje publicado/copied ahora depende del servidor: SIGMA GRINDSET siempre inglés, Vanguardia DR siempre español. Incluye vista previa, Janice y texto de copia.
 - Fuente `5f1d51a2`, build `700b6c83`, Pages run `40760492517` confirmado, 4 Actions, 130 Node, 16 Python, 57 Chromium. Documento principal: DSS §64.
+
+
+## C.2 v1.0.159 — CSS de Discord sin reglas superpuestas (CANDIDATA, 2026-10-28)
+- Tras cerrar B.21, se retiran únicamente estilos heredados de filas y flechas de Discord ya sobrescritos por B.21; se conservan controles, focos, responsive, Light/Dark e idiomas de las comunidades.
+- `tests/css-c2-discord-cascade.test.cjs` verifica la autoridad visual B.21 y las propiedades heredadas que todavía son necesarias.
+- **No LIVE hasta aprobar las suites y GitHub Actions/Pages**; último LIVE certificado B.21 v1.0.158. Sin cambios económicos ni ESI/SSO.

@@ -853,3 +853,10 @@ Mediante mock de `window.fetch` con peticiones ficticias (40 ms) y umbral de 12 
 - El kit debe identificar última LIVE y SHA de main, HTML compilado, protocolo y DSS o referencias canónicas verificadas, decisiones visuales, trabajo pendiente, tests/Actions, prompt de arranque y separación expresa de fuentes antiguas.
 
 **Al comenzar un chat nuevo**, reiniciar el contador de mensajes del usuario a cero. Mantener la regla en AGENTS.md, DSS y el kit.
+
+
+## 66. C.2 — saneamiento CSS de Discord, candidata v1.0.159 (2026-10-28)
+
+**La serie B queda cerrada hasta B.21 v1.0.158 LIVE.** C.2 no rediseña la guía: retira exclusivamente declaraciones antiguas de `src/styles/80-product-ux.css` que la capa B.21 ya sustituye (padding/bordes de filas, flecha de preview oculta, tamaños previos y duplicaciones responsive). Se conservan la composición aprobada, números cobrizos sin círculos, controles nativos, foco de teclado, texto interno y paridad Light/Dark.
+
+**Contrato intacto:** SIGMA siempre inglés, Vanguardia DR siempre español, misma vista previa y portapapeles; contratos y columna Extras independientes, finanzas, ESI/SSO y datos sin cambios. Nuevo test estático `tests/css-c2-discord-cascade.test.cjs` protege ausencia de competencia y propiedades que sí siguen activas. La publicación queda condicionada a Node/Python/legados, Chromium 390/630/980/1440 ES/EN Light/Dark y revisión de capturas; usar Fiko/Fikolasty, HEAD esperado, `force:false`, cuatro Actions y verificación de Pages antes de declarar LIVE. La última LIVE continúa B.21 hasta completar estos gates.

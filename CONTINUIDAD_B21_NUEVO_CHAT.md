@@ -21,3 +21,9 @@
 - **16 mensajes sustantivos o 3 publicaciones LIVE**, o antes si abundan logs/capturas: crear kit y recomendar migrar antes de un desarrollo largo.
 - No existe medidor exacto de tokens ni avisos autónomos; la alerta aparece con la siguiente respuesta. Fuente: AGENTS.md y DSS §65.
 - B.21 v1.0.158 LIVE; no inventar versión posterior. Mantener fuente canónica GitHub Fiko/Fikolasty y verificar HEAD.
+
+## Después del cierre B.21
+- B se da por cerrada en su alcance aprobado; no crear una B.22 sin nuevo pedido visual.
+- C.1a y C.1b están LIVE, C.2 v1.0.159 es candidata de limpieza focal del CSS Discord, sin cambios visibles ni económicos; DSS §66.
+- D.1–D.4 ya publicadas; ningún D.5 está autorizado sin evidencia real adicional.
+- La última LIVE sigue B.21 v1.0.158 hasta aprobar C.2 por CI y Pages. No reutilizar el ZIP B.21 como fuente editable.

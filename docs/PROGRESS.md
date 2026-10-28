@@ -1,6 +1,6 @@
 # PROGRESS — Market Moves+
 
-**Estado más reciente (2026-10-28):** **B.19 v1.0.155 LIVE certificada**. Gavetas de Pasos y Extras publicadas por Fiko fuente `a64c6751`, bot `db473ab6`; cuatro GitHub Actions success, 54/54 Chromium PASS, HTML HTTPS/GitHub/local idéntico (blob `b3e060c3`, 2.375.544 bytes). Los cuatro gates históricos fallidos bloquearon Pages y quedan documentados en DSS §61. Económica, ESI/SSO y B.13–B.18 intactos. Registro técnico completo al final del historial y en DSS §61.
+**Estado más reciente (2026-10-28):** **B.21 v1.0.158 LIVE certificada**. Fuente `5f1d51a2`, build `700b6c83`, cuatro Actions success y 130 Node/16 Python/57 Chromium. C.2 v1.0.159 es la siguiente candidata de saneamiento CSS, todavía NO LIVE; ver DSS §§64–66.
 
 ## 2026-10-28 — B.18 gavetas simétricas de ELIGE TU PLAN, v1.0.154 LIVE
 
@@ -762,3 +762,7 @@ Guía de «PUBLICAR EN DISCORD» refinada como filas B.19, sin números en círc
 
 ### B.21 v1.0.158 LIVE (2026-10-28)
 Publicada la guía compacta Discord en grises cálidos con números sin círculos, y mensaje externo en idioma fijo por comunidad (SIGMA EN, Vanguardia ES). Fuente protegida Fiko `5f1d51a2`, build `700b6c83`, 4/4 Actions, 57/57 Chromium, 130 Node, 16 Python. CI Pages HTTPS v1.0.158; imágenes Dark/Light 1440/390 inspeccionadas. DSS §64.
+
+
+## C.2 v1.0.159 — candidata de limpieza sin rediseño (2026-10-28)
+La serie B se considera cerrada hasta B.21. Se retiran únicamente estilos antiguos de Discord reemplazados por las reglas B.21, conservando propiedades activas (foco, detalles nativos, lectura y geometría), y se añade contrato Node. No se alteran cálculos ni ESI/SSO. Pendientes pruebas remotas Chromium y cuatro Actions antes de declarar LIVE. DSS §66.
