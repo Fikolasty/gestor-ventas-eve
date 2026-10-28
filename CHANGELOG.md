@@ -1251,3 +1251,7 @@ Versiones de desarrollo v35 → v111 (prototipos internos): parser del inventari
 - Extras conserva Contratos/Discord y Reproceso con sus mismos `details`, datos, copias, formularios y acciones, ahora con bandejas cálidas inset respecto a sus cabeceras, sin falsos nuevos cálculos ni acordeones obligatorios.
 - ES/EN, Dark/Light, 1440–390, acceso mediante teclado y semántica financiera conservados. **LIVE Fiko:** fuente `a64c6751`, bot `db473ab6`, cuatro Actions success (Pages `40737011137`), **54 Chromium**, 37 Node, 16 Python y ocho regresiones heredadas PASS. `index.html` GitHub/HTTPS/local idéntico byte a byte (blob `b3e060c3`, **2.375.544 bytes**, HTTP 200). Los cuatro gates previos fallidos no publicaron; documentados en DSS §61. Sin ESI/SSO real probado de extremo a extremo.
 
+## B.20 — v1.0.156 · CANDIDATA (2026-10-28)
+- Extras › Tus Contratos: superficies grafito existentes, etiquetas legibles, importe recibido verde y coste de envío rojo; layout y botones intactos.
+- Listado de Items: controles rectangulares, icono alineado con nombre/cantidad, textos más compactos, «PRECIO UNIDAD», rótulos alineados y detalle abierto tipo gaveta.
+- CSS Light/Dark con geometría compartida; lógica económica, ESI y SSO sin modificaciones. Validación remota pendiente antes de certificar LIVE.

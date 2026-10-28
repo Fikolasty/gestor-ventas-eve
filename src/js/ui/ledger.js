@@ -381,7 +381,7 @@ function paintLot(r){
   const removeButton=u.removeButton;
   if(removeButton){const label=tx('ledger.removeItem',{item:o.name});
     setLotAttr(removeButton,'title',label);setLotAttr(removeButton,'aria-label',label);}
-  if(!u.ic){const ic=iconFor(o.name);if(ic){u.nm.querySelector('b').prepend(ic);u.ic=ic;}} // ícono cuando ya se conoce el type_id
+  if(!u.ic){const ic=iconFor(o.name);if(ic){u.nm.prepend(ic);u.ic=ic;}} // ícono cuando ya se conoce el type_id
   setLotLeafText(u.qty,tx('ledger.units',{count:fmtQ(r.q)}));
   setLotLeafText(u.ppLabel,tx('ledger.lotUnitPrice'));
   setLotLeafText(u.netLabel,tx('ledger.netSales'));

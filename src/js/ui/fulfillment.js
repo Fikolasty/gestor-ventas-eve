@@ -71,7 +71,7 @@ function ctItems(list,withC){const w=el('div','ct-items'),hd=el('div','ct-ih');
   w.append(ul);return w;}
 // Casillas negras (etiqueta arriba, valor abajo; clic copia el valor exacto del contrato). cls: 'slots-2' = dos columnas (los valores largos ocupan la fila).
 function slots(fields,cls){const w=el('div','slots'+(cls?' '+cls:''));
-  fields.forEach(([k,v,cp])=>{const d=el('div','slot'+(String(v).length>22?' wide':''));d.append(el('span','slot-k',k));d.append(copyBtn(cp!=null?cp:v,v)); /* v1.0.64: todas se copian */w.append(d);});return w;}
+  fields.forEach(([k,v,cp])=>{const d=el('div','slot'+(String(v).length>22?' wide':''));if(k==='Recibiré (ISK)')d.classList.add('slot-receive');if(k==='Recompensa (Reward)')d.classList.add('slot-shipping');d.append(el('span','slot-k',k));d.append(copyBtn(cp!=null?cp:v,v)); /* v1.0.64: todas se copian */w.append(d);});return w;}
 // v1.0.60: el recuadro Extras se ve solo si tiene alguna sección visible
 const syncExtras=()=>{$('pRepro').hidden=S.flip||!S.items.some(o=>resolveOre(o.name));$('pExtra').hidden=!S.items.length;}; // Contratos se oculta en Jita sin courier // reproceso solo en HY-RWO
 function paintContracts(P){

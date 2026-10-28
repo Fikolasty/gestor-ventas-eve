@@ -36,3 +36,4 @@ Antes de analizar o modificar este proyecto, leer completos y en este orden:
 - En **cada petición de desarrollo**, entregar enlaces/archivos del DSS y documentación de continuidad modificada; registrar expresamente aprobación pendiente, estado local, pruebas reales y publicación. No asumir que documentación local está en GitHub.
 
 **Orden de trabajo:** comprender → diagnosticar y proponer → acordar → implementar en incrementos → verificar → documentar y entregar.
+- **B.20 v1.0.156 candidata (DSS §62):** Contratos y Listado de Items se refinan por separado bajo la misma versión: paleta grafito cálida, importes semánticos, cabeceras/filas compactas y detalle retranqueado. Mantener separadas ambas secciones. No declarar LIVE sin gate remoto completo, Chromium y coincidencia pública de HTML.

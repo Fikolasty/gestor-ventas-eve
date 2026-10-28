@@ -265,4 +265,25 @@ html.light #pExtra>details.fold .mm-extra-drawer-body{
 html.light #pExtra>details.fold:not([open]){background:var(--surface-card)!important}
 html.light #pExtra>details.fold>summary::after{display:none!important;content:none!important}
 
-
+/* B.20: same geometry and warm graphites in Light, no new blue-gray palette. */
+html.light #pCtr .ce-l .cz>.ct{
+  background:var(--surface-card)!important;border-color:var(--line2)!important;
+  box-shadow:0 3px 10px rgba(45,36,28,.07)!important;
+}
+html.light #pCtr .ce-l .cz .ct-items,
+html.light #pCtr .ce-l .slots>.slot{
+  background:var(--surface-panel)!important;border-color:var(--line2)!important;
+  box-shadow:none!important;
+}
+html.light #pCtr .ce-l .ct-items li{border-top-color:var(--line2)!important}
+html.light #pCtr .ce-l .ct-s{color:var(--gain)!important}
+html.light #pCtr .ce-l .ct.cr .ct-s{color:var(--loss)!important}
+html.light #ledger .ledger-tools #bEsi,
+html.light #ledger .ledger-tools #ledgerPriceHelp>summary{
+  background:var(--surface-card)!important;border-color:var(--line2)!important;
+}
+html.light #ledger #lots .lot.open{background:var(--glass)!important}
+html.light #ledger #lots .lot.open .lot-head{background:var(--surface-card)!important}
+html.light #ledger #lots .lot.open .lot-body{
+  background:var(--surface-panel)!important;border-color:var(--line2)!important;
+}

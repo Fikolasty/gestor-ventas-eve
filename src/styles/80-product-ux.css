@@ -2518,3 +2518,99 @@ html:not(.light) #ledger:not([open]):hover{background:var(--surface-panel)!impor
   #pExtra>details.fold>summary h2{flex:1 1 100%!important}
   #pExtra>details.fold>summary>.sum{flex:1 1 100%!important;margin:0!important;order:2!important}
 }
+
+/* B.20 v1.0.156 — Graphite polish of independent Contract and Item sections.
+   Existing surfaces and semantic financial colors only; no added animation. */
+#pCtr .ce-l .cz>.ct{
+  background:var(--surface-card)!important;border:1px solid var(--line2)!important;
+  border-radius:10px;box-shadow:0 3px 10px rgba(0,0,0,.13)!important;
+}
+#pCtr .ce-l .ct-h{align-items:center;gap:8px 10px}
+#pCtr .ce-l .ct-h b{font:650 .94rem/1.35 var(--f-ui);color:var(--txt)}
+#pCtr .ce-l .ct-s{font:700 .98rem/1.3 var(--f-num);color:var(--gain)!important}
+#pCtr .ce-l .ct.cr .ct-s{color:var(--loss)!important}
+body:not(.light) #pCtr .ce-l .cz .ct-items{
+  background:var(--surface-panel)!important;border:1px solid var(--line2)!important;
+  box-shadow:none!important;
+}
+#pCtr .ce-l .ct-ih,#pCtr .ce-l .ct-q{color:var(--mut)}
+#pCtr .ce-l .ct-items li{border-top-color:var(--line2)!important}
+#pCtr .ce-l .ct-n{color:var(--txt)}
+#pCtr .ce-l .slots>.slot{
+  background:var(--surface-panel)!important;border:1px solid var(--line2)!important;
+  box-shadow:none!important;border-radius:8px;
+}
+#pCtr .ce-l .slot-k{color:var(--mut);font-size:.73rem}
+#pCtr .ce-l .slot .copy{color:var(--txt)}
+#pCtr .ce-l .slot.slot-receive .copy{color:var(--gain)!important}
+#pCtr .ce-l .slot.slot-shipping .copy{color:var(--loss)!important}
+#pCtr .ce-l .slot .copy:focus-visible{outline:2px solid var(--ion);outline-offset:2px}
+
+/* Registered Items: filter-shaped tools rather than pills. */
+#ledger .ledger-tools #bEsi{
+  min-height:36px!important;padding:6px 12px!important;
+  border:1px solid var(--line2)!important;border-radius:8px!important;
+  background:var(--surface-card)!important;color:var(--txt);
+}
+#ledger .ledger-tools #bEsi:hover{background:var(--surface-panel)!important}
+#ledger .ledger-tools #bEsi:focus-visible{outline:2px solid var(--ion);outline-offset:2px}
+#ledger .ledger-tools #ledgerPriceHelp{flex:0 0 36px;width:36px}
+#ledger .ledger-tools #ledgerPriceHelp>summary{
+  width:36px;height:36px;border-radius:8px!important;
+  background:var(--surface-card)!important;border-color:var(--line2)!important;
+}
+#ledger .ledger-tools #ledgerPriceHelp>summary:hover{background:var(--surface-panel)!important}
+
+/* Four compact columns on one shared baseline, centered image in its cell. */
+#ledger #lots .lot-head{min-height:84px!important}
+#ledger #lots .lot-info{
+  display:grid!important;grid-template-columns:44px minmax(0,1fr);
+  grid-template-rows:auto auto;column-gap:12px;row-gap:3px;align-content:center;
+}
+#ledger #lots .lot-name{display:contents!important}
+#ledger #lots .lot-name img.ti{
+  grid-column:1;grid-row:1/3;width:44px;height:44px;
+  margin:0!important;align-self:center;justify-self:center;
+}
+#ledger #lots .lot-name b{
+  grid-column:2;grid-row:1;display:block!important;
+  font:700 clamp(.91rem,1.12vw,1rem)/1.28 var(--f-ui)!important;
+}
+#ledger #lots .lot-meta{
+  grid-column:2;grid-row:2;padding:0!important;align-items:center;
+}
+#ledger #lots .lot-qty{font-size:.79rem!important}
+#ledger #lots .lot-route,#ledger #lots .lot-pp,#ledger #lots .lot-financial{
+  display:grid!important;grid-template-rows:18px minmax(35px,auto);
+  align-self:start!important;align-content:start!important;
+  gap:5px!important;justify-items:start;margin-top:5px;
+}
+#ledger #lots .lot-k{
+  margin:0!important;font:750 .71rem/18px var(--f-ui)!important;
+  letter-spacing:.02em;
+}
+#ledger #lots .lot-route-main{min-height:35px;align-items:center;align-self:stretch}
+#ledger #lots .lot-route .lot-dest{font-size:.86rem!important}
+#ledger #lots .lot-pp .copy,#ledger #lots .lot-financial .lot-net{
+  font-size:clamp(.89rem,1.16vw,1.05rem)!important;
+}
+/* Recessed body = a drawer pulled from the same item, without a guide rail. */
+#ledger #lots .lot.open{background:var(--glass)!important}
+#ledger #lots .lot.open .lot-head{background:var(--surface-card)!important}
+#ledger #lots .lot.open .lot-body{
+  box-sizing:border-box;margin:0 11px 11px!important;
+  padding:12px!important;border:1px solid var(--line2);
+  border-radius:8px;background:var(--surface-panel)!important;
+}
+@media(max-width:980px){
+  #ledger #lots .lot-route,#ledger #lots .lot-pp,#ledger #lots .lot-financial{margin-top:0}
+}
+@media(max-width:600px){
+  #ledger #lots .lot-info{grid-template-columns:37px minmax(0,1fr);column-gap:9px}
+  #ledger #lots .lot-name img.ti{width:37px;height:37px;margin:0!important}
+  #ledger #lots .lot-name b{font-size:.92rem!important}
+  #ledger #lots .lot.open .lot-body{margin:0 7px 8px!important;padding:9px!important}
+}
+@media(prefers-reduced-motion:reduce){
+  #ledger #lots .lot-head{transition:none!important}
+}
