@@ -2077,9 +2077,7 @@ class ThemeBrowserTests(unittest.TestCase):
             paintVerdict(P);
             document.querySelector('#pExtra').hidden=false;
             document.querySelector('#pCtr').hidden=false;
-            document.querySelector('#pCtr').open=true;
             document.querySelector('#pRepro').hidden=false;
-            document.querySelector('#pRepro').open=true;
         }""")
         visibility=self.page.evaluate("""() => {
             const ids=['salesBody','verdict','pSum','pkPlanContent','stepDrawer','deep','stepsPanel','vPlan'];
@@ -2102,7 +2100,6 @@ class ThemeBrowserTests(unittest.TestCase):
                 document.querySelector('#pExtra').hidden=false;
                 for(const id of ['pCtr','pRepro']){
                     document.querySelector('#'+id).hidden=false;
-                    document.querySelector('#'+id).open=true;
                 }
             }""")
             for width in (1440,630,390):
@@ -2114,7 +2111,6 @@ class ThemeBrowserTests(unittest.TestCase):
                             return {x:r.x,y:r.y,w:r.width,right:r.right,bottom:r.bottom}};
                         return {frame:rect('#stepDrawer'),head:rect('#bDeep'),
                             step:rect('#vPlan .stp'),body:rect('#deep'),
-                            extraHead:rect('#pCtr>summary'),extraBody:rect('#pCtr .mm-extra-drawer-body'),
                             total:document.querySelector('#stepDrawerTotal').textContent,
                             result:document.querySelector('#pkResultValue').textContent,
                             chevron:getComputedStyle(document.querySelector('#vPlan .stp-chev')).display,
@@ -2123,7 +2119,6 @@ class ThemeBrowserTests(unittest.TestCase):
                     self.assertAlmostEqual(out['frame']['w'],out['head']['w'],delta=2,msg=out)
                     self.assertGreater(out['body']['x'],out['frame']['x']+6,out)
                     self.assertGreater(out['step']['x'],out['frame']['x']+6,out)
-                    self.assertGreater(out['extraBody']['x'],out['extraHead']['x']+6,out)
                     self.assertEqual(out['chevron'],'none')
                     self.assertEqual(out['total'],out['result'])
                     self.assertLessEqual(out['overflow'],1,out)
@@ -2132,12 +2127,41 @@ class ThemeBrowserTests(unittest.TestCase):
                         artifacts.mkdir(parents=True,exist_ok=True)
                         self.page.locator('#stepDrawer').screenshot(
                             path=str(artifacts/'b19-steps-gaveta-1440-dark-es.png'),animations='disabled')
-                        self.page.locator('#pExtra').screenshot(
-                            path=str(artifacts/'b19-extras-gaveta-1440-dark-es.png'),animations='disabled')
-        self.page.locator('#bDeep').click()
+        # Extras has its own native details focus policy. Opening a contract
+        # intentionally closes Pasos, so inspect these two drawers sequentially.
+        self.page.set_viewport_size({'width':1440,'height':900})
+        self.page.evaluate('setLang', 'es')
+        self.page.evaluate("""() => {
+            document.querySelector('#pExtra').hidden=false;
+            document.querySelector('#pCtr').hidden=false;
+            document.querySelector('#pRepro').hidden=false;
+        }""")
+        for id in ('pCtr','pRepro'):
+            el=self.page.locator('#'+id)
+            el.locator('summary').click()
+            expect(el).to_have_attribute('open','')
+            for light in (False,True):
+                self.page.evaluate('(on)=>document.documentElement.classList.toggle("light",on)',light)
+                inset=self.page.evaluate("""(id) => {
+                    const parent=document.querySelector('#'+id),head=parent.querySelector('summary');
+                    const inner=parent.querySelector('.mm-extra-drawer-body');
+                    return {head:head.getBoundingClientRect().x,body:inner.getBoundingClientRect().x,
+                        chevron:getComputedStyle(parent.querySelector('.fold-chevron')).display};
+                }""",id)
+                self.assertGreater(inset['body'],inset['head']+6,inset)
+                self.assertEqual(inset['chevron'],'none')
+                if not light and id=='pCtr':
+                    artifacts=INDEX.parent/'tests'/'artifacts'/'theme'
+                    artifacts.mkdir(parents=True,exist_ok=True)
+                    self.page.locator('#pExtra').screenshot(
+                        path=str(artifacts/'b19-extras-gaveta-1440-dark-es.png'),animations='disabled')
+            el.locator('summary').click()
+            expect(el).not_to_have_attribute('open','')
         expect(self.page.locator('#deep')).to_be_hidden()
         self.page.locator('#bDeep').click()
         expect(self.page.locator('#deep')).to_be_visible()
+        self.page.locator('#bDeep').click()
+        expect(self.page.locator('#deep')).to_be_hidden()
 
     def test_b16_ledger_matches_adjacent_dark_panels_in_both_states(self):
         """Both Listado states match the existing panel palette, with no flat gray tray."""
