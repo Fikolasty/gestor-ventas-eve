@@ -750,3 +750,6 @@ Dos cambios separados y aprobados: Contratos grafito y Listado de Items compacto
 
 ### Cierre de B.20 LIVE (2026-10-28)
 Después de inspeccionar capturas reales se corrigieron los saltos de línea del precio/neto y del rótulo «NETO DEL LOTE» en móvil; regresión Chromium añadida. Fuente protegida Fiko `de9e13eb`; build `a811f771`; 55/55 Chromium y 4/4 Actions; GitHub Pages confirmó v1.0.156. Economía/ESI/SSO intactos. DSS §62.
+
+## B.20.1 v1.0.157 — corrección focal del help de precios (2026-10-28)
+Raulito identificó screenshot de popover recortado a la izquierda y sobre las tarjetas. Se diagnostica CSS absoluto `right:0` desde icono de 36px; se reemplaza por cuerpo inline independiente que se abre con details nativo; se suman verificaciones Node y Chromium de geometría. DSS §63. Gate de publicación pendiente.

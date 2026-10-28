@@ -2573,7 +2573,7 @@ class ThemeBrowserTests(unittest.TestCase):
         expect(mineral.locator('tbody .copy').first).to_have_attribute('aria-label',
             'Copiar estimación de Heavy Water en HY-RWO: 46.57 ISK por unidad')
         self.page.locator('#ledgerPriceHelp>summary').click()
-        self.assertNotIn('SIGMA',self.page.locator('#ledgerPriceHelp>p').inner_text())
+        self.assertNotIn('SIGMA',self.page.locator('#ledgerPriceHelpContent').inner_text())
         self.page.locator('#ledgerPriceHelp>summary').click()
         for cls in ('prices','lot-adjustments','lot-guide'):
             self.page.locator('#lots .'+cls+'>summary').click()
@@ -2725,7 +2725,7 @@ class ThemeBrowserTests(unittest.TestCase):
         self.page.evaluate("setLang('en')")
         self.page.evaluate("paintLot(S.items[0].ui.last)")
         expect(mineral).to_contain_text('estimated per-unit prices')
-        self.assertNotIn('SIGMA',self.page.locator('#ledgerPriceHelp>p').inner_text())
+        self.assertNotIn('SIGMA',self.page.locator('#ledgerPriceHelpContent').inner_text())
         expect(self.page.locator('#lots .pr-manual-editor label')).to_have_text(
             'Manual · ISK/u')
         expect(self.page.locator('#lots .lot-adjustments input[aria-label*="Visible order"]')).to_be_visible()
@@ -3074,6 +3074,60 @@ class ThemeBrowserTests(unittest.TestCase):
                     self.page.locator('#ledger').screenshot(
                         path=str(out/f'b20-registered-items-{width}-{"light" if light else "dark"}.png'),
                         animations='disabled')
+
+
+    def test_b201_price_help_drawer_never_clips_or_overlays_registered_items(self):
+        """B.20.1 regression: help was right-anchored to the 36px info icon."""
+        from playwright.sync_api import expect
+        out=INDEX.parent/'tests'/'artifacts'/'theme'
+        out.mkdir(parents=True,exist_ok=True)
+        for lang in ('es','en'):
+            self.page.evaluate("""(lang)=>{
+                setLang(lang);
+                const ledger=document.querySelector('#ledger');
+                ledger.hidden=false;ledger.open=true;
+                document.querySelector('#lots').innerHTML=
+                  '<div class="lot" style="height:76px"><strong style="padding:12px">Test Item</strong></div>';
+            }""",lang)
+            for width in (1440,980,630,390):
+                self.page.set_viewport_size({'width':width,'height':900})
+                for light in (False,True):
+                    self.page.evaluate('(on)=>document.documentElement.classList.toggle("light",on)',light)
+                    summary=self.page.locator('#ledgerPriceHelp>summary')
+                    if self.page.locator('#ledgerPriceHelp').get_attribute('open') is not None:
+                        summary.click()
+                    expect(self.page.locator('#ledgerPriceHelpContent')).to_be_hidden()
+                    closedHeight=self.page.evaluate("document.querySelector('#ledger .ledger-controls').getBoundingClientRect().height")
+                    summary.click()
+                    expect(self.page.locator('#ledgerPriceHelp')).to_have_attribute('open','')
+                    note=self.page.locator('#ledgerPriceHelpContent')
+                    expect(note).to_be_visible()
+                    sizes=self.page.evaluate("""() => {
+                        const rect=s=>{const e=document.querySelector(s).getBoundingClientRect();
+                          return {left:e.left,right:e.right,top:e.top,bottom:e.bottom,width:e.width}};
+                        return {
+                          note:rect('#ledgerPriceHelpContent'),panel:rect('#ledger'),
+                          controls:rect('#ledger .ledger-controls'),lots:rect('#lots'),
+                          refresh:rect('#bEsi'),info:rect('#ledgerPriceHelp>summary'),
+                          sort:rect('#ledger .ledger-head'),
+                          windowWidth:innerWidth,overflow:document.documentElement.scrollWidth-innerWidth,
+                          text:document.querySelector('#ledgerPriceHelpContent').innerText
+                        };
+                    }""")
+                    self.assertGreaterEqual(sizes['note']['left'],sizes['panel']['left']-1,sizes)
+                    self.assertLessEqual(sizes['note']['right'],sizes['panel']['right']+1,sizes)
+                    self.assertGreaterEqual(sizes['note']['width'],200,sizes)
+                    self.assertLessEqual(sizes['note']['bottom'],sizes['lots']['top']+1,sizes)
+                    self.assertGreater(sizes['controls']['bottom']-sizes['controls']['top'],closedHeight+1,sizes)
+                    self.assertLessEqual(abs(sizes['refresh']['top']-sizes['info']['top']),5,sizes)
+                    self.assertLessEqual(sizes['overflow'],1,sizes)
+                    self.assertTrue(len(sizes['text'])>100,sizes)
+                    if lang=='es' and width in (1440,390):
+                        self.page.locator('#ledger').screenshot(
+                          path=str(out/f'b201-price-info-{width}-{"light" if light else "dark"}.png'),
+                          animations='disabled')
+                    summary.click()
+                    expect(note).to_be_hidden()
 
 if __name__ == "__main__":
     unittest.main()

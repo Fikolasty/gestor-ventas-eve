@@ -1259,3 +1259,8 @@ Versiones de desarrollo v35 → v111 (prototipos internos): parser del inventari
 
 ### B.20 v1.0.156 — LIVE certificada (2026-10-28)
 Fuente `de9e13eb`, build GitHub Actions `a811f771`; 4/4 workflows aprobados y 55/55 Chromium (incluye rótulos e importes móviles). Pages confirmó v1.0.156. Blob compilado `54b086d8` (2.382.760 bytes). Documentación DSS §62.
+
+## B.20.1 — v1.0.157 (candidata, 2026-10-28)
+- Listado de Items: la ayuda sobre el origen de precios deja de estar anclada como popover de 440 px a un icono de 36 px, que la cortaba a la izquierda.
+- Ahora aparece debajo de la banda de controles como gaveta informativa de fondo grafito sin solapar Items; el icono conserva el control nativo y la accesibilidad. Pruebas responsive ES/EN Light/Dark.
+- Ninguna modificación a cálculos, ESI, SSO, cotizaciones ni funcionalidad de Items. Publicación pendiente del gate.

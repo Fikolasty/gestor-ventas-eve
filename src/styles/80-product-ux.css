@@ -1615,12 +1615,14 @@ html.light #pSum #unitCourierRows .mm-unit-row{background:transparent!important}
   display:grid;place-items:center;width:16px;height:16px;border:1.5px solid currentColor;
   border-radius:50%;font:750 11px/1 var(--f-ui)
 }
-#ledger #ledgerPriceHelp>p{
-  position:absolute;right:0;top:calc(100% + 8px);z-index:30;
-  width:min(440px,calc(100vw - 42px));box-sizing:border-box;
-  margin:0;padding:12px 14px;border:1px solid var(--line2);border-radius:9px;
-  color:var(--txt);background:var(--surface-card);box-shadow:0 12px 28px rgba(0,0,0,.22);
-  font:450 var(--mm-sales-explanation-size)/1.55 var(--f-ui)
+#ledger .ledger-tools #ledgerPriceHelpContent{
+  display:none;flex:1 0 100%;min-width:0;width:100%;
+  box-sizing:border-box;margin:3px 0 0;padding:12px 14px;
+  border:1px solid var(--line2);border-radius:9px;
+  color:var(--txt);background:var(--surface-panel);
+  box-shadow:0 3px 10px rgba(0,0,0,.13);
+  font:450 var(--mm-sales-explanation-size)/1.55 var(--f-ui);
+  overflow-wrap:break-word
 }
 #ledger .ledger-head{justify-content:flex-end;gap:3px 8px!important;padding:5px 10px 9px!important}
 #ledger .ledger-sort-title{margin-right:5px;font:600 .73rem/1.35 var(--f-ui);letter-spacing:0;text-transform:none}
@@ -2645,3 +2647,13 @@ body:not(.light) #pCtr .ce-l .cz .ct-items{
     margin:0!important;max-width:100%!important;
   }
 }
+/* B.20.1 v1.0.157 — price info is an inline drawer, never a clipped overlay.
+   The same two controls keep their position; opening help reserves real space
+   above the items and leaves the sorting filters independent. */
+#ledger .ledger-controls>.ledger-tools{flex-wrap:wrap}
+#ledger .ledger-tools #ledgerPriceHelp[open] + #ledgerPriceHelpContent{display:block}
+#ledger .ledger-controls>.ledger-tools:has(#ledgerPriceHelp[open]){
+  flex:0 1 min(440px,100%);width:min(440px,100%);max-width:100%;
+}
+#ledger .ledger-controls:has(#ledgerPriceHelp[open]){align-items:flex-start}
+#ledger .ledger-controls:has(#ledgerPriceHelp[open])>.ledger-head{align-self:flex-start}

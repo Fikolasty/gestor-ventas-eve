@@ -1,6 +1,6 @@
 # DSS — Design Standards & Session Handoff · Market Moves+
 
-**Última actualización:** 2026-10-28 · **B.20 v1.0.156 LIVE certificada** (DSS §62). Fuente Fiko protegida `de9e13eb`, build automático `a811f771`, 4/4 Actions success, 55/55 Chromium, 16/16 Python, Pages HTTPS confirmado y HTML GitHub blob `54b086d8` (2.382.760 bytes). Contratos/Discord y Listado de Items refinados en secciones independientes; economía, ESI/SSO sin cambios.
+**Última actualización:** 2026-10-28 · **B.20.1 v1.0.157 CANDIDATA** (DSS §63), corrección de la ayuda del Listado recortada. LIVE anterior certificada B.20 v1.0.156 (DSS §62). Pendiente gate Chromium/Pages/HTTPS para B.20.1; lógica económica, ESI/SSO intactos.
 
 **Continuidad de versión:** la release anterior v1.0.126 (P0 Paladin + A+B.1) quedó verificada con fuente `205ec9fa`, build `c716f7aa`, Actions/Pages `40215891182`, blob `9601d5f8`; ver §9. La etapa B.2 se implementó inicialmente **local** sobre `dcdb6195` (§10) y posteriormente se publicó tras autorización expresa y QA (§11). El usuario concedió también **autorización continua de publicación de mejoras incrementales bien probadas**, registrada en §1.8.
 
@@ -806,3 +806,16 @@ Mediante mock de `window.fetch` con peticiones ficticias (40 ms) y umbral de 12 
 
 
 **Certificación LIVE B.20 v1.0.156 — 2026-10-28 (cierre §62):** fuente final Fiko `de9e13eb46713da2c8c49462412a6a9ef624a56f`, compilado CI `a811f77199cc9d6f08b35c7e57e8fcb4f2d34541`, objeto Git `index.html` **`54b086d85153cb80c4b7b897208a62059790f866`**, **2.382.760 bytes**. Las cuatro Actions pasaron: Build, Versiones, Verificación minera y Rebuild/Chromium/Pages. Pruebas Python **16/16**, Chromium **55/55**, Node y ocho regresiones heredadas PASSED. Pages: despliegue **success**, HTTPS verificó `v1.0.156` en `https://fikolasty.github.io/gestor-ventas-eve/` (run `40751802428`). Las capturas **b20-registered-items-1440-dark/light** y **b20-registered-items-390-dark/light** se inspeccionaron: importes largos y títulos financieros completos en ambos temas. La captura de Extras anterior del mismo cambio fuente también se inspeccionó. La comprobación pública de CI valida versión y marcador HTML; no se realizó una comparación de hash independiente de la respuesta HTTPS. No se modificaron cálculos, ESI/SSO ni funciones de copia. **B.20 es LIVE.**
+
+
+## 63. B.20.1 — ayuda de precios del Listado dentro de su gaveta (v1.0.157, 2026-10-28)
+
+**Reporte visual de Raulito tras B.20:** al abrir el botón de información junto a «Actualizar Precios», la explicación aparecía cortada hacia el borde izquierdo y tapaba filas del Listado. La captura real muestra el botón ⓘ y un recuadro de texto parcialmente invisible.
+
+**Causa verificada:** `#ledgerPriceHelp>p` se pintaba con `position:absolute;right:0;width:min(440px,100vw - 42px)` dentro de un `<details>` de solo 36 px. En B.20 el botón quedó rectangular y el contenido de la ayuda continuó pegado a su borde derecho: el recuadro se extendía hacia la izquierda fuera del contenedor.
+
+**Corrección visual acotada:** mantener `#ledgerPriceHelp` y su `<summary>` nativos, su acción, texto de origen de precios y traducciones ES/EN. Pasar el texto a un hermano `<p id="ledgerPriceHelpContent" role="note">` dentro de `.ledger-tools`; el estado nativo `[open]` controla `display:block` mediante CSS. El resumen conecta `aria-controls` con el contenido. La ayuda ahora baja el Listado en el flujo normal, en vez de convertirse en popover superpuesto; aumenta el ancho de la banda de controles hasta 440 px solo mientras está abierta. Mantener los filtros separados y la superficie cálida `--surface-panel`, con idéntica geometría en Light/Dark.
+
+**Alcance protegido:** `src/shell.html`, `src/styles/80-product-ux.css`, `src/styles/themes/light-components.css`, tests B.20.1 en Node y Chromium. La corrección conserva la visual B.20 de botones, precios, filtros, gráficos y gavetas; no toca código económico, ESI, SSO ni datos de Items.
+
+**Verificación requerida:** CI de build + Node + Python + ocho regresiones económicas, Chromium ES/EN × Dark/Light × 390/630/980/1440 (límites de ayuda, foco y ausencia de solapamiento), verificación pública HTTPS y commits protegidos únicamente desde la cuenta Fiko/Fikolasty. **B.20 v1.0.156 sigue siendo la última LIVE certificada hasta superar todos esos gates.**
