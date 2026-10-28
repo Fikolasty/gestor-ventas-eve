@@ -1,6 +1,6 @@
 # PROGRESS — Market Moves+
 
-**Estado más reciente (2026-10-28):** B.19 v1.0.155 implementada localmente para gavetas de Pasos y Extras, con 37 Node/16 Python/regresiones financieras PASS. **Aún NO LIVE**; Chromium, GitHub Actions y HTTPS pendientes. Registro técnico completo al final de este historial y en DSS §61. Última LIVE certificada B.18 v1.0.154.
+**Estado más reciente (2026-10-28):** **B.19 v1.0.155 LIVE certificada**. Gavetas de Pasos y Extras publicadas por Fiko fuente `a64c6751`, bot `db473ab6`; cuatro GitHub Actions success, 54/54 Chromium PASS, HTML HTTPS/GitHub/local idéntico (blob `b3e060c3`, 2.375.544 bytes). Los cuatro gates históricos fallidos bloquearon Pages y quedan documentados en DSS §61. Económica, ESI/SSO y B.13–B.18 intactos. Registro técnico completo al final del historial y en DSS §61.
 
 ## 2026-10-28 — B.18 gavetas simétricas de ELIGE TU PLAN, v1.0.154 LIVE
 
