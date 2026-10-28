@@ -17,3 +17,6 @@
 - LIVE anterior: B.20 v1.0.156, cierre documental c2acd7cb.
 - B.20.1 candidata; verificar commit fuente, Actions, test Chromium, publicación Pages y HTML público antes de anunciar LIVE.
 - GitHub únicamente cuenta Fiko/Fikolasty, `force:false`, `expected_sha`, sin Cloud Browser.
+
+## Gate inicial bloqueado
+- Fuente Fiko `e5add9b6`, run `40755296500`: 55/56 Chromium; test B.20.1 aprobado. Un test heredado B.5 se refería al antiguo selector de nota hijo del botón. Ajustar el selector para el nuevo elemento hermano, repetir 56/56 y verificar Pages.

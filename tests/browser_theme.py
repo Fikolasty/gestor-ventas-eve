@@ -1396,7 +1396,7 @@ class ThemeBrowserTests(unittest.TestCase):
                             repSub:px('#vCap .mm-rep-sub'),
                             methodNote:px('#pSum #pkSpeedBox>.mm-picker-method'),
                             ledgerQuestion:px('#ledger #ledgerPriceHelp .mm-ledger-info-glyph'),
-                            ledgerExplanation:px('#ledger #ledgerPriceHelp>p'),
+                            ledgerExplanation:px('#ledger #ledgerPriceHelpContent'),
                             netContext:px('#verdict .mm-net-context'),
                             sortLabel:px('#ledger .ledger-sort[data-lsort="n"]'),
                             primaryISK:px('#verdict .v-isk')
