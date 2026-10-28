@@ -1264,3 +1264,6 @@ Fuente `de9e13eb`, build GitHub Actions `a811f771`; 4/4 workflows aprobados y 55
 - Listado de Items: la ayuda sobre el origen de precios deja de estar anclada como popover de 440 px a un icono de 36 px, que la cortaba a la izquierda.
 - Ahora aparece debajo de la banda de controles como gaveta informativa de fondo grafito sin solapar Items; el icono conserva el control nativo y la accesibilidad. Pruebas responsive ES/EN Light/Dark.
 - Ninguna modificación a cálculos, ESI, SSO, cotizaciones ni funcionalidad de Items. Publicación pendiente del gate.
+
+### B.20.1 v1.0.157 — LIVE certificada (2026-10-28)
+- Se eliminó el recorte de la ayuda del Listado: queda inline y los Items se desplazan bajo la nota al abrirla. 128 Node, 16 Python, 56 Chromium; gate previo bloqueado por test B.5 heredado ya actualizado. Publicación de fuente `489a5cb2`, build `3e87fcd2`, Pages confirmado HTTPS v1.0.157; HTML blob `ca68ecab` de 2.383.840 bytes. DSS §63.

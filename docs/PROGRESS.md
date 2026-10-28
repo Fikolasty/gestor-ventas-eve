@@ -753,3 +753,6 @@ Después de inspeccionar capturas reales se corrigieron los saltos de línea del
 
 ## B.20.1 v1.0.157 — corrección focal del help de precios (2026-10-28)
 Raulito identificó screenshot de popover recortado a la izquierda y sobre las tarjetas. Se diagnostica CSS absoluto `right:0` desde icono de 36px; se reemplaza por cuerpo inline independiente que se abre con details nativo; se suman verificaciones Node y Chromium de geometría. DSS §63. Gate de publicación pendiente.
+
+### B.20.1 v1.0.157 LIVE (2026-10-28)
+La primera corrida Chromium aprobó el nuevo escenario del bug, pero 55/56 por selector antiguo de B.5; se corrigió sin cambiar el producto. Segunda corrida fuente `489a5cb2`, build `3e87fcd2`, 56/56 Chromium, 128 Node, 16 Python, 4/4 Actions, Pages success y HTTPS v1.0.157. Capturas inspeccionadas a 1440/390 Light/Dark. DSS §63.

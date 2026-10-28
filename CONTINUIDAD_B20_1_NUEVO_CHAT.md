@@ -14,9 +14,12 @@
 - `docs/DSS.md` §63 fuente definitiva de la decisión, CHANGELOG, PROGRESS, AGENTS.
 
 ## Estado
-- LIVE anterior: B.20 v1.0.156, cierre documental c2acd7cb.
-- B.20.1 candidata; verificar commit fuente, Actions, test Chromium, publicación Pages y HTML público antes de anunciar LIVE.
+- **LIVE actual: B.20.1 v1.0.157**, fuente Fiko `489a5cb2`, build `3e87fcd2`, HTML blob `ca68ecab` (2.383.840 bytes). B.20 v1.0.156 era la LIVE anterior, cierre documental `c2acd7cb`.
+- GitHub Actions run `40755828358`: 4/4 success, 128/128 Node, 16/16 Python, 56/56 Chromium. Pages confirmó HTTPS `v1.0.157`; comparación HTTP binaria independiente no disponible por DNS local.
 - GitHub únicamente cuenta Fiko/Fikolasty, `force:false`, `expected_sha`, sin Cloud Browser.
 
 ## Gate inicial bloqueado
 - Fuente Fiko `e5add9b6`, run `40755296500`: 55/56 Chromium; test B.20.1 aprobado. Un test heredado B.5 se refería al antiguo selector de nota hijo del botón. Ajustar el selector para el nuevo elemento hermano, repetir 56/56 y verificar Pages.
+
+## Validación visual final
+- Capturas `b201-price-info-1440-dark/light`, `b201-price-info-390-dark/light` revisadas. La ayuda se ve completa debajo de los controles y no superpone las tarjetas de Items. B.20 y contratos intactos.
