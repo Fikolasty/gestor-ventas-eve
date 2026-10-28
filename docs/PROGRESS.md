@@ -747,3 +747,6 @@ La captura del propietario demostró una omisión real: B.18 había publicado ú
 
 ## B.20 v1.0.156 — candidata visual (2026-10-28)
 Dos cambios separados y aprobados: Contratos grafito y Listado de Items compacto/gaveta. Código fuente y pruebas de contrato de presentación preparados. Publicación solo tras todas las GitHub Actions y verificación del HTML real. Referencia principal DSS §62.
+
+### Cierre de B.20 LIVE (2026-10-28)
+Después de inspeccionar capturas reales se corrigieron los saltos de línea del precio/neto y del rótulo «NETO DEL LOTE» en móvil; regresión Chromium añadida. Fuente protegida Fiko `de9e13eb`; build `a811f771`; 55/55 Chromium y 4/4 Actions; GitHub Pages confirmó v1.0.156. Economía/ESI/SSO intactos. DSS §62.

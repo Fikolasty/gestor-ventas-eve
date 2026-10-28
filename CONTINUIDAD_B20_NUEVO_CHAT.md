@@ -3,8 +3,8 @@
 ## Estado
 - Repositorio: Fikolasty/gestor-ventas-eve, rama main.
 - GitHub: operar exclusivamente mediante conexión Fiko/Fikolasty y actualizaciones sin force y con expected_sha.
-- Última LIVE certificada antes del gate B.20: B.19 v1.0.155 (2b4fc136, HTML b3e060c3).
-- B.20 candidata v1.0.156: ver DSS §62. Confirmar resultado de Actions, 54+ Chromium y HTML HTTPS antes de declarar LIVE.
+- Última LIVE certificada: **B.20 v1.0.156**. Anterior: B.19 v1.0.155 (2b4fc136, HTML b3e060c3).
+- B.20 **LIVE CERTIFICADA**: fuente `de9e13eb`, build `a811f771`, HTML blob `54b086d8` (2.382.760 bytes), 4/4 Actions, 55/55 Chromium, 16/16 Python. Pages comprobó HTTPS y v1.0.156. La prueba verificó contenido/versionado, sin hash independiente del HTTP. Ver DSS §62.
 
 ## Diseño aprobado
 - Contratos/Discord y Listado de Items permanecen en sus secciones independientes. Comparten exclusivamente la versión B.20.
@@ -28,3 +28,9 @@
 - Index de Pages debe coincidir byte a byte con index generado. Hasta entonces B.20 no es LIVE.
 - Revisión posterior al primer gate: screenshots de B.20 detectaron importes largos rotos en móvil; corrección CSS y test Chromium focal añadidos antes del cierre LIVE.
 - Segundo control visual: añadido ajuste de rótulos financieros móviles para que «NETO DEL LOTE» y «PRECIO UNIDAD» no se dividan; test Chromium comprueba su renglón.
+
+
+## Cierre final
+- Capturas B.20 Dark/Light 1440/390 inspeccionadas; no se cortan ni los importes ni los títulos.
+- Cambio compartido solo por número de versión: Contratos y Listado siguen siendo secciones independientes.
+- No modificar código económico ni usar otra conexión que Fiko para próximas publicaciones.
