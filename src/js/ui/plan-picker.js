@@ -55,6 +55,11 @@ function paintPicker(P){
   metric.textContent=tx(showProfit?'picker.estimatedProfit':'picker.netProceeds');
   selectedNet.className='mm-plan-result-value num '+sgn(chosen.t.net);
   selectedNet.textContent=(chosen.t.net<0?'−':showProfit?'+':'')+fmt(Math.abs(chosen.t.net));
+  // B.19: display the *same* selected-plan net in the steps drawer header.
+  // This is a mirror of the canonical result, never a new financial formula.
+  const stepNet=$('stepDrawerTotal');
+  stepNet.className='num'+(chosen.t.net<0?' neg':'');
+  stepNet.textContent=selectedNet.textContent;
   const marketFees=$('vsCn').textContent;
   const includesImport=P.rows.some(r=>r.best==='fN');
   const onlyImport=includesImport&&P.rows.every(r=>!r.best||r.best==='fN');

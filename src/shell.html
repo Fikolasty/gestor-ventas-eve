@@ -338,15 +338,13 @@ Contraband Freight = no</textarea><small>Una regla por línea: Nombre = tax tota
       <section class="pk-opportunity mm-decision-card" id="pkOpportunity" aria-label="Comparación de rutas" hidden></section>
     </div>
     </div>
-    <!-- v1.0.50: justo debajo de los planes. Al abrir el desglose, los planes se pliegan y el desglose pasa a ser lo principal -->
-    <button type="button" class="more-btn step-toggle" id="bDeep" aria-expanded="false" aria-controls="deep"><span class="step-toggle-icon ic i-list" aria-hidden="true"></span><span class="step-toggle-copy"><strong data-i18n="verdict.showSteps">Ver pasos para vender</strong><small data-i18n="verdict.stepsDescription">Contratos, destinos y precios por item</small></span><span class="step-toggle-chevron" aria-hidden="true"></span></button>
-  </section>
-
-</section>
-  <!-- 2. El análisis (oculto hasta que lo pides) -->
+    <!-- B.19: la cabecera de pasos es la tapa de su propia gaveta.
+         El desglose original vive dentro de ella y conserva sus IDs/eventos. -->
+    <section class="mm-step-drawer" id="stepDrawer">
+      <button type="button" class="more-btn step-toggle" id="bDeep" aria-expanded="false" aria-controls="deep"><span class="step-toggle-copy"><strong data-i18n="verdict.showSteps">Ver pasos para vender</strong><small data-i18n="verdict.stepsHint">Haz clic en cualquier paso para ver los detalles</small></span><span class="mm-step-total"><small data-i18n="verdict.planNetTotal">Neto total del plan</small><b class="num" id="stepDrawerTotal"></b></span></button>
+  <!-- El análisis original (oculto hasta que se abre la cabecera). -->
   <div id="deep" class="deep" hidden>
   <section class="panel verdict-detail" id="stepsPanel">
-    <header class="mm-section-head"><h3 class="mm-title">PASOS PARA VENDER</h3><p class="mm-section-sub">HAZ CLIC EN CUALQUIER PASO PARA VER LOS DETALLES</p></header>
     <div class="pl-groups stp-list" id="vPlan"></div>
 
     <div id="vRep" hidden>
@@ -363,11 +361,16 @@ Contraband Freight = no</textarea><small>Una regla por línea: Nombre = tax tota
     </div>
   </section>
   </div>
+    </section>
+  </section>
+
+</section>
   <!-- v1.0.63: Extras = Contratos y Envío, Reproceso y Vender a Jugadores, dentro de un recuadro como el del Resultado -->
   <section class="panel extras" id="pExtra" hidden>
     <header class="mm-section-head"><h2 class="mm-title">EXTRAS</h2><p class="mm-section-sub">CONSULTA CONTRATOS, REPROCESO Y OTRAS OPCIONES</p></header>
   <details class="panel thin fold" id="pCtr" hidden>
     <summary><h2><span class="ic i-list" aria-hidden="true"></span><span id="ctrTitle">CONTRATOS Y DISCORD</span></h2><span class="sum" id="ctrSum"></span><span class="fold-chevron" aria-hidden="true"></span></summary>
+    <div class="mm-extra-drawer-body">
     <div class="ce">
       <div class="ce-l">
         <div class="ce-h"><h3 class="sub-h"><span class="ic i-list" aria-hidden="true"></span>Tus Contratos</h3>
@@ -410,9 +413,11 @@ Contraband Freight = no</textarea><small>Una regla por línea: Nombre = tax tota
       <div class="scn" id="fScn"></div>
       <p class="scn-v" id="fScnV"></p>
     </div>
+    </div>
   </details>
   <details class="panel thin fold" id="pRepro" hidden>
     <summary><h2><span class="ic i-flask" aria-hidden="true"></span>REPROCESO</h2><span class="sum" id="rSum"></span><span class="fold-chevron" aria-hidden="true"></span></summary>
+    <div class="mm-extra-drawer-body">
     <p class="lead">Qué minerales deja tu ore y cuánto valen.</p>
     <div class="grid" style="margin-top:14px">
       <label>Ore<select id="rOre"></select><small id="rSkillName"></small></label>
@@ -459,6 +464,7 @@ Contraband Freight = no</textarea><small>Una regla por línea: Nombre = tax tota
     </div>
     </div>
     <p class="note">La Refinería, el Rig, la Seguridad y el Implante se cambian en Ajustes → Refinería. Reprocessing, Reprocessing Efficiency y la skill del ore se cambian en Ajustes → Tus Skills. El gas no se reprocesa.</p>
+    </div>
   </details>
 
   </section>

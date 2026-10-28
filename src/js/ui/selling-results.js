@@ -97,7 +97,9 @@ function setSect(t,open){
 $('bDeep').addEventListener('click',()=>{
   const open=$('deep').hidden;
   setSect('deep',open);
-  if(open)$('stepsPanel').scrollIntoView({behavior:MOTION()?'smooth':'auto',block:'start'});
+  // Keep the drawer front in view: scrolling to its old detached panel would
+  // hide the parent header and make the content look unrelated to the click.
+  if(open)$('bDeep').scrollIntoView({behavior:MOTION()?'smooth':'auto',block:'start'});
 });
 // v1.0.54: modo foco. Al abrir una sección principal (planes, desglose, Listado, Contratos, Reproceso, Jugadores, Ajustes o Guía de Uso),
 // las demás se pliegan y la vista va a la que abriste.

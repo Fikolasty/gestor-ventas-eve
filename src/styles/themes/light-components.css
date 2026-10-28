@@ -238,4 +238,31 @@ html.light #pSum .mm-plan-drawer-body>#pkSpeedBox{
   }
 }
 
+/* B.19: preserve the same recessed drawer dimensions in both themes;
+   generated Light rules must not restore orange fold rails or extra cards. */
+html.light #pSum #stepDrawer,html.light #pExtra>details.fold{
+  background:var(--glass)!important;border-color:var(--line2)!important;
+  box-shadow:none!important;
+}
+html.light #pSum #bDeep.step-toggle,
+html.light #pExtra>details.fold>summary{
+  background:var(--surface-card)!important;border-color:var(--line2)!important;
+  box-shadow:none!important;
+}
+html.light #pSum #stepDrawer #stepsPanel.panel{
+  background:transparent!important;border:0!important;box-shadow:none!important;
+}
+html.light #pSum #stepDrawer #vPlan>.stp{
+  background:var(--surface-card)!important;border-color:var(--line2)!important;
+  box-shadow:none!important;
+}
+html.light #pSum #stepDrawer #vPlan>.stp.open{box-shadow:none!important}
+html.light #pSum #stepDrawer .stp-n{background:none!important;box-shadow:none!important;color:var(--clay)!important}
+html.light #pSum #stepDrawer .stp-main>.pl,
+html.light #pExtra>details.fold .mm-extra-drawer-body{
+  background:var(--surface-panel)!important;border-color:var(--line2)!important;box-shadow:none!important;
+}
+html.light #pExtra>details.fold:not([open]){background:var(--surface-card)!important}
+html.light #pExtra>details.fold>summary::after{display:none!important;content:none!important}
+
 

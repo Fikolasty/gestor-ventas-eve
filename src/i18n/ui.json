@@ -79,6 +79,14 @@
     "es": "Contratos, destinos y precios por item",
     "en": "Contracts, destinations and item prices"
   },
+  "verdict.stepsHint": {
+    "es": "Haz clic en cualquier paso para ver los detalles",
+    "en": "Select any step to see its details"
+  },
+  "verdict.planNetTotal": {
+    "es": "Neto total del plan",
+    "en": "Total plan net"
+  },
   "freight.noCost": {
     "es": "0 ISK · sin courier",
     "en": "0 ISK · no courier"

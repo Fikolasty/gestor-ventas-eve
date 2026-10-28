@@ -13,7 +13,8 @@ test('the header has exactly one icon-only disclosure with bilingual accessible 
   assert.equal((html.match(/id="pkPlanOptions"/g)||[]).length,1);
   assert.equal((html.match(/id="pkPlanContent"/g)||[]).length,1);
   assert.match(html,/<button[^>]*id="pkPlanToggle"[^>]*aria-controls="pkPlanContent"[^>]*aria-expanded="false"[^>]*><span[^>]*aria-hidden="true"><\/span><\/button>/);
-  assert.match(html,/<div id="pkPlanContent" class="mm-plan-content" hidden>[\s\S]*?<div class="fb2" id="flipBuy"[\s\S]*?<div class="mm-plan-layout">[\s\S]*?<div class="mm-decision-grid" id="decisionGrid">[\s\S]*?<\/div>\s*<\/div>\s*<!-- v1\.0\.50/);
+  assert.match(html,/<div id="pkPlanContent" class="mm-plan-content" hidden>[\s\S]*?<div class="fb2" id="flipBuy"[\s\S]*?<div class="mm-plan-layout">[\s\S]*?<div class="mm-decision-grid" id="decisionGrid">[\s\S]*?<\/div>\s*<\/div>\s*<!-- B\.19:/);
+  assert.match(html,/<section class="mm-step-drawer" id="stepDrawer">[\s\S]*?id="bDeep"[^>]*aria-controls="deep"[\s\S]*?<div id="deep" class="deep" hidden>/);
   assert.deepEqual(keys['picker.hidePlans'],{es:'Ocultar toda la sección',en:'Collapse entire section'});
   assert.deepEqual(keys['picker.showPlans'],{es:'Mostrar toda la sección',en:'Expand entire section'});
   assert.match(picker,/pkPanelCollapsed=!pkPanelCollapsed/);

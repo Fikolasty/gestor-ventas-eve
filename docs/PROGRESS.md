@@ -1,5 +1,7 @@
 # PROGRESS — Market Moves+
 
+**Estado más reciente (2026-10-28):** B.19 v1.0.155 implementada localmente para gavetas de Pasos y Extras, con 37 Node/16 Python/regresiones financieras PASS. **Aún NO LIVE**; Chromium, GitHub Actions y HTTPS pendientes. Registro técnico completo al final de este historial y en DSS §61. Última LIVE certificada B.18 v1.0.154.
+
 ## 2026-10-28 — B.18 gavetas simétricas de ELIGE TU PLAN, v1.0.154 LIVE
 
 Raulito aprobó la composición de gaveta con dibujo en Paint: dos cabeceras anchas para parejas de paneles, cuerpos continuos retranqueados, mitades simétricas, línea central de 1 px y la paleta de grafito cálido ya existente. Ambas parejas despliegan juntas mediante toda la cabecera, sin iconos ni acordeones redundantes; abajo se comparan Plan óptimo y alternativa rápida usando solo `modeTotal()` y el motor económico previo. En móvil las mitades se apilan conservando el mismo marco y la división horizontal. No se alteraron B.13–B.17, impuestos, courier, ISK, ESI/SSO o persistencia.
@@ -739,3 +741,7 @@ Raulito detectó fallas de calidad acumuladas que los tests de geometría de B.1
 **QA local B.15 cerrada:** 35 Node, 16 Python, ocho scripts de dominio y **51 Chromium**, todos PASS; HTML compilado v1.0.151 sin diff inválido. Capturas genuinas del Listado plegado y abierto Light/Dark 1440 muestran la corrección de tonos, altura ~90 px de fila y fondos neutros. Responsividad 390/1440 y reglas monetarias conservadas. Fiko/CI/Pages pendientes de certificación.
 
 **Cierre B.15 v1.0.151 LIVE certificado:** Fiko publicó fuente `ac6cca060c370708292d247abd4403705e0351e1` con lease sobre `50806f08` y `force:false`. El bot CI compiló `d37aafc9db91152e5f6003f840888994af0cc3f2`. Cuatro Actions `success`: Versiones `40464338748`, Build `40464338758`, Minería `40464338773` y Rebuild/Chromium/Pages `40464338792`, incluida validación en navegador 51/51 y despliegue. HTTPS independiente y GitHub `index.html` **2.351.528 bytes**, hash blob `8afc9be54272d3194f71300cabb2f67be5b7de0d`, `cmp` idéntico al local. Color plegado oscuro, bandeja cálida abierta y filas compactas son ahora LIVE; sin cambios económicos, ESI/SSO o cuatro paneles B.13.
+## 2026-10-28 — B.19 v1.0.155 local: Pasos y Extras con gavetas aprobadas; publicación pendiente
+
+La captura del propietario demostró una omisión real: B.18 había publicado únicamente las dos gavetas de «ELIGE TU PLAN», mientras «PASOS PARA VENDER» seguía fuera de «Ver pasos para vender» y Extras conservaba cabezales salientes naranjas. Se integra ahora el cuerpo `#deep` bajo `#bDeep` dentro de `#stepDrawer`, con título «VER PASOS PARA VENDER», ayuda corta y neto del plan seleccionado a la derecha (reflejo exacto de `#pkResultValue`, sin fórmula nueva), filas de paso compactas y jerarquía de sangrías, sin chevrons. `#pCtr`/`#pRepro` mantienen sus detalles nativos, pero con cuerpo inset `.mm-extra-drawer-body` en grafito cálido. Build v1.0.155 OK, Node **37/37**, Python **16/16**, regresiones económicas heredadas PASS. El escenario B.19 de Chromium quedó escrito y requiere ejecución en CI antes de LIVE. DSS §61. **NO publicado en este punto; última LIVE v1.0.154.**
+

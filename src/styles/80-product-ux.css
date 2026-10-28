@@ -2401,3 +2401,120 @@ html:not(.light) #ledger:not([open]):hover{background:var(--surface-panel)!impor
   #pSum #pkResult,#pSum #pkPlanOptions{padding:14px 11px!important}
 }
 @media(prefers-reduced-motion:reduce){#pSum .mm-plan-drawer-head{transition:none}}
+
+/* B.19 — Pasos / Extras: the header is the full-width drawer front;
+   a single inset graphite tray grows beneath it. No additional fold glyphs,
+   orange rails, detached panels or changes to economic/content controls. */
+#pSum #stepDrawer{
+  box-sizing:border-box;min-width:0;margin-top:14px;padding:0 13px 13px;
+  background:var(--glass);border:1px solid var(--line2);border-radius:11px;
+  box-shadow:0 5px 17px rgba(0,0,0,.14);overflow:hidden;
+}
+#pSum #bDeep.step-toggle{
+  width:calc(100% + 26px)!important;margin:0 -13px!important;
+  display:flex!important;justify-content:space-between!important;align-items:center!important;
+  min-height:67px!important;gap:16px!important;padding:12px 23px!important;
+  border:0!important;border-bottom:1px solid var(--line2)!important;
+  border-radius:9px 9px 4px 4px!important;background:var(--surface-card)!important;
+  box-shadow:none!important;color:var(--txt)!important;cursor:pointer;
+}
+#pSum #bDeep.step-toggle:hover{background:var(--surface-panel)!important}
+#pSum #bDeep.step-toggle:focus-visible{outline:2px solid var(--ion)!important;outline-offset:-3px!important}
+#pSum #bDeep .step-toggle-copy{display:flex!important;flex-direction:column!important;gap:3px!important;flex:1 1 auto!important}
+#pSum #bDeep .step-toggle-copy strong{
+  font:750 1.02rem/1.25 var(--f-ui)!important;letter-spacing:.018em!important;
+  text-transform:uppercase!important;color:var(--txt)!important;
+}
+#pSum #bDeep .step-toggle-copy small{
+  font:650 .69rem/1.35 var(--f-ui)!important;letter-spacing:.045em!important;
+  text-transform:uppercase!important;color:var(--mut)!important;
+}
+#pSum #bDeep .mm-step-total{display:flex;flex:0 0 auto;flex-direction:column;align-items:flex-end;gap:4px;max-width:45%;text-align:right}
+#pSum #bDeep .mm-step-total small{color:var(--mut);font:600 .65rem/1.3 var(--f-ui);letter-spacing:.04em;text-transform:uppercase}
+#pSum #bDeep .mm-step-total b{font:700 clamp(.9rem,1.3vw,1.1rem)/1.25 var(--f-num);color:var(--gain);font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
+#pSum #bDeep .mm-step-total b.neg{color:var(--loss)}
+#pSum #stepDrawer #deep{display:block;box-sizing:border-box;padding:12px 0 0;margin:0!important;min-width:0}
+#pSum #stepDrawer #deep[hidden]{display:none!important}
+#pSum #stepDrawer #stepsPanel.panel{
+  padding:0!important;margin:0!important;border:0!important;border-radius:0!important;
+  background:transparent!important;box-shadow:none!important;
+}
+#pSum #stepDrawer #vPlan{display:grid!important;gap:6px!important;margin:0!important}
+#pSum #stepDrawer #vPlan>.stp{
+  min-width:0;margin:0 3px!important;border:1px solid var(--line2)!important;
+  border-radius:9px!important;background:var(--surface-card)!important;
+  box-shadow:none!important;opacity:1!important;overflow:hidden;
+}
+#pSum #stepDrawer #vPlan>.stp.open{border-color:var(--line2)!important;box-shadow:none!important}
+#pSum #stepDrawer .stp-h{
+  display:grid!important;grid-template-columns:23px minmax(0,1fr) minmax(95px,auto)!important;
+  gap:10px!important;min-height:59px!important;padding:10px 15px!important;
+  background:transparent!important;border-radius:8px!important;
+}
+#pSum #stepDrawer .stp-h:hover{background:var(--surface-panel)!important}
+#pSum #stepDrawer .stp-n{
+  width:auto!important;height:auto!important;border-radius:0!important;
+  background:none!important;box-shadow:none!important;color:var(--clay)!important;
+  font:750 1.1rem/1.2 var(--f-num)!important;align-self:center!important;
+}
+#pSum #stepDrawer .stp-t{font:700 .87rem/1.28 var(--f-ui)!important}
+#pSum #stepDrawer .stp-s{font:450 .73rem/1.35 var(--f-ui)!important;margin-top:3px!important}
+#pSum #stepDrawer .stp-a{grid-column:3!important;grid-row:1!important;min-width:0;white-space:normal!important}
+#pSum #stepDrawer .stp-a b{font:700 .9rem/1.3 var(--f-num)!important}
+#pSum #stepDrawer .stp-a small{font-size:.68rem!important}
+#pSum #stepDrawer .stp-chev{display:none!important}
+#pSum #stepDrawer .stp-b{
+  box-sizing:border-box;margin:0 10px 10px 38px;padding:9px 0 0!important;
+  border-top:1px solid var(--line2);min-width:0;
+}
+#pSum #stepDrawer .stp-b[hidden]{display:none!important}
+#pSum #stepDrawer .stp-main>.pl{
+  background:var(--surface-panel)!important;border:1px solid var(--line2)!important;
+  box-shadow:none!important;
+}
+#pSum #stepDrawer #vRep,#pSum #stepDrawer #vNote,#pSum #stepDrawer #bbBox{margin:10px 3px 0!important}
+
+/* Extra sections remain native details, but the visible heading and its
+   content now form one recessed drawer instead of an orange standalone card. */
+#pExtra.panel{background:var(--glass)!important}
+#pExtra>details.fold{
+  box-sizing:border-box;min-width:0;margin:0 12px 2px!important;padding:0 12px 12px!important;
+  border:1px solid var(--line2)!important;border-radius:10px!important;
+  background:var(--glass)!important;box-shadow:none!important;overflow:hidden;
+}
+#pExtra>details.fold:not([open]){padding-bottom:0!important;background:var(--surface-card)!important}
+#pExtra>details.fold>summary{
+  width:calc(100% + 24px);margin:0 -12px!important;box-sizing:border-box;
+  min-height:57px!important;padding:12px 18px!important;gap:12px!important;
+  border:0!important;border-radius:8px!important;background:var(--surface-card)!important;
+  box-shadow:none!important;cursor:pointer!important;
+}
+#pExtra>details.fold>summary:hover{background:var(--surface-panel)!important}
+#pExtra>details.fold>summary:focus-visible{outline:2px solid var(--ion)!important;outline-offset:-3px!important}
+#pExtra>details.fold>summary h2{font:750 .87rem/1.3 var(--f-ui)!important;white-space:normal!important}
+#pExtra>details.fold>summary>.sum{font:500 .75rem/1.4 var(--f-ui)!important;min-width:0}
+#pExtra>details.fold>summary .fold-chevron,#pExtra>details.fold>summary::after{display:none!important;content:none!important}
+#pExtra>details.fold .mm-extra-drawer-body{
+  min-width:0;box-sizing:border-box;margin:11px 0 0;padding:15px;
+  border:1px solid var(--line2);border-radius:8px;
+  background:var(--surface-panel);color:var(--txt);
+}
+@media(max-width:880px){
+  #pSum #stepDrawer .stp-h{grid-template-columns:21px minmax(0,1fr) minmax(83px,auto)!important}
+  #pExtra>details.fold{margin-left:7px!important;margin-right:7px!important}
+}
+@media(max-width:600px){
+  #pSum #stepDrawer{padding:0 9px 9px!important}
+  #pSum #bDeep.step-toggle{width:calc(100% + 18px)!important;margin:0 -9px!important;padding:12px 14px!important;gap:8px!important}
+  #pSum #bDeep .step-toggle-copy strong{font-size:.85rem!important}
+  #pSum #bDeep .step-toggle-copy small{font-size:.61rem!important}
+  #pSum #bDeep .mm-step-total{max-width:43%}
+  #pSum #bDeep .mm-step-total b{font-size:.85rem!important}
+  #pSum #stepDrawer .stp-h{grid-template-columns:19px minmax(0,1fr)!important;gap:4px 9px!important;padding:10px 12px!important}
+  #pSum #stepDrawer .stp-a{grid-column:2!important;grid-row:2!important;text-align:left!important}
+  #pSum #stepDrawer .stp-b{margin:0 8px 8px 29px;padding-top:8px!important}
+  #pExtra>details.fold .mm-extra-drawer-body{padding:11px}
+  #pExtra>details.fold>summary{flex-wrap:wrap!important;gap:4px 9px!important}
+  #pExtra>details.fold>summary h2{flex:1 1 100%!important}
+  #pExtra>details.fold>summary>.sum{flex:1 1 100%!important;margin:0!important;order:2!important}
+}

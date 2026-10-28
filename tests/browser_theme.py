@@ -2051,6 +2051,79 @@ class ThemeBrowserTests(unittest.TestCase):
         expect(self.page.locator('#vFinanceDetails')).to_be_visible()
         self.assertEqual(self.page.locator('#pkResultValue').inner_text(),before)
 
+    def test_b19_steps_and_extras_recede_under_their_headers(self):
+        """The approved drawers have no detached steps panel or fold chevrons."""
+        from playwright.sync_api import expect
+        self.page.evaluate("selectAppModule('ventas')")
+        self.page.evaluate("""() => {
+            S.flip=false;S.planMode=null;C.bb.on=true;
+            const item={name:'Tritanium',qty:10,m3u:1,jita:{buy:50,sell:70}};
+            S.items=[item];
+            const row={o:item,q:10,auto:'null',best:'null',np:75,jl:70,
+                g:{null:700,jOrd:650,jInst:600,bb:560},
+                prod:0,vol:10,coll:700,ship:{},net:{},qd:0,hint:{},courierAllocated:0};
+            const P={rows:[row],best:700,mode:null,shipCost:0,Vs:0,missing:[],toBB:[],bbGross:0};
+            window.__b19Fixture=P;
+            pkPanelCollapsed=false;
+            paintVerdict(P);
+            document.querySelector('#verdict').hidden=false;
+            document.querySelector('#pSum').hidden=false;
+            document.querySelector('#deep').hidden=false;
+            document.querySelector('#bDeep').setAttribute('aria-expanded','true');
+            paintVerdict(P);
+            document.querySelector('#pExtra').hidden=false;
+            document.querySelector('#pCtr').hidden=false;
+            document.querySelector('#pCtr').open=true;
+            document.querySelector('#pRepro').hidden=false;
+            document.querySelector('#pRepro').open=true;
+        }""")
+        expect(self.page.locator('#vPlan .stp-h').first).to_be_visible()
+        for language in ('es','en'):
+            self.page.evaluate('setLang',language)
+            self.page.evaluate("""() => {
+                document.querySelector('#deep').hidden=false;
+                document.querySelector('#bDeep').setAttribute('aria-expanded','true');
+                paintVerdict(window.__b19Fixture);
+                document.querySelector('#pExtra').hidden=false;
+                for(const id of ['pCtr','pRepro']){
+                    document.querySelector('#'+id).hidden=false;
+                    document.querySelector('#'+id).open=true;
+                }
+            }""")
+            for width in (1440,630,390):
+                self.page.set_viewport_size({'width':width,'height':900})
+                for light in (False,True):
+                    self.page.evaluate('(on)=>document.documentElement.classList.toggle("light",on)',light)
+                    out=self.page.evaluate("""() => {
+                        const rect=id=>{const r=document.querySelector(id).getBoundingClientRect();
+                            return {x:r.x,y:r.y,w:r.width,right:r.right,bottom:r.bottom}};
+                        return {frame:rect('#stepDrawer'),head:rect('#bDeep'),
+                            step:rect('#vPlan .stp'),body:rect('#deep'),
+                            extraHead:rect('#pCtr>summary'),extraBody:rect('#pCtr .mm-extra-drawer-body'),
+                            total:document.querySelector('#stepDrawerTotal').textContent,
+                            result:document.querySelector('#pkResultValue').textContent,
+                            chevron:getComputedStyle(document.querySelector('#vPlan .stp-chev')).display,
+                            overflow:document.documentElement.scrollWidth-innerWidth};
+                    }""")
+                    self.assertAlmostEqual(out['frame']['w'],out['head']['w'],delta=2,msg=out)
+                    self.assertGreater(out['body']['x'],out['frame']['x']+6,out)
+                    self.assertGreater(out['step']['x'],out['frame']['x']+6,out)
+                    self.assertGreater(out['extraBody']['x'],out['extraHead']['x']+6,out)
+                    self.assertEqual(out['chevron'],'none')
+                    self.assertEqual(out['total'],out['result'])
+                    self.assertLessEqual(out['overflow'],1,out)
+                    if width==1440 and language=='es' and not light:
+                        artifacts=INDEX.parent/'tests'/'artifacts'/'theme'
+                        artifacts.mkdir(parents=True,exist_ok=True)
+                        self.page.locator('#stepDrawer').screenshot(
+                            path=str(artifacts/'b19-steps-gaveta-1440-dark-es.png'),animations='disabled')
+                        self.page.locator('#pExtra').screenshot(
+                            path=str(artifacts/'b19-extras-gaveta-1440-dark-es.png'),animations='disabled')
+        self.page.locator('#bDeep').click()
+        expect(self.page.locator('#deep')).to_be_hidden()
+        self.page.locator('#bDeep').click()
+        expect(self.page.locator('#deep')).to_be_visible()
+
     def test_b16_ledger_matches_adjacent_dark_panels_in_both_states(self):
         """Both Listado states match the existing panel palette, with no flat gray tray."""
         from playwright.sync_api import expect
@@ -2082,7 +2155,9 @@ class ThemeBrowserTests(unittest.TestCase):
                 opened=self.color('#ledger')
                 self.assertEqual(opened,'rgb(231, 227, 220)' if light else 'rgba(21, 21, 21, 0.88)')
                 if not light:
-                    self.assertEqual(opened,self.color('#stepsPanel'), 'Listado should share the panel graphite')
+                    # B.19 embeds Pasos inside its own glass drawer: compare
+                    # the visible outer tray, not its transparent inner panel.
+                    self.assertEqual(opened,self.color('#stepDrawer'), 'Listado and Pasos drawer share panel graphite')
                 self.assertNotEqual(opened,closed)
                 if width==1440:
                     item_height=self.page.locator('#lots .lot').evaluate(
