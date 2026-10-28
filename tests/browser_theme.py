@@ -2138,7 +2138,8 @@ class ThemeBrowserTests(unittest.TestCase):
         }""")
         for id in ('pCtr','pRepro'):
             el=self.page.locator('#'+id)
-            el.locator('summary').click()
+            head=self.page.locator('#'+id+'>summary')
+            head.click()
             expect(el).to_have_attribute('open','')
             for light in (False,True):
                 self.page.evaluate('(on)=>document.documentElement.classList.toggle("light",on)',light)
@@ -2155,7 +2156,7 @@ class ThemeBrowserTests(unittest.TestCase):
                     artifacts.mkdir(parents=True,exist_ok=True)
                     self.page.locator('#pExtra').screenshot(
                         path=str(artifacts/'b19-extras-gaveta-1440-dark-es.png'),animations='disabled')
-            el.locator('summary').click()
+            head.click()
             expect(el).not_to_have_attribute('open','')
         expect(self.page.locator('#deep')).to_be_hidden()
         self.page.locator('#bDeep').click()
