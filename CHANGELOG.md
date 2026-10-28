@@ -1267,3 +1267,8 @@ Fuente `de9e13eb`, build GitHub Actions `a811f771`; 4/4 workflows aprobados y 55
 
 ### B.20.1 v1.0.157 — LIVE certificada (2026-10-28)
 - Se eliminó el recorte de la ayuda del Listado: queda inline y los Items se desplazan bajo la nota al abrirla. 128 Node, 16 Python, 56 Chromium; gate previo bloqueado por test B.5 heredado ya actualizado. Publicación de fuente `489a5cb2`, build `3e87fcd2`, Pages confirmado HTTPS v1.0.157; HTML blob `ca68ecab` de 2.383.840 bytes. DSS §63.
+
+## B.21 v1.0.158 · Candidata (2026-10-28)
+- Discord: tres pasos más delgados, números tipográficos cobrizo como «Pasos para vender», preview más sobrio y compacto. Contratos, botones y destinos se mantienen.
+- Mensaje preparado y copiado: SIGMA GRINDSET siempre inglés; Vanguardia DR siempre español, sin importar idioma de ajustes. No se muestra fórmula interna.
+- Paridad Light/Dark/ES/EN y responsive bajo nuevas pruebas. Publicación por verificar.

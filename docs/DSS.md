@@ -1,6 +1,6 @@
 # DSS — Design Standards & Session Handoff · Market Moves+
 
-**Última actualización:** 2026-10-28 · **B.20.1 v1.0.157 LIVE certificada** (§63). Ayuda de precios de Listado corregida como gaveta inline sin recortes. Fuente Fiko `489a5cb2`, build `3e87fcd2`, 4/4 Actions, 128 Node, 16 Python, 56 Chromium; GitHub Pages confirmó HTTPS v1.0.157. Blob compilado `ca68ecab` (2.383.840 bytes). B.20 y reglas económicas/ESI/SSO preservadas.
+**Última actualización:** 2026-10-28 · **B.21 v1.0.158 candidata** (§64): Discord compacto y mensajes por comunidad (SIGMA inglés siempre, Vanguardia español siempre). Última LIVE confirmada B.20.1 v1.0.157. No declarar B.21 LIVE antes de Actions/Chromium/Pages.
 
 **Continuidad de versión:** la release anterior v1.0.126 (P0 Paladin + A+B.1) quedó verificada con fuente `205ec9fa`, build `c716f7aa`, Actions/Pages `40215891182`, blob `9601d5f8`; ver §9. La etapa B.2 se implementó inicialmente **local** sobre `dcdb6195` (§10) y posteriormente se publicó tras autorización expresa y QA (§11). El usuario concedió también **autorización continua de publicación de mejoras incrementales bien probadas**, registrada en §1.8.
 
@@ -824,3 +824,14 @@ Mediante mock de `window.fetch` con peticiones ficticias (40 ms) y umbral de 12 
 
 
 **Cierre certificado B.20.1 v1.0.157 LIVE (2026-10-28, DSS §63):** fuente Fiko protegida **`489a5cb2abdb7a9b2fe89a615bbfd4e37128519c`**, compilado automático **`3e87fcd22e1be77c6b32e9aa02bb36b1667cd006`**, objeto Git `index.html` **`ca68ecabe9d38f46c5f575152e08055e2a9fd398`**, **2.383.840 bytes**. Run `40755828358`: **cuatro workflows success** (Build, Versiones, Verificación minera, Rebuild/Chromium/Pages), **128/128 Node**, **16/16 Python**, **56/56 Chromium**, ocho regresiones funcionales heredadas sin fallos. El deploy terminó `success` y GitHub Actions verificó por HTTPS el marcador B.20.1 y `v1.0.157` en `https://fikolasty.github.io/gestor-ventas-eve/`. Se inspeccionaron capturas `b201-price-info-1440-dark/light` y `b201-price-info-390-dark/light`: la nota aparece íntegra debajo de los botones y sin tapar Items. **Límite de verificación:** un GET HTTP independiente desde el contenedor no se pudo completar por resolución DNS; no se asegura identidad de bytes HTTP/GitHub de forma independiente, solo marcador/versión pública confirmados en Actions y SHA del HTML del repositorio. ESI/SSO y matemática intactos. **Última LIVE B.20.1 v1.0.157.**
+
+
+## 64. B.21 — guía de Discord compacta y mensaje por comunidad (v1.0.158; 2026-10-28)
+
+**Petición de Raulito con captura real:** las tres filas de la guía de Discord tienen excesiva altura y los números 1–3 en círculos claros desentonan respecto a «VER PASOS PARA VENDER». El mensaje mostrado para SIGMA GRINDSET aparece erróneamente en español cuando la interfaz está en español; el canal de la alianza es en inglés.
+
+**Cambio aprobado por contexto:** solo columna «PUBLICAR EN DISCORD», sin tocar «TUS CONTRATOS». La guía conserva los tres pasos y sus botones; los convierte en filas compactas grafito con números tipográficos cobrizo `--clay`, **sin círculos ni líneas de conexión**, siguiendo los pasos B.19. Reduce tamaño de texto y de la vista previa, afina separaciones y conserva una gaveta informativa independiente. No se cambian campos, selección de servidor, precios ni enlaces.
+
+**Contrato funcional de publicación:** `discDest==='sigma'` ⇒ el `#dMsg` y `#dCopyMsg.dataset.v` deben ser SIEMPRE inglés: «WTS», «Price», «Contract at», «DM me», placeholder inglés de Janice. `discDest==='vg'` ⇒ siempre español «VENDO», «Precio», «Contrato en», «Escríbeme», placeholder español. `S.lang` controla únicamente la UI circundante; **no** el idioma del mensaje externo de la comunidad. La selección de destino vuelve a llamar a `refresh()`, manteniendo vista previa y portapapeles sincronizados. Fórmulas económicas y ESI/SSO no modificadas.
+
+**Fuentes:** `src/js/ui/fulfillment.js`, `src/styles/80-product-ux.css`, `src/styles/themes/light-components.css`, `tests/browser_theme.py` y `tests/b21-discord-guide.test.cjs`, workflow v1.0.158 y documentación. Verificar 1440/980/630/390, ES/EN, Light/Dark, copiar/vista previa y teclado; solamente tras éxito de Actions y Pages declarar LIVE. **LIVE anterior B.20.1 v1.0.157** hasta esa certificación.

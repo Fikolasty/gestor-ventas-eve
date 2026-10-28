@@ -756,3 +756,6 @@ Raulito identificó screenshot de popover recortado a la izquierda y sobre las t
 
 ### B.20.1 v1.0.157 LIVE (2026-10-28)
 La primera corrida Chromium aprobó el nuevo escenario del bug, pero 55/56 por selector antiguo de B.5; se corrigió sin cambiar el producto. Segunda corrida fuente `489a5cb2`, build `3e87fcd2`, 56/56 Chromium, 128 Node, 16 Python, 4/4 Actions, Pages success y HTTPS v1.0.157. Capturas inspeccionadas a 1440/390 Light/Dark. DSS §63.
+
+## B.21 v1.0.158 candidata (2026-10-28)
+Guía de «PUBLICAR EN DISCORD» refinada como filas B.19, sin números en círculos ni cambio de funciones. Mensaje por comunidad, sin depender del idioma de ajustes: SIGMA EN, Vanguardia ES. DSS §64; gates CI/Chromium/Pages pendientes.

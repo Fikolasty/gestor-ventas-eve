@@ -185,7 +185,9 @@ function paintDisc(P){
   $('dOpenNote').textContent=es?'Pide login en Discord. Te lleva al servidor de la corporación.':(hasS?'Pide login en Discord. Te lleva directo al canal #market-trade de SIGMA.':'Pega abajo el link del canal #market-trade (clic derecho en el canal → Copiar enlace).');
   $('dWhere').textContent=es?'Cópialo y publícalo en Vanguardia DR › Actividades › #💰-mercado-local.':'Cópialo y publícalo en SIGMA GRINDSET › trade › #market-trade.';
   // mensaje corto: los items ya están en el link de Janice; la entrega es por contrato (inmediata)
-  const localSpanish=S.lang!=='en';
+  // Discord message language follows the recipient community, not UI settings.
+  // SIGMA #market-trade is English-only; Vanguardia's local market is Spanish.
+  const localSpanish=discDest==='vg';
   const lines=[localSpanish?'VENDO':'WTS'];
   // The Jita Buy × percentage rule belongs ONLY in Settings/pricing.
   // Discord previews and copied WTS messages contain the final offer price,

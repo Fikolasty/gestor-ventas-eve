@@ -3129,5 +3129,75 @@ class ThemeBrowserTests(unittest.TestCase):
                     summary.click()
                     expect(note).to_be_hidden()
 
+
+    def test_b21_discord_message_tracks_destination_not_ui_language_and_guide_is_compact(self):
+        """SIGMA posting is English even in ES settings; Vanguardia is Spanish in EN."""
+        from playwright.sync_api import expect
+        out=INDEX.parent/'tests'/'artifacts'/'theme'
+        out.mkdir(parents=True,exist_ok=True)
+        self.page.evaluate("""() => {
+            selectAppModule('ventas');C.disc.on=true;S.flip=false;
+            S.items=[{name:'Compressed Plagioclase III-Grade',qty:2123}];
+            const r={o:S.items[0],q:2123,best:'bb',g:{bb:73312,disc:146349671},ship:{}};
+            window.__b21P={rows:[r],toBB:[r],bbGross:73312};
+            const ctr=document.querySelector('#pCtr');ctr.hidden=false;ctr.open=true;
+            paintContracts(window.__b21P);
+            paintDisc(window.__b21P);
+        }""")
+        for lang in ('es','en'):
+            self.page.evaluate('setLang',lang)
+            for dest in ('sigma','vg'):
+                self.page.locator(f'#pDisc .dests .dest[data-d="{dest}"]').click()
+                self.page.evaluate('paintDisc(window.__b21P)')
+                message=self.page.locator('#dMsg').text_content()
+                copied=self.page.locator('#dCopyMsg').get_attribute('data-v')
+                self.assertEqual(message,copied,(lang,dest))
+                self.assertIn('146,349,671 ISK',message)
+                self.assertNotIn('Jita Buy',message)
+                if dest=='sigma':
+                    self.assertTrue(message.startswith('WTS\n'),(lang,message))
+                    self.assertIn('Price: ',message)
+                    self.assertIn('Contract at: ',message)
+                    self.assertIn('DM me if interested.',message)
+                    self.assertIn('<paste your Janice link>',message)
+                    self.assertNotIn('VENDO',message)
+                    self.assertNotIn('Contrato en:',message)
+                else:
+                    self.assertTrue(message.startswith('VENDO\n'),(lang,message))
+                    self.assertIn('Precio: ',message)
+                    self.assertIn('Contrato en: ',message)
+                    self.assertIn('Escríbeme por DM si te interesa.',message)
+                    self.assertIn('<pega aquí tu link de Janice>',message)
+        self.page.locator('#pDisc .dests .dest[data-d="sigma"]').click()
+        for width in (1440,980,630,390):
+            self.page.set_viewport_size({'width':width,'height':900})
+            for light in (False,True):
+                self.page.evaluate('(on)=>document.documentElement.classList.toggle("light",on)',light)
+                geometry=self.page.evaluate("""() => {
+                    const box=document.querySelector('#pCtr .disc-steps');
+                    const rows=[...box.querySelectorAll(':scope > li')];
+                    const css=getComputedStyle(rows[0],'::before');
+                    const rect=el=>{const r=el.getBoundingClientRect();
+                        return {left:r.left,right:r.right,top:r.top,bottom:r.bottom,height:r.height};};
+                    const parent=rect(document.querySelector('#pCtr .discord-content'));
+                    return {guide:rect(box),parent,rows:rows.map(rect),
+                        numberBg:css.backgroundColor,numberRadius:css.borderRadius,
+                        numberColor:css.color,
+                        overflow:document.documentElement.scrollWidth-innerWidth};
+                }""")
+                self.assertEqual(geometry['numberBg'],'rgba(0, 0, 0, 0)',geometry)
+                self.assertEqual(geometry['numberRadius'],'0px',geometry)
+                self.assertEqual(len(geometry['rows']),3,geometry)
+                self.assertLessEqual(geometry['guide']['right'],geometry['parent']['right']+1,geometry)
+                self.assertGreaterEqual(geometry['guide']['left'],geometry['parent']['left']-1,geometry)
+                self.assertLessEqual(geometry['overflow'],1,geometry)
+                self.assertLess(max(x['height'] for x in geometry['rows']),360 if width<=630 else 245,geometry)
+                if width in (1440,390):
+                    self.page.locator('#dPreview>summary').click()
+                    self.page.locator('#pCtr .discord-side').screenshot(
+                        path=str(out/f'b21-discord-{width}-{"light" if light else "dark"}.png'),
+                        animations='disabled')
+                    self.page.locator('#dPreview>summary').click()
+
 if __name__ == "__main__":
     unittest.main()

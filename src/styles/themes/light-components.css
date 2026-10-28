@@ -293,3 +293,15 @@ html.light #ledger .ledger-tools #ledgerPriceHelpContent{
   border-color:var(--line2)!important;
   box-shadow:0 3px 10px rgba(45,36,28,.075)!important;
 }
+
+/* B.21 — same Discord guide geometry in Light; warm surfaces only. */
+html.light #pCtr .discord-content .disc-steps>li{
+  background:var(--surface-card)!important;border-color:var(--line2)!important;
+}
+html.light #pCtr .disc-preview{
+  background:var(--glass)!important;border-color:var(--line2)!important;
+}
+html.light #pCtr .disc-preview>summary{background:var(--surface-card)!important}
+html.light #pCtr .disc-preview .msg{
+  background:var(--surface-panel)!important;border-color:var(--line2)!important;
+}
