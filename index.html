@@ -5849,6 +5849,23 @@ body:not(.light) #pCtr .ce-l .cz .ct-items{
     font-size:clamp(.8rem,3.15vw,.94rem)!important;max-width:100%!important;
   }
 }
+
+/* B.20 mobile typography: labels and entire amounts share the same drawer width. */
+@media(max-width:600px){
+  #ledger #lots .lot-pp,#ledger #lots .lot-financial{
+    grid-column:1/-1!important;display:flex!important;
+    flex-direction:column!important;align-items:flex-start!important;
+    justify-content:flex-start!important;gap:6px!important;
+    width:100%!important;min-width:0!important;margin-top:0!important;
+  }
+  #ledger #lots .lot-pp .lot-k,#ledger #lots .lot-financial .lot-k{
+    display:block!important;width:auto!important;max-width:100%;
+    white-space:nowrap!important;flex:0 0 auto!important;margin:0!important;
+  }
+  #ledger #lots .lot-pp .copy,#ledger #lots .lot-financial .lot-net{
+    margin:0!important;max-width:100%!important;
+  }
+}
 /* ===== tema claro (generado desde el oscuro por light.py) ===== */
 html.light{--header-surface:rgba(240,237,229,0.96);--ticker-surface:rgba(240,237,229,0.91);--ticker-hover:rgba(240,237,229,0.96);--surface-card:rgba(240,237,229,0.9);--surface-result:linear-gradient(180deg,rgba(240,237,229,0.91),rgba(240,237,229,0.96));--surface-panel:rgba(240,237,229,0.96);--void:#e4e3dd;--hull:#e2e0da;--hull2:#e0ded8;--line:rgba(31,30,29,0.114);--line2:rgba(31,30,29,0.125);--txt:#1c1c1a;--mut:#54524d;--dim:#6c6a64;--ion:#413f3c;--blue:#a39d8b;--clay:#c96442;--thrust:#a67526;--gain:#418b62;--loss:#a92c23}
 html.light body::after{background:repeating-linear-gradient(180deg,rgba(31,30,29,0.011) 0 1px,transparent 1px 3px),
