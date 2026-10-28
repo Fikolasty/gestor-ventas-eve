@@ -3049,7 +3049,12 @@ class ThemeBrowserTests(unittest.TestCase):
                       .map(sel=>row.querySelector(sel).getBoundingClientRect().top);
                     const price=row.querySelector('.lot-pp').getBoundingClientRect();
                     const net=row.querySelector('.lot-financial').getBoundingClientRect();
-                    return {details,headings:k,cardRight:row.getBoundingClientRect().right,
+                    const labels=['.lot-pp .lot-k','.lot-financial .lot-k'].map(sel=>{
+                        const el=row.querySelector(sel);const r=document.createRange();
+                        r.selectNodeContents(el.firstChild);
+                        return {textRects:r.getClientRects().length,whiteSpace:getComputedStyle(el).whiteSpace};
+                    });
+                    return {details,labels,headings:k,cardRight:row.getBoundingClientRect().right,
                       priceBottom:price.bottom,netTop:net.top,
                       overflow:document.documentElement.scrollWidth-innerWidth};
                 }""")
@@ -3063,6 +3068,8 @@ class ThemeBrowserTests(unittest.TestCase):
                     self.assertLessEqual(max(result['headings'])-min(result['headings']),2,result)
                 if width==390:
                     self.assertGreaterEqual(result['netTop'],result['priceBottom'],result)
+                    self.assertEqual([r['textRects'] for r in result['labels']],[1,1],result)
+                    self.assertTrue(all(r['whiteSpace']=='nowrap' for r in result['labels']),result)
                 if width in (1440,390):
                     self.page.locator('#ledger').screenshot(
                         path=str(out/f'b20-registered-items-{width}-{"light" if light else "dark"}.png'),

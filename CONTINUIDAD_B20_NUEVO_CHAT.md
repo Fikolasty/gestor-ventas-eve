@@ -27,3 +27,4 @@
 - Paridad 1440/980/630/390, Light/Dark y ES/EN; importes correctos, teclado, copia y cierres.
 - Index de Pages debe coincidir byte a byte con index generado. Hasta entonces B.20 no es LIVE.
 - Revisión posterior al primer gate: screenshots de B.20 detectaron importes largos rotos en móvil; corrección CSS y test Chromium focal añadidos antes del cierre LIVE.
+- Segundo control visual: añadido ajuste de rótulos financieros móviles para que «NETO DEL LOTE» y «PRECIO UNIDAD» no se dividan; test Chromium comprueba su renglón.

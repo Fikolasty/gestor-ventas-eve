@@ -801,3 +801,5 @@ Mediante mock de `window.fetch` con peticiones ficticias (40 ms) y umbral de 12 
 **Publicación:** candidata de fuente a verificar en GitHub Actions (Build, Minería, Versiones, Rebuild/Chromium/Pages). **Hasta que el gate apruebe y se compare Pages, LIVE oficial continúa siendo B.19 v1.0.155**. No confundir objetos Git subidos o commit de fuente con sitio publicado.
 
 **Corrección visual tras el primer gate B.20 (antes del cierre):** el artefacto Chromium reveló que, pese a 54/54 tests, precios de 10 dígitos podían partir «ISK» y el neto en móvil. Se agrega ajuste de tipografía/retícula para usar el ancho completo en <=600 px y prueba Chromium B.20 de importes largos, alineación y paridad Dark/Light. El primer despliegue se sustituirá por un segundo gate validado antes de certificar LIVE.
+
+**B.20 segundo control de captura:** las cifras ya no se partían (55/55 Chromium), pero el rótulo «NETO DEL LOTE» quedaba en tres líneas al usar toda la anchura móvil. Corrección de las dos columnas financieras a `flex-direction:column` y etiquetas nowrap solo <=600px; se extiende la misma regresión Chromium para medir títulos. Pendiente gate y verificación pública final.
