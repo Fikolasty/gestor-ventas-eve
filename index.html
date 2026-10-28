@@ -7,7 +7,7 @@
 <meta name="referrer" content="no-referrer">
 <title>Market Moves+ · SIGMA GRINDSET</title>
 <style>
-/* ================= Market Moves+ v1.0.158 =================
+/* ================= Market Moves+ v1.0.159 =================
    Paleta: azul de base, naranja = acción, verde/rojo = ganancia/pérdida.
    Sin backdrop-filter: el vidrio se finge con rgba + bordes. */
 *{box-sizing:border-box;margin:0;padding:0}
@@ -4964,28 +4964,18 @@ html.light #pSum #unitCourierRows .mm-unit-row{background:transparent!important}
 #pCtr #dSum.is-empty{color:var(--mut)}
 #pCtr #dLead{margin:5px 0 0;color:var(--mut);font:400 .82rem/1.5 var(--f-ui)}
 #pCtr .discord-content .dests{margin-top:12px}
-#pCtr .discord-content .disc-steps{margin:12px 0 0;padding:12px 14px;box-shadow:none}
-#pCtr .disc-steps li{align-items:start;padding:6px 0}
-#pCtr .disc-steps li+li{border-top:1px solid var(--line)}
 #pCtr .disc-steps li span{line-height:1.5}
 #pCtr .disc-after{margin:10px 2px 0;padding:10px 0 0;border-top:1px solid var(--line);color:var(--mut);font:400 .81rem/1.55 var(--f-ui)}
 #pCtr .disc-after strong{color:var(--txt);font-weight:650}
-#pCtr .disc-preview{margin-top:12px;border:1px solid var(--line);border-radius:var(--r-md);overflow:hidden}
-#pCtr .disc-preview>summary{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:42px;box-sizing:border-box;padding:10px 13px;cursor:pointer;color:var(--txt);font:600 .83rem/1.35 var(--f-ui);list-style:none}
+#pCtr .disc-preview{overflow:hidden}
+#pCtr .disc-preview>summary{display:flex;align-items:center;justify-content:space-between;gap:12px;box-sizing:border-box;cursor:pointer;color:var(--txt);list-style:none}
 #pCtr .disc-preview>summary::-webkit-details-marker{display:none}
-#pCtr .disc-preview>summary::after{content:"";width:7px;height:7px;flex:none;border-right:1.7px solid currentColor;border-bottom:1.7px solid currentColor;transform:rotate(45deg);transition:transform .16s ease}
-#pCtr .disc-preview[open]>summary::after{transform:rotate(225deg)}
 #pCtr .disc-preview>summary:focus-visible{outline:2px solid var(--ion);outline-offset:-3px;border-radius:var(--r-sm)}
-#pCtr .disc-preview .msg{margin:0;border:0;border-top:1px solid var(--line);border-radius:0;box-shadow:none}
 @media(max-width:600px){
   #pExtra #pCtr>summary{flex-wrap:wrap!important;row-gap:5px!important}
   #pExtra #pCtr>summary h2{flex:1 1 0!important;white-space:normal!important;min-width:0;font-size:.88rem!important}
   #pExtra #pCtr>summary>.sum{flex:0 0 100%!important;margin-left:0!important;order:3}
-  #pCtr .disc-steps li{grid-template-columns:24px minmax(0,1fr);gap:5px 9px}
-  #pCtr .disc-steps li>b{grid-column:2}
-  #pCtr .disc-steps li>span{grid-column:2}
 }
-@media(prefers-reduced-motion:reduce){#pCtr .disc-preview>summary::after{transition:none}}
 
 /* B.13 revised candidate — Raulito requires 2×2 even when every panel opens.
    Rows align when opened; closed siblings retain natural height rather than
@@ -8318,13 +8308,13 @@ Contraband Freight = no</textarea><small>Una regla por línea: Nombre = tax tota
 <button type="button" class="totop" id="toTop" aria-label="Volver arriba" title="Volver arriba (Inicio)" hidden><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 14l6-6 6 6"/></svg></button>
 <footer class="foot">
   <p class="foot-sec"><span class="ic i-lock" aria-hidden="true"></span>Tu inventario no se guarda: al cerrar o recargar se borra. Solo tus Ajustes quedan en este navegador.</p>
-  <div class="foot-by">Creado por <b>Fiko McGivert</b> · Vanguardia DR · SIGMA GRINDSET · <span class="ver">v1.0.158</span></div>
+  <div class="foot-by">Creado por <b>Fiko McGivert</b> · Vanguardia DR · SIGMA GRINDSET · <span class="ver">v1.0.159</span></div>
 </footer>
 
 <script>
 'use strict';
 /* ============================================================
-   Market Moves+ v1.0.158 — SIGMA GRINDSET / Vanguardia DR
+   Market Moves+ v1.0.159 — SIGMA GRINDSET / Vanguardia DR
    Flujo:  pegado → items → carga (ESI: precios, volúmenes, historial) → verificación → plan → vista
      1. Pegado      parsePaste(): parser posicional de columnas de EVE (Name · Quantity · … · Volume · Est. Price).
      2. Carga       esiItems(): trae todo lo que falta; mientras carga, refresh() NO pinta (S.loading).
