@@ -227,5 +227,15 @@ html.light #pSum .mm-plan-drawer-body>#vFinanceDetails,
 html.light #pSum .mm-plan-drawer-body>#pkSpeedBox{
   background:transparent!important;box-shadow:none!important
 }
+html.light #pSum .mm-plan-drawer-body>#pkPlanOptions,
+html.light #pSum .mm-plan-drawer-body>#pkSpeedBox{
+  border-left:1px solid var(--line2)!important
+}
+@media(max-width:880px){
+  html.light #pSum .mm-plan-drawer-body>#pkPlanOptions,
+  html.light #pSum .mm-plan-drawer-body>#pkSpeedBox{
+    border-left:0!important;border-top:1px solid var(--line2)!important
+  }
+}
 
 

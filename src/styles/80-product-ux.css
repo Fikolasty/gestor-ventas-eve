@@ -2322,6 +2322,10 @@ html:not(.light) #ledger:not([open]):hover{background:var(--surface-panel)!impor
 #pSum .mm-plan-drawer-body[hidden]{display:none!important}
 #pSum .mm-plan-drawer-body>[id]{min-width:0;align-self:stretch}
 #pSum .mm-plan-drawer-body>[id]+[id]{border-left:1px solid var(--line2)!important}
+/* The legacy #pkPlanOptions/#pkSpeedBox card resets are ID-specific and
+   would erase this hairline unless the joined-pane rule is equally scoped. */
+#pSum .mm-plan-drawer-body>#pkPlanOptions,
+#pSum .mm-plan-drawer-body>#pkSpeedBox{border-left:1px solid var(--line2)!important}
 #pSum #pkResult,#pSum #pkPlanOptions{
   grid-row:auto!important;grid-column:auto!important;order:0!important;
   margin:0!important;padding:17px 19px 18px!important;
@@ -2383,6 +2387,8 @@ html:not(.light) #ledger:not([open]):hover{background:var(--surface-panel)!impor
   #pSum .mm-plan-drawer-head>span+span{padding-left:10px}
   #pSum .mm-plan-drawer-body{grid-template-columns:minmax(0,1fr)}
   #pSum .mm-plan-drawer-body>[id]+[id]{border-left:0!important;border-top:1px solid var(--line2)!important}
+  #pSum .mm-plan-drawer-body>#pkPlanOptions,
+  #pSum .mm-plan-drawer-body>#pkSpeedBox{border-left:0!important;border-top:1px solid var(--line2)!important}
   #pSum .mm-plan-drawer-body>#pkResult,#pSum .mm-plan-drawer-body>#pkPlanOptions{padding:15px 16px!important}
   #pSum #vFinanceDetails .mm-finance-details-body,#pSum #pkSpeedBox{padding:15px 16px!important}
 }

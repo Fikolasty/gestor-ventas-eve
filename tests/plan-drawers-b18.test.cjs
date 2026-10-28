@@ -16,6 +16,8 @@ test('B.18: each drawer has one full-width button controlling a shared two-colum
   assert.match(css,/#pSum \.mm-plan-drawer-head\{[^}]*grid-template-columns:repeat\(2,minmax\(0,1fr\)\)/);
   assert.match(css,/#pSum \.mm-plan-drawer-body\{[^}]*grid-template-columns:repeat\(2,minmax\(0,1fr\)\)/);
   assert.match(css,/#pSum \.mm-plan-drawer-body>\[id\]\+\[id\]\{border-left:1px solid var\(--line2\)!important\}/);
+  assert.match(css,/#pSum \.mm-plan-drawer-body>#pkPlanOptions,\s*#pSum \.mm-plan-drawer-body>#pkSpeedBox\{border-left:1px solid var\(--line2\)!important\}/);
+  assert.match(css,/@media\(max-width:880px\)\{[\s\S]*?#pSum \.mm-plan-drawer-body>#pkSpeedBox\{border-left:0!important;border-top:1px solid var\(--line2\)!important\}/);
   assert.match(css,/#pSum \.mm-plan-drawer-body\[hidden\]\{display:none!important\}/);
 });
 
