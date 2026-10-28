@@ -2081,7 +2081,15 @@ class ThemeBrowserTests(unittest.TestCase):
             document.querySelector('#pRepro').hidden=false;
             document.querySelector('#pRepro').open=true;
         }""")
-        expect(self.page.locator('#vPlan .stp-h').first).to_be_visible()
+        visibility=self.page.evaluate("""() => {
+            const ids=['salesBody','verdict','pSum','pkPlanContent','stepDrawer','deep','stepsPanel','vPlan'];
+            const states=ids.map(id=>{const e=document.querySelector('#'+id),r=e.getBoundingClientRect();
+                return {id,hidden:e.hidden,display:getComputedStyle(e).display,
+                    visibility:getComputedStyle(e).visibility,height:r.height,width:r.width};});
+            return {body:document.body.className,states};
+        }""")
+        self.assertTrue(self.page.locator('#vPlan .stp-h').first.is_visible(),
+                        'B.19 fixture hidden ancestor: '+str(visibility))
         for language in ('es','en'):
             self.page.evaluate('setLang',language)
             self.page.evaluate("""() => {
