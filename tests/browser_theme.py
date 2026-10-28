@@ -837,6 +837,9 @@ class ThemeBrowserTests(unittest.TestCase):
             });
             S.items=rows.map(r=>({...r.o,qty:r.q}));
             stepOpen=new Set(['null']);
+            // B.19: the steps are now children of the summary drawer, so
+            // synthetic fixtures must expose its ancestor as well.
+            document.querySelector('#pSum').hidden=false;
             document.querySelector('#deep').hidden=false;
             paintVerdict({rows,missing:[],toBB:[],bbGross:0,mode:null,best:1440,Vs:0,shipCost:0});
         }""")
@@ -2066,6 +2069,7 @@ class ThemeBrowserTests(unittest.TestCase):
             window.__b19Fixture=P;
             pkPanelCollapsed=false;
             paintVerdict(P);
+            paintSummary(P);
             document.querySelector('#verdict').hidden=false;
             document.querySelector('#pSum').hidden=false;
             document.querySelector('#deep').hidden=false;
@@ -2081,6 +2085,9 @@ class ThemeBrowserTests(unittest.TestCase):
         for language in ('es','en'):
             self.page.evaluate('setLang',language)
             self.page.evaluate("""() => {
+                paintSummary(window.__b19Fixture);
+                document.querySelector('#verdict').hidden=false;
+                document.querySelector('#pSum').hidden=false;
                 document.querySelector('#deep').hidden=false;
                 document.querySelector('#bDeep').setAttribute('aria-expanded','true');
                 paintVerdict(window.__b19Fixture);
