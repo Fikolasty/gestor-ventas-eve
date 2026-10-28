@@ -282,3 +282,5 @@ Raulito mostró la falta de simetría de las cuatro tarjetas abiertas, pie dupli
 
 ### C.2 v1.0.159 — limpieza focal de Discord (candidata 2026-10-28)
 B.21 cierra el alcance aprobado de B. El nuevo corte C.2 retira reglas CSS anteriores que B.21 sobrescribe, sin cambiar UI, i18n, fórmulas, contratos, SSO/ESI ni almacenamiento. Se conservan las reglas estructurales y de foco que aún son necesarias; un test de propiedad única lo verifica. No declarar LIVE antes de los gates y revisión de capturas de Actions. Ver DSS §66.
+
+**Cierre remoto C.2 LIVE:** Fiko `73f1c917` → build `51077506`, 4/4 Actions correctas, 133 Node/16 Python/57 Chromium PASS y Pages HTTPS v1.0.159 confirmado en run `40789891357`; Git blob `00d0f173` (2.387.044 bytes). No se compara hash HTTPS independiente ni se han inspeccionado los nuevos PNG manualmente. CSS heredado reducido 973 caracteres sin alterar contratos de UI. DSS §66.

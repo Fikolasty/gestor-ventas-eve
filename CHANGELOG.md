@@ -1283,3 +1283,7 @@ Fuente `de9e13eb`, build GitHub Actions `a811f771`; 4/4 workflows aprobados y 55
 - Tras cerrar B.21, se retiran únicamente estilos heredados de filas y flechas de Discord ya sobrescritos por B.21; se conservan controles, focos, responsive, Light/Dark e idiomas de las comunidades.
 - `tests/css-c2-discord-cascade.test.cjs` verifica la autoridad visual B.21 y las propiedades heredadas que todavía son necesarias.
 - **No LIVE hasta aprobar las suites y GitHub Actions/Pages**; último LIVE certificado B.21 v1.0.158. Sin cambios económicos ni ESI/SSO.
+
+### C.2 v1.0.159 — LIVE certificada (2026-10-28)
+- Fuente Fiko `73f1c917`, bot build `51077506`, 4/4 Actions PASS (run Pages `40789891357`), **133 Node, 16 Python y 57 Chromium**. HTTPS validó v1.0.159 mediante CI, blob HTML `00d0f173` de 2.387.044 bytes.
+- Se preserva B.21 como última dirección visual aprobada; C.2 limpia CSS supersedido sin alterar lógica económica/ESI/SSO, acceso por teclado ni copias por destino. No hay hash HTTPS independiente ni inspección manual de nuevas capturas.

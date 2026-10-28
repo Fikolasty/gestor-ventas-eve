@@ -1,6 +1,6 @@
 # PROGRESS — Market Moves+
 
-**Estado más reciente (2026-10-28):** **B.21 v1.0.158 LIVE certificada**. Fuente `5f1d51a2`, build `700b6c83`, cuatro Actions success y 130 Node/16 Python/57 Chromium. C.2 v1.0.159 es la siguiente candidata de saneamiento CSS, todavía NO LIVE; ver DSS §§64–66.
+**Estado más reciente (2026-10-28):** **B.21 v1.0.158 LIVE certificada**. Fuente `5f1d51a2`, build `700b6c83`, cuatro Actions success y 130 Node/16 Python/57 Chromium. C.2 v1.0.159 ya es LIVE certificada (fuente `73f1c917`, build `51077506`, 4/4 Actions, 133 Node/16 Python/57 Chromium, Pages HTTPS v1.0.159); ver DSS §§64–66.
 
 ## 2026-10-28 — B.18 gavetas simétricas de ELIGE TU PLAN, v1.0.154 LIVE
 
@@ -766,3 +766,7 @@ Publicada la guía compacta Discord en grises cálidos con números sin círculo
 
 ## C.2 v1.0.159 — candidata de limpieza sin rediseño (2026-10-28)
 La serie B se considera cerrada hasta B.21. Se retiran únicamente estilos antiguos de Discord reemplazados por las reglas B.21, conservando propiedades activas (foco, detalles nativos, lectura y geometría), y se añade contrato Node. No se alteran cálculos ni ESI/SSO. Pendientes pruebas remotas Chromium y cuatro Actions antes de declarar LIVE. DSS §66.
+
+
+### C.2 v1.0.159 — LIVE certificada (2026-10-28)
+Fuente protegida Fiko `73f1c917`, compilación CI `51077506`, blob `00d0f173` de 2.387.044 bytes; 4/4 Actions success (Pages `40789891357`), 133 Node, 16 Python y 57 Chromium. Se retira CSS previamente sobrescrito sin alterar DOM ni JS. La verificación pública de CI confirma v1.0.159; no se hizo cotejo independiente de bytes HTTPS ni revisión humana de los PNG nuevos. DSS §66.

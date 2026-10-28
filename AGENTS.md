@@ -57,3 +57,5 @@ Antes de analizar o modificar este proyecto, leer completos y en este orden:
 **Al comenzar un chat nuevo**, reiniciar el contador de mensajes del usuario a cero. Mantener la regla en AGENTS.md, DSS y el kit.
 
 - **C.2 v1.0.159 CANDIDATA de saneamiento:** B cerrada hasta B.21. Solo se retiran reglas antiguas de Discord comprobablemente sobrescritas por B.21; conservar propiedades de foco, detalles, idiomas fijos por destino y geometría. Test `tests/css-c2-discord-cascade.test.cjs`. No declarar LIVE antes de Actions/Pages y revisión de capturas; DSS §66.
+
+- **C.2 v1.0.159 LIVE certificada (DSS §66):** saneamiento CSS de Discord sin rediseño, 973 caracteres obsoletos retirados. Fuente protegida Fiko `73f1c917`, build `51077506`, 4/4 Actions, 133 Node/16 Python/57 Chromium y HTTPS CI v1.0.159. B queda cerrada en B.21; D.1–D.4 permanecen verificadas. Ningún cambio económico, SSO/ESI o de contenido Discord.

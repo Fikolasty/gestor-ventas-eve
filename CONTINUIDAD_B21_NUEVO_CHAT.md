@@ -27,3 +27,8 @@
 - C.1a y C.1b están LIVE, C.2 v1.0.159 es candidata de limpieza focal del CSS Discord, sin cambios visibles ni económicos; DSS §66.
 - D.1–D.4 ya publicadas; ningún D.5 está autorizado sin evidencia real adicional.
 - La última LIVE sigue B.21 v1.0.158 hasta aprobar C.2 por CI y Pages. No reutilizar el ZIP B.21 como fuente editable.
+
+## Certificación posterior C.2 v1.0.159
+- Última LIVE: **C.2 v1.0.159**, limpieza CSS sin cambio visual pretendido. Fuente Fiko `73f1c917`, build `51077506`, index Git blob `00d0f173` (2.387.044 bytes); 4/4 Actions, 133 Node, 16 Python, 57 Chromium, CI HTTPS v1.0.159, run `40789891357`.
+- Visual de B cerrada: B.21 v1.0.158; SIGMA inglés/Vanguardia español; no inventar B.22. C.1a/C.1b/C.2 LIVE, D.1–D.4 LIVE. Próxima etapa C solo con auditoría concreta y pruebas; D necesita evidencia de ESI real autorizada.
+- Límite de QA: sin cotejo de hash HTTP externo independiente ni inspección manual nueva del artefacto de capturas C.2.
