@@ -511,7 +511,8 @@ class ThemeBrowserTests(unittest.TestCase):
         fixture()
         shortcut=self.page.locator("#pkShortcut")
         expect(shortcut).to_be_visible()
-        self.assertIn("¿Quieres cobrar con menos espera?",shortcut.inner_text())
+        self.assertIn("La alternativa rápida evita esperar una orden de venta",shortcut.inner_text())
+        self.assertIn("Plan óptimo (seleccionado)",shortcut.inner_text())
         self.assertIn("9,500,000 ISK",shortcut.inner_text())
         self.assertIn("500,000 ISK menos",shortcut.inner_text())
         self.assertIsNone(self.page.evaluate("S.planMode"))
@@ -520,7 +521,7 @@ class ThemeBrowserTests(unittest.TestCase):
         expect(self.page.locator("#pkOthers .pk-shortcut-highlight")).to_have_count(1)
         self.page.evaluate("setLang('en')")
         fixture()
-        self.assertIn("Want a quicker way to get paid?",shortcut.inner_text())
+        self.assertIn("The fast alternative avoids waiting for a sell order",shortcut.inner_text())
         self.assertIn("500,000 ISK less",shortcut.inner_text())
         self.assertIsNone(self.page.evaluate("S.planMode"))
 
@@ -1970,6 +1971,7 @@ class ThemeBrowserTests(unittest.TestCase):
     def test_b18_two_drawers_have_overhanging_headers_and_one_shared_surface(self):
         """Gaveta geometry is symmetric and the inner seam is only a hairline."""
         from playwright.sync_api import expect
+        self.page.evaluate("selectAppModule('ventas')")
         self.page.evaluate("""() => {
             S.flip=false;S.planMode=null;C.bb.on=true;
             const item={name:'Tritanium',qty:10,m3u:1};
@@ -1978,10 +1980,11 @@ class ThemeBrowserTests(unittest.TestCase):
                 g:{null:1050000,jOrd:900000,jInst:810000,bb:790000},
                 prod:0,vol:10,coll:1000000,ship:{},net:{}};
             const P={rows:[row],best:1050000,mode:null,shipCost:0,Vs:0,missing:[],toBB:[]};
+            pkPanelCollapsed=false;pkOverviewCollapsed=false;pkInsightsCollapsed=false;
+            paintVerdict(P);
             document.querySelector('#verdict').hidden=false;
             document.querySelector('#pSum').hidden=false;
-            pkPanelCollapsed=false;pkOverviewCollapsed=false;pkInsightsCollapsed=false;
-            paintVerdict(P);paintPicker(P);
+            paintPicker(P);
         }""")
         for language in ('es','en'):
             self.page.evaluate('setLang',language)
