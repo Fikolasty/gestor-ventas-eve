@@ -1255,3 +1255,4 @@ Versiones de desarrollo v35 → v111 (prototipos internos): parser del inventari
 - Extras › Tus Contratos: superficies grafito existentes, etiquetas legibles, importe recibido verde y coste de envío rojo; layout y botones intactos.
 - Listado de Items: controles rectangulares, icono alineado con nombre/cantidad, textos más compactos, «PRECIO UNIDAD», rótulos alineados y detalle abierto tipo gaveta.
 - CSS Light/Dark con geometría compartida; lógica económica, ESI y SSO sin modificaciones. Validación remota pendiente antes de certificar LIVE.
+- Corrección B.20 post-visual QA: ISK sin saltos de línea; en móvil PRECIO UNIDAD y NETO DEL LOTE usan el ancho completo para garantizar legibilidad. Nuevo test Chromium de importes largos.

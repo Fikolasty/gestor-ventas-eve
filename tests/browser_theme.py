@@ -3012,5 +3012,61 @@ class ThemeBrowserTests(unittest.TestCase):
             self.assertEqual(result['copyButtons'], [False, False])
             self.assertIn('D2 Synthetic Cargo', result['unitAria'])
 
+
+    def test_b20_long_isk_amounts_never_break_in_collapsed_item_rows(self):
+        """B.20: screenshots revealed large ISK amounts wrapping; prohibit it in both themes."""
+        self.page.evaluate("""() => {
+            S.flip=false;S.api['paladin']={id:28659};
+            const o={name:'Paladin',qty:7,m3u:50000,ref:917800000,checks:[],
+                jita:{buy:905400000,topBuy:905400000,sell:917800000,topSell:917800000}};
+            const r={o,q:7,best:'null',auto:'null',np:1060000000,jl:917800000,
+                g:{null:7140000000,jOrd:6000000000},
+                net:{null:7140000000,jOrd:6000000000},
+                ship:{},prod:0,vol:350000,qd:0,hint:{},courierAllocated:0};
+            document.querySelector('#lots').replaceChildren();
+            S.items=[o];document.querySelector('#lots').append(buildLot(o));paintLot(r);
+            const ledger=document.querySelector('#ledger');ledger.hidden=false;ledger.open=true;
+        }""")
+        out=INDEX.parent/'tests'/'artifacts'/'theme'
+        out.mkdir(parents=True,exist_ok=True)
+        for width in (1440,630,390):
+            self.page.set_viewport_size({'width':width,'height':900})
+            for light in (False,True):
+                self.page.evaluate('(on)=>document.documentElement.classList.toggle("light",on)',light)
+                result=self.page.evaluate("""() => {
+                    const row=document.querySelector('#lots .lot');
+                    const buttons=[row.querySelector('.lot-pp .copy'),
+                        row.querySelector('.lot-financial .lot-net')];
+                    const details=buttons.map(e=>{
+                        const r=document.createRange();r.selectNodeContents(e.firstChild);
+                        return {textRects:r.getClientRects().length,
+                          whiteSpace:getComputedStyle(e).whiteSpace,
+                          width:e.getBoundingClientRect().width,
+                          right:e.getBoundingClientRect().right,
+                          scroll:e.scrollWidth,client:e.clientWidth};
+                    });
+                    const k=['.lot-route .lot-k','.lot-pp .lot-k','.lot-financial .lot-k']
+                      .map(sel=>row.querySelector(sel).getBoundingClientRect().top);
+                    const price=row.querySelector('.lot-pp').getBoundingClientRect();
+                    const net=row.querySelector('.lot-financial').getBoundingClientRect();
+                    return {details,headings:k,cardRight:row.getBoundingClientRect().right,
+                      priceBottom:price.bottom,netTop:net.top,
+                      overflow:document.documentElement.scrollWidth-innerWidth};
+                }""")
+                for d in result['details']:
+                    self.assertEqual(d['whiteSpace'],'nowrap',(width,light,result))
+                    self.assertEqual(d['textRects'],1,(width,light,result))
+                    self.assertLessEqual(d['right'],result['cardRight']+1,(width,light,result))
+                    self.assertLessEqual(d['scroll'],d['client']+1,(width,light,result))
+                self.assertLessEqual(result['overflow'],1,(width,light,result))
+                if width==1440:
+                    self.assertLessEqual(max(result['headings'])-min(result['headings']),2,result)
+                if width==390:
+                    self.assertGreaterEqual(result['netTop'],result['priceBottom'],result)
+                if width in (1440,390):
+                    self.page.locator('#ledger').screenshot(
+                        path=str(out/f'b20-registered-items-{width}-{"light" if light else "dark"}.png'),
+                        animations='disabled')
+
 if __name__ == "__main__":
     unittest.main()

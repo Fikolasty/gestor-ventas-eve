@@ -2614,3 +2614,17 @@ body:not(.light) #pCtr .ce-l .cz .ct-items{
 @media(prefers-reduced-motion:reduce){
   #ledger #lots .lot-head{transition:none!important}
 }
+
+/* B.20 visual QA correction: ISK amounts must never break in narrow cards. */
+#ledger #lots .lot-pp .copy,#ledger #lots .lot-financial .lot-net{
+  font-size:clamp(.81rem,1.02vw,.96rem)!important;
+  white-space:nowrap!important;overflow-wrap:normal!important;word-break:normal!important;
+}
+@media(max-width:600px){
+  #ledger #lots .lot-pp,#ledger #lots .lot-financial{
+    grid-column:1/-1!important;min-width:0!important;
+  }
+  #ledger #lots .lot-pp .copy,#ledger #lots .lot-financial .lot-net{
+    font-size:clamp(.8rem,3.15vw,.94rem)!important;max-width:100%!important;
+  }
+}
