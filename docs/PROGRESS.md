@@ -1,5 +1,11 @@
 # PROGRESS — Market Moves+
 
+## 2026-10-28 — B.18 gavetas simétricas de ELIGE TU PLAN, v1.0.154 LIVE
+
+Raulito aprobó la composición de gaveta con dibujo en Paint: dos cabeceras anchas para parejas de paneles, cuerpos continuos retranqueados, mitades simétricas, línea central de 1 px y la paleta de grafito cálido ya existente. Ambas parejas despliegan juntas mediante toda la cabecera, sin iconos ni acordeones redundantes; abajo se comparan Plan óptimo y alternativa rápida usando solo `modeTotal()` y el motor económico previo. En móvil las mitades se apilan conservando el mismo marco y la división horizontal. No se alteraron B.13–B.17, impuestos, courier, ISK, ESI/SSO o persistencia.
+
+**Certificación tras cuatro pushes protegidos de Fiko (tres gates históricos bloquearon el despliegue):** fuente final `811392a67f606dbb8a34e2c83a36e12ffd7df876`, compilación CI descendiente `d06f42d5aedba394e2a16e5613d001b4df7f5d25`. Cuatro Actions `success`: Versiones `40658138564`, Minería `40658138549`, Build `40658138728`, Rebuild/Chromium/Pages `40658138473` (53/53 Chromium, ~79,6 s). Además 36/36 Node, 16/16 Python y 8/8 regresiones heredadas PASS. HTTPS público con anti-caché entregó **v1.0.154**, 2.366.142 bytes, Git SHA blob **`bce873f67dd57a42020db88cf2225b171ff4ed62`**, idéntico byte a byte a `index.html` local y al objeto GitHub (`cmp`). DSS §60 y CHANGELOG conservan los tres intentos anteriores y la corrección auténtica de la costura central. **B.18 LIVE.** Sin prueba de transacciones EVE o SSO/ESI reales extremo a extremo.
+
 ## 2026-10-27 — B.17 anuncio persistente de SP y segmento Comercio Jita, v1.0.153
 
 **Aprobación de Raulito:** tras dos imágenes de propuesta, acepta el banner horizontal «¿Nuevo piloto? Consigue **1,000,000 SP GRATIS** ↗» a la izquierda de la fila de utilidades, alineado con Tasación, visible desde la pantalla inicial «Vender Items». En «Comercio Jita» se habilita, a la derecha, un control segmentado con destino, «Jita Sell / Buy Order» y «Enviar», sin textos redundantes visibles. Se preservan la base grafito cálido B.16, los dos temas, los dos idiomas, las cuatro tarjetas B.13 y todos los controles canónicos, sus eventos y resultados económicos.
