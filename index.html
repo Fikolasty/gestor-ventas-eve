@@ -7,7 +7,7 @@
 <meta name="referrer" content="no-referrer">
 <title>Market Moves+ · SIGMA GRINDSET</title>
 <style>
-/* ================= Market Moves+ v1.0.157 =================
+/* ================= Market Moves+ v1.0.158 =================
    Paleta: azul de base, naranja = acción, verde/rojo = ganancia/pérdida.
    Sin backdrop-filter: el vidrio se finge con rgba + bordes. */
 *{box-sizing:border-box;margin:0;padding:0}
@@ -5878,6 +5878,79 @@ body:not(.light) #pCtr .ce-l .cz .ct-items{
 }
 #ledger .ledger-controls:has(#ledgerPriceHelp[open]){align-items:flex-start}
 #ledger .ledger-controls:has(#ledgerPriceHelp[open])>.ledger-head{align-self:flex-start}
+
+/* B.21 v1.0.158 — Discord guide inherits the B.19 selling-step grammar.
+   Three tight inset rows, copper numerals without pills or connecting rails.
+   No changes to destinations, commands, prices or interactive controls. */
+#pCtr .discord-content .disc-steps{
+  display:grid!important;gap:6px!important;margin:10px 0 0!important;
+  padding:0!important;border:0!important;background:transparent!important;
+  box-shadow:none!important;counter-reset:g;
+}
+#pCtr .discord-content .disc-steps>li,
+#pCtr .discord-content .disc-steps>li+li{
+  box-sizing:border-box;min-width:0;margin:0!important;
+  display:grid!important;grid-template-columns:19px minmax(105px,.85fr) minmax(0,1.6fr)!important;
+  gap:5px 10px!important;align-items:start!important;
+  padding:10px 12px!important;border:1px solid var(--line2)!important;
+  border-radius:8px!important;background:var(--surface-card)!important;
+  font:450 .77rem/1.4 var(--f-ui)!important;
+}
+#pCtr .discord-content .disc-steps>li::before{
+  grid-column:1;grid-row:1/3;content:counter(g);
+  display:block!important;align-self:start;justify-self:start;
+  width:auto!important;height:auto!important;min-width:0!important;
+  margin:0;padding:1px 0 0;border:0!important;border-radius:0!important;
+  background:transparent!important;color:var(--clay)!important;
+  box-shadow:none!important;font:750 .98rem/1.3 var(--f-num)!important;
+}
+#pCtr .discord-content .disc-steps>li>b{
+  grid-column:2!important;grid-row:1!important;min-width:0;
+  margin:0;padding-top:1px;color:var(--txt);
+  font:700 .8rem/1.35 var(--f-ui)!important;
+}
+#pCtr .discord-content .disc-steps>li>span{
+  grid-column:3!important;grid-row:1!important;min-width:0;
+  font:450 .77rem/1.42 var(--f-ui)!important;color:var(--mut);
+  overflow-wrap:break-word;
+}
+#pCtr .discord-content .disc-steps .copy{
+  width:auto!important;min-height:27px;display:inline-flex;align-items:center;
+  padding:3px 8px!important;margin:2px 2px 0!important;
+  border-radius:6px!important;font:650 .72rem/1.3 var(--f-ui)!important;
+}
+#pCtr .discord-content .disc-steps input{
+  box-sizing:border-box;display:block;min-width:0;width:100%;max-width:100%;
+  min-height:32px;margin:0;padding:6px 9px;font-size:.77rem;
+}
+#pCtr .discord-content .disc-steps small{font-size:.7rem;line-height:1.35}
+#pCtr .disc-after{margin-top:9px;padding-top:8px;font-size:.76rem}
+#pCtr .disc-preview{
+  margin-top:9px;border:1px solid var(--line2)!important;border-radius:8px;
+  background:var(--glass)!important;box-shadow:none!important;
+}
+#pCtr .disc-preview>summary{
+  min-height:35px!important;padding:8px 11px!important;
+  font:650 .76rem/1.35 var(--f-ui)!important;
+  background:var(--surface-card)!important;
+}
+#pCtr .disc-preview>summary:hover{background:var(--surface-panel)!important}
+#pCtr .disc-preview>summary::after{display:none!important}
+#pCtr .disc-preview .msg{
+  margin:7px!important;padding:10px 12px!important;
+  border:1px solid var(--line2)!important;border-radius:7px!important;
+  background:var(--surface-panel)!important;
+  box-shadow:none!important;font-size:.77rem!important;line-height:1.45!important;
+}
+@media(max-width:760px){
+  #pCtr .discord-content .disc-steps>li,
+  #pCtr .discord-content .disc-steps>li+li{
+    grid-template-columns:18px minmax(0,1fr)!important;
+    gap:3px 9px!important;padding:9px 10px!important;
+  }
+  #pCtr .discord-content .disc-steps>li>b{grid-column:2!important;grid-row:1!important}
+  #pCtr .discord-content .disc-steps>li>span{grid-column:2!important;grid-row:2!important}
+}
 /* ===== tema claro (generado desde el oscuro por light.py) ===== */
 html.light{--header-surface:rgba(240,237,229,0.96);--ticker-surface:rgba(240,237,229,0.91);--ticker-hover:rgba(240,237,229,0.96);--surface-card:rgba(240,237,229,0.9);--surface-result:linear-gradient(180deg,rgba(240,237,229,0.91),rgba(240,237,229,0.96));--surface-panel:rgba(240,237,229,0.96);--void:#e4e3dd;--hull:#e2e0da;--hull2:#e0ded8;--line:rgba(31,30,29,0.114);--line2:rgba(31,30,29,0.125);--txt:#1c1c1a;--mut:#54524d;--dim:#6c6a64;--ion:#413f3c;--blue:#a39d8b;--clay:#c96442;--thrust:#a67526;--gain:#418b62;--loss:#a92c23}
 html.light body::after{background:repeating-linear-gradient(180deg,rgba(31,30,29,0.011) 0 1px,transparent 1px 3px),
@@ -7633,6 +7706,18 @@ html.light #ledger .ledger-tools #ledgerPriceHelpContent{
   border-color:var(--line2)!important;
   box-shadow:0 3px 10px rgba(45,36,28,.075)!important;
 }
+
+/* B.21 — same Discord guide geometry in Light; warm surfaces only. */
+html.light #pCtr .discord-content .disc-steps>li{
+  background:var(--surface-card)!important;border-color:var(--line2)!important;
+}
+html.light #pCtr .disc-preview{
+  background:var(--glass)!important;border-color:var(--line2)!important;
+}
+html.light #pCtr .disc-preview>summary{background:var(--surface-card)!important}
+html.light #pCtr .disc-preview .msg{
+  background:var(--surface-panel)!important;border-color:var(--line2)!important;
+}
 /* EVE7 theme ownership: shipping, header, ticker, lighter station image */
 html.light {
  --header-surface:rgba(250,248,245,.94);
@@ -8233,13 +8318,13 @@ Contraband Freight = no</textarea><small>Una regla por línea: Nombre = tax tota
 <button type="button" class="totop" id="toTop" aria-label="Volver arriba" title="Volver arriba (Inicio)" hidden><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 14l6-6 6 6"/></svg></button>
 <footer class="foot">
   <p class="foot-sec"><span class="ic i-lock" aria-hidden="true"></span>Tu inventario no se guarda: al cerrar o recargar se borra. Solo tus Ajustes quedan en este navegador.</p>
-  <div class="foot-by">Creado por <b>Fiko McGivert</b> · Vanguardia DR · SIGMA GRINDSET · <span class="ver">v1.0.157</span></div>
+  <div class="foot-by">Creado por <b>Fiko McGivert</b> · Vanguardia DR · SIGMA GRINDSET · <span class="ver">v1.0.158</span></div>
 </footer>
 
 <script>
 'use strict';
 /* ============================================================
-   Market Moves+ v1.0.157 — SIGMA GRINDSET / Vanguardia DR
+   Market Moves+ v1.0.158 — SIGMA GRINDSET / Vanguardia DR
    Flujo:  pegado → items → carga (ESI: precios, volúmenes, historial) → verificación → plan → vista
      1. Pegado      parsePaste(): parser posicional de columnas de EVE (Name · Quantity · … · Volume · Est. Price).
      2. Carga       esiItems(): trae todo lo que falta; mientras carga, refresh() NO pinta (S.loading).
@@ -10973,7 +11058,9 @@ function paintDisc(P){
   $('dOpenNote').textContent=es?'Pide login en Discord. Te lleva al servidor de la corporación.':(hasS?'Pide login en Discord. Te lleva directo al canal #market-trade de SIGMA.':'Pega abajo el link del canal #market-trade (clic derecho en el canal → Copiar enlace).');
   $('dWhere').textContent=es?'Cópialo y publícalo en Vanguardia DR › Actividades › #💰-mercado-local.':'Cópialo y publícalo en SIGMA GRINDSET › trade › #market-trade.';
   // mensaje corto: los items ya están en el link de Janice; la entrega es por contrato (inmediata)
-  const localSpanish=S.lang!=='en';
+  // Discord message language follows the recipient community, not UI settings.
+  // SIGMA #market-trade is English-only; Vanguardia's local market is Spanish.
+  const localSpanish=discDest==='vg';
   const lines=[localSpanish?'VENDO':'WTS'];
   // The Jita Buy × percentage rule belongs ONLY in Settings/pricing.
   // Discord previews and copied WTS messages contain the final offer price,
