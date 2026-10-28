@@ -15,3 +15,9 @@
 
 ## Matiz visual confirmado
 - La captura de VER PASOS PARA VENDER es la referencia para los números 1–3: cobre tipográfico, sin círculos, pequeño sangrado lateral y filas grafito. B.21 ya aplica ese lenguaje en Discord.
+
+## ALERTA TEMPRANA DE MIGRACIÓN (vigente desde el próximo chat)
+- **12 mensajes sustantivos del usuario o 2 versiones LIVE** en un chat nuevo: alerta amarilla y preparación de kit.
+- **16 mensajes sustantivos o 3 publicaciones LIVE**, o antes si abundan logs/capturas: crear kit y recomendar migrar antes de un desarrollo largo.
+- No existe medidor exacto de tokens ni avisos autónomos; la alerta aparece con la siguiente respuesta. Fuente: AGENTS.md y DSS §65.
+- B.21 v1.0.158 LIVE; no inventar versión posterior. Mantener fuente canónica GitHub Fiko/Fikolasty y verificar HEAD.

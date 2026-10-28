@@ -1,6 +1,6 @@
 # DSS — Design Standards & Session Handoff · Market Moves+
 
-**Última actualización:** 2026-10-28 · **B.21 v1.0.158 LIVE certificada** (§64). Guía de Discord compacta con números cobre como VER PASOS; SIGMA exporta mensajes en inglés y Vanguardia en español sin depender de UI. Fuente Fiko `5f1d51a2`, build bot `700b6c83`, 4/4 Actions success, 130 Node/16 Python/57 Chromium PASS, HTTPS Pages versión v1.0.158 confirmada, Git blob HTML `88ff393f` (2.388.017 bytes).
+**Última actualización:** 2026-10-28 · **B.21 v1.0.158 sigue LIVE certificada** (§64); nueva política de alerta temprana de cambio de chat (§65), cambio solo documental. Fuente B.21 `5f1d51a2`, build `700b6c83`, blob HTML `88ff393f` (2.388.017 bytes); 130 Node/16 Python/57 Chromium y Pages success.
 
 **Continuidad de versión:** la release anterior v1.0.126 (P0 Paladin + A+B.1) quedó verificada con fuente `205ec9fa`, build `c716f7aa`, Actions/Pages `40215891182`, blob `9601d5f8`; ver §9. La etapa B.2 se implementó inicialmente **local** sobre `dcdb6195` (§10) y posteriormente se publicó tras autorización expresa y QA (§11). El usuario concedió también **autorización continua de publicación de mejoras incrementales bien probadas**, registrada en §1.8.
 
@@ -838,3 +838,18 @@ Mediante mock de `window.fetch` con peticiones ficticias (40 ms) y umbral de 12 
 
 
 **Cierre LIVE B.21 v1.0.158 — 2026-10-28 (DSS §64):** fuente Fiko protegida `5f1d51a2c6f77800c3b04d1e081aad25ab95b116`, compilación Actions `700b6c83bddb4282bdd8f65ec11748bf50823b93`; `index.html` Git blob `88ff393faf9c1d0a3afce62b2d5ef5dc985dfc0b`, **2.388.017 bytes**. Las cuatro Actions aprobaron: Build, Versiones, Minería, Rebuild/Chromium/Pages (run `40760492517`). **130/130 Node, 16/16 Python, 57/57 Chromium**. CI registró Pages `success` y confirmó por HTTPS `v1.0.158` en la URL pública. Las capturas Chromium `b21-discord-1440-dark/light.png` y `b21-discord-390-dark/light.png` se inspeccionaron: números tipográficos cobrizos sin círculos, tres filas compactas y nota/previsualización legibles. El escenario B.21 probó ambos destinos frente a ambos idiomas de interfaz, con igualdad exacta entre `#dMsg` y `#dCopyMsg.dataset.v`; SIGMA siempre WTS/Price/Contract at en inglés, Vanguardia siempre VENDO/Precio/Contrato en español. Se verificó marcador de versión pública por CI; **no** se realizó comparación hash independiente de la descarga HTTPS. Sin cambios en fórmulas, destinos, ESI/SSO. **Última LIVE B.21 v1.0.158.**
+
+
+## 65. Alerta de continuidad para nuevas conversaciones — política operativa
+
+## Política de continuidad de chats — aviso preventivo de migración (2026-10-28)
+
+**Motivo:** las conversaciones de desarrollo largas pueden perder contexto operativo. Estos umbrales son preventivos, no un contador exacto de tokens ni una alerta del sistema.
+
+- **Umbral AMARILLO:** al llegar a **12 mensajes sustantivos del usuario relativos al desarrollo** en un chat, **o a 2 versiones LIVE publicadas** desde su comienzo (lo primero que ocurra), emitir en la respuesta siguiente **«⚠️ ALERTA DE CONTINUIDAD — conviene preparar el siguiente chat»**. Resumir versión LIVE, HEAD, cambios pendientes y tests, sin interrumpir una corrección urgente.
+- **Umbral ROJO:** al llegar a **16 mensajes sustantivos**, **3 publicaciones LIVE** o al detectar un historial especialmente pesado por logs y capturas, **crear kit antes de iniciar otra etapa larga de implementación**. Ofrecer enlace y prompt para migrar. Continuar aquí solo si el usuario lo prefiere.
+- Tras cada publicación grande, actualizar DSS y continuidad para reducir el coste del traspaso. El usuario puede pedir kit en cualquier momento.
+- **Limitación honesta:** no existe medidor fiable de ventana restante ni aviso autónomo sin mensajes nuevos. Las alertas solo aparecen **en una respuesta de chat** y estos umbrales no garantizan evitar todo recorte; con uso intensivo de herramientas, avisar antes.
+- El kit debe identificar última LIVE y SHA de main, HTML compilado, protocolo y DSS o referencias canónicas verificadas, decisiones visuales, trabajo pendiente, tests/Actions, prompt de arranque y separación expresa de fuentes antiguas.
+
+**Al comenzar un chat nuevo**, reiniciar el contador de mensajes del usuario a cero. Mantener la regla en AGENTS.md, DSS y el kit.

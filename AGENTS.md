@@ -42,3 +42,16 @@ Antes de analizar o modificar este proyecto, leer completos y en este orden:
 - **B.20.1 v1.0.157 LIVE certificada (DSS §63):** explicación de origen de precios ahora como gaveta *inline* debajo de los dos botones, sin solapar Items ni recortarse. Control nativo `#ledgerPriceHelp`, nota semántica `#ledgerPriceHelpContent`. Fuente Fiko `489a5cb2`, build bot `3e87fcd2`, Pages HTTPS confirmado, 4/4 Actions y 56/56 Chromium. No volver a anclar una ayuda de 440 px por la derecha a un icono estrecho sin pruebas de límites ES/EN Light/Dark.
 - **B.21 v1.0.158 candidata (DSS §64):** guía de Discord como pasos compactos sin números circulares; mensaje público en inglés fijo cuando destino SIGMA y español fijo cuando Vanguardia, independiente de UI. No tocar economía ni ESI/SSO; gate remoto antes de LIVE.
 - **B.21 v1.0.158 LIVE certificada (DSS §64):** «PUBLICAR EN DISCORD» tiene tres pasos compactos, números cobrizos sin círculos como «VER PASOS PARA VENDER», detalle/previsualización sin iconografía redundante. Copia externa SIGMA = inglés siempre; Vanguardia DR = español siempre, independientemente de ES/EN UI. Fuente Fiko `5f1d51a2`, compilado `700b6c83`, 4/4 Actions success y 57/57 Chromium. No tocar lógica de precios ni sustituir el texto externo según `S.lang`.
+
+
+## Política de continuidad de chats — aviso preventivo de migración (2026-10-28)
+
+**Motivo:** las conversaciones de desarrollo largas pueden perder contexto operativo. Estos umbrales son preventivos, no un contador exacto de tokens ni una alerta del sistema.
+
+- **Umbral AMARILLO:** al llegar a **12 mensajes sustantivos del usuario relativos al desarrollo** en un chat, **o a 2 versiones LIVE publicadas** desde su comienzo (lo primero que ocurra), emitir en la respuesta siguiente **«⚠️ ALERTA DE CONTINUIDAD — conviene preparar el siguiente chat»**. Resumir versión LIVE, HEAD, cambios pendientes y tests, sin interrumpir una corrección urgente.
+- **Umbral ROJO:** al llegar a **16 mensajes sustantivos**, **3 publicaciones LIVE** o al detectar un historial especialmente pesado por logs y capturas, **crear kit antes de iniciar otra etapa larga de implementación**. Ofrecer enlace y prompt para migrar. Continuar aquí solo si el usuario lo prefiere.
+- Tras cada publicación grande, actualizar DSS y continuidad para reducir el coste del traspaso. El usuario puede pedir kit en cualquier momento.
+- **Limitación honesta:** no existe medidor fiable de ventana restante ni aviso autónomo sin mensajes nuevos. Las alertas solo aparecen **en una respuesta de chat** y estos umbrales no garantizan evitar todo recorte; con uso intensivo de herramientas, avisar antes.
+- El kit debe identificar última LIVE y SHA de main, HTML compilado, protocolo y DSS o referencias canónicas verificadas, decisiones visuales, trabajo pendiente, tests/Actions, prompt de arranque y separación expresa de fuentes antiguas.
+
+**Al comenzar un chat nuevo**, reiniciar el contador de mensajes del usuario a cero. Mantener la regla en AGENTS.md, DSS y el kit.
