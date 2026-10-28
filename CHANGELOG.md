@@ -1,0 +1,1253 @@
+## v1.0.153 — 2026-10-27 [ChatGPT] · B.17: banner de SP y controles compactos Jita — LIVE CERTIFICADA
+
+- Banner alargado **«¿Nuevo piloto? Consigue 1,000,000 SP GRATIS»** de fondo grafito alineado exactamente con Tasación; visible desde el modo inicial «Vender Items», sin desplazar el encabezado principal. «GRATIS» queda en mayúsculas y el inglés conserva «FREE SP».
+- Al elegir «Comercio Jita», destino, Jita Sell/Buy Order y «Enviar» aparecen como segmento compacto alineado con Inventario. Se ocultan redundancias «IMPORTACIÓN A»/«Comprar a» visualmente, preservando los mismos selectores originales, listeners, ayudas accesibles y estados.
+- ES/EN, Dark/Light, 1440/630/390 px y foco/teclado comprobados; sin cambios financieros, ESI/SSO, B.13 2×2 ni B.16. **QA: 35 Node, 16 Python, 8 heredadas y 52 Chromium** PASS; capturas de ambos estados/temas inspeccionadas. **LIVE por Fiko:** fuente `dea0d4f8`, CI `87e95f01`, cuatro Actions success (Rebuild/Pages `40556894593`); HTTPS público, GitHub y build local idénticos byte a byte, **2.356.623 bytes**, blob `4d40645a`. DSS §59.
+
+## v1.0.152 — 2026-10-27 [ChatGPT] · B.16: fondo grafito del Listado coherente con el resto — LIVE CERTIFICADA
+
+- Por nueva captura de Raulito, se elimina el gris opaco medio `--hull2` **del fondo del Listado abierto en Dark**. La bandeja usa `--glass`, el mismo grafito translúcido de los demás paneles; cerrado sigue `--surface-card` y las tarjetas de Items conservan su profundidad y altura compacta.
+- No se alteran Light, cantidades, sort, interacciones, copia, precios, retícula 2×2 ni finanzas/ESI/SSO. **35 Node, 16 Python, 8 heredadas y 51 Chromium PASS**; ambos estados y temas revisados, 390/1440 px. **LIVE por Fiko:** fuente `2d1141d6`, CI `265f5739`, 4/4 Actions success (Rebuild/Pages `40467130743`); GitHub/Pages HTTPS idénticos al local, **2.351.455 bytes**, blob `df5ba864`. DSS §58.
+
+## v1.0.151 — 2026-10-27 [ChatGPT] · B.15: Listado cerrado en grafito oscuro y filas compactas — LIVE CERTIFICADA
+
+- **Corrección de color a petición de Raulito:** el gris medio se veía en la barra minimizada; ese tono corresponde al contenedor abierto. Cerrado Dark ahora usa el grafito profundo ya existente (`--surface-card`), abierto mantiene `--hull2`; Light usa una tarjeta clara cerrada y bandeja gris cálida abierta. No se introducen tonos azulados.
+- **Tarjetas de Items más compactas:** por segunda captura de Raulito, las cabeceras reducen su mínimo de 112 a 88 px y su padding vertical de 18 a 11 px; iconos 48→44 px, separación entre tarjetas 12→9 px. No afecta al contenido abierto ni al layout móvil apilado.
+- Sin cambios a cálculos, copy, datos, SSO/ESI ni tarjetas interiores 2×2. **QA local:** 35 Node, 16 Python, 8 heredadas y **51 Chromium PASS**, incluyendo estados plegado/abierto Light/Dark, anchos 390/1440 y altura compacta. Capturas genuinas inspeccionadas; ver DSS §57. **LIVE por Fiko:** fuente `ac6cca060c370708292d247abd4403705e0351e1`, CI `d37aafc9db91152e5f6003f840888994af0cc3f2`, 4/4 Actions success (Rebuild/Pages `40464338792`). GitHub y Pages HTTPS idénticos byte a byte al build local: **2.351.528 bytes**, blob `8afc9be54272d3194f71300cabb2f67be5b7de0d`.
+
+## v1.0.150 — 2026-10-26 [ChatGPT] · B.14: profundidad gris cálida del Listado — LIVE CERTIFICADA
+
+- **Diseño aprobado por Raulito:** contenedor gris cálido medio y tarjetas de Item grafito oscuro, exclusivamente con tokens neutros existentes; en Light se conserva idéntica jerarquía/retícula y se invierten luminancias. DSS §56 registra el patrón como referencia para próximas secciones (sin recolorear otras por iniciativa propia).
+- **Listado plegado:** identidad y cantidad, ruta elegida con estado, precio unitario y neto en columnas alineadas. Barra de ordenación segmentada, etiquetas mayores, sin palabra visual «Sort/Ordenar». Toda la fila abre/cierra el detalle por botón nativo accesible, sin chevron; copiar precio/neto y quitar Item siguen siendo acciones separadas.
+- No toca fórmulas, fuentes de mercado, ESI/SSO, los cuatro paneles B.13 2×2, persistencia ni cálculo de precios. Build y QA local **35 Node, 16 Python, 8 heredadas, 50 Chromium + 4 focales** PASS; capturas desktop Dark/Light y móvil examinadas. **LIVE por Fiko:** fuente `b5af720613dbc9f72df5ee30b2d5ee0c2eb378df`, CI `df68e18050c7938c081d95dce516f0e4d996be7b`, 4/4 Actions success (Rebuild/Pages `40448857455`). GitHub `index.html` y descarga pública HTTPS idénticos byte a byte al local: **2.351.180 bytes**, blob `5c1cb8ac5bad5ba8ab973638bf9f942af78f172e`. Sin pruebas reales ESI/SSO extremo a extremo.
+
+## v1.0.149 — 2026-10-26 [ChatGPT] · D.4: ráfagas ESI acotadas, cotizaciones íntegras — LIVE CERTIFICADA
+
+- **Servicio de mercado:** una cola FIFO limita a 12 las solicitudes `esiFetch` simultáneas (no toca SSO); páginas de órdenes secundarias fallidas ya no se ignoran para aparentar una cotización completa. Se mantienen reintentos, `Retry-After`, cálculos, UI B.13 y precios.
+- **Contraste sintético:** 50 Items/10 páginas con servidor ficticio de capacidad 12: **9.322→2.142 ms**, **137→0 respuestas 429 simuladas**, **490/500→500/500** páginas de órdenes. Sin restricción y con diez páginas, el límite cuesta ~1 s adicional; una página queda ~611 ms. La red ESI real usa otros límites y NO se midió. `docs/PERFORMANCE_D4_RESULTS.md`.
+- **QA local y publicación:** tres pruebas nuevas de cola/errores/completitud en Node, 34/34 suites Node, 16/16 Python, 8/8 scripts heredados y **49/49 Chromium PASS**. Capturas Dark/Light cuatro paneles 2×2 idénticas byte a byte a B.13. Benchmark ESI repetido en la nueva conversación: 2.143 ms, 603 intentos, pico 12, 0 respuestas 429 artificiales y 500/500 páginas. **LIVE por Fiko:** fuente `d55ed801828e73a863956eed1ed69a34541b63ff`, build `6db5fd74e6f392ef442144f9b32e761dea326081`, cuatro Actions success (Rebuild/Chromium/Pages `40429810049`). HTTPS público e `index.html` de GitHub idénticos, **2.342.547 bytes**, blob `2a919800c4133c76f5f7bd4229ca9f0bc2a93b6e`. No se usó ESI real ni SSO.
+
+## v1.0.148 — 2026-10-26 [ChatGPT] · D.3: categorías sin ESI más rápidas — LIVE CERTIFICADA
+
+- **Alcance acotado:** `computePlan` indexa la primera coincidencia de nombre por ejecución; `isModule` recibe ese índice opcionalmente para no recorrer 500 Items al inferir Category sin ESI. Sin cambios a precio, fórmula, plan, copywriting, Light/Dark, ES/EN ni al diseño desktop B.13 2×2.
+- **Medición comparable:** 500 Items Selling sin categoría ESI: **18,6→5,6 ms** (−70 %); con categorías mixtas 13,8→8,6 ms. **18/18 SHA-256 financieros idénticos** entre v1.0.147 y v1.0.148, incluyendo Selling/Trading, 100/250/500 Items y tres estados de categorías. `docs/PERFORMANCE_D3_RESULTS.md` registra método, límites y ruido.
+- **Gates locales y remotos:** 33/33 Node, 16/16 Python, 8/8 heredadas y **49/49 Chromium** PASS. Desktop Dark/Light cuatro paneles 2×2 idénticos byte a byte a B.13. Fiko publicó fuente `11e3fa4852cb414f496ab2a7f8a3bf1c5e735806` y ajuste CI `506c7f2773c3f9897d8239fa1823fab4eb154216`; commit de build `b51ef1ba06e9873fb525a6cce1115678f5e60a21`. Los cuatro Actions finalizaron correctamente (Rebuild/Pages `40425125255`); GitHub y Pages HTTPS comparten blob `1c75e331d21664103eb664c74bf7dbec203a7e2c` de 2.341.402 bytes. **D.3 LIVE certificada.**
+
+## v1.0.147 — 2026-10-26 [ChatGPT] · D.2: cabeceras del Listado sin mutaciones redundantes — LIVE CERTIFICADA
+
+- **Autorización expresa de Raulito:** tras D.1 aprobó continuar D.2–D.4 midiendo y contrastando cada mejora; se empieza por el render de Items, conservando intactos el 2×2, UX writing, accesibilidad, cálculos, ESI/SSO y precios.
+- `src/js/ui/ledger.js` actualiza solo cuando realmente cambia texto/clase/atributo de una **hoja simple de cabecera**; las funciones generales y las tarjetas desplegadas no cambian. El botón de eliminar, ruta, cantidad, precio y neto mantienen textos, copia, nombres accesibles, idioma y estado; los resultados nuevos se siguen asignando a `u.last`.
+- **Benchmark comparable** con 100/250/500 Items, 0/1/10 abiertos, Dark/Light 1440 y 12 muestras: 500 Items plegados pasan de **35,2→25,0 ms Dark** (~29 %) y **35,9→28,5 ms Light** (~21 %). Layout CDP de repintado sin cambios ~33–36→~0,5 ms por iteración; no implica coste cero tras cambios reales. Comparación completa en `docs/PERFORMANCE_D2_RESULTS.md`.
+- **QA:** build local 1.0.147, 109/109 Node, 16/16 Python, 8/8 heredadas, 49/49 Chromium (nueva regresión de ausencia de mutación + actualización de cantidades/impuestos y ES/EN), diff/sintaxis PASS. Capturas desktop Light/Dark de los **cuatro paneles** visualmente aprobados son **idénticas byte a byte** a v1.0.146 (`cmp`, SHA-256 en informe). **Certificado en Fiko/main:** fuente `b7109733`, bot de build `8a8705e3`, 4/4 Actions success y HTTPS con hash de `index.html` `b9108594`. D.3 y D.4 todavía sin cambios en código de producción.
+
+## v1.0.146 — 2026-10-26 [ChatGPT] · B.13: cierre visual del Listado — LIVE verificada
+
+- **Cierre remoto con cuenta Fiko:** `main` avanzó protegido (`expected_sha=1b9c5b9c`, `force:false`) a fuente `3232b726ce06f58d911576c35d760aeb94a07c89`; CI generó `7ccf8e94173714bc668eb839e79f9adc21f7ad94` e `index.html` v1.0.146. Cuatro Actions `success`: Versiones `40416434399`, Build `40416434316`, Minería `40416434442`, Rebuild/Chromium/Pages `40416434387`. HTTPS público independiente: **2.339.758 bytes**, blob Git `12092a4d05f557306902db0c07b21ff4e4a3e986`, **idéntico byte a byte** al build local y al objeto GitHub. Aprobación humana DSS §50 y certificación DSS §51. No significa que se haya probado SSO/ESI extremo a extremo.
+- **D.1 sin modificar el producto:** primera línea base de desktop 1440 en Chromium Dark/Light, inventarios sintéticos de 0/1/10/50/100/250 Items, plegados y un Item con los cuatro paneles abiertos. Con 100 Items, refresh mediano 5–7 ms; con 250, 14–17 ms y p95 hasta ~24 ms abierto; se identificó layout en listas grandes como candidato para una investigación posterior, **no como autorización para cambiar fórmulas**. Script `benchmarks/performance_baseline_d1.py` e informe `docs/PERFORMANCE_BASELINE_D1.md`. Sin tráfico ESI real, sin optimizaciones aplicadas.
+- **D.1.2 diagnóstico sin release funcional:** nueva instrumentación Chromium `benchmarks/performance_investigation_d1.py` atribuye a 500 Items ~17–19 ms a `computePlan`, ~14–19 ms a `paintLot`, ~33–49 ms de layout separado; refresh mediano ~35–45 ms según cantidad de paneles abiertos. Laboratorio de `fetchTypes` con `fetch` interceptado y 40 ms ficticios observó para 100 Items **303/503/1.203** consultas con 1/3/10 páginas, picos de 12 a 36 solicitudes simultáneas. No implica demora ESI real ni cambiar la política de concurrencia sin comparación; informe D.1 actualizado, ninguna modificación de `src/`, `index.html`, Pages, SSO o cálculos.
+
+- **Aprobación final de Raulito (DSS §50, 2026-10-26):** aceptados en su conjunto los cuatro paneles 2×2 desktop, volumen oscuro neutro, tres columnas de precios alineadas, lectura/precios sin cápsulas, simetría y copywriting ES/EN Light/Dark. El propietario indicó «me parece hermoso. apruebo todo y sigamos». QA local definitiva: 109 Node, 16 Python, ocho scripts heredados y 48 Chromium PASS; autorización de publicar por Fiko sin forzar `main`. **La condición LIVE se certificará únicamente después de Actions/Pages/HTTPS.** Siguiente etapa D.1: perfilar antes de optimizar.
+
+- **Dos ajustes puntuales de Raulito a cuatro paneles (DSS §49):** «Volumen total» adopta exactamente la superficie de Cantidad/Volumen/u: `rgba(0,0,0,.35)` Dark y `rgba(0,0,0,.055)` Light, sin verde por ser m³, conservando recuadro neutro. La cabecera de la tabla de Precios reduce copy a **RUTA | PRECIO · ISK/u | NETO · ISK/u**, presenta una división horizontal continua (sin subrayados independientes), tipografía uniforme en mayúsculas y columnas alineadas en 7 px con los valores. Traducciones nuevas solo para esa tabla, sin alterar etiquetas accesibles completas de cifras/rutas, fórmulas, data-v ni inputs. Nuevas capturas de los mismos cuatro paneles a 1440 Light/Dark ES, sin publicación.
+- **Revisión de densidad y copywriting de los cuatro paneles, siguiendo anotación verde de Raulito (DSS §48):** la igualdad de alturas se había conseguido **estirando cinco filas de Precios hasta ~92 px** por el alto de Comparar. Se compacta la lista de rutas/tabla mineral de Comparar mediante *padding*, sin reducir datos, signos ni cálculos; la fila de Precios baja a ~72 px y ambos paneles mantienen bordes simétricos. En Ajustes se incrementa la legibilidad de títulos y etiquetas; el editor «Manual · ISK/u», Jita Sell «690,000» y Volumen/u «100» evitan paréntesis redundantes, con fuente Jita/API/pegado conservada en tooltip/`aria-description` bilingüe. La cifra automática «689,800» conserva valor real y se formatea únicamente como placeholder. Capturas nuevas 2×2 desktop Light/Dark ES y primeros planos; sin cambio financiero, ESI/SSO, almacenamiento ni publicación.
+  - QA: 109/109 Node, 16/16 Python, 8/8 heredadas y 48/48 Chromium PASS para el corte. Los importes cero de la tabla reciben color neutral (regresión cromática + focal Chromium tras el parche), conservando verde/rojo de signos reales.
+- **Cabecera del Listado armonizada para nueva imagen desktop (DSS §47):** la ruta bajo el nombre se muestra sin cápsula y el precio unitario/neto de lote usan el mismo tratamiento de texto ISK verde/rojo, con acciones de copia independientes y accesibles, sin fondo ni bordes tipo botón. Título unitario acortado a «Precio unitario», mayúsculas por CSS, y texto de copia sin ISK duplicado. Se conserva nombre, cantidad, ruta, unidad, neto y datos internos de cada botón; no cambia cálculo, persistencia ni ESI. Capturas reales nuevas 1440 Light ES/Dark ES con los cuatro paneles 2×2 abiertos. v1.0.146 sigue local, sin publicación ni validación de mercado real.
+  - QA: build PASS, 109/109 Node, 16/16 Python, 8/8 heredadas, 48/48 Chromium, sintaxis y diff correctos. La aprobación visual es el siguiente gate, antes de cualquier acción Fiko.
+- **Prototipo real de precios horizontales solicitado por Raulito (DSS §46):** «Precios por ruta» ahora prueba tres columnas Ruta/Precio/Neto en una línea por ruta en escritorio y dos niveles en móvil, sin modificar cálculos ni los dos botones de copia. Nombres visibles más breves con etiquetas accesibles completas, `ISK/u` en títulos en vez de sufijos redundantes en cada cifra, verde/rojo por signo y sin cajas verdes. Las filas reparten altura para conservar 2×2 simétrico junto a Comparar; se comprobó también el overflow a 1100 y se corrigió `box-sizing`. Capturas auténticas Light ES, Dark EN, 390 y vista global generadas, todavía **para aprobar**, no release. QA local focal aprobada, suite total en ejecución; v1.0.145 sigue LIVE.
+  - Cierre QA local: 32/32 Node, 16/16 Python, 8/8 heredadas y 48/48 Chromium PASS; sin commit/push.
+
+- **Refinamiento contextual aún en revisión (DSS §45):** se detectó que «Tu Buy Order» aparecía erróneamente en Venta por una colisión de especificidad CSS. Venta presenta Inventario/Referencias en tres filas exactas con Jita Buy en Referencias; Trading presenta también tres con la Buy Order personal y mueve la cotización Jita Buy al pie de Precios. Nunca se duplica visualmente ni se pierde el valor. Controles de 36 px en filas uniformes de 40 px. El título «CÓMO LEER ESTOS IMPORTES» pasa a mayúsculas y `1rem`; texto `.93rem`, pie sin alturas absolutas y adaptado a Light/Dark, móvil. Candidato local con capturas reales de ambos modos. **Pendiente de propuesta/aceptación:** mejorar nombres y lectura de rutas con tres columnas Ruta/Precio/Neto en escritorio; todavía no implementado ni publicado. Sin cambios de motor, cálculo o ESI.
+
+- **Nueva iteración según el montaje Paint, pendiente de aceptación visual:** Inventario y Referencias muestran filas horizontales etiqueta/valor en vez de campos verticales; Jita Buy verde sin caja, volumen neutro en recuadro, y Trading «Tu Buy Order» / «Your buy order». Tu precio manual y ajuste permanecen abajo. Títulos Precio de ruta / Neto estimado más legibles (`.82rem`) y pie educativo bilingüe al fondo sobre ruta, neto vs beneficio y copia. Se mantiene cuadrícula 2×2, Light/Dark, móvil y accesibilidad. Capturas reales Light ES/Dark EN/móviles compartidas. Build v1.0.146; Node 32/32, Python 16/16, ocho heredados, Chromium 48/48 (texto final de ayuda en revalidación). Sin cambio de ISK calculado, ESI/SSO, almacenamiento ni fuentes de datos. **B.13 sin publicar; v1.0.145 sigue LIVE.** DSS §44.
+
+- **Motivo y revisión:** Raulito detectó desalineación al abrir las cuatro tarjetas, huecos en el contenido, enlace redundante de eliminación, un submenú de minerales fuera de jerarquía y atribuciones incorrectas a SIGMA. **Rechazó expresamente** la primera candidata, que pasaba a ancho completo al abrirse: exige conservar cuatro tarjetas **2×2**. También identificó fondos verdes incorrectos detrás de números. Nueva candidata **pendiente de revisión visual antes de publicar**.
+- **Refinamiento posterior, mostrado en captura real:** los títulos visibles de las rutas ya no exponen fórmulas como «Jita Buy −2,5 %». «Precios por ruta» alinea «Precio a publicar» y «Neto estimado», ambos copiables con etiqueta accesible independiente; la procedencia/deducciones sigue disponible a tecnología asistiva. El editor de **precio manual HY-RWO** (y restablecer automático) pasa de la tabla a «Ajustes del ítem → Precios y estrategia», frente al grupo «Datos del ítem», con equilibrio visual. En «Cómo venderlo» los importes son texto semántico verde/rojo, sin controles de copia. Conserva la misma fórmula, estado local del override y valores numéricos. Se hicieron nuevas capturas de **cuatro tarjetas abiertas en Light ES, Dark EN y móvil**, exclusivamente del Listado. **Raulito todavía debe aceptar la nueva disposición; no se publicó.**
+- **Aprobación editorial siguiente y captura preliminar:** «Ajustes del Item» se redistribuye en dos grupos superiores **INVENTARIO / REFERENCIAS** (tres hechos cada uno en Ventas) y una franja inferior **TU PRECIO · HY-RWO** (precio manual, restablecimiento, ajuste). Se acortan los rótulos ES/EN sin borrar información de ayudas ni la diferencia referencia de otro vendedor/override propio. Los títulos de grupo reciben mayúsculas CSS; el contenido y la cuadrícula 2×2 conservan semántica y responsive. Decisión global y permanente del propietario: **Item/Items sin tilde** en todo texto visible, incluidos tooltips y traducciones. Nueva prueba preventiva de copywriting y reglas en protocolo/AGENTS. Se documentan títulos densos de Ajustes generales para revisar luego, sin intervención en otras funciones. Una nueva captura real Light fue compartida para comentarios; **no publicado**.
+- **QA final de la última revisión local:** build 1.0.146, 32/32 Node, 16/16 Python, ocho heredados, 47/47 Chromium (~59 s), incluida geometría de los tres grupos en escritorio y móvil y capturas Light/Dark. Dos aserciones heredadas se actualizaron de «ítem» a «item» tras una primera corrida, y el segundo pase completo fue correcto. **Pendiente revisión visual de Raulito y publicación controlada por Fiko; main sigue v1.0.145.**
+- **Corrección puntual de navegación Light/Dark tras capturas del propietario:** el generador Light reintroducía un fondo/borde en `.mm-ho-main`, haciendo que tres pestañas redondeadas parecieran una barra cuadrada solo en Light. Tema explícito `light-components.css` mantiene el wrapper transparente y los tres botones delimitados/redondeados con colores Light; Dark, DOM y acciones intactos. Regresión nueva de geometría en 1440/720/390 y ES/EN, capturas Light/Dark reales verificadas. Gate de paridad de temas añadido al protocolo y AGENTS; CSS auto-generado pendiente de auditorías selectivas futuras. **Sin publicación de v1.0.146.**
+- **QA repetida tras la corrección:** build 1.0.146, 32 Node, 16 Python, 8 heredados y **48/48 Chromium**, ~59 s; navegación Light/Dark simétrica en las medidas y capturas de ES/EN a 1440/720/390. No se tocó SSO/ESI ni la lógica de ventas; v1.0.145 permanece LIVE, candidata v1.0.146 sin push.
+- Las cuatro funciones siguen independientes y en orden DOM/teclado: Precios, Comparar, Ajustes y Cómo venderlo. En escritorio **siguen 2×2 tanto cerradas como abiertas**; las tarjetas abiertas de cada fila tienen bordes alineados y las cerradas no se estiran a una altura vacía si la vecina está abierta. En móvil se apilan. Cada ruta se presenta en un registro compacto de dos columnas con neto, precio publicable y explicación; se quita el sombreado verde heredado del renglón recomendado, conservando texto ISK verde/rojo según signo. Se aclara la diferencia entre **orden visible en nullsec** (referencia para undercut) y **precio manual de publicación** (override que prevalece), sin alterar su comportamiento. Comparación y guía más compactas; Ajustes adapta columnas; cabecera del Listado reúne orden y actualización en una franja.
+- Los productos del reprocesamiento conservan cantidades, valores y copia, pero aparecen como tabla contextual dentro de «Comparar rutas», sin un quinto desplegable. Nullsec se identifica como estimación, no como órdenes verificadas. Se elimina «Quitar del lote» duplicado; la X original conserva su manejador, se amplía a 44 px y adapta etiqueta ES/EN. Los textos sobre fuente de precios y colateral atribuyen la estimación a Market Moves+, no a SIGMA.
+- **QA local de la revisión 2×2:** build `1.0.146`, **31/31 Node**, **16/16 Python**, ocho scripts heredados y **47/47 Chromium** (~56 s), más matriz 390/630/980/1000/1024/1100/1440 × ES/EN × Light/Dark en la prueba visual focalizada: proporciones, filas abiertas, celdas sin sombreado, nombres de campos accesibles, bordes y ausencia de overflow. Se examinaron capturas de escritorio Light ES y Dark EN, móvil, uno y cuatro abiertos. Los importes son fixtures, no cotizaciones ESI en vivo. `index.html` se genera desde `src/`; no subirlo manualmente por Fiko. Sin cambios en fórmulas, `r.net`, `r.g`, ESI/SSO, persistencia, elecciones o costes. **NO PUBLICADO: revisión de Raulito pendiente antes de usar Fiko, CI o Pages.**
+
+## v1.0.145 — 2026-10-26 [ChatGPT] · B.12: Extras/Discord sin huecos ni redundancias — LIVE certificada
+
+- **Aprobación expresa de Raulito:** corregir el fallo visual de Light y auditar la utilidad de «Contratos y Discord». Las dos columnas conservan 50/50 de anchura en escritorio, pero los contratos terminan a su altura natural, sin relleno artificial hasta el pie de Discord.
+- Se elimina el resumen inferior que repetía número de contratos, Buyback y envío. Su etiqueta EN «YOUR BUYBACK PROFIT» era impropia para `P.bbGross`, que representa ingreso, no beneficio; el valor y los controles de copia se conservan dentro de la ficha. La oferta Discord se identifica como **precio de oferta estimado**, no venta confirmada; se distingue entre ruta elegida y alternativa manual.
+- Discord conserva destinos SIGMA/Vanguardia, lista y enlace Janice, mensaje WTS copiable, enlace del canal y advertencias de cierre. La guía se reduce a tres pasos y nota contextual; la vista previa se pliega de entrada y es operable por teclado. Light elimina el gran contenedor gris interior; ES/EN, Dark/Light, 1440/630/390 verificados.
+- **QA local previo al despliegue:** build `1.0.145`, 30/30 Node, 16/16 Python, 8/8 scripts heredados y 46/46 Chromium (~55 s), incluida nueva regresión B.12. Sin cambios en `r.g.disc`, `P.bbGross`, cálculo, ESI/SSO ni persistencia. Las verificaciones de Actions, Pages y HTTP se completaron en el cierre remoto siguiente. D.1 pendiente.
+
+- **Cierre remoto LIVE:** Fiko publicó 17 blobs comprobados SHA, árbol `f209e6ff`, fuente `e2cad1cb5e629cf176a239db5b702516e5f93e3c` sobre `87d0cbfa` protegido (`expected_sha`, `force:false`), bot `298ac823f89deb9d1ef4bc21b512910db83226bb`. Las cuatro Actions fueron `success` (Versiones `40383422021`, Minería `40383422005`, Build `40383422146`, Rebuild/Pages `40383448358`). HTTPS independiente entregó **v1.0.145**, 2.311.398 bytes y blob Git `bf6d1f44c3a5c5f11753b79fec90bc7d1661892b` idéntico al local/remoto. No se certifican transacciones EVE ni SSO/ESI real end-to-end. D.1 perfilado sigue pendiente.
+
+## v1.0.144 — 2026-10-26 [ChatGPT] · B.11: listado compacto con cuatro paneles simétricos — LIVE verificada por CI/Pages
+
+- **Aprobación expresa de Raulito:** reemplazar el detalle repetitivo del Listado por cuatro paneles plegables de igual ancho: «Precios por ruta», «Comparar rutas», «Ajustes del ítem» y «Cómo venderlo». Dos columnas independientes impiden que el panel de precios deje un espacio vacío artificial debajo de la comparación; en móvil los cuatro paneles se apilan en orden natural.
+- **Flecha realmente reparada:** `.lot-body[hidden]` ahora prevalece frente a `display:grid!important`, que impedía que el ítem pareciera cerrarse pese a actualizar `aria-expanded`. El mismo principio oculta las rutas sin precio de `.lot-analysis .opt[hidden]`; sin barras vacías o importes inventados.
+- Cabecera sin párrafo redundante; origen de cotizaciones accesible desde un icono `i` con información y advertencias originales; ordenación más discreta, con desplazamiento horizontal en móvil. Tarjetas, textos, campos y barras más compactos; cifras ISK positivas en verde y costos en rojo, tipografía numérica tabular y guía de venta propia, sin acordeón anidado. Se eliminan notas repetidas de copia sin quitar ninguna acción de copia o edición; nuevas frases dinámicas traducidas ES/EN mediante catálogo.
+- No se modifican fórmulas, decisiones, rutas, tarifas, SSO/ESI, almacenamiento ni persistencia. Se mantienen inputs, copia numérica, precio manual local, edición de lotes y todos los controles de las rutas. Chromium verifica teclado/flecha, cuatro detalles autónomos, simetría 50/50, orden móvil, valores ocultos, guía y localización. **QA completa: 29 Node, 16 Python, 8 smoke legacy y 45 Chromium, build v1.0.144, diff limpio. Publicación confirmada por cuatro Actions y despliegue Pages con HTTP del banner; sin comparación HTTPS byte a byte independiente en este entorno.**
+
+- **Publicación Fiko:** fuente `1f0b91386e4761bff46b0563cf3dfc160a7e07c5`, bot `42e23ceb2cf83cfdc9c0c058fa258f262ed98dec`; HTML generado v1.0.144, 2.306.688 bytes, blob `6c42291d83c0c605bd62df9ddeb56fe9fe4ba80c`. Cuatro Actions correctas: Versiones `40376261734`, Minería `40376261614`, Build `40376261710`, Rebuild/Chromium/Pages `40376261674` (banner HTTP público confirmado). D.1 pendiente; ESI/SSO real no probado extremo a extremo.
+
+## v1.0.143 — 2026-10-26 [ChatGPT] · B.10: dos secciones de planes minimizadas por defecto — LIVE certificada
+
+- **Aprobación de Raulito:** el bloque «ELIGE TU PLAN» y la sección interna «Planes disponibles» arrancan ambos minimizados. Abrir el bloque principal muestra la tarjeta «Tu resultado» y una cabecera compacta de «Planes disponibles»; una flecha independiente despliega su lista, filtros y ordenamiento.
+- Los dos controles son iconográficos sin texto visual, con etiquetas accesibles ES/EN, `aria-expanded` y `aria-controls`. Cada apertura conserva su estado en repintados y cambios de idioma; la acción contextual de ruta rápida abre ambas cuando necesita revelar un plan.
+- CSS responsive y Dark/Light reutiliza el chevrón B.7. No se modifican `modeTotal`, `computePlan`, importes, filtros, orden, SSO/ESI ni almacenamiento. **QA: 29/29 Node, 16/16 Python, 8/8 legacy y 43/43 Chromium, build 1.0.143 y diff sin errores**; publicación certificada por GitHub Fiko y HTTPS al final de esta entrada.
+- **Corrección visual añadida desde captura:** el botón «X» de quitar un ítem dispone de 52 px reservados en la cabecera del Listado; ya no invade «Neto del lote» ni su cifra. Una regresión de navegador compara la geometría en escritorio/móvil y ambos temas.
+- La tarjeta interior «Planes disponibles» no se estira al alto de «Tu resultado» mientras esté cerrada: ocupa únicamente su cabezal (Chromium confirma menos de 100 px); al abrir vuelve a mostrar contenido natural, sin crear espacios vacíos.
+- **LIVE verificada:** Fiko publicó fuente inicial `7d7da4b1` (15 blobs SHA), compilado automático `2e3d41c3`, afinación compacta `a6aa070b` y compilado final `2e458f1b`, todo con `expected_sha` y `force:false`. Cuatro Actions finalizadas en `success`: Minería `40364971664`, Versiones `40364966998`, Build `40364967016` y Rebuild/Chromium/Pages `40364966906`. HTML público v1.0.143: **2.292.948 bytes**, blob SHA Git `733c10ef83619c595f6e33c11f1d8185d8588501`, idéntico por `cmp` al build local y al `index.html` de GitHub. D.1 perfilado pendiente; sin test EVE SSO/ESI extremo a extremo.
+
+## v1.0.142 — 2026-10-26 [ChatGPT] · B.9: un solo desplegable de explicaciones simétricas — LIVE verificada
+
+- **Aprobación expresa:** Raulito pidió «simetría perfecta», cero subdesplegables dentro de ambas respuestas y preservar todos los cálculos; confirmó «sí» a cabecera única, flecha única y estado cerrado por defecto.
+- **Presentación:** `paintDecisionExplanations` pone «¿Por qué reprocesar o no?» y «¿De dónde salen estas deducciones?» en la misma barra, ancho 50/50 y divisor alineado píxel a píxel con sus respuestas al abrir. Un solo `<details>` nativo y dos cuerpos planos; en móvil se apilan las dos preguntas y sus respuestas sin overflow. Cuando no hay ruta de reproceso válida, solo se muestra el coste explicado, a ancho completo. ES/EN y Dark/Light, foco y Space/Enter conservados.
+- **Integridad:** no cambia el cálculo original de `assessReprocessing`, `computePlan`, fees, ESI/SSO, almacenamiento ni reparto courier. Se mantienen cifras y advertencias existentes (tasas, refinería, ventas estimadas) y se corrige una instrucción obsoleta «Abre el detalle». `vCap` conserva un único estado abierto en refrescos; no hay `details` anidados en las respuestas. Playwright detectó un `gap` de 12 px que creaba 6 px de desalineación y fue corregido.
+- **QA local completa:** build v1.0.142, **29/29 Node, 16/16 Python, 8/8 legacy y 43/43 Chromium** (≈51 s), incluyendo 390/630/1440, temas/idiomas, foco, teclas y comparación exacta de ejes. Solo CI/Pages y descarga HTTPS independiente pendientes para afirmar LIVE; sin prueba EVE SSO/ESI real.
+- **LIVE certificada:** Fiko/Fikolasty avanzó `main` con commit fuente **`72a18a35cb33f13b0ad211b714971915765719f8`** desde `475d730abdfa7497dd317ca73fc3fa7cbb9c4816` con `expected_sha`/`force:false` y 17 blobs comparados, árbol `0035d394c91c14825db112cbeaaf27476a247319`. CI creó **`48998c54de815228c8f5f1ca7edfe4e95df3adba`**; cuatro Actions `success`: Minería `40360343285`, Versiones `40360343410`, Build `40360343433`, Rebuild/Chromium/Pages `40360343320`. HTML de Pages v1.0.142 descargado por HTTPS independiente: **2.291.110 bytes**, SHA Git **`aac3e3ef79eefc70232f2ef6f0ff3d52f1d95f93`**, idéntico a compilado local y remoto. D.1 profiling pendiente.
+
+## v1.0.141 — 2026-10-26 [ChatGPT] · B.8 tabla compacta de coste real del envío — LIVE verificada
+
+- **Aprobación de Raulito («me encanta»):** segundo mockup con los ítems enviados completos, nombre/cantidad y tres columnas **ANTES DEL ENVÍO − ENVÍO = TOTAL FINAL**; sin «te queda», «unidad», expansiones por ítem ni fila de «Ver más». Subtítulo exacto «Aquí se refleja la reducción real por unidad de cada ítem». Coste total de contratos preservado en cabecera.
+- **Código sin cambios de fórmulas:** `paintCourierUnits(P)` utiliza las cifras existentes de `courierUnitPresentation(r)` y conserva la selección real de ítems enviados y el caso de coste no asignado. Cargo courier rojo con signo negativo visible, antes/final positivos verdes; cero o desconocido neutro. Tabla de cuatro columnas responsiva por container query y con roles/etiquetas accesibles. La explicación íntegra del colateral y la advertencia de ingreso estimado pasan a un solo icono informativo desplegable al lado del título, ES/EN y Dark/Light, teclado y foco.
+- **QA completa:** build `1.0.141`, **28/28 Node**, **16/16 Python**, **8/8 legacy** y **43/43 Chromium** PASS (~49,2 s), incluido B.8 **2/2** y capturas 1440 Dark y 390 Light revisadas; solo CI/Pages por confirmar antes de afirmar LIVE. Ningún test de transacciones reales EVE SSO/ESI.
+- **B.9 por separado, no aprobado:** propuesta UX de un acordeón único para «¿Por qué reprocesar o no?» y «¿De dónde salen estas deducciones?»; cabecera con ambas preguntas, una flecha y respuestas 50/50 al abrir (móvil apilado). Sin implementación ni cambios contables en este release.
+- **Cierre remoto LIVE:** el conector Fiko/Fikolasty subió 20 blobs de fuentes, tests y documentos con SHA Git exacto (sin `index.html`, QA generado ni screenshots), árbol `b996a38df65b22683c8f4dee91795fa40f4ee6f0`, fuente `b850891db2e4ed35f8dfcc4cbac1c9fc5713ecaa` desde `c626d51503f566d994893bb6e15d1294940ab988` protegido con `expected_sha` y `force:false`; CI compiló commit `ab45b0d60163bfd8a40b1b1a2571d71ab3356468` y cuatro Actions `success`: Versiones `40287903370`, Build `40287903353`, Minería `40287903413` y Rebuild/Chromium/Pages `40287903453`. `https://fikolasty.github.io/gestor-ventas-eve/` devolvió `v1.0.141`, **2.289.107 bytes** y Git blob **`cd6e23abddfba0b0aa5e108fd9a27d5606cd5c6c`**, idéntico al build local y al GitHub remoto. EVE SSO/ESI real no certificado; D.1 sigue pendiente.
+
+## v1.0.140 — 2026-10-26 [ChatGPT] · B.7a corrección del plegado integral — LIVE verificada
+
+- **Aclaración visual de Raulito:** su captura rodea con una línea azul las cuatro tarjetas de «ELIGE TU PLAN» — «Tu resultado», «Planes disponibles», «Ver distribución de ingresos y destinos» y «¿Quieres cobrar con menos espera?» —, no solo el lado derecho. Al pulsar la flecha superior debe desaparecer todo ese bloque, dejando visibles la cabecera y «Ver pasos para vender». No cambia el diseño interior abierto.
+- **Cambio acotado:** `#pkPlanContent` envuelve las dos filas y la información complementaria condicional (`#flipBuy` y `#decisionGrid`). `#pkPlanToggle` apunta al contenedor completo mediante `aria-controls` y sincroniza `hidden/aria-expanded`, manteniendo nombre accesible ES/EN sin texto visible. El estado de plan/filtro/orden y los `<details>` permanecen montados y se recuperan al expandir. Se eliminan las dos reglas CSS del antiguo colapso solo de `#pkPlanOptions`. Sin cambios a ISK, motor, ESI/SSO ni almacenamiento.
+- **QA realmente ejecutada:** build `1.0.140`, **27/27 Node**, **16/16 Python**, **8/8 legacy**, **42/42 Chromium** (~49 s), más caso focalizado B.7a con 1440/390, Dark/Light, ES/EN, foco por Enter, repintado mientras plegado, alturas y acceso «Ver pasos». Capturas plegadas de escritorio Dark y móvil Light inspeccionadas. `git diff --check` correcto. D.1 de perfilado continúa sin iniciar por prioridad de esta corrección.
+- **LIVE certificada:** 14 blobs fuente/test/docs con SHA Git idénticos al local, árbol `3a517c59e0fcd79d99d3e1e18398303a96708339`, commit fuente protegido **`9d4ac38f7d75b5f19c27472b478dcf328a55b7fb`** desde `6be1ffd383228bba9c92d131148249c582489a68` con Fiko/Fikolasty, `expected_sha`, `force:false`; bot CI **`78f400df5aef7e991853df41587c1fcf0c99fc88`**. Cuatro Actions `success`: Minería `40281853283`, Versiones `40281853280`, Build `40281853335`, Rebuild/Chromium/Pages **`40281853225`**. Descarga HTTPS independiente con anti-caché sirve `v1.0.140`, **2.283.423 bytes**, blob Git **`a7311be48b042d0f476f70ed387158943bd11eae`** idéntico al `index.html` local y remoto. EVE SSO/ESI real no certificado. Una nueva captura solicita revisar la densidad de «Coste real del envío» y mover la pregunta de colateral; **propuesta B.8 sin aprobación ni cambios de código**.
+
+## v1.0.139 — 2026-10-26 [ChatGPT] · B.7 interfaz de planes compacta y plegable — LIVE verificada
+
+- **Aprobación visual explícita:** Geiner aprobó la segunda propuesta tras revisar dos mockups: botón de solo flecha para contraer «Planes disponibles» sin perder «Tu resultado» ni el modo seleccionado; filtros «Todos/Rápidos/Sin envío/Con reproceso» como pestañas de texto con línea fina activa; filas más delgadas con importes verde y rojo contiguos horizontalmente; eliminación de «Ruta elegida» y la nota de estimación de la vista principal; corrección del radio inferior derecho de la franja de costes. En móvil, filtros desplazables horizontalmente con foco que los mantiene visibles.
+- **Implementación preservadora:** `#pkPlanToggle` tiene `aria-expanded`, `aria-controls` y nombre/título localizados ES/EN sin texto visual; `pkPanelCollapsed` es estado de UI independiente de `pkView.filter`, orden, modo y cálculos. El acceso contextual a una alternativa rápida reabre la tarjeta; selección y cálculos originales se conservan. La nota ordinaria de estimación se encuentra ahora dentro de `#vFinanceDetails`, mientras la ausencia de base válida de compra en Trading continúa como advertencia visible. La franja `.v-finance` recorta sus fondos dentro del radio común y usa tokens Dark/Light. Sin cambios de `modeTotal`, `computePlan`, tasas, SSO/ESI, storage ni permisos.
+- **Pruebas realmente ejecutadas:** build `1.0.139`, `git diff --check`, **27/27 Node**, **16/16 Python**, **8/8 legacy** y **42/42 Chromium completos** (46,4 s). El primer Chromium halló una expectativa antigua de filtros sin scroll; se actualizó el contrato móvil y se corrigió el auto-desplazamiento al enfocar una pestaña fuera de vista, repitiendo toda la suite correctamente. Capturas Dark escritorio y Light 390 inspeccionadas, con geometría de dinero en una sola línea, sin overflow del documento, tecla Enter para el toggle, selección/filtro/sort intactos y ES/EN. Tests nuevos `tests/plan-polish-b7.test.cjs` y caso navegador B.7.
+- **Publicación LIVE certificada:** 15 blobs fuente con SHA local idéntico al API, árbol `d8d7e40e5532a9317c9f51c6482a4dd2bea40090`, commit `[ChatGPT]` **`da7d964aeffa4bfa77449b28d2b76e254728790f`** protegido desde `ae23f9e21f15e9eb732898f25a491c2f96738a91` por Fiko/Fikolasty (`expected_sha`, `force:false`), sin HTML ni capturas manuales. Bot CI compiló **`c6eba766c1c22bd25e63a3e6f51619af91475728`**. Cuatro Actions `success`: Build `40279915807`, Minería `40279915852`, Versiones `40279915826` y Rebuild/Chromium/Pages **`40279915874`**. Página pública v1.0.139 por HTTPS con query anti-caché: **2.283.440 bytes**, Git blob **`a0e9a970089194c7a6bde5544ccf6af0aa7abfd6`**, exactamente igual al build local y al `index.html` remoto. EVE SSO/ESI y operaciones reales no probadas end-to-end; sigue D.1 profiling.
+
+## v1.0.138 — 2026-10-26 [ChatGPT] · C.1b saneamiento CSS de tres desplegables financieros — LIVE verificada
+
+- Segundo incremento acotado de C.1: las flechas de «Distribución de ingresos», «Ver cálculo por unidad» y «Ver otros ítems enviados» dejan de tener sus antiguos glifos, transformaciones `rotate(180deg)` y transiciones en reglas v124/v125. El contrato global B.1, posterior y prioritario, ya era el dueño de las flechas geométricas, giro abierto y reducción de movimiento. Se conservan márgenes y reglas de foco/hover; no se añaden overrides ni cambia ningún `!important`, HTML, JS, motor financiero, EVE SSO/ESI, persistencia o i18n.
+- Nuevo test estático `tests/css-c1b-chevron.test.cjs` y prueba Chromium de los tres desplegables con click nativo y geometría ES/EN, 390/1440, Dark/Light. Captura del courier en Dark 1440 **SHA-256 idéntico** antes/después (`936cab42d86bc9ea388bd276a4e91a1d77f424d2fbf0a1fa8fe5e56faf82f991`); build `1.0.138`, **26 Node, 16 Python, ocho heredadas y 41 Chromium completos PASS**, `git diff --check`. Los workflows apuntan a 1.0.138. Certificación remota completada en la línea siguiente. D requiere medir rendimiento, no se inicia por este CSS.
+- **Cierre público de C.1b:** 11 blobs exactos de fuente, test y documentación con Fiko/Fikolasty; fuente `090002037a65fcc369a6d6c28c3d597b741480b4` sobre `f2c38908dd9e4a18866a1a3a832d7bf934f825b9` mediante `expected_sha`, `force:false`; bot `ac48fd710571e5ade39e8f4fe21a56fac10e5ff6`. Cuatro Actions `success`: Rebuild/Chromium/Pages **`40271091437`**, Versiones `40271091441`, Build `40271091500`, Minería `40271091525`. HTML público HTTPS v1.0.138 **2.277.473 bytes**, blob Git **`2a11bfac798f1970b53ac613ea20fb2096a14a4c`**, idéntico a GitHub y al build local. **LIVE verificada y propietario notificado.** D profiling pendiente; EVE SSO/ESI reales no probados.
+
+## v1.0.137 — 2026-10-26 [ChatGPT] · B.6c cuatro paneles de decisión y superficies coherentes — LIVE verificada
+
+- La pantalla «ELIGE TU PLAN» presenta cuatro piezas originales en dos filas: Resultado / Planes disponibles y Distribución de ingresos y destinos / Alternativa rápida. El segundo panel es condicional; si no existe ruta rápida adecuada, la Distribución ocupa el ancho completo. En ≤1050 px: Planes → Resultado → Distribución → Rapidez. IDs, detalles nativos, filtros, selección, costes e i18n ES/EN preservados.
+- Los costes visibles del resumen financiero comparten `--surface-card` en Dark y Light, sin superficies enfrentadas. Las ayudas de reproceso y deducciones se estiran simétricamente al expandirse. Se retiran solo el botón «Revisar Ajustes» y la nota redundante de cargos ya descontados; la explicación técnica y su origen permanecen. Cero ISK neutro, costes rojos e ingresos positivos verdes.
+- Pruebas **locales reales**: build `python3 build.py 1.0.137`, **25/25 Node**, **16/16 Python**, **8/8 heredadas** y **40/40 Chromium** en ES/EN, Dark/Light, 390/1440 y geometría expandida, `git diff --check` correcto. Inspeccionadas capturas Dark escritorio y Light móvil; datos sintéticos, no transacciones EVE.
+- **Cierre público:** 17 rutas de fuente/documentación/test publicadas por Fiko/Fikolasty en `98ffe46a672550990a052d205e14d8091e6605ea`, árbol `8588e50bbebd4e72ca1a20b14dde5d9a428ce7bf`, sobre `8b07529bf591080c9f873ca11bcdce843238de70` (`expected_sha`, `force:false`); bot compiló `07eb1f3e4ff840191d4ebebcfe256c84d990e031`. Actions `success`: Rebuild/Pages **`40269836663`**, Build `40269836688`, Minería `40269836845`, Versiones `40269836843`. Descarga HTTPS de Pages con cache-buster: **2.278.066 bytes**, objeto Git **`faa2e51c6e4e1436580e918cc76e243b7d2b2be4`** exacto entre Pages, GitHub y build local. **LIVE certificada.** C.1b y D siguen pendientes; EVE SSO/ESI real no validado.
+
+## v1.0.136 — 2026-10-25 [ChatGPT] · C.1a limpieza CSS demostrablemente neutra — LIVE verificada
+
+- Primer incremento de C.1 autorizado por Raulito al pedir continuar el plan, **separado del candidato B.6a+B.6b v1.0.135 aún sin publicar**. En `src/styles/80-product-ux.css`, se retiran 14 declaraciones `!important` redundantes: el bloque antiguo B.6 del selector conserva estructura grid/teclado; B.6a queda como único dueño de superficies, bordes, padding, altura y resaltado. Los campos copiables de Listado reutilizan `.isk-pos/.isk-neg` globales sin un segundo override de mayor especificidad ni un `color:var(--txt)!important` que los anulaba. Sin cambios de JS, cálculos, precios, listeners, DOM, i18n, EVE SSO/ESI o almacenamiento.
+- Control diferencial: **24/24 Node, 16/16 Python, 8/8 legacy, 39/39 Chromium y build 1.0.136 PASS**. Capturas críticas v1.0.135 vs v1.0.136 (resumen Dark 1440, dos tarjetas Dark, selector Light 390 y Listado Dark 390) **idénticas byte a byte**; otras capturas de suite difieren solo en diminutos píxeles de estados dinámicos, no en geometría. Estática nueva `tests/css-c1-cascade.test.cjs`; workflows locales apuntan a v1.0.136. `docs/QA_STATUS.md` conserva el último release oficial.
+- **Estado intermedio, ya superado:** Fiko/Fikolasty respondió al usar el `link_id` verdadero. **v1.0.135 quedó LIVE** (fuente `3fd7b8a1`, build `2f13ec87`, cuatro Actions success, Pages/Chromium `40264034910`, HTML `24553de1da93db4667d4cf47f3e22cdfa87af7a5` exacto, 2.279.007 bytes). El bloqueo anterior se resolvió sin usar otro login ni terminal push; en ese momento v1.0.136 aún debía publicarse como delta mínimo sobre el build v135, preservando artefactos CI. El cierre real de v136 está en la siguiente línea.
+- **Cierre de v1.0.136:** publicadas **solo 10 rutas** con SHA exacto mediante Fiko sobre el padre post-CI de v135; fuente **`de0133b2d7b07efd7834f2dd7015bb1d088ad452`**, `expected_sha`, `force:false`. Bot **`b4553e85b6242398b50052152c2d027dee02be70`**. Repetición de gates: **24 Node, 16 Python, 8 legacy y 39 Chromium** + build; **cuatro Actions success**: Versiones `40264599038`, Minería `40264598971`, Build `40264599004`, Rebuild/Pages **`40264598943`**. Descarga HTTPS independiente sirvió **`v1.0.136`**, **2.278.601 bytes**, blob Git **`b697ac7d1e977fc9d935d06926b38539369804df`** idéntico local/GitHub/Pages. **LIVE y Raulito informado.** Quedan C.1b y D; SSO/ESI real no validado de extremo a extremo.
+
+## v1.0.135 — 2026-10-25 [ChatGPT] · B.6a+B.6b lista ligera y regla de ISK — LIVE verificada
+
+- **B.6b aprobada para esta misma release:** Raulito acepta las capturas y la publicación, con regla monetaria reutilizable: ISK positivos/entrantes en **verde**, negativos/deducciones/inversiones salientes en **rojo**, cero/no disponible neutral; signos y contexto explican la diferencia entre ingreso de venta y beneficio real. El panel derecho ahora colorea todas las rutas y la ruta rápida (importe verde, ISK sacrificados rojo), coste courier rojo, precios copiables del Listado y tokens monetarios de Minería/Reproceso mediante `.isk-pos/.isk-neg`. Los porcentajes, volúmenes y cantidades no cambian de tono. Se respetan clases `pos`/`neg` explícitas antes de inferir el signo de magnitudes absolutas; valores `data-v` e interacciones de copia intactos. Nuevo test `tests/isk-color-policy.test.cjs` y ampliación de Chromium. Motor financiero/ESI/SSO intactos.
+- **Cierre remoto:** corregido el uso del identificador de la conexión **Fiko/Fikolasty**, con permisos `admin/push`. Se enviaron 21 blobs exactos y se avanzó `main` desde `43af7d493d217e6618ee373088ffb26f9864af61` a **`3fd7b8a1a1bc62110f9816df82d724e660f604df`** con `expected_sha`/`force:false`. Build bot **`2f13ec872403bf23f4085cbfc9c8e597e47d9858`**. 23 Node, 16 Python, 8 legacy, 39 Chromium locales; cuatro Actions success: Versiones `40264034819`, Minería `40264034914`, Build `40264034916`, Rebuild/Pages `40264034910`. HTTPS Pages **2.279.007 bytes**, versión `v1.0.135`, hash Git `24553de1da93db4667d4cf47f3e22cdfa87af7a5` idéntico al HTML local y GitHub. **LIVE; Raulito informado.**
+- Aprobado por el propietario, que pidió ser llamado «Raulito» en esta conversación, a partir de dos capturas Dark de v1.0.134. Se elimina de la franja financiera la segunda visualización del monto neto ya protagonista en `#vIsk`; permanecen coste de envío e impuestos, inversión Trading cuando corresponde y gastos de reproceso/producción existentes. Los dos desplegables se invierten: «¿Por qué reprocesar o no?» izquierda y «¿De dónde salen estas deducciones?» derecha, sin tocar contenido, estado nativo ni i18n.
+- «Planes disponibles» adopta un **único contenedor de lista con separadores finos**, filas ~46–48 px y selección discreta. Se preservan botones nativos y eventos, filtros, ordenamiento, nombres, importes abreviados (exactos en «Tu resultado») y soporte teclado/foco; ningún plan se recalcula distinto.
+- El detalle `#unitCourierBox` se oculta cuando no existe cargo courier (`P.shipCost≈0` y cero filas asignadas), pues el resumen ya deja visible «0 ISK». Si sí hay courier, su detalle y FAQ colateral siguen accesibles. La comparación de rapidez `#pkShortcut` y su FAQ de por qué no elegir la opción más rápida se agrupan en `#pkSpeedBox` como segunda tarjeta junto al courier cuando se necesita; en ausencia de courier son una única sección compacta. `#pkOpportunity` conserva por separado avisos reales de guardas, capital o compresión. Móvil apila sin overflow.
+- Código: `src/js/ui/{selling-results,plan-picker}.js`, `src/shell.html`, `src/styles/80-product-ux.css`, pruebas `tests/plan-layout-b6a.test.cjs`, ampliaciones `tests/browser_theme.py`/`tests/test_i18n_catalog.py`, workflows de versión `1.0.135` y documentos. **22 Node, 16 Python, 8 heredadas, 39 Chromium y build v1.0.135 PASS;** capturas sintéticas ES/EN, Dark/Light, 390/1440 y dos paneles con courier inspeccionadas. Sin cambios financieros, EVE SSO/ESI, datos o almacenamiento.
+- **Estado anterior a la publicación:** la propuesta se validó localmente sobre `main=43af7d493d217e6618ee373088ffb26f9864af61`. El cierre real posterior está registrado arriba y en DSS §23; no confundir este histórico con el estado de la web actual. C.1 y D se retomaron después.
+
+## v1.0.134 — 2026-10-25 [ChatGPT] · B.6 paneles laterales y selector de planes simplificado — LIVE
+
+- Aprobado por Geiner: las explicaciones de deducciones y reprocesamiento comparten fila en escritorio y se apilan en móvil, manteniendo dos desplegables nativos. Respuesta de reprocesamiento a **13 px** y cifras semánticas: tasas y cargos rojos; reducción de Accounting, cero ISK y diferencia favorable verdes; importes de referencia neutrales.
+- «ELIGE TU PLAN»: resultado de la ruta seleccionada a la izquierda (neto estimado o beneficio real solo si Trading conoce el coste, impuestos/comisiones conocidos, envío, ruta y desglose de ingresos/destinos a petición), tarjetas compactas con valores abreviados a la derecha, alternativas abiertas, filtros y ordenación nativa preservados. En móvil se elige antes de ver el resumen; una ruta única evita la barra del 100 % redundante.
+- Se reutilizan `modeTotal`, `flipPlanAccounting`, `P.best`, `S.planMode` y `refreshNow`; **no** se cambian fórmulas financieras, ESI/SSO, almacenamiento o tarifas. En cada selección las cifras exactas son visibles en el resumen y accesibles en las filas. Fuentes: `src/shell.html`, `src/js/ui/plan-picker.js`, `selling-results.js`, `src/i18n/ui.json`, `src/styles/80-product-ux.css`, pruebas Node/Python/Chromium y workflows de v1.0.134.
+- Base remota limpia `main=be0e32d02d3d44ff324e5823626fb047e378abc3`, conexión **Fiko/Fikolasty** verificada, **18 blobs exactos**, fuente [`55121747617c51168d14efc192e521390cc5422b`](https://github.com/Fikolasty/gestor-ventas-eve/commit/55121747617c51168d14efc192e521390cc5422b) mediante lease `expected_sha` y `force:false`. Bot de build `3680c7719cf03a8498167681a33ade0a4514336e` (hijo directo). **21 Node, 16 Python, 8 legacy y 38 Chromium** correctos; **4 Actions success**: Build `40251629822`, Versiones `40251629802`, Verificación minera `40251629816`, Rebuild/Pages `40251629800`. HTML remoto GitHub, descarga HTTPS Pages y compilación local coinciden byte por byte, v1.0.134, **2.271.131 bytes**, blob `755dab77ad9137ec18ccbb8f994302b7c5f7231d`. **LIVE confirmado y Geiner avisado**. C.1/D siguen pendientes; EVE SSO/ESI real no certificado.
+
+## v1.0.133 — 2026-10-25 [ChatGPT] · B.5c reprocesamiento plegable y textos naturales, LIVE
+
+- La recomendación de reprocesamiento deja de ocupar una tarjeta siempre abierta: ahora es **un único `<details>` plegado por defecto** con «¿Por qué reprocesar o no?» como pregunta exterior, equivalente a la explicación de deducciones superior. Mantiene estado abierto al recalcular, teclado, foco y chevron; dentro conserva respuesta, mejor alternativa y desglose marginal por ítem.
+- ES/EN más naturales: «Reprocesa el {ítem}. Ganarías…» o «No reproceses el {ítem}. Si lo haces, perderías…». Se retira «mi hielo u ore»; importe del **beneficio positivo verde** y **pérdida negativa roja** usando tokens semánticos existentes, sin colorear la tarjeta ni modificar cifras financieras/optimización. Las cifras y nombres se insertan como nodos de texto seguros.
+- Fuente `src/js/ui/selling-results.js`, traducciones `src/i18n/ui.json`, CSS focalizado `src/styles/80-product-ux.css`, tests Node/Chromium y workflows/build v1.0.133. **QA/publicación confirmados:** 20 Node, 16 Python, 8 legacy y 37 Chromium; fuente GitHub Fiko `91e5dbe8365a09084b92346f8761d06227338209`, bot `fd779e0d23dd3156c5b094771dfd78571ac23df7`; cuatro Actions `success`, incluido Pages/Chromium `40247756569`. HTML servido por HTTPS **2.258.784 bytes**, blob `8a062a1d1895639ab72026f0c39bbe9de7c82f4a` idéntico al local y GitHub. **v1.0.133 LIVE.**
+
+## v1.0.132 — 2026-10-25 [ChatGPT] · B.5b armonización tipográfica de Ventas, LIVE verificada
+
+- Escala tipográfica compartida y limitada a las secciones de Ventas (`#verdict`, `#pSum`, `#ledger`): preguntas/disclosures **13,5 px**, explicaciones **13 px**, etiquetas secundarias **12,5 px**. Se armonizan FAQ, deducciones, reproceso, desglose de courier, nota de precios y pequeños textos de Listado/selector de plan.
+- Sin cambiar cifras ISK, encabezados protagonistas, precios unitarios copiables, botones de acción, flechas, DOM, cálculo económico, ESI/SSO, almacenamiento, temas ni traducciones. `src/styles/80-product-ux.css` mantiene los tokens en un único alcance; nuevas aserciones estáticas y de Chromium protegen tamaños computados ES/EN, Dark/Light, 390/630/1440 y no herencia hacia Minería.
+- Versión de build y workflows **v1.0.132**. **Publicación certificada:** 20 Node, 16 Python, 8 legacy y 37 Chromium; fuente `14a86d62245a8e63c1b8d676d4e1317088348868` por Fiko/Fikolasty con lease y sin force; CI bot `06cef2e1ca9b38586d073559645eadaa6c7bfad5`, cuatro Actions `success` (Rebuild/Pages `40243816765`). HTML de HTTPS público v1.0.132, **2.258.241 bytes**, blob `b52bdeb59dfd9bb6c7b2ee8fe100f856f224c7ab` igual al build local y GitHub. **LIVE.**
+
+## v1.0.131 — 2026-10-25 [ChatGPT] · Legibilidad contextual B.5a, publicada y verificada en GitHub Pages
+
+- Mejora focalizada de las preguntas y explicaciones de Ventas: preguntas desplegables y FAQ a **16 px**, subtítulos a **~15 px**, párrafos explicativos a **~14,7 px**, textos de fuentes **~13,4 px**, mayor contraste y aire entre líneas. Reprocesamiento y notas de costos también ganan legibilidad sin alterar importes, fórmulas ni los controles existentes.
+- CSS modular `src/styles/80-product-ux.css`, build/workflows `1.0.131`, test estático de escala y Chromium con tamaños computados en ES/EN, Dark/Light y 390/630/1440. **QA y publicación confirmados:** 20 Node, 16 Python, 8 legacy, 37 Chromium; Fiko/Fikolasty, `expected_sha` y sin force en fuente `38f53189`; build `c532def7`; cuatro Actions `success` (Rebuild/Chromium/Pages `40242376437`). Descarga HTTPS pública v1.0.131 de **2.257.122 bytes**, blob `43ef5d8b` idéntico al HTML local y GitHub. **LIVE.**
+
+## v1.0.130 — 2026-10-25 [ChatGPT] · B.5 publicada y verificada en GitHub Pages
+- «LA MEJOR RUTA»: muestra impuestos y comisiones, envío, tarifa de refinería y otros costes **ya incluidos** en el resultado neto. Un desplegable explica tasas efectivas configuradas, Accounting, broker/SCC, relists, courier y origen de las cifras, sin afirmar que las habilidades manuales provienen de un piloto verificado. Import `fN` incorpora tasas en su precio neto: se marca como desglose parcial/no separable, no un falso cero.
+- «¿DEBO REPROCESAR?»: respuesta visible Sí/No/datos insuficientes, justificación y diferencias en ISK. La comparación marginal **usa el courier real del plan completo** y recalcula saltos de contrato/colateral manteniendo los demás ítems en sus rutas; sustituye la comparación preliminar basada en flete prorrateado. No cambia la ruta del motor ni fuerza planes manuales.
+- Listado, «Elige tu plan» y envío: preguntas naturales escondidas bajo `<details>` sobre origen/liquidez de las cotizaciones ESI, rentabilidad frente a rapidez y colateral como garantía (no como coste entero). Estilo Dark/Light, teclado, ES/EN y móvil. Diferenciación de neto de venta y beneficio Trading intacta.
+- **Publicación confirmada:** 19 Node, 16 Python, 8 legacy, 37/37 Chromium local y CI sin fallos; fuente `910d8f950ce4f93cede56df13df8735196ec0403` por Fiko/Fikolasty con SHA esperado, sin force; build CI `ff842ec9ff03079a888009784b78bed7d660b8b5`. Cuatro Actions `success` (Rebuild/Chromium/Pages `40240791939`). El HTML público v1.0.130 tiene **2.256.976 bytes**, blob `e3aaec13676552cf0e104e90bbf299708ddc2d94` idéntico al build local y al remoto; comprobación HTTPS independiente. **v1.0.130 LIVE.** EVE SSO/ESI end-to-end sigue pendiente.
+
+## v1.0.129 — 2026-10-25 [ChatGPT] · B.4 publicada y verificada en GitHub Pages
+- «ELIGE TU PLAN»: la comparación de ISK adicionales o neto alternativo se integra en el encabezado, como en «LA RUTA MÁS RENTABLE», utilizando los mismos importes y rutas. Las advertencias importantes permanecen debajo; no se inventan ganancias con precios incompletos ni ventas a jugadores sin cotización firme.
+- «LISTADO DE ÍTEMS REGISTRADOS»: filas con iconos EVE, cantidad, ruta, **precio unitario copiable** en recuadro neutro de Contrato y **neto estimado del lote** diferenciado de la ganancia tras inversión. Detalles diferidos de precios/guía/ajustes/comparación, expansión por teclado y datos móviles verticales sin desbordamiento.
+- Traducciones ES/EN y nuevas regresiones B.4; pruebas de navegador 390/630/1440, Dark/Light. Preparados los workflows de v1.0.129, sin cambios económicos ni en EVE SSO/ESI o persistencia.
+- **QA y publicación confirmados:** 18 Node, 16 Python, 8 legacy, 35/35 Chromium y build; 15 blobs fuente por Fiko/Fikolasty, commit `3779d79e`, compilado CI `0258f38f`, cuatro Actions `success` (Pages `40231430480`). GitHub y web pública sirven el HTML `v1.0.129` con blob `1af23167` idéntico al build local (2.231.495 bytes). Ver `docs/DSS.md` §14. SSO/ESI reales y cotizaciones ejecutables continúan sin certificado end-to-end.
+
+## v1.0.128 — 2026-10-25 [ChatGPT] · Publicado y verificado en GitHub Pages
+- Consolida las flechas de los acordeones de Minería y los planes/filas de Skills con el mismo contrato ya aprobado de Ventas: 9 px, trazo CSS 1,75 px, color neutro y giro al abrir. Minería mantiene el icono «ⓘ» como ayuda y Skills sigue aislado en su iframe y sincronizado con tema/idioma.
+- Extiende el indicador compartido a tarjetas de planes, detalle por ítem, pasos de venta, filas del Listado y menú de identidad; no modifica las flechas de ordenación ni los `<select>` nativos.
+- Añade `tests/refinement-stage-b3.test.cjs` y dos escenarios Chromium con teclado, detalles abiertos/cerrados, ES/EN, Dark/Light y 390/1440 px. Prepara los dos workflows de publicación para v1.0.128.
+- **QA local completo:** build v1.0.128, 17 archivos de pruebas Node (60 casos), 16 Python, 8 heredadas y **33/33 Chromium**. Una inspección de captura Light 390 px detectó y corrigió una flecha desalineada al envolver la descripción de Minería; la suite completa se repitió después y aprobó. No modifica cálculos, cotizaciones, EVE SSO/ESI, traducciones técnicas ni almacenamiento.
+- **Publicación confirmada:** Fiko/Fikolasty avanzó `main` desde `9e480bf7` a la fuente `f4e4f57cff8447b0670e74104572adab5c67b4b7` con SHA esperado y sin force. Cuatro Actions `success`; Rebuild/Chromium/Pages `40225807322`, commit automático de build `3a2783a4803a90773ceedb07aab1d2b4bcd6b31c`. El HTML descargado por HTTPS de la web pública contiene `v1.0.128` y coincide byte a byte con el build local y remoto Git blob `c7eb9d60ae1f562a409690a1f158c4bb7ea97f66`. La versión ya está LIVE; autenticación EVE y ESI end-to-end reales quedan sin validar.
+
+## v1.0.127 — 2026-10-25 [ChatGPT] · Publicado y verificado en GitHub Pages
+- Refina los filtros de rutas `Todos/Rápidos/Sin envío` y otras categorías de «Elige tu plan» con superficie gris neutral, selección y foco claros, conteos discretos y distribución en filas a ≤760 px. Mantiene todos los predicados de filtrado, rutas e importes. Al redibujar la lista, el teclado conserva el foco en el botón seleccionado. Los filtros de Minería se preservan.
+- Moderniza visualmente el selector de adquisición `Jita Sell / Buy Order` con botón y menú accesibles; el único `<select id="tradePurchaseMode">` continúa gobernando el evento `change`, `C.buyMode` y la economía de Trading. Admite Escape/Tab, flechas, Home/End, Enter/Space, clic fuera y fallback nativo. Usa el chevron compartido B.1 de 9 px/1,75 px, ES/EN, Dark/Light y responsive.
+- Añade `tests/refinement-stage-b2.test.cjs` y dos pruebas Chromium de interacción y foco. Pruebas locales: build v1.0.127, **16 Node + 16 Python + 8 heredadas + 31 Chromium** correctas. Primera corrida Chromium 30/31 por una fixture que ocultaba el contenedor de filtros; corregida la fixture, 31/31. La captura móvil detectó el desborde horizontal de filtros, cambiado a flex-wrap y comprobado de nuevo en Chromium.
+- **Publicación confirmada:** conector GitHub Fiko/Fikolasty, sin force y con precondición de SHA. Fuente `659f4bc8b4b06cbd89d261ec50954d375acff464`, build automático `26e811f2da2a588d46423a61ec348db20a56feac`; cuatro Actions `success`, Rebuild/31 Chromium/Pages `40221550470`. El HTML público descargado, el build local y el blob remoto comparten SHA Git **`5652b3b873288932e58dd4903540e36cb7d0c5a5`** y contienen `v1.0.127`, por lo que ya está live.
+- El propietario otorgó además autorización continua para publicar **futuros incrementos probados** cuando resulte conveniente, siempre mediante Fiko y sin alterar historial, con Actions/Pages verificados. No se modifican fórmulas, ESI/SSO, almacenamiento ni configuración del piloto; chevrons fuera de Ventas, saneamiento C y rendimiento D siguen pendientes.
+
+## v1.0.126 — 2026-10-25 [ChatGPT] · Publicado y verificado en GitHub Pages
+- **Entrega confirmada:** fuente `205ec9fa848527e59b212e0458133279a42ae6f2`, compilación oficial `c716f7aad165bd3fa4354bd28fd6aad7f8a23bf2`; cuatro workflows exitosos, incluido Rebuild/Chromium/Pages `40215891182`. Avance solo mediante Fiko/Fikolasty, sin force. El HTML servido desde la URL pública coincidió byte a byte con el build local `9601d5f848f9652fb2594809862e42ea775ce61d` y contiene `v1.0.126`. El propietario recibió confirmación expresa de disponibilidad live.
+- **Pruebas:** locales 15 Node, 16 Python, 8 heredadas y 29 Chromium; CI aprobó las mismas familias de validación y el gate de HTTP público. Las ejecuciones EVE SSO/ESI con cuenta real, liquidez Buy Order y revisión humana completa no se afirman.
+- **Verificación adicional real:** la conexión Fiko/Fikolasty volvió a operar y `main` se inspeccionó en `fbf5b00f`. Después de recibir y comparar el ZIP completo, se ejecutaron **29/29 pruebas Chromium** en Playwright 1.56.0/Chromium 141, además de 15 Node, 16 Python, ocho regresiones heredadas y build.
+- **Corrección encontrada por Chromium:** una regla posterior del tema Light volvía a aplicar un degradado al Listado. `src/styles/themes/light-components.css` fija `html.light #ledger` a fondo sólido neutro y borde gris; la prueba estática B.1 protege este contrato. Primera pasada 28/29, segunda 29/29.
+- **Seguridad de release:** el workflow de Pages exigió tanto el banner como el literal `v1.0.126` en la respuesta pública y terminó correctamente. No se modificaron ESI, SSO, persistencia ni cálculo económico adicional respecto al P0 ya aprobado.
+- **P0 de economía en Comercio Jita aprobado e implementado:** presupuestar Buy Order toma el mejor `topBuy` publicado (el que ve Tasación) o el precio manual del usuario, **nunca** el `jita.buy` que puede haber sido rebajado por el filtro anti-bait de venta inmediata. Calcula capital de todo el lote, broker de compra una vez, resta inversión de ingresos netos posteriores al flete y presenta **beneficio/ROI reales del escenario** solo si las referencias son válidas.
+- Regresión sintética de **7 Paladin**: a 905,4 M/u y 1,5 % broker, inversión **6.432.867.000 ISK** y beneficio proyectado **655.549.500 ISK**, en vez del falso beneficio de ~7,061 B. No es precio de mercado ESI actual ni venta garantizada en HY-RWO.
+- Si falta precio para cualquier fila activa o el bid automático es flagrantemente inconsistente con el ask, se suspende el beneficio y se muestra una advertencia accionable. Campo manual de precio por unidad solo en Trading, no persistido y sin editar ESI. La etiqueta Jita Buy del detalle concuerda con Tasación; microcopy y resultado ES/EN corregidos. Ingresos de planes siguen visibles como *ingresos*, nunca como beneficio cuando falta capital.
+- `tests/trade-purchase-capital.test.cjs` añade tests de Paladin, ambos modos, presupuesto manual, quote desconocida, bid extremo, filas parcialmente no cotizadas y broker 0/1,5/3 %. `tests/browser_theme.py` cubre ES/EN × Light/Dark × 390/1440; **29/29 Chromium locales y gate remoto aprobados**, además de 15 Node, 16 Python y 8 heredadas.
+- Ambos workflows compilan 1.0.126. El bloqueo histórico `Unknown tool` de Fiko se resolvió en la sesión de publicación y dejó de ser pendiente; fuente/build/Pages confirmados en los SHA y Actions arriba.
+- Etapa A de refinamiento aprobada: la Importación hacia Null pasa a estar encima de Inventario en su columna derecha, y Tasación e Inventario mantienen la misma altura de inicio. Se reutiliza `#importControls` y todos los controles/listeners originales; móvil muestra Tasación → Importación → Inventario.
+- Alinea los bordes del header SIGMA/perfil con los del contenido principal, unifica la pista de altura de las cabeceras, retira marcas decorativas en títulos (incluido Skills) y elimina desplazamiento artificial de la ruta recomendada. Se retira CSS ya inservible de la antigua barra de importación.
+- Nuevo contrato estático `tests/layout-stage-a.test.cjs` y escenario de geometría bilingüe y ambos temas en `tests/browser_theme.py`, **ahora aprobado en Chromium** junto con el resto de las 29 pruebas. El resultado previo de 13 Node y 16 Python quedó superado por la suite final de 15/16.
+- **Revisión B.1 según dos capturas nuevas:** `#ledger` deja de heredar el degradado naranja de `.fold`, utiliza fondo sólido y borde gris mediante tokens Dark/Light y conserva el estado expandido, advertencias ESI y foco de teclado. Cuatro chevrons de la captura —selector de venta, Listado, detalle financiero y pasos— comparten medida 9 px, trazo 1,75 px y rotación coherente; también los disclosures financieros afines. Los indicadores de ordenación de tablas quedan intactos.
+- Añade `tests/ledger-chevron-stage-b.test.cjs` y escenario Chromium Dark/Light + 1440/390 px para el nuevo aspecto y el `<details>` original. La suite final **15 Node/16 Python/29 Chromium** está aprobada; los demás desplegables de Minería/Skills, selector Jita y filtros Rápidos quedan para el resto de la Etapa B.
+- Las Etapas A y B.1 no modificaron motores económicos; el P0 Trading sí corrigió explícitamente el capital. EVE SSO/ESI y persistencia permanecen intactos. **v1.0.126 está live**; quedan B.2–D y revisión humana.
+
+## v1.0.125 — 2026-10-25 [ChatGPT]
+- Primera pantalla piloto aprobada: el resultado de Ventas ordena la lectura como ingreso neto/beneficio estimado → ruta elegida → costes visibles → pasos de ejecución. Añade contexto honesto sobre órdenes y estimaciones, sin presentar el ingreso por ítems propios como beneficio contable.
+- El detalle de distribución de ISK/destinos se abre solo cuando el usuario lo pide. El cálculo del gráfico se mantiene actualizado aunque los pasos operativos estén cerrados; los pasos costosos siguen cargándose bajo demanda.
+- Conserva dos tarjetas de decisión simétricas: comparación de rutas y coste real de courier. Si el plan no tiene transporte asignado, la segunda explica el coste de 0 ISK. Para lotes grandes se ven dos ítems y el resto se expande con un control accesible.
+- Lleva la alternativa rápida detrás del análisis principal y aclara «Ver pasos para vender», reutilizando los controles originales; incorpora microcopy y atributos bilingües mediante `src/i18n/ui.json`, soporte Dark/Light y responsive.
+- Añade regresión estática `tests/sales-pilot.test.cjs` y validación de navegador con fixture sintético en `tests/browser_theme.py`; versiones de workflows actualizadas a 1.0.125. No cambia `src/js/domain/*`, ESI, SSO, persistencia ni las fórmulas de ISK.
+- Publicación confirmada: fuente `5df575a4`, corrección de fixture de test `0dba2dc8`, compilación `6721fc31`, 26 Chromium y GitHub Pages correctos en la ejecución `40171076176`. Primer intento bloqueado por una expectativa de test equivocada, sin despliegue parcial; blob final exacto `97db1a66`.
+
+## v1.0.124 — 2026-10-25 [ChatGPT]
+- Corrige la recomendación para 1.400–1.520 unidades de hielo Krystallos: el plan compara valor neto del dueño después de impuestos, reproceso, compresión y tarifa real SIGMA Freight (incluidos los saltos de contratos de 350.000 m³). La ruta comprimida cotiza **Compressed Krystallos** como item distinto en ESI, con volumen verificado y liquidez propia; la opción se activa solo si el piloto confirma acceso a compresión y su coste.
+- Protección logística para hielo: si el flete marginal captura más ISK que el beneficio adicional del dueño frente a la mejor venta sin envío, se recomienda quedarse localmente; una elección manual puede prevalecer. No equivale a estimar coste de adquisición ni garantiza que una orden se complete.
+- Corrige el desglose de envío por unidad: muestra **lo que recibes**, restando el courier del neto tras comisiones, en vez de sumarle el transporte al precio aparente. El volumen mostrado corresponde al contenido físico que realmente viaja; los contratos listan hielo comprimido cuando corresponde.
+- «Ver diferencias de ISK» y «Coste real del envío» son tarjetas abiertas, gemelas y adaptables, en dos columnas para escritorio y una en móvil; solo la aritmética secundaria se despliega a petición.
+- Actualiza traducciones ES/EN, Ajustes persistentes, instrucciones de venta y pruebas de regresión económicas sintéticas para 1.400 y 1.520 unidades; sin cambios en EVE SSO, Minería ni Skill Plan.
+- Alinea el workflow secundario `Build Market Moves+` con las nuevas rutas `cOrd/cInst` y con la compilación v1.0.124; la comprobación textual antigua falló tras el primer commit de fuente.
+- Actualiza el test visual Chromium que todavía esperaba el cálculo viejo `precio + envío` para que valide `neto − envío` y el resumen visible, dejando los detalles secundarios cerrados.
+
+## v1.0.123 — 2026-10-25 [ChatGPT]
+- Retira el icono de lista situado a la izquierda de «Ventas» en el header, según la captura marcada por el usuario. Mantiene el botón original `#mmTabVentas`, su texto, semántica accesible, selección y comportamiento sin cambiar módulos ni fórmulas.
+- Añade regresión de estructura del tab y actualiza el workflow de compilación a v1.0.123. Fuente `8f9514a`, build `c41fb9c` y Pages verificados con Actions `40165679157`. Revisión visual Dark/escritorio aceptada parcialmente por el usuario; pendientes Light/móvil manual y EVE SSO/ESI end-to-end.
+
+## v1.0.122 — 2026-10-24 [ChatGPT]
+- Recupera el acabado gráfico del header: Inicio con icono de casa, navegación y acciones con radio pequeño, Ajustes/Guía solo iconos, identidad/login como texto sin cápsula, margen inferior equilibrado y chevron fino en «Vender Ítems».
+- Conserva los controles originales, EVE SSO, idiomas, Dark/Light, flujos comerciales y datos. Se añade `docs/DSS.md` para estándares gráficos y continuidad obligatoria por commit.
+- Pruebas Node/Python aprobadas; validación visual Chromium pendiente porque no existe navegador de pruebas local.
+
+## v1.0.121 — 2026-10-24 [ChatGPT]
+- Las cuatro rutas del panel de reproceso usan ahora el comparador compartido y pruebas contractuales confirman que el cargo ISK solo afecta rutas refinadas.
+- Corrige la sincronización del rendimiento al cambiar Reprocessing en Ajustes: la vista toma los niveles actuales antes de pintar, aunque el evento de cambio esté pendiente. Añade regresión específica del fallo de CI v1.0.120.
+- Separa el rendimiento efectivo del reproceso de la tarifa de refinería: cantidades enteras por lotes, sobrantes sin procesar y tarifa estimada en ISK.
+- Integra el cargo independiente en las rutas de Ventas, las comparaciones del panel de reproceso y la valoración del hielo en Minería. Los impuestos de ventas se calculan sobre ingresos brutos, antes del cargo de estructura.
+- La base de tarifa utiliza precios de referencia disponibles y **no está verificada** frente a la valoración interna de EVE; las decisiones siguen siendo estimaciones, no garantías de ejecución.
+- Añade pruebas unitarias de invariancia de minerales al cambiar tarifas y traducciones ES/EN. Pruebas de navegador pendientes donde Playwright no está instalado.
+
+## v1.0.111 — 2026-10-22
+- Layout inspirado en YouTube: marca compacta, navegación en cápsula central y controles reales a la derecha.
+- Franja contextual de comercio separada y oculta para Minería/Skill Plan; responsive hasta móvil.
+- Sin cambios al motor financiero, EVE SSO, Dark/Light, módulos ni simetría Tasación/Inventario.
+- Pruebas de regresión actualizadas; workflow genera versión 1.0.111; documentación y advertencias de publicación en docs/SDD.md.
+
+## v1.0.110 — 2026-10-22
+- Compact SIGMA GRINDSET branding; remove redundant “EVE Online” and main-title tagline.
+- Move the unique 1M Skill Points referral link into a readable animated ticker below MARKET MOVES+; remove the Gratis tag.
+- Show Settings and Help as real bordered buttons; theme switch beside them; increase SSO portrait, label and hit target.
+- Appraisal/Inventory: equal-width/equal-height cards, matched headers and spacing; responsive stack at 860px.
+- Replace v109 header-specific CSS rather than piling additional overrides. Keep core EVE API, financial math, business modes, Light/Dark and authentication DOM intact.
+- Update header regression assertions and GitHub Actions generated site to 1.0.110; details and QA limits in docs/SDD.md.
+
+## v1.0.109 — 2026-10-22
+- Header aprobado reorganizado; se conservan todos los módulos y motores existentes.
+- Navegación y contexto de comercio sin controles redundantes; margen en Ajustes.
+- Limpieza de estilos del navbar v106–108 y nuevas regresiones de compatibilidad.
+
+# Changelog
+
+## 1.0.98 — [ChatGPT] Dos modos de negocio y escenarios Null/Trading
+*2026-10-21*
+
+- Sustituye el switch direccional visible por pestañas **Vender mis ítems** y **Comerciar desde Jita**. Conserva la maquinaria interna y evita duplicar los motores de venta, taxes, courier y reproceso.
+- Trading permite estimar compra a Jita Sell o mediante Buy Order, con broker de compra y advertencia de que la orden no garantiza ejecución. No cobra coste de fabricación otra vez.
+- Ajuste por defecto del **45 % de Jita Buy** para ore, minerales y lotes grandes (≥1.000 unidades) en Null, con excepciones a isótopos y Moon Goo. El precio local por unidad puede editarse por ítem; no se simulan órdenes de Null inexistentes.
+- Distribuye los costes de courier del contrato compartido entre ítems, mostrando el coste por unidad. Mantiene límite configurable de **350.000 m³/contrato**, incluso si exige varios contratos.
+- La comparación de planes se expresa como ingresos netos en liquidación o como beneficio en Trading, incluyendo oportunidad con diferencias positivas/negativas. Tablas largas pasan a acordeones.
+- Nuevas regresiones `tests/market-scenarios.cjs` y ampliación `tests/financial-accounting.cjs`. Minería, Skill Plan, lógica del Buyback y reproceso conservados.
+- Documenta limitaciones del optimizador heurístico y los precios estimados de Null en el SDD.
+
+## 1.0.97 — [ChatGPT] Contraste de pestañas e icono Hulk
+*2026-10-21*
+
+- Mejora el contraste de Ventas, Minería y Skill Plan en tema Light para estados normal, hover y seleccionado, preservando el diseño Dark.
+- Renombra la pestaña «Skills» a **«Skill Plan»**, sin modificar su funcionalidad.
+- Elimina visualmente la placa oscura del render oficial de Hulk mediante composición CSS adaptada a Light/Dark; conserva el modelo oficial y el icono de respaldo sin descargar nuevas imágenes.
+- Añade comprobaciones de regresión de estos estilos. Pendiente de validación visual con el navegador del usuario.
+
+## 1.0.96 — [ChatGPT] Conciliación de importación y armonía visual
+*2026-10-21*
+
+- En dirección Jita → Null, el resumen superior muestra la **ganancia neta estimada** que corresponde al plan activo: ingresos netos menos inversión en Jita. Los ingresos netos, la inversión y el transporte también aparecen expresamente en el desglose; si faltan precios base, se mantiene la cifra verificable de ingresos, sin beneficios inventados.
+- La tarjeta «Comprar en Jita…» dejó de forzar la hipótesis de transportar todo: usa la ruta **realmente seleccionada** y contempla mezclas de ventas en Jita y Null.
+- Nuevo encabezado Minería centrado y de gran formato, consistente con Skills; icono oficial de **Hulk (22544)** en la pestaña, con fallback.
+- Reemplaza el icono parecido a un sol por un verdadero **engranaje** en Ajustes.
+- En Skills el interruptor se llama **«Simular piloto»**, y detecta automáticamente el piloto conectado y activa planes personalizados reales sin pedir simulación; al conectarse, el estado se muestra como «Piloto conectado».
+- Eliminadas sobrescrituras duplicadas de texto y visibilidad del piloto en el build, manteniendo cálculos y utilidades.
+- Nuevas pruebas financieras sintéticas y regresiones de Skills en GitHub Actions. Quedan pruebas visuales y ESI real pendientes.
+
+## 1.0.95 — [ChatGPT] Navegación, importación y Skills ES/EN
+*2026-10-21*
+
+- Pestañas de Ventas, Minería y Skills con icono y nombre; icono EVE de skillbook; Ajustes junto a Guía de uso en la cabecera.
+- Mueve Enviar y Margen al bloque de importación, mostrado solo para la dirección Jita → Null.
+- Endurece la actualización de idioma del módulo Skills, con fallback español y render al cambiar ES/EN.
+- Identifica las etapas totalmente entrenadas con «PLAN COMPLETADO · 100 %» / «PLAN COMPLETE · 100%» y estilo de éxito.
+- Mejora tipografía pequeña de Skills a un mínimo de 11,5 px.
+- Amplía las pruebas de integración del build; pendiente validación manual con piloto real y precios online.
+
+## 1.0.94 — [ChatGPT] Limpieza de caché y protección de sesión EVE
+*2026-10-21*
+
+- Cancela al abandonar la página los temporizadores de pegado, consulta diferida y limpieza de cachés, incluidos los trabajos idle del navegador. Conserva la lógica original de limpieza de precios, ID de ítems e iconos.
+- Evita que renovaciones SSO o solicitudes de habilidades/alianza retrasadas vuelvan a guardar una sesión o modificar niveles y mercado después de que el piloto se desconecte.
+- Amplía las pruebas de regresión para verificar limpieza, respuestas atrasadas, límites de mercado y el módulo Skills integrado.
+- Conserva íntegros los cálculos de ventas, reproceso y minería. La inspección estática y las pruebas funcionales disponibles no sustituyen un profiler de memoria con una sesión prolongada.
+
+## 1.0.93 — [ChatGPT] Skills Library y mantenimiento preventivo
+*2026-10-21*
+
+- Integra el preview aprobado de **Skills** como sección al mismo nivel de Minería; Core Skills y Planetary Industry contienen tres etapas cada una con acordeones, copia de lista EVE, atributos, skillbooks e iconos oficiales por Type ID.
+- Aísla los estilos de Skills en un documento incrustado y protegido para que no se propaguen a Ventas, Minería, Ajustes ni el CSS del resto de la página. Se conserva la distribución existente.
+- Reutiliza la sesión EVE SSO ya autorizada; solo transmite al módulo niveles y SP de habilidades, **nunca tokens**. Sin sesión, planes originales completos; toggle de simulación diferenciado.
+- Estima SP pendiente, tiempo estándar y remap sugerido. Si un libro ya se aprendió (incluso sin nivel entrenado), no se vuelve a presupuestar. Precios de Jita 4-4 con fallback de referencia claramente identificado.
+- Modera la carga de mercado del módulo: 3 solicitudes concurrentes, máximo 4 páginas por habilidad, evita duplicados y respeta pausas de 60 s ante respuestas de límite. Solo se crea el iframe al abrir Skills; cachés de precio y habilidad con conjunto acotado.
+- Añade `tests/skills-integration.cjs` y su ejecución tras el build. No se modifica el motor económico, el reproceso ni el dataset Pyfa de Minería.
+
+**Pendiente por validar:** ejecución satisfactoria de Actions/Pages, reproducción real con EVE SSO, cotizaciones en red, iconos oficiales cargados y QA integral en Firefox/móvil. Los totales e ISK de Ventas no se han recalculado con datos reales en esta entrega.
+
+## 1.0.84 — Mercados Null configurables y mantenimiento de rutas
+*2026-10-19*
+
+- Separa explícitamente el sistema de venta Null de la estructura de reproceso; el selector admite HY-RWO (SIGMA), UALX-3 (BRAVE) y C-J6MT (Goonswarm Federation), con selección automática por alianza ESI o manual.
+- Sincroniza las etiquetas de rutas, contratos de envío y textos del análisis de importación con el mercado elegido.
+- Descarta precios manuales de productos refinados Null cuando el usuario cambia de mercado, para no trasladarlos inadvertidamente a otro sistema.
+- Aclara en Ajustes que los precios de venta Null se estiman con reglas basadas en Jita: no hay cotizaciones locales de órdenes Null integradas.
+- Automatiza reconstrucción del HTML al editar fuentes y añade verificaciones sintácticas del JavaScript y comprobaciones del bundle generado.
+
+**Pendiente de validación:** confirmar la ejecución de GitHub Actions, la publicación de index.html y pruebas de escenarios in-game en los tres mercados. La estimación de mercado Null no es una consulta real de órdenes locales.
+
+
+## 1.0.83 — [ChatGPT] Resumen dinámico y simetría visual
+*2026-10-18*
+
+- La descripción superior se genera directamente a partir del plan seleccionado, las rutas aplicadas y el número de ítems con precio. Resalta el nombre del plan con un color suave, también en el tema claro.
+- Ajusta la proporción horizontal del encabezado y la cifra neta, mejorando separación, lectura y respuesta en pantallas estrechas.
+- «Tasación» deja de ser una insignia y comparte el encabezado en mayúsculas con acento arcilla usado en «Listado de Items Registrados».
+- Regresiones estáticas para cambios de plan y textos con rutas/ítems alternativos. No modifica cálculos de precios ni ISK.
+
+
+## 1.0.82 — [ChatGPT] Interfaz v6 aprobada y mantenimiento de memoria
+*2026-10-18*
+
+- Integra en la app la v6 aprobada: barra de módulos a la derecha, sin Minería duplicada en el encabezado, títulos y subtítulos alineados, La Mejor Ruta de Venta y selección de planes en el mismo panel, fila compacta y desplegable por clic con flecha coherente.
+- Elimina el aviso Deshacer y su historial de ítems, retira resultados/cálculos visuales duplicados que ya estaban ocultos, y limpia referencias de código obsoletas sin cambiar las fórmulas de venta, reproceso ni minería.
+- Corrige limpieza de cachés al reemplazar inventarios: ids, volúmenes, categorías, ore memo e imágenes HTTPS; solo revoca object URLs si realmente son blob. Elimina cotizaciones de Minería antiguas y desconecta su ResizeObserver en pagehide.
+- Conserva la validación de ítems sin precio y la Tasación bruta existente; la equivalencia exacta con Janice continúa sin verificarse.
+- Añade regresiones para el nuevo selector, módulos, cachés y HTML distribuible.
+
+
+## 1.0.81 — [ChatGPT] Diseño final del gestor y navegación modular
+*2026-10-18*
+
+- Sustituye «Antes de empezar» por navegación persistente Ventas / Minería / Industria Planetaria. Minería utiliza el módulo existente; PI es solo una sección reservada.
+- Moderniza encabezados (mayúsculas, acento arcilla y subtítulos útiles) en ruta, resultado, pasos y extras.
+- Muestra el resumen de la ruta antes del resultado; «De dónde sale tu ISK» y «Dónde se vende» comparten tarjeta de ancho completo. Ítems y Volumen quedan compactos debajo.
+- Elimina del resumen principal los paneles redundantes de envío, impuestos y relists sin cambiar el motor ni sus opciones guardadas.
+- Tasación muestra únicamente el número de ítems; Buy/Split/Sell se calculan con los precios brutos originales, sin deducciones. «N sin precio» se indica en el Listado de Items Registrados.
+- La metodología exacta de Janice no se declara verificada hasta contrastar sus datos con una lista y un instante comunes.
+
+
+## 1.0.80 — [ChatGPT] Selector de planes v5 aprobado
+*2026-10-18*
+
+- Solo muestra la fila del plan seleccionado. El Plan Óptimo pasa a estar disponible en «Cambia de Plan», alineado a la derecha; desaparece «Volver al óptimo».
+- El resumen personalizado se ve justo debajo de «Elige un Plan», con una diferencia explícita como +15,195,568 ISK y texto sobre el tiempo o la ruta.
+- Conserva filtros, ordenación, ajustes, precios y motor de cálculos. Actualiza el HTML descargable, sin modificar PI ni Minería.
+
+
+Cambios por versión del Gestor de Ventas. La más nueva arriba. El detalle técnico completo está en `docs/SPEC.txt`.
+
+## 1.0.79 — [ChatGPT] Fichas ⓘ por Type ID y coherencia de drones T1/T2
+*2026-10-16*
+
+- Descripciones específicas para los 35 Type IDs presentes en los fits y presupuestos: naves, módulos, rigs, drones e implantes. Las fichas muestran Type ID, build del SDE usado y enlace a EVE Ref.
+- Confirma que Full T1 equipa Mining Drone I (10246), mientras Full T2 usa Mining Drone II (10250) cuando las skills lo permiten. La facción usa 'Augmented' Mining Drone (43694), sin confundirlo con T1.
+- Avisa expresamente cuando Skills III/IV fuerzan el uso del dron básico en un escenario T2 o Facción; sin cambiar el rendimiento ni inventar skills.
+- Corrige la explicación de moon ore: los strip miners de los escenarios no generan residuo, pero los drones T2 sí (34%) y Augmented también (40%). Sigue mostrándose el residuo de drones por separado.
+- Actualiza el HTML distribuible, los estilos de los tooltips y las regresiones. El dataset histórico de 864 escenarios, los precios ESI y el motor de ventas no se modifican.
+- Referencia estática: los nombres y typeIDs provienen del SDE build 3579973; para cambios posteriores a ese build es necesario regenerar el dataset.
+
+## 1.0.78 — [ChatGPT] Hotfix del residuo de Ice Harvesting Drone II
+*2026-10-16*
+
+- Corrige el error de prefijos del nombre del dron: Ice Harvesting Drone I y II no se deben comparar con includes('Drone I') sin verificar el tipo completo. El residuo de Ice Harvesting Drone II se establece en 34% en 96 escenarios (todos los boosts/implantes correspondientes).
+- Refuerza las pruebas sobre los 864 casos, incluyendo validación por fila de la columna droneWaste. Sin cambios adicionales a UI, rendimiento bruto, refinado, ESI o persistencia.
+
+## 1.0.77 — [ChatGPT] Tooltips estilo EVE y drones actualizados
+*2026-10-16*
+
+- Botones ⓘ con información flotante al pasar el mouse, hacer clic o usar teclado, en precios, descargas, filtros y componentes de fit. Cada componente enlaza a su ficha por Type ID en EVE Ref.
+- Se distribuyen precios y tiempo muerto en dos columnas; filtros de escenario a la izquierda y resumen/ayudas a la derecha. En móvil se apilan.
+- Auditoría de drones moon: T1 conserva Mining Drone I (10246); T2 incorpora Mining Drone II (10250); Facción usa 'Augmented' Mining Drone (43694) cuando se cumplen las skills avanzadas. Skills IV usa fallback T1.
+- Stats verificadas octubre 2026: I 25 m³/ciclo 60 s, 0% de residuo; II 33 m³/ciclo y 34% de residuo; Augmented 37 m³/ciclo y 40% de residuo. Se aplica +2%/nivel por Mining Drone Specialization solo a los avanzados.
+- Dataset derivado actualizado: 96 escenarios moon de Skills V y 12 presupuestos por Type ID, afectando dr/tot/eff/fill e ISK/h; se incorpora la columna droneWaste (también 34% para Ice Harvesting Drone II). Generador Pyfa sincronizado para la próxima regeneración.
+- Caché del generador SDE aislada por directorio, archivos y build para evitar nombres/atributos antiguos. Test adicional comprueba 864 escenarios y asignaciones exactas.
+- Sin cambios a Buyback, contratos, impuestos, configuraciones guardadas ni límites de ESI. Sigue pendiente la validación visual manual y la regeneración desde un snapshot Pyfa más reciente cuando esté disponible.
+
+## 1.0.76 — [ChatGPT] Minería: guía visual de configuración y resultados
+*2026-10-16*
+
+- Se reorganiza el comparador en un flujo explícito «01 Configura tu escenario» y «02 Resultados de tu escenario».
+- Los filtros se agrupan en Contexto (clase, material, fit), Personaje (skills, implantes) y Apoyo y valoración (boost, unidad). Los botones se ajustan al contenido, con altura uniforme, sin columnas vacías ni cambios a los bindings originales.
+- Notas de Skills III e implante +4% ahora se integran en avisos discretos; resumen del escenario en una tarjeta de lectura rápida; se mejora el orden de títulos y espaciados de tarjetas, gráfica y presupuesto.
+- Se añade un encabezado de módulo y una explicación de ajustes compartidos (precios, tiempos de traslado), también visibles en las otras vistas. Diseño adaptable a desktop/tablet/móvil con estados accesibles y soporte de tema claro/oscuro.
+- No se modifica motor de minería, reglas ESI, listas Pyfa, Plan Omega, persistencia, Buyback o fórmula de rendimiento. Regresión nueva que verifica grupos, filtros únicos, orden y referencias de las vistas.
+
+## 1.0.75 — [ChatGPT] Minería por clase, precio de fits y entrenamiento por etapas
+*2026-10-16*
+
+- En Pasos para vender, un clic copia cada precio del producto reprocesado y doble clic (o F2) permite sustituirlo; Enter guarda, Esc cancela, Auto restaura el valor. Override por producto y destino Null/Jita, sin alterar ESI, Buyback ni descuentos físicos/comerciales.
+- Sidebar: «Enviar / No enviar» en lugar de «Envío On / Off».
+- Minería: controles agrupados y clase Barges/Exhumers; Skills III (estimación explícita), IV y V; implantes ordenados Sin (por defecto), 4% (estimado), 5%; material, boosts, fit T1/T2/Facción y valoración. Resumen, ganador, tarjetas, comparativas, entrenamiento y presupuesto responden al escenario seleccionado.
+- Eliminadas la tabla duplicada «Producción por Nave y Escalón» y la gráfica redundante de autonomía. «Fit y Detalle» pasa a fichas verticales con los componentes exactos del fit (nave, módulos, rigs y drones), cantidades, precios Jita Sell y subtotales; los implantes +5% se incluyen cuando corresponde.
+- Editor de precios con botón «Actualizar cotizaciones ESI», selección de nave y componentes del fit y presupuesto, sin borrar overrides manuales. Se deduplican consultas concurrentes por typeID; 2 solicitudes simultáneas como máximo por lote, cooldown ESI y cache de cotizaciones de 5 min.
+- Ruta de entrenamiento por etapas, prioridades de yield, prerequisitos, días acumulados, objetivo IV/V y skillbooks a Jita Sell cuando existen órdenes; no se inventan precios ni calendario III. La trayectoria histórica IV/V es aproximada, no optimizador exhaustivo.
+- Minería persiste el plan y la configuración local en el navegador de forma independiente de los Settings de ventas y del inventario temporal. Se retiran funciones de gráficos huérfanas y se actualizan documentación, pruebas y ajustes de estilo responsive.
+- Skills III y bonus de implantes +4% son estimaciones sobre dataset Pyfa IV/V y Sin/+5%, expresamente marcadas. Los costes de implantes +4% no se incorporan sin precios y typeIDs validados; el fit de referencia III puede no ser equipable.
+
+## 1.0.74 — [ChatGPT] Tiempo muerto editable y comparación de barges
+*2026-10-16*
+
+- Modificador de tiempo muerto por carga de 0 a 900 s, predeterminado 65 s (alinear, warp, depositar sin dock, volver, más 5 s de margen).
+- Rendimiento efectivo calculado por capacidad y producción bruta, para que la mejor barge/exhumer cambie según material, skills, boost, fit y tiempo de viaje. Con compresión en el sitio no se descuenta viaje.
+- Seis tarjetas detalladas de naves por escalón T1/T2/Facción: valor bruto/efectivo, bodega, duración hasta llenar, viajes/h, módulos, drones, ciclo y bonos informativos del casco y habilidades. Ganadora de cada clase resaltada con estrella sutil.
+- La fórmula nueva se utiliza en Rendimiento por Nave, Nave Maxiada y Plan Omega. Primer mes reajustado aproximadamente desde simulaciones históricas de 120 s con bodega IV; progresión restante conserva sus estimaciones.
+- En el gestor, el aviso de «Precios ajustados» solo aparece en rutas que usan los ajustes: venta rápida −0.16% únicamente Jita, nunca Null/Buyback/refinado HY.
+- Sin alterar los datos de Pyfa ni fórmulas de Buyback/ESI/reprocesado. Tests para 65/120 s, compresión y ajuste Jita.
+
+## 1.0.73 — [ChatGPT] HOME, valor del hielo y días minados
+*2026-10-16*
+
+- HOME en el sidebar, sin vaciar inventario ni ajustes.
+- Hielo sin refinar usa Hielo/Null de Ajustes; productos refinados Heavy Water, Liquid Ozone y Strontium tienen reducción comercial en HY del 55% por defecto editable. Isótopos conservan Jita Buy.
+- Buyback Mayhem se rige exclusivamente por su contrato, precios base y tax general/especial, incluso en los planes de hielo.
+- Los planes sugeridos cotejan el coste del envío del hielo frente a su mejor salida local para no recomendar envíos ruinosos.
+- Minería integra escenarios Jita/HY/Mayhem/reprocesado HY y días trabajados de 1 a 30 después del mes 1, sin prorratear Omega.
+- Refine físico, tasas generales, lógica de venta de otros items y endpoints ESI no cambiados. Nuevas pruebas de humo.
+
+## 1.0.72 — [ChatGPT] Precios manuales de minería con restablecimiento ESI
+*2026-10-16*
+
+- Nuevo editor discreto «✎ Editar precios» disponible en las tres vistas de Minería. Permite seleccionar mineral de luna, hielo y gas, alternar Jita Buy/Sell y comprimido/sin comprimir e introducir valores ISK/u propios.
+- Editor avanzado de precio Jita Sell para naves, módulos, implantes y upgrades del fit; recalcula los costes de inversión y los resultados que lo utilizan.
+- Los overrides están aislados por typeID y lado del mercado, prevalecen sobre ESI sin modificar su caché; cada importe tiene control «Volver a ESI». Se mantiene el PLEX manual ya existente.
+- Recalcula Plan Omega, Rendimiento por Nave y Nave Maxiada, manteniendo sin cambios los rendimientos físicos m³/h, las fórmulas del gestor y los endpoints ESI.
+- Admite 2.500.000, 2,500,000 y 2.5m; valida importes positivos. No persiste importes fuera de la sesión; pruebas de parser, prioridad y restablecimiento.
+
+## 1.0.71 — [ChatGPT] Switch de 1M SP en la barra de pestañas
+*2026-10-15*
+
+- El botón ancho de 1M SP se sustituye por un switch compacto situado junto a los tres tabs de Minería, visible solo en Plan para Omega Nuevo.
+- Nuevo enlace «FREE 1 Million SP! ↗» al programa oficial de EVE Online (requiere invitación elegible; el enlace informativo por sí solo no otorga SP).
+- Estilos adaptables en escritorio y móvil, foco de teclado y enlace externo seguro. Se mantiene la traducción al inglés.
+- No se modifican cálculos de entrenamiento, precios, API, fórmulas de venta ni el rendimiento de las naves.
+- Pruebas estáticas de existencia, comportamiento del switch y URL, más SPEC/PROGRESS/MINING.
+
+## 1.0.70 — [ChatGPT] Corregir escalado del plan Omega y transición a Exhumer
+*2026-10-15*
+
+- Corrige los meses 2–12 que permanecían congelados en skills IV, y la barge que nunca ascendía a Exhumer.
+- Las rutas Procurer→Skiff, Retriever→Mackinaw y Covetor→Hulk cambian al estimarse Exhumers I en la cola histórica.
+- Nueva proyección diaria aproximada hacia los hitos IV y V usando tiempos Pyfa y rendimiento interpolado; escenario IV estático diferenciado.
+- La tabla indica el día aproximado de acceso y finalización V. Ingresos brutos y Omega mensual por 1–1000 cuentas, con intervalos de 28 y luego 30 días consecutivos.
+- Añade pruebas de progresión, meseta V y escalado. Datos Pyfa históricos, ESI y fórmulas del gestor de ventas no se modifican.
+
+## 1.0.69 — [ChatGPT] Comparativa minera con pestaña Omega y endgame
+*2026-10-15*
+
+- Se reincorpora desde el tag histórico v1.0.42 la **Comparativa Minera** con sus datos Pyfa, seis barges/exhumers, boosts, fits, cargo, drones e implantes.
+- Tab en el menú y barra superior, integrado al tema del Gestor de Ventas; CSS aislado y JS independiente del cálculo de ventas.
+- Moon ore en orden R64, R32, R16, R8, R4. Gas restringido al escenario del norte Guristas; selección inicial Monazite / Krystallos / Golden Cytoserocin.
+- Plan para Omega Nuevo con 1 millón de SP opcional/condicional (aproximación), 12 meses de proyección declarada, Omega calculado con precio ESI de PLEX y escala 1–1000 cuentas (slider 1–100).
+- Vista **Nave Maxiada** separada: cifras de comparación al V, sin Omega ni inversión. Se muestran precios ESI de Aoede/Ingenii con advertencia de que no están simulados en el fit Faction histórico.
+- Sin cambios en `computePlan`, tasas, fórmulas de ventas ni transporte; ESI minero mantiene máximo dos trabajadores y enfriamiento de 420/429.
+- Documentación minera y generadores históricos conservados. Validación estática de sintaxis del JS integrado; pruebas de navegador y regeneración reproducible de Pyfa pendientes.
+## 1.0.68 — [ChatGPT] Completar terminología de envío en Ajustes
+*2026-10-15*
+
+- Las etiquetas Días por courier (mejor/peor caso) y Destinatario del courier pasan a Días por envío y Destinatario del envío.
+- Se actualizan los equivalentes en inglés y se mantienen las entradas antiguas del diccionario para compatibilidad.
+- Sin cambios en identificadores del DOM, contratos Courier, cálculos, API, datos de reproceso o funciones; se regenera index.html.
+## 1.0.67 — [ChatGPT] Terminología de envío fuera de contratos
+*2026-10-15*
+
+- En los textos de ayuda, pasos, guía y menú se usa «envío» en lugar de «courier»; el contrato de tipo **Courier** y su terminología contractual se mantienen.
+- Actualización de traducciones al inglés para los textos y el interruptor Envío On/Off.
+- README: se actualizan los textos de envío, los pasos y la referencia al Modo Ligero, eliminado en v1.0.56.
+- **Sin cambios** en cálculos, parámetros, API ESI/Fenris, reglas de mercado o datos de reproceso. Cambios limitados a textos, documentación e index.html compilado.
+- Identificación de autor: commit con `[ChatGPT]` y tag de recuperación `chatgpt-<sha12>` creado por GitHub Actions.
+
+## 1.0.66 — Textos de Ajustes sin comillas
+*2026-10-15*
+
+- Ajustes y Pasos sin «comillas»: «Restablecer» → el botón Restablecer; «Relists» → la casilla Relists del desglose; «Contratos y Envío», «Broker's fee», «no», «Activa …» sin comillas; el nombre de la refinería explica «la parte antes del guion».
+- Textos que apuntaban a secciones viejas («Tus Contratos», «Precios para Listar») ahora apuntan a donde está cada cosa hoy (este paso, Contratos y Envío, Extras).
+- Traducciones al inglés actualizadas.
+
+## 1.0.65 — Ajustes con el estilo de la Guía y títulos divisores
+*2026-10-15*
+
+- **Ajustes**: las tarjetas y campos usan el negro de la Guía de Uso (fondo #0b0b0b con sombra interior, campos más oscuros). Mismo funcionamiento, íconos y títulos.
+- **Títulos divisores**: el estilo de «IMPUESTOS Y PRECIOS» (mayúsculas en arcilla con una rayita) se usa ahora en todos los subtítulos: Guía de Uso (Las Formas de Vender, Palabras Clave, Seguridad), Pasos para Vender, ¿Reprocesar?, Tus Contratos, Envío, Dos Escenarios y Reproceso.
+- Tema claro incluido.
+
+## 1.0.64 — Simetría en los Pasos y casillas copiables
+*2026-10-15*
+
+- Paso abierto simétrico: el mismo margen a la izquierda, a la derecha y abajo (20 px); la tabla de items y «Cómo llenar el contrato» empiezan y terminan a la misma altura, con la fila «Copiar items» al nivel del título del contrato.
+- En pasos con contrato, la tabla usa columnas proporcionales: el nombre del item queda en una línea con su ícono.
+- Todas las casillas del contrato se copian con un clic (también Tipo de contrato, Ubicación, Expiración, Cálculo…), en los Pasos y en Contratos y Envío.
+
+## 1.0.63 — Contratos dentro de Extras
+*2026-10-15*
+
+- **Contratos y Envío** pasa al recuadro **EXTRAS**, junto a Reproceso y Vender a Jugadores, con la misma medida que las demás filas. Extras se oculta solo cuando no queda ninguna sección que mostrar.
+
+## 1.0.62 — Ticker de Skill Points, aviso de inicio y Tasación junto al pegado
+*2026-10-15*
+
+- **Ticker**: el anuncio «Gratis · 1 Millón de Skill Points» corre en bucle en el encabezado, entre SIGMA GRINDSET y Dark/Light (se pausa al pasar el mouse; clic abre el enlace). En móvil va en su propia fila. Con «reducir movimiento» queda quieto.
+- **Antes de empezar**: aviso de ancho completo arriba de la Tasación, con «Ver Guía de Uso», «Configurar Ajustes» y una **X**. Al cerrarlo no vuelve a salir en este navegador («Restablecer» en Ajustes lo vuelve a mostrar).
+- **Tasación | Pegar**: la Tasación a la izquierda y el recuadro para pegar a la derecha, misma altura. Sin items, el recuadro ocupa todo el ancho.
+- Fuera la tarjeta vieja «Gratis / Antes de empezar» y sus estilos.
+
+## 1.0.61 — Guía de Uso actualizada
+*2026-10-15*
+
+- Textos de la Guía de Uso al día: Fenris Creations en lugar de CCP, «pégalos en el recuadro de inicio», Tasación, Plan Óptimo desplegable, Pasos con contrato, menú lateral (ruta, Courier, margen), Listado de Items Registrados y la seguridad tal como funciona hoy. También en inglés.
+- Estilo: los cuadros de texto usan el negro de las casillas para que el texto resalte; los números 1–4 en arcilla, como los de los Pasos; los títulos de «Formas de Vender» y «Palabras Clave» en arcilla.
+
+## 1.0.60 — Recuadro Extras y medidas iguales
+*2026-10-15*
+
+- **EXTRAS**: Reproceso y Vender a Jugadores van dentro de un recuadro con título e ícono, como el del Resultado. Se oculta si no hay nada que mostrar (por ejemplo, con la ruta Jita → HY-RWO).
+- «Ver el desglose» y las filas de Extras tienen la misma medida (ancho y alto) que la fila del plan elegido.
+- Arreglo: al cambiar a Jita → HY-RWO, Reproceso ya no se queda visible (solo se reprocesa en HY-RWO).
+
+## 1.0.59 — Pasos para Vender en dos columnas y secciones plegables
+*2026-10-15*
+
+**Contratos y Envío, Reproceso y Vender a Jugadores**
+- Fuera del desglose y de «Ver más»: siempre visibles debajo del Resultado, plegadas con el mismo aspecto que «Listado de Items Registrados» (borde arcilla, «Ver ▾ / Ocultar ▴» a la derecha). Al abrir una, las demás se pliegan.
+- Los datos de cada contrato usan casillas negras (etiqueta arriba, valor abajo, clic para copiar), en dos columnas.
+
+**Pasos para Vender, rediseñados**
+- Cada paso se pliega con clic en su cabecera; el paso 1 empieza abierto. Abrir uno no cierra los demás y lo centra en pantalla.
+- Pasos con contrato (Buyback, Courier, Jugador) en dos columnas: a la izquierda los items, a la derecha **Cómo llenar el contrato** con las casillas negras (mismos datos que «Contratos y Envío»).
+- Tablas y listas dentro de los pasos con el mismo fondo negro de las casillas.
+- El paso del Courier muestra la lista de items con su volumen y «Copiar items».
+
+**Limpieza**
+- Una sola fuente para los datos de contratos (ctrSpecs) y para la lista de items (ctItems); fuera la tabla vieja de campos, la tira de íconos, el botón «Ver más» y sus estilos.
+
+## 1.0.58 — Fondo limpio en alta resolución, tema arriba y margen más claro
+*2026-10-15*
+
+- **Fondo**: la imagen de Citadel sin ningún texto (fuera «A CITY MADE OF DREAMS…», el logo de EVE Online, «CITADEL»/«SIGMA» y «SPRING 2016»), ampliada a 2560 × 1440 con nitidez extra para pantallas grandes.
+- **Dark / Light** pasa a la esquina superior derecha (sale del menú lateral).
+- **Margen** de la ruta Jita → HY-RWO rediseñado: campo oscuro con «+» y «%» dentro, sin las flechas blancas, con borde arcilla al escribir.
+
+## 1.0.57 — Nueva imagen de fondo
+*2026-10-15*
+
+- Imagen de fondo nueva (arte de EVE Online: Citadel) con **SIGMA** en lugar de «CITADEL», con el mismo estilo de letra: la I y la A son las letras originales; la S, la G y la M se dibujaron con el mismo grosor de trazo, altura y espaciado.
+- La imagen pesa menos: la página pasa de 1,25 MB a 0,94 MB.
+
+## 1.0.56 — Limpieza, sin Modo Ligero y textos
+*2026-10-15*
+
+**Textos**
+- «Ítem/Ítems» sin acento en toda la app (Item, Items, ITEMS).
+- «Tus Ítems» → **Listado de Items Registrados**.
+- En «Ganas de más / Dejas de ganar», el % y el monto de la alternativa van con color (verde positivo, rojo negativo).
+- El texto pequeño del Resultado («RECIBES CON ESTE PLAN», «DEJAS DE GANAR») alineado con el título RESULTADO; en móvil el número grande cabe en una línea.
+
+**Fuera el Modo Ligero** y todo su código (interruptor, guardado, estilos `html.lite`).
+
+**Revisión de código, memoria y fórmulas**
+- Memoria: 10 ciclos de pegar 155 items / limpiar / pegar pocos, abriendo desglose, planes, rutas, items y Ajustes: los nodos y listeners vuelven siempre al mismo número y la memoria se mantiene estable (~2,5 MB). Sin fugas.
+- Rendimiento: recalcular 6–9 ms, abrir el desglose ~65 ms, cambiar de plan ~40 ms.
+- Fórmulas: 2.000+ comprobaciones en las tres rutas (HY-RWO → Jita, Jita → HY-RWO con y sin Courier) y con relists: total = suma de cada item − envío; envío = courier del volumen y colateral; contratos suman lo mismo que el envío; precios de Jita, Null, Buyback e importación con sus tasas; Tasación igual a la suma de Jita Buy/Sell. Todo cuadra.
+- Fuera variables y ~90 reglas CSS que ya no usaba nada; mismo aspecto (comparado píxel a píxel).
+
+## 1.0.55 — Interruptor Courier On/Off y pasos sin casillas
+*2026-10-15*
+
+**Courier On/Off** (reemplaza «En Jita / En HY-RWO»)
+- Ruta **HY-RWO → Jita**: el courier siempre se cuenta cuando el plan envía algo a Jita; el interruptor no aparece.
+- Ruta **Jita → HY-RWO**: aparece **Courier On/Off** (al elegir la ruta empieza en On).
+  - **On**: los items están en Jita y los llevas a HY-RWO con SIGMA Freight; se cuenta el courier y el plan compara vender en Jita o en HY-RWO.
+  - **Off**: los trajiste a Jita para venderlos allí; sin courier, solo vender en Jita (orden o al instante).
+- Al cambiar de ruta, el Courier vuelve a On.
+
+**Pasos para Vender**
+- Fuera las casillas de cada item, el botón «✓ Marcar hecho» y el contador «N de M pasos hechos».
+
+**Arreglo**
+- En «¿Reprocesar?» (venta a jugador) se mostraba una diferencia extra que no correspondía.
+
+**Limpieza**
+- Fuera las ramas de código que ya no pueden ocurrir con el nuevo interruptor (textos «sin envío» de la ruta normal, etiquetas que cambiaban con el switch) y el código/estilos de las casillas.
+
+## 1.0.54 — Modo foco
+*2026-10-15*
+
+- Al abrir una sección principal —los planes (clic en el Plan Óptimo), el desglose, Tus Items, Ajustes o la Guía de Uso— las demás se pliegan solas y la vista se mueve a la que abriste.
+
+## 1.0.53 — Inicio más limpio y Guía de Uso
+*2026-10-15*
+
+- **Título** más grande y centrado: logo + MARKET MOVES+ + subtítulo como un solo bloque, al centro de las tarjetas de abajo.
+- **Una sola tarjeta** para «Gratis» y «Antes de empezar», separadas por una línea; las dos etiquetas arriba y alineadas (sin la bombilla).
+- El texto «Usa mi enlace para recibir **1 Millón de Skill Points** gratis» más grande y en arcilla clara para que destaque (la tarjeta queda igual).
+- Fuera los botones de arriba (Ajustes y Ayuda): se abren desde el menú lateral, desde «Antes de empezar» o se cierran con su X.
+- **Ayuda → Guía de Uso** en toda la app («Ver Guía de Uso», «Cerrar Guía de Uso», «Lee la Guía de Uso…»).
+- Aviso de privacidad discreto: una línea pequeña y centrada al pie, sin recuadro.
+
+## 1.0.52 — Market Moves+
+*2026-10-15*
+
+- Nuevo nombre: **MARKET MOVES+** (título, pestaña del navegador y README).
+- Subtítulo: «Herramienta para gestionar tus planes de mercado.» / en inglés «A tool to manage your market plans.»
+
+## 1.0.51 — Planes desde el plan elegido, textos y movimiento más ágil
+*2026-10-15*
+
+**Elige un Plan**
+- Clic en el plan elegido (Plan Óptimo u otro) despliega o pliega los demás; la etiqueta «+N planes ▾» lo indica. Fuera el botón «Ver más planes».
+- Al elegir otro plan, la lista se vuelve a plegar.
+- Fuera el «Es igual a «…»» del Plan Óptimo.
+
+**Textos**
+- «Vender en null» / «Vender en Null» → **Vender en HY-RWO** en toda la app (también «Reprocesar y Vender en HY-RWO»).
+- «/u» y «Precio por Unidad» en etiquetas y columnas → **Precio Unidad** (Precio Unidad Neto, Precio Unidad Compra/Venta, Precio Unidad del ore…).
+- **RESULTADO** y **TUS ITEMS** en mayúsculas.
+
+**Tus Items**
+- Plegado se ve como el plan elegido y «Ver el desglose» (borde y franja arcilla). A la derecha dice **Ver los N items ▾** / **Ocultar los items ▴** en vez de la hora y los avisos (los avisos siguen en cada item). La cantidad queda centrada con el título.
+
+**Desglose**
+- Fuera la fila «Total del plan» (el total ya está arriba) y las esquinas de mira del recuadro.
+
+**Movimiento**
+- Más ágil: 0,22 s al abrir y 0,14 s al cerrar, solo opacidad y un leve desplazamiento (lo hace la tarjeta gráfica). Antes se animaba la altura y con mucho contenido se sentía lento.
+- Arreglo: al abrir un item de Tus Items, «aria-expanded» se volvía a actualizar (se había perdido en 1.0.50).
+
+## 1.0.50 — El desglose como protagonista y movimiento suave
+*2026-10-15*
+
+**Resultado**
+- Fuera el bloque «Plan Óptimo» (contratos, órdenes y Tiempo): repetía lo que muestra el desglose.
+- **Ver el desglose** queda justo debajo de «Ver más planes». Al abrirlo, los planes se pliegan y el desglose pasa a ser lo principal; el botón cambia a **Volver a los planes**.
+
+**Movimiento suave**
+- Abrir y cerrar con curva *ease in-out* (lenta al empezar, rápida en el medio, lenta al terminar): el desglose, «Ver más planes», Ajustes, Ayuda, cada item de Tus Items y las secciones desplegables.
+- Si el sistema tiene activado «reducir movimiento», se abre al instante como antes.
+
+**Limpieza**
+- Fuera el código y los estilos que ya no usaba nada: el bloque del plan y su texto, y estilos de «Qué hace» y de tarjetas que ya no existen (50+ reglas). Mismo aspecto, archivo más chico.
+
+## 1.0.49 — Planes plegados, plan más corto y página más liviana
+*2026-10-15*
+
+**Elige un Plan**
+- Solo se ven el Plan Óptimo y el plan que elijas. Los demás aparecen con **Ver más planes (N)**; los filtros Todos / Rápidos / Sin envío salen al abrirlos.
+
+**Plan Óptimo**
+- Texto corto: «Recibirías X netos, ya sin taxes, broker y envío. Sigue estos pasos:». El detalle está en la lista.
+- **Tiempo Estimado** va dentro del plan, como una fila más («Tiempo · 7 a 21 días · envío 1–3 días · Jita ≤1 día…»). Los avisos (plan largo, sin precio) siguen debajo si aplican.
+- «Revisa cada destino… Ver el análisis» con el mismo estilo que el plan elegido (borde y franja arcilla), igual que «Ver más planes».
+
+**Optimización (sin quitar nada)**
+- La imagen de fondo y el logo iban dos veces dentro del archivo: ahora una sola. La página pasa de 2,04 MB a 1,28 MB (−37 %), carga más rápido.
+- Consultas a ESI: 8 items a la vez (con los reintentos de 1.0.46), casi el doble de rápido que con 4.
+- Fuera código que ya no se usaba (el texto largo del plan).
+
+## 1.0.48 — Resultado en dos mitades
+*2026-10-15*
+
+- Izquierda: **Recibes con este plan** (el número grande) y, debajo, el plan elegido y «Precios ajustados».
+- Derecha: **Ganas de más**, otro número grande con cuánto más deja el plan y el %:
+  - si el plan envía algo, frente a vender todo en el origen sin enviar nada;
+  - si no envía nada, frente a llevarlo todo al destino con courier.
+- Si el plan deja menos (por ejemplo, elegido por rapidez) dice **Dejas de ganar** en ámbar y lo explica. Si no hay con qué comparar, no se muestra.
+- En móvil va uno debajo del otro.
+
+## 1.0.47 — Tasación mitad y mitad
+*2026-10-15*
+
+- La Tasación y las tarjetas de la derecha ocupan la mitad cada una.
+- Las filas de las dos columnas tienen la misma altura: las líneas divisoras quedan alineadas.
+- «Precios de» dice solo «Jita 4-4», sin la hora.
+
+## 1.0.46 — Pegado con espacios en vez de tabs
+*2026-10-15*
+
+- Si al copiar del juego las columnas llegan separadas por espacios en vez de tabs, la página tomaba toda la línea como nombre («Platinum 13,320 Moon Materials Material»): la cantidad quedaba en 1 y la API no encontraba el item, así que la Tasación y el plan salían vacíos. Ahora 2 o más espacios se leen como columnas, y con un solo espacio el nombre llega hasta el primer número suelto.
+- Conexión con ESI más estable: hasta 3 reintentos con espera si la API corta o pide esperar, y 4 consultas a la vez en vez de 10.
+
+## 1.0.45 — Tasación del lote como Janice
+*2026-10-15*
+
+- Al pegar los items aparece la **Tasación** (la de v1.0.29) donde estaba «Qué hace»: Precios de (Jita 4-4 y la hora) · Volumen · Items | Buy · Split · Sell. Usa la mejor compra y la venta más barata de Jita 4-4 tal cual, igual que Janice. Volumen con 2 decimales; los valores se copian con un clic.
+- «Gratis» y «Antes de empezar» más compactos a la derecha. Sin items, la Tasación no se muestra y las dos tarjetas ocupan todo el ancho.
+- Fuera la tarjeta «Qué hace».
+
+## 1.0.44 — Vuelta a v1.0.22 (pegar items vuelve a mostrar todo)
+*2026-10-15*
+
+- Desde v1.0.23 la página no mostraba nada al pegar los items en el navegador del usuario; v1.0.22 sí funciona. Se vuelve a v1.0.22 como base para seguir desarrollando.
+- Quedan fuera v1.0.23–v1.0.43: Comparativa Minera y mineria.html, ruta/dónde vendes, Tasación, contratos con números crudos, sin Modo Ligero, ganancia a la derecha y compras al Buy/Split/Sell.
+- Todo ese trabajo queda guardado en la rama `respaldo-v1.0.43` para traerlo de vuelta por partes.
+- Se conserva el workflow de Releases.
+
+## 1.0.43 — Vuelta a v1.0.31 (sin los cambios de Codex)
+*2026-10-15*
+
+- Se deshacen los cambios subidos por la web de v1.0.32 a v1.0.39 (hechos con Codex) y las revisiones que dependían de ellos (v1.0.40 y v1.0.42).
+- La Comparativa Minera y el plan para Omega nuevo quedan como en v1.0.31; el resto de la app no cambia (esos cambios no lo tocaban).
+- Se conserva el workflow de v1.0.41, que crea los Releases de las versiones subidas por la web.
+
+## 1.0.31 — Comparativa Minera: plan para Omega nuevo más claro y con precios de ESI
+*2026-10-14*
+
+- **Cuentas**: con 2 o más cuentas, las cifras grandes ahora muestran el total de tus cuentas (antes mostraban solo una y parecía que no cambiaba nada).
+- **Precios de la API de EVE para todo**:
+  - PLEX del **mercado global de PLEX** (región 19000001 de ESI, la orden de venta más barata; si no responde, el promedio de CCP). Se puede escribir otro precio y volver al de ESI.
+  - Implantes de atributos +3 y de minería, naves, módulos y minerales desde Jita 4-4.
+  - El Expert System y el Omega se calculan en PLEX × el precio del PLEX.
+- **Implantes en la inversión**: «Remap + implantes» suma 4 implantes +3 (Int, Mem, Per, Will). Los +5 salen del plan porque piden Cybernetics V (unas dos semanas). En «Rendimiento por Nave», con implantes, la inversión suma los implantes de minería.
+- **Vista rediseñada**:
+  - Introducción en 4 pasos (día 1, días 1–7, día 8, días 8–28).
+  - «Tu Escenario» con botones − / + y accesos rápidos de cuentas (1, 5, 10, 25, 50, 100) en vez de los controles del navegador.
+  - Tarjetas de resultado por material: lo que te queda (o te falta) a los 28 días, si las semanas 2 a 4 pagan el Omega y una barra de cuánto cubren.
+  - Detalle por material: cuentas claras (ingresos y gastos, por cuenta y de todas tus cuentas), línea de tiempo (Expert System, días sin minar, barge propia, día 28 y Exhumer) y gráfico del ISK juntado.
+- Textos reescritos, más simples y en segunda persona. Español / English.
+
+## 1.0.30 — Ganancia a la derecha y compras al Buy, Split o Sell
+*2026-10-14*
+
+- «Tu Lote en Jita»: el punto de tu plan queda centrado sobre la línea y no se corta en el borde; usa los mismos valores que la Tasación (Buy · Split · Sell en las marcas) y lo que deja tu plan se copia con un clic.
+- **Resultado**: con la ruta Jita → HY-RWO, la ganancia (y el % sobre lo invertido) va a la derecha del total, y una etiqueta muestra el margen de importación que tienes en el menú.
+- **Comprar en Jita al Buy, Split o Sell** (solo con la ruta Jita → HY-RWO vendiendo en HY-RWO): Sell = tomas las órdenes de venta, sin broker; Buy o Split = pones una buy order y pagas el Broker de Jita. La ganancia, la tabla y el resumen se recalculan.
+- Casilla del margen del menú sin flechas blancas, con el estilo oscuro de la app.
+
+**Sin redundancias**
+- El margen de importación ya no está repetido en Ajustes: queda solo en el menú lateral y se guarda con tus Ajustes.
+- Fuera la tarjeta «Envío» del resumen (el envío ya está en «De Dónde Sale tu ISK», en el paso Courier y en Contratos).
+- Fuera los números repetidos de «Tu Lote en Jita» (ya están en la Tasación) y el número grande de la tarjeta de compra (ya está a la derecha del Resultado).
+
+## 1.0.29 — Tasación como Janice y contratos exactos para SIGMA Freight
+*2026-10-14*
+
+- Tasación con los mismos valores que Janice: la mejor compra y la venta más barata de Jita 4-4 tal cual. El plan sigue usando sus precios protegidos (compras que aceptan tu cantidad, sin trampas ni cebos).
+- **Contratos de courier con los números crudos que verifica SIGMA Freight**: el colateral es la Jita Sell tal cual de cada item (como Janice: sin anti-cebo, undercut ni ajuste de precios); el volumen va con 2 decimales y el reward = base + ISK/m³ × volumen + % × colateral, redondeado al ISK.
+- «Cálculo» del contrato muestra cada parte con sus decimales y el total, para comprobarlo a mano.
+- El paso «Courier» de Pasos para Vender usa exactamente los mismos números que el contrato (reward, colateral y volumen).
+
+## 1.0.28 — Tasación con los precios juntos
+*2026-10-14*
+
+- Tasación en dos columnas fijas, como Janice: a la izquierda Precios de (Jita 4-4), Volumen e Items; a la derecha los tres precios juntos: Buy, Split y Sell.
+- Arreglado: en la 1.0.27 el Split no aparecía y los precios salían mezclados con los datos.
+
+## 1.0.27 — Volumen copiable en la tasación
+*2026-10-14*
+
+- Tasación: el **Volumen** también se copia con un clic (copia el número en m³).
+
+## 1.0.26 — Comparativa Minera: plan para Omega nuevo, inversión y entrenamiento
+*2026-10-14*
+
+- **Nuevo nombre**: el tab y la página aparte se llaman **Comparativa Minera** (la dirección `mineria.html` no cambia).
+- **Dos vistas**: «Rendimiento por Nave» (la comparativa de siempre) y **«Plan para Omega Nuevo»**.
+- **Plan para Omega Nuevo**, separado por material (moon ore, hielo y gas):
+  - Personaje nuevo que pasa a Omega y compra el **Expert System** de barge (7 días, 15 PLEX editable): mina mientras entrena para volar la barge sin él.
+  - Simulación de 28 días, día por día, con la barge (Procurer, Retriever o Covetor) y el fit elegidos; lo que las skills aún no permiten se baja al módulo que sí se puede usar.
+  - **¿Paga el siguiente Omega?** Ingresos de los días 8 a 28 frente a 500 PLEX (editable); balance a 28 días y día en que se recupera todo (nave, fit, Expert System y Omega).
+  - **Inversión**: nave + fit al precio de venta en Jita 4-4 (ESI). Precio del PLEX manual (mercado global).
+  - **De 1 a 100 cuentas**: todo se multiplica solo.
+  - Hitos: día en que vuela la barge sin el Expert System (y días sin minar si no llega), skills de rendimiento a IV y Exhumer.
+  - Atributos: base 20/20, remap óptimo para el plan, y remap con implantes +3 o +5.
+  - Gráfico de ISK acumulado contra la inversión y el siguiente Omega; plan de entrenamiento recomendado paso a paso.
+- **Entrenamiento: Todo a IV vs Todo a V**: días desde un personaje nuevo para cada nave y escalón (con prerequisitos).
+- **Inversión** de cada fit en la tabla de detalle.
+- La **mejor nave de cada clase** se marca con ★ y fondo dorado.
+- Español / English completos.
+
+## 1.0.25 — Ruta y dónde vendes, tasación del lote
+*2026-10-14*
+
+**Los dos controles del menú, con su significado real**
+- **Ruta** = hacia dónde va el courier: HY-RWO → Jita o Jita → HY-RWO. Los contratos de envío siguen esa dirección.
+- **Dónde vendes** = «En HY-RWO» o «En Jita». Si vendes en el destino de la ruta, se cuenta el envío de SIGMA Freight y salen los contratos; si vendes en el origen, no hay envío.
+  - HY-RWO → Jita · En Jita: courier a Jita y venta en Jita (orden, al instante o reprocesado).
+  - HY-RWO → Jita · En HY-RWO: venta en HY-RWO (órdenes, Buyback, jugador, reproceso), sin envío.
+  - Jita → HY-RWO · En HY-RWO: courier a HY-RWO y venta con tu margen de importación.
+  - Jita → HY-RWO · En Jita: venta en Jita (orden o al instante), sin envío ni reglas del hielo.
+- Por defecto: HY-RWO → Jita, En HY-RWO.
+- Arreglado: con Jita → HY-RWO no salían los contratos hacia HY-RWO; los precios por unidad de esa ruta decían «Precio de cada mineral abajo».
+- Nuevo aviso en el resumen: cuánto dejaría vender en el otro mercado (con el costo del envío y los contratos, o sin envío) y un botón para cambiar.
+
+**Tasación del lote (como Janice)**
+- Fuera la tarjeta «Qué hace». La tasación solo aparece al pegar items; antes, Skill Points y «Antes de empezar» ocupan todo el ancho.
+- La tasación va a la izquierda y las tarjetas a la derecha. Como Janice: a la izquierda «Precios de: Jita 4-4», Volumen e Items; a la derecha Buy · Split · Sell (clic para copiar).
+
+**Reproceso solo en HY-RWO**
+- Nunca se reprocesa en Jita: la opción se llama «Reprocesar en HY-RWO → Jita» (se reprocesa en HY-RWO y se vende el material en Jita) y no aparece cuando los items están en Jita.
+
+**Menú**
+- Rótulos sobre los controles: «Dirección» (Direction) y «En» (At), según el idioma.
+- Fuera el **Modo Ligero** y todo su código (estilos, switch y lo guardado). El tema Dark/Light sigue igual.
+
+## 1.0.24 — Minería: boosts de Porpoise, Orca y Rorqual
+*2026-10-14*
+
+- **Nuevo control «Boost»** en Minería: Sin boost · Porpoise · Orca · Rorqual, cada una **al máximo**.
+  - Mining Foreman Burst II con Mining Laser Optimization (menos ciclo en strip miners, ice y gas harvesters) y Mining Laser Efficiency (más probabilidad de crítico, menos residuo).
+  - Mining Director V, Mining Foreman Mindlink, la skill de la nave a V y su Industrial Core II (Medium, Large o Capital).
+  - Resultado: ciclo −41.6% (Porpoise), −46.5% (Orca), −61.5% (Rorqual); crítico +139% / +155% / +205%.
+- Una línea bajo los controles explica el boost elegido. La Rorqual avisa que no entra en highsec. Los drones no reciben boost.
+- Todo lo demás se recalcula con el boost: ganadora por escalón, tablas, gráficos y autonomía de la bodega.
+- La fórmula reproduce el máximo publicado por CCP para la Rorqual (−57.13% con el core de 2016); hoy el Capital Industrial Core II da +40%.
+- En móvil, los grupos de botones de Minería pasan a la línea siguiente si no caben.
+
+## 1.0.23 — Minería: Barges y Exhumers
+*2026-10-14*
+
+- **Nuevo tab «Minería»** (barra lateral y barra de arriba): compara Procurer, Retriever, Covetor, Skiff, Mackinaw y Hulk en **moon ore, hielo y gas**.
+  - Tres escalones de fit: **Full T1**, **Full T2** y **Facción** (máximo, mezcla facción y T2).
+  - Skills **todo a IV** o **todo a V** (a IV respeta lo obligatorio: Mining Barge V y Astrogeology V para exhumers) y **con o sin implantes de +5%**.
+  - Cuenta strip miners/harvesters, mejoras, Mining Survey Chipset, rigs, **drones**, **implantes** y los **críticos de minería** de Catalyst.
+  - **Bodega y autonomía**: minutos hasta llenarla con cada fit.
+  - **m³/h o ISK/h**: eliges qué minas (cada moon ore, hielo y gas) y el precio de Jita 4-4 (Buy o Sell, comprimido o sin comprimir; la compresión es 1:1 en unidades).
+  - Regla de moon ore: nada que desperdicie mineral (fuera Modulated Strip Miner II y drones T2/facción/Augmented).
+  - Fit y detalle por nave, ganadora por escalón, gráficos de producción y de autonomía, «Qué Nave Recomendar» y «Cómo se Calculó».
+- **Página aparte**: `mineria.html` con la misma comparativa, estilo, tema claro e idioma (lee, sin escribir, el tema e idioma guardados por el Gestor).
+- Datos generados desde los datos estáticos de EVE (los de Pyfa) con `tools/mining/build_data.py`; se regeneran tras cada parche de CCP.
+- Español / English y tema claro incluidos. Solo memoria; solo se conecta a ESI.
+
+## 1.0.22 — Items ya en Jita y nuevo resumen del plan
+*2026-10-14*
+
+- **Items ya en Jita** (ruta HY-RWO → Jita con el switch en «En Jita»): solo se considera venderlos en Jita, con orden o al instante, usando tus Ajustes y el anti-cebo. Ya no aparecen Null, Buyback, venta a jugador, reproceso ni las reglas del hielo; tampoco la barra Null/Jita, «Ver más» ni las tarjetas de Null y Buyback.
+- Con la ruta invertida y el switch en «En HY-RWO» (items ya en HY-RWO), solo se considera venderlos en HY-RWO.
+- Elige un Plan: la cabecera ya no se encima con el subtítulo cuando no hay filtros.
+- **Resumen del plan rediseñado** (arriba del análisis):
+  - Total grande y qué plan es.
+  - «De Dónde Sale tu ISK»: barra del valor de venta repartido en lo que te queda, Sales Tax, Broker (y SCC), Relists, Envío y Producción, con montos y %.
+  - Tarjetas: Items, Volumen, Envío (solo si hay envío) y Taxes y Broker (con Relists).
+  - «Tu Lote en Jita»: Buy · Split · Sell en una línea y un punto con lo que te deja tu plan (% del valor a Jita Sell).
+  - «Dónde se Vende»: barra con la parte del ISK de cada acción del plan.
+  - Fuera «La Más Rápida» y «Comparación con Otros Planes»: ya están en Elige un Plan (columna Rapidez y diferencia vs óptimo).
+- Limpieza: fuera el bloque muerto del contrato del Buyback y referencias a elementos que ya no existen.
+
+## 1.0.21 — Elige un Plan con columnas y filtros; limpieza del código
+*2026-10-14*
+
+**Elige un Plan**
+- Columnas: Plan · Rapidez · Envío · Valor (barra) · Total · vs Óptimo. Clic en un encabezado ordena por esa columna (otro clic invierte).
+- Filtros: Todos · Rápidos (cobras el mismo día: venta al instante y Buyback) · Sin envío · Con reproceso. Solo aparecen los que tienen planes; cada uno muestra cuántos.
+- El **Plan Óptimo va siempre primero**; los demás, de mejor a peor por defecto.
+- Rapidez según el plan y el switch de envío (Inmediato, ~1 día, Días, 1–2 semanas, Incierto; con envío suma «Envío 1–3 d»).
+- Con el envío apagado se ocultan la columna Envío y el filtro «Sin envío», y ningún texto habla de envío.
+- Ordenar o filtrar no recalcula el plan (solo repinta la lista). Todo sigue la ruta (HY-RWO → Jita o Jita → HY-RWO) y el switch.
+
+**Limpieza y optimización**
+- Fuera código muerto: pestañas Todo/Ore/Loot y su nota, plegado de tablas, recomendaciones antiguas (recoFor), shipShare y ~55 reglas CSS obsoletas (tarjetas viejas del selector, pestañas, botón de plegar).
+- La nota de pestaña creaba un listener nuevo en cada repintado; ya no existe.
+- clearViews() también vacía el orden/filtro del selector y el progreso de los pasos.
+- «Reprocesar para llevar a Jita» dice «y vender en Jita» cuando el envío está apagado.
+- Cabecera del código actualizada: flujo, estado, memoria, seguridad y rendimiento.
+
+## 1.0.20 — Elige un Plan en filas
+*2026-10-14*
+
+- «Elige un Plan» pasa de tarjetas a filas delgadas, una debajo de otra: punto de selección, nombre, una línea que explica qué significa ese plan, barra del valor (comparada con el mejor), total en ISK y diferencia con el óptimo.
+- El óptimo lleva la etiqueta «Recomendado» y barra verde; el plan elegido se marca en arcilla.
+- Si un plan solo aplica a parte de los items, la explicación dice cuántos.
+- En celular, el valor y la diferencia bajan debajo de la explicación.
+
+## 1.0.19 — Pasos para Vender
+*2026-10-14*
+
+- «Qué Hacer» ahora es **Pasos para Vender**: un paso numerado por acción, en el orden en que se hacen (primero lo que se hace donde están los items, luego el courier y al final lo que se hace al llegar).
+- Cada paso dice qué hacer y dónde (En HY-RWO / Envío / En Jita), cuánto ISK deja o cuesta, y muestra su tabla de items con íconos desde el inicio (primeros 5; botón ancho «Ver los N items restantes»).
+- Nuevo paso **Courier**: íconos de lo que viaja, destinatario, destino, reward y colateral para copiar, y botón para copiar los items.
+- Progreso: casilla por item, «Marcar hecho» por paso y barra «N de M pasos hechos» (solo en memoria; se reinicia al recargar).
+- Sin pestañas Todo / Ore / Loot; el buscador solo aparece en pasos con más de 8 items.
+
+## 1.0.18 — Sin descuento por cantidad en Jita
+*2026-10-14*
+
+- El descuento por cantidad ya no se aplica a las órdenes en Jita (ni al vender items que ya están en Jita): es un mercado grande y no hace falta bajar el precio. Solo queda para vender en Null.
+- El texto «Con −X% por cantidad» solo aparece en las ventas en Null.
+
+## 1.0.17 — Anti-cebo, undercut de 1 tick y venta rápida por spread
+*2026-10-14*
+
+- **Undercut en ticks**: la orden en Jita se publica 1 tick por debajo de la venta más barata (1 tick = el mínimo de EVE, 4 cifras). Ajustable en Ajustes → Órdenes de Venta. Si escribiste tu propio precio, se respeta tal cual.
+- **Órdenes cebo**: se revisan las 5 ventas más baratas. Si una está más de 5 ticks por debajo de la siguiente, se salta (hasta 3 en cascada), salvo que tenga mucha cantidad (más que las 3 siguientes juntas). El precio elegido se confirma con la siguiente orden; si no se confirma, es otro nivel de precio y se usa la más barata. Aviso en el item con las órdenes ignoradas.
+  Ejemplo real: 1,512,000 (6 u.) · 1,700,000 (13) · 1,715,000 (13) · 1,812,000 (20) · 1,813,000 (109) → se usa 1,812,000 y se publica a 1,811,000.
+- **Venta rápida por spread**: si tu precio de orden queda a 2 ticks o menos de la mejor compra, el plan vende al instante (casi el mismo ISK, sin esperar) y lo explica en la guía.
+- Ajustes nuevos: Undercut en Jita (ticks), Ignorar órdenes cebo (ticks), Vender al instante si la diferencia es ≤ (ticks). El Undercut % queda para Null y el hielo.
+
+## 1.0.16 — Ajustes guardados e íconos en la web
+*2026-10-14*
+
+- **Los Ajustes se guardan en tu navegador** (localStorage, solo en esa PC): skills, taxes, Buyback, refinería, envío, idioma, tema Dark/Light y Modo Ligero. Se cargan solos la próxima vez.
+- Nuevo botón **Restablecer** en Ajustes: borra lo guardado y vuelve a los valores de fábrica.
+- Lo demás se reinicia en cada visita: inventario pegado, precios, ruta (HY-RWO → Jita), switch de envío (En HY-RWO) y menú contraído.
+- Modo Ligero ya no se activa solo en Firefox. Por defecto: Dark y sin Modo Ligero.
+- **Íconos de los items**: no salían en GitHub Pages porque se descargaban con fetch. Ahora se muestran directo desde images.evetech.net (CSP: img-src incluye ese host). Si un ícono no carga, se oculta.
+
+## 1.0.15 — Menú lateral contraído por defecto
+*2026-10-14*
+
+- El menú lateral siempre empieza contraído (solo íconos), en cualquier tamaño de pantalla. Se expande con el botón de arriba.
+- Primera versión publicada en GitHub Pages: https://fikolasty.github.io/gestor-ventas-eve/
+
+## 1.0.14 — Skills y Taxes enlazados
+*2026-10-14*
+
+Ajustes enlazados (en los dos sentidos)
+- Accounting ↔ Sales Tax %: tax = 7.5% × (1 − 0.11 × nivel). Si cambias el nivel, se reescribe el tax; si escribes el tax, se elige el nivel que da ese valor.
+  Si el tax no corresponde a ningún nivel, Accounting muestra «Personalizado» y se usa el valor escrito.
+- Broker Relations + standings ↔ Broker en Jita %: broker = 3% − 0.3% × BR − 0.03% × facción − 0.02% × corp.
+  Cambiar BR o un standing recalcula el Broker. Escribir el Broker ajusta BR (el más alto que no pase de lo escrito) y reparte el resto en standings
+  (facción primero, luego corp, tope 10). Ej.: 1.27% con BR 5 → facción 7.67.
+- Debajo del Broker se muestra la cuenta (= 3% − 1.5% (Broker Relations 5) − 0.23% (facción 7.67)).
+- Antes, cambiar un standing también reescribía el Sales Tax; ya no.
+- El campo que se ajustó solo destella en arcilla.
+- Días por courier: si el mejor caso pasa al peor (o al revés), la otra caja se corrige también.
+
+Campos que no aplican se apagan (con el motivo debajo)
+- Hielo: sus campos sin «Reglas especiales para hielo»; «Descuento sobre Jita Buy» solo con «Jita Buy menos un %».
+- Buyback: sin «Comparar con el Buyback». Venta a Jugador: sin «Comparar esta opción». Descuento máximo: sin «Descuento por cantidad».
+- Días por courier y destinatario: con el envío apagado. Margen al importar y Destino en Null: solo en la ruta Jita → HY-RWO.
+
+## 1.0.13 — Mensaje de pegado y Ajustes con relieve
+*2026-10-14*
+
+- Texto de la caja de pegado (placeholder): "Pega aquí tus items con Ctrl+V" (English: "Paste your items here with Ctrl+V"). Sin ejemplos ni instrucciones largas; la guía completa sigue en Ayuda.
+- El mensaje va centrado y más grande (1.35rem; 1.1rem en móvil) solo mientras la caja está vacía (:placeholder-shown); al pegar vuelve al estilo normal alineado a la izquierda.
+Ajustes: estilo gráfico (relieve, sombras y paleta)
+- Tarjetas de cada sección con degradado sobre #151515, brillo arriba, sombra en dos capas; al pasar el mouse se aclara el borde.
+- Sección abierta: borde y franja izquierda arcilla (#d97757) con sombra más profunda; el chevron se pinta arcilla.
+- Ícono de cada sección dentro de una ficha cuadrada con relieve: arcilla suave cerrada, arcilla sólida con ícono blanco abierta.
+- Títulos de grupo (Idioma, Tu Personaje…) en arcilla con una barrita luminosa.
+- La explicación de cada sección va en una nota con borde arcilla a la izquierda.
+- Cada campo es una mini tarjeta; las cajas de texto y selects van hundidas (sombra interior, fondo #0e0e0e) y al enfocarlas se marcan en arcilla.
+- Botones Abrir Todo / Cerrar Todo con relieve y borde arcilla al pasar el mouse.
+- Versión Light equivalente (light_extra.css). En Modo Ligero se quitan las sombras y se deja solo la franja arcilla.
+
+## 1.0.12 — Idioma inglés, textos y Broker de Jita
+*2026-10-14*
+
+Textos y tooltips
+- Etiquetas en Title Case: "Modo Ligero", "Abrir Todo", "Cerrar Todo".
+- Switch de envío: dice "En HY-RWO" (encendido: se cuenta el courier de SIGMA Freight) o "En Jita" (apagado: los items ya están en destino). Con la ruta invertida dice "En Jita" / "En HY-RWO". Función syncShipSwitch().
+- Tema: el switch solo dice "Dark" o "Light".
+- Tooltips con una explicación breve en: ruta (flip), envío, Modo Ligero, tema, Ajustes y Ayuda.
+
+Idioma
+- Nueva sección en Ajustes: "Idioma" → select #langSel (Español / English). Solo en memoria; no se guarda.
+- Traducción en tiempo de ejecución con un diccionario ES→EN embebido (I18N_EN, ~1,050 entradas).
+  Una sola regex (claves de mayor a menor largo, con límites de palabra) sobre nodos de texto y atributos title/aria-label/placeholder.
+  MutationObserver solo mientras está en English; los originales se guardan en WeakMaps para volver al español sin recargar.
+  Al volver a Español se desconecta el observer y se libera la regex. No traduce: textarea de pegado, nombres de items (.lot-name), nombres de EVE.
+- <html lang> cambia a es/en.
+
+Precisión (Broker de Jita)
+- Caso real: 13 items en sell order en Jita. El juego: 1,656,677,161 ISK; la app: 1,661,355,993 ISK.
+  Los precios coincidían exactos (bruto 1,737,365,743 ISK); la diferencia era el Broker: el juego cobró 1.27% y la app tenía 1.00% por defecto.
+- Default del Broker en Jita ahora 1.50% (Broker Relations 5 sin standings: 3% − 1.5%). Lo conservador: mejor sorprenderse con más.
+- La ayuda del campo dice que copies el "Broker's fee" que muestra el juego en la ventana de venta.
+
+Verificación
+- node --check OK; smoke, stress, leak4, pk, ce, noship, t111, tperm111 (1527/1536), tsec111 (solo hosts ESI, storage vacío), sk: sin errores.
+- English: 0 textos en español sobrantes (salvo el nombre "Español" a propósito), escritorio y móvil; volver a Español restaura todo.
+
+## 1.0.11 — Ajuste de precios, menú lateral, Ajustes por secciones, paleta gris-negro
+*2026-10-14*
+
+A) AJUSTE DE PRECIOS (skew)
+- Motivo: la venta rápida real en el juego salió 0.14% por encima de lo calculado (642,876,190 vs 641,950,282); Arturo prefiere que la app calcule un poco a la baja: "mejor sorprenderse con más".
+- Ajustes → Impuestos y Precios → Ajuste de Precios: Venta rápida (Jita Buy) −0.16% por defecto · Órdenes en Jita 0 · Órdenes en Null 0. Además, dentro de cada item: "Ajuste de precio %" que se suma al general (ej. −2).
+- Motor: factor = 1 + ajuste general del tipo de venta + ajuste del item. Venta rápida: valor del recorrido de buy orders × factor (y su promedio). Órdenes en Jita / Null / importado: precio de lista × factor, redondeado al tick. Buyback y jugador no cambian (pagan por su base).
+- Avisos: "Precios ajustados: venta rápida −0.16% · N items con ajuste propio" sobre el total; etiqueta "ajuste −2%" en la fila del item.
+- Verificado: con todo en 0 el resultado es idéntico a 1.0.10; con −0.16% cada venta rápida = ×0.9984; ajuste de item −2% baja su orden en Jita ~2%.
+
+B) MENÚ LATERAL (estilo Claude)
+- Barra lateral fija a la izquierda: "Cálculo" (ruta HY-RWO ⇄ Jita, Contar envío, Modo ligero, Tema claro, y el margen de importación con la ruta invertida) y "General" (Ajustes, Ayuda). Botón ▯ para contraer a solo íconos (60 px) o expandir (248 px). Empieza expandido en pantallas ≥1300 px y contraído en las menores. En móvil (≤900 px) se oculta y se abre encima con un botón flotante; tocar fuera lo cierra. Solo en memoria.
+- La barra de opciones de debajo del pegado se movió al menú. Los botones Ajustes/Ayuda de arriba quedan solo con ícono (con nombre accesible y tooltip). El menú marca Ajustes/Ayuda cuando están abiertos.
+
+C) AJUSTES POR SECCIONES
+- Cuatro secciones con título e introducción: Tu Personaje (Skills) · Impuestos y Precios (Impuestos, Ajuste de Precios, Órdenes de Venta) · Dónde Vendes (Precios en Null, Hielo, Buyback, Venta a Jugador) · Envío y Reproceso (Envío, Refinería). Cada grupo muestra una frase-resumen bajo su título aun cerrado. "Costo de producción %" ahora dice "(si lo fabricaste)".
+
+D) PALETA GRIS-NEGRO (la de la barra que le gustó a Arturo)
+- Paneles: rgba(21,21,21,.88) translúcido sobre la imagen, borde fino rgba(222,220,209,.12), esquinas 14 px, sombra suave. Tarjetas internas apenas más claras (blanco 3.5%) con borde fino, sin sombras. Campos oscuros translúcidos. Plan elegido en arcilla. El tema claro se genera igual desde estos colores (crema).
+
+E) VERIFICACIÓN
+- node --check; skew (cero = 1.0.10; −0.16% exacto); menú en 1440/1200/390 px (expandir, contraer, abrir Ajustes desde el menú, interruptores funcionando, móvil con fondo); tema claro; motor; parser 1527/1536; foco 31/31; smoke; Contratos y Envío; modo invertido; escáner sin envío; selector 8/8; quitar/deshacer; sin fugas; solo hosts de ESI; nada en storage; sin desborde; cero errores.
+- Pestaña del navegador: título "Gestor de Ventas · SIGMA GRINDSET"; con resultado, "1,8 B ISK · Gestor de Ventas" (vuelve al título base al limpiar). Ícono de la pestaña: el logo de SIGMA GRINDSET, incrustado en el archivo (data:), sin pedir nada a internet. El navegador alinea el título a la izquierda; no se puede centrar desde la página.
+
+## 1.0.10 — Barra de opciones armónica
+*2026-10-14*
+
+- Se quitó "Tu lote está en". La ruta y los interruptores van en una sola barra (#route): fondo oscuro, esquinas 12 px, sombra, divisores finos entre controles, todos de 40 px de alto y el mismo relleno.
+- Los cinco controles se ven iguales: interruptor/ícono a la izquierda + texto normal (peso 500). La ruta usa un "interruptor" con ícono ⇄ que se pinta en arcilla cuando está invertida; texto "HY-RWO → Jita" / "Jita → HY-RWO".
+- Textos cortos: "Contar envío"; margen de importación "Margen + [15] % neto" (solo visible con la ruta invertida).
+- Tema claro: barra crema con texto oscuro. Móvil: rejilla de 2 columnas (ruta y margen a lo ancho).
+- Verificado: node --check; capturas oscuro/claro/invertido/móvil; smoke; modo invertido (margen 20%); escáner sin envío; motor idéntico a v105; cero errores; sin desborde.
+- Qué Hacer: la pestaña elegida (Todo / Hielo / Ore y Minerales / Loot y Otros) se marca en arcilla. Si no es "Todo", aparece "Mostrando solo X: n de N items. El plan completo está en «Todo». [Ver todo]" — explica por qué el desglose no coincide con el texto del Plan Óptimo (que siempre habla de todo el lote).
+- Comparación con Otros Planes: si una alternativa deja más que el plan (porque el óptimo eligió rapidez), dice "Ganas +X vs <plan>, pero se vende más lento (el plan óptimo prefiere vender rápido cuando la diferencia es pequeña)".
+- Corregido "ISK ISK" en la recomendación "Elegido por rapidez".
+
+
+---
+
+## 1.0.9 — Sin envío = items ya en destino, una sola fuente, fondo
+*2026-10-14*
+
+A) ENVÍO APAGADO
+- Idea de Arturo: con "Contar envío" apagado los items se tratan como si ya estuvieran en Jita (o en HY-RWO en modo invertido). Llevarlos uno mismo cuesta 0, así que no se menciona el envío en ningún lado.
+- Helper SH() = C.shipOn. Con SH() falso: sin bloque "Envío a Jita" en el análisis; la sección se llama "Contratos" y oculta la columna de envío; sin "Dos Escenarios"; el resumen lista "Vender en Jita" (o "Vender en HY-RWO") como órdenes sin contrato (ya no "Lo llevas tú"); guías, recomendaciones, Precios para Listar, comparación de reproceso, Buyback, jugador, "antes del envío", "Ver más" y la barra "Viaja a Jita" (→ "Se vende en Jita") sin textos de envío/courier. En modo invertido: "Vender en HY-RWO" / "Todo en HY-RWO" y la tabla de comprar y revender sin columna de envío.
+- Verificado con un escáner de texto (todas las secciones abiertas, ruta normal e invertida): 0 menciones de envío/courier/SIGMA Freight fuera de Ajustes, Ayuda y el propio interruptor.
+
+B) UNA SOLA FUENTE
+- Toda la app usa solo la fuente de la interfaz (--f-ui: Anthropic Sans → system-ui → Segoe UI…). Se quitaron la serif y la de números (--f-num y --f-serif apuntan a --f-ui; regla global con !important). Números con cifras tabulares. Auditoría: 1 sola familia en todos los elementos visibles.
+
+C) FONDO
+- Viñeta del modo normal más marcada en las orillas y casi nula al centro (radial + laterales + arriba/abajo, hasta 88–92% negro en los bordes).
+- Modo ligero (oscuro y claro): la imagen se desvanece abajo (mask-image) para no cortarse de golpe; sin viñeta.
+- Tema claro menos brillante: fondos crema (#e6e3da página, tarjetas ~#ebe8e1, campos #f1eee6) en vez de blanco.
+
+D) VERIFICACIÓN
+- node --check; escáner de textos sin envío; auditoría de fuente; capturas oscuro/claro/ligero; motor idéntico a v105; parser 1527/1536; foco 31/31; smoke y API caída; Contratos y Envío; modo invertido; selector 8/8; quitar/deshacer; sin fugas (10 ciclos); solo hosts de ESI; nada en storage; escritorio y móvil sin desborde; cero errores.
+
+
+---
+
+## 1.0.8 — Ajustes ordenados, tema claro, precio por unidad en la lista, optimización
+*2026-10-14*
+
+A) ELIGE UN PLAN
+- Si un plan es exactamente el óptimo (mismo destino para cada item y mismo total), no se muestra como tarjeta aparte: la tarjeta del óptimo dice "Recomendado · es Todo a Jita (Orden)" y el subtítulo "Plan Óptimo · Todo a Jita (Orden)".
+
+B) AJUSTES Y AYUDA
+- Se abren arriba del todo, debajo del título (contenedor .top-slot), y la página baja hasta ellos.
+- Botón X dentro de cada sección, fijo arriba a la derecha mientras bajas (sticky): cierra igual que el botón de la barra.
+- Ajustes: cada grupo (Skills, Impuestos, Precios en Null, Hielo, Refinería, Órdenes, Envío, Jugador, Buyback) es un desplegable de una columna; empiezan cerrados; se abren con clic o Enter; botones "Abrir todo / Cerrar todo". Campos en rejilla automática (mín. 230 px).
+
+C) INTERRUPTORES (debajo del pegado, junto a la ruta)
+- Contar envío · Modo ligero (sale del pie; Firefox lo enciende solo) · Tema claro. Todos solo en memoria. Empieza en tema oscuro.
+- Tema claro: generado automáticamente desde el CSS oscuro por light.py (en build.py): cada regla con colores se repite bajo html.light con colores convertidos (fondos oscuros → casi blanco cálido, texto claro → oscuro, colores vivos oscurecidos para leerse en claro, sombras suaves, arcilla #c96442). Ajustes a mano en light_extra.css (sin sombras de texto, imagen de fondo al 12%, sin viñeta, interruptores).
+- Viñeta negra sobre la imagen de fondo en modo normal (oscuro): transparente al centro → negro 92% en los bordes. Modo ligero sin viñeta.
+
+D) TUS ITEMS
+- Nueva columna "Precio /u": precio por unidad sugerido para la opción elegida, visible sin abrir el item y copiable con clic (Null/importado: precio de lista; Jita orden: precio de orden; venta rápida: promedio de buy orders; Buyback/Jugador: lo que pagan por unidad; reproceso: "—", se ven los minerales al abrir). Copiar no abre la fila. En móvil va en su propia línea.
+- La cabecera de cada fila ahora es un elemento con role="button" (Enter/Espacio abren) para poder contener el botón de copiar.
+
+E) RENDIMIENTO Y MEMORIA
+- El análisis (rutas, Qué Hacer, comparación) solo se pinta con la sección abierta; al abrirla se recalcula una vez. Recálculo con 155 items: ~10 ms → ~6.5 ms.
+- Filas de Tus Items sin listeners propios: un solo manejador de clic y teclado en #lots (WeakMap fila → item). Lote de 155 items: 592 → 129 listeners.
+- Limpieza automática en segundo plano (4 s después de cambiar la lista, en tiempo ocioso): precios de la API e íconos (URL.revokeObjectURL) de items que ya no están ni en Deshacer se sueltan. Lista vacía → 0 precios y 0 íconos en memoria.
+- 10 ciclos de pegar/limpiar: DOM, nodos y listeners constantes; heap estable (~2 MB). Nada se pide a la red hasta pegar.
+
+F) VERIFICACIÓN
+- node --check; selector con plan repetido oculto; Ajustes arriba, desplegables, X fija y funcional; Ayuda con X; tema claro y modo ligero; columna Precio /u (copia exacta, no abre la fila; Enter abre); limpieza de cachés; motor idéntico a v105; parser 1527/1536; foco 31/31; smoke (51 controles de Ajustes) y API caída; Contratos y Envío; modo invertido; quitar/deshacer; solo hosts de ESI; nada en storage; escritorio y móvil sin desborde; cero errores.
+
+
+---
+
+## 1.0.7 — Interruptor "Contar envío"
+*2026-10-13*
+
+Pedido de Arturo: poder apagar el envío en el cálculo, para cuando lleva las cosas él mismo (a Jita o a HY-RWO).
+
+- Interruptor "Contar envío (SIGMA Freight)" junto al botón de la ruta (encendido por defecto; solo en memoria). Funciona en las dos direcciones.
+- C.shipOn=false: courierCost y courierShare valen 0 (courierRaw guarda la fórmula para mostrar lo que costaría); packCouriers no arma contratos de courier; el motor elige sin restar envío (lo que viaja puede cambiar).
+- Textos con envío apagado: resumen "Lo llevas tú a Jita/HY-RWO · N items, m³. Sin courier"; deducciones sin "envío"; panel de envío "El envío está apagado: lo llevas tú…" + volumen, valor y lo que costaría con SIGMA Freight; análisis "Lo llevas tú (sin courier)"; en Comprar en Jita y Vender en HY-RWO, "Envío (lo llevas tú) 0 ISK".
+- Al cambiar el interruptor se vuelve al plan óptimo.
+- Verificado: apagado = suma exacta de las ventas sin envío (2,136,370,896 en el lote de prueba); encender de nuevo devuelve el total original exacto; en modo invertido la ganancia de comprar y revender sube de 237.8 M a 335.5 M; motor con envío encendido idéntico a v105; smoke; selector 8/8; foco 31/31; escritorio y móvil sin desborde; cero errores.
+
+
+---
+
+## 1.0.6 — Comprar en Jita y vender en HY-RWO
+*2026-10-13*
+
+Pedido de Arturo: con la ruta invertida, mostrar cuánto ganas si COMPRAS el lote en Jita al Sell, lo llevas a HY-RWO y lo vendes allí a Jita Sell + el margen que quieras (neto, después de taxes).
+
+- Bloque "Comprar en Jita y Vender en HY-RWO" en Resultado, debajo del total, solo en modo Jita → HY-RWO (#flipBuy, paintFlipBuy).
+- Ganancia grande en verde (o pérdida en rojo) + % sobre lo invertido; 4 datos: Compras en Jita · Envío a HY-RWO · Vendes en HY-RWO (neto) · Ganancia.
+- Tabla por item (máx. 10, ordenada por ganancia): Compras a /u (Jita Sell) · Vendes a /u (precio de lista en HY-RWO) · su parte del envío · ganancia · margen. En móvil, tarjetas.
+- Fórmulas: compra = Jita Sell (referencia del item, editable) × cantidad, comprando de sell orders (sin broker). Venta neta = g.fN − producción = Jita Sell × (1 + margen) × cantidad. Envío = courierCost de todo el lote (todo viaja); por item con courierShare. Ganancia = venta neta − compra − envío.
+- El margen es el mismo campo junto al botón de la ruta (y Ajustes → Envío).
+- Verificado: total del bloque = cálculo independiente al ISK (237,766,717 con 15%; 349,816,357 con 20%); se oculta en la ruta normal; escritorio y móvil sin desborde; motor normal idéntico a v105; smoke; selector 8/8; cero errores.
+- Encabezado: debajo del título y "¿Lo vendes en Null o lo llevas a Jita?", tres columnas iguales alineadas arriba: anuncio de Skill Points (ahora tarjeta, misma altura) · "Qué hace" (texto de la app en tarjeta oscura con etiqueta) · "Antes de empezar". En pantallas de menos de 980 px se apilan.
+
+
+---
+
+## 1.0.5 — Invertir ruta: Jita → HY-RWO
+*2026-10-13*
+
+Pedido de Arturo: un botón "flip" para cuando el lote está en Jita y conviene llevarlo a HY-RWO (Null) y venderlo allí más caro. Ej.: naves como Paladin se venden 14–20% más caras que en Jita, después de impuestos.
+
+A) INTERFAZ
+- Debajo del cuadro de pegado: "Tu lote está en [HY-RWO → Jita ⇄ Invertir]". Al pulsar pasa a "Jita → HY-RWO" (borde arcilla) y aparece "Vender en HY-RWO a Jita Sell + [15] % neto". Solo en memoria (S.flip); no se guarda.
+- Ajustes → Envío: "Destino en Null" (por defecto HY-RWO: Time Is A Flat Circle) y "Margen al importar a HY-RWO %" (15, sincronizado con el campo junto al botón).
+- Al invertir se vuelve al plan óptimo (los planes son otros).
+
+B) MOTOR (computePlan con S.flip)
+- Opciones nuevas: fN = llevar a HY-RWO y vender con orden; fJ = orden en Jita; fJI = venta rápida en Jita (buy orders). No aplican Buyback, jugador ni reproceso.
+- fJ: precio de orden en Jita (jitaList, con undercut y descuento por cantidad) × rateJita. Sin envío.
+- fJI: recorrido de buy orders (walkBuys) × rateInst. Sin envío.
+- fN: precio a listar = tick(Jita Sell × (1 + margen) / rateNull) → neto por unidad = Jita Sell × (1 + margen) (después de Sales Tax, Broker y SCC). Viaja en courier SIGMA Freight (mismas tarifas en ambas direcciones; colateral = valor Jita Sell). SHIPS = {fN}.
+- Mismas reglas: rapidez (si Jita deja casi lo mismo, se queda en Jita), orden vs instantánea por umbral, "no vale la pena enviar" (si el envío real no compensa, se queda en Jita).
+- Totales: "Todo a HY-RWO" (con envío) y "Todo en Jita" (orden) reemplazan a Todo en Null / Todo a Jita; Buyback se oculta.
+- Con S.flip=false el motor es idéntico a v105 (verificado).
+
+C) TEXTOS QUE CAMBIAN CON LA RUTA
+- Selector de plan: Todo a HY-RWO · Todo en Jita (Orden) · Todo en Jita al Instante. Etiquetas: Llevar a HY-RWO (ámbar), Orden/Venta Rápida en Jita (azul).
+- Resumen ("Envío a HY-RWO", "Vender en Jita" sin contrato), guía por item, Precios para Listar (importado / Jita orden / Jita rápida), recomendaciones por grupo.
+- Contratos y Envío: "Courier a HY-RWO", Destino = Destino en Null, ruta "Jita 4-4 → HY-RWO", ganancia extra frente a venderlo en Jita.
+- Análisis: "Envío a HY-RWO", "Todo a HY-RWO", "Todo en Jita".
+- Se ocultan Reproceso, Dos Escenarios y Vender a Jugadores.
+
+D) VERIFICACIÓN
+- Lote de prueba (2 Paladin, 20 Heavy Pulse Laser II, 600 Kerr Sequencer): normal 2,038 M → invertido 2,472 M (todo a HY-RWO, 1 contrato de 97.7 M); margen 20% → 2,584 M; volver a la ruta normal da exactamente el total original; selector en modo invertido 4/4 exacto.
+- Regresión: motor normal idéntico a v105; parser 1527/1536; foco 31/31; smoke y API caída; Contratos y Envío; selector 8/8; quitar/deshacer; 155 items; sin fugas; solo hosts de ESI; escritorio y móvil sin desborde; cero errores.
+
+
+---
+
+## 1.0.4 — Fuente de números solo en números
+*2026-10-13*
+
+- Bahnschrift/DIN (--f-num) queda solo para cifras. Pasan a la fuente de la interfaz (--f-ui) los textos que aún la usaban: marca, subtítulo del héroe, títulos de Ajustes (legend) y de Ayuda, títulos de escenarios, botones de copiar con texto, valores de texto del contrato (Courier, SIGMA Freight, Jita IV…), contador del carrusel, versión del pie y otros rótulos.
+- copyBtn y los valores del contrato marcan con .cp-n lo que es número (isNumTxt: cifras con ISK, m³, %, días, u); esos siguen en la fuente de números.
+- Auditoría automática con todo abierto: ningún texto que no sea cifra usa la fuente de números.
+- Verificado: node --check; smoke; motor idéntico a v105; Contratos y Envío; foco 31/31; sin errores.
+
+
+---
+
+## 1.0.3 — "Antes de empezar" más visible
+*2026-10-13*
+
+- El aviso "Antes de empezar" usa el mismo formato que el anuncio de Skill Points: borde arcilla, degradado arcilla → oscuro, sombra, título como etiqueta arcilla (igual que "Gratis"), palabras clave en arcilla claro, botones con borde arcilla. Sigue siendo caja (no píldora) porque tiene texto y botones.
+- Verificado: node --check; smoke completo; escritorio y móvil sin desborde ni errores.
+- Color #151515 (pedido de Arturo) en las tarjetas dentro de los paneles: contratos, envío, escenarios, lista del plan, tiempo estimado, cuadro de pegado, ajustes, ayuda, aviso de deshacer; con la misma sombra/profundidad que las tarjetas de plan. Sub-bloques internos (items del contrato, datos del envío, consejos) un tono más claro (#1c1b1a). La lista de "Tiempo Estimado" queda como viñetas simples.
+- Contratos: la fila "Disponibilidad" se llama "Name" (como en el juego: Private → Name) en Buyback, Courier y Jugador; también en Ajustes.
+
+
+---
+
+## 1.0.2 — Datos del contrato uniformes
+*2026-10-13*
+
+- Tarjetas de contrato (Buyback, Courier, Jugador): todos los valores con la misma letra (la de números), mismo tamaño (.92rem), peso normal (400) y alineados a la derecha con el mismo relleno, sean copiables (con borde) o no (sin borde). Etiquetas de la izquierda en gris, peso normal.
+- Móvil: el nombre de los items del contrato ya no se corta con "…".
+- Verificado: node --check; smoke completo; Contratos y Envío en escritorio y móvil sin desborde ni errores.
+- Fondo: imagen de EVE al 91% de visibilidad, sin desaturar; viñeta suave solo en los bordes. En Modo ligero también 91% (es estática).
+- Título principal otra vez en MAYÚSCULAS (serif, espaciado .04em). Sombra de texto en el título, textos del héroe, marca y pie para que se lean sobre la imagen.
+
+
+---
+
+## 1.0.1 — Ajustes visuales y de texto
+*2026-10-13*
+
+- Fondo: la imagen de EVE vuelve a verse (42%, algo desaturada y oscurecida) con viñeta radial que oscurece los bordes. Modo ligero: 30%.
+- Números: vuelve la fuente anterior (Bahnschrift/DIN) en .num, total grande, tarjetas de plan y montos.
+- Etiquetas de plan (Qué Hacer, etiqueta junto al total, chips del resumen y de los contratos): con color otra vez y forma casi cuadrada (radio 7 px). Clase k-<opción>: Null y Reprocesar en Null ámbar; Jita (orden, instante, reprocesado) azul suave; Buyback verde; Jugador violeta. La etiqueta del total usa data-k con la opción principal.
+- Textos: "Tu Resultado" → "Resultado". "Elige tu plan" → "Elige un Plan". "Lo mejor sería:/Tu plan:" → subtítulo "Plan Óptimo" o "Plan Elegido · <plan>" y el texto debajo. "Tiempo estimado" → "Tiempo Estimado".
+- Subtítulos del Resultado iguales: 1.05rem, 600, sans, con línea divisoria arriba. Aviso del plan elegido y botón "Ver el análisis" en sans.
+- "Ver el análisis" / "Ver más": algo más visibles (fondo un poco más claro, borde izquierdo arcilla, texto del botón en arcilla claro); abiertos vuelven a neutro.
+- Tarjetas de "Elige un Plan": fondo #151515 con sombra (profundidad), se elevan 1 px al pasar el mouse; ordenadas de mayor a menor total (a igual total, el óptimo primero). La óptima sigue marcada "Recomendado" donde caiga.
+- Qué Hacer: "Ocultar tabla" ahora es un botón con flecha: ↑ (claro) = ocultar; ↓ (oscuro) = mostrar. Las tablas empiezan plegadas (foldC: sin valor = plegada).
+- "Sin Reproceso" en "Todo en Null/Todo a Jita" solo aparece si el lote tiene algo reprocesable (resolveOre).
+- Contrato de courier: nuevo campo "Disponibilidad: SIGMA Freight" (copiable). Editable en Ajustes → Envío → Destinatario del courier (no se guarda).
+
+Verificación: node --check; selector 8/8 exacto y ordenado; plegado por defecto y flecha; etiqueta "Sin Reproceso" con y sin ore; destinatario en la tarjeta del courier; quitar/deshacer; escritorio y móvil sin desborde; motor idéntico a v105; parser 1527/1536; foco 31/31; smoke y API caída; solo hosts de ESI; nada en storage.
+
+
+---
+
+## 1.0.0 — Estilo Claude, quitar items, Contratos y Envío alineado
+*2026-10-13*
+
+NUMERACIÓN: por pedido de Arturo esta versión es la 1.0.0 (antes v112). La siguiente es 1.0.1. Archivo: calculadora-ventas-jita-v1.0.0.html. El pie muestra "v1.0.0". build.py se llama con "1.0.0".
+
+A) QUITAR ITEMS DE "TUS ITEMS"
+- Cada fila tiene una × a la derecha (tenue; se marca en rojo al pasar el mouse; visible siempre en táctil). Quita las líneas de ese item del pegado y todo se recalcula: plan, totales, contratos, envío, resumen.
+- Barra "Quitaste X. Todo se recalculó sin ese item. [Deshacer]": devuelve las líneas al pegado. Pila de hasta 20 en memoria; se borra al Limpiar y al cerrar (pagehide). "Quitar del lote" dentro del item usa lo mismo.
+
+B) CONTRATOS Y ENVÍO ALINEADO
+- Las dos columnas tienen el encabezado en la misma fila (puntos + flechas del carrusel a la derecha de "Tus Contratos"; ruta a la derecha de "Envío a Jita"). Las tarjetas empiezan a la misma altura y terminan a la misma altura (la del contrato se estira; el resumen queda abajo a la izquierda).
+
+C) ESTILO CLAUDE (pedido: menos azul, más gris, lectura más clara, íconos minimalistas, negrita más simple)
+- Paleta: fondo #262624, paneles #2b2a28, tarjetas #30302e, campos #1f1e1d, bordes rgba(222,220,209,.10–.17). Texto #faf9f5 / #e5e3da / #c2c0b6 / #9c9a92 (más sólido que antes).
+- Color solo donde informa: verde/rojo en números (#5cba86 / #e8746c), ámbar en alertas (#e0a84f), arcilla #d97757 para la acción principal (botón, plan elegido, base del envío). Los azules pasaron a grises (conversión automática de todos los colores del CSS + bloque final "v112: estilo Claude").
+- Tipografía: sans del sistema para la interfaz y los números (tabulares); serif (Anthropic Serif → Tiempos → Georgia) para títulos de sección, el título principal (ya no en mayúsculas) y los textos explicativos, más grandes y claros. Negritas a 600. Subtítulos como "Tiempo estimado" sin mayúsculas ni color.
+- Íconos de línea fina (trazo 1.6) y en gris. Etiquetas (pills/chips) neutras. Sin sombras ni brillos. Fondo Athanor casi invisible (6%, en gris); en Modo ligero se oculta.
+
+D) VERIFICACIÓN
+- node --check; quitar y deshacer (total vuelve exacto); selector de plan 8/8 exacto; Contratos y Envío (carrusel, barras, 4/2/0 contratos); escritorio 1400 y móvil 390 sin desborde; cero errores.
+- Regresión: motor idéntico a v105; parser 1527/1536; foco 31/31; smoke completo y API caída; 155 items; 10 ciclos sin fugas; solo hosts de ESI; nada en storage.
+
+
+---
+
+## Antes de 1.0.0
+Versiones de desarrollo v35 → v111 (prototipos internos): parser del inventario, motor de cálculo, ESI, Buyback, reproceso, contratos y envío. Ver `docs/SPEC.txt`.
+## v1.0.154 — 2026-10-28 [ChatGPT] · B.18: gavetas gemelas de ELIGE TU PLAN — LIVE CERTIFICADA
+
+- Dirección visual aprobada por Geiner tras varias propuestas y su dibujo en Paint: **dos franjas simétricas**, cada una con **una cabecera completa de dos títulos** y un cuerpo compartido que se retrae lateralmente, sobre vidrio grafito. Dos contenidos al 50 % con solo una línea fina central, sin tarjetas independientes ni relieve añadido; esquinas «gaveta» iguales arriba y abajo. En ≤880 px, apilado natural sin romper el contenedor.
+- Los pares son **Tu resultado / Planes disponibles** y **Distribución y destinos / Alternativa más rápida**. Toda la cabecera abre/cierra sus dos mitades a la vez; sin chevrones ni minimizadores en ellas. Se eliminan los subdesplegables de planes y distribución y la pregunta interna del plan rápido; la información útil sigue visible. Neto, ganancias, costes, reparto y comparativa siguen usando los datos económicos existentes sin nuevas fórmulas; se ve un estado honesto cuando no hay alternativa comparable.
+- Traducciones ES/EN, foco y `aria-expanded`, grises cálidos Dark/Light exclusivamente mediante tokens actuales. No se modifica B.13–B.17, ESI/SSO, persistencia ni motor de cálculo. **QA:** `build.py 1.0.154`, **36/36 Node, 16/16 Python, 8/8 heredadas y 53/53 Chromium PASS**. Los tres primeros gates en CI bloquearon correctamente la publicación por tests obsoletos/fixture y una verdadera división central de 0 px; se corrigió con línea de 1 px en escritorio y línea superior en móvil, también en Light. **LIVE por Fiko protegida:** fuente final `811392a6`, bot CI `d06f42d5`, cuatro Actions `success` (Rebuild/Chromium/Pages `40658138473`); GitHub y HTTPS públicos idénticos byte por byte al build local: **2.366.142 bytes**, blob `bce873f6`. DSS §60.
+
+## v1.0.155 — 2026-10-28 [ChatGPT] · B.19: Pasos y Extras realmente dentro de gavetas — CANDIDATA LOCAL
+
+- Completa dos cambios que se habían aprobado visualmente pero no estaban en el release B.18: «Ver pasos para vender» encabeza ahora su propio contenido, con total neto de la ruta seleccionada y pasos delgados progresivamente retranqueados; desaparece la tarjeta «PASOS PARA VENDER» desconectada, los chevrons y los rails naranjas.
+- Extras conserva Contratos/Discord y Reproceso con sus mismos `details`, datos, copias, formularios y acciones, ahora con bandejas cálidas inset respecto a sus cabeceras, sin falsos nuevos cálculos ni acordeones obligatorios.
+- ES/EN, Dark/Light, 1440–390, acceso mediante teclado y semántica financiera conservados. `index.html` compilado localmente como v1.0.155. QA local 37 Node, 16 Python y regresiones financieras heredadas PASS; Chromium/Actions/Pages/HTTPS pendientes. La última versión LIVE certificada sigue siendo v1.0.154 hasta completar esos gates. DSS §61.
+

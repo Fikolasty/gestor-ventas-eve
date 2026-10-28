@@ -1,0 +1,130 @@
+# Comparativa Minera — especificación y guía técnica
+
+**Integración objetivo:** Market Moves+ v1.0.69 (octubre de 2026).
+**Estado:** módulo reincorporado desde el tag histórico v1.0.42, con mejoras propias documentadas. Separado del motor económico de venta.
+**Puntos de entrada:** botón **Minería** en el menú y en la barra superior; tres vistas internas: Rendimiento por Nave, Plan para Omega Nuevo y Nave Maxiada.
+
+## Origen verificable de la información
+
+- Dataset precalculado de la versión histórica v1.0.42, obtenido del SDE utilizado por Pyfa, build **3579973**, con 864 escenarios (boost × skills × implante × material × tier × nave), además de simulación y fits de 28 días. Archivo `src/mining_data.js`. No son rendimientos consultados por ESI ni una simulación de mercado en tiempo real.
+- Mecánicas posteriores a Catalyst: https://www.eveonline.com/es/news/view/catalyst-expansion-notes
+- Mining barges/exhumers, ciclos, upgrade T2 y storyline: https://wiki.eveuniversity.org/ORE_Basic_Ship_and_Skill_Guide
+- Residuo de cristales y prohibición autoimpuesta de desperdiciar moon ore: https://wiki.eveuniversity.org/Mining_crystals y https://wiki.eveuniversity.org/Moon_mining
+- Clasificación de luna: https://support.eveonline.com/hc/en-us/articles/115005404229-Moon-Mining y https://wiki.eveuniversity.org/Moon_mining
+- Distribución de gas: https://wiki.eveuniversity.org/Gas_huffing
+- Mercado global de PLEX: https://www.eveonline.com/news/view/global-plex-market-coming-7-july
+- 1 millón de SP condicionado al programa de referidos: https://www.eveonline.com/recruit
+
+## Nave y materiales
+
+- **Solo las seis naves pedidas:** Procurer, Retriever, Covetor; Skiff, Mackinaw, Hulk.
+- Comparaciones de luna, hielo y gas; fits T1, T2, Facción; skills IV/V; implantes, drones, boosts y bodega.
+- Moon ore ordenada explícitamente **R64, R32, R16, R8, R4**, no alfabéticamente; mostrar las variantes del dataset dentro de cada rareza.
+- Gas: solo selección regional **Guristas/norte Nullsec**: Golden Cytoserocin (Tenal), Amber Cytoserocin (Vale of the Silent) y Mykoserocin del corredor Venal/Tenal/Vale según documentos actuales. No ofrecer fulleritas de WH ni otros citoserocinos de regiones ajenas. La distribución de Mykoserocin cambia; verificar en el sistema real antes de minar.
+- Moon ore: no desperdiciar el recurso. El escenario T2 del archivo histórico utiliza Strip Miner I con upgrades T2 porque Modulated Strip Miner II con cristal A tiene residuo; ORE Strip Miner para Facción. Drones I no destructivos.
+- Boost de Porpoise/Orca/Rorqual como comparación, no presume que todos los usuarios tengan el booster. Porpoise puede comprimir **gas**, no luna ni hielo; Orca y Rorqual tienen más compresores.
+- Resultados guardados como estimados calculados con ciclos/críticos y tiempos de descarga del dataset; en condiciones reales pueden variar por lag, distancia, vuelo de drones, saturación del sitio, protección, agotamiento y aportación efectiva del booster.
+
+## Datos de mercado
+
+La fuente de precios en la interfaz es **CCP/Fenris ESI**, no números estáticos:
+- Jita 4-4, The Forge `10000002`, estación `60003760`: `/markets/10000002/orders/?order_type=all&type_id={id}&page={n}`; cinco páginas máximo de órdenes para cada producto. No equivale a afirmar libro completo, profundidad ni venta inmediata asegurada.
+- Precios Jita Buy/Sell del material bruto o comprimido. `ISK/h = (m³/h / m³ por unidad bruto) × precio ISK/u`. Comprimir cambia volumen de transporte, **no aumenta unidades recolectadas**.
+- PLEX typeID **44992**: mercado global `19000001`, `/markets/19000001/orders/?order_type=all&type_id=44992&page=1`; caída a precio promedio `/markets/prices/` marcada como aproximación. Campo de precio editable con botón para volver a ESI. 500 PLEX por cuenta Omega/mes por defecto, editable.
+- Módulos endgame: **'Aoede' Mining Laser Upgrade** (typeID 22615) y **'Ingenii' Ice Harvester Upgrade** (typeID 22623), precios por ESI; no asumir 800 M por módulo ni costes fijos. IMPORTANTE: el build Pyfa histórico de las columnas **Faction** conserva low-slot T2 y por ello las cifras de Nave Maxiada no integran automáticamente el bonus de Aoede/Ingenii. Se muestra advertencia y precio, sin falsificar incremento ni ajuste de CPU.
+- Respuestas 420/429 de precios mineros detienen los fetch mineros temporalmente; máximo dos trabajadores para precios de módulos (además de la concurrencia del gestor original, que no se modifica). Sin reintentos en estampida. Se conserva caché 5 minutos en memoria. Si faltan precios, ISK/h/beneficio se representa con «—»; no sustituir por cero.
+
+## Plan Omega y escala
+
+- **Mes 1**: dataset histórico `MINE.sim` / `MINE.simx` para 28 días con o sin Expert System. Skills según perfil de atributos; 1 millón de SP de referidos **opcional**, activado inicialmente cuando corresponde al ejemplo. El adelanto se aproxima usando **30 SP/min** y desplazando el perfil diario de 28 días; NO es una aplicación exacta habilidad por habilidad, no se debe prometer como tal.
+- **Meses 2–12**: proyección explícitamente orientativa al rendimiento con skills IV. Muestra el hito de acceso a Exhumers estimado por plan de entrenamiento y cambios de nave. Aún **no** modela cada skill V ni puede fijar exactamente en qué mes alcanza el 100% real. Evitar etiquetar una extrapolación como entrenamiento al V validado.
+- **Nave Maxiada**: cálculos separados, skills V e implantes, fit Faction del dataset, sin pago Omega ni inversión ni factores de formación. Compara seis naves en los tres tipos de material y presenta las limitaciones del fit historial ante upgrades caros.
+- Solo **Omega recurrente**: el neto mensual de la tabla es ingresos estimados menos precio PLEX × PLEX por Omega × cuentas. Otros gastos y costes de arranque en una sección independiente; no se cuentan repetidos cada mes. Las cifras de ISK/h no descuentan taxes/market broker, escasez o viajes adicionales no simulados; NO se garantizan ISK recibidos.
+- Escalado: selector manual de 1–1000 cuentas y slider de 1–100. Modelo hipotético, no instrucciones de automatización, input broadcasting o macros. Las ganancias se multiplican linealmente y no incluyen efecto precio, disponibilidad de rocks, mantenimiento de hardware ni capacidad de gestión.
+
+## Aislamiento y seguridad
+
+- `src/mining.js` usa estado `S` privado dentro de `MineUI`, sin mutar `S` ni `C` del gestor. Los datos generados están en `src/mining_data.js`; estilos aislados con `@scope (#mining)` para no colisionar con `.pl-row`, `.pk-...` del gestor de ventas. Tema claro con reglas específicas. `src/mining.css` no carga fuentes ni scripts externos.
+- Se integra en `src/shell.html`, `src/script.js` y `build.py`; `index.html` generado para GitHub Pages. La CSP original sigue sin hosts nuevos. Inventario del gestor nunca es leído ni enviado por el módulo de minería.
+- Se conservan identificadores, opciones de venta, cálculos `computePlan`, tasas, transporte y mecanismos ESI preexistentes.
+
+## Verificaciones necesarias y limitaciones
+
+1. `node --check` de código original + minería; parsear objeto MINE, número de escenarios, luna con residuo 0 y grupos.
+2. Reconstruir `index.html` con `python3 build.py 1.0.69` y comparar byte a byte con el publicado (si no coincide, corregir archivos fuente antes del siguiente release).
+3. Test de navegador a 390px/1400px, tema oscuro/claro, inglés/español, paneles de Minería/Ajustes/Guía, consola y cálculos con ESI simulado.
+4. Validar precios reales y cobertura de orders (en el navegador del usuario, si la conexión de pruebas no alcanza ESI). Enfriamiento de 420/429, resultados sin precios y fallback PLEX.
+5. Verificar que no cambian snapshots económicos de Market Moves+ v1.0.68.
+6. Regenerar dataset cuando CCP cambie atributos/skills/boosts usando las herramientas históricas `tools/mining` y un SDE reciente; hasta entonces marcarlo como referencia Pyfa build 3579973.
+
+**Criterio de publicación:** no ocultar los elementos no validados. El motor de ventas queda intacto, y cualquier error o limitación de la minería se registra en `docs/PROGRESS.md`.
+
+
+## Corrección de progresión v1.0.70 (15-10-2026)
+
+**Error reproducido por captura de usuario:** v1.0.69 repite idéntico rendimiento de skills IV del mes 2 al 12 cuando se elige Retriever (o cualquier barge). La evolución hacia Exhumer solo se intentaba si se seleccionaba manualmente Skiff/Mackinaw/Hulk. Esto NO representaba el entrenamiento.
+
+**Regla corregida:** selección Procurer, Retriever o Covetor mantiene la barge como inicio y asigna automáticamente la Skiff, Mackinaw o Hulk correspondiente como nave futura. Seleccionar directamente una Exhumer inicia con su barge correspondiente. El acceso al Exhumer se indica explícitamente con `MINE.train.ends[material][atributos][stages.exhumer-1]` / 24 menos el adelanto aproximado del bono SP.
+
+**Ejemplo de la captura, moon/Monazite, atributos base y 1M SP opcional:**
+- Exhumers I al día aproximado `1414.47 / 24 - 1_000_000 / (30×60×24) = 35.79`, es decir, en el mes 2 para Retriever → Mackinaw.
+- Escenario IV completo de Mackinaw en `MINE.train.targets['4|moon|T1|Mackinaw'].base / 24 - bono ≈ 60.6` días.
+- Referencia de habilidades V del fit en `MINE.train.targets['5|moon|T1|Mackinaw'].base / 24 - bono ≈ 213.9` días (aprox. mes 8). Esta meta histórica incluye el conjunto seleccionado de skills; el día exacto puede variar según distribución real de SP, implantes y cambios de CCP.
+
+**Orden de entrenamiento simulado:** se prioriza primero el acceso a Exhumers I y después Cybernetics V para implantes. El hito de Exhumers I es independiente de Cybernetics; al activar implantes, la preparación de IV y V se retrasa por el tiempo de Cybernetics V (≈17,8 días para atributos base), pues una cuenta solo entrena una skill a la vez. Sin implantes, el hito V del ejemplo es día 214; con implantes, alrededor del día 232 (ambos aproximados).
+
+**Modelo de ISK/h**: el mes 1 sigue usando las 28 muestras históricas; los meses 2–12 promedian diariamente la tasa m³/h con la barge al inicio y la Exhumer tras Exhumers I. Entre el desbloqueo, referencia IV y referencia V, se **interpola linealmente** entre rendimientos del dataset Pyfa (no son ticks reales de cada skill). El implante +5% entra a partir de `r.implDay` estimado. Las ganancias son ingreso bruto al precio ESI constante en la consulta actual; solo se descuenta Omega mensual, multiplicado por cuentas. La interpolación suaviza la curva y NO equivale a un simulador verificable de niveles individuales.
+
+**Calidad:** un segundo test en `tests/mining-smoke.cjs` comprueba hitos, evolución de yield, correspondencia Retriever→Mackinaw, multiplicación de cuentas y periodo mensual consecutivo. La caja de escenario fijo IV existente se mantiene identificada como **referencia fija, no progresión**.
+
+**Pendiente para simulación exacta:** integrar entrenamiento granular skill por skill con distribución específica de 1M SP, requisitos de módulos/fits, transiciones de implantes en cada día, niveles I–V de Exhumers, y regeneración Pyfa/SDE actualizada. No presentar el modelo interpolado como beneficio garantizado. No afecta ninguna fórmula del gestor de ventas.
+
+## Controles del bono referido v1.0.71
+
+El Plan Omega tiene una barra compartida con las tres vistas. En el lado derecho de escritorio aparece un switch «Usar 1M SP (referido)» (0/1.000.000 en `S.freeSP`) y un enlace al **programa oficial** `https://www.eveonline.com/recruit` («FREE 1 Million SP! ↗»), que se abre en pestaña nueva. En móvil los controles pasan a la fila inferior. Se requiere un enlace de invitación elegible para obtener el millón de SP; esta URL informativa no los concede automáticamente. No se modifican valores de entrenamiento ni cálculos existentes.
+
+## Editor de precios manuales v1.0.72
+
+En «✎ Editar precios» se pueden seleccionar moon ore (R64 primero), hielo y gas Guristas, y editar precios por unidad del mercado Jita Buy o Jita Sell en forma cruda o comprimida. Los importes se calculan a través de una función de cotización que primero consulta el override por `typeID:buy/sell` y luego recurre a la caché de ESI. La cotización original de ESI no se altera y cada entrada tiene botón para volver al precio consultado; las actualizaciones se reflejan en las tres vistas. Incluye un editor avanzado de costes de nave y fits por typeID seleccionado, que afecta al cálculo de inversión. PLEX tiene editor independiente en Plan Omega. No se almacenan precios manuales fuera de la memoria de la pestaña, para evitar proyecciones obsoletas al recargar.
+
+## v1.0.73: Hielo, Mayhem y días por mes
+
+Se añadieron cuatro escenarios de valoración del hielo: Jita (como antes), venta de hielo en HY-RWO (Settings de Hielo + tasas de Null), contrato Buyback Mayhem (su tax/base/especiales, sin ajustes de Hielo), o reprocesar y vender productos en HY (reproNets con skill/refinería y productos ICE via Jita ESI).
+Los productos Heavy Water, Liquid Ozone y Strontium vendidos en HY se valoran por defecto al 45% de Jita Buy (55% de reducción comercial editable); isótopos de Helio, Hidrógeno, Oxígeno y Nitrógeno mantienen Jita Buy sin ese descuento. Esto no afecta el yield físico ni las unidades producidas.
+Los meses desde el segundo se pueden simular minando 1-30 días, con atajos 7/14/21/30. Las skills avanzan por 30 días naturales y Omega se resta entero, no proporcional a los días trabajados. Mes 1 sigue basándose en 28 días históricos.
+Sin cotizaciones ESI para todos los productos, la rentabilidad refinada se presenta como no disponible; no se sustituye un precio ausente por cero.
+
+
+
+## v1.0.74 — Desplazamientos reales, bonos y ganadores dinámicos
+El tiempo muerto por descarga es editable en todas las vistas: 65 segundos iniciales (10 alinear + 5 warp + 30 depositar sin dock + 10 alinear + 5 volver + 5 de margen). Con cero segundos no hay pérdida; con 120 s se aproxima al resultado original del dataset.
+El yield bruto sigue siendo el de Pyfa, con sus bonos por nivel y por rol ya aplicados. La producción efectiva se recalcula a partir del tiempo teórico hasta llenar y el viaje, no usando la penalización histórica precalculada, evitando doble descuento.
+Con Orca/Rorqual se presupone compresión sin viajes en moon/hielo/gas; la Porpoise solo evita viajes en gas. Seis tarjetas muestran todos los atributos principales de producción, autonomía, descarga y las bonificaciones de Mining Barge y Exhumers por nivel. El ganador real se elige por m³/h efectivos dentro de barge/exhumer y tier, no por nombre predefinido.
+El mes 1 reinterpreta cifras históricas ajustando la penalización de 120 s usando una bodega IV de referencia, aproximación declarada; meses posteriores toman filas Pyfa recalculadas. No incluye cambios de recursos dentro de ciclos, drones al volver ni modificaciones a navegación del piloto, fit de alineamiento o riesgo del sistema. Ajustar tiempo manualmente al trayecto observado.
+Fuentes de bonos de naves: https://db.evetools.org/type/17476 (Covetor), https://db.evetools.org/type/17478 (Retriever), https://db.evetools.org/type/17480 (Procurer), https://db.evetools.org/type/22544 (Hulk), https://db.evetools.org/type/22548 (Mackinaw), https://db.evetools.org/type/22546 (Skiff).
+
+
+## v1.0.75 — Comparador legible, costes reales y ruta de entrenamiento
+En «Rendimiento por Nave» se agrupan los filtros para tipo de nave (Barges o Exhumers), material, skills III/IV/V, implantes de minería Sin/4%/5%, boost, valor m³/h o ISK/h y fit T1/T2/Facción. Por defecto: Barges, V, Sin, Facción. Con la clase elegida se muestran tres tarjetas, mejor nave por escalón, gráfica de extracción y fichas verticales de fit/inversión; ya no se duplica la tabla ni se conserva la gráfica aparte de autonomía.
+El resumen solo menciona las naves de la clase seleccionada y respeta skills, implantes, boost, material, fit, unidad y tiempo muerto. El precio de la inversión se calcula como suma de cantidad de cada componente × Jita Sell (o Buy si no hay Sell), con overrides manuales, usando MINE.fits y el casco, módulos, rigs, drones y los implantes +5% seleccionados. Los costes y subtotales de cada nave se actualizan con ESI.
+**Precisión:** el dataset Pyfa disponible solo cubre IV/V, implante Sin/+5%. III se estima extrapolando diferencias de bruto/capacidad IV→V y muestra limitación explícita del fit, que puede no ser montable a III. +4% interpola rendimiento 80% del efecto de 5% en cada componente (aproximación, no simulación verificada); su precio de implante queda fuera de inversión. Esta lógica no duplica los bonos por nave.
+Entrenamiento se divide en etapas de desbloqueo Barge, crecimiento de yield y acceso a Exhumer cuando aplica, mostrando skills en orden del plan precalculado y días acumulados. Las especializaciones para V se presentan como prioridades orientativas; el tiempo exacto sigue el perfil de referencia IV/V de MINE.train.targets. Coste de skillbooks: resolver typeIDs con ESI POST /universe/ids y consultar órdenes Jita Sell, 1 compra por habilidad. Sin órdenes Jita Sell, mostrar «Sin cotización», nunca precio inventado.
+El botón de actualización de precios de Minería obliga a refrescar las cotizaciones de materiales y fit sin cambiar los overrides. Lote de carga con dos workers, cache de cinco minutos, máximo cinco páginas por consulta de ítem, deduplicación de consultas idénticas y respeto de HTTP 420/429 y Retry-After. Los fallos mantienen las cotizaciones antiguas cuando existían; nunca escribir ESI sobre overrides.
+El plan minero y sus selectores de escenario se guardan y restauran desde 'marketMoves.miningPlan.v1', separados del localStorage de Settings y de la sesión de ventas. No se guarda el inventario, ni precios ESI, ni ediciones de productos de los pasos de venta.
+
+
+## v1.0.76 — Dos pasos: configura y compara
+«Rendimiento por Nave» muestra primero «01 Configura tu escenario» con grupos: Contexto (Barges/Exhumers, material, fit), Personaje (Skills III/IV/V e implantes Sin/4%/5%) y Apoyo y valoración (boost y m³/h o ISK/h). Todos usan el mismo estado de la v1.0.75; la selección y el Plan Omega continúan persistiendo en localStorage.
+Los avisos de Skills III e implantes 4% se muestran de forma discreta al elegir esos escenarios estimados. «02 Resultados de tu escenario» contiene el resumen sincronizado, ganadoras por fit, tarjetas, comparativa visual, fichas de inversión y ruta de entrenamiento. Las herramientas comunes para ESI y viajes permanecen por encima, en las tres vistas.
+El rediseño es exclusivamente de presentación: no modifica las cifras Pyfa ni el tiempo muerto, tasas locales, coste de componentes, skills o las llamadas a ESI. Se priorizan botones de tamaño contenido, títulos legibles, teclado y diseño responsive en escritorio y móvil.
+
+
+## v1.0.77 — Información contextual y drones correctos
+Botones ⓘ estilo EVE para filtros, tiempos, precios y componentes. Al pasar el mouse se despliega la explicación, con clic/teclado funciona en dispositivos táctiles. Las fichas de ítems incluyen enlaces a su Type ID en EVE Ref; no crean requests ESI por hover. Dos columnas para la configuración en desktop y una en móvil.
+Moon ore: con Skills V, T1 Mining Drone I (10246, 25 m³ por 60s, sin residuo), T2 Mining Drone II (10250, 33 m³/60s, 34% residuo) y Facción 'Augmented' Mining Drone (43694, 37 m³/60s, 40% residuo). Estos dos últimos requieren Mining Drone Operation V y Mining Drone Specialization I. En Skills IV se usa fallback a Mining Drone I. El skill Mining Drone Specialization suma +2%/nivel de extracción solo a los avanzados; el precio del fit cambia con el Type ID real.
+Los 96 casos moon Skills V T2/Facción del dataset recalculan dr/tot/eff/fill para los boosts e implantes originales. El residuo del dron se guarda aparte como droneWaste; Ice Harvesting Drone II muestra 34%. No se suman residuos al rendimiento efectivo: son mineral perdido en la roca, no una penalización de lo recibido. El tiempo muerto editable sigue intacto.
+Actualizar el SDE Pyfa usando tools/mining/build_data.py; tools/mining/sde.py vincula el caché a la versión de datos para no usar atributos desactualizados. EVE Ref se consultó el 16-10-2026 sobre los drones referidos; el conjunto de otros módulos mantiene el snapshot Pyfa build 3579973, que puede requerir revisión cuando CCP cambie algo.
+
+
+## v1.0.78 — Corrección de residuo Ice II
+Ice Harvesting Drone I tiene 0% y Ice Harvesting Drone II tiene 34% de residuo. Un comparador por prefijos puede confundir ambos nombres; corregido en todas las filas de Ice II, sin cambiar el yield recibido ni el coste del fit. El test evita la regresión en todos los escenarios.

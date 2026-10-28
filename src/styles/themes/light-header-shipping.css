@@ -1,0 +1,119 @@
+/* EVE7 theme ownership: shipping, header, ticker, lighter station image */
+html.light {
+ --header-surface:rgba(250,248,245,.94);
+ --ticker-surface:rgba(250,248,245,.94);
+ --ticker-hover:rgba(244,239,233,.98);
+ --surface-card:rgba(251,249,246,.92);
+ --surface-result:linear-gradient(180deg,rgba(255,255,255,.94),rgba(248,246,242,.94));
+}
+html.light body{background:#e9e7e2!important}
+html.light body::before{opacity:.30!important;filter:grayscale(.2) brightness(1.08)!important}
+html.light body::after{background:none!important}
+html.light body .top.mm-ho-root{
+ background:var(--header-surface)!important;
+ color:var(--txt)!important;border-color:var(--edge)!important;
+}
+html.light body .top.mm-ho-root>.brand,
+html.light body .top.mm-ho-root>.brand .brand-wordmark,
+html.light body .top.mm-ho-root .mm-ho-main .mm-home,
+html.light body .top.mm-ho-root .mm-ho-main .mm-mod:not([aria-selected="true"]),
+html.light body .top.mm-ho-root .mm-ho-context,
+html.light body .top.mm-ho-root .mm-top-actions,
+html.light body .top.mm-ho-root .mm-top-actions .side-l,
+html.light body .top.mm-ho-root .mm-profile-row #evePilotName{
+ color:var(--txt)!important;
+}
+html.light body .top.mm-ho-root .mm-top-actions>.top-header-action,
+html.light body .top.mm-ho-root .mm-top-actions>.top-guide-action,
+html.light body .top.mm-ho-root .mm-top-actions .mm-theme,
+html.light body .top.mm-ho-root .mm-profile-row .eve-identity-button{
+ color:var(--txt)!important;
+ background:rgba(87,66,49,.055)!important;border-color:var(--edge)!important;
+}
+html.light .hero>.hero-referral,
+html.light .hero>.hero-referral:hover{
+ background:var(--ticker-surface)!important;
+ border-color:rgba(161,86,55,.32)!important;
+ color:#332c25!important;
+}
+html.light .hero>.hero-referral:hover{background:var(--ticker-hover)!important}
+html.light .hero>.hero-referral .tk-track,
+html.light .hero>.hero-referral .tk-i{
+ background:transparent!important;color:#332c25!important;
+}
+html.light .hero>.hero-referral .tk-i b{color:#a34d2c!important}
+/* Light referral must remain text-only, matching Dark mode. */
+html.light .hero>.hero-referral-pill,
+html.light .hero>.hero-referral-pill:hover{
+ background:transparent!important;
+ border:0!important;
+ border-radius:0!important;
+ box-shadow:none!important;
+ color:#332c25!important;
+}
+html.light .hero>.hero-referral-pill .hero-referral-kicker{color:#554a40!important}
+html.light .hero>.hero-referral-pill .hero-referral-offer,
+html.light .hero>.hero-referral-pill .hero-referral-arrow{color:#a34d2c!important}
+/* B.17: the approved two-column utility row uses existing warm Light tokens. */
+html.light .hero #salesUtilityRow>.hero-referral-pill,
+html.light .hero #salesUtilityRow>#importControls:not([hidden]){
+ background:var(--surface-card)!important;border-color:var(--edge)!important;
+ color:var(--txt)!important;box-shadow:0 2px 8px rgba(45,35,25,.08)!important;
+}
+html.light .hero #salesUtilityRow>.hero-referral-pill:hover{
+ background:#f5f2ed!important;border-color:var(--mut)!important;
+}
+html.light .hero #salesUtilityRow .hero-referral-kicker{color:var(--txt)!important}
+html.light .hero #salesUtilityRow .hero-referral-offer{color:#a34d2c!important}
+html.light .hero #salesUtilityRow .hero-referral-arrow,
+html.light .hero #salesUtilityRow #importControls .mm-import-intro strong,
+html.light .hero #salesUtilityRow #importControls .mm-import-intro strong .ic{color:var(--mut)!important}
+html.light .hero #salesUtilityRow #importControls .mm-trade-trigger{
+ background:#f5f2ed!important;color:var(--txt)!important;
+}
+html.light .hero-intro:not(.no-appr)>.appr,
+html.light .hero-intro:not(.no-appr)>.paste{
+ background:var(--surface-card)!important;
+ box-shadow:0 5px 14px rgba(45,35,25,.1)!important;
+ border-color:var(--edge)!important;
+}
+html.light #unitCourierBox.mm-unit-courier,
+html.light .mm-unit-courier{
+ background:var(--surface-card)!important;
+ border:1px solid var(--edge)!important;
+ color:var(--txt)!important;
+ box-shadow:0 2px 9px rgba(45,35,25,.07)!important;
+}
+html.light #unitCourierBox.mm-unit-courier>summary,
+html.light #unitCourierBox .mm-unit-courier-total,
+html.light #unitCourierRows .mm-unit-row b{color:var(--txt)!important}
+html.light #unitCourierRows{background:transparent!important;border-color:var(--edge)!important}
+html.light #unitCourierRows .mm-unit-row{
+ background:rgba(255,255,255,.8)!important;
+ border-color:var(--edge)!important;
+}
+html.light #unitCourierRows .mm-unit-row span,
+html.light #unitCourierRows .mm-unit-row small{color:var(--mut)!important}
+
+/* Guide panels share Sales theme tokens in Light, too. */
+html.light #help .hp-c,html.light #help .hp-t>div{
+  background:var(--surface-card)!important;border-color:var(--line)!important;
+  box-shadow:none!important;color:var(--txt)!important;
+}
+html.light #help :is(.hp-c h3,.hp-t>div>b,.hp-c b){color:var(--txt)!important}
+html.light #help :is(.hp-c p,.hp-t>div>span){color:var(--mut)!important}
+
+/* B.12: remove the large nested gray Discord sheet in Light. */
+html.light #pCtr .discord-side,
+html.light #pCtr .discord-content{background:transparent!important;border:0!important;box-shadow:none!important}
+html.light #pCtr .discord-content .disc-steps{
+  background:#f7f5f1!important;border:1px solid var(--line)!important;box-shadow:none!important
+}
+html.light #pCtr .discord-content .dests .dest{
+  background:#fff!important;border-color:var(--line)!important;box-shadow:none!important
+}
+html.light #pCtr .discord-content .dests .dest[aria-pressed="true"]{
+  background:#fff8f3!important;border-color:#a45134!important;box-shadow:0 0 0 1px rgba(164,81,52,.18)!important
+}
+html.light #pCtr .disc-preview{background:#f7f5f1;border-color:var(--line)}
+html.light #pCtr .disc-preview .msg{background:#fff!important;border-top:1px solid var(--line)!important;box-shadow:none!important}

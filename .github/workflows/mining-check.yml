@@ -1,0 +1,34 @@
+name: Verificacion minera
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Sintaxis de scripts
+        run: |
+          node --check src/mining.js
+          node --check src/mining_data.js
+          node --check src/script.js
+      - name: Compile current modular site for integration checks
+        run: python3 build.py 1.0.115
+      - name: Regresión estática de minería
+        run: |
+          node tests/mining-smoke.cjs
+          node tests/mining-types.cjs
+          node tests/ice-settings.cjs
+          node tests/mining-price-flow.cjs
+          node tests/trading-unit-prices.cjs
+          node tests/market-scenarios.cjs
+          node tests/financial-accounting.cjs
+          node tests/skills-integration.cjs
