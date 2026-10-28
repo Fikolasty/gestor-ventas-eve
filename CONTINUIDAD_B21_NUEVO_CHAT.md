@@ -10,4 +10,8 @@
 - CSS modular + overrides Light, Node test estático y Chromium dedicado (4 anchuras × 2 temas × 2 idiomas), build 1.0.158.
 
 ## Publicación
-- Hasta Actions y HTTPS no decir LIVE. Documentar SHA fuente/CI/index, 4 Actions, pruebas, capturas 1440/390 Dark/Light, y si Pages verificó versión.
+- **B.21 LIVE:** fuente Fiko `5f1d51a2`, compilado `700b6c83`, index blob `88ff393f` (2.388.017 bytes); 4/4 Actions (run `40760492517`), 130 Node, 16 Python, 57 Chromium PASS. CI Pages verificó HTTPS v1.0.158; no hay comparación hash independiente de respuesta HTTPS. Capturas 1440/390 Dark/Light inspeccionadas.
+
+
+## Matiz visual confirmado
+- La captura de VER PASOS PARA VENDER es la referencia para los números 1–3: cobre tipográfico, sin círculos, pequeño sangrado lateral y filas grafito. B.21 ya aplica ese lenguaje en Discord.

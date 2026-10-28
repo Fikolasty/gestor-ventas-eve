@@ -759,3 +759,6 @@ La primera corrida Chromium aprobó el nuevo escenario del bug, pero 55/56 por s
 
 ## B.21 v1.0.158 candidata (2026-10-28)
 Guía de «PUBLICAR EN DISCORD» refinada como filas B.19, sin números en círculos ni cambio de funciones. Mensaje por comunidad, sin depender del idioma de ajustes: SIGMA EN, Vanguardia ES. DSS §64; gates CI/Chromium/Pages pendientes.
+
+### B.21 v1.0.158 LIVE (2026-10-28)
+Publicada la guía compacta Discord en grises cálidos con números sin círculos, y mensaje externo en idioma fijo por comunidad (SIGMA EN, Vanguardia ES). Fuente protegida Fiko `5f1d51a2`, build `700b6c83`, 4/4 Actions, 57/57 Chromium, 130 Node, 16 Python. CI Pages HTTPS v1.0.158; imágenes Dark/Light 1440/390 inspeccionadas. DSS §64.

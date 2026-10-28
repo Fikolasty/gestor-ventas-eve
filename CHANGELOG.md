@@ -1272,3 +1272,8 @@ Fuente `de9e13eb`, build GitHub Actions `a811f771`; 4/4 workflows aprobados y 55
 - Discord: tres pasos más delgados, números tipográficos cobrizo como «Pasos para vender», preview más sobrio y compacto. Contratos, botones y destinos se mantienen.
 - Mensaje preparado y copiado: SIGMA GRINDSET siempre inglés; Vanguardia DR siempre español, sin importar idioma de ajustes. No se muestra fórmula interna.
 - Paridad Light/Dark/ES/EN y responsive bajo nuevas pruebas. Publicación por verificar.
+
+### B.21 v1.0.158 — LIVE (2026-10-28)
+- Extras › PUBLICAR EN DISCORD: guía de tres pasos alineada con los números cobrizo sin cápsulas de VER PASOS PARA VENDER; filas y mensaje preparado más compactos en Light/Dark, sin alterar la columna TUS CONTRATOS.
+- El idioma del mensaje publicado/copied ahora depende del servidor: SIGMA GRINDSET siempre inglés, Vanguardia DR siempre español. Incluye vista previa, Janice y texto de copia.
+- Fuente `5f1d51a2`, build `700b6c83`, Pages run `40760492517` confirmado, 4 Actions, 130 Node, 16 Python, 57 Chromium. Documento principal: DSS §64.
