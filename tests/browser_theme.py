@@ -1980,6 +1980,7 @@ class ThemeBrowserTests(unittest.TestCase):
                 g:{null:1050000,jOrd:900000,jInst:810000,bb:790000},
                 prod:0,vol:10,coll:1000000,ship:{},net:{}};
             const P={rows:[row],best:1050000,mode:null,shipCost:0,Vs:0,missing:[],toBB:[]};
+            window.__b18Fixture=P;
             pkPanelCollapsed=false;pkOverviewCollapsed=false;pkInsightsCollapsed=false;
             paintVerdict(P);
             document.querySelector('#verdict').hidden=false;
@@ -1988,6 +1989,15 @@ class ThemeBrowserTests(unittest.TestCase):
         }""")
         for language in ('es','en'):
             self.page.evaluate('setLang',language)
+            self.page.evaluate("""() => {
+                const P=window.__b18Fixture;
+                pkPanelCollapsed=false;pkOverviewCollapsed=false;pkInsightsCollapsed=false;
+                paintVerdict(P);
+                document.querySelector('#verdict').hidden=false;
+                document.querySelector('#pSum').hidden=false;
+                paintPicker(P);
+            }""")
+            expect(self.page.locator('#pSum')).to_be_visible()
             for width in (1440,980,630,390):
                 self.page.set_viewport_size({'width':width,'height':900})
                 for light in (False,True):
