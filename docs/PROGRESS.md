@@ -1,8 +1,8 @@
 # PROGRESS — Market Moves+
 
-**C.4b — LIVE CERTIFICADA 2026-10-29:** inventario focal Settings/Guía (202 selectores, 29 en varios archivos), dos reglas previas redundantes de Ajustes retiradas, nuevo test de contrato de CSS y workflows a 1.0.160. Sin modificación JS, fórmulas, ESI/SSO, persistencia ni HTML fuente. DSS §68. **Certificación:** fuente `282a25dc`, build `41214eec`, Node 140/140, Python 16/16, Chromium 61/61, 4/4 Actions, Pages HTTPS v1.0.160. Git blob `385b3fc1` 2.386.775 bytes. CSS −188 caracteres; JS, finanzas, ESI/SSO y persistencia intactos. **v1.0.160 LIVE.**
+**Histórico C.4b — LIVE CERTIFICADA 2026-10-29:** inventario focal Settings/Guía (202 selectores, 29 en varios archivos), dos reglas previas redundantes de Ajustes retiradas, nuevo test de contrato de CSS y workflows a 1.0.160. Sin modificación JS, fórmulas, ESI/SSO, persistencia ni HTML fuente. DSS §68. **Certificación:** fuente `282a25dc`, build `41214eec`, Node 140/140, Python 16/16, Chromium 61/61, 4/4 Actions, Pages HTTPS v1.0.160. Git blob `385b3fc1` 2.386.775 bytes. CSS −188 caracteres; JS, finanzas, ESI/SSO y persistencia intactos. **v1.0.160 LIVE.**
 
-**Estado más reciente (2026-10-29):** **C.2 v1.0.159 LIVE funcional**, B cerrada hasta B.21. **C.4a QA-only certificada:** fuente `76dc4865`, build `f6b65de5`, 4/4 Actions, 137 Node/16 Python/61 Chromium, Pages HTTPS v1.0.159; HTML Git idéntico a C.2 `00d0f173`. Reintento 2 tras fallo intermitente B.21; ver DSS §§66–67.
+**Estado histórico previo a C.5b (2026-10-29):** **C.2 v1.0.159 LIVE funcional**, B cerrada hasta B.21. **C.4a QA-only certificada:** fuente `76dc4865`, build `f6b65de5`, 4/4 Actions, 137 Node/16 Python/61 Chromium, Pages HTTPS v1.0.159; HTML Git idéntico a C.2 `00d0f173`. Reintento 2 tras fallo intermitente B.21; ver DSS §§66–67.
 
 ## 2026-10-29 — C.4a: contratos de Settings/Guía y build (QA-only certificada)
 
@@ -786,3 +786,7 @@ Settings reorganizados en General, Personaje e impuestos, Precios y ventas, Env�
 Afecta shell, CSS, UI de Settings, reubicación DOM del switch de tema, catálogo de traducción, tests y workflows. No se cambia motor económico, servicios ESI ni autenticación.
 
 **Candidata:** Node/Python/Chromium/Actions/Pages todavía requieren resultados. No declarar nuevo LIVE ni identidad HTTPS antes de verificarlos. DSS §69.
+
+### Cierre C.5b v1.0.161 LIVE
+
+**Cierre LIVE certificado — 2026-10-29:** commit de código Fiko `a9eda29eb768b0cc83203f05029f53ad216545f2`, compilación CI descendiente `7654b09e7bd35bcb59bce5117e600a949ee7d6e2`. Cuatro workflows GitHub Actions **success**: Versiones `40973119567`, Build `40973119601`, Minería `40973119602`, Rebuild/Chromium/Pages `40973119608`. Pruebas CI: **142/142 Node, 16/16 Python, 65/65 Chromium** y ocho scripts heredados PASS. `index.html` Git blob `10eaff8c6e5fe8f6b5d2f36723b32b9ee4742508`. GitHub Pages desplegó satisfactoriamente y su verificación HTTPS con curl confirmó **v1.0.161** en https://fikolasty.github.io/gestor-ventas-eve/ (2026-10-29 23:28 UTC). Los dos fallos visuales de Light y el test intermitente de Discord se corrigieron antes del despliegue; ninguna fórmula fue modificada. No consta una comparación byte por byte independiente entre HTML completo HTTPS y build ni inspección humana de screenshots de esta release; ESI/SSO real extremo a extremo no probado. **C.5b v1.0.161 LIVE.**

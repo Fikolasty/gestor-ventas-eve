@@ -1,9 +1,13 @@
-## v1.0.161 — 2026-10-29 [ChatGPT] · C.5b: header compartido, workspaces y Ajustes reorganizados — QA PENDIENTE
+## v1.0.161 — 2026-10-29 [ChatGPT] · C.5b: header compartido, workspaces y Ajustes reorganizados — LIVE CERTIFICADA
 
 - Navegación como aplicación: Ventas, Minería, Habilidades, Ajustes y Guía usan header compartido; estado de inventario y plan se preserva al cambiar de vista.
 - Logo e Inicio reinician sesión temporal sin popup; preferencias persisten. Avatar junto a identidad EVE real; no se duplica login.
 - Cuatro pestañas de Ajustes con doce fieldsets originales sin clonar y gavetas/escala tipográfica de Ventas.
 - Pruebas nuevas de navegación, ARIA y persistencia. Sin cambios financieros, ESI/SSO ni sincronización. No LIVE hasta las cuatro Actions y Pages.
+
+### Certificación LIVE
+
+**Cierre LIVE certificado — 2026-10-29:** commit de código Fiko `a9eda29eb768b0cc83203f05029f53ad216545f2`, compilación CI descendiente `7654b09e7bd35bcb59bce5117e600a949ee7d6e2`. Cuatro workflows GitHub Actions **success**: Versiones `40973119567`, Build `40973119601`, Minería `40973119602`, Rebuild/Chromium/Pages `40973119608`. Pruebas CI: **142/142 Node, 16/16 Python, 65/65 Chromium** y ocho scripts heredados PASS. `index.html` Git blob `10eaff8c6e5fe8f6b5d2f36723b32b9ee4742508`. GitHub Pages desplegó satisfactoriamente y su verificación HTTPS con curl confirmó **v1.0.161** en https://fikolasty.github.io/gestor-ventas-eve/ (2026-10-29 23:28 UTC). Los dos fallos visuales de Light y el test intermitente de Discord se corrigieron antes del despliegue; ninguna fórmula fue modificada. No consta una comparación byte por byte independiente entre HTML completo HTTPS y build ni inspección humana de screenshots de esta release; ESI/SSO real extremo a extremo no probado. **C.5b v1.0.161 LIVE.**
 
 ## v1.0.160 — 2026-10-29 [ChatGPT] · C.4b: inventario CSS y dos redundancias de Ajustes — LIVE CERTIFICADA
 
