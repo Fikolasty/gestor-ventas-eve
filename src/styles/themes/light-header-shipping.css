@@ -137,5 +137,17 @@ html.light #settings .modern-panel .st-f,
 html.light #help .modern-panel .hp-c,
 html.light #help .modern-panel .hp-t>div{background:#fff!important;border-color:var(--line2)!important}
 html.light body .top.mm-ho-root .mm-profile-row #evePilotName{
-  background:var(--clay)!important;color:#fff!important
+  background:var(--clay)!important;color:#191715!important
+}
+/* C.5b Chromium gate: light.py generates some legacy borders AFTER modular
+   styles. This final Light module must own the same tab geometry as Dark. */
+html.light body .top.mm-ho-root .mm-ho-main .mm-home,
+html.light body .top.mm-ho-root .mm-ho-main .mm-mod{
+  border:0!important;
+  border-radius:7px 7px 0 0!important;
+  background:transparent!important
+}
+html.light body .top.mm-ho-root .mm-ho-main .mm-mod[aria-selected="true"]{
+  border:0!important;background:transparent!important;
+  box-shadow:inset 0 -3px 0 var(--clay)!important
 }
