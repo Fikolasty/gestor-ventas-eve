@@ -7,7 +7,7 @@
 <meta name="referrer" content="no-referrer">
 <title>Market Moves+ · SIGMA GRINDSET</title>
 <style>
-/* ================= Market Moves+ v1.0.159 =================
+/* ================= Market Moves+ v1.0.160 =================
    Paleta: azul de base, naranja = acción, verde/rojo = ganancia/pérdida.
    Sin backdrop-filter: el vidrio se finge con rgba + bordes. */
 *{box-sizing:border-box;margin:0;padding:0}
@@ -1038,7 +1038,6 @@ details.fold>summary h2 .logo{width:24px;height:24px;margin:0 2px 0 0}
 /* v1.0.65: Ajustes con el negro de la Guía de Uso (tarjetas y campos), sin cambiar cómo funcionan */
 #settings fieldset.st{background:#0b0b0b!important;border-color:rgba(222,220,209,.08)!important;box-shadow:inset 0 1px 4px rgba(0,0,0,.6)!important}
 #settings fieldset.st:not(.closed){border-color:rgba(217,119,87,.45)!important;box-shadow:inset 3px 0 0 #d97757,inset 0 1px 4px rgba(0,0,0,.6)!important}
-#settings .st-f{background:#151515;border-color:rgba(222,220,209,.08);box-shadow:none}
 #settings .st-f input:not([type=checkbox]),#settings .st-f select,#settings .st-f textarea{background:#0b0b0b!important}
 /* títulos divisores (estilo IMPUESTOS Y PRECIOS) también en la Guía y en los subtítulos generales */
 .sub-h{display:flex;align-items:center;gap:10px;font:600 .8rem var(--f-ui)!important;letter-spacing:.1em;text-transform:uppercase;color:#e8a588!important}
@@ -1619,7 +1618,6 @@ html.light #verdict .v-plan-name{color:#ad4b27}
 #settings .st-wrap{min-width:0}
 #help .modern-panel .hp{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
 #help .modern-panel .hp-c{min-height:0}
-#settings .st-tools{display:flex;align-items:center;justify-content:flex-end;flex-wrap:wrap;gap:8px}
 @media(max-width:750px){#help .modern-panel .hp{grid-template-columns:1fr}#settings .modern-tabs,#help .modern-tabs{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:thin}#settings .modern-tab,#help .modern-tab{flex:none;white-space:nowrap}}
 .side-i[data-side-module][aria-current="page"]{color:var(--txt);background:rgba(217,119,87,.12);border-color:rgba(217,119,87,.45)}
 
@@ -6222,7 +6220,6 @@ html.light .sn-x:hover{border-color:#c96442;background:rgba(217,119,87,0.25)}
 html.light .stp-ct h5{border-bottom:1px solid rgba(31,30,29,0.076)}
 html.light #settings fieldset.st{background:#ebeae6!important;border-color:rgba(31,30,29,0.076)!important;box-shadow:inset 0 1px 4px rgba(0,0,0,0.096)!important}
 html.light #settings fieldset.st:not(.closed){border-color:rgba(217,119,87,0.562)!important;box-shadow:inset 3px 0 0 #c96442,inset 0 1px 4px rgba(0,0,0,0.096)!important}
-html.light #settings .st-f{background:#e9e7e3;border-color:rgba(31,30,29,0.076)}
 html.light #settings .st-f input:not([type=checkbox]),html.light #settings .st-f select,html.light #settings .st-f textarea{background:#ebeae6!important}
 html.light .sub-h{color:#a44d28!important}
 html.light .sub-h::before{background:linear-gradient(90deg,#c96442,rgba(217,119,87,0.312));box-shadow:0 0 8px rgba(217,119,87,0.562)}
@@ -8308,13 +8305,13 @@ Contraband Freight = no</textarea><small>Una regla por línea: Nombre = tax tota
 <button type="button" class="totop" id="toTop" aria-label="Volver arriba" title="Volver arriba (Inicio)" hidden><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 14l6-6 6 6"/></svg></button>
 <footer class="foot">
   <p class="foot-sec"><span class="ic i-lock" aria-hidden="true"></span>Tu inventario no se guarda: al cerrar o recargar se borra. Solo tus Ajustes quedan en este navegador.</p>
-  <div class="foot-by">Creado por <b>Fiko McGivert</b> · Vanguardia DR · SIGMA GRINDSET · <span class="ver">v1.0.159</span></div>
+  <div class="foot-by">Creado por <b>Fiko McGivert</b> · Vanguardia DR · SIGMA GRINDSET · <span class="ver">v1.0.160</span></div>
 </footer>
 
 <script>
 'use strict';
 /* ============================================================
-   Market Moves+ v1.0.159 — SIGMA GRINDSET / Vanguardia DR
+   Market Moves+ v1.0.160 — SIGMA GRINDSET / Vanguardia DR
    Flujo:  pegado → items → carga (ESI: precios, volúmenes, historial) → verificación → plan → vista
      1. Pegado      parsePaste(): parser posicional de columnas de EVE (Name · Quantity · … · Volume · Est. Price).
      2. Carga       esiItems(): trae todo lo que falta; mientras carga, refresh() NO pinta (S.loading).
