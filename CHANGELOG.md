@@ -1,3 +1,9 @@
+## v1.0.160 — 2026-10-29 [ChatGPT] · C.4b: inventario CSS y dos redundancias de Ajustes — CANDIDATA
+
+- Inventario focal de selectores y dependencias Settings/Guía en `docs/C4B_CSS_SELECTOR_INVENTORY.md`. Eliminadas dos declaraciones históricas completamente reemplazadas por el mismo selector posterior, sin cambiar la cascada ganadora.
+- Test Node C.4b, workflows v1.0.160 y gates completos de C.4a/Chromium/economía. Sin cambios JS, fórmulas, ESI/SSO, controles ni persistencia.
+- Candidata pendiente de Actions y Pages; anterior LIVE certificada v1.0.159. DSS §68.
+
 ## v1.0.153 — 2026-10-27 [ChatGPT] · B.17: banner de SP y controles compactos Jita — LIVE CERTIFICADA
 
 - Banner alargado **«¿Nuevo piloto? Consigue 1,000,000 SP GRATIS»** de fondo grafito alineado exactamente con Tasación; visible desde el modo inicial «Vender Items», sin desplazar el encabezado principal. «GRATIS» queda en mayúsculas y el inglés conserva «FREE SP».

@@ -202,7 +202,6 @@ html.light #verdict .v-plan-name{color:#ad4b27}
 #settings .st-wrap{min-width:0}
 #help .modern-panel .hp{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
 #help .modern-panel .hp-c{min-height:0}
-#settings .st-tools{display:flex;align-items:center;justify-content:flex-end;flex-wrap:wrap;gap:8px}
 @media(max-width:750px){#help .modern-panel .hp{grid-template-columns:1fr}#settings .modern-tabs,#help .modern-tabs{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:thin}#settings .modern-tab,#help .modern-tab{flex:none;white-space:nowrap}}
 .side-i[data-side-module][aria-current="page"]{color:var(--txt);background:rgba(217,119,87,.12);border-color:rgba(217,119,87,.45)}
 
