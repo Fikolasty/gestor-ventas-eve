@@ -151,3 +151,14 @@ html.light body .top.mm-ho-root .mm-ho-main .mm-mod[aria-selected="true"]{
   border:0!important;background:transparent!important;
   box-shadow:inset 0 -3px 0 var(--clay)!important
 }
+
+/* C.5b ownership: the historic Light components module uses #mmTabs and
+   .mm-modgroup, so match that specificity rather than adding a new palette. */
+html.light body .top.mm-ho-root #mmTabs>.mm-ho-main .mm-modgroup .mm-mod{
+  border:0!important;border-radius:7px 7px 0 0!important;
+  background:transparent!important;box-shadow:none!important
+}
+html.light body .top.mm-ho-root #mmTabs>.mm-ho-main .mm-modgroup .mm-mod[aria-selected="true"]{
+  border:0!important;background:transparent!important;
+  box-shadow:inset 0 -3px 0 var(--clay)!important;color:var(--txt)!important
+}

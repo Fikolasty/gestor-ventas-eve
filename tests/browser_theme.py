@@ -3148,9 +3148,15 @@ class ThemeBrowserTests(unittest.TestCase):
             self.page.evaluate('setLang',lang)
             for dest in ('sigma','vg'):
                 self.page.locator(f'#pDisc .dests .dest[data-d="{dest}"]').click()
-                self.page.evaluate('paintDisc(window.__b21P)')
-                message=self.page.locator('#dMsg').text_content()
-                copied=self.page.locator('#dCopyMsg').get_attribute('data-v')
+                # C.5b: destination clicks can start an asynchronous refresh.
+                # Render the synthetic fixture and read preview/copy atomically,
+                # so a concurrent render cannot interleave two Playwright calls.
+                pair=self.page.evaluate("""() => {
+                    paintDisc(window.__b21P);
+                    return {message:document.querySelector('#dMsg').textContent,
+                            copied:document.querySelector('#dCopyMsg').dataset.v};
+                }""")
+                message,copied=pair['message'],pair['copied']
                 self.assertEqual(message,copied,(lang,dest))
                 self.assertIn('146,349,671 ISK',message)
                 self.assertNotIn('Jita Buy',message)
