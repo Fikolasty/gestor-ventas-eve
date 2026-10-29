@@ -1,6 +1,10 @@
 # PROGRESS — Market Moves+
 
-**Estado más reciente (2026-10-28):** **B.21 v1.0.158 LIVE certificada**. Fuente `5f1d51a2`, build `700b6c83`, cuatro Actions success y 130 Node/16 Python/57 Chromium. C.2 v1.0.159 ya es LIVE certificada (fuente `73f1c917`, build `51077506`, 4/4 Actions, 133 Node/16 Python/57 Chromium, Pages HTTPS v1.0.159); ver DSS §§64–66.
+**Estado más reciente (2026-10-29):** **C.2 v1.0.159 LIVE certificada**, B cerrada hasta B.21. Fuente C.2 `73f1c917`, build `51077506`, 4/4 Actions, 133 Node/16 Python/57 Chromium, Pages HTTPS v1.0.159. C.4a es una etapa de pruebas únicamente, pendiente de CI; ver DSS §§66–67.
+
+## 2026-10-29 — C.4a: contratos de Settings/Guía y build (candidata QA-only)
+
+Se agregan cuatro tests Node y cuatro escenarios Chromium, sin cambiar las fuentes de producto. Se protegen IDs, persistencia de preferencias, navegación por pestañas y teclado, build y salidas económicas sintéticas al restaurar ajustes. Build local reprodujo el Git blob de C.2; Node 4/4 y sintaxis Python correctos. Chromium local no pudo ejecutarse por ausencia de Playwright: verificar remotamente las cuatro Actions antes de cerrar. C.2 v1.0.159 sigue siendo la única LIVE funcional.
 
 ## 2026-10-28 — B.18 gavetas simétricas de ELIGE TU PLAN, v1.0.154 LIVE
 

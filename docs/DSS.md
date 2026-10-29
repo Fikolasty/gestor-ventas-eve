@@ -1,6 +1,6 @@
 # DSS — Design Standards & Session Handoff · Market Moves+
 
-**Última actualización:** 2026-10-28 · **B.21 v1.0.158 sigue LIVE certificada** (§64); nueva política de alerta temprana de cambio de chat (§65), cambio solo documental. Fuente B.21 `5f1d51a2`, build `700b6c83`, blob HTML `88ff393f` (2.388.017 bytes); 130 Node/16 Python/57 Chromium y Pages success.
+**Última actualización:** 2026-10-29 · **C.2 v1.0.159 sigue LIVE certificada** (§66); C.4a añade únicamente pruebas de contratos (§67), sin nueva versión funcional. Fuente C.2 `73f1c917`, build `51077506`, blob HTML `00d0f173` (2.387.044 bytes); 133 Node/16 Python/57 Chromium y Pages success.
 
 **Continuidad de versión:** la release anterior v1.0.126 (P0 Paladin + A+B.1) quedó verificada con fuente `205ec9fa`, build `c716f7aa`, Actions/Pages `40215891182`, blob `9601d5f8`; ver §9. La etapa B.2 se implementó inicialmente **local** sobre `dcdb6195` (§10) y posteriormente se publicó tras autorización expresa y QA (§11). El usuario concedió también **autorización continua de publicación de mejoras incrementales bien probadas**, registrada en §1.8.
 
@@ -863,3 +863,12 @@ Mediante mock de `window.fetch` con peticiones ficticias (40 ms) y umbral de 12 
 
 
 **Cierre C.2 v1.0.159 LIVE — 2026-10-28:** fuente Fiko protegida `73f1c917911f0463863b59110e8437784bf90fc1` sobre `45b271f3`, build CI descendiente `510775062d62787d4bbca2597e7dab199d48776b`, objeto Git `index.html` `00d0f173110d77f1b782848c18bb870910ed959e` (**2.387.044 bytes**, 973 menos que B.21). Cuatro Actions `success`: Build `40789891273`, Minería `40789894129`, Versiones `40789891255`, Rebuild/Chromium/Pages `40789891357`; **133/133 Node, 16/16 Python y 57/57 Chromium PASS**, ocho regresiones heredadas sin fallos. El job Pages completó despliegue y validó por HTTPS `v1.0.159`, banner y estructura de gaveta. **Limitación:** no se comparó el hash de una descarga HTTPS independiente ni se realizó inspección visual humana nueva del artefacto de screenshots; el artefacto `theme-regression-40789891357` está disponible en Actions. No se modificaron cálculos, SSO/ESI, destino, idioma, controles, datos ni selección. **Última LIVE técnica C.2 v1.0.159; última etapa B aprobada B.21 v1.0.158.**
+
+## 67. C.4a — blindaje de contratos (pruebas únicamente, 2026-10-29)
+
+**Alcance autorizado:** agregar pruebas de Settings, persistencia, IDs únicos, navegación de Ajustes/Guía, puntos de ensamblado y equivalencia económica. No modificar `src/`, `build.py`, estilos, fórmulas, ESI/SSO ni permisos. Se conservan B.21 y C.2 LIVE; C.4a no crea una versión visual nueva.
+
+- `tests/c4a-contracts.test.cjs`: cuatro tests Node de IDs fuente sin duplicados, contrato de almacenamiento, orden de ensamblado y marcadores únicos del build.
+- `tests/browser_c4a.py`: cuatro escenarios Chromium sin ESI real para identidad de controles al cambiar pestañas, teclado Settings/Guía, guardado/restauración con tarifas económicas sintéticas y restablecimiento de valores por defecto.
+- QA previo: build local `python3 build.py 1.0.159` reprodujo exactamente el Git blob C.2 `00d0f173110d77f1b782848c18bb870910ed959e` (2.387.044 bytes); Node C.4a 4/4 PASS; sintaxis Python PASS. Chromium local no disponible por dependencia `playwright` ausente; ejecución remota pendiente de GitHub Actions.
+- **Estado de esta entrada:** candidato de pruebas, aún no certificado por CI. No afirmar nuevos conteos ni LIVE adicional hasta comprobar Actions y Pages. Actualizar el cierre con SHA y gates reales.
