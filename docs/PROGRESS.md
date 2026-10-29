@@ -1,10 +1,10 @@
 # PROGRESS — Market Moves+
 
-**Estado más reciente (2026-10-29):** **C.2 v1.0.159 LIVE certificada**, B cerrada hasta B.21. Fuente C.2 `73f1c917`, build `51077506`, 4/4 Actions, 133 Node/16 Python/57 Chromium, Pages HTTPS v1.0.159. C.4a es una etapa de pruebas únicamente, pendiente de CI; ver DSS §§66–67.
+**Estado más reciente (2026-10-29):** **C.2 v1.0.159 LIVE funcional**, B cerrada hasta B.21. **C.4a QA-only certificada:** fuente `76dc4865`, build `f6b65de5`, 4/4 Actions, 137 Node/16 Python/61 Chromium, Pages HTTPS v1.0.159; HTML Git idéntico a C.2 `00d0f173`. Reintento 2 tras fallo intermitente B.21; ver DSS §§66–67.
 
-## 2026-10-29 — C.4a: contratos de Settings/Guía y build (candidata QA-only)
+## 2026-10-29 — C.4a: contratos de Settings/Guía y build (QA-only certificada)
 
-Se agregan cuatro tests Node y cuatro escenarios Chromium, sin cambiar las fuentes de producto. Se protegen IDs, persistencia de preferencias, navegación por pestañas y teclado, build y salidas económicas sintéticas al restaurar ajustes. Build local reprodujo el Git blob de C.2; Node 4/4 y sintaxis Python correctos. Chromium local no pudo ejecutarse por ausencia de Playwright: verificar remotamente las cuatro Actions antes de cerrar. C.2 v1.0.159 sigue siendo la única LIVE funcional.
+Cuatro tests Node nuevos y cuatro escenarios Chromium, sin tocar `src/`, `build.py`, fórmulas ni `index.html`. Protegen IDs, persistencia, navegación por pestañas/teclado, ensamblado y equivalencia económica con ajustes sintéticos y reload. Fuente protegida Fiko `76dc4865`; corrida `40816922601`, segundo intento: 137/137 Node, 16/16 Python y 61/61 Chromium, ocho regresiones heredadas y Pages HTTPS success; las otras tres Actions success. Build CI documental `f6b65de5`, HTML inalterado `00d0f173`. Primera ejecución: gate de Chromium bloqueado por carrera probable en B.21 heredado (texto Discord frente a `data-v`); el reintento pasó sin cambiar producto ni tests heredados. Riesgo de estabilidad pendiente de seguimiento separado. C.2 v1.0.159 sigue siendo la única LIVE funcional. DSS §67.
 
 ## 2026-10-28 — B.18 gavetas simétricas de ELIGE TU PLAN, v1.0.154 LIVE
 
