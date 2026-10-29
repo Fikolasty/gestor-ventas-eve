@@ -1,6 +1,6 @@
 # PROGRESS — Market Moves+
 
-**C.4b — candidata 2026-10-29:** inventario focal Settings/Guía (202 selectores, 29 en varios archivos), dos reglas previas redundantes de Ajustes retiradas, nuevo test de contrato de CSS y workflows a 1.0.160. Sin modificación JS, fórmulas, ESI/SSO, persistencia ni HTML fuente. DSS §68. **La versión funcional LIVE continúa 1.0.159 hasta verificación CI/Pages.**
+**C.4b — LIVE CERTIFICADA 2026-10-29:** inventario focal Settings/Guía (202 selectores, 29 en varios archivos), dos reglas previas redundantes de Ajustes retiradas, nuevo test de contrato de CSS y workflows a 1.0.160. Sin modificación JS, fórmulas, ESI/SSO, persistencia ni HTML fuente. DSS §68. **Certificación:** fuente `282a25dc`, build `41214eec`, Node 140/140, Python 16/16, Chromium 61/61, 4/4 Actions, Pages HTTPS v1.0.160. Git blob `385b3fc1` 2.386.775 bytes. CSS −188 caracteres; JS, finanzas, ESI/SSO y persistencia intactos. **v1.0.160 LIVE.**
 
 **Estado más reciente (2026-10-29):** **C.2 v1.0.159 LIVE funcional**, B cerrada hasta B.21. **C.4a QA-only certificada:** fuente `76dc4865`, build `f6b65de5`, 4/4 Actions, 137 Node/16 Python/61 Chromium, Pages HTTPS v1.0.159; HTML Git idéntico a C.2 `00d0f173`. Reintento 2 tras fallo intermitente B.21; ver DSS §§66–67.
 

@@ -1,8 +1,8 @@
-## v1.0.160 — 2026-10-29 [ChatGPT] · C.4b: inventario CSS y dos redundancias de Ajustes — CANDIDATA
+## v1.0.160 — 2026-10-29 [ChatGPT] · C.4b: inventario CSS y dos redundancias de Ajustes — LIVE CERTIFICADA
 
 - Inventario focal de selectores y dependencias Settings/Guía en `docs/C4B_CSS_SELECTOR_INVENTORY.md`. Eliminadas dos declaraciones históricas completamente reemplazadas por el mismo selector posterior, sin cambiar la cascada ganadora.
 - Test Node C.4b, workflows v1.0.160 y gates completos de C.4a/Chromium/economía. Sin cambios JS, fórmulas, ESI/SSO, controles ni persistencia.
-- Candidata pendiente de Actions y Pages; anterior LIVE certificada v1.0.159. DSS §68.
+- **LIVE:** fuente protegida `282a25dc`, build `41214eec`; 4/4 Actions success, 140/140 Node, 16/16 Python, 61/61 Chromium y Pages HTTPS v1.0.160; Git blob HTML `385b3fc1` de 2.386.775 bytes. Sin cotejo hash HTTPS independiente ni revisión humana nueva de capturas; sin ESI/SSO reales. DSS §68.
 
 ## v1.0.153 — 2026-10-27 [ChatGPT] · B.17: banner de SP y controles compactos Jita — LIVE CERTIFICADA
 

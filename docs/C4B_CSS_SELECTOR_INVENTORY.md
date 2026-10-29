@@ -1,6 +1,6 @@
 # C.4b · Inventario de selectores CSS y dependencias — Market Moves+
 
-**Fuente:** `main` preflight `65a6fcf1bec93b32f8bc0a38070f01332edbf3c0`, 2026-10-29. **Estado:** candidata v1.0.160, no LIVE hasta aprobar Actions/Pages. Anterior LIVE funcional: v1.0.159.
+**Fuente:** `main` preflight `65a6fcf1bec93b32f8bc0a38070f01332edbf3c0`, 2026-10-29. **Estado:** **v1.0.160 LIVE certificada** (fuente `282a25dc`, build `41214eec`, 140 Node/16 Python/61 Chromium, 4 Actions y Pages HTTPS success). Fuente del inventario: preflight `65a6fcf1`.
 
 ## Alcance
 
