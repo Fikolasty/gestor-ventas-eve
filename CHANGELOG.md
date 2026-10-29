@@ -1,3 +1,10 @@
+## v1.0.162 — 2026-10-29 [ChatGPT] · C.5b.1: header sin Inicio y Habilidades — QA PENDIENTE
+
+- El logotipo de Market Moves+ conserva el reinicio del workspace; Inicio deja de mostrarse como pestaña y su control heredado permanece oculto y conectado.
+- «Planes de habilidades» cambia a «Habilidades» en ES y «Skills» en EN, sin renombrar ni alterar los contenidos del módulo. Accesibilidad del botón y catálogo de traducciones actualizados.
+- Sin cambios al motor financiero, ESI/SSO, importación, minería, configuraciones o persistencia. Pruebas y versión del workflow actualizadas; C.5c se conserva para después de este ajuste.
+- **Candidata:** no LIVE hasta completar GitHub Actions/Pages.
+
 ## v1.0.161 — 2026-10-29 [ChatGPT] · C.5b: header compartido, workspaces y Ajustes reorganizados — LIVE CERTIFICADA
 
 - Navegación como aplicación: Ventas, Minería, Habilidades, Ajustes y Guía usan header compartido; estado de inventario y plan se preserva al cambiar de vista.

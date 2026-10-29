@@ -2878,3 +2878,7 @@ body:is([data-mm-view="settings"],[data-mm-view="help"]) .top-slot>.panel{
   body .top.mm-ho-root .mm-profile-row .mm-avatar-fallback,
   body .top.mm-ho-root .mm-profile-row #evePortrait{width:28px!important;height:28px!important;flex-basis:28px!important}
 }
+
+/* C.5b.1: Home is the existing clickable brand; retain #navHome only as a
+   hidden legacy control for its original event wiring, not as a second tab. */
+body .top.mm-ho-root #mmTabs>.mm-ho-main #navHome{display:none!important}

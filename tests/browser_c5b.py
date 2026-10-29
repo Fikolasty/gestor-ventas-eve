@@ -58,6 +58,9 @@ class C5bWorkspaceTests(unittest.TestCase):
         self.assertTrue(state["allOriginal"] and state["idsUnique"])
         self.assertEqual(state["controls"], state["panelIds"])
         self.assertEqual(state["view"], "settings")
+        self.assertTrue(self.page.locator("#navHome").is_hidden())
+        self.assertEqual(self.page.locator("#mmTabSkills .mm-mod-label").inner_text(), "Habilidades")
+
         tabs = self.page.locator("#settings .modern-tab")
         tabs.first.focus()
         tabs.first.press("End")
@@ -111,7 +114,7 @@ class C5bWorkspaceTests(unittest.TestCase):
           stSaveNow();
         }""")
         with self.page.expect_navigation(wait_until="domcontentloaded"):
-            self.page.locator("#navHome").click()
+            self.page.locator("header.top .brand[data-go-home]").click()
         self.page.wait_for_selector("header.top.mm-ho-root")
         state = self.page.evaluate("""() => ({
           items:S.items.length,plan:S.planMode,paste:$('paste').value,

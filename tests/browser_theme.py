@@ -183,7 +183,7 @@ class ThemeBrowserTests(unittest.TestCase):
     def test_guide_ticker_settings_and_skills_tabs_translate_both_ways(self):
         self.page.evaluate("setLang('en')")
         self.page.wait_for_function(
-            "() => document.querySelector('#mmTabSkills .mm-mod-label')?.textContent.trim()==='Skill Plans'"
+            "() => document.querySelector('#mmTabSkills .mm-mod-label')?.textContent.trim()==='Skills'"
         )
         self.assertIn("New pilot? Get", self.page.locator(".hero-referral").inner_text())
         self.assertIn("1,000,000 FREE SP", self.page.locator(".hero-referral").inner_text())
@@ -192,7 +192,7 @@ class ThemeBrowserTests(unittest.TestCase):
         self.assertIn("Home market", self.page.locator("#settings").text_content())
         self.page.evaluate("setLang('es')")
         self.page.wait_for_function(
-            "() => document.querySelector('#mmTabSkills .mm-mod-label')?.textContent.trim()==='Planes de habilidades'"
+            "() => document.querySelector('#mmTabSkills .mm-mod-label')?.textContent.trim()==='Habilidades'"
         )
         self.assertIn("¿Nuevo piloto? Consigue", self.page.locator(".hero-referral").inner_text())
         self.assertIn("1,000,000 SP GRATIS", self.page.locator(".hero-referral").inner_text())

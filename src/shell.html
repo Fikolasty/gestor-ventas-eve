@@ -52,7 +52,7 @@
     <div><h1>Market Moves+</h1></div>
   </div>
   <nav class="mm-modnav" id="mmTabs" aria-label="Navegación de Market Moves+">
-    <button type="button" id="navHome" class="mm-home" title="HOME" aria-label="Volver al inicio"><span class="ic i-home" aria-hidden="true"></span><span class="mm-home-label" data-i18n="css.home">Inicio</span></button>
+    <button type="button" id="navHome" class="mm-home" title="HOME" aria-label="Volver al inicio" hidden><span class="ic i-home" aria-hidden="true"></span><span class="mm-home-label" data-i18n="css.home">Inicio</span></button>
     <!-- Both business modes occupy the formerly empty space beside Home. -->
     <section class="mm-business-switch" id="businessSwitch" aria-label="Tipo de negocio">
         <div class="mm-business-tabs" role="group" aria-label="Escenario de mercado">
@@ -84,7 +84,7 @@
     <div class="mm-modgroup" role="tablist" aria-label="Módulos de Market Moves+">
     <button type="button" class="mm-mod on" data-mm-module="ventas" role="tab" aria-controls="salesBody" aria-selected="true" id="mmTabVentas" title="Ventas" aria-label="Ventas"><span class="mm-mod-label">Ventas</span></button>
     <button type="button" class="mm-mod" data-mm-module="mining" role="tab" aria-controls="mining" aria-selected="false" id="mmTabMining" title="Minería" aria-label="Minería"><span class="mm-mining-icon" aria-hidden="true"><img class="mm-eve-hulk-icon" src="__HULK_ICON__" alt="" width="28" height="26"></span><span class="mm-mod-label">Minería</span></button>
-    <button type="button" class="mm-mod" data-mm-module="skills" role="tab" aria-controls="skills" aria-selected="false" id="mmTabSkills" title="Planes de habilidades" aria-label="Planes de habilidades"><span class="mm-skills-icon" aria-hidden="true"><span class="ic i-key"></span><img class="mm-eve-skill-icon" src="https://images.evetech.net/types/3426/icon?size=64" alt="" width="20" height="20" loading="lazy" onerror="this.hidden=true"></span><span class="mm-mod-label">Planes de habilidades</span></button>
+    <button type="button" class="mm-mod" data-mm-module="skills" role="tab" aria-controls="skills" aria-selected="false" id="mmTabSkills" title="Habilidades" aria-label="Habilidades" data-i18n-title="module.skills" data-i18n-aria-label="module.skills"><span class="mm-skills-icon" aria-hidden="true"><span class="ic i-key"></span><img class="mm-eve-skill-icon" src="https://images.evetech.net/types/3426/icon?size=64" alt="" width="20" height="20" loading="lazy" onerror="this.hidden=true"></span><span class="mm-mod-label" data-i18n="module.skills">Habilidades</span></button>
     <!-- PI temporalmente fuera de navegación; conservar para reactivar más adelante.
     <button type="button" class="mm-mod" data-mm-module="pi" role="tab" aria-controls="pi" aria-selected="false" id="mmTabPi">Industria Planetaria · PI</button>
     -->
