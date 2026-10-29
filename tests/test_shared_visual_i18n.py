@@ -17,7 +17,7 @@ class SharedUiTests(unittest.TestCase):
             start = html.index('id="' + section + '"')
             self.assertIn('mm-section-head mm-module-heading', html[start:start + 600], section)
         self.assertNotIn('Skill Plan</span>', html)
-        self.assertIn('Planes de habilidades</span>', html)
+        self.assertIn('data-i18n="module.skills">Habilidades</span>', html)
         self.assertNotIn('No pide tu contraseña de EVE ni inicio de sesión', html)
         self.assertIn('ABRIR PASOS A SEGUIR', html)
         self.assertIn('Privacidad y acceso a EVE', html)
