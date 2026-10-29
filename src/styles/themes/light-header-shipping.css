@@ -117,3 +117,25 @@ html.light #pCtr .discord-content .dests .dest[aria-pressed="true"]{
 }
 html.light #pCtr .disc-preview{background:#f7f5f1;border-color:var(--line)}
 html.light #pCtr .disc-preview .msg{background:#fff!important;border-top:1px solid var(--line)!important;box-shadow:none!important}
+
+/* C.5b — Light parity for the shared header and drawers.
+   Loaded after light.py so historical dark overrides cannot reappear. */
+html.light body:is([data-mm-view="settings"],[data-mm-view="help"]) .top-slot>.panel{
+  background:var(--hull2)!important;border-color:var(--line2)!important
+}
+html.light #settings .modern-tabs,html.light #help .modern-tabs{
+  background:#f7f5f1!important;border-color:var(--line2)!important
+}
+html.light #settings .modern-tab[aria-selected="true"],
+html.light #help .modern-tab[aria-selected="true"]{
+  color:#38251e!important;background:rgba(217,119,87,.12)!important;
+  border-bottom-color:var(--clay)!important
+}
+html.light #settings .modern-panel>fieldset.st{background:var(--hull2)!important;border-color:var(--line2)!important}
+html.light #settings .modern-panel>fieldset.st.closed{background:#fff!important}
+html.light #settings .modern-panel .st-f,
+html.light #help .modern-panel .hp-c,
+html.light #help .modern-panel .hp-t>div{background:#fff!important;border-color:var(--line2)!important}
+html.light body .top.mm-ho-root .mm-profile-row #evePilotName{
+  background:var(--clay)!important;color:#fff!important
+}

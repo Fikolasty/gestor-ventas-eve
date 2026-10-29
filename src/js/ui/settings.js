@@ -5,6 +5,8 @@ function selectAppModule(name){
   // Mientras está oculta en la navegación, no permitir activarla mediante accesos antiguos.
   if(name==='pi')name='ventas';
   if(!['ventas','mining','pi','skills'].includes(name))return;
+  // C.5b: navigation changes the visible workspace, never the Sales inventory.
+  document.body.dataset.mmView=name;
   document.body.classList.toggle('mm-mining',name==='mining');
   document.body.classList.toggle('mm-pi',name==='pi');
   document.body.classList.toggle('mm-skills',name==='skills');
@@ -22,7 +24,7 @@ function selectAppModule(name){
   }else if(name==='skills'){
     $('mining').hidden=true;$('pi').hidden=true;$('settings').hidden=true;$('help').hidden=true;
     $('skills').hidden=false;SkillUI.mount($('skillRoot'));SkillUI.setLanguage(S.lang);SkillUI.setTheme(document.documentElement.classList.contains('light')?'light':'dark');SkillUI.shown();
-  }else{$('mining').hidden=true;$('pi').hidden=true;$('skills').hidden=true;}
+  }else{$('mining').hidden=true;$('pi').hidden=true;$('skills').hidden=true;$('settings').hidden=true;$('help').hidden=true;}
   document.querySelectorAll('.side-i[data-panel="mining"]').forEach(b=>b.setAttribute('aria-pressed',String(name==='mining')));
 }
 const mmTabs=[...document.querySelectorAll('#mmTabs [data-mm-module]')];
@@ -35,16 +37,39 @@ mmTabs.forEach((b,i)=>{
   });
 });
 
+// The main module tabs and Settings/Guide are mutually exclusive workspaces.
+document.body.dataset.mmView='ventas';
+function mmSyncWorkspaceTabs(){
+  const view=document.body.dataset.mmView;
+  document.querySelectorAll('#mmTabs [data-mm-module]').forEach(b=>{
+    const active=b.dataset.mmModule===view;
+    b.setAttribute('aria-selected',String(active));
+    b.tabIndex=active?0:-1;
+    b.classList.toggle('on',active);
+  });
+}
 // v1.0.53: se abren desde el menú lateral, los botones de Antes de empezar y se cierran con su X.
 // force=true abre (o solo desplaza si ya está abierto); force=false cierra; sin force alterna.
 function togglePanel(id,force){
   if(id==='mining'){selectAppModule(force===false?'ventas':'mining');return;}
+  if(!['settings','help'].includes(id))return;
   if(document.body.classList.contains('mm-mining')||document.body.classList.contains('mm-pi')||document.body.classList.contains('mm-skills'))selectAppModule('ventas');
   const s=$(id),open=force!=null?force:s.hidden;
-  if(open&&!s.hidden){s.scrollIntoView({behavior:'smooth',block:'start'});return;}
-  if(open){focusOnly(id);slide(s,true);if(id==='mining'){MineUI.mount($('mnRoot'));MineUI.shown();}}else s.hidden=true;
+  if(open){
+    const other=id==='settings'?'help':'settings';
+    $(other).hidden=true;
+    document.querySelectorAll('.side-i[data-panel="'+other+'"]').forEach(x=>x.setAttribute('aria-pressed','false'));
+    // Do not call focusOnly(): it closes Sales drawers and destroys view state.
+    if(s.hidden)slide(s,true);
+    document.body.dataset.mmView=id;
+  }else{
+    s.hidden=true;
+    if(document.body.dataset.mmView===id)document.body.dataset.mmView='ventas';
+  }
   document.querySelectorAll('.side-i[data-panel="'+id+'"]').forEach(x=>x.setAttribute('aria-pressed',String(open)));
-  if(open)s.scrollIntoView({behavior:'smooth',block:'start'});}
+  mmSyncWorkspaceTabs();
+  if(open)s.scrollIntoView({behavior:MOTION()?'smooth':'auto',block:'start'});
+}
 // v1.0.11: menú lateral. Escritorio: se contrae a íconos. Móvil: se abre encima con fondo oscuro. Solo en memoria.
 {const mob=()=>innerWidth<=900,b=document.body;
  const setC=c=>{b.classList.toggle('side-c',c);$('sideTg').setAttribute('aria-expanded',String(!c));$('sideTg').title=c?'Expandir menú':'Contraer menú';};
@@ -56,11 +81,10 @@ function togglePanel(id,force){
    x.addEventListener('click',()=>{if(x.dataset.panel==='mining')selectAppModule('mining');else togglePanel(x.dataset.panel);if(mob())setO(false);});});}
 // v1.0.8: X dentro de la sección (fija al bajar)
 document.querySelectorAll('.x-close').forEach(b=>b.addEventListener('click',()=>togglePanel(b.dataset.close,false)));
-const navigateHome=()=>{
-  selectAppModule('ventas');focusOnly('home'); // Cierra paneles sin borrar inventario ni preferencias.
-  window.scrollTo({top:0,behavior:MOTION()?'smooth':'auto'});
-  if(innerWidth<=900){document.body.classList.remove('side-open');$('sideBd').hidden=true;}
-};
+// Home and the brand explicitly restart the volatile workspace. Settings remain
+// in the original localStorage key and are restored by the normal boot process.
+// No confirmation popup: normal tab navigation never invokes this handler.
+const navigateHome=()=>{window.location.reload();};
 $('navHome').addEventListener('click',navigateHome);
 document.querySelectorAll('[data-go-home]').forEach(node=>{
   node.addEventListener('click',navigateHome);
@@ -86,39 +110,75 @@ document.querySelectorAll('[data-go-home]').forEach(node=>{
   }
   document.querySelectorAll('#mmTabs [data-mm-module]').forEach(btn=>btn.addEventListener('click',updateModuleSidebar));
   $('navHome').addEventListener('click',updateModuleSidebar);
-  function tabs(host,groups,labels){
+  function tabs(host,groups,labels,keys=[]){
     if(!host||host.dataset.modernized)return;
     host.dataset.modernized='true';
-    const bar=document.createElement('div');bar.className='modern-tabs';bar.setAttribute('role','tablist');
+    const scope=host.closest('#settings')?'settings':'help';
+    const bar=document.createElement('div');
+    bar.className='modern-tabs';bar.setAttribute('role','tablist');
+    bar.setAttribute('aria-label',scope==='settings'?tx('module.settings'):tx('module.guide'));
     const buttons=[];
     const activate=i=>{
       groups.forEach((panel,j)=>panel.hidden=j!==i);
-      buttons.forEach((btn,j)=>{const active=j===i;btn.setAttribute('aria-selected',String(active));btn.tabIndex=active?0:-1;});
+      buttons.forEach((btn,j)=>{
+        const active=j===i;
+        btn.setAttribute('aria-selected',String(active));btn.tabIndex=active?0:-1;
+      });
     };
     groups.forEach((panel,i)=>{
       panel.classList.add('modern-panel');
-      const btn=document.createElement('button');btn.type='button';btn.className='modern-tab';btn.textContent=labels[i];
-      btn.setAttribute('role','tab');btn.addEventListener('click',()=>activate(i));
+      panel.id='mm-'+scope+'-panel-'+i;
+      panel.setAttribute('role','tabpanel');
+      const btn=document.createElement('button');
+      btn.type='button';btn.className='modern-tab';btn.textContent=labels[i];
+      btn.id='mm-'+scope+'-tab-'+i;
+      btn.setAttribute('role','tab');btn.setAttribute('aria-controls',panel.id);
+      panel.setAttribute('aria-labelledby',btn.id);
+      if(keys[i])btn.setAttribute('data-i18n',keys[i]);
+      btn.addEventListener('click',()=>activate(i));
       btn.addEventListener('keydown',e=>{
         if(!['ArrowLeft','ArrowRight','Home','End'].includes(e.key))return;
-        e.preventDefault();const p=e.key==='Home'?0:e.key==='End'?buttons.length-1:(i+(e.key==='ArrowRight'?1:-1)+buttons.length)%buttons.length;
+        e.preventDefault();
+        const p=e.key==='Home'?0:e.key==='End'?buttons.length-1:(i+(e.key==='ArrowRight'?1:-1)+buttons.length)%buttons.length;
         buttons[p].focus();activate(p);
       });
       buttons.push(btn);bar.append(btn);
     });
-    host.prepend(bar);groups.forEach(x=>host.append(x));activate(0);
+    host.prepend(bar);groups.forEach(panel=>host.append(panel));activate(0);
   }
   const wrap=document.querySelector('#settings .st-wrap');
   if(wrap){
-    const sections=[...wrap.children],groups=[],labels=[];
-    let panel=null;
-    sections.forEach(child=>{
-      if(child.classList.contains('st-sec')){
-        panel=document.createElement('div');groups.push(panel);labels.push(child.querySelector('h3')?.textContent.trim()||'Ajustes');
+    // All twelve original fieldsets and the language/market controls are MOVED,
+    // never cloned. Contract: Market (0), Skills (1), Taxes (2),
+    // Prices/Sales (3..8), Freight/Refining (9..11).
+    const originals=[...wrap.children];
+    const panels=Array.from({length:4},()=>document.createElement('div'));
+    const keys=['settings.tabGeneral','settings.tabPilot','settings.tabPricing','settings.tabFreight'];
+    const labels=keys.map(key=>tx(key));
+    let fieldsets=0,target=0;
+    originals.forEach(node=>{
+      if(node.matches('fieldset.st')){
+        target=fieldsets===0?0:fieldsets<=2?1:fieldsets<=8?2:3;
+        fieldsets++;
+      }else if(node.classList.contains('st-language'))target=0;
+      else if(node.classList.contains('st-sec')){
+        target=fieldsets===0?0:fieldsets<=2?1:fieldsets<=8?2:3;
       }
-      if(panel)panel.append(child);
+      panels[target].append(node);
     });
-    tabs(wrap,groups,labels);
+    if(fieldsets!==12)throw new Error('C.5b: Settings fieldset contract changed: '+fieldsets);
+    const groupTax=panels[1].querySelectorAll('.st-sec');
+    const taxSection=[...groupTax].find(node=>node.querySelector('.st-sec-t')?.textContent.includes('Impuestos y Precios'));
+    if(taxSection){
+      const title=taxSection.querySelector('.st-sec-t'),desc=taxSection.querySelector('.st-sec-i');
+      title.setAttribute('data-i18n','settings.groupTaxes');title.textContent=tx('settings.groupTaxes');
+      if(desc){desc.setAttribute('data-i18n','settings.groupTaxesHelp');desc.textContent=tx('settings.groupTaxesHelp');}
+    }
+    const priceSection=document.createElement('div');priceSection.className='st-sec c5b-price-section';
+    const title=document.createElement('h3');title.className='st-sec-t';title.setAttribute('data-i18n','settings.groupPrices');title.textContent=tx('settings.groupPrices');
+    const desc=document.createElement('p');desc.className='st-sec-i';desc.setAttribute('data-i18n','settings.groupPricesHelp');desc.textContent=tx('settings.groupPricesHelp');
+    priceSection.append(title,desc);panels[2].prepend(priceSection);
+    tabs(wrap,panels,labels,keys);
   }
   const help=$('help');
   if(help){

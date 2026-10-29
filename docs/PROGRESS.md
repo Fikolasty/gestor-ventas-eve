@@ -776,3 +776,13 @@ La serie B se considera cerrada hasta B.21. Se retiran únicamente estilos antig
 
 ### C.2 v1.0.159 — LIVE certificada (2026-10-28)
 Fuente protegida Fiko `73f1c917`, compilación CI `51077506`, blob `00d0f173` de 2.387.044 bytes; 4/4 Actions success (Pages `40789891357`), 133 Node, 16 Python y 57 Chromium. Se retira CSS previamente sobrescrito sin alterar DOM ni JS. La verificación pública de CI confirma v1.0.159; no se hizo cotejo independiente de bytes HTTPS ni revisión humana de los PNG nuevos. DSS §66.
+
+## 2026-10-29 — C.5b v1.0.161 candidata
+
+Base confirmada 079997e5e993ace5db1290b9820dd289ea451de7, último HEAD C.4b LIVE. Dirección visual C.5a v2/v3 aprobada. Header único, avatar/piloto junto al login, Ajustes/Guía en header, tabs y superficies cálidas con escala tipográfica de Ventas, sidebar legado oculto sin eliminar DOM.
+
+Settings reorganizados en General, Personaje e impuestos, Precios y ventas, Envío y reproceso. Mismos 12 fieldsets y controles/IDs; Guía con cuatro tabs y contenido existente. Cambio de vista conserva el estado de Ventas, inventario y plan; Inicio/logo reinician temporalmente sin popup mediante recarga; ajustes locales persistidos sobreviven.
+
+Afecta shell, CSS, UI de Settings, reubicación DOM del switch de tema, catálogo de traducción, tests y workflows. No se cambia motor económico, servicios ESI ni autenticación.
+
+**Candidata:** Node/Python/Chromium/Actions/Pages todavía requieren resultados. No declarar nuevo LIVE ni identidad HTTPS antes de verificarlos. DSS §69.

@@ -1,6 +1,6 @@
 # DSS — Design Standards & Session Handoff · Market Moves+
 
-**Última actualización:** 2026-10-29 · **C.4b v1.0.160 LIVE certificada** (§68): fuente `282a25dc`, build `41214eec`, 140 Node/16 Python/61 Chromium y 4/4 Actions/Pages. **C.4a QA-only** (§67) y **C.2** (§66) también certificadas; fórmulas, Settings, persistencia y ESI/SSO intactos.
+**Última actualización:** 2026-10-29 · **C.5b v1.0.161 candidata, CI pendiente** (§69); anterior **C.4b v1.0.160 LIVE certificada** (§68): fuente `282a25dc`, build `41214eec`, 140 Node/16 Python/61 Chromium y 4/4 Actions/Pages. **C.4a QA-only** (§67) y **C.2** (§66) también certificadas; fórmulas, Settings, persistencia y ESI/SSO intactos.
 
 **Continuidad de versión:** la release anterior v1.0.126 (P0 Paladin + A+B.1) quedó verificada con fuente `205ec9fa`, build `c716f7aa`, Actions/Pages `40215891182`, blob `9601d5f8`; ver §9. La etapa B.2 se implementó inicialmente **local** sobre `dcdb6195` (§10) y posteriormente se publicó tras autorización expresa y QA (§11). El usuario concedió también **autorización continua de publicación de mejoras incrementales bien probadas**, registrada en §1.8.
 
@@ -887,3 +887,17 @@ Mediante mock de `window.fetch` con peticiones ficticias (40 ms) y umbral de 12 
 
 
 **Cierre LIVE C.4b v1.0.160 — 2026-10-29 (DSS §68):** conexión Fiko/Fikolasty, fuente `282a25dc6b1a5782e8827548f61547546a3244af` por actualización de `main` con `expected_sha=65a6fcf1bec93b32f8bc0a38070f01332edbf3c0`, `force:false`; build descendiente automático `41214eec63eebfb27bafef37b45341abc060278f`. Cuatro Actions SUCCESS: Build `40961515495`, Versiones `40961515425`, Minería `40961515419`, Rebuild/Chromium/Pages `40961515464` (primer intento). **140/140 Node, 16/16 Python, 61/61 Chromium**, ocho scripts de regresión heredada PASS. Build `index.html` v1.0.160: blob Git `385b3fc1f8cb1184f35ae1bc80ca9452c7efdfad`, **2.386.775 bytes**. Job Pages aprobó y confirmó v1.0.160 mediante petición HTTPS a la URL pública. CSS recortado exactamente 188 caracteres, reglas ganadoras conservadas. Ningún cambio en JS, fórmulas, SSO/ESI, controles o persistencia. **Limitaciones:** no hubo comparación hash independiente contra todo el documento HTTPS ni inspección humana nueva de screenshots, ni ESI/SSO reales. **Siguiente:** no repetir C.4a; preparar revisión visual Settings/Guía con captura de base y protocolo previo a cambios extensos. C.4b LIVE.
+
+## 69. C.5b — header global, navegación por workspaces y cuatro pestañas (2026-10-29)
+
+**Dirección aprobada:** base C.4b v1.0.160; fuente, superficies y grises cálidos de Ventas; un solo header; accesos Settings y User Guide; avatar junto al botón EVE SSO; tab activo con subrayado; gavetas compactas; trabajo preservado al navegar por Ventas, Minería, Habilidades, Ajustes y Guía. Inicio/logo reinician únicamente estado temporal sin popup; tema, idioma y ajustes persistidos permanecen.
+
+**Implementación candidata v1.0.161 (NO LIVE hasta Actions/Pages):**
+- src/shell.html: header global con marca Market Moves+, control original Inicio y avatar circular junto al retrato EVE y al botón real eveIdentityButton.
+- src/js/app/refresh.js: mueve el control original de tema antes de Ajustes y Guía; nodos y listeners conservados.
+- src/js/ui/settings.js: cada módulo tiene estado de pantalla completa. Settings/Guía no cierran las gavetas de Ventas al navegar. Inicio y marca hacen reload deliberado sin popup; las pestañas habituales no recargan. Los doce fieldsets originales se reubican sin clonarse: General (mercado, idioma); Personaje e impuestos (skills, tasas); Precios y ventas (márgenes, órdenes, mercado, hielo, Buyback y jugador); Envío y reproceso (compresión, SIGMA Freight y refinería). Teclado y semántica ARIA de tabs conservados.
+- src/i18n/ui.json: nuevos títulos oficiales ES/EN. src/styles/80-product-ux.css y src/styles/themes/light-header-shipping.css: tokens originales y paridad visual Light/Dark.
+- tests/browser_c5b.py y tests/c5b-navigation.test.cjs: navegación y estado; tests/browser_c4a.py actualizado para cuatro pestañas sin relajar contratos financieros o persistencia.
+- CI compila v1.0.161. Publicación solo con Fiko/Fikolasty, expected_sha, force:false, tests y Pages certificados.
+
+**Límites:** el mockup no autoriza inventar funciones de notificaciones, sincronización cloud, formatos avanzados ni rutas de archivos locales. No se tocan cálculos, ESI/SSO, permisos, almacenamiento ni personalización económica temporal de una operación (requiere etapa funcional posterior). Retrato EVE solamente si EVE SSO devuelve una identidad. ESI/SSO reales y revisión humana nueva de capturas no quedan probados por tests sintéticos.

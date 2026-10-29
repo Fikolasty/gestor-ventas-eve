@@ -52,7 +52,7 @@ class C4aContractTests(unittest.TestCase):
             visiblePanels: panels.filter(p => !p.hidden).length
           };
         }""")
-        self.assertGreaterEqual(result["tabs"], 5)
+        self.assertEqual(result["tabs"], 4)
         self.assertEqual(result["tabs"], result["panels"])
         self.assertTrue(result["sameNodes"])
         self.assertEqual(result["selected"], 1)

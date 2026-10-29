@@ -1,3 +1,10 @@
+## v1.0.161 — 2026-10-29 [ChatGPT] · C.5b: header compartido, workspaces y Ajustes reorganizados — QA PENDIENTE
+
+- Navegación como aplicación: Ventas, Minería, Habilidades, Ajustes y Guía usan header compartido; estado de inventario y plan se preserva al cambiar de vista.
+- Logo e Inicio reinician sesión temporal sin popup; preferencias persisten. Avatar junto a identidad EVE real; no se duplica login.
+- Cuatro pestañas de Ajustes con doce fieldsets originales sin clonar y gavetas/escala tipográfica de Ventas.
+- Pruebas nuevas de navegación, ARIA y persistencia. Sin cambios financieros, ESI/SSO ni sincronización. No LIVE hasta las cuatro Actions y Pages.
+
 ## v1.0.160 — 2026-10-29 [ChatGPT] · C.4b: inventario CSS y dos redundancias de Ajustes — LIVE CERTIFICADA
 
 - Inventario focal de selectores y dependencias Settings/Guía en `docs/C4B_CSS_SELECTOR_INVENTORY.md`. Eliminadas dos declaraciones históricas completamente reemplazadas por el mismo selector posterior, sin cambiar la cascada ganadora.

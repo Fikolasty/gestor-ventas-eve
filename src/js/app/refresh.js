@@ -314,7 +314,7 @@ $('themeLight').addEventListener('change',e=>{document.documentElement.classList
     if(modePicker.open&&!modePicker.contains(event.target))modePicker.open=false;
   });
   syncBusinessMode();
-  topActions.insertBefore(theme,profile); // Light/Dark shares the right-side action group
+  topActions.insertBefore(theme,topActions.firstChild); // Keep the real theme switch accessible before Settings/Guide.
   const headerLegacy=document.createElement('div');headerLegacy.className='mm-ho-legacy';
   headerLegacy.append(rightGroup); // retains the internal #bFlip route control and its listener
   bar.append(headerMain,headerLegacy);
