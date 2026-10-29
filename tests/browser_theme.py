@@ -127,7 +127,7 @@ class ThemeBrowserTests(unittest.TestCase):
         self.page.wait_for_function("document.querySelector('#evePilotName')?.textContent.trim()==='Iniciar sesión'")
 
     def test_b13_main_navigation_tabs_have_identical_light_dark_geometry(self):
-        """Theme parity: three rounded buttons, never a Light-only gray bar."""
+        """C.5b: flat shared tabs and identical Light/Dark geometry."""
         from playwright.sync_api import expect
         out=INDEX.parent/'tests'/'artifacts'/'theme'
         out.mkdir(parents=True,exist_ok=True)
@@ -151,7 +151,7 @@ class ThemeBrowserTests(unittest.TestCase):
                         self.assertEqual(group['background'],'rgba(0, 0, 0, 0)',(width,language,light,group))
                         self.assertEqual(group['borderWidth'],'0px',(width,language,light,group))
                     for tab in styles[2:]:
-                        self.assertGreaterEqual(float(tab['borderWidth'][:-2]),1)
+                        self.assertEqual(tab['borderWidth'],'0px', (width,language,light,tab))
                         self.assertGreaterEqual(tab['radius'],7)
                         self.assertGreaterEqual(tab['height'],34)
                     variants.append(styles)
@@ -407,7 +407,7 @@ class ThemeBrowserTests(unittest.TestCase):
                          "Adjust skills, taxes and markets. Changes are saved in this browser.")
         self.assertEqual(self.page.locator("#stLanguageLabel").inner_text(),"LANGUAGE")
         tabs=self.page.locator("#settings .st-wrap>.modern-tabs .modern-tab")
-        self.assertGreaterEqual(tabs.count(),5)
+        self.assertEqual(tabs.count(),4)
         self.assertEqual(self.page.locator("#settings .st-wrap>.modern-panel").count(),tabs.count())
         self.page.evaluate("setLang('es')")
         self.assertEqual(self.page.locator("#settings>.lead").inner_text(),
