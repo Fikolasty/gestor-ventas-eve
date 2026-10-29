@@ -1,6 +1,6 @@
 # DSS — Design Standards & Session Handoff · Market Moves+
 
-**Última actualización:** 2026-10-29 · **C.4b v1.0.160 LIVE certificada** (DSS §68), Settings/Guía protegidas, sin cambios funcionales de JS. (§66) y **C.4a QA-only certificada** (§67), sin modificación de fórmulas o producto. C.4a fuente `76dc4865`, build documental `f6b65de5`, HTML idéntico `00d0f173` (2.387.044 bytes); **137 Node/16 Python/61 Chromium**, 4/4 Actions y Pages success (reintento 2).
+**Última actualización:** 2026-10-29 · **C.4b v1.0.160 LIVE certificada** (§68): fuente `282a25dc`, build `41214eec`, 140 Node/16 Python/61 Chromium y 4/4 Actions/Pages. **C.4a QA-only** (§67) y **C.2** (§66) también certificadas; fórmulas, Settings, persistencia y ESI/SSO intactos.
 
 **Continuidad de versión:** la release anterior v1.0.126 (P0 Paladin + A+B.1) quedó verificada con fuente `205ec9fa`, build `c716f7aa`, Actions/Pages `40215891182`, blob `9601d5f8`; ver §9. La etapa B.2 se implementó inicialmente **local** sobre `dcdb6195` (§10) y posteriormente se publicó tras autorización expresa y QA (§11). El usuario concedió también **autorización continua de publicación de mejoras incrementales bien probadas**, registrada en §1.8.
 
