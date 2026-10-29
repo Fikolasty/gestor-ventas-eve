@@ -794,3 +794,7 @@ Afecta shell, CSS, UI de Settings, reubicación DOM del switch de tema, catálog
 ## 2026-10-29 — C.5b.1 v1.0.162 candidata
 
 En respuesta a la aprobación de simplificar el header: pestaña Inicio retirada de la navegación visible (la acción antigua se conserva oculta para compatibilidad; logo y título reinician); «Planes de habilidades» pasa a «Habilidades» / «Skills» exclusivamente en navegación. Módulo de planes y fórmulas intactos, sin nuevas funciones. Se refuerza QA por catálogo ES/EN y reinicio del logo; publicación pendiente de CI/Pages. C.5c continúa como próxima etapa separada. DSS §70.
+
+### Cierre C.5b.1 v1.0.162 LIVE
+
+**Cierre LIVE certificado — 2026-10-29:** fuente Fiko `6b8b5b39258d0dc9a91c53906758ed0be7c163de`; bot build `63826a669eabfd9d304d9e9b16a4d1ae1601515a`; blob `index.html` `324c64db249d52cd149deae8c435a1698b5d27aa`. 4/4 Actions **success**: Rebuild/Chromium/Pages `40974321618`, Build `40974321690`, Minería `40974321654`, Versiones `40974321616`. Regresiones: 142/142 Node, 16/16 Python, 65/65 Chromium y pruebas heredadas. GitHub Pages reportó despliegue exitoso y comprobó por HTTPS `v1.0.162` en https://fikolasty.github.io/gestor-ventas-eve/ (2026-10-29 23:38 UTC). No se alteró ninguna fórmula, ESI/SSO ni el motor de planes. Pendientes normales: revisión humana de screenshots y prueba EVE SSO extremo a extremo. C.5c no iniciado. **C.5b.1 v1.0.162 LIVE.**
