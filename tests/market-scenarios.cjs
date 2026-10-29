@@ -125,7 +125,7 @@ assert(salesJS.includes("$('salesUtilityRow').append($('importControls'))"),
   'Original import controls belong in the utility row above Inventory, never cloned');
 assert(!salesJS.includes('salesToolbar.append('),'Obsolete import toolbar must not be rendered');
 assert(!salesJS.includes("headerContext.append($('businessSwitch')"),'No duplicate Sales navigation in header');
-assert(salesJS.includes('topActions.insertBefore(theme,profile)'),'Theme must live beside Settings, Guide and the EVE pilot');
+assert(salesJS.includes('topActions.insertBefore(theme,topActions.firstChild)'),'Theme remains the original interactive control in the shared header');
 assert(salesJS.includes("headerLegacy.append(rightGroup)"),'Original internal route control must survive');
 assert(salesJS.includes("header.insertBefore(bar,topActions)"),'Navigation must be in main header');
 assert(salesJS.includes("$('importControls').hidden=!isImport"));
@@ -151,7 +151,7 @@ assert(salesJS.includes("$('shipLab').hidden=!isImport"),'Ship control respects 
 assert(salesHTML.includes('@media(max-width:1190px)')&&salesHTML.includes('@media(max-width:520px)'));
 assert(!salesHTML.includes('/* v1.0.106: ONE balanced navigation row:'));
 assert(!salesHTML.includes('/* v1.0.107 — compact Jita import bar.'));
-assert(salesHTML.includes('class="brand-wordmark">SIGMA GRINDSET</span>'));
+assert(salesHTML.includes('class="brand-wordmark">Market Moves+</span>'),'The approved global header displays the product name');
 assert(!salesHTML.includes('SIGMA GRINDSET <small>EVE Online</small>'));
 assert(!salesHTML.includes('Herramienta para gestionar tus planes de mercado.'));
 assert(salesHTML.includes('class="hero-referral hero-referral-pill"'),'Static referral pill is present');
