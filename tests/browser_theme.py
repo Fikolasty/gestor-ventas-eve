@@ -1134,16 +1134,16 @@ class ThemeBrowserTests(unittest.TestCase):
                 else S.api['synthetic circuit']=oldApi;
             }
         }""")
-        self.assertEqual(result["english"]["head"],"ACTUAL FREIGHT COST")
+        self.assertEqual(result["english"]["head"],"ITEM DETAILS")
         self.assertEqual(result["english"]["values"],["6,500.00 ISK","−2,000.00 ISK","4,500.00 ISK"])
-        self.assertEqual(result["english"]["headings"],["SHIPPED ITEM","BEFORE SHIPPING","SHIPPING","FINAL TOTAL"])
+        self.assertEqual(result["english"]["headings"],["ITEM","BEFORE SHIPPING","SHIPPING","FINAL TOTAL"])
         self.assertEqual(result["english"]["qty"],"× 60")
-        self.assertIn("reduction per unit",result["english"]["note"])
+        self.assertIn("Per-unit amounts",result["english"]["note"])
         self.assertIn("collateral",result["english"]["help"])
         self.assertEqual(result["english"]["icon"],"34")
-        self.assertEqual(result["spanish"]["head"],"COSTE REAL DEL ENVÍO")
-        self.assertEqual(result["spanish"]["headings"],["ITEM ENVIADO","ANTES DEL ENVÍO","ENVÍO","TOTAL FINAL"])
-        self.assertEqual(result["spanish"]["note"],"Aquí se refleja la reducción real por unidad de cada item.")
+        self.assertEqual(result["spanish"]["head"],"DETALLE POR ITEM")
+        self.assertEqual(result["spanish"]["headings"],["ITEM","ANTES DEL ENVÍO","ENVÍO","TOTAL FINAL"])
+        self.assertEqual(result["spanish"]["note"],"Importes por unidad tras tasas y otros gastos. El total descuenta el envío.")
         self.assertIn("colateral",result["spanish"]["help"])
         self.assertTrue(result["moved"],"Unit freight panel must be after plan comparison")
 
@@ -1178,7 +1178,7 @@ class ThemeBrowserTests(unittest.TestCase):
         for lang in ('es','en'):
             self.page.evaluate('(lang)=>{setLang(lang);paintCourierUnits(window.__b8Freight)}',lang)
             expect(self.page.locator('#unitCourierSubtitle')).to_contain_text(
-                'reducción real por unidad' if lang=='es' else 'actual reduction per unit')
+                'Importes por unidad' if lang=='es' else 'Per-unit amounts')
             expect(self.page.locator('#unitCourierHelp summary')).to_have_attribute(
                 'aria-label','Información sobre el envío y el colateral' if lang=='es'
                 else 'Information about freight and collateral')
@@ -1249,7 +1249,7 @@ class ThemeBrowserTests(unittest.TestCase):
             }""")
             expect(self.page.locator('#vIsk')).to_contain_text('280')
             expect(self.page.locator('#vRouteW')).to_be_visible()
-            expect(self.page.locator('#unitCourierBox')).to_be_hidden()
+            expect(self.page.locator('#unitCourierBox')).to_be_visible()
             self.assertIn('0 ISK',self.page.locator('#unitCourierTotal').inner_text())
             expect(self.page.locator('#vFinanceDetails')).to_have_attribute('open','')
             if language=='es':
@@ -1660,7 +1660,7 @@ class ThemeBrowserTests(unittest.TestCase):
             }""")
             expect(self.page.locator('#pkSpeedBox')).to_be_visible()
             expect(self.page.locator('#pkShortcut')).to_be_hidden()
-            expect(self.page.locator('#unitCourierBox')).to_be_hidden()
+            expect(self.page.locator('#unitCourierBox')).to_be_visible()
             self.assertEqual(self.page.evaluate("iskToneText('−120,000 ISK')"), 'isk-neg')
             self.assertEqual(self.page.evaluate("iskToneText('790,000 ISK')"), 'isk-pos')
             self.assertTrue(self.page.locator('#pkSpeedBox .mm-picker-method').is_visible())
@@ -1706,7 +1706,7 @@ class ThemeBrowserTests(unittest.TestCase):
                         return {courierHidden:courier.hidden,speedLeft:speed.left,
                             speedRight:speed.right,groupRight:group.right};
                     }""")
-                    self.assertTrue(dims['courierHidden'])
+                    self.assertFalse(dims['courierHidden'])
                     self.assertLessEqual(dims['speedRight'],width+1,dims)
                     self.assertLessEqual(dims['groupRight'],width+1,dims)
                     if width==1440 and not light:

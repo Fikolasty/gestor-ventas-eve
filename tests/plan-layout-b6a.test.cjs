@@ -17,7 +17,7 @@ test('B.6a displays estimated net proceeds once and aligns help with deductions'
   assert.match(css,/#verdict #vCap \.mm-explanation-pair\.has-refining \.mm-explanation-answers/);
 });
 
-test('B.6c keeps the fast-route rationale in the plan grid and hides zero-courier detail',()=>{
+test('B.6c keeps the fast-route rationale in the plan grid and keeps local Items in the unified detail',()=>{
   for(const id of ['unitCourierBox','pkShortcut','pkSpeedBox','pkOpportunity','decisionGrid']){
     assert.equal((shell.match(new RegExp('id="'+id+'"','g'))||[]).length,1,id);
   }
@@ -28,7 +28,7 @@ test('B.6c keeps the fast-route rationale in the plan grid and hides zero-courie
   const left=shell.indexOf('id="unitCourierBox"');
   const opportunities=shell.indexOf('id="pkOpportunity"');
   assert.ok(right<fast&&fast<why&&why<finance&&finance<left&&left<opportunities);
-  assert.match(chooser,/box\.hidden=!rows\.length&&!hasCourierCost/);
+  assert.match(chooser,/box\.hidden=!rows\.length/);
   assert.match(chooser,/\$\('pkSpeedBox'\)\.hidden=false/);
   assert.match(css,/#pSum \.mm-plan-drawer-body:has\(>#pkSpeedBox\[hidden\]\)>#vFinanceDetails/);
   assert.match(css,/#pSum #pkSpeedBox>\.mm-picker-method/);

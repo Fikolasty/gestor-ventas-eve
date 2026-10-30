@@ -204,7 +204,6 @@ function paintPicker(P){
   const chosen=all.find(x=>x.m===cur)||all[0];
   paintPlanAnalysis(P,chosen,all);
   $('pkComparisonBasis').textContent=tx('picker.comparisonBasis',{plan:chosen.l});
-  paintPlanUnits(P);
   // Only reuse amounts from existing accounting and plan totals. No new
   // pricing or profit formula is introduced by the result companion card.
   const selectedNet=$('pkResultValue'),metric=$('pkResultMetric');
@@ -573,6 +572,7 @@ function paintFlipBuy(P){
     :'Inversión a Jita Sell o Buy Order; las Buy Orders incluyen broker y podrían no completarse. Beneficio = ingresos netos − inversión.'));
   box.append(detail);
 }
+let unitDetailPage=0;
 // Unit-price illustration: quote per unit + the ACTUAL freight allocation.
 // Does not mutate selling-route prices, taxes or courier billing.
 function courierUnitPresentation(r){
@@ -601,11 +601,10 @@ function paintCourierUnits(P){
   helpButton.title=tx('freight.infoLabel');
   help.querySelector('.mm-freight-collateral').textContent=tx('decision.collateralA');
   help.querySelector('.mm-freight-reference').textContent=tx('freight.reference');
-  const rows=P.rows.filter(r=>r.courierAllocated>0&&r.q>0);
-  // B.6a: zero freight is already explicit in the financial header and plan
-  // result. Only show the detailed courier card when a real cost applies.
-  const hasCourierCost=Number.isFinite(P.shipCost)&&P.shipCost>0.5;
-  box.hidden=!rows.length&&!hasCourierCost;
+  const rows=P.rows.filter(r=>r.q>0);
+  const pager=$('unitDetailPager');pager.replaceChildren();pager.hidden=true;
+  box.hidden=!rows.length;
+  const pages=Math.ceil(rows.length/10);unitDetailPage=Math.max(0,Math.min(unitDetailPage,pages-1));
   const before=rows.length&&rows.every(r=>Number.isFinite(courierUnitPresentation(r)?.base))?
     rows.reduce((sum,r)=>sum+courierUnitPresentation(r).base*r.q,0):null;
   const after=before==null?null:before-(P.shipCost||0);
@@ -625,9 +624,9 @@ function paintCourierUnits(P){
   }
   const count=trips(P.Vs);
   $('unitCourierHeading').textContent=tx('freight.heading');
-  $('unitCourierTotal').textContent=currency(P.shipCost);
+  $('unitCourierTotal').textContent=P.shipCost>0?currency(P.shipCost):tx('freight.noCost');
   $('unitCourierTotal').title=tx(count===1?'freight.contractOne':'freight.contractMany',{count});
-  $('unitCourierTotal').classList.add('isk-neg');
+  $('unitCourierTotal').classList.toggle('isk-neg',P.shipCost>0);
   const headers=['freight.itemColumn','freight.beforeColumn','freight.freightColumn','freight.finalColumn'];
   const columns=el('div','mm-freight-columns');columns.setAttribute('role','row');
   headers.forEach(key=>{const heading=el('span',null,tx(key));heading.setAttribute('role','columnheader');columns.append(heading);});
@@ -640,14 +639,15 @@ function paintCourierUnits(P){
     const tone=amount==null?'':freight&&amount>0?' isk-neg':amount>0?' isk-pos':amount<0?' isk-neg':'';
     const shown=amount==null?'—':(freight&&amount>0?'−':'')+currency(amount);
     const figure=el('strong','num'+tone);
-    if(key==='freight.finalColumn'&&Number.isFinite(amount)){
-      const button=copyBtn(amount,shown);button.setAttribute('aria-label',tx('freight.copyUnit',{item,amount:shown}));button.title=tx('freight.copyAction');figure.append(button);
-    }else figure.textContent=shown;
+    if((key==='freight.finalColumn'||key==='freight.profitColumn')&&Number.isFinite(amount)){
+      const button=copyBtn(amount,shown);button.setAttribute('aria-label',tx(key==='freight.profitColumn'?'freight.copyProfit':'freight.copyUnit',{item,amount:shown}));button.title=key==='freight.profitColumn'?button.getAttribute('aria-label'):tx('freight.copyAction');figure.append(button);
+    }else figure.textContent=key==='freight.freightColumn'&&amount===0?tx('freight.noShipping'):shown;
     cell.append(figure);
     return cell;
   };
-  rows.forEach(r=>{
+  rows.slice(unitDetailPage*10,unitDetailPage*10+10).forEach(r=>{
     const costs=courierUnitPresentation(r);
+    const record=el('div','mm-unit-record');record.setAttribute('role','rowgroup');
     const card=el('div','mm-unit-row');card.setAttribute('role','row');
     const title=el('div','mm-freight-item');
     title.setAttribute('role','cell');
@@ -659,8 +659,26 @@ function paintCourierUnits(P){
     card.append(title,value('freight.beforeColumn',costs.base),
       value('freight.freightColumn',costs.freightUnit,true),
       value('freight.finalColumn',costs.unit,false,r.o.name));
-    host.append(card);
+    record.append(card);
+    if(S.flip){
+      const totalPurchase=tradePurchaseCost(r),purchase=Number.isFinite(totalPurchase)?totalPurchase/r.q:null;
+      const profit=Number.isFinite(purchase)&&Number.isFinite(costs.unit)?costs.unit-purchase:null;
+      const trade=el('div','mm-unit-trade');trade.setAttribute('role','row');
+      for(const [key,amount,cost] of [['freight.purchaseColumn',purchase,true],['freight.profitColumn',profit,false]]){
+        const cell=value(key,amount,cost,r.o.name);cell.setAttribute('aria-colspan','2');trade.append(cell);
+      }
+      record.append(trade);
+    }
+    host.append(record);
   });
+  if(pages>1){
+    pager.hidden=false;
+    for(const [delta,key,disabled] of [[-1,'picker.unitPrevious',unitDetailPage===0],[1,'picker.unitNext',unitDetailPage===pages-1]]){
+      const button=el('button',null,tx(key));button.type='button';button.dataset.unitPage=String(delta);button.disabled=disabled;pager.append(button);
+      if(delta===-1)pager.append(el('span',null,tx('picker.unitPage',{page:unitDetailPage+1,pages})));
+    }
+    pager.setAttribute('aria-label',tx('picker.unitPager'));
+  }
 }
 function paintSummary(P){
   const box=$('pSum'),none=!P.rows.length||P.missing.length===P.rows.length;
@@ -675,50 +693,13 @@ function paintSummary(P){
   paintFlipBuy(P);
 }
 
-// Optional unit detail is bounded and lazy. Reads the canonical freight allocation;
-// no quotes, settings, ownership or financial results are changed here.
-let pkUnitPage=0;
-function paintPlanUnits(P){
-  const details=$('pkUnits'),host=$('pkUnitRows');
-  const rows=P.rows.filter(r=>r.q>0&&r.best);
-  details.hidden=!rows.length;
-  host.replaceChildren();if(!details.open||!rows.length)return;
-  const pages=Math.ceil(rows.length/10);pkUnitPage=Math.max(0,Math.min(pkUnitPage,pages-1));
-  const trade=flipPlanAccounting(P);
-  const figure=(key,amount,cost=false)=>{
-    const row=el('div'),valid=Number.isFinite(amount),tone=!valid||Math.abs(amount)<.0000001?'':cost?'neg':sgn(amount);
-    const dd=el('dd','num '+tone),shown=valid?(cost&&amount>0?'−':'')+fmt(amount):'—';
-    if(valid&&(key==='picker.unitProceeds'||key==='picker.unitProfit')){
-      const button=copyBtn(amount,shown);button.setAttribute('aria-label',tx('freight.copyFinal',{amount:shown}));dd.append(button);
-    }else dd.textContent=shown;
-    row.append(el('dt',null,tx(key)),dd);return row;
-  };
-  for(const r of rows.slice(pkUnitPage*10,pkUnitPage*10+10)){
-    const unit=courierUnitPresentation(r);if(!unit)continue;
-    const card=el('article'),list=el('dl');
-    card.append(el('strong',null,r.o.name),el('span',null,tx('picker.unitContext',{quantity:fmtQ(r.q),plan:modeName(r.best)})));
-    list.append(figure('picker.unitBefore',unit.base),figure('picker.unitShipping',unit.freightUnit,true),figure('picker.unitProceeds',unit.unit));
-    if(trade){
-      const purchase=tradePurchaseCost(r)/r.q;
-      list.append(figure('picker.unitPurchase',purchase,true),figure('picker.unitProfit',unit.unit-purchase));
-    }
-    card.append(list);host.append(card);
-  }
-  if(pages>1){
-    const nav=el('nav');nav.setAttribute('aria-label',tx('picker.unitPager'));
-    for(const [delta,key,disabled] of [[-1,'picker.unitPrevious',pkUnitPage===0],[1,'picker.unitNext',pkUnitPage===pages-1]]){
-      const button=el('button',null,tx(key));button.type='button';button.dataset.unitPage=String(delta);button.disabled=disabled;nav.append(button);
-      if(delta===-1)nav.append(el('span',null,tx('picker.unitPage',{page:pkUnitPage+1,pages})));
-    }
-    host.append(nav);
-  }
-}
-$('pkUnits').addEventListener('toggle',()=>{if(lastP)paintPlanUnits(lastP);});
-$('pkUnitRows').addEventListener('click',event=>{
+// One bounded Item detail replaces the duplicate per-unit drawer.
+$('unitDetailPager').addEventListener('click',event=>{
   const button=event.target.closest('[data-unit-page]');if(!button||!lastP)return;
   const delta=Number(button.dataset.unitPage);if(delta!==-1&&delta!==1)return;
-  pkUnitPage+=delta;paintPlanUnits(lastP);
-  const focus=$('pkUnitRows').querySelector('[data-unit-page="'+delta+'"]:not(:disabled)')||$('pkUnits').querySelector('summary');focus.focus({preventScroll:true});
+  unitDetailPage+=delta;paintCourierUnits(lastP);
+  const focus=$('unitDetailPager').querySelector('[data-unit-page="'+delta+'"]:not(:disabled)')||$('unitCourierToggle');
+  focus.focus({preventScroll:true});
 });
 
 // Shipping disclosure state belongs to the view, never to the calculation.

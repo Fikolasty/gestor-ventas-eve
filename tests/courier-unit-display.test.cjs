@@ -40,7 +40,7 @@ test('absent quote does not invent a base price or lot target',()=>{
 });
 test('new freight table uses original per-unit accounting for every shipped item',()=>{
   const render=source.slice(end,source.indexOf('function paintSummary(P){',end));
-  assert.match(render,/rows=P\.rows\.filter\(r=>r\.courierAllocated>0&&r\.q>0\)/);
+  assert.match(render,/rows=P\.rows\.filter\(r=>r\.q>0\)/);
   assert.match(render,/value\('freight\.beforeColumn',costs\.base\)/);
   assert.match(render,/value\('freight\.freightColumn',costs\.freightUnit,true\)/);
   assert.match(render,/value\('freight\.finalColumn',costs\.unit,false,r\.o\.name\)/);

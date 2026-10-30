@@ -1160,20 +1160,20 @@
     "en": " · {selected} of {total} items support this route."
   },
   "freight.heading": {
-    "es": "COSTE REAL DEL ENVÍO",
-    "en": "ACTUAL FREIGHT COST"
+    "es": "DETALLE POR ITEM",
+    "en": "ITEM DETAILS"
   },
   "freight.subtitle": {
-    "es": "Aquí se refleja la reducción real por unidad de cada item.",
-    "en": "This shows the actual reduction per unit for each shipped item."
+    "es": "Importes por unidad tras tasas y otros gastos. El total descuenta el envío.",
+    "en": "Per-unit amounts after fees and other costs. The total deducts shipping."
   },
   "freight.infoLabel": {
     "es": "Información sobre el envío y el colateral",
     "en": "Information about freight and collateral"
   },
   "freight.itemColumn": {
-    "es": "ITEM ENVIADO",
-    "en": "SHIPPED ITEM"
+    "es": "ITEM",
+    "en": "ITEM"
   },
   "freight.beforeColumn": {
     "es": "ANTES DEL ENVÍO",
@@ -2044,7 +2044,23 @@
     "en": "Copy final amount per unit for {item}: {amount}"
   },
   "freight.batchScope": {
-    "es": "Totales del lote de Items enviados; las filas muestran ISK por unidad, después de tasas y otros gastos.",
-    "en": "Totals cover the shipped Items; rows show ISK per unit, after fees and other costs."
+    "es": "La cabecera incluye todo el lote; las filas muestran importes por unidad.",
+    "en": "The header covers the full batch; rows show per-unit amounts."
+  },
+  "freight.purchaseColumn": {
+    "es": "Inversión",
+    "en": "Investment"
+  },
+  "freight.profitColumn": {
+    "es": "Ganancia",
+    "en": "Profit"
+  },
+  "freight.copyProfit": {
+    "es": "Copiar ganancia por unidad de {item}: {amount}",
+    "en": "Copy profit per unit for {item}: {amount}"
+  },
+  "freight.noShipping": {
+    "es": "Sin envío",
+    "en": "No shipping"
   }
 }

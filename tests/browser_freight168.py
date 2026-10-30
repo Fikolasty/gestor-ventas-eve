@@ -59,7 +59,7 @@ class Freight168Tests(unittest.TestCase):
        self.page.evaluate('on=>{document.documentElement.classList.toggle("light",on);document.activeElement?.blur();scrollTo(0,0)}',light);self.page.mouse.move(0,0)
        self.assertLessEqual(self.page.evaluate('document.documentElement.scrollWidth-innerWidth'),1)
        geometry.append(self.page.locator('#unitCourierBox').evaluate('(e)=>[e.getBoundingClientRect().width,e.getBoundingClientRect().height]'))
-       if width==1440 and lang=='es':self.page.locator('#pSum').screenshot(path=str(out/f'freight169-final-r1-20261030-{flip}-{opened}-{light}.png'),animations='disabled')
+       if width==1440 and lang=='es':self.page.locator('#pSum').screenshot(path=str(out/f'detail170-final-r2-20261030-{flip}-{opened}-{light}.png'),animations='disabled')
       for a,b in zip(*geometry):self.assertAlmostEqual(a,b,delta=1)
 
  def test_unit_equation_is_independent_of_quantity_and_final_copies_visible_cents(self):
@@ -94,6 +94,48 @@ class Freight168Tests(unittest.TestCase):
      self.assertNotIn('ISK/',self.page.locator('.mm-freight-columns').inner_text())
      if width==1440 and lang=='es':
       out=ROOT/'tests/artifacts/theme';out.mkdir(parents=True,exist_ok=True)
-      self.page.locator('#unitCourierBox').screenshot(path=str(out/f'freight169-unit-example-r1-{light}.png'),animations='disabled')
+      self.page.locator('#unitCourierBox').screenshot(path=str(out/f'detail170-unit-example-r2-{light}.png'),animations='disabled')
+
+ def test_unified_detail_covers_local_shipped_unknown_and_trade_profit(self):
+  self.assertEqual(self.page.locator('#pkUnits').count(),0)
+  self.page.evaluate("""()=>{
+   S.flip=true;C.buyMode='sell';
+   window.__unified={rows:[
+    {o:{name:'Shipped example',ref:4,jita:{sell:4}},q:300,best:'jOrd',g:{jOrd:3000},prod:0,courierAllocated:600},
+    {o:{name:'Local Item with a deliberately long name to verify wrapping',ref:30,jita:{sell:30}},q:5,best:'null',g:{null:100},prod:0,courierAllocated:0}
+   ],Vs:300,shipCost:600};paintCourierUnits(window.__unified);
+   Object.defineProperty(navigator,'clipboard',{configurable:true,value:{writeText:async v=>{window.__copied=v;}}});
+  }""")
+  self.page.locator('#unitCourierToggle').click()
+  self.assertEqual(self.page.locator('#unitCourierRows .mm-unit-row').count(),2)
+  self.assertEqual(self.page.locator('#freightLotBefore').inner_text(),'3,100.00 ISK')
+  self.assertEqual(self.page.locator('#freightLotFinal').inner_text(),'2,500.00 ISK')
+  self.assertEqual(self.page.locator('.mm-unit-trade').first.locator('strong').all_inner_texts(),['−4.00 ISK','4.00 ISK'])
+  self.assertEqual(self.page.locator('.mm-unit-trade').nth(1).locator('strong').all_inner_texts(),['−30.00 ISK','-10.00 ISK'])
+  self.page.locator('.mm-unit-trade').nth(1).locator('button').click()
+  self.assertEqual(self.page.evaluate('window.__copied'),'-10')
+  for lang in ['es','en']:
+   self.page.evaluate('l=>{setLang(l);paintCourierUnits(window.__unified)}',lang)
+   self.assertEqual(self.page.locator('.mm-unit-row').nth(1).locator('.mm-freight-cell').nth(1).locator('strong').inner_text(),'Sin envío' if lang=='es' else 'No shipping')
+   for width in [1440,980,630,390]:
+    self.page.set_viewport_size({'width':width,'height':1000})
+    geometry=[]
+    for light in [False,True]:
+     self.page.evaluate('v=>{document.documentElement.classList.toggle("light",v);document.activeElement?.blur()}',light)
+     self.page.mouse.move(0,0)
+     self.assertLessEqual(self.page.evaluate('document.documentElement.scrollWidth-innerWidth'),1)
+     geometry.append(self.page.locator('#unitCourierBox').evaluate('e=>[e.getBoundingClientRect().width,e.getBoundingClientRect().height]'))
+     if width in [1440,390] and lang=='es':
+      out=ROOT/'tests/artifacts/theme';out.mkdir(parents=True,exist_ok=True)
+      self.page.locator('#unitCourierBox').screenshot(path=str(out/f'detail170-trade-mixed-r2-{width}-{light}.png'),animations='disabled')
+    for a,b in zip(*geometry):self.assertAlmostEqual(a,b,delta=1)
+  # Missing purchase basis is unknown, never an invented zero investment/profit.
+  self.page.evaluate("delete window.__unified.rows[0].o.ref;paintCourierUnits(window.__unified)")
+  self.assertEqual(self.page.locator('.mm-unit-trade').first.locator('strong').all_inner_texts(),['—','—'])
+  # An unsellable Item remains represented and invalidates full-batch proceeds.
+  self.page.evaluate("window.__unified.rows.push({o:{name:'Missing quote'},q:3,best:null,g:{},courierAllocated:0});paintCourierUnits(window.__unified)")
+  self.assertEqual(self.page.locator('#unitCourierRows .mm-unit-row').count(),3)
+  self.assertEqual(self.page.locator('#freightLotFinal').inner_text(),'—')
+  self.assertEqual(self.page.locator('.mm-unit-row').nth(2).locator('.mm-freight-cell strong').all_inner_texts(),['—','No shipping','—'])
 
 if __name__=='__main__':unittest.main()

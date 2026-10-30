@@ -12,12 +12,14 @@ test('approved freight table and subtitle exist only once, with contextual help'
   }
   assert.match(html,/id="unitCourierSubtitle"[^>]*data-i18n="freight.subtitle"/);
   assert.match(html,/id="unitCourierHelp"/);
+  assert.doesNotMatch(html,/id="pkUnits"|id="pkUnitRows"/);
+  assert.match(html,/id="unitDetailPager"/);
   assert.match(html,/data-i18n="decision.collateralA"/);
   assert.match(html,/data-i18n="freight.reference"/);
   assert.doesNotMatch(html,/class="mm-inline-faq mm-courier-faq"/);
   assert.deepEqual(keys['freight.subtitle'],{
-    es:'Aquí se refleja la reducción real por unidad de cada item.',
-    en:'This shows the actual reduction per unit for each shipped item.'});
+    es:'Importes por unidad tras tasas y otros gastos. El total descuenta el envío.',
+    en:'Per-unit amounts after fees and other costs. The total deducts shipping.'});
   for(const key of ['freight.infoLabel','freight.itemColumn','freight.beforeColumn',
     'freight.freightColumn','freight.finalColumn']){
     assert.ok(keys[key]?.es&&keys[key]?.en,key);
@@ -26,11 +28,11 @@ test('approved freight table and subtitle exist only once, with contextual help'
 
 test('comparison reuses the exact audited proceeds and allocation',()=>{
   assert.match(js,/const costs=courierUnitPresentation\(r\)/);
-  assert.match(js,/rows=P\.rows\.filter\(r=>r\.courierAllocated>0&&r\.q>0\)/);
+  assert.match(js,/rows=P\.rows\.filter\(r=>r\.q>0\)/);
   assert.match(js,/value\('freight\.beforeColumn',costs\.base\)/);
   assert.match(js,/value\('freight\.freightColumn',costs\.freightUnit,true\)/);
   assert.match(js,/value\('freight\.finalColumn',costs\.unit,false,r\.o\.name\)/);
-  assert.match(js,/rows\.forEach\(r=>\{/);
+  assert.match(js,/rows\.slice\(unitDetailPage\*10,unitDetailPage\*10\+10\)\.forEach/);
   assert.doesNotMatch(js.slice(js.indexOf('function paintCourierUnits(P){'),
     js.indexOf('function paintSummary(P){')),/mm-freight-extra|mm-freight-detail|freight\.more/);
 });

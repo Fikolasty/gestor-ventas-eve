@@ -45,7 +45,7 @@ test('copy values, fees, shortcut and mining use signed presentation only',()=>{
   assert.match(ledger,/b\.classList\.toggle\('isk-pos',up!=null&&up>0\)/);
   assert.match(picker,/pk-shortcut-loss isk-neg/);
   assert.match(picker,/value\('freight.freightColumn',costs.freightUnit,true\)/);
-  assert.match(picker,/unitCourierTotal'\)\.classList\.add\('isk-neg'\)/);
+  assert.match(picker,/unitCourierTotal'\)\.classList\.toggle\('isk-neg',P\.shipCost>0\)/);
   assert.match(mining,/typeof iskToneText==='function'/);
   assert.match(mining,/h\('strong',complete\?'isk-neg':'',complete\?cmpISK\(sum\)/);
 });

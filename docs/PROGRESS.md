@@ -1,5 +1,10 @@
 # PROGRESS — Market Moves+
 
+## 2026-10-30 — v1.0.170 candidata: unificación aprobada
+
+Una sola gaveta DETALLE POR ITEM sustituye el detalle redundante; todos los Items, totales del lote, copia unitaria, inversión/ganancia comercial y paginación10. 150 Node/16 Python/8 legacy PASS; 84 Chromium en curso y publicación pendiente. DSS §81; kit HANDOFF_DETAIL_170.md. Última LIVE v169, base f24c945.
+
+
 ## 2026-10-30 — v1.0.169 candidata local
 
 Detalle de envío por unidad con céntimos visibles, copia explícita y cantidad junto al nombre. La fórmula ya era unitaria y se conserva. 150 Node /16 Python /83 Chromium /8 legacy PASS; caso independiente 300 × (10−2) muestra y copia 8. DSS §80 y HANDOFF_FREIGHT_169.md; remoto/Pages/HTTPS pendientes, LIVE v1.0.168.
@@ -924,3 +929,7 @@ v1.0.168: primer CI 41080237306 detuvo Pages por límite fijo de altura B.8 depe
 
 
 **Cierre LIVE v1.0.169 — 2026-10-30:** fuente Fiko protegida e45601f70998a772bd3bd1f3c03437c053e145f6; build bot a6fe39e142ba458b441e615cb83f01cd12bdcbff. Cuatro workflows SUCCESS: Versiones 41123424881, Build 41123425094, Minería 41123425038, Rebuild/Pages 41123425088; compile124295641875 y deploy124297174894 completados. CI:150 Node/16 Python/83 Chromium (151,112 s)/8 legacy PASS; local83 Chromium (117,362 s). HTTPS independiente confirmó v1.0.169 y coincidencia exacta con HTML canónico local/GitHub:2.478.591 bytes, blob6cc30ffc81d5f31645c08589e71d7f867bef680c. Web https://fikolasty.github.io/gestor-ventas-eve/. Este cierre sustituye los pendientes anteriores: v1.0.169 es la última LIVE. Los datos de QA son fixtures y no se probó ESI/SSO real extremo a extremo. Solo presentación: se conserva la división canónica por cantidad, la contabilidad y la asignación de envío. El commit documental posterior puede avanzar main sin alterar el HTML. Kit vigente HANDOFF_FREIGHT_169.md; documentos publicados mediante Fiko, sin force.
+
+## Gate v170 antes de publicación
+
+Gate local previo a publicación:150 Node/16 Python/8 legacy PASS; suite Chromium completa83/84 en128,036 s. La única falla restante era una expectativa B.6a antigua courierHidden=true para un plan sin envío, incompatible con la unificación aprobada. Se actualizó a false; misma regresión focal PASS en3,309 s. No hubo ajuste de producto tras el build/capturas r2. Se exige suite CI completa84/84 antes de desplegar. Las capturas r2 finales se inspeccionaron en desktop1440 Dark/Light y móvil390 de la misma mezcla comercial; banda de inversión/ganancia alineada y sin desbordamiento. No presentar el gate inicial83/84 como un pase completo local84.
