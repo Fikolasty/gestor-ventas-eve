@@ -389,7 +389,15 @@ function enhance(native,id,get,set,min){
  add.addEventListener('click',()=>{books[id]=true;localStorage.setItem(store,JSON.stringify(books));set(Math.min(5,Math.max(min,get()+1)));draw()});
  minus.addEventListener('click',()=>{if(get()<=min)return;set(Math.max(min,get()-1));draw()});
  group.addEventListener('contextmenu',e=>{if(min>0)return;e.preventDefault();books[id]=books[id]===false;localStorage.setItem(store,JSON.stringify(books));if(!books[id])set(0);draw()});
- group.append(minus,p,rank,add); // Minus and plus balance the original five skill-level buttons.native.after(group);if(id!=='mn-rank'){const badge=document.createElement('span');badge.className='c5c-skill-source';native.closest('.c5c-skill-card')?.append(badge);}native.addEventListener('change',draw);draw();
+ group.append(minus,p,rank,add);
+ native.after(group);
+ if(id!=='mn-rank'){
+  const badge=document.createElement('span');
+  badge.className='c5c-skill-source';
+  native.closest('.c5c-skill-card')?.append(badge);
+ }
+ native.addEventListener('change',draw);
+ draw();
  }
 function enhanceSettings(){ids.forEach(id=>{const n=document.getElementById(id);if(!n||n.dataset.eveDone)return;enhance(n,id,()=>Number(n.value)||0,v=>{n.dataset.mmSkillSource='manual';n.value=String(v);n.dispatchEvent(new Event('input',{bubbles:true}));n.dispatchEvent(new Event('change',{bubbles:true}))},0)})}
 function enhanceMining(){
