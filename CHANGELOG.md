@@ -1322,3 +1322,11 @@ Fuente `de9e13eb`, build GitHub Actions `a811f771`; 4/4 workflows aprobados y 55
 ### C.2 v1.0.159 — LIVE certificada (2026-10-28)
 - Fuente Fiko `73f1c917`, bot build `51077506`, 4/4 Actions PASS (run Pages `40789891357`), **133 Node, 16 Python y 57 Chromium**. HTTPS validó v1.0.159 mediante CI, blob HTML `00d0f173` de 2.387.044 bytes.
 - Se preserva B.21 como última dirección visual aprobada; C.2 limpia CSS supersedido sin alterar lógica económica/ESI/SSO, acceso por teclado ni copias por destino. No hay hash HTTPS independiente ni inspección manual de nuevas capturas.
+
+
+## 1.0.163 — C.5b.2: Settings de personaje e impuestos (2026-10-30)
+
+- Settings incorpora cuatro pestañas horizontales y una vista rediseñada de Personaje e impuestos: seis tarjetas de habilidades 3×2, controles visuales −/+ y cinco segmentos, con procedencia ESI/Manual.
+- Los controles visuales conservan los `select` nativos como fuente de verdad. Se corrigió el montaje que impedía insertar los controles y se restauró la capitalización natural de «Manual».
+- Accounting y Broker Relations siguen vinculados a las tasas efectivas; Advanced Broker Relations afecta únicamente el coste de relist. Se conservan las fórmulas, standings, tasas de estructura y SCC, ESI/SSO y persistencia.
+- Validación final: **144 Node, 16 Python y 70 Chromium**; Build, Minería, Versiones y Rebuild/Chromium/Pages aprobados. GitHub Pages confirmó v1.0.163. Capturas ES Dark, ES Light y EN Dark revisadas. Ver DSS §71.

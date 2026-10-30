@@ -111,6 +111,8 @@ python3 build.py 1.0.98
 Eso escribe `index.html` con la versión indicada.
 
 ## Versiones
+**Última versión publicada:** [v1.0.163 — C.5b.2 Settings de personaje e impuestos](https://github.com/Fikolasty/gestor-ventas-eve/releases/tag/v1.0.163) · [Abrir Market Moves+](https://fikolasty.github.io/gestor-ventas-eve/).
+
 Se usa versionado semántico (`1.0.x`). Cada versión tiene su **tag** y su **Release** con el HTML para descargar.
 Lo que cambió en cada una está en [CHANGELOG.md](CHANGELOG.md).
 

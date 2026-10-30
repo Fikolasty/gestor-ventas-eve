@@ -59,3 +59,6 @@ Antes de analizar o modificar este proyecto, leer completos y en este orden:
 - **C.2 v1.0.159 CANDIDATA de saneamiento:** B cerrada hasta B.21. Solo se retiran reglas antiguas de Discord comprobablemente sobrescritas por B.21; conservar propiedades de foco, detalles, idiomas fijos por destino y geometría. Test `tests/css-c2-discord-cascade.test.cjs`. No declarar LIVE antes de Actions/Pages y revisión de capturas; DSS §66.
 
 - **C.2 v1.0.159 LIVE certificada (DSS §66):** saneamiento CSS de Discord sin rediseño, 973 caracteres obsoletos retirados. Fuente protegida Fiko `73f1c917`, build `51077506`, 4/4 Actions, 133 Node/16 Python/57 Chromium y HTTPS CI v1.0.159. B queda cerrada en B.21; D.1–D.4 permanecen verificadas. Ningún cambio económico, SSO/ESI o de contenido Discord.
+
+
+- **C.5b.2 v1.0.163 LIVE certificada (DSS §71):** Personaje e impuestos con seis controles visuales de habilidad enlazados a los selectores originales; origen ESI/Manual y copy ES/EN. Fuente de corrección de montaje `4add9924`, ajuste de copy `f7f6425f`, QA de capturas `fc412436`, build `1ac99495`; Pages run `40992370571`. Gates finales: 144 Node / 16 Python / 70 Chromium y 4/4 Actions. Fórmulas y ESI/SSO sin cambios. Próxima pasada sugerida: compactar títulos, añadir libro EVE y agrupar standings sin alterar IDs ni cálculos.
