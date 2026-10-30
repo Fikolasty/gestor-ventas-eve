@@ -85,8 +85,8 @@ class C5b2SettingsTests(unittest.TestCase):
         self.assertEqual(self.page.get_by_role("group",name="Standing de Jita").count(),1)
         self.assertEqual(cluster.locator(".c5c-broker-standings .st-l").nth(0).inner_text(),"STANDING DE FACCIÓN")
         self.assertEqual(cluster.locator(".c5c-broker-standings .st-l").nth(1).inner_text(),"STANDING DE CORP")
-        self.assertIn("−0,03 puntos porcentuales",cluster.locator("#cStdFac").locator("xpath=..").inner_text())
-        self.assertIn("−0,02 puntos porcentuales",cluster.locator("#cStdCorp").locator("xpath=..").inner_text())
+        self.assertIn("−0,03 p.p.",cluster.locator("#cStdFac").locator("xpath=..").inner_text())
+        self.assertIn("−0,02 p.p.",cluster.locator("#cStdCorp").locator("xpath=..").inner_text())
 
         self.page.evaluate("setLang('en')")
         self.assertEqual(self.page.locator(".c5c-skill-section .st-sec-t").inner_text(),"SKILLS")
@@ -94,8 +94,8 @@ class C5b2SettingsTests(unittest.TestCase):
         self.assertEqual(self.page.get_by_role("group",name="Jita standings").count(),1)
         self.assertEqual(cluster.locator(".c5c-broker-standings .st-l").nth(0).inner_text(),"FACTION STANDING")
         self.assertEqual(cluster.locator(".c5c-broker-standings .st-l").nth(1).inner_text(),"CORP STANDING")
-        self.assertIn("−0.03 percentage points",cluster.locator("#cStdFac").locator("xpath=..").inner_text())
-        self.assertIn("−0.02 percentage points",cluster.locator("#cStdCorp").locator("xpath=..").inner_text())
+        self.assertIn("−0.03 pp",cluster.locator("#cStdFac").locator("xpath=..").inner_text())
+        self.assertIn("−0.02 pp",cluster.locator("#cStdCorp").locator("xpath=..").inner_text())
         self.assertIn("effective rate shown in EVE",cluster.locator("#cBroker").locator("xpath=..").inner_text())
 
     def test_broker_standings_remain_linked_to_the_original_broker_rate(self):

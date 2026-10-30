@@ -2297,14 +2297,14 @@
   "Standing de Jita": "Jita standings",
   "Standing de facción": "Faction standing",
   "Standing de corp": "Corp standing",
-  "−0,03 puntos porcentuales por punto.": "−0.03 percentage points per standing point.",
-  "−0,02 puntos porcentuales por punto.": "−0.02 percentage points per standing point.",
-  "Usa la tasa efectiva que muestra EVE; ya incluye Broker Relations y standings.": "Use the effective rate shown in EVE; it already includes Broker Relations and standings.",
   "HABILIDADES": "SKILLS",
   "Niveles de personaje que influyen en las tasas de mercado y el rendimiento de reproceso.": "Pilot skill levels that affect market fees and reprocessing yield.",
   "Controles de habilidades": "Skill level controls",
   "ESI sincroniza las habilidades compatibles; el procesamiento de mineral o hielo se ajusta manualmente. Puedes simular otros niveles.": "ESI syncs supported skills; ore or ice processing is set manually. You can simulate other levels.",
   "Valores de impuestos y comisiones": "Tax and fee values",
   "Tasas efectivas aplicadas a cada ruta de venta.": "Effective rates applied to each selling route.",
-  "Accounting actualiza Sales Tax; Broker Relations y los standings ajustan el Broker de Jita. Puedes introducir las tasas que muestra EVE.": "Accounting updates Sales Tax; Broker Relations and standings adjust the Jita Broker fee. You can enter the rates shown in EVE."
+  "Accounting actualiza Sales Tax; Broker Relations y los standings ajustan el Broker de Jita. Puedes introducir las tasas que muestra EVE.": "Accounting updates Sales Tax; Broker Relations and standings adjust the Jita Broker fee. You can enter the rates shown in EVE.",
+  "Usa la tasa efectiva que muestra EVE.": "Use the effective rate shown in EVE.",
+  "−0,03 p.p. por punto.": "−0.03 pp per point.",
+  "−0,02 p.p. por punto.": "−0.02 pp per point."
 }

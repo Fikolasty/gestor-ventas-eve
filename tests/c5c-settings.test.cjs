@@ -40,10 +40,12 @@ test('C.5b.2a groups the two original Jita standings inside the Broker area',()=
  assert.match(style,/#settings \.c5c-taxes \.c5c-broker-cluster/);
  assert.match(style,/#settings \.c5c-taxes \.c5c-broker-standings/);
  assert.match(style,/height:auto!important;min-height:0!important;align-self:start!important/);
+ assert.match(style,/grid-template-columns:minmax\(0,1fr\) 62px!important/);
+ assert.match(style,/grid-column:2!important;grid-row:1 \/ span 2!important/);
 });
 test('C.5b.2a keeps complete bilingual copy for the grouped tax controls',()=>{
  const en=JSON.parse(read('src','i18n','en.json')),ui=JSON.parse(read('src','i18n','ui.json'));
- for(const key of ['Standing de Jita','Standing de facción','Standing de corp','−0,03 puntos porcentuales por punto.','−0,02 puntos porcentuales por punto.','Usa la tasa efectiva que muestra EVE; ya incluye Broker Relations y standings.']){
+ for(const key of ['Standing de Jita','Standing de facción','Standing de corp','−0,03 p.p. por punto.','−0,02 p.p. por punto.','Usa la tasa efectiva que muestra EVE.']){
   assert.equal(typeof en[key],'string',key+' needs an English translation');
  }
  for(const key of ['settings.pilotDescription','settings.skillsSubtitle','settings.groupTaxesHelp','settings.taxesIntro','settings.taxesTitle','settings.taxesSubtitle']){

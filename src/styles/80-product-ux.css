@@ -3126,3 +3126,21 @@ body .top.mm-ho-root #mmTabs>.mm-ho-main #navHome{display:none!important}
 #settings .c5c-taxes>.st-g>.st-f{
   height:auto!important;min-height:0!important;align-self:start!important
 }
+
+
+/* Compact each standing field into a two-line label/note with the value at right. */
+#settings .c5c-taxes .c5c-broker-standings .st-f{
+  display:grid!important;grid-template-columns:minmax(0,1fr) 62px!important;
+  grid-template-rows:auto auto!important;align-items:center!important;
+  column-gap:7px!important;row-gap:3px!important
+}
+#settings .c5c-taxes .c5c-broker-standings .st-f .st-l{
+  grid-column:1!important;grid-row:1!important;min-width:0!important
+}
+#settings .c5c-taxes .c5c-broker-standings .st-f input[type="number"]{
+  grid-column:2!important;grid-row:1 / span 2!important;align-self:center!important;
+  width:62px!important;min-width:0!important
+}
+#settings .c5c-taxes .c5c-broker-standings .st-f small{
+  grid-column:1!important;grid-row:2!important;margin:0!important
+}
