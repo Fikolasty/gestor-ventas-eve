@@ -1,5 +1,17 @@
 # PROGRESS — Market Moves+
 
+## 2026-10-30 — R8 v1.0.167 LIVE certificada
+
+
+**Cierre LIVE certificado R8 v1.0.167 — 2026-10-30:** fuente Fiko `2a48228665342637476bb37c7f58dc82f398ab2d`, integración protegida en main desde `33877801cf25ec7b694438d43a937ec4a0281dfe`, sin force ni HTML generado manual. Build bot `741e6fd7779c856602d6bcc63fcd9b37e06db007`. Cuatro workflows productivos SUCCESS: Versiones `41075790816`, Minería `41075791001`, Build `41075790817`, Rebuild/Pages `41075791125`; jobs compile `124131479337` y deploy `124132774105` SUCCESS, incluido gate HTTPS.
+
+CI confirma 150 Node / 16 Python / 79 Chromium completos (113,626 s) y ocho legacy PASS. Local: mismos gates, Chromium 106,789 s y 24/24 equivalencias exactas frente a v1.0.165. Cuatro comprobaciones adicionales de detalle por unidad abierto con nombres largos en 390/630 y ambos temas PASS; capturas únicas r8-167-units-long-20261030-*. Inspección final de composición completa 1440 ES Light/Dark en ambas direcciones, incluidos detalles por unidad abiertos.
+
+Comprobación HTTP independiente: https://fikolasty.github.io/gestor-ventas-eve/ sirve v1.0.167. HTML público/local canónico LF/GitHub idénticos byte a byte: **2.469.754 bytes**, blob **`099514fb895c2904258ee3f907695a82b4c71f98`**. R8 está implementada y LIVE, no solo en preview. Economía, Settings, ESI/SSO, permisos y persistencia sin cambios; no se hizo ESI/SSO real extremo a extremo. Estados previos de candidata/pendientes quedan sustituidos por este cierre.
+
+Siguiente trabajo: revisar la web con el propietario; Ajustes → Precios y ventas permanece como auditoría/propuesta separada, no implementada. No volver a los prototipos r3–r6 ni reabrir la aprobación de r8. Consultar el ref remoto actual al comenzar otro chat: el cierre documental puede avanzar HEAD más allá del build bot sin alterar index.html.
+
+
 ## 2026-10-30 — R8 v1.0.167 autorizada e implementada localmente
 
 Propietario aprueba «Aplicar r8 y publicar tras las pruebas». Ver DSS §78. Se conserva identidad y DOM originales; precios completos, nombres cortos, diferencia frente al seleccionado, guía reactiva y detalle por unidad paginado/lazy. 150 Node, 16 Python, ocho legacy y 24 equivalencias PASS; Chromium y publicación pendientes. Última LIVE v1.0.166; no ESI/SSO real.

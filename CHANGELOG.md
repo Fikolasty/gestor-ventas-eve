@@ -1,10 +1,12 @@
-## v1.0.167 — 2026-10-30 [ChatGPT] · R8 ELIGE TU PLAN — CANDIDATA
+## v1.0.167 — 2026-10-30 [ChatGPT] · R8 ELIGE TU PLAN — LIVE CERTIFICADA
+
+Fuente `2a482286`, build `741e6fd7`; 4/4 Actions SUCCESS y HTTPS/local/GitHub idénticos (blob `099514fb`, 2.469.754 bytes). 150 Node, 16 Python, 79 Chromium, ocho legacy y 24 equivalencias exactas PASS. DSS §78.
 
 - Conserva gavetas, cuatro paneles, grafito original, cabeceras uppercase, selección circular naranja y donut.
 - Nombres cortos y precios completos legibles; diferencias frente al plan seleccionado, con referencia explícita.
 - Guía del panel 2 reacciona al selector del panel 1, con comparación y efecto de envío, sin otro selector.
 - Importes por unidad de cada Item en detalle accesible, lazy y paginado. Compra/ganancia solo con base válida.
-- Economía, Settings, ESI/SSO, permisos y persistencia intactos. Estado y gates reales en DSS §78; no declarar LIVE antes de certificar.
+- Economía, Settings, ESI/SSO, permisos y persistencia intactos. Certificación completa en DSS §78.
 
 ## v1.0.166 — 2026-10-30 [ChatGPT] · C.5c ELIGE TU PLAN — LIVE CERTIFICADA
 

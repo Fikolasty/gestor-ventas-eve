@@ -68,3 +68,6 @@ El propietario confirma mediante la opción «Sí, conservar esta base visual».
 ## Autorización de implementación y publicación
 
 El propietario seleccionó «Aplicar r8 y publicar tras las pruebas». Implementación local v1.0.167 sobre componentes originales en curso; DSS §78 y HANDOFF_R8_167.md registran los gates y el cierre real. Esto sustituye las restricciones previas de solo preview. No confundir capturas del prototipo con pruebas del producto final.
+
+
+**Cierre:** R8 ya se implementó y publicó como v1.0.167. Fuente 2a482286, build 741e6fd7, 4/4 Actions SUCCESS y HTML HTTP/local/GitHub idénticos, blob 099514fb895c2904258ee3f907695a82b4c71f98. 150 Node /16 Python /79 Chromium /8 legacy /24 equivalencias PASS. DSS §78 y HANDOFF_R8_167.md contienen la certificación; los estados de propuesta anteriores son históricos.

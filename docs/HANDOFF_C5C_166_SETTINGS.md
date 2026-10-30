@@ -43,3 +43,6 @@ Actualización vigente: propietario APROBÓ la dirección visual r8 («Sí, cons
 
 
 Autorización posterior: propietario eligió «Aplicar r8 y publicar tras las pruebas». Trabajo ya iniciado como v1.0.167; DSS §78 y HANDOFF_R8_167.md sustituyen los pendientes de aprobación anteriores. Continuar desde el kit nuevo.
+
+
+Cierre posterior: v1.0.167 R8 LIVE certificada. Fuente 2a482286, build 741e6fd7, 4/4 Actions SUCCESS; 150 Node/16 Python/79 Chromium/8 legacy/24 equivalencias PASS. Kit y estado vigentes en HANDOFF_R8_167.md y DSS §78; v166 ya no es última LIVE.
