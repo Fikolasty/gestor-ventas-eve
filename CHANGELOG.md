@@ -1,5 +1,13 @@
 ## v1.0.166 — 2026-10-30 [ChatGPT] · C.5c ELIGE TU PLAN — CANDIDATA DE RAMA
 
+**Publicación LIVE autorizada posteriormente por el propietario:** corrección v4 aprobada, workflows productivos preparados para 1.0.166 y gates completos repetidos antes de integrar en main. Estado de publicación y SHA reales en DSS §76; no declarar LIVE mientras falten CI/Pages/HTTPS. Los estados locales siguientes se conservan como historia.
+
+**Corrección posterior LOCAL, aún no publicada:** la referencia recuperada exige Planes/Análisis arriba y Resultado/Distribución abajo, conservando dos aperturas compartidas. Se corrigen orden, títulos uppercase, cabecera sin icono con glow solo abierto, filtros compactos, seleccionado separado y análisis/donut. Preview real v3 para revisión; DSS §75 y `docs/C5C_REFERENCE_PREVIEW.md`. Los commits y CI siguientes describen la candidata anterior, no esta corrección. Producción continúa en v1.0.165.
+
+Gates locales del preview corregido: 150 Node, 16 Python, 75 Chromium, ocho legacy y 24 equivalencias financieras PASS; matriz focal 3/3 y capturas v3 revisadas. Sin publicación de esta corrección.
+
+Revisión local v4: dirección visual aceptada; eliminado el marco blanco permanente de Buyback/alternativa rápida. Se conserva foco accesible y atajo. 150 Node y 3 Chromium focales PASS; capturas v4 actualizadas. Sin commit/push/deploy.
+
 - Análisis y Distribución arriba; Planes y Resultado abajo, conservando dos parejas de gavetas.
 - Cabecera completa clicable sin icono, glow tenue solo al desplegar, análisis de la ruta y donut con cifras originales.
 - Ordenar usa portal accesible a body, límites de viewport, teclado, cierre exterior y Escape; selector canónico conservado.

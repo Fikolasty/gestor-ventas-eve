@@ -1,5 +1,21 @@
 # PROGRESS — Market Moves+
 
+## 2026-10-30 — Publicación de C.5c v1.0.166 autorizada (DSS §76)
+
+El propietario aprueba pasar a LIVE el diseño corregido v4; se levanta la pausa de §§74–75. Preflight sin divergencias: candidata `df688e3`, main `feb4051c`; Fiko/Fikolasty confirmado. Workflows de producción preparados para 1.0.166; candidata continúa sin permisos Pages. Se repiten todos los gates antes de publicar fuentes en rama, integrar por fast-forward protegido y certificar Actions/Pages/HTTPS. Hasta cerrar esas verificaciones, producción sigue v1.0.165. Settings queda para auditoría posterior, sin cambios automáticos de fórmulas o ESI.
+
+Gate local de publicación completado: **150 Node, 16 Python, 75 Chromium completos (87,396 s), ocho legacy y 24 equivalencias exactas PASS**, con build v1.0.166. Confirmaciones remotas y SHA se agregan tras observarlos; todavía no declarar LIVE.
+
+## 2026-10-30 — Preview LOCAL corregido con la conversación original (DSS §75)
+
+El propietario recuperó la referencia y autorizó corregirla: Planes + Análisis arriba; Resultado + Distribución abajo. Se conservan las dos parejas de gavetas. Cabecera completa con superficie cálida, sin icono ni flecha independiente, glow tenue solo abierta; cuatro títulos uppercase por CSS; filtros nuevos, seleccionado separado, análisis de cualquier plan y donut con cifras originales. La conversación compartida se pudo leer en navegador. Settings se mantiene como referencia/backlog, sin tocar ese módulo ni copiar porcentajes ilustrativos.
+
+Estado **LOCAL**, sin commit/push/CI nuevo; rama en `df688e3`, producción v1.0.165 y publicación pausada. 150 Node, 16 Python, ocho legacy y 24 equivalencias PASS; focal de matriz PASS, repetición Chromium completa en curso al checkpoint. Informe y cierre: [C5C_REFERENCE_PREVIEW](C5C_REFERENCE_PREVIEW.md). El CI anterior de §74 no certifica esta corrección visual. Revisión del propietario pendiente.
+
+**Cierre local posterior:** 75/75 Chromium completos PASS (87,378 s), focal 3/3, Node 150/150, Python 16/16, legacy 8/8 y 24 equivalencias exactas PASS. Capturas v3 regeneradas tras el último ajuste y revisadas; preview compilado separado en `tests/artifacts/c5c-reference-local/index.html`. Sigue sin commit/push/CI/deploy; esperar valoración del propietario.
+
+**Revisión v4:** el propietario acepta la dirección («Me encanta») y pide quitar el marco blanco de Buyback. Se retira el outline permanente de `.pk-shortcut-highlight` en `70-typography.css`, preservando atajo y foco de teclado. 150 Node y 3 Chromium focales PASS (matriz de cuatro anchos, ES/EN, ambos temas y outline reposo/foco). Capturas v4 nuevas inspeccionadas; corrección solo local, sin publicación.
+
 ## 2026-10-30 — C.5c v1.0.166 candidata en rama, producción v1.0.165
 
 Alcance autorizado: dos parejas de gavetas de ELIGE TU PLAN, orden Análisis/Distribución → Planes/Resultado; cabecera completa sin icono, glow tenue solo desplegada; análisis dinámico y donut de los segmentos existentes; Ordenar mediante portal accesible a body. IDs, fórmulas, ESI/SSO, persistencia y Settings conservados. ES/EN y Light/Dark, 1440/980/630/390.

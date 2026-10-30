@@ -38,8 +38,10 @@ function paintPlanAnalysis(P,chosen){
     Order:['picker.analysisOrder','picker.riskOrder','picker.liquidityOrder','picker.tradeoffOrder']
   }[kind];
   $('pkAnalysisRoute').textContent=chosen.l;
-  $('pkAdvantages').textContent=tx(copy[0]);
-  $('pkTradeoffs').textContent=tx(copy[3]);
+  const advantages=$('pkAdvantages'),tradeoffs=$('pkTradeoffs');
+  advantages.replaceChildren(el('li',null,tx(chosen.m==='auto'?'picker.bestDesc':copy[0])));
+  if(!pkShips(chosen.m,P))advantages.append(el('li',null,tx('picker.noShipping')));
+  tradeoffs.replaceChildren(el('li',null,tx(copy[3])));
   const facts=$('pkAnalysisFacts');facts.replaceChildren();
   for(const [label,value] of [
     ['picker.speedLabel',pkSpeed(new Set(routes).size===1?routes[0]:chosen.m,P)],
@@ -68,7 +70,9 @@ function paintPlanDonut(segs,sum,P){
     const row=el('div');row.append(el('dt',null,keys[label]?tx(keys[label]):label),
       el('dd','num '+(kind==='net'?'pos':'neg'),(kind==='cost'?'−':'')+fmt(amount)));legend.append(row);
   }
-  chart.append(donut,legend);host.append(chart);
+  const ring=el('div','c5c-donut-wrap'),center=el('span','c5c-donut-center');
+  center.append(el('strong','num pos',compactIsk(P.best)+' ISK'),el('small',null,tx('picker.netProceeds')));
+  ring.append(donut,center);chart.append(ring,legend);host.append(chart);
   if(P.rows.some(r=>r.best==='fN'))host.append(el('p',null,tx('picker.analysisPartial')));
 }
 const PK_FAST=new Set(['jInst','cInst','fJI','bb']);         // cobras el mismo día (sin contar el envío)
@@ -183,6 +187,8 @@ function paintPicker(P){
   metric.textContent=tx(showProfit?'picker.estimatedProfit':'picker.netProceeds');
   selectedNet.className='mm-plan-result-value num '+sgn(chosen.t.net);
   selectedNet.textContent=(chosen.t.net<0?'−':showProfit?'+':'')+fmt(Math.abs(chosen.t.net));
+  $('pkAnalysisValue').textContent=selectedNet.textContent;
+  $('pkAnalysisValue').className='num '+sgn(chosen.t.net);
   // B.19: display the *same* selected-plan net in the steps drawer header.
   // This is a mirror of the canonical result, never a new financial formula.
   const stepNet=$('stepDrawerTotal');
@@ -195,6 +201,9 @@ function paintPicker(P){
   $('pkResultFees').textContent=onlyImport?tx('picker.feesIncluded'):
     (knownFees?'−':'')+(marketFees||'—')+(includesImport?' · '+tx('picker.feesPartial'):'');
   $('pkResultFees').className=knownFees&&!onlyImport?'neg':'';
+  const feeTradeoff=el('li');feeTradeoff.append(tx('picker.marketFees')+': ',
+    el('span',$('pkResultFees').className,$('pkResultFees').textContent));
+  $('pkTradeoffs').append(feeTradeoff);
   $('pkResultShip').textContent=(P.shipCost>0.5?'−':'')+fmt(P.shipCost||0);
   $('pkResultShip').className=P.shipCost>0.5?'neg':'zero';
   const destinations=[...new Set(P.rows.filter(r=>r.q>0&&r.best).map(r=>r.best))];
@@ -353,6 +362,7 @@ function paintPicker(P){
       cOrd:'picker.compressOrderDesc',cInst:'picker.compressInstantDesc',
       fN:'picker.importDesc'};
     txt.append(nm);
+    if(selected)txt.append(el('small','c5c-selected-description',tx(short[m]||'picker.bestDesc')));
     b.setAttribute('aria-label',l+'. '+(showProfit?tx('picker.estimatedProfit'):tx('picker.netProceeds'))+': '+fmt(t.net)+'. '+(selected?tx('picker.selected'):tx(short[m]||'picker.bestDesc')+part));
     const diff=m==='auto'?tx('picker.optimal'):Math.round(d)===0?tx('picker.same'):(d>0?'+':'−')+compactIsk(Math.abs(d));
     const compact=compactIsk(Math.abs(t.net))+(Math.abs(t.net)>=1000?' ISK':'');

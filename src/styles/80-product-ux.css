@@ -3200,3 +3200,104 @@ body .top.mm-ho-root #mmTabs>.mm-ho-main #navHome{display:none!important}
   #pSum .c5c-donut-layout{grid-template-columns:82px minmax(0,1fr);gap:12px}
   #pSum .c5c-donut{width:82px;height:82px}
 }
+/* C.5c reference correction: Plans + Analysis / Result + Distribution. */
+#pSum>.mm-plan-heading{
+  padding:14px 20px!important;border:1px solid var(--line2)!important;
+  border-radius:8px!important;background:var(--surface-panel)!important
+}
+#pSum.c5c-expanded>.mm-plan-heading{
+  border-color:color-mix(in srgb,var(--clay) 32%,var(--line2))!important;
+  box-shadow:0 0 15px -9px var(--clay)!important
+}
+#pSum .mm-plan-drawer-head{text-transform:uppercase;font-size:.94rem;font-weight:650}
+#pSum .mm-plan-drawer-body>#pkPlanOptions,#pSum .mm-plan-drawer-body>#pkResult{border-left:0!important}
+#pSum .mm-plan-drawer-body>#pkSpeedBox,#pSum .mm-plan-drawer-body>#vFinanceDetails{border-left:1px solid var(--line2)!important}
+#pSum .c5c-analysis-selected{display:flex;justify-content:space-between;align-items:center;gap:12px;margin:0 0 15px;padding-bottom:12px;border-bottom:1px solid var(--line2)}
+#pSum .c5c-analysis-selected>span{min-width:0}
+#pSum .c5c-analysis-selected small{display:block;color:var(--mut);font-size:.72rem;margin-bottom:3px}
+#pSum #pkSpeedBox .c5c-analysis-route{display:block;margin:0;font-size:.88rem;overflow-wrap:anywhere}
+#pSum #pkAnalysisValue{font-size:1rem;white-space:nowrap}
+#pSum .c5c-analysis-main{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:18px}
+#pSum .c5c-analysis-copy{display:flex;flex-direction:column;gap:15px}
+#pSum .c5c-analysis-copy ul{margin:7px 0 0;padding-left:16px;color:var(--txt);font-size:.78rem;line-height:1.55}
+#pSum .c5c-analysis-copy li+li{margin-top:7px}
+#pSum #pkAdvantages li::marker{color:var(--gain)}
+#pSum #pkTradeoffs li::marker{color:var(--clay)}
+#pSum #pkAnalysisEconomy{margin-top:0}
+#pSum .c5c-donut-layout{grid-template-columns:minmax(0,1fr);gap:10px;justify-items:center}
+#pSum .c5c-donut-wrap{position:relative;width:120px;height:120px}
+#pSum .c5c-donut{width:120px;height:120px}
+#pSum .c5c-donut-center{position:absolute;inset:24px 18px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;text-align:center}
+#pSum .c5c-donut-center strong{font-size:.8rem;line-height:1.25}
+#pSum .c5c-donut-center small{font-size:.6rem;line-height:1.3;color:var(--mut)}
+#pSum .c5c-donut-legend{width:100%;font-size:.71rem;gap:5px}
+#pSum .c5c-analysis-facts{grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;font-size:.73rem}
+#pSum .c5c-analysis-facts dt{font-size:.65rem}
+#pSum #pkSpeedBox #pkShortcut{margin-top:12px;padding-top:10px;gap:6px!important}
+#pSum #pkSpeedBox .pk-shortcut-heading>p{font-size:.72rem}
+#pSum #pkSpeedBox .pk-shortcut-choice{padding:7px 9px;gap:3px}
+#pSum #pkSpeedBox .pk-shortcut-isk{font-size:.8rem}
+#pSum #pkSpeedBox .pk-shortcut-note{font-size:.72rem;margin:0}
+#pSum #pkSpeedBox .pk-shortcut-choice:first-child{display:none}
+#pSum #pkSpeedBox .pk-shortcut-compare{grid-template-columns:minmax(0,1fr)}
+#pSum #pkSpeedBox .pk-shortcut-choice+.pk-shortcut-choice{border-left:0}
+#pSum #pkSpeedBox .pk-shortcut-choice .pk-shortcut-meter{display:none}
+#pSum #pkSpeedBox .mm-picker-method{font-size:.7rem;line-height:1.5;margin-top:8px;padding-top:8px}
+#pSum #pkPlanOptions #pk{margin:0 0 13px!important;display:block!important}
+#pSum #pkPlanOptions #pk>.pk-o{width:100%;min-height:65px!important;padding:11px 12px!important;border:1px solid color-mix(in srgb,var(--clay) 40%,var(--line2))!important;border-radius:6px!important;background:var(--surface-panel)!important;grid-template-columns:18px minmax(0,1fr) auto!important;box-shadow:none!important}
+#pSum #pk .pk-d{display:none}
+#pSum #pk .c5c-selected-description{display:block;margin-top:4px;color:var(--mut);font-weight:450;font-size:.75rem;line-height:1.4}
+#pSum #pk .pk-v{font-size:1rem!important}
+#pSum #pkOthers>.pk-o{min-height:43px!important}
+#pSum #pkPlanOptions .mm-plan-controls{display:flex!important;align-items:center;gap:10px;margin-bottom:12px}
+#pSum .mm-plan-controls .pk-tools{min-width:0;overflow:visible;flex:1}
+#pSum .pk-tools .pk-flt{width:auto!important;max-width:100%;flex-wrap:wrap!important;gap:6px!important}
+#pSum .pk-tools .pk-flt .pk-fb{min-height:32px!important;padding:5px 9px!important;border:1px solid var(--line2)!important;border-radius:5px!important;font-size:.72rem;font-weight:550;background:transparent!important}
+#pSum .pk-tools .pk-flt .pk-fb.on{background:var(--surface-panel)!important;border-color:color-mix(in srgb,var(--clay) 40%,var(--line2))!important}
+#pSum .pk-tools .pk-flt .pk-fb::after{display:none!important}
+#pSum .mm-plan-sort{margin-left:auto}
+#pSum #pkSortToggle{display:inline-flex;align-items:center;justify-content:space-between;gap:14px;min-width:98px}
+#pSum #pkSortToggle::after{content:"";width:7px;height:7px;border-right:1.5px solid currentColor;border-bottom:1.5px solid currentColor;transform:rotate(45deg);margin-top:-3px}
+#pSum #pkSortToggle[aria-expanded=true]::after{transform:rotate(225deg);margin-top:3px}
+#pSum #vFinanceDetails .mm-finance-details-body{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px 16px}
+#pSum #vFinanceDetails .mm-finance-details-body>h4{grid-column:1;grid-row:1;font-size:.74rem}
+#pSum #ovFlow{grid-column:1;grid-row:2;min-width:0}
+#pSum #vFinanceDetails #ovDestW{grid-column:2;grid-row:1 / span 2;min-width:0;margin:0;padding:0 0 0 16px;border-top:0;border-left:1px solid var(--line2)}
+#pSum #vFinanceDetails .ov-leg{grid-template-columns:minmax(0,1fr)}
+#pSum #vFinanceDetails .mm-finance-estimate{grid-column:1 / -1;margin:0;padding-top:10px}
+@media(max-width:1100px){
+  #pSum .c5c-analysis-main{grid-template-columns:minmax(0,1fr)}
+  #pSum .c5c-analysis-copy{display:grid;grid-template-columns:1fr 1fr}
+  #pSum .c5c-donut-layout{grid-template-columns:120px minmax(0,1fr);justify-items:stretch}
+  #pSum .c5c-analysis-facts{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media(max-width:880px){
+  #pSum .mm-plan-drawer-body>#pkResult{border-top:0!important}
+  #pSum .mm-plan-drawer-body>#pkSpeedBox,#pSum .mm-plan-drawer-body>#vFinanceDetails{border-left:0!important;border-top:1px solid var(--line2)!important}
+}
+@media(max-width:480px){
+  #pSum>.mm-plan-heading{padding:13px 14px!important}
+  #pSum .c5c-analysis-selected{flex-wrap:wrap}
+  #pSum .c5c-analysis-copy{grid-template-columns:1fr}
+  #pSum .c5c-donut-layout{grid-template-columns:95px minmax(0,1fr);gap:10px}
+  #pSum .c5c-donut-wrap,#pSum .c5c-donut{width:95px;height:95px}
+  #pSum .c5c-donut-center{inset:19px 13px}
+  #pSum .c5c-donut-center strong{font-size:.69rem}
+  #pSum #pk .pk-v{grid-row:2!important;grid-column:2 / -1!important;font-size:.9rem!important}
+  #pSum #vFinanceDetails .mm-finance-details-body{grid-template-columns:minmax(0,1fr)}
+  #pSum #vFinanceDetails #ovDestW{grid-column:1;grid-row:3;border-left:0;border-top:1px solid var(--line2);padding:12px 0 0}
+}
+/* The fast shortcut remains an action, rather than a second analysis panel. */
+#pSum #pkSpeedBox #pkShortcut{display:grid!important;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:8px!important}
+#pSum #pkSpeedBox .pk-shortcut-heading,#pSum #pkSpeedBox .pk-shortcut-note,#pSum #pkSpeedBox>.mm-picker-method{
+  position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;
+  overflow:hidden!important;clip-path:inset(50%);white-space:nowrap;border:0!important
+}
+#pSum #pkSpeedBox .pk-shortcut-compare{border:0;background:transparent;border-radius:0;box-shadow:none}
+#pSum #pkSpeedBox .pk-shortcut-choice+.pk-shortcut-choice{display:flex;flex-direction:row;flex-wrap:wrap;align-items:baseline;padding:0;gap:4px 8px}
+#pSum #pkSpeedBox .pk-shortcut-name,#pSum #pkSpeedBox .pk-shortcut-loss{font-size:.72rem}
+#pSum #pkSpeedBox .pk-shortcut-action{align-self:center;font-size:.75rem;margin:0;white-space:nowrap}
+#pSum #pkSpeedBox>.mm-picker-method{font-size:var(--mm-sales-label-size)}
+#pSum #pkSpeedBox .pk-shortcut-choice:first-child{display:flex!important;position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip-path:inset(50%)}
+@media(max-width:600px){#pSum .mm-plan-controls .pk-tools{flex:1 1 100%;width:100%}}
+@media(max-width:480px){#pSum #pkSpeedBox #pkShortcut{grid-template-columns:minmax(0,1fr)}}

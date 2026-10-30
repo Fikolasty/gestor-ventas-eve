@@ -13,7 +13,7 @@ test('B.6c keeps unique real disclosures and uses four grid children in decision
   const tail=shell.indexOf('<div class="mm-decision-grid"',head);
   assert.ok(head>=0&&tail>head);
   const grid=shell.slice(head,tail);
-  const ordered=['id="pkSpeedBox"','id="vFinanceDetails"','class="mm-plan-options"','id="pkResult"'];
+  const ordered=['class="mm-plan-options"','id="pkSpeedBox"','id="pkResult"','id="vFinanceDetails"'];
   let cursor=-1;
   for(const marker of ordered){
     const at=grid.indexOf(marker);

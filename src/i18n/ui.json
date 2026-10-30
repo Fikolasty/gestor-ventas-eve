@@ -1,7 +1,7 @@
 {
   "picker.distributionDestinations": {
-    "es": "DISTRIBUCIÓN Y DESTINOS",
-    "en": "DISTRIBUTION & DESTINATIONS"
+    "es": "Distribución y destinos",
+    "en": "Distribution & destinations"
   },
   "picker.fastAlternative": {
     "es": "ALTERNATIVA MÁS RÁPIDA",
@@ -1829,7 +1829,7 @@
   },
   "picker.riskFast": {
     "es": "Depende de compras suficientes; el envío añade espera.",
-    "en": "Requires sufficient buy orders; shipping adds waiting time."
+    "en": "Depends on available buying volume; shipping adds waiting time."
   },
   "picker.riskOrder": {
     "es": "La orden puede tardar o no completarse.",
@@ -1870,5 +1870,13 @@
   "picker.analysisPartial": {
     "es": "Las tasas incluidas en el objetivo de importación no se separan.",
     "en": "Fees included in the import target are not itemized."
+  },
+  "picker.selectedPlanAria": {
+    "es": "Plan seleccionado",
+    "en": "Selected plan"
+  },
+  "picker.alternativesAria": {
+    "es": "Otros planes",
+    "en": "Other plans"
   }
 }

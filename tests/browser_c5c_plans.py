@@ -31,10 +31,14 @@ class C5cPlanTests(unittest.TestCase):
         self.page.goto((ROOT/'index.html').as_uri(),wait_until='domcontentloaded')
         self.page.evaluate(FIXTURE)
         expect(self.page.locator('#pSum')).to_be_visible()
+        self.assertEqual(self.page.locator('#pkPlanToggle .mm-plan-toggle-chevron').count(),0)
+        self.assertEqual(self.page.locator('#pk [aria-current="true"]').count(),1)
+        self.assertEqual(self.page.locator('#pkOthers [aria-current="true"]').count(),0)
+        self.assertTrue(self.page.locator('.mm-plan-drawer-head').first.evaluate('(el)=>getComputedStyle(el).textTransform==="uppercase"'))
     def tearDown(self):
         self.assertEqual(self.errors,[]);self.page.close()
     def test_complete_composition_matrix_and_drawer_states(self):
-        stamp='c5c-166-20261030-r4'
+        stamp='c5c-reference-20261030-v4'
         out=ROOT/'tests/artifacts/theme';out.mkdir(parents=True,exist_ok=True)
         for lang in ('es','en'):
             self.page.evaluate('(lang)=>setLang(lang)',lang)
@@ -45,7 +49,7 @@ class C5cPlanTests(unittest.TestCase):
                 for light in (False,True):
                     self.page.evaluate('(on)=>document.documentElement.classList.toggle("light",on)',light)
                     self.page.evaluate('()=>{document.activeElement?.blur();scrollTo(0,0)}')
-                    rects=self.page.evaluate("""() => ['pkSpeedBox','vFinanceDetails','pkPlanOptions','pkResult'].map(id=>{
+                    rects=self.page.evaluate("""() => ['pkPlanOptions','pkSpeedBox','pkResult','vFinanceDetails'].map(id=>{
                       const el=$(id),r=el.getBoundingClientRect();return {x:r.x,y:r.y,w:r.width,h:r.height,right:r.right};
                     })""")
                     if width>880:
@@ -77,12 +81,20 @@ class C5cPlanTests(unittest.TestCase):
 
     def test_selected_plan_analysis_and_donut_follow_original_engine(self):
         before=self.page.locator('#pkAnalysisFacts').inner_text()
+        shortcut=self.page.locator('#pkOthers .pk-shortcut-highlight')
+        self.page.evaluate('()=>document.activeElement?.blur()')
+        self.assertEqual(shortcut.evaluate('(el)=>getComputedStyle(el).outlineWidth'),'0px')
+        shortcut.focus()
+        self.assertEqual(shortcut.evaluate('(el)=>getComputedStyle(el).outlineWidth'),'2px')
         self.assertTrue(self.page.locator('.c5c-donut').is_visible())
         self.page.locator('#pkOthers [data-m="jInst"]').click()
         self.assertEqual(self.page.evaluate('S.planMode'),'jInst')
         self.assertEqual(self.page.evaluate('lastP.best'),self.page.evaluate('computePlan().best'))
         self.assertNotEqual(self.page.locator('#pkAnalysisFacts').inner_text(),before)
         self.assertEqual(self.page.locator('#stepDrawerTotal').inner_text(),self.page.locator('#pkResultValue').inner_text())
+        self.assertEqual(self.page.locator('#pkAnalysisValue').inner_text(),self.page.locator('#pkResultValue').inner_text())
+        self.assertEqual(self.page.locator('#pkOthers [data-m="jInst"]').count(),0)
+        self.assertEqual(self.page.locator('#pk').evaluate('(e)=>e.parentElement.id'),'pkOptionsContent')
         expect(self.page.locator('#pkAdvantages')).to_contain_text('Evita esperar')
         self.page.evaluate("setLang('en')")
         expect(self.page.locator('#pkAdvantages')).to_contain_text('Avoids waiting')

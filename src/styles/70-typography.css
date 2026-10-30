@@ -412,7 +412,6 @@ html.light .hero .mm-sales-mode-picker>.mm-sales-mode-trigger{
   grid-area:note;color:var(--mut);margin:0!important;
   font:400 .77rem/1.5 var(--f-ui)!important;
 }
-#pSum .pk-shortcut-highlight{outline:1px solid var(--ion);outline-offset:-2px}
 @media(max-width:820px){
   #pSum .pk-shortcut{grid-template-columns:minmax(0,1fr) auto;
     grid-template-areas:"heading heading" "method action" "note note";

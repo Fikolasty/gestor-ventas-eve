@@ -29,7 +29,7 @@ test('B.18 unifies available plans and result behind one full-width, two-column 
   assert.equal((html.match(/id="pkOptionsToggle"/g)||[]).length,0);
   assert.equal((html.match(/id="pkOptionsContent"/g)||[]).length,1);
   assert.match(html,/id="pkOverviewToggle" aria-controls="pkOverviewContent" aria-expanded="true"/);
-  assert.match(html,/<div class="mm-plan-drawer-body" id="pkInsightsContent">[\s\S]*?id="pkPlanOptions"[\s\S]*?id="pkResult"/);
+  assert.match(html,/<div class="mm-plan-drawer-body" id="pkOverviewContent">[\s\S]*?id="pkPlanOptions"[\s\S]*?id="pkSpeedBox"/);
   assert.match(html,/<div id="pkOptionsContent">[\s\S]*?id="pkTools"[\s\S]*?id="pkSort"[\s\S]*?id="pkOthers"/);
   assert.match(picker,/let pkPanelCollapsed=true/);
   assert.match(picker,/let pkOverviewCollapsed=false/);

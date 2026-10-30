@@ -699,7 +699,7 @@ class ThemeBrowserTests(unittest.TestCase):
                     self.assertEqual(node.locator(':scope > summary').evaluate(
                         '(el)=>getComputedStyle(el).display'),'none')
                     expect(node).to_have_attribute('open','')
-                    drawer=self.page.locator('#pkOverviewToggle')
+                    drawer=self.page.locator('#pkInsightsToggle')
                     drawer.click()
                     expect(node).to_be_hidden()
                     drawer.click()
@@ -1255,9 +1255,9 @@ class ThemeBrowserTests(unittest.TestCase):
                 expect(self.page.locator('#vEstimate')).to_be_hidden()
                 self.assertIn('orders may take time',self.page.locator('#vEstimateHelp').text_content())
                 expect(self.page.locator('#bDeep .step-toggle-copy strong')).to_have_text('View selling steps')
-            self.page.locator('#pkOverviewToggle').click()
+            self.page.locator('#pkInsightsToggle').click()
             expect(self.page.locator('#vFinanceDetails')).to_be_hidden()
-            self.page.locator('#pkOverviewToggle').click()
+            self.page.locator('#pkInsightsToggle').click()
             expect(self.page.locator('#vFinanceDetails')).to_have_attribute('open','')
             self.assertIn('280 ISK',self.page.locator('#ovFlow').inner_text())
             for width,height in [(1440,900),(390,844)]:
@@ -1592,9 +1592,9 @@ class ThemeBrowserTests(unittest.TestCase):
             self.assertEqual(self.page.locator('#vFinanceDetails').evaluate('(e)=>e.parentElement?.className'),'mm-plan-drawer-body')
             self.page.locator('#pkSort').select_option('speed:1')
             self.assertEqual(self.page.locator('#pkSort').input_value(),'speed:1')
-            self.page.locator('#pkOverviewToggle').click()
+            self.page.locator('#pkInsightsToggle').click()
             expect(self.page.locator('#vFinanceDetails')).to_be_hidden()
-            self.page.locator('#pkOverviewToggle').click()
+            self.page.locator('#pkInsightsToggle').click()
             expect(self.page.locator('#vFinanceDetails')).to_have_attribute('open','')
             self.page.locator('#pkOthers [data-m="jOrd"]').click()
             expect(self.page.locator('#pkResultValue')).to_contain_text('900,000 ISK')
@@ -1621,8 +1621,8 @@ class ThemeBrowserTests(unittest.TestCase):
                     self.assertFalse(dims['overflow'],dims)
                     self.assertLessEqual(dims['font'],13.5,dims)
                     if width>880:
-                        self.assertGreater(dims['left']['x'],dims['right']['x'],dims)
-                        self.assertAlmostEqual(dims['left']['y'],dims['right']['y'],delta=2)
+                        self.assertAlmostEqual(dims['left']['x'],dims['right']['x'],delta=2)
+                        self.assertGreater(dims['left']['y'],dims['right']['y'],dims)
                     else:
                         self.assertGreater(dims['left']['y'],dims['right']['y'],dims)
                     out=INDEX.parent/'tests'/'artifacts'/'theme'
@@ -1728,10 +1728,10 @@ class ThemeBrowserTests(unittest.TestCase):
                 const a=document.querySelector('#pkSpeedBox').getBoundingClientRect();
                 const b=document.querySelector('#vFinanceDetails').getBoundingClientRect();
                 const c=document.querySelector('#unitCourierBox').getBoundingClientRect();
-                return {aRight:a.right,aY:a.y,bX:b.x,bY:b.y,bBottom:b.bottom,cY:c.y};
+                return {aX:a.x,aY:a.y,bX:b.x,bY:b.y,bBottom:b.bottom,cY:c.y};
             }""")
-            self.assertLessEqual(geom['aRight'],geom['bX']+1,geom)
-            self.assertAlmostEqual(geom['aY'],geom['bY'],delta=2)
+            self.assertAlmostEqual(geom['aX'],geom['bX'],delta=2)
+            self.assertLess(geom['aY'],geom['bY'],geom)
             self.assertGreaterEqual(geom['cY'],geom['bBottom']-1,geom)
             if language=='es':
                 self.page.evaluate('document.documentElement.classList.remove("light")')
@@ -1777,14 +1777,14 @@ class ThemeBrowserTests(unittest.TestCase):
                             columns:getComputedStyle(document.querySelector('.mm-plan-layout')).gridTemplateColumns};
                     }""")
                     if width==1440:
-                        self.assertGreater(rects['result']['x'],rects['options']['x'],rects)
-                        self.assertAlmostEqual(rects['result']['y'],rects['options']['y'],delta=2)
-                        self.assertGreater(rects['flow']['x'],rects['speed']['x'],rects)
-                        self.assertAlmostEqual(rects['flow']['y'],rects['speed']['y'],delta=2)
-                        self.assertLess(rects['flow']['y'],rects['result']['y'],rects)
-                        self.assertAlmostEqual(rects['flow']['bottom'],rects['speed']['bottom'],delta=2)
+                        self.assertLess(rects['options']['x'],rects['speed']['x'],rects)
+                        self.assertAlmostEqual(rects['options']['y'],rects['speed']['y'],delta=2)
+                        self.assertLess(rects['result']['x'],rects['flow']['x'],rects)
+                        self.assertAlmostEqual(rects['flow']['y'],rects['result']['y'],delta=2)
+                        self.assertLess(rects['options']['y'],rects['result']['y'],rects)
+                        self.assertAlmostEqual(rects['flow']['bottom'],rects['result']['bottom'],delta=2)
                     else:
-                        sequence=[rects[name]['y'] for name in ('speed','flow','options','result')]
+                        sequence=[rects[name]['y'] for name in ('options','speed','result','flow')]
                         self.assertEqual(sequence,sorted(sequence),rects)
                         for name in ('options','result','flow','speed'):
                             self.assertGreaterEqual(rects[name]['x'],-1,rects)
@@ -1869,12 +1869,13 @@ class ThemeBrowserTests(unittest.TestCase):
                         const s=getComputedStyle(el),active=el.querySelector('.pk-fb.on');
                         const a=getComputedStyle(active),u=getComputedStyle(active,'::after');
                         return {border:s.borderTopWidth,bg:s.backgroundColor,
-                            activeBg:a.backgroundColor,underline:u.height};
+                            activeBg:a.backgroundColor,activeBorder:a.borderTopWidth,underlineDisplay:u.display};
                     }""")
                     self.assertEqual(strip['border'],'0px',strip)
                     self.assertEqual(strip['bg'],'rgba(0, 0, 0, 0)',strip)
-                    self.assertEqual(strip['activeBg'],'rgba(0, 0, 0, 0)',strip)
-                    self.assertEqual(strip['underline'],'2px',strip)
+                    self.assertNotEqual(strip['activeBg'],'rgba(0, 0, 0, 0)',strip)
+                    self.assertEqual(strip['activeBorder'],'1px',strip)
+                    self.assertEqual(strip['underlineDisplay'],'none',strip)
                     row=self.page.locator('#pkOthers>.pk-o').first
                     geometry=row.evaluate("""el=>{
                         const r=el.getBoundingClientRect(),a=el.querySelector('.pk-v').getBoundingClientRect(),
@@ -1964,8 +1965,8 @@ class ThemeBrowserTests(unittest.TestCase):
         insights_toggle.click()
         expect(insights_toggle).to_have_attribute('aria-expanded','false')
         expect(self.page.locator('#pkResult')).to_be_hidden()
-        expect(self.page.locator('#pkPlanOptions')).to_be_hidden()
-        expect(self.page.locator('#vFinanceDetails')).to_be_visible()
+        expect(self.page.locator('#vFinanceDetails')).to_be_hidden()
+        expect(self.page.locator('#pkPlanOptions')).to_be_visible()
         insights_toggle.focus()
         self.page.keyboard.press('Space')
         expect(insights_toggle).to_have_attribute('aria-expanded','true')
@@ -2043,14 +2044,14 @@ class ThemeBrowserTests(unittest.TestCase):
         insights=self.page.locator('#pkInsightsToggle')
         before=self.page.locator('#pkResultValue').inner_text()
         overview.click()
-        expect(self.page.locator('#vFinanceDetails')).to_be_hidden()
+        expect(self.page.locator('#pkPlanOptions')).to_be_hidden()
         expect(self.page.locator('#pkSpeedBox')).to_be_hidden()
         expect(self.page.locator('#pkResult')).to_be_visible()
         overview.click()
-        expect(self.page.locator('#vFinanceDetails')).to_be_visible()
+        expect(self.page.locator('#pkPlanOptions')).to_be_visible()
         insights.click()
         expect(self.page.locator('#pkResult')).to_be_hidden()
-        expect(self.page.locator('#pkPlanOptions')).to_be_hidden()
+        expect(self.page.locator('#vFinanceDetails')).to_be_hidden()
         insights.click()
         expect(self.page.locator('#pkResult')).to_be_visible()
         self.assertEqual(self.page.locator('#pkResultValue').inner_text(),before)

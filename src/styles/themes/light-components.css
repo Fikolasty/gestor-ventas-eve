@@ -319,3 +319,14 @@ html.light .c5c-sort-menu{background:linear-gradient(var(--surface-card),var(--s
   html.light #pSum .mm-plan-drawer-body>#pkSpeedBox,
   html.light #pSum .mm-plan-drawer-body>#pkPlanOptions{border-top:0!important}
 }
+/* C.5c corrected reference: final chromatic overrides, shared geometry above. */
+html.light #pSum>.mm-plan-heading{border:1px solid var(--line2)!important;background:var(--surface-panel)!important;box-shadow:none!important}
+html.light #pSum.c5c-expanded>.mm-plan-heading{border-color:color-mix(in srgb,var(--clay) 32%,var(--line2))!important;box-shadow:0 0 15px -9px var(--clay)!important}
+html.light #pSum .mm-plan-drawer-body>#pkPlanOptions,html.light #pSum .mm-plan-drawer-body>#pkResult{border-left:0!important}
+html.light #pSum .mm-plan-drawer-body>#pkSpeedBox,html.light #pSum .mm-plan-drawer-body>#vFinanceDetails{border-left:1px solid var(--line2)!important}
+html.light #pSum .pk-tools .pk-flt .pk-fb{background:transparent!important;border-color:var(--line2)!important}
+html.light #pSum .pk-tools .pk-flt .pk-fb.on{background:var(--surface-panel)!important;border-color:color-mix(in srgb,var(--clay) 40%,var(--line2))!important}
+@media(max-width:880px){
+  html.light #pSum .mm-plan-drawer-body>#pkResult{border-top:0!important}
+  html.light #pSum .mm-plan-drawer-body>#pkSpeedBox,html.light #pSum .mm-plan-drawer-body>#vFinanceDetails{border-left:0!important;border-top:1px solid var(--line2)!important}
+}
