@@ -24,11 +24,11 @@ test('B.18: each drawer has one full-width button controlling a shared two-colum
 test('B.18: finance and fastest alternative are a joint drawer without nested questions',()=>{
   const upper=html.slice(html.indexOf('id="pkOverviewContent"'),html.indexOf('id="pkInsightsDrawer"'));
   const lower=html.slice(html.indexOf('id="pkInsightsContent"'),html.indexOf('id="decisionGrid"'));
-  assert.match(upper,/id="pkResult"[\s\S]*id="pkPlanOptions"/);
-  assert.match(lower,/id="vFinanceDetails" open>[\s\S]*id="pkSpeedBox"/);
+  assert.match(upper,/id="pkSpeedBox"[\s\S]*id="vFinanceDetails" open>/);
+  assert.match(lower,/id="pkPlanOptions"[\s\S]*id="pkResult"/);
   assert.match(css,/#pSum #vFinanceDetails>summary\{display:none!important\}/);
   assert.doesNotMatch(lower,/class="mm-inline-faq/);
-  assert.match(lower,/data-i18n="decision.planMethodA"/);
+  assert.match(upper,/data-i18n="decision.planMethodA"/);
   assert.match(picker,/\$\('vFinanceDetails'\)\.open=true/);
   assert.match(picker,/others\.hidden=false/);
   assert.doesNotMatch(picker,/data-pk-toggle/);

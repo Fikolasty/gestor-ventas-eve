@@ -8,11 +8,12 @@ const html=src('shell.html'),css=src('styles/80-product-ux.css');
 const picker=src('js/ui/plan-picker.js'),verdict=src('js/ui/selling-results.js');
 const keys=JSON.parse(src('i18n/ui.json'));
 
-test('the header has exactly one icon-only disclosure with bilingual accessible names',()=>{
+test('C.5c has one full-heading disclosure with bilingual accessible names',()=>{
   assert.equal((html.match(/id="pkPlanToggle"/g)||[]).length,1);
   assert.equal((html.match(/id="pkPlanOptions"/g)||[]).length,1);
   assert.equal((html.match(/id="pkPlanContent"/g)||[]).length,1);
-  assert.match(html,/<button[^>]*id="pkPlanToggle"[^>]*aria-controls="pkPlanContent"[^>]*aria-expanded="false"[^>]*><span[^>]*aria-hidden="true"><\/span><\/button>/);
+  assert.match(html,/<button[^>]*id="pkPlanToggle"[^>]*aria-controls="pkPlanContent"[^>]*aria-expanded="false"[^>]*>[\s\S]*?data-i18n="picker.chooseTitle"/);
+  assert.doesNotMatch(html,/class="mm-plan-toggle-chevron"/);
   assert.match(html,/<div id="pkPlanContent" class="mm-plan-content" hidden>[\s\S]*?<div class="fb2" id="flipBuy"[\s\S]*?<div class="mm-plan-layout">[\s\S]*?<div class="mm-decision-grid" id="decisionGrid">[\s\S]*?<\/div>\s*<\/div>\s*<!-- B\.19:/);
   assert.match(html,/<section class="mm-step-drawer" id="stepDrawer">[\s\S]*?id="bDeep"[^>]*aria-controls="deep"[\s\S]*?<div id="deep" class="deep" hidden>/);
   assert.deepEqual(keys['picker.hidePlans'],{es:'Ocultar toda la sección',en:'Collapse entire section'});
@@ -28,7 +29,7 @@ test('B.18 unifies available plans and result behind one full-width, two-column 
   assert.equal((html.match(/id="pkOptionsToggle"/g)||[]).length,0);
   assert.equal((html.match(/id="pkOptionsContent"/g)||[]).length,1);
   assert.match(html,/id="pkOverviewToggle" aria-controls="pkOverviewContent" aria-expanded="true"/);
-  assert.match(html,/<div class="mm-plan-drawer-body" id="pkOverviewContent">[\s\S]*?id="pkResult"[\s\S]*?id="pkPlanOptions"/);
+  assert.match(html,/<div class="mm-plan-drawer-body" id="pkInsightsContent">[\s\S]*?id="pkPlanOptions"[\s\S]*?id="pkResult"/);
   assert.match(html,/<div id="pkOptionsContent">[\s\S]*?id="pkTools"[\s\S]*?id="pkSort"[\s\S]*?id="pkOthers"/);
   assert.match(picker,/let pkPanelCollapsed=true/);
   assert.match(picker,/let pkOverviewCollapsed=false/);

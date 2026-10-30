@@ -18,7 +18,7 @@ test('B.6 moves the existing finance disclosure inside the result companion with
   const options=html.indexOf('class="mm-plan-options"');
   const detail=html.indexOf('id="vFinanceDetails"');
   const fast=html.indexOf('id="pkSpeedBox"');
-  assert.ok(layout>=0&&layout<result&&result<options&&options<detail&&detail<fast);
+  assert.ok(layout>=0&&layout<fast&&fast<detail&&detail<options&&options<result);
   assert.match(html,/<select id="pkSort"/);
   assert.match(html,/id="bDeep" aria-expanded="false" aria-controls="deep"/);
 });

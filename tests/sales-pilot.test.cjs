@@ -17,9 +17,9 @@ test('sales pilot keeps original result, plan and execution controls',()=>{
   }
   assert.match(html,/<details class="ov-card ov-flow mm-finance-details" id="vFinanceDetails" open>/);
   assert.match(html,/id="bDeep" aria-expanded="false" aria-controls="deep"/);
-  assert.ok(html.indexOf('id="vFinanceDetails"')<html.indexOf('id="pkShortcut"')
-    &&html.indexOf('id="pkShortcut"')<html.indexOf('id="decisionGrid"'),
-    'Quick-sale shortcut belongs in the fourth plan cell, before freight extras');
+  assert.ok(html.indexOf('id="pkShortcut"')<html.indexOf('id="vFinanceDetails"')
+    &&html.indexOf('id="vFinanceDetails"')<html.indexOf('id="decisionGrid"'),
+    'C.5c keeps the quick-sale rationale in analysis before distribution and freight extras');
   assert.ok(html.indexOf('id="pkShortcut"')<html.indexOf('id="bDeep"'),
     'Execution action remains after the decision explanations');
 });

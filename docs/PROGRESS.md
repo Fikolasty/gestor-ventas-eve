@@ -1,5 +1,11 @@
 # PROGRESS — Market Moves+
 
+## 2026-10-30 — C.5c v1.0.166 candidata en rama, producción v1.0.165
+
+Alcance autorizado: dos parejas de gavetas de ELIGE TU PLAN, orden Análisis/Distribución → Planes/Resultado; cabecera completa sin icono, glow tenue solo desplegada; análisis dinámico y donut de los segmentos existentes; Ordenar mediante portal accesible a body. IDs, fórmulas, ESI/SSO, persistencia y Settings conservados. ES/EN y Light/Dark, 1440/980/630/390.
+
+Preflight limpio y ramas base en `feb4051c`; candidata `feature/elige-tu-plan-1.0.166`. 150 Node, 16 Python, ocho legacy y 24 salidas financieras idénticas a v1.0.165 PASS. Chromium completo final 75/75 PASS tras corregir una expectativa B.7 antigua. DSS §74 y [evidencia C.5c](C5C_CANDIDATE_RESULTS.md) registran los cierres y SHA reales. Workflow de candidata sin permisos de escritura ni Pages; no merge ni despliegue. **Producción sigue v1.0.165; aprobación de producción pendiente.**
+
 **Histórico C.4b — LIVE CERTIFICADA 2026-10-29:** inventario focal Settings/Guía (202 selectores, 29 en varios archivos), dos reglas previas redundantes de Ajustes retiradas, nuevo test de contrato de CSS y workflows a 1.0.160. Sin modificación JS, fórmulas, ESI/SSO, persistencia ni HTML fuente. DSS §68. **Certificación:** fuente `282a25dc`, build `41214eec`, Node 140/140, Python 16/16, Chromium 61/61, 4/4 Actions, Pages HTTPS v1.0.160. Git blob `385b3fc1` 2.386.775 bytes. CSS −188 caracteres; JS, finanzas, ESI/SSO y persistencia intactos. **v1.0.160 LIVE.**
 
 **Estado histórico previo a C.5b (2026-10-29):** **C.2 v1.0.159 LIVE funcional**, B cerrada hasta B.21. **C.4a QA-only certificada:** fuente `76dc4865`, build `f6b65de5`, 4/4 Actions, 137 Node/16 Python/61 Chromium, Pages HTTPS v1.0.159; HTML Git idéntico a C.2 `00d0f173`. Reintento 2 tras fallo intermitente B.21; ver DSS §§66–67.

@@ -27,7 +27,7 @@ test('B.6c keeps the fast-route rationale in the plan grid and hides zero-courie
   const why=shell.indexOf('class="mm-picker-method"');
   const left=shell.indexOf('id="unitCourierBox"');
   const opportunities=shell.indexOf('id="pkOpportunity"');
-  assert.ok(finance<right&&right<fast&&fast<why&&why<left&&left<opportunities);
+  assert.ok(right<fast&&fast<why&&why<finance&&finance<left&&left<opportunities);
   assert.match(chooser,/box\.hidden=!rows\.length&&!hasCourierCost/);
   assert.match(chooser,/\$\('pkSpeedBox'\)\.hidden=false/);
   assert.match(css,/#pSum \.mm-plan-drawer-body:has\(>#pkSpeedBox\[hidden\]\)>#vFinanceDetails/);

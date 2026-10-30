@@ -12,6 +12,8 @@ let pkInsightsCollapsed=false;
 function syncPlanPanel(){
   const panel=$('pkPlanContent'),toggle=$('pkPlanToggle');
   panel.hidden=pkPanelCollapsed;
+  $('pSum').classList.toggle('c5c-expanded',!pkPanelCollapsed);
+  if(pkPanelCollapsed)closePlanSort();
   toggle.setAttribute('aria-expanded',String(!pkPanelCollapsed));
   const label=tx(pkPanelCollapsed?'picker.showPlans':'picker.hidePlans');
   toggle.setAttribute('aria-label',label);toggle.title=label;
@@ -22,6 +24,52 @@ function syncPlanPanel(){
   }
   // The finance breakdown is content of the lower drawer, not a third disclosure.
   $('vFinanceDetails').open=true;
+}
+// C.5c: present the selected plan using existing route/time classifications.
+// These descriptions are qualitative, never a forecast of fills or a risk score.
+function paintPlanAnalysis(P,chosen){
+  const routes=chosen.m==='auto'?P.rows.filter(r=>r.q>0&&r.best).map(r=>r.best):[chosen.m];
+  const kind=routes.length&&routes.every(m=>PK_FAST.has(m))?'Fast':
+    routes.includes('disc')?'Player':!routes.length||new Set(routes).size>1?'Mixed':'Order';
+  const copy={
+    Fast:['picker.analysisFast','picker.riskFast','picker.liquidityFast','picker.tradeoffFast'],
+    Player:['picker.analysisPlayer','picker.riskPlayer','picker.liquidityPlayer','picker.tradeoffPlayer'],
+    Mixed:['picker.analysisMixed','picker.riskMixed','picker.liquidityMixed','picker.tradeoffMixed'],
+    Order:['picker.analysisOrder','picker.riskOrder','picker.liquidityOrder','picker.tradeoffOrder']
+  }[kind];
+  $('pkAnalysisRoute').textContent=chosen.l;
+  $('pkAdvantages').textContent=tx(copy[0]);
+  $('pkTradeoffs').textContent=tx(copy[3]);
+  const facts=$('pkAnalysisFacts');facts.replaceChildren();
+  for(const [label,value] of [
+    ['picker.speedLabel',pkSpeed(new Set(routes).size===1?routes[0]:chosen.m,P)],
+    ['picker.shippingLabel',pkShips(chosen.m,P)?tx('picker.shippingRange',{range:C.cDays[0]+'–'+C.cDays[1]}):tx('picker.noShipping')],
+    ['picker.riskLabel',tx(copy[1])],['picker.liquidityLabel',tx(copy[2])]
+  ]){const entry=el('div');entry.append(el('dt',null,tx(label)),el('dd',null,value));facts.append(entry);}
+}
+// Both chart views consume the very same segments produced by paintVerdict.
+// Only angles are derived here; financial values never flow back to the engine.
+function paintPlanDonut(segs,sum,P){
+  const host=$('pkAnalysisEconomy');host.replaceChildren();
+  host.append(el('h4',null,tx('picker.analysisEconomy')));
+  if(!(sum>0)||P.best<0){host.append(el('p',null,tx('picker.analysisEmpty')));return;}
+  const chart=el('div','c5c-donut-layout'),donut=el('div','c5c-donut');
+  donut.setAttribute('aria-hidden','true');
+  let angle=0;
+  const stops=segs.map(([,amount,,kind])=>{
+    const start=angle;angle+=amount/sum*360;
+    return `var(${kind==='net'?'--gain':'--loss'}) ${start}deg ${angle}deg`;
+  });
+  donut.style.background='conic-gradient('+stops.join(',')+')';
+  const legend=el('dl','c5c-donut-legend');
+  const labels=['picker.netProceeds','Sales Tax','Broker','Relists','picker.shippingLabel','picker.compression','decision.otherCharges'];
+  const keys={'Te queda':labels[0],'Envío':labels[4],'Compresión':labels[5],'Producción':labels[6]};
+  for(const [label,amount,,kind] of segs){
+    const row=el('div');row.append(el('dt',null,keys[label]?tx(keys[label]):label),
+      el('dd','num '+(kind==='net'?'pos':'neg'),(kind==='cost'?'−':'')+fmt(amount)));legend.append(row);
+  }
+  chart.append(donut,legend);host.append(chart);
+  if(P.rows.some(r=>r.best==='fN'))host.append(el('p',null,tx('picker.analysisPartial')));
 }
 const PK_FAST=new Set(['jInst','cInst','fJI','bb']);         // cobras el mismo día (sin contar el envío)
 const PK_REP=new Set(['rNull','rJita']);
@@ -35,6 +83,85 @@ function pkSpeed(m,P){const ship=pkShips(m,P);
 const pkSpeedRank=(m,P)=>m==='auto'?1.5:(PK_FAST.has(m)?0:m==='disc'?4:(m==='null'||m==='rNull'||m==='fN')?3:2)+(pkShips(m,P)?.5:0);
 function pkShips(m,P){if(!SH())return false;if(m==='auto')return P.Vs>0;return !!SHIPS[m];}
 const PK_FILTERS=[['all','picker.all'],['fast','picker.fastFilter'],['noship','picker.noShipping'],['rep','picker.reprocessing'],['comp','picker.compression']];
+// Portal retains pkSort as the canonical select and its existing change event.
+// A fixed listbox in body is independent of drawer overflow and stacking.
+const planSortMenu=document.createElement('div');
+planSortMenu.id='pkSortMenu';planSortMenu.className='c5c-sort-menu';
+planSortMenu.setAttribute('role','listbox');planSortMenu.tabIndex=-1;
+planSortMenu.hidden=true;document.body.append(planSortMenu);
+const planSortButton=$('pkSortToggle'),planSortSelect=$('pkSort');
+planSortButton.hidden=false;planSortSelect.classList.add('c5c-sort-native');
+planSortSelect.tabIndex=-1;planSortSelect.setAttribute('aria-hidden','true');
+let planSortIndex=0;
+function syncPlanSort(){
+  planSortButton.textContent=planSortSelect.selectedOptions[0]?.textContent||'';
+  planSortButton.setAttribute('aria-label',tx('picker.sortAria')+': '+planSortButton.textContent);
+  planSortMenu.setAttribute('aria-label',tx('picker.sortAria'));
+  if(!planSortMenu.hidden)closePlanSort(true);
+}
+function closePlanSort(restore=false){
+  planSortMenu.hidden=true;planSortButton.setAttribute('aria-expanded','false');
+  if(restore)planSortButton.focus({preventScroll:true});
+}
+function placePlanSort(){
+  const rect=planSortButton.getBoundingClientRect(),margin=8;
+  const height=window.visualViewport?.height||innerHeight;
+  const width=window.visualViewport?.width||innerWidth;
+  const offsetTop=window.visualViewport?.offsetTop||0,offsetLeft=window.visualViewport?.offsetLeft||0;
+  const below=height+offsetTop-rect.bottom-margin,above=rect.top-offsetTop-margin;
+  const up=below<Math.min(planSortMenu.scrollHeight,220)&&above>below;
+  planSortMenu.style.width=Math.max(0,Math.min(Math.max(220,rect.width),width-margin*2))+'px';
+  planSortMenu.style.maxHeight=Math.max(0,up?above:below)+'px';
+  planSortMenu.style.left=Math.max(offsetLeft+margin,Math.min(rect.left,offsetLeft+width-planSortMenu.offsetWidth-margin))+'px';
+  planSortMenu.style.top=(up?rect.top-planSortMenu.offsetHeight:rect.bottom)+'px';
+  planSortMenu.dataset.direction=up?'up':'down';
+}
+function focusPlanSort(index){
+  const options=[...planSortMenu.children];
+  planSortIndex=(index+options.length)%options.length;
+  options[planSortIndex]?.focus({preventScroll:true});
+  options[planSortIndex]?.scrollIntoView({block:'nearest'});
+}
+function openPlanSort(last=false){
+  planSortMenu.replaceChildren();
+  [...planSortSelect.options].forEach((option,index)=>{
+    const button=el('button',null,option.textContent);button.type='button';
+    button.setAttribute('role','option');button.setAttribute('aria-selected',String(option.selected));button.tabIndex=-1;
+    button.addEventListener('click',()=>{
+      planSortSelect.value=option.value;closePlanSort(true);
+      planSortSelect.dispatchEvent(new Event('change',{bubbles:true}));
+    });
+    button.addEventListener('focus',()=>{planSortIndex=index;});
+    planSortMenu.append(button);
+  });
+  planSortMenu.hidden=false;planSortButton.setAttribute('aria-expanded','true');placePlanSort();
+  focusPlanSort(last?planSortSelect.options.length-1:planSortSelect.selectedIndex);
+}
+planSortButton.addEventListener('click',()=>planSortMenu.hidden?openPlanSort():closePlanSort(true));
+planSortButton.addEventListener('keydown',e=>{
+  if(['ArrowDown','ArrowUp','Home','End'].includes(e.key)){
+    e.preventDefault();openPlanSort(e.key==='End');
+    if(e.key==='Home')focusPlanSort(0);
+  }
+});
+planSortMenu.addEventListener('keydown',e=>{
+  if(e.key==='Escape'){e.preventDefault();e.stopPropagation();closePlanSort(true);}
+  else if(['ArrowDown','ArrowUp','Home','End'].includes(e.key)){
+    e.preventDefault();focusPlanSort(e.key==='Home'?0:e.key==='End'?planSortMenu.children.length-1:planSortIndex+(e.key==='ArrowDown'?1:-1));
+  }else if(e.key==='Tab'){
+    // Return to the trigger before the browser advances in document order.
+    closePlanSort(true);
+  }else if(e.key.length===1&&!e.ctrlKey&&!e.metaKey&&!e.altKey){
+    const items=[...planSortMenu.children],search=e.key.toLocaleLowerCase();
+    const next=items.findIndex((_,i)=>items[(i+planSortIndex+1)%items.length].textContent.toLocaleLowerCase().startsWith(search));
+    if(next>=0){e.preventDefault();focusPlanSort(next+planSortIndex+1);}
+  }
+});
+document.addEventListener('pointerdown',e=>{if(!planSortMenu.contains(e.target)&&!planSortButton.contains(e.target))closePlanSort();});
+document.addEventListener('focusin',e=>{if(!planSortMenu.hidden&&!planSortMenu.contains(e.target)&&e.target!==planSortButton)closePlanSort();});
+window.addEventListener('resize',()=>closePlanSort());
+document.addEventListener('scroll',()=>{if(!planSortMenu.hidden)placePlanSort();},true);
+window.visualViewport?.addEventListener('resize',()=>closePlanSort());
 function paintPicker(P){
   const box=$('pk'),bar=$('pkNote'),tools=$('pkTools'),others=$('pkOthers');
   syncPlanPanel();
@@ -49,6 +176,7 @@ function paintPicker(P){
   // Mantener siempre visible el plan elegido, aunque su resultado sea idéntico al óptimo.
   const list=all.filter(x=>x.m===cur||!same.includes(x.m));
   const chosen=all.find(x=>x.m===cur)||all[0];
+  paintPlanAnalysis(P,chosen);
   // Only reuse amounts from existing accounting and plan totals. No new
   // pricing or profit formula is introduced by the result companion card.
   const selectedNet=$('pkResultValue'),metric=$('pkResultMetric');
@@ -75,6 +203,7 @@ function paintPicker(P){
   const warning=$('pkResultWarning');warning.hidden=!(S.flip&&!showProfit);
   warning.textContent=warning.hidden?'':tx('trade.proceedsOnly');
   $('pkSort').value=pkView.sort+':'+pkView.dir;
+  syncPlanSort();
 
   // Benchmark is the largest estimated net across feasible plan selections, not necessarily Plan Óptimo.
   // Financial opportunity and time/liquidity are reported separately; no fabricated days or returns.

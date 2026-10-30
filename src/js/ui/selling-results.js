@@ -380,6 +380,7 @@ function paintVerdict(P){
    const ship=SH()&&P.Vs>0?P.shipCost:0,prod=P.rows.reduce((a,r)=>a+(r.best?r.prod:0),0),compression=P.rows.reduce((a,r)=>a+(['cOrd','cInst'].includes(r.best)?r.comp?.cost||0:0),0);
    const segs=[['Te queda',P.best,'#5cba86','net'],['Sales Tax',tax,'#e8746c','cost'],['Broker'+(bN>0&&Gn>0?' y SCC':''),brk,'#e0a84f','cost'],['Relists',rel,'#c98bd8','cost'],['Envío',ship,'#6aa8d8','cost'],['Compresión',compression,'#a49ed8','cost'],['Producción',prod,'#9c9a92','cost']].filter(x=>x[1]>0.5);
    const sum=segs.reduce((a,x)=>a+x[1],0),fb=$('ovFlow');fb.textContent='';
+   paintPlanDonut(segs,sum,P);
    if(!none){
      const refinery=P.rows.reduce((a,r)=>a+(r.best==='rNull'||r.best==='rJita'?r.refiningCost||0:0),0);
      const costAnswer=paintCostExplanation(P,{tax,brk,rel,ship,refinery,compression,production:prod,

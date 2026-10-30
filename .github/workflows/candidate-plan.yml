@@ -1,0 +1,57 @@
+name: C.5c candidate validation (no deployment)
+on:
+  push:
+    branches: [feature/elige-tu-plan-1.0.166]
+    paths:
+      - 'src/**'
+      - 'tests/**'
+      - 'benchmarks/c5c_financial_equivalence.py'
+      - 'build.py'
+      - '.github/workflows/candidate-plan.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: candidate-plan-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  validate:
+    if: github.ref == 'refs/heads/feature/elige-tu-plan-1.0.166'
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: python -m unittest discover -s tests -p 'test_*.py' -v
+      - run: node --test tests/*.test.cjs
+      - run: python build.py 1.0.166
+      - name: Financial and legacy regressions
+        run: |
+          node tests/mining-smoke.cjs
+          node tests/mining-types.cjs
+          node tests/ice-settings.cjs
+          node tests/mining-price-flow.cjs
+          node tests/trading-unit-prices.cjs
+          node tests/market-scenarios.cjs
+          node tests/financial-accounting.cjs
+          node tests/skills-integration.cjs
+      - run: python -m pip install playwright==1.56.0
+      - run: python -m playwright install chromium --with-deps
+      - run: python benchmarks/c5c_financial_equivalence.py
+      - run: python -m unittest discover -s tests -p 'browser_*.py' -v
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: c5c-candidate-${{ github.sha }}
+          path: |
+            index.html
+            tests/artifacts/theme/*.png
+            tests/artifacts/c5c-financial-equivalence.json
+          retention-days: 14

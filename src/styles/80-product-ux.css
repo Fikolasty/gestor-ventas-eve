@@ -3151,3 +3151,52 @@ body .top.mm-ho-root #mmTabs>.mm-ho-main #navHome{display:none!important}
 #settings .c5c-taxes .c5c-broker-standings .st-f small{
   grid-column:1!important;grid-row:2!important;margin:0!important
 }
+/* C.5c — approved plan analysis and paired drawers. Shared theme geometry. */
+#pSum>.mm-plan-heading{
+  display:block!important;width:100%;text-align:left;cursor:pointer;
+  border:0!important;border-radius:6px;background:transparent!important;
+  padding:12px 0!important;margin:0 0 12px!important;box-shadow:none!important;
+  color:var(--txt);white-space:normal
+}
+#pSum>.mm-plan-heading .mm-title,#pSum>.mm-plan-heading .mm-section-sub{display:block}
+#pSum>.mm-plan-heading:focus-visible{outline:2px solid var(--ion);outline-offset:3px}
+#pSum.c5c-expanded>.mm-plan-heading{box-shadow:0 5px 16px -12px var(--clay)!important}
+#pSum .mm-plan-drawer-body>#pkSpeedBox{border-left:0!important}
+#pSum .mm-plan-drawer-body>#vFinanceDetails,
+#pSum .mm-plan-drawer-body>#pkResult{border-left:1px solid var(--line2)!important}
+#pSum .mm-plan-drawer-body>#pkPlanOptions{border-left:0!important}
+#pSum #pkSpeedBox{display:block!important}
+#pSum #pkSpeedBox .c5c-analysis-route{margin:0 0 12px;font-weight:650;color:var(--txt)}
+#pSum .c5c-analysis-copy{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+#pSum .c5c-analysis-copy h4,#pSum #pkAnalysisEconomy>h4{margin:0 0 5px;font-size:.78rem;text-transform:uppercase;color:var(--mut)}
+#pSum .c5c-analysis-copy p,#pSum #pkAnalysisEconomy>p{margin:0;font-size:var(--mm-sales-explanation-size);line-height:1.55;color:var(--txt)}
+#pSum #pkAnalysisEconomy{margin-top:16px}
+#pSum .c5c-donut-layout{display:grid;grid-template-columns:104px minmax(0,1fr);gap:18px;align-items:center;margin-top:10px}
+#pSum .c5c-donut{width:104px;height:104px;border-radius:50%;mask:radial-gradient(farthest-side,transparent 69%,#000 70%)}
+#pSum .c5c-donut-legend{margin:0;display:grid;gap:5px;font-size:.75rem}
+#pSum .c5c-donut-legend>div{display:flex;flex-wrap:wrap;justify-content:space-between;gap:3px 9px}
+#pSum .c5c-donut-legend dt{color:var(--mut)}
+#pSum .c5c-donut-legend dd{margin:0}
+#pSum .c5c-analysis-facts{display:grid;grid-template-columns:1fr 1fr;gap:12px 18px;margin:16px 0 0;padding-top:12px;border-top:1px solid var(--line2);font-size:.78rem;line-height:1.55}
+#pSum .c5c-analysis-facts dt{text-transform:uppercase;color:var(--mut);font-size:.7rem;margin-bottom:3px}
+#pSum .c5c-analysis-facts dd{margin:0;color:var(--txt)}
+#pSum #pkShortcut{margin-top:16px;padding-top:12px;border-top:1px solid var(--line2)}
+#pSum #pkPlanOptions .mm-plan-controls{flex-wrap:wrap}
+#pSum .mm-plan-sort{position:relative;min-width:0;max-width:100%}
+#pSum #pkSort.c5c-sort-native{position:absolute!important;width:1px!important;height:1px!important;min-height:0!important;padding:0!important;margin:0!important;clip-path:inset(50%);overflow:hidden;opacity:0;pointer-events:none}
+#pSum #pkSortToggle{min-height:34px;max-width:100%;padding:5px 10px;border:1px solid var(--line2);border-radius:5px;background:var(--surface-panel);color:var(--txt);font:550 .78rem/1.4 var(--f-ui);white-space:normal;text-align:left}
+#pSum #pkSortToggle:focus-visible{outline:2px solid var(--ion);outline-offset:2px}
+.c5c-sort-menu{position:fixed;z-index:10000;box-sizing:border-box;overflow-y:auto;overscroll-behavior:contain;padding:4px;background:var(--surface-card);border:1px solid var(--line2);border-radius:6px;box-shadow:0 8px 24px #0003;color:var(--txt)}
+.c5c-sort-menu[hidden]{display:none!important}
+.c5c-sort-menu>[role=option]{display:block;width:100%;min-height:36px;padding:7px 10px;border:0;border-radius:3px;text-align:left;background:transparent;color:var(--txt);font:500 .84rem/1.4 var(--f-ui)}
+.c5c-sort-menu>[aria-selected=true]{background:var(--surface-panel);font-weight:700}
+.c5c-sort-menu>[role=option]:focus-visible{outline:2px solid var(--ion);outline-offset:-2px;background:var(--surface-panel)}
+@media(max-width:880px){
+  #pSum .mm-plan-drawer-body>#vFinanceDetails,#pSum .mm-plan-drawer-body>#pkResult{border-left:0!important;border-top:1px solid var(--line2)!important}
+  #pSum .mm-plan-drawer-body>#pkSpeedBox,#pSum .mm-plan-drawer-body>#pkPlanOptions{border-top:0!important}
+}
+@media(max-width:480px){
+  #pSum .c5c-analysis-copy{grid-template-columns:1fr;gap:10px}
+  #pSum .c5c-donut-layout{grid-template-columns:82px minmax(0,1fr);gap:12px}
+  #pSum .c5c-donut{width:82px;height:82px}
+}

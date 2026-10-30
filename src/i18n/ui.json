@@ -1766,5 +1766,109 @@
   "settings.resetAll": {
     "es": "Restablecer ajustes",
     "en": "Reset settings"
+  },
+  "picker.tradeoffFast": {
+    "es": "La cotización no garantiza vender todo el lote.",
+    "en": "The quote does not guarantee selling the entire lot."
+  },
+  "picker.tradeoffPlayer": {
+    "es": "Precio de oferta, no una venta confirmada.",
+    "en": "An asking price, not a confirmed sale."
+  },
+  "picker.tradeoffMixed": {
+    "es": "Requiere ejecutar las acciones de cada ruta.",
+    "en": "Requires carrying out each route’s actions."
+  },
+  "picker.tradeoffOrder": {
+    "es": "Necesita seguimiento de la orden.",
+    "en": "Requires monitoring the order."
+  },
+  "picker.analysis": {
+    "es": "Análisis del plan",
+    "en": "Plan analysis"
+  },
+  "picker.advantages": {
+    "es": "Ventajas",
+    "en": "Advantages"
+  },
+  "picker.tradeoffs": {
+    "es": "Contrapartidas",
+    "en": "Trade-offs"
+  },
+  "picker.speedLabel": {
+    "es": "Rapidez",
+    "en": "Speed"
+  },
+  "picker.shippingLabel": {
+    "es": "Envío",
+    "en": "Shipping"
+  },
+  "picker.riskLabel": {
+    "es": "Riesgo y espera",
+    "en": "Risk & wait"
+  },
+  "picker.liquidityLabel": {
+    "es": "Liquidez",
+    "en": "Liquidity"
+  },
+  "picker.analysisFast": {
+    "es": "Evita esperar una orden de venta.",
+    "en": "Avoids waiting for a sell order."
+  },
+  "picker.analysisOrder": {
+    "es": "Permite publicar al precio de la ruta seleccionada.",
+    "en": "Allows listing at the selected route price."
+  },
+  "picker.analysisMixed": {
+    "es": "Combina las rutas elegidas por el motor para este inventario.",
+    "en": "Combines the engine’s selected routes for this inventory."
+  },
+  "picker.analysisPlayer": {
+    "es": "Permite ofrecer el lote a otro jugador.",
+    "en": "Allows offering the lot to another player."
+  },
+  "picker.riskFast": {
+    "es": "Depende de compras suficientes; el envío añade espera.",
+    "en": "Requires sufficient buy orders; shipping adds waiting time."
+  },
+  "picker.riskOrder": {
+    "es": "La orden puede tardar o no completarse.",
+    "en": "The order may take time or remain unfilled."
+  },
+  "picker.riskPlayer": {
+    "es": "Oferta manual sin comprador ni plazo confirmado.",
+    "en": "Manual offer with no confirmed buyer or timeframe."
+  },
+  "picker.riskMixed": {
+    "es": "Cada ruta conserva sus requisitos y tiempos de ejecución.",
+    "en": "Each route retains its execution requirements and timing."
+  },
+  "picker.liquidityFast": {
+    "es": "Sujeta al volumen disponible de compra.",
+    "en": "Subject to available buying volume."
+  },
+  "picker.liquidityOrder": {
+    "es": "Requiere que se completen las ventas.",
+    "en": "Requires completed sales."
+  },
+  "picker.liquidityPlayer": {
+    "es": "Sin confirmar.",
+    "en": "Unconfirmed."
+  },
+  "picker.liquidityMixed": {
+    "es": "Depende de la combinación de rutas.",
+    "en": "Depends on the route mix."
+  },
+  "picker.analysisEconomy": {
+    "es": "Desglose del ingreso de venta",
+    "en": "Sales proceeds breakdown"
+  },
+  "picker.analysisEmpty": {
+    "es": "Sin desglose disponible para este plan.",
+    "en": "No breakdown available for this plan."
+  },
+  "picker.analysisPartial": {
+    "es": "Las tasas incluidas en el objetivo de importación no se separan.",
+    "en": "Fees included in the import target are not itemized."
   }
 }

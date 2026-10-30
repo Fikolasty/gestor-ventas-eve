@@ -288,13 +288,36 @@ Contraband Freight = no</textarea><small>Una regla por línea: Nombre = tax tota
 
   <!-- 1. Resultado simple -->
   <section class="summary res mm-plan-area" id="pSum" hidden>
-    <header class="mm-section-head mm-plan-heading"><div class="mm-plan-heading-copy"><h2 class="mm-title" data-i18n="picker.chooseTitle">ELIGE TU PLAN</h2><p class="mm-section-sub" data-i18n="picker.chooseSubtitle">COMPARA LAS RUTAS Y DESCUBRE CUÁNTO RECIBIRÍAS</p></div><button type="button" class="mm-plan-toggle" id="pkPlanToggle" aria-controls="pkPlanContent" aria-expanded="false" aria-label="Mostrar toda la sección" title="Mostrar toda la sección"><span class="mm-plan-toggle-chevron" aria-hidden="true"></span></button></header>
+    <button type="button" class="mm-section-head mm-plan-heading" id="pkPlanToggle" aria-controls="pkPlanContent" aria-expanded="false"><span class="mm-plan-heading-copy"><span class="mm-title" role="heading" aria-level="2" data-i18n="picker.chooseTitle">ELIGE TU PLAN</span><span class="mm-section-sub" data-i18n="picker.chooseSubtitle">COMPARA LAS RUTAS Y DESCUBRE CUÁNTO RECIBIRÍAS</span></span></button>
     <div id="pkPlanContent" class="mm-plan-content" hidden>
     <div class="fb2" id="flipBuy" hidden></div>
     <div class="mm-plan-layout">
       <section class="mm-plan-drawer" id="pkOverviewDrawer">
-        <button type="button" class="mm-plan-drawer-head" id="pkOverviewToggle" aria-controls="pkOverviewContent" aria-expanded="true"><span data-i18n="picker.yourResult">Tu resultado</span><span data-i18n="picker.availablePlans">Planes disponibles</span></button>
+        <button type="button" class="mm-plan-drawer-head" id="pkOverviewToggle" aria-controls="pkOverviewContent" aria-expanded="true"><span data-i18n="picker.analysis">Análisis del plan</span><span data-i18n="picker.distributionDestinations">DISTRIBUCIÓN Y DESTINOS</span></button>
         <div class="mm-plan-drawer-body" id="pkOverviewContent">
+      <section class="mm-speed-card mm-decision-card" id="pkSpeedBox">
+        <p class="c5c-analysis-route" id="pkAnalysisRoute"></p>
+        <div class="c5c-analysis-copy"><section><h4 data-i18n="picker.advantages">Ventajas</h4><p id="pkAdvantages"></p></section><section><h4 data-i18n="picker.tradeoffs">Contrapartidas</h4><p id="pkTradeoffs"></p></section></div>
+        <div id="pkAnalysisEconomy"></div>
+        <dl class="c5c-analysis-facts" id="pkAnalysisFacts"></dl>
+        <aside class="pk-shortcut" id="pkShortcut" aria-live="polite" hidden></aside>
+        <p class="mm-picker-method" data-i18n="decision.planMethodA">Comparamos ingresos netos después de las comisiones y un único envío compartido. Las opciones rápidas pueden sacrificar ISK: una orden tarda en completarse y la venta inmediata depende de compras reales suficientes. En Trading hablamos de ganancia solo si hay un coste de compra válido.</p>
+      </section>
+      <details class="ov-card ov-flow mm-finance-details" id="vFinanceDetails" open><summary data-i18n="verdict.inspectBreakdown">Ver distribución de ingresos y destinos</summary><div class="mm-finance-details-body"><h4 data-i18n="picker.moneyOrigin">DE DÓNDE SALE TU ISK</h4><div id="ovFlow"></div><div class="mm-dest-inline" id="ovDestW"><h4 data-i18n="picker.salesDestinationUpper">DÓNDE SE VENDE</h4><div id="ovDest"></div></div><p class="mm-finance-estimate" id="vEstimateHelp" hidden></p></div></details>
+        </div>
+      </section>
+      <section class="mm-plan-drawer" id="pkInsightsDrawer">
+        <button type="button" class="mm-plan-drawer-head" id="pkInsightsToggle" aria-controls="pkInsightsContent" aria-expanded="true"><span data-i18n="picker.availablePlans">Planes disponibles</span><span data-i18n="picker.yourResult">Tu resultado</span></button>
+        <div class="mm-plan-drawer-body" id="pkInsightsContent">
+      <section class="mm-plan-options" id="pkPlanOptions" aria-label="Planes disponibles" data-i18n-aria-label="picker.availablePlans">
+        <div id="pkOptionsContent">
+        <div class="mm-plan-controls">
+          <div class="pk-tools" id="pkTools"></div>
+          <div class="mm-plan-sort"><span data-i18n="picker.sortLabel">Ordenar</span><select id="pkSort" aria-label="Ordenar planes" data-i18n-aria-label="picker.sortAria"><option value="net:-1" data-i18n="picker.sortMost">Más ISK</option><option value="net:1" data-i18n="picker.sortLeast">Menos ISK</option><option value="speed:1" data-i18n="picker.sortFast">Más rápidos</option><option value="ship:1" data-i18n="picker.sortNoShip">Sin envío primero</option><option value="name:1" data-i18n="picker.sortName">Nombre A–Z</option></select><button type="button" id="pkSortToggle" aria-haspopup="listbox" aria-controls="pkSortMenu" aria-expanded="false" hidden></button></div>
+        </div>
+        <div class="pk-w"><div class="pk" id="pk" role="group" aria-label="Plan seleccionado"></div><div class="pk" id="pkOthers" role="group" aria-label="Otros planes"></div></div>
+        </div>
+      </section>
       <section class="mm-plan-result" id="pkResult" aria-label="Resultado del plan seleccionado" data-i18n-aria-label="picker.resultAria" aria-live="polite">
         <span class="mm-plan-result-label" id="pkResultMetric" data-i18n="picker.netProceeds">Ingreso neto estimado</span>
         <strong class="mm-plan-result-value num" id="pkResultValue"></strong>
@@ -306,25 +329,6 @@ Contraband Freight = no</textarea><small>Una regla por línea: Nombre = tax tota
           <div><dt data-i18n="picker.salesDestination">Dónde se vende</dt><dd id="pkResultDestination"></dd></div>
         </dl>
         <p class="mm-plan-result-warning" id="pkResultWarning" hidden></p>
-      </section>
-      <section class="mm-plan-options" id="pkPlanOptions" aria-label="Planes disponibles" data-i18n-aria-label="picker.availablePlans">
-        <div id="pkOptionsContent">
-        <div class="mm-plan-controls">
-          <div class="pk-tools" id="pkTools"></div>
-          <label class="mm-plan-sort"><span data-i18n="picker.sortLabel">Ordenar</span><select id="pkSort" aria-label="Ordenar planes" data-i18n-aria-label="picker.sortAria"><option value="net:-1" data-i18n="picker.sortMost">Más ISK</option><option value="net:1" data-i18n="picker.sortLeast">Menos ISK</option><option value="speed:1" data-i18n="picker.sortFast">Más rápidos</option><option value="ship:1" data-i18n="picker.sortNoShip">Sin envío primero</option><option value="name:1" data-i18n="picker.sortName">Nombre A–Z</option></select></label>
-        </div>
-        <div class="pk-w"><div class="pk" id="pk" role="group" aria-label="Plan seleccionado"></div><div class="pk" id="pkOthers" role="group" aria-label="Otros planes"></div></div>
-        </div>
-      </section>
-        </div>
-      </section>
-      <section class="mm-plan-drawer" id="pkInsightsDrawer">
-        <button type="button" class="mm-plan-drawer-head" id="pkInsightsToggle" aria-controls="pkInsightsContent" aria-expanded="true"><span data-i18n="picker.distributionDestinations">DISTRIBUCIÓN Y DESTINOS</span><span data-i18n="picker.fastAlternative">ALTERNATIVA MÁS RÁPIDA</span></button>
-        <div class="mm-plan-drawer-body" id="pkInsightsContent">
-      <details class="ov-card ov-flow mm-finance-details" id="vFinanceDetails" open><summary data-i18n="verdict.inspectBreakdown">Ver distribución de ingresos y destinos</summary><div class="mm-finance-details-body"><h4 data-i18n="picker.moneyOrigin">DE DÓNDE SALE TU ISK</h4><div id="ovFlow"></div><div class="mm-dest-inline" id="ovDestW"><h4 data-i18n="picker.salesDestinationUpper">DÓNDE SE VENDE</h4><div id="ovDest"></div></div><p class="mm-finance-estimate" id="vEstimateHelp" hidden></p></div></details>
-      <section class="mm-speed-card mm-decision-card" id="pkSpeedBox" hidden>
-        <aside class="pk-shortcut" id="pkShortcut" aria-live="polite" hidden></aside>
-        <p class="mm-picker-method" data-i18n="decision.planMethodA">Comparamos ingresos netos después de las comisiones y un único envío compartido. Las opciones rápidas pueden sacrificar ISK: una orden tarda en completarse y la venta inmediata depende de compras reales suficientes. En Trading hablamos de ganancia solo si hay un coste de compra válido.</p>
       </section>
         </div>
       </section>

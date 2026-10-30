@@ -1,3 +1,11 @@
+## v1.0.166 — 2026-10-30 [ChatGPT] · C.5c ELIGE TU PLAN — CANDIDATA DE RAMA
+
+- Análisis y Distribución arriba; Planes y Resultado abajo, conservando dos parejas de gavetas.
+- Cabecera completa clicable sin icono, glow tenue solo al desplegar, análisis de la ruta y donut con cifras originales.
+- Ordenar usa portal accesible a body, límites de viewport, teclado, cierre exterior y Escape; selector canónico conservado.
+- ES/EN y Light/Dark; 1440/980/630/390. 150 Node, 16 Python, ocho legacy y 24 equivalencias financieras PASS; 75/75 Chromium PASS; cierre remoto en DSS §74 / C5C_CANDIDATE_RESULTS.
+- Solo rama `feature/elige-tu-plan-1.0.166`. Workflow read-only con artefactos; sin merge ni Pages. **Producción permanece v1.0.165.**
+
 ## v1.0.165 — 2026-10-29 [ChatGPT] · C.5b.2a: Broker Jita en primera fila — LIVE CERTIFICADA
 
 - Broker Jita y sus standings ocupan una primera fila de ancho completo; el campo principal queda a la izquierda y los dos standings comparten el área restante.
