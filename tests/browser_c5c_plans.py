@@ -34,7 +34,7 @@ class C5cPlanTests(unittest.TestCase):
     def tearDown(self):
         self.assertEqual(self.errors,[]);self.page.close()
     def test_complete_composition_matrix_and_drawer_states(self):
-        stamp='c5c-166-20261030-final'
+        stamp='c5c-166-20261030-r4'
         out=ROOT/'tests/artifacts/theme';out.mkdir(parents=True,exist_ok=True)
         for lang in ('es','en'):
             self.page.evaluate('(lang)=>setLang(lang)',lang)
@@ -108,6 +108,7 @@ class C5cPlanTests(unittest.TestCase):
                         button.evaluate('(el,edge)=>el.scrollIntoView({block:edge})',edge)
                         button.focus();button.press('ArrowDown')
                         expect(menu).to_be_visible()
+                        self.assertTrue(menu.evaluate('(e)=>getComputedStyle(e).backgroundColor.startsWith("rgb(")'))
                         self.assertTrue(menu.evaluate('(e)=>e.parentElement===document.body'))
                         bounds=menu.bounding_box()
                         self.assertGreaterEqual(bounds['x'],0);self.assertGreaterEqual(bounds['y'],0)

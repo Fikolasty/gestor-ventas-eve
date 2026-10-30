@@ -312,7 +312,7 @@ html.light #pSum .mm-plan-drawer-body>#pkSpeedBox,
 html.light #pSum .mm-plan-drawer-body>#pkPlanOptions{border-left:0!important}
 html.light #pSum .mm-plan-drawer-body>#vFinanceDetails,
 html.light #pSum .mm-plan-drawer-body>#pkResult{border-left:1px solid var(--line2)!important}
-html.light .c5c-sort-menu{background:var(--surface-card);color:var(--txt);border-color:var(--line2)}
+html.light .c5c-sort-menu{background:linear-gradient(var(--surface-card),var(--surface-card)),var(--void);color:var(--txt);border-color:var(--line2)}
 @media(max-width:880px){
   html.light #pSum .mm-plan-drawer-body>#vFinanceDetails,
   html.light #pSum .mm-plan-drawer-body>#pkResult{border-left:0!important;border-top:1px solid var(--line2)!important}
