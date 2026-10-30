@@ -367,3 +367,46 @@ function readBB(){
 }
 ['bbOn','bbTax','bbBase','bbSpecial','bbAvail','bbLoc','bbExp','bbDesc','bbName'].forEach(id=>$(id).addEventListener(id==='bbOn'||id==='bbBase'?'change':'input',()=>{readBB();refresh();}));
 
+// C.5b.2: one skill-rank UI owner in the Settings module, not a second
+// footer script. Native controls stay authoritative for ESI/persistence.
+/* Skill ranks: preserve native controls as the source of truth for all existing calculations. */
+(()=>{
+'use strict';
+const ids=['skAcc','skBR','cAbr','skRep','skRepE','skOre'];
+const store='marketmoves.skillbooks.v1';
+let books={};try{books=JSON.parse(localStorage.getItem(store)||'{}')}catch(_){}
+function enhance(native,id,get,set,min){
+ if(native.dataset.eveDone)return;
+ native.dataset.eveDone='1';native.classList.add('eve-sk-native');
+ const group=document.createElement('div');group.className='eve-sk';group.setAttribute('role','group');group.setAttribute('aria-label',id==='mn-rank'?'Skills de Minería':native.closest('label')?.textContent?.split('\n')[0]||id);
+ const p=document.createElement('div');p.className='eve-sk-pips';
+ const rank=document.createElement('span');rank.className='eve-sk-rank';
+ const add=document.createElement('button');add.type='button';add.className='eve-sk-add';
+ const minus=document.createElement('button');minus.type='button';minus.className='eve-sk-minus';minus.textContent='−';minus.setAttribute('aria-label','Bajar un nivel');minus.title='Bajar un nivel';
+ const marks=[];
+ function draw(){const lv=get();const locked=min===0&&books[id]===false&&lv===0;marks.forEach((b,i)=>{const v=i+1;b.className='eve-sk-pip'+(locked?' locked':v<=lv?' trained':'');b.disabled=v<min;b.setAttribute('aria-pressed',String(lv===v));b.title='Nivel '+v});rank.textContent=locked?'—':lv+'/5';add.className='eve-sk-add'+(locked?' book':'');add.textContent=locked?'▣':'+';add.title=locked?'Adquirir skillbook':lv===5?'Nivel máximo':'Subir habilidad';add.disabled=lv===5&&!locked;minus.disabled=lv<=min;minus.title=lv<=min?'Nivel mínimo':'Bajar a nivel '+(lv-1);if(id!=='mn-rank'){const card=native.closest('.c5c-skill-card');if(card){card.dataset.skillSource=native.dataset.mmSkillSource||'manual';const badge=card.querySelector('.c5c-skill-source');if(badge)badge.textContent=typeof tx==='function'?tx(native.dataset.mmSkillSource==='esi'?'settings.sourceEsi':'settings.sourceManual'):(native.dataset.mmSkillSource==='esi'?'ESI':'Manual');}}}
+ for(let i=1;i<=5;i++){const b=document.createElement('button');b.type='button';b.title='Elegir nivel '+i;b.setAttribute('aria-label','Nivel '+i);b.addEventListener('click',()=>{books[id]=true;set(i);draw()});marks.push(b);p.append(b)}
+ add.addEventListener('click',()=>{books[id]=true;localStorage.setItem(store,JSON.stringify(books));set(Math.min(5,Math.max(min,get()+1)));draw()});
+ minus.addEventListener('click',()=>{if(get()<=min)return;set(Math.max(min,get()-1));draw()});
+ group.addEventListener('contextmenu',e=>{if(min>0)return;e.preventDefault();books[id]=books[id]===false;localStorage.setItem(store,JSON.stringify(books));if(!books[id])set(0);draw()});
+ group.append(minus,p,rank,add); // Minus and plus balance the original five skill-level buttons.native.after(group);if(id!=='mn-rank'){const badge=document.createElement('span');badge.className='c5c-skill-source';native.closest('.c5c-skill-card')?.append(badge);}native.addEventListener('change',draw);draw();
+ }
+function enhanceSettings(){ids.forEach(id=>{const n=document.getElementById(id);if(!n||n.dataset.eveDone)return;enhance(n,id,()=>Number(n.value)||0,v=>{n.dataset.mmSkillSource='manual';n.value=String(v);n.dispatchEvent(new Event('input',{bubbles:true}));n.dispatchEvent(new Event('change',{bubbles:true}))},0)})}
+function enhanceMining(){
+ const root=document.getElementById('mining');if(!root)return;
+ const head=[...root.querySelectorAll('.mn-field-title')].find(n=>n.textContent.trim().startsWith('Skills'));if(!head)return;
+ const field=head.closest('.mn-config-field');if(!field)return;
+ const groups=[...field.querySelectorAll('button')].filter(b=>/^(III|IV|V)(\s|$|\s·)/.test(b.textContent.trim()));
+ if(groups.length!==3)return;
+ const old=groups[0].parentElement;if(old.dataset.eveDone)return;
+ const buttons={3:groups.find(b=>/^III/.test(b.textContent.trim())),4:groups.find(b=>/^IV/.test(b.textContent.trim())),5:groups.find(b=>/^V/.test(b.textContent.trim()))};
+ const get=()=>{const x=[3,4,5].find(n=>buttons[n]?.getAttribute('aria-pressed')==='true'||buttons[n]?.classList.contains('active')||buttons[n]?.classList.contains('on'));return x||4};
+ enhance(old,'mn-rank',get,v=>buttons[Math.max(3,v)]?.click(),3);
+}
+let pending=false;function check(){if(pending)return;pending=true;queueMicrotask(()=>{pending=false;enhanceSettings();enhanceMining()})}
+// The embedded script may execute after DOMContentLoaded in a distributable;
+// initialize immediately when the DOM is already interactive/complete.
+const mountSkillLevels=()=>{check();const root=document.getElementById('mining');if(root){const observer=new MutationObserver(check);observer.observe(root,{subtree:true,childList:true});window.addEventListener('pagehide',()=>observer.disconnect(),{once:true})}};
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',mountSkillLevels,{once:true});
+else mountSkillLevels();
+})();

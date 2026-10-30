@@ -7,7 +7,7 @@ test('C.5b.2 keeps native skill IDs and shows six balanced level controls',()=>{
    assert.match(shell,new RegExp('id="'+id+'"'));
    assert.match(shell,new RegExp('data-skill-note="'+id+'"'));
  }
- assert.match(shell,/group\.append\(minus,p,rank,add\)/);
+ assert.match(settings,/group\.append\(minus,p,rank,add\)/);
  assert.match(settings,/fieldset\.st:not\(\.c5c-fixed\)/);
  assert.match(settings,/mmUpdateSettingsSkillNotes/);
  assert.match(auth,/e\.dataset\.mmSkillSource='esi'/);
