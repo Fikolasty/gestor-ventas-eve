@@ -1,9 +1,9 @@
 ## v1.0.168 — 2026-10-30 [ChatGPT] · Plegado, envío por unidad y copia — LIVE CERTIFICADA
 
-## v1.0.170 — candidata local
+## v1.0.170 — LIVE certificada
 - Una sola gaveta DETALLE POR ITEM: todos los Items, locales o enviados, recibidos unitarios copiables y totales del lote.
 - Comercio Jita conserva inversión y ganancia por unidad; paginación de diez Items. Se retira el detalle duplicado de Tu resultado.
-- Economía intacta. Gates remotos pendientes, LIVE v169.
+- Economía intacta.150 Node/16 Python/84 Chromium CI/8 legacy y cuatro workflows PASS. Fuente Fiko cdfbcfc2, build63e77f8; HTTPS idéntico al build validado.
 
 
 ## v1.0.169 — LIVE certificada

@@ -1,5 +1,13 @@
 # PROGRESS — Market Moves+
 
+## 2026-10-30 — v1.0.170 LIVE certificada
+
+
+**Cierre LIVE v1.0.170 — 2026-10-30:** autorización explícita adicional del propietario para fuentes, tests y DSS mediante Fiko/Fikolasty. Fuente protegida cdfbcfc29bf0c477b111b0920442e79fcc4f0bcb; build bot63e77f8f814cf4025acb746ed5de2556dab83df8. Cuatro workflows SUCCESS: Versiones41126314635, Build41126314495, Minería41126314632 y Rebuild/Pages41126314476; compile124305661253 y deploy124307058169 completados. CI final150 Node/16 Python/84 Chromium completos (150,297 s)/8 legacy PASS. Local:150 Node/16 Python/8 legacy; primer pase Chromium83/84 más regresión histórica corregida y focal PASS3,309 s, sin cambios de producto. La certificación de la suite completa84 corresponde a CI.
+
+HTTPS independiente confirmó v1.0.170 y HTML público/local canónico/GitHub idénticos:2.478.033 bytes, blob314cb9a674637ad8a5c1d99aed8667ed021e361c. La gaveta DETALLE POR ITEM está publicada: todos los Items, con/sin envío, totales de todo el lote, filas y copia unitarias, inversión/ganancia comercial y paginación10. Se eliminó #pkUnits y no se modificaron motor económico, ESI/SSO o almacenamiento. Los datos de las capturas son fixtures; no se probó ESI/SSO real extremo a extremo. Este cierre sustituye pendientes anteriores. La revisión automática había rechazado un blob DSS por no reconocer la identidad; se verificó login Fikolasty y el propietario reiteró autorización explícita, tras lo cual se completó el mismo flujo GitHub sin atajos ni force. El cierre documental posterior puede avanzar main sin cambiar HTML. Última LIVE v1.0.170; kit vigente HANDOFF_DETAIL_170.md.
+
+
 ## 2026-10-30 — v1.0.170 candidata: unificación aprobada
 
 Una sola gaveta DETALLE POR ITEM sustituye el detalle redundante; todos los Items, totales del lote, copia unitaria, inversión/ganancia comercial y paginación10. 150 Node/16 Python/8 legacy PASS; 84 Chromium en curso y publicación pendiente. DSS §81; kit HANDOFF_DETAIL_170.md. Última LIVE v169, base f24c945.
