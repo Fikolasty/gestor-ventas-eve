@@ -902,3 +902,6 @@ R8 v1.0.167: cierre local completo, 150 Node / 16 Python / 79 Chromium / ocho le
 
 
 v1.0.168: gate local completo 150 Node /16 Python /82 Chromium (97,797 s) /8 legacy /24 equivalencias exactas PASS; capturas finales r3 revisadas. Build canónico bd50031dd08e21f746c60b87b3b97eb7a30ebb3f, 2.477.948 bytes. Publicación y certificación remota pendientes.
+
+
+v1.0.168: primer CI 41080237306 detuvo Pages por límite fijo de altura B.8 dependiente de fuentes (81/82). Comprobación reemplazada por espacio inexplicado y filas contenidas, preservando importes y overflow. No cambia HTML ni producto; repetir CI. LIVE v1.0.167 permanece. DSS §79.

@@ -1189,6 +1189,9 @@ class ThemeBrowserTests(unittest.TestCase):
                 self.assertEqual(names,['Promethium','Dysprosium','Morphite','Cadmium'])
                 geometry=self.page.locator('#unitCourierBox').evaluate("""el => ({
                     height:el.getBoundingClientRect().height,
+                    batchHeader:el.querySelector('.mm-freight-drawer-head').getBoundingClientRect().height,
+                    tableHeight:el.querySelector('#unitCourierRows').getBoundingClientRect().height,
+                    rowsInside:[...el.querySelectorAll('.mm-unit-row')].every(row=>row.getBoundingClientRect().bottom<=el.getBoundingClientRect().bottom+1),
                     rowDisplay:getComputedStyle(el.querySelector('.mm-unit-row')).display,
                     headDisplay:getComputedStyle(el.querySelector('.mm-freight-columns')).display,
                     mobileLabel:getComputedStyle(el.querySelector('.mm-freight-cell-label')).display,
@@ -1196,7 +1199,10 @@ class ThemeBrowserTests(unittest.TestCase):
                 })""")
                 self.assertEqual(geometry['rowDisplay'],'grid',geometry)
                 self.assertLessEqual(geometry['extent'],1,geometry)
-                self.assertLess(geometry['height'],1200,geometry)  # Four readable unit rows plus the batch header, including long EN labels.
+                # The new batch header and readable labels wrap with the platform font.
+                # Bound unexplained space instead of enforcing the old fixed pixel height.
+                self.assertLess(geometry['height']-geometry['batchHeader']-geometry['tableHeight'],200,geometry)
+                self.assertTrue(geometry['rowsInside'],geometry)
                 if width==1440:
                     self.assertEqual(geometry['mobileLabel'],'none',geometry)
                     self.assertEqual(geometry['headDisplay'],'grid',geometry)
