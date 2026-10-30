@@ -1,5 +1,13 @@
 # PROGRESS — Market Moves+
 
+## 2026-10-30 — v1.0.171 LIVE; Listado únicamente propuesto
+
+
+**Cierre LIVE v1.0.171 — 2026-10-30:** fuente Fiko protegida ce2aa05ca1846fff3829bbd7d983d169734c3ab8; build bot736a793d18a2206ee2fc36da5f2d883d4b1dc546. Cuatro workflows SUCCESS: Versiones41140155992, Build41140155841, Minería41140155933, Rebuild/Pages41140155865; compile124352195957 y deploy124353195389 completados. Gates:152 Node/16 Python/87 Chromium completos (local145,242s, CI128,057s)/8 legacy PASS. HTTPS independiente confirmó v1.0.171 y HTML público/local canónico/GitHub idénticos:2.481.868 bytes, blob4bb0cabb3d2c813b0c98d9bfcc39dad6827b7aa9. Web https://fikolasty.github.io/gestor-ventas-eve/. Los informes de auditoría de Janice quedan incorporados en GitHub como documentación de este cambio; se sustituyen sus pendientes históricos de publicación.
+
+Solo se publica la transparencia de Tasación: cobertura por lado, consulta registrada y aviso parcial. Las cifras, fuentes de precios, requests, fórmulas, SSO y almacenamiento se conservan; el único metadato nuevo queriedAt vive en memoria. ESI/SSO autenticado real no se probó extremo a extremo. **El Listado de Items real no cambió:** §84 es únicamente un prototipo pendiente de revisión. La propuesta standalone no se sube ni se integra en el HTML público. El cierre documental puede avanzar main después del build sin alterar el HTML. Kit vigente HANDOFF_APPRAISAL_171.md. Este cierre sustituye candidatos anteriores; última LIVE v1.0.171.
+
+
 ## 2026-10-30 — v171 candidata y prototipo Listado separado
 
 Tasación incorpora cobertura Buy/Sell, fecha de consulta registrada y aviso parcial;152Node/16Python/87Chromium/8legacy PASS. Publicación pendiente, LIVEv170. DSS§83 y HANDOFF_APPRAISAL_171.md. Listado: únicamente propuesta interactiva de tabla Lote/Unidad y copia discreta; no modificar el Listado real sin revisión del propietario (DSS§84).
