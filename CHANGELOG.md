@@ -6,6 +6,7 @@
 - ES/EN y Light/Dark; 1440/980/630/390. 150 Node, 16 Python, ocho legacy y 24 equivalencias financieras PASS; 75/75 Chromium PASS; cierre remoto en DSS §74 / C5C_CANDIDATE_RESULTS.
 - Solo rama `feature/elige-tu-plan-1.0.166`. Workflow read-only con artefactos; sin merge ni Pages. **Producción permanece v1.0.165.**
 - Fuente inicial `d2b8e89`, CI `41016103227` SUCCESS (150 Node, 16 Python, 75 Chromium, 8 legacy, 24 equivalencias). Segundo bloque: fondo del portal opaco con tokens existentes tras detectar transparencia en captura real; nuevo gate de opacidad en ambos temas.
+- Fuente final `929c40b`, CI `41016610649` SUCCESS: 150/150 Node, 16/16 Python, 75/75 Chromium, 8/8 legacy y 24/24 equivalencias financieras. Artefacto candidato `12959493181`; capturas r4 regeneradas y revisadas. 22 archivos de fuente/QA/docs publicados en rama, sin HTML generado en Git y sin despliegue. Revisión/merge/producción siguen pendientes de aprobación expresa.
 
 ## v1.0.165 — 2026-10-29 [ChatGPT] · C.5b.2a: Broker Jita en primera fila — LIVE CERTIFICADA
 

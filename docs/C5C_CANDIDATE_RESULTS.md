@@ -16,7 +16,7 @@ Dos parejas originales: Análisis/Distribución y Planes/Resultado. Cabecera com
 | Ocho scripts legacy del workflow | 8/8 PASS |
 | `python benchmarks/c5c_financial_equivalence.py` | 24/24 salidas exactas iguales a v1.0.165 |
 | Nueva matriz `browser_c5c_plans.py` | 3/3 PASS |
-| Chromium completo final | 75/75 PASS (85,359 s) |
+| Chromium completo final r4 | 75/75 PASS local (85,946 s) / CI (122,815 s) |
 
 Matriz: 1440/980/630/390 × ES/EN × Light/Dark; ambos cerrados, uno abierto y ambos abiertos, sección global plegada, elección de plan mediante motor real, datos ausentes/pérdida y nombre largo. Menú fuera de gavetas, arriba/abajo, límites, flechas/Home/End/Enter/Escape/Tab y clic exterior. Misma geometría Light/Dark; sin overflow horizontal. Dependencias locales aisladas `.qa-deps/` y `.qa-browsers/`; no se incluyen en Git. Las ejecuciones Chromium/Python requirieron salir del sandbox por restricciones de procesos/temporales, con autorización de herramienta.
 
@@ -49,3 +49,13 @@ Fiko autenticada como `Fikolasty`. Antes de publicar: comprobar HEAD remoto espe
 - `index.html` versionado permanece v1.0.165. Preview compilado local de candidata en `tests/artifacts/c5c-candidate/index.html`; en GitHub descargar el artefacto de la candidata. Se excluyó el generado del push.
 - Una revisión automática confundió la fuente `src/shell.html` con HTML generado. Se comprobó que contiene `/*__STYLE_SOURCES__*/`, `/*__SCRIPT__*/` y `v__VER__`, sin versión compilada; el reintento de **esa fuente autorizada** fue aceptado. No se subió el compilado ni se eludió el rechazo.
 - Capturas adicionales del menú descubrieron fondo translúcido que permitía leer importes de detrás: segundo bloque superpone `--surface-card` sobre base opaca `--void`, en ambos temas. No cambia geometría, fórmula ni ordenación. Se amplía la prueba de menú para exigir fondo base RGB opaco. Revisión de nuevas capturas r4 Dark/Light confirmó texto legible sin interferencia. Cierre y SHA del segundo bloque pendientes al registrar este checkpoint.
+
+## Cierre certificado de candidata — sin producción
+
+- Fuente final: `929c40b1769a5be2bfbe1896a8a01e4a126098a8` (`fix(plans): make sort portal opaque in both themes`), hija de `d2b8e89…`. Árbol `62c3074b5da1c2f4c010a4b9db0b328d4f8c3684`. Fiko/Fikolasty, SHA esperado, `force:false`, avance fast-forward y lecturas antes/después de cada bloque.
+- [CI final 41016610649](https://github.com/Fikolasty/gestor-ventas-eve/actions/runs/41016610649): **SUCCESS**. Logs: 150/150 Node, 16/16 Python, 75/75 Chromium (122,815 s), ocho scripts legacy y 24/24 salidas financieras exactas iguales a v1.0.165. Gate local r4: 75/75 Chromium (85,946 s), 150/150 Node, 16/16 Python.
+- [Artefacto candidato 12959493181](https://github.com/Fikolasty/gestor-ventas-eve/actions/runs/41016610649/artifacts/12959493181): HTML v1.0.166, screenshots de matriz r4 y JSON financiero. ZIP SHA-256 `9e2d1b748e487e1ee8a8950e6880286d1f24ea8f0d1756201c5227ccce0bf653`, 32.202.537 bytes. No se descargó de nuevo para un cotejo binario independiente; el digest y la existencia provienen de GitHub Actions.
+- Build local corregido: 2.459.149 bytes en Windows, Git blob normalizado `589792f53b4fea8b635dd7e96c5a1b738f8bd495`. Preview final: `tests/artifacts/c5c-candidate/index.html`. No confundirlo con el `index.html` versionado, que permanece v1.0.165, blob `b82f724c7ba9bc4e27b89bdc30c5c43ef2d60e02` (2.427.738 bytes Git), comprobado en el árbol remoto sin cambios.
+- 16 screenshots r4 de composición: ES/EN × Dark/Light × cuatro anchos. Ocho capturas locales adicionales de gavetas cerradas/una abierta/portal en ambos temas; inspección directa de desktop, variantes de ancho y estados. Estas ocho imágenes adicionales se generaron con diagnóstico local excluido de Git; la matriz automatizada sí se sube por CI.
+- Ningún job Pages ni publicación en main. `main` conserva `feb4051c42dd079574fbb0900270608fbc277a7b`; producción v1.0.165. Cierre documental descendiente sin modificación funcional, excluido del trigger CI por paths. Workspace alineado con remoto, sin cambios pendientes de fuente.
+- Documentación actualizada en la rama candidata: DSS §74, PROGRESS, CHANGELOG y este informe. **No se ha publicado esa documentación en main.** Pendientes: revisión del propietario y aprobación expresa de merge/producción si desea avanzar. No se probó ESI/SSO ni transacciones reales.
