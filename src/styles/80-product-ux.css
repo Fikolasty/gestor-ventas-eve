@@ -3120,3 +3120,9 @@ body .top.mm-ho-root #mmTabs>.mm-ho-main #navHome{display:none!important}
   #settings .c5c-pilot-panel>.c5c-fixed{padding:12px 10px!important}
   #settings .c5c-taxes .c5c-broker-standings{grid-template-columns:minmax(0,1fr)!important}
 }
+
+
+/* Keep short tax cards content-sized beside the taller Jita Broker cluster. */
+#settings .c5c-taxes>.st-g>.st-f{
+  height:auto!important;min-height:0!important;align-self:start!important
+}

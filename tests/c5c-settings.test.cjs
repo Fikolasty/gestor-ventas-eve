@@ -39,6 +39,7 @@ test('C.5b.2a groups the two original Jita standings inside the Broker area',()=
  assert.equal((taxes.match(/class="st-f/g)||[]).length,6);
  assert.match(style,/#settings \.c5c-taxes \.c5c-broker-cluster/);
  assert.match(style,/#settings \.c5c-taxes \.c5c-broker-standings/);
+ assert.match(style,/#settings \.c5c-taxes>\.st-g>\.st-f\s*\{[^}]*height:auto!important;[^}]*align-self:start!important;/);
 });
 test('C.5b.2a keeps complete bilingual copy for the grouped tax controls',()=>{
  const en=JSON.parse(read('src','i18n','en.json')),ui=JSON.parse(read('src','i18n','ui.json'));

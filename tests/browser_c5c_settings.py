@@ -83,8 +83,8 @@ class C5b2SettingsTests(unittest.TestCase):
         self.assertEqual(cluster.locator("label label").count(),0)
         self.assertEqual(cluster.locator(".c5c-broker-standings .st-f").count(),2)
         self.assertEqual(self.page.get_by_role("group",name="Standing de Jita").count(),1)
-        self.assertEqual(cluster.locator(".c5c-broker-standings .st-l").nth(0).inner_text(),"Standing de facción")
-        self.assertEqual(cluster.locator(".c5c-broker-standings .st-l").nth(1).inner_text(),"Standing de corp")
+        self.assertEqual(cluster.locator(".c5c-broker-standings .st-l").nth(0).inner_text(),"STANDING DE FACCIÓN")
+        self.assertEqual(cluster.locator(".c5c-broker-standings .st-l").nth(1).inner_text(),"STANDING DE CORP")
         self.assertIn("−0,03 puntos porcentuales",cluster.locator("#cStdFac").locator("xpath=..").inner_text())
         self.assertIn("−0,02 puntos porcentuales",cluster.locator("#cStdCorp").locator("xpath=..").inner_text())
 
@@ -92,8 +92,8 @@ class C5b2SettingsTests(unittest.TestCase):
         self.assertEqual(self.page.locator(".c5c-skill-section .st-sec-t").inner_text(),"SKILLS")
         self.assertEqual(self.page.locator(".c5c-tax-section .st-sec-t").inner_text(),"TAXES")
         self.assertEqual(self.page.get_by_role("group",name="Jita standings").count(),1)
-        self.assertEqual(cluster.locator(".c5c-broker-standings .st-l").nth(0).inner_text(),"Faction standing")
-        self.assertEqual(cluster.locator(".c5c-broker-standings .st-l").nth(1).inner_text(),"Corp standing")
+        self.assertEqual(cluster.locator(".c5c-broker-standings .st-l").nth(0).inner_text(),"FACTION STANDING")
+        self.assertEqual(cluster.locator(".c5c-broker-standings .st-l").nth(1).inner_text(),"CORP STANDING")
         self.assertIn("−0.03 percentage points",cluster.locator("#cStdFac").locator("xpath=..").inner_text())
         self.assertIn("−0.02 percentage points",cluster.locator("#cStdCorp").locator("xpath=..").inner_text())
         self.assertIn("effective rate shown in EVE",cluster.locator("#cBroker").locator("xpath=..").inner_text())
@@ -167,15 +167,20 @@ class C5b2SettingsTests(unittest.TestCase):
                 self.page.set_viewport_size({"width":width,"height":900})
                 metrics=self.page.evaluate("""() => {
                     const columns=selector=>getComputedStyle(document.querySelector(selector)).gridTemplateColumns.split(/\\s+/).length;
-                    const broker=document.querySelector('.c5c-broker-cluster').getBoundingClientRect();
+                    const brokerEl=document.querySelector('.c5c-broker-cluster');
+                    const broker=brokerEl.getBoundingClientRect();
+                    const taxCards=[...document.querySelectorAll('.c5c-taxes>.st-g>.st-f')]
+                        .map(el=>el.getBoundingClientRect().height);
                     return {overflow:document.documentElement.scrollWidth-innerWidth,
                         skills:columns('.c5c-skills>.st-g'),taxes:columns('.c5c-taxes>.st-g'),
-                        brokerWidth:broker.width};
+                        brokerWidth:broker.width,brokerHeight:broker.height,taxCardHeights:taxCards};
                 }""")
                 self.assertLessEqual(metrics["overflow"],1,f"horizontal overflow at {width}px, light={light}")
                 self.assertEqual(metrics["skills"],skill_cols,f"skill columns at {width}px, light={light}")
                 self.assertEqual(metrics["taxes"],tax_cols,f"tax columns at {width}px, light={light}")
                 self.assertGreater(metrics["brokerWidth"],0)
+                self.assertTrue(all(h < metrics["brokerHeight"] for h in metrics["taxCardHeights"]),
+                                f"tax cards should stay content-sized beside Broker cluster at {width}px")
 
 if __name__=="__main__":
     unittest.main()
