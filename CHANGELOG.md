@@ -1,5 +1,9 @@
 ## v1.0.168 — 2026-10-30 [ChatGPT] · Plegado, envío por unidad y copia — LIVE CERTIFICADA
 
+## v1.0.169 — candidata local
+- Detalle del envío: nombre × cantidad, cabeceras breves, dos decimales y copia visible del total por unidad. Contabilidad intacta; caso 10 − 2 = 8 por unidad verificado.
+- 150 Node, 16 Python, 83 Chromium y ocho legacy PASS. Fiko/Actions/Pages/HTTPS pendientes; LIVE v1.0.168.
+
 - Resultado/Distribución y detalle de envío cerrados por defecto; estado de apertura preservado al recalcular.
 - Cabecera del envío con lote antes − coste del envío = total tras envío; filas etiquetadas ISK/u.
 - Finales copiables: resultado, lote tras envío y unidades. Mismo motor y reparto courier, sin cambios financieros.

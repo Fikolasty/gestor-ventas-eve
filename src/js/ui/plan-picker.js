@@ -589,6 +589,7 @@ function courierUnitPresentation(r){
 }
 function paintCourierUnits(P){
   const box=$('unitCourierBox'),host=$('unitCourierRows');
+  const currency=n=>Number.isFinite(n)?NF2.format(Math.round(n*100)/100)+' ISK':'—';
   // Return icon elements to the common Registered Items pool before repaint.
   poolIcons(host);
   host.replaceChildren();
@@ -609,22 +610,22 @@ function paintCourierUnits(P){
     rows.reduce((sum,r)=>sum+courierUnitPresentation(r).base*r.q,0):null;
   const after=before==null?null:before-(P.shipCost||0);
   const lotBefore=$('freightLotBefore'),lotFinal=$('freightLotFinal');
-  lotBefore.textContent=fmt(before);lotBefore.className='num '+sgn(before);
+  lotBefore.textContent=currency(before);lotBefore.className='num '+sgn(before);
   lotFinal.replaceChildren();lotFinal.className='num '+sgn(after);
   if(after==null)lotFinal.textContent='—';
-  else {const button=copyBtn(after,fmt(after));button.setAttribute('aria-label',tx('freight.copyFinal',{amount:fmt(after)}));lotFinal.append(button);}
+  else {const button=copyBtn(after,currency(after));button.setAttribute('aria-label',tx('freight.copyFinal',{amount:currency(after)}));lotFinal.append(button);}
 
   if(!rows.length){
     $('unitCourierHeading').textContent=tx('freight.heading');
     const unallocated=Number.isFinite(P.shipCost)&&P.shipCost>0;
-    $('unitCourierTotal').textContent=unallocated?'−'+fmt(P.shipCost):tx('freight.noCost');
+    $('unitCourierTotal').textContent=unallocated?'−'+currency(P.shipCost):tx('freight.noCost');
     $('unitCourierTotal').classList.toggle('isk-neg',unallocated);
     host.append(el('p','mm-freight-empty',tx(unallocated?'freight.unallocated':'freight.noShipment')));
     return;
   }
   const count=trips(P.Vs);
   $('unitCourierHeading').textContent=tx('freight.heading');
-  $('unitCourierTotal').textContent=fmt(P.shipCost);
+  $('unitCourierTotal').textContent=currency(P.shipCost);
   $('unitCourierTotal').title=tx(count===1?'freight.contractOne':'freight.contractMany',{count});
   $('unitCourierTotal').classList.add('isk-neg');
   const headers=['freight.itemColumn','freight.beforeColumn','freight.freightColumn','freight.finalColumn'];
@@ -637,10 +638,10 @@ function paintCourierUnits(P){
     const cell=el('div','mm-freight-cell');cell.setAttribute('role','cell');
     cell.append(el('span','mm-freight-cell-label',tx(key)));
     const tone=amount==null?'':freight&&amount>0?' isk-neg':amount>0?' isk-pos':amount<0?' isk-neg':'';
-    const shown=amount==null?'—':(freight&&amount>0?'−':'')+fmtP(amount);
+    const shown=amount==null?'—':(freight&&amount>0?'−':'')+currency(amount);
     const figure=el('strong','num'+tone);
     if(key==='freight.finalColumn'&&Number.isFinite(amount)){
-      const button=copyBtn(amount,shown);button.setAttribute('aria-label',tx('freight.copyUnit',{item,amount:shown}));figure.append(button);
+      const button=copyBtn(amount,shown);button.setAttribute('aria-label',tx('freight.copyUnit',{item,amount:shown}));button.title=tx('freight.copyAction');figure.append(button);
     }else figure.textContent=shown;
     cell.append(figure);
     return cell;
@@ -653,7 +654,7 @@ function paintCourierUnits(P){
     const pic=iconFor(r.o.name);if(pic)title.append(pic);
     const identity=el('div','mm-freight-ident');
     identity.append(el('b',null,r.comp&&['cOrd','cInst'].includes(r.best)?r.o.name+' → '+r.comp.name:r.o.name),
-      el('small',null,fmtQ(r.q)));
+      el('small',null,'× '+fmtQ(r.q)));
     title.append(identity);
     card.append(title,value('freight.beforeColumn',costs.base),
       value('freight.freightColumn',costs.freightUnit,true),

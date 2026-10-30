@@ -3409,6 +3409,12 @@ body .top.mm-ho-root #mmTabs>.mm-ho-main #navHome{display:none!important}
 #pSum #freightLotBefore.neg,#pSum #freightLotFinal.neg {color:var(--loss)!important}
 #pSum #unitCourierBox #unitCourierTotal {text-align:left!important;float:none!important}
 
+/* Unit rows: quantity beside the name; final amount exposes its copy action. */
+#pSum #unitCourierRows .mm-unit-row {min-height:50px}
+#pSum #unitCourierRows .mm-freight-ident {flex-direction:row;align-items:baseline;gap:8px;flex:1}
+#pSum #unitCourierRows .mm-freight-ident small {white-space:nowrap;font-size:13px}
+#pSum #unitCourierRows .mm-freight-cell .copy::after {content:'⧉';display:inline-block;margin-left:7px;color:var(--mut);font:400 15px/1 var(--f-ui)}
+
 @media(max-width:450px){
  #pSum #unitCourierRows .mm-unit-row {grid-template-columns:repeat(2,minmax(0,1fr));gap:10px 12px}
  #pSum #unitCourierRows .mm-freight-cell strong {font-size:16px!important}

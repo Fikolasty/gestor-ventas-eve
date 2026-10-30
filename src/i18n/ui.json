@@ -1176,16 +1176,16 @@
     "en": "SHIPPED ITEM"
   },
   "freight.beforeColumn": {
-    "es": "ANTES DEL ENVÍO · ISK/u.",
-    "en": "BEFORE SHIPPING · ISK/unit"
+    "es": "ANTES DEL ENVÍO",
+    "en": "BEFORE SHIPPING"
   },
   "freight.freightColumn": {
-    "es": "ENVÍO · ISK/u.",
-    "en": "SHIPPING · ISK/unit"
+    "es": "ENVÍO",
+    "en": "SHIPPING"
   },
   "freight.finalColumn": {
-    "es": "TOTAL FINAL · ISK/u.",
-    "en": "FINAL TOTAL · ISK/unit"
+    "es": "TOTAL FINAL",
+    "en": "FINAL TOTAL"
   },
   "freight.contractOne": {
     "es": "1 contrato",
@@ -2034,6 +2034,10 @@
   "freight.copyFinal": {
     "es": "Copiar importe final: {amount}",
     "en": "Copy final amount: {amount}"
+  },
+  "freight.copyAction": {
+    "es": "Copiar total por unidad",
+    "en": "Copy total per unit"
   },
   "freight.copyUnit": {
     "es": "Copiar importe final por unidad de {item}: {amount}",

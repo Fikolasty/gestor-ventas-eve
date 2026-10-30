@@ -26,5 +26,5 @@ test('candidate workflow cannot publish Pages or write the main distributable',(
   assert.doesNotMatch(workflow,/git push|deploy-pages|upload-pages-artifact|contents: write|pages: write/);
   const prod=fs.readFileSync('.github/workflows/rebuild-market-moves.yml','utf8');
   assert.match(prod,/if: github.ref == 'refs\/heads\/main'/);
-  assert.match(prod,/python3 build.py 1\.0\.168/);
+  assert.match(prod,/python3 build.py 1\.0\.169/);
 });

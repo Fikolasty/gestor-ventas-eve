@@ -1,5 +1,9 @@
 # PROGRESS — Market Moves+
 
+## 2026-10-30 — v1.0.169 candidata local
+
+Detalle de envío por unidad con céntimos visibles, copia explícita y cantidad junto al nombre. La fórmula ya era unitaria y se conserva. 150 Node /16 Python /83 Chromium /8 legacy PASS; caso independiente 300 × (10−2) muestra y copia 8. DSS §80 y HANDOFF_FREIGHT_169.md; remoto/Pages/HTTPS pendientes, LIVE v1.0.168.
+
 ## 2026-10-30 — v1.0.168 LIVE certificada
 
 
