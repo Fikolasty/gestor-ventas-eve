@@ -7,7 +7,7 @@
 <meta name="referrer" content="no-referrer">
 <title>Market Moves+ · SIGMA GRINDSET</title>
 <style>
-/* ================= Market Moves+ v1.0.164 =================
+/* ================= Market Moves+ v1.0.165 =================
    Paleta: azul de base, naranja = acción, verde/rojo = ganancia/pérdida.
    Sin backdrop-filter: el vidrio se finge con rgba + bordes. */
 *{box-sizing:border-box;margin:0;padding:0}
@@ -6252,8 +6252,8 @@ body .top.mm-ho-root #mmTabs>.mm-ho-main #navHome{display:none!important}
   text-wrap:pretty!important;letter-spacing:0!important
 }
 #settings .c5c-taxes>.st-g{
-  display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;
-  gap:12px!important;align-items:stretch!important
+  display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;
+  gap:12px!important;align-items:start!important
 }
 #settings .c5c-taxes .st-f{
   box-sizing:border-box!important;display:flex!important;flex-direction:column!important;
@@ -6276,7 +6276,6 @@ body .top.mm-ho-root #mmTabs>.mm-ho-main #navHome{display:none!important}
 }
 @media(max-width:1050px){
   #settings .c5c-pilot-panel>.c5c-skills>.st-g{grid-template-columns:repeat(2,minmax(0,1fr))!important}
-  #settings .c5c-taxes>.st-g{grid-template-columns:repeat(2,minmax(0,1fr))!important}
 }
 @media(max-width:650px){
   #settings .st-wrap>.modern-tabs{grid-template-columns:repeat(2,minmax(0,1fr))!important}
@@ -6288,7 +6287,7 @@ body .top.mm-ho-root #mmTabs>.mm-ho-main #navHome{display:none!important}
 }
 
 
-/* C.5b.2a — compact hierarchy and a single Jita Broker/standings cluster. */
+/* C.5b.2a — compact hierarchy; Broker Jita leads a full-width first row. */
 #settings .c5c-pilot-panel>.c5c-skill-section .st-sec-t{
   display:flex!important;align-items:center!important;gap:9px!important
 }
@@ -6308,40 +6307,48 @@ body .top.mm-ho-root #mmTabs>.mm-ho-main #navHome{display:none!important}
   display:none!important;content:none!important
 }
 #settings .c5c-taxes .c5c-broker-cluster{
-  box-sizing:border-box!important;display:flex!important;flex-direction:column!important;
-  min-width:0!important;width:100%!important;height:100%!important;gap:9px!important;
+  box-sizing:border-box!important;display:grid!important;grid-column:1 / -1!important;
+  grid-template-columns:minmax(0,1fr) minmax(0,2fr)!important;
+  align-items:stretch!important;gap:10px!important;
+  min-width:0!important;width:100%!important;height:auto!important;
   padding:12px!important;border:1px solid var(--line2)!important;border-radius:9px!important;
   background:var(--surface-card)!important;box-shadow:none!important
 }
 #settings .c5c-taxes .c5c-broker-main{
-  display:flex!important;flex-direction:column!important;gap:7px!important;
+  grid-column:1!important;display:flex!important;flex-direction:column!important;gap:7px!important;
   min-width:0!important;width:100%!important;height:auto!important;margin:0!important;padding:0!important;
   border:0!important;border-radius:0!important;background:transparent!important;box-shadow:none!important
 }
 #settings .c5c-taxes .c5c-broker-standings{
-  display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;
-  gap:8px!important;min-width:0!important;margin-top:auto!important
+  grid-column:2!important;display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  align-items:stretch!important;gap:8px!important;min-width:0!important;margin:0!important
 }
 #settings .c5c-taxes .c5c-broker-standings .st-f{
   box-sizing:border-box!important;height:auto!important;min-height:0!important;
   gap:5px!important;padding:8px!important;background:var(--surface-panel)!important
 }
 #settings .c5c-taxes .c5c-broker-standings .st-l{
-  font-size:.66rem!important;line-height:1.3!important;text-wrap:balance!important
+  font-size:.72rem!important;line-height:1.35!important;text-wrap:balance!important;
+  word-break:normal!important;overflow-wrap:normal!important
 }
 #settings .c5c-taxes .c5c-broker-standings .st-f small{
-  font-size:.67rem!important;line-height:1.35!important
+  font-size:.70rem!important;line-height:1.4!important
 }
 #settings .c5c-taxes .c5c-broker-standings input[type="number"]{
   min-height:34px!important;padding:6px 8px!important
 }
 @media(max-width:650px){
   #settings .c5c-pilot-panel>.c5c-fixed{padding:12px 10px!important}
+  #settings .c5c-taxes .c5c-broker-cluster{grid-template-columns:minmax(0,1fr)!important}
+  #settings .c5c-taxes .c5c-broker-main,
+  #settings .c5c-taxes .c5c-broker-standings{grid-column:1!important}
+  #settings .c5c-taxes .c5c-broker-standings{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+}
+@media(max-width:430px){
   #settings .c5c-taxes .c5c-broker-standings{grid-template-columns:minmax(0,1fr)!important}
 }
 
-
-/* Keep short tax cards content-sized beside the taller Jita Broker cluster. */
+/* Keep standalone tax fields content-sized on their own row. */
 #settings .c5c-taxes>.st-g>.st-f{
   height:auto!important;min-height:0!important;align-self:start!important
 }
@@ -6349,7 +6356,7 @@ body .top.mm-ho-root #mmTabs>.mm-ho-main #navHome{display:none!important}
 
 /* Compact each standing field into a two-line label/note with the value at right. */
 #settings .c5c-taxes .c5c-broker-standings .st-f{
-  display:grid!important;grid-template-columns:minmax(0,1fr) 62px!important;
+  display:grid!important;grid-template-columns:minmax(0,1fr) 72px!important;
   grid-template-rows:auto auto!important;align-items:center!important;
   column-gap:7px!important;row-gap:3px!important
 }
@@ -6358,7 +6365,7 @@ body .top.mm-ho-root #mmTabs>.mm-ho-main #navHome{display:none!important}
 }
 #settings .c5c-taxes .c5c-broker-standings .st-f input[type="number"]{
   grid-column:2!important;grid-row:1 / span 2!important;align-self:center!important;
-  width:62px!important;min-width:0!important
+  width:72px!important;min-width:0!important
 }
 #settings .c5c-taxes .c5c-broker-standings .st-f small{
   grid-column:1!important;grid-row:2!important;margin:0!important
@@ -8446,7 +8453,7 @@ html.light #settings .c5c-taxes .c5c-broker-standings .st-f{
       <div class="st-sec c5c-skill-section"><h3 class="st-sec-t"><img class="c5c-skillbook-icon" src="https://images.evetech.net/types/3426/icon?size=64" alt="" aria-hidden="true" width="20" height="20" loading="lazy" onerror="this.hidden=true"><span data-i18n="settings.pilotHeading">HABILIDADES</span></h3><p class="st-sec-i" data-i18n="settings.pilotDescription">Niveles de personaje que influyen en las tasas de mercado y el rendimiento de reproceso.</p></div>
       <fieldset class="st c5c-fixed c5c-skills"><legend class="c5c-visually-hidden"><span class="st-tt"><span data-i18n="settings.skillsTitle">Controles de habilidades</span><small class="st-sum" data-i18n="settings.skillsSubtitle">ESI sincroniza las habilidades compatibles; el procesamiento de mineral o hielo se ajusta manualmente. Puedes simular otros niveles.</small></span></legend><div class="st-g"><label class="st-f c5c-skill-card" data-skill="skAcc"><span class="st-l">Accounting</span><select id="skAcc"><option value="0">Nivel 0</option><option value="1">Nivel 1</option><option value="2">Nivel 2</option><option value="3">Nivel 3</option><option value="4">Nivel 4</option><option value="5" selected>Nivel 5</option></select><small class="c5c-skill-note" data-skill-note="skAcc"></small></label><label class="st-f c5c-skill-card" data-skill="skBR"><span class="st-l">Broker Relations</span><select id="skBR"><option value="0">Nivel 0</option><option value="1">Nivel 1</option><option value="2">Nivel 2</option><option value="3">Nivel 3</option><option value="4">Nivel 4</option><option value="5" selected>Nivel 5</option></select><small class="c5c-skill-note" data-skill-note="skBR"></small></label><label class="st-f c5c-skill-card" data-skill="cAbr"><span class="st-l">Advanced Broker Relations</span><select id="cAbr"><option value="0" selected>Nivel 0</option><option value="1">Nivel 1</option><option value="2">Nivel 2</option><option value="3">Nivel 3</option><option value="4">Nivel 4</option><option value="5">Nivel 5</option></select><small class="c5c-skill-note" data-skill-note="cAbr"></small></label><label class="st-f c5c-skill-card" data-skill="skRep"><span class="st-l">Reprocessing</span><select id="skRep"><option value="0">Nivel 0</option><option value="1">Nivel 1</option><option value="2">Nivel 2</option><option value="3">Nivel 3</option><option value="4">Nivel 4</option><option value="5" selected>Nivel 5</option></select><small class="c5c-skill-note" data-skill-note="skRep"></small></label><label class="st-f c5c-skill-card" data-skill="skRepE"><span class="st-l">Reprocessing Efficiency</span><select id="skRepE"><option value="0">Nivel 0</option><option value="1">Nivel 1</option><option value="2">Nivel 2</option><option value="3">Nivel 3</option><option value="4">Nivel 4</option><option value="5" selected>Nivel 5</option></select><small class="c5c-skill-note" data-skill-note="skRepE"></small></label><label class="st-f c5c-skill-card" data-skill="skOre"><span class="st-l" data-i18n="settings.skillOre">Procesamiento de mineral o hielo</span><select id="skOre"><option value="0">Nivel 0</option><option value="1">Nivel 1</option><option value="2">Nivel 2</option><option value="3">Nivel 3</option><option value="4">Nivel 4</option><option value="5" selected>Nivel 5</option></select><small class="c5c-skill-note" data-skill-note="skOre"></small></label></div></fieldset>
       <div class="st-sec c5c-tax-section"><h3 class="st-sec-t">Impuestos y Precios</h3><p class="st-sec-i">Lo que se descuenta en cada venta y cómo se ajustan los precios de Jita antes de calcular.</p></div>
-      <fieldset class="st c5c-fixed c5c-taxes"><legend class="c5c-visually-hidden"><span class="st-tt"><span data-i18n="settings.taxesTitle">Valores de impuestos y comisiones</span><small class="st-sum" data-i18n="settings.taxesSubtitle">Tasas efectivas aplicadas a cada ruta de venta.</small></span></legend><p class="st-i" data-i18n="settings.taxesIntro">Accounting actualiza Sales Tax; Broker Relations y los standings ajustan el Broker de Jita. Puedes introducir las tasas que muestra EVE.</p><div class="st-g"><label class="st-f"><span class="st-l">Sales Tax %</span><input type="number" id="cTax" step="0.001" value="3.375"><small>Se cobra en toda venta del mercado principal y Jita.</small></label><div class="c5c-broker-cluster"><label class="st-f c5c-broker-main"><span class="st-l">Broker en Jita %</span><input type="number" id="cBroker" step="0.01" value="1.50"><small>Usa la tasa efectiva que muestra EVE.</small><small class="st-calc" id="brkNote"></small></label><div class="c5c-broker-standings" role="group" aria-label="Standing de Jita"><label class="st-f"><span class="st-l">Standing de facción</span><input type="number" id="cStdFac" step="0.01" value="0"><small>−0,03 p.p. por punto.</small></label><label class="st-f"><span class="st-l">Standing de corp</span><input type="number" id="cStdCorp" step="0.01" value="0"><small>−0,02 p.p. por punto.</small></label></div></div><label class="st-f"><span class="st-l">Broker de tu estructura %</span><input type="number" id="cBrokerNull" step="0.01" value="1.00"><small>Lo que cobra el dueño de tu estructura comercial.</small></label><label class="st-f"><span class="st-l">SCC %</span><input type="number" id="cScc" step="0.01" value="0.50"><small>Impuesto de CONCORD en tu estructura comercial.</small></label></div></fieldset>
+      <fieldset class="st c5c-fixed c5c-taxes"><legend class="c5c-visually-hidden"><span class="st-tt"><span data-i18n="settings.taxesTitle">Valores de impuestos y comisiones</span><small class="st-sum" data-i18n="settings.taxesSubtitle">Tasas efectivas aplicadas a cada ruta de venta.</small></span></legend><p class="st-i" data-i18n="settings.taxesIntro">Accounting actualiza Sales Tax; Broker Relations y los standings ajustan el Broker de Jita. Puedes introducir las tasas que muestra EVE.</p><div class="st-g"><div class="c5c-broker-cluster"><label class="st-f c5c-broker-main"><span class="st-l">Broker en Jita %</span><input type="number" id="cBroker" step="0.01" value="1.50"><small>Usa la tasa efectiva que muestra EVE.</small><small class="st-calc" id="brkNote"></small></label><div class="c5c-broker-standings" role="group" aria-label="Standing de Jita"><label class="st-f"><span class="st-l">Standing de facción</span><input type="number" id="cStdFac" step="0.01" value="0"><small>−0,03 p.p. por punto.</small></label><label class="st-f"><span class="st-l">Standing de corp</span><input type="number" id="cStdCorp" step="0.01" value="0"><small>−0,02 p.p. por punto.</small></label></div></div><label class="st-f"><span class="st-l">Sales Tax %</span><input type="number" id="cTax" step="0.001" value="3.375"><small>Se cobra en toda venta del mercado principal y Jita.</small></label><label class="st-f"><span class="st-l">Broker de tu estructura %</span><input type="number" id="cBrokerNull" step="0.01" value="1.00"><small>Lo que cobra el dueño de tu estructura comercial.</small></label><label class="st-f"><span class="st-l">SCC %</span><input type="number" id="cScc" step="0.01" value="0.50"><small>Impuesto de CONCORD en tu estructura comercial.</small></label></div></fieldset>
       <fieldset class="st"><legend><span class="ic i-scale" aria-hidden="true"></span><span class="st-tt">Ajuste de Precios<small class="st-sum">Margen de seguridad sobre los precios de Jita</small></span></legend><p class="st-i">Sube o baja los precios de Jita antes de calcular (positivo = más caro, negativo = más barato). Útil porque el mercado se mueve entre que pegas y vendes: mejor sorprenderse con más. También puedes poner un ajuste propio dentro de cada item; se suma a este.</p><div class="st-g"><label class="st-f"><span class="st-l">Venta rápida (Jita Buy) %</span><input type="number" id="cSkInst" step="0.01" value="-0.16"><small>Por defecto −0.16%: el juego suele pagar un poco más que lo calculado.</small></label><label class="st-f"><span class="st-l">Órdenes en Jita (Jita Sell) %</span><input type="number" id="cSkOrd" step="0.01" value="0"><small>Si sueles listar más barato para vender rápido, ponlo en negativo.</small></label><label class="st-f"><span class="st-l">Órdenes en <span data-market-system>HY-RWO</span> %</span><input type="number" id="cSkNul" step="0.01" value="0"><small>Para el precio de venta en <span data-market-system>HY-RWO</span>.</small></label></div></fieldset>
       <fieldset class="st"><legend><span class="ic i-list" aria-hidden="true"></span><span class="st-tt">Órdenes de Venta<small class="st-sum">Undercut, relists y cuándo conviene vender al instante</small></span></legend><p class="st-i">Ajusta el undercut, los relists y cuándo priorizar una venta rápida frente a una sell order.</p><div class="st-g"><label class="st-f"><span class="st-l">Undercut en Jita (ticks)</span><input type="number" id="cUnderTk" step="1" min="0" value="1"><small>Tu orden queda este número de ticks por debajo de la venta más barata. 1 tick = el mínimo que EVE deja bajar (4 cifras).</small></label><label class="st-f"><span class="st-l">Ignorar órdenes cebo (ticks)</span><input type="number" id="cBaitTk" step="1" min="0" value="5"><small>Revisa las 5 ventas más baratas: salta hasta 3 que estén más de estos ticks debajo de la siguiente (menos las de mucha cantidad) y confirma el precio con la siguiente. Si no se confirma, usa la más barata. 0 lo apaga.</small></label><label class="st-f"><span class="st-l">Vender al instante si la diferencia es ≤ (ticks)</span><input type="number" id="cSpreadTk" step="1" min="0" value="2"><small>Si tu precio de orden queda a estos ticks o menos de la mejor compra, el plan vende al instante: casi el mismo ISK, sin esperar. 0 lo apaga.</small></label><label class="st-f"><span class="st-l">Undercut % (mercado principal y hielo)</span><input type="number" id="cUnder" step="0.05" min="0" value="0.1"><small>Para el precio que ves en <span data-market-system>HY-RWO</span> y la orden de hielo en Jita.</small></label><label class="st-f"><span class="st-l">Relists esperados</span><input type="number" id="cRelists" step="1" min="0" value="1"><small>Cuántas veces piensas cambiar el precio. Solo se descuentan si marcas la casilla Relists en el desglose.</small></label><label class="st-f" hidden aria-hidden="true"><span class="st-l">Orden vs venta al instante (ISK)</span><input type="number" id="cUmbral" step="100000" value="1000000"><small>Ganancia adicional mínima en ISK para preferir una sell order frente a vender a buy orders.</small></label><label class="st-f" hidden aria-hidden="true"><span class="st-l">Preferir Jita por rapidez %</span><input type="number" id="cFast" step="0.5" min="0" value="5"><small>Permite priorizar Jita cuando la diferencia neta está dentro del porcentaje indicado. 0 desactiva esta preferencia.</small></label><label class="st-f st-ck"><span class="st-l"><input type="checkbox" id="qdOn" checked> Descuento por cantidad</span><small>Solo para vender en <span data-market-system>HY-RWO</span>: más de 1,000 u. bajan el precio por tramos (no aplica al hielo). En Jita no se aplica.</small></label><label class="st-f"><span class="st-l">Descuento máximo %</span><input type="number" id="qdMax" step="0.5" min="0" value="5"><small>Tope del descuento (0.2% · 0.02% · 0.002% por cada 1,000 u.).</small></label><label class="st-f st-ck"><span class="st-l"><input type="checkbox" id="cTick" checked> Redondear precios a 4 cifras</span><small>Ajusta los precios al tick permitido por el mercado de EVE (4 cifras significativas).</small></label></div></fieldset>
       <div class="st-sec"><h3 class="st-sec-t">Dónde Vendes</h3><p class="st-sec-i">Las reglas de cada destino: <span data-market-system>HY-RWO</span>, Jita, hielo, Buyback y jugadores.</p></div>
@@ -8794,13 +8801,13 @@ Contraband Freight = no</textarea><small>Una regla por línea: Nombre = tax tota
 <button type="button" class="totop" id="toTop" aria-label="Volver arriba" title="Volver arriba (Inicio)" hidden><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 14l6-6 6 6"/></svg></button>
 <footer class="foot">
   <p class="foot-sec"><span class="ic i-lock" aria-hidden="true"></span>Tu inventario no se guarda: al cerrar o recargar se borra. Solo tus Ajustes quedan en este navegador.</p>
-  <div class="foot-by">Creado por <b>Fiko McGivert</b> · Vanguardia DR · SIGMA GRINDSET · <span class="ver">v1.0.164</span></div>
+  <div class="foot-by">Creado por <b>Fiko McGivert</b> · Vanguardia DR · SIGMA GRINDSET · <span class="ver">v1.0.165</span></div>
 </footer>
 
 <script>
 'use strict';
 /* ============================================================
-   Market Moves+ v1.0.164 — SIGMA GRINDSET / Vanguardia DR
+   Market Moves+ v1.0.165 — SIGMA GRINDSET / Vanguardia DR
    Flujo:  pegado → items → carga (ESI: precios, volúmenes, historial) → verificación → plan → vista
      1. Pegado      parsePaste(): parser posicional de columnas de EVE (Name · Quantity · … · Volume · Est. Price).
      2. Carga       esiItems(): trae todo lo que falta; mientras carga, refresh() NO pinta (S.loading).
