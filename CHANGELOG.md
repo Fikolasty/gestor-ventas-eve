@@ -1,4 +1,6 @@
-## v1.0.166 — 2026-10-30 [ChatGPT] · C.5c ELIGE TU PLAN — CANDIDATA DE RAMA
+## v1.0.166 — 2026-10-30 [ChatGPT] · C.5c ELIGE TU PLAN — LIVE CERTIFICADA
+
+**Cierre vigente:** Planes/Análisis arriba y Resultado/Distribución abajo, dos gavetas compartidas, seleccionado separado y Buyback sin marco blanco permanente. Fuente `d3d9918`, build `ddebadf3`; cuatro Actions SUCCESS y Pages HTTPS idéntico al build local/GitHub (2.454.596 bytes, blob `6ceddf61497016ef48544369e874af0ca28f4923`). 150 Node, 16 Python, 75 Chromium, ocho legacy y 24 equivalencias financieras PASS. DSS §76 contiene la trazabilidad. Las restricciones de publicación y orden anterior que siguen son checkpoints históricos sustituidos por este cierre.
 
 **Publicación LIVE autorizada posteriormente por el propietario:** corrección v4 aprobada, workflows productivos preparados para 1.0.166 y gates completos repetidos antes de integrar en main. Estado de publicación y SHA reales en DSS §76; no declarar LIVE mientras falten CI/Pages/HTTPS. Los estados locales siguientes se conservan como historia.
 

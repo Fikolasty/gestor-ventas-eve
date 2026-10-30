@@ -1,5 +1,7 @@
 # C.5c — v1.0.166, candidata de rama
 
+**Informe histórico sustituido:** esta candidata inicial tenía un orden visual incompleto. La corrección aprobada está en `C5C_REFERENCE_PREVIEW.md` y DSS §§75–76. v1.0.166 ya está LIVE con fuente `d3d9918`, build `ddebadf3`, cuatro Actions SUCCESS y HTML público/local/GitHub idénticos; las restricciones y pendientes siguientes describen exclusivamente el checkpoint anterior.
+
 Fecha: 2026-10-30 (America/La_Paz). Base aprobada: `feb4051c42dd079574fbb0900270608fbc277a7b`, producción v1.0.165. Rama autorizada: `feature/elige-tu-plan-1.0.166`. Sin merge ni despliegue.
 
 ## Alcance y contratos

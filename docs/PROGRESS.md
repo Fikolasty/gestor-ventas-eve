@@ -1,5 +1,15 @@
 # PROGRESS — Market Moves+
 
+## 2026-10-30 — C.5c v1.0.166 LIVE certificada
+
+
+**Cierre LIVE certificado — 2026-10-30:** fuente Fiko `d3d9918f007d898bd264f4ef8960ef8cc562c47e`, candidata CI `41019835004` SUCCESS (150 Node, 16 Python, 75 Chromium, ocho legacy y 24 equivalencias exactas). Integración fast-forward protegida en main desde `feb4051c`, sin force ni HTML manual. Cuatro workflows productivos SUCCESS: Build `41020134379`, Versiones `41020134267`, Minería `41020134282`, Rebuild/Pages `41020134420`. Compilación y despliegue Pages completados; build bot `ddebadf329cd6a6faf57db28805d727c5aef92cb`.
+
+Comprobación HTTP independiente: https://fikolasty.github.io/gestor-ventas-eve/ sirve **v1.0.166**. HTML público idéntico byte a byte al build local normalizado a LF y al blob GitHub: **2.454.596 bytes**, Git blob **`6ceddf61497016ef48544369e874af0ca28f4923`**. La corrección v4 aprobada está publicada, incluido Buyback sin contorno permanente y foco de teclado conservado. Gates locales finales: 150 Node, 16 Python, 75 Chromium, ocho legacy y 24 equivalencias PASS; CI repitió los gates. Sin cambios económicos, Settings, almacenamiento, permisos o ESI/SSO; no se hizo una prueba ESI/SSO real extremo a extremo.
+
+Los checkpoints previos de candidata/pausa/pendientes quedan sustituidos por este cierre. Auditoría siguiente de solo lectura: `docs/SETTINGS_NEXT_AUDIT.md`; propuesta concreta de Precios y ventas pendiente de revisión antes de implementar. Continuidad: `docs/HANDOFF_C5C_166_SETTINGS.md`.
+
+
 ## 2026-10-30 — Publicación de C.5c v1.0.166 autorizada (DSS §76)
 
 El propietario aprueba pasar a LIVE el diseño corregido v4; se levanta la pausa de §§74–75. Preflight sin divergencias: candidata `df688e3`, main `feb4051c`; Fiko/Fikolasty confirmado. Workflows de producción preparados para 1.0.166; candidata continúa sin permisos Pages. Se repiten todos los gates antes de publicar fuentes en rama, integrar por fast-forward protegido y certificar Actions/Pages/HTTPS. Hasta cerrar esas verificaciones, producción sigue v1.0.165. Settings queda para auditoría posterior, sin cambios automáticos de fórmulas o ESI.
