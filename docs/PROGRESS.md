@@ -1,5 +1,17 @@
 # PROGRESS — Market Moves+
 
+## 2026-10-30 — v1.0.168 LIVE certificada
+
+
+**Cierre LIVE certificado v1.0.168 — 2026-10-30:** implementación Fiko `aebfa045d4be36bf8426567ab2ef494082cd904f`, corrección exclusiva de test/continuidad `607f883aac98859c519147422cafd7a9b42cd6cc`, build bot `fa97a7e1cdba8165fca9b54129c6c620708554f4`. Cuatro workflows finales SUCCESS: Versiones `41081107088`, Build `41081107313`, Minería `41081106908`, Rebuild/Pages `41081107002`; compile `124150160517` y deploy `124151773210` completados. La primera ejecución fallida `41080237306` quedó como gate histórico; no desplegó ni expuso una release sin validar.
+
+Gates finales CI: **150 Node /16 Python /82 Chromium completos (140,860 s) /8 legacy PASS**. Local: mismos gates con 82 Chromium (97,797 s), prueba focal final de geometría PASS y **24/24 equivalencias financieras exactas**. El test de geometría final acota espacio no explicado y filas contenidas, sin depender de una altura total fija por fuente del sistema; preserva cifras, reparto, nombres, temas, columnas y ausencia de overflow. No se alteró el HTML del producto al corregirlo.
+
+HTTPS independiente confirmó **v1.0.168**, HTML público/local canónico LF/GitHub idénticos: **2.477.948 bytes**, blob **`bd50031dd08e21f746c60b87b3b97eb7a30ebb3f`**. Web https://fikolasty.github.io/gestor-ventas-eve/. Ambas secciones ya inician minimizadas; cabecera con lote antes − envío = total tras envío, detalle por unidad y finales copiables. Se preserva la apertura elegida durante repintados, no se cierra forzosamente tras cada cambio.
+
+Economía, ESI/SSO, Settings, permisos y persistencia intactos; no se hizo ESI/SSO real extremo a extremo. Datos de las capturas son fixtures, no mercado vivo. Toda la documentación/código del alcance y este cierre se publican mediante Fiko sin force; CI genera index.html. El cierre documental puede avanzar HEAD más allá del build bot sin cambiar el HTML. Este cierre sustituye los pendientes de publicación anteriores. Kit vigente HANDOFF_FREIGHT_168.md; no reiniciar aprobaciones ni volver a prototipos r3–r6.
+
+
 ## 2026-10-30 — v1.0.168 candidata: plegado y costes de envío
 
 Petición del propietario implementada localmente: pareja Resultado/Distribución y envío cerrados por defecto; cabecera aritmética por lote, filas en ISK/u. y finales copiables con función existente. 150 Node, 16 Python, ocho legacy y 24 equivalencias PASS. Suite Chromium final en curso; fuente/Pages/HTTP pendientes. Ver DSS §79 y HANDOFF_FREIGHT_168.md.

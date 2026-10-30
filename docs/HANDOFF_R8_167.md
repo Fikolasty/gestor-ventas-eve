@@ -26,3 +26,6 @@ Siguiente trabajo: revisar la web con el propietario; Ajustes → Precios y vent
 
 
 Nueva petición posterior: v1.0.168 para plegado inicial, envío por unidad y precios copiables. Continuidad activa en HANDOFF_FREIGHT_168.md y DSS §79; no reiniciar el diseño r8.
+
+
+La mejora posterior v1.0.168 ya está LIVE certificada: fuente aebfa045, test 607f883a, build fa97a7e1, cuatro Actions SUCCESS y HTML público/local/GitHub idénticos bd50031d. Kit activo HANDOFF_FREIGHT_168.md y DSS §79. v167 ya no es última LIVE.
