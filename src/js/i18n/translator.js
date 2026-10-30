@@ -117,6 +117,11 @@ function setLang(l){
     i18nObs.observe(document.documentElement,{subtree:true,childList:true,characterData:true,attributes:true,attributeFilter:I18N_ATTR});
   }else{i18nRestore();i18nKeyed(document.documentElement);I18N_RE=null;} // ES restored from source catalog
   syncMarketCopy();syncBusinessMode();
+  if(typeof window.mmUpdateSettingsSkillNotes==='function')window.mmUpdateSettingsSkillNotes();
+  document.querySelectorAll('#settings .c5c-skill-card').forEach(card=>{
+    const native=card.querySelector('select'),badge=card.querySelector('.c5c-skill-source');
+    if(native&&badge)badge.textContent=tx(native.dataset.mmSkillSource==='esi'?'settings.sourceEsi':'settings.sourceManual');
+  });
   // Mining has its own stateful renderer; rebuild the visible view in the new
   // language so previously generated English labels also return to Spanish.
   // Do not mount or recalculate a hidden module.

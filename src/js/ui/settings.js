@@ -155,6 +155,7 @@ document.querySelectorAll('[data-go-home]').forEach(node=>{
     const panels=Array.from({length:4},()=>document.createElement('div'));
     const keys=['settings.tabGeneral','settings.tabPilot','settings.tabPricing','settings.tabFreight'];
     const labels=keys.map(key=>tx(key));
+    panels[1].classList.add('c5c-pilot-panel');
     let fieldsets=0,target=0;
     originals.forEach(node=>{
       if(node.matches('fieldset.st')){
@@ -285,12 +286,42 @@ function initMarketPicker(){
 initMarketPicker();
 window.mmSyncMarketPicker=syncMarketPicker;
 
+// C.5b.2: explanatory Settings copy follows the ORIGINAL native skill and tax
+// inputs (including ESI updates). These are display-only readings; all existing
+// tax/broker/reprocessing calculations and persistence remain in their owners.
+function mmUpdateSettingsSkillNotes(){
+  const level=id=>Math.min(5,Math.max(0,Number($(id)?.value)||0));
+  const rate=id=>{const n=Number($(id)?.value);return Number.isFinite(n)?n.toLocaleString(S.lang==='en'?'en-US':'es-ES',{maximumFractionDigits:3}):'—';};
+  const notes={
+    skAcc:tx('settings.skillAccNote',{level:level('skAcc'),rate:rate('cTax')}),
+    skBR:tx('settings.skillBRNote',{level:level('skBR'),rate:rate('cBroker')}),
+    cAbr:tx('settings.skillAbrNote',{level:level('cAbr')}),
+    skRep:tx('settings.skillRepNote',{level:level('skRep'),bonus:level('skRep')*3}),
+    skRepE:tx('settings.skillRepENote',{level:level('skRepE'),bonus:level('skRepE')*2}),
+    skOre:tx('settings.skillOreNote',{level:level('skOre'),bonus:level('skOre')*2})
+  };
+  for(const [id,value] of Object.entries(notes)){
+    const el=document.querySelector('#settings [data-skill-note="'+id+'"]');
+    if(el&&el.textContent!==value)el.textContent=value;
+  }
+}
+window.mmUpdateSettingsSkillNotes=mmUpdateSettingsSkillNotes;
+$('settings').addEventListener('input',event=>{
+  if(event.target.matches('.c5c-skills select,#cTax,#cBroker,#cStdFac,#cStdCorp'))queueMicrotask(mmUpdateSettingsSkillNotes);
+});
+$('settings').addEventListener('change',event=>{
+  if(event.target.matches('.c5c-skills select,#cTax,#cBroker,#cStdFac,#cStdCorp'))queueMicrotask(mmUpdateSettingsSkillNotes);
+});
+mmUpdateSettingsSkillNotes();
+
+// The two read-only-layout skill/tax grids are always open; the remaining
+// Settings groups keep their original drawer behavior.
 // v1.0.8: cada grupo de Ajustes es desplegable (empiezan cerrados); se abren con clic o Enter en su título
-document.querySelectorAll('#settings fieldset.st').forEach(f=>{const l=f.querySelector('legend');if(!l)return;f.classList.add('closed');
+document.querySelectorAll('#settings fieldset.st').forEach(f=>{const l=f.querySelector('legend');if(!l)return;if(f.classList.contains('c5c-fixed')){f.classList.remove('closed');l.removeAttribute('role');l.removeAttribute('tabindex');l.removeAttribute('aria-expanded');return;}f.classList.add('closed');
   l.tabIndex=0;l.setAttribute('role','button');l.setAttribute('aria-expanded','false');
   const t=()=>{const c=f.classList.toggle('closed');l.setAttribute('aria-expanded',String(!c));};
   l.addEventListener('click',t);l.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();t();}});});
-const stAll=open=>document.querySelectorAll('#settings fieldset.st').forEach(f=>{f.classList.toggle('closed',!open);const l=f.querySelector('legend');if(l)l.setAttribute('aria-expanded',String(open));});
+const stAll=open=>document.querySelectorAll('#settings fieldset.st:not(.c5c-fixed)').forEach(f=>{f.classList.toggle('closed',!open);const l=f.querySelector('legend');if(l)l.setAttribute('aria-expanded',String(open));});
 $('stOpenAll').addEventListener('click',()=>stAll(true));$('stCloseAll').addEventListener('click',()=>stAll(false));
 [['cTax','tax'],['cBroker','broker'],['cBrokerNull','brokerNull'],['cScc','scc'],['cMargin','margin'],['cProd','prod']].forEach(([id,k])=>
   $(id).addEventListener('input',e=>{C[k]=(parseFloat(e.target.value)||0)/100;refresh();}));

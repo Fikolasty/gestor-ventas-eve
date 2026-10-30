@@ -1,3 +1,11 @@
+## v1.0.163 — 2026-10-29 [ChatGPT] · C.5b.2: Skills/Taxes en Settings — QA PENDIENTE
+
+- Rediseño focal de Personaje e impuestos: tabs horizontales en Ajustes, acciones discretas, seis habilidades en cuadrícula simétrica con cinco niveles y botones −/+; habilidades e impuestos siempre visibles.
+- Descripciones bilingües reactivas: niveles y porcentajes reales que ya están en los campos originales; origen ESI frente a simulación manual, sin duplicar cálculos.
+- Tasas más compactas, grises y tipografías del sistema de Ventas; controles de Settings existentes sin renombrar, con persistencia igual.
+- ESI actualiza sus cinco skills reales; el selector combinado de ore/hielo permanece manual. Sin modificar fórmulas financieras, ESI scopes, SSO, motores de precios o Minería.
+- Tests específicos de Node/Chromium y versión de CI; publicación bloqueada hasta 4/4 Actions y Pages.
+
 ## v1.0.162 — 2026-10-29 [ChatGPT] · C.5b.1: header sin Inicio y Habilidades — LIVE CERTIFICADA
 
 - El logotipo de Market Moves+ conserva el reinicio del workspace; Inicio deja de mostrarse como pestaña y su control heredado permanece oculto y conectado.

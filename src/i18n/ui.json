@@ -1686,5 +1686,85 @@
   "settings.groupPricesHelp": {
     "es": "Márgenes, órdenes, hielo, Buyback y ventas directas. Las tarifas de tu personaje se configuran en su pestaña.",
     "en": "Margins, orders, ice, Buyback and direct sales. Configure pilot fees in the Pilot tab."
+  },
+  "settings.pilotHeading": {
+    "es": "HABILIDADES DEL PERSONAJE",
+    "en": "PILOT SKILLS"
+  },
+  "settings.pilotDescription": {
+    "es": "Configura las habilidades de tu piloto para calcular las tasas y el rendimiento de reproceso.",
+    "en": "Set your pilot's skills for market fees and refining yields."
+  },
+  "settings.skillsTitle": {
+    "es": "HABILIDADES",
+    "en": "SKILLS"
+  },
+  "settings.skillsSubtitle": {
+    "es": "Los niveles de ESI se cargan automáticamente. Puedes simular otros valores.",
+    "en": "ESI loads your actual levels automatically. You can simulate different levels."
+  },
+  "settings.skillsIntro": {
+    "es": "Accounting y Broker Relations influyen en las tasas de mercado. Reprocessing mejora el rendimiento de los materiales.",
+    "en": "Accounting and Broker Relations affect market fees. Reprocessing skills improve material yield."
+  },
+  "settings.taxesTitle": {
+    "es": "IMPUESTOS Y COMISIONES",
+    "en": "TAXES & FEES"
+  },
+  "settings.taxesSubtitle": {
+    "es": "Se aplican a las rutas de venta correspondientes.",
+    "en": "Applied to the relevant selling routes."
+  },
+  "settings.taxesIntro": {
+    "es": "Las tasas vinculadas cambian con las habilidades. También puedes introducir las tarifas reales que muestra EVE.",
+    "en": "Linked fees update with your skills. You can also enter the actual rates shown in EVE."
+  },
+  "settings.skillOre": {
+    "es": "Procesamiento de mineral o hielo",
+    "en": "Ore or ice processing"
+  },
+  "settings.sourceEsi": {
+    "es": "ESI",
+    "en": "ESI"
+  },
+  "settings.sourceManual": {
+    "es": "Manual",
+    "en": "Manual"
+  },
+  "settings.skillAccNote": {
+    "es": "Nivel {level}/5 · Impuesto de venta actual: {rate}%.",
+    "en": "Level {level}/5 · Current sales tax: {rate}%."
+  },
+  "settings.skillBRNote": {
+    "es": "Nivel {level}/5 · Broker de Jita actual: {rate}%.",
+    "en": "Level {level}/5 · Current Jita broker fee: {rate}%."
+  },
+  "settings.skillAbrNote": {
+    "es": "Nivel {level}/5 · Reduce el coste de modificar órdenes.",
+    "en": "Level {level}/5 · Lowers the cost of updating orders."
+  },
+  "settings.skillRepNote": {
+    "es": "Nivel {level}/5 · Bonificación de habilidad: +{bonus}% al rendimiento base.",
+    "en": "Level {level}/5 · Skill bonus: +{bonus}% to base yield."
+  },
+  "settings.skillRepENote": {
+    "es": "Nivel {level}/5 · Bonificación adicional: +{bonus}% al rendimiento base.",
+    "en": "Level {level}/5 · Additional bonus: +{bonus}% to base yield."
+  },
+  "settings.skillOreNote": {
+    "es": "Nivel {level}/5 · Bonificación de procesamiento: +{bonus}%. Ajuste según mineral o hielo; se configura manualmente.",
+    "en": "Level {level}/5 · Processing bonus: +{bonus}%. Ore/ice-specific manual setting."
+  },
+  "settings.openAll": {
+    "es": "Abrir todas las gavetas",
+    "en": "Expand all drawers"
+  },
+  "settings.closeAll": {
+    "es": "Cerrar todas las gavetas",
+    "en": "Collapse all drawers"
+  },
+  "settings.resetAll": {
+    "es": "Restablecer ajustes",
+    "en": "Reset settings"
   }
 }

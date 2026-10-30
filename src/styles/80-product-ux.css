@@ -2882,3 +2882,188 @@ body:is([data-mm-view="settings"],[data-mm-view="help"]) .top-slot>.panel{
 /* C.5b.1: Home is the existing clickable brand; retain #navHome only as a
    hidden legacy control for its original event wiring, not as a second tab. */
 body .top.mm-ho-root #mmTabs>.mm-ho-main #navHome{display:none!important}
+
+/* C.5b.2 — Settings redesign, aligned with the established Sales/header tokens.
+   Preserve all native Settings controls, IDs, listeners and accounting logic. */
+#settings .st-wrap{
+  display:grid!important;grid-template-columns:minmax(0,1fr)!important;
+  grid-auto-rows:auto!important;gap:14px!important;align-items:stretch!important
+}
+#settings .st-wrap>.modern-tabs{
+  position:static!important;top:auto!important;grid-column:1!important;grid-row:1!important;
+  display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;
+  flex-direction:row!important;flex-wrap:nowrap!important;align-items:stretch!important;
+  width:100%!important;max-height:none!important;overflow:visible!important;
+  margin:0!important;padding:0!important;gap:0!important;
+  background:var(--surface-panel)!important;border:1px solid var(--line2)!important;
+  border-radius:10px!important
+}
+#settings .st-wrap>.modern-tabs>.modern-tab{
+  display:flex!important;justify-content:center!important;align-items:center!important;
+  width:100%!important;min-width:0!important;min-height:48px!important;
+  padding:10px 9px!important;margin:0!important;
+  border:0!important;border-bottom:3px solid transparent!important;
+  border-radius:0!important;background:transparent!important;
+  font:650 .80rem/1.4 var(--f-ui)!important;text-align:center!important;
+  color:var(--mut)!important;white-space:normal!important
+}
+#settings .st-wrap>.modern-tabs>.modern-tab[aria-selected="true"]{
+  color:var(--txt)!important;background:rgba(217,119,87,.085)!important;
+  border-bottom-color:var(--clay)!important;box-shadow:inset 0 1px 0 rgba(217,119,87,.18)!important
+}
+#settings .st-wrap>.modern-panel{
+  grid-column:1!important;grid-row:2!important;min-width:0!important;
+}
+#settings .st-wrap>.modern-panel[hidden]{display:none!important}
+#settings .c5c-tools{display:flex!important;justify-content:flex-end!important;gap:8px!important;margin:0 0 10px!important}
+#settings .c5c-tools .st-tools-group{display:flex!important;gap:4px!important}
+#settings .c5c-tools .st-tool-btn{
+  display:grid!important;place-items:center!important;flex:0 0 auto!important;
+  width:34px!important;height:32px!important;min-height:32px!important;
+  padding:0!important;border:1px solid var(--line2)!important;
+  border-radius:7px!important;background:var(--surface-card)!important;
+  color:var(--mut)!important;font:650 18px/1 var(--f-ui)!important;
+  box-shadow:none!important
+}
+#settings .c5c-tools .st-tool-btn:hover{border-color:var(--clay)!important;color:var(--txt)!important}
+#settings .c5c-tools .st-tool-reset{margin-left:5px!important;background:transparent!important}
+#settings .c5c-pilot-panel{gap:12px!important}
+#settings .c5c-pilot-panel>.st-sec{margin:2px 0 0!important;padding:0!important}
+#settings .c5c-pilot-panel>.st-sec .st-sec-t{
+  color:var(--txt)!important;font:750 .86rem/1.35 var(--f-ui)!important;
+  letter-spacing:.035em!important;text-transform:uppercase!important
+}
+#settings .c5c-pilot-panel>.c5c-fixed{
+  border:1px solid var(--line2)!important;border-radius:11px!important;
+  background:var(--glass)!important;padding:0 14px 14px!important;
+  overflow:visible!important
+}
+#settings .c5c-pilot-panel>.c5c-fixed>legend{
+  float:none!important;display:flex!important;align-items:center!important;
+  width:100%!important;min-height:52px!important;max-width:none!important;
+  margin:0!important;padding:11px 5px!important;
+  cursor:default!important;pointer-events:none!important;
+}
+#settings .c5c-pilot-panel>.c5c-fixed>legend::after{display:none!important;content:none!important}
+#settings .c5c-pilot-panel>.c5c-fixed>legend .st-tt{
+  display:block!important;color:var(--txt)!important;
+  font:750 .87rem/1.35 var(--f-ui)!important;
+  letter-spacing:.03em!important;text-transform:uppercase!important
+}
+#settings .c5c-pilot-panel>.c5c-fixed>legend .st-sum{
+  display:block!important;margin-top:3px!important;font:450 .76rem/1.5 var(--f-ui)!important;
+  letter-spacing:0!important;text-transform:none!important;color:var(--mut)!important
+}
+#settings .c5c-pilot-panel>.c5c-fixed>.st-i{
+  margin:0 0 12px!important;padding:9px 12px!important;
+  border-radius:7px!important;background:var(--surface-panel)!important;
+  color:var(--mut)!important;font:450 .75rem/1.5 var(--f-ui)!important
+}
+#settings .c5c-pilot-panel>.c5c-skills>.st-g{
+  display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;
+  gap:12px!important;align-items:stretch!important
+}
+#settings .c5c-skills .c5c-skill-card{
+  position:relative!important;box-sizing:border-box!important;display:flex!important;
+  flex-direction:column!important;gap:9px!important;min-width:0!important;
+  min-height:158px!important;width:100%!important;padding:13px!important;
+  background:var(--surface-card)!important;border:1px solid var(--line2)!important;
+  border-radius:10px!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.035)!important
+}
+#settings .c5c-skills .c5c-skill-card .st-l{
+  display:block!important;padding-right:52px!important;
+  color:var(--txt)!important;font:750 .80rem/1.4 var(--f-ui)!important;
+  text-transform:uppercase!important;min-height:17px!important
+}
+#settings .c5c-skill-source{
+  position:absolute;right:12px;top:12px;
+  padding:2px 6px;border:1px solid var(--line2);border-radius:5px;
+  color:var(--mut);background:var(--surface-panel);
+  font:650 .62rem/1.35 var(--f-ui);letter-spacing:.035em;text-transform:uppercase
+}
+#settings .c5c-skill-card[data-skill-source="esi"] .c5c-skill-source{
+  color:var(--ok);border-color:rgba(90,190,150,.34)
+}
+#settings .c5c-skills .eve-sk-native{
+  position:absolute!important;width:1px!important;height:1px!important;
+  opacity:0!important;pointer-events:none!important;overflow:hidden!important
+}
+#settings .c5c-skills .eve-sk{
+  display:grid!important;grid-template-columns:32px minmax(0,1fr) 38px 32px!important;
+  align-items:center!important;gap:7px!important;width:100%!important;
+  min-height:36px!important;padding:0!important;margin:1px 0!important
+}
+#settings .c5c-skills .eve-sk-pips{
+  display:grid!important;grid-template-columns:repeat(5,minmax(0,1fr))!important;
+  gap:4px!important;align-items:center!important;min-width:0!important
+}
+#settings .c5c-skills .eve-sk-pip{
+  display:block!important;min-width:0!important;width:100%!important;
+  height:20px!important;padding:0!important;margin:0!important;
+  border:1px solid rgba(214,210,205,.33)!important;border-radius:3px!important;
+  background:rgba(164,160,155,.25)!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.10)!important
+}
+#settings .c5c-skills .eve-sk-pip.trained{
+  border-color:rgba(238,234,229,.95)!important;background:#ece9e5!important;
+  box-shadow:0 1px 5px rgba(0,0,0,.28),inset 0 1px 0 #fff!important
+}
+#settings .c5c-skills .eve-sk-pip:focus-visible,
+#settings .c5c-skills .eve-sk-add:focus-visible,
+#settings .c5c-skills .eve-sk-minus:focus-visible{
+  outline:2px solid var(--clay)!important;outline-offset:2px!important
+}
+#settings .c5c-skills .eve-sk-minus,#settings .c5c-skills .eve-sk-add{
+  display:grid!important;place-items:center!important;box-sizing:border-box!important;
+  width:32px!important;height:32px!important;min-width:32px!important;
+  min-height:32px!important;padding:0!important;margin:0!important;
+  border:1px solid var(--line2)!important;border-radius:7px!important;
+  color:var(--txt)!important;background:var(--surface-panel)!important;
+  font:750 18px/1 var(--f-ui)!important;line-height:1!important;box-shadow:none!important
+}
+#settings .c5c-skills .eve-sk-minus:disabled,#settings .c5c-skills .eve-sk-add:disabled{opacity:.44!important}
+#settings .c5c-skills .eve-sk-rank{
+  display:block!important;min-width:0!important;margin:0!important;
+  color:var(--txt)!important;text-align:center!important;
+  font:700 .8rem/1.3 var(--f-num,var(--f-ui))!important;font-variant-numeric:tabular-nums!important
+}
+#settings .c5c-skills .c5c-skill-note{
+  display:block!important;margin-top:auto!important;min-height:36px!important;
+  color:var(--mut)!important;font:450 .75rem/1.5 var(--f-ui)!important;
+  text-wrap:pretty!important;letter-spacing:0!important
+}
+#settings .c5c-taxes>.st-g{
+  display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;
+  gap:12px!important;align-items:stretch!important
+}
+#settings .c5c-taxes .st-f{
+  box-sizing:border-box!important;display:flex!important;flex-direction:column!important;
+  min-width:0!important;width:100%!important;height:100%!important;
+  gap:8px!important;padding:12px!important;border:1px solid var(--line2)!important;
+  border-radius:9px!important;background:var(--surface-card)!important;
+  box-shadow:none!important
+}
+#settings .c5c-taxes .st-f .st-l{
+  color:var(--txt)!important;font:750 .77rem/1.3 var(--f-ui)!important;text-transform:uppercase!important
+}
+#settings .c5c-taxes .st-f input[type="number"]{
+  box-sizing:border-box!important;min-height:38px!important;width:100%!important;
+  padding:8px 10px!important;border:1px solid var(--line2)!important;
+  border-radius:7px!important;background:var(--hull2)!important;color:var(--txt)!important;
+  font:650 .88rem/1.25 var(--f-num,var(--f-ui))!important
+}
+#settings .c5c-taxes .st-f small{
+  color:var(--mut)!important;font:450 .74rem/1.5 var(--f-ui)!important;
+}
+@media(max-width:1050px){
+  #settings .c5c-pilot-panel>.c5c-skills>.st-g{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+  #settings .c5c-taxes>.st-g{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+}
+@media(max-width:650px){
+  #settings .st-wrap>.modern-tabs{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+  #settings .st-wrap>.modern-tabs>.modern-tab{min-height:42px!important;font-size:.75rem!important}
+  #settings .c5c-pilot-panel>.c5c-skills>.st-g{grid-template-columns:minmax(0,1fr)!important}
+  #settings .c5c-taxes>.st-g{grid-template-columns:minmax(0,1fr)!important}
+  #settings .c5c-pilot-panel>.c5c-fixed{padding:0 10px 12px!important}
+  #settings .c5c-skills .c5c-skill-card{min-height:145px!important}
+}
