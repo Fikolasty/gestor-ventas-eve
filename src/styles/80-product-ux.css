@@ -3067,3 +3067,56 @@ body .top.mm-ho-root #mmTabs>.mm-ho-main #navHome{display:none!important}
   #settings .c5c-pilot-panel>.c5c-fixed{padding:0 10px 12px!important}
   #settings .c5c-skills .c5c-skill-card{min-height:145px!important}
 }
+
+
+/* C.5b.2a — compact hierarchy and a single Jita Broker/standings cluster. */
+#settings .c5c-pilot-panel>.c5c-skill-section .st-sec-t{
+  display:flex!important;align-items:center!important;gap:9px!important
+}
+#settings .c5c-skillbook-icon{
+  display:block!important;flex:0 0 20px!important;width:20px!important;height:20px!important;
+  object-fit:contain!important;border-radius:3px!important
+}
+#settings .c5c-pilot-panel>.c5c-fixed{padding:14px!important}
+#settings .c5c-pilot-panel>.c5c-fixed>legend.c5c-visually-hidden{
+  position:absolute!important;display:block!important;box-sizing:border-box!important;
+  width:1px!important;height:1px!important;min-height:1px!important;max-width:1px!important;
+  margin:-1px!important;padding:0!important;overflow:hidden!important;
+  clip:rect(0,0,0,0)!important;clip-path:inset(50%)!important;
+  white-space:nowrap!important;border:0!important;line-height:1px!important
+}
+#settings .c5c-pilot-panel>.c5c-fixed>legend.c5c-visually-hidden::after{
+  display:none!important;content:none!important
+}
+#settings .c5c-taxes .c5c-broker-cluster{
+  box-sizing:border-box!important;display:flex!important;flex-direction:column!important;
+  min-width:0!important;width:100%!important;height:100%!important;gap:9px!important;
+  padding:12px!important;border:1px solid var(--line2)!important;border-radius:9px!important;
+  background:var(--surface-card)!important;box-shadow:none!important
+}
+#settings .c5c-taxes .c5c-broker-main{
+  display:flex!important;flex-direction:column!important;gap:7px!important;
+  min-width:0!important;width:100%!important;height:auto!important;margin:0!important;padding:0!important;
+  border:0!important;border-radius:0!important;background:transparent!important;box-shadow:none!important
+}
+#settings .c5c-taxes .c5c-broker-standings{
+  display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  gap:8px!important;min-width:0!important;margin-top:auto!important
+}
+#settings .c5c-taxes .c5c-broker-standings .st-f{
+  box-sizing:border-box!important;height:auto!important;min-height:0!important;
+  gap:5px!important;padding:8px!important;background:var(--surface-panel)!important
+}
+#settings .c5c-taxes .c5c-broker-standings .st-l{
+  font-size:.66rem!important;line-height:1.3!important;text-wrap:balance!important
+}
+#settings .c5c-taxes .c5c-broker-standings .st-f small{
+  font-size:.67rem!important;line-height:1.35!important
+}
+#settings .c5c-taxes .c5c-broker-standings input[type="number"]{
+  min-height:34px!important;padding:6px 8px!important
+}
+@media(max-width:650px){
+  #settings .c5c-pilot-panel>.c5c-fixed{padding:12px 10px!important}
+  #settings .c5c-taxes .c5c-broker-standings{grid-template-columns:minmax(0,1fr)!important}
+}

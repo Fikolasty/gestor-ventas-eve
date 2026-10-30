@@ -1672,12 +1672,12 @@
     "en": "Freight & refining"
   },
   "settings.groupTaxes": {
-    "es": "Impuestos del personaje",
-    "en": "Pilot taxes"
+    "es": "IMPUESTOS",
+    "en": "TAXES"
   },
   "settings.groupTaxesHelp": {
-    "es": "Impuestos de venta, Broker y tasas de mercado según los ajustes aplicables.",
-    "en": "Sales Tax, Broker fees and market charges according to your settings."
+    "es": "Tasas efectivas de venta y Broker para las rutas configuradas.",
+    "en": "Effective Sales Tax and Broker fees for your configured selling routes."
   },
   "settings.groupPrices": {
     "es": "Modificación de precios",
@@ -1688,36 +1688,36 @@
     "en": "Margins, orders, ice, Buyback and direct sales. Configure pilot fees in the Pilot tab."
   },
   "settings.pilotHeading": {
-    "es": "HABILIDADES DEL PERSONAJE",
-    "en": "PILOT SKILLS"
-  },
-  "settings.pilotDescription": {
-    "es": "Ajusta los niveles de tu piloto. Sus habilidades influyen en impuestos, órdenes y reproceso.",
-    "en": "Set your pilot's skills for market fees and refining yields."
-  },
-  "settings.skillsTitle": {
     "es": "HABILIDADES",
     "en": "SKILLS"
   },
+  "settings.pilotDescription": {
+    "es": "Niveles de personaje que influyen en las tasas de mercado y el rendimiento de reproceso.",
+    "en": "Pilot skill levels that affect market fees and reprocessing yield."
+  },
+  "settings.skillsTitle": {
+    "es": "Controles de habilidades",
+    "en": "Skill level controls"
+  },
   "settings.skillsSubtitle": {
-    "es": "Con ESI se cargan tus niveles reales; puedes simular cambios manualmente.",
-    "en": "ESI loads your actual levels automatically. You can simulate different levels."
+    "es": "ESI sincroniza las habilidades compatibles; el procesamiento de mineral o hielo se ajusta manualmente. Puedes simular otros niveles.",
+    "en": "ESI syncs supported skills; ore or ice processing is set manually. You can simulate other levels."
   },
   "settings.skillsIntro": {
     "es": "Los impuestos se actualizan con Accounting y Broker Relations. Las habilidades de reproceso afectan los materiales recuperados.",
     "en": "Accounting and Broker Relations affect market fees. Reprocessing skills improve material yield."
   },
   "settings.taxesTitle": {
-    "es": "IMPUESTOS Y COMISIONES",
-    "en": "TAXES & FEES"
+    "es": "Valores de impuestos y comisiones",
+    "en": "Tax and fee values"
   },
   "settings.taxesSubtitle": {
-    "es": "Se aplican a las rutas correspondientes de venta.",
-    "en": "Applied to the relevant selling routes."
+    "es": "Tasas efectivas aplicadas a cada ruta de venta.",
+    "en": "Effective rates applied to each selling route."
   },
   "settings.taxesIntro": {
-    "es": "Accounting y Broker Relations modifican las tasas vinculadas. Puedes introducir las tasas reales del juego cuando sean diferentes.",
-    "en": "Linked fees update with your skills. You can also enter the actual rates shown in EVE."
+    "es": "Accounting actualiza Sales Tax; Broker Relations y los standings ajustan el Broker de Jita. Puedes introducir las tasas que muestra EVE.",
+    "en": "Accounting updates Sales Tax; Broker Relations and standings adjust the Jita Broker fee. You can enter the rates shown in EVE."
   },
   "settings.skillOre": {
     "es": "Procesamiento de mineral o hielo",

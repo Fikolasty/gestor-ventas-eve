@@ -2293,5 +2293,11 @@
   "Bajar un nivel": "Decrease one level",
   "Subir habilidad": "Increase skill level",
   "Nivel máximo": "Maximum level",
-  "Adquirir skillbook": "Acquire skillbook"
+  "Adquirir skillbook": "Acquire skillbook",
+  "Standing de Jita": "Jita standings",
+  "Standing de facción": "Faction standing",
+  "Standing de corp": "Corp standing",
+  "−0,03 puntos porcentuales por punto.": "−0.03 percentage points per standing point.",
+  "−0,02 puntos porcentuales por punto.": "−0.02 percentage points per standing point.",
+  "Usa la tasa efectiva que muestra EVE; ya incluye Broker Relations y standings.": "Use the effective rate shown in EVE; it already includes Broker Relations and standings."
 }

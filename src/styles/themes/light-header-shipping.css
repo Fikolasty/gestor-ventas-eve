@@ -162,3 +162,15 @@ html.light body .top.mm-ho-root #mmTabs>.mm-ho-main .mm-modgroup .mm-mod[aria-se
   border:0!important;background:transparent!important;
   box-shadow:inset 0 -3px 0 var(--clay)!important;color:var(--txt)!important
 }
+
+
+/* C.5b.2a — keep the nested Broker card coherent after legacy Light overrides. */
+html.light #settings .c5c-taxes .c5c-broker-cluster{
+  background:var(--surface-card)!important;border-color:var(--line2)!important
+}
+html.light #settings .c5c-taxes .c5c-broker-main{
+  background:transparent!important;border-color:transparent!important;box-shadow:none!important
+}
+html.light #settings .c5c-taxes .c5c-broker-standings .st-f{
+  background:var(--surface-panel)!important;border-color:var(--line2)!important
+}
