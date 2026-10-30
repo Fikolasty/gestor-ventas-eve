@@ -21,7 +21,18 @@ class C5b2SettingsTests(unittest.TestCase):
         self.page.goto(INDEX.as_uri(),wait_until="domcontentloaded")
         self.page.evaluate("togglePanel('settings',true)")
         self.page.locator("#mm-settings-tab-1").click()
-        self.page.locator(".c5c-skill-card[data-skill=\"skAcc\"] .eve-sk-minus").wait_for(timeout=10000)
+        try:
+            self.page.locator(".c5c-skill-card[data-skill=\"skAcc\"] .eve-sk-minus").wait_for(timeout=2500, state="attached")
+        except Exception as exc:
+            detail=self.page.evaluate("""() => {
+              const native=$('skAcc'),card=document.querySelector('.c5c-skill-card[data-skill="skAcc"]');
+              return {ready:document.readyState,native:!!native,enhanced:native?.dataset.eveDone,
+                cards:document.querySelectorAll('.c5c-skill-card').length,
+                inside:card?.querySelectorAll('.eve-sk').length,
+                everywhere:document.querySelectorAll('.eve-sk').length,
+                html:card?.outerHTML.slice(0,1800)};
+            }""")
+            raise AssertionError(f"Skill enhancer not mounted: {detail}") from exc
     def tearDown(self):
         self.assertEqual(self.errors,[])
         self.page.close()

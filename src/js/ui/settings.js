@@ -407,6 +407,7 @@ let pending=false;function check(){if(pending)return;pending=true;queueMicrotask
 // The embedded script may execute after DOMContentLoaded in a distributable;
 // initialize immediately when the DOM is already interactive/complete.
 const mountSkillLevels=()=>{check();const root=document.getElementById('mining');if(root){const observer=new MutationObserver(check);observer.observe(root,{subtree:true,childList:true});window.addEventListener('pagehide',()=>observer.disconnect(),{once:true})}};
+enhanceSettings(); // The original Settings controls already exist before the bundled script.
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',mountSkillLevels,{once:true});
 else mountSkillLevels();
 })();
