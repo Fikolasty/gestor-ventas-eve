@@ -88,6 +88,30 @@ class C5b2SettingsTests(unittest.TestCase):
         self.assertIn("Nivel 2/5",card.locator(".c5c-skill-note").inner_text())
         card.locator(".eve-sk-minus").click()
         self.assertEqual(card.locator(".c5c-skill-source").inner_text(),"Manual")
+    def test_settings_character_tax_visual_snapshots(self):
+        out=Path(__file__).resolve().parent/"artifacts"/"theme"
+        out.mkdir(parents=True,exist_ok=True)
+        self.page.set_viewport_size({"width":1440,"height":1000})
+        self.page.evaluate("setLang('es')")
+        for light,filename in ((False,"c5b2-settings-character-tax-es-dark-1440.png"),
+                               (True,"c5b2-settings-character-tax-es-light-1440.png")):
+            self.page.evaluate("""value => {
+                const sw=document.querySelector('#themeLight');
+                sw.checked=!value;
+                sw.dispatchEvent(new Event('change',{bubbles:true}));
+            }""",light)
+            self.page.evaluate("window.scrollTo(0,0)")
+            self.page.screenshot(path=str(out/filename),animations="disabled",full_page=True)
+        self.page.evaluate("setLang('en')")
+        self.page.evaluate("""() => {
+            const sw=document.querySelector('#themeLight');
+            sw.checked=true;
+            sw.dispatchEvent(new Event('change',{bubbles:true}));
+        }""")
+        self.page.evaluate("window.scrollTo(0,0)")
+        self.page.screenshot(path=str(out/"c5b2-settings-character-tax-en-dark-1440.png"),
+                             animations="disabled",full_page=True)
+
     def test_mobile_has_no_horizontal_overflow(self):
         self.page.set_viewport_size({"width":390,"height":844})
         self.assertLessEqual(self.page.evaluate("document.documentElement.scrollWidth-innerWidth"),1)
