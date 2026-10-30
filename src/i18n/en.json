@@ -2287,5 +2287,11 @@
   "Los niveles de ESI se cargan automáticamente. Puedes simular otros valores.": "ESI loads your actual levels automatically. You can simulate different levels.",
   "Accounting y Broker Relations influyen en las tasas de mercado. Reprocessing mejora el rendimiento de los materiales.": "Accounting and Broker Relations affect market fees. Reprocessing skills improve material yield.",
   "Se aplican a las rutas de venta correspondientes.": "Applied to the relevant selling routes.",
-  "Las tasas vinculadas cambian con las habilidades. También puedes introducir las tarifas reales que muestra EVE.": "Linked fees update with your skills. You can also enter the actual rates shown in EVE."
+  "Las tasas vinculadas cambian con las habilidades. También puedes introducir las tarifas reales que muestra EVE.": "Linked fees update with your skills. You can also enter the actual rates shown in EVE.",
+  "Skills de Minería": "Mining skills",
+  "Nivel mínimo": "Minimum level",
+  "Bajar un nivel": "Decrease one level",
+  "Subir habilidad": "Increase skill level",
+  "Nivel máximo": "Maximum level",
+  "Adquirir skillbook": "Acquire skillbook"
 }
