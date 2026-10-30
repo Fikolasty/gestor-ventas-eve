@@ -49,8 +49,8 @@ test('finance disclosure retains ordinary estimation context and exceptional war
 
 test('filters remain real buttons and monetary rows still use original engine amounts',()=>{
   assert.match(picker,/b\.dataset\.pkf=f;b\.setAttribute\('aria-pressed'/);
-  assert.match(picker,/const d=t\.net-opt;/);
-  assert.match(picker,/const compact=compactIsk\(Math\.abs\(t\.net\)\)/);
+  assert.match(picker,/const d=t\.net-chosen\.t\.net;/);
+  assert.match(picker,/const compact=fmt\(Math\.abs\(t\.net\)\)/);
   assert.match(css,/#pSum \.pk-tools \.pk-fb\.on::after\{content:""/);
   assert.match(css,/#pSum \.pk-o \.pk-v\{grid-column:3!important;grid-row:1!important/);
   assert.match(css,/#pSum \.pk-o \.pk-d\{grid-column:4!important;grid-row:1!important/);

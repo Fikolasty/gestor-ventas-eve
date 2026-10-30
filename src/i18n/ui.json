@@ -948,8 +948,8 @@
     "en": "SEE ISK DIFFERENCES"
   },
   "picker.gap": {
-    "es": "ISK QUE DEJAS DE GANAR",
-    "en": "ISK YOU GIVE UP"
+    "es": "Menos que la mejor opción",
+    "en": "Less than the best alternative"
   },
   "picker.gain": {
     "es": "ISK EXTRA",
@@ -1096,32 +1096,32 @@
     "en": "—"
   },
   "route.auto": {
-    "es": "Plan óptimo",
-    "en": "Optimal plan"
+    "es": "Plan recomendado",
+    "en": "Recommended plan"
   },
   "route.fN": {
-    "es": "Importar y vender en {system}",
-    "en": "Import and sell in {system}"
+    "es": "Orden {system}",
+    "en": "{system} order"
   },
   "route.fJ": {
-    "es": "Vender con órdenes en Jita",
-    "en": "Sell with Jita orders"
+    "es": "Orden Jita",
+    "en": "Jita order"
   },
   "route.fJI": {
-    "es": "Venta inmediata en Jita",
-    "en": "Instant sale in Jita"
+    "es": "Insta Jita",
+    "en": "Instant Jita"
   },
   "route.null": {
-    "es": "Vender en {system}",
-    "en": "Sell in {system}"
+    "es": "Orden {system}",
+    "en": "{system} order"
   },
   "route.jOrd": {
-    "es": "Vender con órdenes en Jita",
-    "en": "Sell with Jita orders"
+    "es": "Orden Jita",
+    "en": "Jita order"
   },
   "route.jInst": {
-    "es": "Venta inmediata en Jita",
-    "en": "Instant sale in Jita"
+    "es": "Insta Jita",
+    "en": "Instant Jita"
   },
   "route.cOrd": {
     "es": "Comprimir y vender con orden en Jita",
@@ -1132,8 +1132,8 @@
     "en": "Compress and sell instantly in Jita"
   },
   "route.bb": {
-    "es": "Vender al Buyback",
-    "en": "Sell to Buyback"
+    "es": "Buyback",
+    "en": "Buyback"
   },
   "route.rNull": {
     "es": "Reprocesar y vender en {system}",
@@ -1144,8 +1144,8 @@
     "en": "Reprocess and sell in Jita"
   },
   "route.disc": {
-    "es": "Vender a otro jugador",
-    "en": "Sell to another player"
+    "es": "Otro jugador",
+    "en": "Other player"
   },
   "route.prefix": {
     "es": "la ruta «{name}»",
@@ -1878,5 +1878,137 @@
   "picker.alternativesAria": {
     "es": "Otros planes",
     "en": "Other plans"
+  },
+  "picker.guideHow": {
+    "es": "Cómo funciona",
+    "en": "How it works"
+  },
+  "picker.guideCompare": {
+    "es": "Qué ganas o sacrificas",
+    "en": "What you gain or give up"
+  },
+  "picker.guideShipping": {
+    "es": "Efecto del envío",
+    "en": "Shipping impact"
+  },
+  "picker.comparisonBasis": {
+    "es": "Diferencias frente a {plan} · Impuestos y envío incluidos",
+    "en": "Differences relative to {plan} · Taxes and shipping included"
+  },
+  "picker.guideAuto": {
+    "es": "Combina las rutas con mejor resultado para tus Items. Puede coincidir con una sola ruta si es la mejor opción para todo el lote.",
+    "en": "Combines the strongest routes for your Items. It can match one route when that is best for the whole lot."
+  },
+  "picker.guideBuyback": {
+    "es": "Vendes al Buyback sin gestionar tus propias órdenes. Confirma los Items aceptados y las condiciones de pago del programa.",
+    "en": "Sell to Buyback without managing your own orders. Confirm accepted Items and program payment terms."
+  },
+  "picker.guideJita": {
+    "es": "Publicas órdenes en Jita. Optas al precio estimado de venta, pero debes esperar a que compren tus Items.",
+    "en": "List orders in Jita. You seek the estimated selling price, but must wait for buyers."
+  },
+  "picker.guideLocal": {
+    "es": "Publicas órdenes en {market}. Dependes del mercado local para completar la venta.",
+    "en": "List orders in {market}. Completing the sale depends on local market buyers."
+  },
+  "picker.guideImport": {
+    "es": "Compras en Jita y vendes en {market}. Revisa la inversión, el envío y la espera hasta completar la venta.",
+    "en": "Buy in Jita and sell in {market}. Check investment, shipping and the wait to complete the sale."
+  },
+  "picker.guideInstant": {
+    "es": "Evita esperar una orden propia: vendes a compras existentes en Jita. El precio depende de que haya compras suficientes para tu cantidad.",
+    "en": "Avoids waiting for your own order: sell into existing Jita bids. The price depends on sufficient buy orders for your quantity."
+  },
+  "picker.guidePlayer": {
+    "es": "Preparas una oferta WTS. No hay comprador ni plazo confirmados; el importe no es una venta garantizada.",
+    "en": "Prepare a WTS offer. Neither buyer nor timing is confirmed; the amount is not a guaranteed sale."
+  },
+  "picker.guideOrderWait": {
+    "es": "A cambio, aceptas esperar compradores para las órdenes. Los plazos no están garantizados.",
+    "en": "In return, you accept waiting for order buyers. Timing is not guaranteed."
+  },
+  "picker.guideFastWait": {
+    "es": "Evitas gestionar una orden propia; el pago sigue las condiciones de cada ruta.",
+    "en": "Avoid managing your own order; payment follows each route’s terms."
+  },
+  "picker.guideAgainst": {
+    "es": "Frente a {plan}: ",
+    "en": "Compared with {plan}: "
+  },
+  "picker.guideMore": {
+    "es": "recibes {amount} más.",
+    "en": "you receive {amount} more."
+  },
+  "picker.guideLess": {
+    "es": "recibes {amount} menos.",
+    "en": "you receive {amount} less."
+  },
+  "picker.guideProfitMore": {
+    "es": "tu resultado es {amount} mayor.",
+    "en": "your result is {amount} higher."
+  },
+  "picker.guideProfitLess": {
+    "es": "tu resultado es {amount} menor.",
+    "en": "your result is {amount} lower."
+  },
+  "picker.guideEqual": {
+    "es": "mismo resultado.",
+    "en": "same result."
+  },
+  "picker.guideNoComparison": {
+    "es": "No hay otra alternativa comparable con los datos disponibles.",
+    "en": "No other alternative can be compared using the available data."
+  },
+  "picker.guideShipCost": {
+    "es": "{amount} ya descontados del resultado. No los restes otra vez.",
+    "en": "{amount} already deducted from the result. Do not subtract them again."
+  },
+  "picker.guideNoShip": {
+    "es": "Este plan no descuenta envío.",
+    "en": "This plan has no shipping deduction."
+  },
+  "picker.unitsTitle": {
+    "es": "Ver importes por unidad de cada Item",
+    "en": "View per-unit amounts for each Item"
+  },
+  "picker.unitBefore": {
+    "es": "Antes del envío / u.",
+    "en": "Before shipping / unit"
+  },
+  "picker.unitShipping": {
+    "es": "Envío / u.",
+    "en": "Shipping / unit"
+  },
+  "picker.unitProceeds": {
+    "es": "Recibes / u.",
+    "en": "You receive / unit"
+  },
+  "picker.unitPurchase": {
+    "es": "Compra / u.",
+    "en": "Purchase / unit"
+  },
+  "picker.unitProfit": {
+    "es": "Ganancia / u.",
+    "en": "Profit / unit"
+  },
+  "picker.unitContext": {
+    "es": "{quantity} unidades · {plan}",
+    "en": "{quantity} units · {plan}"
+  },
+  "picker.unitPrevious": {
+    "es": "Anterior",
+    "en": "Previous"
+  },
+  "picker.unitNext": {
+    "es": "Siguiente",
+    "en": "Next"
+  },
+  "picker.unitPage": {
+    "es": "Página {page} de {pages}",
+    "en": "Page {page} of {pages}"
+  },
+  "picker.unitPager": {
+    "es": "Páginas de importes por Item",
+    "en": "Per-Item amount pages"
   }
 }

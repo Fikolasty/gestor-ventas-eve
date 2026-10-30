@@ -35,11 +35,11 @@ jobs:
       - name: Build single-file app
         id: build_site
         run: |
-          python3 build.py 1.0.166
+          python3 build.py 1.0.167
           test -s index.html
           grep -q 'EVE7 theme ownership' index.html
           grep -q 'Login' index.html
-          grep -q 'v1.0.166' index.html
+          grep -q 'v1.0.167' index.html
           grep -Fq 'B.21 v1.0.158' index.html
           grep -Fq 'id="pkOverviewToggle" aria-controls="pkOverviewContent"' index.html
           grep -Fq 'id="pkInsightsToggle" aria-controls="pkInsightsContent"' index.html
@@ -98,7 +98,7 @@ jobs:
 
           - Source commit: \`${GITHUB_SHA}\`
           - Workflow run: \`${GITHUB_RUN_ID}\`
-          - Version: \`1.0.166\`
+          - Version: \`1.0.167\`
           - Verified before publication: Python source assembly, Node syntax, SIGMA Freight formula regression, build, Chromium Light/Dark contrast and Login/Iniciar sesión checks.
           - Limitation: automated headless checks do not replace human visual review of every view or live ESI/SSO.
           EOF
@@ -109,7 +109,7 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add index.html docs/QA_STATUS.md
           if ! git diff --cached --quiet; then
-            git commit -m "build: publish Market Moves+ 1.0.166 from modular sources"
+            git commit -m "build: publish Market Moves+ 1.0.167 from modular sources"
             # Other documentation / source commits may land while Chromium runs.
             # Rebase our tested artifact instead of overwriting or force pushing.
             for attempt in 1 2 3 4; do
@@ -148,7 +148,7 @@ jobs:
           mkdir -p _site
           cp index.html _site/index.html
           touch _site/.nojekyll
-          grep -q 'v1.0.166' _site/index.html
+          grep -q 'v1.0.167' _site/index.html
       - name: Upload verified GitHub Pages artifact
         if: steps.publish_site.outputs.published == 'true'
         uses: actions/upload-pages-artifact@v3
@@ -170,7 +170,7 @@ jobs:
           body="# Market Moves+ — CI publication blocked\\n\\n"
           body+=f"- Source: \`{os.environ['GITHUB_SHA']}\`\\n"
           body+=f"- Run: \`{os.environ['GITHUB_RUN_ID']}\`\\n"
-          body+="- Expected version: \`1.0.166\`\\n"
+          body+="- Expected version: \`1.0.167\`\\n"
           body+="- Failed gates: "+(', '.join(failed) or 'unknown (check GitHub Actions logs)')+"\\n"
           body+="\\nPublication was stopped. See the workflow run for error details.\\n"
           pathlib.Path('docs/CI_FAILURE.md').write_text(body,encoding='utf-8')
@@ -180,7 +180,7 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add docs/CI_FAILURE.md
           if ! git diff --cached --quiet; then
-            git commit -m "ci: record failed v1.0.166 publication gate"
+            git commit -m "ci: record failed v1.0.167 publication gate"
             git fetch origin main
             git rebase origin/main || { git rebase --abort || true; exit 0; }
             git push origin HEAD:main || true
@@ -210,12 +210,12 @@ jobs:
           for attempt in $(seq 1 15); do
             if pages_html=$(curl -fLsS --connect-timeout 10 --max-time 20 "${PAGES_URL}?verified=${GITHUB_RUN_ID}") && \
                grep -Fq 'class="hero-referral-offer" data-i18n="referral.freeSp">1,000,000 SP GRATIS</span>' <<< "$pages_html" && \
-               grep -Fq 'v1.0.166' <<< "$pages_html" && \
+               grep -Fq 'v1.0.167' <<< "$pages_html" && \
                grep -Fq 'class="mm-step-drawer" id="stepDrawer"' <<< "$pages_html"; then
-              echo "Public GitHub Pages confirms B.21 compact Discord steps and fixed destination language v1.0.166 at $PAGES_URL"
+              echo "Public GitHub Pages confirms B.21 compact Discord steps and fixed destination language v1.0.167 at $PAGES_URL"
               exit 0
             fi
-            echo "Waiting for Pages CDN to serve v1.0.166 (attempt $attempt of 15)"
+            echo "Waiting for Pages CDN to serve v1.0.167 (attempt $attempt of 15)"
             sleep 6
           done
           echo "Pages deployment did not serve the validated static SP banner."

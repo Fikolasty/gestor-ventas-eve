@@ -301,12 +301,12 @@ Contraband Freight = no</textarea><small>Una regla por línea: Nombre = tax tota
           <div class="pk-tools" id="pkTools"></div>
           <div class="mm-plan-sort"><span data-i18n="picker.sortLabel">Ordenar</span><select id="pkSort" aria-label="Ordenar planes" data-i18n-aria-label="picker.sortAria"><option value="net:-1" data-i18n="picker.sortMost">Más ISK</option><option value="net:1" data-i18n="picker.sortLeast">Menos ISK</option><option value="speed:1" data-i18n="picker.sortFast">Más rápidos</option><option value="ship:1" data-i18n="picker.sortNoShip">Sin envío primero</option><option value="name:1" data-i18n="picker.sortName">Nombre A–Z</option></select><button type="button" id="pkSortToggle" aria-haspopup="listbox" aria-controls="pkSortMenu" aria-expanded="false" hidden></button></div>
         </div>
-        <div class="pk c5c-selected-plan" id="pk" role="group" aria-label="Plan seleccionado" data-i18n-aria-label="picker.selectedPlanAria"></div><div class="pk-w"><div class="pk" id="pkOthers" role="group" aria-label="Otros planes" data-i18n-aria-label="picker.alternativesAria"></div></div>
+        <div class="pk c5c-selected-plan" id="pk" role="group" aria-label="Plan seleccionado" data-i18n-aria-label="picker.selectedPlanAria"></div><p id="pkComparisonBasis" class="pk-comparison-basis"></p><div class="pk-w"><div class="pk" id="pkOthers" role="group" aria-label="Otros planes" data-i18n-aria-label="picker.alternativesAria"></div></div>
         </div>
       </section>
       <section class="mm-speed-card mm-decision-card" id="pkSpeedBox">
         <header class="c5c-analysis-selected"><span><small data-i18n="picker.selected">Seleccionado</small><strong class="c5c-analysis-route" id="pkAnalysisRoute"></strong></span><strong class="num" id="pkAnalysisValue"></strong></header>
-        <div class="c5c-analysis-main"><div class="c5c-analysis-copy"><section><h4 data-i18n="picker.advantages">Ventajas</h4><ul id="pkAdvantages"></ul></section><section><h4 data-i18n="picker.tradeoffs">Contrapartidas</h4><ul id="pkTradeoffs"></ul></section></div>
+        <div class="c5c-analysis-main"><div class="c5c-analysis-copy"><section><h4 data-i18n="picker.guideHow">Cómo funciona</h4><ul id="pkAdvantages"></ul></section><section><h4 data-i18n="picker.guideCompare">Qué ganas o sacrificas</h4><ul id="pkTradeoffs"></ul></section><section><h4 data-i18n="picker.guideShipping">Efecto del envío</h4><p id="pkGuideShipping"></p></section></div>
         <div id="pkAnalysisEconomy"></div></div>
         <dl class="c5c-analysis-facts" id="pkAnalysisFacts"></dl>
         <aside class="pk-shortcut" id="pkShortcut" aria-live="polite" hidden></aside>
@@ -327,7 +327,7 @@ Contraband Freight = no</textarea><small>Una regla por línea: Nombre = tax tota
           <div><dt data-i18n="picker.shippingCost">Envío estimado</dt><dd id="pkResultShip"></dd></div>
           <div><dt data-i18n="picker.salesDestination">Dónde se vende</dt><dd id="pkResultDestination"></dd></div>
         </dl>
-        <p class="mm-plan-result-warning" id="pkResultWarning" hidden></p>
+        <p class="mm-plan-result-warning" id="pkResultWarning" hidden></p><details class="mm-plan-units" id="pkUnits"><summary data-i18n="picker.unitsTitle">Ver importes por unidad de cada Item</summary><div id="pkUnitRows"></div></details>
       </section>
       <details class="ov-card ov-flow mm-finance-details" id="vFinanceDetails" open><summary data-i18n="verdict.inspectBreakdown">Ver distribución de ingresos y destinos</summary><div class="mm-finance-details-body"><h4 data-i18n="picker.moneyOrigin">DE DÓNDE SALE TU ISK</h4><div id="ovFlow"></div><div class="mm-dest-inline" id="ovDestW"><h4 data-i18n="picker.salesDestinationUpper">DÓNDE SE VENDE</h4><div id="ovDest"></div></div><p class="mm-finance-estimate" id="vEstimateHelp" hidden></p></div></details>
         </div>

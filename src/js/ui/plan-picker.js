@@ -27,26 +27,47 @@ function syncPlanPanel(){
 }
 // C.5c: present the selected plan using existing route/time classifications.
 // These descriptions are qualitative, never a forecast of fills or a risk score.
-function paintPlanAnalysis(P,chosen){
-  const routes=chosen.m==='auto'?P.rows.filter(r=>r.q>0&&r.best).map(r=>r.best):[chosen.m];
-  const kind=routes.length&&routes.every(m=>PK_FAST.has(m))?'Fast':
-    routes.includes('disc')?'Player':!routes.length||new Set(routes).size>1?'Mixed':'Order';
-  const copy={
-    Fast:['picker.analysisFast','picker.riskFast','picker.liquidityFast','picker.tradeoffFast'],
-    Player:['picker.analysisPlayer','picker.riskPlayer','picker.liquidityPlayer','picker.tradeoffPlayer'],
-    Mixed:['picker.analysisMixed','picker.riskMixed','picker.liquidityMixed','picker.tradeoffMixed'],
-    Order:['picker.analysisOrder','picker.riskOrder','picker.liquidityOrder','picker.tradeoffOrder']
-  }[kind];
+function paintPlanAnalysis(P,chosen,comparisons=[]){
+  const rows=P.rows.filter(r=>r.q>0&&r.best),routes=rows.map(r=>r.best);
+  const allFast=routes.length>0&&routes.every(m=>PK_FAST.has(m));
+  const keys={auto:'picker.guideAuto',bb:'picker.guideBuyback',jOrd:'picker.guideJita',fJ:'picker.guideJita',
+    null:'picker.guideLocal',fN:'picker.guideImport',jInst:'picker.guideInstant',fJI:'picker.guideInstant',disc:'picker.guidePlayer'};
+  const fallback=allFast?'picker.analysisFast':routes.includes('disc')?'picker.analysisPlayer':'picker.analysisOrder';
   $('pkAnalysisRoute').textContent=chosen.l;
-  const advantages=$('pkAdvantages'),tradeoffs=$('pkTradeoffs');
-  advantages.replaceChildren(el('li',null,tx(chosen.m==='auto'?'picker.bestDesc':copy[0])));
-  if(!pkShips(chosen.m,P))advantages.append(el('li',null,tx('picker.noShipping')));
-  tradeoffs.replaceChildren(el('li',null,tx(copy[3])));
+  $('pkAdvantages').replaceChildren(el('li',null,tx(keys[chosen.m]||fallback,{market:nullSystem()})));
+  const tradeoffs=$('pkTradeoffs');tradeoffs.replaceChildren();
+  const available=comparisons.filter(x=>x.m!==chosen.m&&x.m!=='disc'&&Number.isFinite(x.t.net));
+  const best=available.slice().sort((a,b)=>b.t.net-a.t.net)[0];
+  const fast=available.filter(x=>PK_FAST.has(x.m)).sort((a,b)=>b.t.net-a.t.net)[0];
+  const refs=[best,fast].filter((x,i,a)=>x&&a.findIndex(y=>y?.m===x.m)===i);
+  const profit=S.flip&&flipPlanAccounting(P)!=null;
+  for(const other of refs){
+    const gap=(chosen.t?.net??P.best)-other.t.net,node=el('li');
+    const prefix=el('span','mm-guide-plan',tx('picker.guideAgainst',{plan:other.l}));node.append(prefix);
+    if(Math.abs(gap)<.5)node.append(tx('picker.guideEqual'));
+    else{
+      const key=profit?(gap>0?'picker.guideProfitMore':'picker.guideProfitLess'):(gap>0?'picker.guideMore':'picker.guideLess');
+      const parts=tx(key,{amount:'__ISK__'}).split('__ISK__');
+      node.append(parts[0],el('strong','num '+(gap>0?'pos':'neg'),fmt(Math.abs(gap))),parts[1]||'');
+    }
+    tradeoffs.append(node);
+  }
+  if(!refs.length)tradeoffs.append(el('li',null,tx('picker.guideNoComparison')));
+  const hasOrders=routes.some(m=>m!=='disc'&&!PK_FAST.has(m));
+  if(hasOrders)tradeoffs.append(el('li',null,tx('picker.guideOrderWait')));
+  else if(allFast)tradeoffs.append(el('li',null,tx('picker.guideFastWait')));
+  if(chosen.m==='disc')tradeoffs.append(el('li',null,tx('picker.playerUnconfirmed')));
+  if(chosen.m!=='auto'&&chosen.t?.n<P.rows.length)
+    tradeoffs.append(el('li',null,tx('picker.partial',{selected:chosen.t.n,total:P.rows.length})));
+  const ship=$('pkGuideShipping');ship.replaceChildren();
+  if(P.shipCost>.5){
+    const parts=tx('picker.guideShipCost',{amount:'__ISK__'}).split('__ISK__');
+    ship.append(parts[0],el('strong','num neg','−'+fmt(P.shipCost)),parts[1]||'');
+  }else ship.textContent=tx('picker.guideNoShip');
   const facts=$('pkAnalysisFacts');facts.replaceChildren();
   for(const [label,value] of [
     ['picker.speedLabel',pkSpeed(new Set(routes).size===1?routes[0]:chosen.m,P)],
-    ['picker.shippingLabel',pkShips(chosen.m,P)?tx('picker.shippingRange',{range:C.cDays[0]+'–'+C.cDays[1]}):tx('picker.noShipping')],
-    ['picker.riskLabel',tx(copy[1])],['picker.liquidityLabel',tx(copy[2])]
+    ['picker.shippingLabel',P.shipCost>.5?tx('picker.shippingRange',{range:C.cDays[0]+'–'+C.cDays[1]}):tx('picker.noShipping')]
   ]){const entry=el('div');entry.append(el('dt',null,tx(label)),el('dd',null,value));facts.append(entry);}
 }
 // Both chart views consume the very same segments produced by paintVerdict.
@@ -71,7 +92,8 @@ function paintPlanDonut(segs,sum,P){
       el('dd','num '+(kind==='net'?'pos':'neg'),(kind==='cost'?'−':'')+fmt(amount)));legend.append(row);
   }
   const ring=el('div','c5c-donut-wrap'),center=el('span','c5c-donut-center');
-  center.append(el('strong','num pos',compactIsk(P.best)+' ISK'),el('small',null,tx('picker.netProceeds')));
+  const full=el('strong','num pos',NF0.format(Math.round(P.best)));
+  full.append(el('span',null,'ISK'));center.append(full,el('small',null,tx('picker.netProceeds')));
   ring.append(donut,center);chart.append(ring,legend);host.append(chart);
   if(P.rows.some(r=>r.best==='fN'))host.append(el('p',null,tx('picker.analysisPartial')));
 }
@@ -180,7 +202,9 @@ function paintPicker(P){
   // Mantener siempre visible el plan elegido, aunque su resultado sea idéntico al óptimo.
   const list=all.filter(x=>x.m===cur||!same.includes(x.m));
   const chosen=all.find(x=>x.m===cur)||all[0];
-  paintPlanAnalysis(P,chosen);
+  paintPlanAnalysis(P,chosen,all);
+  $('pkComparisonBasis').textContent=tx('picker.comparisonBasis',{plan:chosen.l});
+  paintPlanUnits(P);
   // Only reuse amounts from existing accounting and plan totals. No new
   // pricing or profit formula is introduced by the result companion card.
   const selectedNet=$('pkResultValue'),metric=$('pkResultMetric');
@@ -201,9 +225,6 @@ function paintPicker(P){
   $('pkResultFees').textContent=onlyImport?tx('picker.feesIncluded'):
     (knownFees?'−':'')+(marketFees||'—')+(includesImport?' · '+tx('picker.feesPartial'):'');
   $('pkResultFees').className=knownFees&&!onlyImport?'neg':'';
-  const feeTradeoff=el('li');feeTradeoff.append(tx('picker.marketFees')+': ',
-    el('span',$('pkResultFees').className,$('pkResultFees').textContent));
-  $('pkTradeoffs').append(feeTradeoff);
   $('pkResultShip').textContent=(P.shipCost>0.5?'−':'')+fmt(P.shipCost||0);
   $('pkResultShip').className=P.shipCost>0.5?'neg':'zero';
   const destinations=[...new Set(P.rows.filter(r=>r.q>0&&r.best).map(r=>r.best))];
@@ -341,7 +362,7 @@ function paintPicker(P){
   bar.hidden=!bar.textContent;
   box.classList.toggle('pk-noship',!SH());others.classList.toggle('pk-noship',!SH());
   function row({m,l,t},selected){
-    const d=t.net-opt;
+    const d=t.net-chosen.t.net;
     const b=el('button','pk-o'+(selected?' on':'')+(m==='auto'?' best':''));
     b.type='button';
     if(shortcut&&m===shortcut.m&&!selected)b.classList.add('pk-shortcut-highlight');
@@ -364,11 +385,11 @@ function paintPicker(P){
     txt.append(nm);
     if(selected)txt.append(el('small','c5c-selected-description',tx(short[m]||'picker.bestDesc')));
     b.setAttribute('aria-label',l+'. '+(showProfit?tx('picker.estimatedProfit'):tx('picker.netProceeds'))+': '+fmt(t.net)+'. '+(selected?tx('picker.selected'):tx(short[m]||'picker.bestDesc')+part));
-    const diff=m==='auto'?tx('picker.optimal'):Math.round(d)===0?tx('picker.same'):(d>0?'+':'−')+compactIsk(Math.abs(d));
-    const compact=compactIsk(Math.abs(t.net))+(Math.abs(t.net)>=1000?' ISK':'');
+    const diff=Math.round(d)===0?tx('picker.same'):(d>0?'+':'−')+fmt(Math.abs(d));
+    const compact=fmt(Math.abs(t.net));
     b.append(el('span','pk-dot'),txt,
       el('b','pk-v num '+sgn(t.net),(t.net<0?'−':showProfit?'+':'')+compact),
-      el('small','pk-d '+(m==='auto'||Math.round(d)===0?'':d>0?'pos':'neg'),diff));
+      el('small','pk-d '+(Math.round(d)===0?'':d>0?'pos':'neg'),diff));
     if(part)b.title=part.trim();
     return b;
   }
@@ -636,3 +657,45 @@ function paintSummary(P){
     compactIsk(active?active.profit:P.best)+' ISK · Market Moves+';
   paintFlipBuy(P);
 }
+
+// Optional unit detail is bounded and lazy. Reads the canonical freight allocation;
+// no quotes, settings, ownership or financial results are changed here.
+let pkUnitPage=0;
+function paintPlanUnits(P){
+  const details=$('pkUnits'),host=$('pkUnitRows');
+  const rows=P.rows.filter(r=>r.q>0&&r.best);
+  details.hidden=!rows.length;
+  host.replaceChildren();if(!details.open||!rows.length)return;
+  const pages=Math.ceil(rows.length/10);pkUnitPage=Math.max(0,Math.min(pkUnitPage,pages-1));
+  const trade=flipPlanAccounting(P);
+  const figure=(key,amount,cost=false)=>{
+    const row=el('div'),valid=Number.isFinite(amount),tone=!valid||Math.abs(amount)<.0000001?'':cost?'neg':sgn(amount);
+    row.append(el('dt',null,tx(key)),el('dd','num '+tone,valid?(cost&&amount>0?'−':'')+fmt(amount):'—'));return row;
+  };
+  for(const r of rows.slice(pkUnitPage*10,pkUnitPage*10+10)){
+    const unit=courierUnitPresentation(r);if(!unit)continue;
+    const card=el('article'),list=el('dl');
+    card.append(el('strong',null,r.o.name),el('span',null,tx('picker.unitContext',{quantity:fmtQ(r.q),plan:modeName(r.best)})));
+    list.append(figure('picker.unitBefore',unit.base),figure('picker.unitShipping',unit.freightUnit,true),figure('picker.unitProceeds',unit.unit));
+    if(trade){
+      const purchase=tradePurchaseCost(r)/r.q;
+      list.append(figure('picker.unitPurchase',purchase,true),figure('picker.unitProfit',unit.unit-purchase));
+    }
+    card.append(list);host.append(card);
+  }
+  if(pages>1){
+    const nav=el('nav');nav.setAttribute('aria-label',tx('picker.unitPager'));
+    for(const [delta,key,disabled] of [[-1,'picker.unitPrevious',pkUnitPage===0],[1,'picker.unitNext',pkUnitPage===pages-1]]){
+      const button=el('button',null,tx(key));button.type='button';button.dataset.unitPage=String(delta);button.disabled=disabled;nav.append(button);
+      if(delta===-1)nav.append(el('span',null,tx('picker.unitPage',{page:pkUnitPage+1,pages})));
+    }
+    host.append(nav);
+  }
+}
+$('pkUnits').addEventListener('toggle',()=>{if(lastP)paintPlanUnits(lastP);});
+$('pkUnitRows').addEventListener('click',event=>{
+  const button=event.target.closest('[data-unit-page]');if(!button||!lastP)return;
+  const delta=Number(button.dataset.unitPage);if(delta!==-1&&delta!==1)return;
+  pkUnitPage+=delta;paintPlanUnits(lastP);
+  const focus=$('pkUnitRows').querySelector('[data-unit-page="'+delta+'"]:not(:disabled)')||$('pkUnits').querySelector('summary');focus.focus({preventScroll:true});
+});

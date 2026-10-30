@@ -3301,3 +3301,71 @@ body .top.mm-ho-root #mmTabs>.mm-ho-main #navHome{display:none!important}
 #pSum #pkSpeedBox .pk-shortcut-choice:first-child{display:flex!important;position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip-path:inset(50%)}
 @media(max-width:600px){#pSum .mm-plan-controls .pk-tools{flex:1 1 100%;width:100%}}
 @media(max-width:480px){#pSum #pkSpeedBox #pkShortcut{grid-template-columns:minmax(0,1fr)}}
+
+/* R8 v1.0.167 — approved original graphite drawers, readable prices and reactive guide. */
+/* r7 extends the actual v1.0.166 components without replacing their surfaces. */
+#pSum .mm-title,#pSum .mm-section-sub,#pSum .mm-plan-drawer-head {text-transform:uppercase!important}
+#pSum .mm-plan-drawer-head {font-size:17px!important;font-weight:650!important}
+#pSum .pk-o {grid-template-columns:18px minmax(0,1fr) auto!important;gap:4px 12px!important;padding:12px!important;min-height:70px!important}
+#pSum .pk-o .pk-dot {grid-column:1!important;grid-row:1/span 2!important;align-self:center!important;width:16px!important;height:16px!important}
+#pSum .pk-o .pk-tx {grid-column:2!important;grid-row:1/span 2!important;min-width:0!important}
+#pSum .pk-o .pk-l {font-size:16px!important;font-weight:600!important;line-height:1.4!important}
+#pSum .pk-o .pk-v {grid-column:3!important;grid-row:1!important;font:650 18px/1.4 var(--f-ui)!important;font-variant-numeric:tabular-nums!important;white-space:nowrap!important}
+#pSum .pk-o .pk-d {grid-column:3!important;grid-row:2!important;font:500 14px/1.4 var(--f-ui)!important;text-align:right!important;white-space:nowrap!important}
+#pSum #pk>.pk-o {min-height:82px!important;border-color:var(--clay)!important;box-shadow:inset 3px 0 0 var(--clay),0 0 15px -9px var(--clay)!important}
+#pSum #pk .pk-l,#pSum #pkAnalysisRoute {color:var(--clay)!important}
+#pSum #pk .pk-v {grid-row:1/span 2!important;font-size:20px!important}
+#pSum #pk .c5c-selected-description {font-size:14px!important;line-height:1.5!important;font-weight:400!important}
+#pSum .pk-comparison-basis {margin:0 0 10px;color:var(--mut);font:400 13px/1.5 var(--f-ui)}
+#pSum #pkAnalysisRoute {font-size:18px!important;font-weight:650!important}
+#pSum #pkAnalysisValue {font:650 21px/1.4 var(--f-ui)!important}
+#pSum .c5c-analysis-selected small {font-size:14px!important}
+#pSum .c5c-analysis-main {grid-template-columns:minmax(0,1.05fr) minmax(0,1fr)!important;gap:20px!important}
+#pSum .c5c-analysis-copy section+section {margin-top:17px}
+#pSum .c5c-analysis-copy h4,#pSum #pkAnalysisEconomy>h4 {font:650 13px/1.5 var(--f-ui)!important;text-transform:uppercase!important;margin:0 0 7px!important;color:var(--mut)!important}
+#pSum .c5c-analysis-copy p {font:400 15px/1.6 var(--f-ui);margin:0 0 10px;color:var(--txt)}
+#pSum .c5c-analysis-copy .mm-guide-money {font-weight:650;font-size:16px;white-space:nowrap;font-variant-numeric:tabular-nums}
+#pSum .mm-guide-plan {color:var(--clay);font-weight:550}
+#pSum .c5c-donut-wrap,#pSum .c5c-donut {width:150px!important;height:150px!important}
+#pSum .c5c-donut-center {inset:26px 12px!important}
+#pSum .c5c-donut-center strong {font:650 14px/1.4 var(--f-ui)!important;white-space:normal!important}
+#pSum .c5c-donut-center small {font:400 12px/1.4 var(--f-ui)!important}
+#pSum .c5c-donut-legend {font:400 14px/1.5 var(--f-ui)!important;gap:8px!important}
+#pSum .c5c-donut-legend>div {flex-wrap:wrap;gap:4px}
+#pSum .c5c-donut-legend dd {font-size:15px!important;font-weight:600!important}
+#pSum .c5c-analysis-facts {grid-template-columns:repeat(2,minmax(0,1fr))!important;font-size:14px!important}
+#pSum .c5c-analysis-facts>div:nth-child(n+3) {display:none!important}
+#pSum .c5c-analysis-facts dt {font-size:12px!important}
+#pSum #pkShortcut {display:none!important}
+#pSum #pkResultValue {font-size:32px!important;font-weight:700!important}
+#pSum .mm-plan-result-label,#pSum .mm-plan-facts,#pSum #pkHeadline {font-size:15px!important}
+#pSum #vFinanceDetails h4 {font-size:14px!important}
+#pSum #vFinanceDetails .ov-leg,#pSum #vFinanceDetails .ov-sum {font-size:14px!important}
+#pSum #pkUnits {margin-top:16px;border:1px solid var(--line2);border-radius:7px;background:var(--surface-card);padding:0;box-shadow:none}
+#pSum #pkUnits summary {font:550 14px/1.5 var(--f-ui);padding:10px 12px;color:var(--clay);background:transparent;cursor:pointer}
+#pSum #pkUnits article {padding:12px;border-top:1px solid var(--line2)}
+#pSum #pkUnits article>strong,#pSum #pkUnits article>span {display:block;font-size:14px}
+#pSum #pkUnits article>span {color:var(--mut);font-size:13px;margin:4px 0 8px}
+#pSum #pkUnits dl {margin:0}
+#pSum #pkUnits dl>div {display:flex;justify-content:space-between;gap:8px;padding:5px 0;font-size:14px}
+#pSum #pkUnits dd {margin:0;font-size:15px}
+@media(max-width:1100px){#pSum .c5c-analysis-main {grid-template-columns:minmax(0,1fr)!important}}
+@media(max-width:600px){#pSum .pk-o .pk-v {font-size:16px!important}#pSum #pk .pk-v {grid-column:2/-1!important;grid-row:3!important;font-size:20px!important}#pSum .pk-o .pk-l {font-size:15px!important}#pSum .pk-o .pk-d {font-size:13px!important}#pSum .mm-plan-drawer-head {font-size:15px!important}#pSum .c5c-analysis-selected {flex-wrap:wrap!important}#pSum #pkAnalysisValue {font-size:22px!important}#pSum #pkUnits dl>div {flex-direction:column}#pSum #pkOthers .pk-o {grid-template-columns:18px minmax(0,1fr)!important}#pSum #pkOthers .pk-tx {grid-row:1!important}#pSum #pkOthers .pk-v {grid-column:2!important;grid-row:2!important}#pSum #pkOthers .pk-d {grid-column:2!important;grid-row:3!important;text-align:left!important}}
+
+/* Full amounts remain legible inside the original donut hole. */
+#pSum .c5c-donut-wrap,#pSum .c5c-donut {width:180px!important;height:180px!important}
+#pSum .c5c-donut-center {inset:30px!important;width:120px!important;height:120px!important;overflow:visible!important}
+#pSum .c5c-donut-center strong {display:block!important;font-size:14px!important;white-space:nowrap!important;max-width:none!important}
+#pSum .c5c-donut-center strong>span {display:block!important;font-size:12px!important;margin-top:3px}
+#pSum .c5c-donut-center small {font-size:11px!important;white-space:normal!important}
+#pSum #pkSpeedBox #pkShortcut {display:none!important}
+@media(max-width:600px){#pSum .c5c-donut-layout {grid-template-columns:minmax(0,1fr)!important;justify-items:center!important}#pSum .c5c-donut-legend {width:100%!important}}
+#pSum .c5c-analysis-copy ul {padding:0!important;margin:0!important;list-style:none!important;font:400 15px/1.6 var(--f-ui)!important}
+#pSum .c5c-analysis-copy li+li {margin-top:10px!important}
+#pSum .c5c-analysis-copy li .num,#pSum .c5c-analysis-copy p .num {font-size:16px;font-weight:650;white-space:nowrap}
+#pSum #pkUnits nav {display:flex;justify-content:space-between;align-items:center;gap:10px;padding:12px;border-top:1px solid var(--line2);font-size:13px}
+#pSum #pkUnits nav button {font-size:14px;min-height:36px;padding:7px 12px;border:1px solid var(--line2);border-radius:6px;background:var(--surface-panel);color:var(--txt)}
+#pSum #pkUnits nav button:focus-visible {outline:2px solid var(--clay);outline-offset:2px}
+#pSum #pkUnits nav button:disabled {opacity:.45;cursor:default}
+
+#pSum #pkUnits article>strong,#pSum #pkUnits article>span {overflow-wrap:anywhere}

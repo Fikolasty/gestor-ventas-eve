@@ -38,7 +38,7 @@ class C5cPlanTests(unittest.TestCase):
     def tearDown(self):
         self.assertEqual(self.errors,[]);self.page.close()
     def test_complete_composition_matrix_and_drawer_states(self):
-        stamp='c5c-reference-20261030-v4'
+        stamp='r8-167-20261030-final'
         out=ROOT/'tests/artifacts/theme';out.mkdir(parents=True,exist_ok=True)
         for lang in ('es','en'):
             self.page.evaluate('(lang)=>setLang(lang)',lang)

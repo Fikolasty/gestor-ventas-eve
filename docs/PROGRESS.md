@@ -1,5 +1,15 @@
 # PROGRESS — Market Moves+
 
+## 2026-10-30 — R8 v1.0.167 autorizada e implementada localmente
+
+Propietario aprueba «Aplicar r8 y publicar tras las pruebas». Ver DSS §78. Se conserva identidad y DOM originales; precios completos, nombres cortos, diferencia frente al seleccionado, guía reactiva y detalle por unidad paginado/lazy. 150 Node, 16 Python, ocho legacy y 24 equivalencias PASS; Chromium y publicación pendientes. Última LIVE v1.0.166; no ESI/SSO real.
+
+
+## 2026-10-30 — Propuesta local de claridad en Elige tu plan
+
+Nueva prioridad del propietario, Ajustes en pausa. Ver DSS §77 y `PLANS_CLARITY_PROPOSAL.md`: cifras legibles completas, nombres cortos, diferencia contra el seleccionado y efecto del envío/inversión por Item en ambas direcciones. Preview aislado r3; 32 combinaciones Chromium y cuatro reconciliaciones PASS. Aprobación de dirección pendiente; sin cambios de producto, commit, push o deploy. LIVE sigue v1.0.166. El usuario pide opciones de aprobación por clic.
+
+
 ## 2026-10-30 — C.5c v1.0.166 LIVE certificada
 
 
@@ -857,3 +867,18 @@ Candidata v1.0.165: Broker Jita pasa a la primera fila de ancho completo; cBroke
 Source commit f655fd00eff4d4b236117b8f2bb0dd92b248146d; build commit 70dde51569706fbce6ed2c178469280938e53877. 4/4 workflows SUCCESS: Build 40999980538, Minería 40999980622, Rebuild/Pages 40999980692, Versiones 40999980739. Resultados: 147/147 Node, 16/16 Python, 72/72 Chromium. Nuevas pruebas de geometría responsive y snapshots pasaron. Artefacto 12953460873 con 10 capturas; revisión visual confirmada a 1440/980/630/390, Dark/Light y ES/EN. GitHub Pages confirmó v1.0.165 por HTTPS: https://fikolasty.github.io/gestor-ventas-eve/.
 
 Broker Jita ocupa la primera fila completa; cBroker queda en la primera columna y los dos standings comparten el resto. Sales Tax, Broker de estructura y SCC quedan en la fila siguiente. Sin overflow horizontal; DOM/foco en orden visual. No se alteraron fórmulas, IDs, ESI/SSO, persistencia, ventas ni minería. ESI/SSO real no probado; la suite usa integración sintética. C.5b.2a cerrada; no comenzar otra sección sin nueva instrucción.
+
+
+2026-10-30 — Corrección de la propuesta §77: propietario no aprueba r3; panel 2 debe ser mini guía reactiva al único selector de panel 1. Preview r5 sin selector secundario, todos los modos disponibles de cuatro fixtures comprobados y matriz 32 combinaciones repetida. Estados recomendado/Buyback inspeccionados en ES Dark/Light. Producción intacta, documentación y prototipo locales; revisión pendiente.
+
+
+2026-10-30 — Preview r6: guía reactiva confirmada; corrección solicitada de textos/tamaños y nombres con naranja --clay aplicada a la propuesta aislada. Matriz 32 combinaciones y selección de todos los modos PASS; captura Buyback ES desktop en ambos temas revisada. Sin cambios de producto ni publicación; propuesta completa pendiente de aprobación para implementar. Ver DSS §77 / PLANS_CLARITY_PROPOSAL.md.
+
+
+2026-10-30 — Propietario rechaza r6 por alejarse de la foto original. Nuevo preview r8 vuelve a DOM/CSS reales v1.0.166: grafito oscuro, gavetas, radios, uppercase, selección naranja y donut. Solo mejoras de lectura/nombres/importes/guía y detalle por unidad. 32 combinaciones visuales verificadas; recorte del donut de r7 corregido en r8, capturas finales revisadas. Todo local y pendiente de revisión, sin cambios de producción ni publicación. Ver DSS §77 y propuesta.
+
+
+2026-10-30 — Dirección visual r8 APROBADA expresamente por el propietario mediante opción seleccionable. Conservar base original/grafito/gavetas/uppercase/radio naranja/donut. Restan refinamiento de contenido y alcance final de implementación; no convertir la confirmación de dirección en aprobación integral ni release. LIVE v1.0.166 intacta, solo documentación local.
+
+
+R8 v1.0.167: cierre local completo, 150 Node / 16 Python / 79 Chromium / ocho legacy / 24 equivalencias PASS. Capturas finales reales en ambos temas/direcciones inspeccionadas. Build canónico 2.469.754 bytes, blob 099514fb895c2904258ee3f907695a82b4c71f98. Publicación Fiko y gates remotos pendientes.

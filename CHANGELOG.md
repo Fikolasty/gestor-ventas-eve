@@ -1,3 +1,11 @@
+## v1.0.167 — 2026-10-30 [ChatGPT] · R8 ELIGE TU PLAN — CANDIDATA
+
+- Conserva gavetas, cuatro paneles, grafito original, cabeceras uppercase, selección circular naranja y donut.
+- Nombres cortos y precios completos legibles; diferencias frente al plan seleccionado, con referencia explícita.
+- Guía del panel 2 reacciona al selector del panel 1, con comparación y efecto de envío, sin otro selector.
+- Importes por unidad de cada Item en detalle accesible, lazy y paginado. Compra/ganancia solo con base válida.
+- Economía, Settings, ESI/SSO, permisos y persistencia intactos. Estado y gates reales en DSS §78; no declarar LIVE antes de certificar.
+
 ## v1.0.166 — 2026-10-30 [ChatGPT] · C.5c ELIGE TU PLAN — LIVE CERTIFICADA
 
 **Cierre vigente:** Planes/Análisis arriba y Resultado/Distribución abajo, dos gavetas compartidas, seleccionado separado y Buyback sin marco blanco permanente. Fuente `d3d9918`, build `ddebadf3`; cuatro Actions SUCCESS y Pages HTTPS idéntico al build local/GitHub (2.454.596 bytes, blob `6ceddf61497016ef48544369e874af0ca28f4923`). 150 Node, 16 Python, 75 Chromium, ocho legacy y 24 equivalencias financieras PASS. DSS §76 contiene la trazabilidad. Las restricciones de publicación y orden anterior que siguen son checkpoints históricos sustituidos por este cierre.

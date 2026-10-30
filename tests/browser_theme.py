@@ -209,8 +209,8 @@ class ThemeBrowserTests(unittest.TestCase):
         self.assertEqual(en[1],'NET SALES AFTER FEES')
         self.assertEqual(en[2],'SHIPPING')
         self.assertEqual(en[3],'★ Most profitable')
-        self.assertEqual(self.page.evaluate("modeName('auto')"),'Optimal plan')
-        self.assertIn('Import and sell in ',self.page.evaluate("modeName('fN')"))
+        self.assertEqual(self.page.evaluate("modeName('auto')"),'Recommended plan')
+        self.assertTrue(self.page.evaluate("modeName('fN')").endswith(' order'))
         self.page.evaluate("setLang('es')")
         es=self.page.evaluate("""() => [
             tx('picker.optimalSummary'),tx('verdict.netSales'),
@@ -220,8 +220,8 @@ class ThemeBrowserTests(unittest.TestCase):
         self.assertEqual(es[1],'VENTAS NETAS DESPUÉS DE TASAS')
         self.assertEqual(es[2],'ENVÍO')
         self.assertEqual(es[3],'★ Más rentable')
-        self.assertEqual(self.page.evaluate("modeName('auto')"),'Plan óptimo')
-        self.assertIn('Importar y vender en ',self.page.evaluate("modeName('fN')"))
+        self.assertEqual(self.page.evaluate("modeName('auto')"),'Plan recomendado')
+        self.assertTrue(self.page.evaluate("modeName('fN')").startswith('Orden '))
 
     def test_settings_guide_pi_mining_and_referral_roundtrip(self):
         from playwright.sync_api import expect
@@ -509,20 +509,19 @@ class ThemeBrowserTests(unittest.TestCase):
                 pkPanelCollapsed=false;paintPicker(lastP);
             }""")
         fixture()
-        shortcut=self.page.locator("#pkShortcut")
-        expect(shortcut).to_be_visible()
-        self.assertIn("La alternativa rápida evita esperar una orden de venta",shortcut.inner_text())
-        self.assertIn("Plan óptimo (seleccionado)",shortcut.inner_text())
-        self.assertIn("9,500,000 ISK",shortcut.inner_text())
-        self.assertIn("500,000 ISK menos",shortcut.inner_text())
-        self.assertIsNone(self.page.evaluate("S.planMode"))
-        shortcut.locator("button").click()
+        guide=self.page.locator("#pkSpeedBox .c5c-analysis-copy")
+        expect(guide).to_be_visible()
+        self.assertIn("Buyback",guide.inner_text())
+        self.assertIn("500,000 ISK",guide.inner_text())
+        self.assertIn("más",guide.inner_text())
+        self.assertEqual(self.page.locator('#pkSpeedBox select').count(),0)
         self.assertIsNone(self.page.evaluate("S.planMode"))
         expect(self.page.locator("#pkOthers .pk-shortcut-highlight")).to_have_count(1)
         self.page.evaluate("setLang('en')")
         fixture()
-        self.assertIn("The fast alternative avoids waiting for a sell order",shortcut.inner_text())
-        self.assertIn("500,000 ISK less",shortcut.inner_text())
+        self.assertIn("Compared with Buyback",guide.inner_text())
+        self.assertIn("500,000 ISK",guide.inner_text())
+        self.assertIn("more",guide.inner_text())
         self.assertIsNone(self.page.evaluate("S.planMode"))
 
     def test_sales_selector_is_on_right_edge_desktop_and_mobile(self):
@@ -1619,7 +1618,7 @@ class ThemeBrowserTests(unittest.TestCase):
                             font:parseFloat(getComputedStyle(document.querySelector('#pkResultMetric')).fontSize)};
                     }""")
                     self.assertFalse(dims['overflow'],dims)
-                    self.assertLessEqual(dims['font'],13.5,dims)
+                    self.assertGreaterEqual(dims['font'],15,dims)
                     if width>880:
                         self.assertAlmostEqual(dims['left']['x'],dims['right']['x'],delta=2)
                         self.assertGreater(dims['left']['y'],dims['right']['y'],dims)
@@ -1652,7 +1651,7 @@ class ThemeBrowserTests(unittest.TestCase):
                 paintPicker(P);paintCourierUnits(P);
             }""")
             expect(self.page.locator('#pkSpeedBox')).to_be_visible()
-            expect(self.page.locator('#pkShortcut')).to_be_visible()
+            expect(self.page.locator('#pkShortcut')).to_be_hidden()
             expect(self.page.locator('#unitCourierBox')).to_be_hidden()
             self.assertEqual(self.page.evaluate("iskToneText('−120,000 ISK')"), 'isk-neg')
             self.assertEqual(self.page.evaluate("iskToneText('790,000 ISK')"), 'isk-pos')
@@ -1801,7 +1800,7 @@ class ThemeBrowserTests(unittest.TestCase):
             }""")
             self.page.set_viewport_size({'width':1440,'height':900})
             expect(self.page.locator('#pkSpeedBox')).to_be_visible()
-            expect(self.page.locator('#pkShortcut .pk-shortcut-empty')).to_be_visible()
+            expect(self.page.locator('#pkTradeoffs')).to_contain_text('same result' if language=='en' else 'mismo resultado')
             self.assertEqual(self.page.locator('#vFinanceDetails').evaluate(
                 '(el)=>getComputedStyle(el).gridColumnEnd'), 'auto')
             expect(self.page.locator('#vFinanceDetails')).to_be_visible()
@@ -1883,9 +1882,9 @@ class ThemeBrowserTests(unittest.TestCase):
                         return {height:r.height,posY:(a.top+a.bottom)/2,
                             negY:(b.top+b.bottom)/2,posRight:a.right,negLeft:b.left};
                     }""")
-                    self.assertLess(abs(geometry['posY']-geometry['negY']),3,geometry)
-                    self.assertLess(geometry['posRight'],geometry['negLeft'],geometry)
-                    self.assertLessEqual(geometry['height'],72 if width==390 else 44,geometry)
+                    # R8 places the full difference below the full amount instead of truncating both.
+                    self.assertGreater(geometry['negY'],geometry['posY'],geometry)
+                    self.assertLessEqual(geometry['height'],148 if width==390 else 100,geometry)
                     self.assertLessEqual(self.page.evaluate(
                         'document.documentElement.scrollWidth-innerWidth'),1)
                     if language=='es' and width==1440 and not light:
