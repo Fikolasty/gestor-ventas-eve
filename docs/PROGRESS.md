@@ -1,5 +1,10 @@
 # PROGRESS — Market Moves+
 
+## 2026-10-30 — v1.0.168 candidata: plegado y costes de envío
+
+Petición del propietario implementada localmente: pareja Resultado/Distribución y envío cerrados por defecto; cabecera aritmética por lote, filas en ISK/u. y finales copiables con función existente. 150 Node, 16 Python, ocho legacy y 24 equivalencias PASS. Suite Chromium final en curso; fuente/Pages/HTTP pendientes. Ver DSS §79 y HANDOFF_FREIGHT_168.md.
+
+
 ## 2026-10-30 — R8 v1.0.167 LIVE certificada
 
 
@@ -894,3 +899,6 @@ Broker Jita ocupa la primera fila completa; cBroker queda en la primera columna 
 
 
 R8 v1.0.167: cierre local completo, 150 Node / 16 Python / 79 Chromium / ocho legacy / 24 equivalencias PASS. Capturas finales reales en ambos temas/direcciones inspeccionadas. Build canónico 2.469.754 bytes, blob 099514fb895c2904258ee3f907695a82b4c71f98. Publicación Fiko y gates remotos pendientes.
+
+
+v1.0.168: gate local completo 150 Node /16 Python /82 Chromium (97,797 s) /8 legacy /24 equivalencias exactas PASS; capturas finales r3 revisadas. Build canónico bd50031dd08e21f746c60b87b3b97eb7a30ebb3f, 2.477.948 bytes. Publicación y certificación remota pendientes.

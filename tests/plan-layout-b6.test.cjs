@@ -33,7 +33,7 @@ test('B.6 preserves actual plan accounting, sorting, filters, selected-route ref
   assert.match(picker,/\$\('pkTools'\)\.addEventListener\('click'/);
   assert.match(picker,/S\.planMode=b\.dataset\.m==='auto'\?null:b\.dataset\.m/);
   assert.match(picker,/refreshNow\(\)/);
-  assert.match(picker,/selectedNet\.textContent=.*fmt\(Math\.abs\(chosen\.t\.net\)\)/);
+  assert.match(picker,/selectedText=.*fmt\(Math\.abs\(chosen\.t\.net\)\)/);
   assert.match(picker,/fmt\(Math\.abs\(t\.net\)\)/);
   assert.match(picker,/tx\('trade\.proceedsOnly'\)/);
   assert.match(view,/function verdictFinance\(P,tradeAccounting\)/);

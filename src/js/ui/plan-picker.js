@@ -8,7 +8,7 @@ let pkView={sort:'net',dir:-1,filter:'all',open:true}; // B.6: mostrar alternati
 let pkPanelCollapsed=true; // B.10: keep the entire decision area folded until the pilot opens it
 // B.18: two symmetrical drawers; each header opens/closes both inner columns.
 let pkOverviewCollapsed=false;
-let pkInsightsCollapsed=false;
+let pkInsightsCollapsed=true;
 function syncPlanPanel(){
   const panel=$('pkPlanContent'),toggle=$('pkPlanToggle');
   panel.hidden=pkPanelCollapsed;
@@ -210,7 +210,9 @@ function paintPicker(P){
   const selectedNet=$('pkResultValue'),metric=$('pkResultMetric');
   metric.textContent=tx(showProfit?'picker.estimatedProfit':'picker.netProceeds');
   selectedNet.className='mm-plan-result-value num '+sgn(chosen.t.net);
-  selectedNet.textContent=(chosen.t.net<0?'−':showProfit?'+':'')+fmt(Math.abs(chosen.t.net));
+  const selectedText=(chosen.t.net<0?'−':showProfit?'+':'')+fmt(Math.abs(chosen.t.net));
+  const resultCopy=copyBtn(chosen.t.net,selectedText);resultCopy.setAttribute('aria-label',tx('freight.copyFinal',{amount:selectedText}));
+  selectedNet.replaceChildren(resultCopy);
   $('pkAnalysisValue').textContent=selectedNet.textContent;
   $('pkAnalysisValue').className='num '+sgn(chosen.t.net);
   // B.19: display the *same* selected-plan net in the steps drawer header.
@@ -592,6 +594,7 @@ function paintCourierUnits(P){
   host.replaceChildren();
   host.removeAttribute('role');host.removeAttribute('aria-label');
   $('unitCourierSubtitle').textContent=tx('freight.subtitle');
+  $('unitCourierSubtitle').title=tx('freight.batchScope');
   const help=$('unitCourierHelp'),helpButton=help.querySelector('summary');
   helpButton.setAttribute('aria-label',tx('freight.infoLabel'));
   helpButton.title=tx('freight.infoLabel');
@@ -602,6 +605,15 @@ function paintCourierUnits(P){
   // result. Only show the detailed courier card when a real cost applies.
   const hasCourierCost=Number.isFinite(P.shipCost)&&P.shipCost>0.5;
   box.hidden=!rows.length&&!hasCourierCost;
+  const before=rows.length&&rows.every(r=>Number.isFinite(courierUnitPresentation(r)?.base))?
+    rows.reduce((sum,r)=>sum+courierUnitPresentation(r).base*r.q,0):null;
+  const after=before==null?null:before-(P.shipCost||0);
+  const lotBefore=$('freightLotBefore'),lotFinal=$('freightLotFinal');
+  lotBefore.textContent=fmt(before);lotBefore.className='num '+sgn(before);
+  lotFinal.replaceChildren();lotFinal.className='num '+sgn(after);
+  if(after==null)lotFinal.textContent='—';
+  else {const button=copyBtn(after,fmt(after));button.setAttribute('aria-label',tx('freight.copyFinal',{amount:fmt(after)}));lotFinal.append(button);}
+
   if(!rows.length){
     $('unitCourierHeading').textContent=tx('freight.heading');
     const unallocated=Number.isFinite(P.shipCost)&&P.shipCost>0;
@@ -612,8 +624,8 @@ function paintCourierUnits(P){
   }
   const count=trips(P.Vs);
   $('unitCourierHeading').textContent=tx('freight.heading');
-  $('unitCourierTotal').textContent='−'+fmt(P.shipCost)+' · '+
-    tx(count===1?'freight.contractOne':'freight.contractMany',{count});
+  $('unitCourierTotal').textContent=fmt(P.shipCost);
+  $('unitCourierTotal').title=tx(count===1?'freight.contractOne':'freight.contractMany',{count});
   $('unitCourierTotal').classList.add('isk-neg');
   const headers=['freight.itemColumn','freight.beforeColumn','freight.freightColumn','freight.finalColumn'];
   const columns=el('div','mm-freight-columns');columns.setAttribute('role','row');
@@ -621,12 +633,16 @@ function paintCourierUnits(P){
   host.setAttribute('role','table');
   host.setAttribute('aria-label',tx('freight.heading'));
   host.append(columns);
-  const value=(key,amount,freight=false)=>{
+  const value=(key,amount,freight=false,item='')=>{
     const cell=el('div','mm-freight-cell');cell.setAttribute('role','cell');
     cell.append(el('span','mm-freight-cell-label',tx(key)));
     const tone=amount==null?'':freight&&amount>0?' isk-neg':amount>0?' isk-pos':amount<0?' isk-neg':'';
     const shown=amount==null?'—':(freight&&amount>0?'−':'')+fmtP(amount);
-    cell.append(el('strong','num'+tone,shown));
+    const figure=el('strong','num'+tone);
+    if(key==='freight.finalColumn'&&Number.isFinite(amount)){
+      const button=copyBtn(amount,shown);button.setAttribute('aria-label',tx('freight.copyUnit',{item,amount:shown}));figure.append(button);
+    }else figure.textContent=shown;
+    cell.append(figure);
     return cell;
   };
   rows.forEach(r=>{
@@ -641,7 +657,7 @@ function paintCourierUnits(P){
     title.append(identity);
     card.append(title,value('freight.beforeColumn',costs.base),
       value('freight.freightColumn',costs.freightUnit,true),
-      value('freight.finalColumn',costs.unit));
+      value('freight.finalColumn',costs.unit,false,r.o.name));
     host.append(card);
   });
 }
@@ -670,7 +686,11 @@ function paintPlanUnits(P){
   const trade=flipPlanAccounting(P);
   const figure=(key,amount,cost=false)=>{
     const row=el('div'),valid=Number.isFinite(amount),tone=!valid||Math.abs(amount)<.0000001?'':cost?'neg':sgn(amount);
-    row.append(el('dt',null,tx(key)),el('dd','num '+tone,valid?(cost&&amount>0?'−':'')+fmt(amount):'—'));return row;
+    const dd=el('dd','num '+tone),shown=valid?(cost&&amount>0?'−':'')+fmt(amount):'—';
+    if(valid&&(key==='picker.unitProceeds'||key==='picker.unitProfit')){
+      const button=copyBtn(amount,shown);button.setAttribute('aria-label',tx('freight.copyFinal',{amount:shown}));dd.append(button);
+    }else dd.textContent=shown;
+    row.append(el('dt',null,tx(key)),dd);return row;
   };
   for(const r of rows.slice(pkUnitPage*10,pkUnitPage*10+10)){
     const unit=courierUnitPresentation(r);if(!unit)continue;
@@ -698,4 +718,12 @@ $('pkUnitRows').addEventListener('click',event=>{
   const delta=Number(button.dataset.unitPage);if(delta!==-1&&delta!==1)return;
   pkUnitPage+=delta;paintPlanUnits(lastP);
   const focus=$('pkUnitRows').querySelector('[data-unit-page="'+delta+'"]:not(:disabled)')||$('pkUnits').querySelector('summary');focus.focus({preventScroll:true});
+});
+
+// Shipping disclosure state belongs to the view, never to the calculation.
+$('unitCourierToggle').addEventListener('click',()=>{
+  const button=$('unitCourierToggle'),content=$('unitCourierContent');
+  const open=button.getAttribute('aria-expanded')!=='true';
+  button.setAttribute('aria-expanded',String(open));content.hidden=!open;
+  $('unitCourierBox').classList.toggle('is-open',open);
 });

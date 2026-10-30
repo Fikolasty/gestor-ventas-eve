@@ -1176,16 +1176,16 @@
     "en": "SHIPPED ITEM"
   },
   "freight.beforeColumn": {
-    "es": "ANTES DEL ENVÍO",
-    "en": "BEFORE FREIGHT"
+    "es": "ANTES DEL ENVÍO · ISK/u.",
+    "en": "BEFORE SHIPPING · ISK/unit"
   },
   "freight.freightColumn": {
-    "es": "ENVÍO",
-    "en": "FREIGHT"
+    "es": "ENVÍO · ISK/u.",
+    "en": "SHIPPING · ISK/unit"
   },
   "freight.finalColumn": {
-    "es": "TOTAL FINAL",
-    "en": "FINAL TOTAL"
+    "es": "TOTAL FINAL · ISK/u.",
+    "en": "FINAL TOTAL · ISK/unit"
   },
   "freight.contractOne": {
     "es": "1 contrato",
@@ -2010,5 +2010,37 @@
   "picker.unitPager": {
     "es": "Páginas de importes por Item",
     "en": "Per-Item amount pages"
+  },
+  "freight.unitHint": {
+    "es": "Ver detalle por unidad",
+    "en": "View per-unit detail"
+  },
+  "freight.lotBefore": {
+    "es": "Lote antes del envío",
+    "en": "Batch before shipping"
+  },
+  "freight.lotShipping": {
+    "es": "Envío del lote",
+    "en": "Batch shipping"
+  },
+  "freight.lotFinal": {
+    "es": "Total del lote tras envío",
+    "en": "Batch total after shipping"
+  },
+  "freight.lotEquation": {
+    "es": "Antes del envío menos envío igual a total del lote",
+    "en": "Before shipping minus shipping equals batch total"
+  },
+  "freight.copyFinal": {
+    "es": "Copiar importe final: {amount}",
+    "en": "Copy final amount: {amount}"
+  },
+  "freight.copyUnit": {
+    "es": "Copiar importe final por unidad de {item}: {amount}",
+    "en": "Copy final amount per unit for {item}: {amount}"
+  },
+  "freight.batchScope": {
+    "es": "Totales del lote de Items enviados; las filas muestran ISK por unidad, después de tasas y otros gastos.",
+    "en": "Totals cover the shipped Items; rows show ISK per unit, after fees and other costs."
   }
 }

@@ -23,3 +23,6 @@ CI confirma 150 Node / 16 Python / 79 Chromium completos (113,626 s) y ocho lega
 Comprobación HTTP independiente: https://fikolasty.github.io/gestor-ventas-eve/ sirve v1.0.167. HTML público/local canónico LF/GitHub idénticos byte a byte: **2.469.754 bytes**, blob **`099514fb895c2904258ee3f907695a82b4c71f98`**. R8 está implementada y LIVE, no solo en preview. Economía, Settings, ESI/SSO, permisos y persistencia sin cambios; no se hizo ESI/SSO real extremo a extremo. Estados previos de candidata/pendientes quedan sustituidos por este cierre.
 
 Siguiente trabajo: revisar la web con el propietario; Ajustes → Precios y ventas permanece como auditoría/propuesta separada, no implementada. No volver a los prototipos r3–r6 ni reabrir la aprobación de r8. Consultar el ref remoto actual al comenzar otro chat: el cierre documental puede avanzar HEAD más allá del build bot sin alterar index.html.
+
+
+Nueva petición posterior: v1.0.168 para plegado inicial, envío por unidad y precios copiables. Continuidad activa en HANDOFF_FREIGHT_168.md y DSS §79; no reiniciar el diseño r8.

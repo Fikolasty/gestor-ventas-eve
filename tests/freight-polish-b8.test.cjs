@@ -29,7 +29,7 @@ test('comparison reuses the exact audited proceeds and allocation',()=>{
   assert.match(js,/rows=P\.rows\.filter\(r=>r\.courierAllocated>0&&r\.q>0\)/);
   assert.match(js,/value\('freight\.beforeColumn',costs\.base\)/);
   assert.match(js,/value\('freight\.freightColumn',costs\.freightUnit,true\)/);
-  assert.match(js,/value\('freight\.finalColumn',costs\.unit\)/);
+  assert.match(js,/value\('freight\.finalColumn',costs\.unit,false,r\.o\.name\)/);
   assert.match(js,/rows\.forEach\(r=>\{/);
   assert.doesNotMatch(js.slice(js.indexOf('function paintCourierUnits(P){'),
     js.indexOf('function paintSummary(P){')),/mm-freight-extra|mm-freight-detail|freight\.more/);

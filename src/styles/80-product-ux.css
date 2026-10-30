@@ -3369,3 +3369,49 @@ body .top.mm-ho-root #mmTabs>.mm-ho-main #navHome{display:none!important}
 #pSum #pkUnits nav button:disabled {opacity:.45;cursor:default}
 
 #pSum #pkUnits article>strong,#pSum #pkUnits article>span {overflow-wrap:anywhere}
+
+
+/* v1.0.168 — shipping is a closed drawer with a batch equation and unit rows. */
+#pSum #unitCourierBox {padding:0!important;overflow:hidden!important;background:var(--surface-card)!important}
+#pSum #unitCourierBox.is-open {background:var(--glass)!important}
+#pSum #unitCourierBox .mm-freight-drawer-head {padding:14px 18px}
+#pSum #unitCourierBox #unitCourierToggle {display:flex!important;align-items:center!important;gap:10px!important;width:100%!important;padding:0!important;margin:0 0 12px!important;min-height:36px!important;border:0!important;border-radius:0!important;box-shadow:none!important;background:transparent!important;text-align:left!important;cursor:pointer}
+#pSum #unitCourierToggle small {margin-left:auto;color:var(--mut);font:400 13px/1.4 var(--f-ui)}
+#pSum #unitCourierToggle:focus-visible {outline:2px solid var(--clay)!important;outline-offset:4px}
+#pSum #unitCourierBox .mm-freight-lot {display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr) auto minmax(0,1fr);align-items:center;gap:12px}
+#pSum .mm-freight-lot>div {min-width:0}
+#pSum .mm-freight-lot>div>span {display:block;color:var(--mut);font:450 13px/1.5 var(--f-ui);margin-bottom:5px}
+#pSum .mm-freight-lot strong,#pSum #unitCourierBox #unitCourierTotal {display:block;margin:0!important;font:650 20px/1.4 var(--f-ui)!important;font-variant-numeric:tabular-nums;white-space:nowrap}
+#pSum .mm-freight-operator {font:500 24px/1.4 var(--f-ui);color:var(--mut);align-self:end}
+#pSum #unitCourierContent {padding:14px 18px;border-top:1px solid var(--line2);background:var(--surface-card)}
+#pSum #unitCourierContent[hidden] {display:none!important}
+#pSum #unitCourierContent #unitCourierHelp {margin:0 0 8px;width:100%}
+#pSum #unitCourierContent #unitCourierHelp .mm-freight-help-content {position:static;margin:6px 0 10px;box-shadow:none}
+#pSum #unitCourierContent #unitCourierSubtitle {font-size:14px}
+#pSum #freightLotFinal .copy,#pSum #pkResultValue .copy,#pSum #pkUnitRows dd .copy,#pSum #unitCourierRows .mm-freight-cell .copy {font:inherit!important;color:inherit!important;padding:2px 0!important;margin:0!important;min-height:0!important;background:transparent!important;border:0!important;border-radius:3px!important;box-shadow:none!important;text-align:inherit;white-space:nowrap}
+#pSum #freightLotFinal .copy:hover,#pSum #pkResultValue .copy:hover,#pSum #pkUnitRows dd .copy:hover,#pSum #unitCourierRows .mm-freight-cell .copy:hover {text-decoration:underline;text-underline-offset:4px}
+#pSum #freightLotFinal .copy:focus-visible,#pSum #pkResultValue .copy:focus-visible,#pSum #pkUnitRows dd .copy:focus-visible,#pSum #unitCourierRows .mm-freight-cell .copy:focus-visible {outline:2px solid var(--clay)!important;outline-offset:4px}
+#pSum #unitCourierRows .mm-freight-cell strong {font-size:16px!important}
+@media(max-width:700px){
+ #pSum #unitCourierBox .mm-freight-lot {grid-template-columns:minmax(0,1fr);gap:7px}
+ #pSum .mm-freight-lot>div {display:flex;justify-content:space-between;align-items:baseline;gap:10px}
+ #pSum .mm-freight-lot>div>span {font-size:13px;margin:0}
+ #pSum .mm-freight-lot strong,#pSum #unitCourierBox #unitCourierTotal {font-size:17px!important}
+ #pSum .mm-freight-operator {display:none}
+ #pSum .mm-freight-lot>div:last-child {border-top:1px solid var(--line2);padding-top:8px}
+ #pSum #unitCourierToggle {flex-wrap:wrap}
+ #pSum #unitCourierToggle small {margin-left:0;flex-basis:100%}
+ #pSum #unitCourierHeading {font-size:16px!important}
+}
+@media(max-width:450px){#pSum .mm-freight-lot>div {flex-direction:column;gap:3px}#pSum #unitCourierRows .mm-unit-row {grid-template-columns:minmax(0,1fr)}#pSum #unitCourierRows .mm-freight-cell strong {font-size:17px!important}#pSum #unitCourierRows .mm-freight-cell-label {font-size:12px}}
+
+#pSum #freightLotBefore.pos,#pSum #freightLotFinal.pos {color:var(--gain)!important}
+#pSum #freightLotBefore.neg,#pSum #freightLotFinal.neg {color:var(--loss)!important}
+#pSum #unitCourierBox #unitCourierTotal {text-align:left!important;float:none!important}
+
+@media(max-width:450px){
+ #pSum #unitCourierRows .mm-unit-row {grid-template-columns:repeat(2,minmax(0,1fr));gap:10px 12px}
+ #pSum #unitCourierRows .mm-freight-cell strong {font-size:16px!important}
+ #pSum #unitCourierRows .mm-freight-cell:last-child {grid-column:1/-1;display:flex;align-items:baseline;justify-content:space-between;gap:10px;padding-top:7px;border-top:1px solid var(--line2)}
+ #pSum #unitCourierRows .mm-freight-cell:last-child strong {font-size:17px!important}
+}

@@ -682,9 +682,10 @@ class ThemeBrowserTests(unittest.TestCase):
             paintCourierUnits({rows:[item(1),item(2),item(3)],Vs:18,shipCost:360000});
             document.querySelector('#verdict').hidden=false;
             document.querySelector('#pSum').hidden=false;
-            pkPanelCollapsed=false;syncPlanPanel();
+            pkPanelCollapsed=false;pkInsightsCollapsed=false;syncPlanPanel();
             document.querySelector('#vFinanceDetails').open=true;
         }""")
+        self.page.locator('#unitCourierToggle').click()
         for language in ('es','en'):
             self.page.evaluate('setLang',language)
             for width in (1440,390):
@@ -1135,13 +1136,13 @@ class ThemeBrowserTests(unittest.TestCase):
         }""")
         self.assertEqual(result["english"]["head"],"ACTUAL FREIGHT COST")
         self.assertEqual(result["english"]["values"],["6,500.00 ISK","−2,000.00 ISK","4,500.00 ISK"])
-        self.assertEqual(result["english"]["headings"],["SHIPPED ITEM","BEFORE FREIGHT","FREIGHT","FINAL TOTAL"])
+        self.assertEqual(result["english"]["headings"],["SHIPPED ITEM","BEFORE SHIPPING · ISK/unit","SHIPPING · ISK/unit","FINAL TOTAL · ISK/unit"])
         self.assertEqual(result["english"]["qty"],"60")
         self.assertIn("reduction per unit",result["english"]["note"])
         self.assertIn("collateral",result["english"]["help"])
         self.assertEqual(result["english"]["icon"],"34")
         self.assertEqual(result["spanish"]["head"],"COSTE REAL DEL ENVÍO")
-        self.assertEqual(result["spanish"]["headings"],["ITEM ENVIADO","ANTES DEL ENVÍO","ENVÍO","TOTAL FINAL"])
+        self.assertEqual(result["spanish"]["headings"],["ITEM ENVIADO","ANTES DEL ENVÍO · ISK/u.","ENVÍO · ISK/u.","TOTAL FINAL · ISK/u."])
         self.assertEqual(result["spanish"]["note"],"Aquí se refleja la reducción real por unidad de cada item.")
         self.assertIn("colateral",result["spanish"]["help"])
         self.assertTrue(result["moved"],"Unit freight panel must be after plan comparison")
@@ -1167,6 +1168,7 @@ class ThemeBrowserTests(unittest.TestCase):
             paintCourierUnits(window.__b8Freight);
         }""")
         expect(self.page.locator('#unitCourierBox')).to_be_visible()
+        self.page.locator('#unitCourierToggle').click()
         self.assertEqual(self.page.locator('#unitCourierRows .mm-unit-row').count(),4)
         self.assertEqual(self.page.locator('#unitCourierRows .mm-freight-extra').count(),0)
         self.assertEqual(self.page.locator('#unitCourierRows .mm-freight-detail').count(),0)
@@ -1194,7 +1196,7 @@ class ThemeBrowserTests(unittest.TestCase):
                 })""")
                 self.assertEqual(geometry['rowDisplay'],'grid',geometry)
                 self.assertLessEqual(geometry['extent'],1,geometry)
-                self.assertLess(geometry['height'],720,geometry)
+                self.assertLess(geometry['height'],1200,geometry)  # Four readable unit rows plus the batch header, including long EN labels.
                 if width==1440:
                     self.assertEqual(geometry['mobileLabel'],'none',geometry)
                     self.assertEqual(geometry['headDisplay'],'grid',geometry)
@@ -1234,7 +1236,7 @@ class ThemeBrowserTests(unittest.TestCase):
                     document.querySelector('#vFinanceDetails').open=false;
                     paintVerdict(P);
                     document.querySelector('#pSum').hidden=false;
-                    pkPanelCollapsed=false;
+                    pkPanelCollapsed=false;pkInsightsCollapsed=false;
                     paintPicker(P);
                     paintCourierUnits(P);
                 } finally {S.items=oldItems;lastP=oldP;}
@@ -1528,7 +1530,7 @@ class ThemeBrowserTests(unittest.TestCase):
                     shipCost:0,Vs:0,missing:[],toBB:[]};
                 document.querySelector('#verdict').hidden=false;
                 document.querySelector('#pSum').hidden=false;
-                pkPanelCollapsed=false;
+                pkPanelCollapsed=false;pkInsightsCollapsed=false;
                 paintPicker(window.__b4Plan);
                 paintCourierUnits(window.__b4Plan);
             }""")
@@ -1835,6 +1837,9 @@ class ThemeBrowserTests(unittest.TestCase):
         toggle.click()
         expect(toggle).to_have_attribute('aria-expanded','true')
         expect(overview_toggle).to_have_attribute('aria-expanded','true')
+        expect(insights_toggle).to_have_attribute('aria-expanded','false')
+        expect(self.page.locator('#pkResult')).to_be_hidden()
+        insights_toggle.click()
         expect(insights_toggle).to_have_attribute('aria-expanded','true')
         expect(self.page.locator('#pkPlanOptions')).to_be_visible()
         expect(self.page.locator('#pkResult')).to_be_visible()

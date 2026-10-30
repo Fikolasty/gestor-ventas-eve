@@ -43,7 +43,7 @@ test('new freight table uses original per-unit accounting for every shipped item
   assert.match(render,/rows=P\.rows\.filter\(r=>r\.courierAllocated>0&&r\.q>0\)/);
   assert.match(render,/value\('freight\.beforeColumn',costs\.base\)/);
   assert.match(render,/value\('freight\.freightColumn',costs\.freightUnit,true\)/);
-  assert.match(render,/value\('freight\.finalColumn',costs\.unit\)/);
+  assert.match(render,/value\('freight\.finalColumn',costs\.unit,false,r\.o\.name\)/);
   assert.doesNotMatch(render,/mm-freight-detail|mm-freight-extra|freight\.landed/);
   assert.match(render,/iconFor\(r\.o\.name\)/);
 });

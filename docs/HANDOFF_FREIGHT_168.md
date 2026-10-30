@@ -1,0 +1,17 @@
+# Continuidad — v1.0.168: plegado, envío y copia
+
+Base main 227d329fc4c94a5ebfa0db4c9d92842911709271, última LIVE v1.0.167. Petición explícita del propietario: Resultado/Distribución cerrados inicialmente y Coste real del envío también cerrado, desplegable; valores por unidad claros y cabecera con lote antes − envío = total del lote tras envío; finales copiables.
+
+Implementación local en shell, plan-picker, catálogo y CSS; workflows apuntan a 1.0.168. No tocar fórmulas, valores iniciales, ESI/SSO, Settings o persistencia. Copia usa copyBtn existente; cabecera suma datos de courierUnitPresentation del mismo lote enviado, no inventa precios. Nuevo estado independiente de plegado con botón/aria/hidden; no confundir nuevos defaults con fixtures que abren explícitamente las gavetas.
+
+DSS §79 y PROGRESS registran pruebas/capturas/publicación. Gates iniciales: 150 Node, 16 Python, ocho legacy, 24 equivalencias PASS; tres Chromium nuevas PASS, suite final completa de 82 en curso. Publicación continua autorizada, exclusivamente Fiko/Fikolasty, SHA esperado y sin force. No declarar LIVE hasta cuatro Actions, Pages y HTML público/local/GitHub idénticos. Los SHA y cierre se añadirán cuando existan.
+
+Continuar sin reabrir permisos: leer AGENTS/protocolo/DSS en orden; inspeccionar HEAD y estado local antes de editar. Preservar identidad r8 original y sus cuatro paneles. Revisar capturas finales de ambos temas, mismas condiciones, luego completar publicación y documentación. ESI/SSO real no probado. Este kit sustituye al de r8 para el trabajo activo.
+
+
+QA de composición adicional: las capturas iniciales mostraron verde inconsistente en Dark para los totales del lote y densidad excesiva en móvil. Se corrigieron ambos: colores semánticos explícitos por componente y dos columnas móviles con final en fila propia. Nuevas capturas únicas freight168-release-r3-20261030-* de desktop/móvil, estados cerrados y abiertos, Dark/Light inspeccionadas directamente. Ajuste de prueba B.8: su altura máxima antigua ya no incluía la nueva cabecera/etiquetas EN legibles; el límite actualizado conserva comprobaciones de layout, importes, asignación y overflow. La prueba focal pasa; suite final completa de 82 en curso. Build canónico 2.477.948 bytes, blob bd50031dd08e21f746c60b87b3b97eb7a30ebb3f. Dominio/ESI/SSO/Settings/persistencia sin modificaciones; no hay publicación nueva todavía.
+
+
+**Gate local final v1.0.168:** 150/150 Node, 16/16 Python, 82/82 Chromium completos (97,797 s), ocho legacy y 24/24 salidas financieras exactas PASS. Se verifican estados cerrados y abiertos, teclado, copia de lote/unidad y que copiar no altere el plegado; matriz ambas direcciones × ES/EN × Dark/Light × 1440/980/630/390. Las capturas r3 de estado inicial muestran ambas secciones cerradas; al abrir solo envío, Resultado/Distribución permanece cerrado. Copia al portapapeles cubierta con API simulada, sin copiar datos del usuario ni llamadas ESI.
+
+Build canónico LF: 2.477.948 bytes, blob `bd50031dd08e21f746c60b87b3b97eb7a30ebb3f`. Imágenes finales `freight168-release-r3-20261030-*` inspeccionadas en escritorio y móvil, mismos estados Dark/Light; la densidad móvil se corrigió a dos columnas con total en fila propia. Los límites del test antiguo B.8 se actualizaron para la nueva cabecera y texto legible en inglés, sin retirar comprobaciones de importe/asignación/overflow. Fuente/remoto, cuatro Actions, Pages y HTTP todavía pendientes al registrar este gate. ESI/SSO real no probado.

@@ -1,3 +1,10 @@
+## v1.0.168 — 2026-10-30 [ChatGPT] · Plegado, envío por unidad y copia — CANDIDATA
+
+- Resultado/Distribución y detalle de envío cerrados por defecto; estado de apertura preservado al recalcular.
+- Cabecera del envío con lote antes − coste del envío = total tras envío; filas etiquetadas ISK/u.
+- Finales copiables: resultado, lote tras envío y unidades. Mismo motor y reparto courier, sin cambios financieros.
+- Gates y publicación reales en DSS §79. Hasta certificar, última LIVE v1.0.167.
+
 ## v1.0.167 — 2026-10-30 [ChatGPT] · R8 ELIGE TU PLAN — LIVE CERTIFICADA
 
 Fuente `2a482286`, build `741e6fd7`; 4/4 Actions SUCCESS y HTTPS/local/GitHub idénticos (blob `099514fb`, 2.469.754 bytes). 150 Node, 16 Python, 79 Chromium, ocho legacy y 24 equivalencias exactas PASS. DSS §78.
