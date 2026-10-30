@@ -3033,8 +3033,8 @@ body .top.mm-ho-root #mmTabs>.mm-ho-main #navHome{display:none!important}
   text-wrap:pretty!important;letter-spacing:0!important
 }
 #settings .c5c-taxes>.st-g{
-  display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;
-  gap:12px!important;align-items:stretch!important
+  display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;
+  gap:12px!important;align-items:start!important
 }
 #settings .c5c-taxes .st-f{
   box-sizing:border-box!important;display:flex!important;flex-direction:column!important;
@@ -3057,7 +3057,6 @@ body .top.mm-ho-root #mmTabs>.mm-ho-main #navHome{display:none!important}
 }
 @media(max-width:1050px){
   #settings .c5c-pilot-panel>.c5c-skills>.st-g{grid-template-columns:repeat(2,minmax(0,1fr))!important}
-  #settings .c5c-taxes>.st-g{grid-template-columns:repeat(2,minmax(0,1fr))!important}
 }
 @media(max-width:650px){
   #settings .st-wrap>.modern-tabs{grid-template-columns:repeat(2,minmax(0,1fr))!important}
@@ -3069,7 +3068,7 @@ body .top.mm-ho-root #mmTabs>.mm-ho-main #navHome{display:none!important}
 }
 
 
-/* C.5b.2a — compact hierarchy and a single Jita Broker/standings cluster. */
+/* C.5b.2a — compact hierarchy; Broker Jita leads a full-width first row. */
 #settings .c5c-pilot-panel>.c5c-skill-section .st-sec-t{
   display:flex!important;align-items:center!important;gap:9px!important
 }
@@ -3089,40 +3088,48 @@ body .top.mm-ho-root #mmTabs>.mm-ho-main #navHome{display:none!important}
   display:none!important;content:none!important
 }
 #settings .c5c-taxes .c5c-broker-cluster{
-  box-sizing:border-box!important;display:flex!important;flex-direction:column!important;
-  min-width:0!important;width:100%!important;height:100%!important;gap:9px!important;
+  box-sizing:border-box!important;display:grid!important;grid-column:1 / -1!important;
+  grid-template-columns:minmax(0,1fr) minmax(0,2fr)!important;
+  align-items:stretch!important;gap:10px!important;
+  min-width:0!important;width:100%!important;height:auto!important;
   padding:12px!important;border:1px solid var(--line2)!important;border-radius:9px!important;
   background:var(--surface-card)!important;box-shadow:none!important
 }
 #settings .c5c-taxes .c5c-broker-main{
-  display:flex!important;flex-direction:column!important;gap:7px!important;
+  grid-column:1!important;display:flex!important;flex-direction:column!important;gap:7px!important;
   min-width:0!important;width:100%!important;height:auto!important;margin:0!important;padding:0!important;
   border:0!important;border-radius:0!important;background:transparent!important;box-shadow:none!important
 }
 #settings .c5c-taxes .c5c-broker-standings{
-  display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;
-  gap:8px!important;min-width:0!important;margin-top:auto!important
+  grid-column:2!important;display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  align-items:stretch!important;gap:8px!important;min-width:0!important;margin:0!important
 }
 #settings .c5c-taxes .c5c-broker-standings .st-f{
   box-sizing:border-box!important;height:auto!important;min-height:0!important;
   gap:5px!important;padding:8px!important;background:var(--surface-panel)!important
 }
 #settings .c5c-taxes .c5c-broker-standings .st-l{
-  font-size:.66rem!important;line-height:1.3!important;text-wrap:balance!important
+  font-size:.72rem!important;line-height:1.35!important;text-wrap:balance!important;
+  word-break:normal!important;overflow-wrap:normal!important
 }
 #settings .c5c-taxes .c5c-broker-standings .st-f small{
-  font-size:.67rem!important;line-height:1.35!important
+  font-size:.70rem!important;line-height:1.4!important
 }
 #settings .c5c-taxes .c5c-broker-standings input[type="number"]{
   min-height:34px!important;padding:6px 8px!important
 }
 @media(max-width:650px){
   #settings .c5c-pilot-panel>.c5c-fixed{padding:12px 10px!important}
+  #settings .c5c-taxes .c5c-broker-cluster{grid-template-columns:minmax(0,1fr)!important}
+  #settings .c5c-taxes .c5c-broker-main,
+  #settings .c5c-taxes .c5c-broker-standings{grid-column:1!important}
+  #settings .c5c-taxes .c5c-broker-standings{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+}
+@media(max-width:430px){
   #settings .c5c-taxes .c5c-broker-standings{grid-template-columns:minmax(0,1fr)!important}
 }
 
-
-/* Keep short tax cards content-sized beside the taller Jita Broker cluster. */
+/* Keep standalone tax fields content-sized on their own row. */
 #settings .c5c-taxes>.st-g>.st-f{
   height:auto!important;min-height:0!important;align-self:start!important
 }
@@ -3130,7 +3137,7 @@ body .top.mm-ho-root #mmTabs>.mm-ho-main #navHome{display:none!important}
 
 /* Compact each standing field into a two-line label/note with the value at right. */
 #settings .c5c-taxes .c5c-broker-standings .st-f{
-  display:grid!important;grid-template-columns:minmax(0,1fr) 62px!important;
+  display:grid!important;grid-template-columns:minmax(0,1fr) 72px!important;
   grid-template-rows:auto auto!important;align-items:center!important;
   column-gap:7px!important;row-gap:3px!important
 }
@@ -3139,7 +3146,7 @@ body .top.mm-ho-root #mmTabs>.mm-ho-main #navHome{display:none!important}
 }
 #settings .c5c-taxes .c5c-broker-standings .st-f input[type="number"]{
   grid-column:2!important;grid-row:1 / span 2!important;align-self:center!important;
-  width:62px!important;min-width:0!important
+  width:72px!important;min-width:0!important
 }
 #settings .c5c-taxes .c5c-broker-standings .st-f small{
   grid-column:1!important;grid-row:2!important;margin:0!important

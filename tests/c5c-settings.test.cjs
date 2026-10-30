@@ -27,21 +27,22 @@ test('C.5b.2a removes duplicate visible headings and uses the EVE skillbook icon
  assert.equal(ui['settings.groupTaxes'].es,'IMPUESTOS');
  assert.equal(ui['settings.groupTaxes'].en,'TAXES');
 });
-test('C.5b.2a groups the two original Jita standings inside the Broker area',()=>{
+test('C.5b.2a places the full-width Broker cluster before the standalone tax fields',()=>{
  const shell=read('src','shell.html'),style=read('src','styles','80-product-ux.css');
  const taxes=shell.match(/<fieldset class="st c5c-fixed c5c-taxes">([\s\S]*?)<\/fieldset>/)?.[1]||'';
- const standings=taxes.match(/<div class="c5c-broker-standings" role="group" aria-label="Standing de Jita">([\s\S]*?)<\/div>/)?.[1]||'';
+ const order=['c5c-broker-cluster','cBroker','cStdFac','cStdCorp','cTax','cBrokerNull','cScc'].map(token=>taxes.indexOf(token));
+ assert.ok(order.every(i=>i>=0),'all original tax controls and Broker cluster must remain');
+ assert.ok(order.every((i,n)=>n===0||i>order[n-1]),'Broker and standings precede Sales Tax, structure Broker and SCC in DOM order');
  assert.match(taxes,/class="c5c-broker-cluster"/);
  assert.match(taxes,/class="st-f c5c-broker-main"/);
- assert.match(taxes,/id="cBroker"/);
- assert.match(standings,/id="cStdFac"/);
- assert.match(standings,/id="cStdCorp"/);
+ assert.match(taxes,/class="c5c-broker-standings" role="group" aria-label="Standing de Jita"/);
  assert.equal((taxes.match(/class="st-f/g)||[]).length,6);
- assert.match(style,/#settings \.c5c-taxes \.c5c-broker-cluster/);
- assert.match(style,/#settings \.c5c-taxes \.c5c-broker-standings/);
- assert.match(style,/height:auto!important;min-height:0!important;align-self:start!important/);
- assert.match(style,/grid-template-columns:minmax\(0,1fr\) 62px!important/);
- assert.match(style,/grid-column:2!important;grid-row:1 \/ span 2!important/);
+ assert.match(style,/#settings \.c5c-taxes>\.st-g\{\s*display:grid!important;grid-template-columns:repeat\(3,minmax\(0,1fr\)\)!important/);
+ assert.match(style,/#settings \.c5c-taxes \.c5c-broker-cluster\{[\s\S]*?grid-column:1 \/ -1!important;[\s\S]*?grid-template-columns:minmax\(0,1fr\) minmax\(0,2fr\)!important/);
+ assert.match(style,/#settings \.c5c-taxes \.c5c-broker-standings\{[\s\S]*?grid-template-columns:repeat\(2,minmax\(0,1fr\)\)!important/);
+ assert.match(style,/grid-template-columns:minmax\(0,1fr\) 72px!important/);
+ assert.match(style,/@media\(max-width:650px\)/);
+ assert.match(style,/@media\(max-width:430px\)/);
 });
 test('C.5b.2a keeps complete bilingual copy for the grouped tax controls',()=>{
  const en=JSON.parse(read('src','i18n','en.json')),ui=JSON.parse(read('src','i18n','ui.json'));

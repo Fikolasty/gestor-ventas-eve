@@ -1,6 +1,6 @@
 # DSS — Design Standards & Session Handoff · Market Moves+
 
-**Última actualización:** 2026-10-29 · **C.5b.2 v1.0.163 candidata, QA pendiente** (§71); anterior **C.5b.1 v1.0.162 LIVE certificada** (§70), 142 Node/16 Python/65 Chromium y 4/4 Actions; anterior **C.5b v1.0.161 LIVE certificada** (§69), con 142 Node/16 Python/65 Chromium y cuatro Actions/Pages; anterior **C.4b v1.0.160 LIVE** (§68): fuente `282a25dc`, build `41214eec`, 140 Node/16 Python/61 Chromium y 4/4 Actions/Pages. **C.4a QA-only** (§67) y **C.2** (§66) también certificadas; fórmulas, Settings, persistencia y ESI/SSO intactos.
+**Última actualización:** 2026-10-29 · **C.5b.2a v1.0.164 LIVE certificada** (§72); anterior **C.5b.2 v1.0.163 LIVE certificada** (§71), 144 Node/16 Python/70 Chromium y 4/4 Actions; anterior **C.5b.1 v1.0.162 LIVE certificada** (§70), 142 Node/16 Python/65 Chromium y 4/4 Actions; anterior **C.5b v1.0.161 LIVE certificada** (§69); anterior **C.4b v1.0.160 LIVE** (§68). Fórmulas, Settings, persistencia y ESI/SSO intactos.
 
 **Continuidad de versión:** la release anterior v1.0.126 (P0 Paladin + A+B.1) quedó verificada con fuente `205ec9fa`, build `c716f7aa`, Actions/Pages `40215891182`, blob `9601d5f8`; ver §9. La etapa B.2 se implementó inicialmente **local** sobre `dcdb6195` (§10) y posteriormente se publicó tras autorización expresa y QA (§11). El usuario concedió también **autorización continua de publicación de mejoras incrementales bien probadas**, registrada en §1.8.
 
@@ -930,4 +930,23 @@ Mediante mock de `window.fetch` con peticiones ficticias (40 ms) y umbral de 12 
 
 **Guardia de fórmulas y semántica de tasas:** `skills-bridge.js` mantiene `Sales Tax = 7.5% × (1 − 0.11 × Accounting)` y `Broker Jita = 3% − 0.3% × Broker Relations − 0.03% × standing de facción − 0.02% × standing de corp`. `Advanced Broker Relations` solo cambia el multiplicador del coste de relist: `max(0, 1 − (0.5 + 0.06 × ABR))`, descuento de 50% base a 80% en V; no reduce Sales Tax ni el Broker inicial. `cTax` y `cBroker` contienen las tasas efectivas ya recalculadas, no bases pendientes de otra reducción. No implementar cajas de «reducción/final» que vuelvan a descontar estos valores. La maqueta generada con 0.11 puntos por nivel y 0.25% por nivel de ABR no es fuente de fórmulas.
 
-**Pendiente para la siguiente iteración:** refinamiento compacto de Personaje e impuestos según la revisión visual; después General, Precios y ventas, Envío y reproceso, accesibilidad de menús flotantes y Guía. El diseño «ELIGE TU PLAN» sigue aprobado visualmente pero sin integración en esta versión. No inventar nuevas fórmulas, notificaciones, sincronización cloud ni opciones por operación.
+**Cierre de la revisión visual:** skillbook, títulos compactos y agrupación inicial de standings se publicaron en v1.0.164; el problema restante de anchura y jerarquía del Broker Jita queda documentado y corregido en la iteración C.5b.2a §73. Las demás secciones siguen fuera de alcance. El diseño «ELIGE TU PLAN» continúa aprobado visualmente pero sin integración. No inventar fórmulas, notificaciones, sincronización cloud ni opciones por operación.
+
+
+## 72. C.5b.2a — refinamiento de Personaje e Impuestos, v1.0.164 LIVE
+
+Fuente y publicación verificadas: fuente e3ed1ffb901bc176ad9ebe47f1817088630291fe; build 51d1a8abbacc01c58ff8a052cebd0d2005c65d9b; QA run 40996989584. Cuatro workflows SUCCESS: Build 40996989666, Minería 40996989595, Rebuild/Chromium/Pages 40996989584, Versiones 40996989500. Regresiones confirmadas en logs: 147/147 Node, 16/16 Python y 72/72 Chromium. Deploy verificó por HTTPS la versión v1.0.164, el banner SP y la gaveta de pasos.
+
+Trabajo incluido: icono Skillbook de EVE, eliminación de encabezados visibles duplicados, copy ES/EN, agrupación de Broker Jita con standings de facción/corporación y controles compactos. IDs nativos, ESI/SSO, persistencia y fórmulas originales preservados. src/styles/themes/light-header-shipping.css fue inspeccionado: sus overrides C.5b.2a solo fijan superficies/bordes Light; no sustituyen la geometría compartida.
+
+Revisión humana del artefacto CI 12951427301: cuatro capturas 1440 px ES/EN × Dark/Light. La composición general y las traducciones son correctas; el Broker queda estrecho dentro de una cuadrícula de cuatro tarjetas y los rótulos de standings se parten en exceso. El layout de fila completa aún no estaba implementado. Los tests de ESI son sintéticos; no equivalen a login EVE real extremo a extremo.
+
+## 73. C.5b.2a — Broker Jita en primera fila completa, v1.0.165 candidata
+
+Alcance aprobado: reordenar únicamente los hijos de .c5c-taxes>.st-g para que c5c-broker-cluster sea el primer elemento del DOM; Broker Jita ocupa una fila completa, con cBroker en la primera columna y los standings originales en las dos columnas restantes. Sales Tax (cTax), Broker de estructura (cBrokerNull) y SCC (cScc) pasan a la fila independiente siguiente. No clonar, renombrar ni sustituir controles.
+
+Geometría compartida: tres columnas para los tres impuestos independientes en escritorio (1440 y 980 px); una columna a 630/390 px. Broker cluster: dos columnas a 1440/980 y una a 630/390. Los standings comparten fila hasta 630 px y se apilan a 390 px. light-header-shipping.css conserva únicamente los overrides cromáticos; la geometría procede de 80-product-ux.css y debe ser idéntica en ambos temas.
+
+Scope: src/shell.html, src/styles/80-product-ux.css, tests/c5c-settings.test.cjs, tests/browser_c5c_settings.py, workflows build-site.yml y rebuild-market-moves.yml (bump a 1.0.165), CHANGELOG.md, docs/DSS.md y docs/PROGRESS.md. No modificar settings.js, skills-bridge.js, ESI/SSO, persistencia ni fórmulas. QA_STATUS lo genera el workflow de rebuild.
+
+Gates pendientes: Node/Python/regresiones financieras, Chromium ES/EN y Dark/Light, 1440/980/630/390, overflow, orden DOM/foco, actualización Broker con standings, controles manuales/ESI sintéticos, capturas nuevas y verificación Pages HTTPS. No declarar LIVE si falla cualquiera.

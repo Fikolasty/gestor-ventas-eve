@@ -148,39 +148,76 @@ class C5b2SettingsTests(unittest.TestCase):
 
     def test_settings_character_tax_visual_snapshots(self):
         out=Path(__file__).resolve().parent/"artifacts"/"theme"
-        out.mkdir(parents=True,exist_ok=True)
-        self.page.set_viewport_size({"width":1440,"height":1000})
-        for lang in ("es","en"):
+        captures=[(1440,"es"),(1440,"en"),(980,"es"),(630,"es"),(390,"es")]
+        for width,lang in captures:
+            height=1000 if width>=980 else 900
+            self.page.set_viewport_size({"width":width,"height":height})
             self.page.evaluate("setLang('"+lang+"')")
             for light in (False,True):
                 self.set_theme(light)
                 self.page.evaluate("window.scrollTo(0,0)")
                 suffix="light" if light else "dark"
-                filename=f"c5b2a-settings-character-tax-{lang}-{suffix}-1440.png"
+                filename=f"c5b2a-broker-layout-v165-{lang}-{suffix}-{width}.png"
                 self.page.screenshot(path=str(out/filename),animations="disabled",full_page=True)
 
     def test_responsive_geometry_and_overflow_in_both_themes(self):
-        expected={1440:(3,4),980:(2,2),630:(1,1),390:(1,1)}
+        expected={
+            1440:(3,3,2,2),
+            980:(2,3,2,2),
+            630:(1,1,1,2),
+            390:(1,1,1,1),
+        }
         for light in (False,True):
             self.set_theme(light)
-            for width,(skill_cols,tax_cols) in expected.items():
+            for width,(skill_cols,tax_cols,broker_cols,standing_cols) in expected.items():
                 self.page.set_viewport_size({"width":width,"height":900})
                 metrics=self.page.evaluate("""() => {
-                    const columns=selector=>getComputedStyle(document.querySelector(selector)).gridTemplateColumns.split(/\\s+/).length;
+                    const columns=selector=>getComputedStyle(document.querySelector(selector)).gridTemplateColumns.trim().split(' ').filter(Boolean).length;
+                    const taxGrid=document.querySelector('.c5c-taxes>.st-g');
                     const brokerEl=document.querySelector('.c5c-broker-cluster');
-                    const broker=brokerEl.getBoundingClientRect();
-                    const taxCards=[...document.querySelectorAll('.c5c-taxes>.st-g>.st-f')]
-                        .map(el=>el.getBoundingClientRect().height);
-                    return {overflow:document.documentElement.scrollWidth-innerWidth,
-                        skills:columns('.c5c-skills>.st-g'),taxes:columns('.c5c-taxes>.st-g'),
-                        brokerWidth:broker.width,brokerHeight:broker.height,taxCardHeights:taxCards};
+                    const main=brokerEl.querySelector('.c5c-broker-main').getBoundingClientRect();
+                    const standingsEl=brokerEl.querySelector('.c5c-broker-standings');
+                    const standings=standingsEl.getBoundingClientRect();
+                    const labels=[...standingsEl.querySelectorAll('.st-l')];
+                    const taxCards=[...taxGrid.children].slice(1).map(el=>el.getBoundingClientRect());
+                    return {
+                        overflow:document.documentElement.scrollWidth-innerWidth,
+                        skills:columns('.c5c-skills>.st-g'),
+                        taxes:columns('.c5c-taxes>.st-g'),
+                        broker:columns('.c5c-broker-cluster'),
+                        standings:columns('.c5c-broker-standings'),
+                        order:[...taxGrid.children].map(el=>el.classList.contains('c5c-broker-cluster')?'broker':el.querySelector('input')?.id||'unknown'),
+                        taxGridWidth:taxGrid.getBoundingClientRect().width,
+                        brokerWidth:brokerEl.getBoundingClientRect().width,
+                        main:{x:main.x,y:main.y,bottom:main.bottom},
+                        standingsBox:{x:standings.x,y:standings.y,width:standings.width},
+                        standingWidths:[...standingsEl.querySelectorAll('.st-f')].map(el=>el.getBoundingClientRect().width),
+                        labelOverflow:labels.some(el=>el.scrollWidth>el.clientWidth+1),
+                        labelBreaks:labels.map(el=>({wordBreak:getComputedStyle(el).wordBreak,overflowWrap:getComputedStyle(el).overflowWrap})),
+                        taxCards:taxCards.map(r=>({x:r.x,y:r.y,width:r.width}))
+                    };
                 }""")
                 self.assertLessEqual(metrics["overflow"],1,f"horizontal overflow at {width}px, light={light}")
                 self.assertEqual(metrics["skills"],skill_cols,f"skill columns at {width}px, light={light}")
                 self.assertEqual(metrics["taxes"],tax_cols,f"tax columns at {width}px, light={light}")
-                self.assertGreater(metrics["brokerWidth"],0)
-                self.assertTrue(all(h < metrics["brokerHeight"] for h in metrics["taxCardHeights"]),
-                                f"tax cards should stay content-sized beside Broker cluster at {width}px")
+                self.assertEqual(metrics["broker"],broker_cols,f"Broker cluster columns at {width}px, light={light}")
+                self.assertEqual(metrics["standings"],standing_cols,f"standings columns at {width}px, light={light}")
+                self.assertEqual(metrics["order"],["broker","cTax","cBrokerNull","cScc"])
+                self.assertLessEqual(abs(metrics["brokerWidth"]-metrics["taxGridWidth"]),2,
+                                     f"Broker cluster must span the tax row at {width}px")
+                self.assertEqual(len(metrics["taxCards"]),3)
+                self.assertTrue(all(card["y"]>=metrics["main"]["bottom"]-1 for card in metrics["taxCards"]),
+                                f"standalone taxes must follow the Broker row at {width}px")
+                self.assertFalse(metrics["labelOverflow"],f"standing label overflow at {width}px")
+                self.assertTrue(all(x["wordBreak"]=="normal" and x["overflowWrap"]=="normal"
+                                    for x in metrics["labelBreaks"]))
+                self.assertTrue(all(w>0 for w in metrics["standingWidths"]))
+                if width>650:
+                    self.assertLess(metrics["main"]["x"],metrics["standingsBox"]["x"])
+                    self.assertLess(abs(metrics["main"]["y"]-metrics["standingsBox"]["y"]),2)
+                else:
+                    self.assertGreater(metrics["standingsBox"]["y"],metrics["main"]["bottom"])
+                    self.assertLess(abs(metrics["main"]["x"]-metrics["standingsBox"]["x"]),2)
 
 if __name__=="__main__":
     unittest.main()

@@ -1,4 +1,18 @@
-## v1.0.163 — 2026-10-29 [ChatGPT] · C.5b.2: Skills/Taxes en Settings — QA PENDIENTE
+## v1.0.165 — 2026-10-29 [ChatGPT] · C.5b.2a: Broker Jita en primera fila — CANDIDATA
+
+- Broker Jita y sus standings ocupan una primera fila de ancho completo; el campo principal queda a la izquierda y los dos standings comparten el área restante.
+- Sales Tax, Broker de estructura y SCC quedan en una fila independiente. Orden DOM y foco siguen el orden visual.
+- Responsive: tres tarjetas independientes a 1440/980 px, una columna a 630/390 px; Broker horizontal a 1440/980 y apilado en 630/390; standings en dos columnas hasta 630 y una a 390.
+- IDs, controles nativos, fórmulas, ESI/SSO, persistencia y motor financiero intactos. Publicación condicionada a gates completos y Pages HTTPS.
+
+## v1.0.164 — 2026-10-29 [ChatGPT] · C.5b.2a: skillbook, copy y standings compactos — LIVE CERTIFICADA
+
+- Icono Skillbook de EVE y títulos visibles simplificados en Personaje e Impuestos; se conserva la leyenda accesible de los fieldsets.
+- Broker Jita se agrupa con standings de facción y corporación; textos y ayudas ES/EN centralizados en el motor de traducción.
+- Controles nativos, IDs, fórmulas, ESI/SSO y persistencia sin cambios.
+- LIVE: fuente e3ed1ff, build 51d1a8a, 4/4 Actions SUCCESS; 147 Node, 16 Python y 72 Chromium. GitHub Pages confirmó v1.0.164 por HTTPS. Artefacto de capturas 12951427301 inspeccionado; la fila completa de Broker quedó como refinamiento pendiente.
+
+## v1.0.163 — 2026-10-29 [ChatGPT] · C.5b.2: Skills/Taxes en Settings — LIVE CERTIFICADA
 
 - Rediseño focal de Personaje e impuestos: tabs horizontales en Ajustes, acciones discretas, seis habilidades en cuadrícula simétrica con cinco niveles y botones −/+; habilidades e impuestos siempre visibles.
 - Descripciones bilingües reactivas: niveles y porcentajes reales que ya están en los campos originales; origen ESI frente a simulación manual, sin duplicar cálculos.
