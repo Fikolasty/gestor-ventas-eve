@@ -2062,5 +2062,61 @@
   "freight.noShipping": {
     "es": "Sin envío",
     "en": "No shipping"
+  },
+  "appraisal.heading": {
+    "es": "TASACIÓN",
+    "en": "APPRAISAL"
+  },
+  "appraisal.partialHeading": {
+    "es": "TASACIÓN PARCIAL",
+    "en": "PARTIAL APPRAISAL"
+  },
+  "appraisal.market": {
+    "es": "Precios de",
+    "en": "Market"
+  },
+  "appraisal.volume": {
+    "es": "Volumen",
+    "en": "Volume"
+  },
+  "appraisal.regionalMarket": {
+    "es": "The Forge (referencia)",
+    "en": "The Forge (reference)"
+  },
+  "appraisal.coverage": {
+    "es": "Cotizaciones: Buy {buy}/{total} Items · Sell {sell}/{total} Items",
+    "en": "Price coverage: Buy {buy}/{total} Items · Sell {sell}/{total} Items"
+  },
+  "appraisal.queried": {
+    "es": "Consulta ESI: {date}",
+    "en": "ESI queried: {date}"
+  },
+  "appraisal.dateUnknown": {
+    "es": "fecha no registrada",
+    "en": "date not recorded"
+  },
+  "appraisal.dateIncomplete": {
+    "es": "fechas incompletas",
+    "en": "incomplete dates"
+  },
+  "appraisal.dateHelp": {
+    "es": "Hora local de consulta de los precios disponibles, de la más antigua a la más reciente. ESI puede devolver datos de su caché; no es la fecha de una operación de mercado.",
+    "en": "Local query time for available prices, from oldest to newest. ESI may return cached data; this is not the time of a market transaction."
+  },
+  "appraisal.partialNote": {
+    "es": "Total parcial: faltan cotizaciones. Cada lado suma solo los Items con precio disponible.",
+    "en": "Partial total: some quotes are missing. Each side only sums Items with an available price."
+  },
+  "appraisal.regionalNote": {
+    "es": "Sin órdenes disponibles en Jita 4-4. Los precios mostrados son una referencia de The Forge, no una venta garantizada en Jita.",
+    "en": "No orders are available in Jita 4-4. These prices are a The Forge reference, not a guaranteed Jita sale."
+  },
+  "appraisal.noOrders": {
+    "es": "Sin órdenes Buy/Sell disponibles en Jita 4-4 para este inventario. Prueba hielo comprimido, reproceso o Buyback.",
+    "en": "No Buy/Sell orders are available in Jita 4-4 for this inventory. Consider compressed ice, reprocessing or Buyback."
+  },
+  "appraisal.notLoaded": {
+    "es": "Todavía no hay precios de Jita disponibles para estos Items. Revisa el estado de la API y sus nombres.",
+    "en": "Jita prices are not available for these Items yet. Check the API status and Item names."
   }
 }

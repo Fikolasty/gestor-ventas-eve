@@ -3426,3 +3426,9 @@ body .top.mm-ho-root #mmTabs>.mm-ho-main #navHome{display:none!important}
  #pSum #unitCourierRows .mm-unit-trade .mm-freight-cell {flex-direction:column;align-items:flex-start;gap:3px;text-align:left}
  #pSum #unitCourierRows .mm-unit-trade {gap:12px}
 }
+
+/* v1.0.171 — appraisal quote coverage and honest ESI query dates. */
+#appr .appr-meta {margin-top:12px;padding-top:10px;border-top:1px solid var(--line2);color:var(--mut);font:400 14px/1.5 var(--f-ui);overflow-wrap:anywhere}
+#appr .appr-meta p {margin:0}
+#appr .appr-meta p+p {margin-top:4px}
+#appr .appr-partial {margin:8px 0 0;color:var(--thrust);font:500 14px/1.5 var(--f-ui)}

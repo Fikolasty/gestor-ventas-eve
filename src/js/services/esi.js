@@ -139,7 +139,7 @@ async function fetchTypes(names,withHist){
   const known=names.filter(n=>ids[n.toLowerCase()]);let done=0;
   await pool(known,ESI_POOL,async n=>{
     const id=ids[n.toLowerCase()];
-    const[b,v,h]=await Promise.all([jitaBook(id),typeVolume(id),withHist(n)?history30(id):Promise.resolve(null)]);
+    const[b,v,h]=await Promise.all([jitaBook(id).then(book=>({...book,queriedAt:Date.now()})),typeVolume(id),withHist(n)?history30(id):Promise.resolve(null)]);
     const cat=grpOf[id]!=null?await groupCat(grpOf[id]):null;
     S.api[n.toLowerCase()]={...b,vol:v,alt:volAlt[id],hist:h,ccp:ccp?ccp[id]:null,id,cat};applyBait(S.api[n.toLowerCase()]);
     ++done;status('esiStatus','Consultando Jita: '+done+' de '+known.length+'…');

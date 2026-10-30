@@ -69,7 +69,7 @@ assert(!sales.includes("fSk.append(el('small','fact-h'"));
 assert(sales.includes("iSk.setAttribute('aria-description',skewHint)"));
 assert(sales.includes('amount.title=breakdown;metric.title=breakdown'));
 
-assert(sales.includes("box.append(el('h2','mm-title appr-title','TASACIÓN'),g)"),'Tasación debe usar el título de las secciones');
+assert(sales.includes("box.append(el('h2','mm-title appr-title',tx(ok&&partial?'appraisal.partialHeading':'appraisal.heading')),g)"),'Tasación debe usar el título de las secciones');
 assert(!sales.includes("el('span','appr-tag','Tasación')"),'Tasación no debe aparecer como insignia antigua');
 assert(html.includes('.appr .appr-title{font-size:1.2rem!important'),'Tasación debe usar el mismo tamaño de título que el Listado');
 

@@ -1,5 +1,10 @@
 # PROGRESS — Market Moves+
 
+## 2026-10-30 — v171 candidata y prototipo Listado separado
+
+Tasación incorpora cobertura Buy/Sell, fecha de consulta registrada y aviso parcial;152Node/16Python/87Chromium/8legacy PASS. Publicación pendiente, LIVEv170. DSS§83 y HANDOFF_APPRAISAL_171.md. Listado: únicamente propuesta interactiva de tabla Lote/Unidad y copia discreta; no modificar el Listado real sin revisión del propietario (DSS§84).
+
+
 ## 2026-10-30 — v1.0.170 LIVE certificada
 
 
@@ -941,3 +946,11 @@ v1.0.168: primer CI 41080237306 detuvo Pages por límite fijo de altura B.8 depe
 ## Gate v170 antes de publicación
 
 Gate local previo a publicación:150 Node/16 Python/8 legacy PASS; suite Chromium completa83/84 en128,036 s. La única falla restante era una expectativa B.6a antigua courierHidden=true para un plan sin envío, incompatible con la unificación aprobada. Se actualizó a false; misma regresión focal PASS en3,309 s. No hubo ajuste de producto tras el build/capturas r2. Se exige suite CI completa84/84 antes de desplegar. Las capturas r2 finales se inspeccionaron en desktop1440 Dark/Light y móvil390 de la misma mezcla comercial; banda de inversión/ganancia alineada y sin desbordamiento. No presentar el gate inicial83/84 como un pase completo local84.
+
+## 2026-10-30 — auditoría Janice, pendiente de snapshot MM por Item
+
+Auditoría local sin código ni release: tres exclusiones de Janice explican0,50m³; archivo177 tipos correctamente leído y Split correcto en ambos. Diferencia de precios aún sin causa confirmada por Item. Informe docs/APPRAISAL_JANICE_AUDIT_2026-10-30.md y DSS §82, no publicados en GitHub; LIVE v170 intacta.
+
+## 2026-10-30 — Janice W7Gh86, nuevo lote auditado
+
+Informe local APPRAISAL_JANICE_W7GH86_AUDIT_2026-10-30.md:176/179 tipos y0,50m³ de exclusiones. Comparación de tres libros ESI reales confirma precios de snapshot distintos; Silicon por sí solo cambia1.771.120ISK en Buy. No atribuirlo al antiguo lote completo ni a fórmulas; producto sin cambios, LIVE v170.

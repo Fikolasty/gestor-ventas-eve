@@ -22,6 +22,17 @@ function refresh(){if(refQ)return;refQ=requestAnimationFrame(()=>{refQ=0;refresh
 // v1.0.45: Tasación del lote como Janice: Precios de · Volumen · Items | Buy · Split · Sell.
 // Valores crudos (mejor compra y venta más barata de Jita 4-4), sin los filtros del plan. Solo con items pegados.
 let appraisalRenderKey=null,appraisalRenderNode=null;
+// Coverage is per Item type and side; zero is known, missing is never a quote.
+function appraisalCoverage(items,buyOf,sellOf){
+  const valid=n=>Number.isFinite(n)&&n>=0;
+  const priced=items.filter(o=>valid(buyOf(o))||valid(sellOf(o)));
+  const times=priced.map(o=>o.jita?.queriedAt).filter(n=>Number.isFinite(n)&&n>0);
+  return {total:items.length,buy:items.filter(o=>valid(buyOf(o))).length,
+    sell:items.filter(o=>valid(sellOf(o))).length,
+    earliest:times.length?Math.min(...times):null,latest:times.length?Math.max(...times):null,
+    incompleteDate:times.length<priced.length};
+}
+
 function paintAppraisal(){
   const box=$('appr');if(!box)return;
   // Appraisal depends on raw EVE market prices and inventory, NOT brokerage,
@@ -30,7 +41,7 @@ function paintAppraisal(){
   const its=S.items.filter(o=>o.qty>0);
   const key=JSON.stringify([S.lang,its.map(o=>[
     o.name,o.qty,o.m3u,o.jita?.id,o.jita?.topBuy,o.jita?.topSell,
-    o.jita?.regionBuy,o.jita?.regionSell
+    o.jita?.regionBuy,o.jita?.regionSell,o.jita?.queriedAt
   ])]);
   box.hidden=!its.length;
   box.parentNode.classList.toggle('no-appr',!its.length);
@@ -50,18 +61,32 @@ function paintAppraisal(){
   const cell=(col,k,v,c,cp)=>{const d=el('div',c||null);d.append(el('dt',null,k));const dd=el('dd','num');
     if(typeof v==='number')dd.append(copyBtn(Math.round(v),fmt(v)));else if(cp!=null)dd.append(copyBtn(cp,v));else dd.append(el('span','appr-v',v));d.append(dd);col.append(d);}; // v1.0.47: misma caja en todas las filas
   const ok=priced.length>0||regional,v2=Math.round(vol*100)/100;
-  cell(colL,'Precios de',regional?'The Forge (referencia)':'Jita 4-4');
-  cell(colL,'Volumen',NF2.format(v2)+' m³',null,String(v2)); // 2 decimales, como Janice; clic copia el número
+  cell(colL,tx('appraisal.market'),regional?tx('appraisal.regionalMarket'):'Jita 4-4');
+  cell(colL,tx('appraisal.volume'),NF2.format(v2)+' m³',null,String(v2)); // 2 decimales, como Janice; clic copia el número
   cell(colL,'Items',String(its.length));
   cell(colR,'Buy',ok&&vB>0?vB:'—','t-buy');cell(colR,'Split',ok&&vB>0&&vS>0?(vB+vS)/2:'—','t-split');cell(colR,'Sell',ok&&vS>0?vS:'—','t-sell');
-  g.append(colL,colR);box.append(el('h2','mm-title appr-title','TASACIÓN'),g);
+  const coverage=appraisalCoverage(its,buyOf,sellOf),partial=coverage.buy<its.length||coverage.sell<its.length;
+  g.append(colL,colR);box.append(el('h2','mm-title appr-title',tx(ok&&partial?'appraisal.partialHeading':'appraisal.heading')),g);
+  const meta=el('div','appr-meta');
+  meta.append(el('p','appr-coverage',tx('appraisal.coverage',coverage)));
+  let date=tx('appraisal.dateUnknown');
+  if(coverage.latest!=null){
+    const locale=S.lang==='en'?'en-GB':'es-ES';
+    const full=n=>new Intl.DateTimeFormat(locale,{dateStyle:'short',timeStyle:'medium'}).format(n);
+    date=full(coverage.earliest);
+    if(coverage.latest!==coverage.earliest)date+=' – '+full(coverage.latest);
+    if(coverage.incompleteDate)date+=' · '+tx('appraisal.dateIncomplete');
+  }
+  const queried=el('p','appr-queried',tx('appraisal.queried',{date}));queried.title=tx('appraisal.dateHelp');
+  meta.append(queried);box.append(meta);
+  if(ok&&partial){const note=el('p','appr-partial',tx('appraisal.partialNote'));note.setAttribute('role','status');box.append(note);}
   if(regional){
-    const note=el('p','appr-no-price','Sin órdenes disponibles en Jita 4-4. Los precios mostrados son una referencia de The Forge, no una venta garantizada en Jita.');
+    const note=el('p','appr-no-price',tx('appraisal.regionalNote'));
     note.setAttribute('role','status');box.append(note);
   }else if(!ok){
     const note=el('p','appr-no-price',its.some(o=>o.jita&&o.jita.id)
-      ?'Sin órdenes Buy/Sell disponibles en Jita 4-4 para este inventario. Prueba hielo comprimido, reproceso o Buyback.'
-      :'Todavía no hay precios de Jita disponibles para estos items. Revisa el estado de la API y sus nombres.');
+      ?tx('appraisal.noOrders')
+      :tx('appraisal.notLoaded'));
     note.setAttribute('role','status');box.append(note);
   }
   appraisalRenderKey=key;

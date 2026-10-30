@@ -1,5 +1,10 @@
 ## v1.0.168 — 2026-10-30 [ChatGPT] · Plegado, envío por unidad y copia — LIVE CERTIFICADA
 
+## v1.0.171 — candidata local
+- Tasación: cobertura independiente Buy/Sell, fecha de consulta ESI y aviso de total parcial. Datos sin fecha se identifican; fórmulas intactas.
+-152Node/16Python/87Chromium/8legacy PASS; publicación pendiente. Prototipo del Listado separado, sin cambio a la web real.
+
+
 ## v1.0.170 — LIVE certificada
 - Una sola gaveta DETALLE POR ITEM: todos los Items, locales o enviados, recibidos unitarios copiables y totales del lote.
 - Comercio Jita conserva inversión y ganancia por unidad; paginación de diez Items. Se retira el detalle duplicado de Tu resultado.
