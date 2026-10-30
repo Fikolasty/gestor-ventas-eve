@@ -528,7 +528,11 @@ function enhanceMining(){
  enhance(old,'mn-rank',get,v=>buttons[Math.max(3,v)]?.click(),3);
 }
 let pending=false;function check(){if(pending)return;pending=true;queueMicrotask(()=>{pending=false;enhanceSettings();enhanceMining()})}
-document.addEventListener('DOMContentLoaded',()=>{check();const root=document.getElementById('mining');if(root){const observer=new MutationObserver(check);observer.observe(root,{subtree:true,childList:true});window.addEventListener('pagehide',()=>observer.disconnect(),{once:true})}});
+// The embedded script may execute after DOMContentLoaded in a distributable;
+// initialize immediately when the DOM is already interactive/complete.
+const mountSkillLevels=()=>{check();const root=document.getElementById('mining');if(root){const observer=new MutationObserver(check);observer.observe(root,{subtree:true,childList:true});window.addEventListener('pagehide',()=>observer.disconnect(),{once:true})}};
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',mountSkillLevels,{once:true});
+else mountSkillLevels();
 })();
 </script>
 

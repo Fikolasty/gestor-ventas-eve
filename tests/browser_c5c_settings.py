@@ -21,6 +21,7 @@ class C5b2SettingsTests(unittest.TestCase):
         self.page.goto(INDEX.as_uri(),wait_until="domcontentloaded")
         self.page.evaluate("togglePanel('settings',true)")
         self.page.locator("#mm-settings-tab-1").click()
+        self.page.locator(".c5c-skill-card[data-skill=\"skAcc\"] .eve-sk-minus").wait_for(timeout=10000)
     def tearDown(self):
         self.assertEqual(self.errors,[])
         self.page.close()
