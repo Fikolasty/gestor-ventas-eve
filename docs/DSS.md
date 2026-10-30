@@ -1,6 +1,6 @@
 # DSS — Design Standards & Session Handoff · Market Moves+
 
-**Última actualización:** 2026-10-29 · **C.5b.2a v1.0.164 LIVE certificada** (§72); anterior **C.5b.2 v1.0.163 LIVE certificada** (§71), 144 Node/16 Python/70 Chromium y 4/4 Actions; anterior **C.5b.1 v1.0.162 LIVE certificada** (§70), 142 Node/16 Python/65 Chromium y 4/4 Actions; anterior **C.5b v1.0.161 LIVE certificada** (§69); anterior **C.4b v1.0.160 LIVE** (§68). Fórmulas, Settings, persistencia y ESI/SSO intactos.
+**Última actualización:** 2026-10-29 · **C.5b.2a v1.0.165 LIVE certificada** (§73), 147 Node/16 Python/72 Chromium y 4/4 Actions/Pages; anterior **C.5b.2a v1.0.164 LIVE certificada** (§72); anterior **C.5b.2 v1.0.163 LIVE certificada** (§71); fórmulas, Settings, persistencia y ESI/SSO intactos.
 
 **Continuidad de versión:** la release anterior v1.0.126 (P0 Paladin + A+B.1) quedó verificada con fuente `205ec9fa`, build `c716f7aa`, Actions/Pages `40215891182`, blob `9601d5f8`; ver §9. La etapa B.2 se implementó inicialmente **local** sobre `dcdb6195` (§10) y posteriormente se publicó tras autorización expresa y QA (§11). El usuario concedió también **autorización continua de publicación de mejoras incrementales bien probadas**, registrada en §1.8.
 
@@ -941,7 +941,7 @@ Trabajo incluido: icono Skillbook de EVE, eliminación de encabezados visibles d
 
 Revisión humana del artefacto CI 12951427301: cuatro capturas 1440 px ES/EN × Dark/Light. La composición general y las traducciones son correctas; el Broker queda estrecho dentro de una cuadrícula de cuatro tarjetas y los rótulos de standings se parten en exceso. El layout de fila completa aún no estaba implementado. Los tests de ESI son sintéticos; no equivalen a login EVE real extremo a extremo.
 
-## 73. C.5b.2a — Broker Jita en primera fila completa, v1.0.165 candidata
+## 73. C.5b.2a — Broker Jita en primera fila completa, v1.0.165 LIVE certificada
 
 Alcance aprobado: reordenar únicamente los hijos de .c5c-taxes>.st-g para que c5c-broker-cluster sea el primer elemento del DOM; Broker Jita ocupa una fila completa, con cBroker en la primera columna y los standings originales en las dos columnas restantes. Sales Tax (cTax), Broker de estructura (cBrokerNull) y SCC (cScc) pasan a la fila independiente siguiente. No clonar, renombrar ni sustituir controles.
 
@@ -949,4 +949,10 @@ Geometría compartida: tres columnas para los tres impuestos independientes en e
 
 Scope: src/shell.html, src/styles/80-product-ux.css, tests/c5c-settings.test.cjs, tests/browser_c5c_settings.py, workflows build-site.yml y rebuild-market-moves.yml (bump a 1.0.165), CHANGELOG.md, docs/DSS.md y docs/PROGRESS.md. No modificar settings.js, skills-bridge.js, ESI/SSO, persistencia ni fórmulas. QA_STATUS lo genera el workflow de rebuild.
 
-Gates pendientes: Node/Python/regresiones financieras, Chromium ES/EN y Dark/Light, 1440/980/630/390, overflow, orden DOM/foco, actualización Broker con standings, controles manuales/ESI sintéticos, capturas nuevas y verificación Pages HTTPS. No declarar LIVE si falla cualquiera.
+**Gates completados:** Node 147/147 (0 failures); Python 16/16; Chromium 72/72. Las pruebas nuevas test_responsive_geometry_and_overflow_in_both_themes y test_settings_character_tax_visual_snapshots pasaron. Matriz 1440/980/630/390 en Dark/Light; ES/EN; sin overflow horizontal; orden DOM/foco coincide con el orden visual; standings y Broker conservan sus controles nativos e interacción. Artefacto CI 12953460873 con diez capturas; revisión visual directa de las vistas clave completada. Cuatro workflows SUCCESS: Build 40999980538, Minería 40999980622, Rebuild/Pages 40999980692, Versiones 40999980739.
+
+**Trazabilidad:** source commit f655fd00eff4d4b236117b8f2bb0dd92b248146d; build commit 70dde51569706fbce6ed2c178469280938e53877; Pages HTTPS confirmó v1.0.165 en https://fikolasty.github.io/gestor-ventas-eve/. QA_STATUS actualizado automáticamente por el workflow. Fórmulas, IDs, ESI/SSO, persistencia, ventas y minería sin cambios.
+
+**Límite de verificación:** no se realizó un login real de EVE SSO; la sincronización ESI se cubre con pruebas sintéticas existentes. En 390 px se observó que el botón de inicio de sesión del encabezado global queda comprimido; se registra fuera del scope de esta iteración y no se modifica aquí.
+
+**Estado:** C.5b.2a v1.0.165 LIVE. No iniciar otras secciones hasta recibir una nueva instrucción.
