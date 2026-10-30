@@ -1692,7 +1692,7 @@
     "en": "PILOT SKILLS"
   },
   "settings.pilotDescription": {
-    "es": "Configura las habilidades de tu piloto para calcular las tasas y el rendimiento de reproceso.",
+    "es": "Ajusta los niveles de tu piloto. Sus habilidades influyen en impuestos, órdenes y reproceso.",
     "en": "Set your pilot's skills for market fees and refining yields."
   },
   "settings.skillsTitle": {
@@ -1700,11 +1700,11 @@
     "en": "SKILLS"
   },
   "settings.skillsSubtitle": {
-    "es": "Los niveles de ESI se cargan automáticamente. Puedes simular otros valores.",
+    "es": "Con ESI se cargan tus niveles reales; puedes simular cambios manualmente.",
     "en": "ESI loads your actual levels automatically. You can simulate different levels."
   },
   "settings.skillsIntro": {
-    "es": "Accounting y Broker Relations influyen en las tasas de mercado. Reprocessing mejora el rendimiento de los materiales.",
+    "es": "Los impuestos se actualizan con Accounting y Broker Relations. Las habilidades de reproceso afectan los materiales recuperados.",
     "en": "Accounting and Broker Relations affect market fees. Reprocessing skills improve material yield."
   },
   "settings.taxesTitle": {
@@ -1712,11 +1712,11 @@
     "en": "TAXES & FEES"
   },
   "settings.taxesSubtitle": {
-    "es": "Se aplican a las rutas de venta correspondientes.",
+    "es": "Se aplican a las rutas correspondientes de venta.",
     "en": "Applied to the relevant selling routes."
   },
   "settings.taxesIntro": {
-    "es": "Las tasas vinculadas cambian con las habilidades. También puedes introducir las tarifas reales que muestra EVE.",
+    "es": "Accounting y Broker Relations modifican las tasas vinculadas. Puedes introducir las tasas reales del juego cuando sean diferentes.",
     "en": "Linked fees update with your skills. You can also enter the actual rates shown in EVE."
   },
   "settings.skillOre": {
