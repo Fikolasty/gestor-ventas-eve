@@ -49,6 +49,11 @@ test('C.5b.2a keeps complete bilingual copy for the grouped tax controls',()=>{
   assert.equal(typeof ui[key]?.es,'string',key+' needs Spanish copy');
   assert.equal(typeof ui[key]?.en,'string',key+' needs English copy');
  }
+ const htmlFallbacks=['HABILIDADES','Niveles de personaje que influyen en las tasas de mercado y el rendimiento de reproceso.',
+  'Controles de habilidades','ESI sincroniza las habilidades compatibles; el procesamiento de mineral o hielo se ajusta manualmente. Puedes simular otros niveles.',
+  'Valores de impuestos y comisiones','Tasas efectivas aplicadas a cada ruta de venta.',
+  'Accounting actualiza Sales Tax; Broker Relations y los standings ajustan el Broker de Jita. Puedes introducir las tasas que muestra EVE.'];
+ for(const text of htmlFallbacks)assert.equal(typeof en[text],'string',text+' needs an English fallback');
 });
 test('C.5b.2a tabs retain Sales tokens and the native fixed-fieldset contract',()=>{
  const style=read('src','styles','80-product-ux.css'),settings=read('src','js','ui','settings.js');
