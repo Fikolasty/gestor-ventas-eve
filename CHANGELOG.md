@@ -1,9 +1,9 @@
-## v1.0.177 — simetría de Ajustes — candidata
+## v1.0.177 — simetría de Ajustes — LIVE certificada
 
 - Cabeceras de gavetas con altura, márgenes y tipografía uniformes en los cuatro tabs; se reserva el subtítulo ausente.
 - General ocupa su ancho completo y conserva la misma geometría Light/Dark.
 - Tarjetas de habilidades con altura uniforme, incluidas notas ESI largas.
-- Cálculos, valores guardados y sincronización intactos. Gate remoto pendiente; docs/HANDOFF_177.md.
+- 4 Actions / 119 Chromium PASS; HTML HTTPS/local/GitHub idéntico. Cálculos, valores guardados y sincronización intactos. docs/HANDOFF_177.md.
 
 ## v1.0.176 — dropdowns, habilidades iniciales y reloj — LIVE certificada
 
