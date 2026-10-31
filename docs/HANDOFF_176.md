@@ -1,6 +1,6 @@
-# Continuidad — v1.0.176 candidata
+# Continuidad — v1.0.176 LIVE certificada
 
-Última LIVE175; base main139573f7a543758258581bc1fb98ca23d9d30d29. Leer AGENTS/protocolo/DSS. No repetir r5 ya publicada. Solicitudes incrementales: popup sin recorte, seis habilidades0 en primera visita conservando ajustes por navegador, reloj discretoUTC24h/Local12h sin IP/geolocalización.
+Última LIVE176; fuente52315a41, build95166de8. El cierre al final contiene los SHA completos y gates verificados. Leer AGENTS/protocolo/DSS. No repetir r5 ya publicada. Solicitudes incrementales: popup sin recorte, seis habilidades0 en primera visita conservando ajustes por navegador, reloj discretoUTC24h/Local12h sin IP/geolocalización.
 
 
 ## v1.0.176 candidata — dropdown, habilidades iniciales y reloj (2026-10-31)
@@ -19,3 +19,16 @@ Siguiente: completar gate, publicar por Fiko/Fikolasty con expected_sha y force:
 
 
 **QA176 actualizada:** gate inicial115/117 con dos fixtures que dependían de skills V por defecto; se hizo explícito ese escenario sin cambiar sus expectativas económicas. Ocho focales finales PASS (seis nuevos+dos corregidos). Capturas finales `settings176-market-final3-*` y `settings176-header-final2-*`, mismo estado, idioma y tema activado mediante el control real; inspeccionadas.117Chromium completo pendiente de repetición/CI antes de LIVE.157Node/16Python/8legacy PASS.
+
+
+## Cierre LIVE v1.0.176 — 2026-10-31
+
+Los tres cambios solicitados ya están publicados: dropdown Mercado principal sin recorte, seis habilidades en cero solo para primeras visitas sin ajustes y reloj discreto EVE UTC24h / Local12h desde la zona del navegador. No se consulta IP ni ubicación; ambas horas dependen del reloj del dispositivo. Se conservan ajustes guardados por navegador y la sincronización ESI autorizada de175.
+
+Fuente Fiko inicial `c14543ef174ed7d7e1200bcd2331da57ef4fac78`; corrección de fixture asíncrono `52315a412d06d4cb2f06beb0acba161df0901ead`; build bot `95166de859aedab76fc0d6d5e7624cb0642d1ba2`. Cuatro Actions SUCCESS: Build `41227599384`, Minería `41227599362`, Versiones `41227599414`, Rebuild/Pages `41227599474`. Compile `124614975779` y Deploy `124616282963` success. CI: 157 Node, 16 Python, 8 legacy y 117 Chromium PASS (277,335 s). Local final: 117 Chromium PASS (231,719 s), 157 Node, 16 Python y 8 legacy PASS. Ocho focales finales también pasaron.
+
+HTTPS independiente: v1.0.176, HTML público/local canónico/GitHub idénticos, 2.550.125 bytes, blob `c52943dfb78c13b4b17e00abf493803381311f52`. Web https://fikolasty.github.io/gestor-ventas-eve/. Capturas `settings176-market-final3-*` y `settings176-header-final2-*` inspeccionadas en1440 Dark/Light con mismo estado/idioma y control de tema real. Matriz de dropdowns390/630/980/1440 y900/450px de alto; cada opción se comprueba por hit-test real, no solo por su rectángulo. Fallback nativo si no existe Popover API; teclado/foco/resize/scroll conservados. Native selects de Ajustes y menús de Comercio/Ordenar conservan sus handlers.
+
+Los gates locales históricos115/117 y116/117 detectaron fixtures que suponían habilidades V y un recálculo pendiente. Se declaró el escenario explícitamente y se vació su refresh antes de inyectar datos sintéticos, sin relajar expectativas. El primer run remoto176 `41227288588` quedó cancelado; el cierre válido es `41227599474`. El cambio de defaults0 afecta legítimamente al cálculo inicial: Accounting0=7.5%, Broker Relations0 con standings0=3%; no se altera ninguna fórmula ni se borra caché existente. Testea primera visita, recarga y otro contexto de navegador independiente. Yield inicial estimado65.13% bajo la configuración manual de instalación/implante existente, no datos de una instalación del personaje.
+
+Reloj: medianocheUTC00:00, cambio de minuto, DST de New York y media hora de Kolkata verificados. Etiquetas y formatos se mantienen en ES/EN, móvil se redistribuye sin overflow. Capturas con horas de prueba no son un reloj remoto del servidor. No se probó ESI/SSO con un personaje real; ese límite de175 sigue vigente. Kit activo: docs/HANDOFF_176.md. Este cierre sustituye los estados candidatos/gates pendientes anteriores; no repetir la implementación ni iniciar un rediseño amplio sin dirección aprobada. La documentación se cierra en un commit posterior que no modifica el HTML certificado.
