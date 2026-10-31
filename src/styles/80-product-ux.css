@@ -2847,8 +2847,12 @@ body:is([data-mm-view="settings"],[data-mm-view="help"]) .top-slot>.panel{
 #settings .modern-panel .st-f{background:var(--surface-card)!important;border-color:var(--line2)!important}
 #settings .modern-panel .st-f .st-l{font:600 .78rem/1.4 var(--f-ui)!important}
 #help .modern-panel .hp,#help .modern-panel .hp-t{
-  display:grid!important;grid-template-columns:minmax(0,1fr)!important;gap:10px!important
+  display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:12px!important
 }
+#help .modern-panel .hp-t:has(>div:only-child){grid-template-columns:minmax(0,1fr)!important}
+#help .modern-panel .hp-t [data-market-system]{display:inline!important;font:inherit!important;color:inherit!important;margin:0!important}
+#help .modern-panel .hp-t>div>b{display:block}
+@media(max-width:850px){#help .modern-panel .hp,#help .modern-panel .hp-t{grid-template-columns:minmax(0,1fr)!important}}
 #help .modern-panel .hp-c,#help .modern-panel .hp-t>div{
   min-width:0!important;border:1px solid var(--line2)!important;
   background:var(--surface-card)!important;border-radius:10px!important;

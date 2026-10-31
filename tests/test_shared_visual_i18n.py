@@ -19,7 +19,7 @@ class SharedUiTests(unittest.TestCase):
         self.assertNotIn('Skill Plan</span>', html)
         self.assertIn('data-i18n="module.skills">Habilidades</span>', html)
         self.assertNotIn('No pide tu contraseña de EVE ni inicio de sesión', html)
-        self.assertIn('ABRIR PASOS A SEGUIR', html)
+        self.assertIn('data-i18n="verdict.showSteps">Ver pasos para vender', html)
         self.assertIn('Privacidad y acceso a EVE', html)
 
     def test_skills_visual_tokens_are_synced_from_main(self):

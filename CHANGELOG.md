@@ -1,3 +1,10 @@
+## v1.0.179 — Guía de Uso en dos columnas — candidata
+
+- Pasos, rutas y glosario aprovechan dos columnas en escritorio; una columna en pantallas pequeñas.
+- Conserva orden, lectura, tipografía y tabs ES/EN Dark/Light.
+- Referencias de Guía actualizadas a Detalle por Item y Ver pasos para vender.
+- Gate remoto pendiente; docs/HANDOFF_179.md.
+
 ## v1.0.178 — habilidades compactas y centradas — LIVE certificada
 
 - Menos espacio interior; títulos y origen ESI/Manual alineados, controles centrados.
