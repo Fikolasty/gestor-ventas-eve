@@ -1410,3 +1410,10 @@ Fuente `de9e13eb`, build GitHub Actions `a811f771`; 4/4 workflows aprobados y 55
 - Los controles visuales conservan los `select` nativos como fuente de verdad. Se corrigió el montaje que impedía insertar los controles y se restauró la capitalización natural de «Manual».
 - Accounting y Broker Relations siguen vinculados a las tasas efectivas; Advanced Broker Relations afecta únicamente el coste de relist. Se conservan las fórmulas, standings, tasas de estructura y SCC, ESI/SSO y persistencia.
 - Validación final: **144 Node, 16 Python y 70 Chromium**; Build, Minería, Versiones y Rebuild/Chromium/Pages aprobados. GitHub Pages confirmó v1.0.163. Capturas ES Dark, ES Light y EN Dark revisadas. Ver DSS §71.
+
+
+## Cierre LIVE v1.0.173 — 2026-10-31
+
+r5 publicada y certificada. Fuente Fiko protegida65e5a1fec9e9282145d5f52b3e16f104b9c441c5; build bot2fc3334eae240db0e80aae5c8dfe3fa1cd8e2e13. Cuatro Actions SUCCESS:Versiones41166835035,Build41166835010,Minería41166835051 y Rebuild/Pages41166834966. Compile124436106289 y deploy124436851131 success. CI157 Node/16 Python/96 Chromium (154,203s)/8 legacy PASS; local96 Chromium (145,288s),157Node/16Python/8legacy PASS.
+
+HTTPS independiente confirmó v1.0.173 y coincidencia exacta del HTML público/local canónico/GitHub:2.511.804 bytes,blob6e2c83ee03c65a4434223bd2eb1345398470adb9. Web https://fikolasty.github.io/gestor-ventas-eve/. Cabecera redondeada, curvas punteadas,+/− centrados,cuatro paneles2×2, tabla fusionada inferior y referencia independiente del plan ya están LIVE. Se conservan tasas,motor,ESI/SSO y almacenamiento. No se probó ESI/SSO real extremo a extremo; capturas con fixtures. Este cierre sustituye los estados candidatos y pendientes anteriores. La documentación se publica con commit posterior que puede avanzar main sin alterar el HTML certificado. Kit vigente HANDOFF_LEDGER_173.md; no repetir implementación ni extender los hilos a otros módulos sin revisión del propietario.

@@ -47,3 +47,10 @@ Envío: el motor YA reparte por volumen/colateral/fijo y normaliza al total solo
 ## 2026-10-30 — r5 autorizado e implementación v1.0.173 local
 
 El propietario aprobó expresamente «Aplicar r5 y publicar tras las pruebas». Esta autorización sustituye los pendientes de implementación del preview: fusión inferior de Listado/Detalle, header redondeado, curvas con puntos, +/− centrados, cuatro paneles2×2, switch Lote/Unidad y referencia de envío independiente del plan seleccionado. La proyección reutiliza courierCost/allocateCourier y las tasas originales sin modificar el plan. Implementación local en revisión;157 Node/16 Python/8 legacy PASS. Chromium focal y suite completa en curso. No publicado: última LIVE sigue v172; continuidad activa HANDOFF_LEDGER_173.md.
+
+
+## Cierre LIVE v1.0.173 — 2026-10-31
+
+r5 publicada y certificada. Fuente Fiko protegida65e5a1fec9e9282145d5f52b3e16f104b9c441c5; build bot2fc3334eae240db0e80aae5c8dfe3fa1cd8e2e13. Cuatro Actions SUCCESS:Versiones41166835035,Build41166835010,Minería41166835051 y Rebuild/Pages41166834966. Compile124436106289 y deploy124436851131 success. CI157 Node/16 Python/96 Chromium (154,203s)/8 legacy PASS; local96 Chromium (145,288s),157Node/16Python/8legacy PASS.
+
+HTTPS independiente confirmó v1.0.173 y coincidencia exacta del HTML público/local canónico/GitHub:2.511.804 bytes,blob6e2c83ee03c65a4434223bd2eb1345398470adb9. Web https://fikolasty.github.io/gestor-ventas-eve/. Cabecera redondeada, curvas punteadas,+/− centrados,cuatro paneles2×2, tabla fusionada inferior y referencia independiente del plan ya están LIVE. Se conservan tasas,motor,ESI/SSO y almacenamiento. No se probó ESI/SSO real extremo a extremo; capturas con fixtures. Este cierre sustituye los estados candidatos y pendientes anteriores. La documentación se publica con commit posterior que puede avanzar main sin alterar el HTML certificado. Kit vigente HANDOFF_LEDGER_173.md; no repetir implementación ni extender los hilos a otros módulos sin revisión del propietario.
