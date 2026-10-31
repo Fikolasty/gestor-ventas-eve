@@ -20,7 +20,7 @@ test('B.4 comparison is in the plan header; alerts retain their own container',(
 
 test('B.4 registered items separate disclosure, copy and removal as native buttons',()=>{
   assert.match(ledger,/el\('button','lot-open'\)/);
-  assert.match(ledger,/head\.append\(toggle,info,quantity\.cell,volume\.cell,buy\.cell,sell\.cell\)/);
+  assert.match(ledger,/head\.append\(info,quantity\.cell,volume\.cell,buy\.cell,sell\.cell,freight\.cell,result\.cell\)/);
   assert.match(ledger,/toggle\.setAttribute\('aria-controls',body\.id\)/);
   assert.match(ledger,/e\.target\.closest\('\.lot-open'\)/);
   assert.match(ledger,/if\(open&&!ui\.detailsReady\)buildLotDetails\(o,ui\)/);
@@ -50,6 +50,6 @@ test('B.4 all new labels, financial caveats and disclosures are translated',()=>
   }
   assert.doesNotMatch(shell,/data-i18n="ledger\.intro"/);
   assert.match(shell,/id="ledgerPriceHelp"/);
-  assert.match(shell,/data-i18n-aria-label="decision\.priceSourceQ"/);
+  assert.match(shell,/data-i18n-aria-label="ledger\.referenceInfo"/);
   assert.match(shell,/data-i18n="ledger\.netSort"/);
 });

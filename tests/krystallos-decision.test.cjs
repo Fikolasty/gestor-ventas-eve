@@ -12,7 +12,7 @@ const shell=fs.readFileSync('src/shell.html','utf8');
 const styles=fs.readFileSync('src/styles/80-product-ux.css','utf8');
 assert(shell.includes('class="mm-decision-grid" id="decisionGrid"'),'Economic sections share a two-column grid');
 assert(shell.includes('<section class="pk-opportunity mm-decision-card"'),'Financial comparison visible without expansion');
-assert(shell.includes('<section class="mm-unit-courier mm-decision-card"'),'Freight comparison visible without expansion');
+assert(shell.includes('<section class="ledger-fusion-shell"'),'Freight comparison visible without expansion');
 assert(styles.includes('grid-template-columns:repeat(2,minmax(0,1fr))'),'Symmetric equal-width columns');
 assert(styles.includes('@media(max-width:980px)'),'Responsive single column');
 assert(styles.includes('.mm-freight-columns'),'Shipped items compare all three actual financial values');

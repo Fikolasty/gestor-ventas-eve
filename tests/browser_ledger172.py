@@ -23,7 +23,7 @@ class Ledger172Tests(unittest.TestCase):
    S.items[0].m3u=.001;S.items[0].checks=[['Sample warning','warn']];
    S.items[1].name='Long module name with multiple words and variants';
    S.api[S.items[1].name.toLowerCase()]={cat:7};
-   syncLots();refreshNow();$('ledger').hidden=false;$('ledger').open=true;
+   S.items.forEach(o=>o.ui=null);syncLots();refreshNow();ledgerValueMode='lot';lastP.rows.forEach(r=>paintLotMarket(r));paintLedgerReference();$('ledger').hidden=false;$('ledger').open=true;
    window.copies=[];Object.defineProperty(navigator,'clipboard',{configurable:true,
     value:{writeText:v=>{copies.push(v);return Promise.resolve()}}});
   }""")
@@ -50,6 +50,7 @@ class Ledger172Tests(unittest.TestCase):
   row.locator('.lot-open').focus();self.page.keyboard.press('Enter')
   expect(row.locator('.lot-body')).to_be_visible()
   self.assertEqual(row.locator('.lot-panel-grid>details').count(),4)
+  row.locator('.lot-analysis>summary').click()
   expect(row.locator('.lot-selected-summary')).to_be_visible()
   row.locator('.lot-open').focus();self.page.keyboard.press('Space')
   expect(row.locator('.lot-body')).to_be_hidden()

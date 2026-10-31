@@ -975,3 +975,29 @@ Autorización expresa de implementar/publicar tras QA. Tabla sencilla con Lote/U
 **Cierre LIVE v1.0.172 — 2026-10-30:** fuente Fiko protegida3aa4792fa916da13f3bfeee7287ddbf5dddc5085; build botcf6f4e5e6e5bde9e62fd2a1562c382137d39188f. Cuatro Actions SUCCESS: Versiones41158004073, Build41158004089, Minería41158004071 y Rebuild/Pages41158004208. Compile124408988153 y deploy124409793939 success;90/90 Chromium CI (144,871s),152 Node/16 Python/8 legacy PASS. QA local90/90 Chromium (118,339s),152 Node/16 Python/8 legacy y cinco focales PASS. HTTPS independiente confirma v1.0.172 y HTML público/local canónico/GitHub idénticos:2.496.791 bytes, blob e4f7c3bbe4c83a9a25c14c6e479928297bc9052e. Web https://fikolasty.github.io/gestor-ventas-eve/.
 
 La tabla aprobada y sus controles ya están LIVE. Se preservan cuatro paneles, precios manuales, filtros, avisos, orden, remove, semántica financiera, lazy DOM y rendimiento D.2. Sin cambios en fórmulas, ESI/SSO, permisos ni persistencia; ESI/SSO real E2E no probado. Las capturas revisadas son fixtures locales, no cotizaciones reales. Este cierre sustituye estados de candidata de §85 y pendientes históricos de §84. El cierre documental puede avanzar main sin modificar el HTML certificado. Kit activo docs/HANDOFF_LEDGER_172.md.
+
+## 2026-10-30 — propuesta de fusión del detalle, sin código
+
+DSS§86 y HANDOFF_LEDGER_172.md registran petición del propietario y recomendación. Auditoría confirma reparto courier ponderado y división unitaria ya existentes. Preview y aprobación de implementación pendientes; documentación solo local, LIVE172/mainb411973 sin cambios.
+
+## Preview de fusión r1 — revisión pendiente
+
+Switch único Lote/Unidad tras corrección expresa del usuario. Preview interactivo y capturas únicas final3 revisadas; copia, apertura, transporte independiente y matriz1440/980/630/390Dark/Light PASS. Datos ilustrativos, sin código productivo ni publicación. DSS§86 y HANDOFF_LEDGER_172 actualizados localmente.
+
+## Preview r3 — hilo visual conservando paneles2×2
+
+Aclaración del usuario: profundidad visual, sin reorganizar contenido en árbol. r3 conserva cuatro paneles y conecta a fila padre; copia simplificada, tabla sin cuadrícula, acciones +/−/× sin columna. QA y capturas1440Dark/Light revisadas, matriz cuatro anchos PASS. Diseño pendiente de revisión; docs locales, producto y GitHub sin cambios. DSS§86/HANDOFF_LEDGER_172.
+
+## Preview r4 — curvas y puntos
+
+Profundidad r3 confirmada; r4 prueba curvas14–16px y puntos con alternativa continua. QA focal y capturas Dark/Light1440 revisadas; matriz cuatro anchos PASS. Solo preview/docs locales, pendiente elección visual, sin implementar/publicar.
+
+**Elección visual confirmada por el propietario:** «Curvas con puntos» para el hilo de r4. Se conserva paneles2×2 y estilo punteado por defecto. Esta selección es visual; implementación y publicación de la fusión aún no autorizadas. Registro local, producto sin cambios.
+
+
+**Preview r5 — centrado de +/−:** el propietario detectó el signo descentrado en los círculos laterales. Se sustituyó el dibujo dependiente de la fuente por trazos simétricos centrados en ambos ejes (7×1 y1×7px), tanto en acciones de fila como en controles de panel; se conservan etiquetas accesibles, teclado y estados. Preview vigente detalle-hilos-centrado-r5.html, en el mismo directorio de visualizaciones. Focal Chromium1440/980/630/390 × Dark/Light × abierto/cerrado PASS, sin erroresJS; estilos calculados centrados50%/50%, capturas3× de +/− y composición inspeccionadas. Se mantienen curvas con puntos y cuatro paneles2×2; sin cambios de datos, código del producto o publicación.
+
+
+## 2026-10-30 — r5 autorizado e implementación v1.0.173 local
+
+El propietario aprobó expresamente «Aplicar r5 y publicar tras las pruebas». Esta autorización sustituye los pendientes de implementación del preview: fusión inferior de Listado/Detalle, header redondeado, curvas con puntos, +/− centrados, cuatro paneles2×2, switch Lote/Unidad y referencia de envío independiente del plan seleccionado. La proyección reutiliza courierCost/allocateCourier y las tasas originales sin modificar el plan. Implementación local en revisión;157 Node/16 Python/8 legacy PASS. Chromium focal y suite completa en curso. No publicado: última LIVE sigue v172; continuidad activa HANDOFF_LEDGER_173.md.

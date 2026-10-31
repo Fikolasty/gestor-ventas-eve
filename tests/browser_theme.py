@@ -6,7 +6,7 @@ Requires: pip install playwright && python -m playwright install chromium --with
 from pathlib import Path
 import re
 import unittest
-from playwright.sync_api import sync_playwright
+from playwright.sync_api import sync_playwright, expect
 
 INDEX = Path(__file__).resolve().parents[1] / "index.html"
 
@@ -118,7 +118,7 @@ class ThemeBrowserTests(unittest.TestCase):
             ("255, 255, 255" in inventory_gradient or "248, 246, 242" in inventory_gradient),
             f"Light inventory card is dark: {inventory_bg} / {inventory_gradient}"
         )
-        self.assertGreater(brightness(self.color(".mm-unit-courier")), 180)
+        self.assertGreater(brightness(self.color("#ledger")), 180)
 
     def test_ssologin_label_roundtrips_in_both_languages(self):
         self.page.evaluate("setLang('en')")
@@ -344,7 +344,7 @@ class ThemeBrowserTests(unittest.TestCase):
                 ship:{},prod:0,net:{},cant:false};
             lastP=window.__filterMock={mode:null,rows:[row],Vs:0,shipCost:0,best:100000};
             document.querySelector('#verdict').hidden=false;
-            document.querySelector('#pSum').hidden=false;
+            document.querySelector('#pSum').hidden=false;document.querySelector('#stepDrawer').hidden=false;document.querySelector('#pkPlanToggle').hidden=false;
             pkPanelCollapsed=false;pkOverviewCollapsed=false;pkInsightsCollapsed=false;
             pkView.open=true;pkView.filter='all';paintPicker(lastP);
         }""")
@@ -352,7 +352,7 @@ class ThemeBrowserTests(unittest.TestCase):
             self.page.set_viewport_size({'width':width,'height':900})
             for lang in ('es','en'):
                 self.page.evaluate('setLang',lang)
-                self.page.evaluate("lastP=window.__filterMock;pkView.open=true;pkView.filter='all';document.querySelector('#verdict').hidden=false;document.querySelector('#pSum').hidden=false;paintPicker(lastP)")
+                self.page.evaluate("lastP=window.__filterMock;pkView.open=true;pkView.filter='all';document.querySelector('#verdict').hidden=false;document.querySelector('#pSum').hidden=false;document.querySelector('#stepDrawer').hidden=false;document.querySelector('#pkPlanToggle').hidden=false;paintPicker(lastP)")
                 for light in (False,True):
                     self.page.evaluate('(on)=>document.documentElement.classList.toggle("light",on)',light)
                     self.assertTrue(self.page.locator('[data-pkf="fast"]').is_visible(),
@@ -505,7 +505,7 @@ class ThemeBrowserTests(unittest.TestCase):
                 };
                 lastP={mode:null,rows:[row],Vs:0,shipCost:0,best:10000000};
                 document.querySelector('#verdict').hidden=false;
-                document.querySelector('#pSum').hidden=false;
+                document.querySelector('#pSum').hidden=false;document.querySelector('#stepDrawer').hidden=false;document.querySelector('#pkPlanToggle').hidden=false;
                 pkPanelCollapsed=false;paintPicker(lastP);
             }""")
         fixture()
@@ -637,7 +637,7 @@ class ThemeBrowserTests(unittest.TestCase):
         self.page.evaluate("""() => {
             document.body.classList.remove('is-loading');
             const ledger=document.querySelector('#ledger');
-            ledger.hidden=false;
+            document.querySelector('#verdict').hidden=false;document.querySelector('#pSum').hidden=false;document.querySelector('#stepDrawer').hidden=false;document.querySelector('#pkPlanToggle').hidden=false;document.querySelector('#unitCourierBox').hidden=false;ledger.hidden=false;
             ledger.open=false;
         }""")
         for light in (False,True):
@@ -665,7 +665,7 @@ class ThemeBrowserTests(unittest.TestCase):
                 self.assertFalse(styles['insetShadow'],styles)
                 self.assertNotIn('217, 119, 87',styles['border'])
                 self.assertEqual(styles['financeDisplay'],'none',styles)
-                self.assertEqual(styles['arrow'],styles['business'],styles)
+                self.assertEqual(self.page.locator('#ledger>summary').evaluate("e=>getComputedStyle(e,'::after').display"),'none')
                 expect(self.page.locator('#ledger')).to_be_visible()
                 self.page.locator('#ledger>summary').click()
                 expect(self.page.locator('#ledger')).to_have_attribute('open','')
@@ -675,15 +675,11 @@ class ThemeBrowserTests(unittest.TestCase):
     def test_c1b_sales_disclosure_chevrons_keep_shared_geometry_and_native_toggle(self):
         """B.18 finance has no nested disclosure; freight retains one info help."""
         from playwright.sync_api import expect
-        self.page.evaluate("""() => {
-            const item=n=>({o:{name:'Tritanium '+n,jita:{buy:5000,sell:7000}},
-                q:60,best:'jOrd',jl:7000,g:{jOrd:390000},vol:6,
-                ship:{jOrd:{v:6,c:420000}},courierAllocated:120000,courierPerUnit:2000});
-            paintCourierUnits({rows:[item(1),item(2),item(3)],Vs:18,shipCost:360000});
-            document.querySelector('#verdict').hidden=false;
-            document.querySelector('#pSum').hidden=false;
-            pkPanelCollapsed=false;pkInsightsCollapsed=false;syncPlanPanel();
-            document.querySelector('#vFinanceDetails').open=true;
+        from browser_ledger173 import FIXTURE
+        self.page.evaluate(FIXTURE)
+        self.page.evaluate("""()=>{
+            $('ledger').open=false;pkPanelCollapsed=false;pkInsightsCollapsed=false;syncPlanPanel();
+            $('vFinanceDetails').open=true;
         }""")
         self.page.locator('#unitCourierToggle').click()
         for language in ('es','en'):
@@ -704,16 +700,16 @@ class ThemeBrowserTests(unittest.TestCase):
                     expect(node).to_be_hidden()
                     drawer.click()
                     expect(node).to_be_visible()
-                    help_node=self.page.locator('#unitCourierHelp')
+                    help_node=self.page.locator('#ledgerPriceHelp')
                     expect(help_node).to_be_visible()
                     help_node.evaluate('(el)=>el.open=false')
                     help_summary=help_node.locator(':scope > summary')
-                    self.assertEqual(help_summary.locator('.mm-freight-info-glyph').inner_text(),'i')
+                    self.assertEqual(help_summary.locator('.mm-ledger-info-glyph').inner_text(),'i')
                     self.assertEqual(help_summary.evaluate(
-                        "el=>getComputedStyle(el,'::after').display"),'none')
+                        "el=>getComputedStyle(el,'::after').content"),'none')
                     help_summary.click()
                     expect(help_node).to_have_attribute('open','')
-                    expect(help_node.locator('.mm-freight-collateral')).to_be_visible()
+                    expect(self.page.locator('#ledgerPriceHelpContent')).to_be_visible()
                     help_summary.click()
                     expect(help_node).not_to_have_attribute('open','')
                     self.assertLessEqual(self.page.evaluate(
@@ -736,7 +732,7 @@ class ThemeBrowserTests(unittest.TestCase):
                 ship:{},prod:0,net:{},cant:false
             };
             lastP={mode:null,rows:[row],Vs:0,shipCost:0,best:100000};
-            document.querySelector('#pSum').hidden=false;
+            document.querySelector('#pSum').hidden=false;document.querySelector('#stepDrawer').hidden=false;document.querySelector('#pkPlanToggle').hidden=false;
             pkPanelCollapsed=false;pkOverviewCollapsed=false;pkInsightsCollapsed=false;
             pkView.open=true;pkView.filter='all';
             paintPicker(lastP);
@@ -839,7 +835,7 @@ class ThemeBrowserTests(unittest.TestCase):
             stepOpen=new Set(['null']);
             // B.19: the steps are now children of the summary drawer, so
             // synthetic fixtures must expose its ancestor as well.
-            document.querySelector('#pSum').hidden=false;
+            document.querySelector('#pSum').hidden=false;document.querySelector('#stepDrawer').hidden=false;document.querySelector('#pkPlanToggle').hidden=false;
             document.querySelector('#deep').hidden=false;
             paintVerdict({rows,missing:[],toBB:[],bbGross:0,mode:null,best:1440,Vs:0,shipCost:0});
         }""")
@@ -1102,125 +1098,43 @@ class ThemeBrowserTests(unittest.TestCase):
         self.assertLess(brightness(dark), 120, dark)
 
     def test_freight_unit_table_shows_owner_net_and_icon_in_both_languages(self):
-        result = self.page.evaluate("""() => {
-            const oldLang=S.lang, oldApi=S.api['synthetic circuit'];
-            try {
-                S.api['synthetic circuit']={id:34};
-                const item={o:{name:'Synthetic Circuit',jita:{buy:5000,sell:7000}},
-                    q:60,best:'jOrd',jl:7000,g:{jOrd:390000},vol:6,
-                    ship:{jOrd:{v:6,c:420000}},
-                    courierAllocated:120000,courierPerUnit:2000};
-                const list={rows:[item],Vs:6,shipCost:120000};
-                S.lang='en';paintCourierUnits(list);
-                const node=document.querySelector('#unitCourierRows .mm-unit-row');
-                const english={head:document.querySelector('#unitCourierHeading').textContent,
-                    values:Array.from(node.querySelectorAll('.mm-freight-cell strong'),x=>x.textContent),
-                    headings:Array.from(document.querySelectorAll('#unitCourierRows .mm-freight-columns span'),x=>x.textContent),
-                    icon:node.querySelector('img.ti')?.dataset.tid,
-                    qty:node.querySelector('.mm-freight-ident small').textContent,
-                    note:document.querySelector('#unitCourierSubtitle').textContent,
-                    help:document.querySelector('#unitCourierHelp summary').getAttribute('aria-label')};
-                S.lang='es';paintCourierUnits(list);
-                const spanish={head:document.querySelector('#unitCourierHeading').textContent,
-                    headings:Array.from(document.querySelectorAll('#unitCourierRows .mm-freight-columns span'),x=>x.textContent),
-                    note:document.querySelector('#unitCourierSubtitle').textContent,
-                    help:document.querySelector('#unitCourierHelp summary').getAttribute('aria-label')};
-                const panel=document.querySelector('#unitCourierBox');
-                const plans=document.querySelector('#pSum .pk-w');
-                return {english,spanish,moved:!!(plans.compareDocumentPosition(panel)&Node.DOCUMENT_POSITION_FOLLOWING)};
-            } finally {
-                S.lang=oldLang;
-                if(oldApi===undefined)delete S.api['synthetic circuit'];
-                else S.api['synthetic circuit']=oldApi;
-            }
-        }""")
-        self.assertEqual(result["english"]["head"],"ITEM DETAILS")
-        self.assertEqual(result["english"]["values"],["6,500.00 ISK","−2,000.00 ISK","4,500.00 ISK"])
-        self.assertEqual(result["english"]["headings"],["ITEM","BEFORE SHIPPING","SHIPPING","FINAL TOTAL"])
-        self.assertEqual(result["english"]["qty"],"× 60")
-        self.assertIn("Per-unit amounts",result["english"]["note"])
-        self.assertIn("collateral",result["english"]["help"])
-        self.assertEqual(result["english"]["icon"],"34")
-        self.assertEqual(result["spanish"]["head"],"DETALLE POR ITEM")
-        self.assertEqual(result["spanish"]["headings"],["ITEM","ANTES DEL ENVÍO","ENVÍO","TOTAL FINAL"])
-        self.assertEqual(result["spanish"]["note"],"Importes por unidad tras tasas y otros gastos. El total descuenta el envío.")
-        self.assertIn("colateral",result["spanish"]["help"])
-        self.assertTrue(result["moved"],"Unit freight panel must be after plan comparison")
+        from browser_ledger173 import FIXTURE
+        self.page.evaluate(FIXTURE)
+        self.page.evaluate("S.api['example paste'].id=34;paintLot(lastP.rows[0])")
+        for lang,labels in [('es',['Item','Cantidad','Volumen','Compra','Venta']),('en',['Item','Quantity','Volume','Buy','Sell'])]:
+            self.page.evaluate('l=>setLang(l)',lang)
+            self.assertEqual(self.page.locator('.ledger-market-columns button').all_inner_texts()[:5],[x.upper() for x in labels])
+            self.assertEqual(self.page.locator('#lots .lot-table-result .copy').first.get_attribute('data-v'),'8')
+            self.assertEqual(self.page.locator('#lots .lot-table-freight .copy').first.get_attribute('data-v'),'-2')
+            self.assertEqual(self.page.locator('#lots .lot-table-quantity .copy').first.inner_text(),'300')
+            self.assertEqual(self.page.locator('#lots img.ti').first.get_attribute('data-tid'),'34')
+            self.assertTrue(self.page.evaluate("!!($('pkPlanOptions').compareDocumentPosition($('unitCourierBox'))&Node.DOCUMENT_POSITION_FOLLOWING)"))
 
     def test_b8_freight_table_is_compact_responsive_and_keeps_real_allocation(self):
-        """Only shipped items, authentic unit net−freight=final, contextual help."""
-        from playwright.sync_api import expect
-        self.page.evaluate("""() => {
-            const data=[
-                ['Promethium',10,55000,0,10000],
-                ['Dysprosium',12,240000,24000,12000],
-                ['Morphite',20,400000,0,40000],
-                ['Cadmium',25,250000,0,25000]
-            ];
-            const rows=data.map(([name,q,g,prod,allocated])=>({
-                o:{name},q,best:'jOrd',g:{jOrd:g},prod,
-                courierAllocated:allocated,ship:{jOrd:{v:q,c:allocated}}
-            }));
-            window.__b8Freight={rows,Vs:67,shipCost:87000};
-            document.querySelector('#verdict').hidden=false;
-            document.querySelector('#pSum').hidden=false;
-            document.querySelector('#pkPlanContent').hidden=false;
-            paintCourierUnits(window.__b8Freight);
-        }""")
-        expect(self.page.locator('#unitCourierBox')).to_be_visible()
-        self.page.locator('#unitCourierToggle').click()
-        self.assertEqual(self.page.locator('#unitCourierRows .mm-unit-row').count(),4)
-        self.assertEqual(self.page.locator('#unitCourierRows .mm-freight-extra').count(),0)
-        self.assertEqual(self.page.locator('#unitCourierRows .mm-freight-detail').count(),0)
-        self.assertEqual(self.page.locator('#unitCourierRows .mm-freight-cell strong').first.inner_text(),'5,500.00 ISK')
-        self.assertEqual(self.page.locator('#unitCourierRows .mm-freight-cell strong').nth(1).inner_text(),'−1,000.00 ISK')
-        self.assertEqual(self.page.locator('#unitCourierRows .mm-freight-cell strong').nth(2).inner_text(),'4,500.00 ISK')
+        """Shared canonical reference, one aligned table and bounded contextual help."""
+        from browser_ledger173 import FIXTURE
+        self.page.evaluate(FIXTURE)
         for lang in ('es','en'):
-            self.page.evaluate('(lang)=>{setLang(lang);paintCourierUnits(window.__b8Freight)}',lang)
-            expect(self.page.locator('#unitCourierSubtitle')).to_contain_text(
-                'Importes por unidad' if lang=='es' else 'Per-unit amounts')
-            expect(self.page.locator('#unitCourierHelp summary')).to_have_attribute(
-                'aria-label','Información sobre el envío y el colateral' if lang=='es'
-                else 'Information about freight and collateral')
-            for width,light in ((1440,False),(630,True),(390,True)):
+            self.page.evaluate('l=>setLang(l)',lang)
+            for width in (1440,630,390):
                 self.page.set_viewport_size({'width':width,'height':900})
-                self.page.evaluate('(light)=>document.documentElement.classList.toggle("light",light)',light)
-                names=self.page.locator('#unitCourierRows .mm-freight-ident b').all_inner_texts()
-                self.assertEqual(names,['Promethium','Dysprosium','Morphite','Cadmium'])
-                geometry=self.page.locator('#unitCourierBox').evaluate("""el => ({
-                    height:el.getBoundingClientRect().height,
-                    batchHeader:el.querySelector('.mm-freight-drawer-head').getBoundingClientRect().height,
-                    tableHeight:el.querySelector('#unitCourierRows').getBoundingClientRect().height,
-                    rowsInside:[...el.querySelectorAll('.mm-unit-row')].every(row=>row.getBoundingClientRect().bottom<=el.getBoundingClientRect().bottom+1),
-                    rowDisplay:getComputedStyle(el.querySelector('.mm-unit-row')).display,
-                    headDisplay:getComputedStyle(el.querySelector('.mm-freight-columns')).display,
-                    mobileLabel:getComputedStyle(el.querySelector('.mm-freight-cell-label')).display,
-                    extent:document.documentElement.scrollWidth-innerWidth
-                })""")
-                self.assertEqual(geometry['rowDisplay'],'grid',geometry)
-                self.assertLessEqual(geometry['extent'],1,geometry)
-                # The new batch header and readable labels wrap with the platform font.
-                # Bound unexplained space instead of enforcing the old fixed pixel height.
-                self.assertLess(geometry['height']-geometry['batchHeader']-geometry['tableHeight'],200,geometry)
-                self.assertTrue(geometry['rowsInside'],geometry)
-                if width==1440:
-                    self.assertEqual(geometry['mobileLabel'],'none',geometry)
-                    self.assertEqual(geometry['headDisplay'],'grid',geometry)
-                else:
-                    self.assertNotEqual(geometry['mobileLabel'],'none',geometry)
-                    self.assertEqual(geometry['headDisplay'],'none',geometry)
-                if lang=='es' and width in (1440,390):
-                    out=INDEX.parent/'tests'/'artifacts'/'theme'
-                    out.mkdir(parents=True,exist_ok=True)
-                    self.page.locator('#unitCourierBox').screenshot(
-                        path=str(out/f'b8-freight-{width}-{"light" if light else "dark"}.png'),animations='disabled')
-            info=self.page.locator('#unitCourierHelp summary')
-            info.click()
-            expect(self.page.locator('#unitCourierHelp .mm-freight-collateral')).to_be_visible()
-            expect(self.page.locator('#unitCourierHelp .mm-freight-reference')).to_be_visible()
-            info.focus()
-            self.page.keyboard.press('Enter')
-            expect(self.page.locator('#unitCourierHelp .mm-freight-collateral')).to_be_hidden()
+                for light in (False,True):
+                    self.page.evaluate('v=>document.documentElement.classList.toggle("light",v)',light)
+                    self.assertEqual(self.page.locator('#lots>.lot').count(),2)
+                    self.assertEqual(self.page.locator('#lots .lot-table-freight .copy').first.get_attribute('data-v'),'-2')
+                    self.assertEqual(self.page.locator('#lots .lot-table-result .copy').first.get_attribute('data-v'),'8')
+                    geometry=self.page.locator('#ledger').evaluate("""el=>({height:el.getBoundingClientRect().height,
+                     head:el.querySelector('#unitCourierToggle').getBoundingClientRect().height,
+                     table:el.querySelector('#unitCourierRows').getBoundingClientRect().height,
+                     display:getComputedStyle(el.querySelector('.lot-head')).display,
+                     overflow:document.documentElement.scrollWidth-innerWidth})""")
+                    self.assertLessEqual(geometry['overflow'],1,geometry)
+                    self.assertEqual(geometry['display'],'grid')
+                    self.assertLess(geometry['height']-geometry['head']-geometry['table'],220,geometry)
+            self.page.locator('#ledgerPriceHelp>summary').hover()
+            expect(self.page.locator('#ledgerPriceHelpContent')).to_be_visible()
+            self.page.locator('#ledgerPriceHelp>summary').focus();self.page.keyboard.press('Escape')
+            expect(self.page.locator('#ledgerPriceHelpContent')).to_be_hidden()
 
     def test_sales_pilot_prioritizes_owner_proceeds_and_exposes_optional_details(self):
         from playwright.sync_api import expect
@@ -1241,7 +1155,7 @@ class ThemeBrowserTests(unittest.TestCase):
                     // ordinary language switches intentionally preserve disclosure state.
                     document.querySelector('#vFinanceDetails').open=false;
                     paintVerdict(P);
-                    document.querySelector('#pSum').hidden=false;
+                    document.querySelector('#pSum').hidden=false;document.querySelector('#stepDrawer').hidden=false;document.querySelector('#pkPlanToggle').hidden=false;
                     pkPanelCollapsed=false;pkInsightsCollapsed=false;
                     paintPicker(P);
                     paintCourierUnits(P);
@@ -1250,7 +1164,7 @@ class ThemeBrowserTests(unittest.TestCase):
             expect(self.page.locator('#vIsk')).to_contain_text('280')
             expect(self.page.locator('#vRouteW')).to_be_visible()
             expect(self.page.locator('#unitCourierBox')).to_be_visible()
-            self.assertIn('0 ISK',self.page.locator('#unitCourierTotal').inner_text())
+            self.assertAlmostEqual(float(self.page.locator('#unitCourierTotal').get_attribute('data-v')),-self.page.evaluate('ledgerReference.shipCost'),places=2)
             expect(self.page.locator('#vFinanceDetails')).to_have_attribute('open','')
             if language=='es':
                 expect(self.page.locator('#vRouteCaption')).to_have_text('Ruta recomendada')
@@ -1413,7 +1327,7 @@ class ThemeBrowserTests(unittest.TestCase):
                         'question':13.5,'explanation':13,
                         'source':13,'repQuestion':13.5,
                         'repSub':13,'methodNote':12.5,
-                        'ledgerQuestion':11,'ledgerExplanation':13,
+                        'ledgerQuestion':11,'ledgerExplanation':14,
                         'netContext':13
                     }.items():
                         self.assertAlmostEqual(type_scale[label],expected,places=2,
@@ -1535,7 +1449,7 @@ class ThemeBrowserTests(unittest.TestCase):
                 window.__b4Plan={rows:[row],best:15370696854,mode:null,
                     shipCost:0,Vs:0,missing:[],toBB:[]};
                 document.querySelector('#verdict').hidden=false;
-                document.querySelector('#pSum').hidden=false;
+                document.querySelector('#pSum').hidden=false;document.querySelector('#stepDrawer').hidden=false;document.querySelector('#pkPlanToggle').hidden=false;
                 pkPanelCollapsed=false;pkInsightsCollapsed=false;
                 paintPicker(window.__b4Plan);
                 paintCourierUnits(window.__b4Plan);
@@ -1581,7 +1495,7 @@ class ThemeBrowserTests(unittest.TestCase):
                     missing:[],toBB:[]};
                 window.__b6Plan=P;
                 const detail=document.querySelector('#vFinanceDetails');detail.open=false;
-                paintVerdict(P);document.querySelector('#pSum').hidden=false;
+                paintVerdict(P);document.querySelector('#pSum').hidden=false;document.querySelector('#stepDrawer').hidden=false;document.querySelector('#pkPlanToggle').hidden=false;
                 pkPanelCollapsed=false;pkOverviewCollapsed=false;pkInsightsCollapsed=false;
                 pkView.open=true;pkView.filter='all';pkView.sort='net';pkView.dir=-1;
                 paintPicker(P);
@@ -1654,7 +1568,7 @@ class ThemeBrowserTests(unittest.TestCase):
                 const P={rows:[row],best:1050000,mode:null,shipCost:0,Vs:0,
                     missing:[],toBB:[]};
                 window.__b6aFixture={P,row};
-                paintVerdict(P);document.querySelector('#pSum').hidden=false;
+                paintVerdict(P);document.querySelector('#pSum').hidden=false;document.querySelector('#stepDrawer').hidden=false;document.querySelector('#pkPlanToggle').hidden=false;
                 pkPanelCollapsed=false;pkOverviewCollapsed=false;pkInsightsCollapsed=false;
                 paintPicker(P);paintCourierUnits(P);
             }""")
@@ -1742,7 +1656,7 @@ class ThemeBrowserTests(unittest.TestCase):
             self.assertGreaterEqual(geom['cY'],geom['bBottom']-1,geom)
             if language=='es':
                 self.page.evaluate('document.documentElement.classList.remove("light")')
-                self.page.locator('#decisionGrid').screenshot(
+                self.page.locator('#pSum').screenshot(
                     path=str(INDEX.parent/'tests'/'artifacts'/'theme'/'b6a-dual-decisions-es-1440-dark.png'),
                     animations='disabled')
 
@@ -1761,7 +1675,7 @@ class ThemeBrowserTests(unittest.TestCase):
                 const P={rows:[row],best:1050000,mode:null,shipCost:0,Vs:0,
                     missing:[],toBB:[]};
                 window.__b6cFixture={P,row};
-                paintVerdict(P);document.querySelector('#pSum').hidden=false;
+                paintVerdict(P);document.querySelector('#pSum').hidden=false;document.querySelector('#stepDrawer').hidden=false;document.querySelector('#pkPlanToggle').hidden=false;
                 pkPanelCollapsed=false;pkOverviewCollapsed=false;pkInsightsCollapsed=false;
                 paintPicker(P);paintCourierUnits(P);
             }""")
@@ -1771,7 +1685,7 @@ class ThemeBrowserTests(unittest.TestCase):
             self.assertEqual(self.page.locator('#pkSpeedBox').evaluate(
                 '(el)=>el.parentElement?.className'), 'mm-plan-drawer-body')
             self.assertEqual(self.page.locator('#unitCourierBox').evaluate(
-                '(el)=>el.parentElement?.id'), 'decisionGrid')
+                '(el)=>el.parentElement?.id'), 'pSum')
             for width in (1440, 390):
                 self.page.set_viewport_size({'width':width,'height':900})
                 for light in (False, True):
@@ -1828,7 +1742,7 @@ class ThemeBrowserTests(unittest.TestCase):
                 missing:[],toBB:[]};
             window.__b7Fixture=P;
             document.querySelector('#verdict').hidden=false;
-            document.querySelector('#pSum').hidden=false;
+            document.querySelector('#pSum').hidden=false;document.querySelector('#stepDrawer').hidden=false;document.querySelector('#pkPlanToggle').hidden=false;
             paintVerdict(P);paintPicker(P);paintCourierUnits(P);
         }""")
         toggle=self.page.locator('#pkPlanToggle')
@@ -1854,7 +1768,7 @@ class ThemeBrowserTests(unittest.TestCase):
             self.page.evaluate('setLang',language)
             self.page.evaluate("""() => {
                 const P=window.__b7Fixture;
-                paintVerdict(P);document.querySelector('#pSum').hidden=false;
+                paintVerdict(P);document.querySelector('#pSum').hidden=false;document.querySelector('#stepDrawer').hidden=false;document.querySelector('#pkPlanToggle').hidden=false;
                 paintPicker(P);paintCourierUnits(P);
             }""")
             expect(toggle).to_have_attribute('aria-label',
@@ -1999,7 +1913,7 @@ class ThemeBrowserTests(unittest.TestCase):
             pkPanelCollapsed=false;pkOverviewCollapsed=false;pkInsightsCollapsed=false;
             paintVerdict(P);
             document.querySelector('#verdict').hidden=false;
-            document.querySelector('#pSum').hidden=false;
+            document.querySelector('#pSum').hidden=false;document.querySelector('#stepDrawer').hidden=false;document.querySelector('#pkPlanToggle').hidden=false;
             paintPicker(P);
         }""")
         for language in ('es','en'):
@@ -2009,7 +1923,7 @@ class ThemeBrowserTests(unittest.TestCase):
                 pkPanelCollapsed=false;pkOverviewCollapsed=false;pkInsightsCollapsed=false;
                 paintVerdict(P);
                 document.querySelector('#verdict').hidden=false;
-                document.querySelector('#pSum').hidden=false;
+                document.querySelector('#pSum').hidden=false;document.querySelector('#stepDrawer').hidden=false;document.querySelector('#pkPlanToggle').hidden=false;
                 paintPicker(P);
             }""")
             expect(self.page.locator('#pSum')).to_be_visible()
@@ -2083,7 +1997,7 @@ class ThemeBrowserTests(unittest.TestCase):
             paintVerdict(P);
             paintSummary(P);
             document.querySelector('#verdict').hidden=false;
-            document.querySelector('#pSum').hidden=false;
+            document.querySelector('#pSum').hidden=false;document.querySelector('#stepDrawer').hidden=false;document.querySelector('#pkPlanToggle').hidden=false;
             document.querySelector('#deep').hidden=false;
             document.querySelector('#bDeep').setAttribute('aria-expanded','true');
             paintVerdict(P);
@@ -2105,7 +2019,7 @@ class ThemeBrowserTests(unittest.TestCase):
             self.page.evaluate("""() => {
                 paintSummary(window.__b19Fixture);
                 document.querySelector('#verdict').hidden=false;
-                document.querySelector('#pSum').hidden=false;
+                document.querySelector('#pSum').hidden=false;document.querySelector('#stepDrawer').hidden=false;document.querySelector('#pkPlanToggle').hidden=false;
                 document.querySelector('#deep').hidden=false;
                 document.querySelector('#bDeep').setAttribute('aria-expanded','true');
                 paintVerdict(window.__b19Fixture);
@@ -2183,7 +2097,7 @@ class ThemeBrowserTests(unittest.TestCase):
             const o={name:'Pyerite',qty:20000,m3u:1,ref:15.74,checks:[],jita:{}};
             const r={o,q:20000,best:'bb',auto:'bb',np:15.74,jl:15.74,bbUnit:15.74,
                 g:{bb:314800},net:{bb:314800},ship:{},prod:0,vol:20000,qd:0,hint:{},courierAllocated:0};
-            const ledger=document.querySelector('#ledger');ledger.hidden=false;ledger.open=true;
+            const ledger=document.querySelector('#ledger');document.querySelector('#verdict').hidden=false;document.querySelector('#pSum').hidden=false;document.querySelector('#stepDrawer').hidden=false;document.querySelector('#pkPlanToggle').hidden=false;document.querySelector('#unitCourierBox').hidden=false;ledger.hidden=false;ledger.open=true;
             document.querySelector('#lots').replaceChildren(buildLot(o));paintLot(r);
             ledger.open=false;
         }""")
@@ -2195,7 +2109,7 @@ class ThemeBrowserTests(unittest.TestCase):
                 self.page.evaluate('(on)=>document.documentElement.classList.toggle("light",on)',light)
                 self.page.mouse.move(0,0)
                 closed=self.color('#ledger')
-                self.assertEqual(closed,'rgb(250, 249, 245)' if light else 'rgba(21, 21, 21, 0.9)')
+                self.assertEqual(closed,self.page.evaluate("()=>{const n=document.createElement('i');n.style.background='var(--surface-card)';document.body.append(n);const c=getComputedStyle(n).backgroundColor;n.remove();return c}"))
                 self.assertEqual(self.page.locator('#ledger').evaluate(
                     '(el)=>getComputedStyle(el).backgroundImage'),'none')
                 if width==1440:
@@ -2205,12 +2119,12 @@ class ThemeBrowserTests(unittest.TestCase):
                 self.page.locator('#ledger>summary').click()
                 expect(self.page.locator('#ledger')).to_have_attribute('open','')
                 opened=self.color('#ledger')
-                self.assertEqual(opened,'rgb(231, 227, 220)' if light else 'rgba(21, 21, 21, 0.88)')
+                self.assertEqual(opened,closed)
                 if not light:
                     # B.19 embeds Pasos inside its own glass drawer: compare
                     # the visible outer tray, not its transparent inner panel.
-                    self.assertEqual(opened,self.color('#stepDrawer'), 'Listado and Pasos drawer share panel graphite')
-                self.assertNotEqual(opened,closed)
+                    self.assertEqual(self.color('#ledger>summary','borderTopWidth'),'0px')
+                self.assertEqual(opened,closed)
                 if width==1440:
                     item_height=self.page.locator('#lots .lot').evaluate(
                         '(el)=>el.getBoundingClientRect().height')
@@ -2247,7 +2161,7 @@ class ThemeBrowserTests(unittest.TestCase):
                         bbUnit:d.price,g:{[d.best]:d.net},net:{[d.best]:d.net},
                         ship:{},prod:0,vol:d.qty,qd:0,hint:{},courierAllocated:0});
                 }
-                const ledger=document.querySelector('#ledger');ledger.hidden=false;ledger.open=true;
+                const ledger=document.querySelector('#ledger');document.querySelector('#verdict').hidden=false;document.querySelector('#pSum').hidden=false;document.querySelector('#stepDrawer').hidden=false;document.querySelector('#pkPlanToggle').hidden=false;document.querySelector('#unitCourierBox').hidden=false;ledger.hidden=false;ledger.open=true;
                 window.__b14Copies=[];
                 Object.defineProperty(navigator,'clipboard',{configurable:true,
                     value:{writeText:v=>{window.__b14Copies.push(v);return Promise.resolve();}}});
@@ -2280,7 +2194,7 @@ class ThemeBrowserTests(unittest.TestCase):
                     }""")
                     self.assertNotEqual(checks['parent'],checks['card'],checks)
                     self.assertLessEqual(checks['overflow'],1,checks)
-                    self.assertEqual(checks['toggleZ'],'1')
+                    self.assertEqual(checks['toggleZ'],'3')
                     self.assertTrue(all(c['z']=='2' for c in checks['copies']),checks)
                     self.assertTrue(all(c['r']<=checks['cardRight']+1 for c in checks['copies']),checks)
                     if width==1440:
@@ -2289,7 +2203,7 @@ class ThemeBrowserTests(unittest.TestCase):
                         self.assertTrue(all(checks['slots'][i]['right']<checks['slots'][i+1]['left']
                             for i in range(4)),checks)
                     if width==390:
-                        self.assertLess(checks['slots'][0]['top'],checks['slots'][1]['top'],checks)
+                        self.assertAlmostEqual((checks['slots'][0]['top']+checks['slots'][0]['bottom'])/2,(checks['slots'][1]['top']+checks['slots'][1]['bottom'])/2,delta=3,msg=str(checks))
                     if width==1440:
                         self.page.mouse.move(0,0)
                         self.page.locator('#ledger').screenshot(path=str(out/
@@ -2301,7 +2215,7 @@ class ThemeBrowserTests(unittest.TestCase):
             price=first.locator('.lot-table-buy .copy')
             price.click()
             self.assertEqual(first.locator('.lot-open').get_attribute('aria-expanded'),'false')
-            self.assertEqual(self.page.evaluate('window.__b14Copies.at(-1)'),'984190500')
+            self.assertEqual(self.page.evaluate('window.__b14Copies.at(-1)'),'243010')
             first.locator('.lot-open').click()
             expect(first.locator('.lot-open')).to_have_attribute('aria-expanded','true')
             expect(first.locator('.lot-panel-grid')).to_be_visible()
@@ -2323,7 +2237,7 @@ class ThemeBrowserTests(unittest.TestCase):
                     ship:{},prod:0,vol:350000,qd:0,hint:{},courierAllocated:0};
                 document.querySelector('#lots').replaceChildren();
                 S.items=[o];document.querySelector('#lots').append(buildLot(o));
-                paintLot(r);document.querySelector('#ledger').hidden=false;
+                paintLot(r);document.querySelector('#verdict').hidden=false;document.querySelector('#pSum').hidden=false;document.querySelector('#stepDrawer').hidden=false;document.querySelector('#pkPlanToggle').hidden=false;document.querySelector('#unitCourierBox').hidden=false;document.querySelector('#ledger').hidden=false;
                 document.querySelector('#ledger').open=true;
                 Object.defineProperty(navigator,'clipboard',{configurable:true,
                     value:{writeText:v=>{window.__b4Copy=v;return Promise.resolve();}}});
@@ -2348,6 +2262,7 @@ class ThemeBrowserTests(unittest.TestCase):
                 path=str(out/f'b4-ledger-row-{language}-390-dark.png'),animations='disabled')
             self.page.set_viewport_size({'width':1440,'height':900})
             self.page.locator('#lots .lot-open').click()
+            self.page.locator('#lots .lot-analysis>summary').click()
             price.click()
             self.assertEqual(self.page.evaluate('window.__b4Copy'),'1060000000')
             net_copy.click()
@@ -2359,7 +2274,7 @@ class ThemeBrowserTests(unittest.TestCase):
             expect(self.page.locator('#lots .lot-open')).to_have_attribute('aria-expanded','true')
             for selector in ('#lots .prices','#lots .lot-analysis','#lots .lot-adjustments'):
                 expect(self.page.locator(selector)).to_be_visible()
-                self.page.locator(selector+'>summary').click()
+                if self.page.locator(selector).get_attribute('open') is None:self.page.locator(selector+'>summary').click()
                 expect(self.page.locator(selector)).to_have_attribute('open','')
             self.assertEqual(self.page.locator('#lots .lot-adjustments input').count(),7)
             for width in (1440, 630, 390):
@@ -2396,7 +2311,7 @@ class ThemeBrowserTests(unittest.TestCase):
                             return names.map(sel=>{const el=document.querySelector(sel),s=getComputedStyle(el),b=el.getBoundingClientRect();
                                 return {sel,w:b.width,cols:s.gridTemplateColumns,area:s.gridArea,display:s.display};});
                         }""")
-                        self.assertEqual(sizing[2]['w'],28,sizing)
+                        self.assertGreaterEqual(sizing[2]['w'],32,sizing)
                         prices_width=self.page.evaluate("""() => {
                             const n=document.querySelector('#lots .lot-panel-grid .prices');
                             return {scroll:n.scrollWidth,client:n.clientWidth};
@@ -2427,7 +2342,7 @@ class ThemeBrowserTests(unittest.TestCase):
                 g:{null:5000,jOrd:4500},net:{null:5000,jOrd:4500},
                 ship:{},prod:0,vol:7,qd:0,hint:{},courierAllocated:0};
             S.items=[o];document.querySelector('#lots').replaceChildren(buildLot(o));
-            const ledger=document.querySelector('#ledger');ledger.hidden=false;ledger.open=true;
+            const ledger=document.querySelector('#ledger');document.querySelector('#verdict').hidden=false;document.querySelector('#pSum').hidden=false;document.querySelector('#stepDrawer').hidden=false;document.querySelector('#pkPlanToggle').hidden=false;document.querySelector('#unitCourierBox').hidden=false;ledger.hidden=false;ledger.open=true;
             paintLot(r);
         }""")
         toggle=self.page.locator('#lots .lot-open')
@@ -2454,7 +2369,7 @@ class ThemeBrowserTests(unittest.TestCase):
                 guide:{k:'null',unit:800,relistFee:75,days:3},
                 ship:{},prod:0,vol:7,qd:0,hint:{},courierAllocated:0};
             S.items=[o];document.querySelector('#lots').replaceChildren(buildLot(o));
-            const ledger=document.querySelector('#ledger');ledger.hidden=false;ledger.open=true;
+            const ledger=document.querySelector('#ledger');document.querySelector('#verdict').hidden=false;document.querySelector('#pSum').hidden=false;document.querySelector('#stepDrawer').hidden=false;document.querySelector('#pkPlanToggle').hidden=false;document.querySelector('#unitCourierBox').hidden=false;ledger.hidden=false;ledger.open=true;
             paintLot(r);
         }""")
         self.page.locator('#lots .lot-open').click()
@@ -2539,7 +2454,7 @@ class ThemeBrowserTests(unittest.TestCase):
             self.assertTrue(all(abs(p['width']-positions[0]['width'])<1.5 for p in positions),positions)
             self.assertLessEqual(self.page.evaluate('document.documentElement.scrollWidth'),width+1)
         expect(self.page.locator('#ledgerPriceHelp summary')).to_have_attribute('aria-label',
-            '¿De dónde vienen los precios de cada item?')
+            'Cómo se calculan los importes')
         self.page.evaluate("""() => {setLang('en');paintLot(S.items[0].ui.last);}""")
         expect(self.page.locator('#lots .lot-guide>summary')).to_have_text('How to sell')
         self.assertIn('per unit',self.page.locator('#lots .lot-guide>.guide').inner_text())
@@ -2562,7 +2477,7 @@ class ThemeBrowserTests(unittest.TestCase):
                       {m:'Strontium Clathrates',n:253210,np:594.40,p:5015}],
                 ship:{},prod:0,vol:161500,qd:0,hint:{},courierAllocated:0};
             S.items=[o];document.querySelector('#lots').replaceChildren(buildLot(o));
-            const ledger=document.querySelector('#ledger');ledger.hidden=false;ledger.open=true;
+            const ledger=document.querySelector('#ledger');document.querySelector('#verdict').hidden=false;document.querySelector('#pSum').hidden=false;document.querySelector('#stepDrawer').hidden=false;document.querySelector('#pkPlanToggle').hidden=false;document.querySelector('#unitCourierBox').hidden=false;ledger.hidden=false;ledger.open=true;
             paintLot(r);
         }""")
         self.page.locator('#lots .lot-open').click()
@@ -2627,7 +2542,7 @@ class ThemeBrowserTests(unittest.TestCase):
         self.assertTrue(all(abs(h['top']-headers[0]['top'])<1.5 for h in headers),headers)
         row_heights=self.page.locator('#lots .prices tr.pr-route:visible').evaluate_all(
             '(es)=>es.map(e=>e.getBoundingClientRect().height)')
-        self.assertTrue(all(50<=height<=78 for height in row_heights),
+        self.assertTrue(all(50<=height<=80 for height in row_heights),
             f'Route rows stretched into wasted space: {row_heights}')
         label_sizes=self.page.locator('#lots .lot-adjustments .fact-group:not(.fact-strategy) .fact>span').evaluate_all(
             '(es)=>es.filter(e=>getComputedStyle(e.parentElement).display!=="none").map(e=>parseFloat(getComputedStyle(e).fontSize))')
@@ -2994,7 +2909,7 @@ class ThemeBrowserTests(unittest.TestCase):
                     skew:0,checks:[],refMan:null,m3uMan:null,
                     jita:{buy:9200,sell:10000,topBuy:9200,topSell:10000,vol:5}};
                 S.items=[o];syncLots();
-                const ledger=document.querySelector('#ledger');ledger.hidden=false;ledger.open=true;
+                const ledger=document.querySelector('#ledger');document.querySelector('#verdict').hidden=false;document.querySelector('#pSum').hidden=false;document.querySelector('#stepDrawer').hidden=false;document.querySelector('#pkPlanToggle').hidden=false;document.querySelector('#unitCourierBox').hidden=false;ledger.hidden=false;ledger.open=true;
                 refreshNow();
                 const ui=o.ui;
                 const leaves=[ui.removeButton,ui.qty,ui.ppLabel,ui.netLabel,ui.net,
@@ -3038,9 +2953,10 @@ class ThemeBrowserTests(unittest.TestCase):
                 ship:{},prod:0,vol:350000,qd:0,hint:{},courierAllocated:0};
             document.querySelector('#lots').replaceChildren();
             S.items=[o];document.querySelector('#lots').append(buildLot(o));paintLot(r);
-            const ledger=document.querySelector('#ledger');ledger.hidden=false;ledger.open=true;
+            const ledger=document.querySelector('#ledger');document.querySelector('#verdict').hidden=false;document.querySelector('#pSum').hidden=false;document.querySelector('#stepDrawer').hidden=false;document.querySelector('#pkPlanToggle').hidden=false;document.querySelector('#unitCourierBox').hidden=false;ledger.hidden=false;ledger.open=true;
         }""")
         self.page.locator('#lots .lot-open').click()
+        self.page.locator('#lots .lot-analysis>summary').click()
         out=INDEX.parent/'tests'/'artifacts'/'theme'
         out.mkdir(parents=True,exist_ok=True)
         for width in (1440,630,390):
@@ -3099,7 +3015,7 @@ class ThemeBrowserTests(unittest.TestCase):
             self.page.evaluate("""(lang)=>{
                 setLang(lang);
                 const ledger=document.querySelector('#ledger');
-                ledger.hidden=false;ledger.open=true;
+                document.querySelector('#verdict').hidden=false;document.querySelector('#pSum').hidden=false;document.querySelector('#stepDrawer').hidden=false;document.querySelector('#pkPlanToggle').hidden=false;document.querySelector('#unitCourierBox').hidden=false;ledger.hidden=false;ledger.open=true;
                 document.querySelector('#lots').innerHTML=
                   '<div class="lot" style="height:76px"><strong style="padding:12px">Test Item</strong></div>';
             }""",lang)
@@ -3110,6 +3026,8 @@ class ThemeBrowserTests(unittest.TestCase):
                     summary=self.page.locator('#ledgerPriceHelp>summary')
                     if self.page.locator('#ledgerPriceHelp').get_attribute('open') is not None:
                         summary.click()
+                    self.page.evaluate("()=>{document.activeElement?.blur();$('unitCourierHelp').dataset.helpDismissed='true'}")
+                    self.page.mouse.move(0,0)
                     expect(self.page.locator('#ledgerPriceHelpContent')).to_be_hidden()
                     closedHeight=self.page.evaluate("document.querySelector('#ledger .ledger-controls').getBoundingClientRect().height")
                     summary.click()
@@ -3131,16 +3049,15 @@ class ThemeBrowserTests(unittest.TestCase):
                     self.assertGreaterEqual(sizes['note']['left'],sizes['panel']['left']-1,sizes)
                     self.assertLessEqual(sizes['note']['right'],sizes['panel']['right']+1,sizes)
                     self.assertGreaterEqual(sizes['note']['width'],200,sizes)
-                    self.assertLessEqual(sizes['note']['bottom'],sizes['lots']['top']+1,sizes)
-                    self.assertGreater(sizes['controls']['bottom']-sizes['controls']['top'],closedHeight+1,sizes)
-                    self.assertLessEqual(abs(sizes['refresh']['top']-sizes['info']['top']),5,sizes)
+                    self.assertAlmostEqual(sizes['controls']['bottom']-sizes['controls']['top'],closedHeight,delta=1,msg=str(sizes))
+                    self.assertGreaterEqual(sizes['note']['top'],sizes['info']['bottom']-1,sizes)
                     self.assertLessEqual(sizes['overflow'],1,sizes)
                     self.assertTrue(len(sizes['text'])>100,sizes)
                     if lang=='es' and width in (1440,390):
                         self.page.locator('#ledger').screenshot(
                           path=str(out/f'b201-price-info-{width}-{"light" if light else "dark"}.png'),
                           animations='disabled')
-                    summary.click()
+                    summary.focus();self.page.keyboard.press('Escape')
                     expect(note).to_be_hidden()
 
 

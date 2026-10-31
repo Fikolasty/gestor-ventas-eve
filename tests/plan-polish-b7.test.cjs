@@ -14,7 +14,7 @@ test('C.5c has one full-heading disclosure with bilingual accessible names',()=>
   assert.equal((html.match(/id="pkPlanContent"/g)||[]).length,1);
   assert.match(html,/<button[^>]*id="pkPlanToggle"[^>]*aria-controls="pkPlanContent"[^>]*aria-expanded="false"[^>]*>[\s\S]*?data-i18n="picker.chooseTitle"/);
   assert.doesNotMatch(html,/class="mm-plan-toggle-chevron"/);
-  assert.match(html,/<div id="pkPlanContent" class="mm-plan-content" hidden>[\s\S]*?<div class="fb2" id="flipBuy"[\s\S]*?<div class="mm-plan-layout">[\s\S]*?<div class="mm-decision-grid" id="decisionGrid">[\s\S]*?<\/div>\s*<\/div>\s*<!-- B\.19:/);
+  assert.match(html,/<div id="pkPlanContent" class="mm-plan-content" hidden>[\s\S]*?<div class="fb2" id="flipBuy"[\s\S]*?<div class="mm-plan-layout">[\s\S]*?<div class="mm-decision-grid" id="decisionGrid">[\s\S]*?<\/div>\s*<\/div>[\s\S]*?id="ledger"[\s\S]*?<!-- B\.19:/);
   assert.match(html,/<section class="mm-step-drawer" id="stepDrawer">[\s\S]*?id="bDeep"[^>]*aria-controls="deep"[\s\S]*?<div id="deep" class="deep" hidden>/);
   assert.deepEqual(keys['picker.hidePlans'],{es:'Ocultar toda la sección',en:'Collapse entire section'});
   assert.deepEqual(keys['picker.showPlans'],{es:'Mostrar toda la sección',en:'Expand entire section'});

@@ -112,6 +112,7 @@ function refreshNow(){
   document.body.classList.toggle('in-jita',IN_JITA()); // v1.0.22: oculta lo que no aplica con los items ya en Jita
   if(!S.repro.dirty&&!$('pRepro').hidden)fillFromItem();
   const P=computePlan();
+  prepareLedgerReference(P);
   syncExtras();paintAppraisal();P.rows.forEach(paintLot);paintVerdict(P);paintContracts(P);paintCourier(P);paintDisc(P);paintRepro();paintSummary(P);
   document.querySelectorAll('#fScnV,#vRep .rw,.pl-row .n small').forEach(colorNums);
   document.querySelectorAll('.margPct').forEach(e=>e.textContent=pct(C.margin));

@@ -251,30 +251,6 @@ Contraband Freight = no</textarea><small>Una regla por línea: Nombre = tax tota
     <div class="ld-body"><b id="ldTxt">Trayendo precios de Jita…</b><small>Espera un momento: calculo todo cuando lleguen todos los precios.</small>
       <div class="ld-track"><i id="ldBar"></i></div></div>
   </section>
-  <details class="panel thin fold mm-ledger-table" id="ledger" hidden>
-    <summary><h2 class="mm-title">LISTADO DE ITEMS REGISTRADOS</h2><span class="cnt" id="lCount"></span><span class="mm-missing" id="missCount" hidden></span><span class="status" id="esiStatus" role="status"></span></summary>
-    <div class="ledger-controls">
-      <div class="ledger-tools">
-        <button class="ghost" id="bEsi"><span class="ic i-sync" aria-hidden="true"></span>Actualizar Precios</button>
-        <details class="mm-inline-faq mm-ledger-faq" id="ledgerPriceHelp"><summary aria-controls="ledgerPriceHelpContent" data-i18n-aria-label="decision.priceSourceQ" data-i18n-title="decision.priceSourceQ" aria-label="¿De dónde vienen los precios de cada item?" title="¿De dónde vienen los precios de cada item?"><span class="mm-ledger-info-glyph" aria-hidden="true">i</span></summary></details><p id="ledgerPriceHelpContent" class="mm-ledger-price-help-content" role="note" data-i18n="decision.priceSourceA">Market Moves+ utiliza cotizaciones disponibles de Jita mediante ESI y los precios que introduces manualmente. Las tarifas configuradas afectan las estimaciones netas, no los precios del mercado. Las cotizaciones pueden desactualizarse y el volumen mostrado no garantiza compradores para todo el lote. Si falta un precio, se muestra una advertencia sin asumir una venta.</p>
-      </div>
-      <div class="ledger-secondary-sort" role="group" data-i18n-aria-label="ledger.sortGroup" aria-label="Ordenar tus Items">
-        <button type="button" class="ledger-sort" data-lsort="d"><span data-i18n="ledger.route">Ruta</span> <span class="sort-arrow" aria-hidden="true"></span></button>
-        <button type="button" class="ledger-sort" data-lsort="a"><span data-i18n="ledger.netSort">Neto del lote</span> <span class="sort-arrow" aria-hidden="true"></span></button>
-      </div>
-      <div class="ledger-value-toolbar"><span id="ledgerValueScope" data-i18n="ledger.tableLotScope">Jita 4-4 · Precios y volumen del lote</span><div id="ledgerValueMode" role="group" data-i18n-aria-label="ledger.tableMode" aria-label="Valores por lote o unidad"><button type="button" data-ledger-mode="lot" aria-pressed="true" data-i18n="ledger.tableLot">Lote</button><button type="button" data-ledger-mode="unit" aria-pressed="false" data-i18n="ledger.tableUnit">Unidad</button></div></div>
-    </div>
-    <div class="ledger-head ledger-market-columns" role="group" data-i18n-aria-label="ledger.sortGroup" aria-label="Ordenar tus Items">
-      <span aria-hidden="true"></span>
-      <button type="button" class="ledger-sort" data-lsort="n"><span data-i18n="ledger.tableItem">Item</span> <span class="sort-arrow" aria-hidden="true"></span></button>
-      <button type="button" class="ledger-sort" data-lsort="q"><span data-i18n="ledger.quantity">Cantidad</span> <span class="sort-arrow" aria-hidden="true"></span></button>
-      <button type="button" class="ledger-sort" data-lsort="v"><span data-i18n="ledger.tableVolume">Volumen</span> <span class="sort-arrow" aria-hidden="true"></span></button>
-      <button type="button" class="ledger-sort" data-lsort="jb"><span data-i18n="ledger.tableBuy">Buy</span> <span class="sort-arrow" aria-hidden="true"></span></button>
-      <button type="button" class="ledger-sort" data-lsort="js"><span data-i18n="ledger.tableSell">Sell</span> <span class="sort-arrow" aria-hidden="true"></span></button>
-      <span aria-hidden="true"></span>
-    </div>
-    <div id="lots"></div>
-  </details>
   <section class="panel verdict" id="verdict" hidden aria-live="polite">
     <!-- v1.0.22: resumen del plan (overview): total, a dónde va el ISK, datos clave, tu lote en Jita y dónde se vende -->
     <div class="ov">
@@ -341,16 +317,44 @@ Contraband Freight = no</textarea><small>Una regla por línea: Nombre = tax tota
       </section>
     </div>
     <div class="mm-decision-grid" id="decisionGrid">
-      <section class="mm-unit-courier mm-decision-card" id="unitCourierBox" aria-labelledby="unitCourierHeading" hidden>
-        <header class="mm-freight-drawer-head"><button type="button" class="mm-decision-head" id="unitCourierToggle" aria-expanded="false" aria-controls="unitCourierContent"><span class="ic i-list" aria-hidden="true"></span><strong id="unitCourierHeading" data-i18n="freight.heading">DETALLE POR ITEM</strong><small data-i18n="freight.unitHint">Ver detalle por unidad</small></button><div class="mm-freight-lot" role="group" data-i18n-aria-label="freight.lotEquation" aria-label="Antes del envío menos envío igual a total del lote"><div><span data-i18n="freight.lotBefore">Lote antes del envío</span><strong id="freightLotBefore" class="num"></strong></div><span class="mm-freight-operator" aria-hidden="true">−</span><div><span data-i18n="freight.lotShipping">Envío del lote</span><strong id="unitCourierTotal" class="mm-unit-courier-total isk-neg num"></strong></div><span class="mm-freight-operator" aria-hidden="true">=</span><div><span data-i18n="freight.lotFinal">Total del lote tras envío</span><strong id="freightLotFinal" class="num"></strong></div></div></header>
-        <div id="unitCourierContent" hidden>
-<details class="mm-freight-help" id="unitCourierHelp"><summary aria-label="Información sobre el envío y el colateral" title="Información sobre el envío y el colateral" data-i18n-aria-label="freight.infoLabel" data-i18n-title="freight.infoLabel"><span class="mm-freight-info-glyph" aria-hidden="true">i</span></summary><div class="mm-freight-help-content"><p class="mm-freight-collateral" data-i18n="decision.collateralA">No. En un contrato courier, el colateral es una garantía que se devuelve al completar el trabajo; no se resta entero como tarifa. El transportista puede calcular su precio usando el colateral y el volumen transportados. Market Moves+ descuenta del resultado la tarifa de envío estimada, no el colateral.</p><p class="mm-freight-reference" data-i18n="freight.reference">Recibes = venta neta tras tasas y proceso − envío real asignado. Una orden de venta no garantiza comprador inmediato.</p></div></details>
-        <p class="mm-freight-intro" id="unitCourierSubtitle" data-i18n="freight.subtitle">Importes por unidad tras tasas y otros gastos. El total descuenta el envío.</p>
-        <div id="unitCourierRows"></div><nav id="unitDetailPager" hidden></nav></div>
-      </section>
+
       <section class="pk-opportunity mm-decision-card" id="pkOpportunity" aria-label="Comparación de rutas" hidden></section>
     </div>
     </div>
+    <section class="ledger-fusion-shell" id="unitCourierBox" aria-labelledby="unitCourierHeading" hidden>
+      <details class="panel thin fold mm-ledger-table ledger-fusion" id="ledger" hidden>
+        <summary id="unitCourierToggle" aria-expanded="false" aria-controls="unitCourierContent">
+          <span class="ledger-title-group"><span class="mm-title" id="unitCourierHeading" data-i18n="freight.heading">Detalle por Item</span><span class="cnt" id="lCount"></span><span class="mm-missing" id="missCount" hidden></span></span>
+          <button class="ghost ledger-refresh" id="bEsi" type="button" data-i18n-aria-label="ledger.refresh" data-i18n-title="ledger.refresh" aria-label="Actualizar precios" title="Actualizar precios"><span class="ic i-sync" aria-hidden="true"></span></button>
+          <span class="mm-freight-lot" role="group" data-i18n-aria-label="freight.lotEquation" aria-label="Totales del lote"><span><span data-i18n="freight.lotBefore">Antes del envío</span><button type="button" id="freightLotBefore" class="copy num"></button></span><span><span data-i18n="freight.lotShipping">Envío del lote</span><button type="button" id="unitCourierTotal" class="copy num"></button></span><span><span id="ledgerLotFinalLabel" data-i18n="ledger.referenceFinal">Te queda en Jita</span><button type="button" id="freightLotFinal" class="copy num"></button></span></span>
+        </summary>
+        <div id="unitCourierContent">
+          <div class="ledger-controls">
+            <div class="ledger-reference-controls"><span id="ledgerValueScope">Jita 4-4</span><div id="ledgerSaleMode" role="group" data-i18n-aria-label="ledger.referenceSale" aria-label="Venta en Jita"><button type="button" data-ledger-sale="order" aria-pressed="true" data-i18n="ledger.referenceOrder">Orden</button><button type="button" data-ledger-sale="instant" aria-pressed="false" data-i18n="ledger.referenceInstant">Inmediata</button></div><span id="unitCourierHelp" class="ledger-help-slot"><details class="mm-inline-faq mm-ledger-faq" id="ledgerPriceHelp"><summary aria-controls="ledgerPriceHelpContent" aria-describedby="ledgerPriceHelpContent" data-i18n-aria-label="ledger.referenceInfo" aria-label="Cómo se calculan los importes"><span class="mm-ledger-info-glyph" aria-hidden="true">i</span></summary></details><p id="ledgerPriceHelpContent" role="tooltip" data-i18n="ledger.referenceHelp">Los precios de compra y venta son referencias. El resultado descuenta tasas y el envío asignado dentro de este lote. Enviarlo por separado requiere otra cotización.</p></span></div>
+            <div id="ledgerValueMode" role="group" data-i18n-aria-label="ledger.tableMode" aria-label="Valores por lote o unidad"><button type="button" data-ledger-mode="lot" aria-pressed="false" data-i18n="ledger.tableLot">Lote</button><button type="button" data-ledger-mode="unit" aria-pressed="true" data-i18n="ledger.tableUnit">Unidad</button></div>
+            <details class="ledger-secondary-sort"><summary data-i18n="ledger.sortBy">Ordenar</summary><div><button type="button" class="ledger-sort" data-lsort="d"><span data-i18n="ledger.route">Ruta</span><span class="sort-arrow" aria-hidden="true"></span></button><button type="button" class="ledger-sort" data-lsort="a"><span data-i18n="ledger.netSort">Neto del lote</span><span class="sort-arrow" aria-hidden="true"></span></button></div></details>
+          </div>
+          <p id="ledgerReferenceWarning" role="status" hidden></p>
+          <p id="ledgerTradeTotals" hidden></p>
+          <div class="ledger-table-scroll" id="unitCourierRows">
+            <div class="ledger-head ledger-market-columns" role="group" data-i18n-aria-label="ledger.sortGroup" aria-label="Ordenar tus Items">
+              <button type="button" class="ledger-sort" data-lsort="n"><span data-i18n="ledger.tableItem">Item</span><span class="sort-arrow" aria-hidden="true"></span></button>
+              <button type="button" class="ledger-sort" data-lsort="q"><span data-i18n="ledger.quantity">Cantidad</span><span class="sort-arrow" aria-hidden="true"></span></button>
+              <button type="button" class="ledger-sort" data-lsort="v"><span data-i18n="ledger.tableVolume">Volumen</span><span class="sort-arrow" aria-hidden="true"></span></button>
+              <button type="button" class="ledger-sort" data-lsort="jb"><span data-i18n="ledger.tableBuy">Compra</span><span class="sort-arrow" aria-hidden="true"></span></button>
+              <button type="button" class="ledger-sort" data-lsort="js"><span data-i18n="ledger.tableSell">Venta</span><span class="sort-arrow" aria-hidden="true"></span></button>
+              <button type="button" class="ledger-sort" data-lsort="freight"><span id="ledgerFreightColumn" data-i18n="ledger.referenceShipping">Envío</span><span class="sort-arrow" aria-hidden="true"></span></button>
+              <button type="button" class="ledger-sort" data-lsort="result"><span id="ledgerResultColumn" data-i18n="ledger.referenceNet">Te queda</span><span class="sort-arrow" aria-hidden="true"></span></button>
+            </div>
+            <div id="lots"></div>
+          </div>
+          <nav id="unitDetailPager" hidden></nav>
+          <p id="unitCourierSubtitle" class="sr-only"></p>
+          <span class="status" id="esiStatus" role="status"></span>
+        </div>
+      </details>
+    </section>
+
     <!-- B.19: la cabecera de pasos es la tapa de su propia gaveta.
          El desglose original vive dentro de ella y conserva sus IDs/eventos. -->
     <section class="mm-step-drawer" id="stepDrawer">

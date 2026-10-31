@@ -78,14 +78,16 @@ function buildLot(o){
   const netBox=el('span','lot-financial'),netLabel=el('span','lot-k',tx('ledger.netSales')),net=copyBtn('','—');net.classList.add('lot-net','cp-n');net.disabled=true;netBox.append(netLabel,net);
   const marketCell=(key,cls)=>{const cell=el('span','lot-table-cell '+cls),label=el('span','lot-table-label',tx(key)),button=copyBtn('','—');button.removeAttribute('title');cell.append(label,button);return{cell,label,button};};
   const quantity=marketCell('ledger.quantity','lot-table-quantity'),volume=marketCell('ledger.tableVolume','lot-table-volume'),buy=marketCell('ledger.tableBuy','lot-table-buy'),sell=marketCell('ledger.tableSell','lot-table-sell');
-  head.classList.add('ledger-market-row');head.append(toggle,info,quantity.cell,volume.cell,buy.cell,sell.cell);
+  const freight=marketCell('ledger.referenceShipping','lot-table-freight'),result=marketCell('ledger.referenceNet','lot-table-result');
+  head.classList.add('ledger-market-row');head.append(info,quantity.cell,volume.cell,buy.cell,sell.cell,freight.cell,result.cell);
   const selectedSummary=el('div','lot-selected-summary');selectedSummary.append(route,pp,netBox);
   const body=el('div','lot-body');body.hidden=true;body.id='lot-detail-'+(++lotDetailId);toggle.setAttribute('aria-controls',body.id);
   body.append(selectedSummary);
-  const ui={nm,lot,head:toggle,tag,qty,dest,routeLabel,net,netLabel,ppLabel,body,ppB,selectedSummary,nameCopy,headerWarning,market:{quantity,volume,buy,sell},detailsReady:false};
+  const trade=el('div','lot-reference-trade'),investment=marketCell('freight.purchaseColumn','lot-reference-investment'),profit=marketCell('freight.profitColumn','lot-reference-profit');trade.append(investment.cell,profit.cell);selectedSummary.append(trade);trade.hidden=true;
+  const ui={nm,lot,head:toggle,tag,qty,dest,routeLabel,net,netLabel,ppLabel,body,ppB,selectedSummary,nameCopy,headerWarning,trade,investment,profit,market:{quantity,volume,buy,sell,freight,result},detailsReady:false};
   const x=el('button','lot-x');x.type='button';x.title=tx('ledger.removeItem',{item:o.name});x.setAttribute('aria-label',x.title);
   ui.removeButton=x;
-  o.ui=ui;lot.append(head,x,body);LOT_OF.set(lot,o); // v1.0.8: sin listeners por fila; un solo manejador en #lots
+  o.ui=ui;lot.append(head,toggle,x,body);LOT_OF.set(lot,o); // delegated independent disclosure/copy/remove
   return lot;
 }
 function buildLotDetails(o,ui){
@@ -205,10 +207,14 @@ function buildLotDetails(o,ui){
   }
   mineralHead.append(mineralHeaderRow);mineralTable.append(mineralHead,mineralRows);
   minerals.append(mineralTitle,mineralNote,mineralTable);analysis.append(analysisSummary,opts,minerals);
+  // Preserve the selected-plan references inside the comparison panel; the
+  // drawer itself stays as the four approved peers, without an extra header.
+  analysis.append(ui.selectedSummary);
   const adjustments=el('details','lot-adjustments lot-detail-section'),adjustmentsSummary=el('summary','sub-h',tx('ledger.adjust'));adjustmentsSummary.dataset.i18n='ledger.adjust';adjustments.append(adjustmentsSummary,facts);
   // Four peers keep the same 2×2 desktop grid even when each is open.
   // CSS aligns the edges of both rows and stacks only for narrow screens.
   const panels=el('div','lot-panel-grid');panels.append(prices,analysis,adjustments,guidePanel);
+  for(const cls of ['ledger-thread-rail','ledger-thread-rail right']){const rail=el('span',cls);rail.setAttribute('aria-hidden','true');panels.prepend(rail);}
   body.append(verdict,panels,checks);
   Object.assign(ui,{iRef,iBuyOrder,iSeen,seenCaption,iM3,bBuy,bBuyPrice,bVol,manualInput,manualLabel,manualNote,resetPrice,strategyTitle,pBody,mineralRows,minerals,checks,verdict,detailsReady:true});
 }
@@ -236,7 +242,7 @@ function showLedgerCopyFeedback(button){
 }
 function copyPriceValue(b){
   const v=b.dataset.v,done=()=>{if(!b.isConnected)return;const t=b.textContent;
-    if(b.closest('#lots')){showLedgerCopyFeedback(b);return;}
+    if(b.closest('#ledger')){showLedgerCopyFeedback(b);return;}
     b.textContent='Copiado';setTimeout(()=>{if(b.isConnected)b.textContent=t;},900);};
   if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(v).then(done,()=>prompt(tx('shared.copyPrompt'),v));else prompt(tx('shared.copyPrompt'),v);
 }
@@ -327,15 +333,24 @@ function priceRow(tb,routeKey,unit,note,net,best){
    Se ordenan SOLO los nodos del ledger, usando o.ui.last (último cálculo ya disponible).
    No se ejecuta computePlan ni se modifica S.items, de modo que el plan, tabs y contratos
    siguen en el orden de su propio motor. Se conserva el foco y el contenido abierto. */
-let ledgerValueMode='lot';
+let ledgerValueMode='unit',ledgerSaleMode='order',ledgerReference=null,ledgerReferenceSource=null;
+const ledgerReferenceByItem=new Map();
+function prepareLedgerReference(P){
+  const key=S.flip?(C.shipOn?'fN':'fJ'):(ledgerSaleMode==='instant'?'jInst':'jOrd');
+  ledgerReference=ledgerRouteProjection(P,key);ledgerReferenceSource=P;
+  ledgerReferenceByItem.clear();ledgerReference.rows.forEach(r=>ledgerReferenceByItem.set(r.o,r));
+}
 const ledgerValueFormat=new Intl.NumberFormat('en-US',{maximumFractionDigits:6});
 function paintLotMarket(r){
   const u=r.o.ui;if(!u)return;
   const lot=ledgerValueMode==='lot',factor=lot?r.q:1;
+  const reference=ledgerReferenceByItem.get(r.o);
   const entries=[['quantity',r.q,'ledger.quantity',false],
     ['volume',Number.isFinite(r.o.m3u)?r.o.m3u*factor:null,'ledger.tableVolume',false],
     ['buy',Number.isFinite(r.o.jita?.topBuy)?r.o.jita.topBuy*factor:null,'ledger.tableBuy',true],
-    ['sell',Number.isFinite(r.o.jita?.topSell)?r.o.jita.topSell*factor:null,'ledger.tableSell',true]];
+    ['sell',Number.isFinite(r.o.jita?.topSell)?r.o.jita.topSell*factor:null,'ledger.tableSell',true],
+    ['freight',Number.isFinite(reference?.courierPerUnit)?-reference.courierPerUnit*factor:null,'ledger.referenceShipping',true],
+    ['result',Number.isFinite(reference?.referenceAfter)?reference.referenceAfter/r.q*factor:null,'ledger.referenceNet',true]];
   for(const [key,value,label,money] of entries){
     const {button}=u.market[key],valid=Number.isFinite(value);
     setLotLeafText(u.market[key].label,tx(label));
@@ -349,15 +364,85 @@ function paintLotMarket(r){
   const warnings=(r.o.checks||[]).filter(c=>c[1]==='warn').length;
   if(u.headerWarning.hidden!==!warnings)u.headerWarning.hidden=!warnings;
   setLotLeafText(u.headerWarning,warnings?tx(warnings===1?'ledger.tableWarning':'ledger.tableWarnings',{count:warnings}):'');
+  if(u.trade.hidden!==!S.flip)u.trade.hidden=!S.flip;
+  if(S.flip){
+    const purchase=tradePurchaseCost(r),gain=Number.isFinite(purchase)&&Number.isFinite(reference?.referenceAfter)?reference.referenceAfter-purchase:null;
+    for(const [part,amount,key] of [[u.investment,Number.isFinite(purchase)?-purchase/r.q*factor:null,'freight.purchaseColumn'],[u.profit,Number.isFinite(gain)?gain/r.q*factor:null,'freight.profitColumn']]){
+      setLotLeafText(part.label,tx(key));const valid=Number.isFinite(amount),b=part.button;
+      setLotLeafText(b,valid?NF2.format(amount)+' ISK':'—','copy cp-n '+(valid?sgn(amount):''));
+      setLotAttr(b,'data-v',valid?String(Math.round(amount*100)/100):'');b.disabled=!valid;
+      setLotAttr(b,'aria-label',tx('ledger.copyField',{field:tx(key),item:r.o.name,value:b.textContent}));
+    }
+  }
 }
 $('ledgerValueMode').addEventListener('click',event=>{
   const button=event.target.closest('[data-ledger-mode]');if(!button)return;
   ledgerValueMode=button.dataset.ledgerMode;
   $('ledgerValueMode').querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',String(b===button)));
-  setLotLeafText($('ledgerValueScope'),tx(ledgerValueMode==='lot'?'ledger.tableLotScope':'ledger.tableUnitScope'));
   S.items.forEach(o=>{if(o.ui?.last)paintLotMarket(o.ui.last);});
-  if(ledgerSort.key)applyLedgerSort();
+  paintLedgerReference();if(ledgerSort.key)applyLedgerSort();
 });
+$('ledgerSaleMode').addEventListener('click',event=>{
+  const button=event.target.closest('[data-ledger-sale]');if(!button||!lastP)return;
+  ledgerSaleMode=button.dataset.ledgerSale;prepareLedgerReference(lastP);
+  lastP.rows.forEach(paintLotMarket);paintLedgerReference();if(ledgerSort.key)applyLedgerSort();
+});
+function paintLedgerReference(){
+  const ref=ledgerReference;if(!ref)return;
+  const market=S.flip&&C.shipOn?nullSystem():'Jita 4-4';setLotLeafText($('ledgerValueScope'),market);
+  $('ledgerSaleMode').hidden=S.flip;
+  $('ledgerSaleMode').querySelectorAll('button').forEach(b=>setLotAttr(b,'aria-pressed',String(b.dataset.ledgerSale===ledgerSaleMode)));
+  for(const [id,amount] of [['freightLotBefore',ref.before],['unitCourierTotal',Number.isFinite(ref.shipCost)?-ref.shipCost:null],['freightLotFinal',ref.after]]){
+    const b=$(id),valid=Number.isFinite(amount);setLotLeafText(b,valid?NF2.format(amount)+' ISK':'—','copy num '+(valid?sgn(amount):''));
+    setLotAttr(b,'data-v',valid?String(Math.round(amount*100)/100):'');if(b.disabled===valid)b.disabled=!valid;
+    setLotAttr(b,'aria-label',tx('shared.copyAmount',{amount:b.textContent}));
+  }
+  const finalLabel=tx('ledger.referenceFinalMarket',{market});setLotLeafText($('ledgerLotFinalLabel'),finalLabel);$('ledgerLotFinalLabel').removeAttribute('data-i18n');
+  const scale=tx(ledgerValueMode==='unit'?'ledger.referenceUnit':'ledger.referenceBatch');
+  for(const [id,key]of [['ledgerFreightColumn','ledger.referenceShipping'],['ledgerResultColumn','ledger.referenceNet']]){
+    $(id).removeAttribute('data-i18n');setLotLeafText($(id),tx(key)+' / '+scale);
+  }
+  const warn=$('ledgerReferenceWarning');warn.hidden=ref.completeFreight&&ref.completeSale;
+  setLotLeafText(warn,tx(!ref.completeFreight?'ledger.referenceMissingFreight':'ledger.referenceMissingSale'));
+  const trade=$('ledgerTradeTotals');trade.hidden=!S.flip;
+  if(S.flip){
+    const purchases=ref.rows.map(tradePurchaseCost),known=purchases.length&&purchases.every(Number.isFinite),buy=known?purchases.reduce((a,b)=>a+b,0):null;
+    trade.replaceChildren(el('span',null,tx('ledger.referenceInvestment')),
+      ledgerAmountCopy(Number.isFinite(buy)?-buy:null),el('span',null,tx('freight.profitColumn')),ledgerAmountCopy(Number.isFinite(ref.after)&&Number.isFinite(buy)?ref.after-buy:null));
+  }
+  $('unitCourierSubtitle').textContent=tx('ledger.referenceScope',{market,scale});
+  applyLedgerPage();
+}
+function ledgerAmountCopy(amount){
+  const known=Number.isFinite(amount),b=copyBtn(known?amount:'',known?NF2.format(amount)+' ISK':'—');
+  b.disabled=!known;b.setAttribute('aria-label',tx('shared.copyAmount',{amount:b.textContent}));return b;
+}
+function applyLedgerPage(){
+  const items=[...$('lots').querySelectorAll('.lot')],pages=Math.ceil(items.length/10);
+  unitDetailPage=Math.max(0,Math.min(unitDetailPage,Math.max(0,pages-1)));
+  items.forEach((node,i)=>{const hidden=i<unitDetailPage*10||i>=unitDetailPage*10+10;if(node.hidden!==hidden)node.hidden=hidden;});
+  const nav=$('unitDetailPager');nav.hidden=pages<=1;nav.replaceChildren();
+  if(pages<=1)return;
+  for(const [delta,key,disabled] of [[-1,'picker.unitPrevious',unitDetailPage===0],[1,'picker.unitNext',unitDetailPage===pages-1]]){
+    const b=el('button',null,tx(key));b.type='button';b.dataset.unitPage=String(delta);b.disabled=disabled;nav.append(b);
+    if(delta===-1)nav.append(el('span',null,tx('picker.unitPage',{page:unitDetailPage+1,pages})));
+  }
+  nav.setAttribute('aria-label',tx('picker.unitPager'));
+}
+function placeLedgerHelp(){
+  const slot=$('unitCourierHelp'),note=$('ledgerPriceHelpContent'),outer=$('ledger').getBoundingClientRect(),anchor=slot.getBoundingClientRect();
+  const width=Math.max(160,Math.min(340,outer.width-24));note.style.width=width+'px';
+  const left=Math.max(outer.left+12,Math.min(anchor.left,outer.right-width-12));
+  note.style.left=(left-anchor.left)+'px';note.style.right='auto';
+}
+for(const event of ['pointerenter','focusin'])$('unitCourierHelp').addEventListener(event,()=>{
+  delete $('unitCourierHelp').dataset.helpDismissed;placeLedgerHelp();
+});
+addEventListener('resize',placeLedgerHelp,{passive:true});
+$('ledgerPriceHelp').addEventListener('keydown',event=>{if(event.key==='Escape'){
+  $('ledgerPriceHelp').open=false;$('unitCourierHelp').dataset.helpDismissed='true';
+}});
+$('ledger').addEventListener('toggle',()=>setLotAttr($('unitCourierToggle'),'aria-expanded',String($('ledger').open)));
 let ledgerSort={key:null,dir:1};
 const ledgerSortDefault=k=>k==='n'?1:-1;
 function applyLedgerSort(){
@@ -373,6 +458,8 @@ function applyLedgerSort(){
     if(k==='v')return Number.isFinite(o.m3u)?o.m3u*factor:-Infinity;
     if(k==='jb')return Number.isFinite(o.jita?.topBuy)?o.jita.topBuy*factor:-Infinity;
     if(k==='js')return Number.isFinite(o.jita?.topSell)?o.jita.topSell*factor:-Infinity;
+    if(k==='freight'){const n=ledgerReferenceByItem.get(o)?.courierPerUnit;return Number.isFinite(n)?n*factor:-Infinity;}
+    if(k==='result'){const v=ledgerReferenceByItem.get(o)?.referenceAfter;return Number.isFinite(v)?v/(r?.q||o.qty||1)*factor:-Infinity;}
     if(k==='d')return r&&r.best?(OPTS.find(x=>x[0]===r.best)||['',''])[1].toLocaleLowerCase('es'):'';
     if(k==='a')return r&&r.best&&r.net[r.best]!=null?r.net[r.best]:-Infinity;
     return 0;
@@ -388,6 +475,7 @@ function applyLedgerSort(){
     btn.setAttribute('aria-pressed',String(active));
     const arrow=btn.querySelector('.sort-arrow');if(arrow)arrow.textContent=active?(d===1?'↑':'↓'):'';
   });
+  applyLedgerPage();
 }
 $('ledger').addEventListener('click',e=>{
   const btn=e.target.closest('button[data-lsort]');if(!btn)return;
@@ -428,7 +516,6 @@ function setLotAttr(node,name,value){
 function paintLot(r){
   const o=r.o,u=o.ui;if(!u)return;
   paintLotMarket(r);
-  setLotLeafText($('ledgerValueScope'),tx(ledgerValueMode==='lot'?'ledger.tableLotScope':'ledger.tableUnitScope'));
   setLotAttr(u.head,'aria-label',tx(u.body.hidden?'ledger.openItem':'ledger.closeItem',{item:o.name}));
   const removeButton=u.removeButton;
   if(removeButton){const label=tx('ledger.removeItem',{item:o.name});

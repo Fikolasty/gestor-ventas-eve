@@ -1,72 +1,120 @@
-/* v1.0.172: final shared geometry after generated Light CSS. */
-#ledger.mm-ledger-table {--ledger-columns:28px minmax(180px,2fr) minmax(75px,.55fr) minmax(100px,.65fr) minmax(160px,1fr) minmax(160px,1fr) 44px}
-#ledger.mm-ledger-table .ledger-controls {display:flex;flex-wrap:wrap;align-items:center;gap:12px;margin:8px 18px 14px}
-#ledger.mm-ledger-table .ledger-tools {flex:1 1 auto;order:1}
-#ledger.mm-ledger-table .ledger-secondary-sort {display:flex;gap:5px;order:2}
-#ledger.mm-ledger-table .ledger-secondary-sort button {font:400 13px/1.4 var(--f-ui);padding:6px 9px;border:0;background:transparent;color:var(--mut);border-radius:5px}
-#ledger.mm-ledger-table .ledger-value-toolbar {display:flex;align-items:center;justify-content:space-between;gap:12px;flex:1 0 100%;order:3;color:var(--mut);font:400 14px/1.5 var(--f-ui)}
-#ledgerValueMode {display:flex;gap:4px;padding:3px;border:1px solid var(--line2);border-radius:20px;background:var(--surface-card)}
-#ledgerValueMode button {padding:6px 14px;min-height:32px;border:0;border-radius:16px;background:transparent;color:var(--mut);font:500 14px/1.4 var(--f-ui)}
-#ledgerValueMode button[aria-pressed=true] {color:var(--clay);background:color-mix(in srgb,var(--clay) 12%,transparent)}
-#ledger.mm-ledger-table .ledger-market-columns,#ledger.mm-ledger-table #lots article.lot .lot-head.ledger-market-row {display:grid!important;grid-template-columns:var(--ledger-columns)!important;gap:12px!important;align-items:center;padding:10px 12px!important;margin:0;min-height:52px!important;cursor:default!important}
-#ledger.mm-ledger-table .ledger-market-columns {margin:0 18px;min-height:40px;border:0;border-bottom:1px solid var(--line2);border-radius:0;background:var(--surface-panel)}
-#ledger.mm-ledger-table .ledger-market-columns .ledger-sort {min-width:0;padding:0;border:0;border-radius:0;background:transparent;color:var(--mut);font:500 13px/1.4 var(--f-ui);justify-content:flex-end!important;text-align:right!important;white-space:nowrap}
-#ledger.mm-ledger-table .ledger-market-columns .ledger-sort[data-lsort=n] {justify-content:flex-start!important;text-align:left!important}
-#ledger.mm-ledger-table .ledger-sort[data-active=true] {color:var(--clay)!important}
-#ledger.mm-ledger-table #lots {margin:0 18px 18px;background:var(--surface-card);border-radius:0 0 7px 7px}
-#ledger.mm-ledger-table #lots article.lot {display:block!important;margin:0!important;padding:0;border:0;border-bottom:1px solid var(--line2);border-radius:0;background:transparent!important;box-shadow:none!important;overflow:visible}
-#ledger.mm-ledger-table #lots article.lot:last-child {border-bottom:0}
-#ledger.mm-ledger-table #lots article.lot.open {background:transparent!important}
-#ledger.mm-ledger-table #lots article.lot .lot-head.ledger-market-row {background:transparent!important}
-#ledger.mm-ledger-table #lots article.lot .lot-head.ledger-market-row:hover {background:color-mix(in srgb,var(--txt) 3%,transparent)!important}
-#ledger.mm-ledger-table #lots .lot-open {position:static!important;inset:auto!important;grid-column:1!important;grid-row:1!important;width:28px!important;height:32px!important;min-height:32px;padding:0;border:0;border-radius:4px;background:transparent!important;z-index:1;display:flex;align-items:center;justify-content:center}
-#ledger.mm-ledger-table #lots .lot-open::after {content:'';display:block;width:7px;height:7px;border-right:1.5px solid var(--mut);border-bottom:1.5px solid var(--mut);transform:rotate(-45deg)}
-#ledger.mm-ledger-table #lots .lot.open .lot-open::after {transform:rotate(45deg)}
-#ledger.mm-ledger-table #lots .lot-open:focus-visible {outline:2px solid var(--clay);outline-offset:1px}
-#ledger.mm-ledger-table #lots .lot-info {display:flex!important;flex-direction:column;align-items:stretch;grid-column:2!important;grid-row:1!important;pointer-events:auto;gap:3px}
-#ledger.mm-ledger-table #lots .lot-name {display:flex!important;align-items:center;flex-wrap:nowrap;gap:8px;width:auto;min-width:0}
-#ledger.mm-ledger-table #lots .lot-name b {display:block!important;min-width:0;font:400 15px/1.4 var(--f-ui)!important}
-#ledger.mm-ledger-table #lots .lot-name img.ti {display:block;width:24px;height:24px;flex:none;border:0;border-radius:3px;margin:0!important;grid-row:auto}
-#ledger.mm-ledger-table #lots .lot-meta {padding:0;margin:0;font:400 12px/1.4 var(--f-ui);color:var(--thrust)}
-#ledger.mm-ledger-table #lots .lot-meta:has(.lot-header-warning[hidden]) {display:none}
-#ledger.mm-ledger-table #lots .lot-table-cell {display:block;min-width:0;text-align:right;font:500 15px/1.45 var(--f-ui);font-variant-numeric:tabular-nums;grid-row:1}
-#ledger.mm-ledger-table #lots .lot-table-quantity {grid-column:3}
-#ledger.mm-ledger-table #lots .lot-table-volume {grid-column:4}
-#ledger.mm-ledger-table #lots .lot-table-buy {grid-column:5}
-#ledger.mm-ledger-table #lots .lot-table-sell {grid-column:6}
-#ledger.mm-ledger-table #lots .lot-table-label {display:none}
-#ledger.mm-ledger-table #lots button.copy {position:relative;z-index:2;pointer-events:auto;background:transparent!important;border:0!important;box-shadow:none!important;padding:0!important;margin:0!important;min-height:0!important;border-radius:2px!important;font:inherit!important;line-height:inherit!important;color:inherit;text-align:inherit;max-width:100%}
-#ledger.mm-ledger-table #lots button.copy::before,#ledger.mm-ledger-table #lots button.copy::after {display:none!important}
-#ledger.mm-ledger-table #lots .lot-table-cell button.copy {display:block;width:100%;overflow-x:auto;white-space:nowrap;scrollbar-width:thin}
-#ledger.mm-ledger-table #lots button.copy:focus-visible {outline:2px solid var(--clay)!important;outline-offset:3px}
-#ledger.mm-ledger-table #lots button.copy:disabled {opacity:1;color:var(--mut);cursor:default}
-#ledger.mm-ledger-table #lots button.copy.pos,#ledger.mm-ledger-table #lots button.copy.isk-pos {color:var(--gain)!important}
-#ledger.mm-ledger-table #lots button.copy.neg,#ledger.mm-ledger-table #lots button.copy.isk-neg {color:var(--loss)!important}
-#ledger.mm-ledger-table #lots .lot-x {position:absolute;right:0;top:4px;min-height:44px;min-width:44px;width:44px;height:44px;opacity:.55;z-index:3}
-#ledger.mm-ledger-table #lots .lot-selected-summary {display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;padding:12px 0 16px;border-bottom:1px solid var(--line2);margin-bottom:14px}
-#ledger.mm-ledger-table #lots .lot-selected-summary>.lot-route,#ledger.mm-ledger-table #lots .lot-selected-summary>.lot-pp,#ledger.mm-ledger-table #lots .lot-selected-summary>.lot-financial {grid-column:auto!important;grid-row:auto!important;display:block;text-align:left}
-#ledger.mm-ledger-table #lots .lot-selected-summary button.copy {font:600 16px/1.45 var(--f-ui)!important}
-#ledgerCopyFeedback {position:fixed;z-index:10000;pointer-events:none;border:1px solid var(--line2);border-radius:5px;padding:6px 10px;background:var(--surface-panel);color:var(--txt);font:400 13px/1.4 var(--f-ui);box-shadow:0 3px 12px rgba(0,0,0,.15)}
-#ledgerCopyFeedback[hidden] {display:none!important}
-@media(max-width:900px){
- #ledger.mm-ledger-table .ledger-market-columns {display:flex!important;gap:16px!important;flex-wrap:wrap!important;justify-content:flex-start;overflow:visible}
- #ledger.mm-ledger-table .ledger-market-columns>span {display:none}
- #ledger.mm-ledger-table #lots article.lot .lot-head.ledger-market-row {grid-template-columns:28px repeat(2,minmax(0,1fr)) 32px!important;gap:10px 12px!important;padding:12px!important}
- #ledger.mm-ledger-table #lots .lot-info {grid-column:2/4!important}
- #ledger.mm-ledger-table #lots .lot-table-quantity {grid-column:2;grid-row:2}
- #ledger.mm-ledger-table #lots .lot-table-volume {grid-column:3;grid-row:2}
- #ledger.mm-ledger-table #lots .lot-table-buy {grid-column:2;grid-row:3}
- #ledger.mm-ledger-table #lots .lot-table-sell {grid-column:3;grid-row:3}
- #ledger.mm-ledger-table #lots .lot-table-cell {text-align:left;font-size:16px}
- #ledger.mm-ledger-table #lots .lot-table-label {display:block;color:var(--mut);font:400 12px/1.4 var(--f-ui);margin-bottom:3px}
- #ledger.mm-ledger-table #lots .lot-selected-summary {grid-template-columns:minmax(0,1fr);gap:12px}
-}
-@media(max-width:450px){
- #ledger.mm-ledger-table .ledger-controls {margin:8px 10px 12px}
- #ledger.mm-ledger-table .ledger-value-toolbar {align-items:flex-start;flex-direction:column}
- #ledger.mm-ledger-table .ledger-market-columns {margin:0 10px;font-size:12px;gap:12px!important}
- #ledger.mm-ledger-table #lots {margin:0 10px 12px}
- #ledger.mm-ledger-table #lots .lot-table-buy {grid-column:1/-1;grid-row:3}
- #ledger.mm-ledger-table #lots .lot-table-sell {grid-column:1/-1;grid-row:4}
- #ledger.mm-ledger-table #lots .lot-name img.ti {width:22px;height:22px}
-}
+/* v173: approved r5 merged drawer. Shared geometry follows generated Light. */
+#unitCourierBox.ledger-fusion-shell{margin:20px 0;min-width:0;background:none;border:0;padding:0}
+#unitCourierBox #ledger.ledger-fusion{--ledger-columns:minmax(200px,1.4fr) 95px 100px minmax(155px,1fr) minmax(155px,1fr) minmax(160px,1fr) minmax(275px,1.6fr);--ledger-thread:color-mix(in srgb,var(--mut) 55%,var(--surface-panel));margin:0!important;padding:0!important;border:1px solid var(--line2)!important;border-radius:12px!important;background:var(--surface-card)!important;overflow:hidden;box-shadow:0 8px 24px color-mix(in srgb,var(--txt) 3%,transparent)}
+#unitCourierBox #ledger.ledger-fusion>#unitCourierToggle{display:grid!important;grid-template-columns:minmax(0,1fr) 40px;gap:24px!important;margin:0!important;padding:24px!important;list-style:none;background:linear-gradient(110deg,var(--surface-panel),var(--surface-card))!important;border:0!important;align-items:start;cursor:pointer}
+#unitCourierBox #ledger.ledger-fusion>#unitCourierToggle::after,#unitCourierBox #ledger.ledger-fusion>#unitCourierToggle::-webkit-details-marker{display:none!important;content:none!important}
+#unitCourierBox #ledger .ledger-title-group{display:flex;align-items:center;gap:12px;flex-wrap:wrap;min-width:0}
+#unitCourierBox #ledger #unitCourierHeading{font:750 21px/1.3 var(--f-ui);text-transform:uppercase;letter-spacing:.035em}
+#unitCourierBox #ledger #lCount,#unitCourierBox #ledger #missCount{font:400 13px/1.4 var(--f-ui);color:var(--mut)}
+#unitCourierBox #ledger #bEsi.ledger-refresh{display:grid;place-items:center;width:38px;height:38px;min-width:38px;padding:8px!important;margin:0!important;font-size:0;border:1px solid var(--line2)!important;border-radius:7px!important;background:var(--surface-card)!important;color:var(--mut)}
+#unitCourierBox #ledger #bEsi .ic{margin:0!important;width:18px;height:18px}
+#unitCourierBox #ledger .mm-freight-lot{grid-column:1/-1;display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:28px!important;margin:0!important;padding:0!important;border:0!important;background:none!important}
+#unitCourierBox #ledger .mm-freight-lot>span{display:block;min-width:0}
+#unitCourierBox #ledger .mm-freight-lot>span>span{display:block;font:400 15px/1.4 var(--f-ui);color:var(--mut);margin:0 0 7px}
+#unitCourierBox #ledger .mm-freight-lot button.copy{font:600 24px/1.4 var(--f-ui)!important;text-align:left;white-space:nowrap;max-width:100%;overflow-x:auto;scrollbar-width:thin}
+#unitCourierBox #ledger #unitCourierContent{border-top:1px solid var(--line2);min-width:0}
+#unitCourierBox #ledger .ledger-controls{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin:0!important;padding:18px 24px 20px!important}
+#unitCourierBox #ledger .ledger-reference-controls{display:flex;align-items:center;gap:14px;flex-wrap:wrap;min-width:0}
+#unitCourierBox #ledger #ledgerValueScope{font:500 15px/1.4 var(--f-ui);color:var(--txt)}
+#unitCourierBox #ledger #ledgerSaleMode,#unitCourierBox #ledger #ledgerValueMode{display:inline-flex;gap:3px;padding:3px;border:1px solid var(--line2);border-radius:20px;background:var(--surface-card)}
+#unitCourierBox #ledger #ledgerSaleMode{border-radius:6px}
+#unitCourierBox #ledger #ledgerValueMode{margin-left:auto}
+#unitCourierBox #ledger #ledgerSaleMode button,#unitCourierBox #ledger #ledgerValueMode button{font:400 14px/1.4 var(--f-ui);border:0;border-radius:17px;background:none;color:var(--mut);padding:6px 14px;min-height:32px}
+#unitCourierBox #ledger #ledgerSaleMode button{border-radius:4px;padding:5px 11px}
+#unitCourierBox #ledger #ledgerSaleMode button[aria-pressed=true],#unitCourierBox #ledger #ledgerValueMode button[aria-pressed=true]{color:var(--clay);background:color-mix(in srgb,var(--clay) 13%,var(--surface-card));font-weight:600}
+#unitCourierBox #ledger .ledger-help-slot{position:relative;display:inline-flex;align-items:center}
+#unitCourierBox #ledger #ledgerPriceHelp{width:22px;flex:none;position:static;margin:0;background:none;border:0;box-shadow:none}
+#unitCourierBox #ledger #ledgerPriceHelp>summary{display:grid;place-items:center;width:22px;height:22px;padding:0!important;border:1px solid var(--line2)!important;border-radius:50%!important;background:none!important;color:var(--mut);font:400 12px/1 var(--f-ui)}
+#unitCourierBox #ledger #ledgerPriceHelp>summary::after,#unitCourierBox #ledger #ledgerPriceHelp>summary::before{content:none!important}
+#unitCourierBox #ledger #ledgerPriceHelpContent{display:none;position:absolute;z-index:20;left:0;top:30px;width:min(340px,calc(100vw - 90px));padding:12px 14px;margin:0;border:1px solid var(--line2);border-radius:7px;background:var(--surface-panel);color:var(--txt);box-shadow:0 5px 20px color-mix(in srgb,var(--txt) 12%,transparent);font:400 14px/1.5 var(--f-ui)}
+#unitCourierBox #ledger .ledger-help-slot:hover #ledgerPriceHelpContent,#unitCourierBox #ledger .ledger-help-slot:focus-within #ledgerPriceHelpContent,#unitCourierBox #ledger #ledgerPriceHelp[open]+#ledgerPriceHelpContent{display:block}
+#unitCourierBox #ledger .ledger-secondary-sort{position:relative;margin:0;border:0;background:transparent;font:400 13px/1.4 var(--f-ui);color:var(--mut)}
+#unitCourierBox #ledger .ledger-secondary-sort>summary{padding:5px;list-style:none}
+#unitCourierBox #ledger .ledger-secondary-sort>summary::after,#unitCourierBox #ledger .ledger-secondary-sort>summary::-webkit-details-marker{content:none!important;display:none}
+#unitCourierBox #ledger .ledger-secondary-sort>div{position:absolute;right:0;top:100%;z-index:10;min-width:150px;background:var(--surface-panel);border:1px solid var(--line2);border-radius:5px;padding:5px}
+#unitCourierBox #ledger .ledger-secondary-sort button{display:block;width:100%;border:0;padding:8px;text-align:left;background:none;color:var(--txt);font:inherit}
+#unitCourierBox #ledger #ledgerReferenceWarning{margin:0 24px 14px;font:400 14px/1.5 var(--f-ui);color:var(--mut)}
+#unitCourierBox #ledger #ledgerTradeTotals{display:flex;flex-wrap:wrap;align-items:center;gap:10px 20px;margin:0 24px 14px;font:400 14px/1.4 var(--f-ui)}
+#unitCourierBox #ledger .ledger-table-scroll{overflow-x:auto;max-width:100%;margin:0 12px;scrollbar-width:thin}
+#unitCourierBox #ledger.ledger-fusion .ledger-market-columns,#unitCourierBox #ledger.ledger-fusion #lots article.lot .lot-head.ledger-market-row{display:grid!important;grid-template-columns:var(--ledger-columns)!important;gap:12px!important;align-items:center;padding:16px 14px!important;min-width:1240px;min-height:64px!important;margin:0!important;background:none!important}
+#unitCourierBox #ledger.ledger-fusion .ledger-market-columns{border:0!important;border-bottom:1px solid var(--line2)!important}
+#unitCourierBox #ledger.ledger-fusion .ledger-market-columns .ledger-sort{display:block!important;width:100%;min-width:0;min-height:0;padding:0!important;border:0!important;border-radius:0;background:none!important;font:650 14px/1.4 var(--f-ui)!important;letter-spacing:.035em;text-transform:uppercase;text-align:left!important;color:var(--txt);white-space:nowrap}
+#unitCourierBox #ledger.ledger-fusion .ledger-market-columns .ledger-sort:first-child{padding-left:14px!important}
+#unitCourierBox #ledger .sort-arrow:empty{display:none}
+#unitCourierBox #ledger .ledger-sort[data-active=true]{color:var(--clay)!important}
+#unitCourierBox #ledger.ledger-fusion #lots{margin:0;padding:0;min-width:1240px;background:var(--surface-card)}
+#unitCourierBox #ledger.ledger-fusion #lots article.lot{display:block!important;position:relative;grid-template-columns:none;margin:0!important;padding:0!important;border:0!important;border-bottom:1px solid var(--line2)!important;border-radius:0;background:transparent!important;box-shadow:none!important;overflow:visible}
+#unitCourierBox #ledger.ledger-fusion #lots article.lot[hidden],#unitCourierBox #ledger #lots .lot-body[hidden]{display:none!important}
+#unitCourierBox #ledger #lots .lot-head:hover{background:color-mix(in srgb,var(--txt) 2%,transparent)!important}
+#unitCourierBox #ledger #lots .lot-info{display:flex!important;flex-direction:column;align-items:stretch;grid-column:1!important;grid-row:1!important;pointer-events:auto;gap:3px;min-width:0;padding-left:14px;position:relative}
+#unitCourierBox #ledger #lots .lot-name{display:flex!important;align-items:center;flex-wrap:nowrap;gap:8px;min-width:0}
+#unitCourierBox #ledger #lots .lot-name b{display:block!important;min-width:0;font:500 15px/1.45 var(--f-ui)!important}
+#unitCourierBox #ledger #lots .lot-name img.ti{display:block;flex:none;width:24px;height:24px;margin:0!important;border:0;border-radius:3px}
+#unitCourierBox #ledger #lots .lot-meta{padding:0!important;margin:0;color:var(--thrust);font:400 12px/1.4 var(--f-ui)}
+#unitCourierBox #ledger #lots .lot-meta:has(.lot-header-warning[hidden]){display:none}
+#unitCourierBox #ledger #lots .lot-table-cell{display:block;min-width:0;grid-row:1;text-align:left;font:500 15px/1.45 var(--f-ui);font-variant-numeric:tabular-nums}
+#unitCourierBox #ledger #lots .lot-table-label{display:none}
+#unitCourierBox #ledger #lots .lot-table-quantity{grid-column:2!important}#unitCourierBox #ledger #lots .lot-table-volume{grid-column:3!important}#unitCourierBox #ledger #lots .lot-table-buy{grid-column:4!important}#unitCourierBox #ledger #lots .lot-table-sell{grid-column:5!important}#unitCourierBox #ledger #lots .lot-table-freight{grid-column:6!important}#unitCourierBox #ledger #lots .lot-table-result{grid-column:7!important;padding-right:96px}
+#unitCourierBox #ledger button.copy{position:relative;z-index:2;pointer-events:auto;background:transparent!important;border:0!important;box-shadow:none!important;padding:0!important;margin:0!important;min-height:0!important;border-radius:2px!important;font:inherit!important;line-height:inherit!important;color:inherit;text-align:inherit;max-width:100%}
+#unitCourierBox #ledger button.copy::before,#unitCourierBox #ledger button.copy::after{display:none!important}
+#unitCourierBox #ledger #lots .lot-table-cell button.copy{display:block;width:100%;white-space:nowrap;overflow-x:auto;scrollbar-width:thin}
+#unitCourierBox #ledger button.copy:focus-visible{outline:2px solid var(--clay)!important;outline-offset:3px}
+#unitCourierBox #ledger button.copy:disabled{opacity:1;color:var(--mut);cursor:default}
+#unitCourierBox #ledger button.copy.pos,#unitCourierBox #ledger button.copy.isk-pos{color:var(--gain)!important}#unitCourierBox #ledger button.copy.neg,#unitCourierBox #ledger button.copy.isk-neg{color:var(--loss)!important}
+#unitCourierBox #ledger #lots .lot-open{position:absolute!important;inset:auto!important;right:46px!important;top:16px!important;z-index:3;width:32px!important;height:32px!important;min-height:32px;padding:0!important;background:transparent!important;border:0!important;border-radius:3px;grid-column:auto!important;grid-row:auto!important}
+#unitCourierBox #ledger #lots .lot-open::before{content:'';position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);box-sizing:border-box;width:17px;height:17px;border:1px solid var(--ledger-thread);border-radius:50%;background:var(--surface-card)}
+#unitCourierBox #ledger #lots .lot-open::after{content:'';display:block;position:absolute;left:50%;top:50%;transform:translate(-50%,-50%)!important;width:7px;height:7px;border:0!important;border-radius:0;color:var(--mut);background-image:linear-gradient(currentColor,currentColor),linear-gradient(currentColor,currentColor);background-size:7px 1px,1px 7px;background-position:center;background-repeat:no-repeat}
+#unitCourierBox #ledger #lots .lot.open .lot-open::after{background-image:linear-gradient(currentColor,currentColor);background-size:7px 1px}
+#unitCourierBox #ledger #lots .lot-open:focus-visible{outline:2px solid var(--clay);outline-offset:1px}
+#unitCourierBox #ledger #lots .lot-x{position:absolute;right:0;top:10px!important;margin:0!important;width:44px!important;height:44px!important;min-width:44px;min-height:44px;opacity:.6;z-index:3;background:none!important;border:0;border-radius:3px}
+#unitCourierBox #ledger #lots .lot-x::before{width:12px;height:12px}
+#unitCourierBox #ledger #lots article.lot.open>.lot-head.ledger-market-row{background:var(--surface-panel)!important}
+#unitCourierBox #ledger #lots .lot.open .lot-body{box-sizing:border-box;position:relative;margin:0!important;padding:0 24px 20px 14px!important;background:var(--surface-panel)!important;border:0!important;border-radius:0!important;max-width:100%}
+#unitCourierBox #ledger #lots .lot-selected-summary{display:flex;flex-wrap:wrap;align-items:flex-start;gap:14px 28px;margin:0 0 14px 22px;padding:12px 0;border-bottom:1px solid var(--line2);font:400 13px/1.4 var(--f-ui)}
+#unitCourierBox #ledger #lots .lot-selected-summary>.lot-route,#unitCourierBox #ledger #lots .lot-selected-summary>.lot-pp,#unitCourierBox #ledger #lots .lot-selected-summary>.lot-financial{display:block!important;grid-column:auto!important;grid-row:auto!important;min-width:0;margin:0;gap:5px}
+#unitCourierBox #ledger #lots .lot-selected-summary .lot-k{display:block;font:600 12px/1.4 var(--f-ui)!important;margin-bottom:5px!important}
+#unitCourierBox #ledger #lots .lot-selected-summary button.copy{font:500 15px/1.45 var(--f-ui)!important}
+#unitCourierBox #ledger #lots .lot-reference-trade{display:flex;gap:20px;flex-wrap:wrap}
+#unitCourierBox #ledger #lots .lot-reference-trade .lot-table-label{display:block;font:400 13px/1.4 var(--f-ui);margin-bottom:5px}
+#unitCourierBox #ledger #lots .lot-panel-grid{position:relative;display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:12px 32px!important;max-width:none;margin:0!important;padding:24px 0 0 22px!important;border:0!important;background:none!important}
+#unitCourierBox #ledger #lots .lot-panel-grid::before{content:'';position:absolute;left:0;top:-8px;width:calc(50% - 8px);height:24px;border-left:2px dotted var(--ledger-thread);border-bottom:2px dotted var(--ledger-thread);border-bottom-left-radius:16px}
+#unitCourierBox #ledger #lots .lot-panel-grid::after{content:'';position:absolute;left:calc(50% - 8px);top:16px;width:14px;height:16px;border-top:2px dotted var(--ledger-thread);border-right:2px dotted var(--ledger-thread);border-top-right-radius:14px}
+#unitCourierBox #ledger #lots .ledger-thread-rail{position:absolute;left:0;top:16px;bottom:22px;border-left:2px dotted var(--ledger-thread);pointer-events:none}
+#unitCourierBox #ledger #lots .ledger-thread-rail.right{left:calc(50% + 6px);top:32px}
+#unitCourierBox #ledger #lots .lot-panel-grid>details{position:relative;min-width:0;align-self:start!important;border:1px solid var(--line2)!important;border-radius:7px!important;background:var(--surface-card)!important;overflow:visible!important}
+#unitCourierBox #ledger #lots .lot-panel-grid>details::before{content:'';position:absolute;left:-22px;top:0;width:20px;height:23px;border-left:2px dotted var(--ledger-thread);border-bottom:2px dotted var(--ledger-thread);border-bottom-left-radius:16px}
+#unitCourierBox #ledger #lots .lot-panel-grid>details>summary{position:relative;list-style:none;padding:13px 14px!important;min-height:48px;font:650 14px/1.4 var(--f-ui)!important;background:transparent!important}
+#unitCourierBox #ledger #lots .lot-panel-grid>details>summary::-webkit-details-marker{display:none}
+#unitCourierBox #ledger #lots .lot-panel-grid>details>summary::after{display:none!important;content:none!important}
+#unitCourierBox #ledger #lots .lot-panel-grid>details>summary::before{content:'';position:absolute;box-sizing:content-box;left:-29px;top:16px;width:15px;height:15px;border:1px solid var(--ledger-thread);border-radius:50%;color:var(--mut);background-color:var(--surface-panel);background-image:linear-gradient(currentColor,currentColor),linear-gradient(currentColor,currentColor);background-size:7px 1px,1px 7px;background-position:center;background-repeat:no-repeat;z-index:1}
+#unitCourierBox #ledger #lots .lot-panel-grid>details[open]>summary::before{background-image:linear-gradient(currentColor,currentColor);background-size:7px 1px}
+#unitCourierBox #ledger #lots .lot-panel-grid>details[open]>summary{color:var(--clay);border-bottom:1px solid var(--line2)}
+#unitCourierBox #ledger #unitDetailPager{display:flex;justify-content:flex-end;align-items:center;gap:12px;margin:0;padding:14px 24px;font:400 14px/1.4 var(--f-ui)}
+#unitCourierBox #ledger #esiStatus{display:block;margin:0;padding:0 24px 14px;font:400 13px/1.4 var(--f-ui)}
+#unitCourierBox #ledger #esiStatus:empty{display:none}
+#unitCourierBox #ledger [hidden]{display:none!important}
+#ledgerCopyFeedback{position:fixed;z-index:10000;pointer-events:none;border:1px solid var(--line2);border-radius:5px;padding:6px 10px;background:var(--surface-panel);color:var(--txt);font:400 13px/1.4 var(--f-ui);box-shadow:0 3px 12px rgba(0,0,0,.15)}
+#ledgerCopyFeedback[hidden]{display:none!important}
+@media(max-width:980px){#unitCourierBox #ledger #lots .lot.open .lot-body{width:calc(100vw - 120px);max-width:100%}#unitCourierBox #ledger #lots .lot-panel-grid{grid-template-columns:minmax(0,1fr)!important}#unitCourierBox #ledger #lots .ledger-thread-rail.right,#unitCourierBox #ledger #lots .lot-panel-grid::after{display:none}#unitCourierBox #ledger #lots .lot-panel-grid::before{width:20px}#unitCourierBox #ledger #lots .lot-selected-summary{flex-direction:column}}
+@media(max-width:600px){#unitCourierBox #ledger.ledger-fusion>#unitCourierToggle{padding:20px 16px!important;gap:18px!important}#unitCourierBox #ledger .mm-freight-lot{grid-template-columns:minmax(0,1fr)!important;gap:10px!important}#unitCourierBox #ledger .mm-freight-lot>span{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px}#unitCourierBox #ledger .mm-freight-lot>span>span{margin:0}#unitCourierBox #ledger .mm-freight-lot button.copy{font-size:21px!important}#unitCourierBox #ledger .ledger-controls{padding:16px!important}#unitCourierBox #ledger .ledger-table-scroll{margin:0 6px}#unitCourierBox #ledger #ledgerPriceHelpContent{left:auto;right:0}#unitCourierBox #ledger #lots .lot.open .lot-body{width:calc(100vw - 100px)}}
+@media(pointer:coarse){#unitCourierBox #ledger #lots .lot-open{width:44px!important;height:44px!important;top:10px!important}}
+
+#unitCourierBox #ledger #unitCourierHelp{display:inline-flex!important;width:22px!important;flex:0 0 22px!important;margin:0!important}
+#unitCourierBox #ledger #unitCourierToggle button.copy{font:600 24px/1.4 var(--f-ui)!important}
+#unitCourierBox #ledger #unitCourierToggle button.copy.pos{color:var(--gain)!important}
+#unitCourierBox #ledger #unitCourierToggle button.copy.neg{color:var(--loss)!important}
+#unitCourierBox #ledger #unitCourierSubtitle{position:absolute;left:0;top:0;width:1px;height:1px;margin:0;padding:0;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap}
+@media(max-width:600px){#unitCourierBox #ledger #unitCourierToggle button.copy{font-size:21px!important}}
+
+#unitCourierBox #ledger #unitCourierContent{padding:0!important}
+
+#unitCourierBox #ledger #lots .lot-panel-grid>details>summary::before{display:block!important;content:''!important;mask:none!important;-webkit-mask:none!important}
+html.light #unitCourierBox #ledger #unitCourierToggle{background:linear-gradient(110deg,var(--hull2),var(--surface-card))!important}
+html.light #unitCourierBox #ledger #lots .lot.open .lot-body,html.light #unitCourierBox #ledger #lots article.lot.open>.lot-head.ledger-market-row{background:color-mix(in srgb,var(--hull2) 55%,var(--surface-card))!important}
+
+#unitCourierBox #ledger #unitCourierHelp[data-help-dismissed] #ledgerPriceHelpContent{display:none!important}
+#unitCourierBox #ledger #lots article.lot .lot-head{border-radius:0!important}
+
+/* Preserve equal open siblings while closed panels keep their natural height. */
+#unitCourierBox #ledger #lots .lot-panel-grid>details[open]{align-self:stretch!important}
+#unitCourierBox #ledger #lots .lot-panel-grid>details>summary::before{box-shadow:none!important}

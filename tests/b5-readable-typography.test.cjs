@@ -29,7 +29,7 @@ test('B.18 removes the nested plan question while keeping other native disclosur
   assert.match(html,/<details class="mm-inline-faq mm-ledger-faq"/);
   assert.match(html,/<p class="mm-picker-method" data-i18n="decision.planMethodA"/);
   assert.doesNotMatch(html,/class="mm-inline-faq mm-picker-faq"/);
-  assert.match(html,/<details class="mm-freight-help" id="unitCourierHelp">/);
+  assert.match(html,/<span id="unitCourierHelp" class="ledger-help-slot">/);
   assert.match(css,/#verdict #vCap \.mm-context-help>summary:focus-visible/);
   assert.match(css,/#pSum>\.mm-inline-faq>summary:focus-visible/);
   assert.match(css,/#verdict #vCap \.mm-context-help\[open\]>summary::after/);

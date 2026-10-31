@@ -27,8 +27,8 @@ test('B.6c keeps the fast-route rationale in the plan grid and keeps local Items
   const why=shell.indexOf('class="mm-picker-method"');
   const left=shell.indexOf('id="unitCourierBox"');
   const opportunities=shell.indexOf('id="pkOpportunity"');
-  assert.ok(right<fast&&fast<why&&why<finance&&finance<left&&left<opportunities);
-  assert.match(chooser,/box\.hidden=!rows\.length/);
+  assert.ok(right<fast&&fast<why&&why<finance&&finance<opportunities&&opportunities<left);
+  assert.match(chooser,/\$\('unitCourierBox'\)\.hidden=!S\.items\.length/);
   assert.match(chooser,/\$\('pkSpeedBox'\)\.hidden=false/);
   assert.match(css,/#pSum \.mm-plan-drawer-body:has\(>#pkSpeedBox\[hidden\]\)>#vFinanceDetails/);
   assert.match(css,/#pSum #pkSpeedBox>\.mm-picker-method/);

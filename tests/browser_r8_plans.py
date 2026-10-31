@@ -10,7 +10,7 @@ FIXTURE="""() => {
  S.items=[{name:'Sample module A',qty:50,srcQty:50,ref:12000000,m3u:50,refMan:null,m3uMan:null,checks:[],skew:0,jita:{buy:11000000,sell:12000000,topBuy:11000000,topSell:12000000,vol:50}},
  {name:'Sample module B',qty:20,srcQty:20,ref:28000000,m3u:100,refMan:null,m3uMan:null,checks:[],skew:0,jita:{buy:26000000,sell:28000000,topBuy:26000000,topSell:28000000,vol:100}}];
  S.items.forEach(o=>S.api[o.name.toLowerCase()]={cat:7});
- pkPanelCollapsed=false;pkOverviewCollapsed=false;pkInsightsCollapsed=false;pkView.filter='all';refreshNow();
+ pkPanelCollapsed=false;pkOverviewCollapsed=false;pkInsightsCollapsed=false;pkView.filter='all';syncLots();refreshNow();
 }"""
 
 class R8PlanTests(unittest.TestCase):
@@ -50,14 +50,15 @@ class R8PlanTests(unittest.TestCase):
  def test_single_unit_detail_is_bounded_paged_and_matches_allocated_shipping(self):
   self.assertEqual(self.page.locator('#pkUnits').count(),0)
   self.page.locator('#unitCourierToggle').click()
-  expected=self.page.evaluate("courierUnitPresentation(lastP.rows[0])")
-  shown=self.page.locator('#unitCourierRows .mm-unit-row').first.locator('.mm-freight-cell strong').all_inner_texts()
+  expected=self.page.evaluate("({freightUnit:ledgerReference.rows[0].courierPerUnit,unit:ledgerReference.rows[0].referenceAfter/ledgerReference.rows[0].q})")
+  shown=self.page.locator('#lots .lot').first.locator('.lot-table-freight .copy,.lot-table-result .copy').all_inner_texts()
+  shown=['unused']+shown
   self.assertAlmostEqual(float(re.sub(r'[^0-9.]','',shown[1])),expected['freightUnit'],places=2)
   self.assertAlmostEqual(float(re.sub(r'[^0-9.]','',shown[2])),expected['unit'],places=2)
-  self.page.evaluate("""()=>{const o=S.items[0];S.items=Array.from({length:25},(_,i)=>({...o,name:'Paged Item '+i}));S.items.forEach(o=>S.api[o.name.toLowerCase()]={cat:7});refreshNow();}""")
-  self.assertEqual(self.page.locator('#unitCourierRows .mm-unit-row').count(),10)
+  self.page.evaluate("""()=>{const o=S.items[0];S.items=Array.from({length:25},(_,i)=>({...o,name:'Paged Item '+i,ui:null}));S.items.forEach(o=>S.api[o.name.toLowerCase()]={cat:7});syncLots();refreshNow();}""")
+  self.assertEqual(self.page.locator('#lots>.lot:visible').count(),10)
   self.page.locator('[data-unit-page="1"]').click();self.page.locator('[data-unit-page="1"]').click()
-  self.assertEqual(self.page.locator('#unitCourierRows .mm-unit-row').count(),5)
+  self.assertEqual(self.page.locator('#lots>.lot:visible').count(),5)
   self.assertTrue(self.page.locator('[data-unit-page="1"]').is_disabled())
   self.page.locator('#unitCourierToggle').click()
   self.assertFalse(self.page.locator('#unitCourierContent').is_visible())
@@ -67,7 +68,7 @@ class R8PlanTests(unittest.TestCase):
    for lang in ['es','en']:
     self.page.evaluate('(l)=>setLang(l)',lang)
     for ship in [False,True]:
-     self.page.evaluate('([flip,ship])=>{S.flip=flip;C.shipOn=ship;S.planMode=null;refreshNow()}',[flip,ship])
+     self.page.evaluate('([flip,ship])=>{setFlip(flip);C.shipOn=ship;S.planMode=null;refreshNow()}',[flip,ship])
      for width in [1440,980,630,390]:
       self.page.set_viewport_size({'width':width,'height':1000});geometry=[]
       for light in [False,True]:
@@ -82,12 +83,12 @@ class R8PlanTests(unittest.TestCase):
       for a,b in zip(*geometry):
        for x,y in zip(a,b):self.assertAlmostEqual(x,y,delta=1)
  def test_unknown_purchase_basis_is_not_profit_or_fake_zero(self):
-  self.page.evaluate("""()=>{S.flip=true;C.buyMode='buy';S.items.forEach(o=>o.jita.topBuy=null);refreshNow();}""")
+  self.page.evaluate("""()=>{setFlip(true);C.buyMode='buy';S.items.forEach(o=>o.jita.topBuy=null);refreshNow();}""")
   self.assertIsNone(self.page.evaluate('flipPlanAccounting(lastP)'))
   self.assertTrue(self.page.locator('#pkResultWarning').is_visible())
   self.assertNotIn('Ganancia',self.page.locator('#pkResultMetric').inner_text())
   self.page.locator('#unitCourierToggle').click()
-  self.assertTrue(all(x=='—' for x in self.page.locator('.mm-unit-trade .mm-freight-cell:last-child strong').all_inner_texts()))
+  self.assertTrue(self.page.locator('#ledgerTradeTotals button.copy').last.inner_text()=='—')
   self.assertNotRegex(self.page.locator('#pSum').inner_text(),r'NaN|Infinity|undefined')
 
 if __name__=='__main__':unittest.main()

@@ -3,6 +3,7 @@ from pathlib import Path
 import unittest
 from playwright.sync_api import sync_playwright
 from browser_r8_plans import FIXTURE
+from browser_ledger173 import FIXTURE as UNIT_FIXTURE
 
 ROOT=Path(__file__).resolve().parents[1]
 class Freight168Tests(unittest.TestCase):
@@ -29,26 +30,26 @@ class Freight168Tests(unittest.TestCase):
   self.assertTrue(self.page.locator('#unitCourierContent').is_visible())
   self.assertFalse(self.page.locator('#pkInsightsContent').is_visible())
  def test_batch_arithmetic_unit_payload_and_clipboard_match_actual_allocation(self):
-  data=self.page.evaluate("""()=>{const rows=lastP.rows.filter(r=>r.q>0&&r.courierAllocated>0);return {
-   before:rows.reduce((s,r)=>s+courierUnitPresentation(r).base*r.q,0),ship:lastP.shipCost,
-   unit:courierUnitPresentation(rows[0]).unit,final:$('freightLotFinal').querySelector('button').dataset.v};}""")
+  data=self.page.evaluate("""()=>{const rows=ledgerReference.rows;return {
+   before:ledgerReference.before,ship:ledgerReference.shipCost,
+   unit:rows[0].referenceAfter/rows[0].q,final:$('freightLotFinal').dataset.v};}""")
   self.assertAlmostEqual(float(data['final']),round((data['before']-data['ship'])*100)/100,places=2)
   self.page.evaluate("Object.defineProperty(navigator,'clipboard',{configurable:true,value:{writeText:async v=>{window.__copied=v;}}})")
-  self.page.locator('#freightLotFinal button.copy').click()
+  self.page.locator('#freightLotFinal').click()
   self.assertEqual(self.page.evaluate('window.__copied'),data['final'])
   self.assertFalse(self.page.locator('#unitCourierContent').is_visible())
   self.page.locator('#unitCourierToggle').click()
-  button=self.page.locator('#unitCourierRows button.copy').first
+  button=self.page.locator('#lots .lot-table-result button.copy').first
   expected=button.get_attribute('data-v');button.press('Enter')
   self.assertEqual(self.page.evaluate('window.__copied'),expected)
   self.assertAlmostEqual(float(expected),round(data['unit']*100)/100,places=2)
   self.assertTrue(self.page.locator('#unitCourierContent').is_visible())
-  self.assertNotIn('ISK/u.',self.page.locator('.mm-freight-columns').inner_text())
+  self.assertNotIn('ISK/u.',self.page.locator('.ledger-market-columns').inner_text())
  def test_full_composition_matrix_closed_open_both_directions_and_themes(self):
   out=ROOT/'tests/artifacts/theme';out.mkdir(parents=True,exist_ok=True)
   for flip in [False,True]:
    for lang in ['es','en']:
-    self.page.evaluate('l=>setLang(l)',lang);self.page.evaluate('f=>{S.flip=f;refreshNow()}',flip)
+    self.page.evaluate('l=>setLang(l)',lang);self.page.evaluate('f=>{setFlip(f);refreshNow()}',flip)
     for width in [1440,980,630,390]:
      self.page.set_viewport_size({'width':width,'height':1000})
      for opened in [False,True]:
@@ -63,79 +64,66 @@ class Freight168Tests(unittest.TestCase):
       for a,b in zip(*geometry):self.assertAlmostEqual(a,b,delta=1)
 
  def test_unit_equation_is_independent_of_quantity_and_final_copies_visible_cents(self):
-  # Independent owner example: 300 units at 10 each, allocated freight 600.
-  # Assert rendered values and copied payload, never derive expected from the UI helper.
+  # Canonical real calculation: 1% collateral on 60,000 + 134,260 = 1,942.60.
+  # Its allocation is 600 / 300 = 2 and 1342.60 / 5 = 268.52 per unit.
+  self.page.evaluate(UNIT_FIXTURE)
   self.page.evaluate("""()=>{
-   $('verdict').hidden=false;$('pSum').hidden=false;
-   window.__unitExample={rows:[
-    {o:{name:'Unit example'},q:300,best:'jOrd',g:{jOrd:3000},prod:0,courierAllocated:600},
-    {o:{name:'Decimal example'},q:5,best:'jOrd',g:{jOrd:123617.25},prod:0,courierAllocated:1342.60}
-   ],Vs:305,shipCost:1942.60};paintCourierUnits(window.__unitExample);
-   Object.defineProperty(navigator,'clipboard',{configurable:true,value:{writeText:async v=>{window.__copied=v;}}});
+   C.perM3=0;C.collPct=.01;
+   Object.assign(S.items[0],{ref:10,refMan:10,m3u:1});S.items[0].jita.topSell=200;
+   Object.assign(S.items[1],{ref:24723.45,refMan:24723.45,m3u:1});S.items[1].jita.topSell=26852;
+   refreshNow();
   }""")
-  self.page.locator('#unitCourierToggle').click()
-  rows=self.page.locator('#unitCourierRows .mm-unit-row')
-  self.assertEqual(rows.nth(0).locator('.mm-freight-cell strong').all_inner_texts(),['10.00 ISK','−2.00 ISK','8.00 ISK'])
-  self.assertEqual(rows.nth(1).locator('.mm-freight-cell strong').all_inner_texts(),['24,723.45 ISK','−268.52 ISK','24,454.93 ISK'])
-  for i,expected in [(0,'8'),(1,'24454.93')]:
-   rows.nth(i).locator('button.copy').click()
-   self.assertEqual(self.page.evaluate('window.__copied'),expected)
+  rows=self.page.locator('#lots>.lot')
+  self.assertAlmostEqual(self.page.evaluate('ledgerReference.shipCost'),1942.60,places=2)
+  for i,shipping,final in [(0,'-2','8'),(1,'-268.52','24454.93')]:
+   self.assertEqual(rows.nth(i).locator('.lot-table-freight .copy').get_attribute('data-v'),shipping)
+   button=rows.nth(i).locator('.lot-table-result .copy');self.assertEqual(button.get_attribute('data-v'),final)
+   button.click();self.assertEqual(self.page.evaluate('window.copied'),final)
   for width in [1440,980,630,390]:
    self.page.set_viewport_size({'width':width,'height':1000})
    for lang in ['es','en']:
-    self.page.evaluate('l=>{setLang(l);paintCourierUnits(window.__unitExample)}',lang)
+    self.page.evaluate('l=>setLang(l)',lang)
     for light in [False,True]:
      self.page.evaluate('v=>document.documentElement.classList.toggle("light",v)',light)
      self.assertLessEqual(self.page.evaluate('document.documentElement.scrollWidth-innerWidth'),1)
-     geometry=rows.first.locator('.mm-freight-ident').evaluate("""e=>{
-      const a=e.querySelector('b').getBoundingClientRect(),b=e.querySelector('small').getBoundingClientRect();
-      return {right:b.left>=a.right,aligned:Math.abs(a.top-b.top)<5};}""")
-     self.assertTrue(geometry['right'],geometry);self.assertTrue(geometry['aligned'],geometry)
-     self.assertNotIn('ISK/',self.page.locator('.mm-freight-columns').inner_text())
-     if width==1440 and lang=='es':
-      out=ROOT/'tests/artifacts/theme';out.mkdir(parents=True,exist_ok=True)
-      self.page.locator('#unitCourierBox').screenshot(path=str(out/f'detail170-unit-example-r2-{light}.png'),animations='disabled')
+     self.assertEqual(rows.first.locator('.lot-table-quantity .copy').inner_text(),'300')
+     self.assertNotIn('ISK/',self.page.locator('.ledger-market-columns').inner_text())
+  self.page.locator('[data-ledger-mode=lot]').click()
+  self.assertEqual(rows.first.locator('.lot-table-result .copy').get_attribute('data-v'),'2400')
+  self.assertEqual(rows.first.locator('.lot-table-freight .copy').get_attribute('data-v'),'-600')
+  self.assertEqual(rows.first.locator('.lot-table-quantity .copy').inner_text(),'300')
 
  def test_unified_detail_covers_local_shipped_unknown_and_trade_profit(self):
   self.assertEqual(self.page.locator('#pkUnits').count(),0)
+  self.page.evaluate(UNIT_FIXTURE)
   self.page.evaluate("""()=>{
-   S.flip=true;C.buyMode='sell';
-   window.__unified={rows:[
-    {o:{name:'Shipped example',ref:4,jita:{sell:4}},q:300,best:'jOrd',g:{jOrd:3000},prod:0,courierAllocated:600},
-    {o:{name:'Local Item with a deliberately long name to verify wrapping',ref:30,jita:{sell:30}},q:5,best:'null',g:{null:100},prod:0,courierAllocated:0}
-   ],Vs:300,shipCost:600};paintCourierUnits(window.__unified);
-   Object.defineProperty(navigator,'clipboard',{configurable:true,value:{writeText:async v=>{window.__copied=v;}}});
+   setFlip(true);C.buyMode='sell';C.brokerNull=0;C.scc=0;
+   S.refinedMan.null[S.items[0].name.toLowerCase()]=8;
+   S.refinedMan.null[S.items[1].name.toLowerCase()]=90;refreshNow();
   }""")
-  self.page.locator('#unitCourierToggle').click()
-  self.assertEqual(self.page.locator('#unitCourierRows .mm-unit-row').count(),2)
-  self.assertEqual(self.page.locator('#freightLotBefore').inner_text(),'3,100.00 ISK')
-  self.assertEqual(self.page.locator('#freightLotFinal').inner_text(),'2,500.00 ISK')
-  self.assertEqual(self.page.locator('.mm-unit-trade').first.locator('strong').all_inner_texts(),['−4.00 ISK','4.00 ISK'])
-  self.assertEqual(self.page.locator('.mm-unit-trade').nth(1).locator('strong').all_inner_texts(),['−30.00 ISK','-10.00 ISK'])
-  self.page.locator('.mm-unit-trade').nth(1).locator('button').click()
-  self.assertEqual(self.page.evaluate('window.__copied'),'-10')
+  rows=self.page.locator('#lots>.lot')
+  self.assertEqual(self.page.locator('#freightLotBefore').get_attribute('data-v'),'2850')
+  self.assertEqual(self.page.locator('#freightLotFinal').get_attribute('data-v'),'2150')
+  for i,investment,profit in [(0,'-10','-4'),(1,'-100','-30')]:
+   rows.nth(i).locator('.lot-open').click();rows.nth(i).locator('.lot-analysis>summary').click()
+   self.assertEqual(rows.nth(i).locator('.lot-reference-investment .copy').get_attribute('data-v'),investment)
+   button=rows.nth(i).locator('.lot-reference-profit .copy');self.assertEqual(button.get_attribute('data-v'),profit)
+   button.click();self.assertEqual(self.page.evaluate('window.copied'),profit)
+  self.page.evaluate('()=>{C.shipOn=false;refreshNow()}')
+  self.assertTrue(all(x=='0' for x in rows.locator('.lot-table-freight .copy').evaluate_all('es=>es.map(e=>e.dataset.v)')))
   for lang in ['es','en']:
-   self.page.evaluate('l=>{setLang(l);paintCourierUnits(window.__unified)}',lang)
-   self.assertEqual(self.page.locator('.mm-unit-row').nth(1).locator('.mm-freight-cell').nth(1).locator('strong').inner_text(),'Sin envío' if lang=='es' else 'No shipping')
+   self.page.evaluate('l=>setLang(l)',lang)
    for width in [1440,980,630,390]:
-    self.page.set_viewport_size({'width':width,'height':1000})
-    geometry=[]
+    self.page.set_viewport_size({'width':width,'height':1000});geometry=[]
     for light in [False,True]:
      self.page.evaluate('v=>{document.documentElement.classList.toggle("light",v);document.activeElement?.blur()}',light)
-     self.page.mouse.move(0,0)
-     self.assertLessEqual(self.page.evaluate('document.documentElement.scrollWidth-innerWidth'),1)
+     self.page.mouse.move(0,0);self.assertLessEqual(self.page.evaluate('document.documentElement.scrollWidth-innerWidth'),1)
      geometry.append(self.page.locator('#unitCourierBox').evaluate('e=>[e.getBoundingClientRect().width,e.getBoundingClientRect().height]'))
-     if width in [1440,390] and lang=='es':
-      out=ROOT/'tests/artifacts/theme';out.mkdir(parents=True,exist_ok=True)
-      self.page.locator('#unitCourierBox').screenshot(path=str(out/f'detail170-trade-mixed-r2-{width}-{light}.png'),animations='disabled')
     for a,b in zip(*geometry):self.assertAlmostEqual(a,b,delta=1)
-  # Missing purchase basis is unknown, never an invented zero investment/profit.
-  self.page.evaluate("delete window.__unified.rows[0].o.ref;paintCourierUnits(window.__unified)")
-  self.assertEqual(self.page.locator('.mm-unit-trade').first.locator('strong').all_inner_texts(),['—','—'])
-  # An unsellable Item remains represented and invalidates full-batch proceeds.
-  self.page.evaluate("window.__unified.rows.push({o:{name:'Missing quote'},q:3,best:null,g:{},courierAllocated:0});paintCourierUnits(window.__unified)")
-  self.assertEqual(self.page.locator('#unitCourierRows .mm-unit-row').count(),3)
-  self.assertEqual(self.page.locator('#freightLotFinal').inner_text(),'—')
-  self.assertEqual(self.page.locator('.mm-unit-row').nth(2).locator('.mm-freight-cell strong').all_inner_texts(),['—','No shipping','—'])
+  self.page.evaluate("()=>{C.buyMode='buy';S.items.forEach(o=>o.jita.topBuy=null);refreshNow()}")
+  self.assertTrue(all(x=='—' for x in rows.locator('.lot-reference-profit .copy').all_inner_texts()))
+  self.page.evaluate("()=>{S.items.push({name:'Missing quote',qty:3,checks:[],jita:{}});syncLots();refreshNow()}")
+  self.assertEqual(rows.count(),3);self.assertEqual(self.page.locator('#freightLotFinal').inner_text(),'—')
+  self.assertEqual(rows.nth(2).locator('.lot-table-result .copy').inner_text(),'—')
 
 if __name__=='__main__':unittest.main()

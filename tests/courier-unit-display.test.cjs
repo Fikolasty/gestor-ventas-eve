@@ -38,12 +38,11 @@ test('absent quote does not invent a base price or lot target',()=>{
   assert.equal(v.total,null);
   assert.equal(v.freightUnit,150);
 });
-test('new freight table uses original per-unit accounting for every shipped item',()=>{
+test('merged freight table delegates to the read-only projection and keeps the audited helper',()=>{
   const render=source.slice(end,source.indexOf('function paintSummary(P){',end));
-  assert.match(render,/rows=P\.rows\.filter\(r=>r\.q>0\)/);
-  assert.match(render,/value\('freight\.beforeColumn',costs\.base\)/);
-  assert.match(render,/value\('freight\.freightColumn',costs\.freightUnit,true\)/);
-  assert.match(render,/value\('freight\.finalColumn',costs\.unit,false,r\.o\.name\)/);
-  assert.doesNotMatch(render,/mm-freight-detail|mm-freight-extra|freight\.landed/);
-  assert.match(render,/iconFor\(r\.o\.name\)/);
+  assert.match(render,/prepareLedgerReference\(P\)/);
+  assert.match(render,/paintLedgerReference\(\)/);
+  const ledger=fs.readFileSync('src/js/ui/ledger.js','utf8');
+  assert.match(ledger,/reference\.courierPerUnit\*factor/);
+  assert.match(ledger,/reference\.referenceAfter\/r\.q\*factor/);
 });

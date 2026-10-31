@@ -1,3 +1,10 @@
+## v1.0.173 — Fusión r5 — candidata local
+
+- Un solo Detalle por Item inferior, cabecera redondeada con totales copiables y actualización solo icono.
+- Compra/Venta/Envío/Te queda, switch Lote/Unidad, cantidad fija y referencia de envío independiente del plan.
+- Cuatro paneles2×2 con curvas punteadas y controles +/− centrados; ayuda hover/foco/tap y copia discreta.
+- Cálculos y tasas originales reutilizados sin cambiar el plan.157Node/16Python/8legacy PASS; Chromium y publicación pendientes.
+
 ## v1.0.172 — Listado sencillo — LIVE certificada
 
 - Columnas Item, Cantidad, Volumen, Buy y Sell; Lote/Unidad para volumen y precios de Jita4-4.

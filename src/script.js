@@ -121,7 +121,7 @@ refreshMarketControls();
 /*__MODULE_FORMAT__*/function setText(el,t,cls){el.textContent=t;if(cls!==undefined)el.className=cls;}
 function status(id,msg,cls){const s=$(id);s.textContent=msg;s.className='status'+(cls?' '+cls:'');}
 // v1.0.51: el resumen de Listado de Items Registrados funciona como botón: Ver los N items ▾ / Ocultar los items ▴
-function ledgerCta(){const n=S.items.length;if(!n)return;const english=S.lang==='en';status('esiStatus',$('ledger').open?(english?'Hide list':'Ocultar lista'):(english?'Show list':'Ver lista'),'cta');}
+function ledgerCta(){status('esiStatus','','');}
 
 /*__MODULE_MARKET_PRICING__*//*__MODULE_COURIER__*//*__MODULE_INVENTORY_PARSER__*/// Precedencia: a mano > API > pegado
 function derive(o){

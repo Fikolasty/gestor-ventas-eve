@@ -28,9 +28,9 @@ test('detail disclosure and freight summary do not modify financial models',()=>
   const overview=view.indexOf("const sum=segs.reduce");
   const defer=view.indexOf("if($('deep').hidden)return;",overview);
   assert.ok(overview>=0&&defer>overview,'Overview breakdown must render before deferring steps');
-  assert.match(picker,/if\(!rows\.length\)\{/);
-  assert.match(picker,/host\.append\(columns\)/);
-  assert.match(picker,/rows\.slice\(unitDetailPage\*10,unitDetailPage\*10\+10\)\.forEach/);
+  assert.match(picker,/prepareLedgerReference\(P\)/);
+  assert.match(picker,/paintLedgerReference\(\)/);
+  assert.match(fs.readFileSync('src/js/ui/ledger.js','utf8'),/unitDetailPage\*10/);
   assert.doesNotMatch(picker,/more&&index>=2\?more:host/);
   assert.match(css,/#verdict #vFinanceDetails>summary:focus-visible/);
   assert.match(css,/#pSum #unitCourierHelp>summary:focus-visible/);

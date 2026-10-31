@@ -8,8 +8,8 @@ const lightCss=fs.readFileSync(path.join(root,'src/styles/themes/light-component
 const html=fs.readFileSync(path.join(root,'src/shell.html'),'utf8');
 
 test('Listado remains the original details panel with one live ESI status',()=>{
-  assert.match(html,/<details class="panel thin fold mm-ledger-table" id="ledger" hidden>/);
-  assert.match(html,/<summary><h2 class="mm-title">LISTADO DE ITEMS REGISTRADOS<\/h2>/);
+  assert.match(html,/<details class="panel thin fold mm-ledger-table ledger-fusion" id="ledger" hidden>/);
+  assert.match(html,/id="unitCourierHeading" data-i18n="freight.heading">Detalle por Item<\/span>/);
   assert.equal((html.match(/id="ledger"/g)||[]).length,1);
   assert.equal((html.match(/id="esiStatus"/g)||[]).length,1);
 });

@@ -588,103 +588,19 @@ function courierUnitPresentation(r){
     derived:['rJita','cOrd','cInst'].includes(r.best)};
 }
 function paintCourierUnits(P){
-  const box=$('unitCourierBox'),host=$('unitCourierRows');
-  const currency=n=>Number.isFinite(n)?NF2.format(Math.round(n*100)/100)+' ISK':'—';
-  // Return icon elements to the common Registered Items pool before repaint.
-  poolIcons(host);
-  host.replaceChildren();
-  host.removeAttribute('role');host.removeAttribute('aria-label');
-  $('unitCourierSubtitle').textContent=tx('freight.subtitle');
-  $('unitCourierSubtitle').title=tx('freight.batchScope');
-  const help=$('unitCourierHelp'),helpButton=help.querySelector('summary');
-  helpButton.setAttribute('aria-label',tx('freight.infoLabel'));
-  helpButton.title=tx('freight.infoLabel');
-  help.querySelector('.mm-freight-collateral').textContent=tx('decision.collateralA');
-  help.querySelector('.mm-freight-reference').textContent=tx('freight.reference');
-  const rows=P.rows.filter(r=>r.q>0);
-  const pager=$('unitDetailPager');pager.replaceChildren();pager.hidden=true;
-  box.hidden=!rows.length;
-  const pages=Math.ceil(rows.length/10);unitDetailPage=Math.max(0,Math.min(unitDetailPage,pages-1));
-  const before=rows.length&&rows.every(r=>Number.isFinite(courierUnitPresentation(r)?.base))?
-    rows.reduce((sum,r)=>sum+courierUnitPresentation(r).base*r.q,0):null;
-  const after=before==null?null:before-(P.shipCost||0);
-  const lotBefore=$('freightLotBefore'),lotFinal=$('freightLotFinal');
-  lotBefore.textContent=currency(before);lotBefore.className='num '+sgn(before);
-  lotFinal.replaceChildren();lotFinal.className='num '+sgn(after);
-  if(after==null)lotFinal.textContent='—';
-  else {const button=copyBtn(after,currency(after));button.setAttribute('aria-label',tx('freight.copyFinal',{amount:currency(after)}));lotFinal.append(button);}
-
-  if(!rows.length){
-    $('unitCourierHeading').textContent=tx('freight.heading');
-    const unallocated=Number.isFinite(P.shipCost)&&P.shipCost>0;
-    $('unitCourierTotal').textContent=unallocated?'−'+currency(P.shipCost):tx('freight.noCost');
-    $('unitCourierTotal').classList.toggle('isk-neg',unallocated);
-    host.append(el('p','mm-freight-empty',tx(unallocated?'freight.unallocated':'freight.noShipment')));
-    return;
-  }
-  const count=trips(P.Vs);
-  $('unitCourierHeading').textContent=tx('freight.heading');
-  $('unitCourierTotal').textContent=P.shipCost>0?currency(P.shipCost):tx('freight.noCost');
-  $('unitCourierTotal').title=tx(count===1?'freight.contractOne':'freight.contractMany',{count});
-  $('unitCourierTotal').classList.toggle('isk-neg',P.shipCost>0);
-  const headers=['freight.itemColumn','freight.beforeColumn','freight.freightColumn','freight.finalColumn'];
-  const columns=el('div','mm-freight-columns');columns.setAttribute('role','row');
-  headers.forEach(key=>{const heading=el('span',null,tx(key));heading.setAttribute('role','columnheader');columns.append(heading);});
-  host.setAttribute('role','table');
-  host.setAttribute('aria-label',tx('freight.heading'));
-  host.append(columns);
-  const value=(key,amount,freight=false,item='')=>{
-    const cell=el('div','mm-freight-cell');cell.setAttribute('role','cell');
-    cell.append(el('span','mm-freight-cell-label',tx(key)));
-    const tone=amount==null?'':freight&&amount>0?' isk-neg':amount>0?' isk-pos':amount<0?' isk-neg':'';
-    const shown=amount==null?'—':(freight&&amount>0?'−':'')+currency(amount);
-    const figure=el('strong','num'+tone);
-    if((key==='freight.finalColumn'||key==='freight.profitColumn')&&Number.isFinite(amount)){
-      const button=copyBtn(amount,shown);button.setAttribute('aria-label',tx(key==='freight.profitColumn'?'freight.copyProfit':'freight.copyUnit',{item,amount:shown}));button.title=key==='freight.profitColumn'?button.getAttribute('aria-label'):tx('freight.copyAction');figure.append(button);
-    }else figure.textContent=key==='freight.freightColumn'&&amount===0?tx('freight.noShipping'):shown;
-    cell.append(figure);
-    return cell;
-  };
-  rows.slice(unitDetailPage*10,unitDetailPage*10+10).forEach(r=>{
-    const costs=courierUnitPresentation(r);
-    const record=el('div','mm-unit-record');record.setAttribute('role','rowgroup');
-    const card=el('div','mm-unit-row');card.setAttribute('role','row');
-    const title=el('div','mm-freight-item');
-    title.setAttribute('role','cell');
-    const pic=iconFor(r.o.name);if(pic)title.append(pic);
-    const identity=el('div','mm-freight-ident');
-    identity.append(el('b',null,r.comp&&['cOrd','cInst'].includes(r.best)?r.o.name+' → '+r.comp.name:r.o.name),
-      el('small',null,'× '+fmtQ(r.q)));
-    title.append(identity);
-    card.append(title,value('freight.beforeColumn',costs.base),
-      value('freight.freightColumn',costs.freightUnit,true),
-      value('freight.finalColumn',costs.unit,false,r.o.name));
-    record.append(card);
-    if(S.flip){
-      const totalPurchase=tradePurchaseCost(r),purchase=Number.isFinite(totalPurchase)?totalPurchase/r.q:null;
-      const profit=Number.isFinite(purchase)&&Number.isFinite(costs.unit)?costs.unit-purchase:null;
-      const trade=el('div','mm-unit-trade');trade.setAttribute('role','row');
-      for(const [key,amount,cost] of [['freight.purchaseColumn',purchase,true],['freight.profitColumn',profit,false]]){
-        const cell=value(key,amount,cost,r.o.name);cell.setAttribute('aria-colspan','2');trade.append(cell);
-      }
-      record.append(trade);
-    }
-    host.append(record);
-  });
-  if(pages>1){
-    pager.hidden=false;
-    for(const [delta,key,disabled] of [[-1,'picker.unitPrevious',unitDetailPage===0],[1,'picker.unitNext',unitDetailPage===pages-1]]){
-      const button=el('button',null,tx(key));button.type='button';button.dataset.unitPage=String(delta);button.disabled=disabled;pager.append(button);
-      if(delta===-1)pager.append(el('span',null,tx('picker.unitPage',{page:unitDetailPage+1,pages})));
-    }
-    pager.setAttribute('aria-label',tx('picker.unitPager'));
-  }
+  $('unitCourierBox').hidden=!S.items.length;
+  if(ledgerReferenceSource!==P)prepareLedgerReference(P);
+  paintLedgerReference();
 }
+
 function paintSummary(P){
   const box=$('pSum'),none=!P.rows.length||P.missing.length===P.rows.length;
-  box.hidden=none||!S.items.length;
-  if(box.hidden)return;
-  paintPicker(P);paintCourierUnits(P);
+  box.hidden=!S.items.length;
+  $('pkPlanToggle').hidden=none;$('stepDrawer').hidden=none;
+  if(none)$('pkPlanContent').hidden=true;
+  paintCourierUnits(P);
+  if(box.hidden||none)return;
+  paintPicker(P);
   const active=flipPlanAccounting(P);
   // Never put sales proceeds in the browser title as an apparent Trading
   // profit while the purchase basis is unknown.
@@ -702,10 +618,4 @@ $('unitDetailPager').addEventListener('click',event=>{
   focus.focus({preventScroll:true});
 });
 
-// Shipping disclosure state belongs to the view, never to the calculation.
-$('unitCourierToggle').addEventListener('click',()=>{
-  const button=$('unitCourierToggle'),content=$('unitCourierContent');
-  const open=button.getAttribute('aria-expanded')!=='true';
-  button.setAttribute('aria-expanded',String(open));content.hidden=!open;
-  $('unitCourierBox').classList.toggle('is-open',open);
-});
+// Native #ledger owns the merged drawer's disclosure state.

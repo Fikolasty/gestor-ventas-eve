@@ -12,7 +12,7 @@ const translations=JSON.parse(read('src/i18n/ui.json'));
 test('Registered Item disclosure preserves independent copy/remove actions',()=>{
   assert.match(ledger,/const toggle=el\('button','lot-open'\)/);
   assert.match(ledger,/toggle\.setAttribute\('aria-controls',body\.id\)/);
-  assert.match(ledger,/head\.append\(toggle,info,quantity\.cell,volume\.cell,buy\.cell,sell\.cell\)/);
+  assert.match(ledger,/head\.append\(info,quantity\.cell,volume\.cell,buy\.cell,sell\.cell,freight\.cell,result\.cell\)/);
   assert.match(ledger,/routeMain\.append\(dest,tag\)/);
   assert.doesNotMatch(ledger,/el\('span','chev'\)/);
   assert.match(ledger,/if\(e\.target\.closest\('\.lot-x'\)\)/);

@@ -1160,8 +1160,8 @@
     "en": " · {selected} of {total} items support this route."
   },
   "freight.heading": {
-    "es": "DETALLE POR ITEM",
-    "en": "ITEM DETAILS"
+    "es": "Detalle por Item",
+    "en": "Item detail"
   },
   "freight.subtitle": {
     "es": "Importes por unidad tras tasas y otros gastos. El total descuenta el envío.",
@@ -2016,8 +2016,8 @@
     "en": "View per-unit detail"
   },
   "freight.lotBefore": {
-    "es": "Lote antes del envío",
-    "en": "Batch before shipping"
+    "es": "Antes del envío",
+    "en": "Before shipping"
   },
   "freight.lotShipping": {
     "es": "Envío del lote",
@@ -2028,8 +2028,8 @@
     "en": "Batch total after shipping"
   },
   "freight.lotEquation": {
-    "es": "Antes del envío menos envío igual a total del lote",
-    "en": "Before shipping minus shipping equals batch total"
+    "es": "Totales del lote",
+    "en": "Batch totals"
   },
   "freight.copyFinal": {
     "es": "Copiar importe final: {amount}",
@@ -2128,11 +2128,11 @@
     "en": "Volume"
   },
   "ledger.tableBuy": {
-    "es": "Buy",
+    "es": "Compra",
     "en": "Buy"
   },
   "ledger.tableSell": {
-    "es": "Sell",
+    "es": "Venta",
     "en": "Sell"
   },
   "ledger.tableLot": {
@@ -2174,5 +2174,73 @@
   "ledger.copied": {
     "es": "Copiado",
     "en": "Copied"
+  },
+  "ledger.refresh": {
+    "es": "Actualizar precios",
+    "en": "Refresh prices"
+  },
+  "ledger.referenceSale": {
+    "es": "Venta en Jita",
+    "en": "Sale in Jita"
+  },
+  "ledger.referenceOrder": {
+    "es": "Orden",
+    "en": "Sell order"
+  },
+  "ledger.referenceInstant": {
+    "es": "Inmediata",
+    "en": "Instant"
+  },
+  "ledger.referenceInfo": {
+    "es": "Cómo se calculan los importes",
+    "en": "How the amounts are calculated"
+  },
+  "ledger.referenceHelp": {
+    "es": "Los precios de compra y venta son referencias. El resultado descuenta tasas y el envío asignado dentro de este lote. Enviarlo por separado requiere otra cotización.",
+    "en": "Buy and sell prices are references. Returns deduct fees and allocated shipping within this batch. Shipping separately needs another quote."
+  },
+  "ledger.referenceShipping": {
+    "es": "Envío",
+    "en": "Shipping"
+  },
+  "ledger.referenceNet": {
+    "es": "Te queda",
+    "en": "You receive"
+  },
+  "ledger.referenceFinal": {
+    "es": "Te queda en Jita",
+    "en": "You receive in Jita"
+  },
+  "ledger.referenceFinalMarket": {
+    "es": "Te queda · {market}",
+    "en": "You receive · {market}"
+  },
+  "ledger.referenceUnit": {
+    "es": "Unidad",
+    "en": "Unit"
+  },
+  "ledger.referenceBatch": {
+    "es": "Lote",
+    "en": "Batch"
+  },
+  "ledger.referenceMissingFreight": {
+    "es": "Faltan datos de volumen o colateral para cotizar el lote completo.",
+    "en": "Volume or collateral data is missing for a quote of the full batch."
+  },
+  "ledger.referenceMissingSale": {
+    "es": "Algún Item no tiene una venta calculable en esta modalidad. Los totales quedan pendientes.",
+    "en": "Some Items have no calculable sale in this mode. Batch totals are unavailable."
+  },
+  "ledger.referenceScope": {
+    "es": "Referencia de {market}. Importes por {scale}.",
+    "en": "Reference for {market}. Amounts per {scale}."
+  },
+  "ledger.referenceInvestment": {
+    "es": "Inversión del lote",
+    "en": "Batch investment"
+  },
+  "shared.copyAmount": {
+    "es": "Copiar importe: {amount}",
+    "en": "Copy amount: {amount}"
   }
 }

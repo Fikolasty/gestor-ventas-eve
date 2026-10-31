@@ -392,6 +392,32 @@ function allocateCourier(P){
     r.courierAllocated=share;r.courierPerUnit=share/r.q;left-=share;
   });
 }
+// Read-only quotation for the ENTIRE inventory on one explicit route. Reuse
+// the canonical courier bill/allocation; never force or mutate the active plan.
+// Missing transport inputs invalidate the shared bill, not just one row's fee.
+function ledgerRouteProjection(P,key){
+  const transported=!!SHIPS[key]&&C.shipOn;
+  const rows=P.rows.filter(r=>r.q>0).map(r=>{
+    const v=r.o.m3u,coll=r.o.jita?.topSell??r.o.jita?.regionSell;
+    const knownVolume=Number.isFinite(v)&&v>=0,knownCollateral=Number.isFinite(coll)&&coll>=0;
+    const base=Number.isFinite(r.g[key])?r.g[key]-(Number.isFinite(r.prod)?r.prod:0):null;
+    return {...r,best:key,ship:transported?{[key]:{v:knownVolume?v*r.q:0,c:knownCollateral?coll*r.q:0}}:{},
+      referenceBefore:base,referenceVolume:knownVolume,referenceCollateral:knownCollateral,
+      courierAllocated:0,courierPerUnit:0};
+  });
+  const completeFreight=!transported||rows.every(r=>r.referenceVolume&&r.referenceCollateral);
+  const Vs=transported?rows.reduce((s,r)=>s+r.ship[key].v,0):0;
+  const Cs=transported?rows.reduce((s,r)=>s+r.ship[key].c,0):0;
+  const shipCost=completeFreight?(Vs>0?courierCost(Vs,Cs):0):null;
+  const projection={rows,Vs,Cs,shipCost,key,transported,completeFreight};
+  if(completeFreight)allocateCourier(projection);
+  else rows.forEach(r=>{r.courierAllocated=null;r.courierPerUnit=null;});
+  rows.forEach(r=>{r.referenceAfter=Number.isFinite(r.referenceBefore)&&Number.isFinite(r.courierAllocated)?r.referenceBefore-r.courierAllocated:null;});
+  projection.completeSale=rows.length>0&&rows.every(r=>Number.isFinite(r.referenceBefore));
+  projection.before=projection.completeSale?rows.reduce((s,r)=>s+r.referenceBefore,0):null;
+  projection.after=Number.isFinite(projection.before)&&Number.isFinite(shipCost)?projection.before-shipCost:null;
+  return projection;
+}
 // v111: total neto exacto de cada plan a partir del plan calculado (barato: una suma por item, sin pintar).
 // m='auto' = óptimo. Los items que no admiten m siguen el óptimo (igual que computePlan con S.planMode=m).
 function modeTotal(P,m){let g=0,V=0,Cc=0,n=0;
