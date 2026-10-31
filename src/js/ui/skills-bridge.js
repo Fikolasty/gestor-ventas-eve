@@ -1,9 +1,25 @@
 // ================= Tus Skills (manuales, sin login) =================
 // Accounting y Broker Relations → Sales Tax y Broker de Jita; Reprocessing, Efficiency y la skill del ore → rendimiento.
+// Per-material ESI levels stay separate from the global manual simulation.
+// Re-reading Settings during refresh must never flatten them to one level.
+let esiProcessingSkills=null;
+function syncProcessingControl(){
+  if(!esiProcessingSkills)return;
+  const ore=resolveOre($('rOre')?.value||'Monazite')||resolveOre('Monazite');
+  const name=ore&&ORE_SKILL[ore.base],native=$('skOre');
+  if(!name||esiProcessingSkills[name]==null)return;
+  native.dataset.mmSkillSource='esi';native.value=String(esiProcessingSkills[name]);
+  native.dispatchEvent(new Event('change',{bubbles:true}));
+}
 function readSkills(fromUser){
+  if(esiProcessingSkills){
+    const r=resolveOre($('rOre')?.value||'Monazite')||resolveOre('Monazite');
+    const name=r&&ORE_SKILL[r.base];
+    if(name&&$('skOre').value!==String(esiProcessingSkills[name]))syncProcessingControl();
+  }
   const g=id=>parseInt($(id).value,10)||0,ore=g('skOre');
   S.sk={_name:'Tus Skills',Accounting:g('skAcc'),'Broker Relations':g('skBR'),'Advanced Broker Relations':g('cAbr'),Reprocessing:g('skRep'),'Reprocessing Efficiency':g('skRepE')};
-  Object.values(ORE_SKILL).forEach(s=>S.sk[s]=ore);
+  Object.values(ORE_SKILL).forEach(s=>S.sk[s]=esiProcessingSkills?.[s]??ore);
   if(fromUser)applySkills();
 }
 // v1.0.13: Skills ↔ Taxes enlazados en los dos sentidos.
@@ -32,9 +48,12 @@ function brokerNote(){const n=$('brkNote');if(!n)return;const br=parseInt($('skB
 function applySkills(){taxFromAcc();brokerFromBR();C.abr=(S.sk&&S.sk['Advanced Broker Relations'])||0;}
 $('skAcc').addEventListener('change',()=>{readSkills(false);taxFromAcc();stFlash('cTax');refresh();});
 $('skBR').addEventListener('change',()=>{readSkills(false);brokerFromBR();stFlash('cBroker');refresh();});
-['skRep','skRepE','skOre'].forEach(id=>$(id).addEventListener('change',()=>{readSkills(false);refresh();}));
-$('cTax').addEventListener('input',()=>{accFromTax();stFlash('skAcc');});
-$('cBroker').addEventListener('input',()=>{brFromBroker();stFlash('skBR');stFlash('cStdFac');stFlash('cStdCorp');});
+['skRep','skRepE','skOre'].forEach(id=>$(id).addEventListener('change',()=>{if(id==='skOre'&&$('skOre').dataset.mmSkillSource!=='esi')esiProcessingSkills=null;readSkills(false);refresh();}));
+// This native select emits change (ESI and restored preferences included).
+$('cAbr').addEventListener('change',()=>{readSkills(false);C.abr=Number($('cAbr').value)||0;refresh();});
+$('cTax').addEventListener('input',()=>{accFromTax();$('skAcc').dataset.mmSkillSource='manual';$('skAcc').dispatchEvent(new Event('input',{bubbles:true}));stFlash('skAcc');});
+$('cBroker').addEventListener('input',()=>{delete $('cStdFac').dataset.mmSettingSource;delete $('cStdCorp').dataset.mmSettingSource;brFromBroker();$('skBR').dataset.mmSkillSource='manual';$('skBR').dispatchEvent(new Event('input',{bubbles:true}));stFlash('skBR');stFlash('cStdFac');stFlash('cStdCorp');});
+$('settings').addEventListener('change',event=>{if(event.isTrusted&&event.target.matches('.c5c-skills select'))event.target.dataset.mmSkillSource='manual';},true);
 $('cBroker').addEventListener('change',()=>{brokerNote();});
 readSkills(false); // al abrir: niveles por defecto, sin tocar los Taxes ya escritos
 

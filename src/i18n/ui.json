@@ -1700,8 +1700,8 @@
     "en": "Skill level controls"
   },
   "settings.skillsSubtitle": {
-    "es": "ESI sincroniza las habilidades compatibles; el procesamiento de mineral o hielo se ajusta manualmente. Puedes simular otros niveles.",
-    "en": "ESI syncs supported skills; ore or ice processing is set manually. You can simulate other levels."
+    "es": "ESI sincroniza habilidades y niveles por material. Puedes simular otros niveles manualmente.",
+    "en": "ESI syncs skills and material-specific levels. You can simulate other levels manually."
   },
   "settings.skillsIntro": {
     "es": "Los impuestos se actualizan con Accounting y Broker Relations. Las habilidades de reproceso afectan los materiales recuperados.",
@@ -1752,8 +1752,8 @@
     "en": "Level {level}/5 · Additional bonus: +{bonus}% to base yield."
   },
   "settings.skillOreNote": {
-    "es": "Nivel {level}/5 · Bonificación de procesamiento: +{bonus}%. Ajuste según mineral o hielo; se configura manualmente.",
-    "en": "Level {level}/5 · Processing bonus: +{bonus}%. Ore/ice-specific manual setting."
+    "es": "Nivel {level}/5 · Bonificación de procesamiento: +{bonus}%. Simulación manual común para minerales y hielo.",
+    "en": "Level {level}/5 · Processing bonus: +{bonus}%. Shared manual simulation for ore and ice."
   },
   "settings.openAll": {
     "es": "Abrir todas las gavetas",
@@ -2242,5 +2242,393 @@
   "shared.copyAmount": {
     "es": "Copiar importe: {amount}",
     "en": "Copy amount: {amount}"
+  },
+  "sso.syncSettings": {
+    "es": "Actualizar datos ESI",
+    "en": "Refresh ESI data"
+  },
+  "sso.authorizeSettings": {
+    "es": "Autorizar standings e implantes",
+    "en": "Authorize standings and implants"
+  },
+  "sso.syncingSettings": {
+    "es": "Consultando habilidades, standings e implantes autorizados…",
+    "en": "Fetching authorized skills, standings and implants…"
+  },
+  "sso.settingsSynced": {
+    "es": "Datos del personaje sincronizados. Los demás ajustes siguen siendo manuales.",
+    "en": "Character data synced. Other settings remain manual."
+  },
+  "sso.settingsPermissionsNeeded": {
+    "es": "Habilidades sincronizadas. Autoriza standings e implantes desde el menú del personaje para rellenar esos ajustes; entretanto siguen siendo manuales.",
+    "en": "Skills synced. Authorize standings and implants from the character menu to populate those settings; they remain manual in the meantime."
+  },
+  "sso.syncPartial": {
+    "es": "Sincronización incompleta. Conservamos los ajustes de las consultas fallidas; revísalos o vuelve a actualizar los datos ESI.",
+    "en": "Sync incomplete. Settings from failed requests were preserved; review them or refresh ESI data again."
+  },
+  "sso.syncFailed": {
+    "es": "No se pudieron actualizar los datos ESI: {error}",
+    "en": "Could not update ESI data: {error}"
+  },
+  "settings.skillCustomNote": {
+    "es": "Tasa personalizada; no corresponde a un nivel de Accounting.",
+    "en": "Custom tax rate; does not correspond to an Accounting level."
+  },
+  "settings.skillOreEsiNote": {
+    "es": "{skill} · Nivel {level}/5 · +{bonus}%. ESI aplica el nivel específico de cada material. Un cambio manual simula un nivel común.",
+    "en": "{skill} · Level {level}/5 · +{bonus}%. ESI applies each material’s own skill level. A manual change simulates one shared level."
+  },
+  "settings.pricing.cSkInst.label": {
+    "es": "Venta inmediata · Jita %",
+    "en": "Immediate sale · Jita %"
+  },
+  "settings.pricing.cSkInst.help": {
+    "es": "Ajusta el ingreso estimado de la venta a compras existentes. No cambia la cotización.",
+    "en": "Adjusts estimated proceeds from existing buy orders. It does not change the market quote."
+  },
+  "settings.pricing.cSkOrd.label": {
+    "es": "Orden Jita %",
+    "en": "Jita order %"
+  },
+  "settings.pricing.cSkOrd.help": {
+    "es": "Ajusta el precio propuesto para tu orden. Un valor negativo lo reduce.",
+    "en": "Adjusts your suggested listing price. A negative value lowers it."
+  },
+  "settings.pricing.cSkNul.label": {
+    "es": "Orden {market} %",
+    "en": "{market} order %"
+  },
+  "settings.pricing.cSkNul.help": {
+    "es": "Se suma al ajuste particular del Item para estimar su precio local.",
+    "en": "Combines with the Item adjustment to estimate its local price."
+  },
+  "settings.pricing.cUnderTk.label": {
+    "es": "Undercut Jita · ticks",
+    "en": "Jita undercut · ticks"
+  },
+  "settings.pricing.cUnderTk.help": {
+    "es": "Cuántos ticks bajar respecto a la venta de referencia. Un tick es el paso de precio permitido por EVE.",
+    "en": "Ticks below the reference sell price. A tick is the price step allowed by EVE."
+  },
+  "settings.pricing.cBaitTk.label": {
+    "es": "Filtro de precios cebo · ticks",
+    "en": "Bait-price filter · ticks"
+  },
+  "settings.pricing.cBaitTk.help": {
+    "es": "0 desactiva el filtro. Revisa 5 ventas y puede saltar hasta 3 precios bajos confirmados por la siguiente orden; conserva las de mucho volumen.",
+    "en": "0 disables the filter. Checks 5 sell orders and may skip up to 3 low prices confirmed by the next order; large-volume orders are retained."
+  },
+  "settings.pricing.cSpreadTk.label": {
+    "es": "Diferencia para venta rápida · ticks",
+    "en": "Quick-sale gap · ticks"
+  },
+  "settings.pricing.cSpreadTk.help": {
+    "es": "Prefiere venta inmediata si la diferencia frente a tu orden no supera este valor. 0 desactiva la regla.",
+    "en": "Prefers an immediate sale when its gap from your listing does not exceed this value. 0 disables the rule."
+  },
+  "settings.pricing.cUnder.label": {
+    "es": "Undercut local y hielo %",
+    "en": "Local and ice undercut %"
+  },
+  "settings.pricing.cUnder.help": {
+    "es": "Reduce el precio propuesto en {market} y el de la orden de hielo en Jita.",
+    "en": "Lowers the suggested price in {market} and the ice listing price in Jita."
+  },
+  "settings.pricing.cRelists.label": {
+    "es": "Cambios de precio previstos",
+    "en": "Expected price changes"
+  },
+  "settings.pricing.cRelists.help": {
+    "es": "Solo se descuentan sus comisiones cuando activas Relists en el desglose.",
+    "en": "Their fees are deducted only when Relists is enabled in the breakdown."
+  },
+  "settings.pricing.qdOn.label": {
+    "es": "Descuento por cantidad",
+    "en": "Quantity discount"
+  },
+  "settings.pricing.qdOn.help": {
+    "es": "Solo en {market}, por encima de 1,000 unidades. Excluye hielo y sus productos; no se aplica en Jita.",
+    "en": "Only in {market}, above 1,000 units. Excludes ice and its products; never applies in Jita."
+  },
+  "settings.pricing.qdMax.label": {
+    "es": "Descuento máximo %",
+    "en": "Maximum discount %"
+  },
+  "settings.pricing.qdMax.help": {
+    "es": "Limita la rebaja por cantidad: tramos de 0.2%, 0.02%, 0.002% y 0.0002% por cada 1,000 unidades.",
+    "en": "Caps quantity discounts: tiers of 0.2%, 0.02%, 0.002% and 0.0002% per 1,000 units."
+  },
+  "settings.pricing.cTick.label": {
+    "es": "Redondear al tick de EVE",
+    "en": "Round to EVE ticks"
+  },
+  "settings.pricing.cTick.help": {
+    "es": "Ajusta los precios propuestos a las cuatro cifras significativas del mercado.",
+    "en": "Rounds suggested prices to the market’s four significant figures."
+  },
+  "settings.pricing.cNonMod.label": {
+    "es": "Otros productos · % de Jita Buy",
+    "en": "Other products · % of Jita Buy"
+  },
+  "settings.pricing.cNonMod.help": {
+    "es": "Referencia para Items sin regla especial. El precio manual del Item prevalece.",
+    "en": "Reference for Items without a special rule. An Item’s manual price takes priority."
+  },
+  "settings.pricing.cBulkNull.label": {
+    "es": "Materiales abundantes · % de Buy",
+    "en": "Bulk materials · % of Buy"
+  },
+  "settings.pricing.cBulkNull.help": {
+    "es": "Ore, minerales comunes y lotes de 1,000+ unidades. Excluye Moon Goo, minerales lunares e isótopos; prevalece el precio manual.",
+    "en": "Ore, common minerals and batches of 1,000+ units. Excludes Moon Goo, moon minerals and isotopes; manual prices take priority."
+  },
+  "settings.pricing.cMargin.label": {
+    "es": "Módulos · margen sobre Buy %",
+    "en": "Modules · markup over Buy %"
+  },
+  "settings.pricing.cMargin.help": {
+    "es": "0 usa Jita Buy. El margen modifica tu precio local propuesto, no una oferta confirmada.",
+    "en": "0 uses Jita Buy. The markup changes your suggested local price, not a confirmed offer."
+  },
+  "settings.pricing.cNullDays.label": {
+    "es": "Plazo estimado · días",
+    "en": "Estimated wait · days"
+  },
+  "settings.pricing.cNullDays.help": {
+    "es": "Se usa para comparar tiempos de venta en {market}. El hielo tiene su propio plazo.",
+    "en": "Used to compare sale times in {market}. Ice has its own waiting time."
+  },
+  "settings.pricing.cProd.label": {
+    "es": "Coste de producción %",
+    "en": "Production cost %"
+  },
+  "settings.pricing.cProd.help": {
+    "es": "Si fabricaste el Item, descuenta este porcentaje de su valor de referencia.",
+    "en": "If you manufactured the Item, deducts this percentage of its reference value."
+  },
+  "settings.pricing.iceOn.label": {
+    "es": "Usar reglas de hielo",
+    "en": "Use ice rules"
+  },
+  "settings.pricing.iceOn.help": {
+    "es": "Al desactivarlo, el hielo utiliza las reglas generales de productos.",
+    "en": "When disabled, ice uses the general product rules."
+  },
+  "settings.pricing.iceNull.label": {
+    "es": "Referencia local",
+    "en": "Local reference"
+  },
+  "settings.pricing.iceNull.help": {
+    "es": "Determina la base del precio propuesto para el hielo en {market}.",
+    "en": "Sets the basis for the suggested ice price in {market}."
+  },
+  "settings.pricing.iceDisc.label": {
+    "es": "Descuento sobre Buy %",
+    "en": "Discount from Buy %"
+  },
+  "settings.pricing.iceDisc.help": {
+    "es": "Rebaja del precio local del hielo sobre Jita Buy, antes de impuestos.",
+    "en": "Local ice discount from Jita Buy, before taxes."
+  },
+  "settings.pricing.iceJita.label": {
+    "es": "Referencia para orden Jita",
+    "en": "Jita listing reference"
+  },
+  "settings.pricing.iceJita.help": {
+    "es": "Elige la base del precio propuesto para publicar la orden de hielo.",
+    "en": "Chooses the basis for your suggested ice listing price."
+  },
+  "settings.pricing.iceDays.label": {
+    "es": "Plazo local · días",
+    "en": "Local wait · days"
+  },
+  "settings.pricing.iceDays.help": {
+    "es": "Estimación para comparar tiempos; no garantiza cuándo se venderá.",
+    "en": "An estimate for comparing waiting times; it does not guarantee a sale date."
+  },
+  "settings.pricing.iceRefLoss.label": {
+    "es": "Reducción del valor refinado %",
+    "en": "Refined-value reduction %"
+  },
+  "settings.pricing.iceRefLoss.help": {
+    "es": "Afecta al precio local de Heavy Water, Liquid Ozone y Strontium. No reduce cantidades físicas, isótopos ni el pago del Buyback.",
+    "en": "Affects local Heavy Water, Liquid Ozone and Strontium prices. It does not reduce physical output, isotope prices or Buyback payment."
+  },
+  "settings.pricing.bbOn.label": {
+    "es": "Comparar Buyback",
+    "en": "Compare Buyback"
+  },
+  "settings.pricing.bbOn.help": {
+    "es": "Incluye el ingreso estimado del programa entre las alternativas de venta.",
+    "en": "Includes estimated program proceeds among the sale alternatives."
+  },
+  "settings.pricing.bbTax.label": {
+    "es": "Comisión del programa %",
+    "en": "Program fee %"
+  },
+  "settings.pricing.bbTax.help": {
+    "es": "Se resta de la referencia elegida para calcular lo que recibirías.",
+    "en": "Deducted from the chosen reference to calculate estimated proceeds."
+  },
+  "settings.pricing.bbBase.label": {
+    "es": "Referencia de pago",
+    "en": "Payment reference"
+  },
+  "settings.pricing.bbBase.help": {
+    "es": "Cotización de Jita sobre la que aplica la comisión del programa.",
+    "en": "Jita quote to which the program fee applies."
+  },
+  "settings.pricing.bbAvail.label": {
+    "es": "Destinatario del contrato",
+    "en": "Contract recipient"
+  },
+  "settings.pricing.bbAvail.help": {
+    "es": "Personaje o corporación. Confírmalo en el programa antes de enviar.",
+    "en": "Character or corporation. Confirm it with the program before sending."
+  },
+  "settings.pricing.bbLoc.label": {
+    "es": "Ubicación del contrato",
+    "en": "Contract location"
+  },
+  "settings.pricing.bbLoc.help": {
+    "es": "Lugar donde debe crearse el Item Exchange.",
+    "en": "Where the Item Exchange must be created."
+  },
+  "settings.pricing.bbExp.label": {
+    "es": "Vigencia del contrato",
+    "en": "Contract duration"
+  },
+  "settings.pricing.bbExp.help": {
+    "es": "Duración indicada por las condiciones del programa.",
+    "en": "Duration specified by the program’s terms."
+  },
+  "settings.pricing.bbDesc.label": {
+    "es": "Descripción del contrato",
+    "en": "Contract description"
+  },
+  "settings.pricing.bbDesc.help": {
+    "es": "Copia la descripción que genera la página del Buyback.",
+    "en": "Copy the description generated by the Buyback website."
+  },
+  "settings.pricing.bbSpecial.label": {
+    "es": "Excepciones por Item",
+    "en": "Item exceptions"
+  },
+  "settings.pricing.bbSpecial.help": {
+    "es": "Una regla por línea: Nombre = comisión total en %, o no para excluir el Item.",
+    "en": "One rule per line: Name = total fee in %, or no to exclude the Item."
+  },
+  "settings.pricing.discOn.label": {
+    "es": "Comparar venta a jugador",
+    "en": "Compare player sale"
+  },
+  "settings.pricing.discOn.help": {
+    "es": "Sin Sales Tax ni envío en esta proyección. Se recomienda solo si faltan otras rutas.",
+    "en": "No Sales Tax or freight in this projection. Recommended only when other routes are unavailable."
+  },
+  "settings.pricing.discBase.label": {
+    "es": "Referencia de precio",
+    "en": "Price reference"
+  },
+  "settings.pricing.discBase.help": {
+    "es": "La app usa esta base para estimar la oferta WTS. No conoce ofertas privadas.",
+    "en": "The app uses this basis to estimate the WTS offer. Private offers are unknown."
+  },
+  "settings.pricing.discPct.label": {
+    "es": "Precio pedido · % de la base",
+    "en": "Asking price · % of basis"
+  },
+  "settings.pricing.discPct.help": {
+    "es": "Importe que propondrías al comprador respecto a la referencia elegida.",
+    "en": "Amount you would ask the buyer for, relative to the chosen reference."
+  },
+  "settings.pricing.discDays.label": {
+    "es": "Plazo estimado · días",
+    "en": "Estimated wait · days"
+  },
+  "settings.pricing.discDays.help": {
+    "es": "Se usa para comparar la espera. No presupone un comprador disponible.",
+    "en": "Used to compare waiting times. It does not assume an available buyer."
+  },
+  "settings.pricing.discLoc.label": {
+    "es": "Lugar de entrega",
+    "en": "Delivery location"
+  },
+  "settings.pricing.discLoc.help": {
+    "es": "Ubicación propuesta para el contrato de venta.",
+    "en": "Suggested location for the sale contract."
+  },
+  "settings.pricing.group0.title": {
+    "es": "Ajustes de cotización",
+    "en": "Quote adjustments"
+  },
+  "settings.pricing.group0.subtitle": {
+    "es": "Jita y {market}",
+    "en": "Jita and {market}"
+  },
+  "settings.pricing.group0.intro": {
+    "es": "Variación aplicada a los precios de referencia antes de comparar rutas.",
+    "en": "Variation applied to reference prices before comparing routes."
+  },
+  "settings.pricing.group1.title": {
+    "es": "Órdenes de venta",
+    "en": "Sell orders"
+  },
+  "settings.pricing.group1.subtitle": {
+    "es": "Precio, rapidez y seguimiento",
+    "en": "Price, speed and follow-up"
+  },
+  "settings.pricing.group1.intro": {
+    "es": "Estas reglas cambian el precio propuesto o la preferencia entre orden y venta inmediata.",
+    "en": "These rules change the suggested price or the preference between a listing and immediate sale."
+  },
+  "settings.pricing.group2.title": {
+    "es": "Precios en {market}",
+    "en": "Prices in {market}"
+  },
+  "settings.pricing.group2.subtitle": {
+    "es": "Reglas por tipo de Item",
+    "en": "Rules by Item type"
+  },
+  "settings.pricing.group2.intro": {
+    "es": "Son estimaciones locales. Un precio manual del Item prevalece sobre la regla general.",
+    "en": "These are local estimates. An Item’s manual price takes priority over the general rule."
+  },
+  "settings.pricing.group3.title": {
+    "es": "Hielo",
+    "en": "Ice"
+  },
+  "settings.pricing.group3.subtitle": {
+    "es": "Precios y tiempos específicos",
+    "en": "Specific prices and waiting times"
+  },
+  "settings.pricing.group3.intro": {
+    "es": "Las reglas de hielo y la reducción del valor refinado afectan conceptos distintos.",
+    "en": "Ice rules and the refined-value reduction affect different concepts."
+  },
+  "settings.pricing.group4.title": {
+    "es": "Buyback de la alianza",
+    "en": "Alliance Buyback"
+  },
+  "settings.pricing.group4.subtitle": {
+    "es": "Pago del programa y contrato",
+    "en": "Program payment and contract"
+  },
+  "settings.pricing.group4.intro": {
+    "es": "La comisión y las excepciones calculan el pago; los demás campos preparan el contrato.",
+    "en": "The fee and exceptions determine payment; the other fields prepare the contract."
+  },
+  "settings.pricing.group5.title": {
+    "es": "Venta a jugador",
+    "en": "Player sale"
+  },
+  "settings.pricing.group5.subtitle": {
+    "es": "Precio de referencia para comparar",
+    "en": "Reference price for comparison"
+  },
+  "settings.pricing.group5.intro": {
+    "es": "Permite comparar la proyección WTS; el precio y el plazo son los que tú configuras.",
+    "en": "Compares the WTS projection using the price and waiting time you configure."
   }
 }

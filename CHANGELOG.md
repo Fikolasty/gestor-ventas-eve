@@ -1,3 +1,10 @@
+## v1.0.175 — Ajustes r5 y sincronización de personaje — candidata
+
+- Precios y ventas / Envío y reproceso con dos columnas, números compactos y cabeceras pulsables; ES/EN y Dark/Light.
+- ESI conserva niveles activos por material, actualiza Advanced Broker Relations y permite autorizar standings/implantes.
+- Fallos, logout y ediciones manuales durante consultas se manejan sin inventar datos; tasas personalizadas no muestran un falso nivel.
+- Publicación y verificación remota pendientes. Auditoría: docs/ESI_SETTINGS_AUDIT_175.md.
+
 ## v1.0.174 — corrección de márgenes y desbordamiento — LIVE certificada
 
 - Corrige hilos dobles y márgenes planos: trazos únicos, sangría del Item al panel y del header al contenido.

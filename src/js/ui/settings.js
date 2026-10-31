@@ -298,21 +298,30 @@ function mmUpdateSettingsSkillNotes(){
     cAbr:tx('settings.skillAbrNote',{level:level('cAbr')}),
     skRep:tx('settings.skillRepNote',{level:level('skRep'),bonus:level('skRep')*3}),
     skRepE:tx('settings.skillRepENote',{level:level('skRepE'),bonus:level('skRepE')*2}),
-    skOre:tx('settings.skillOreNote',{level:level('skOre'),bonus:level('skOre')*2})
+    skOre:tx(esiProcessingSkills?'settings.skillOreEsiNote':'settings.skillOreNote',{level:level('skOre'),bonus:level('skOre')*2,skill:ORE_SKILL[resolveOre($('rOre')?.value||'Monazite')?.base]||'Ice Processing'})
   };
+  if($('skAcc').value==='x')notes.skAcc=tx('settings.skillCustomNote');
   for(const [id,value] of Object.entries(notes)){
     const el=document.querySelector('#settings [data-skill-note="'+id+'"]');
     if(el&&el.textContent!==value)el.textContent=value;
   }
+  for(const id of ['cStdFac','cStdCorp','refImp']){
+    const native=$(id),help=native?.closest('.st-f')?.querySelector('small');if(!help)continue;
+    let badge=help.querySelector('.mm-setting-source');
+    if(!badge){badge=document.createElement('span');badge.className='mm-setting-source';help.append(badge);}
+    badge.textContent=' · '+tx(native.dataset.mmSettingSource==='esi'?'settings.sourceEsi':'settings.sourceManual');
+  }
 }
 window.mmUpdateSettingsSkillNotes=mmUpdateSettingsSkillNotes;
 $('settings').addEventListener('input',event=>{
-  if(event.target.matches('.c5c-skills select,#cTax,#cBroker,#cStdFac,#cStdCorp'))queueMicrotask(mmUpdateSettingsSkillNotes);
+  if(event.target.matches('.c5c-skills select,#cTax,#cBroker,#cStdFac,#cStdCorp,#refImp'))queueMicrotask(mmUpdateSettingsSkillNotes);
 });
 $('settings').addEventListener('change',event=>{
-  if(event.target.matches('.c5c-skills select,#cTax,#cBroker,#cStdFac,#cStdCorp'))queueMicrotask(mmUpdateSettingsSkillNotes);
+  if(event.target.matches('.c5c-skills select,#cTax,#cBroker,#cStdFac,#cStdCorp,#refImp'))queueMicrotask(mmUpdateSettingsSkillNotes);
 });
-mmUpdateSettingsSkillNotes();
+// Initial render runs before the Skills bridge is assembled; defer its first
+// read until all shared skill state has been initialized.
+queueMicrotask(mmUpdateSettingsSkillNotes);
 
 // The two read-only-layout skill/tax grids are always open; the remaining
 // Settings groups keep their original drawer behavior.
@@ -384,7 +393,7 @@ function enhance(native,id,get,set,min){
  const add=document.createElement('button');add.type='button';add.className='eve-sk-add';
  const minus=document.createElement('button');minus.type='button';minus.className='eve-sk-minus';minus.textContent='−';minus.setAttribute('aria-label','Bajar un nivel');minus.title='Bajar un nivel';
  const marks=[];
- function draw(){const lv=get();const locked=min===0&&books[id]===false&&lv===0;marks.forEach((b,i)=>{const v=i+1;b.className='eve-sk-pip'+(locked?' locked':v<=lv?' trained':'');b.disabled=v<min;b.setAttribute('aria-pressed',String(lv===v));b.title='Nivel '+v});rank.textContent=locked?'—':lv+'/5';add.className='eve-sk-add'+(locked?' book':'');add.textContent=locked?'▣':'+';add.title=locked?'Adquirir skillbook':lv===5?'Nivel máximo':'Subir habilidad';add.disabled=lv===5&&!locked;minus.disabled=lv<=min;minus.title=lv<=min?'Nivel mínimo':'Bajar a nivel '+(lv-1);if(id!=='mn-rank'){const card=native.closest('.c5c-skill-card');if(card){card.dataset.skillSource=native.dataset.mmSkillSource||'manual';const badge=card.querySelector('.c5c-skill-source');if(badge)badge.textContent=typeof tx==='function'?tx(native.dataset.mmSkillSource==='esi'?'settings.sourceEsi':'settings.sourceManual'):(native.dataset.mmSkillSource==='esi'?'ESI':'Manual');}}}
+ function draw(){const lv=get();const locked=min===0&&books[id]===false&&lv===0;marks.forEach((b,i)=>{const v=i+1;b.className='eve-sk-pip'+(locked?' locked':v<=lv?' trained':'');b.disabled=v<min;b.setAttribute('aria-pressed',String(lv===v));b.title='Nivel '+v});rank.textContent=locked||native.value==='x'?'—':lv+'/5';add.className='eve-sk-add'+(locked?' book':'');add.textContent=locked?'▣':'+';add.title=locked?'Adquirir skillbook':lv===5?'Nivel máximo':'Subir habilidad';add.disabled=lv===5&&!locked;minus.disabled=lv<=min;minus.title=lv<=min?'Nivel mínimo':'Bajar a nivel '+(lv-1);if(id!=='mn-rank'){const card=native.closest('.c5c-skill-card');if(card){card.dataset.skillSource=native.dataset.mmSkillSource||'manual';const badge=card.querySelector('.c5c-skill-source');if(badge)badge.textContent=typeof tx==='function'?tx(native.dataset.mmSkillSource==='esi'?'settings.sourceEsi':'settings.sourceManual'):(native.dataset.mmSkillSource==='esi'?'ESI':'Manual');}}}
  for(let i=1;i<=5;i++){const b=document.createElement('button');b.type='button';b.title='Elegir nivel '+i;b.setAttribute('aria-label','Nivel '+i);b.addEventListener('click',()=>{books[id]=true;set(i);draw()});marks.push(b);p.append(b)}
  add.addEventListener('click',()=>{books[id]=true;localStorage.setItem(store,JSON.stringify(books));set(Math.min(5,Math.max(min,get()+1)));draw()});
  minus.addEventListener('click',()=>{if(get()<=min)return;set(Math.max(min,get()-1));draw()});
@@ -396,7 +405,7 @@ function enhance(native,id,get,set,min){
   badge.className='c5c-skill-source';
   native.closest('.c5c-skill-card')?.append(badge);
  }
- native.addEventListener('change',draw);
+ native.addEventListener('change',draw);native.addEventListener('input',draw);
  draw();
  }
 function enhanceSettings(){ids.forEach(id=>{const n=document.getElementById(id);if(!n||n.dataset.eveDone)return;enhance(n,id,()=>Number(n.value)||0,v=>{n.dataset.mmSkillSource='manual';n.value=String(v);n.dispatchEvent(new Event('input',{bubbles:true}));n.dispatchEvent(new Event('change',{bubbles:true}))},0)})}
@@ -419,3 +428,38 @@ enhanceSettings(); // The original Settings controls already exist before the bu
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',mountSkillLevels,{once:true});
 else mountSkillLevels();
 })();
+
+// r5: the approved compact Settings composition. Reparent the existing controls;
+// never clone native nodes, listeners or calculation state.
+const MM_PRICING_FIELDS=["cSkInst", "cSkOrd", "cSkNul", "cUnderTk", "cBaitTk", "cSpreadTk", "cUnder", "cRelists", "qdOn", "qdMax", "cTick", "cNonMod", "cBulkNull", "cMargin", "cNullDays", "cProd", "iceOn", "iceNull", "iceDisc", "iceJita", "iceDays", "iceRefLoss", "bbOn", "bbTax", "bbBase", "bbAvail", "bbLoc", "bbExp", "bbDesc", "bbSpecial", "discOn", "discBase", "discPct", "discDays", "discLoc"];
+function mmUpdatePricingCopy(){
+  const host=$('mm-settings-panel-2');if(!host)return;
+  const args={market:nullSystem()};
+  host.querySelectorAll('fieldset.st').forEach((f,i)=>{
+    const key='settings.pricing.group'+i+'.',title=f.querySelector('.st-tt'),sub=f.querySelector('.st-sum');
+    title.replaceChildren(document.createTextNode(tx(key+'title',args)),sub);
+    sub.textContent=tx(key+'subtitle',args);f.querySelector(':scope>.st-i').textContent=tx(key+'intro',args);
+  });
+  MM_PRICING_FIELDS.forEach(id=>{
+    const field=$(id)?.closest('label'),label=field?.querySelector('.st-l');if(!label)return;
+    const key='settings.pricing.'+id+'.',check=label.querySelector('input[type=checkbox]');
+    if(check)label.replaceChildren(check,document.createTextNode(' '+tx(key+'label',args)));
+    else label.textContent=tx(key+'label',args);
+    const help=field.querySelector('small');if(help)help.textContent=tx(key+'help',args);
+  });
+}
+function mmMountCompactSettings(){
+  document.body.classList.add('mm-settings-compact');
+  for(const [id,split]of [['mm-settings-panel-2',3],['mm-settings-panel-3',2]]){
+    const host=$(id),groups=[...host.querySelectorAll('fieldset.st')];
+    for(const nodes of [groups.slice(0,split),groups.slice(split)]){
+      const lane=document.createElement('div');lane.className='mm-settings-lane';nodes.forEach(n=>lane.append(n));host.append(lane);
+    }
+    host.querySelectorAll('select,input[type=text]').forEach(n=>n.closest('label')?.classList.add('mm-settings-wide-field'));
+  }
+  $('bbSpecial').closest('label').classList.add('mm-settings-special');
+  // Removing these actions applies to Settings only; Reset remains independent.
+  $('stOpenAll').closest('.st-tools-group').hidden=true;
+  mmUpdatePricingCopy();
+}
+mmMountCompactSettings();

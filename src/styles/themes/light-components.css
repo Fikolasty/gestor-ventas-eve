@@ -330,3 +330,6 @@ html.light #pSum .pk-tools .pk-flt .pk-fb.on{background:var(--surface-panel)!imp
   html.light #pSum .mm-plan-drawer-body>#pkResult{border-top:0!important}
   html.light #pSum .mm-plan-drawer-body>#pkSpeedBox,html.light #pSum .mm-plan-drawer-body>#vFinanceDetails{border-left:0!important;border-top:1px solid var(--line2)!important}
 }
+
+/* r5 Settings: final Light colors only; identical geometry to Dark. */
+html.light body.mm-settings-compact #settings :is(#mm-settings-panel-2,#mm-settings-panel-3) fieldset.st:not(.closed),html.light body.mm-settings-compact #settings .st-wrap>.modern-tabs{background:var(--void)!important}

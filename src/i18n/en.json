@@ -2306,5 +2306,6 @@
   "Accounting actualiza Sales Tax; Broker Relations y los standings ajustan el Broker de Jita. Puedes introducir las tasas que muestra EVE.": "Accounting updates Sales Tax; Broker Relations and standings adjust the Jita Broker fee. You can enter the rates shown in EVE.",
   "Usa la tasa efectiva que muestra EVE.": "Use the effective rate shown in EVE.",
   "−0,03 p.p. por punto.": "−0.03 pp per point.",
-  "−0,02 p.p. por punto.": "−0.02 pp per point."
+  "−0,02 p.p. por punto.": "−0.02 pp per point.",
+  "ESI sincroniza habilidades y niveles por material. Puedes simular otros niveles manualmente.": "ESI syncs skills and material-specific levels. You can simulate other levels manually."
 }

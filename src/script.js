@@ -101,6 +101,7 @@ document.getElementById('nullMarketMode')?.addEventListener('change',e=>{
 // This only edits explicitly marked elements, not Nullsec security levels,
 // inventory names, internal route keys, calculation formulas, or caches.
 function syncMarketCopy(){
+  if(document.body.classList.contains('mm-settings-compact'))mmUpdatePricingCopy();
   const hub=nullSystem(),en=S.lang==='en';
   document.querySelectorAll('[data-market-system]').forEach(node=>{if(node.textContent!==hub)node.textContent=hub;});
   const ship=document.getElementById('shipLab'),margin=document.getElementById('rtM'),input=document.getElementById('fImpM');
