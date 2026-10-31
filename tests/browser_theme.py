@@ -890,6 +890,7 @@ class ThemeBrowserTests(unittest.TestCase):
             "De tu primera barge a tu primera Omega")
 
     def test_refiner_profile_tracks_skills_implant_and_saved_fee(self):
+        self.page.evaluate("['skRep','skRepE','skOre'].forEach(id=>{$(id).value='5';$(id).dispatchEvent(new Event('change',{bubbles:true}))});paintRefineryProfile()")
         from playwright.sync_api import expect
         fee=self.page.locator("#rTax")
         expect(fee).to_have_value("0.5")
@@ -1205,6 +1206,7 @@ class ThemeBrowserTests(unittest.TestCase):
                 self.page.screenshot(path=str(out/f'pilot-{language}-{width}.png'),animations='disabled')
 
     def test_b5_cost_sources_and_refining_answer_are_progressive_bilingual_and_responsive(self):
+        self.page.evaluate("['skAcc','skBR'].forEach(id=>{$(id).value='5';$(id).dispatchEvent(new Event('change',{bubbles:true}))})")
         from playwright.sync_api import expect
         for language in ('es', 'en'):
             self.page.evaluate('setLang', language)

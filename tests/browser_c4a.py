@@ -157,8 +157,8 @@ class C4aContractTests(unittest.TestCase):
         self.assertIsNone(
             self.page.evaluate("localStorage.getItem('gestorVentas.ajustes.v1')")
         )
-        self.assertEqual(self.page.locator("#cTax").input_value(), "3.375")
-        self.assertAlmostEqual(self.page.evaluate("C.tax"), 0.03375)
+        self.assertEqual(self.page.locator("#cTax").input_value(), "7.5")
+        self.assertAlmostEqual(self.page.evaluate("C.tax"), 0.075)
 
 
 if __name__ == "__main__":

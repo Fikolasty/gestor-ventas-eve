@@ -1,3 +1,10 @@
+## v1.0.176 — dropdowns, habilidades iniciales y reloj — candidata
+
+- Mercado principal abre sus cuatro opciones sin recorte, con top layer y teclado/foco conservados.
+- Primera visita: seis habilidades en cero, tasas coherentes y ajustes persistidos por navegador conservados.
+- Reloj discreto: EVE UTC24h y Local12h, zona del navegador, sin IP ni ubicación.
+- Gate remoto y publicación pendientes; continuidad en docs/HANDOFF_176.md.
+
 ## v1.0.175 — Ajustes r5 y sincronización de personaje — LIVE certificada
 
 - Precios y ventas / Envío y reproceso con dos columnas, números compactos y cabeceras pulsables; ES/EN y Dark/Light.

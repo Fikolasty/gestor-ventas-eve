@@ -6,6 +6,8 @@ from playwright.sync_api import sync_playwright
 
 ROOT=Path(__file__).resolve().parents[1]
 FIXTURE="""() => {
+ // This fixture tests a non-optimal Buyback alternative at trained market skills.
+ ['skAcc','skBR'].forEach(id=>{$(id).value='5';$(id).dispatchEvent(new Event('change',{bubbles:true}))});
  S.loading=false;S.flip=false;S.planMode=null;C.shipOn=true;C.bb.on=true;C.disc.on=true;
  S.items=[{name:'Sample module A',qty:50,srcQty:50,ref:12000000,m3u:50,refMan:null,m3uMan:null,checks:[],skew:0,jita:{buy:11000000,sell:12000000,topBuy:11000000,topSell:12000000,vol:50}},
  {name:'Sample module B',qty:20,srcQty:20,ref:28000000,m3u:100,refMan:null,m3uMan:null,checks:[],skew:0,jita:{buy:26000000,sell:28000000,topBuy:26000000,topSell:28000000,vol:100}}];

@@ -282,6 +282,9 @@ $('themeLight').addEventListener('change',e=>{document.documentElement.classList
   const guide=document.querySelector('.side-i[data-panel="help"]');
   const topActions=document.createElement('div');
   topActions.className='mm-top-actions';
+  const clock=document.createElement('div');clock.id='headerClock';clock.className='mm-header-clock';clock.setAttribute('aria-live','off');
+  clock.innerHTML='<span>EVE: <time id="eveClock">--:--</time></span><span>Local: <time id="localClock">--:--</time></span>';
+  topActions.append(clock);
   if(settings){settings.classList.add('top-header-action');settings.setAttribute('aria-label','Ajustes');settings.title='Ajustes';topActions.append(settings);}
   if(guide){guide.classList.add('top-guide-action');guide.setAttribute('aria-label','Guía de uso');guide.title='Guía de uso';topActions.append(guide);}
   const profile=document.createElement('div');profile.className='mm-profile-row';
@@ -348,3 +351,24 @@ $('themeLight').addEventListener('change',e=>{document.documentElement.classList
   header.insertBefore(bar,topActions);
 })();;
 
+
+// EVE uses UTC. Local uses the browser zone (including DST), never IP/location.
+let headerClockTimer=0;
+function paintHeaderClock(now=new Date()){
+  const utc=new Intl.DateTimeFormat('en-GB',{timeZone:'UTC',hour:'2-digit',minute:'2-digit',hourCycle:'h23'});
+  const local=new Intl.DateTimeFormat('en-US',{hour:'numeric',minute:'2-digit',hour12:true});
+  for(const [id,format]of [['eveClock',utc],['localClock',local]]){
+    const node=$(id);if(!node)continue;
+    const text=format.format(now).replace(/[\u00a0\u202f]/g,' ');if(node.textContent!==text)node.textContent=text;
+    node.dateTime=now.toISOString();
+  }
+  if($('headerClock'))$('headerClock').title='EVE: UTC · Local: '+local.resolvedOptions().timeZone;
+}
+function tickHeaderClock(){
+  clearTimeout(headerClockTimer);paintHeaderClock();
+  if(!document.hidden)headerClockTimer=setTimeout(tickHeaderClock,60000-Date.now()%60000+30);
+}
+document.addEventListener('visibilitychange',tickHeaderClock);
+window.addEventListener('focus',tickHeaderClock);
+window.addEventListener('pagehide',()=>clearTimeout(headerClockTimer));
+tickHeaderClock();

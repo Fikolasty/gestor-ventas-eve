@@ -226,16 +226,35 @@ function initMarketPicker(){
   const picker=$('marketPicker'),select=$('nullMarketMode'),
         trigger=$('marketTrigger'),menu=$('marketOptions');
   if(!picker||!select||!trigger||!menu||picker.dataset.ready)return;
+  // Native fallback on browsers without the top layer. A larger z-index cannot
+  // escape a clipped Settings drawer or a filter-created stacking context.
+  if(typeof menu.showPopover!=='function')return;
+  menu.popover='manual';
   picker.dataset.ready='true';
   const options=[...menu.querySelectorAll('[data-market-option]')];
   const close=(restoreFocus=false)=>{
+    if(menu.matches(':popover-open'))menu.hidePopover();
     menu.hidden=true;trigger.setAttribute('aria-expanded','false');
     picker.classList.remove('is-open');
-    if(restoreFocus)trigger.focus();
+    if(restoreFocus)trigger.focus({preventScroll:true});
+  };
+  const place=()=>{
+    const a=trigger.getBoundingClientRect(),v=window.visualViewport;
+    const left=v?.offsetLeft||0,top=v?.offsetTop||0,w=v?.width||innerWidth,h=v?.height||innerHeight,pad=8,gap=5;
+    if(a.bottom<=top||a.top>=top+h||!trigger.getClientRects().length){close(false);return;}
+    const width=Math.min(a.width,w-pad*2);
+    Object.assign(menu.style,{position:'fixed',inset:'auto',margin:'0',minWidth:'0',width:width+'px',maxHeight:'290px'});
+    const wanted=Math.min(menu.scrollHeight,290),below=Math.max(0,top+h-pad-a.bottom-gap),above=Math.max(0,a.top-top-pad-gap);
+    const up=below<wanted&&above>below,available=up?above:below;
+    menu.style.maxHeight=Math.min(290,available)+'px';
+    const height=menu.getBoundingClientRect().height;
+    menu.style.left=Math.max(left+pad,Math.min(a.left,left+w-pad-width))+'px';
+    menu.style.top=(up?a.top-gap-height:a.bottom+gap)+'px';
   };
   const open=(focusSelected=false)=>{
     menu.hidden=false;trigger.setAttribute('aria-expanded','true');
     picker.classList.add('is-open');
+    menu.showPopover();place();
     if(focusSelected){
       const selected=options.find(x=>x.dataset.marketOption===select.value)||options[0];
       selected.focus();
@@ -282,6 +301,11 @@ function initMarketPicker(){
   select.addEventListener('change',syncMarketPicker);
   // Keep the popup attached to its trigger when modal scrolling changes layout.
   window.addEventListener('resize',()=>{if(!menu.hidden)close(false);});
+  window.visualViewport?.addEventListener('resize',()=>{if(!menu.hidden)close(false);});
+  window.addEventListener('scroll',event=>{if(!menu.hidden&&!menu.contains(event.target))place();},true);
+  const visibility=new MutationObserver(()=>{if(!menu.hidden&&!trigger.getClientRects().length)close(false);});
+  visibility.observe($('settings'),{subtree:true,attributes:true,attributeFilter:['hidden','class']});
+  window.addEventListener('pagehide',()=>visibility.disconnect(),{once:true});
 }
 initMarketPicker();
 window.mmSyncMarketPicker=syncMarketPicker;

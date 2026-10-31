@@ -103,11 +103,11 @@ class ESISettingsTests(unittest.TestCase):
   self.assertAlmostEqual(s['tax'],.075);self.assertAlmostEqual(s['broker'],.03)
  def test_invalid_skill_response_preserves_manual_values_and_reports_partial_sync(self):
   self.skills_override=[{'skill_id':IDS['Accounting'],'active_skill_level':9}];self.boot()
-  self.assertEqual(self.page.locator('#skAcc').input_value(),'5')
+  self.assertEqual(self.page.locator('#skAcc').input_value(),'0')
   self.assertIsNone(self.page.locator('#skAcc').get_attribute('data-mm-skill-source'))
   self.assertIn('incompleta',self.page.locator('#eveLoginStatus').inner_text())
  def test_incomplete_catalog_applies_none_of_the_skills(self):
-  self.catalog_missing=True;self.boot();self.assertEqual(self.page.locator('#skAcc').input_value(),'5');self.assertEqual(self.state()['abr'],0)
+  self.catalog_missing=True;self.boot();self.assertEqual(self.page.locator('#skAcc').input_value(),'0');self.assertEqual(self.state()['abr'],0)
  def test_missing_permissions_preserves_optional_values_and_offers_authorization(self):
   self.scopes=[SKILL];self.boot()
   self.assertFalse(any('/standings/' in u or '/implants/' in u for u in self.requests))
