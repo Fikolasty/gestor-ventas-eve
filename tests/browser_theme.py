@@ -1206,7 +1206,7 @@ class ThemeBrowserTests(unittest.TestCase):
                 self.page.screenshot(path=str(out/f'pilot-{language}-{width}.png'),animations='disabled')
 
     def test_b5_cost_sources_and_refining_answer_are_progressive_bilingual_and_responsive(self):
-        self.page.evaluate("['skAcc','skBR'].forEach(id=>{$(id).value='5';$(id).dispatchEvent(new Event('change',{bubbles:true}))})")
+        self.page.evaluate("['skAcc','skBR'].forEach(id=>{$(id).value='5';$(id).dispatchEvent(new Event('change',{bubbles:true}))});refreshNow()")
         from playwright.sync_api import expect
         for language in ('es', 'en'):
             self.page.evaluate('setLang', language)
