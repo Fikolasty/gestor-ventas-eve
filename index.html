@@ -7,7 +7,7 @@
 <meta name="referrer" content="no-referrer">
 <title>Market Moves+ · SIGMA GRINDSET</title>
 <style>
-/* ================= Market Moves+ v1.0.178 =================
+/* ================= Market Moves+ v1.0.179 =================
    Paleta: azul de base, naranja = acción, verde/rojo = ganancia/pérdida.
    Sin backdrop-filter: el vidrio se finge con rgba + bordes. */
 *{box-sizing:border-box;margin:0;padding:0}
@@ -6065,8 +6065,12 @@ body:is([data-mm-view="settings"],[data-mm-view="help"]) .top-slot>.panel{
 #settings .modern-panel .st-f{background:var(--surface-card)!important;border-color:var(--line2)!important}
 #settings .modern-panel .st-f .st-l{font:600 .78rem/1.4 var(--f-ui)!important}
 #help .modern-panel .hp,#help .modern-panel .hp-t{
-  display:grid!important;grid-template-columns:minmax(0,1fr)!important;gap:10px!important
+  display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:12px!important
 }
+#help .modern-panel .hp-t:has(>div:only-child){grid-template-columns:minmax(0,1fr)!important}
+#help .modern-panel .hp-t [data-market-system]{display:inline!important;font:inherit!important;color:inherit!important;margin:0!important}
+#help .modern-panel .hp-t>div>b{display:block}
+@media(max-width:850px){#help .modern-panel .hp,#help .modern-panel .hp-t{grid-template-columns:minmax(0,1fr)!important}}
 #help .modern-panel .hp-c,#help .modern-panel .hp-t>div{
   min-width:0!important;border:1px solid var(--line2)!important;
   background:var(--surface-card)!important;border-radius:10px!important;
@@ -9086,10 +9090,10 @@ Contraband Freight = no</textarea><small>Una regla por línea: Nombre = tax tota
         <p>Selecciona los items, copia con <b>Ctrl+C</b> y pégalos en el recuadro de inicio con <b>Ctrl+V</b>. Al pegar aparece la Tasación (Buy, Split y Sell de Jita, como Janice).</p></div>
       <div class="hp-c"><h3><span class="hp-n">2</span>Espera los Precios</h3>
         <p>Los precios de mercado se consultan mediante ESI de EVE Online. Espera a que termine la actualización y revisa los avisos de items con cotizaciones incompletas.</p>
-        <p>Si un item tiene avisos (volumen distinto, precio atípico, pocas compras), ábrelo en el <b>Listado de Items Registrados</b> para revisarlo antes de publicar.</p></div>
+        <p>Si un item tiene avisos (volumen distinto, precio atípico, pocas compras), ábrelo en el <b data-i18n="freight.heading">Detalle por Item</b> para revisarlo antes de publicar.</p></div>
       <div class="hp-c"><h3><span class="hp-n">3</span>Lee el Plan</h3>
         <p><b>Resultado</b> muestra lo que recibirías con el plan elegido y cuánto más (o menos) deja frente a la alternativa simple. En ELIGE TU PLAN puedes comparar el plan óptimo con las demás rutas disponibles.</p>
-        <p>El plan más rentable combina rutas por item y descuenta impuestos, reproceso y el coste total compartido del courier. Si dos combinaciones dan prácticamente el mismo neto, se prefiere la más rápida. El tiempo de venta es estimado, no garantizado.</p><p>Pulsa <b>ABRIR PASOS A SEGUIR</b> para consultar los destinos y contratos de la ruta elegida.</p></div>
+        <p>El plan más rentable combina rutas por item y descuenta impuestos, reproceso y el coste total compartido del courier. Si dos combinaciones dan prácticamente el mismo neto, se prefiere la más rápida. El tiempo de venta es estimado, no garantizado.</p><p>Pulsa <b data-i18n="verdict.showSteps">Ver pasos para vender</b> para consultar los destinos y contratos de la ruta elegida.</p></div>
       <div class="hp-c"><h3><span class="hp-n">4</span>Ajusta a tu Medida</h3>
         <p>En Ventas puedes elegir Vender Items o Comercio Jita. Usa Ajustes para configurar tu mercado, habilidades, impuestos, Buyback, refinería, márgenes y envío.</p>
         <p>Los Ajustes y el tema se guardan en este navegador. El inventario pegado no se conserva al recargar.</p></div>
@@ -9396,13 +9400,13 @@ Contraband Freight = no</textarea><small>Una regla por línea: Nombre = tax tota
 <button type="button" class="totop" id="toTop" aria-label="Volver arriba" title="Volver arriba (Inicio)" hidden><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 14l6-6 6 6"/></svg></button>
 <footer class="foot">
   <p class="foot-sec"><span class="ic i-lock" aria-hidden="true"></span>Tu inventario no se guarda: al cerrar o recargar se borra. Solo tus Ajustes quedan en este navegador.</p>
-  <div class="foot-by">Creado por <b>Fiko McGivert</b> · Vanguardia DR · SIGMA GRINDSET · <span class="ver">v1.0.178</span></div>
+  <div class="foot-by">Creado por <b>Fiko McGivert</b> · Vanguardia DR · SIGMA GRINDSET · <span class="ver">v1.0.179</span></div>
 </footer>
 
 <script>
 'use strict';
 /* ============================================================
-   Market Moves+ v1.0.178 — SIGMA GRINDSET / Vanguardia DR
+   Market Moves+ v1.0.179 — SIGMA GRINDSET / Vanguardia DR
    Flujo:  pegado → items → carga (ESI: precios, volúmenes, historial) → verificación → plan → vista
      1. Pegado      parsePaste(): parser posicional de columnas de EVE (Name · Quantity · … · Volume · Est. Price).
      2. Carga       esiItems(): trae todo lo que falta; mientras carga, refresh() NO pinta (S.loading).
