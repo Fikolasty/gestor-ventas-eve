@@ -1,6 +1,6 @@
 # DSS — Design Standards & Session Handoff · Market Moves+
 
-**Última actualización:** 2026-10-30 · **v1.0.171 LIVE CERTIFICADA** (§83): cobertura y fecha de consulta en Tasación. Fuente ce2aa05c, build736a793d; cuatro Actions SUCCESS,87 Chromium y HTML público/local/GitHub idénticos. **Listado v172: implementación y publicación autorizadas; candidata local (§85)**. Última LIVE todavía v171; kit activo docs/HANDOFF_LEDGER_172.md.
+**Última actualización:** 2026-10-30 · **v1.0.172 LIVE CERTIFICADA** (§85): Listado con Lote/Unidad, copia discreta y detalle conservado. Fuente3aa4792f, buildcf6f4e5e; cuatro Actions SUCCESS,90 Chromium y HTML público/local/GitHub idénticos. Kit docs/HANDOFF_LEDGER_172.md.
 
 **Continuidad de versión:** la release anterior v1.0.126 (P0 Paladin + A+B.1) quedó verificada con fuente `205ec9fa`, build `c716f7aa`, Actions/Pages `40215891182`, blob `9601d5f8`; ver §9. La etapa B.2 se implementó inicialmente **local** sobre `dcdb6195` (§10) y posteriormente se publicó tras autorización expresa y QA (§11). El usuario concedió también **autorización continua de publicación de mejoras incrementales bien probadas**, registrada en §1.8.
 
@@ -1184,3 +1184,8 @@ CSS final compartido src/styles/themes/zz-ledger-table.css cargado explícitamen
 QA local:152 Node,16 Python y ocho suites legacy PASS; cinco focales Chromium PASS, incluida matriz completa Light/Dark y ES/EN, copia sin apertura, orden/mode sin cambio económico, datos ausentes, volumen0.001 y precios largos. Pasada completa90/90 Chromium PASS (118,339s). Las regresiones históricas de activación por fila se actualizan al botón separado aprobado, manteniendo lazy DOM, cuatro paneles, editor, semántica económica, controles44px y rendimiento D.2. Fórmulas, tasas, ESI/SSO, persistencia y permisos intactos. Sin ESI/SSO real E2E.
 
 Estado: candidata local autorizada; pendiente gate Chromium completo, publicación exclusiva Fiko/Fikolasty, cuatro Actions, Pages y comparación HTTPS/local/GitHub. Base main4ebf3f78737ca0482a2b258ee47edd911a79e135; última LIVE v171. Kit vigente docs/HANDOFF_LEDGER_172.md.
+
+
+**Cierre LIVE v1.0.172 — 2026-10-30:** fuente Fiko protegida3aa4792fa916da13f3bfeee7287ddbf5dddc5085; build botcf6f4e5e6e5bde9e62fd2a1562c382137d39188f. Cuatro Actions SUCCESS: Versiones41158004073, Build41158004089, Minería41158004071 y Rebuild/Pages41158004208. Compile124408988153 y deploy124409793939 success;90/90 Chromium CI (144,871s),152 Node/16 Python/8 legacy PASS. QA local90/90 Chromium (118,339s),152 Node/16 Python/8 legacy y cinco focales PASS. HTTPS independiente confirma v1.0.172 y HTML público/local canónico/GitHub idénticos:2.496.791 bytes, blob e4f7c3bbe4c83a9a25c14c6e479928297bc9052e. Web https://fikolasty.github.io/gestor-ventas-eve/.
+
+La tabla aprobada y sus controles ya están LIVE. Se preservan cuatro paneles, precios manuales, filtros, avisos, orden, remove, semántica financiera, lazy DOM y rendimiento D.2. Sin cambios en fórmulas, ESI/SSO, permisos ni persistencia; ESI/SSO real E2E no probado. Las capturas revisadas son fixtures locales, no cotizaciones reales. Este cierre sustituye estados de candidata de §85 y pendientes históricos de §84. El cierre documental puede avanzar main sin modificar el HTML certificado. Kit activo docs/HANDOFF_LEDGER_172.md.

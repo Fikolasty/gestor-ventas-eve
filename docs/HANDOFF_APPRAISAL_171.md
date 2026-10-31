@@ -33,3 +33,5 @@ Auditoría de encaje: el Listado vigente muestra ruta seleccionada, precio unita
 Registro de esta aprobación: local, todavía no publicado en GitHub. La siguiente respuesta del propietario debe distinguir aprobación de implementación de esta aprobación visual.
 
 **Sustitución de continuidad (2026-10-30):** el propietario aprobó después aplicar el Listado real y publicar tras pruebas. La limitación de prototipo anterior es histórica. Continuar desde docs/HANDOFF_LEDGER_172.md y DSS§85; candidata172 local, certificación remota pendiente.
+
+**v172 ya LIVE certificada:** fuente3aa4792f/buildcf6f4e5e,4Actions SUCCESS y90Chromium. HTML HTTPS/local/GitHub idéntico e4f7c3bbe4c83a9a25c14c6e479928297bc9052e. Ver kit HANDOFF_LEDGER_172.md y DSS§85; los pendientes de implementación anteriores ya no aplican.

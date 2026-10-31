@@ -970,3 +970,8 @@ El propietario conserva la dirección de listado-simple-copia-r1. Aprobación li
 ## 2026-10-30 — Listado172 implementado, cierre pendiente
 
 Autorización expresa de implementar/publicar tras QA. Tabla sencilla con Lote/Unidad y copia independiente; detalle y controles preservados. DSS§85 y HANDOFF_LEDGER_172.md activos.152Node/16Python/8legacy y cinco focales Chromium PASS;90/90 Chromium completos PASS (118,339s). Publicación Fiko/Actions/Pages/HTTPS pendiente; LIVEv171.
+
+
+**Cierre LIVE v1.0.172 — 2026-10-30:** fuente Fiko protegida3aa4792fa916da13f3bfeee7287ddbf5dddc5085; build botcf6f4e5e6e5bde9e62fd2a1562c382137d39188f. Cuatro Actions SUCCESS: Versiones41158004073, Build41158004089, Minería41158004071 y Rebuild/Pages41158004208. Compile124408988153 y deploy124409793939 success;90/90 Chromium CI (144,871s),152 Node/16 Python/8 legacy PASS. QA local90/90 Chromium (118,339s),152 Node/16 Python/8 legacy y cinco focales PASS. HTTPS independiente confirma v1.0.172 y HTML público/local canónico/GitHub idénticos:2.496.791 bytes, blob e4f7c3bbe4c83a9a25c14c6e479928297bc9052e. Web https://fikolasty.github.io/gestor-ventas-eve/.
+
+La tabla aprobada y sus controles ya están LIVE. Se preservan cuatro paneles, precios manuales, filtros, avisos, orden, remove, semántica financiera, lazy DOM y rendimiento D.2. Sin cambios en fórmulas, ESI/SSO, permisos ni persistencia; ESI/SSO real E2E no probado. Las capturas revisadas son fixtures locales, no cotizaciones reales. Este cierre sustituye estados de candidata de §85 y pendientes históricos de §84. El cierre documental puede avanzar main sin modificar el HTML certificado. Kit activo docs/HANDOFF_LEDGER_172.md.
