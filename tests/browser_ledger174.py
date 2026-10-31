@@ -15,6 +15,7 @@ class Ledger174Tests(unittest.TestCase):
   page.goto((ROOT/'index.html').as_uri(),wait_until='domcontentloaded');page.evaluate(FIXTURE)
   page.evaluate("()=>{$('ledger').open=true}")
   page.locator('[data-ledger-mode=lot]').click()
+  page.add_style_tag(content=':root{--f-ui:Arial,sans-serif!important}')
   out=ROOT/'tests/artifacts/theme';out.mkdir(parents=True,exist_ok=True)
   for lang in ['es','en']:
    page.evaluate('l=>setLang(l)',lang)
@@ -39,7 +40,7 @@ class Ledger174Tests(unittest.TestCase):
        for d in grid.locator(':scope>details[open]').all():
         inset=d.evaluate('e=>e.children[1].getBoundingClientRect().left-e.getBoundingClientRect().left');self.assertGreaterEqual(inset,14)
       sizes.append(page.locator('#ledger').bounding_box()['height'])
-      if width in [1440,820] and lang=='es':page.locator('#ledger').screenshot(path=str(out/f'ledger174-real-r3-{width}-{state}-{"light" if light else "dark"}.png'),animations='disabled')
+      if width in [1440,820] and lang=='es':page.locator('#ledger').screenshot(path=str(out/f'ledger174-real-r4-{width}-{state}-{"light" if light else "dark"}.png'),animations='disabled')
      self.assertAlmostEqual(sizes[0],sizes[1],delta=1,msg=str((lang,width,state)))
   self.assertEqual(errors,[]);page.close()
 if __name__=='__main__':unittest.main()
