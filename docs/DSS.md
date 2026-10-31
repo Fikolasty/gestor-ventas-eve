@@ -1,6 +1,6 @@
 # DSS — Design Standards & Session Handoff · Market Moves+
 
-**Última actualización:** 2026-10-30 · **v1.0.172 LIVE CERTIFICADA** (§85): Listado con Lote/Unidad, copia discreta y detalle conservado. Fuente3aa4792f, buildcf6f4e5e; cuatro Actions SUCCESS,90 Chromium y HTML público/local/GitHub idénticos. Kit docs/HANDOFF_LEDGER_172.md.
+**Última actualización:** 2026-10-31 · **v1.0.174 LIVE CERTIFICADA**: corrección real de sangría, conectores y tabla sin scroll lateral. Fuente e72baf56, build03a6a62d;4Actions/97Chromium PASS y HTTPS idéntico. Kit docs/HANDOFF_LEDGER_174.md.
 
 **Continuidad de versión:** la release anterior v1.0.126 (P0 Paladin + A+B.1) quedó verificada con fuente `205ec9fa`, build `c716f7aa`, Actions/Pages `40215891182`, blob `9601d5f8`; ver §9. La etapa B.2 se implementó inicialmente **local** sobre `dcdb6195` (§10) y posteriormente se publicó tras autorización expresa y QA (§11). El usuario concedió también **autorización continua de publicación de mejoras incrementales bien probadas**, registrada en §1.8.
 
@@ -1297,3 +1297,12 @@ Fuente Fiko protegida7ebe772eabedcd864849334e7cd5ccddeedb4649 (baseb7898e068815c
 
 
 **Gate CI inicial174 detenido:** Rebuild41181585720 pasó96/97Chromium (204,660s); única falla del test nuevo:550,000,000.00ISK no cabe en celda de tres columnas a630px con fuente Linux. Pages se omitió; web sigue173. Se corrige producto: dos columnas hasta800px y wrap de importes completos hasta1200px, sin reducir fuentes ni relajar el test. Focal ahora fuerzaArial como estrés de ancho; capturas reales r4. Pendiente repetir gate.
+
+
+## Cierre LIVE v1.0.174 — 2026-10-31
+
+Corrección real solicitada por el propietario publicada mediante Fiko/Fikolasty. r6 descartada, sin cambios económicos. Fuente inicial7ebe772eabedcd864849334e7cd5ccddeedb4649; corrección de ancho en Linuxe72baf565726240deb25b6344177005e6ad16dc1; build bot03a6a62d0d7ae11c7ad41771ef132c6915480bea. Cuatro Actions SUCCESS:Versiones41182010769,Build41182010806,Minería41182010911 y Rebuild/Pages41182010865. Compile124481170640 y deploy124481997889 success. CI157Node/16Python/97Chromium (218,741s)/8legacy PASS. Gate local final157Node/16Python/97Chromium (209,471s)/8legacy PASS y diez focales posteriores al ajuste de fuentes PASS.
+
+HTTPS independiente confirmó v174 y HTML público/local canónico/GitHub idénticos:2.514.523 bytes,blob a145b513bea2bbac58da9fa2ab202a988dab1cc4. Web https://fikolasty.github.io/gestor-ventas-eve/. Primer intento CI96/97 quedó bloqueado por importe largo a630px; se corrigió CSS y el gate completo posterior97/97 sustituye ese pendiente. No se relajó la regresión de legibilidad. Las capturas reales finales r4 se revisaron en1440 Dark/Light con la misma composición y con fuenteArial de estrés, además de la matriz390/630/820/980/1200/1440; datos sintéticos, no precios ESI vivos.
+
+Cuatro paneles originales2×2 y controles conservados. Cuerpos con sangría desde su header; curvas punteadas con un solo path por columna y sin raíles solapados. Siete columnas en desktop y campos etiquetados adaptables, sin scroll lateral del listado ni fuentes reducidas. No se probó ESI/SSO real extremo a extremo. Última LIVE174; kit activo HANDOFF_LEDGER_174.md. El cierre documental puede avanzar main sin alterar el HTML certificado. Este cierre sustituye candidata y gates pendientes anteriores; no repetir r6 ni extender el patrón fuera del Detalle por Item automáticamente.
