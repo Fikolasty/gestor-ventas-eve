@@ -1,3 +1,9 @@
+## v1.0.172 — Listado sencillo — candidata local
+
+- Columnas Item, Cantidad, Volumen, Buy y Sell; Lote/Unidad para volumen y precios de Jita4-4.
+- Copia discreta por campo y aviso de un segundo; detalle con botón independiente, cuatro paneles y controles originales.
+- Ruta, precio sugerido y neto conservados en detalle; fórmulas, ESI/SSO y persistencia intactos. Publicación pendiente de gates; DSS§85.
+
 ## v1.0.168 — 2026-10-30 [ChatGPT] · Plegado, envío por unidad y copia — LIVE CERTIFICADA
 
 ## v1.0.171 — LIVE certificada

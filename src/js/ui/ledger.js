@@ -63,22 +63,26 @@ function buildLot(o){
   // v102: solo creamos la cabecera para cada item; los controles pesados se construyen bajo demanda.
   // Importante: o.ui.last se actualiza en paintLot() aun con el detalle cerrado.
   const lot=el('article','lot'),head=el('div','lot-head');
-  // The full row is one native keyboard-operable toggle; copy/remove remain
-  // separate actions above its transparent hit area, never nested buttons.
+  // Disclosure is a separate native button so copying any table field never
+  // opens the detail. Copy/remove controls are independent sibling actions.
   const toggle=el('button','lot-open');toggle.type='button';toggle.setAttribute('aria-expanded','false');
   toggle.setAttribute('aria-label',tx('ledger.openItem',{item:o.name}));
-  const nm=el('span','lot-name');nm.append(el('b',null,o.name));const tag=el('span','tag');
+  const nm=el('span','lot-name'),nameCopy=copyBtn(o.name,o.name);nameCopy.classList.add('lot-name-copy');nameCopy.removeAttribute('title');nm.append(el('b'));nm.querySelector('b').append(nameCopy);const tag=el('span','tag');
   const qty=el('span','lot-qty'),dest=el('span','lot-dest');
-  const info=el('span','lot-info'),meta=el('span','lot-meta');meta.append(qty);info.append(nm,meta);
+  const info=el('span','lot-info'),meta=el('span','lot-meta'),headerWarning=el('span','lot-header-warning');headerWarning.hidden=true;meta.append(headerWarning);info.append(nm,meta);
   const route=el('span','lot-route'),routeLabel=el('span','lot-k',tx('ledger.selectedRoute'));
   const routeMain=el('span','lot-route-main');routeMain.append(dest,tag);route.append(routeLabel,routeMain);
   // Both headline amounts have the same quiet, keyboard-accessible copy
   // affordance. They differ only in meaning (unit price vs lot net).
   const pp=el('span','lot-pp'),ppLabel=el('span','lot-k',tx('ledger.lotUnitPrice')),ppB=copyBtn('','—');ppB.classList.add('cp-n');pp.append(ppLabel,ppB);
   const netBox=el('span','lot-financial'),netLabel=el('span','lot-k',tx('ledger.netSales')),net=copyBtn('','—');net.classList.add('lot-net','cp-n');net.disabled=true;netBox.append(netLabel,net);
-  head.append(toggle,info,route,pp,netBox);
+  const marketCell=(key,cls)=>{const cell=el('span','lot-table-cell '+cls),label=el('span','lot-table-label',tx(key)),button=copyBtn('','—');button.removeAttribute('title');cell.append(label,button);return{cell,label,button};};
+  const quantity=marketCell('ledger.quantity','lot-table-quantity'),volume=marketCell('ledger.tableVolume','lot-table-volume'),buy=marketCell('ledger.tableBuy','lot-table-buy'),sell=marketCell('ledger.tableSell','lot-table-sell');
+  head.classList.add('ledger-market-row');head.append(toggle,info,quantity.cell,volume.cell,buy.cell,sell.cell);
+  const selectedSummary=el('div','lot-selected-summary');selectedSummary.append(route,pp,netBox);
   const body=el('div','lot-body');body.hidden=true;body.id='lot-detail-'+(++lotDetailId);toggle.setAttribute('aria-controls',body.id);
-  const ui={nm,lot,head:toggle,tag,qty,dest,routeLabel,net,netLabel,ppLabel,body,ppB,detailsReady:false};
+  body.append(selectedSummary);
+  const ui={nm,lot,head:toggle,tag,qty,dest,routeLabel,net,netLabel,ppLabel,body,ppB,selectedSummary,nameCopy,headerWarning,market:{quantity,volume,buy,sell},detailsReady:false};
   const x=el('button','lot-x');x.type='button';x.title=tx('ledger.removeItem',{item:o.name});x.setAttribute('aria-label',x.title);
   ui.removeButton=x;
   o.ui=ui;lot.append(head,x,body);LOT_OF.set(lot,o); // v1.0.8: sin listeners por fila; un solo manejador en #lots
@@ -220,8 +224,19 @@ function copyBtn(v,label){const b=el('button','copy'+(isNumTxt(label)?' cp-n':''
 // Los precios editables esperan brevemente para distinguir clic (copiar) de doble clic (editar).
 // Los demás botones de copiar conservan su comportamiento inmediato.
 let refinedCopyTimer=0;
+let ledgerCopyTimer=0;
+function showLedgerCopyFeedback(button){
+  let tip=$('ledgerCopyFeedback');
+  if(!tip){tip=el('span','ledger-copy-feedback');tip.id='ledgerCopyFeedback';tip.setAttribute('role','status');tip.setAttribute('aria-live','polite');document.body.append(tip);}
+  clearTimeout(ledgerCopyTimer);tip.textContent=tx('ledger.copied');tip.hidden=false;
+  const rect=button.getBoundingClientRect();
+  tip.style.left=Math.max(8,Math.min(rect.left+rect.width/2-tip.offsetWidth/2,innerWidth-tip.offsetWidth-8))+'px';
+  tip.style.top=(rect.top>tip.offsetHeight+12?rect.top-tip.offsetHeight-7:rect.bottom+7)+'px';
+  ledgerCopyTimer=setTimeout(()=>{tip.hidden=true;},1000);
+}
 function copyPriceValue(b){
   const v=b.dataset.v,done=()=>{if(!b.isConnected)return;const t=b.textContent;
+    if(b.closest('#lots')){showLedgerCopyFeedback(b);return;}
     b.textContent='Copiado';setTimeout(()=>{if(b.isConnected)b.textContent=t;},900);};
   if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(v).then(done,()=>prompt(tx('shared.copyPrompt'),v));else prompt(tx('shared.copyPrompt'),v);
 }
@@ -312,6 +327,37 @@ function priceRow(tb,routeKey,unit,note,net,best){
    Se ordenan SOLO los nodos del ledger, usando o.ui.last (último cálculo ya disponible).
    No se ejecuta computePlan ni se modifica S.items, de modo que el plan, tabs y contratos
    siguen en el orden de su propio motor. Se conserva el foco y el contenido abierto. */
+let ledgerValueMode='lot';
+const ledgerValueFormat=new Intl.NumberFormat('en-US',{maximumFractionDigits:6});
+function paintLotMarket(r){
+  const u=r.o.ui;if(!u)return;
+  const lot=ledgerValueMode==='lot',factor=lot?r.q:1;
+  const entries=[['quantity',r.q,'ledger.quantity',false],
+    ['volume',Number.isFinite(r.o.m3u)?r.o.m3u*factor:null,'ledger.tableVolume',false],
+    ['buy',Number.isFinite(r.o.jita?.topBuy)?r.o.jita.topBuy*factor:null,'ledger.tableBuy',true],
+    ['sell',Number.isFinite(r.o.jita?.topSell)?r.o.jita.topSell*factor:null,'ledger.tableSell',true]];
+  for(const [key,value,label,money] of entries){
+    const {button}=u.market[key],valid=Number.isFinite(value);
+    setLotLeafText(u.market[key].label,tx(label));
+    const shown=!valid?'—':money?NF2.format(value)+' ISK':ledgerValueFormat.format(value)+(key==='volume'?' m³':'');
+    setLotLeafText(button,shown,'copy'+(money?' cp-n '+(valid?sgn(value):''):''));
+    setLotAttr(button,'data-v',!valid?'':String(Math.round(value*(money?100:1e6))/(money?100:1e6)));
+    setLotAttr(button,'aria-label',tx('ledger.copyField',{field:tx(label),item:r.o.name,value:shown}));
+    if(button.disabled===valid)button.disabled=!valid;
+  }
+  setLotAttr(u.nameCopy,'aria-label',tx('ledger.copyName',{item:r.o.name}));
+  const warnings=(r.o.checks||[]).filter(c=>c[1]==='warn').length;
+  if(u.headerWarning.hidden!==!warnings)u.headerWarning.hidden=!warnings;
+  setLotLeafText(u.headerWarning,warnings?tx(warnings===1?'ledger.tableWarning':'ledger.tableWarnings',{count:warnings}):'');
+}
+$('ledgerValueMode').addEventListener('click',event=>{
+  const button=event.target.closest('[data-ledger-mode]');if(!button)return;
+  ledgerValueMode=button.dataset.ledgerMode;
+  $('ledgerValueMode').querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',String(b===button)));
+  setLotLeafText($('ledgerValueScope'),tx(ledgerValueMode==='lot'?'ledger.tableLotScope':'ledger.tableUnitScope'));
+  S.items.forEach(o=>{if(o.ui?.last)paintLotMarket(o.ui.last);});
+  if(ledgerSort.key)applyLedgerSort();
+});
 let ledgerSort={key:null,dir:1};
 const ledgerSortDefault=k=>k==='n'?1:-1;
 function applyLedgerSort(){
@@ -323,6 +369,10 @@ function applyLedgerSort(){
     const r=o.ui.last;
     if(k==='n')return o.name.toLocaleLowerCase('es');
     if(k==='q')return r?r.q:o.qty;
+    const factor=ledgerValueMode==='lot'?(r?r.q:o.qty):1;
+    if(k==='v')return Number.isFinite(o.m3u)?o.m3u*factor:-Infinity;
+    if(k==='jb')return Number.isFinite(o.jita?.topBuy)?o.jita.topBuy*factor:-Infinity;
+    if(k==='js')return Number.isFinite(o.jita?.topSell)?o.jita.topSell*factor:-Infinity;
     if(k==='d')return r&&r.best?(OPTS.find(x=>x[0]===r.best)||['',''])[1].toLocaleLowerCase('es'):'';
     if(k==='a')return r&&r.best&&r.net[r.best]!=null?r.net[r.best]:-Infinity;
     return 0;
@@ -377,6 +427,8 @@ function setLotAttr(node,name,value){
 }
 function paintLot(r){
   const o=r.o,u=o.ui;if(!u)return;
+  paintLotMarket(r);
+  setLotLeafText($('ledgerValueScope'),tx(ledgerValueMode==='lot'?'ledger.tableLotScope':'ledger.tableUnitScope'));
   setLotAttr(u.head,'aria-label',tx(u.body.hidden?'ledger.openItem':'ledger.closeItem',{item:o.name}));
   const removeButton=u.removeButton;
   if(removeButton){const label=tx('ledger.removeItem',{item:o.name});

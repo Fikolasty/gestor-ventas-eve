@@ -251,20 +251,27 @@ Contraband Freight = no</textarea><small>Una regla por línea: Nombre = tax tota
     <div class="ld-body"><b id="ldTxt">Trayendo precios de Jita…</b><small>Espera un momento: calculo todo cuando lleguen todos los precios.</small>
       <div class="ld-track"><i id="ldBar"></i></div></div>
   </section>
-  <details class="panel thin fold" id="ledger" hidden>
+  <details class="panel thin fold mm-ledger-table" id="ledger" hidden>
     <summary><h2 class="mm-title">LISTADO DE ITEMS REGISTRADOS</h2><span class="cnt" id="lCount"></span><span class="mm-missing" id="missCount" hidden></span><span class="status" id="esiStatus" role="status"></span></summary>
     <div class="ledger-controls">
       <div class="ledger-tools">
         <button class="ghost" id="bEsi"><span class="ic i-sync" aria-hidden="true"></span>Actualizar Precios</button>
         <details class="mm-inline-faq mm-ledger-faq" id="ledgerPriceHelp"><summary aria-controls="ledgerPriceHelpContent" data-i18n-aria-label="decision.priceSourceQ" data-i18n-title="decision.priceSourceQ" aria-label="¿De dónde vienen los precios de cada item?" title="¿De dónde vienen los precios de cada item?"><span class="mm-ledger-info-glyph" aria-hidden="true">i</span></summary></details><p id="ledgerPriceHelpContent" class="mm-ledger-price-help-content" role="note" data-i18n="decision.priceSourceA">Market Moves+ utiliza cotizaciones disponibles de Jita mediante ESI y los precios que introduces manualmente. Las tarifas configuradas afectan las estimaciones netas, no los precios del mercado. Las cotizaciones pueden desactualizarse y el volumen mostrado no garantiza compradores para todo el lote. Si falta un precio, se muestra una advertencia sin asumir una venta.</p>
       </div>
-      <!-- v103: sort the ledger independently of the chosen plan. -->
-      <div class="ledger-head" role="group" data-i18n-aria-label="ledger.sortGroup" aria-label="Ordenar tus items">
-        <button type="button" class="ledger-sort" data-lsort="n" aria-label="Ordenar por nombre"><span data-i18n="ledger.name">Nombre</span> <span class="sort-arrow" aria-hidden="true"></span></button>
-        <button type="button" class="ledger-sort" data-lsort="q" aria-label="Ordenar por cantidad"><span data-i18n="ledger.quantity">Cantidad</span> <span class="sort-arrow" aria-hidden="true"></span></button>
-        <button type="button" class="ledger-sort" data-lsort="d" aria-label="Ordenar por destino de venta"><span data-i18n="ledger.route">Ruta</span> <span class="sort-arrow" aria-hidden="true"></span></button>
-        <button type="button" class="ledger-sort" data-lsort="a" aria-label="Ordenar por ISK netos"><span data-i18n="ledger.netSort">Neto del lote</span> <span class="sort-arrow" aria-hidden="true"></span></button>
+      <div class="ledger-secondary-sort" role="group" data-i18n-aria-label="ledger.sortGroup" aria-label="Ordenar tus Items">
+        <button type="button" class="ledger-sort" data-lsort="d"><span data-i18n="ledger.route">Ruta</span> <span class="sort-arrow" aria-hidden="true"></span></button>
+        <button type="button" class="ledger-sort" data-lsort="a"><span data-i18n="ledger.netSort">Neto del lote</span> <span class="sort-arrow" aria-hidden="true"></span></button>
       </div>
+      <div class="ledger-value-toolbar"><span id="ledgerValueScope" data-i18n="ledger.tableLotScope">Jita 4-4 · Precios y volumen del lote</span><div id="ledgerValueMode" role="group" data-i18n-aria-label="ledger.tableMode" aria-label="Valores por lote o unidad"><button type="button" data-ledger-mode="lot" aria-pressed="true" data-i18n="ledger.tableLot">Lote</button><button type="button" data-ledger-mode="unit" aria-pressed="false" data-i18n="ledger.tableUnit">Unidad</button></div></div>
+    </div>
+    <div class="ledger-head ledger-market-columns" role="group" data-i18n-aria-label="ledger.sortGroup" aria-label="Ordenar tus Items">
+      <span aria-hidden="true"></span>
+      <button type="button" class="ledger-sort" data-lsort="n"><span data-i18n="ledger.tableItem">Item</span> <span class="sort-arrow" aria-hidden="true"></span></button>
+      <button type="button" class="ledger-sort" data-lsort="q"><span data-i18n="ledger.quantity">Cantidad</span> <span class="sort-arrow" aria-hidden="true"></span></button>
+      <button type="button" class="ledger-sort" data-lsort="v"><span data-i18n="ledger.tableVolume">Volumen</span> <span class="sort-arrow" aria-hidden="true"></span></button>
+      <button type="button" class="ledger-sort" data-lsort="jb"><span data-i18n="ledger.tableBuy">Buy</span> <span class="sort-arrow" aria-hidden="true"></span></button>
+      <button type="button" class="ledger-sort" data-lsort="js"><span data-i18n="ledger.tableSell">Sell</span> <span class="sort-arrow" aria-hidden="true"></span></button>
+      <span aria-hidden="true"></span>
     </div>
     <div id="lots"></div>
   </details>

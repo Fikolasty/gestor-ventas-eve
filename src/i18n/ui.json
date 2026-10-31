@@ -2118,5 +2118,61 @@
   "appraisal.notLoaded": {
     "es": "Todavía no hay precios de Jita disponibles para estos Items. Revisa el estado de la API y sus nombres.",
     "en": "Jita prices are not available for these Items yet. Check the API status and Item names."
+  },
+  "ledger.tableItem": {
+    "es": "Item",
+    "en": "Item"
+  },
+  "ledger.tableVolume": {
+    "es": "Volumen",
+    "en": "Volume"
+  },
+  "ledger.tableBuy": {
+    "es": "Buy",
+    "en": "Buy"
+  },
+  "ledger.tableSell": {
+    "es": "Sell",
+    "en": "Sell"
+  },
+  "ledger.tableLot": {
+    "es": "Lote",
+    "en": "Batch"
+  },
+  "ledger.tableUnit": {
+    "es": "Unidad",
+    "en": "Unit"
+  },
+  "ledger.tableLotScope": {
+    "es": "Jita 4-4 · Precios y volumen del lote",
+    "en": "Jita 4-4 · Batch prices and volume"
+  },
+  "ledger.tableUnitScope": {
+    "es": "Jita 4-4 · Precios y volumen por unidad",
+    "en": "Jita 4-4 · Unit prices and volume"
+  },
+  "ledger.tableMode": {
+    "es": "Valores por lote o unidad",
+    "en": "Batch or unit values"
+  },
+  "ledger.copyName": {
+    "es": "Copiar nombre: {item}",
+    "en": "Copy name: {item}"
+  },
+  "ledger.copyField": {
+    "es": "Copiar {field} de {item}: {value}",
+    "en": "Copy {field} for {item}: {value}"
+  },
+  "ledger.tableWarning": {
+    "es": "1 aviso",
+    "en": "1 warning"
+  },
+  "ledger.tableWarnings": {
+    "es": "{count} avisos",
+    "en": "{count} warnings"
+  },
+  "ledger.copied": {
+    "es": "Copiado",
+    "en": "Copied"
   }
 }

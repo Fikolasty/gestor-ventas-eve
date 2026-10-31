@@ -16,11 +16,13 @@ CSS_PARTS = (
     "70-typography.css",
     "80-product-ux.css",
 )
-# Light theme order intentionally mirrors the former single light_extra.css.
+# Light theme order mirrors the former light_extra.css; the final shared table
+# geometry follows generated Light rules so both themes use identical layout.
 LIGHT_PARTS = (
     "light-foundation.css",
     "light-components.css",
     "light-header-shipping.css",
+    "zz-ledger-table.css",
 )
 
 def light_sources(read):

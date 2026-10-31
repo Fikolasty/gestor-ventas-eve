@@ -1,0 +1,72 @@
+/* v1.0.172: final shared geometry after generated Light CSS. */
+#ledger.mm-ledger-table {--ledger-columns:28px minmax(180px,2fr) minmax(75px,.55fr) minmax(100px,.65fr) minmax(160px,1fr) minmax(160px,1fr) 44px}
+#ledger.mm-ledger-table .ledger-controls {display:flex;flex-wrap:wrap;align-items:center;gap:12px;margin:8px 18px 14px}
+#ledger.mm-ledger-table .ledger-tools {flex:1 1 auto;order:1}
+#ledger.mm-ledger-table .ledger-secondary-sort {display:flex;gap:5px;order:2}
+#ledger.mm-ledger-table .ledger-secondary-sort button {font:400 13px/1.4 var(--f-ui);padding:6px 9px;border:0;background:transparent;color:var(--mut);border-radius:5px}
+#ledger.mm-ledger-table .ledger-value-toolbar {display:flex;align-items:center;justify-content:space-between;gap:12px;flex:1 0 100%;order:3;color:var(--mut);font:400 14px/1.5 var(--f-ui)}
+#ledgerValueMode {display:flex;gap:4px;padding:3px;border:1px solid var(--line2);border-radius:20px;background:var(--surface-card)}
+#ledgerValueMode button {padding:6px 14px;min-height:32px;border:0;border-radius:16px;background:transparent;color:var(--mut);font:500 14px/1.4 var(--f-ui)}
+#ledgerValueMode button[aria-pressed=true] {color:var(--clay);background:color-mix(in srgb,var(--clay) 12%,transparent)}
+#ledger.mm-ledger-table .ledger-market-columns,#ledger.mm-ledger-table #lots article.lot .lot-head.ledger-market-row {display:grid!important;grid-template-columns:var(--ledger-columns)!important;gap:12px!important;align-items:center;padding:10px 12px!important;margin:0;min-height:52px!important;cursor:default!important}
+#ledger.mm-ledger-table .ledger-market-columns {margin:0 18px;min-height:40px;border:0;border-bottom:1px solid var(--line2);border-radius:0;background:var(--surface-panel)}
+#ledger.mm-ledger-table .ledger-market-columns .ledger-sort {min-width:0;padding:0;border:0;border-radius:0;background:transparent;color:var(--mut);font:500 13px/1.4 var(--f-ui);justify-content:flex-end!important;text-align:right!important;white-space:nowrap}
+#ledger.mm-ledger-table .ledger-market-columns .ledger-sort[data-lsort=n] {justify-content:flex-start!important;text-align:left!important}
+#ledger.mm-ledger-table .ledger-sort[data-active=true] {color:var(--clay)!important}
+#ledger.mm-ledger-table #lots {margin:0 18px 18px;background:var(--surface-card);border-radius:0 0 7px 7px}
+#ledger.mm-ledger-table #lots article.lot {display:block!important;margin:0!important;padding:0;border:0;border-bottom:1px solid var(--line2);border-radius:0;background:transparent!important;box-shadow:none!important;overflow:visible}
+#ledger.mm-ledger-table #lots article.lot:last-child {border-bottom:0}
+#ledger.mm-ledger-table #lots article.lot.open {background:transparent!important}
+#ledger.mm-ledger-table #lots article.lot .lot-head.ledger-market-row {background:transparent!important}
+#ledger.mm-ledger-table #lots article.lot .lot-head.ledger-market-row:hover {background:color-mix(in srgb,var(--txt) 3%,transparent)!important}
+#ledger.mm-ledger-table #lots .lot-open {position:static!important;inset:auto!important;grid-column:1!important;grid-row:1!important;width:28px!important;height:32px!important;min-height:32px;padding:0;border:0;border-radius:4px;background:transparent!important;z-index:1;display:flex;align-items:center;justify-content:center}
+#ledger.mm-ledger-table #lots .lot-open::after {content:'';display:block;width:7px;height:7px;border-right:1.5px solid var(--mut);border-bottom:1.5px solid var(--mut);transform:rotate(-45deg)}
+#ledger.mm-ledger-table #lots .lot.open .lot-open::after {transform:rotate(45deg)}
+#ledger.mm-ledger-table #lots .lot-open:focus-visible {outline:2px solid var(--clay);outline-offset:1px}
+#ledger.mm-ledger-table #lots .lot-info {display:flex!important;flex-direction:column;align-items:stretch;grid-column:2!important;grid-row:1!important;pointer-events:auto;gap:3px}
+#ledger.mm-ledger-table #lots .lot-name {display:flex!important;align-items:center;flex-wrap:nowrap;gap:8px;width:auto;min-width:0}
+#ledger.mm-ledger-table #lots .lot-name b {display:block!important;min-width:0;font:400 15px/1.4 var(--f-ui)!important}
+#ledger.mm-ledger-table #lots .lot-name img.ti {display:block;width:24px;height:24px;flex:none;border:0;border-radius:3px;margin:0!important;grid-row:auto}
+#ledger.mm-ledger-table #lots .lot-meta {padding:0;margin:0;font:400 12px/1.4 var(--f-ui);color:var(--thrust)}
+#ledger.mm-ledger-table #lots .lot-meta:has(.lot-header-warning[hidden]) {display:none}
+#ledger.mm-ledger-table #lots .lot-table-cell {display:block;min-width:0;text-align:right;font:500 15px/1.45 var(--f-ui);font-variant-numeric:tabular-nums;grid-row:1}
+#ledger.mm-ledger-table #lots .lot-table-quantity {grid-column:3}
+#ledger.mm-ledger-table #lots .lot-table-volume {grid-column:4}
+#ledger.mm-ledger-table #lots .lot-table-buy {grid-column:5}
+#ledger.mm-ledger-table #lots .lot-table-sell {grid-column:6}
+#ledger.mm-ledger-table #lots .lot-table-label {display:none}
+#ledger.mm-ledger-table #lots button.copy {position:relative;z-index:2;pointer-events:auto;background:transparent!important;border:0!important;box-shadow:none!important;padding:0!important;margin:0!important;min-height:0!important;border-radius:2px!important;font:inherit!important;line-height:inherit!important;color:inherit;text-align:inherit;max-width:100%}
+#ledger.mm-ledger-table #lots button.copy::before,#ledger.mm-ledger-table #lots button.copy::after {display:none!important}
+#ledger.mm-ledger-table #lots .lot-table-cell button.copy {display:block;width:100%;overflow-x:auto;white-space:nowrap;scrollbar-width:thin}
+#ledger.mm-ledger-table #lots button.copy:focus-visible {outline:2px solid var(--clay)!important;outline-offset:3px}
+#ledger.mm-ledger-table #lots button.copy:disabled {opacity:1;color:var(--mut);cursor:default}
+#ledger.mm-ledger-table #lots button.copy.pos,#ledger.mm-ledger-table #lots button.copy.isk-pos {color:var(--gain)!important}
+#ledger.mm-ledger-table #lots button.copy.neg,#ledger.mm-ledger-table #lots button.copy.isk-neg {color:var(--loss)!important}
+#ledger.mm-ledger-table #lots .lot-x {position:absolute;right:0;top:4px;min-height:44px;min-width:44px;width:44px;height:44px;opacity:.55;z-index:3}
+#ledger.mm-ledger-table #lots .lot-selected-summary {display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;padding:12px 0 16px;border-bottom:1px solid var(--line2);margin-bottom:14px}
+#ledger.mm-ledger-table #lots .lot-selected-summary>.lot-route,#ledger.mm-ledger-table #lots .lot-selected-summary>.lot-pp,#ledger.mm-ledger-table #lots .lot-selected-summary>.lot-financial {grid-column:auto!important;grid-row:auto!important;display:block;text-align:left}
+#ledger.mm-ledger-table #lots .lot-selected-summary button.copy {font:600 16px/1.45 var(--f-ui)!important}
+#ledgerCopyFeedback {position:fixed;z-index:10000;pointer-events:none;border:1px solid var(--line2);border-radius:5px;padding:6px 10px;background:var(--surface-panel);color:var(--txt);font:400 13px/1.4 var(--f-ui);box-shadow:0 3px 12px rgba(0,0,0,.15)}
+#ledgerCopyFeedback[hidden] {display:none!important}
+@media(max-width:900px){
+ #ledger.mm-ledger-table .ledger-market-columns {display:flex!important;gap:16px!important;flex-wrap:wrap!important;justify-content:flex-start;overflow:visible}
+ #ledger.mm-ledger-table .ledger-market-columns>span {display:none}
+ #ledger.mm-ledger-table #lots article.lot .lot-head.ledger-market-row {grid-template-columns:28px repeat(2,minmax(0,1fr)) 32px!important;gap:10px 12px!important;padding:12px!important}
+ #ledger.mm-ledger-table #lots .lot-info {grid-column:2/4!important}
+ #ledger.mm-ledger-table #lots .lot-table-quantity {grid-column:2;grid-row:2}
+ #ledger.mm-ledger-table #lots .lot-table-volume {grid-column:3;grid-row:2}
+ #ledger.mm-ledger-table #lots .lot-table-buy {grid-column:2;grid-row:3}
+ #ledger.mm-ledger-table #lots .lot-table-sell {grid-column:3;grid-row:3}
+ #ledger.mm-ledger-table #lots .lot-table-cell {text-align:left;font-size:16px}
+ #ledger.mm-ledger-table #lots .lot-table-label {display:block;color:var(--mut);font:400 12px/1.4 var(--f-ui);margin-bottom:3px}
+ #ledger.mm-ledger-table #lots .lot-selected-summary {grid-template-columns:minmax(0,1fr);gap:12px}
+}
+@media(max-width:450px){
+ #ledger.mm-ledger-table .ledger-controls {margin:8px 10px 12px}
+ #ledger.mm-ledger-table .ledger-value-toolbar {align-items:flex-start;flex-direction:column}
+ #ledger.mm-ledger-table .ledger-market-columns {margin:0 10px;font-size:12px;gap:12px!important}
+ #ledger.mm-ledger-table #lots {margin:0 10px 12px}
+ #ledger.mm-ledger-table #lots .lot-table-buy {grid-column:1/-1;grid-row:3}
+ #ledger.mm-ledger-table #lots .lot-table-sell {grid-column:1/-1;grid-row:4}
+ #ledger.mm-ledger-table #lots .lot-name img.ti {width:22px;height:22px}
+}

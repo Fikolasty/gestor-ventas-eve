@@ -34,7 +34,7 @@ class LightGeneratorTests(unittest.TestCase):
     def test_modular_light_theme_order_and_ownership(self):
         self.assertEqual(
             build_sources.LIGHT_PARTS,
-            ("light-foundation.css", "light-components.css", "light-header-shipping.css"),
+            ("light-foundation.css", "light-components.css", "light-header-shipping.css", "zz-ledger-table.css"),
         )
         css = build_sources.light_sources(read)
         self.assertGreater(len(css), 20000)

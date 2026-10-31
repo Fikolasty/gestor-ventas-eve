@@ -2214,8 +2214,8 @@ class ThemeBrowserTests(unittest.TestCase):
                 if width==1440:
                     item_height=self.page.locator('#lots .lot').evaluate(
                         '(el)=>el.getBoundingClientRect().height')
-                    self.assertGreaterEqual(item_height,80)
-                    self.assertLessEqual(item_height,95)
+                    self.assertGreaterEqual(item_height,52)
+                    self.assertLessEqual(item_height,80)
                 if width==1440:
                     self.page.locator('#ledger').screenshot(path=str(out/
                         f'b16-open-ledger-es-1440-{"light" if light else "dark"}.png'),
@@ -2224,7 +2224,7 @@ class ThemeBrowserTests(unittest.TestCase):
                 expect(self.page.locator('#ledger')).not_to_have_attribute('open','')
 
     def test_b14_collapsed_ledger_inverted_depth_row_activation_and_semantics(self):
-        """Approved four-column desktop cards; no decorative row toggle controls."""
+        """Five-column market table with independent native detail disclosure."""
         from playwright.sync_api import expect
         out=INDEX.parent/'tests'/'artifacts'/'theme'
         out.mkdir(parents=True,exist_ok=True)
@@ -2240,7 +2240,7 @@ class ThemeBrowserTests(unittest.TestCase):
                 S.flip=false;S.items=[];S.api={};
                 const parent=document.querySelector('#lots');parent.replaceChildren();
                 for(const d of entries){
-                    const o={name:d.name,qty:d.qty,m3u:1,ref:d.price,checks:d.checks,jita:{}};
+                    const o={name:d.name,qty:d.qty,m3u:1,ref:d.price,checks:d.checks,jita:{topBuy:d.price,topSell:d.price}};
                     S.items.push(o);S.api[d.name.toLowerCase()]={id:d.id};
                     parent.append(buildLot(o));
                     paintLot({o,q:d.qty,best:d.best,auto:d.best,np:d.price,jl:d.price,
@@ -2257,7 +2257,7 @@ class ThemeBrowserTests(unittest.TestCase):
             self.assertEqual(self.page.locator('#lots .lot-route .lot-k').count(),3)
             self.assertIn('zydrine',self.page.locator('#lots .lot').last.inner_text().lower())
             self.assertIn('2 warnings' if language=='en' else '2 avisos',
-                self.page.locator('#lots .lot').last.locator('.lot-route-main').inner_text())
+                self.page.locator('#lots .lot').last.locator('.lot-header-warning').inner_text())
             for width in (1440,980,630,390):
                 self.page.set_viewport_size({'width':width,'height':900})
                 for light in (False,True):
@@ -2265,7 +2265,7 @@ class ThemeBrowserTests(unittest.TestCase):
                     checks=self.page.evaluate("""() => {
                         const row=document.querySelector('#lots .lot');
                         const outer=document.querySelector('#ledger');
-                        const parts=['.lot-info','.lot-route','.lot-pp','.lot-financial']
+                        const parts=['.lot-info','.lot-table-quantity','.lot-table-volume','.lot-table-buy','.lot-table-sell']
                             .map(sel=>row.querySelector(sel).getBoundingClientRect());
                         const card=row.getBoundingClientRect();
                         return {parent:getComputedStyle(outer).backgroundColor,
@@ -2287,7 +2287,7 @@ class ThemeBrowserTests(unittest.TestCase):
                         self.assertTrue(all(abs((checks['slots'][0]['top']+checks['slots'][0]['bottom'])/2-
                             (s['top']+s['bottom'])/2)<3 for s in checks['slots']),checks)
                         self.assertTrue(all(checks['slots'][i]['right']<checks['slots'][i+1]['left']
-                            for i in range(3)),checks)
+                            for i in range(4)),checks)
                     if width==390:
                         self.assertLess(checks['slots'][0]['top'],checks['slots'][1]['top'],checks)
                     if width==1440:
@@ -2298,12 +2298,11 @@ class ThemeBrowserTests(unittest.TestCase):
             self.page.set_viewport_size({'width':1440,'height':900})
             self.page.evaluate('document.documentElement.classList.remove("light")')
             first=self.page.locator('#lots .lot').first
-            price=first.locator('.lot-pp .copy')
+            price=first.locator('.lot-table-buy .copy')
             price.click()
             self.assertEqual(first.locator('.lot-open').get_attribute('aria-expanded'),'false')
-            self.assertEqual(self.page.evaluate('window.__b14Copies.at(-1)'),'243010')
-            route_box=first.locator('.lot-route').bounding_box()
-            self.page.mouse.click(route_box['x']+14,route_box['y']+8)
+            self.assertEqual(self.page.evaluate('window.__b14Copies.at(-1)'),'984190500')
+            first.locator('.lot-open').click()
             expect(first.locator('.lot-open')).to_have_attribute('aria-expanded','true')
             expect(first.locator('.lot-panel-grid')).to_be_visible()
             first.locator('.lot-open').focus()
@@ -2330,7 +2329,7 @@ class ThemeBrowserTests(unittest.TestCase):
                     value:{writeText:v=>{window.__b4Copy=v;return Promise.resolve();}}});
             }""")
             expect(self.page.locator('#lots .lot-open')).to_have_attribute('aria-expanded','false')
-            self.assertEqual(self.page.locator('#lots .lot-body').locator(':scope > *').count(),0)
+            self.assertEqual(self.page.locator('#lots .lot-panel-grid, #lots .lot-body input').count(),0)
             expect(self.page.locator('#lots img.ti')).to_have_attribute('data-tid','28659')
             price=self.page.locator('#lots .lot-pp button.copy')
             expect(price).to_be_enabled()
@@ -2348,11 +2347,13 @@ class ThemeBrowserTests(unittest.TestCase):
             self.page.locator('#ledger').screenshot(
                 path=str(out/f'b4-ledger-row-{language}-390-dark.png'),animations='disabled')
             self.page.set_viewport_size({'width':1440,'height':900})
+            self.page.locator('#lots .lot-open').click()
             price.click()
             self.assertEqual(self.page.evaluate('window.__b4Copy'),'1060000000')
             net_copy.click()
             self.assertEqual(self.page.evaluate('window.__b4Copy'),'7140000000')
-            self.assertEqual(self.page.locator('#lots .lot-open').get_attribute('aria-expanded'),'false')
+            self.assertEqual(self.page.locator('#lots .lot-open').get_attribute('aria-expanded'),'true')
+            self.page.locator('#lots .lot-open').click()
             self.page.locator('#lots .lot-open').focus()
             self.page.keyboard.press('Enter')
             expect(self.page.locator('#lots .lot-open')).to_have_attribute('aria-expanded','true')
@@ -2395,7 +2396,7 @@ class ThemeBrowserTests(unittest.TestCase):
                             return names.map(sel=>{const el=document.querySelector(sel),s=getComputedStyle(el),b=el.getBoundingClientRect();
                                 return {sel,w:b.width,cols:s.gridTemplateColumns,area:s.gridArea,display:s.display};});
                         }""")
-                        self.assertGreater(sizing[2]['w'],95,sizing)
+                        self.assertEqual(sizing[2]['w'],28,sizing)
                         prices_width=self.page.evaluate("""() => {
                             const n=document.querySelector('#lots .lot-panel-grid .prices');
                             return {scroll:n.scrollWidth,client:n.clientWidth};
@@ -3039,6 +3040,7 @@ class ThemeBrowserTests(unittest.TestCase):
             S.items=[o];document.querySelector('#lots').append(buildLot(o));paintLot(r);
             const ledger=document.querySelector('#ledger');ledger.hidden=false;ledger.open=true;
         }""")
+        self.page.locator('#lots .lot-open').click()
         out=INDEX.parent/'tests'/'artifacts'/'theme'
         out.mkdir(parents=True,exist_ok=True)
         for width in (1440,630,390):

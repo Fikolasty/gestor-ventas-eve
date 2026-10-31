@@ -962,3 +962,11 @@ Auditoría local sin código ni release: tres exclusiones de Janice explican0,50
 ## 2026-10-30 — Janice W7Gh86, nuevo lote auditado
 
 Informe local APPRAISAL_JANICE_W7GH86_AUDIT_2026-10-30.md:176/179 tipos y0,50m³ de exclusiones. Comparación de tres libros ESI reales confirma precios de snapshot distintos; Silicon por sí solo cambia1.771.120ISK en Buy. No atribuirlo al antiguo lote completo ni a fórmulas; producto sin cambios, LIVE v170.
+
+## 2026-10-30 — base visual del Listado aprobada
+
+El propietario conserva la dirección de listado-simple-copia-r1. Aprobación limitada a diseño; implementación pendiente. DSS§84 y HANDOFF_APPRAISAL_171.md registran encaje de columnas principales y preservación de ruta/neto/controles en detalle. Web v171 sin cambios; registro local no publicado.
+
+## 2026-10-30 — Listado172 implementado, cierre pendiente
+
+Autorización expresa de implementar/publicar tras QA. Tabla sencilla con Lote/Unidad y copia independiente; detalle y controles preservados. DSS§85 y HANDOFF_LEDGER_172.md activos.152Node/16Python/8legacy y cinco focales Chromium PASS;90/90 Chromium completos PASS (118,339s). Publicación Fiko/Actions/Pages/HTTPS pendiente; LIVEv171.
