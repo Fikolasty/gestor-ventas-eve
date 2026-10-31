@@ -1,6 +1,6 @@
 # DSS — Design Standards & Session Handoff · Market Moves+
 
-**Última actualización:** 2026-10-31 · **v1.0.179 LIVE CERTIFICADA**: Guía en dos columnas desktop, una en móvil; nombres vigentes y mercados en línea. Fuente651e6e64, build5438d4d1;4Actions/122Chromium PASS y HTML HTTPS idéntico. Kit docs/HANDOFF_179.md.
+**Última actualización:** 2026-10-31 · **v1.0.180 LIVE CERTIFICADA**: header compacto, Pilot & Taxes y tabs capitalizados, skills refinados y Taxes con campos compactos y márgenes corregidos. Fuenteeee763e9, build06296507;4Actions/123Chromium PASS y HTML HTTPS idéntico. Kit docs/HANDOFF_180.md.
 
 **Continuidad de versión:** la release anterior v1.0.126 (P0 Paladin + A+B.1) quedó verificada con fuente `205ec9fa`, build `c716f7aa`, Actions/Pages `40215891182`, blob `9601d5f8`; ver §9. La etapa B.2 se implementó inicialmente **local** sobre `dcdb6195` (§10) y posteriormente se publicó tras autorización expresa y QA (§11). El usuario concedió también **autorización continua de publicación de mejoras incrementales bien probadas**, registrada en §1.8.
 
@@ -1466,3 +1466,11 @@ Las seis tarjetas conservan dimensiones simétricas, controles28px y pips con á
 Taxes: se retira el fondo de cápsula de la ayuda y su padding interno; el contenedor recupera14px de margen interior superior, perdido por una regla de cascada anterior. Valores de tasas100px y standings72px, altura34px, alineados a la derecha y con etiquetas/notas en su flujo. Se conserva Broker Jita de ancho completo y dos standings en su grupo, tasas debajo. Eliminar bordes de sección y sombras de acento heredadas solo en el panel de personaje Light asegura geometría idéntica a Dark. Sin cambios de economía, ESI/SSO, caché o permisos.
 
 Pruebas:14 focales PASS, focal final tras separar reset/cerrar PASS3.200s;157Node/16Python PASS. Nueva regresión comprueba capitalización, ayuda sin cápsula y alineada, campos acotados, simetría de tarjetas, ausencia de overflow, header y acciones sin solape y geometría Dark/Light en ES/EN390/630/980/1440. Capturas settings180-final3 en1440 de ambos idiomas, temas, niveles0 y niveles mixtos revisadas. Niveles mixtos son simulación de QA, no un login ESI real.123Chromium completo y gates remotos pendientes. Última LIVE179; no declarar180LIVE antes de4Actions/Pages/HTTP idéntico.
+
+Gate local final:123/123 Chromium PASS en280.801s;157Node/16Python PASS. Fuente Fiko eee763e95d686d62ce7a370f87244ab748286b68 en main tras lease889fde0f. Tres controles remotos iniciales success; Rebuild/Chromium/Pages aún en curso. No declarar LIVE hasta el cierre remoto siguiente.
+
+## v1.0.180 LIVE certificada — cierre 2026-10-31
+
+Este cierre sustituye expresamente la candidata anterior. Fuente Fiko/Fikolasty eee763e95d686d62ce7a370f87244ab748286b68, build bot0629650766f26eb139f73310ba88d20f28efd810. Cuatro Actions success: Versiones41248937574, Build41248937568, Verificación minera41248937546 y Rebuild/Pages41248937557. Compile124678160494 y Deploy124679021895 success. CI157Node/16Python/8legacy/123Chromium PASS (211.696s); local123Chromium280.801s,157Node/16Python y focales PASS. Sin cambios de fórmulas, ESI/SSO ni persistencia. No se hizo login EVE real extremo a extremo.
+
+HTML público HTTPS, GitHub y local idénticos:2,558,839bytes, blob94baaf73d661afefe279456e159f7b9a031546a9; v1.0.180. Revisión visual de settings180-final3 en1440px ES/EN Dark/Light mismo estado, incluyendo niveles0 y niveles mixtos de QA. Regresiones verifican390/630/980/1440, navegación, niveles, notas ESI simuladas, estados cerrados/uno/todos de los cuatro tabs y dropdowns existentes. Se revisó móvil internamente: el botón cerrar conserva su comportamiento sticky al desplazarse; al comparar imágenes debe conservarse también la misma posición de scroll. No hay un rediseño amplio aprobado pendiente; atender la siguiente petición. Documentación de cierre posterior puede avanzar main sin modificar HTML.

@@ -1,9 +1,9 @@
-## v1.0.180 — Ajustes: header, habilidades y Taxes — candidata
+## v1.0.180 — Ajustes: header, habilidades y Taxes — LIVE certificada
 
 - Tabs con capitalización consistente, header compacto y acciones separadas.
 - Tarjetas de skills refinadas, niveles naranja tenue y dimensiones simétricas.
 - Taxes sin banda de ayuda redundante, márgenes corregidos y valores compactos.
-- ES/EN y Dark/Light; controles y fórmulas conservados. Gate remoto pendiente.
+- ES/EN y Dark/Light; controles y fórmulas conservados. 4Actions/123Chromium PASS; HTML HTTPS idéntico.
 
 ## v1.0.179 — Guía de Uso en dos columnas — LIVE certificada
 
