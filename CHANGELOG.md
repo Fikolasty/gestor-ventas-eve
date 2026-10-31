@@ -1,9 +1,9 @@
-## v1.0.178 — habilidades compactas y centradas — candidata
+## v1.0.178 — habilidades compactas y centradas — LIVE certificada
 
 - Menos espacio interior; títulos y origen ESI/Manual alineados, controles centrados.
 - +/− de28px y marcas más finas, conservando zona de clic y teclado.
 - Una sola cara visual por marca en Light/Dark; mismas alturas entre tarjetas.
-- Valores, cálculos y persistencia intactos. Gate remoto pendiente; docs/HANDOFF_178.md.
+- 4 Actions / 121 Chromium PASS; HTML público/local/GitHub idéntico. Valores, cálculos y persistencia intactos. docs/HANDOFF_178.md.
 
 ## v1.0.177 — simetría de Ajustes — LIVE certificada
 
