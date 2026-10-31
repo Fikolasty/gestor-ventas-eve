@@ -2203,7 +2203,7 @@ class ThemeBrowserTests(unittest.TestCase):
                         self.assertTrue(all(checks['slots'][i]['right']<checks['slots'][i+1]['left']
                             for i in range(4)),checks)
                     if width==390:
-                        self.assertAlmostEqual((checks['slots'][0]['top']+checks['slots'][0]['bottom'])/2,(checks['slots'][1]['top']+checks['slots'][1]['bottom'])/2,delta=3,msg=str(checks))
+                        self.assertGreaterEqual(checks['slots'][1]['top'],checks['slots'][0]['bottom'],checks)
                     if width==1440:
                         self.page.mouse.move(0,0)
                         self.page.locator('#ledger').screenshot(path=str(out/

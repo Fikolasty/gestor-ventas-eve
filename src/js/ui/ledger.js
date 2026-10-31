@@ -214,10 +214,39 @@ function buildLotDetails(o,ui){
   // Four peers keep the same 2×2 desktop grid even when each is open.
   // CSS aligns the edges of both rows and stacks only for narrow screens.
   const panels=el('div','lot-panel-grid');panels.append(prices,analysis,adjustments,guidePanel);
-  for(const cls of ['ledger-thread-rail','ledger-thread-rail right']){const rail=el('span',cls);rail.setAttribute('aria-hidden','true');panels.prepend(rail);}
+  const thread=document.createElementNS('http://www.w3.org/2000/svg','svg');
+  thread.classList.add('ledger-thread');thread.setAttribute('aria-hidden','true');panels.prepend(thread);
+  ledgerThreadObserver.observe(panels);
   body.append(verdict,panels,checks);
   Object.assign(ui,{iRef,iBuyOrder,iSeen,seenCaption,iM3,bBuy,bBuyPrice,bVol,manualInput,manualLabel,manualNote,resetPrice,strategyTitle,pBody,mineralRows,minerals,checks,verdict,detailsReady:true});
 }
+// One path per column: no overlapping CSS rails, elbows or inherited pseudo-elements.
+// Coordinates follow the actual summaries after native disclosure/layout changes.
+function drawLedgerThread(grid){
+  if(!grid.isConnected){ledgerThreadObserver.unobserve(grid);return;}
+  const svg=grid.querySelector(':scope>.ledger-thread'),box=grid.getBoundingClientRect();
+  if(!svg||!box.width||!box.height)return;
+  const groups=new Map();
+  grid.querySelectorAll(':scope>details>summary').forEach(summary=>{
+    const r=summary.getBoundingClientRect(),x=Math.round(r.left-box.left);
+    if(!groups.has(x))groups.set(x,[]);groups.get(x).push(r.top-box.top+r.height/2);
+  });
+  const paths=[];
+  groups.forEach((ys,end)=>{
+    const x=end-22,radius=10,last=ys.at(-1);
+    let d=`M ${x} 0 V ${last-radius} Q ${x} ${last} ${x+radius} ${last} H ${end}`;
+    ys.slice(0,-1).forEach(y=>{d+=` M ${x} ${y-radius} Q ${x} ${y} ${x+radius} ${y} H ${end}`;});
+    paths.push(d);
+  });
+  const signature=box.width+'|'+box.height+'|'+paths.join('|');
+  if(svg.dataset.geometry===signature)return;svg.dataset.geometry=signature;
+  svg.setAttribute('viewBox',`0 0 ${box.width} ${box.height}`);svg.replaceChildren();
+  paths.forEach(d=>{const path=document.createElementNS('http://www.w3.org/2000/svg','path');path.setAttribute('d',d);svg.append(path);});
+}
+const ledgerThreadObserver=new ResizeObserver(entries=>entries.forEach(e=>drawLedgerThread(e.target)));
+$('lots').addEventListener('toggle',e=>{
+  const grid=e.target.closest('.lot-panel-grid');if(grid)requestAnimationFrame(()=>drawLedgerThread(grid));
+},true);
 // copia el valor limpio: números con máx. 2 decimales y sin "ISK" (listo para pegar en el juego)
 const isNumTxt=t=>/^[−+\-]?\s*[\d][\d,.\s]*(\s*(ISK|m³|m3|%|días?|u))?$/i.test(String(t).trim());
 function copyBtn(v,label){const b=el('button','copy'+(isNumTxt(label)?' cp-n':''),label);
@@ -488,7 +517,9 @@ function syncLots(){
   const box=$('lots');
   // quita las filas que ya no están (Set: O(n)) y solo mueve las que cambiaron de lugar
   const keep=new Set();S.items.forEach(o=>{if(!o.ui)buildLot(o);keep.add(o.ui.lot);});
-  [...box.children].forEach(n=>{if(!keep.has(n)&&!n.classList.contains('empty'))n.remove();});
+  [...box.children].forEach(n=>{if(!keep.has(n)&&!n.classList.contains('empty')){
+    const grid=n.querySelector('.lot-panel-grid');if(grid)ledgerThreadObserver.unobserve(grid);n.remove();
+  }});
   let prev=null;S.items.forEach(o=>{const n=o.ui.lot,want=prev?prev.nextSibling:box.firstChild;if(n!==want)box.insertBefore(n,want);prev=n;});
   if(!S.items.length&&!box.querySelector('.empty'))box.append(el('p','empty','Pega tu inventario arriba para empezar.'));
   else if(S.items.length)box.querySelectorAll('.empty').forEach(n=>n.remove());

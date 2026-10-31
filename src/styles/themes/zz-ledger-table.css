@@ -1,6 +1,6 @@
-/* v173: approved r5 merged drawer. Shared geometry follows generated Light. */
+/* v174: approved r5 merged drawer. Shared geometry follows generated Light. */
 #unitCourierBox.ledger-fusion-shell{margin:20px 0;min-width:0;background:none;border:0;padding:0}
-#unitCourierBox #ledger.ledger-fusion{--ledger-columns:minmax(200px,1.4fr) 95px 100px minmax(155px,1fr) minmax(155px,1fr) minmax(160px,1fr) minmax(275px,1.6fr);--ledger-thread:color-mix(in srgb,var(--mut) 55%,var(--surface-panel));margin:0!important;padding:0!important;border:1px solid var(--line2)!important;border-radius:12px!important;background:var(--surface-card)!important;overflow:hidden;box-shadow:0 8px 24px color-mix(in srgb,var(--txt) 3%,transparent)}
+#unitCourierBox #ledger.ledger-fusion{--ledger-columns:minmax(0,1.25fr) minmax(0,.55fr) minmax(0,.65fr) repeat(3,minmax(0,1fr)) minmax(0,1.2fr);--ledger-thread:color-mix(in srgb,var(--mut) 55%,var(--surface-panel));margin:0!important;padding:0!important;border:1px solid var(--line2)!important;border-radius:12px!important;background:var(--surface-card)!important;overflow:hidden;box-shadow:0 8px 24px color-mix(in srgb,var(--txt) 3%,transparent)}
 #unitCourierBox #ledger.ledger-fusion>#unitCourierToggle{display:grid!important;grid-template-columns:minmax(0,1fr) 40px;gap:24px!important;margin:0!important;padding:24px!important;list-style:none;background:linear-gradient(110deg,var(--surface-panel),var(--surface-card))!important;border:0!important;align-items:start;cursor:pointer}
 #unitCourierBox #ledger.ledger-fusion>#unitCourierToggle::after,#unitCourierBox #ledger.ledger-fusion>#unitCourierToggle::-webkit-details-marker{display:none!important;content:none!important}
 #unitCourierBox #ledger .ledger-title-group{display:flex;align-items:center;gap:12px;flex-wrap:wrap;min-width:0}
@@ -11,7 +11,7 @@
 #unitCourierBox #ledger .mm-freight-lot{grid-column:1/-1;display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:28px!important;margin:0!important;padding:0!important;border:0!important;background:none!important}
 #unitCourierBox #ledger .mm-freight-lot>span{display:block;min-width:0}
 #unitCourierBox #ledger .mm-freight-lot>span>span{display:block;font:400 15px/1.4 var(--f-ui);color:var(--mut);margin:0 0 7px}
-#unitCourierBox #ledger .mm-freight-lot button.copy{font:600 24px/1.4 var(--f-ui)!important;text-align:left;white-space:nowrap;max-width:100%;overflow-x:auto;scrollbar-width:thin}
+#unitCourierBox #ledger .mm-freight-lot button.copy{font:600 24px/1.4 var(--f-ui)!important;text-align:left;white-space:normal;max-width:100%;overflow-wrap:anywhere;overflow:visible}
 #unitCourierBox #ledger #unitCourierContent{border-top:1px solid var(--line2);min-width:0}
 #unitCourierBox #ledger .ledger-controls{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin:0!important;padding:18px 24px 20px!important}
 #unitCourierBox #ledger .ledger-reference-controls{display:flex;align-items:center;gap:14px;flex-wrap:wrap;min-width:0}
@@ -35,14 +35,14 @@
 #unitCourierBox #ledger .ledger-secondary-sort button{display:block;width:100%;border:0;padding:8px;text-align:left;background:none;color:var(--txt);font:inherit}
 #unitCourierBox #ledger #ledgerReferenceWarning{margin:0 24px 14px;font:400 14px/1.5 var(--f-ui);color:var(--mut)}
 #unitCourierBox #ledger #ledgerTradeTotals{display:flex;flex-wrap:wrap;align-items:center;gap:10px 20px;margin:0 24px 14px;font:400 14px/1.4 var(--f-ui)}
-#unitCourierBox #ledger .ledger-table-scroll{overflow-x:auto;max-width:100%;margin:0 12px;scrollbar-width:thin}
-#unitCourierBox #ledger.ledger-fusion .ledger-market-columns,#unitCourierBox #ledger.ledger-fusion #lots article.lot .lot-head.ledger-market-row{display:grid!important;grid-template-columns:var(--ledger-columns)!important;gap:12px!important;align-items:center;padding:16px 14px!important;min-width:1240px;min-height:64px!important;margin:0!important;background:none!important}
+#unitCourierBox #ledger .ledger-table-scroll{overflow:visible;max-width:100%;margin:0 12px}
+#unitCourierBox #ledger.ledger-fusion .ledger-market-columns,#unitCourierBox #ledger.ledger-fusion #lots article.lot .lot-head.ledger-market-row{display:grid!important;grid-template-columns:var(--ledger-columns)!important;gap:10px!important;align-items:center;padding:16px 84px 16px 14px!important;min-width:0;min-height:64px!important;margin:0!important;background:none!important}
 #unitCourierBox #ledger.ledger-fusion .ledger-market-columns{border:0!important;border-bottom:1px solid var(--line2)!important}
 #unitCourierBox #ledger.ledger-fusion .ledger-market-columns .ledger-sort{display:block!important;width:100%;min-width:0;min-height:0;padding:0!important;border:0!important;border-radius:0;background:none!important;font:650 14px/1.4 var(--f-ui)!important;letter-spacing:.035em;text-transform:uppercase;text-align:left!important;color:var(--txt);white-space:nowrap}
 #unitCourierBox #ledger.ledger-fusion .ledger-market-columns .ledger-sort:first-child{padding-left:14px!important}
 #unitCourierBox #ledger .sort-arrow:empty{display:none}
 #unitCourierBox #ledger .ledger-sort[data-active=true]{color:var(--clay)!important}
-#unitCourierBox #ledger.ledger-fusion #lots{margin:0;padding:0;min-width:1240px;background:var(--surface-card)}
+#unitCourierBox #ledger.ledger-fusion #lots{margin:0;padding:0;min-width:0;background:var(--surface-card)}
 #unitCourierBox #ledger.ledger-fusion #lots article.lot{display:block!important;position:relative;grid-template-columns:none;margin:0!important;padding:0!important;border:0!important;border-bottom:1px solid var(--line2)!important;border-radius:0;background:transparent!important;box-shadow:none!important;overflow:visible}
 #unitCourierBox #ledger.ledger-fusion #lots article.lot[hidden],#unitCourierBox #ledger #lots .lot-body[hidden]{display:none!important}
 #unitCourierBox #ledger #lots .lot-head:hover{background:color-mix(in srgb,var(--txt) 2%,transparent)!important}
@@ -54,10 +54,10 @@
 #unitCourierBox #ledger #lots .lot-meta:has(.lot-header-warning[hidden]){display:none}
 #unitCourierBox #ledger #lots .lot-table-cell{display:block;min-width:0;grid-row:1;text-align:left;font:500 15px/1.45 var(--f-ui);font-variant-numeric:tabular-nums}
 #unitCourierBox #ledger #lots .lot-table-label{display:none}
-#unitCourierBox #ledger #lots .lot-table-quantity{grid-column:2!important}#unitCourierBox #ledger #lots .lot-table-volume{grid-column:3!important}#unitCourierBox #ledger #lots .lot-table-buy{grid-column:4!important}#unitCourierBox #ledger #lots .lot-table-sell{grid-column:5!important}#unitCourierBox #ledger #lots .lot-table-freight{grid-column:6!important}#unitCourierBox #ledger #lots .lot-table-result{grid-column:7!important;padding-right:96px}
+#unitCourierBox #ledger #lots .lot-table-quantity{grid-column:2!important}#unitCourierBox #ledger #lots .lot-table-volume{grid-column:3!important}#unitCourierBox #ledger #lots .lot-table-buy{grid-column:4!important}#unitCourierBox #ledger #lots .lot-table-sell{grid-column:5!important}#unitCourierBox #ledger #lots .lot-table-freight{grid-column:6!important}#unitCourierBox #ledger #lots .lot-table-result{grid-column:7!important;padding-right:0}
 #unitCourierBox #ledger button.copy{position:relative;z-index:2;pointer-events:auto;background:transparent!important;border:0!important;box-shadow:none!important;padding:0!important;margin:0!important;min-height:0!important;border-radius:2px!important;font:inherit!important;line-height:inherit!important;color:inherit;text-align:inherit;max-width:100%}
 #unitCourierBox #ledger button.copy::before,#unitCourierBox #ledger button.copy::after{display:none!important}
-#unitCourierBox #ledger #lots .lot-table-cell button.copy{display:block;width:100%;white-space:nowrap;overflow-x:auto;scrollbar-width:thin}
+#unitCourierBox #ledger #lots .lot-table-cell button.copy{display:block;width:100%;white-space:nowrap;overflow:visible}
 #unitCourierBox #ledger button.copy:focus-visible{outline:2px solid var(--clay)!important;outline-offset:3px}
 #unitCourierBox #ledger button.copy:disabled{opacity:1;color:var(--mut);cursor:default}
 #unitCourierBox #ledger button.copy.pos,#unitCourierBox #ledger button.copy.isk-pos{color:var(--gain)!important}#unitCourierBox #ledger button.copy.neg,#unitCourierBox #ledger button.copy.isk-neg{color:var(--loss)!important}
@@ -69,24 +69,19 @@
 #unitCourierBox #ledger #lots .lot-x{position:absolute;right:0;top:10px!important;margin:0!important;width:44px!important;height:44px!important;min-width:44px;min-height:44px;opacity:.6;z-index:3;background:none!important;border:0;border-radius:3px}
 #unitCourierBox #ledger #lots .lot-x::before{width:12px;height:12px}
 #unitCourierBox #ledger #lots article.lot.open>.lot-head.ledger-market-row{background:var(--surface-panel)!important}
-#unitCourierBox #ledger #lots .lot.open .lot-body{box-sizing:border-box;position:relative;margin:0!important;padding:0 24px 20px 14px!important;background:var(--surface-panel)!important;border:0!important;border-radius:0!important;max-width:100%}
+#unitCourierBox #ledger #lots .lot.open .lot-body{box-sizing:border-box;position:relative;margin:0!important;padding:0 24px 24px!important;background:var(--surface-panel)!important;border:0!important;border-radius:0!important;max-width:100%}
 #unitCourierBox #ledger #lots .lot-selected-summary{display:flex;flex-wrap:wrap;align-items:flex-start;gap:14px 28px;margin:0 0 14px 22px;padding:12px 0;border-bottom:1px solid var(--line2);font:400 13px/1.4 var(--f-ui)}
 #unitCourierBox #ledger #lots .lot-selected-summary>.lot-route,#unitCourierBox #ledger #lots .lot-selected-summary>.lot-pp,#unitCourierBox #ledger #lots .lot-selected-summary>.lot-financial{display:block!important;grid-column:auto!important;grid-row:auto!important;min-width:0;margin:0;gap:5px}
 #unitCourierBox #ledger #lots .lot-selected-summary .lot-k{display:block;font:600 12px/1.4 var(--f-ui)!important;margin-bottom:5px!important}
 #unitCourierBox #ledger #lots .lot-selected-summary button.copy{font:500 15px/1.45 var(--f-ui)!important}
 #unitCourierBox #ledger #lots .lot-reference-trade{display:flex;gap:20px;flex-wrap:wrap}
 #unitCourierBox #ledger #lots .lot-reference-trade .lot-table-label{display:block;font:400 13px/1.4 var(--f-ui);margin-bottom:5px}
-#unitCourierBox #ledger #lots .lot-panel-grid{position:relative;display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:12px 32px!important;max-width:none;margin:0!important;padding:24px 0 0 22px!important;border:0!important;background:none!important}
-#unitCourierBox #ledger #lots .lot-panel-grid::before{content:'';position:absolute;left:0;top:-8px;width:calc(50% - 8px);height:24px;border-left:2px dotted var(--ledger-thread);border-bottom:2px dotted var(--ledger-thread);border-bottom-left-radius:16px}
-#unitCourierBox #ledger #lots .lot-panel-grid::after{content:'';position:absolute;left:calc(50% - 8px);top:16px;width:14px;height:16px;border-top:2px dotted var(--ledger-thread);border-right:2px dotted var(--ledger-thread);border-top-right-radius:14px}
-#unitCourierBox #ledger #lots .ledger-thread-rail{position:absolute;left:0;top:16px;bottom:22px;border-left:2px dotted var(--ledger-thread);pointer-events:none}
-#unitCourierBox #ledger #lots .ledger-thread-rail.right{left:calc(50% + 6px);top:32px}
+#unitCourierBox #ledger #lots .lot-panel-grid{position:relative;display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:16px 36px!important;max-width:none;margin:0!important;padding:18px 0 0 26px!important;border:0!important;background:none!important}
 #unitCourierBox #ledger #lots .lot-panel-grid>details{position:relative;min-width:0;align-self:start!important;border:1px solid var(--line2)!important;border-radius:7px!important;background:var(--surface-card)!important;overflow:visible!important}
-#unitCourierBox #ledger #lots .lot-panel-grid>details::before{content:'';position:absolute;left:-22px;top:0;width:20px;height:23px;border-left:2px dotted var(--ledger-thread);border-bottom:2px dotted var(--ledger-thread);border-bottom-left-radius:16px}
-#unitCourierBox #ledger #lots .lot-panel-grid>details>summary{position:relative;list-style:none;padding:13px 14px!important;min-height:48px;font:650 14px/1.4 var(--f-ui)!important;background:transparent!important}
+#unitCourierBox #ledger #lots .lot-panel-grid>details>summary{position:relative;list-style:none;padding:13px 14px 13px 42px!important;min-height:48px;font:650 14px/1.4 var(--f-ui)!important;background:transparent!important}
 #unitCourierBox #ledger #lots .lot-panel-grid>details>summary::-webkit-details-marker{display:none}
 #unitCourierBox #ledger #lots .lot-panel-grid>details>summary::after{display:none!important;content:none!important}
-#unitCourierBox #ledger #lots .lot-panel-grid>details>summary::before{content:'';position:absolute;box-sizing:content-box;left:-29px;top:16px;width:15px;height:15px;border:1px solid var(--ledger-thread);border-radius:50%;color:var(--mut);background-color:var(--surface-panel);background-image:linear-gradient(currentColor,currentColor),linear-gradient(currentColor,currentColor);background-size:7px 1px,1px 7px;background-position:center;background-repeat:no-repeat;z-index:1}
+#unitCourierBox #ledger #lots .lot-panel-grid>details>summary::before{content:'';position:absolute;box-sizing:content-box;left:14px;top:16px;width:15px;height:15px;border:1px solid var(--ledger-thread);border-radius:50%;color:var(--mut);background-color:var(--surface-panel);background-image:linear-gradient(currentColor,currentColor),linear-gradient(currentColor,currentColor);background-size:7px 1px,1px 7px;background-position:center;background-repeat:no-repeat;z-index:1}
 #unitCourierBox #ledger #lots .lot-panel-grid>details[open]>summary::before{background-image:linear-gradient(currentColor,currentColor);background-size:7px 1px}
 #unitCourierBox #ledger #lots .lot-panel-grid>details[open]>summary{color:var(--clay);border-bottom:1px solid var(--line2)}
 #unitCourierBox #ledger #unitDetailPager{display:flex;justify-content:flex-end;align-items:center;gap:12px;margin:0;padding:14px 24px;font:400 14px/1.4 var(--f-ui)}
@@ -95,8 +90,35 @@
 #unitCourierBox #ledger [hidden]{display:none!important}
 #ledgerCopyFeedback{position:fixed;z-index:10000;pointer-events:none;border:1px solid var(--line2);border-radius:5px;padding:6px 10px;background:var(--surface-panel);color:var(--txt);font:400 13px/1.4 var(--f-ui);box-shadow:0 3px 12px rgba(0,0,0,.15)}
 #ledgerCopyFeedback[hidden]{display:none!important}
-@media(max-width:980px){#unitCourierBox #ledger #lots .lot.open .lot-body{width:calc(100vw - 120px);max-width:100%}#unitCourierBox #ledger #lots .lot-panel-grid{grid-template-columns:minmax(0,1fr)!important}#unitCourierBox #ledger #lots .ledger-thread-rail.right,#unitCourierBox #ledger #lots .lot-panel-grid::after{display:none}#unitCourierBox #ledger #lots .lot-panel-grid::before{width:20px}#unitCourierBox #ledger #lots .lot-selected-summary{flex-direction:column}}
-@media(max-width:600px){#unitCourierBox #ledger.ledger-fusion>#unitCourierToggle{padding:20px 16px!important;gap:18px!important}#unitCourierBox #ledger .mm-freight-lot{grid-template-columns:minmax(0,1fr)!important;gap:10px!important}#unitCourierBox #ledger .mm-freight-lot>span{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px}#unitCourierBox #ledger .mm-freight-lot>span>span{margin:0}#unitCourierBox #ledger .mm-freight-lot button.copy{font-size:21px!important}#unitCourierBox #ledger .ledger-controls{padding:16px!important}#unitCourierBox #ledger .ledger-table-scroll{margin:0 6px}#unitCourierBox #ledger #ledgerPriceHelpContent{left:auto;right:0}#unitCourierBox #ledger #lots .lot.open .lot-body{width:calc(100vw - 100px)}}
+#unitCourierBox #ledger #lots .ledger-thread{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;color:var(--ledger-thread);overflow:visible}
+#unitCourierBox #ledger #lots .ledger-thread path{fill:none;stroke:currentColor;stroke-width:1;stroke-linecap:round;stroke-dasharray:.1 3.4}
+#unitCourierBox #ledger #lots .lot-panel-grid::before,#unitCourierBox #ledger #lots .lot-panel-grid::after,#unitCourierBox #ledger #lots .lot-panel-grid>details::before{display:none!important;content:none!important}
+#unitCourierBox #ledger #lots .lot-panel-grid>details>:not(summary){margin-left:24px!important;margin-right:12px!important;width:auto!important;min-width:0}
+@media(max-width:1200px){
+ #unitCourierBox #ledger.ledger-fusion .ledger-market-columns{display:none!important}
+ #unitCourierBox #ledger.ledger-fusion #lots article.lot .lot-head.ledger-market-row{grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:16px 20px!important;padding:16px 18px!important}
+ #unitCourierBox #ledger #lots .lot-info{grid-column:1/-1!important;grid-row:1!important;padding:0 80px 0 0}
+ #unitCourierBox #ledger #lots .lot-table-cell{grid-column:auto!important;grid-row:auto!important}
+ #unitCourierBox #ledger #lots .lot-table-label{display:block;font:500 12px/1.4 var(--f-ui);text-transform:uppercase;color:var(--mut);margin-bottom:5px}
+ #unitCourierBox #ledger #lots .lot-table-result{padding-right:0}
+ #unitCourierBox #ledger #lots .lot.open .lot-body{width:100%;max-width:100%}
+ #unitCourierBox #ledger .mm-freight-lot{grid-template-columns:minmax(0,1fr)!important;gap:12px!important}
+ #unitCourierBox #ledger .mm-freight-lot>span{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px}
+ #unitCourierBox #ledger .mm-freight-lot>span>span{margin:0}
+}
+@media(max-width:980px){#unitCourierBox #ledger #lots .lot-panel-grid{grid-template-columns:minmax(0,1fr)!important}#unitCourierBox #ledger #lots .lot-selected-summary{flex-direction:column}}
+@media(max-width:600px){
+ #unitCourierBox #ledger.ledger-fusion>#unitCourierToggle{padding:20px 16px!important;gap:18px!important}
+ #unitCourierBox #ledger .mm-freight-lot button.copy{font-size:21px!important}
+ #unitCourierBox #ledger .ledger-controls{padding:16px!important}
+ #unitCourierBox #ledger .ledger-table-scroll{margin:0 6px}
+ #unitCourierBox #ledger.ledger-fusion #lots article.lot .lot-head.ledger-market-row{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:14px 12px!important;padding:16px 12px!important}
+ #unitCourierBox #ledger #lots .lot.open .lot-body{padding:0 12px 20px!important}
+ #unitCourierBox #ledger #lots .lot-panel-grid{padding-left:18px!important}
+ #unitCourierBox #ledger #lots .lot-panel-grid>details>:not(summary){margin-left:14px!important;margin-right:10px!important}
+ #unitCourierBox #ledger #lots .lot-panel-grid>details>summary{padding-left:38px!important}
+ #unitCourierBox #ledger #lots .lot-table-cell button.copy{white-space:normal;overflow-wrap:anywhere}
+}
 @media(pointer:coarse){#unitCourierBox #ledger #lots .lot-open{width:44px!important;height:44px!important;top:10px!important}}
 
 #unitCourierBox #ledger #unitCourierHelp{display:inline-flex!important;width:22px!important;flex:0 0 22px!important;margin:0!important}

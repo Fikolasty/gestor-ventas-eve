@@ -1,3 +1,10 @@
+## v1.0.174 — corrección de márgenes y desbordamiento — candidata
+
+- Corrige hilos dobles y márgenes planos: trazos únicos, sangría del Item al panel y del header al contenido.
+- Conserva cuatro paneles2×2, distribución de Ajustes, controles y datos reales de v173.
+- Retira ancho mínimo1240px; importes y nombres visibles sin scroll lateral, con campos etiquetados en pantallas menores.
+- r6 descartada, sin cambios económicos, ESI/SSO o persistencia; QA/publicación en cierre.
+
 ## v1.0.173 — Fusión r5 — candidata local
 
 - Un solo Detalle por Item inferior, cabecera redondeada con totales copiables y actualización solo icono.
