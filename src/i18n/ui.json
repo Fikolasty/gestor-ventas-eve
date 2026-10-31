@@ -1660,16 +1660,16 @@
     "en": "General"
   },
   "settings.tabPilot": {
-    "es": "Personaje e impuestos",
-    "en": "Pilot & taxes"
+    "es": "Personaje e Impuestos",
+    "en": "Pilot & Taxes"
   },
   "settings.tabPricing": {
-    "es": "Precios y ventas",
-    "en": "Pricing & sales"
+    "es": "Precios y Ventas",
+    "en": "Pricing & Sales"
   },
   "settings.tabFreight": {
-    "es": "Envío y reproceso",
-    "en": "Freight & refining"
+    "es": "Envío y Reproceso",
+    "en": "Freight & Refining"
   },
   "settings.groupTaxes": {
     "es": "IMPUESTOS",

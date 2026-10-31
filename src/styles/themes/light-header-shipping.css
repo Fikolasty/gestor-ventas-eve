@@ -174,3 +174,8 @@ html.light #settings .c5c-taxes .c5c-broker-main{
 html.light #settings .c5c-taxes .c5c-broker-standings .st-f{
   background:var(--surface-panel)!important;border-color:var(--line2)!important
 }
+
+/* v180: the pilot section keeps the same insets and edges as Dark. */
+html.light body.mm-settings-compact #settings .c5c-pilot-panel>.st-sec{border:0!important}
+html.light body.mm-settings-compact #settings .c5c-pilot-panel>.c5c-fixed{border:1px solid var(--line2)!important;box-shadow:none!important}
+html.light body.mm-settings-compact #settings .c5c-taxes .c5c-broker-standings .st-f{background:transparent!important}

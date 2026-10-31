@@ -131,10 +131,10 @@ class C5bWorkspaceTests(unittest.TestCase):
         self.page.evaluate("togglePanel('settings',true)")
         tabs = self.page.locator("#settings .modern-tab")
         self.assertEqual(tabs.all_text_contents(), [
-            "General","Personaje e impuestos","Precios y ventas","Envío y reproceso"])
+            "General","Personaje e Impuestos","Precios y Ventas","Envío y Reproceso"])
         self.page.evaluate("setLang('en')")
         self.assertEqual(tabs.all_text_contents(), [
-            "General","Pilot & taxes","Pricing & sales","Freight & refining"])
+            "General","Pilot & Taxes","Pricing & Sales","Freight & Refining"])
         self.assertEqual(self.page.locator("#settings .modern-tab[aria-selected=true]").count(),1)
         self.page.locator("#themeLight").evaluate("""el=>{
           el.checked=false;el.dispatchEvent(new Event('change',{bubbles:true}));
