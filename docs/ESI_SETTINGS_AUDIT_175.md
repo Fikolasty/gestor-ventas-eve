@@ -1,6 +1,6 @@
 # Auditoría de Ajustes y ESI — v1.0.175
 
-Fecha:2026-10-31. Estado: correcciones locales verificadas; publicación pendiente. No se ha usado un personaje ni token real en las pruebas.
+Fecha:2026-10-31. Estado: v1.0.175 publicada y certificada; ver cierre al final. No se ha usado un personaje ni token real en las pruebas.
 
 | Ajuste | Origen y efecto |
 |---|---|
@@ -41,3 +41,14 @@ QA157Node/16Python/8legacy PASS;109Chromium en gate amplio previo y21focales fin
 - [Accounting](https://esi.evetech.net/universe/types/16622?compatibility_date=2026-10-01&language=en), [ABR](https://esi.evetech.net/universe/types/16597?compatibility_date=2026-10-01&language=en), [Reprocessing](https://esi.evetech.net/universe/types/3385?compatibility_date=2026-10-01&language=en), [Efficiency](https://esi.evetech.net/universe/types/3389?compatibility_date=2026-10-01&language=en), [Simple Ore](https://esi.evetech.net/universe/types/60377?compatibility_date=2026-10-01&language=en), [Ice](https://esi.evetech.net/universe/types/18025?compatibility_date=2026-10-01&language=en): porcentajes por nivel confirmados por descripciones oficiales.
 
 Limitación pendiente: EVE SSO/ESI con un personaje real, autorización real de scopes adicionales y comparación contra su ventana de venta. Los tests con firma y endpoints simulados no certifican esos pasos externos.
+
+
+## Cierre LIVE v1.0.175 — 2026-10-31
+
+r5 y la auditoría ESI solicitadas ya están publicadas. Fuente Fiko protegida `e34254ed42960fe18d4b0ce9f6caa8839f64211d`; build bot `23a94fdc586fc7024f3dfde7e891104da749ad55`. Cuatro Actions SUCCESS: Build `41224717813`, Minería `41224717833`, Versiones `41224718002`, Rebuild/Pages `41224718006`. Compile `124606370289` y Deploy `124607530883` success. CI: 157 Node, 16 Python, 8 legacy y 111 Chromium PASS (244,904 s). Gate local final: los mismos 111 Chromium PASS (219,977 s), 157 Node, 16 Python y 8 legacy PASS. Los 21 focales finales también pasaron.
+
+HTTPS independiente confirmó v1.0.175. HTML público/local canónico/GitHub idénticos: 2.546.435 bytes, blob `594ab7d2606ad40089eebc6da7fe69520498d057`. Web: https://fikolasty.github.io/gestor-ventas-eve/. Capturas reales finales `v175-r5-final2-*` inspeccionadas en 1440 px Dark/Light para ambos tabs con igual idioma y estado; matriz 390/630/980/1440, ES/EN y cerrados/uno/todos PASS. La captura inicial que reveló textarea comprimido fue corregida y sustituida por final2, con 108 px y sus reglas visibles. No se usa la maqueta como evidencia de producción.
+
+Se conservan los 51 controles de Precios/Envío, los cuatro tabs y fórmulas económicas. Ahora ESI alimenta correctamente ABR y las 12 habilidades específicas de procesamiento además de las cinco generales; niveles activos, ausencia válida = 0, error nunca = 0. Standings e implantes se sincronizan cuando el personaje concede sus permisos de lectura; sesiones antiguas pueden usar «Autorizar standings e implantes» en el menú del personaje. El login básico sigue siendo compatible con el permiso histórico de habilidades. Esos permisos adicionales podrían requerir habilitar los scopes en el registro Developer de la aplicación; no se han concedido ni comprobado con un personaje real. No se solicitan wallet/assets/escritura.
+
+Tarifas de estructura/refinería, rig, seguridad, plazos/costes privados de envío, programas Buyback y ofertas particulares siguen siendo configuración del usuario. Los tests firmados usan una clave efímera y datos sintéticos: NO certifican EVE SSO/ESI real extremo a extremo. La prueba con un personaje real y la comparación contra su ventana de venta siguen pendientes. Kit activo: docs/HANDOFF_SETTINGS_PRICING.md; auditoría: docs/ESI_SETTINGS_AUDIT_175.md. Este cierre sustituye estados candidatos y permisos de diseño pendientes anteriores en este alcance. No repetir el rediseño ni ampliar a otros módulos por inercia. La documentación se cierra en un commit posterior que no cambia el HTML certificado.

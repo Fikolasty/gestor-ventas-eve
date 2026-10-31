@@ -116,3 +116,6 @@ Cuatro paneles originales2×2 y controles conservados. Cuerpos con sangría desd
 
 
 - **v1.0.175 candidata aprobada (2026-10-31):** Ajustes r5 en Precios/Envío, dos columnas compactas, gris cálido r5 y cabeceras sin símbolos/acciones globales visibles. Auditoría ESI solicitada: ABR enlazado en change, niveles activos específicos por material, standings e implantes con permiso opcional; manuales preservados ante fallos/ediciones. Fórmulas vigentes verificadas con CCP. Ver docs/ESI_SETTINGS_AUDIT_175.md y docs/HANDOFF_SETTINGS_PRICING.md; gate remoto pendiente, última LIVE174.
+
+
+- **v1.0.175 LIVE certificada (2026-10-31):** r5 de Ajustes y auditoría ESI publicadas. Fuente Fiko `e34254ed`, build `23a94fdc`, cuatro Actions SUCCESS, 157 Node / 16 Python / 8 legacy / 111 Chromium PASS; HTML HTTPS/local/GitHub idéntico `594ab7d2` (2.546.435 bytes). ABR actualiza C.abr con change; niveles activos por material no se aplanan en refresh. Standings/implante activo requieren scopes de lectura opcionales concedidos por EVE; no afirmar que una sesión antigua dispone de ellos. Login básico skills conservado. No inventar tarifas privadas a partir de habilidades. No probado SSO/ESI real extremo a extremo. Ver docs/ESI_SETTINGS_AUDIT_175.md y kit activo docs/HANDOFF_SETTINGS_PRICING.md. Este cierre sustituye el estado candidato175 anterior.
