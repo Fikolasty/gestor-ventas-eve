@@ -7,7 +7,7 @@
 <meta name="referrer" content="no-referrer">
 <title>Market Moves+ · SIGMA GRINDSET</title>
 <style>
-/* ================= Market Moves+ v1.0.177 =================
+/* ================= Market Moves+ v1.0.178 =================
    Paleta: azul de base, naranja = acción, verde/rojo = ganancia/pérdida.
    Sin backdrop-filter: el vidrio se finge con rgba + bordes. */
 *{box-sizing:border-box;margin:0;padding:0}
@@ -6719,6 +6719,56 @@ body.mm-settings-compact #settings .modern-panel>fieldset.st:not(.c5c-fixed)>leg
   margin-left:-14px!important;margin-right:-14px!important;
 }
 body.mm-settings-compact #settings .c5c-skills>.st-g{grid-auto-rows:1fr!important}
+
+/* Compact skill cards: actual controls centered, with natural content rhythm. */
+body.mm-settings-compact #settings .c5c-pilot-panel>.c5c-skills{padding:14px!important}
+body.mm-settings-compact #settings .c5c-skills .c5c-skill-card{
+  min-height:0!important;padding:12px!important;gap:6px!important;
+}
+body.mm-settings-compact #settings .c5c-skills .c5c-skill-card .st-l{
+  display:flex!important;align-items:center!important;min-height:20px!important;
+}
+body.mm-settings-compact #settings .c5c-skills .eve-sk{
+  align-self:center!important;margin:0 auto!important;
+}
+body.mm-settings-compact #settings .c5c-skills .c5c-skill-note{margin:0!important;min-height:0!important}
+body.mm-settings-compact #settings .c5c-skills .c5c-skill-source{
+  box-sizing:border-box;display:inline-flex;align-items:center;justify-content:center;height:20px;
+}
+body.mm-settings-compact #settings .c5c-skills .eve-sk{
+  grid-template-columns:28px minmax(0,1fr) 32px 28px!important;
+  gap:6px!important;max-width:300px!important;min-height:32px!important;
+}
+body.mm-settings-compact #settings .c5c-skills :is(.eve-sk-minus,.eve-sk-add){
+  width:28px!important;height:28px!important;min-width:28px!important;min-height:28px!important;
+  border-radius:6px!important;font-size:16px!important;
+}
+body.mm-settings-compact #settings .c5c-skills .eve-sk-pip{
+  position:relative;height:28px!important;min-height:28px!important;
+  border:0!important;background:transparent!important;box-shadow:none!important;
+}
+body.mm-settings-compact #settings .c5c-skills .eve-sk-pip::before{
+  content:'';position:absolute;inset:6px 0;box-sizing:border-box;
+  border:1px solid var(--line2);border-radius:3px;
+  background:color-mix(in srgb,var(--mut) 24%,transparent);
+  box-shadow:inset 0 1px 0 #ffffff0d;
+}
+body.mm-settings-compact #settings .c5c-skills .eve-sk-pip.trained::before{
+  background:var(--txt);border-color:var(--txt);
+  box-shadow:inset 0 1px 0 #ffffff59,0 1px 3px #00000029;
+}
+body.mm-settings-compact #settings .c5c-skills .c5c-skill-card{
+  display:grid!important;grid-template-columns:minmax(0,1fr) auto;
+  grid-template-rows:auto auto auto;align-content:start;column-gap:10px!important;
+}
+body.mm-settings-compact #settings .c5c-skills .c5c-skill-card .st-l{
+  grid-column:1;grid-row:1;padding-right:0!important;margin:0!important;
+}
+body.mm-settings-compact #settings .c5c-skills .c5c-skill-source{
+  position:static;grid-column:2;grid-row:1;align-self:center;justify-self:end;
+}
+body.mm-settings-compact #settings .c5c-skills .eve-sk{grid-column:1/-1;grid-row:2;justify-self:center}
+body.mm-settings-compact #settings .c5c-skills .c5c-skill-note{grid-column:1/-1;grid-row:3;align-self:start}
 /* ===== tema claro (generado desde el oscuro por light.py) ===== */
 html.light{--header-surface:rgba(240,237,229,0.96);--ticker-surface:rgba(240,237,229,0.91);--ticker-hover:rgba(240,237,229,0.96);--surface-card:rgba(240,237,229,0.9);--surface-result:linear-gradient(180deg,rgba(240,237,229,0.91),rgba(240,237,229,0.96));--surface-panel:rgba(240,237,229,0.96);--void:#e4e3dd;--hull:#e2e0da;--hull2:#e0ded8;--line:rgba(31,30,29,0.114);--line2:rgba(31,30,29,0.125);--txt:#1c1c1a;--mut:#54524d;--dim:#6c6a64;--ion:#413f3c;--blue:#a39d8b;--clay:#c96442;--thrust:#a67526;--gain:#418b62;--loss:#a92c23}
 html.light body::after{background:repeating-linear-gradient(180deg,rgba(31,30,29,0.011) 0 1px,transparent 1px 3px),
@@ -8524,6 +8574,10 @@ html.light #pSum .pk-tools .pk-flt .pk-fb.on{background:var(--surface-panel)!imp
 html.light body.mm-settings-compact #settings :is(#mm-settings-panel-2,#mm-settings-panel-3) fieldset.st:not(.closed),html.light body.mm-settings-compact #settings .st-wrap>.modern-tabs{background:var(--void)!important}
 /* General uses the same one-pixel frame as the other disclosure drawers. */
 html.light body.mm-settings-compact #settings #mm-settings-panel-0>fieldset.st{border-width:1px!important;border-color:var(--line2)!important}
+/* Level marks use a single small face; their larger hit target stays clear. */
+html.light body.mm-settings-compact #settings .c5c-skills .eve-sk-pip{
+  border:0!important;background:transparent!important;box-shadow:none!important;
+}
 /* EVE7 theme ownership: shipping, header, ticker, lighter station image */
 html.light {
  --header-surface:rgba(250,248,245,.94);
@@ -9342,13 +9396,13 @@ Contraband Freight = no</textarea><small>Una regla por línea: Nombre = tax tota
 <button type="button" class="totop" id="toTop" aria-label="Volver arriba" title="Volver arriba (Inicio)" hidden><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 14l6-6 6 6"/></svg></button>
 <footer class="foot">
   <p class="foot-sec"><span class="ic i-lock" aria-hidden="true"></span>Tu inventario no se guarda: al cerrar o recargar se borra. Solo tus Ajustes quedan en este navegador.</p>
-  <div class="foot-by">Creado por <b>Fiko McGivert</b> · Vanguardia DR · SIGMA GRINDSET · <span class="ver">v1.0.177</span></div>
+  <div class="foot-by">Creado por <b>Fiko McGivert</b> · Vanguardia DR · SIGMA GRINDSET · <span class="ver">v1.0.178</span></div>
 </footer>
 
 <script>
 'use strict';
 /* ============================================================
-   Market Moves+ v1.0.177 — SIGMA GRINDSET / Vanguardia DR
+   Market Moves+ v1.0.178 — SIGMA GRINDSET / Vanguardia DR
    Flujo:  pegado → items → carga (ESI: precios, volúmenes, historial) → verificación → plan → vista
      1. Pegado      parsePaste(): parser posicional de columnas de EVE (Name · Quantity · … · Volume · Est. Price).
      2. Carga       esiItems(): trae todo lo que falta; mientras carga, refresh() NO pinta (S.loading).
