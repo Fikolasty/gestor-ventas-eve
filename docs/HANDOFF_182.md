@@ -1,4 +1,4 @@
-# Continuidad — v1.0.182 candidata
+# Continuidad — v1.0.182 LIVE certificada
 
 Base main1700ee99d264e973137090701224d8bccdaffc65; últimaLIVE181. Leer AGENTS/protocolo/DSS y cierre de esta entrega.
 
@@ -13,3 +13,21 @@ Notas ES/EN conservan el efecto real y eliminan el prefijo de nivel duplicado. P
 Settings, Skills, Taxes y grupos visibles de General: descripción junto al título donde cabe, salto natural en móvil y línea1px. Nuevos tokens locales --mm-settings-head/body/input aplican jerarquía gris cálido a gavetas de Ajustes, con header más claro que cuerpo y campo profundo en Dark; Light conserva contraste con los mismos tamaños/márgenes. La petición nueva prevalece solo para Settings sobre el patrón previo de cabeceras cerradas oscuras; no se extiende a Ventas/Guía/otros paneles.
 
 157Node/16Python PASS. Focales de178/180/181 PASS5tests12.982s; dos casos nuevos182 PASS4.723s:32estados Manual/ESI simulado×ES/EN×390/630/980/1440×temas; ancho/alto de botones, alineación nombre/barra/ayuda, alturas idénticas con texto máximo, contención y sin overflow, porcentajes bold/color, nivel único y actualizaciones del native select; centrado geométrico de ambos signos y luminancia real cabecera>cuerpo>campo. Capturas settings182-final1-* y quote-final1-* revisadas en1440 Dark/Light con mismos datos/idioma.127Chromium completo/CI/Pages/HTTP pendientes. ÚltimaLIVE181; no declarar182LIVE aún. No login EVE real extremo a extremo.
+
+### Verificación local y publicación en curso182
+
+Fuente Fiko protegida09d99023dd622550bacb84717db89cc9bacade69, parent1700ee99.157Node/16Python PASS. Run local completo127casos en276.355s:125PASS y2expectativas históricas que exigían Nivel/Level dentro de la nota; se actualizan a nivel único en barra, conservando verificación de select/tasa/idioma/origenESI y clics. Focales corregidos2/2PASS1.464s; no cambia producción después del run. CI completo127 pendiente, Rebuild41278966789; Minería41278966846/Build41278966801/Versiones41278966802 success. HTML local canónico2543289bytes/blobf020a7c5c305eece9154479d12eb3803085a41c5. Esperar4Actions/Pages/HTTPS antes de LIVE; cierre siguiente sustituye esta nota.
+
+## v1.0.182 LIVE certificada — cierre 2026-11-01
+
+Este cierre sustituye candidata y gates pendientes182. Publicados los ajustes acumulados de Skills compactos, nota sin nivel redundante, porcentajes bold/naranja, títulos con descripción lateral y divisores1px, e inversión de superficies de Ajustes. Fuente Fiko protegida09d99023dd622550bacb84717db89cc9bacade69; build bot a2c4e71fcb298469c90790f02f08d03e7f3bedec. Cuatro Actions success: Versiones41278966802, Build41278966801, Minería41278966846, Rebuild/Pages41278966789. Compile124766777840 y Deploy124767870970 success. CI157Node/16Python/8legacy/127Chromium PASS (302.470s). Local157Node/16Python PASS;127ejecutadas en276.355s (125PASS+dos expectativas antiguas del nivel repetido), ambas corregidas con focales2/2PASS1.464s sin cambio de producto posterior. No se afirma127PASS en un solo run local final; CI completo certifica127/127.
+
+GitHub/HTTPS/local index idénticos:2543289bytes/blob f020a7c5c305eece9154479d12eb3803085a41c5, versión182. Owner src/styles/91-settings-skills.css,11CSS_PARTS; reglas Skills anteriores y parche Light retirados. Tarjetas312px máximo y altura común derivada del contenido mayor, control244px centrado, botones cuadrados26px, signo CSS centrado50% y nombre/ayuda alineados con−. Nota ESI larga conserva advertencia material/manual; porcentajes se dibujan con nodos seguros strong. Las fuentes de nivel/cálculo/ESI/storage y la UI de Minería no cambian.
+
+Settings/Skills/Taxes/General visibles: título y ayuda lateral cuando cabe, wrap natural y línea fina. Tokens locales --mm-settings-head/body/input distinguen cabecera gris cálido medio, cuerpo oscuro y campo profundo en Dark; Light mantiene geometría y contraste. La petición de inversión prevalece sobre el header cerrado oscuro exclusivamente en Ajustes, sin alterar patrón de Ventas/Guía. Capturas settings182-final1-* y quote-final1-* revisadas1440 ambos temas/idiomas/datos equivalentes. Regresiones390/630/980/1440 ES/EN, Manual/ESI simulado, estados de gavetas, foco/clic/nativos/defaults/caché PASS. Signos antes/después medidos centrados y luminancia de header>body>input Dark. No login SSO/ESI real extremo a extremo.
+
+No hay aprobación pendiente en este alcance. Kit docs/HANDOFF_182.md; documentos previos son historia. La documentación de cierre puede avanzar main sin cambiar el HTML certificado. No reabrir etapas anteriores sin petición; atender el siguiente ajuste del propietario.
+
+## Prompt para continuar en otro chat
+
+Continúa Market Moves+ en C:/Users/hfiko/gestor-ventas-eve. Lee AGENTS y documentos obligatorios; después HANDOFF_182 y el cierre182 de DSS. ÚltimaLIVE182, fuente09d99023/builda2c4e71f,4Actions/127Chromium PASS; HTML2543289bytes/blobf020a7c5c305eece9154479d12eb3803085a41c5. El cierre documental puede avanzar main: verificar HEAD real. Skills y encabezados/colores de Ajustes ya implementados según peticiones acumuladas: no repetirlos ni volver al nivel duplicado/notas sin porcentaje destacado. Owner Skills91, Taxes90; no reintroducir cascada retirada. Mantener controles/fórmulas/ESI/cache, la distinción de fuentes y datos útiles por unidad/lote. Sin etapa amplia adicional aprobada; atender siguiente petición. Publicación exclusivamente Fiko/Fikolasty y gates completos. Reiniciar contador de continuidad en un chat nuevo.

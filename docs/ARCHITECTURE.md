@@ -20,6 +20,7 @@
 | `src/styles/30-legacy-layout.css` | Layout heredado, no añadir nuevos estilos aquí |
 | `src/styles/40-sales-ui.css` | Vista de venta y componentes históricos de resultados |
 | `src/styles/50-navigation.css` | Header y navegación actual |
+| `src/styles/91-settings-skills.css` | Skills compactos, lecturas resaltadas y jerarquía/superficies locales de Ajustes desde182 |
 | `src/styles/90-settings-taxes.css` | Taxes r2: geometría y superficies compartidas Dark/Light, único owner desde181 |
 | `src/styles/60-final-layout.css` | Últimas reglas de simetría y responsive |
 | `src/light.py` | Conversión Light heredada, pendiente de sustitución controlada por temas explícitos |
@@ -92,3 +93,7 @@ La equivalencia del texto reconstruido se comprobó con la versión previa `3df7
 ## 2026-11-01 — Taxes r2 y saneamiento de UI retirada (v1.0.181)
 
 Taxes pasa a un módulo CSS propio ensamblado después de80, sin reglas antiguas dedicadas ni parches de tema duplicados. Se preservan grupos DOM, inputs y motor. La retirada de paintShip/shipBox/fadeIn y sus estilos exclusivos elimina UI inactiva sin tocar el courier canónico; la función courierUnitPresentation conserva su contrato de regresión. Conversor Light/PI pausado/Skills iframe siguen activos o conservados expresamente. Certificación y límites en DSS/HANDOFF_181.
+
+## 2026-11-01 — Skills y superficies de Ajustes (v1.0.182)
+
+Owner91-settings-skills reemplaza reglas dedicadas anteriores de Skills en80 y el parche Light. El render de porcentajes usa nodos text/strong y preserva el texto accesible y los inputs originales; no replica fórmulas. Variables --mm-settings-head/body/input se limitan a Settings. Impuestos conserva90, motor/ESI/storage sin cambios; cierre y evidencia en DSS/HANDOFF_182.
