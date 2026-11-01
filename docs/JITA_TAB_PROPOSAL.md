@@ -138,3 +138,20 @@ Fuente184 está lista para publicar exclusivamente mediante Fiko al terminar ese
 ### Cierre de preparación184 — antes de Fiko
 
 Gate local completo133/133 Chromium PASS272.649s. Después del último selector de visibilidad: dos regresiones Jita PASS38.394s (incluyen128estados y matriz de los cuatro paneles), capturas regeneradas y píxeles Dark/Light del mismo estado revisados.164 Node finales PASS,16 Python/8legacy/gate Build-site/sintaxis/build184 PASS. Sin fallos locales pendientes. Preparada publicación de37archivos fuente/documentación/tests/workflows; index.html lo genera y despliega CI solamente tras su propio gate. Fiko perfil Fikolasty comprobado y main remoto5a5f3a5b verificado. Publicación/Actions/HTTPS todavía pendientes: esta nota NO declara LIVE.
+
+
+## v1.0.184 LIVE certificada — Jita r6 (2026-11-01)
+
+Este cierre sustituye todos los estados candidata/local/pendiente184 y las aprobaciones pendientes de los previews r1–r6. R6 fue aprobada por el propietario y su implementación/publicación autorizada con «bueno dale con todo». Se publicó exclusivamente mediante GitHub Fiko/Fikolasty.
+
+Fuente protegida a3480329a79c712b4351c7bc5df22831cc5695fc, árbol73902cdb15b5f88108e6c0ed63de62eddb4b6a9a;37archivos comparados por SHA de blob antes de avanzar main sin force desde5a5f3a5b. Build bot4ccfe51b067e77217322a354699bd2f0196e1e4e, árbol e8f047725a0f40a63655dbd6d90ac865dd14caeb.
+
+Cuatro Actions SUCCESS: Build41340401531, Minería41340401529, Versiones41340401568 y Rebuild/Pages41340401522. Compile124948962329 y Deploy124950864781 success. CI164Node/16Python/8legacy y133/133Chromium PASS399.894s. Local164Node/16Python/8legacy y gate Build-site exacto PASS;133/133Chromium PASS272.649s y dos focales Jita posteriores al último selector PASS38.394s, con128estados y composición cerrada/fila/uno/todos abiertos ES/EN/Light/Dark390/630/980/1440. Capturas finales del mismo estado ambos temas revisadas después del último ajuste. Fixtures explícitos, no ESI real.
+
+GitHub/HTTPS/local index184 idénticos:2.583.853bytes canónicosLF, blob33d88f070e78592de458ec423afba2e0fc779488. HTTPS200 en https://fikolasty.github.io/gestor-ventas-eve/ sin query, con Cache-Control:no-cache, versión184 y comparación byte a byte. No se declara LIVE solo por fuente o número de versión. El cierre documental puede avanzar main sin cambiar ese HTML certificado.
+
+Comportamiento vigente: Jita entre Ventas/Minería, un solo inventario compartido y sin nueva persistencia. Personal/Buy–Sell/Enviar como tres switches simétricos con títulos en mayúsculas; recibo compacto sin subtítulos. Personal muestra presupuesto neutro; cargos rojos; reventa separa venta estimada, tasas y beneficio tras adquisición/envío. Los Ajustes reales alimentan compra/broker/mercado/courier y el coste final por unidad/lote copiable. Se conservan cuatro paneles del Item con contenido de compra y campos de reventa ocultos en uso personal, sin eliminar sus valores. Contratos utilizan la misma proyección completa que el presupuesto y no inventan cotización si faltan datos de transporte. Faltantes y Buy anómalo permanecen desconocidos, no cero ni ganancia ficticia. Ventas mantiene planes, economía y manuales; tab cambia contexto, no lista.
+
+Owner jita.js/93-jita.css y final Light zzz-jita.css; hooks explícitos y mensajes en ui.json. No duplicar fórmulas ni reintroducir sobrescrituras de funciones propias de las maquetas. Controles antiguos conservados hidden como adaptadores de IDs/listeners; no segundo selector visible. Se retira su constructor antiguo. Iconos Settings/Guide28px en44px. Perfil Light sin borde heredado que desplazaba navegación; geometría equivalente. Sin nuevas librerías, backend, scopes/permisos ESI o cambios de almacenamiento. ESI/SSO real con personaje no probado extremo a extremo.
+
+Última LIVE184. Kit activo docs/HANDOFF_184.md; HANDOFF_JITA_PREVIEW y JITA_TAB_PROPOSAL conservan historia y remiten a este cierre. No quedan aprobaciones o controles de publicación pendientes en esta entrega.
