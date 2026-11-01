@@ -29,8 +29,8 @@ class Settings178Tests(unittest.TestCase):
       for m in metrics:
        self.assertLessEqual(m['center'],1,(esi,lang,width,light,m));self.assertLessEqual(m['gap'],7,(esi,lang,width,light,m));self.assertGreaterEqual(m['gap'],0)
        self.assertLessEqual(m['titleGap'],7);self.assertLessEqual(m['badgeCenter'],1);self.assertTrue(m['contained'])
-       for b in m['buttons']:self.assertGreaterEqual(b['w'],24);self.assertEqual(b['h'],28)
-      self.assertTrue(self.p.locator('.eve-sk-pip').evaluate_all("es=>es.every(e=>{const s=getComputedStyle(e),face=getComputedStyle(e,'::before');return s.backgroundColor==='rgba(0, 0, 0, 0)'&&parseFloat(s.borderTopWidth)===0&&parseFloat(face.top)===6&&parseFloat(face.bottom)===6})"))
+       for b in m['buttons']:self.assertGreaterEqual(b['w'],24);self.assertEqual(b['h'],26)
+      self.assertTrue(self.p.locator('.eve-sk-pip').evaluate_all("es=>es.every(e=>{const s=getComputedStyle(e),face=getComputedStyle(e,'::before');return s.backgroundColor==='rgba(0, 0, 0, 0)'&&parseFloat(s.borderTopWidth)===0&&parseFloat(face.top)===0&&parseFloat(face.bottom)===0})"))
       self.assertLessEqual(max(m['h'] for m in metrics)-min(m['h'] for m in metrics),1)
       both.append([(m['w'],m['h']) for m in metrics])
       inset=self.p.locator('.c5c-skills>.st-g').evaluate('e=>{const a=e.getBoundingClientRect(),b=e.parentElement.getBoundingClientRect();return a.top-b.top}')

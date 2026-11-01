@@ -1,0 +1,41 @@
+/* Compact Skills and shared Settings hierarchy — 2026-11-01. */
+body.mm-settings-compact #settings{
+  --mm-settings-head:color-mix(in srgb,var(--surface-panel) 55%,var(--hull2));
+  --mm-settings-body:color-mix(in srgb,var(--surface-card) 90%,var(--surface-panel));
+  --mm-settings-input:color-mix(in srgb,var(--surface-card) 82%,#000);
+}
+html.light body.mm-settings-compact #settings{--mm-settings-input:var(--surface-card)}
+body.mm-settings-compact #settings>h2{display:inline-flex!important;margin:0 0 8px!important;vertical-align:baseline}
+body.mm-settings-compact #settings>.lead{display:inline;margin:0 100px 12px 10px!important;max-width:none!important;vertical-align:baseline}
+body.mm-settings-compact #settings>.lead::before{content:'–';margin-right:8px;color:var(--mut)}
+body.mm-settings-compact #settings>.st-wrap{border-top:1px solid var(--line2);padding-top:8px;margin-top:0!important}
+body.mm-settings-compact #settings :is(#mm-settings-panel-0,#mm-settings-panel-1)>.st-sec{display:flex;align-items:baseline;flex-wrap:wrap;gap:4px 9px;border:0!important;border-bottom:1px solid var(--line2)!important;padding:0 0 8px!important}
+body.mm-settings-compact #settings :is(#mm-settings-panel-0,#mm-settings-panel-1)>.st-sec :is(.st-sec-t,.st-sec-i){margin:0!important}
+body.mm-settings-compact #settings :is(#mm-settings-panel-0,#mm-settings-panel-1)>.st-sec .st-sec-i{font:400 14px/1.5 var(--f-ui)!important;color:var(--mut)}
+body.mm-settings-compact #settings :is(#mm-settings-panel-0,#mm-settings-panel-1)>.st-sec .st-sec-i::before{content:'–';margin-right:8px}
+body.mm-settings-compact #settings .c5c-pilot-panel>.c5c-skills{padding:14px!important;background:var(--mm-settings-body)!important}
+body.mm-settings-compact #settings #mm-settings-panel-1 .c5c-skills>.st-g{display:grid!important;grid-template-columns:repeat(3,minmax(0,312px))!important;grid-auto-rows:1fr!important;gap:12px!important;justify-content:center!important;align-items:stretch!important;max-width:960px;width:100%;margin:0 auto!important}
+body.mm-settings-compact #settings #mm-settings-panel-1 .c5c-skill-card{position:relative;display:grid!important;grid-template-columns:minmax(0,190px) 44px;grid-template-rows:minmax(36px,auto) 26px auto;justify-content:center;align-content:start;align-items:center;gap:6px 10px!important;box-sizing:border-box;width:100%!important;max-width:312px;min-width:0;min-height:0!important;height:100%!important;align-self:stretch!important;margin:0 auto!important;padding:14px!important;border:1px solid var(--line2)!important;border-radius:12px!important;background:linear-gradient(155deg,var(--mm-settings-head),var(--mm-settings-body))!important;box-shadow:inset 0 1px 0 color-mix(in srgb,var(--txt) 5%,transparent)!important}
+body.mm-settings-compact #settings #mm-settings-panel-1 .c5c-skill-card .st-l{grid-column:1;grid-row:1;display:flex;align-items:center;align-self:stretch;min-width:0;margin:0!important;padding:0!important;color:var(--txt)!important;font:700 12.8px/1.4 var(--f-ui)!important;text-transform:uppercase}
+body.mm-settings-compact #settings #mm-settings-panel-1 .c5c-skill-source{grid-column:2;grid-row:1;position:static;justify-self:end;display:inline-flex;align-items:center;justify-content:center;box-sizing:border-box;height:20px;padding:2px 5px;border:1px solid var(--line2);border-radius:5px;color:var(--mut);background:transparent;font:500 10px/1.3 var(--f-ui)}
+body.mm-settings-compact #settings #mm-settings-panel-1 .c5c-skill-card[data-skill-source=esi] .c5c-skill-source{border-color:color-mix(in srgb,var(--gain) 35%,transparent);color:var(--gain)}
+body.mm-settings-compact #settings #mm-settings-panel-1 .eve-sk-native{position:absolute!important;width:1px!important;height:1px!important;opacity:0!important;pointer-events:none!important;overflow:hidden!important}
+body.mm-settings-compact #settings #mm-settings-panel-1 .c5c-skills .eve-sk{grid-column:1/-1;grid-row:2;display:grid!important;grid-template-columns:26px 146px 28px 26px!important;align-items:center!important;gap:6px!important;width:244px!important;max-width:100%;min-height:26px!important;padding:0!important;margin:0!important;justify-self:center}
+body.mm-settings-compact #settings #mm-settings-panel-1 .eve-sk button.eve-sk-pips{display:grid!important;grid-template-columns:repeat(5,26px)!important;gap:4px!important;align-items:center;min-width:0}
+body.mm-settings-compact #settings #mm-settings-panel-1 .eve-sk button{position:relative;box-sizing:border-box;display:grid!important;place-items:center!important;width:26px!important;height:26px!important;min-width:26px!important;min-height:26px!important;padding:0!important;margin:0!important;border:1px solid var(--line2)!important;border-radius:5px!important;background:var(--mm-settings-body)!important;color:var(--txt)!important;box-shadow:none!important;font:500 16px/1 var(--f-ui)!important}
+body.mm-settings-compact #settings #mm-settings-panel-1 .eve-sk button.eve-sk-pip{border:0!important;background:transparent!important}
+body.mm-settings-compact #settings #mm-settings-panel-1 .eve-sk button.eve-sk-pip::before{content:'';position:absolute;inset:0;box-sizing:border-box;border:1px solid var(--line2);border-radius:5px;background:color-mix(in srgb,var(--mut) 12%,var(--surface-card))}
+body.mm-settings-compact #settings #mm-settings-panel-1 .eve-sk button.eve-sk-pip.trained::before{background:linear-gradient(180deg,color-mix(in srgb,var(--clay) 78%,var(--txt)),var(--clay));border-color:var(--clay);box-shadow:inset 0 1px 0 #ffffff24}
+body.mm-settings-compact #settings #mm-settings-panel-1 .eve-sk :is(.eve-sk-minus,.eve-sk-add:not(.book)){font-size:0!important}
+body.mm-settings-compact #settings #mm-settings-panel-1 .eve-sk :is(.eve-sk-minus,.eve-sk-add:not(.book))::before{content:'';position:absolute;width:10px;height:1.5px;left:50%;top:50%;transform:translate(-50%,-50%);border:0;background:currentColor;border-radius:1px}
+body.mm-settings-compact #settings #mm-settings-panel-1 .eve-sk-add:not(.book)::after{content:'';position:absolute;width:1.5px;height:10px;left:50%;top:50%;transform:translate(-50%,-50%);background:currentColor;border-radius:1px}
+body.mm-settings-compact #settings #mm-settings-panel-1 .eve-sk button:disabled{opacity:.44!important}
+body.mm-settings-compact #settings #mm-settings-panel-1 .eve-sk button:focus-visible{outline:2px solid var(--clay)!important;outline-offset:3px}
+body.mm-settings-compact #settings #mm-settings-panel-1 .eve-sk-rank{color:var(--txt);font:700 12px/1.3 var(--f-ui)!important;text-align:center;font-variant-numeric:tabular-nums;min-width:0}
+body.mm-settings-compact #settings #mm-settings-panel-1 .c5c-skill-note{grid-column:1/-1;grid-row:3;display:block;align-self:start;min-width:0;min-height:0!important;margin:0!important;color:var(--mut)!important;font:400 12.5px/1.5 var(--f-ui)!important;letter-spacing:0;text-wrap:pretty}
+body.mm-settings-compact #settings #mm-settings-panel-1 .mm-skill-value{color:var(--clay)!important;font-weight:750!important;white-space:nowrap}
+body.mm-settings-compact #settings :is(#mm-settings-panel-0,#mm-settings-panel-2,#mm-settings-panel-3) fieldset.st:not(.c5c-fixed)>legend{background:var(--mm-settings-head)!important}
+body.mm-settings-compact #settings :is(#mm-settings-panel-0,#mm-settings-panel-2,#mm-settings-panel-3) fieldset.st:not(.c5c-fixed):not(.closed){background:var(--mm-settings-body)!important}
+body.mm-settings-compact #settings :is(#mm-settings-panel-0,#mm-settings-panel-1,#mm-settings-panel-2,#mm-settings-panel-3) :is(.st-f input:not([type=checkbox]),.st-f select,.st-f textarea){background:var(--mm-settings-input)!important}
+@media(max-width:1050px){body.mm-settings-compact #settings #mm-settings-panel-1 .c5c-skills>.st-g{grid-template-columns:repeat(2,minmax(0,312px))!important;max-width:636px}}
+@media(max-width:650px){body.mm-settings-compact #settings #mm-settings-panel-1 .c5c-skills>.st-g{grid-template-columns:minmax(0,312px)!important;max-width:312px}body.mm-settings-compact #settings>.lead{display:block;margin:0 80px 12px 0!important}body.mm-settings-compact #settings>.lead::before{display:none}}

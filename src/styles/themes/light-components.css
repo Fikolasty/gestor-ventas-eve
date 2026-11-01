@@ -335,7 +335,3 @@ html.light #pSum .pk-tools .pk-flt .pk-fb.on{background:var(--surface-panel)!imp
 html.light body.mm-settings-compact #settings :is(#mm-settings-panel-2,#mm-settings-panel-3) fieldset.st:not(.closed),html.light body.mm-settings-compact #settings .st-wrap>.modern-tabs{background:var(--void)!important}
 /* General uses the same one-pixel frame as the other disclosure drawers. */
 html.light body.mm-settings-compact #settings #mm-settings-panel-0>fieldset.st{border-width:1px!important;border-color:var(--line2)!important}
-/* Level marks use a single small face; their larger hit target stays clear. */
-html.light body.mm-settings-compact #settings .c5c-skills .eve-sk-pip{
-  border:0!important;background:transparent!important;box-shadow:none!important;
-}

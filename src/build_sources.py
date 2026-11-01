@@ -16,6 +16,7 @@ CSS_PARTS = (
     "70-typography.css",
     "80-product-ux.css",
     "90-settings-taxes.css",
+    "91-settings-skills.css",
 )
 # Light theme order mirrors the former light_extra.css; the final shared table
 # geometry follows generated Light rules so both themes use identical layout.

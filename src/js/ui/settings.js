@@ -327,7 +327,13 @@ function mmUpdateSettingsSkillNotes(){
   if($('skAcc').value==='x')notes.skAcc=tx('settings.skillCustomNote');
   for(const [id,value] of Object.entries(notes)){
     const el=document.querySelector('#settings [data-skill-note="'+id+'"]');
-    if(el&&el.textContent!==value)el.textContent=value;
+    if(el&&el.textContent!==value){
+      const parts=value.split(/([+−-]?\d+(?:[.,]\d+)*%)/g);
+      el.replaceChildren(...parts.map((part,i)=>{
+        if(i%2===0)return document.createTextNode(part);
+        const strong=document.createElement('strong');strong.className='mm-skill-value';strong.textContent=part;return strong;
+      }));
+    }
   }
   for(const id of ['cStdFac','cStdCorp','refImp']){
     const native=$(id),help=native?.closest('.st-f')?.querySelector('small');if(!help)continue;

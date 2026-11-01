@@ -1,3 +1,10 @@
+## v1.0.182 — Skills compactos y jerarquía de Ajustes — candidata
+
+- Tarjetas de Skills más estrechas y simétricas, nombre alineado y controles26×26 centrados.
+- Nivel mostrado una vez; porcentajes bold/naranja, texto explicativo contextual ES/EN.
+- Títulos con descripción lateral y separadores finos; cabeceras cálidas más claras, cuerpos oscuros y campos profundos.
+- Owner CSS de Skills consolidado; fórmulas, valores y ESI conservados. Gates remotos pendientes.
+
 ## v1.0.181 — Taxes r2 y saneamiento conservador — LIVE certificada
 
 - Diseño aprobado: seis tarjetas simétricas con profundidad cálida, ayudas14px y porcentajes naranja.

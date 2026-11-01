@@ -118,7 +118,7 @@ class C5b2SettingsTests(unittest.TestCase):
         card.locator(".eve-sk-pip").nth(3).click()
         self.assertEqual(self.page.locator("#skAcc").input_value(),"4")
         self.assertIn("4/5",card.locator(".eve-sk-rank").inner_text())
-        self.assertIn("Nivel 4/5",card.locator(".c5c-skill-note").inner_text())
+        self.assertNotIn("Nivel",card.locator(".c5c-skill-note").inner_text())
         self.assertIn(self.page.locator("#cTax").input_value().rstrip("0").rstrip("."),
                       card.locator(".c5c-skill-note").inner_text().replace(",","."))
         card.locator(".eve-sk-minus").click()
@@ -126,10 +126,11 @@ class C5b2SettingsTests(unittest.TestCase):
         card.locator(".eve-sk-add").click()
         self.assertEqual(self.page.locator("#skAcc").input_value(),"4")
         self.page.evaluate("setLang('en')")
-        self.assertIn("Level 4/5",card.locator(".c5c-skill-note").inner_text())
+        self.assertNotIn("Level",card.locator(".c5c-skill-note").inner_text())
+        self.assertIn("Current sales tax",card.locator(".c5c-skill-note").inner_text())
         self.assertEqual(card.locator(".c5c-skill-source").inner_text(),"Manual")
         self.page.evaluate("setLang('es')")
-        self.assertIn("Nivel 4/5",card.locator(".c5c-skill-note").inner_text())
+        self.assertNotIn("Nivel",card.locator(".c5c-skill-note").inner_text())
 
     def test_native_esi_update_syncs_visual_without_new_formula(self):
         state=self.page.evaluate("""() => {
@@ -142,7 +143,7 @@ class C5b2SettingsTests(unittest.TestCase):
         card=self.page.locator('.c5c-skill-card[data-skill="skBR"]')
         self.assertIn("2/5",card.locator(".eve-sk-rank").inner_text())
         self.assertEqual(card.locator(".c5c-skill-source").inner_text(),"ESI")
-        self.assertIn("Nivel 2/5",card.locator(".c5c-skill-note").inner_text())
+        self.assertNotIn("Nivel",card.locator(".c5c-skill-note").inner_text())
         card.locator(".eve-sk-minus").click()
         self.assertEqual(card.locator(".c5c-skill-source").inner_text(),"Manual")
 

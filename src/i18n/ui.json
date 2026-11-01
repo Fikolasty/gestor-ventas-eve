@@ -1720,28 +1720,28 @@
     "en": "Manual"
   },
   "settings.skillAccNote": {
-    "es": "Nivel {level}/5 · Impuesto de venta actual: {rate}%.",
-    "en": "Level {level}/5 · Current sales tax: {rate}%."
+    "es": "Impuesto de venta actual: {rate}%.",
+    "en": "Current sales tax: {rate}%."
   },
   "settings.skillBRNote": {
-    "es": "Nivel {level}/5 · Broker de Jita actual: {rate}%.",
-    "en": "Level {level}/5 · Current Jita broker fee: {rate}%."
+    "es": "Broker de Jita actual: {rate}%.",
+    "en": "Current Jita broker fee: {rate}%."
   },
   "settings.skillAbrNote": {
-    "es": "Nivel {level}/5 · Reduce el coste de modificar órdenes.",
-    "en": "Level {level}/5 · Lowers the cost of updating orders."
+    "es": "Reduce el coste de modificar órdenes.",
+    "en": "Lowers the cost of updating orders."
   },
   "settings.skillRepNote": {
-    "es": "Nivel {level}/5 · Bonificación de habilidad: +{bonus}% al rendimiento base.",
-    "en": "Level {level}/5 · Skill bonus: +{bonus}% to base yield."
+    "es": "Bonificación de habilidad: +{bonus}% al rendimiento base.",
+    "en": "Skill bonus: +{bonus}% to base yield."
   },
   "settings.skillRepENote": {
-    "es": "Nivel {level}/5 · Bonificación adicional: +{bonus}% al rendimiento base.",
-    "en": "Level {level}/5 · Additional bonus: +{bonus}% to base yield."
+    "es": "Bonificación adicional: +{bonus}% al rendimiento base.",
+    "en": "Additional bonus: +{bonus}% to base yield."
   },
   "settings.skillOreNote": {
-    "es": "Nivel {level}/5 · Bonificación de procesamiento: +{bonus}%. Simulación manual común para minerales y hielo.",
-    "en": "Level {level}/5 · Processing bonus: +{bonus}%. Shared manual simulation for ore and ice."
+    "es": "Bonificación de procesamiento: +{bonus}%. Simulación manual común para minerales y hielo.",
+    "en": "Processing bonus: +{bonus}%. Shared manual simulation for ore and ice."
   },
   "settings.openAll": {
     "es": "Abrir todas las gavetas",
@@ -2264,8 +2264,8 @@
     "en": "Custom tax rate; does not correspond to an Accounting level."
   },
   "settings.skillOreEsiNote": {
-    "es": "{skill} · Nivel {level}/5 · +{bonus}%. ESI aplica el nivel específico de cada material. Un cambio manual simula un nivel común.",
-    "en": "{skill} · Level {level}/5 · +{bonus}%. ESI applies each material’s own skill level. A manual change simulates one shared level."
+    "es": "{skill}: +{bonus}%. ESI usa el nivel de cada material; el ajuste manual aplica un nivel común.",
+    "en": "{skill}: +{bonus}%. ESI uses each material’s level; a manual adjustment applies one shared level."
   },
   "settings.pricing.cSkInst.label": {
     "es": "Venta inmediata · Jita %",
