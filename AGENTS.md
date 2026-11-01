@@ -162,3 +162,18 @@ Owner jita.js/93-jita.css y final Light zzz-jita.css; hooks explícitos y mensaj
 Última LIVE184. Kit activo docs/HANDOFF_184.md; HANDOFF_JITA_PREVIEW y JITA_TAB_PROPOSAL conservan historia y remiten a este cierre. No quedan aprobaciones o controles de publicación pendientes en esta entrega.
 
 - **v1.0.185 candidata, criterio aprobado de reventaJita:** usar regla local aplicable de Ajustes solo si excede100% de Buy;≤100% conserva cálculo previo de importación, NO el cost-plus propuesto. Manuales prioritarios, incremento local por Item una sola vez. NoPersonal=venta nullsec incluso sin courier; Enviar solo controla coste. No alterar Ventas ni adquisición. Estado real/gates en DSS y docs/HANDOFF_JITA_RESALE.md; todavía no asumir LIVE185.
+
+
+## v1.0.185 LIVE certificada — listado de reventa nullsec (2026-11-01)
+
+Este cierre sustituye los estados pendiente/candidata185. Se implementó la decisión económica explícita del propietario: solo usar la regla aplicable de Ajustes cuando supera100% de Buy; en100% o menos conservar el cálculo anterior de importación. No se implementó la propuesta cost-plus descartada. El precio manual sigue siendo prioritario. El incremento porcentual por Item se aplica una sola vez a la base y no cambia las cotizaciones de compra ni los cálculos de Ventas.
+
+Publicación exclusiva Fiko/Fikolasty: fuente fcc5afe696f5fabe4b604144672f387b5b019c66, árbol f1ecd2405d4090557474ee066c7faae6405f5cdf,14archivos verificados por SHA antes de avanzar main sin force desde eeaafaf. Build bot a121a8fb439ec08aec02613b5858a6ada531157a, árbol b92f6be78b460b65787b55b305e43179122d1399.
+
+Cuatro Actions SUCCESS: Build41361906790, Versiones41361906782, Minería41361906812, Rebuild/Pages41361906866. Compile125013863438 y Deploy125015150657 SUCCESS. CI170Node/16Python/8legacy y135Chromium PASS287.470s. Local170Node/16Python/8legacy/gate Build-site PASS;135Chromium PASS341.965s; dos focales finales después de la referencia explícita de traducción PASS8.228s. Capturas1440 ES Dark/Light mismo estado y todos los paneles abiertos renovadas y revisadas tras el último cambio, además de390/630/980 y datos/controles condicionales. Son fixtures, no cotizaciones ESI vivas.
+
+GitHub/HTTPS/local HTML185 idénticos:2.593.153bytes canónicosLF, blob c38c01ad94186eb342d9e0dc40f5964efc6fe91a. HTTPS200 sin query con Cache-Control:no-cache y comparación byte a byte. El cierre documental posterior puede avanzar main sin cambiar el HTML certificado.
+
+Visible en «Precios y listado» del Item cuando Uso personal=No: «Listar en {market} · por unidad», importe copiable18px, input Incremento% y botones−/+ de un punto porcentual junto al precio. Conserva foco y valor al refrescar, no capitaliza el incremento, mantiene cuatro paneles y cantidad. Ingreso bruto, tasas y beneficio se actualizan desde ese listado; se resta adquisición+comisión+envío una sola vez. Sin Enviar, no se carga courier y el destino de reventa continúa nullsec. Uso personal conserva presupuesto anterior; campos y precio de reventa se ocultan allí. Ayudas de Ajustes explican el umbral y el margen de módulos como porcentaje efectivo sobre Buy. Persistencia de Ajustes intacta; jitaMarkup vive solo en el inventario de la sesión.
+
+Sin cambios ESI/SSO, permisos/scopes, backend o dependencias. No se prueba SSO/ESI real extremo a extremo. No se garantiza comprador o rentabilidad: el listado es objetivo/estimación y una regla>100% todavía puede dejar pérdida tras spread/costes. Última LIVE185; no quedan aprobaciones ni gates de publicación pendientes. Kit activo docs/HANDOFF_JITA_RESALE.md; HANDOFF_184 queda histórico. Antes de otra etapa larga conviene continuar desde este kit.
