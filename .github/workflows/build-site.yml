@@ -55,7 +55,8 @@ jobs:
           assert "SHIPS=S.flip?{fN:1}:{jOrd:1,jInst:1,cOrd:1,cInst:1,rJita:1}" in s
           assert "!Number.isFinite(r.net[k])" in s
           assert "#mmTabs #shipLab[hidden]" in s
-          assert "' Los precios de '+nullSystem()+' se estiman" in s
+          assert "settings.general.priceHelp" in s and "Prices in {market} are estimates" in s
+          assert "node.id='generalPriceReference'" in s
           assert 'data:image/png;base64,' in s and '__HULK_ICON__' not in s
           assert '__REFINE__' not in s and '__MINING__' not in s
           assert len(s)>100000
