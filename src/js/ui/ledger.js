@@ -367,7 +367,7 @@ const ledgerReferenceByItem=new Map();
 function prepareLedgerReference(P){
   const key=S.flip?(C.shipOn?'fN':'fJ'):(ledgerSaleMode==='instant'?'jInst':'jOrd');
   ledgerReference=ledgerRouteProjection(P,key);ledgerReferenceSource=P;
-  currentJitaPurchase=JitaContext.active?jitaPurchaseModel(P):null;
+  currentJitaPurchase=JitaContext.active?jitaPurchaseModel(P,C.buyMode,JitaContext.personal):null;
   ledgerReferenceByItem.clear();ledgerReference.rows.forEach(r=>ledgerReferenceByItem.set(r.o,r));
 }
 const ledgerValueFormat=new Intl.NumberFormat('en-US',{maximumFractionDigits:6});

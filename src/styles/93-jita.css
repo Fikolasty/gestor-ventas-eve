@@ -43,3 +43,19 @@ body.is-jita .jita-warning{color:var(--loss);font-size:14px}
 body.is-jita #verdict .jita-control-line .sw-t::after{background:#fff!important}
 body.is-jita.jita-personal #ledger #lots .lot-adjustments>.facts .fact-group.fact-strategy,body.is-jita.jita-personal #ledger #lots .lot-adjustments>.facts .fact.fact-resale-only{display:none!important}
 body.is-jita #ledger #lots .prices td.jita-neutral .copy,body.is-jita #ledger #lots .prices td.jita-neutral .copy *{color:var(--txt)!important}
+/* A listing target and its adjustment share one stable, scoped Item panel. */
+body.is-jita #ledger #lots .prices .jita-listing-editor{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px 14px;align-items:center;padding:14px;margin:12px 14px;border:1px solid var(--line2);border-radius:8px;background:var(--surface-card)}
+body.is-jita #ledger #lots .prices .jita-listing-editor[hidden]{display:none!important}
+body.is-jita #ledger #lots .prices .jita-listing-quote{display:flex;flex-direction:column;align-items:flex-start;gap:6px;min-width:0}
+body.is-jita #ledger #lots .prices .jita-listing-quote>strong{font:600 13px/1.4 var(--f-ui);color:var(--mut)}
+body.is-jita #ledger #lots .prices .jita-listing-quote>button.copy{font:750 18px/1.4 var(--f-ui)!important;padding:0;border:0;background:none;white-space:normal;overflow-wrap:anywhere;color:var(--txt)!important}
+body.is-jita #ledger #lots .prices .jita-listing-controls{display:flex;align-items:flex-end;gap:6px;min-width:0}
+body.is-jita #ledger #lots .prices .jita-listing-controls>label{display:grid;grid-template-columns:64px auto;gap:4px;align-items:center;margin:0;font:550 13px/1.4 var(--f-ui)}
+body.is-jita #ledger #lots .prices .jita-listing-controls>label>span:first-child{grid-column:1/-1}
+body.is-jita #ledger #lots .prices .jita-listing-controls input{width:64px;min-width:0;height:30px;box-sizing:border-box;padding:3px 6px;font:600 14px/1.4 var(--f-ui);color:var(--clay);background:var(--surface-input,var(--surface-card));border:1px solid var(--line2);border-radius:5px}
+body.is-jita #ledger #lots .prices .jita-listing-controls>button{display:grid;place-items:center;width:30px;height:30px;min-width:30px;padding:0;border:1px solid var(--line2);border-radius:5px;background:var(--surface-panel);color:var(--txt);font:650 16px/1 var(--f-ui);cursor:pointer}
+body.is-jita #ledger #lots .prices .jita-listing-controls>button:disabled{opacity:.4;cursor:default}
+body.is-jita #ledger #lots .prices .jita-listing-note{grid-column:1/-1;margin:0;font:400 13px/1.55 var(--f-ui);color:var(--mut)}
+@media(max-width:630px){body.is-jita #ledger #lots .prices .jita-listing-editor{grid-template-columns:minmax(0,1fr);margin:10px;padding:12px}body.is-jita #ledger #lots .prices .jita-listing-controls{justify-self:start}}
+
+body.is-jita #ledger #lots .prices .jita-listing-quote>button.copy.pos{color:var(--gain)!important}

@@ -11,19 +11,44 @@ function activateJitaContext(active){
   $('shipOn').checked=C.shipOn;document.body.classList.toggle('is-flip',active);document.body.classList.toggle('is-jita',active);
   $('bFlip').setAttribute('aria-pressed',String(active));syncNullRouteLabels();syncShipSwitch();syncBusinessMode();syncJitaControls();
 }
+// Reuse the applicable local category rule only above 100% of Jita Buy.
+// Otherwise preserve the pre-185 import target, not the unapproved cost-plus proposal.
+function jitaResaleListing(r,firstItemByName){
+  const o=r.o,key=String(o.name).toLowerCase(),manual=S.refinedMan.null[key];
+  let base=null,source='import';
+  if(Number.isFinite(manual)&&manual>=0){base=manual;source='manual';}
+  else{
+    const ore=resolveOre(o.name);let multiplier;
+    if(C.ice.on&&ore?.d.cat==='ice')multiplier=C.ice.nullMode==='margin'?1+C.margin:C.ice.nullMode==='jbuy'?1-C.ice.nullDisc:1;
+    else if(C.ice.on&&isIceIsotope(o.name))multiplier=1;
+    else if(C.ice.on&&isIceRefinedNonIsotope(o.name))multiplier=1-C.ice.refLoss;
+    else if(bulkNullMaterial(o.name,r.q,firstItemByName))multiplier=C.nullBulk;
+    else multiplier=isModule(o.name,firstItemByName)?1+marginFor(o.name):C.nullNonMod;
+    if(multiplier>1){
+      const quoted=nullList(o.name,o.ref,o.jita?.buy,o.nullSeen,r.q,firstItemByName);
+      base=quoted==null?null:skTick(quoted,o,'nul');source='settings';
+    }else if(Number.isFinite(o.ref)&&rateNull()>0){base=skTick(tick(o.ref*(1+C.impM)/rateNull()),o,'nul');}
+  }
+  const adjustment=Number.isFinite(o.jitaMarkup)&&o.jitaMarkup>=0?o.jitaMarkup:0;
+  const price=Number.isFinite(base)?(adjustment?tick(base*(1+adjustment)):base):null;
+  return {base,price,source,adjustment};
+}
 // Purchase budget is independent of expected resale revenue. Missing quotes or
 // freight inputs propagate as unknown, never a partial total disguised as complete.
-function jitaPurchaseModel(P,basis=C.buyMode){
+function jitaPurchaseModel(P,basis=C.buyMode,personal=true){
   const projection=ledgerRouteProjection(P,C.shipOn?'fN':'fJ');
+  const firstItemByName=new Map();P.rows.forEach(r=>{const key=String(r.o.name).toLowerCase();if(!firstItemByName.has(key))firstItemByName.set(key,r.o);});
   const rows=projection.rows.map(r=>{
     const unit=tradePurchaseUnitAt(r,basis),purchase=tradePurchaseCostAt(r,basis);
     const raw=Number.isFinite(unit)?unit*r.q:null;
-    return {...r,raw,purchase,cost:Number.isFinite(purchase)&&Number.isFinite(r.courierAllocated)?purchase+r.courierAllocated:null};
+    const listing=personal?null:jitaResaleListing(r,firstItemByName);
+    return {...r,listing,raw,purchase,cost:Number.isFinite(purchase)&&Number.isFinite(r.courierAllocated)?purchase+r.courierAllocated:null};
   });
   const sum=key=>rows.length&&rows.every(r=>Number.isFinite(r[key]))?rows.reduce((s,r)=>s+r[key],0):null;
   const raw=sum('raw'),purchase=sum('purchase'),cost=sum('cost');
-  const gross=rows.length&&rows.every(r=>Number.isFinite(C.shipOn?r.np:r.jl))?rows.reduce((s,r)=>s+(C.shipOn?r.np:r.jl)*r.q,0):null;
-  const net=projection.before;
+  const gross=personal?(rows.length&&rows.every(r=>Number.isFinite(C.shipOn?r.np:r.jl))?rows.reduce((s,r)=>s+(C.shipOn?r.np:r.jl)*r.q,0):null):
+    rows.length&&rows.every(r=>Number.isFinite(r.listing.price))?rows.reduce((s,r)=>s+r.listing.price*r.q,0):null;
+  const net=personal?projection.before:Number.isFinite(gross)&&rateNull()>0?gross*rateNull():null;
   return {projection,rows,byItem:new Map(rows.map(r=>[r.o,r])),basis,raw,purchase,cost,ship:projection.shipCost,
     fee:Number.isFinite(raw)&&Number.isFinite(purchase)?purchase-raw:null,gross,
     sellingFees:Number.isFinite(gross)&&Number.isFinite(net)?gross-net:null,
@@ -59,7 +84,7 @@ function paintJitaReceipt(P){
   if(!Number.isFinite(m.cost)){const warning=el('p','jita-warning',tx(!m.projection.completeFreight?'ledger.referenceMissingFreight':'jita.missingPurchase'));warning.setAttribute('role','status');cap.append(warning);}
   if(!JitaContext.personal){
     const resale=el('div','v-finance jita-receipt-lines jita-resale');resale.append(jitaField('jita.gross',m.gross,false,m.gross>0?'pos':''),jitaField('jita.sellingFees',m.sellingFees,true),jitaField('jita.profit',m.profit,false,sgn(m.profit)));
-    cap.append(resale,el('p','jita-fee-note',tx(C.shipOn?'jita.resaleNull':'jita.resaleJita')));
+    cap.append(resale,el('p','jita-fee-note',tx('jita.resaleNull')+(C.shipOn?'':' '+tx('jita.resaleNoCourier',{market:nullSystem()}))));
   }
   const buy=jitaPurchaseModel(P,'buy'),sell=jitaPurchaseModel(P,'sell'),saving=Number.isFinite(buy.cost)&&Number.isFinite(sell.cost)?sell.cost-buy.cost:null;
   const guide=el('section','jita-purchase-guide'),text=el('p');guide.append(el('h3',null,tx('jita.guideTitle')));
@@ -76,6 +101,7 @@ function paintJitaLedgerReference(){
   setJitaAmount($('freightLotBefore'),m.purchase);setJitaAmount($('unitCourierTotal'),m.ship,true);setJitaAmount($('freightLotFinal'),m.cost);
   $('ledgerLotFinalLabel').textContent=tx('jita.finalBatch');$('ledgerResultColumn').textContent=tx('jita.final')+' / '+tx(ledgerValueMode==='unit'?'ledger.referenceUnit':'ledger.referenceBatch');
   $('ledgerTradeTotals').hidden=true;$('ledgerSaleMode').hidden=true;
+  if(!JitaContext.personal)$('ledgerValueScope').textContent=nullSystem();
   const warning=$('ledgerReferenceWarning');warning.hidden=Number.isFinite(m.cost);warning.textContent=tx(!m.projection.completeFreight?'ledger.referenceMissingFreight':'jita.missingPurchase');
 }
 function paintJitaLotMarket(r){
@@ -84,12 +110,17 @@ function paintJitaLotMarket(r){
   const factor=ledgerValueMode==='unit'?r.q:1;
   setJitaAmount(u.market.result.button,Number.isFinite(row.cost)?row.cost/factor:null);
   setLotLeafText(u.market.result.label,tx('jita.final'));u.trade.hidden=JitaContext.personal;
+  if(!JitaContext.personal){
+    const profit=Number.isFinite(row.listing?.price)&&rateNull()>0&&Number.isFinite(row.cost)?row.listing.price*r.q*rateNull()-row.cost:null;
+    const value=Number.isFinite(profit)?profit/factor:null;
+    setJitaAmount(u.profit.button,value);u.profit.button.className='copy cp-n '+(Number.isFinite(value)?sgn(value):'');
+  }
 }
 function paintJitaLotSummary(r){
   const u=r.o.ui,row=currentJitaPurchase?.byItem.get(r.o);if(!JitaContext.active||!u||!row)return;
   setLotLeafText(u.routeLabel,tx('jita.destination'));setLotLeafText(u.netLabel,tx('jita.finalBatch'));setJitaAmount(u.net,row.cost);
   setLotLeafText(u.ppLabel,tx('jita.purchaseUnit'));setJitaAmount(u.ppB,tradePurchaseUnit(r));
-  setLotLeafText(u.dest,C.shipOn?nullSystem():'Jita 4-4','lot-dest pill');
+  setLotLeafText(u.dest,!JitaContext.personal||C.shipOn?nullSystem():'Jita 4-4','lot-dest pill');
 }
 function paintJitaLotDetails(r){
   const u=r.o.ui,active=JitaContext.active;
@@ -97,15 +128,16 @@ function paintJitaLotDetails(r){
   const table=u.pBody.closest('table'),heads=table.querySelectorAll('thead th');
   const prices=table.closest('.prices'),context=prices.querySelector('.pr-context>p'),contextTitle=prices.querySelector('.pr-context-title');
   for(const [node,key]of [[context,active?'jita.ledgerHelp':'ledger.priceContextBody'],[contextTitle,active?'jita.priceHelpTitle':'ledger.priceContextTitle']]){if(node){node.dataset.i18n=key;node.textContent=tx(key);}}
-  for(const [selector,key]of [['.prices>summary',active?'jita.itemPrices':'ledger.prices'],['.lot-analysis>summary',active?'jita.itemCompare':'ledger.compare'],['.lot-guide>summary',active?'jita.itemGuide':'ledger.guide']]){const node=u.body.querySelector(selector);if(node){node.dataset.i18n=key;node.textContent=tx(key);}}
+  for(const [selector,key]of [['.prices>summary',active?(!JitaContext.personal?'jita.itemListingPrices':'jita.itemPrices'):'ledger.prices'],['.lot-analysis>summary',active?'jita.itemCompare':'ledger.compare'],['.lot-guide>summary',active?'jita.itemGuide':'ledger.guide']]){const node=u.body.querySelector(selector);if(node){node.dataset.i18n=key;node.textContent=tx(key);}}
 
   if(heads.length>=4){heads[3].textContent=tx(active?'jita.finalUnit':'ledger.netColumn');heads[3].removeAttribute('data-i18n');}
   let compare=u.optsJita;
   if(!compare&&!active)return;
   if(!compare){compare=el('div','jita-item-comparison');u.optsJita=compare;u.opt.fN.r.parentElement.after(compare);}
   compare.hidden=!active;u.opt.fN.r.parentElement.hidden=active;
-  if(!active)return;
-  const row=currentJitaPurchase.byItem.get(r.o);if(!row)return;
+  const row=active?currentJitaPurchase?.byItem.get(r.o):null;
+  paintJitaListingEditor(r,prices,row);
+  if(!active||!row)return;
   u.pBody.replaceChildren();compare.replaceChildren();
   for(const basis of ['buy','sell']){
     const unit=tradePurchaseUnitAt(r,basis),purchase=tradePurchaseCostAt(r,basis),cost=Number.isFinite(purchase)&&Number.isFinite(row.courierAllocated)?purchase+row.courierAllocated:null;
@@ -115,6 +147,30 @@ function paintJitaLotDetails(r){
     compare.append(jitaField(basis==='buy'?'jita.buyBatch':'jita.sellBatch',cost));
   }
   u.guide.replaceChildren();for(const key of ['jita.purchaseGuide',C.shipOn?'jita.shipGuide':'jita.stayGuide',JitaContext.personal?'jita.personalGuide':'jita.resaleGuide'])u.guide.append(el('li',null,tx(key)));
+}
+// Stable controls: a refresh updates the quoted target without replacing the
+// percentage input, so typing, keyboard focus and the four drawers survive.
+function paintJitaListingEditor(r,prices,row){
+  const u=r.o.ui,visible=JitaContext.active&&!JitaContext.personal;
+  if(!u.jitaListing&&!visible)return;
+  if(!u.jitaListing){
+    const box=el('section','jita-listing-editor'),quote=el('div','jita-listing-quote'),title=el('strong'),value=copyBtn('','—'),note=el('p','jita-listing-note');
+    const controls=el('div','jita-listing-controls'),label=el('label'),caption=el('span'),input=document.createElement('input');
+    input.type='number';input.min='0';input.step='1';input.inputMode='decimal';input.autocomplete='off';
+    const minus=el('button',null,'−'),plus=el('button',null,'+');minus.type=plus.type='button';
+    label.append(caption,input,el('span',null,'%'));controls.append(minus,label,plus);quote.append(title,value);box.append(quote,controls,note);prices.querySelector('table').before(box);
+    const apply=()=>{const n=input.value===''?0:Number(input.value);if(!Number.isFinite(n)||n<0){input.setCustomValidity(tx('jita.invalidAdjustment'));return;}input.setCustomValidity('');r.o.jitaMarkup=n/100;refreshNow();};
+    input.addEventListener('input',apply);
+    for(const [button,delta]of [[minus,-1],[plus,1]])button.addEventListener('click',()=>{input.value=String(Math.max(0,Math.round(((r.o.jitaMarkup||0)*100+delta)*100)/100));apply();});
+    u.jitaListing={box,title,value,note,caption,input,minus,plus};
+  }
+  const editor=u.jitaListing;editor.box.hidden=!visible;if(!visible||!row)return;
+  const listing=row.listing;editor.title.textContent=tx('jita.listAt',{market:nullSystem()});
+  setJitaAmount(editor.value,listing.price);editor.value.className='copy cp-n '+(listing.price>0?'pos':'');
+  editor.caption.textContent=tx('jita.increase');editor.input.setAttribute('aria-label',tx('jita.increaseItem',{item:r.o.name}));
+  editor.minus.setAttribute('aria-label',tx('jita.decreaseOne'));editor.plus.setAttribute('aria-label',tx('jita.increaseOne'));editor.minus.disabled=listing.adjustment<=0;
+  if(document.activeElement!==editor.input)editor.input.value=String(Math.round(listing.adjustment*10000)/100);
+  editor.note.textContent=tx({import:'jita.listingSource.import',settings:'jita.listingSource.settings',manual:'jita.listingSource.manual'}[listing.source])+' '+tx('jita.listingEstimate');
 }
 function syncJitaAppraisal(){
   const box=$('appr'),meta=box.querySelector('.appr-meta'),heading=box.querySelector('h2');if(!meta||!heading)return;

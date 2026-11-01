@@ -1520,3 +1520,10 @@ Comportamiento vigente: Jita entre Ventas/Minería, un solo inventario compartid
 Owner jita.js/93-jita.css y final Light zzz-jita.css; hooks explícitos y mensajes en ui.json. No duplicar fórmulas ni reintroducir sobrescrituras de funciones propias de las maquetas. Controles antiguos conservados hidden como adaptadores de IDs/listeners; no segundo selector visible. Se retira su constructor antiguo. Iconos Settings/Guide28px en44px. Perfil Light sin borde heredado que desplazaba navegación; geometría equivalente. Sin nuevas librerías, backend, scopes/permisos ESI o cambios de almacenamiento. ESI/SSO real con personaje no probado extremo a extremo.
 
 Última LIVE184. Kit activo docs/HANDOFF_184.md; HANDOFF_JITA_PREVIEW y JITA_TAB_PROPOSAL conservan historia y remiten a este cierre. No quedan aprobaciones o controles de publicación pendientes en esta entrega.
+
+## 1.0.185 — candidata: listado nullsec por Item
+
+- Reglas de Ajustes solo sobre100%; en100% o menos conserva el cálculo previo de importación.
+- Precio de listado unitario copiable con incremento porcentual por Item y beneficio actualizado.
+- Reventa permanece en nullsec sin courier incluido; uso personal y Ventas conservados.
+- Gate remoto pendiente; estado completo en DSS y HANDOFF_JITA_RESALE.

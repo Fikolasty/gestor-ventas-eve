@@ -1451,3 +1451,23 @@ Comportamiento vigente: Jita entre Ventas/Minería, un solo inventario compartid
 Owner jita.js/93-jita.css y final Light zzz-jita.css; hooks explícitos y mensajes en ui.json. No duplicar fórmulas ni reintroducir sobrescrituras de funciones propias de las maquetas. Controles antiguos conservados hidden como adaptadores de IDs/listeners; no segundo selector visible. Se retira su constructor antiguo. Iconos Settings/Guide28px en44px. Perfil Light sin borde heredado que desplazaba navegación; geometría equivalente. Sin nuevas librerías, backend, scopes/permisos ESI o cambios de almacenamiento. ESI/SSO real con personaje no probado extremo a extremo.
 
 Última LIVE184. Kit activo docs/HANDOFF_184.md; HANDOFF_JITA_PREVIEW y JITA_TAB_PROPOSAL conservan historia y remiten a este cierre. No quedan aprobaciones o controles de publicación pendientes en esta entrega.
+
+
+## v1.0.185 — reventa nullsec y listado ajustable (2026-11-01, candidata)
+
+Decisión explícita del propietario: «Solo usamos los ajustes si estos suben por encima de100%; de lo contrario usa el cálculo que estuvimos usando antes», con ajustador porcentual junto al precio. Esto sustituye el pendiente de elección anterior y DESCARTA la propuesta cost-plus: no se cambia la base a compra+envío+margen. Se conserva el cálculo anterior de importación (Jita Sell+margen neto configurado, cubriendo rateNull) cuando la regla aplicable de Ajustes es≤100% de Buy. Se evalúa la categoría real: Otros productos, Abundantes o Módulos (margen positivo equivale a>100%); se respetan las excepciones de hielo y la prioridad de precio manual. Si la regla aplicable supera100%, se reutiliza nullList/skTick; no se cambia Ventas.
+
+Uso personal=No significa reventa en nullsec, también con Enviar=No. Ese switch incluye/excluye el courier del presupuesto; no muda la venta a Jita. Se mantiene el cálculo de compra/comisión/envío, mientras el ingreso y las tasas de venta se derivan del precio de listado nullsec vigente; beneficio=venta tras tasas−coste de adquisición con courier una vez. El precio es objetivo/estimación, no orden local ni comprador garantizado. Uso personal conserva el presupuesto184.
+
+UI: bloque «Listar en {market} · por unidad» copiable y precio18px, input Incremento% y botones−/+ de un punto porcentual dentro del mismo panel «Precios y listado». Control creado una vez, mantiene foco al escribir y vive en el Item; porcentaje o.jitaMarkup independiente de o.skew/C, solo en memoria y solo reventaJita. Se aplica una vez sobre la base actual, no se capitaliza al refrescar; no altera adquisición, cotización ESI ni las reglas de Ventas. Manuales explícitos permanecen como base antes del incremento deliberado. Alternar Unidad/Lote no altera el objetivo unitario; la información ya lleva rótulo por unidad. Los cuatro paneles, copias, idioma/temas y listado compartido conservados. Ayudas de Ajustes aclaran el umbral sin alterar su comportamiento en Ventas.
+
+Pruebas nuevas: seis Node de90/100/>100, módulos/abundantes, no acumulación, manuales, envío off/nullsec y propagación de faltantes; dos Chromium para Settings reales, input/foco/teclado/copias, modos y paneles completos390/630/980/1440 ES/EN Dark/Light.170Node/16Python/8legacy PASS. FocalJita185 PASS6.939s y matrizJita184 previa conserva128estados. Suite completa135Chromium en curso. Capturas finales185 en tests/artifacts/theme; revisar de nuevo tras build final. Sin cambios ESI/SSO/scopes/storage; no login real extremo a extremo.
+
+Estado: candidata local185; última LIVE184/main eeaafaf1cd62096cda5c32242f950f522560d962. Falta cierre del gate completo, fuente Fiko, cuatro Actions, Pages y HTTPS idéntico. Kit activo docs/HANDOFF_JITA_RESALE.md; el diagnóstico previo quedó resuelto por la decisión del propietario. No declarar185LIVE antes del cierre certificado.
+
+
+### Gate local185 completo — 2026-11-01
+
+135/135Chromium PASS341.965s;170Node/16Python/8legacy y gate Build-site exacto PASS. Tras sustituir una referencia dinámica de traducción por claves explícitas (sin cambio de significado), build185 y dos focales completos de reventa PASS8.228s; capturas185-listing-final-dark/light1440 ES mismo estado renovadas e inspeccionadas tras el último cambio. Precio18px, ajuste estable, copias correctas, porcentaje no acumulativo, 90/100/>100 y contexto nullsec sin courier comprobados. No fallos pendientes locales. ESI/SSO real no probado; datos sintéticos explícitos.
+
+Preparada subida por Fiko de fuentes/tests/documentación/workflows; HTML185 quedará a cargo del compilador y gate CI. No se ha publicado185 todavía; última LIVE184. Mantener seguimiento hasta cuatro Actions, Pages y HTTPS idéntico al local antes de certificar.

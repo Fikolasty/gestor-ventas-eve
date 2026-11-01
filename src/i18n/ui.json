@@ -2360,24 +2360,24 @@
     "en": "Other products · % of Jita Buy"
   },
   "settings.pricing.cNonMod.help": {
-    "es": "Referencia para Items sin regla especial. El precio manual del Item prevalece.",
-    "en": "Reference for Items without a special rule. An Item’s manual price takes priority."
+    "es": "Referencia para Items sin regla especial. El precio manual del Item prevalece. En reventa de Jita se usa esta regla solo por encima del 100 %; si no, se mantiene el cálculo de importación.",
+    "en": "Reference for Items without a special rule. An Item’s manual price takes priority. Jita resale uses this rule only above 100%; otherwise the import calculation remains in use."
   },
   "settings.pricing.cBulkNull.label": {
     "es": "Materiales abundantes · % de Buy",
     "en": "Bulk materials · % of Buy"
   },
   "settings.pricing.cBulkNull.help": {
-    "es": "Ore, minerales comunes y lotes de 1,000+ unidades. Excluye Moon Goo, minerales lunares e isótopos; prevalece el precio manual.",
-    "en": "Ore, common minerals and batches of 1,000+ units. Excludes Moon Goo, moon minerals and isotopes; manual prices take priority."
+    "es": "Ore, minerales comunes y lotes de 1,000+ unidades. Excluye Moon Goo, minerales lunares e isótopos; prevalece el precio manual. En reventa de Jita se usa esta regla solo por encima del 100 %; si no, se mantiene el cálculo de importación.",
+    "en": "Ore, common minerals and batches of 1,000+ units. Excludes Moon Goo, moon minerals and isotopes; manual prices take priority. Jita resale uses this rule only above 100%; otherwise the import calculation remains in use."
   },
   "settings.pricing.cMargin.label": {
     "es": "Módulos · margen sobre Buy %",
     "en": "Modules · markup over Buy %"
   },
   "settings.pricing.cMargin.help": {
-    "es": "0 usa Jita Buy. El margen modifica tu precio local propuesto, no una oferta confirmada.",
-    "en": "0 uses Jita Buy. The markup changes your suggested local price, not a confirmed offer."
+    "es": "0 usa Jita Buy. El margen modifica tu precio local propuesto, no una oferta confirmada. En Jita, un margen positivo equivale a más del 100 % de Buy; 0 conserva el cálculo de importación.",
+    "en": "0 uses Jita Buy. The markup changes your suggested local price, not a confirmed offer. In Jita, a positive markup means above 100% of Buy; 0 retains the import calculation."
   },
   "settings.pricing.cNullDays.label": {
     "es": "Plazo estimado · días",
@@ -2882,5 +2882,53 @@
   "jita.itemGuide": {
     "es": "Cómo comprarlo",
     "en": "How to buy"
+  },
+  "jita.resaleNoCourier": {
+    "es": "Sin courier incluido; el destino de reventa sigue siendo {market}.",
+    "en": "No courier included; resale is still intended for {market}."
+  },
+  "jita.itemListingPrices": {
+    "es": "Precios y listado",
+    "en": "Prices and listing"
+  },
+  "jita.listAt": {
+    "es": "Listar en {market} · por unidad",
+    "en": "List in {market} · per unit"
+  },
+  "jita.increase": {
+    "es": "Incremento",
+    "en": "Increase"
+  },
+  "jita.increaseItem": {
+    "es": "Incremento del precio de listado de {item}, en porcentaje",
+    "en": "Listing price increase for {item}, in percent"
+  },
+  "jita.increaseOne": {
+    "es": "Subir un punto porcentual",
+    "en": "Increase by one percentage point"
+  },
+  "jita.decreaseOne": {
+    "es": "Bajar un punto porcentual",
+    "en": "Decrease by one percentage point"
+  },
+  "jita.invalidAdjustment": {
+    "es": "Usa un porcentaje mayor o igual a cero.",
+    "en": "Use a percentage greater than or equal to zero."
+  },
+  "jita.listingSource.import": {
+    "es": "Base: cálculo de importación y margen configurado.",
+    "en": "Basis: import calculation and configured margin."
+  },
+  "jita.listingSource.settings": {
+    "es": "Base: regla local de Ajustes superior al 100 %.",
+    "en": "Basis: local Settings rule above 100%."
+  },
+  "jita.listingSource.manual": {
+    "es": "Base: precio manual del Item.",
+    "en": "Basis: the Item’s manual price."
+  },
+  "jita.listingEstimate": {
+    "es": "El incremento se aplica sobre esta base; es un objetivo de venta, no una oferta confirmada.",
+    "en": "The increase applies to this basis; this is a selling target, not a confirmed offer."
   }
 }

@@ -30,7 +30,7 @@ jobs:
           fi
       - name: Compile site
         run: |
-            python build.py 1.0.184
+            python build.py 1.0.185
       - name: JavaScript syntax check
         run: |
           node --check src/script.js
@@ -48,7 +48,7 @@ jobs:
           assert 'id="modeLiquidation"' in s and 'id="modeTrading"' in s
           assert 'id="tradePurchaseMode"' in s and 'id="cBulkNull"' in s
           assert 'id="unitCourierBox"' in s
-          assert 'id="mmTabJita"' in s and 'function jitaPurchaseModel(P,basis=C.buyMode)' in s
+          assert 'id="mmTabJita"' in s and 'function jitaPurchaseModel(P,basis=C.buyMode,personal=true)' in s
           assert 'function allocateCourier(P)' in s
           assert 'function bulkNullMaterial(name,q,firstItemByName)' in s
           assert 'syncLanguageChoices' in s
