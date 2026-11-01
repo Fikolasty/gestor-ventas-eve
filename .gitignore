@@ -5,3 +5,7 @@ __pycache__/
 .qa-browsers/
 .qa-logs/
 tests/artifacts/
+
+# Isolated design previews and cleanup audit builds (not product sources).
+.qa-audit/
+.qa-previews/

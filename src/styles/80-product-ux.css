@@ -2970,7 +2970,7 @@ body .top.mm-ho-root #mmTabs>.mm-ho-main #navHome{display:none!important}
 #settings .c5c-skills .c5c-skill-card{
   position:relative!important;box-sizing:border-box!important;display:flex!important;
   flex-direction:column!important;gap:9px!important;min-width:0!important;
-  min-height:158px!important;width:100%!important;padding:13px!important;
+  width:100%!important;padding:13px!important;
   background:var(--surface-card)!important;border:1px solid var(--line2)!important;
   border-radius:10px!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.035)!important
 }
@@ -3036,29 +3036,6 @@ body .top.mm-ho-root #mmTabs>.mm-ho-main #navHome{display:none!important}
   color:var(--mut)!important;font:450 .75rem/1.5 var(--f-ui)!important;
   text-wrap:pretty!important;letter-spacing:0!important
 }
-#settings .c5c-taxes>.st-g{
-  display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;
-  gap:12px!important;align-items:start!important
-}
-#settings .c5c-taxes .st-f{
-  box-sizing:border-box!important;display:flex!important;flex-direction:column!important;
-  min-width:0!important;width:100%!important;height:100%!important;
-  gap:8px!important;padding:12px!important;border:1px solid var(--line2)!important;
-  border-radius:9px!important;background:var(--surface-card)!important;
-  box-shadow:none!important
-}
-#settings .c5c-taxes .st-f .st-l{
-  color:var(--txt)!important;font:750 .77rem/1.3 var(--f-ui)!important;text-transform:uppercase!important
-}
-#settings .c5c-taxes .st-f input[type="number"]{
-  box-sizing:border-box!important;min-height:38px!important;width:100%!important;
-  padding:8px 10px!important;border:1px solid var(--line2)!important;
-  border-radius:7px!important;background:var(--hull2)!important;color:var(--txt)!important;
-  font:650 .88rem/1.25 var(--f-num,var(--f-ui))!important
-}
-#settings .c5c-taxes .st-f small{
-  color:var(--mut)!important;font:450 .74rem/1.5 var(--f-ui)!important;
-}
 @media(max-width:1050px){
   #settings .c5c-pilot-panel>.c5c-skills>.st-g{grid-template-columns:repeat(2,minmax(0,1fr))!important}
 }
@@ -3066,9 +3043,7 @@ body .top.mm-ho-root #mmTabs>.mm-ho-main #navHome{display:none!important}
   #settings .st-wrap>.modern-tabs{grid-template-columns:repeat(2,minmax(0,1fr))!important}
   #settings .st-wrap>.modern-tabs>.modern-tab{min-height:42px!important;font-size:.75rem!important}
   #settings .c5c-pilot-panel>.c5c-skills>.st-g{grid-template-columns:minmax(0,1fr)!important}
-  #settings .c5c-taxes>.st-g{grid-template-columns:minmax(0,1fr)!important}
   #settings .c5c-pilot-panel>.c5c-fixed{padding:0 10px 12px!important}
-  #settings .c5c-skills .c5c-skill-card{min-height:145px!important}
 }
 
 
@@ -3091,70 +3066,10 @@ body .top.mm-ho-root #mmTabs>.mm-ho-main #navHome{display:none!important}
 #settings .c5c-pilot-panel>.c5c-fixed>legend.c5c-visually-hidden::after{
   display:none!important;content:none!important
 }
-#settings .c5c-taxes .c5c-broker-cluster{
-  box-sizing:border-box!important;display:grid!important;grid-column:1 / -1!important;
-  grid-template-columns:minmax(0,1fr) minmax(0,2fr)!important;
-  align-items:stretch!important;gap:10px!important;
-  min-width:0!important;width:100%!important;height:auto!important;
-  padding:12px!important;border:1px solid var(--line2)!important;border-radius:9px!important;
-  background:var(--surface-card)!important;box-shadow:none!important
-}
-#settings .c5c-taxes .c5c-broker-main{
-  grid-column:1!important;display:flex!important;flex-direction:column!important;gap:7px!important;
-  min-width:0!important;width:100%!important;height:auto!important;margin:0!important;padding:0!important;
-  border:0!important;border-radius:0!important;background:transparent!important;box-shadow:none!important
-}
-#settings .c5c-taxes .c5c-broker-standings{
-  grid-column:2!important;display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;
-  align-items:stretch!important;gap:8px!important;min-width:0!important;margin:0!important
-}
-#settings .c5c-taxes .c5c-broker-standings .st-f{
-  box-sizing:border-box!important;height:auto!important;min-height:0!important;
-  gap:5px!important;padding:8px!important;background:var(--surface-panel)!important
-}
-#settings .c5c-taxes .c5c-broker-standings .st-l{
-  font-size:.72rem!important;line-height:1.35!important;text-wrap:balance!important;
-  word-break:normal!important;overflow-wrap:normal!important
-}
-#settings .c5c-taxes .c5c-broker-standings .st-f small{
-  font-size:.70rem!important;line-height:1.4!important
-}
-#settings .c5c-taxes .c5c-broker-standings input[type="number"]{
-  min-height:34px!important;padding:6px 8px!important
-}
 @media(max-width:650px){
   #settings .c5c-pilot-panel>.c5c-fixed{padding:12px 10px!important}
-  #settings .c5c-taxes .c5c-broker-cluster{grid-template-columns:minmax(0,1fr)!important}
-  #settings .c5c-taxes .c5c-broker-main,
-  #settings .c5c-taxes .c5c-broker-standings{grid-column:1!important}
-  #settings .c5c-taxes .c5c-broker-standings{grid-template-columns:repeat(2,minmax(0,1fr))!important}
-}
-@media(max-width:430px){
-  #settings .c5c-taxes .c5c-broker-standings{grid-template-columns:minmax(0,1fr)!important}
 }
 
-/* Keep standalone tax fields content-sized on their own row. */
-#settings .c5c-taxes>.st-g>.st-f{
-  height:auto!important;min-height:0!important;align-self:start!important
-}
-
-
-/* Compact each standing field into a two-line label/note with the value at right. */
-#settings .c5c-taxes .c5c-broker-standings .st-f{
-  display:grid!important;grid-template-columns:minmax(0,1fr) 72px!important;
-  grid-template-rows:auto auto!important;align-items:center!important;
-  column-gap:7px!important;row-gap:3px!important
-}
-#settings .c5c-taxes .c5c-broker-standings .st-f .st-l{
-  grid-column:1!important;grid-row:1!important;min-width:0!important
-}
-#settings .c5c-taxes .c5c-broker-standings .st-f input[type="number"]{
-  grid-column:2!important;grid-row:1 / span 2!important;align-self:center!important;
-  width:72px!important;min-width:0!important
-}
-#settings .c5c-taxes .c5c-broker-standings .st-f small{
-  grid-column:1!important;grid-row:2!important;margin:0!important
-}
 /* C.5c — approved plan analysis and paired drawers. Shared theme geometry. */
 #pSum>.mm-plan-heading{
   display:block!important;width:100%;text-align:left;cursor:pointer;
@@ -3571,15 +3486,5 @@ body.mm-settings-compact #settings .c5c-skills .c5c-skill-card{
 body.mm-settings-compact #settings .c5c-skills .eve-sk-pip::before{border-radius:4px;background:color-mix(in srgb,var(--mut) 12%,var(--surface-card));box-shadow:none}
 body.mm-settings-compact #settings .c5c-skills .eve-sk-pip.trained::before{background:linear-gradient(180deg,color-mix(in srgb,var(--clay) 78%,var(--txt)),var(--clay));border-color:color-mix(in srgb,var(--clay) 80%,var(--txt));box-shadow:inset 0 1px 0 #ffffff24}
 body.mm-settings-compact #settings .c5c-skills .c5c-skill-source{background:transparent;border-radius:6px;font-weight:500}
-body.mm-settings-compact #settings .c5c-pilot-panel>.c5c-taxes>.st-i{background:none!important;border:0!important;border-radius:0!important;box-shadow:none!important;padding:0!important;margin:0 0 12px!important;font:400 13px/1.5 var(--f-ui)!important}
-body.mm-settings-compact #settings .c5c-taxes>.st-g{align-items:stretch!important}
-body.mm-settings-compact #settings .c5c-taxes .c5c-broker-cluster{align-items:start!important}
-body.mm-settings-compact #settings .c5c-taxes :is(.st-g>.st-f,.c5c-broker-main){display:grid!important;grid-template-columns:minmax(0,1fr) 100px;column-gap:12px!important;row-gap:5px!important;align-content:start;align-items:center}
-body.mm-settings-compact #settings .c5c-taxes :is(.st-g>.st-f,.c5c-broker-main)>.st-l{grid-column:1;grid-row:1;margin:0!important}
-body.mm-settings-compact #settings .c5c-taxes :is(.st-g>.st-f,.c5c-broker-main)>input{grid-column:2;grid-row:1;width:100%!important}
-body.mm-settings-compact #settings .c5c-taxes :is(.st-g>.st-f,.c5c-broker-main)>small{grid-column:1/-1;margin:0!important}
-body.mm-settings-compact #settings .c5c-taxes .st-f input[type=number]{height:34px!important;min-height:34px!important;padding:6px 9px!important;background:var(--surface-card)!important;box-shadow:none!important;font-weight:500!important;text-align:right}
-body.mm-settings-compact #settings .c5c-taxes .c5c-broker-standings .st-f{align-content:start!important;background:transparent!important}
-body.mm-settings-compact #settings .c5c-pilot-panel>.c5c-taxes{padding:14px!important}
 body.mm-settings-compact #settings .c5c-skillbook-icon[hidden]{display:none!important}
 @media(max-width:650px){body.mm-settings-compact #settings .c5c-tools{top:16px;right:60px}body.mm-settings-compact #settings>h2{font-size:22px}}

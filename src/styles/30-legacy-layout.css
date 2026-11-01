@@ -16,10 +16,9 @@ body::after{background:radial-gradient(130% 100% at 50% 40%,rgba(14,13,12,0) 55%
 .start-note-actions button{border:1px solid rgba(217,119,87,.55);color:#f3e6c8;background:rgba(217,119,87,.08)}
 .start-note-actions button:hover{background:rgba(217,119,87,.2);border-color:#d97757}
 /* 1.0.3: #151515 para las tarjetas dentro de los paneles (con la misma profundidad que las tarjetas de plan) */
-.ct,.sh-card,.sh-kpi>div,.sh-tips li,.scn>div,.ct-sum,fieldset.st,.hp-c,.undo,.ct-items,.rx>div,.rx-c,.pod,.call,.paste{background:#151515!important;border-color:rgba(222,220,209,.09)!important}
-.ct,.sh-card,.scn>div,fieldset.st,.hp-c,.ct-sum,.paste{box-shadow:0 1px 0 rgba(255,255,255,.04) inset,0 2px 4px rgba(0,0,0,.45),0 8px 18px rgba(0,0,0,.3)!important}
-.ct-items,.sh-kpi>div,.sh-tips li{background:#1c1b1a!important}
-.sh-tips li{border-color:rgba(222,220,209,.08)!important}
+.ct,.scn>div,.ct-sum,fieldset.st,.hp-c,.undo,.ct-items,.rx>div,.rx-c,.pod,.call,.paste{background:#151515!important;border-color:rgba(222,220,209,.09)!important}
+.ct,.scn>div,fieldset.st,.hp-c,.ct-sum,.paste{box-shadow:0 1px 0 rgba(255,255,255,.04) inset,0 2px 4px rgba(0,0,0,.45),0 8px 18px rgba(0,0,0,.3)!important}
+.ct-items{background:#1c1b1a!important}
 /* 1.0.4: la fuente de números (Bahnschrift) solo para números; todo texto con la fuente de la interfaz */
 .brand,.tagline,legend,fieldset.st legend,.hp-c h3,.call b,.rx-fh,.scn h4,.copy,.cz-pos,.pod-v,.rx-big,.foot-by .ver,.opt-v,.fact b,.receipt .amt,.guide li::before{font-family:var(--f-ui)!important}
 .copy.cp-n,.scn h4 b,.lot-qty,.lot-net,td.r .num{font-family:var(--f-num)!important}
@@ -272,10 +271,10 @@ body::after{background:radial-gradient(120% 95% at 50% 42%,rgba(0,0,0,0) 38%,rgb
 /* v1.0.9: UNA sola fuente en toda la app (la de la interfaz). Números con cifras tabulares para que se alineen. */
 :root{--f-num:var(--f-ui);--f-serif:var(--f-ui)}
 html,body,body *,body *::before,body *::after{font-family:var(--f-ui)!important}
-.num,td.r,.r,.sh-big,.pk-v,#resIsk,.v-isk,.fb2-big b{font-variant-numeric:tabular-nums}
+.num,td.r,.r,.pk-v,#resIsk,.v-isk,.fb2-big b{font-variant-numeric:tabular-nums}
 .hero h1{font-weight:700!important;letter-spacing:.03em}
 .panel h2,details.panel>summary h2{font-weight:600!important;letter-spacing:0}
-.panel .lead,.v-hint,.sh-none,.scn-v,.rguide,.pk-note,.ledger-tools .lead,.hero p,.more-btn span{font-size:.98rem!important;line-height:1.6}
+.panel .lead,.v-hint,.scn-v,.rguide,.pk-note,.ledger-tools .lead,.hero p,.more-btn span{font-size:.98rem!important;line-height:1.6}
 /* v1.0.9: viñeta high-end: casi nada al centro, marcada en las orillas (modo normal) */
 body::after{background:
   radial-gradient(ellipse 88% 82% at 50% 45%,rgba(0,0,0,0) 48%,rgba(0,0,0,.42) 76%,rgba(0,0,0,.88) 100%),
@@ -351,7 +350,7 @@ body.side-c .side-top{justify-content:center;padding:0 0 6px}
 /* barra de arriba: solo íconos */
 /* paleta: paneles gris-negro translúcidos, bordes finos, tarjetas internas apenas más claras */
 .panel{background:var(--glass)!important;border:1px solid var(--edge)!important;border-radius:14px!important;box-shadow:0 2px 4px rgba(0,0,0,.45),0 10px 24px rgba(0,0,0,.32)!important}
-.ct,.sh-card,.sh-kpi>div,.scn>div,.ct-sum,fieldset.st,.hp-c,.undo,.rx>div,.rx-c,.pod,.call,.pk-o,.fb2,.fb2-l>div,.ct-items{background:var(--glass2)!important;border:1px solid rgba(222,220,209,.09)!important;box-shadow:none!important}
+.ct,.scn>div,.ct-sum,fieldset.st,.hp-c,.undo,.rx>div,.rx-c,.pod,.call,.pk-o,.fb2,.fb2-l>div,.ct-items{background:var(--glass2)!important;border:1px solid rgba(222,220,209,.09)!important;box-shadow:none!important}
 .paste{background:var(--glass)!important;border:1px solid var(--edge)!important}
 input,select,textarea{background:rgba(0,0,0,.35)!important;border-color:rgba(222,220,209,.14)!important}
 .copy{background:rgba(255,255,255,.05)!important;border-color:rgba(222,220,209,.14)!important}

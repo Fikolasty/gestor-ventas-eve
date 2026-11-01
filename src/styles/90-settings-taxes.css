@@ -1,0 +1,120 @@
+/* Taxes r2 approved 2026-11-01. Single owner; shared geometry and theme tokens. */
+
+body.mm-settings-compact #settings #mm-settings-panel-1 .c5c-taxes{
+  padding:18px!important;
+  border-radius:16px!important;
+  box-shadow:inset 0 1px 0 color-mix(in srgb,var(--txt) 5%,transparent),0 12px 26px #00000012!important;
+  background:var(--glass)!important;
+}
+
+body.mm-settings-compact #settings #mm-settings-panel-1 .c5c-taxes>.st-i{
+  font:400 14px/1.6 var(--f-ui)!important;
+  margin:0 0 16px!important;
+  max-width:100%!important;
+  color:var(--mut)!important;
+  padding:0!important;
+  background:none!important;
+  border:0!important;
+  box-shadow:none!important;
+  border-radius:0!important;
+}
+
+body.mm-settings-compact #settings #mm-settings-panel-1 .c5c-taxes>.st-g{
+  grid-template-columns:repeat(3,minmax(0,1fr))!important;
+  gap:14px!important;
+  grid-auto-rows:1fr!important;
+  display:grid!important;
+  align-items:stretch!important;
+}
+
+body.mm-settings-compact #settings #mm-settings-panel-1 .c5c-taxes .c5c-broker-cluster,body.mm-settings-compact #settings #mm-settings-panel-1 .c5c-taxes .c5c-broker-standings{
+  display:contents!important;
+}
+
+body.mm-settings-compact #settings #mm-settings-panel-1 .c5c-taxes .st-f{
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr) 112px!important;
+  grid-template-rows:40px minmax(44px,auto) auto!important;
+  align-content:start!important;
+  align-items:center!important;
+  gap:10px 14px!important;
+  padding:16px!important;
+  border:1px solid var(--line2)!important;
+  border-radius:12px!important;
+  min-height:154px!important;
+  height:100%!important;
+  grid-column:auto!important;
+  background:linear-gradient(155deg,color-mix(in srgb,var(--surface-panel) 55%,var(--surface-card)),var(--surface-card))!important;
+  box-shadow:inset 0 1px 0 color-mix(in srgb,var(--txt) 6%,transparent),0 4px 12px #00000012!important;
+  box-sizing:border-box!important;
+  min-width:0!important;
+  width:100%!important;
+  margin:0!important;
+}
+
+body.mm-settings-compact #settings #mm-settings-panel-1 .c5c-taxes .st-f>.st-l{
+  grid-column:1!important;
+  grid-row:1!important;
+  font:650 14px/1.4 var(--f-ui)!important;
+  letter-spacing:.025em!important;
+  text-transform:uppercase!important;
+  min-width:0!important;
+  align-self:center;
+  margin:0!important;
+  color:var(--txt)!important;
+  padding:0!important;
+  word-break:normal;
+  overflow-wrap:normal;
+}
+
+body.mm-settings-compact #settings #mm-settings-panel-1 .c5c-taxes .st-f>input{
+  grid-column:2!important;
+  grid-row:1!important;
+  width:112px!important;
+  height:40px!important;
+  min-height:40px!important;
+  text-align:right;
+  font:600 19px/1.3 var(--f-num,var(--f-ui))!important;
+  border:1px solid var(--line2)!important;
+  border-radius:8px!important;
+  background:var(--surface-card)!important;
+  box-shadow:inset 0 2px 5px #00000012!important;
+  color:var(--clay)!important;
+  padding:7px 12px!important;
+  box-sizing:border-box!important;
+  min-width:0!important;
+  max-width:100%!important;
+  align-self:center!important;
+}
+
+body.mm-settings-compact #settings #mm-settings-panel-1 .c5c-taxes .st-f:has(#cStdFac)>input,body.mm-settings-compact #settings #mm-settings-panel-1 .c5c-taxes .st-f:has(#cStdCorp)>input{
+  color:var(--txt)!important;
+}
+
+body.mm-settings-compact #settings #mm-settings-panel-1 .c5c-taxes .st-f>small{
+  grid-column:1/-1!important;
+  grid-row:2!important;
+  font:400 14px/1.55 var(--f-ui)!important;
+  color:var(--mut)!important;
+  margin:0!important;
+  align-self:start!important;
+}
+
+body.mm-settings-compact #settings #mm-settings-panel-1 .c5c-taxes .st-f>#brkNote{
+  grid-row:3!important;
+  font:500 13px/1.5 var(--f-ui)!important;
+  color:var(--clay)!important;
+}
+
+body.mm-settings-compact #settings #mm-settings-panel-1 .c5c-taxes input:focus-visible{
+  outline:2px solid var(--clay)!important;
+  outline-offset:3px;
+}
+
+body.mm-settings-compact #settings #mm-settings-panel-1 .c5c-taxes .st-f>.st-calc{
+  grid-row:3!important;
+  min-height:0!important;
+}
+
+@media(max-width:1050px){body.mm-settings-compact #settings #mm-settings-panel-1 .c5c-taxes>.st-g{grid-template-columns:repeat(2,minmax(0,1fr))!important}}
+@media(max-width:650px){body.mm-settings-compact #settings #mm-settings-panel-1 .c5c-taxes>.st-g{grid-template-columns:minmax(0,1fr)!important}body.mm-settings-compact #settings #mm-settings-panel-1 .c5c-taxes{padding:12px!important}}

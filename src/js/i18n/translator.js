@@ -91,9 +91,6 @@ function syncLanguageChoices(){
 // CSS-generated responsive captions cannot be seen by a DOM text observer.
 // The same UI_TEXT catalog supplies their CSS content strings, in both locales.
 const I18N_CSS_KEYS={
-  '--mm-i18n-volume':'css.volume',
-  '--mm-i18n-shipping':'css.shipping',
-  '--mm-i18n-extra-gain':'css.extraGain',
   '--mm-i18n-reprocessed':'css.reprocessed',
   '--mm-i18n-unprocessed':'css.unprocessed',
   '--mm-i18n-units':'css.units',

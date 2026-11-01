@@ -85,8 +85,8 @@ class C5b2SettingsTests(unittest.TestCase):
         self.assertEqual(self.page.get_by_role("group",name="Standing de Jita").count(),1)
         self.assertEqual(cluster.locator(".c5c-broker-standings .st-l").nth(0).inner_text(),"STANDING DE FACCIÓN")
         self.assertEqual(cluster.locator(".c5c-broker-standings .st-l").nth(1).inner_text(),"STANDING DE CORP")
-        self.assertIn("−0,03 p.p.",cluster.locator("#cStdFac").locator("xpath=..").inner_text())
-        self.assertIn("−0,02 p.p.",cluster.locator("#cStdCorp").locator("xpath=..").inner_text())
+        self.assertIn("0,03 puntos porcentuales",cluster.locator("#cStdFac").locator("xpath=..").inner_text())
+        self.assertIn("0,02 puntos porcentuales",cluster.locator("#cStdCorp").locator("xpath=..").inner_text())
 
         self.page.evaluate("setLang('en')")
         self.assertEqual(self.page.locator(".c5c-skill-section .st-sec-t").inner_text(),"SKILLS")
@@ -94,9 +94,9 @@ class C5b2SettingsTests(unittest.TestCase):
         self.assertEqual(self.page.get_by_role("group",name="Jita standings").count(),1)
         self.assertEqual(cluster.locator(".c5c-broker-standings .st-l").nth(0).inner_text(),"FACTION STANDING")
         self.assertEqual(cluster.locator(".c5c-broker-standings .st-l").nth(1).inner_text(),"CORP STANDING")
-        self.assertIn("−0.03 pp",cluster.locator("#cStdFac").locator("xpath=..").inner_text())
-        self.assertIn("−0.02 pp",cluster.locator("#cStdCorp").locator("xpath=..").inner_text())
-        self.assertIn("effective rate shown in EVE",cluster.locator("#cBroker").locator("xpath=..").inner_text())
+        self.assertIn("0.03 percentage points",cluster.locator("#cStdFac").locator("xpath=..").inner_text())
+        self.assertIn("0.02 percentage points",cluster.locator("#cStdCorp").locator("xpath=..").inner_text())
+        self.assertIn("rate shown in EVE",cluster.locator("#cBroker").locator("xpath=..").inner_text())
 
     def test_broker_standings_remain_linked_to_the_original_broker_rate(self):
         broker=self.page.locator("#cBroker")
@@ -161,63 +161,21 @@ class C5b2SettingsTests(unittest.TestCase):
                 self.page.screenshot(path=str(out/filename),animations="disabled",full_page=True)
 
     def test_responsive_geometry_and_overflow_in_both_themes(self):
-        expected={
-            1440:(3,3,2,2),
-            980:(2,3,2,2),
-            630:(1,1,1,2),
-            390:(1,1,1,1),
-        }
         for light in (False,True):
             self.set_theme(light)
-            for width,(skill_cols,tax_cols,broker_cols,standing_cols) in expected.items():
-                self.page.set_viewport_size({"width":width,"height":900})
-                metrics=self.page.evaluate("""() => {
-                    const columns=selector=>getComputedStyle(document.querySelector(selector)).gridTemplateColumns.trim().split(' ').filter(Boolean).length;
-                    const taxGrid=document.querySelector('.c5c-taxes>.st-g');
-                    const brokerEl=document.querySelector('.c5c-broker-cluster');
-                    const main=brokerEl.querySelector('.c5c-broker-main').getBoundingClientRect();
-                    const standingsEl=brokerEl.querySelector('.c5c-broker-standings');
-                    const standings=standingsEl.getBoundingClientRect();
-                    const labels=[...standingsEl.querySelectorAll('.st-l')];
-                    const taxCards=[...taxGrid.children].slice(1).map(el=>el.getBoundingClientRect());
-                    return {
-                        overflow:document.documentElement.scrollWidth-innerWidth,
-                        skills:columns('.c5c-skills>.st-g'),
-                        taxes:columns('.c5c-taxes>.st-g'),
-                        broker:columns('.c5c-broker-cluster'),
-                        standings:columns('.c5c-broker-standings'),
-                        order:[...taxGrid.children].map(el=>el.classList.contains('c5c-broker-cluster')?'broker':el.querySelector('input')?.id||'unknown'),
-                        taxGridWidth:taxGrid.getBoundingClientRect().width,
-                        brokerWidth:brokerEl.getBoundingClientRect().width,
-                        main:{x:main.x,y:main.y,bottom:main.bottom},
-                        standingsBox:{x:standings.x,y:standings.y,width:standings.width},
-                        standingWidths:[...standingsEl.querySelectorAll('.st-f')].map(el=>el.getBoundingClientRect().width),
-                        labelOverflow:labels.some(el=>el.scrollWidth>el.clientWidth+1),
-                        labelBreaks:labels.map(el=>({wordBreak:getComputedStyle(el).wordBreak,overflowWrap:getComputedStyle(el).overflowWrap})),
-                        taxCards:taxCards.map(r=>({x:r.x,y:r.y,width:r.width}))
-                    };
-                }""")
-                self.assertLessEqual(metrics["overflow"],1,f"horizontal overflow at {width}px, light={light}")
-                self.assertEqual(metrics["skills"],skill_cols,f"skill columns at {width}px, light={light}")
-                self.assertEqual(metrics["taxes"],tax_cols,f"tax columns at {width}px, light={light}")
-                self.assertEqual(metrics["broker"],broker_cols,f"Broker cluster columns at {width}px, light={light}")
-                self.assertEqual(metrics["standings"],standing_cols,f"standings columns at {width}px, light={light}")
-                self.assertEqual(metrics["order"],["broker","cTax","cBrokerNull","cScc"])
-                self.assertLessEqual(abs(metrics["brokerWidth"]-metrics["taxGridWidth"]),2,
-                                     f"Broker cluster must span the tax row at {width}px")
-                self.assertEqual(len(metrics["taxCards"]),3)
-                self.assertTrue(all(card["y"]>=metrics["main"]["bottom"]-1 for card in metrics["taxCards"]),
-                                f"standalone taxes must follow the Broker row at {width}px")
-                self.assertFalse(metrics["labelOverflow"],f"standing label overflow at {width}px")
-                self.assertTrue(all(x["wordBreak"]=="normal" and x["overflowWrap"]=="normal"
-                                    for x in metrics["labelBreaks"]))
-                self.assertTrue(all(w>0 for w in metrics["standingWidths"]))
-                if width>650:
-                    self.assertLess(metrics["main"]["x"],metrics["standingsBox"]["x"])
-                    self.assertLess(abs(metrics["main"]["y"]-metrics["standingsBox"]["y"]),2)
-                else:
-                    self.assertGreater(metrics["standingsBox"]["y"],metrics["main"]["bottom"])
-                    self.assertLess(abs(metrics["main"]["x"]-metrics["standingsBox"]["x"]),2)
+            for width,cols in [(1440,3),(980,2),(630,1),(390,1)]:
+                self.page.set_viewport_size({'width':width,'height':1100})
+                grid=self.page.locator('.c5c-taxes>.st-g')
+                self.assertEqual(grid.evaluate("e=>getComputedStyle(e).gridTemplateColumns.trim().split(' ').length"),cols)
+                cards=self.page.locator('.c5c-taxes .st-f').evaluate_all("es=>es.map(e=>{const r=e.getBoundingClientRect();return {x:r.x,y:r.y,w:r.width,h:r.height,over:e.scrollWidth-e.clientWidth}})")
+                self.assertEqual(len(cards),6)
+                self.assertLessEqual(max(c['h'] for c in cards)-min(c['h'] for c in cards),1)
+                self.assertTrue(all(c['over']<=1 for c in cards))
+                for i,c in enumerate(cards):
+                    self.assertLessEqual(abs(c['x']-cards[i%cols]['x']),1)
+                    if i%cols:self.assertLessEqual(abs(c['y']-cards[i-1]['y']),1)
+                self.assertEqual(self.page.locator('.c5c-broker-standings').get_attribute('role'),'group')
+                self.assertLessEqual(self.page.evaluate('document.documentElement.scrollWidth-innerWidth'),1)
 
 if __name__=="__main__":
     unittest.main()

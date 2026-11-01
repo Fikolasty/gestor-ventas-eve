@@ -36,7 +36,6 @@ function czShow(i,dir){
   c.style.setProperty('--cz-dx',dir>0?'24px':dir<0?'-24px':'0');box.append(c);
   const n=czCards.length;$('czDots').hidden=n<2;
   $('czDots').querySelectorAll('.cz-d').forEach((d,j)=>d.setAttribute('aria-current',String(j===czIdx)));
-  document.querySelectorAll('#shBody .sh-c').forEach(b=>b.classList.toggle('on',+b.dataset.ci===czIdx));
 }
 $('czDots').addEventListener('click',e=>{const d=e.target.closest('.cz-d');if(d)czShow(+d.dataset.i,+d.dataset.i>czIdx?1:-1);});
 $('pCtr').addEventListener('keydown',e=>{if(e.target.closest('input,textarea,select'))return;
@@ -92,69 +91,6 @@ function paintContracts(P){
   // already present in each copyable contract. Never label proceeds as profit.
   // El análisis de envío permanece fuera de la UI; el courier sigue calculándose en el motor.
   if(cards.length)czShow(czIdx,0);
-}
-// Derecha: envío a Jita
-function paintShip(P,cs){
-  const b=$('shBody');b.textContent='';
-  $('shTitle').textContent=(S.lang==='en'?'Shipping to ':'Envío a ')+DEST();$('shRoute').textContent=(S.flip?'Jita 4-4 → '+nullSystem():nullSystem()+' → Jita 4-4')+' · SIGMA Freight';
-  $('fBase').textContent=fmt(C.base);$('fPerM3').textContent=C.perM3.toLocaleString('en-US')+' ISK';$('fCollPct').textContent=pct(C.collPct)+'%';$('fMaxVol').textContent=fmtV(C.maxVol);
-  if(!C.shipOn){
-    const sh=P.rows.filter(r=>r.best&&SHIPS[r.best]&&r.ship[r.best]),V=sh.reduce((a,r)=>a+r.ship[r.best].v,0),Cc=sh.reduce((a,r)=>a+r.ship[r.best].c,0);
-    b.append(el('p','sh-none','El envío está apagado: lo llevas tú, así que no se descuenta el coste del envío ni se arman contratos de envío.'));
-    if(V>0){const n=trips(V);b.append(el('p','sh-none','Tu plan lleva '+fmtV(Math.round(V))+' a '+DEST()+' (valor '+fmt(Cc)+'). Con SIGMA Freight costaría −'+fmt(courierRaw(V,Cc))+' ('+n+(n>1?' contratos':' contrato')+').'));}
-    return;}
-  if(!cs.length){
-    const p=el('p','sh-none','Tu plan no manda nada a '+DEST()+', así que no pagas envío.');b.append(p);
-    if(P.VJ>0){const n=trips(P.VJ),d=P.allJita!=null?P.best-P.allJita:null;
-      b.append(el('p','sh-none','Llevar todo costaría −'+fmt(P.allJitaCost)+' ('+n+(n>1?' contratos':' contrato')+', '+fmtV(Math.round(P.VJ))+')'+(d!=null&&d>0?' y te dejaría '+fmt(d)+' menos que tu plan.':'.')));}
-    return;}
-  const n=cs.length,V=cs.reduce((a,k)=>a+k.v,0),Cc=cs.reduce((a,k)=>a+k.c,0),R=cs.reduce((a,k)=>a+k.reward,0);
-  const pB=C.base*n,pV=C.perM3*V,pC=C.collPct*Cc;
-  const top=el('div','sh-top');top.append(el('b','sh-big num','−'+fmt(R)),el('span','sh-sub',n+(n>1?' contratos':' contrato')+' · '+fmtV(Math.round(V))+' · colateral '+fmt(Cc)));b.append(top);
-  // de qué se compone
-  const bar=el('div','sh-bar');bar.setAttribute('role','img');bar.setAttribute('aria-label','Composición del envío');
-  [[pB,'b1'],[pV,'b2'],[pC,'b3']].forEach(([v,c])=>{const i=el('i',c);i.style.width=(R>0?v/R*100:0)+'%';bar.append(i);});b.append(bar);
-  const leg=el('div','sh-leg');
-  [['l1','Base ('+n+'×)',pB],['l2','Por m³',pV],['l3','Colateral',pC]].forEach(([c,l,v])=>{const d=el('div');d.append(el('span',c,l+' · '+pct(R>0?v/R:0)+'%'),el('b','num',fmt(v)));leg.append(d);});b.append(leg);
-  // lo que sirve para decidir
-  const ship=P.rows.filter(r=>r.best&&r.ship[r.best]).map(r=>{const s=r.ship[r.best],cost=courierShare(s.v,s.c,V),net=r.g[r.best]-r.prod-cost;
-    const alt=(S.flip?['fJ','fJI']:['null','bb','rNull']).filter(k=>r.g[k]!=null).reduce((a,k)=>a==null||r.g[k]-r.prod>a.v?{k,v:r.g[k]-r.prod}:a,null);
-    return{r,s,cost,net,extra:alt?net-alt.v:null,alt:alt&&alt.k};});
-  const ex=ship.filter(x=>x.extra!=null),gain=ex.reduce((a,x)=>a+x.extra,0),cap=n*C.maxVol;
-  const kpi=el('div','sh-kpi'),K=(l,v,s,cls)=>{const d=el('div');d.append(el('span',null,l),el('b','num '+(cls||''),v));if(s)d.append(el('small',null,s));kpi.append(d);};
-  K('Pesa sobre la carga',pct(Cc>0?R/Cc:0)+'%','de lo que vale en Jita Sell');
-  K('Costo real por m³',fmt(V>0?R/V:0),'con la base incluida');
-  K('Espacio usado',pct(cap>0?V/cap:0)+'%',fmtV(Math.round(V))+' de '+fmtV(cap));
-  if(ex.length)K(gain>=0?'Ganas por enviarlo':'Por enviarlo',(gain>=0?'+':'−')+fmt(Math.abs(gain)),gain>=0?(S.flip?'frente a venderlo en Jita':'frente a no enviarlo ('+nullSystem()+' o Buyback)')+', ya restado el envío':'menos que no enviarlo'+(ex.some(x=>x.r.fast)?': se envía por rapidez':''),gain>=0?'pos':'neg');
-  else K('Si se pierde',fmt(Cc),'el colateral que te pagan si el contrato falla');
-  b.append(kpi);
-  // capacidad por contrato (clic = ver ese contrato)
-  const capB=el('div','sh-cap');
-  cs.forEach((k,i)=>{const ci=czCards.findIndex(c=>c.courier===i),bt=el('button','sh-c');bt.type='button';bt.dataset.ci=ci;bt.title='Ver el contrato';
-    const tr=el('span','tr'),f=el('i');f.style.width=Math.min(100,k.v/C.maxVol*100)+'%';tr.append(f);
-    bt.append(el('span',null,'Courier'+(n>1?' '+(i+1):'')),tr,el('span','pc',fmtV(Math.round(k.v))+' · '+pct(k.v/C.maxVol)+'%'));
-    bt.addEventListener('click',()=>{if(ci>=0)czShow(ci,ci>czIdx?1:-1);});capB.append(bt);});
-  b.append(capB);
-  // consejos
-  const tips=el('ul','sh-tips'),T=(t,cls)=>tips.append(el('li',cls||null,t));
-  const last=cs[n-1],free=C.maxVol-last.v;
-  if(last.v<C.maxVol*.6)T('Al '+(n>1?'último contrato':'contrato')+' le sobran '+fmtV(Math.round(free))+'. Puedes meter más carga sin pagar otra base de '+fmt(C.base)+': cada m³ extra cuesta solo '+C.perM3+' ISK.');
-  if(R>0&&pB/R>.5)T('La base es el '+pct(pB/R)+'% del envío. Con poca carga sale caro por m³: si puedes, junta más antes de enviar.');
-  const ALT={null:'venderlo en '+nullSystem(),rNull:'reprocesarlo y vender en '+nullSystem(),bb:'el Buyback',fJ:'venderlo en Jita',fJI:'venderlo al instante en Jita'};
-  ex.filter(x=>x.r.fast&&x.extra<0).forEach(x=>T(x.r.o.name+(S.flip?' se queda en Jita por rapidez:':' va a Jita por rapidez:')+' deja '+fmt(-x.extra)+' menos que '+ALT[x.alt]+', pero se vende mucho más rápido. Si no tienes apuro, '+({null:'véndelo en '+nullSystem(),rNull:'reprocésalo y véndelo en Null',bb:'véndeselo al Buyback',fJ:'véndelo en Jita',fJI:'véndelo al instante en Jita'})[x.alt]+'.'));
-  const weak=ex.filter(x=>!x.r.fast&&x.extra<x.cost*.25).sort((a,b)=>a.extra-b.extra)[0];
-  if(weak)T(weak.r.o.name+' gana solo '+(weak.extra>=0?'':'−')+fmt(Math.abs(weak.extra))+' por viajar (su envío: '+fmt(weak.cost)+'). Si necesitas espacio, es lo primero que puedes dejar en '+(S.flip?'Jita':nullSystem())+'.');
-  if(!tips.childNodes.length)T('Contrato bien aprovechado: '+pct(cap>0?V/cap:0)+'% del espacio y el envío pesa '+pct(Cc>0?R/Cc:0)+'% del valor.','ok');
-  b.append(tips);
-  // qué viaja
-  const t=el('table','sh-t'),th=el('thead'),hr=el('tr');
-  [['Qué viaja',''],['Volumen','r'],['Envío','r'],['Gana extra','r']].forEach(([l,c])=>hr.append(el('th',c||null,l)));th.append(hr);t.append(th);
-  const tb=el('tbody');
-  ship.sort((a,b)=>b.cost-a.cost).slice(0,8).forEach(x=>{const tr=el('tr'),nm=['cOrd','cInst'].includes(x.r.best)&&x.r.comp?x.r.comp.name:(x.r.best==='rJita'?(isIce(x.r.o.name)?'Productos de ':'Minerales de '):'')+x.r.o.name,td=el('td',null,nm);td.title=nm;
-    tr.append(td,el('td','r',fmtV(Math.round(x.s.v*100)/100)),el('td','r','−'+fmt(x.cost)),el('td','r '+sgn(x.extra),x.extra==null?'—':(x.extra>=0?'+':'−')+fmt(Math.abs(x.extra))));tb.append(tr);});
-  if(ship.length>8){const tr=el('tr'),td=el('td','muted',S.lang==='en'?'and '+(ship.length-8)+' more items':'y '+(ship.length-8)+' items más');td.colSpan=4;tr.append(td);tb.append(tr);}
-  t.append(tb);b.append(t);
-  b.append(el('small','sh-rates',S.flip?'Gana extra = lo que deja en '+nullSystem()+', ya con taxes y su parte del envío, menos lo que dejaría vendido en Jita.':'Gana extra = lo que deja en Jita, ya con taxes y su parte del envío, menos lo que dejaría sin viajar ('+nullSystem()+' o Buyback).'));
 }
 function paintCourier(P){
   const w=$('fScnWrap');

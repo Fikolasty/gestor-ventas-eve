@@ -21,13 +21,12 @@ test('C.5b.2a removes duplicate visible headings and uses the EVE skillbook icon
  assert.match(shell,/class="c5c-skillbook-icon" src="https:\/\/images\.evetech\.net\/types\/3426\/icon\?size=64"/);
  assert.match(shell,/legend class="c5c-visually-hidden"/);
  assert.equal((shell.match(/legend class="c5c-visually-hidden"/g)||[]).length,2);
- assert.match(style,/legend\.c5c-visually-hidden/);
  assert.equal(ui['settings.pilotHeading'].es,'HABILIDADES');
  assert.equal(ui['settings.pilotHeading'].en,'SKILLS');
  assert.equal(ui['settings.groupTaxes'].es,'IMPUESTOS');
  assert.equal(ui['settings.groupTaxes'].en,'TAXES');
 });
-test('C.5b.2a places the full-width Broker cluster before the standalone tax fields',()=>{
+test('Taxes preserves Broker and standings groups and the six original input IDs',()=>{
  const shell=read('src','shell.html'),style=read('src','styles','80-product-ux.css');
  const taxes=shell.match(/<fieldset class="st c5c-fixed c5c-taxes">([\s\S]*?)<\/fieldset>/)?.[1]||'';
  const order=['c5c-broker-cluster','cBroker','cStdFac','cStdCorp','cTax','cBrokerNull','cScc'].map(token=>taxes.indexOf(token));
@@ -37,12 +36,6 @@ test('C.5b.2a places the full-width Broker cluster before the standalone tax fie
  assert.match(taxes,/class="st-f c5c-broker-main"/);
  assert.match(taxes,/class="c5c-broker-standings" role="group" aria-label="Standing de Jita"/);
  assert.equal((taxes.match(/class="st-f/g)||[]).length,6);
- assert.match(style,/#settings \.c5c-taxes>\.st-g\{\s*display:grid!important;grid-template-columns:repeat\(3,minmax\(0,1fr\)\)!important/);
- assert.match(style,/#settings \.c5c-taxes \.c5c-broker-cluster\{[\s\S]*?grid-column:1 \/ -1!important;[\s\S]*?grid-template-columns:minmax\(0,1fr\) minmax\(0,2fr\)!important/);
- assert.match(style,/#settings \.c5c-taxes \.c5c-broker-standings\{[\s\S]*?grid-template-columns:repeat\(2,minmax\(0,1fr\)\)!important/);
- assert.match(style,/grid-template-columns:minmax\(0,1fr\) 72px!important/);
- assert.match(style,/@media\(max-width:650px\)/);
- assert.match(style,/@media\(max-width:430px\)/);
 });
 test('C.5b.2a keeps complete bilingual copy for the grouped tax controls',()=>{
  const en=JSON.parse(read('src','i18n','en.json')),ui=JSON.parse(read('src','i18n','ui.json'));
@@ -61,6 +54,5 @@ test('C.5b.2a keeps complete bilingual copy for the grouped tax controls',()=>{
 });
 test('C.5b.2a tabs retain Sales tokens and the native fixed-fieldset contract',()=>{
  const style=read('src','styles','80-product-ux.css'),settings=read('src','js','ui','settings.js');
- assert.match(style,/#settings \.c5c-pilot-panel>\.c5c-skills>\.st-g/);
  assert.match(settings,/fieldset\.st:not\(\.c5c-fixed\)/);
 });

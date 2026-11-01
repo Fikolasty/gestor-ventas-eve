@@ -1,0 +1,13 @@
+# Continuidad — v1.0.181 candidata
+
+Base main67f6d53f4e09ce2ceea7dc5e60401a6bdf89ff78; últimaLIVE180. Leer AGENTS/protocolo/DSS y la aprobación/cierre de esta entrega.
+
+## v1.0.181 candidata — Taxes r2 aprobado e integración del saneamiento (2026-11-01)
+
+El propietario aprobó expresamente «Aprobar diseño e implementar» sobre r2. Se implementan seis tarjetas simétricas3×2 desktop, dos columnas hasta1050px y una hasta650px, con ayudas14px, valores19px (porcentajes naranja y standings neutros), profundidad de grises cálidos y sombras/inset suaves. El grupo semántico Broker/standings y todos los IDs/input handlers permanecen. Datos iniciales reales del navegador/ESI: los niveles5 del preview son únicamente fixture y no se convierten en defaults.
+
+CSS de Taxes tiene un propietario modular src/styles/90-settings-taxes.css, ensamblado después de80. Se retiran las reglas dedicadas antiguas y parches Light de Taxes, en lugar de añadir otra capa sobre la cascada anterior. Se conservan reglas comunes de las tarjetas Skills y del panel de personaje. Las doce cadenas de etiquetas/ayudas van a claves settings.tax.<id>.label/help del catálogo ES/EN; las notas de origen ESI/Manual siguen actualizándose desde el mismo input nativo. Copy evita atribuir SCC a un evento distinto y conserva tasas/unidades. No se cambia ninguna fórmula, nivel inicial, dato SSO/ESI, caché o permiso.
+
+Integra el saneamiento solicitado en la petición previa: paintShip sin llamadas y su DOM permanently hidden shipBox, fadeIn sin uso, referencias inertes y estilos .sh-* exclusivos; mínimos de Skills158/145 superados; tres registros/etiquetas CSS exclusivos de la vista retirada. Funciones con contratos activos, PI pausado, Skills iframe real y conversor Light se preservan. El gate aislado previo aprobó123Chromium,157Node/16Python y comparación de192 estados de Ajustes, sin cambio visual; la nueva suite verificará toda la integración.
+
+157Node/16Python finales PASS. Se actualiza el contrato de ensamblado de9→10 fuentes y su orden80→90, y las expectativas geométricas históricas de Taxes a la retícula aprobada; no se eliminan comprobaciones de controles, roles, idiomas o cálculos. Nuevo browser_taxes181:32estados por Manual/ESI simulado,6tarjetas, ayudas14px, sin colisiones/overflow y simetría en390/630/980/1440 ES/EN Dark/Light; prueba adicional de Accounting, Broker Relations, standings, edición manual y teclado sin alterar handlers. Focal final3tests PASS6.904s. Capturas taxes181-final2-* inspeccionadas en1440 ES Dark/Light con mismo estado; faltan cierre de125Chromium y remoto4Actions/Pages/HTTP. No ESI/SSO real extremo a extremo. ÚltimaLIVE180, no declarar181LIVE todavía.

@@ -1339,18 +1339,6 @@
     "es": "No se pudo abrir el login oficial de EVE: {error}",
     "en": "Could not open the official EVE login: {error}"
   },
-  "css.volume": {
-    "es": "Volumen",
-    "en": "Volume"
-  },
-  "css.shipping": {
-    "es": "Envío",
-    "en": "Shipping"
-  },
-  "css.extraGain": {
-    "es": "Gana extra",
-    "en": "Extra gain"
-  },
   "css.reprocessed": {
     "es": "Reprocesado",
     "en": "Reprocessed"
@@ -1716,8 +1704,8 @@
     "en": "Effective rates applied to each selling route."
   },
   "settings.taxesIntro": {
-    "es": "Accounting actualiza Sales Tax; Broker Relations y los standings ajustan el Broker de Jita. Puedes introducir las tasas que muestra EVE.",
-    "en": "Accounting updates Sales Tax; Broker Relations and standings adjust the Jita Broker fee. You can enter the rates shown in EVE."
+    "es": "Usa las tasas de EVE. Accounting ajusta Sales Tax; Broker Relations y los standings ajustan el Broker de Jita.",
+    "en": "Use the rates shown in EVE. Accounting adjusts Sales Tax; Broker Relations and standings adjust the Jita Broker fee."
   },
   "settings.skillOre": {
     "es": "Procesamiento de mineral o hielo",
@@ -2630,5 +2618,53 @@
   "settings.pricing.group5.intro": {
     "es": "Permite comparar la proyección WTS; el precio y el plazo son los que tú configuras.",
     "en": "Compares the WTS projection using the price and waiting time you configure."
+  },
+  "settings.tax.cBroker.label": {
+    "es": "Broker de Jita %",
+    "en": "Jita Broker %"
+  },
+  "settings.tax.cBroker.help": {
+    "es": "Comisión al publicar una orden en Jita. Puedes usar la tasa que ves en EVE.",
+    "en": "Fee for placing an order in Jita. You can use the rate shown in EVE."
+  },
+  "settings.tax.cStdFac.label": {
+    "es": "Standing de facción",
+    "en": "Faction standing"
+  },
+  "settings.tax.cStdFac.help": {
+    "es": "Reduce el Broker de Jita en 0,03 puntos porcentuales por punto.",
+    "en": "Reduces the Jita Broker fee by 0.03 percentage points per point."
+  },
+  "settings.tax.cStdCorp.label": {
+    "es": "Standing de corp",
+    "en": "Corp standing"
+  },
+  "settings.tax.cStdCorp.help": {
+    "es": "Reduce el Broker de Jita en 0,02 puntos porcentuales por punto.",
+    "en": "Reduces the Jita Broker fee by 0.02 percentage points per point."
+  },
+  "settings.tax.cTax.label": {
+    "es": "Sales Tax %",
+    "en": "Sales Tax %"
+  },
+  "settings.tax.cTax.help": {
+    "es": "Impuesto al vender en el mercado principal o en Jita.",
+    "en": "Tax paid when selling in your home market or Jita."
+  },
+  "settings.tax.cBrokerNull.label": {
+    "es": "Broker de estructura %",
+    "en": "Structure Broker %"
+  },
+  "settings.tax.cBrokerNull.help": {
+    "es": "Comisión fijada por el dueño de tu estructura comercial.",
+    "en": "Fee set by the owner of your trading structure."
+  },
+  "settings.tax.cScc.label": {
+    "es": "SCC %",
+    "en": "SCC %"
+  },
+  "settings.tax.cScc.help": {
+    "es": "Impuesto de CONCORD en tu estructura comercial.",
+    "en": "CONCORD tax in your trading structure."
   }
 }

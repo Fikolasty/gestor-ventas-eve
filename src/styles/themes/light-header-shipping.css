@@ -163,19 +163,6 @@ html.light body .top.mm-ho-root #mmTabs>.mm-ho-main .mm-modgroup .mm-mod[aria-se
   box-shadow:inset 0 -3px 0 var(--clay)!important;color:var(--txt)!important
 }
 
-
-/* C.5b.2a — keep the nested Broker card coherent after legacy Light overrides. */
-html.light #settings .c5c-taxes .c5c-broker-cluster{
-  background:var(--surface-card)!important;border-color:var(--line2)!important
-}
-html.light #settings .c5c-taxes .c5c-broker-main{
-  background:transparent!important;border-color:transparent!important;box-shadow:none!important
-}
-html.light #settings .c5c-taxes .c5c-broker-standings .st-f{
-  background:var(--surface-panel)!important;border-color:var(--line2)!important
-}
-
 /* v180: the pilot section keeps the same insets and edges as Dark. */
 html.light body.mm-settings-compact #settings .c5c-pilot-panel>.st-sec{border:0!important}
 html.light body.mm-settings-compact #settings .c5c-pilot-panel>.c5c-fixed{border:1px solid var(--line2)!important;box-shadow:none!important}
-html.light body.mm-settings-compact #settings .c5c-taxes .c5c-broker-standings .st-f{background:transparent!important}

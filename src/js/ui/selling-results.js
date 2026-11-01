@@ -74,8 +74,6 @@ function slide(node,show){
     const a=node.animate([{opacity:1,transform:'none'},{opacity:0,transform:'translateY(-4px)'}],{duration:140,easing:EASE,fill:'forwards'});
     ANIM.set(node,a);a.onfinish=()=>{node.hidden=true;a.cancel();ANIM.delete(node);};}
 }
-// filas nuevas que aparecen (p. ej. al desplegar los planes): entran con un leve escalonado
-function fadeIn(list){if(!MOTION())return;list.forEach((n,i)=>n.animate([{opacity:0,transform:'translateY(-4px)'},{opacity:1,transform:'none'}],{duration:200,delay:Math.min(i,8)*18,easing:EASE,fill:'backwards'}));}
 // <details>: el contenido aparece con la misma curva; al cerrar, se cierra al instante (sin esperar)
 document.addEventListener('toggle',e=>{const d=e.target;if(!(d instanceof HTMLDetailsElement)||!d.open||!MOTION())return;
   [...d.children].filter(c=>c.tagName!=='SUMMARY'&&!c.hidden).forEach(c=>c.animate([{opacity:0,transform:'translateY(-6px)'},{opacity:1,transform:'none'}],{duration:220,easing:EASE}));},true);
@@ -114,7 +112,7 @@ const bestLabel=()=>$('vWhat').textContent.replace(/ · por rapidez$/,'').replac
 // Sin items: vacía todo lo pintado y suelta referencias (así el navegador libera la memoria de lotes grandes)
 function clearViews(){
   document.title='Market Moves+ · SIGMA GRINDSET';
-  ['vPlan','vRepList','ctrList','czDots','shBody','fScn','rx','rxFinal','dMsg'].forEach(id=>{const e=$(id);if(e)e.textContent='';});
+  ['vPlan','vRepList','ctrList','czDots','fScn','rx','rxFinal','dMsg'].forEach(id=>{const e=$(id);if(e)e.textContent='';});
   ['pCtr','pSum'].forEach(id=>{const e=$(id);if(e)e.hidden=true;});
   $('deep').hidden=true;delete $('deep').dataset.uiReady;
   lastP=null;repaintPlanGroup=null;paintAppraisal();discRows=[];czCards=[];lastCs=[];czIdx=0;S.planMode=null;ICON_POOL={};

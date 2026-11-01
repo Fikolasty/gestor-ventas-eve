@@ -91,9 +91,6 @@ test('responsive CSS labels are catalog driven in both languages',()=>{
   const navigation=read('src/styles/50-navigation.css');
   const translator=read('src/js/i18n/translator.js');
   for(const [cssVar,key] of [
-    ['--mm-i18n-volume','css.volume'],
-    ['--mm-i18n-shipping','css.shipping'],
-    ['--mm-i18n-extra-gain','css.extraGain'],
     ['--mm-i18n-reprocessed','css.reprocessed'],
     ['--mm-i18n-unprocessed','css.unprocessed'],
     ['--mm-i18n-units','css.units'],

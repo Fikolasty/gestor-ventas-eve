@@ -1,3 +1,10 @@
+## v1.0.181 — Taxes r2 y saneamiento conservador — candidata
+
+- Diseño aprobado: seis tarjetas simétricas con profundidad cálida, ayudas14px y porcentajes naranja.
+- Conserva campos, tasas, fórmulas, origen ESI/Manual y ES/EN Dark/Light.
+- CSS de Taxes consolidado en un módulo; retirados panel de envío abandonado y código exclusivo sin uso.
+- Gates remotos pendientes; docs/HANDOFF_181.md.
+
 ## v1.0.180 — Ajustes: header, habilidades y Taxes — LIVE certificada
 
 - Tabs con capitalización consistente, header compacto y acciones separadas.
