@@ -20,6 +20,7 @@
 | `src/styles/30-legacy-layout.css` | Layout heredado, no añadir nuevos estilos aquí |
 | `src/styles/40-sales-ui.css` | Vista de venta y componentes históricos de resultados |
 | `src/styles/50-navigation.css` | Header y navegación actual |
+| `src/styles/90-settings-taxes.css` | Taxes r2: geometría y superficies compartidas Dark/Light, único owner desde181 |
 | `src/styles/60-final-layout.css` | Últimas reglas de simetría y responsive |
 | `src/light.py` | Conversión Light heredada, pendiente de sustitución controlada por temas explícitos |
 | `src/styles/themes/light-*.css` | Tema claro modular: tokens y base, componentes, cabecera/ticker/courier; evitar duplicar definiciones |
@@ -87,3 +88,7 @@ La equivalencia del texto reconstruido se comprobó con la versión previa `3df7
 - El workflow `rebuild-market-moves.yml` apunta a **v1.0.116**, publica capturas como artifact y no despliega si fallan pruebas.
 
 **Pendientes:** confirmar ejecución y despliegue reales de v1.0.116; ampliar validación visual fuera de cabecera/ticker, completar eliminación de overrides, medir interacción con inventarios grandes, perfilar navegadores reales, separar `S/C` del resto de funciones y probar OAuth/ESI extremo a extremo.
+
+## 2026-11-01 — Taxes r2 y saneamiento de UI retirada (v1.0.181)
+
+Taxes pasa a un módulo CSS propio ensamblado después de80, sin reglas antiguas dedicadas ni parches de tema duplicados. Se preservan grupos DOM, inputs y motor. La retirada de paintShip/shipBox/fadeIn y sus estilos exclusivos elimina UI inactiva sin tocar el courier canónico; la función courierUnitPresentation conserva su contrato de regresión. Conversor Light/PI pausado/Skills iframe siguen activos o conservados expresamente. Certificación y límites en DSS/HANDOFF_181.
