@@ -18,6 +18,7 @@ class Settings180Tests(unittest.TestCase):
     p.set_viewport_size({'width':width,'height':1100});both=[]
     for light in [False,True]:
      p.evaluate("v=>{$('themeLight').checked=!v;$('themeLight').dispatchEvent(new Event('change',{bubbles:true}));document.activeElement?.blur();scrollTo(0,0)}",light)
+     p.evaluate('()=>new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)))')
      m=p.evaluate("""()=>{const box=e=>{const r=e.getBoundingClientRect();return {x:r.x,y:r.y,w:r.width,h:r.height,right:r.right,bottom:r.bottom}},q=s=>document.querySelector(s),intro=q('.c5c-taxes>.st-i'),s=getComputedStyle(intro);return {intro:box(intro),grid:box(q('.c5c-taxes>.st-g')),background:s.backgroundColor,padding:parseFloat(s.paddingLeft),title:box(q('#settings>h2')),tools:box(q('#settings .c5c-tools')),lead:box(q('#settings>.lead')),tabs:box(q('#settings .modern-tabs')),inputs:[...document.querySelectorAll('.c5c-taxes input')].map(e=>box(e)),cards:[...document.querySelectorAll('.c5c-skill-card')].map(e=>box(e)),over:document.documentElement.scrollWidth-innerWidth}}""")
      self.assertLessEqual(m['over'],1,(lang,width,light,m));self.assertEqual(m['background'],'rgba(0, 0, 0, 0)');self.assertEqual(m['padding'],0)
      self.assertLessEqual(abs(m['intro']['x']-m['grid']['x']),1)
