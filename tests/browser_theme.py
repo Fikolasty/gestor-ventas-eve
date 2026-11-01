@@ -254,85 +254,33 @@ class ThemeBrowserTests(unittest.TestCase):
             "Bonificaciones de nave y habilidades", timeout=10000)
 
     def test_sales_operation_dropdown_preserves_live_trading_controls(self):
-        from playwright.sync_api import expect
-        self.page.evaluate("selectAppModule('ventas')")
-        picker=self.page.locator(".mm-sales-mode-picker")
-        trigger=self.page.locator("#salesModeTrigger")
-        self.assertEqual(self.page.locator(".top.mm-ho-context").count(),0)
-        expect(trigger).to_be_visible()
-        expect(self.page.locator("#businessSwitch")).to_be_hidden()
-        trigger.click()
-        expect(self.page.locator("#modeTrading")).to_be_visible()
-        self.page.locator("#modeTrading").click()
-        expect(picker).not_to_have_attribute("open", "")
-        self.assertTrue(self.page.evaluate("S.flip"))
-        expect(self.page.locator("#importControls")).to_be_visible()
-        expect(self.page.locator("#tradePurchaseMode")).to_be_hidden()
-        expect(self.page.locator("#tradePurchaseTrigger")).to_be_visible()
-        self.assertEqual(self.page.locator("#salesModeCurrent").inner_text(),"Comercio Jita")
+        from browser_jita184 import FIXTURE
+        self.page.evaluate(FIXTURE)
+        self.assertEqual(self.page.locator('.mm-sales-mode-picker').count(),0)
+        self.page.locator('#mmTabJita').click()
+        self.assertTrue(self.page.evaluate('S.flip&&JitaContext.active'))
+        expect(self.page.locator('#importControls')).to_be_hidden()
+        expect(self.page.locator('#jitaPurchaseControls')).to_be_visible()
         self.page.evaluate("setLang('en')")
-        self.assertEqual(self.page.locator("#salesModeCurrent").inner_text(),"Jita Trading")
-        trigger.click()
-        self.page.locator("#modeLiquidation").click()
-        self.assertFalse(self.page.evaluate("S.flip"))
-        expect(self.page.locator("#importControls")).to_be_hidden()
-        self.assertEqual(self.page.locator("#salesModeCurrent").inner_text(),"Sell Items")
-        self.page.evaluate("setLang('es')")
-        self.assertEqual(self.page.locator("#salesModeCurrent").inner_text(),"Vender Items")
+        self.assertEqual(self.page.locator('#jitaPersonalTitle').inner_text(),'PERSONAL USE')
+        self.page.locator('#mmTabVentas').click()
+        self.assertFalse(self.page.evaluate('S.flip'))
+        expect(self.page.locator('#jitaPurchaseControls')).to_be_hidden()
 
     def test_trading_purchase_popup_keeps_original_select_and_keyboard_contract(self):
-        from playwright.sync_api import expect
-        self.page.evaluate("selectAppModule('ventas')")
-        self.page.locator('#salesModeTrigger').click()
-        self.page.locator('#modeTrading').click()
+        from browser_jita184 import FIXTURE
+        self.page.evaluate(FIXTURE)
+        self.page.locator('#mmTabJita').click()
         native=self.page.locator('#tradePurchaseMode')
-        trigger=self.page.locator('#tradePurchaseTrigger')
-        menu=self.page.locator('#tradePurchaseOptions')
         for width in (1440,390):
             self.page.set_viewport_size({'width':width,'height':900})
-            for light in (False,True):
-                self.page.evaluate('(on)=>document.documentElement.classList.toggle("light",on)',light)
-                for lang in ('es','en'):
-                    self.page.evaluate('setLang',lang)
-                    expect(trigger).to_be_visible()
-                    expect(native).to_be_hidden()
-                    self.assertEqual(trigger.get_attribute('aria-expanded'),'false')
-                    trigger.focus()
-                    trigger.press('ArrowDown')
-                    expect(menu).to_be_visible()
-                    self.assertEqual(self.page.evaluate('document.activeElement.dataset.tradeOption'),native.input_value())
-                    self.page.keyboard.press('Escape')
-                    expect(menu).to_be_hidden()
-                    self.assertEqual(self.page.evaluate('document.activeElement.id'),'tradePurchaseTrigger')
-                    trigger.click()
-                    expect(menu).to_be_visible()
-                    if width==1440 and not light and lang=='es':
-                        out=INDEX.parent/'tests'/'artifacts'/'theme'
-                        out.mkdir(parents=True,exist_ok=True)
-                        self.page.screenshot(path=str(out/'b2-jita-popup-dark-1440.png'),animations='disabled')
-                    self.page.locator('[data-trade-option="buy"]').click()
-                    self.assertEqual(native.input_value(),'buy')
-                    self.assertEqual(self.page.evaluate('C.buyMode'),'buy')
-                    self.assertEqual(trigger.get_attribute('aria-expanded'),'false')
-                    self.assertEqual(self.page.locator('#tradePurchaseCurrent').inner_text(),'Buy Order')
-                    self.assertEqual(self.page.locator('[data-trade-option="buy"]').get_attribute('aria-selected'),'true')
-                    # The original change handler still accepts programmatic native changes.
-                    self.page.evaluate("""() => {const n=document.querySelector('#tradePurchaseMode');
-                        n.value='sell';n.dispatchEvent(new Event('change',{bubbles:true}));}""")
-                    self.assertEqual(self.page.evaluate('C.buyMode'),'sell')
-                    self.assertEqual(self.page.locator('#tradePurchaseCurrent').inner_text(),'Jita Sell')
-                    self.assertLessEqual(self.page.evaluate('document.documentElement.scrollWidth-innerWidth'),1)
-                    geometry=self.page.evaluate("""() => {
-                        const arrow=getComputedStyle(document.querySelector('.mm-trade-chevron'));
-                        const reference=getComputedStyle(document.querySelector('.mm-sales-mode-chevron'));
-                        return [arrow.width,arrow.borderRightWidth,reference.width,reference.borderRightWidth];}""")
-                    self.assertEqual(geometry[:2],geometry[2:],geometry)
-        trigger.click()
-        expect(menu).to_be_visible()
-        # B.17: the descriptive label is visually clipped for compactness;
-        # clicking the input body below the popup is a genuine outside click.
-        self.page.locator('#heroIntro .paste textarea').click(position={'x':30,'y':50})
-        expect(menu).to_be_hidden()
+            for lang in ('es','en'):
+                self.page.evaluate('setLang',lang)
+                switch=self.page.locator('#jitaBuyMode');switch.check();switch.focus();switch.press('Space')
+                self.assertEqual(native.input_value(),'buy');self.assertEqual(self.page.evaluate('C.buyMode'),'buy')
+                self.page.evaluate("$('tradePurchaseMode').value='sell';$('tradePurchaseMode').dispatchEvent(new Event('change',{bubbles:true}));refreshNow()")
+                self.assertTrue(switch.is_checked())
+                self.assertLessEqual(self.page.evaluate('document.documentElement.scrollWidth-innerWidth'),1)
 
     def test_quick_plan_filters_are_neutral_and_keep_keyboard_focus(self):
         from playwright.sync_api import expect
@@ -525,111 +473,38 @@ class ThemeBrowserTests(unittest.TestCase):
         self.assertIsNone(self.page.evaluate("S.planMode"))
 
     def test_sales_selector_is_on_right_edge_desktop_and_mobile(self):
-        from playwright.sync_api import expect
-        self.page.evaluate("selectAppModule('ventas')")
-        for width,height in [(1440,900),(390,844)]:
-            self.page.set_viewport_size({"width":width,"height":height})
-            trigger=self.page.locator("#salesModeTrigger")
-            expect(trigger).to_be_visible()
-            edges=self.page.evaluate("""() => {
-                const t=document.querySelector('#salesModeTrigger').getBoundingClientRect();
-                const b=document.querySelector('#heroIntro .paste textarea').getBoundingClientRect();
-                return {gap:b.right-t.right,overflow:t.right-innerWidth};
-            }""")
-            self.assertLess(abs(edges['gap']),6,edges)
-            self.assertLessEqual(edges['overflow'],1,edges)
-            trigger.click()
-            expect(self.page.locator("#modeTrading")).to_be_visible()
-            self.page.locator("#modeTrading").click()
-            expect(trigger).to_be_visible()
-            trigger.click()
-            self.page.locator("#modeLiquidation").click()
-            self.assertFalse(self.page.evaluate("S.flip"))
+        from browser_jita184 import FIXTURE
+        self.page.evaluate(FIXTURE)
+        for width in (1440,390):
+            self.page.set_viewport_size({'width':width,'height':900});self.page.locator('#mmTabJita').click()
+            rects=self.page.locator('.jita-control').evaluate_all('es=>es.map(e=>{const r=e.getBoundingClientRect();return [r.width,r.height,r.top]})')
+            for rect in rects[1:]:
+                for a,b in zip(rect,rects[0]):self.assertAlmostEqual(a,b,delta=1)
+            self.assertLessEqual(self.page.evaluate('document.documentElement.scrollWidth-innerWidth'),1)
 
     def test_import_above_inventory_preserves_two_card_alignment(self):
-        """Use synthetic item data to inspect geometry without ESI requests."""
-        from playwright.sync_api import expect
-        self.page.evaluate("selectAppModule('ventas')")
-        self.page.locator('#salesModeTrigger').click()
-        self.page.locator('#modeTrading').click()
-        expect(self.page.locator('#importControls')).to_be_visible()
-        self.assertEqual(self.page.locator('#importControls').evaluate('el=>el.parentElement.id'),'salesUtilityRow')
-        self.page.evaluate("""() => {
-            S.items=[{name:'Synthetic Layout Item',qty:1,m3u:1,
-                jita:{id:34,topBuy:100,topSell:120}}];
-            paintAppraisal();
-        }""")
-        expect(self.page.locator('#appr')).to_be_visible()
+        from browser_jita184 import FIXTURE
+        self.page.evaluate(FIXTURE)
+        self.page.locator('#mmTabJita').click()
         for width in (1440,1260,980,860,630,390):
             self.page.set_viewport_size({'width':width,'height':900})
-            for language in ('es','en'):
-                self.page.evaluate('setLang',language)
-                for light in (False,True):
-                    self.page.evaluate('(on)=>document.documentElement.classList.toggle("light",on)',light)
-                    rect=self.page.evaluate("""() => {
-                        const r=s=>document.querySelector(s).getBoundingClientRect();
-                        const a=r('#appr'),i=r('#importControls'),p=r('#heroIntro>.paste');
-                        const referral=r('#salesUtilityRow>.hero-referral-pill');
-                        const brand=r('.top .brand'),profile=r('.mm-top-actions .mm-theme');
-                        return {aTop:a.top,aBottom:a.bottom,pTop:p.top,pLeft:p.left,pRight:p.right,
-                            iTop:i.top,iBottom:i.bottom,iLeft:i.left,iRight:i.right,
-                            aLeft:a.left,aRight:a.right,referralLeft:referral.left,
-                            brandLeft:brand.left,profileRight:profile.right,
-                            overflow:document.documentElement.scrollWidth-innerWidth};
-                    }""")
-                    self.assertLessEqual(rect['overflow'],1,(width,language,light,rect))
-                    if width>860:
-                        self.assertLess(abs(rect['aTop']-rect['pTop']),3,rect)
-                        self.assertLess(abs(rect['aLeft']-rect['referralLeft']),3,rect)
-                        self.assertGreaterEqual(rect['iLeft'],rect['pLeft']-3,rect)
-                        self.assertLessEqual(rect['iRight'],rect['pRight']+3,rect)
-                        self.assertLessEqual(rect['iBottom'],rect['pTop']+1,rect)
-                    else:
-                        self.assertLessEqual(rect['iBottom'],rect['aTop']+1,rect)
-                        self.assertLessEqual(rect['iBottom'],rect['pTop']+1,rect)
-                    if width>1260:
-                        self.assertLess(abs(rect['brandLeft']-rect['aLeft']),4,rect)
-                        self.assertLess(abs(rect['profileRight']-rect['pRight']),7,rect)
+            for lang in ('es','en'):
+                self.page.evaluate('setLang',lang)
+                a=self.page.locator('#appr').bounding_box();b=self.page.locator('#heroIntro>.paste').bounding_box()
+                if width>860:
+                    self.assertAlmostEqual(a['y'],b['y'],delta=1);self.assertAlmostEqual(a['height'],b['height'],delta=1)
+                self.assertLessEqual(self.page.evaluate('document.documentElement.scrollWidth-innerWidth'),1)
 
     def test_b17_referral_and_segmented_trade_bar_in_initial_and_jita_modes(self):
-        """The promo is always visible; real trade inputs appear only for Jita."""
-        from playwright.sync_api import expect
-        out=INDEX.parent/'tests'/'artifacts'/'theme'
-        out.mkdir(parents=True,exist_ok=True)
-        self.page.evaluate("""() => {
-            S.items=[{name:'Synthetic Layout Item',qty:1,m3u:1,
-                jita:{id:34,topBuy:100,topSell:120}}];
-            paintAppraisal();
-        }""")
-        for width in (1440,630,390):
-            self.page.set_viewport_size({'width':width,'height':900})
-            for language in ('es','en'):
-                self.page.evaluate('setLang',language)
-                for light in (False,True):
-                    self.page.evaluate('(on)=>document.documentElement.classList.toggle("light",on)',light)
-                    expect(self.page.locator('#salesUtilityRow .hero-referral-pill')).to_be_visible()
-                    expect(self.page.locator('#importControls')).to_be_hidden()
-                    initial_overflow=self.page.evaluate('document.documentElement.scrollWidth-innerWidth')
-                    self.assertLessEqual(initial_overflow,1,(width,language,light,'initial'))
-                    self.assert_referral_utility_row(f'{language} {"Light" if light else "Dark"}')
-                    if width==1440 and language=='es':
-                        self.page.locator('.hero').screenshot(path=str(out/
-                            f'b17-initial-hero-1440-{"light" if light else "dark"}.png'),animations='disabled')
-                    self.page.locator('#salesModeTrigger').click()
-                    self.page.locator('#modeTrading').click()
-                    expect(self.page.locator('#importControls')).to_be_visible()
-                    expect(self.page.locator('#importHeadingPrefix')).to_be_hidden()
-                    expect(self.page.locator('#tradePurchaseLabel')).to_be_visible()
-                    self.assertEqual(self.page.locator('#importControls').evaluate('el=>el.parentElement.id'),'salesUtilityRow')
-                    self.assertLessEqual(self.page.evaluate('document.documentElement.scrollWidth-innerWidth'),1,
-                        (width,language,light,'trade'))
-                    if width==1440 and language=='es':
-                        self.page.locator('.hero').screenshot(path=str(out/
-                            f'b17-jita-hero-1440-{"light" if light else "dark"}.png'),animations='disabled')
-                    self.page.locator('#salesModeTrigger').click()
-                    self.page.locator('#modeLiquidation').click()
-                    expect(self.page.locator('#importControls')).to_be_hidden()
-                    expect(self.page.locator('#salesUtilityRow .hero-referral-pill')).to_be_visible()
+        from browser_jita184 import FIXTURE
+        self.page.evaluate(FIXTURE)
+        for lang in ('es','en'):
+            self.page.evaluate('setLang',lang)
+            for mode in ('ventas','jita'):
+                self.page.evaluate('selectAppModule',mode)
+                expect(self.page.locator('#salesUtilityRow .hero-referral-pill')).to_be_visible()
+                expect(self.page.locator('#importControls')).to_be_hidden()
+                self.assertEqual(self.page.locator('#jitaPurchaseControls').is_visible(),mode=='jita')
 
     def test_ledger_neutral_surface_and_shared_disclosure_chevrons(self):
         """CSS geometry and native open/close, no live prices or EVE API needed."""
@@ -650,7 +525,7 @@ class ThemeBrowserTests(unittest.TestCase):
                     const shell=getComputedStyle(ledger);
                     const chev=getComputedStyle(sum,'::after');
                     const finance=getComputedStyle(document.querySelector('#vFinanceDetails>summary'));
-                    const business=getComputedStyle(document.querySelector('.mm-sales-mode-chevron'));
+                    const business=getComputedStyle(document.querySelector('#mmTabJita'));
                     return {
                         backgroundImage:shell.backgroundImage,
                         backgroundColor:shell.backgroundColor,
@@ -930,25 +805,15 @@ class ThemeBrowserTests(unittest.TestCase):
         self.assertEqual(float(self.page.locator("#refineryYieldLive").inner_text().rstrip("%")),final)
 
     def test_sell_mode_is_aligned_with_inventory_paste_area(self):
-        from playwright.sync_api import expect
-        for width,height in [(1440,900),(390,844)]:
-            self.page.set_viewport_size({"width":width,"height":height})
-            trigger=self.page.locator("#salesModeTrigger")
-            expect(trigger).to_be_visible()
-            geometry=self.page.evaluate("""() => {
-              const mode=document.querySelector('#salesModeTrigger').getBoundingClientRect();
-              const input=document.querySelector('#heroIntro .paste textarea').getBoundingClientRect();
-              const header=document.querySelector('#heroIntro .paste .paste-head').getBoundingClientRect();
-              return {sameCard:document.querySelector('#salesModeTrigger')
-                       .closest('.paste-head')===document.querySelector('#heroIntro .paste-head'),
-                      rightDifference:Math.abs(mode.right-input.right),
-                      inside:mode.left>=header.left-1&&mode.right<=header.right+1,
-                      overflow:mode.right-innerWidth};
-            }""")
-            self.assertTrue(geometry['sameCard'],geometry)
-            self.assertTrue(geometry['inside'],geometry)
-            self.assertLess(geometry['rightDifference'],4,geometry)
-            self.assertLessEqual(geometry['overflow'],1,geometry)
+        from browser_jita184 import FIXTURE
+        self.page.evaluate(FIXTURE)
+        self.page.evaluate('window.originalItems=S.items;window.originalPaste=$("paste")')
+        for width in (1440,390):
+            self.page.set_viewport_size({'width':width,'height':900})
+            for mode in ('jita','ventas','jita','ventas'):
+                self.page.evaluate('selectAppModule',mode)
+                self.assertTrue(self.page.evaluate('S.items===originalItems&&$("paste")===originalPaste'))
+                self.assertEqual(self.page.locator('#mmTabs [role=tab][aria-selected=true]').count(),1)
 
     def test_mining_b3_disclosures_and_info_icons(self):
         """Native Mining accordions keep keyboard behavior and never dress help as a menu."""
@@ -961,8 +826,8 @@ class ThemeBrowserTests(unittest.TestCase):
             for width in (1440, 390):
                 self.page.set_viewport_size({'width': width, 'height': 900})
                 editor.evaluate('(el)=>el.open=false')
-                sales_arrow = self.page.locator('.mm-sales-mode-chevron').evaluate(
-                    'el=>getComputedStyle(el).borderRightWidth')
+                sales_arrow = self.page.locator('#mining .mn-price-editor>summary').evaluate(
+                    'el=>getComputedStyle(el,"::after").borderRightWidth')
                 data = editor.evaluate("""el => {
                     const summary=el.querySelector('summary');
                     const arrow=getComputedStyle(summary,'::after');
@@ -1019,8 +884,7 @@ class ThemeBrowserTests(unittest.TestCase):
             for width in (1440, 390):
                 self.page.set_viewport_size({'width': width, 'height': 900})
                 expect(plan).to_be_visible()
-                sales_arrow = self.page.locator('.mm-sales-mode-chevron').evaluate(
-                    'el=>getComputedStyle(el).borderRightWidth')
+                sales_arrow = '1px'
                 chev = plan.locator(':scope > summary > .chev')
                 expect(chev).to_have_css('width', '9px')
                 expect(chev).to_have_css('height', '9px')

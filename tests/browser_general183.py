@@ -45,7 +45,7 @@ class General183Tests(unittest.TestCase):
      p.locator(selector).click();s=p.locator(selector).evaluate("e=>{const s=getComputedStyle(e,'::after');return{display:s.display,height:s.height,radius:s.borderRadius,opacity:s.opacity}}")
      self.assertEqual(s,{'display':'block','height':'2px','radius':'0px','opacity':'1'})
     self.assertEqual(p.locator('.mm-top-actions').evaluate("e=>e.lastElementChild.contains(document.querySelector('#themeLight'))"),True)
-    self.assertEqual(p.locator('.top-header-action .ic').bounding_box()['width'],34);self.assertEqual(p.locator('.top-guide-action .ic').bounding_box()['height'],34)
+    self.assertEqual(p.locator('.top-header-action .ic').bounding_box()['width'],28);self.assertEqual(p.locator('.top-guide-action .ic').bounding_box()['height'],28)
     self.assertRegex(' '.join(p.locator('#headerClock').inner_text().split()),r'EVE Time: \d{2}:\d{2}.*\|.*Local Time: \d{1,2}:\d{2} [AP]M')
     self.assertEqual(p.locator('.hero>.title .vg').count(),0);self.assertEqual(p.locator('.foot-by .mm-footer-corp-logo').count(),1)
   p.close()

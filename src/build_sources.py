@@ -18,6 +18,7 @@ CSS_PARTS = (
     "90-settings-taxes.css",
     "91-settings-skills.css",
     "92-settings-general-header.css",
+    "93-jita.css",
 )
 # Light theme order mirrors the former light_extra.css; the final shared table
 # geometry follows generated Light rules so both themes use identical layout.
@@ -26,6 +27,7 @@ LIGHT_PARTS = (
     "light-components.css",
     "light-header-shipping.css",
     "zz-ledger-table.css",
+    "zzz-jita.css",
 )
 
 def light_sources(read):
@@ -45,6 +47,7 @@ JS_PARTS = (
     ("/*__MODULE_FULFILLMENT_UI__*/", ("js", "ui", "fulfillment.js")),
     ("/*__MODULE_REFINING_VIEW__*/", ("js", "ui", "refining-view.js")),
     ("/*__MODULE_PLAN_PICKER__*/", ("js", "ui", "plan-picker.js")),
+    ("/*__MODULE_JITA__*/", ("js", "ui", "jita.js")),
     ("/*__MODULE_REFRESH__*/", ("js", "app", "refresh.js")),
     ("/*__MODULE_MINING_BRIDGE__*/", ("js", "ui", "mining-bridge.js")),
     ("/*__MODULE_SETTINGS_UI__*/", ("js", "ui", "settings.js")),

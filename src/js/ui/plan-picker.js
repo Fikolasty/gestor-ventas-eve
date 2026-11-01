@@ -468,12 +468,13 @@ $('pkOpportunity').addEventListener('click',e=>{
 // anti-bait fallback may be hundreds of times smaller than an executable
 // Paladin buy order. NEVER reuse it as the acquisition price (2026-10-25 P0).
 // Neither quote guarantees depth/fill or a sale at the target Null price.
-function tradePurchaseUnit(r){
+function tradePurchaseUnit(r){return tradePurchaseUnitAt(r,C.buyMode);}
+function tradePurchaseUnitAt(r,basis){
   const o=r.o;
   const manual=o.buyMan;
   const isManual=Number.isFinite(manual)&&manual>0;
-  const u=C.buyMode==='buy'?(isManual?manual:o.jita?.topBuy):o.ref;
-  if(C.buyMode==='buy'&&!isManual&&Number.isFinite(u)&&u>0){
+  const u=basis==='buy'?(isManual?manual:o.jita?.topBuy):o.ref;
+  if(basis==='buy'&&!isManual&&Number.isFinite(u)&&u>0){
     const ask=o.jita?.topSell;
     // Conservative PRODUCT policy, not an EVE rule: a 4x+ gap to best ask
     // or crossed buy/ask book should not silently create a giant ROI. Let
@@ -482,9 +483,10 @@ function tradePurchaseUnit(r){
   }
   return Number.isFinite(u)&&u>0?u:null;
 }
-function tradePurchaseCost(r){
-  const unit=tradePurchaseUnit(r);
-  return unit==null?null:unit*r.q*(C.buyMode==='buy'?1+C.broker:1);
+function tradePurchaseCost(r){return tradePurchaseCostAt(r,C.buyMode);}
+function tradePurchaseCostAt(r,basis){
+  const unit=tradePurchaseUnitAt(r,basis);
+  return unit==null?null:unit*r.q*(basis==='buy'?1+C.broker:1);
 }
 function flipPlanAccounting(P){
   if(!S.flip)return null;
@@ -599,6 +601,7 @@ function paintSummary(P){
   $('pkPlanToggle').hidden=none;$('stepDrawer').hidden=none;
   if(none)$('pkPlanContent').hidden=true;
   paintCourierUnits(P);
+  if(JitaContext.active){document.title=tx('jita.title')+' · Market Moves+';return;}
   if(box.hidden||none)return;
   paintPicker(P);
   const active=flipPlanAccounting(P);

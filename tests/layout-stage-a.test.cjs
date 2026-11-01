@@ -10,7 +10,7 @@ test('Sales retains unique live input IDs and moves only their real parent',()=>
     if(id==='salesModeTrigger')continue; // generated as one DOM node at runtime
     assert.equal((html.match(new RegExp('\\bid="'+id+'"','g'))||[]).length,1,id);
   }
-  assert.match(js,/\$\('salesUtilityRow'\)\.append\(\$\('importControls'\)\)/);
+  assert.match(js,/retiredControls\.append\(\$\('businessSwitch'\),\$\('importControls'\)\)/);
   assert.doesNotMatch(js,/salesToolbar\.append|cloneNode|createElement\('select'\)/);
   assert.match(js,/\$\('tradePurchaseMode'\)\.addEventListener\('change'/);
   assert.match(js,/C\.buyMode=e\.target\.value/);

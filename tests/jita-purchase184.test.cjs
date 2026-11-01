@@ -1,0 +1,37 @@
+'use strict';
+const test=require('node:test'),assert=require('node:assert/strict'),fs=require('node:fs'),vm=require('node:vm');
+const C={maxVol:1000,base:100,perM3:2,collPct:.01,shipOn:true,broker:.015,buyMode:'sell'};
+const script=require('./source-bundle.cjs').script();
+const pricing=script.slice(script.indexOf('function tradePurchaseUnit(r){'),script.indexOf('function flipPlanAccounting(P){'));
+const jita=fs.readFileSync('src/js/ui/jita.js','utf8');
+const model=jita.slice(jita.indexOf('function jitaPurchaseModel('),jita.indexOf('function jitaMoney('));
+const context={C,S:{flip:true}};
+const math=vm.runInNewContext(fs.readFileSync('src/js/domain/courier.js','utf8')+'\n'+fs.readFileSync('src/js/domain/planning.js','utf8')+'\n'+pricing+'\n'+model+'\nSHIPS={fN:1};\n({jitaPurchaseModel})',context);
+const row=(q=300,v=1)=>({o:{name:'Example',ref:10,m3u:v,jita:{topBuy:8,topSell:10}},q,vol:q*v,prod:0,best:'fN',g:{fN:12*q,fJ:9*q},np:13,jl:10,ship:{}});
+function reset(){Object.assign(C,{shipOn:true,broker:.015,buyMode:'sell',perM3:2});}
+test('purchase receipt reconciles one bill, unit allocation and resale profit without double freight',()=>{
+ reset();const P={rows:[row(),row(5,10)]},before=JSON.stringify(P),m=math.jitaPurchaseModel(P);
+ assert.equal(m.raw,3050);assert.equal(m.fee,0);assert.equal(m.cost,m.raw+m.ship);
+ assert.ok(Math.abs(m.rows.reduce((s,r)=>s+r.courierAllocated,0)-m.ship)<1e-8);
+ assert.equal(m.profit,3660-m.cost);assert.equal(JSON.stringify(P),before);
+ for(const r of m.rows)assert.equal(r.cost/r.q,10+r.courierPerUnit);
+});
+test('Buy includes exactly one configured broker fee and does not change the active price basis',()=>{
+ reset();const m=math.jitaPurchaseModel({rows:[row()]},'buy');assert.equal(m.raw,2400);assert.ok(Math.abs(m.fee-36)<1e-8);assert.equal(C.buyMode,'sell');
+ C.broker=0;assert.equal(math.jitaPurchaseModel({rows:[row()]},'buy').fee,0);
+});
+test('shipping off keeps acquisition cost and needs no transport volume or collateral',()=>{
+ reset();C.shipOn=false;const r=row();r.o.m3u=null;delete r.o.jita.topSell;const m=math.jitaPurchaseModel({rows:[r]});assert.equal(m.ship,0);assert.equal(m.cost,3000);
+});
+test('unknown purchase, collateral and volume propagate instead of producing partial totals',()=>{
+ reset();const r=row();r.o.ref=null;let m=math.jitaPurchaseModel({rows:[r,row(5,10)]});assert.equal(m.cost,null);assert.ok(m.ship>0);
+ r.o.ref=10;r.o.m3u=null;m=math.jitaPurchaseModel({rows:[r]});assert.equal(m.ship,null);assert.equal(m.cost,null);
+ r.o.m3u=1;delete r.o.jita.topSell;m=math.jitaPurchaseModel({rows:[r]});assert.equal(m.cost,null);
+});
+test('anomalous posted Buy is never substituted with the sanitized sell-to-bids quote',()=>{
+ reset();const r=row();r.o.jita={topBuy:.01,topSell:10,buy:.01};assert.equal(math.jitaPurchaseModel({rows:[r]},'buy').cost,null);
+ r.o.buyMan=7;assert.equal(math.jitaPurchaseModel({rows:[r]},'buy').raw,2100);
+});
+test('zero quantity is excluded and an empty inventory has no invented zero budget',()=>{
+ reset();assert.equal(math.jitaPurchaseModel({rows:[]}).cost,null);assert.equal(math.jitaPurchaseModel({rows:[row(0),row(1)]}).raw,10);
+});

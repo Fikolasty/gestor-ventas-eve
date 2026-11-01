@@ -77,8 +77,8 @@ class R8PlanTests(unittest.TestCase):
        self.page.evaluate('(on)=>{document.documentElement.classList.toggle("light",on);document.activeElement?.blur();scrollTo(0,0)}',light)
        self.page.mouse.move(0,0)
        self.assertLessEqual(self.page.evaluate('document.documentElement.scrollWidth-innerWidth'),1)
-       self.assertTrue(self.page.locator('.c5c-donut').is_visible())
-       self.assertTrue(self.page.locator('#pk .pk-dot').is_visible())
+       self.assertEqual(self.page.locator('.c5c-donut').is_visible(),not flip)
+       self.assertEqual(self.page.locator('#pk .pk-dot').is_visible(),not flip)
        geometry.append(self.page.evaluate("['pkPlanOptions','pkSpeedBox','pkResult','vFinanceDetails'].map(id=>{const r=$(id).getBoundingClientRect();return [r.width,r.height]})"))
        if width==1440 and ship:
         self.page.locator('#pSum').screenshot(path=str(out/f'r8-real-167-20261030-{flip}-{lang}-{"light" if light else "dark"}.png'),animations='disabled')
@@ -87,10 +87,10 @@ class R8PlanTests(unittest.TestCase):
  def test_unknown_purchase_basis_is_not_profit_or_fake_zero(self):
   self.page.evaluate("""()=>{setFlip(true);C.buyMode='buy';S.items.forEach(o=>o.jita.topBuy=null);refreshNow();}""")
   self.assertIsNone(self.page.evaluate('flipPlanAccounting(lastP)'))
-  self.assertTrue(self.page.locator('#pkResultWarning').is_visible())
+  self.assertTrue(self.page.locator('#vCap .jita-warning').is_visible())
   self.assertNotIn('Ganancia',self.page.locator('#pkResultMetric').inner_text())
   self.page.locator('#unitCourierToggle').click()
-  self.assertTrue(self.page.locator('#ledgerTradeTotals button.copy').last.inner_text()=='—')
+  self.assertEqual(self.page.locator('#freightLotFinal').inner_text(),'—')
   self.assertNotRegex(self.page.locator('#pSum').inner_text(),r'NaN|Infinity|undefined')
 
 if __name__=='__main__':unittest.main()

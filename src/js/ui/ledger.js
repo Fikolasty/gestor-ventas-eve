@@ -126,7 +126,7 @@ function buildLotDetails(o,ui){
   },tx(buyKey));
   iBuyOrder.dataset.i18nAriaLabel=buyKey;
   fBuyOrder.append(buyCaption,iBuyOrder);
-  const fSeen=el('label','fact'),seenCaption=el('span',null,tx('ledger.observedNullPrice'));
+  const fSeen=el('label','fact fact-resale-only'),seenCaption=el('span',null,tx('ledger.observedNullPrice'));
   seenCaption.dataset.i18n='ledger.observedNullPrice';
   const iSeen=numIn(o.nullSeen,tx('ledger.optionalPrice'),v=>{
     const x=parseFloat(v);o.nullSeen=isNaN(x)||x<=0?null:x;refresh();
@@ -367,6 +367,7 @@ const ledgerReferenceByItem=new Map();
 function prepareLedgerReference(P){
   const key=S.flip?(C.shipOn?'fN':'fJ'):(ledgerSaleMode==='instant'?'jInst':'jOrd');
   ledgerReference=ledgerRouteProjection(P,key);ledgerReferenceSource=P;
+  currentJitaPurchase=JitaContext.active?jitaPurchaseModel(P):null;
   ledgerReferenceByItem.clear();ledgerReference.rows.forEach(r=>ledgerReferenceByItem.set(r.o,r));
 }
 const ledgerValueFormat=new Intl.NumberFormat('en-US',{maximumFractionDigits:6});
@@ -403,6 +404,7 @@ function paintLotMarket(r){
       setLotAttr(b,'aria-label',tx('ledger.copyField',{field:tx(key),item:r.o.name,value:b.textContent}));
     }
   }
+  paintJitaLotMarket(r);
 }
 $('ledgerValueMode').addEventListener('click',event=>{
   const button=event.target.closest('[data-ledger-mode]');if(!button)return;
@@ -434,12 +436,13 @@ function paintLedgerReference(){
   const warn=$('ledgerReferenceWarning');warn.hidden=ref.completeFreight&&ref.completeSale;
   setLotLeafText(warn,tx(!ref.completeFreight?'ledger.referenceMissingFreight':'ledger.referenceMissingSale'));
   const trade=$('ledgerTradeTotals');trade.hidden=!S.flip;
-  if(S.flip){
+  if(S.flip&&!JitaContext.active){
     const purchases=ref.rows.map(tradePurchaseCost),known=purchases.length&&purchases.every(Number.isFinite),buy=known?purchases.reduce((a,b)=>a+b,0):null;
     trade.replaceChildren(el('span',null,tx('ledger.referenceInvestment')),
       ledgerAmountCopy(Number.isFinite(buy)?-buy:null),el('span',null,tx('freight.profitColumn')),ledgerAmountCopy(Number.isFinite(ref.after)&&Number.isFinite(buy)?ref.after-buy:null));
   }
   $('unitCourierSubtitle').textContent=tx('ledger.referenceScope',{market,scale});
+  paintJitaLedgerReference();
   applyLedgerPage();
 }
 function ledgerAmountCopy(amount){
@@ -488,7 +491,7 @@ function applyLedgerSort(){
     if(k==='jb')return Number.isFinite(o.jita?.topBuy)?o.jita.topBuy*factor:-Infinity;
     if(k==='js')return Number.isFinite(o.jita?.topSell)?o.jita.topSell*factor:-Infinity;
     if(k==='freight'){const n=ledgerReferenceByItem.get(o)?.courierPerUnit;return Number.isFinite(n)?n*factor:-Infinity;}
-    if(k==='result'){const v=ledgerReferenceByItem.get(o)?.referenceAfter;return Number.isFinite(v)?v/(r?.q||o.qty||1)*factor:-Infinity;}
+    if(k==='result'){const v=JitaContext.active?currentJitaPurchase?.byItem.get(o)?.cost:ledgerReferenceByItem.get(o)?.referenceAfter;return Number.isFinite(v)?v/(r?.q||o.qty||1)*factor:-Infinity;}
     if(k==='d')return r&&r.best?(OPTS.find(x=>x[0]===r.best)||['',''])[1].toLocaleLowerCase('es'):'';
     if(k==='a')return r&&r.best&&r.net[r.best]!=null?r.net[r.best]:-Infinity;
     return 0;
@@ -578,6 +581,7 @@ function paintLot(r){
    const label=up==null?tx('ledger.noUnitPrice'):tx('ledger.copyUnit',{item:o.name,price:t});
    setLotAttr(b,'title',label);setLotAttr(b,'aria-label',label);}
   // rendimiento: el cuerpo (opciones, guía, precios, verificación) solo se pinta si la fila está abierta
+  paintJitaLotSummary(r);
   u.last=r;if(u.body.hidden)return;
   paintGuide(u.guide,r);
   u.rcall.hidden=!r.rep;
@@ -674,5 +678,6 @@ function paintLot(r){
   u.checks.textContent='';
   (o.checks||[]).forEach(c=>{const li=el('li',c[1]);li.append(el('b',null,c[0]));if(c[2])li.append(document.createTextNode(' — '+c[2]));u.checks.append(li);});
   u.checks.hidden=!(o.checks||[]).length;
+  paintJitaLotDetails(r);
 }
 

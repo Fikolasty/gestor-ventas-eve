@@ -21,11 +21,10 @@ test('navigation and pilot remain real controls without pill styling',()=>{
   assert.match(css,/\.top\.mm-ho-root\{[^}]*padding-bottom:12px!important/);
 });
 
-test('sales selector preserves native summary and uses a CSS chevron',()=>{
-  assert.match(js,/document\.createElement\('details'\)/);
-  assert.match(js,/document\.createElement\('summary'\)/);
-  assert.match(js,/\.querySelector\('\.paste-head'\)\.append\(modePicker\)/);
-  assert.match(css,/\.mm-sales-mode-chevron\{[^}]*border-right:1\.5px solid currentColor/);
+test('Jita replaces the Sales task dropdown with a first-class accessible tab',()=>{
+  assert.match(html,/data-mm-module="jita"[^>]*role="tab"/);
+  assert.match(js,/retiredControls.hidden=true/);
+  assert.doesNotMatch(js,/append\(modePicker\)/);
 });
 
 test('Ventas header tab displays its text without a leading list icon',()=>{

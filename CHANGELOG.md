@@ -1496,3 +1496,10 @@ Corrección real solicitada por el propietario publicada mediante Fiko/Fikolasty
 HTTPS independiente confirmó v174 y HTML público/local canónico/GitHub idénticos:2.514.523 bytes,blob a145b513bea2bbac58da9fa2ab202a988dab1cc4. Web https://fikolasty.github.io/gestor-ventas-eve/. Primer intento CI96/97 quedó bloqueado por importe largo a630px; se corrigió CSS y el gate completo posterior97/97 sustituye ese pendiente. No se relajó la regresión de legibilidad. Las capturas reales finales r4 se revisaron en1440 Dark/Light con la misma composición y con fuenteArial de estrés, además de la matriz390/630/820/980/1200/1440; datos sintéticos, no precios ESI vivos.
 
 Cuatro paneles originales2×2 y controles conservados. Cuerpos con sangría desde su header; curvas punteadas con un solo path por columna y sin raíles solapados. Siete columnas en desktop y campos etiquetados adaptables, sin scroll lateral del listado ni fuentes reducidas. No se probó ESI/SSO real extremo a extremo. Última LIVE174; kit activo HANDOFF_LEDGER_174.md. El cierre documental puede avanzar main sin alterar el HTML certificado. Este cierre sustituye candidata y gates pendientes anteriores; no repetir r6 ni extender el patrón fuera del Detalle por Item automáticamente.
+
+## 1.0.184 — candidata Jita r6 (2026-11-01)
+
+- Jita como pestaña propia con inventario compartido y controles Uso personal/Buy–Sell/Enviar.
+- Recibo de adquisición, broker y courier; coste final copiable por unidad/lote y beneficio de reventa separado.
+- Conserva Ajustes, mercados, ESI/SSO, ES/EN y Light/Dark; sin nuevas dependencias o persistencia.
+- Verificación y publicación pendientes/finales en DSS y HANDOFF_184; no asumir LIVE por esta entrada.

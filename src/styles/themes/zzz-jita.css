@@ -1,0 +1,9 @@
+/* Final theme ownership: generated legacy Light rules must not recolor purchase budgets. */
+html.light body.is-jita #verdict .jita-neutral,html.light body.is-jita #ledger .jita-neutral,html.light body.is-jita #ledger .jita-neutral *{color:var(--txt)!important}
+
+html.light body.is-jita #verdict .jita-control-line .sw-t::after{background:#fff!important}
+html.light body.is-jita #ledger #lots .prices td.jita-neutral .copy,html.light body.is-jita #ledger #lots .prices td.jita-neutral .copy *{color:var(--txt)!important}
+
+/* Fourth top-level tab exposes a legacy Light profile border: preserve header geometry. */
+html.light body .top.mm-ho-root .mm-profile-row .eve-identity-button{border:0!important}
+html.light body .top.mm-ho-root .mm-top-actions .mm-theme{border:0!important}

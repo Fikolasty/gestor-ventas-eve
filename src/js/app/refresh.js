@@ -111,9 +111,10 @@ function refreshNow(){
   if(S.loading)return; // se pinta al terminar la carga
   document.body.classList.toggle('in-jita',IN_JITA()); // v1.0.22: oculta lo que no aplica con los items ya en Jita
   if(!S.repro.dirty&&!$('pRepro').hidden)fillFromItem();
+  if(JitaContext.active)S.planMode=C.shipOn?'fN':'fJ';
   const P=computePlan();
   prepareLedgerReference(P);
-  syncExtras();paintAppraisal();P.rows.forEach(paintLot);paintVerdict(P);paintContracts(P);paintCourier(P);paintDisc(P);paintRepro();paintSummary(P);
+  syncExtras();paintAppraisal();syncJitaAppraisal();syncJitaControls();P.rows.forEach(paintLot);paintVerdict(P);paintContracts(JitaContext.active?jitaTransportPlan(P):P);paintCourier(P);paintDisc(P);paintRepro();paintSummary(P);
   document.querySelectorAll('#fScnV,#vRep .rw,.pl-row .n small').forEach(colorNums);
   document.querySelectorAll('.margPct').forEach(e=>e.textContent=pct(C.margin));
 }
@@ -148,13 +149,7 @@ function syncShipSwitch(){
   syncTradePurchasePicker();
   if(!isImport)closeTradePurchasePicker();
 }
-function setFlip(on){
-  S.flip=!!on;S.planMode=null;czIdx=0;C.shipOn=true;$('shipOn').checked=true; // cambiar de ruta vuelve a contar el courier
-  SHIPS=S.flip?{fN:1}:{jOrd:1,jInst:1,cOrd:1,cInst:1,rJita:1};
-  $('bFlip').setAttribute('aria-pressed',String(S.flip));syncNullRouteLabels();
-  syncShipSwitch();syncBusinessMode();document.body.classList.toggle('is-flip',S.flip);
-  if(S.items.length)refreshNow();
-}
+function setFlip(on){selectAppModule(on?'jita':'ventas');}
 $('bFlip').addEventListener('click',()=>setFlip(!S.flip));
 /* Business UX: the visible tabs select the existing verified direction states.
    Internal #bFlip and S.flip remain for compatibility; there is only one
@@ -314,35 +309,7 @@ $('themeLight').addEventListener('change',e=>{document.documentElement.classList
   headerMain.append($('navHome'),group);
   // Sales is a single workspace, not a second global-navigation row.
   // Re-parent original controls, preserving their IDs, listeners and state.
-  const modePicker=document.createElement('details');
-  modePicker.className='mm-sales-mode-picker';
-  const modeTrigger=document.createElement('summary');
-  modeTrigger.className='mm-sales-mode-trigger';
-  modeTrigger.id='salesModeTrigger';
-  modeTrigger.setAttribute('data-i18n-aria-label','sales.modeSelectAria');
-  modeTrigger.setAttribute('aria-label',tx('sales.modeSelectAria'));
-  const modeLabel=el('span','mm-sales-mode-current',tx(S.flip?'sales.modeTrade':'sales.modeSell'));
-  modeLabel.id='salesModeCurrent';
-  modeLabel.setAttribute('data-i18n',S.flip?'sales.modeTrade':'sales.modeSell');
-  const modeChevron=el('span','mm-sales-mode-chevron','⌄');
-  modeChevron.setAttribute('aria-hidden','true');
-  modeTrigger.append(modeLabel,modeChevron);
-  modePicker.append(modeTrigger,$('businessSwitch'));
-  // Task selector stays in the inventory heading. Referral and the same live
-  // trade inputs now share a compact row aligned with the cards. No cloning.
-  const salesIntro=$('heroIntro');
-  salesIntro.querySelector('.paste-head').append(modePicker);
-  $('salesUtilityRow').append($('importControls'));
-  modePicker.addEventListener('click',event=>{
-    if(event.target.closest('button[data-business]'))modePicker.open=false;
-  });
-  modePicker.addEventListener('keydown',event=>{
-    if(event.key==='Escape'){modePicker.open=false;modeTrigger.focus();}
-  });
-  document.addEventListener('pointerdown',event=>{
-    if(modePicker.open&&!modePicker.contains(event.target))modePicker.open=false;
-  });
-  syncBusinessMode();
+  const retiredControls=el('div','mm-retired-trade-controls');retiredControls.hidden=true;retiredControls.append($('businessSwitch'),$('importControls'));bar.append(retiredControls);
   topActions.append(theme); // Quiet theme control at the far right, retaining its native handler.
   $('themeLight').setAttribute('aria-label','Dark / Light');
   const headerLegacy=document.createElement('div');headerLegacy.className='mm-ho-legacy';

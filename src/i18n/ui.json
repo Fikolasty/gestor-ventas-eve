@@ -2702,5 +2702,185 @@
   "settings.general.manual": {
     "es": "Selección manual; no cambia al conectar otro piloto.",
     "en": "Manual selection; connecting another pilot will not change it."
+  },
+  "shared.yes": {
+    "es": "Sí",
+    "en": "Yes"
+  },
+  "shared.no": {
+    "es": "No",
+    "en": "No"
+  },
+  "jita.title": {
+    "es": "TU COMPRA EN JITA",
+    "en": "YOUR JITA PURCHASE"
+  },
+  "jita.personal": {
+    "es": "Uso personal",
+    "en": "Personal use"
+  },
+  "jita.buyAt": {
+    "es": "Compras al:",
+    "en": "Buy at:"
+  },
+  "jita.options": {
+    "es": "Opciones de compra",
+    "en": "Purchase options"
+  },
+  "jita.buySwitch": {
+    "es": "Comprar a Sell; desactivar para Buy",
+    "en": "Buy at Sell; turn off for Buy"
+  },
+  "jita.totalHelp": {
+    "es": "Coste total estimado: compra + comisión de compra + envío.",
+    "en": "Estimated total cost: purchase + purchase broker fee + shipping."
+  },
+  "jita.purchase": {
+    "es": "Compra",
+    "en": "Purchase"
+  },
+  "jita.fee": {
+    "es": "Comisión de compra",
+    "en": "Purchase broker fee"
+  },
+  "jita.shipping": {
+    "es": "Envío",
+    "en": "Shipping"
+  },
+  "jita.buyFee": {
+    "es": "La orden Buy incluye la comisión configurada.",
+    "en": "The Buy order includes your configured broker fee."
+  },
+  "jita.sellFee": {
+    "es": "Compra inmediata a Sell: sin comisión por crear una orden de compra.",
+    "en": "Immediate purchase at Sell: no broker fee for placing a buy order."
+  },
+  "jita.personalTax": {
+    "es": "No se descuentan impuestos de venta.",
+    "en": "No selling taxes are deducted."
+  },
+  "jita.missingPurchase": {
+    "es": "Faltan cotizaciones de compra válidas. El coste completo no está disponible.",
+    "en": "Valid purchase quotes are missing. The complete cost is unavailable."
+  },
+  "jita.gross": {
+    "es": "Venta bruta estimada",
+    "en": "Estimated gross sales"
+  },
+  "jita.sellingFees": {
+    "es": "Tasas de venta",
+    "en": "Selling fees"
+  },
+  "jita.profit": {
+    "es": "Beneficio estimado",
+    "en": "Estimated profit"
+  },
+  "jita.resaleNull": {
+    "es": "Venta local estimada según Ajustes; no representa órdenes locales ni compradores confirmados.",
+    "en": "Local sale estimated using Settings, not local orders or confirmed buyers."
+  },
+  "jita.resaleJita": {
+    "es": "Sin envío, la reventa se estima en Jita.",
+    "en": "Without shipping, resale is estimated in Jita."
+  },
+  "jita.guideTitle": {
+    "es": "¿Buy o Sell: cuál me conviene?",
+    "en": "Buy or Sell: which suits me?"
+  },
+  "jita.savingBefore": {
+    "es": "Con estos precios, una orden Buy reduce el coste total en ",
+    "en": "At these prices, a Buy order reduces total cost by "
+  },
+  "jita.savingAfter": {
+    "es": ", incluida su comisión. A cambio, esperas a que otros jugadores completen la orden. Si necesitas los Items ahora, Sell compra a las ventas disponibles; el precio final depende del stock. Puede no haber todo el lote a la misma cotización.",
+    "en": ", including its broker fee. In exchange, you wait for players to fill it. If you need the Items now, Sell buys from available sell orders; the final price depends on stock. The full batch may not be available at one quote."
+  },
+  "jita.noSaving": {
+    "es": "En este lote, la comisión de la orden Buy elimina su ahorro frente a Sell. Compara el coste total y la espera antes de elegir.",
+    "en": "For this batch, the Buy order fee removes its saving versus Sell. Compare total cost and waiting before choosing."
+  },
+  "jita.guideMissing": {
+    "es": "Falta una cotización de compra: no podemos comparar el coste completo de Buy y Sell.",
+    "en": "A purchase quote is missing: complete Buy and Sell costs cannot be compared."
+  },
+  "jita.personalGuide": {
+    "es": "Para uso personal importa cuánto pagas por tener cada unidad en destino. El desglose inferior muestra cuánto añade el envío a cada Item.",
+    "en": "For personal use, what matters is the cost of each unit at destination. The breakdown below shows how shipping affects each Item."
+  },
+  "jita.resaleGuide": {
+    "es": "Para reventa, comprar más barato puede mejorar el margen. El beneficio también depende de las tasas de venta y del envío; un precio local más alto no garantiza una ganancia.",
+    "en": "For resale, a lower purchase cost can improve margin. Profit also depends on selling fees and shipping; a higher local price does not guarantee a gain."
+  },
+  "jita.purchaseWithFee": {
+    "es": "Compra con comisión",
+    "en": "Purchase including broker fee"
+  },
+  "jita.finalBatch": {
+    "es": "Coste final del lote",
+    "en": "Final batch cost"
+  },
+  "jita.final": {
+    "es": "Coste final",
+    "en": "Final cost"
+  },
+  "jita.finalUnit": {
+    "es": "Coste final por unidad",
+    "en": "Final cost per unit"
+  },
+  "jita.purchaseUnit": {
+    "es": "Compra por unidad",
+    "en": "Purchase per unit"
+  },
+  "jita.ledgerHelp": {
+    "es": "Las cotizaciones son referencias. El coste final suma compra, comisión aplicable y envío asignado dentro de este lote. La compra no descuenta impuestos de venta. Enviarlo por separado requiere otra cotización.",
+    "en": "Quotes are references. Final cost adds purchase, applicable broker fee and allocated shipping within this batch. Purchase does not deduct selling taxes. Shipping separately requires a new quote."
+  },
+  "jita.buyBatch": {
+    "es": "Coste del lote a Buy",
+    "en": "Batch cost at Buy"
+  },
+  "jita.sellBatch": {
+    "es": "Coste del lote a Sell",
+    "en": "Batch cost at Sell"
+  },
+  "jita.purchaseGuide": {
+    "es": "Buy crea una orden de compra e incluye el broker de Ajustes; requiere esperar y puede no completarse. Sell compra a las ventas disponibles, según stock y precio.",
+    "en": "Buy places a buy order including the Settings broker fee; it requires waiting and may not fill. Sell buys from available sell orders, subject to stock and price."
+  },
+  "jita.shipGuide": {
+    "es": "El envío se reparte entre los Items de este lote según el motor del courier. Consulta el coste por unidad o por lote antes de contratar.",
+    "en": "Shipping is allocated across this batch using the courier engine. Check the unit or batch cost before contracting."
+  },
+  "jita.stayGuide": {
+    "es": "Sin envío, los Items permanecen en Jita y el coste de transporte es cero.",
+    "en": "Without shipping, the Items remain in Jita and transport cost is zero."
+  },
+  "jita.quoteInfo": {
+    "es": "Cobertura y fecha de cotizaciones",
+    "en": "Quote coverage and time"
+  },
+  "jita.shipLabel": {
+    "es": "Enviar",
+    "en": "Ship"
+  },
+  "jita.destination": {
+    "es": "Destino",
+    "en": "Destination"
+  },
+  "jita.priceHelpTitle": {
+    "es": "Cómo leer los costes",
+    "en": "Reading acquisition costs"
+  },
+  "jita.itemPrices": {
+    "es": "Precios de compra",
+    "en": "Purchase prices"
+  },
+  "jita.itemCompare": {
+    "es": "Comparar compras",
+    "en": "Compare purchases"
+  },
+  "jita.itemGuide": {
+    "es": "Cómo comprarlo",
+    "en": "How to buy"
   }
 }

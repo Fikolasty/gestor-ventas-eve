@@ -2727,7 +2727,7 @@ body:not(.light) #pCtr .ce-l .cz .ct-items{
 body,body.side-c{padding-left:0!important}
 body>.side,body>.side-fab,body>.side-bd{display:none!important}
 body .top.mm-ho-root{
-  grid-template-columns:minmax(145px,1fr) minmax(0,auto) minmax(280px,1fr)!important;
+  grid-template-columns:minmax(145px,1fr) minmax(0,auto) auto!important;
   gap:12px!important;min-height:68px!important;padding-bottom:8px!important;
   background:var(--header-surface)!important
 }

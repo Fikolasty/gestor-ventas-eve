@@ -286,6 +286,7 @@ function paintVerdict(P){
     $('deep').dataset.uiReady='1'; // Pasos a seguir permanece cerrado hasta que el usuario lo abra.
   }
   if(!has){clearViews();return;}
+  if(JitaContext.active){lastP=P;paintJitaReceipt(P);return;}
   const none=P.missing.length===P.rows.length,flipAcct=flipPlanAccounting(P);
   const purchaseUnknown=S.flip&&!flipAcct&&!none;
   // Trading must never present net sales proceeds as profit when the purchase

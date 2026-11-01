@@ -71,14 +71,14 @@ class Ledger173Tests(unittest.TestCase):
   self.assertEqual(self.page.evaluate('S.items.length'),22)
  def test_import_preserves_investment_profit_and_ship_switch(self):
   self.page.evaluate('()=>{setFlip(true);C.buyMode="sell";refreshNow()}')
-  expect(self.page.locator('#ledgerSaleMode')).to_be_hidden();expect(self.page.locator('#ledgerTradeTotals')).to_be_visible()
+  expect(self.page.locator('#ledgerSaleMode')).to_be_hidden();expect(self.page.locator('#ledgerTradeTotals')).to_be_hidden()
   self.assertEqual(self.page.evaluate('ledgerReference.key'),'fN')
   self.assertGreater(self.page.evaluate('ledgerReference.shipCost'),0)
   self.page.evaluate('()=>{C.shipOn=false;refreshNow()}')
   self.assertEqual(self.page.evaluate('ledgerReference.key'),'fJ')
   self.assertEqual(self.page.evaluate('ledgerReference.shipCost'),0)
   self.page.evaluate('()=>{C.buyMode="buy";S.items.forEach(o=>o.jita.topBuy=null);refreshNow()}')
-  self.assertEqual(self.page.locator('#ledgerTradeTotals button.copy').last.inner_text(),'—')
+  self.assertEqual(self.page.locator('#freightLotFinal').inner_text(),'—')
  def test_full_composition_themes_languages_curves_centered_signs_and_bounded_help(self):
   out=ROOT/'tests/artifacts/theme';out.mkdir(parents=True,exist_ok=True)
   for lang in ['es','en']:

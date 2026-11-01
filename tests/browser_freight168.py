@@ -97,13 +97,13 @@ class Freight168Tests(unittest.TestCase):
   self.assertEqual(self.page.locator('#pkUnits').count(),0)
   self.page.evaluate(UNIT_FIXTURE)
   self.page.evaluate("""()=>{
-   setFlip(true);C.buyMode='sell';C.brokerNull=0;C.scc=0;
+   setFlip(true);JitaContext.personal=false;C.buyMode='sell';C.brokerNull=0;C.scc=0;
    S.refinedMan.null[S.items[0].name.toLowerCase()]=8;
    S.refinedMan.null[S.items[1].name.toLowerCase()]=90;refreshNow();
   }""")
   rows=self.page.locator('#lots>.lot')
-  self.assertEqual(self.page.locator('#freightLotBefore').get_attribute('data-v'),'2850')
-  self.assertEqual(self.page.locator('#freightLotFinal').get_attribute('data-v'),'2150')
+  self.assertEqual(self.page.locator('#freightLotBefore').get_attribute('data-v'),'3500')
+  self.assertEqual(self.page.locator('#freightLotFinal').get_attribute('data-v'),'4200')
   for i,investment,profit in [(0,'-10','-4'),(1,'-100','-30')]:
    rows.nth(i).locator('.lot-open').click();rows.nth(i).locator('.lot-analysis>summary').click()
    self.assertEqual(rows.nth(i).locator('.lot-reference-investment .copy').get_attribute('data-v'),investment)

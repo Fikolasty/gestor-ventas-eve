@@ -4,7 +4,8 @@ function selectAppModule(name){
   // PI EN PAUSA: conservar la implementación completa para reactivarla en una futura versión.
   // Mientras está oculta en la navegación, no permitir activarla mediante accesos antiguos.
   if(name==='pi')name='ventas';
-  if(!['ventas','mining','pi','skills'].includes(name))return;
+  if(!['ventas','jita','mining','pi','skills'].includes(name))return;
+  if(name==='ventas'||name==='jita')activateJitaContext(name==='jita');
   // C.5b: navigation changes the visible workspace, never the Sales inventory.
   document.body.dataset.mmView=name;
   document.body.classList.toggle('mm-mining',name==='mining');
@@ -26,6 +27,7 @@ function selectAppModule(name){
     $('skills').hidden=false;SkillUI.mount($('skillRoot'));SkillUI.setLanguage(S.lang);SkillUI.setTheme(document.documentElement.classList.contains('light')?'light':'dark');SkillUI.shown();
   }else{$('mining').hidden=true;$('pi').hidden=true;$('skills').hidden=true;$('settings').hidden=true;$('help').hidden=true;}
   document.querySelectorAll('.side-i[data-panel="mining"]').forEach(b=>b.setAttribute('aria-pressed',String(name==='mining')));
+  if(name==='ventas'||name==='jita')refreshNow();
 }
 const mmTabs=[...document.querySelectorAll('#mmTabs [data-mm-module]')];
 mmTabs.forEach((b,i)=>{
@@ -64,7 +66,7 @@ function togglePanel(id,force){
     document.body.dataset.mmView=id;
   }else{
     s.hidden=true;
-    if(document.body.dataset.mmView===id)document.body.dataset.mmView='ventas';
+    if(document.body.dataset.mmView===id)document.body.dataset.mmView=JitaContext.active?'jita':'ventas';
   }
   document.querySelectorAll('.side-i[data-panel="'+id+'"]').forEach(x=>x.setAttribute('aria-pressed',String(open)));
   mmSyncWorkspaceTabs();

@@ -1,0 +1,45 @@
+/* Jita proposal only. Equal-width groups share the existing product switch track. */
+body.is-jita .mm-sales-mode-picker{display:none!important}
+body.is-jita #verdict #vSubtitle,body.is-jita #verdict #vMetric{display:none!important}
+body.is-jita #verdict .ov-hd{grid-template-columns:minmax(0,1fr) auto minmax(0,1fr)!important;gap:8px 16px!important;margin-bottom:12px!important;min-height:64px}
+body.is-jita #verdict .ov-hd .ov-ttl{grid-column:1;grid-row:1;align-self:center}
+body.is-jita #verdict .ov-hd .mm-net{grid-column:3;grid-row:1;align-self:center}
+body.is-jita #verdict .ov-hd .v-isk{font-size:clamp(32px,3.2vw,46px);margin:0!important}
+body.is-jita #verdict .jita-purchase-controls{grid-column:2;grid-row:1;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));align-items:center;width:384px;max-width:100%;color:var(--txt);font:550 14px/1.4 var(--f-ui)}
+body.is-jita #verdict .jita-control{display:grid;justify-items:center;align-content:center;gap:3px;min-width:0}
+body.is-jita #verdict .jita-control+.jita-control{border-left:1px solid var(--line2)}
+body.is-jita #verdict .jita-control-title{font-size:12px;line-height:18px;font-weight:650;color:var(--mut);text-transform:uppercase;letter-spacing:.035em;white-space:nowrap}
+body.is-jita #verdict .jita-control-line{position:relative;display:grid;grid-template-columns:28px 34px 28px;align-items:center;justify-items:center;gap:5px;min-height:32px;cursor:pointer;margin:0;color:var(--mut)}
+body.is-jita #verdict .jita-control-line .selected{color:var(--clay);font-weight:700}
+body.is-jita #verdict .jita-control-line input{position:absolute;inset:0;opacity:0;width:100%;height:100%;margin:0;z-index:1;cursor:pointer}
+body.is-jita #verdict .jita-control-line .sw-t{background:var(--clay);border-color:var(--clay);width:34px;height:20px;box-sizing:border-box}
+body.is-jita #verdict .jita-control-line .sw-t::after{background:#fff;transform:translateX(0)}
+body.is-jita #verdict .jita-control-line input:checked+.sw-t::after{transform:translateX(14px)}
+body.is-jita #verdict .jita-boolean .sw-t::after{transform:translateX(14px)}
+body.is-jita #verdict .jita-boolean input:checked+.sw-t::after{transform:translateX(0)}
+body.is-jita #verdict .jita-control-line input:focus-visible+.sw-t{outline:2px solid var(--clay);outline-offset:3px}
+@media(max-width:1100px){body.is-jita #verdict .ov-hd{grid-template-columns:minmax(0,1fr) auto!important}body.is-jita #verdict .ov-hd .mm-net{grid-column:2;grid-row:1}body.is-jita #verdict .jita-purchase-controls{grid-column:1/-1;grid-row:2;justify-self:center}}
+@media(max-width:600px){body.is-jita #verdict .ov-hd{grid-template-columns:minmax(0,1fr)!important}body.is-jita #verdict .ov-hd .mm-net{grid-column:1;grid-row:2;text-align:left}body.is-jita #verdict .jita-purchase-controls{grid-row:3;width:100%;font-size:13px}body.is-jita #verdict .jita-control-title{font-size:11px;letter-spacing:0}body.is-jita #verdict .jita-control-line{grid-template-columns:23px 34px 23px;gap:2px}}
+
+.jita-purchase-controls[hidden]{display:none!important}
+body.is-jita #pkPlanToggle,body.is-jita #pkPlanContent,body.is-jita #stepDrawer,body.is-jita #flipBuy{display:none!important}
+body.is-jita #pSum{padding-top:0!important;margin-top:16px!important;border-top:0!important}
+body.is-jita .jita-neutral,body.is-jita .jita-neutral *{color:var(--txt)!important}
+body.is-jita #vCap .jita-receipt-lines{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important}
+body.is-jita #vCap .v-finance-item small{font-size:13px!important}
+body.is-jita #vCap .v-finance-item strong{font-size:19px!important;font-variant-numeric:tabular-nums}
+body.is-jita .jita-resale{margin-top:14px}
+body.is-jita .jita-fee-note{font:400 13px/1.6 var(--f-ui);color:var(--mut);margin:8px 0 0}
+body.is-jita .jita-purchase-guide{margin:18px 0 0;padding-top:15px;border-top:1px solid var(--line2)}
+body.is-jita .jita-purchase-guide h3{font:650 15px/1.5 var(--f-ui);margin:0 0 7px;color:var(--txt)}
+body.is-jita .jita-purchase-guide p{font:400 14px/1.65 var(--f-ui);margin:0 0 7px;color:var(--mut)}
+body.is-jita .jita-warning{color:var(--loss);font-size:14px}
+.jita-quote-info{margin-left:auto;min-width:22px;min-height:22px;border-radius:50%;padding:0;font-size:12px;line-height:20px}
+.jita-quote-info[hidden]{display:none!important}
+.jita-item-comparison{padding:12px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.jita-item-comparison[hidden]{display:none!important}
+@media(max-width:600px){body.is-jita #vCap .jita-receipt-lines{grid-template-columns:minmax(0,1fr)!important}.jita-item-comparison{grid-template-columns:minmax(0,1fr)}}
+
+body.is-jita #verdict .jita-control-line .sw-t::after{background:#fff!important}
+body.is-jita.jita-personal #ledger #lots .lot-adjustments>.facts .fact-group.fact-strategy,body.is-jita.jita-personal #ledger #lots .lot-adjustments>.facts .fact.fact-resale-only{display:none!important}
+body.is-jita #ledger #lots .prices td.jita-neutral .copy,body.is-jita #ledger #lots .prices td.jita-neutral .copy *{color:var(--txt)!important}

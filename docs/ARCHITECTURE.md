@@ -97,3 +97,7 @@ Taxes pasa a un módulo CSS propio ensamblado después de80, sin reglas antiguas
 ## 2026-11-01 — Skills y superficies de Ajustes (v1.0.182)
 
 Owner91-settings-skills reemplaza reglas dedicadas anteriores de Skills en80 y el parche Light. El render de porcentajes usa nodos text/strong y preserva el texto accesible y los inputs originales; no replica fórmulas. Variables --mm-settings-head/body/input se limitan a Settings. Impuestos conserva90, motor/ESI/storage sin cambios; cierre y evidencia en DSS/HANDOFF_182.
+
+## Jita184
+
+`src/js/ui/jita.js` separa contexto y presentación sin clonar inventario ni motor. Los helpers de adquisición aceptan base explícita, y el presupuesto reutiliza ledgerRouteProjection/allocateCourier. Refresh prepara una sola proyección para la tabla, el recibo y los contratos. `93-jita.css` es el owner de composición local y `zzz-jita.css` fija colores Light tras el generador heredado. Estado/publicación: HANDOFF_184 y DSS.

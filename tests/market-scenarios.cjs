@@ -117,12 +117,10 @@ assert(salesHTML.includes('id="cImpM"'),'Margin stays editable in Settings');
 assert.equal((salesHTML.match(/id="eveIdentity"/g)||[]).length,1,'Only one EVE profile');
 assert(salesJS.includes("const identity=$('eveIdentity');if(identity)profile.append(identity)"));
 assert(salesJS.includes("headerMain.append($('navHome'),group)"));
-assert(salesJS.includes("modePicker.append(modeTrigger,$('businessSwitch'))"),'Original Sales buttons must move into operation menu');
-assert(salesJS.includes("salesIntro.querySelector('.paste-head').append(modePicker)"),
-  'Mode selector must align to paste input inside inventory heading');
-assert(salesHTML.includes('id="salesUtilityRow"'),'The shared utility row is in the Sales hero');
-assert(salesJS.includes("$('salesUtilityRow').append($('importControls'))"),
-  'Original import controls belong in the utility row above Inventory, never cloned');
+assert(salesHTML.includes('id="mmTabJita"'),'Jita has its own first-class tab');
+assert(salesHTML.includes('id="salesUtilityRow"'),'Shared inventory utility row remains');
+assert(salesJS.includes("retiredControls.append($('businessSwitch'),$('importControls'))"),
+  'Original controls survive as internal adapters without a second visible selector');
 assert(!salesJS.includes('salesToolbar.append('),'Obsolete import toolbar must not be rendered');
 assert(!salesJS.includes("headerContext.append($('businessSwitch')"),'No duplicate Sales navigation in header');
 assert(salesJS.includes('topActions.append(theme)'),'Theme remains the original interactive control in the shared header');
