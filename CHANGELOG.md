@@ -1,3 +1,10 @@
+## v1.0.183 — General y header r3 aprobados — publicación pendiente
+
+- General en dos paneles simétricos, mercado activo sobre selector y explicaciones separadas.
+- Header con línea recta, botones más cuadrados, relojes en línea y tema al extremo derecho; logo Vanguardia DR en créditos.
+- Manual sin cortes, Skills/Taxes compactos y simétricos, Settings/Guide con ancho común y códigos ES/EN protegidos.
+- Sin cambios de fórmulas, ESI/SSO o almacenamiento. Ver docs/HANDOFF_183.md para gates y estado real.
+
 ## v1.0.182 — Skills compactos y jerarquía de Ajustes — LIVE certificada
 
 - Tarjetas de Skills más estrechas y simétricas, nombre alineado y controles26×26 centrados.

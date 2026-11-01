@@ -81,3 +81,18 @@ test('route price guide is bilingual, accurate, and separate from calculation in
   assert.match(css,/body\.is-flip #ledger #lots \.lot-panel-grid>\.lot-adjustments>\.facts>\.fact-market-references>\.fact-buy-reference\{/);
   assert.match(css,/body:not\(\.is-flip\) #ledger #lots \.lot-panel-grid>\.lot-adjustments>\.facts>\.fact-market-references>\.fact-buy-order\{/);
 });
+
+
+test('General separates affiliation status from estimated-price context in ES/EN',()=>{
+  for(const lang of ['es','en']){
+    const status=['detected','none','manual'].map(k=>messages['settings.general.'+k][lang]);
+    assert.ok(status.every(s=>!s.includes('ESI')&&!s.includes('Jita')));
+    const prices=messages['settings.general.priceHelp'][lang];
+    assert.ok(prices.includes('{market}')&&prices.includes('Jita')&&prices.includes('ESI'));
+    assert.ok(/estim/.test(prices));
+  }
+  assert.equal(messages['market.pickerLabel'].en,'Select Market');
+  const shell=fs.readFileSync(path.join(src,'shell.html'),'utf8');
+  assert.ok(shell.includes('<strong class="no-tr">ES</strong>'));
+  assert.ok(shell.includes('<strong class="no-tr">EN</strong>'));
+});

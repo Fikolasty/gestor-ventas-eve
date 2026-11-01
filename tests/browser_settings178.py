@@ -22,6 +22,7 @@ class Settings178Tests(unittest.TestCase):
      self.p.set_viewport_size({'width':width,'height':1100});both=[]
      for light in [False,True]:
       self.p.evaluate("v=>{$('themeLight').checked=!v;$('themeLight').dispatchEvent(new Event('change',{bubbles:true}));document.activeElement?.blur()}",light)
+      self.p.evaluate('()=>new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)))')
       metrics=self.p.locator('.c5c-skill-card').evaluate_all("""es=>es.map(e=>{
        const a=e.getBoundingClientRect(),t=e.querySelector('.st-l').getBoundingClientRect(),g=e.querySelector('.eve-sk').getBoundingClientRect(),n=e.querySelector('.c5c-skill-note').getBoundingClientRect(),b=e.querySelector('.c5c-skill-source').getBoundingClientRect();
        return {w:a.width,h:a.height,center:Math.abs(g.x+g.width/2-a.x-a.width/2),gap:n.y-g.bottom,titleGap:g.y-t.bottom,badgeCenter:Math.abs(b.y+b.height/2-t.y-t.height/2),contained:n.bottom<=a.bottom,buttons:[...e.querySelectorAll('.eve-sk button')].map(x=>({w:x.getBoundingClientRect().width,h:x.getBoundingClientRect().height}))};
@@ -34,7 +35,7 @@ class Settings178Tests(unittest.TestCase):
       self.assertLessEqual(max(m['h'] for m in metrics)-min(m['h'] for m in metrics),1)
       both.append([(m['w'],m['h']) for m in metrics])
       inset=self.p.locator('.c5c-skills>.st-g').evaluate('e=>{const a=e.getBoundingClientRect(),b=e.parentElement.getBoundingClientRect();return a.top-b.top}')
-      self.assertGreaterEqual(inset,14)
+      self.assertGreaterEqual(inset,8 if width<=650 else 14)
       self.assertLessEqual(self.p.evaluate('document.documentElement.scrollWidth-innerWidth'),1)
       if width in [1440,390] and lang=='es':self.p.locator('#settings').screenshot(path=str(out/(f'settings178-compact-final4-{width}-'+('esi' if esi else 'manual')+'-'+('light' if light else 'dark')+'.png')))
       if width in [1440,390] and lang=='es':self.p.locator('.c5c-skills').screenshot(path=str(out/(f'settings178-cards-final4-{width}-'+('esi' if esi else 'manual')+'-'+('light' if light else 'dark')+'.png')))

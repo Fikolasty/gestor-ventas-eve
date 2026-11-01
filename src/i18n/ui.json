@@ -1548,8 +1548,8 @@
     "en": "ISK/h may not include selling tax, reprocessing fees or shipping: it estimates production value, not necessarily final profit."
   },
   "market.pickerLabel": {
-    "es": "Mercado principal",
-    "en": "Home market"
+    "es": "Seleccionar mercado",
+    "en": "Select Market"
   },
   "market.auto": {
     "es": "Automático según alianza",
@@ -2666,5 +2666,41 @@
   "settings.tax.cScc.help": {
     "es": "Impuesto de CONCORD en tu estructura comercial.",
     "en": "CONCORD tax in your trading structure."
+  },
+  "settings.general.home": {
+    "es": "Mercado principal",
+    "en": "Home Market"
+  },
+  "settings.general.active": {
+    "es": "Mercado activo",
+    "en": "Active Market"
+  },
+  "settings.general.modeTitle": {
+    "es": "Selección automática o manual",
+    "en": "Automatic or manual selection"
+  },
+  "settings.general.modeHelp": {
+    "es": "El modo automático utiliza la alianza del piloto conectado. Puedes elegir otro mercado manualmente. Envío y refinería se configuran por separado.",
+    "en": "Automatic mode uses the connected pilot’s alliance. You can choose another market manually. Freight and refinery settings are configured separately."
+  },
+  "settings.general.priceTitle": {
+    "es": "Referencia de precios",
+    "en": "Price reference"
+  },
+  "settings.general.priceHelp": {
+    "es": "Los precios de {market} son estimaciones según tus Ajustes y referencias de Jita, no órdenes locales de ESI. Cambiar de sistema adapta las rutas y etiquetas.",
+    "en": "Prices in {market} are estimates based on your Settings and Jita references, not local ESI orders. Changing systems adjusts routes and labels."
+  },
+  "settings.general.detected": {
+    "es": "Alianza detectada: {alliance}.",
+    "en": "Alliance detected: {alliance}."
+  },
+  "settings.general.none": {
+    "es": "Sin alianza identificada. HY-RWO se usa por defecto.",
+    "en": "No alliance identified. HY-RWO is used by default."
+  },
+  "settings.general.manual": {
+    "es": "Selección manual; no cambia al conectar otro piloto.",
+    "en": "Manual selection; connecting another pilot will not change it."
   }
 }

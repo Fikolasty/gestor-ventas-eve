@@ -179,6 +179,32 @@ document.querySelectorAll('[data-go-home]').forEach(node=>{
     const title=document.createElement('h3');title.className='st-sec-t';title.setAttribute('data-i18n','settings.groupPrices');title.textContent=tx('settings.groupPrices');
     const desc=document.createElement('p');desc.className='st-sec-i';desc.setAttribute('data-i18n','settings.groupPricesHelp');desc.textContent=tx('settings.groupPricesHelp');
     priceSection.append(title,desc);panels[2].prepend(priceSection);
+    // General is always visible inside its tab; retain the original select/listeners.
+    const general=panels[0],market=general.querySelector('fieldset.st'),language=general.querySelector('.st-language');
+    general.querySelector('.st-sec:not(.st-language)')?.remove();
+    market.querySelector('.st-i')?.remove();market.classList.add('c5c-fixed','mm-general-market');
+    const legend=market.querySelector('legend');
+    legend.querySelector('.st-tt').replaceChildren(document.createTextNode(tx('settings.general.home')));
+    legend.querySelector('.st-tt').setAttribute('data-i18n','settings.general.home');
+    const active=general.querySelector('#nullMarketActive').closest('.st-f');
+    active.querySelector('.st-l').setAttribute('data-i18n','settings.general.active');
+    active.querySelector('.st-l').textContent=tx('settings.general.active');
+    market.querySelector('.st-g').prepend(active);
+    language.className='mm-general-language';
+    const pair=document.createElement('div');pair.className='mm-general-pair';pair.append(market,language);general.append(pair);
+    const help=document.createElement('div');help.className='mm-general-help';
+    for(const keys of [['modeTitle','modeHelp'],['priceTitle','priceHelp']]){
+      const part=document.createElement('div');
+      for(const [i,key]of keys.entries()){
+        const node=document.createElement(i?'p':'h4');
+        if(key==='priceHelp'){node.id='generalPriceReference';node.className='no-tr';}
+        else {const messageKey='settings.general.'+key;node.setAttribute('data-i18n',messageKey);node.textContent=tx(messageKey);}
+        part.append(node);
+      }
+      help.append(part);
+    }
+    const note=general.querySelector('#nullMarketNote');note.classList.add('no-tr');general.append(help);help.firstElementChild.append(note);
+    $('settings').classList.add('mm-general-layout');
     tabs(wrap,panels,labels,keys);
   }
   const help=$('help');
@@ -493,3 +519,29 @@ function mmMountCompactSettings(){
   mmUpdatePricingCopy();
 }
 mmMountCompactSettings();
+
+// Presentation only: all pilot cards use the largest intrinsic content height.
+// No cloned inputs, financial calculations, storage writes or network requests.
+(function mountPilotCardSizing(){
+  const host=$('mm-settings-panel-1'),settings=$('settings');
+  if(!host||!settings)return;
+  let pending=0;
+  function measure(){
+    pending=0;
+    if(settings.hidden||host.hidden)return;
+    const cards=[...host.querySelectorAll('.c5c-skill-card,.c5c-taxes .st-f')];
+    host.classList.add('mm-measure-pilot-cards');
+    let height=0;
+    try{height=Math.ceil(Math.max(...cards.map(card=>card.getBoundingClientRect().height)));}
+    finally{host.classList.remove('mm-measure-pilot-cards');}
+    if(height>0&&host.style.getPropertyValue('--mm-pilot-card-height')!==height+'px')host.style.setProperty('--mm-pilot-card-height',height+'px');
+  }
+  const schedule=()=>{if(!pending)pending=requestAnimationFrame(measure);};
+  const widths=new WeakMap();
+  const resize=new ResizeObserver(entries=>{let changed=false;for(const entry of entries){const w=entry.contentRect.width;changed=changed||widths.get(entry.target)!==w;widths.set(entry.target,w);}if(changed)schedule();});
+  host.querySelectorAll('.c5c-fixed>.st-g').forEach(grid=>resize.observe(grid));
+  const changes=new MutationObserver(schedule);
+  changes.observe(settings,{subtree:true,childList:true,characterData:true,attributes:true,attributeFilter:['hidden']});
+  document.fonts?.ready.then(schedule);
+  schedule();
+})();

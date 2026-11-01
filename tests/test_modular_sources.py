@@ -18,8 +18,8 @@ class BuildSourceTests(unittest.TestCase):
     def test_css_is_complete_and_in_one_deterministic_order(self):
         css = BS.css_sources(read)
         self.assertGreater(len(css), 200_000)
-        self.assertEqual(len(BS.CSS_PARTS), 11)
-        self.assertEqual(BS.CSS_PARTS[-3:], ('80-product-ux.css', '90-settings-taxes.css', '91-settings-skills.css'))
+        self.assertEqual(len(BS.CSS_PARTS), 12)
+        self.assertEqual(BS.CSS_PARTS[-4:], ('80-product-ux.css', '90-settings-taxes.css', '91-settings-skills.css', '92-settings-general-header.css'))
         self.assertEqual(len(set(BS.CSS_PARTS)), len(BS.CSS_PARTS))
         self.assertEqual(css.count("/* ================= Market Moves+"), 1)
         self.assertIn("--surface-card", css)

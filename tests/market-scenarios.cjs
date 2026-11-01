@@ -125,7 +125,7 @@ assert(salesJS.includes("$('salesUtilityRow').append($('importControls'))"),
   'Original import controls belong in the utility row above Inventory, never cloned');
 assert(!salesJS.includes('salesToolbar.append('),'Obsolete import toolbar must not be rendered');
 assert(!salesJS.includes("headerContext.append($('businessSwitch')"),'No duplicate Sales navigation in header');
-assert(salesJS.includes('topActions.insertBefore(theme,topActions.firstChild)'),'Theme remains the original interactive control in the shared header');
+assert(salesJS.includes('topActions.append(theme)'),'Theme remains the original interactive control in the shared header');
 assert(salesJS.includes("headerLegacy.append(rightGroup)"),'Original internal route control must survive');
 assert(salesJS.includes("header.insertBefore(bar,topActions)"),'Navigation must be in main header');
 assert(salesJS.includes("$('importControls').hidden=!isImport"));

@@ -20,6 +20,7 @@ class Settings182Tests(unittest.TestCase):
      p.set_viewport_size({'width':width,'height':1200});both=[]
      for light in [False,True]:
       p.evaluate("v=>{$('themeLight').checked=!v;$('themeLight').dispatchEvent(new Event('change',{bubbles:true}));document.activeElement?.blur();scrollTo(0,0)}",light)
+      p.evaluate('()=>new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)))')
       cards=p.locator('.c5c-skill-card').evaluate_all("""es=>es.map(e=>{const r=e.getBoundingClientRect(),t=e.querySelector('.st-l').getBoundingClientRect(),g=e.querySelector('.eve-sk').getBoundingClientRect(),n=e.querySelector('.c5c-skill-note').getBoundingClientRect();return {x:r.x,y:r.y,w:r.width,h:r.height,align:Math.abs(t.x-g.x),center:Math.abs(g.x+g.width/2-r.x-r.width/2),noteAlign:Math.abs(n.x-g.x),over:e.scrollWidth-e.clientWidth,groupWidth:g.width,buttons:[...e.querySelectorAll('.eve-sk button')].map(b=>({w:b.getBoundingClientRect().width,h:b.getBoundingClientRect().height})),values:[...e.querySelectorAll('.mm-skill-value')].map(v=>({text:v.textContent,weight:+getComputedStyle(v).fontWeight,color:getComputedStyle(v).color,normal:getComputedStyle(v.parentElement).color}))}})""")
       self.assertLessEqual(max(c['h'] for c in cards)-min(c['h'] for c in cards),1)
       for c in cards:

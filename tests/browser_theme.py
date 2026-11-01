@@ -152,7 +152,7 @@ class ThemeBrowserTests(unittest.TestCase):
                         self.assertEqual(group['borderWidth'],'0px',(width,language,light,group))
                     for tab in styles[2:]:
                         self.assertEqual(tab['borderWidth'],'0px', (width,language,light,tab))
-                        self.assertGreaterEqual(tab['radius'],7)
+                        self.assertEqual(tab['radius'],4)
                         self.assertGreaterEqual(tab['height'],34)
                     variants.append(styles)
                     if width==1440 or (width==390 and language=='en'):
@@ -189,7 +189,7 @@ class ThemeBrowserTests(unittest.TestCase):
         self.assertIn("1,000,000 FREE SP", self.page.locator(".hero-referral").inner_text())
         self.assertIn("one million free Skill Points", self.page.locator(".hero-referral").get_attribute("aria-label"))
         self.assertIn("Getting started", self.page.locator("#help .modern-tabs").text_content())
-        self.assertIn("Home market", self.page.locator("#settings").text_content())
+        self.assertIn("Home Market", self.page.locator("#settings").text_content())
         self.page.evaluate("setLang('es')")
         self.page.wait_for_function(
             "() => document.querySelector('#mmTabSkills .mm-mod-label')?.textContent.trim()==='Habilidades'"
@@ -455,7 +455,7 @@ class ThemeBrowserTests(unittest.TestCase):
         expect(trigger).to_have_text("C-J6MT · Goonswarm")
         self.assertEqual(self.page.evaluate("nullSystem()"),"C-J6MT")
         self.page.evaluate("setLang('en')")
-        expect(self.page.locator("#marketPickerLabel")).to_have_text("Home market")
+        expect(self.page.locator("#marketPickerLabel")).to_have_text("Select Market")
         expect(trigger).to_have_text("C-J6MT · Goonswarm")
         trigger.press("ArrowDown")
         expect(menu).to_be_visible()
@@ -570,7 +570,7 @@ class ThemeBrowserTests(unittest.TestCase):
                         const r=s=>document.querySelector(s).getBoundingClientRect();
                         const a=r('#appr'),i=r('#importControls'),p=r('#heroIntro>.paste');
                         const referral=r('#salesUtilityRow>.hero-referral-pill');
-                        const brand=r('.top .brand'),profile=r('#eveIdentityButton');
+                        const brand=r('.top .brand'),profile=r('.mm-top-actions .mm-theme');
                         return {aTop:a.top,aBottom:a.bottom,pTop:p.top,pLeft:p.left,pRight:p.right,
                             iTop:i.top,iBottom:i.bottom,iLeft:i.left,iRight:i.right,
                             aLeft:a.left,aRight:a.right,referralLeft:referral.left,

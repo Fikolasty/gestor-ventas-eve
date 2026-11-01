@@ -22,6 +22,7 @@ class Taxes181Tests(unittest.TestCase):
      p.set_viewport_size({'width':width,'height':1200});both=[]
      for light in [False,True]:
       self.theme(light)
+      p.evaluate('()=>new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)))')
       cards=p.locator('.c5c-taxes .st-f').evaluate_all("""es=>es.map(e=>{const r=e.getBoundingClientRect(),t=e.querySelector('.st-l').getBoundingClientRect(),i=e.querySelector('input').getBoundingClientRect(),n=e.querySelector('small').getBoundingClientRect(),s=getComputedStyle(e.querySelector('small'));return {x:r.x,y:r.y,w:r.width,h:r.height,over:e.scrollWidth-e.clientWidth,collision:t.right>i.x||Math.max(t.bottom,i.bottom)>n.y,contained:[...e.children].every(c=>{const b=c.getBoundingClientRect();return b.bottom<=r.bottom&&b.right<=r.right}),helpSize:parseFloat(s.fontSize)}})""")
       self.assertEqual(len(cards),6);self.assertLessEqual(max(c['h'] for c in cards)-min(c['h'] for c in cards),1)
       self.assertTrue(all(c['over']<=1 and not c['collision'] and c['contained'] and c['helpSize']==14 for c in cards),(esi,lang,width,light,cards))

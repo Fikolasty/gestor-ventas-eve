@@ -88,8 +88,7 @@ const refreshMarketControls=()=>{
   document.getElementById('nullMarketActive').textContent=nullSystem();
   const importLabel=document.getElementById('importMarketLabel');if(importLabel)importLabel.textContent=nullSystem();
   const topMarket=document.querySelector('#mmTabs .mm-route-right');if(topMarket)topMarket.textContent=nullSystem();
-  const note=document.getElementById('nullMarketNote');
-  note.textContent=(marketChoice==='auto'?(marketAlliance?'Alianza detectada: '+marketAlliance+'.':'Sin alianza identificada. Se usa HY-RWO por defecto.'):'Selección manual: no cambiará al conectar otro personaje.')+' Los precios de '+nullSystem()+' se estiman con reglas sobre Jita, no con órdenes locales de ESI.';
+  // Status and price context are localized together by syncMarketCopy().
   syncMarketCopy();syncBusinessMode();
 };
 document.getElementById('nullMarketMode')?.addEventListener('change',e=>{
@@ -103,6 +102,11 @@ document.getElementById('nullMarketMode')?.addEventListener('change',e=>{
 function syncMarketCopy(){
   if(document.body.classList.contains('mm-settings-compact'))mmUpdatePricingCopy();
   const hub=nullSystem(),en=S.lang==='en';
+  if(typeof MM_UI_CATALOG_READY!=='undefined'&&MM_UI_CATALOG_READY){
+    const note=document.getElementById('nullMarketNote'),reference=document.getElementById('generalPriceReference');
+    if(note)note.textContent=tx(marketChoice==='auto'?(marketAlliance?'settings.general.detected':'settings.general.none'):'settings.general.manual',{alliance:marketAlliance});
+    if(reference)reference.textContent=tx('settings.general.priceHelp',{market:hub});
+  }
   document.querySelectorAll('[data-market-system]').forEach(node=>{if(node.textContent!==hub)node.textContent=hub;});
   const ship=document.getElementById('shipLab'),margin=document.getElementById('rtM'),input=document.getElementById('fImpM');
   if(ship)ship.title=en?'Courier from Jita to '+hub+'.':'Enviar desde Jita a '+hub+' con el courier configurado.';

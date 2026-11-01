@@ -283,7 +283,7 @@ $('themeLight').addEventListener('change',e=>{document.documentElement.classList
   const topActions=document.createElement('div');
   topActions.className='mm-top-actions';
   const clock=document.createElement('div');clock.id='headerClock';clock.className='mm-header-clock';clock.setAttribute('aria-live','off');
-  clock.innerHTML='<span>EVE: <time id="eveClock">--:--</time></span><span>Local: <time id="localClock">--:--</time></span>';
+  clock.innerHTML='<span class="no-tr">EVE Time: <time id="eveClock">--:--</time></span><span class="mm-clock-divider" aria-hidden="true">|</span><span class="no-tr">Local Time: <time id="localClock">--:--</time></span>';
   topActions.append(clock);
   if(settings){settings.classList.add('top-header-action');settings.setAttribute('aria-label','Ajustes');settings.title='Ajustes';topActions.append(settings);}
   if(guide){guide.classList.add('top-guide-action');guide.setAttribute('aria-label','Guía de uso');guide.title='Guía de uso';topActions.append(guide);}
@@ -343,7 +343,8 @@ $('themeLight').addEventListener('change',e=>{document.documentElement.classList
     if(modePicker.open&&!modePicker.contains(event.target))modePicker.open=false;
   });
   syncBusinessMode();
-  topActions.insertBefore(theme,topActions.firstChild); // Keep the real theme switch accessible before Settings/Guide.
+  topActions.append(theme); // Quiet theme control at the far right, retaining its native handler.
+  $('themeLight').setAttribute('aria-label','Dark / Light');
   const headerLegacy=document.createElement('div');headerLegacy.className='mm-ho-legacy';
   headerLegacy.append(rightGroup); // retains the internal #bFlip route control and its listener
   bar.append(headerMain,headerLegacy);
