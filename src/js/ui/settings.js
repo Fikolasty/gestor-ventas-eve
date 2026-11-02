@@ -88,12 +88,8 @@ document.querySelectorAll('.x-close').forEach(b=>b.addEventListener('click',()=>
 // No confirmation popup: normal tab navigation never invokes this handler.
 const navigateHome=()=>{window.location.reload();};
 $('navHome').addEventListener('click',navigateHome);
-document.querySelectorAll('[data-go-home]').forEach(node=>{
-  node.addEventListener('click',navigateHome);
-  node.addEventListener('keydown',event=>{
-    if(event.key==='Enter'||event.key===' '){event.preventDefault();navigateHome();}
-  });
-});
+// Brand and hero title are native anchors: the browser owns modified clicks,
+// middle-click and keyboard activation. Do not intercept them with reload().
 // Navigation and compact editorial sections. Original input nodes are moved, never cloned.
 (function modernizeSections(){
   document.querySelectorAll('[data-side-module]').forEach(btn=>btn.addEventListener('click',()=>{

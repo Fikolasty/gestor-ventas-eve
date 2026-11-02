@@ -55,26 +55,28 @@ class ThemeBrowserTests(unittest.TestCase):
         return self.page.locator(selector).first.evaluate("(el,prop)=>getComputedStyle(el)[prop]", attribute)
 
     def assert_referral_utility_row(self, mode):
-        """The referral is a readable, card-aligned utility strip in both themes."""
+        """The referral follows the title width without a boxed utility tray."""
         pill = self.page.locator("#salesUtilityRow>.hero-referral-pill")
         self.assertEqual(pill.count(), 1)
         styles = pill.evaluate("""el => {
             const s = getComputedStyle(el);
             const r = el.getBoundingClientRect();
-            const appraisal = document.querySelector('#heroIntro').getBoundingClientRect();
+            const appraisal = document.querySelector('.hero-home-link').getBoundingClientRect();
             return {
-                background: s.backgroundColor,
+                background: s.backgroundImage,
                 borderTop: s.borderTopWidth,
                 shadow: s.boxShadow,
                 leftDelta: Math.abs(r.left - appraisal.left),
-                width: r.width, height: r.height,
+                width: r.width, titleWidth: appraisal.width, height: r.height,
                 text: el.innerText
             };
         }""")
-        self.assertNotEqual(styles["background"], "rgba(0, 0, 0, 0)", f"{mode}: missing graphite surface")
-        self.assertNotEqual(styles["borderTop"], "0px", f"{mode}: missing subtle border")
-        self.assertLess(styles["leftDelta"], 3, f"{mode}: referral misses Tasación alignment")
-        self.assertGreaterEqual(styles["height"], 40)
+        self.assertIn("linear-gradient", styles["background"])
+        self.assertEqual(styles["borderTop"], "0px")
+        self.assertEqual(styles["shadow"], "none")
+        self.assertLess(styles["leftDelta"], 1)
+        self.assertAlmostEqual(styles["width"], styles["titleWidth"], delta=1)
+        self.assertGreaterEqual(styles["height"], 26)
         self.assertIn("1,000,000", styles["text"])
         if 'en ' not in mode and 'EN' not in mode:
             self.assertIn('GRATIS',styles['text'])

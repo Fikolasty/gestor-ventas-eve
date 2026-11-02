@@ -19,6 +19,7 @@ CSS_PARTS = (
     "91-settings-skills.css",
     "92-settings-general-header.css",
     "93-jita.css",
+    "94-title-referral.css",
 )
 # Light theme order mirrors the former light_extra.css; the final shared table
 # geometry follows generated Light rules so both themes use identical layout.
@@ -28,6 +29,7 @@ LIGHT_PARTS = (
     "light-header-shipping.css",
     "zz-ledger-table.css",
     "zzz-jita.css",
+    "zzzz-title-referral.css",
 )
 
 def light_sources(read):

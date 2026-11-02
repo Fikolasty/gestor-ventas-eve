@@ -1,0 +1,7 @@
+/* Final Light ownership: no old rounded referral tray or changed link geometry. */
+html.light body .top.mm-ho-root>a.brand,html.light body .hero>.title>.hero-home-link{background:none!important;border:0!important;box-shadow:none!important;text-decoration:none}
+html.light body .hero>.title>#salesUtilityRow>.hero-referral-pill{background:linear-gradient(90deg,transparent,rgba(250,248,245,.48) 20%,rgba(250,248,245,.48) 80%,transparent)!important;border:0!important;border-radius:0!important;box-shadow:none!important}
+html.light body .hero>.title>#salesUtilityRow>.hero-referral-pill:hover{background:linear-gradient(90deg,transparent,rgba(250,248,245,.66) 20%,rgba(250,248,245,.66) 80%,transparent)!important}
+html.light body .hero>.title>#salesUtilityRow .hero-referral-kicker{color:var(--txt)!important}
+html.light body .hero>.title>#salesUtilityRow .hero-referral-offer{color:var(--clay)!important}
+html.light body .hero>.title>#salesUtilityRow .hero-referral-arrow{color:var(--mut)!important}
