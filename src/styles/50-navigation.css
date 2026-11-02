@@ -229,29 +229,6 @@ html.light body .top.mm-ho-root .mm-ho-context .mm-buy-basis select{
   body .top.mm-ho-root .mm-ho-main .mm-mod{transition:none!important}
 }
 
-/* Referral: shown below the name, not between navigation elements. */
-.hero>.hero-referral{
-  display:flex!important;justify-content:center!important;position:relative!important;
-  width:min(610px,100%)!important;max-width:100%!important;
-  min-height:37px!important;height:37px!important;margin:16px auto 5px!important;
-  padding:0!important;border:1px solid rgba(217,119,87,.37)!important;
-  border-radius:9px!important;background:var(--ticker-surface)!important;
-  box-shadow:0 3px 12px rgba(0,0,0,.2)!important;overflow:hidden!important;
-  -webkit-mask-image:none!important;mask-image:none!important;color:var(--txt)!important;
-}
-.hero>.hero-referral:hover{border-color:var(--clay)!important;background:var(--ticker-hover)!important}
-.hero>.hero-referral .tk-track{
-  display:flex!important;align-items:center!important;height:100%!important;width:max-content!important;
-  animation:tk 30s linear infinite!important;
-}
-.hero>.hero-referral .tk-i{
-  display:inline-flex!important;align-items:center!important;gap:5px!important;
-  flex:0 0 auto!important;padding:0 28px!important;
-  white-space:nowrap!important;font:600 13px/1.2 var(--f-ui)!important;
-}
-.hero>.hero-referral .tk-i b{font-weight:800!important;color:#e9a785!important}
-.hero>.hero-referral:hover .tk-track,
-.hero>.hero-referral:focus-visible .tk-track{animation-play-state:paused!important}
 .hero .title{margin:0!important}
 .hero .title h1{margin:0!important}
 .hero{padding-top:35px}

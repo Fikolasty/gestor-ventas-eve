@@ -30,30 +30,6 @@ html.light body .top.mm-ho-root .mm-profile-row .eve-identity-button{
  color:var(--txt)!important;
  background:rgba(87,66,49,.055)!important;border-color:var(--edge)!important;
 }
-html.light .hero>.hero-referral,
-html.light .hero>.hero-referral:hover{
- background:var(--ticker-surface)!important;
- border-color:rgba(161,86,55,.32)!important;
- color:#332c25!important;
-}
-html.light .hero>.hero-referral:hover{background:var(--ticker-hover)!important}
-html.light .hero>.hero-referral .tk-track,
-html.light .hero>.hero-referral .tk-i{
- background:transparent!important;color:#332c25!important;
-}
-html.light .hero>.hero-referral .tk-i b{color:#a34d2c!important}
-/* Light referral must remain text-only, matching Dark mode. */
-html.light .hero>.hero-referral-pill,
-html.light .hero>.hero-referral-pill:hover{
- background:transparent!important;
- border:0!important;
- border-radius:0!important;
- box-shadow:none!important;
- color:#332c25!important;
-}
-html.light .hero>.hero-referral-pill .hero-referral-kicker{color:#554a40!important}
-html.light .hero>.hero-referral-pill .hero-referral-offer,
-html.light .hero>.hero-referral-pill .hero-referral-arrow{color:#a34d2c!important}
 /* B.17: the approved two-column utility row uses existing warm Light tokens. */
 html.light .hero #salesUtilityRow>.hero-referral-pill,
 html.light .hero #salesUtilityRow>#importControls:not([hidden]){

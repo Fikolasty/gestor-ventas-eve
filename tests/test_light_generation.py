@@ -52,10 +52,11 @@ class LightGeneratorTests(unittest.TestCase):
         self.assertIn("--ticker-surface:rgba(22,21,21,.91)", foundation)
         self.assertIn("--ticker-hover:rgba(37,29,25,.96)", foundation)
         self.assertIn("background:var(--header-surface)!important", nav)
-        self.assertIn("background:var(--ticker-surface)!important", nav)
         self.assertNotIn("var(--ticker-surface,", nav)
         self.assertNotIn("html.light .hero>.hero-referral{background:", nav)
-        self.assertEqual(css.count("html.light .hero>.hero-referral .tk-i b{"), 1)
+        self.assertNotIn(".hero>.hero-referral", css)
+        self.assertNotIn(".hero>.hero-referral", nav)
+        self.assertIn("body .hero>.title>#salesUtilityRow", css)
         self.assertNotIn("html.light.light", css)
 
 if __name__ == "__main__":

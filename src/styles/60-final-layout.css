@@ -83,8 +83,6 @@ html.light .hero-intro:not(.no-appr)>.paste{
   body .top.mm-ho-root .mm-ho-main .mm-mod{
     height:33px!important;min-height:33px!important;font-size:12px!important;
   }
-  .hero>.hero-referral{height:35px!important;min-height:35px!important;margin-top:12px!important}
-  .hero>.hero-referral .tk-i{font-size:12px!important}
 }
 @media(max-width:390px){
   body .top.mm-ho-root>.brand{font-size:11px!important}
@@ -95,9 +93,7 @@ html.light .hero-intro:not(.no-appr)>.paste{
   body .top.mm-ho-root .mm-profile-row .eve-identity-button{max-width:108px!important}
   body .top.mm-ho-root .mm-profile-row #evePilotName{max-width:67px!important}
 }
-@media(prefers-reduced-motion:reduce){
-  .hero>.hero-referral .tk-track{animation:none!important}
-}
+
 
 
 
@@ -166,28 +162,11 @@ body:not(.light) #pDisc .dests .dest[aria-pressed="true"]{
 }
 
 
-/* Hero referral: centered text-only link, no background pill. */
-.hero>.hero-referral-pill{
-  position:relative!important;left:50%!important;transform:translateX(-50%)!important;
-  display:inline-flex!important;align-items:center;justify-content:center;gap:8px;
-  width:max-content!important;max-width:calc(100% - 24px);height:auto!important;min-height:0!important;
-  margin:10px 0 0!important;padding:3px 0!important;
-  border:0!important;border-radius:0!important;background:transparent!important;
-  box-shadow:none!important;overflow:visible!important;
-  color:inherit!important;font-size:12px;line-height:1.4;cursor:pointer;
-  animation:none!important;transition:opacity .18s ease;
-}
-.hero>.hero-referral-pill:hover{
-  background:transparent!important;border:0!important;box-shadow:none!important;
-  transform:translateX(-50%)!important;opacity:.8;
-}
-.hero>.hero-referral-pill:focus-visible{outline:2px solid var(--ion);outline-offset:3px}
+/* Shared referral text baseline; current composition belongs to94-title-referral. */
 .hero-referral-kicker{font-size:10px;font-weight:700;letter-spacing:.09em;color:#c6c0b9}
 .hero-referral-offer{font-size:12px;font-weight:800;color:#efbc8f;white-space:nowrap}
 .hero-referral-arrow{color:#efbc8f;font-size:14px;line-height:1}
 @media(max-width:540px){
-  .hero>.hero-referral-pill{gap:6px!important;font-size:11px}
   .hero-referral-kicker{font-size:9px}
   .hero-referral-offer{font-size:11px}
 }
-@media(prefers-reduced-motion:reduce){.hero>.hero-referral-pill{transition:none}}
