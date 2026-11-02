@@ -7,7 +7,7 @@
 <meta name="referrer" content="no-referrer">
 <title>Market Moves+ · SIGMA GRINDSET</title>
 <style>
-/* ================= Market Moves+ v1.0.186 =================
+/* ================= Market Moves+ v1.0.187 =================
    Paleta: azul de base, naranja = acción, verde/rojo = ganancia/pérdida.
    Sin backdrop-filter: el vidrio se finge con rgba + bordes. */
 *{box-sizing:border-box;margin:0;padding:0}
@@ -2521,29 +2521,6 @@ html.light body .top.mm-ho-root .mm-ho-context .mm-buy-basis select{
   body .top.mm-ho-root .mm-ho-main .mm-mod{transition:none!important}
 }
 
-/* Referral: shown below the name, not between navigation elements. */
-.hero>.hero-referral{
-  display:flex!important;justify-content:center!important;position:relative!important;
-  width:min(610px,100%)!important;max-width:100%!important;
-  min-height:37px!important;height:37px!important;margin:16px auto 5px!important;
-  padding:0!important;border:1px solid rgba(217,119,87,.37)!important;
-  border-radius:9px!important;background:var(--ticker-surface)!important;
-  box-shadow:0 3px 12px rgba(0,0,0,.2)!important;overflow:hidden!important;
-  -webkit-mask-image:none!important;mask-image:none!important;color:var(--txt)!important;
-}
-.hero>.hero-referral:hover{border-color:var(--clay)!important;background:var(--ticker-hover)!important}
-.hero>.hero-referral .tk-track{
-  display:flex!important;align-items:center!important;height:100%!important;width:max-content!important;
-  animation:tk 30s linear infinite!important;
-}
-.hero>.hero-referral .tk-i{
-  display:inline-flex!important;align-items:center!important;gap:5px!important;
-  flex:0 0 auto!important;padding:0 28px!important;
-  white-space:nowrap!important;font:600 13px/1.2 var(--f-ui)!important;
-}
-.hero>.hero-referral .tk-i b{font-weight:800!important;color:#e9a785!important}
-.hero>.hero-referral:hover .tk-track,
-.hero>.hero-referral:focus-visible .tk-track{animation-play-state:paused!important}
 .hero .title{margin:0!important}
 .hero .title h1{margin:0!important}
 .hero{padding-top:35px}
@@ -2641,8 +2618,6 @@ html.light .hero-intro:not(.no-appr)>.paste{
   body .top.mm-ho-root .mm-ho-main .mm-mod{
     height:33px!important;min-height:33px!important;font-size:12px!important;
   }
-  .hero>.hero-referral{height:35px!important;min-height:35px!important;margin-top:12px!important}
-  .hero>.hero-referral .tk-i{font-size:12px!important}
 }
 @media(max-width:390px){
   body .top.mm-ho-root>.brand{font-size:11px!important}
@@ -2653,9 +2628,7 @@ html.light .hero-intro:not(.no-appr)>.paste{
   body .top.mm-ho-root .mm-profile-row .eve-identity-button{max-width:108px!important}
   body .top.mm-ho-root .mm-profile-row #evePilotName{max-width:67px!important}
 }
-@media(prefers-reduced-motion:reduce){
-  .hero>.hero-referral .tk-track{animation:none!important}
-}
+
 
 
 
@@ -2724,31 +2697,14 @@ body:not(.light) #pDisc .dests .dest[aria-pressed="true"]{
 }
 
 
-/* Hero referral: centered text-only link, no background pill. */
-.hero>.hero-referral-pill{
-  position:relative!important;left:50%!important;transform:translateX(-50%)!important;
-  display:inline-flex!important;align-items:center;justify-content:center;gap:8px;
-  width:max-content!important;max-width:calc(100% - 24px);height:auto!important;min-height:0!important;
-  margin:10px 0 0!important;padding:3px 0!important;
-  border:0!important;border-radius:0!important;background:transparent!important;
-  box-shadow:none!important;overflow:visible!important;
-  color:inherit!important;font-size:12px;line-height:1.4;cursor:pointer;
-  animation:none!important;transition:opacity .18s ease;
-}
-.hero>.hero-referral-pill:hover{
-  background:transparent!important;border:0!important;box-shadow:none!important;
-  transform:translateX(-50%)!important;opacity:.8;
-}
-.hero>.hero-referral-pill:focus-visible{outline:2px solid var(--ion);outline-offset:3px}
+/* Shared referral text baseline; current composition belongs to94-title-referral. */
 .hero-referral-kicker{font-size:10px;font-weight:700;letter-spacing:.09em;color:#c6c0b9}
 .hero-referral-offer{font-size:12px;font-weight:800;color:#efbc8f;white-space:nowrap}
 .hero-referral-arrow{color:#efbc8f;font-size:14px;line-height:1}
 @media(max-width:540px){
-  .hero>.hero-referral-pill{gap:6px!important;font-size:11px}
   .hero-referral-kicker{font-size:9px}
   .hero-referral-offer{font-size:11px}
 }
-@media(prefers-reduced-motion:reduce){.hero>.hero-referral-pill{transition:none}}
 /* Market Moves+ visual type scale — one system for Sales, Mining, Skills and Guide.
    The iframe receives the same body font and theme tokens via its bridge.
    Only use existing theme variables; do not invent per-module accent colors. */
@@ -2977,21 +2933,6 @@ body:not(.light) #pDisc .dests .dest[aria-pressed="true"]{
 }
 .mm-section-head>.mm-title{grid-row:1!important}
 .mm-section-head>.mm-section-sub{grid-row:2!important}
-/* Referral stays text-only, centered and easier to read. */
-.hero>.hero-referral-pill .hero-referral-kicker{
-  font-size:12px!important;
-}
-.hero>.hero-referral-pill .hero-referral-offer{
-  font-size:15px!important;
-}
-.hero>.hero-referral-pill .hero-referral-arrow{
-  font-size:16px!important;
-}
-@media(max-width:540px){
-  .hero>.hero-referral-pill .hero-referral-kicker{font-size:10px!important}
-  .hero>.hero-referral-pill .hero-referral-offer{font-size:13px!important}
-}
-
 /* Product UX: one global navigation level; Sales context belongs to its workspace.
    Existing business mode buttons and shipping inputs are re-parented, not cloned. */
 .hero .mm-sales-mode-picker{position:relative;flex:0 0 auto;min-width:0}
@@ -7348,8 +7289,6 @@ html.light body .top.mm-ho-root .mm-top-actions .mm-theme{border:1px solid rgba(
 html.light body .top.mm-ho-root>.mm-top-actions>.mm-profile-row{border-left:1px solid rgba(31,30,29,0.152)!important}
 html.light body .top.mm-ho-root .mm-profile-row .eve-identity-button{border:1px solid rgba(31,30,29,0.19)!important;background:rgba(31,30,29,0.062)!important}
 html.light body .top.mm-ho-root .mm-profile-row .eve-identity-button:hover{background:rgba(217,119,87,0.125)!important}
-html.light .hero>.hero-referral{border:1px solid rgba(217,119,87,0.463)!important;box-shadow:0 3px 12px rgba(0,0,0,0.032)!important}
-html.light .hero>.hero-referral .tk-i b{color:#a65226!important}
 html.light .hero-intro:not(.no-appr)>.appr,html.light .hero-intro:not(.no-appr)>.paste{border:1px solid rgba(31,30,29,0.171)!important;box-shadow:0 8px 16px rgba(0,0,0,0.056)!important}
 html.light #help .hp-n{color:#151514}
 html.light body:not(.light) #pDisc .discord-content .guide{background:rgba(240,237,229,0.86)}
@@ -8658,30 +8597,6 @@ html.light body .top.mm-ho-root .mm-profile-row .eve-identity-button{
  color:var(--txt)!important;
  background:rgba(87,66,49,.055)!important;border-color:var(--edge)!important;
 }
-html.light .hero>.hero-referral,
-html.light .hero>.hero-referral:hover{
- background:var(--ticker-surface)!important;
- border-color:rgba(161,86,55,.32)!important;
- color:#332c25!important;
-}
-html.light .hero>.hero-referral:hover{background:var(--ticker-hover)!important}
-html.light .hero>.hero-referral .tk-track,
-html.light .hero>.hero-referral .tk-i{
- background:transparent!important;color:#332c25!important;
-}
-html.light .hero>.hero-referral .tk-i b{color:#a34d2c!important}
-/* Light referral must remain text-only, matching Dark mode. */
-html.light .hero>.hero-referral-pill,
-html.light .hero>.hero-referral-pill:hover{
- background:transparent!important;
- border:0!important;
- border-radius:0!important;
- box-shadow:none!important;
- color:#332c25!important;
-}
-html.light .hero>.hero-referral-pill .hero-referral-kicker{color:#554a40!important}
-html.light .hero>.hero-referral-pill .hero-referral-offer,
-html.light .hero>.hero-referral-pill .hero-referral-arrow{color:#a34d2c!important}
 /* B.17: the approved two-column utility row uses existing warm Light tokens. */
 html.light .hero #salesUtilityRow>.hero-referral-pill,
 html.light .hero #salesUtilityRow>#importControls:not([hidden]){
@@ -9440,13 +9355,13 @@ Contraband Freight = no</textarea><small>Una regla por línea: Nombre = tax tota
 <button type="button" class="totop" id="toTop" aria-label="Volver arriba" title="Volver arriba (Inicio)" hidden><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 14l6-6 6 6"/></svg></button>
 <footer class="foot">
   <p class="foot-sec"><span class="ic i-lock" aria-hidden="true"></span>Tu inventario no se guarda: al cerrar o recargar se borra. Solo tus Ajustes quedan en este navegador.</p>
-  <div class="foot-by">Creado por <b>Fiko McGivert</b> · <span class="mm-footer-corp-logo vg" role="img" aria-label="Vanguardia DR"></span>Vanguardia DR · SIGMA GRINDSET · <span class="ver">v1.0.186</span></div>
+  <div class="foot-by">Creado por <b>Fiko McGivert</b> · <span class="mm-footer-corp-logo vg" role="img" aria-label="Vanguardia DR"></span>Vanguardia DR · SIGMA GRINDSET · <span class="ver">v1.0.187</span></div>
 </footer>
 
 <script>
 'use strict';
 /* ============================================================
-   Market Moves+ v1.0.186 — SIGMA GRINDSET / Vanguardia DR
+   Market Moves+ v1.0.187 — SIGMA GRINDSET / Vanguardia DR
    Flujo:  pegado → items → carga (ESI: precios, volúmenes, historial) → verificación → plan → vista
      1. Pegado      parsePaste(): parser posicional de columnas de EVE (Name · Quantity · … · Volume · Est. Price).
      2. Carga       esiItems(): trae todo lo que falta; mientras carga, refresh() NO pinta (S.loading).
