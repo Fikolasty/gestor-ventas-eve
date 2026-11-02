@@ -7,7 +7,7 @@
 <meta name="referrer" content="no-referrer">
 <title>Market Moves+ · SIGMA GRINDSET</title>
 <style>
-/* ================= Market Moves+ v1.0.185 =================
+/* ================= Market Moves+ v1.0.186 =================
    Paleta: azul de base, naranja = acción, verde/rojo = ganancia/pérdida.
    Sin backdrop-filter: el vidrio se finge con rgba + bordes. */
 *{box-sizing:border-box;margin:0;padding:0}
@@ -6831,6 +6831,22 @@ body.is-jita #ledger #lots .prices .jita-listing-note{grid-column:1/-1;margin:0;
 @media(max-width:630px){body.is-jita #ledger #lots .prices .jita-listing-editor{grid-template-columns:minmax(0,1fr);margin:10px;padding:12px}body.is-jita #ledger #lots .prices .jita-listing-controls{justify-self:start}}
 
 body.is-jita #ledger #lots .prices .jita-listing-quote>button.copy.pos{color:var(--gain)!important}
+/* Canonical title/referral ownership. Native anchors keep browser tab semantics. */
+body .top.mm-ho-root>a.brand{color:inherit;text-decoration:none}
+body .hero>.title{display:grid!important;grid-template-columns:minmax(0,1fr);justify-items:stretch;align-items:center;width:max-content;max-width:100%;margin:0 auto 24px!important;gap:8px!important}
+body .hero>.title>.hero-home-link{display:block;color:inherit;text-decoration:none;min-width:0;max-width:100%;background:none;border:0;padding:0;text-align:center}
+body .hero>.title>.hero-home-link h1{margin:0!important;white-space:nowrap}
+body .hero>.title>#salesUtilityRow{contain:inline-size;display:block!important;width:100%;min-width:0;margin:0!important;padding:0;position:static;z-index:auto}
+body .hero>.title>#salesUtilityRow>.hero-referral-pill{display:flex!important;align-items:center;justify-content:center!important;flex-wrap:wrap;gap:6px 8px;box-sizing:border-box;width:100%!important;max-width:100%!important;min-height:36px;height:auto!important;margin:0!important;padding:6px 12px!important;position:static!important;transform:none!important;border:0!important;border-radius:0!important;box-shadow:none!important;background:linear-gradient(90deg,transparent,rgba(17,16,15,.22) 20%,rgba(17,16,15,.22) 80%,transparent)!important;color:var(--txt)!important;text-align:center;line-height:1.4;text-decoration:none}
+body .hero>.title>#salesUtilityRow>.hero-referral-pill:hover{border:0!important;box-shadow:none!important;background:linear-gradient(90deg,transparent,rgba(17,16,15,.35) 20%,rgba(17,16,15,.35) 80%,transparent)!important;opacity:1!important}
+body .hero>.title>#salesUtilityRow .hero-referral-gift{width:16px;height:16px;flex:0 0 16px;color:var(--thrust)}
+body .hero>.title>#salesUtilityRow .hero-referral-kicker{font:500 14px/1.4 var(--f-ui)!important;letter-spacing:0;color:var(--txt)!important;flex:0 1 auto}
+body .hero>.title>#salesUtilityRow .hero-referral-offer{font:750 14px/1.4 var(--f-ui)!important;color:var(--clay)!important;white-space:nowrap;flex:0 0 auto}
+body .hero>.title>#salesUtilityRow .hero-referral-arrow{font-size:14px!important;color:var(--mut)!important;margin:0}
+body .hero>.title>.hero-home-link:focus-visible,body .top.mm-ho-root>a.brand:focus-visible,body .hero>.title>#salesUtilityRow>.hero-referral-pill:focus-visible{outline:2px solid var(--clay);outline-offset:4px}
+@media(max-width:630px){body .hero>.title{gap:6px!important;margin-bottom:18px!important}body .hero>.title>#salesUtilityRow>.hero-referral-pill{padding:5px 4px!important;gap:4px 6px}body .hero>.title>#salesUtilityRow .hero-referral-kicker,body .hero>.title>#salesUtilityRow .hero-referral-offer{font-size:12px!important}}
+
+@media(max-width:630px){body .hero>.title>.hero-home-link h1{font-size:clamp(1.6rem,8.7vw,2.6rem)!important}}
 /* ===== tema claro (generado desde el oscuro por light.py) ===== */
 html.light{--header-surface:rgba(240,237,229,0.96);--ticker-surface:rgba(240,237,229,0.91);--ticker-hover:rgba(240,237,229,0.96);--surface-card:rgba(240,237,229,0.9);--surface-result:linear-gradient(180deg,rgba(240,237,229,0.91),rgba(240,237,229,0.96));--surface-panel:rgba(240,237,229,0.96);--void:#e4e3dd;--hull:#e2e0da;--hull2:#e0ded8;--line:rgba(31,30,29,0.114);--line2:rgba(31,30,29,0.125);--txt:#1c1c1a;--mut:#54524d;--dim:#6c6a64;--ion:#413f3c;--blue:#a39d8b;--clay:#c96442;--thrust:#a67526;--gain:#418b62;--loss:#a92c23}
 html.light body::after{background:repeating-linear-gradient(180deg,rgba(31,30,29,0.011) 0 1px,transparent 1px 3px),
@@ -7381,6 +7397,8 @@ html.light body.mm-settings-compact #settings :is(#mm-settings-panel-2,#mm-setti
 html.light body.mm-settings-compact #settings{--mm-settings-input:color-mix(in srgb,var(--surface-card) 82%,rgba(0,0,0,0.16))}
 html.light body.is-jita #verdict .jita-control-line .sw-t::after{background:#151514}
 html.light body.is-jita #verdict .jita-control-line .sw-t::after{background:#151514!important}
+html.light body .hero>.title>#salesUtilityRow>.hero-referral-pill{background:linear-gradient(90deg,transparent,rgba(240,237,229,0.6) 20%,rgba(240,237,229,0.6) 80%,transparent)!important}
+html.light body .hero>.title>#salesUtilityRow>.hero-referral-pill:hover{background:linear-gradient(90deg,transparent,rgba(240,237,229,0.6) 20%,rgba(240,237,229,0.6) 80%,transparent)!important}
 .i-rock{--i:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 15l3-8 7-3 6 5-1 8-7 3-6-2z'/%3E%3Cpath d='M9 10l3 2 4-2M12 12v5'/%3E%3C/svg%3E")}
 /* Scope moderno para no contaminar el gestor de ventas. */
 @scope (#mining) {
@@ -8925,6 +8943,13 @@ html.light body.is-jita #ledger #lots .prices td.jita-neutral .copy,html.light b
 /* Fourth top-level tab exposes a legacy Light profile border: preserve header geometry. */
 html.light body .top.mm-ho-root .mm-profile-row .eve-identity-button{border:0!important}
 html.light body .top.mm-ho-root .mm-top-actions .mm-theme{border:0!important}
+/* Final Light ownership: no old rounded referral tray or changed link geometry. */
+html.light body .top.mm-ho-root>a.brand,html.light body .hero>.title>.hero-home-link{background:none!important;border:0!important;box-shadow:none!important;text-decoration:none}
+html.light body .hero>.title>#salesUtilityRow>.hero-referral-pill{background:linear-gradient(90deg,transparent,rgba(250,248,245,.48) 20%,rgba(250,248,245,.48) 80%,transparent)!important;border:0!important;border-radius:0!important;box-shadow:none!important}
+html.light body .hero>.title>#salesUtilityRow>.hero-referral-pill:hover{background:linear-gradient(90deg,transparent,rgba(250,248,245,.66) 20%,rgba(250,248,245,.66) 80%,transparent)!important}
+html.light body .hero>.title>#salesUtilityRow .hero-referral-kicker{color:var(--txt)!important}
+html.light body .hero>.title>#salesUtilityRow .hero-referral-offer{color:var(--clay)!important}
+html.light body .hero>.title>#salesUtilityRow .hero-referral-arrow{color:var(--mut)!important}
 </style>
 <script>/* v1.0.16: aplica el tema guardado antes de pintar (sin parpadeo). Por defecto: Dark. */try{var g=JSON.parse(localStorage.getItem('gestorVentas.ajustes.v1')||'null');if(g&&g.ui){if(g.ui.light)document.documentElement.classList.add('light');}}catch(e){}</script>
 </head>
@@ -8958,7 +8983,7 @@ html.light body .top.mm-ho-root .mm-top-actions .mm-theme{border:0!important}
 <button type="button" class="side-fab" id="sideFab" aria-label="Abrir menú" title="Menú"><span class="ic i-panel" aria-hidden="true"></span></button>
 <div class="side-bd" id="sideBd" hidden></div>
 <header class="top">
-  <div class="brand" role="button" tabindex="0" data-go-home title="Ir a Inicio" aria-label="Volver a Inicio"><span class="logo-s sig" aria-hidden="true"></span><span class="brand-wordmark">Market Moves+</span></div>
+  <a class="brand" href="index.html" data-go-home title="Ir a Inicio" aria-label="Volver a Inicio"><span class="logo-s sig" aria-hidden="true"></span><span class="brand-wordmark">Market Moves+</span></a>
 
   
 <label class="sw top-theme" title="Tema de la página: Dark (oscuro) o Light (claro)."><input type="checkbox" id="themeLight"><span class="sw-t" aria-hidden="true"></span><span id="themeTxt">Dark</span></label>
@@ -8966,8 +8991,16 @@ html.light body .top.mm-ho-root .mm-top-actions .mm-theme{border:0!important}
 </header>
 
 <section class="hero">
-  <div class="title" role="button" tabindex="0" data-go-home title="Ir a Inicio" aria-label="Volver a Inicio">
-    <div><h1>Market Moves+</h1></div>
+  <div class="title">
+    <a class="hero-home-link" href="index.html" data-go-home title="Ir a Inicio" aria-label="Volver a Inicio"><h1>Market Moves+</h1></a>
+  <div class="mm-sales-utility-row" id="salesUtilityRow">
+    <button type="button" class="hero-referral hero-referral-pill" data-link="referral" data-i18n-aria-label="referral.linkAria" aria-label="Abrir enlace de referido de EVE Online: un millón de Skill Points gratis">
+      <svg class="hero-referral-gift" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="8" width="18" height="13" rx="1.5"/><path d="M2 8h20M12 8v13M12 8H8a2.5 2.5 0 1 1 2.5-2.5C10.5 7 12 8 12 8ZM12 8h4a2.5 2.5 0 1 0-2.5-2.5C13.5 7 12 8 12 8Z"/></svg>
+      <span class="hero-referral-kicker" data-i18n="referral.newPilot">¿Nuevo piloto? Consigue</span>
+      <span class="hero-referral-offer" data-i18n="referral.freeSp">1,000,000 SP GRATIS</span>
+      <span class="hero-referral-arrow" aria-hidden="true">↗</span>
+    </button>
+  </div>
   </div>
   <nav class="mm-modnav" id="mmTabs" aria-label="Navegación de Market Moves+">
     <button type="button" id="navHome" class="mm-home" title="HOME" aria-label="Volver al inicio" hidden><span class="ic i-home" aria-hidden="true"></span><span class="mm-home-label" data-i18n="css.home">Inicio</span></button>
@@ -9144,15 +9177,6 @@ Contraband Freight = no</textarea><small>Una regla por línea: Nombre = tax tota
     <h3 class="sub-h" style="margin-top:20px"><span class="ic i-lock" aria-hidden="true"></span>Seguridad</h3>
     <div class="hp-t"><div><b>Privacidad y acceso a EVE</b><span>Puedes consultar precios sin iniciar sesión. Si conectas tu personaje, la autenticación se realiza mediante EVE SSO; no se te pide la contraseña en Market Moves+. Los precios se consultan mediante ESI y los enlaces externos se abren por separado.</span></div></div>
   </section>
-  </div>
-  <!-- Shared utility row: referral always visible; import tools only in Jita Trading. -->
-  <div class="mm-sales-utility-row" id="salesUtilityRow">
-    <button type="button" class="hero-referral hero-referral-pill" data-link="referral" data-i18n-aria-label="referral.linkAria" aria-label="Abrir enlace de referido de EVE Online: un millón de Skill Points gratis">
-      <svg class="hero-referral-gift" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="8" width="18" height="13" rx="1.5"/><path d="M2 8h20M12 8v13M12 8H8a2.5 2.5 0 1 1 2.5-2.5C10.5 7 12 8 12 8ZM12 8h4a2.5 2.5 0 1 0-2.5-2.5C13.5 7 12 8 12 8Z"/></svg>
-      <span class="hero-referral-kicker" data-i18n="referral.newPilot">¿Nuevo piloto? Consigue</span>
-      <span class="hero-referral-offer" data-i18n="referral.freeSp">1,000,000 SP GRATIS</span>
-      <span class="hero-referral-arrow" aria-hidden="true">↗</span>
-    </button>
   </div>
   <!-- v1.0.62: Tasación a la izquierda y el recuadro para pegar a la derecha (sin items, el recuadro ocupa todo el ancho) -->
   <div class="hero-intro no-appr" id="heroIntro" role="tabpanel" aria-labelledby="mmTabVentas">
@@ -9416,13 +9440,13 @@ Contraband Freight = no</textarea><small>Una regla por línea: Nombre = tax tota
 <button type="button" class="totop" id="toTop" aria-label="Volver arriba" title="Volver arriba (Inicio)" hidden><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 14l6-6 6 6"/></svg></button>
 <footer class="foot">
   <p class="foot-sec"><span class="ic i-lock" aria-hidden="true"></span>Tu inventario no se guarda: al cerrar o recargar se borra. Solo tus Ajustes quedan en este navegador.</p>
-  <div class="foot-by">Creado por <b>Fiko McGivert</b> · <span class="mm-footer-corp-logo vg" role="img" aria-label="Vanguardia DR"></span>Vanguardia DR · SIGMA GRINDSET · <span class="ver">v1.0.185</span></div>
+  <div class="foot-by">Creado por <b>Fiko McGivert</b> · <span class="mm-footer-corp-logo vg" role="img" aria-label="Vanguardia DR"></span>Vanguardia DR · SIGMA GRINDSET · <span class="ver">v1.0.186</span></div>
 </footer>
 
 <script>
 'use strict';
 /* ============================================================
-   Market Moves+ v1.0.185 — SIGMA GRINDSET / Vanguardia DR
+   Market Moves+ v1.0.186 — SIGMA GRINDSET / Vanguardia DR
    Flujo:  pegado → items → carga (ESI: precios, volúmenes, historial) → verificación → plan → vista
      1. Pegado      parsePaste(): parser posicional de columnas de EVE (Name · Quantity · … · Volume · Est. Price).
      2. Carga       esiItems(): trae todo lo que falta; mientras carga, refresh() NO pinta (S.loading).
@@ -15361,12 +15385,8 @@ document.querySelectorAll('.x-close').forEach(b=>b.addEventListener('click',()=>
 // No confirmation popup: normal tab navigation never invokes this handler.
 const navigateHome=()=>{window.location.reload();};
 $('navHome').addEventListener('click',navigateHome);
-document.querySelectorAll('[data-go-home]').forEach(node=>{
-  node.addEventListener('click',navigateHome);
-  node.addEventListener('keydown',event=>{
-    if(event.key==='Enter'||event.key===' '){event.preventDefault();navigateHome();}
-  });
-});
+// Brand and hero title are native anchors: the browser owns modified clicks,
+// middle-click and keyboard activation. Do not intercept them with reload().
 // Navigation and compact editorial sections. Original input nodes are moved, never cloned.
 (function modernizeSections(){
   document.querySelectorAll('[data-side-module]').forEach(btn=>btn.addEventListener('click',()=>{
