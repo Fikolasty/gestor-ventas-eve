@@ -1827,3 +1827,9 @@ Siguiente alcance recomendado, aún no implementado: auditar propiedades activas
 La hoja 94 reúne las reglas de composición, tipografía, espaciado y transición de la promoción. El tema Light final aplica su paleta. Se retiran las declaraciones duplicadas de 60, 80 y light-header-shipping. El selector de la flecha conserva su altura de línea y su tamaño en la fila flexible. Los adaptadores de importación conservan sus selectores.
 
 Chromium comparó 33 propiedades y los rectángulos de los nodos visibles en 96 combinaciones de vista, ancho, idioma y tema. Las 96 coincidieron. Se revisaron capturas de Ventas a 1440 px en ambos temas. El build 188 pasó 170 pruebas Node, 16 Python, la prueba de enlaces y geometría en Chromium y los escenarios de mercado. La certificación de Pages está pendiente.
+
+### Publicación verificada el 2026-11-03
+
+v1.0.188 está publicada. El primer control de Chromium detectó una diferencia de 21 px en las tarjetas de habilidades a 390 px. El reintento mide cada tema después de cargar las fuentes y completar dos cuadros de renderizado, con la misma tolerancia de un píxel. Pasaron los cuatro flujos de GitHub, incluidos los 136 casos de Chromium. Las 16 comparaciones adicionales de foco visible y puntero coincidieron.
+
+Fuente 227bcdfea25514ac7784c2d0614466ba86783165. Compilación 2ca43c842b0129c38976cbe56e0e1908aef25c63. Rebuild y Pages 41698991916. El HTML público coincide byte por byte con el local. Tamaño 2.590.105 bytes y blob 0d6500771abd7522d55219c4c771c0a93e0a12f3.
