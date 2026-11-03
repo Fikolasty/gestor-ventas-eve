@@ -39,13 +39,23 @@ class Settings177Tests(unittest.TestCase):
      self.assertLessEqual(max(all_heights)-min(all_heights),1,(lang,width,state,all_heights))
  def test_skill_cards_are_equal_in_size_within_the_character_tab(self):
   self.p.locator('#mm-settings-tab-1').click()
+  def measure_cards(light):
+   self.p.evaluate("""async light => {
+    $('themeLight').checked = !light;
+    $('themeLight').dispatchEvent(new Event('change', {bubbles: true}));
+    document.querySelector('.c5c-skill-card').getBoundingClientRect();
+    await document.fonts.ready;
+    await new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+   }""", light)
+   return self.p.locator('.c5c-skill-card').evaluate_all(
+    'cards => cards.map(card => ({w: card.getBoundingClientRect().width, h: card.getBoundingClientRect().height}))'
+   )
   for width in [1440,980,630,390]:
    self.p.set_viewport_size({'width':width,'height':1100})
    for lang in ['es','en']:
     self.p.evaluate('l=>setLang(l)',lang)
-    sizes=self.p.locator('.c5c-skill-card').evaluate_all('es=>es.map(e=>({w:e.getBoundingClientRect().width,h:e.getBoundingClientRect().height}))')
-    self.p.evaluate("$('themeLight').checked=false;$('themeLight').dispatchEvent(new Event('change',{bubbles:true}))")
-    light_sizes=self.p.locator('.c5c-skill-card').evaluate_all('es=>es.map(e=>({w:e.getBoundingClientRect().width,h:e.getBoundingClientRect().height}))')
+    sizes=measure_cards(False)
+    light_sizes=measure_cards(True)
     for dark,light in zip(sizes,light_sizes):
      self.assertLessEqual(abs(dark['w']-light['w']),1,(width,lang,dark,light))
      self.assertLessEqual(abs(dark['h']-light['h']),1,(width,lang,dark,light))
