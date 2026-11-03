@@ -1551,3 +1551,10 @@ CI170Node/16Python/8legacy y136Chromium PASS411.415s. Local170Node/16Python/8leg
 HTTPS200 independiente sin query y Cache-Control:no-cache; HTML público/local/GitHub idénticos:2592879bytes,blob42113f91658dfbb5a78b6f8889e0361196c41aae. Última LIVE187; no queda aprobación ni gate de publicación pendiente en este incremento. El cierre documental posterior puede avanzar main sin alterar el HTML certificado. Auditoría docs/CSS_CLEANUP_187.md y kit activo docs/HANDOFF_CSS_187.md; HANDOFF_HEADER_186 queda histórico.
 
 Siguiente alcance recomendado, aún no implementado: auditar propiedades activas compartidas entre80/94/60 y su tema final, consolidar un propietario por propiedad solo después de medir equivalencia. Mantener line-height de la flecha y demás dependencias activas; no borrar por grep ni retirar adaptadores nativos, PI pausado o light.py. No iniciar un rediseño de colores o composición dentro de la limpieza.
+
+
+## v1.0.188 — consolidación de estilos de la promoción
+
+La hoja 94 reúne las reglas de composición, tipografía, espaciado y transición de la promoción. El tema Light final aplica su paleta. Se retiran las declaraciones duplicadas de 60, 80 y light-header-shipping. El selector de la flecha conserva su altura de línea y su tamaño en la fila flexible. Los adaptadores de importación conservan sus selectores.
+
+Chromium comparó 33 propiedades y los rectángulos de los nodos visibles en 96 combinaciones de vista, ancho, idioma y tema. Las 96 coincidieron. Se revisaron capturas de Ventas a 1440 px en ambos temas. El build 188 pasó 170 pruebas Node, 16 Python, la prueba de enlaces y geometría en Chromium y los escenarios de mercado. La certificación de Pages está pendiente.

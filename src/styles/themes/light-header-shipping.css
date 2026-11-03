@@ -31,17 +31,10 @@ html.light body .top.mm-ho-root .mm-profile-row .eve-identity-button{
  background:rgba(87,66,49,.055)!important;border-color:var(--edge)!important;
 }
 /* B.17: the approved two-column utility row uses existing warm Light tokens. */
-html.light .hero #salesUtilityRow>.hero-referral-pill,
 html.light .hero #salesUtilityRow>#importControls:not([hidden]){
  background:var(--surface-card)!important;border-color:var(--edge)!important;
  color:var(--txt)!important;box-shadow:0 2px 8px rgba(45,35,25,.08)!important;
 }
-html.light .hero #salesUtilityRow>.hero-referral-pill:hover{
- background:#f5f2ed!important;border-color:var(--mut)!important;
-}
-html.light .hero #salesUtilityRow .hero-referral-kicker{color:var(--txt)!important}
-html.light .hero #salesUtilityRow .hero-referral-offer{color:#a34d2c!important}
-html.light .hero #salesUtilityRow .hero-referral-arrow,
 html.light .hero #salesUtilityRow #importControls .mm-import-intro strong,
 html.light .hero #salesUtilityRow #importControls .mm-import-intro strong .ic{color:var(--mut)!important}
 html.light .hero #salesUtilityRow #importControls .mm-trade-trigger{

@@ -523,42 +523,6 @@ html.light body .top.mm-ho-root .mm-top-actions .mm-theme{background:transparent
 /* B.17 · Persistent referral on the left, trade-only controls on the right.
    One row above the exact Tasación/Inventario grid; no phantom empty grid
    row or reparented/cloned financial controls inside either card. */
-.hero #salesUtilityRow{
-  display:grid;grid-template-columns:repeat(2,minmax(0,1fr));align-items:center;
-  gap:14px;margin:24px 0 0;position:relative;z-index:40;min-width:0;
-}
-.hero #salesUtilityRow>.hero-referral-pill{
-  grid-column:1;display:flex!important;align-items:center;justify-content:flex-start!important;
-  gap:8px;min-height:42px;height:auto!important;width:100%!important;max-width:100%!important;
-  margin:0!important;padding:9px 15px!important;position:static!important;
-  left:auto!important;transform:none!important;
-  border:1px solid var(--line2)!important;border-radius:10px!important;
-  background:var(--glass)!important;box-shadow:0 2px 8px rgba(0,0,0,.14)!important;
-  color:var(--txt)!important;text-align:left;white-space:normal;
-  font:500 .86rem/1.35 var(--f-ui)!important;
-  transition:background-color .15s ease,border-color .15s ease;
-}
-.hero #salesUtilityRow>.hero-referral-pill:hover{
-  transform:none!important;opacity:1!important;background:var(--surface-panel)!important;
-  border-color:var(--mut)!important;
-}
-.hero #salesUtilityRow>.hero-referral-pill:focus-visible{
-  outline:2px solid var(--ion);outline-offset:3px;
-}
-.hero #salesUtilityRow .hero-referral-gift{
-  flex:0 0 19px;color:var(--thrust);width:19px;height:19px;
-}
-.hero #salesUtilityRow .hero-referral-kicker{
-  flex:0 1 auto;min-width:0;color:var(--txt)!important;
-  font:500 .86rem/1.35 var(--f-ui)!important;letter-spacing:0;
-}
-.hero #salesUtilityRow .hero-referral-offer{
-  flex:0 0 auto;color:#efbc8f!important;
-  font:750 .9rem/1.35 var(--f-ui)!important;white-space:nowrap;
-}
-.hero #salesUtilityRow .hero-referral-arrow{
-  flex:0 0 auto;margin-left:0;color:var(--mut)!important;font-size:17px!important;
-}
 .hero #salesUtilityRow>#importControls:not([hidden]){
   grid-column:2;justify-self:end;display:inline-flex!important;align-items:center;
   justify-content:flex-end!important;flex-wrap:nowrap;min-width:0;max-width:100%;
@@ -607,19 +571,12 @@ html.light body .top.mm-ho-root .mm-top-actions .mm-theme{background:transparent
 #verdict .v-cap{margin-left:0!important}
 
 @media(max-width:860px){
-  .hero #salesUtilityRow{grid-template-columns:minmax(0,1fr);gap:9px;margin-top:17px}
-  .hero #salesUtilityRow>.hero-referral-pill,
   .hero #salesUtilityRow>#importControls:not([hidden]){
     grid-column:1;justify-self:stretch;width:100%!important;
   }
   .hero #salesUtilityRow>#importControls:not([hidden]){justify-content:space-between!important}
 }
 @media(max-width:540px){
-  .hero #salesUtilityRow>.hero-referral-pill{gap:6px;padding:9px 10px!important}
-  .hero #salesUtilityRow .hero-referral-kicker{font-size:.74rem!important}
-  .hero #salesUtilityRow .hero-referral-offer{font-size:.78rem!important}
-  .hero #salesUtilityRow .hero-referral-gift{width:16px;height:16px;flex-basis:16px}
-  .hero #salesUtilityRow .hero-referral-arrow{font-size:14px!important}
   .hero #salesUtilityRow>#importControls:not([hidden]){flex-wrap:wrap;justify-content:center!important}
   .hero #salesUtilityRow #importControls .mm-import-intro{padding:7px 9px}
   .hero #salesUtilityRow #importControls #shipLab{padding:6px 9px}

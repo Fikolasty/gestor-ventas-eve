@@ -17,9 +17,9 @@ test('Sales retains unique live input IDs and moves only their real parent',()=>
   assert.match(js,/\$\('shipOn'\)\.addEventListener\('change'/);
 });
 
-test('persistent two-column utility area aligns promo and trade tools with cards',()=>{
-  assert.match(css,/#salesUtilityRow\{\s*display:grid;grid-template-columns:repeat\(2,minmax\(0,1fr\)\)/);
-  assert.match(css,/#salesUtilityRow>\.hero-referral-pill\{/);
+test('title owns the referral and retired import controls retain their hooks',()=>{
+  const referral = fs.readFileSync('src/styles/94-title-referral.css', 'utf8');
+  assert.match(referral, /\.title>#salesUtilityRow>\.hero-referral-pill\{/);
   assert.match(css,/#salesUtilityRow>#importControls:not\(\[hidden\]\)\{/);
   assert.match(css,/#salesUtilityRow #importControls #importHeadingPrefix,/);
   assert.match(css,/#salesUtilityRow #importControls #rtM\{display:none!important\}/);

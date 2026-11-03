@@ -42,3 +42,10 @@ Siguiente alcance recomendado, aún no implementado: auditar propiedades activas
 ### Prompt de arranque
 
 Continúa Market Moves+ desde v1.0.187 LIVE. Lee AGENTS.md, EVE_PRODUCT_DESIGN_PROTOCOL.md, DSS.md y HANDOFF_CSS_187.md. El propietario ya confirmó ESI manualmente. La primera limpieza de layouts promocionales retirados está publicada y certificada; no repetirla. Si se continúa, auditar y proponer alcance de consolidación de reglas activas80/94/60 antes de editar, mantener apariencia/ES-EN/temas y fórmulas y demostrar equivalencia. Verificar HEAD/main y preservar cambios locales. Publicación autorizada exclusivamente Fiko tras gates.
+
+
+## v1.0.188 — consolidación de estilos de la promoción
+
+La hoja 94 reúne las reglas de composición, tipografía, espaciado y transición de la promoción. El tema Light final aplica su paleta. Se retiran las declaraciones duplicadas de 60, 80 y light-header-shipping. El selector de la flecha conserva su altura de línea y su tamaño en la fila flexible. Los adaptadores de importación conservan sus selectores.
+
+Chromium comparó 33 propiedades y los rectángulos de los nodos visibles en 96 combinaciones de vista, ancho, idioma y tema. Las 96 coincidieron. Se revisaron capturas de Ventas a 1440 px en ambos temas. El build 188 pasó 170 pruebas Node, 16 Python, la prueba de enlaces y geometría en Chromium y los escenarios de mercado. La certificación de Pages está pendiente.
