@@ -1833,3 +1833,10 @@ Chromium comparó 33 propiedades y los rectángulos de los nodos visibles en 96 
 v1.0.188 está publicada. El primer control de Chromium detectó una diferencia de 21 px en las tarjetas de habilidades a 390 px. El reintento mide cada tema después de cargar las fuentes y completar dos cuadros de renderizado, con la misma tolerancia de un píxel. Pasaron los cuatro flujos de GitHub, incluidos los 136 casos de Chromium. Las 16 comparaciones adicionales de foco visible y puntero coincidieron.
 
 Fuente 227bcdfea25514ac7784c2d0614466ba86783165. Compilación 2ca43c842b0129c38976cbe56e0e1908aef25c63. Rebuild y Pages 41698991916. El HTML público coincide byte por byte con el local. Tamaño 2.590.105 bytes y blob 0d6500771abd7522d55219c4c771c0a93e0a12f3.
+
+
+## v1.0.189 — acciones visibles en los desplegables de Ventas
+
+Elige tu plan y Detalle por Item muestran una acción textual con borde cálido. La acción cambia al abrir cada sección y la cabecera responde al puntero y al teclado. Los tres títulos principales comparten la escala tipográfica. Una línea fina separa la cabecera de Detalle por Item de los totales. Tasación retira del flujo visual la cobertura y las fechas ESI, mientras conserva los avisos de cotización parcial y la consulta de metadatos en Jita.
+
+Comparación local en Chromium a 390, 630, 980 y 1440 px en ES/EN y Light/Dark. Los dos controles abren y cierran con teclado y sus títulos comparten tamaño. El selector se acotó a Ventas tras detectar que la primera versión hacía visible el selector de planes en Jita. Publicación condicionada a CI y comparación HTTPS.

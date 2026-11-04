@@ -68,6 +68,7 @@ function paintAppraisal(){
   const coverage=appraisalCoverage(its,buyOf,sellOf),partial=coverage.buy<its.length||coverage.sell<its.length;
   g.append(colL,colR);box.append(el('h2','mm-title appr-title',tx(ok&&partial?'appraisal.partialHeading':'appraisal.heading')),g);
   const meta=el('div','appr-meta');
+  meta.hidden=true;
   meta.append(el('p','appr-coverage',tx('appraisal.coverage',coverage)));
   let date=tx('appraisal.dateUnknown');
   if(coverage.latest!=null){
@@ -78,7 +79,7 @@ function paintAppraisal(){
     if(coverage.incompleteDate)date+=' · '+tx('appraisal.dateIncomplete');
   }
   const queried=el('p','appr-queried',tx('appraisal.queried',{date}));queried.title=tx('appraisal.dateHelp');
-  meta.append(queried);box.append(meta);
+  meta.append(' ',queried);box.append(meta);
   if(ok&&partial){const note=el('p','appr-partial',tx('appraisal.partialNote'));note.setAttribute('role','status');box.append(note);}
   if(regional){
     const note=el('p','appr-no-price',tx('appraisal.regionalNote'));

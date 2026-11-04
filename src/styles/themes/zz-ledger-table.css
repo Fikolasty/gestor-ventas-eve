@@ -142,3 +142,62 @@ html.light #unitCourierBox #ledger #lots .lot.open .lot-body,html.light #unitCou
 /* Preserve equal open siblings while closed panels keep their natural height. */
 #unitCourierBox #ledger #lots .lot-panel-grid>details[open]{align-self:stretch!important}
 #unitCourierBox #ledger #lots .lot-panel-grid>details>summary::before{box-shadow:none!important}
+
+/* Main Sales disclosures share their action treatment and title scale. */
+:where(body:not(.is-jita)) #pSum > #pkPlanToggle:not([hidden]) {
+  display: flex !important;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px 16px !important;
+}
+
+#pSum #unitCourierBox #ledger #unitCourierHeading {
+  font: 800 var(--mm-type-heading)/1.2 var(--f-ui) !important;
+  letter-spacing: .035em !important;
+}
+
+#pSum .sales-disclosure-cue {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  padding: 5px 10px;
+  border: 1px solid color-mix(in srgb, var(--clay) 40%, var(--line2));
+  border-radius: 6px;
+  background: color-mix(in srgb, var(--clay) 9%, var(--surface-card));
+  color: var(--txt);
+  font: 700 13px/1.4 var(--f-ui);
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+#ledger .sales-disclosure-cue {
+  margin-inline-start: auto;
+}
+
+#pSum :is(#pkPlanToggle, #unitCourierToggle):is(:hover, :focus-visible) .sales-disclosure-cue {
+  border-color: var(--clay);
+  background: color-mix(in srgb, var(--clay) 17%, var(--surface-card));
+}
+
+#pSum .sales-disclosure-close,
+#pkPlanToggle[aria-expanded="true"] .sales-disclosure-open,
+#ledger[open] > summary .sales-disclosure-open {
+  display: none;
+}
+
+#pkPlanToggle[aria-expanded="true"] .sales-disclosure-close,
+#ledger[open] > summary .sales-disclosure-close {
+  display: inline;
+}
+
+#unitCourierBox #ledger #unitCourierToggle .mm-freight-lot {
+  border-top: 1px solid var(--line2) !important;
+  padding-top: 14px !important;
+}
+
+@media (max-width: 600px) {
+  #ledger .sales-disclosure-cue {
+    margin-inline-start: 0;
+  }
+}

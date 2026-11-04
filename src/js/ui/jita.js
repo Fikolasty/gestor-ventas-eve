@@ -175,7 +175,7 @@ function paintJitaListingEditor(r,prices,row){
 function syncJitaAppraisal(){
   const box=$('appr'),meta=box.querySelector('.appr-meta'),heading=box.querySelector('h2');if(!meta||!heading)return;
   let button=heading.querySelector('.jita-quote-info');if(!button){button=el('button','ghost jita-quote-info','i');button.type='button';heading.append(button);}
-  button.hidden=!JitaContext.active;meta.hidden=JitaContext.active;meta.id='appraisalQuoteMetadata';button.setAttribute('aria-label',tx('jita.quoteInfo'));button.setAttribute('aria-describedby',meta.id);button.title=meta.textContent;
+  button.hidden=!JitaContext.active;meta.id='appraisalQuoteMetadata';button.setAttribute('aria-label',tx('jita.quoteInfo'));button.setAttribute('aria-describedby',meta.id);button.title=meta.textContent;
 }
 // Construct once. Refresh only synchronizes values/text, preserving focus and listeners.
 const jitaControls=(()=>{

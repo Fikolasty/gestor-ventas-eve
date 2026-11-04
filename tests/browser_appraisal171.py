@@ -19,11 +19,12 @@ class Appraisal171Tests(unittest.TestCase):
   self.page.goto((ROOT/'index.html').as_uri(),wait_until='domcontentloaded');self.page.evaluate(FIXTURE)
  def tearDown(self):self.assertEqual(self.errors,[]);self.page.close()
  def test_raw_totals_coverage_side_gaps_and_copy_stay_canonical(self):
+  self.assertTrue(self.page.locator('#appr .appr-meta').is_hidden())
   self.assertEqual(self.page.locator('#appr .appr-p button').all_inner_texts(),['110 ISK','135 ISK','160 ISK'])
-  self.assertIn('Buy 3/3',self.page.locator('.appr-coverage').inner_text());self.assertEqual(self.page.locator('.appr-partial').count(),0)
+  self.assertIn('Buy 3/3',self.page.locator('.appr-coverage').text_content());self.assertEqual(self.page.locator('.appr-partial').count(),0)
   self.page.evaluate("S.items[1].jita.topSell=null;S.items[2].jita={};paintAppraisal()")
   self.assertEqual(self.page.locator('#appr .appr-p button').all_inner_texts(),['110 ISK','75 ISK','40 ISK'])
-  self.assertIn('Buy 2/3',self.page.locator('.appr-coverage').inner_text());self.assertIn('Sell 1/3',self.page.locator('.appr-coverage').inner_text())
+  self.assertIn('Buy 2/3',self.page.locator('.appr-coverage').text_content());self.assertIn('Sell 1/3',self.page.locator('.appr-coverage').text_content())
   self.assertEqual(self.page.locator('#appr h2').inner_text(),'TASACIÓN PARCIAL')
   self.assertTrue(self.page.locator('.appr-partial[role=status]').is_visible())
   self.page.evaluate("Object.defineProperty(navigator,'clipboard',{configurable:true,value:{writeText:async v=>{window.__copied=v;}}})")
@@ -32,14 +33,14 @@ class Appraisal171Tests(unittest.TestCase):
   self.assertEqual(self.page.locator('#appr .t-sell button').get_attribute('data-v'),'40')
  def test_query_date_uses_recorded_metadata_and_render_cache_observes_it(self):
   expected=self.page.evaluate("new Intl.DateTimeFormat('es-ES',{dateStyle:'short',timeStyle:'medium'}).format(1793397600000)")
-  self.assertIn(expected,self.page.locator('.appr-queried').inner_text())
-  before=self.page.locator('.appr-queried').inner_text()
+  self.assertIn(expected,self.page.locator('.appr-queried').text_content())
+  before=self.page.locator('.appr-queried').text_content()
   self.page.evaluate('S.items.forEach(o=>o.jita.queriedAt=1793397900000);paintAppraisal()')
-  self.assertNotEqual(before,self.page.locator('.appr-queried').inner_text())
+  self.assertNotEqual(before,self.page.locator('.appr-queried').text_content())
   self.page.evaluate('S.items.forEach(o=>delete o.jita.queriedAt);paintAppraisal()')
-  self.assertIn('fecha no registrada',self.page.locator('.appr-queried').inner_text())
+  self.assertIn('fecha no registrada',self.page.locator('.appr-queried').text_content())
   self.page.evaluate('S.items[0].jita.queriedAt=1793397900000;paintAppraisal()')
-  self.assertIn('fechas incompletas',self.page.locator('.appr-queried').inner_text())
+  self.assertIn('fechas incompletas',self.page.locator('.appr-queried').text_content())
  def test_complete_partial_missing_regional_composition_both_languages_and_themes(self):
   out=ROOT/'tests/artifacts/theme';out.mkdir(parents=True,exist_ok=True)
   for state in ['complete','partial','missing','regional']:
@@ -49,7 +50,7 @@ class Appraisal171Tests(unittest.TestCase):
    if state=='regional':self.page.evaluate("S.items.forEach(o=>{o.jita.regionBuy=o.jita.topBuy;o.jita.regionSell=o.jita.topSell;o.jita.topBuy=null;o.jita.topSell=null});paintAppraisal()")
    for lang in ['es','en']:
     self.page.evaluate('l=>{S.lang=l;paintAppraisal()}',lang)
-    if lang=='en':self.assertIn('Price coverage',self.page.locator('.appr-coverage').inner_text())
+    if lang=='en':self.assertIn('Price coverage',self.page.locator('.appr-coverage').text_content())
     for width in [1440,980,630,390]:
      self.page.set_viewport_size({'width':width,'height':1000});geometry=[]
      for light in [False,True]:

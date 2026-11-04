@@ -270,7 +270,7 @@ Contraband Freight = no</textarea><small>Una regla por línea: Nombre = tax tota
 
   <!-- 1. Resultado simple -->
   <section class="summary res mm-plan-area" id="pSum" hidden>
-    <button type="button" class="mm-section-head mm-plan-heading" id="pkPlanToggle" aria-controls="pkPlanContent" aria-expanded="false"><span class="mm-plan-heading-copy"><span class="mm-title" role="heading" aria-level="2" data-i18n="picker.chooseTitle">ELIGE TU PLAN</span><span class="mm-section-sub" data-i18n="picker.chooseSubtitle">COMPARA LAS RUTAS Y DESCUBRE CUÁNTO RECIBIRÍAS</span></span></button>
+    <button type="button" class="mm-section-head mm-plan-heading" id="pkPlanToggle" aria-controls="pkPlanContent" aria-expanded="false"><span class="mm-plan-heading-copy"><span class="mm-title" role="heading" aria-level="2" data-i18n="picker.chooseTitle">ELIGE TU PLAN</span><span class="mm-section-sub" data-i18n="picker.chooseSubtitle">COMPARA LAS RUTAS Y DESCUBRE CUÁNTO RECIBIRÍAS</span></span><span class="sales-disclosure-cue" aria-hidden="true"><span class="sales-disclosure-open" data-i18n="salesDisclosure.plansOpen">Ver planes</span><span class="sales-disclosure-close" data-i18n="salesDisclosure.plansClose">Ocultar planes</span></span></button>
     <div id="pkPlanContent" class="mm-plan-content" hidden>
     <div class="fb2" id="flipBuy" hidden></div>
     <div class="mm-plan-layout">
@@ -323,7 +323,7 @@ Contraband Freight = no</textarea><small>Una regla por línea: Nombre = tax tota
     <section class="ledger-fusion-shell" id="unitCourierBox" aria-labelledby="unitCourierHeading" hidden>
       <details class="panel thin fold mm-ledger-table ledger-fusion" id="ledger" hidden>
         <summary id="unitCourierToggle" aria-expanded="false" aria-controls="unitCourierContent">
-          <span class="ledger-title-group"><span class="mm-title" id="unitCourierHeading" data-i18n="freight.heading">Detalle por Item</span><span class="cnt" id="lCount"></span><span class="mm-missing" id="missCount" hidden></span></span>
+          <span class="ledger-title-group"><span class="mm-title" id="unitCourierHeading" data-i18n="freight.heading">Detalle por Item</span><span class="cnt" id="lCount"></span><span class="mm-missing" id="missCount" hidden></span><span class="sales-disclosure-cue" aria-hidden="true"><span class="sales-disclosure-open" data-i18n="salesDisclosure.itemsOpen">Ver Items</span><span class="sales-disclosure-close" data-i18n="salesDisclosure.itemsClose">Ocultar Items</span></span></span>
           <button class="ghost ledger-refresh" id="bEsi" type="button" data-i18n-aria-label="ledger.refresh" data-i18n-title="ledger.refresh" aria-label="Actualizar precios" title="Actualizar precios"><span class="ic i-sync" aria-hidden="true"></span></button>
           <span class="mm-freight-lot" role="group" data-i18n-aria-label="freight.lotEquation" aria-label="Totales del lote"><span><span data-i18n="freight.lotBefore">Antes del envío</span><button type="button" id="freightLotBefore" class="copy num"></button></span><span><span data-i18n="freight.lotShipping">Envío del lote</span><button type="button" id="unitCourierTotal" class="copy num"></button></span><span><span id="ledgerLotFinalLabel" data-i18n="ledger.referenceFinal">Te queda en Jita</span><button type="button" id="freightLotFinal" class="copy num"></button></span></span>
         </summary>
