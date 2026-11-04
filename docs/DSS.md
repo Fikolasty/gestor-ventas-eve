@@ -1876,3 +1876,29 @@ El primer flujo de publicación `41808946245` detuvo Pages con 135/136 Chromium.
 Publicada por Fiko tras aprobación del propietario. Fuente inicial `b1e1a4f6`, corrección tipográfica `39f25c0aa43cbf2427af33cd45c85fb1129704ce`, compilado `d37ff5e255d97014a85b25640391918a77950fdb`. Los cuatro flujos del reintento pasaron. Build `41809841166`, Versiones `41809841036`, Minería `41809841028`, Rebuild y Pages `41809840998`. Compile `126506046686` y Deploy `126508839955`. CI 170 Node, 16 Python, ocho legacy y 136/136 Chromium en 408,775 s.
 
 HTTPS 200 en https://fikolasty.github.io/gestor-ventas-eve/ sin query y con solicitud sin caché. HTML público, compilado local y GitHub idénticos, 2.595.013 bytes y blob `4385e84a19b80905eefb7ff5b5216f638edff3e5`. Capturas finales a 1440 px Dark y Light del mismo estado con cuatro paneles abiertos y datos sintéticos. Se verificó la copia real en Chromium con datos de prueba. ESI/SSO real extremo a extremo queda fuera de la verificación de esta entrega. Aprobación y publicación cerradas.
+
+### Propuesta de continuidad visual en Ventas
+
+Iteración r9, pendiente de revisión. La fila inferior se reserva a Distribución y destinos a todo el ancho. Tu resultado repite el neto, la comparación, los costes y el destino. Al retirar el panel, trasladar la copia del neto y el aviso condicional de ingreso sin coste de compra a Análisis. Verificar los casos sin comparables y de comisiones incluidas o parciales antes de retirar sus rótulos. Preview Dark y Light a 1440 px con datos sintéticos. Sin cambio de fuentes ni publicación.
+
+### v1.0.191 — candidata local aprobada
+
+El propietario aprobó el conjunto r11. Elige tu plan se presenta como una sección continua con Planes y Análisis arriba y Distribución y destinos a todo el ancho abajo. Filtros sin conteos, selección con subrayado, filas planas y línea cobriza bajo los encabezados acordados. Se retira el panel redundante Tu resultado. Análisis conserva neto copiable y aviso de coste de compra ausente. Distribución conserva la nota de comisiones incluidas o parciales. Detalle por Item conserva siete columnas, iconos y botones de copia. La columna Item es más ancha, la segunda dice Cantidad y celdas y encabezados se alinean a la izquierda.
+
+Compilado local v1.0.191, blob `8986a1d64a8a4d446cf5fe86b325aa8736eb1e02`. Capturas a 1440 px Dark y Light con el mismo estado, cinco iconos oficiales y cotizaciones sintéticas. Última LIVE certificada v1.0.190. La suite completa y la publicación siguen pendientes.
+
+El gate focal inicial detectó que la distribución podía cerrarse al repintar y que una ruta empatada ocultaba la comparación con la siguiente de menor neto. Se corrigieron ambos casos en Análisis y Distribución. Compilado definitivo local `6e7117ff8dc47998a96297c5dabfb5ba90e0e492`, 169 Node, 16 Python y ocho pruebas legacy aprobadas. Fuentes en main mediante Fiko `9e8bed2107caecd55dfbaf51850716a63c98bfa1`. Chromium completo, Actions, Pages y HTTPS pendientes de cierre.
+
+La primera suite completa local dio 134/136. Las dos aserciones obsoletas esperaban el borde de la lista anterior y un panel de Ventas visible desde Jita. El commit Fiko de pruebas `48d11b28686ecd6ed1f041841a1f69d28032bf2c` conserva las comprobaciones de datos y verifica las nuevas superficies y visibilidad. Ambas focales pasaron. Compilado idéntico. Rebuild y Pages del reintento `41818995240`, aún pendiente.
+
+Suite local final 136/136 Chromium en 270,670 s. La prueba adicional con portapapeles real confirma copia desde Análisis y aviso «Copiado». Con datos sintéticos se comprobaron también el aviso por compra desconocida y las dos variantes de la nota de comisiones. No se hizo una prueba ESI/SSO viva de extremo a extremo.
+
+El primer intento del flujo `41818995240` pasó 136/136 Chromium en 364,385 s. GitHub devolvió errores internos al guardar el HTML tras cuatro reintentos. Pages quedó omitido. Se relanzaron los trabajos fallidos por Fiko sin cambios de fuentes ni historial. La última LIVE sigue siendo v1.0.190 hasta certificar HTTPS.
+
+### v1.0.191 LIVE certificada — 2026-11-04
+
+Fuente Fiko `9e8bed2107caecd55dfbaf51850716a63c98bfa1`, actualización de pruebas `48d11b28686ecd6ed1f041841a1f69d28032bf2c`, compilado `2254b6cb3867ad7607f39ec1c3598766460b30ec`. Los cuatro flujos pasaron. Build `41818995244`, Versiones `41818995330`, Minería `41818995229` y Rebuild/Pages `41818995240`, segundo intento. Compile `126540468288` y Deploy `126543710821`. CI 169 Node, 16 Python, ocho legacy y 136/136 Chromium en 410,029 s.
+
+HTTPS 200 sin query con solicitud sin caché. HTML público, local y GitHub idénticos, 2.597.185 bytes y blob `6e7117ff8dc47998a96297c5dabfb5ba90e0e492`. El primer intento fue afectado por errores internos de GitHub al guardar el HTML durante la incidencia oficial `smtdswd1h2w4`. El segundo completó Pages sin cambios de fuentes. Capturas finales a 1440 px Dark y Light con datos sintéticos e iconos oficiales. Aprobación y publicación cerradas. Kit vigente `docs/HANDOFF_SALES_191.md`.
+
+Preview local sobre el compilado v1.0.190. Elige tu plan pasa de cabecera plegable a sección continua, con los cuatro paneles dentro de la misma superficie. El resumen de ruta, la franja de costes y la pregunta de deducciones prueban la línea cobriza como divisor. La tabla conserva siete columnas, amplía Item con menos espacio entre columnas y conserva el tamaño de la fuente. Nombres a la izquierda, cifras a la derecha. Chromium a 1440 px, ES y mismo estado en Dark y Light con datos sintéticos. Meson Exotic Plasma M quedó en una línea en ambos temas. Propuesta pendiente de revisión. Sin implementación en fuentes ni publicación. Si se aprueba, queda pendiente verificar la composición completa, los estados interactivos y la matriz de anchos e idiomas.
