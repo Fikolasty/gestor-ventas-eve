@@ -70,3 +70,13 @@ v1.0.189 está publicada. El primer CI detectó dos pruebas que pulsaban el cent
 Fuente 8d8cce8301ad59e10288b12fdd3253c8a46d6c1f. Compilación 5a72bc23c8829b5ee506729e596dc6f3428e14dc. Rebuild y Pages 41785732110. El HTML público, el compilado local y GitHub coinciden. Tamaño 2.592.609 bytes y blob f26ee9863f62e5afdf5c24ae994b42662430d7c9. Cierre de la entrega visual solicitada. Pendientes de esta entrega: ninguno.
 
 Para retomar en otro chat: «Continúa Market Moves+ desde v1.0.189 LIVE. Lee AGENTS.md, EVE_PRODUCT_DESIGN_PROTOCOL.md, DSS.md y HANDOFF_CSS_187.md. Los desplegables de Ventas ya tienen acciones textuales y Tasación está alineada con Inventario. Verifica HEAD/main y retoma la auditoría incremental de CSS».
+
+### Siguiente incremento de limpieza
+
+La consolidación de la promoción ya se publicó en v1.0.188. La auditoría desde `61ced55` identifica como siguiente candidato las tres reglas visuales de `.appr-meta`. El nodo permanece oculto y aporta el texto del control de información de Jita. Antes de editar, verificar su descripción accesible y tooltip, el aviso parcial y la geometría de Tasación en Ventas y Jita en ambos idiomas y temas a 390/630/980/1440 px. El DSS registra el estado local y las siete pruebas Node focales. El candidato aún no se implementó ni publicó.
+
+### v1.0.190 — Gavetas de Ventas
+
+Implementación aprobada y compilada localmente. Cabeceras oscuras o blancas, línea cobriza sin flecha, cuatro paneles con la misma superficie, siete columnas divididas y refresco dentro de Detalle por Item. Precio Jita / Jita Price, Orden / Inmediata y Lote / Unidad conservan su función. La limpieza de `.appr-meta` queda como trabajo independiente.
+
+Última LIVE certificada v1.0.189. Los gates locales y las limitaciones de v1.0.190 están en el cierre del DSS. No certificar la candidata hasta comprobar cuatro Actions, Pages y coincidencia HTTPS.

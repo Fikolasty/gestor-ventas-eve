@@ -51,7 +51,7 @@ class R8PlanTests(unittest.TestCase):
   self.assertIn('Buyback',self.page.locator('#pkComparisonBasis').inner_text())
  def test_single_unit_detail_is_bounded_paged_and_matches_allocated_shipping(self):
   self.assertEqual(self.page.locator('#pkUnits').count(),0)
-  self.page.locator('#unitCourierToggle').click()
+  self.page.locator('#unitCourierHeading').click()
   expected=self.page.evaluate("({freightUnit:ledgerReference.rows[0].courierPerUnit,unit:ledgerReference.rows[0].referenceAfter/ledgerReference.rows[0].q})")
   shown=self.page.locator('#lots .lot').first.locator('.lot-table-freight .copy,.lot-table-result .copy').all_inner_texts()
   shown=['unused']+shown
@@ -62,7 +62,7 @@ class R8PlanTests(unittest.TestCase):
   self.page.locator('[data-unit-page="1"]').click();self.page.locator('[data-unit-page="1"]').click()
   self.assertEqual(self.page.locator('#lots>.lot:visible').count(),5)
   self.assertTrue(self.page.locator('[data-unit-page="1"]').is_disabled())
-  self.page.locator('#unitCourierToggle').click()
+  self.page.locator('#unitCourierHeading').click()
   self.assertFalse(self.page.locator('#unitCourierContent').is_visible())
  def test_real_complete_composition_both_directions_themes_languages_and_shipping(self):
   out=ROOT/'tests/artifacts/theme';out.mkdir(parents=True,exist_ok=True)
@@ -89,7 +89,7 @@ class R8PlanTests(unittest.TestCase):
   self.assertIsNone(self.page.evaluate('flipPlanAccounting(lastP)'))
   self.assertTrue(self.page.locator('#vCap .jita-warning').is_visible())
   self.assertNotIn('Ganancia',self.page.locator('#pkResultMetric').inner_text())
-  self.page.locator('#unitCourierToggle').click()
+  self.page.locator('#unitCourierHeading').click()
   self.assertEqual(self.page.locator('#freightLotFinal').inner_text(),'—')
   self.assertNotRegex(self.page.locator('#pSum').inner_text(),r'NaN|Infinity|undefined')
 

@@ -263,11 +263,13 @@ let ledgerCopyTimer=0;
 function showLedgerCopyFeedback(button){
   let tip=$('ledgerCopyFeedback');
   if(!tip){tip=el('span','ledger-copy-feedback');tip.id='ledgerCopyFeedback';tip.setAttribute('role','status');tip.setAttribute('aria-live','polite');document.body.append(tip);}
-  clearTimeout(ledgerCopyTimer);tip.textContent=tx('ledger.copied');tip.hidden=false;
+  clearTimeout(ledgerCopyTimer);tip.textContent=tx('ledger.copied');tip.hidden=true;
+  void tip.offsetWidth;
+  tip.hidden=false;
   const rect=button.getBoundingClientRect();
   tip.style.left=Math.max(8,Math.min(rect.left+rect.width/2-tip.offsetWidth/2,innerWidth-tip.offsetWidth-8))+'px';
   tip.style.top=(rect.top>tip.offsetHeight+12?rect.top-tip.offsetHeight-7:rect.bottom+7)+'px';
-  ledgerCopyTimer=setTimeout(()=>{tip.hidden=true;},1000);
+  ledgerCopyTimer=setTimeout(()=>{tip.hidden=true;},1200);
 }
 function copyPriceValue(b){
   const v=b.dataset.v,done=()=>{if(!b.isConnected)return;const t=b.textContent;
@@ -375,7 +377,7 @@ function paintLotMarket(r){
   const u=r.o.ui;if(!u)return;
   const lot=ledgerValueMode==='lot',factor=lot?r.q:1;
   const reference=ledgerReferenceByItem.get(r.o);
-  const entries=[['quantity',r.q,'ledger.quantity',false],
+  const entries=[['quantity',r.q,'ledger.batchQuantity',false],
     ['volume',Number.isFinite(r.o.m3u)?r.o.m3u*factor:null,'ledger.tableVolume',false],
     ['buy',Number.isFinite(r.o.jita?.topBuy)?r.o.jita.topBuy*factor:null,'ledger.tableBuy',true],
     ['sell',Number.isFinite(r.o.jita?.topSell)?r.o.jita.topSell*factor:null,'ledger.tableSell',true],
@@ -420,7 +422,7 @@ $('ledgerSaleMode').addEventListener('click',event=>{
 });
 function paintLedgerReference(){
   const ref=ledgerReference;if(!ref)return;
-  const market=S.flip&&C.shipOn?nullSystem():'Jita 4-4';setLotLeafText($('ledgerValueScope'),market);
+  const market=S.flip&&C.shipOn?nullSystem():'Jita 4-4';setLotLeafText($('ledgerValueScope'),S.flip?market:tx('ledger.jitaPrice'));
   $('ledgerSaleMode').hidden=S.flip;
   $('ledgerSaleMode').querySelectorAll('button').forEach(b=>setLotAttr(b,'aria-pressed',String(b.dataset.ledgerSale===ledgerSaleMode)));
   for(const [id,amount] of [['freightLotBefore',ref.before],['unitCourierTotal',Number.isFinite(ref.shipCost)?-ref.shipCost:null],['freightLotFinal',ref.after]]){

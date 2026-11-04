@@ -96,10 +96,8 @@ class Ledger173Tests(unittest.TestCase):
        self.assertTrue(self.page.locator('#lots .lot').first.evaluate('e=>{const n=e.querySelector(".lot-table-result .copy").getBoundingClientRect(),a=e.querySelector(".lot-open").getBoundingClientRect();return n.right<a.left}'))
        self.page.locator('#ledger').screenshot(path=str(out/f'ledger173-final-r2-{lang}-{state}-{"light" if light else "dark"}.png'),animations='disabled')
      self.assertAlmostEqual(sizes[0]['height'],sizes[1]['height'],delta=1,msg=str((lang,width,state)))
-    self.page.locator('#ledgerPriceHelp>summary').hover()
-    expect(self.page.locator('#ledgerPriceHelpContent')).to_be_visible()
-    a=self.page.locator('#ledgerPriceHelpContent').bounding_box();b=self.page.locator('#ledger').bounding_box()
-    self.assertGreaterEqual(a['x'],b['x']);self.assertLessEqual(a['x']+a['width'],b['x']+b['width'])
-    self.page.locator('#ledgerPriceHelp>summary').focus();self.page.keyboard.press('Escape');expect(self.page.locator('#ledgerPriceHelpContent')).to_be_hidden()
+    expect(self.page.locator('#ledgerPriceHelp')).to_be_hidden()
+    expect(self.page.locator('#bEsi')).to_be_visible()
+
 
 if __name__=='__main__':unittest.main()

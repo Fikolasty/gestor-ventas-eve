@@ -38,7 +38,7 @@ class Freight168Tests(unittest.TestCase):
   self.page.locator('#freightLotFinal').click()
   self.assertEqual(self.page.evaluate('window.__copied'),data['final'])
   self.assertFalse(self.page.locator('#unitCourierContent').is_visible())
-  self.page.locator('#unitCourierToggle').click()
+  self.page.locator('#unitCourierHeading').click()
   button=self.page.locator('#lots .lot-table-result button.copy').first
   expected=button.get_attribute('data-v');button.press('Enter')
   self.assertEqual(self.page.evaluate('window.__copied'),expected)
@@ -53,7 +53,7 @@ class Freight168Tests(unittest.TestCase):
     for width in [1440,980,630,390]:
      self.page.set_viewport_size({'width':width,'height':1000})
      for opened in [False,True]:
-      if self.page.locator('#unitCourierToggle').get_attribute('aria-expanded')!=str(opened).lower():self.page.locator('#unitCourierToggle').click()
+      if self.page.locator('#unitCourierToggle').get_attribute('aria-expanded')!=str(opened).lower():self.page.locator('#unitCourierHeading').click()
       self.page.evaluate('on=>{pkInsightsCollapsed=!on;syncPlanPanel()}',opened)
       geometry=[]
       for light in [False,True]:

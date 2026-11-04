@@ -2931,20 +2931,12 @@
     "es": "El incremento se aplica sobre esta base; es un objetivo de venta, no una oferta confirmada.",
     "en": "The increase applies to this basis; this is a selling target, not a confirmed offer."
   },
-  "salesDisclosure.plansOpen": {
-    "es": "Ver planes",
-    "en": "View plans"
+  "ledger.jitaPrice": {
+    "es": "Precio Jita",
+    "en": "Jita Price"
   },
-  "salesDisclosure.plansClose": {
-    "es": "Ocultar planes",
-    "en": "Hide plans"
-  },
-  "salesDisclosure.itemsOpen": {
-    "es": "Ver Items",
-    "en": "View Items"
-  },
-  "salesDisclosure.itemsClose": {
-    "es": "Ocultar Items",
-    "en": "Hide Items"
+  "ledger.batchQuantity": {
+    "es": "Cantidad en lote",
+    "en": "Batch quantity"
   }
 }

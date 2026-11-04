@@ -544,13 +544,13 @@ class ThemeBrowserTests(unittest.TestCase):
                 self.assertEqual(styles['financeDisplay'],'none',styles)
                 self.assertEqual(self.page.locator('#ledger>summary').evaluate("e=>getComputedStyle(e,'::after').display"),'none')
                 expect(self.page.locator('#ledger')).to_be_visible()
-                self.page.locator('#unitCourierToggle .sales-disclosure-cue').click()
+                self.page.locator('#unitCourierHeading').click()
                 expect(self.page.locator('#ledger')).to_have_attribute('open','')
-                self.page.locator('#unitCourierToggle .sales-disclosure-cue').click()
+                self.page.locator('#unitCourierHeading').click()
                 expect(self.page.locator('#ledger')).not_to_have_attribute('open','')
 
     def test_c1b_sales_disclosure_chevrons_keep_shared_geometry_and_native_toggle(self):
-        """B.18 finance has no nested disclosure; freight retains one info help."""
+        """B.18 finance has no nested disclosure; Sales hides the price help."""
         from playwright.sync_api import expect
         from browser_ledger173 import FIXTURE
         self.page.evaluate(FIXTURE)
@@ -577,18 +577,9 @@ class ThemeBrowserTests(unittest.TestCase):
                     expect(node).to_be_hidden()
                     drawer.click()
                     expect(node).to_be_visible()
-                    help_node=self.page.locator('#ledgerPriceHelp')
-                    expect(help_node).to_be_visible()
-                    help_node.evaluate('(el)=>el.open=false')
-                    help_summary=help_node.locator(':scope > summary')
-                    self.assertEqual(help_summary.locator('.mm-ledger-info-glyph').inner_text(),'i')
-                    self.assertEqual(help_summary.evaluate(
-                        "el=>getComputedStyle(el,'::after').content"),'none')
-                    help_summary.click()
-                    expect(help_node).to_have_attribute('open','')
-                    expect(self.page.locator('#ledgerPriceHelpContent')).to_be_visible()
-                    help_summary.click()
-                    expect(help_node).not_to_have_attribute('open','')
+                    expect(self.page.locator('#ledgerPriceHelp')).to_be_hidden()
+                    expect(self.page.locator('.ledger-secondary-sort')).to_be_hidden()
+                    expect(self.page.locator('#bEsi')).to_be_visible()
                     self.assertLessEqual(self.page.evaluate(
                         'document.documentElement.scrollWidth-innerWidth'),1)
                     if language=='es' and width==1440 and not light:
@@ -968,7 +959,7 @@ class ThemeBrowserTests(unittest.TestCase):
         from browser_ledger173 import FIXTURE
         self.page.evaluate(FIXTURE)
         self.page.evaluate("S.api['example paste'].id=34;paintLot(lastP.rows[0])")
-        for lang,labels in [('es',['Item','Cantidad','Volumen','Compra','Venta']),('en',['Item','Quantity','Volume','Buy','Sell'])]:
+        for lang,labels in [('es',['Item','Cantidad en lote','Volumen','Compra','Venta']),('en',['Item','Batch quantity','Volume','Buy','Sell'])]:
             self.page.evaluate('l=>setLang(l)',lang)
             self.assertEqual(self.page.locator('.ledger-market-columns button').all_inner_texts()[:5],[x.upper() for x in labels])
             self.assertEqual(self.page.locator('#lots .lot-table-result .copy').first.get_attribute('data-v'),'8')
@@ -998,10 +989,7 @@ class ThemeBrowserTests(unittest.TestCase):
                     self.assertLessEqual(geometry['overflow'],1,geometry)
                     self.assertEqual(geometry['display'],'grid')
                     self.assertLess(geometry['height']-geometry['head']-geometry['table'],220,geometry)
-            self.page.locator('#ledgerPriceHelp>summary').hover()
-            expect(self.page.locator('#ledgerPriceHelpContent')).to_be_visible()
-            self.page.locator('#ledgerPriceHelp>summary').focus();self.page.keyboard.press('Escape')
-            expect(self.page.locator('#ledgerPriceHelpContent')).to_be_hidden()
+            expect(self.page.locator('#ledgerPriceHelp')).to_be_hidden()
 
     def test_sales_pilot_prioritizes_owner_proceeds_and_exposes_optional_details(self):
         from playwright.sync_api import expect
@@ -1984,7 +1972,7 @@ class ThemeBrowserTests(unittest.TestCase):
                     self.page.locator('#ledger').screenshot(path=str(out/
                         f'b16-folded-ledger-es-1440-{"light" if light else "dark"}.png'),
                         animations='disabled')
-                self.page.locator('#unitCourierToggle .sales-disclosure-cue').click()
+                self.page.locator('#unitCourierHeading').click()
                 expect(self.page.locator('#ledger')).to_have_attribute('open','')
                 opened=self.color('#ledger')
                 self.assertEqual(opened,closed)
@@ -2002,7 +1990,7 @@ class ThemeBrowserTests(unittest.TestCase):
                     self.page.locator('#ledger').screenshot(path=str(out/
                         f'b16-open-ledger-es-1440-{"light" if light else "dark"}.png'),
                         animations='disabled')
-                self.page.locator('#unitCourierToggle .sales-disclosure-cue').click()
+                self.page.locator('#unitCourierHeading').click()
                 expect(self.page.locator('#ledger')).not_to_have_attribute('open','')
 
     def test_b14_collapsed_ledger_inverted_depth_row_activation_and_semantics(self):
@@ -2368,9 +2356,7 @@ class ThemeBrowserTests(unittest.TestCase):
         self.assertEqual(mineral.locator('tbody .copy').first.get_attribute('data-v'),'46.57')
         expect(mineral.locator('tbody .copy').first).to_have_attribute('aria-label',
             'Copiar estimación de Heavy Water en HY-RWO: 46.57 ISK por unidad')
-        self.page.locator('#ledgerPriceHelp>summary').click()
-        self.assertNotIn('SIGMA',self.page.locator('#ledgerPriceHelpContent').inner_text())
-        self.page.locator('#ledgerPriceHelp>summary').click()
+        expect(self.page.locator('#ledgerPriceHelp')).to_be_hidden()
         for cls in ('prices','lot-adjustments','lot-guide'):
             self.page.locator('#lots .'+cls+'>summary').click()
         expect(self.page.locator('#lots .pr-manual-editor label')).to_have_text(
@@ -2875,13 +2861,13 @@ class ThemeBrowserTests(unittest.TestCase):
 
 
     def test_b201_price_help_drawer_never_clips_or_overlays_registered_items(self):
-        """B.20.1 regression: help was right-anchored to the 36px info icon."""
+        """The price help retained in Jita fits within the shared ledger."""
         from playwright.sync_api import expect
         out=INDEX.parent/'tests'/'artifacts'/'theme'
         out.mkdir(parents=True,exist_ok=True)
         for lang in ('es','en'):
             self.page.evaluate("""(lang)=>{
-                setLang(lang);
+                setLang(lang);document.body.classList.add("is-jita");
                 const ledger=document.querySelector('#ledger');
                 document.querySelector('#verdict').hidden=false;document.querySelector('#pSum').hidden=false;document.querySelector('#stepDrawer').hidden=false;document.querySelector('#pkPlanToggle').hidden=false;document.querySelector('#unitCourierBox').hidden=false;ledger.hidden=false;ledger.open=true;
                 document.querySelector('#lots').innerHTML=

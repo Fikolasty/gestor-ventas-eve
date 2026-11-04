@@ -143,68 +143,121 @@ html.light #unitCourierBox #ledger #lots .lot.open .lot-body,html.light #unitCou
 #unitCourierBox #ledger #lots .lot-panel-grid>details[open]{align-self:stretch!important}
 #unitCourierBox #ledger #lots .lot-panel-grid>details>summary::before{box-shadow:none!important}
 
-/* Main Sales disclosures share their action treatment and title scale. */
+/* Sales drawers share a surface and a visible seam. Jita keeps its own controls. */
+:where(body:not(.is-jita)) #pSum {
+  --sales-drawer-face: #100f0e;
+  --sales-drawer-hover: #1b1714;
+  --sales-table-head: #211f1d;
+  --sales-table-rule: #393531;
+  --sales-seam: #ab775a;
+}
+html.light :where(body:not(.is-jita)) #pSum {
+  --sales-drawer-face: #fff;
+  --sales-drawer-hover: #f4f5f7;
+  --sales-table-head: #f3f5f7;
+  --sales-table-rule: #dfe3e8;
+  --sales-seam: #a56d4b;
+}
 :where(body:not(.is-jita)) #pSum > #pkPlanToggle:not([hidden]) {
   display: flex !important;
   align-items: center;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 8px 16px !important;
 }
-
+#unitCourierBox #ledger.ledger-fusion > #unitCourierToggle {
+  grid-template-columns: minmax(0, 1fr);
+}
+:where(body:not(.is-jita)) #pSum > #pkPlanToggle,
+:where(body:not(.is-jita)) #pSum #unitCourierBox #ledger.ledger-fusion > #unitCourierToggle {
+  padding: 16px 24px !important;
+  background: var(--sales-drawer-face) !important;
+}
+:where(body:not(.is-jita)) #pSum > #pkPlanToggle {
+  position: relative;
+  min-height: 72px;
+}
+:where(body:not(.is-jita)) #pSum #ledger .ledger-title-group {
+  min-height: 40px;
+}
+:where(body:not(.is-jita)) #pSum > #pkPlanToggle::after,
+:where(body:not(.is-jita)) #pSum #unitCourierBox #ledger.ledger-fusion > #unitCourierToggle::before {
+  content: "" !important;
+  display: block !important;
+  position: absolute;
+  inset: auto 24px 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--sales-seam), transparent);
+  pointer-events: none;
+}
+:where(body:not(.is-jita)) #pSum > #pkPlanToggle::after {
+  inset: auto 24px 0 !important;
+  width: auto !important;
+  height: 1px !important;
+  transform: none !important;
+  border: 0 !important;
+}
+:where(body:not(.is-jita)) #pSum #unitCourierBox #ledger.ledger-fusion > #unitCourierToggle::before {
+  position: static;
+  grid-row: 2;
+  grid-column: 1;
+  margin-block: -12px;
+}
+:where(body:not(.is-jita)) #pSum #ledger .mm-freight-lot {grid-row: 3}
+:where(body:not(.is-jita)) #pSum > #pkPlanToggle:is(:hover,:focus-visible),
+:where(body:not(.is-jita)) #pSum #unitCourierBox #ledger.ledger-fusion > #unitCourierToggle:is(:hover,:focus-visible) {
+  background: var(--sales-drawer-hover) !important;
+}
+:where(body:not(.is-jita)) #pSum #pkPlanContent .mm-plan-drawer-body > :is(#pkPlanOptions,#pkSpeedBox,#pkResult,#vFinanceDetails),
+:where(body:not(.is-jita)) #pSum .mm-plan-drawer > .mm-plan-drawer-head {
+  background: var(--sales-drawer-face) !important;
+}
 #pSum #unitCourierBox #ledger #unitCourierHeading {
   font: 800 var(--mm-type-heading)/1.2 var(--f-ui) !important;
   letter-spacing: .035em !important;
 }
-
-#pSum .sales-disclosure-cue {
-  display: inline-flex;
-  flex: none;
-  align-items: center;
-  padding: 5px 10px;
-  border: 1px solid color-mix(in srgb, var(--clay) 40%, var(--line2));
-  border-radius: 6px;
-  background: color-mix(in srgb, var(--clay) 9%, var(--surface-card));
+:where(body:not(.is-jita)) #pSum #unitCourierBox #ledger :is(#unitCourierHelp,.ledger-secondary-sort) {display:none!important}
+:where(body:not(.is-jita)) #pSum #ledger #bEsi.ledger-refresh {
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
+html.light :where(body:not(.is-jita)) #pSum #unitCourierBox #ledger :is(#unitCourierContent,#lots) {background:#fff!important}
+:where(body:not(.is-jita)) #pSum #ledger :is(#ledgerSaleMode,#ledgerValueMode) {
+  border: 0 !important;
+  padding: 0;
+  background: transparent !important;
+}
+:where(body:not(.is-jita)) #pSum #ledger :is(#ledgerSaleMode,#ledgerValueMode) button {
+  border-radius: 0;
+  border-bottom: 2px solid transparent;
+  padding: 5px 8px;
+  background: transparent !important;
+}
+:where(body:not(.is-jita)) #pSum #ledger :is(#ledgerSaleMode,#ledgerValueMode) button[aria-pressed=true] {
   color: var(--txt);
-  font: 700 13px/1.4 var(--f-ui);
-  text-transform: none;
-  letter-spacing: 0;
+  border-bottom-color: var(--sales-seam);
 }
-
-#ledger .sales-disclosure-cue {
-  margin-inline-start: auto;
-}
-
-#pSum :is(#pkPlanToggle, #unitCourierToggle):is(:hover, :focus-visible) .sales-disclosure-cue {
-  border-color: var(--clay);
-  background: color-mix(in srgb, var(--clay) 17%, var(--surface-card));
-}
-
-#pSum .sales-disclosure-close,
-#pkPlanToggle[aria-expanded="true"] .sales-disclosure-open,
-#ledger[open] > summary .sales-disclosure-open {
-  display: none;
-}
-
-#pkPlanToggle[aria-expanded="true"] .sales-disclosure-close,
-#ledger[open] > summary .sales-disclosure-close {
-  display: inline;
-}
-
-#unitCourierBox #ledger #unitCourierToggle .mm-freight-lot {
-  position: relative;
-}
-
-#unitCourierBox #ledger #unitCourierToggle .mm-freight-lot::before {
-  content: "";
-  position: absolute;
-  inset: -10px 0 auto;
-  border-top: 1px solid var(--line2);
-  pointer-events: none;
-}
-
-@media (max-width: 600px) {
-  #ledger .sales-disclosure-cue {
-    margin-inline-start: 0;
+:where(body:not(.is-jita)) #pSum #ledger #lots .lot-name b {color:var(--txt)}
+:where(body:not(.is-jita)) #pSum #ledger #freightLotFinal {font-weight:750!important}
+@media (min-width:1201px) {
+  :where(body:not(.is-jita)) #pSum #ledger.ledger-fusion .ledger-market-columns {background:var(--sales-table-head)!important}
+  :where(body:not(.is-jita)) #pSum #ledger.ledger-fusion .ledger-market-columns .ledger-sort {
+    white-space: normal;
+    font-size: 12px !important;
   }
+  :where(body:not(.is-jita)) #pSum #ledger.ledger-fusion .ledger-market-columns > :not(:first-child),
+  :where(body:not(.is-jita)) #pSum #ledger #lots .lot-table-cell {
+    align-self: stretch;
+    display: grid !important;
+    align-content: center;
+    border-inline-start: 1px solid var(--sales-table-rule) !important;
+    padding-inline-start: 7px !important;
+    text-align: right !important;
+  }
+}
+@keyframes ledger-copy-pop {
+  0% {opacity:0;transform:translateY(3px)}
+  15%,72% {opacity:1;transform:translateY(0)}
+  100% {opacity:0}
+}
+@media (prefers-reduced-motion:no-preference) {
+  #ledgerCopyFeedback:not([hidden]) {animation:ledger-copy-pop 1.2s both}
 }
