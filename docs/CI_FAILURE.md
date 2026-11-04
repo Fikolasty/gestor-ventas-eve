@@ -1,1 +1,1 @@
-# Market Moves+ — CI publication blocked\n\n- Source: \`0b782fe6eedb362488b271efcdd482f806f87746\`\n- Run: \`40996384693\`\n- Expected version: \`1.0.164\`\n- Failed gates: finance_checks: failure\n\nPublication was stopped. See the workflow run for error details.\n
+# Market Moves+ — CI publication blocked\n\n- Source: \`48d11b28686ecd6ed1f041841a1f69d28032bf2c\`\n- Run: \`41818995240\`\n- Expected version: \`1.0.191\`\n- Failed gates: publish_site: failure\n\nPublication was stopped. See the workflow run for error details.\n
