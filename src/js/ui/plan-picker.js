@@ -5,26 +5,6 @@
 // la ruta (flip) y el switch de envío actuales: aquí no se calcula nada nuevo, solo se ordena y se pinta.
 // Elegir un plan recalcula (S.planMode → refreshNow). Orden y filtro viven en memoria (pkView) y se vacían al limpiar.
 let pkView={sort:'net',dir:-1,filter:'all',open:true}; // B.6: mostrar alternativas desde el inicio
-let pkPanelCollapsed=true; // B.10: keep the entire decision area folded until the pilot opens it
-// B.18: two symmetrical drawers; each header opens/closes both inner columns.
-let pkOverviewCollapsed=false;
-let pkInsightsCollapsed=true;
-function syncPlanPanel(){
-  const panel=$('pkPlanContent'),toggle=$('pkPlanToggle');
-  panel.hidden=pkPanelCollapsed;
-  $('pSum').classList.toggle('c5c-expanded',!pkPanelCollapsed);
-  if(pkPanelCollapsed)closePlanSort();
-  toggle.setAttribute('aria-expanded',String(!pkPanelCollapsed));
-  const label=tx(pkPanelCollapsed?'picker.showPlans':'picker.hidePlans');
-  toggle.setAttribute('aria-label',label);toggle.title=label;
-  for(const [name,collapsed] of [['Overview',pkOverviewCollapsed],['Insights',pkInsightsCollapsed]]){
-    const content=$('pk'+name+'Content'),head=$('pk'+name+'Toggle');
-    content.hidden=collapsed;
-    head.setAttribute('aria-expanded',String(!collapsed));
-  }
-  // The finance breakdown is content of the lower drawer, not a third disclosure.
-  $('vFinanceDetails').open=true;
-}
 // C.5c: present the selected plan using existing route/time classifications.
 // These descriptions are qualitative, never a forecast of fills or a risk score.
 function paintPlanAnalysis(P,chosen,comparisons=[]){
@@ -37,9 +17,11 @@ function paintPlanAnalysis(P,chosen,comparisons=[]){
   $('pkAdvantages').replaceChildren(el('li',null,tx(keys[chosen.m]||fallback,{market:nullSystem()})));
   const tradeoffs=$('pkTradeoffs');tradeoffs.replaceChildren();
   const available=comparisons.filter(x=>x.m!==chosen.m&&x.m!=='disc'&&Number.isFinite(x.t.net));
-  const best=available.slice().sort((a,b)=>b.t.net-a.t.net)[0];
-  const fast=available.filter(x=>PK_FAST.has(x.m)).sort((a,b)=>b.t.net-a.t.net)[0];
-  const refs=[best,fast].filter((x,i,a)=>x&&a.findIndex(y=>y?.m===x.m)===i);
+  available.sort((a,b)=>b.t.net-a.t.net);
+  const best=available[0],fast=available.find(x=>PK_FAST.has(x.m));
+  const next=best&&Math.abs(best.t.net-chosen.t.net)<.5
+    ?available.find(x=>x.t.net<chosen.t.net-.5):null;
+  const refs=[best,fast,next].filter((x,i,a)=>x&&a.findIndex(y=>y?.m===x.m)===i);
   const profit=S.flip&&flipPlanAccounting(P)!=null;
   for(const other of refs){
     const gap=(chosen.t?.net??P.best)-other.t.net,node=el('li');
@@ -190,7 +172,8 @@ document.addEventListener('scroll',()=>{if(!planSortMenu.hidden)placePlanSort();
 window.visualViewport?.addEventListener('resize',()=>closePlanSort());
 function paintPicker(P){
   const box=$('pk'),bar=$('pkNote'),tools=$('pkTools'),others=$('pkOthers');
-  syncPlanPanel();
+  $('pkPlanContent').hidden=false;
+  $('vFinanceDetails').open=true;
   box.textContent='';bar.textContent='';tools.textContent='';others.textContent='';
   const investment=S.flip?flipPlanAccounting(P)?.buy:null;
   const showProfit=investment!=null;
@@ -206,31 +189,22 @@ function paintPicker(P){
   $('pkComparisonBasis').textContent=tx('picker.comparisonBasis',{plan:chosen.l});
   // Only reuse amounts from existing accounting and plan totals. No new
   // pricing or profit formula is introduced by the result companion card.
-  const selectedNet=$('pkResultValue'),metric=$('pkResultMetric');
-  metric.textContent=tx(showProfit?'picker.estimatedProfit':'picker.netProceeds');
+  const selectedNet=$('pkAnalysisValue');
   selectedNet.className='mm-plan-result-value num '+sgn(chosen.t.net);
   const selectedText=(chosen.t.net<0?'−':showProfit?'+':'')+fmt(Math.abs(chosen.t.net));
   const resultCopy=copyBtn(chosen.t.net,selectedText);resultCopy.setAttribute('aria-label',tx('freight.copyFinal',{amount:selectedText}));
   selectedNet.replaceChildren(resultCopy);
-  $('pkAnalysisValue').textContent=selectedNet.textContent;
-  $('pkAnalysisValue').className='num '+sgn(chosen.t.net);
   // B.19: display the *same* selected-plan net in the steps drawer header.
   // This is a mirror of the canonical result, never a new financial formula.
   const stepNet=$('stepDrawerTotal');
   stepNet.className='num'+(chosen.t.net<0?' neg':'');
   stepNet.textContent=selectedNet.textContent;
-  const marketFees=$('vsCn').textContent;
   const includesImport=P.rows.some(r=>r.best==='fN');
   const onlyImport=includesImport&&P.rows.every(r=>!r.best||r.best==='fN');
-  const knownFees=marketFees&&marketFees!=='0 ISK'&&marketFees!=='—';
-  $('pkResultFees').textContent=onlyImport?tx('picker.feesIncluded'):
-    (knownFees?'−':'')+(marketFees||'—')+(includesImport?' · '+tx('picker.feesPartial'):'');
-  $('pkResultFees').className=knownFees&&!onlyImport?'neg':'';
-  $('pkResultShip').textContent=(P.shipCost>0.5?'−':'')+fmt(P.shipCost||0);
-  $('pkResultShip').className=P.shipCost>0.5?'neg':'zero';
-  const destinations=[...new Set(P.rows.filter(r=>r.q>0&&r.best).map(r=>r.best))];
-  $('pkResultDestination').textContent=destinations.length===1?modeName(destinations[0]):
-    destinations.length>1?tx('picker.multipleRoutes',{count:destinations.length}):'—';
+  const feesNote=$('pkFeesNote');
+  feesNote.hidden=!includesImport;
+  feesNote.textContent=includesImport?tx('picker.marketFees')+' · '+
+    (onlyImport?tx('picker.feesIncluded'):tx('picker.feesPartial')):'';
   const warning=$('pkResultWarning');warning.hidden=!(S.flip&&!showProfit);
   warning.textContent=warning.hidden?'':tx('trade.proceedsOnly');
   $('pkSort').value=pkView.sort+':'+pkView.dir;
@@ -297,39 +271,9 @@ function paintPicker(P){
     shortcutPanel.hidden=false;
   }
   $('pkSpeedBox').querySelector('.mm-picker-method').hidden=!shortcut;
-  if(chosen.m==='disc'){
-    headline.append(el('p','pk-headline-note',tx('picker.playerUnconfirmed')));
-  }else if(financial.length>1&&financial.some(x=>x.m===cur)){
-    const benchmark=financial.reduce((best,x)=>x.t.net>best.t.net?x:best);
-    const gap=Math.max(0,benchmark.t.net-chosen.t.net);
-    const grid=el('div','pk-headline-grid');
-    const stat=(label,value,cl='')=>{
-      const node=el('div','pk-headline-stat');
-      const amount=el('strong',cl);
-      if(typeof value==='string')amount.textContent=value;else amount.append(value);
-      node.append(el('small',null,label),amount);grid.append(node);
-    };
-    if(gap<.5){
-      const runner=financial.filter(x=>x.m!==chosen.m&&x.t.net<chosen.t.net-.5)
-        .sort((a,b)=>b.t.net-a.t.net)[0];
-      if(runner){
-        const advantage=chosen.t.net-runner.t.net;
-        stat(tx('picker.gain'),'+'+fmt(advantage),'pos');
-        const other=el('span',null,(S.lang==='en'?trS(runner.l):runner.l)+' · ');
-        other.append(el('span','isk-'+(runner.t.net<0?'neg':'pos'),fmt(runner.t.net)));
-        stat(tx('picker.nextBest'),other);
-      }else stat(tx('picker.gain'),tx('picker.same'));
-    }else{
-      stat(tx('picker.gap'),'−'+fmt(gap),'neg');
-      const higher=el('span',null,(S.lang==='en'?trS(benchmark.l):benchmark.l)+' · ');
-      higher.append(el('span','isk-'+(benchmark.t.net<0?'neg':'pos'),fmt(benchmark.t.net)));
-      stat(tx('picker.higherNet'),higher);
-    }
-    headline.append(grid);
-  }else{
-    headline.append(el('p','pk-headline-note',tx('picker.insufficient')));
-  }
-  headline.hidden=false;
+  const comparisonUnavailable=financial.length<2||!financial.some(x=>x.m===cur);
+  headline.hidden=chosen.m==='disc'||!comparisonUnavailable;
+  headline.textContent=headline.hidden?'':tx('picker.insufficient');
 
   // Financial comparison belongs to the plan header. Keep non-numeric
   // protections below the plans; never discard warnings to save screen space.
@@ -402,8 +346,8 @@ function paintPicker(P){
   // B.18: alternatives belong to the shared drawer, not a nested accordion.
   others.hidden=false;
   if(fl.length>2){const group=el('div','pk-flt');group.setAttribute('role','group');group.setAttribute('aria-label',tx('picker.filters'));
-    fl.forEach(([f,t])=>{const n=f==='all'?available.length:available.filter(x=>pass[f](x)).length;
-      const b=el('button','pk-fb'+(pkView.filter===f?' on':''),tx(t));b.type='button';b.dataset.pkf=f;b.setAttribute('aria-pressed',String(pkView.filter===f));b.append(el('small',null,String(n)));group.append(b);});
+    fl.forEach(([f,t])=>{
+      const b=el('button','pk-fb'+(pkView.filter===f?' on':''),tx(t));b.type='button';b.dataset.pkf=f;b.setAttribute('aria-pressed',String(pkView.filter===f));group.append(b);});
     tools.append(group);}
   const key={name:x=>x.l.toLowerCase(),speed:x=>pkSpeedRank(x.m,P),ship:x=>pkShips(x.m,P)?1:0,net:x=>x.t.net,diff:x=>x.t.net};
   const rest=available.filter(x=>pass[pkView.filter](x))
@@ -419,18 +363,6 @@ function paintPicker(P){
   if(!rest.length)others.append(el('p','pk-empty',tx('picker.empty')));
 }
 // Orden y filtro: solo repintan el selector, sin recalcular ISK.
-$('pkPlanToggle').addEventListener('click',()=>{
-  pkPanelCollapsed=!pkPanelCollapsed;
-  syncPlanPanel();
-});
-$('pkOverviewToggle').addEventListener('click',()=>{
-  pkOverviewCollapsed=!pkOverviewCollapsed;
-  syncPlanPanel();
-});
-$('pkInsightsToggle').addEventListener('click',()=>{
-  pkInsightsCollapsed=!pkInsightsCollapsed;
-  syncPlanPanel();
-});
 $('pkTools').addEventListener('click',e=>{
   const b=e.target.closest('[data-pkf]');if(!b||!lastP)return;
   const hadFocus=document.activeElement===b;
@@ -448,8 +380,6 @@ $('pkSort').addEventListener('change',e=>{if(!lastP)return;
 });
 $('pkShortcut').addEventListener('click',e=>{
   const b=e.target.closest('[data-pk-shortcut]');if(!b||!lastP)return;
-  pkPanelCollapsed=false;
-  pkOverviewCollapsed=false;
   pkView.open=true;pkView.filter='all';paintPicker(lastP);
   const target=[...$('pkOthers').querySelectorAll('[data-m]')].find(x=>x.dataset.m===b.dataset.pkShortcut);
   if(target)target.scrollIntoView({block:'nearest',behavior:'smooth'});

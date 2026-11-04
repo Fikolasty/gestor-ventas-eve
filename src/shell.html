@@ -270,14 +270,16 @@ Contraband Freight = no</textarea><small>Una regla por línea: Nombre = tax tota
 
   <!-- 1. Resultado simple -->
   <section class="summary res mm-plan-area" id="pSum" hidden>
-    <button type="button" class="mm-section-head mm-plan-heading" id="pkPlanToggle" aria-controls="pkPlanContent" aria-expanded="false"><span class="mm-plan-heading-copy"><span class="mm-title" role="heading" aria-level="2" data-i18n="picker.chooseTitle">ELIGE TU PLAN</span><span class="mm-section-sub" data-i18n="picker.chooseSubtitle">COMPARA LAS RUTAS Y DESCUBRE CUÁNTO RECIBIRÍAS</span></span></button>
-    <div id="pkPlanContent" class="mm-plan-content" hidden>
+    <section class="mm-plan-continuous" aria-labelledby="pkPlanTitle">
+    <header class="mm-section-head mm-plan-heading" id="pkPlanToggle"><span class="mm-plan-heading-copy"><span class="mm-title" id="pkPlanTitle" role="heading" aria-level="2" data-i18n="picker.chooseTitle">ELIGE TU PLAN</span><span class="mm-section-sub" data-i18n="picker.chooseSubtitle">COMPARA LAS RUTAS Y DESCUBRE CUÁNTO RECIBIRÍAS</span></span></header>
+    <div id="pkPlanContent" class="mm-plan-content">
     <div class="fb2" id="flipBuy" hidden></div>
     <div class="mm-plan-layout">
       <section class="mm-plan-drawer" id="pkOverviewDrawer">
-        <button type="button" class="mm-plan-drawer-head" id="pkOverviewToggle" aria-controls="pkOverviewContent" aria-expanded="true"><span data-i18n="picker.availablePlans">Planes disponibles</span><span data-i18n="picker.analysis">Análisis del plan</span></button>
+        <div class="mm-plan-drawer-head" id="pkOverviewToggle"><h3 data-i18n="picker.availablePlans">Planes disponibles</h3><h3 data-i18n="picker.analysis">Análisis del plan</h3></div>
         <div class="mm-plan-drawer-body" id="pkOverviewContent">
       <section class="mm-plan-options" id="pkPlanOptions" aria-label="Planes disponibles" data-i18n-aria-label="picker.availablePlans">
+        <h3 class="mm-plan-mobile-heading" data-i18n="picker.availablePlans">Planes disponibles</h3>
         <div id="pkOptionsContent">
         <div class="mm-plan-controls">
           <div class="pk-tools" id="pkTools"></div>
@@ -287,7 +289,10 @@ Contraband Freight = no</textarea><small>Una regla por línea: Nombre = tax tota
         </div>
       </section>
       <section class="mm-speed-card mm-decision-card" id="pkSpeedBox">
+        <h3 class="mm-plan-mobile-heading" data-i18n="picker.analysis">Análisis del plan</h3>
         <header class="c5c-analysis-selected"><span><small data-i18n="picker.selected">Seleccionado</small><strong class="c5c-analysis-route" id="pkAnalysisRoute"></strong></span><strong class="num" id="pkAnalysisValue"></strong></header>
+        <p id="pkResultWarning" class="mm-plan-result-warning" role="status" hidden></p>
+        <p id="pkHeadline" class="pk-headline-note" hidden></p><p id="pkNote" class="pk-summary" hidden></p>
         <div class="c5c-analysis-main"><div class="c5c-analysis-copy"><section><h4 data-i18n="picker.guideHow">Cómo funciona</h4><ul id="pkAdvantages"></ul></section><section><h4 data-i18n="picker.guideCompare">Qué ganas o sacrificas</h4><ul id="pkTradeoffs"></ul></section><section><h4 data-i18n="picker.guideShipping">Efecto del envío</h4><p id="pkGuideShipping"></p></section></div>
         <div id="pkAnalysisEconomy"></div></div>
         <dl class="c5c-analysis-facts" id="pkAnalysisFacts"></dl>
@@ -297,24 +302,13 @@ Contraband Freight = no</textarea><small>Una regla por línea: Nombre = tax tota
         </div>
       </section>
       <section class="mm-plan-drawer" id="pkInsightsDrawer">
-        <button type="button" class="mm-plan-drawer-head" id="pkInsightsToggle" aria-controls="pkInsightsContent" aria-expanded="true"><span data-i18n="picker.yourResult">Tu resultado</span><span data-i18n="picker.distributionDestinations">Distribución y destinos</span></button>
+        <div class="mm-plan-drawer-head" id="pkInsightsToggle"><h3 data-i18n="picker.distributionDestinations">Distribución y destinos</h3></div>
         <div class="mm-plan-drawer-body" id="pkInsightsContent">
-      <section class="mm-plan-result" id="pkResult" aria-label="Resultado del plan seleccionado" data-i18n-aria-label="picker.resultAria" aria-live="polite">
-        <span class="mm-plan-result-label" id="pkResultMetric" data-i18n="picker.netProceeds">Ingreso neto estimado</span>
-        <strong class="mm-plan-result-value num" id="pkResultValue"></strong>
-        <div class="mm-plan-comparison" id="pkHeadline" aria-live="polite" hidden></div>
-        <p class="pk-summary" id="pkNote" aria-live="polite" hidden></p>
-        <dl class="mm-plan-facts">
-          <div><dt data-i18n="picker.marketFees">Impuestos y comisiones</dt><dd id="pkResultFees"></dd></div>
-          <div><dt data-i18n="picker.shippingCost">Envío estimado</dt><dd id="pkResultShip"></dd></div>
-          <div><dt data-i18n="picker.salesDestination">Dónde se vende</dt><dd id="pkResultDestination"></dd></div>
-        </dl>
-        <p class="mm-plan-result-warning" id="pkResultWarning" hidden></p>
-      </section>
-      <details class="ov-card ov-flow mm-finance-details" id="vFinanceDetails" open><summary data-i18n="verdict.inspectBreakdown">Ver distribución de ingresos y destinos</summary><div class="mm-finance-details-body"><h4 data-i18n="picker.moneyOrigin">DE DÓNDE SALE TU ISK</h4><div id="ovFlow"></div><div class="mm-dest-inline" id="ovDestW"><h4 data-i18n="picker.salesDestinationUpper">DÓNDE SE VENDE</h4><div id="ovDest"></div></div><p class="mm-finance-estimate" id="vEstimateHelp" hidden></p></div></details>
+      <details class="ov-card ov-flow mm-finance-details" id="vFinanceDetails" open><summary data-i18n="verdict.inspectBreakdown">Ver distribución de ingresos y destinos</summary><div class="mm-finance-details-body"><h4 data-i18n="picker.moneyOrigin">DE DÓNDE SALE TU ISK</h4><div id="ovFlow"></div><div class="mm-dest-inline" id="ovDestW"><h4 data-i18n="picker.salesDestinationUpper">DÓNDE SE VENDE</h4><div id="ovDest"></div></div><p class="mm-finance-estimate" id="pkFeesNote" hidden></p><p class="mm-finance-estimate" id="vEstimateHelp" hidden></p></div></details>
         </div>
       </section>
     </div>
+    </section>
     <div class="mm-decision-grid" id="decisionGrid">
 
       <section class="pk-opportunity mm-decision-card" id="pkOpportunity" aria-label="Comparación de rutas" hidden></section>
@@ -338,7 +332,7 @@ Contraband Freight = no</textarea><small>Una regla por línea: Nombre = tax tota
           <div class="ledger-table-scroll" id="unitCourierRows">
             <div class="ledger-head ledger-market-columns" role="group" data-i18n-aria-label="ledger.sortGroup" aria-label="Ordenar tus Items">
               <button type="button" class="ledger-sort" data-lsort="n"><span data-i18n="ledger.tableItem">Item</span><span class="sort-arrow" aria-hidden="true"></span></button>
-              <button type="button" class="ledger-sort" data-lsort="q"><span data-i18n="ledger.batchQuantity">Cantidad en lote</span><span class="sort-arrow" aria-hidden="true"></span></button>
+              <button type="button" class="ledger-sort" data-lsort="q"><span data-i18n="ledger.quantity">Cantidad</span><span class="sort-arrow" aria-hidden="true"></span></button>
               <button type="button" class="ledger-sort" data-lsort="v"><span data-i18n="ledger.tableVolume">Volumen</span><span class="sort-arrow" aria-hidden="true"></span></button>
               <button type="button" class="ledger-sort" data-lsort="jb"><span data-i18n="ledger.tableBuy">Compra</span><span class="sort-arrow" aria-hidden="true"></span></button>
               <button type="button" class="ledger-sort" data-lsort="js"><span data-i18n="ledger.tableSell">Venta</span><span class="sort-arrow" aria-hidden="true"></span></button>

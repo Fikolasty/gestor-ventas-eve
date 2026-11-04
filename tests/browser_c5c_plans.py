@@ -11,7 +11,6 @@ FIXTURE="""() => {
     refMan:null,m3uMan:null,checks:[],skew:0,
     jita:{buy:92000,sell:100000,topBuy:92000,topSell:100000,vol:5}}];
   S.api['c5c synthetic module']={cat:7};
-  pkPanelCollapsed=false;pkOverviewCollapsed=false;pkInsightsCollapsed=false;
   pkView.filter='all';refreshNow();
 }"""
 
@@ -49,11 +48,11 @@ class C5cPlanTests(unittest.TestCase):
                 for light in (False,True):
                     self.page.evaluate('(on)=>document.documentElement.classList.toggle("light",on)',light)
                     self.page.evaluate('()=>{document.activeElement?.blur();scrollTo(0,0)}')
-                    rects=self.page.evaluate("""() => ['pkPlanOptions','pkSpeedBox','pkResult','vFinanceDetails'].map(id=>{
+                    rects=self.page.evaluate("""() => ['pkPlanOptions','pkSpeedBox','vFinanceDetails'].map(id=>{
                       const el=$(id),r=el.getBoundingClientRect();return {x:r.x,y:r.y,w:r.width,h:r.height,right:r.right};
                     })""")
                     if width>880:
-                        for a,b in ((rects[0],rects[1]),(rects[2],rects[3])):
+                        for a,b in ((rects[0],rects[1]),):
                             self.assertAlmostEqual(a['y'],b['y'],delta=1)
                             self.assertLess(a['x'],b['x'])
                             self.assertAlmostEqual(a['w'],b['w'],delta=2)
@@ -65,16 +64,9 @@ class C5cPlanTests(unittest.TestCase):
                         self.assertLessEqual(r['right'],width+1)
                     geometry.append(rects)
                     self.page.locator('#pSum').screenshot(path=str(out/f'{stamp}-{lang}-{width}-{"light" if light else "dark"}.png'),animations='disabled')
-                    for top,bottom in ((True,True),(False,True),(True,False),(False,False)):
-                        self.page.evaluate('([a,b])=>{pkOverviewCollapsed=a;pkInsightsCollapsed=b;syncPlanPanel()}',[top,bottom])
-                        self.assertEqual(self.page.locator('#pkOverviewContent').is_visible(),not top)
-                        self.assertEqual(self.page.locator('#pkInsightsContent').is_visible(),not bottom)
-                        self.assertLessEqual(self.page.evaluate('document.documentElement.scrollWidth-innerWidth'),1)
-                    self.page.locator('#pkPlanToggle').click()
-                    expect(self.page.locator('#pkPlanContent')).to_be_hidden()
-                    self.assertEqual(self.page.locator('#pkPlanToggle').evaluate('(e)=>getComputedStyle(e).boxShadow'),'none')
-                    self.page.locator('#pkPlanToggle').press('Enter')
-                    expect(self.page.locator('#pkPlanContent')).to_be_visible()
+                    expect(self.page.locator('#pkOverviewContent')).to_be_visible()
+                    expect(self.page.locator('#pkInsightsContent')).to_be_visible()
+                    self.assertEqual(self.page.locator('#pkPlanToggle').evaluate('e=>e.tagName'),'HEADER')
                 for dark,light in zip(*geometry):
                     for key in ('x','y','w','h'):
                         self.assertAlmostEqual(dark[key],light[key],delta=1,msg=f'{width} {lang} {key}')
@@ -91,8 +83,8 @@ class C5cPlanTests(unittest.TestCase):
         self.assertEqual(self.page.evaluate('S.planMode'),'jInst')
         self.assertEqual(self.page.evaluate('lastP.best'),self.page.evaluate('computePlan().best'))
         self.assertNotEqual(self.page.locator('#pkAnalysisFacts').inner_text(),before)
-        self.assertEqual(self.page.locator('#stepDrawerTotal').inner_text(),self.page.locator('#pkResultValue').inner_text())
-        self.assertEqual(self.page.locator('#pkAnalysisValue').inner_text(),self.page.locator('#pkResultValue').inner_text())
+        self.assertEqual(self.page.locator('#stepDrawerTotal').inner_text(),self.page.locator('#pkAnalysisValue').inner_text())
+        expect(self.page.locator('#pkAnalysisValue .copy')).to_be_visible()
         self.assertEqual(self.page.locator('#pkOthers [data-m="jInst"]').count(),0)
         self.assertEqual(self.page.locator('#pk').evaluate('(e)=>e.parentElement.id'),'pkOptionsContent')
         expect(self.page.locator('#pkAdvantages')).to_contain_text('Evita esperar')

@@ -2934,9 +2934,5 @@
   "ledger.jitaPrice": {
     "es": "Precio Jita",
     "en": "Jita Price"
-  },
-  "ledger.batchQuantity": {
-    "es": "Cantidad en lote",
-    "en": "Batch quantity"
   }
 }

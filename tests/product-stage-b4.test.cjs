@@ -9,9 +9,9 @@ const catalog=JSON.parse(read('src/i18n/ui.json'));
 
 test('B.4 comparison is in the plan header; alerts retain their own container',()=>{
   assert.match(shell,/class="mm-section-head mm-plan-heading"/);
-  assert.match(shell,/id="pkHeadline" aria-live="polite"/);
+  assert.match(shell,/id="pkHeadline" class="pk-headline-note"/);
   assert.match(picker,/const opportunity=\$\('pkOpportunity'\),headline=\$\('pkHeadline'\)/);
-  assert.match(picker,/headline\.append\(grid\)/);
+  assert.match(picker,/const tradeoffs=\$\('pkTradeoffs'\)/);
   assert.match(picker,/opportunity\.hidden=!opportunity\.childElementCount/);
   assert.match(picker,/const financial= comparable\.length\?comparable:valid/);
   assert.match(picker,/showProfit\?\{\.\.\.t,net:t\.net-investment\}:t/);

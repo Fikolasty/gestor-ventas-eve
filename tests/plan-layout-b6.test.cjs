@@ -9,12 +9,11 @@ const css=fs.readFileSync('src/styles/80-product-ux.css','utf8');
 const translations=JSON.parse(fs.readFileSync('src/i18n/ui.json','utf8'));
 
 test('B.6 moves the existing finance disclosure inside the result companion without duplicating IDs',()=>{
-  for(const id of ['pkResult','pkResultMetric','pkResultValue','pkResultFees','pkResultShip',
-    'pkResultDestination','pkSort','pkTools','pkOthers','vFinanceDetails','ovFlow','ovDest']){
+  for(const id of ['pkAnalysisValue','pkResultWarning','pkFeesNote','pkSort','pkTools','pkOthers','vFinanceDetails','ovFlow','ovDest']){
     assert.equal((html.match(new RegExp('id="'+id+'"','g'))||[]).length,1,id);
   }
   const layout=html.indexOf('class="mm-plan-layout"');
-  const result=html.indexOf('id="pkResult"');
+  const result=html.indexOf('id="pkInsightsDrawer"');
   const options=html.indexOf('class="mm-plan-options"');
   const detail=html.indexOf('id="vFinanceDetails"');
   const fast=html.indexOf('id="pkSpeedBox"');

@@ -92,7 +92,6 @@ assert(sales.includes('box.append(row(chosen,true))'),'debe mostrarse el plan el
 assert(sales.includes("open:true"),'alternativas inicialmente visibles');
 assert(sales.includes('others.hidden=false'),'las alternativas ya no tienen desplegable anidado');
 assert(!sales.includes("e.target.closest('[data-pk-toggle]')"),'la fila elegida no debe plegar opciones');
-assert(sales.includes("$('pkOverviewToggle').addEventListener('click'"),'la cabecera completa abre el plan');
 assert(!sales.includes('pkChange'),'el botón Cambia de Plan ya no se usa');
 assert(sales.includes('El óptimo también se elige aquí'),'Plan Óptimo debe seguir seleccionable entre alternativas');
 assert(!sales.includes("back.dataset.m='auto'"),'no debe reaparecer Volver al óptimo');

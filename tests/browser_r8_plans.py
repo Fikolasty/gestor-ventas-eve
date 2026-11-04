@@ -12,7 +12,7 @@ FIXTURE="""() => {
  S.items=[{name:'Sample module A',qty:50,srcQty:50,ref:12000000,m3u:50,refMan:null,m3uMan:null,checks:[],skew:0,jita:{buy:11000000,sell:12000000,topBuy:11000000,topSell:12000000,vol:50}},
  {name:'Sample module B',qty:20,srcQty:20,ref:28000000,m3u:100,refMan:null,m3uMan:null,checks:[],skew:0,jita:{buy:26000000,sell:28000000,topBuy:26000000,topSell:28000000,vol:100}}];
  S.items.forEach(o=>S.api[o.name.toLowerCase()]={cat:7});
- pkPanelCollapsed=false;pkOverviewCollapsed=false;pkInsightsCollapsed=false;pkView.filter='all';syncLots();refreshNow();
+ pkView.filter='all';syncLots();refreshNow();
 }"""
 
 class R8PlanTests(unittest.TestCase):
@@ -79,7 +79,7 @@ class R8PlanTests(unittest.TestCase):
        self.assertLessEqual(self.page.evaluate('document.documentElement.scrollWidth-innerWidth'),1)
        self.assertEqual(self.page.locator('.c5c-donut').is_visible(),not flip)
        self.assertEqual(self.page.locator('#pk .pk-dot').is_visible(),not flip)
-       geometry.append(self.page.evaluate("['pkPlanOptions','pkSpeedBox','pkResult','vFinanceDetails'].map(id=>{const r=$(id).getBoundingClientRect();return [r.width,r.height]})"))
+       geometry.append(self.page.evaluate("['pkPlanOptions','pkSpeedBox','vFinanceDetails'].map(id=>{const r=$(id).getBoundingClientRect();return [r.width,r.height]})"))
        if width==1440 and ship:
         self.page.locator('#pSum').screenshot(path=str(out/f'r8-real-167-20261030-{flip}-{lang}-{"light" if light else "dark"}.png'),animations='disabled')
       for a,b in zip(*geometry):
@@ -88,7 +88,7 @@ class R8PlanTests(unittest.TestCase):
   self.page.evaluate("""()=>{setFlip(true);C.buyMode='buy';S.items.forEach(o=>o.jita.topBuy=null);refreshNow();}""")
   self.assertIsNone(self.page.evaluate('flipPlanAccounting(lastP)'))
   self.assertTrue(self.page.locator('#vCap .jita-warning').is_visible())
-  self.assertNotIn('Ganancia',self.page.locator('#pkResultMetric').inner_text())
+  self.assertTrue(self.page.locator('#pkResultWarning').is_visible())
   self.page.locator('#unitCourierHeading').click()
   self.assertEqual(self.page.locator('#freightLotFinal').inner_text(),'—')
   self.assertNotRegex(self.page.locator('#pSum').inner_text(),r'NaN|Infinity|undefined')

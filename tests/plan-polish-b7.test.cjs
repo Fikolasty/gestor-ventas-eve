@@ -8,35 +8,13 @@ const html=src('shell.html'),css=src('styles/80-product-ux.css');
 const picker=src('js/ui/plan-picker.js'),verdict=src('js/ui/selling-results.js');
 const keys=JSON.parse(src('i18n/ui.json'));
 
-test('C.5c has one full-heading disclosure with bilingual accessible names',()=>{
-  assert.equal((html.match(/id="pkPlanToggle"/g)||[]).length,1);
-  assert.equal((html.match(/id="pkPlanOptions"/g)||[]).length,1);
-  assert.equal((html.match(/id="pkPlanContent"/g)||[]).length,1);
-  assert.match(html,/<button[^>]*id="pkPlanToggle"[^>]*aria-controls="pkPlanContent"[^>]*aria-expanded="false"[^>]*>[\s\S]*?data-i18n="picker.chooseTitle"/);
-  assert.doesNotMatch(html,/class="mm-plan-toggle-chevron"/);
-  assert.match(html,/<div id="pkPlanContent" class="mm-plan-content" hidden>[\s\S]*?<div class="fb2" id="flipBuy"[\s\S]*?<div class="mm-plan-layout">[\s\S]*?<div class="mm-decision-grid" id="decisionGrid">[\s\S]*?<\/div>\s*<\/div>[\s\S]*?id="ledger"[\s\S]*?<!-- B\.19:/);
-  assert.match(html,/<section class="mm-step-drawer" id="stepDrawer">[\s\S]*?id="bDeep"[^>]*aria-controls="deep"[\s\S]*?<div id="deep" class="deep" hidden>/);
-  assert.deepEqual(keys['picker.hidePlans'],{es:'Ocultar toda la sección',en:'Collapse entire section'});
-  assert.deepEqual(keys['picker.showPlans'],{es:'Mostrar toda la sección',en:'Expand entire section'});
-  assert.match(picker,/pkPanelCollapsed=!pkPanelCollapsed/);
-  assert.match(picker,/const panel=\$\('pkPlanContent'\),toggle=\$\('pkPlanToggle'\)/);
-  assert.match(picker,/toggle\.setAttribute\('aria-expanded',String\(!pkPanelCollapsed\)\)/);
-  assert.match(picker,/pkPanelCollapsed=false;\s*pkOverviewCollapsed=false;\s*pkView\.open=true/);
-  assert.match(css,/#pSum #pkPlanContent\[hidden\]\{display:none!important\}/);
-});
-
-test('B.18 unifies available plans and result behind one full-width, two-column drawer header',()=>{
-  assert.equal((html.match(/id="pkOptionsToggle"/g)||[]).length,0);
-  assert.equal((html.match(/id="pkOptionsContent"/g)||[]).length,1);
-  assert.match(html,/id="pkOverviewToggle" aria-controls="pkOverviewContent" aria-expanded="true"/);
-  assert.match(html,/<div class="mm-plan-drawer-body" id="pkOverviewContent">[\s\S]*?id="pkPlanOptions"[\s\S]*?id="pkSpeedBox"/);
-  assert.match(html,/<div id="pkOptionsContent">[\s\S]*?id="pkTools"[\s\S]*?id="pkSort"[\s\S]*?id="pkOthers"/);
-  assert.match(picker,/let pkPanelCollapsed=true/);
-  assert.match(picker,/let pkOverviewCollapsed=false/);
-  assert.match(picker,/pkOverviewCollapsed=!pkOverviewCollapsed/);
-  assert.doesNotMatch(picker,/pkOptionsCollapsed/);
-  assert.match(css,/#pSum #pkOptionsContent\[hidden\]\{display:none!important\}/);
-  assert.match(css,/#pSum \.mm-plan-drawer-body\[hidden\]\{display:none!important\}/);
+test('Sales presents the plan and distribution without disclosure controls',()=>{
+  assert.match(html,/<header[^>]*id="pkPlanToggle"/);
+  assert.match(html,/<div id="pkPlanContent" class="mm-plan-content">/);
+  assert.match(html,/id="pkOverviewContent"[\s\S]*?id="pkPlanOptions"[\s\S]*?id="pkSpeedBox"/);
+  assert.match(html,/id="pkInsightsContent"[\s\S]*?id="vFinanceDetails" open>/);
+  assert.doesNotMatch(picker,/pkPanelCollapsed|pkOverviewCollapsed|pkInsightsCollapsed/);
+  assert.doesNotMatch(html,/id="pkResult"/);
 });
 
 test('finance disclosure retains ordinary estimation context and exceptional warnings remain visible',()=>{

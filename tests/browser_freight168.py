@@ -16,19 +16,17 @@ class Freight168Tests(unittest.TestCase):
   self.page=self.browser.new_page(viewport={'width':1440,'height':1000},reduced_motion='reduce')
   self.errors=[];self.page.on('pageerror',lambda e:self.errors.append(str(e)))
   self.page.route('https://**/*',lambda r:r.abort());self.page.goto((ROOT/'index.html').as_uri(),wait_until='domcontentloaded')
-  self.initial=self.page.evaluate('pkInsightsCollapsed');self.page.evaluate(FIXTURE)
+  self.page.evaluate(FIXTURE)
  def tearDown(self):self.assertEqual(self.errors,[]);self.page.close()
  def test_defaults_keyboard_and_refresh_preserve_independent_drawers(self):
-  self.assertTrue(self.initial)
-  self.page.evaluate('pkInsightsCollapsed=true;syncPlanPanel()')
-  self.assertFalse(self.page.locator('#pkInsightsContent').is_visible())
+  self.assertTrue(self.page.locator('#pkInsightsContent').is_visible())
   self.assertFalse(self.page.locator('#unitCourierContent').is_visible())
   self.page.locator('#unitCourierToggle').press('Enter')
   self.assertTrue(self.page.locator('#unitCourierContent').is_visible())
-  self.assertFalse(self.page.locator('#pkInsightsContent').is_visible())
+  self.assertTrue(self.page.locator('#pkInsightsContent').is_visible())
   self.page.evaluate('refreshNow()')
   self.assertTrue(self.page.locator('#unitCourierContent').is_visible())
-  self.assertFalse(self.page.locator('#pkInsightsContent').is_visible())
+  self.assertTrue(self.page.locator('#pkInsightsContent').is_visible())
  def test_batch_arithmetic_unit_payload_and_clipboard_match_actual_allocation(self):
   data=self.page.evaluate("""()=>{const rows=ledgerReference.rows;return {
    before:ledgerReference.before,ship:ledgerReference.shipCost,
@@ -54,7 +52,6 @@ class Freight168Tests(unittest.TestCase):
      self.page.set_viewport_size({'width':width,'height':1000})
      for opened in [False,True]:
       if self.page.locator('#unitCourierToggle').get_attribute('aria-expanded')!=str(opened).lower():self.page.locator('#unitCourierHeading').click()
-      self.page.evaluate('on=>{pkInsightsCollapsed=!on;syncPlanPanel()}',opened)
       geometry=[]
       for light in [False,True]:
        self.page.evaluate('on=>{document.documentElement.classList.toggle("light",on);document.activeElement?.blur();scrollTo(0,0)}',light);self.page.mouse.move(0,0)
