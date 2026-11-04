@@ -241,7 +241,7 @@ html.light :where(body:not(.is-jita)) #pSum #unitCourierBox #ledger :is(#unitCou
   :where(body:not(.is-jita)) #pSum #ledger.ledger-fusion .ledger-market-columns {background:var(--sales-table-head)!important}
   :where(body:not(.is-jita)) #pSum #ledger.ledger-fusion .ledger-market-columns .ledger-sort {
     white-space: normal;
-    font-size: 12px !important;
+    font-size: 13px !important;
   }
   :where(body:not(.is-jita)) #pSum #ledger.ledger-fusion .ledger-market-columns > :not(:first-child),
   :where(body:not(.is-jita)) #pSum #ledger #lots .lot-table-cell {
