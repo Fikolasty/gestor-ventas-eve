@@ -544,9 +544,9 @@ class ThemeBrowserTests(unittest.TestCase):
                 self.assertEqual(styles['financeDisplay'],'none',styles)
                 self.assertEqual(self.page.locator('#ledger>summary').evaluate("e=>getComputedStyle(e,'::after').display"),'none')
                 expect(self.page.locator('#ledger')).to_be_visible()
-                self.page.locator('#ledger>summary').click()
+                self.page.locator('#unitCourierToggle .sales-disclosure-cue').click()
                 expect(self.page.locator('#ledger')).to_have_attribute('open','')
-                self.page.locator('#ledger>summary').click()
+                self.page.locator('#unitCourierToggle .sales-disclosure-cue').click()
                 expect(self.page.locator('#ledger')).not_to_have_attribute('open','')
 
     def test_c1b_sales_disclosure_chevrons_keep_shared_geometry_and_native_toggle(self):
@@ -1984,7 +1984,7 @@ class ThemeBrowserTests(unittest.TestCase):
                     self.page.locator('#ledger').screenshot(path=str(out/
                         f'b16-folded-ledger-es-1440-{"light" if light else "dark"}.png'),
                         animations='disabled')
-                self.page.locator('#ledger>summary').click()
+                self.page.locator('#unitCourierToggle .sales-disclosure-cue').click()
                 expect(self.page.locator('#ledger')).to_have_attribute('open','')
                 opened=self.color('#ledger')
                 self.assertEqual(opened,closed)
@@ -2002,7 +2002,7 @@ class ThemeBrowserTests(unittest.TestCase):
                     self.page.locator('#ledger').screenshot(path=str(out/
                         f'b16-open-ledger-es-1440-{"light" if light else "dark"}.png'),
                         animations='disabled')
-                self.page.locator('#ledger>summary').click()
+                self.page.locator('#unitCourierToggle .sales-disclosure-cue').click()
                 expect(self.page.locator('#ledger')).not_to_have_attribute('open','')
 
     def test_b14_collapsed_ledger_inverted_depth_row_activation_and_semantics(self):
