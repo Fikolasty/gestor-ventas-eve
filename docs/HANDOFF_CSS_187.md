@@ -62,3 +62,11 @@ Fuente 227bcdfea25514ac7784c2d0614466ba86783165. Compilación 2ca43c842b0129c389
 Elige tu plan y Detalle por Item muestran una acción textual con borde cálido. La acción cambia al abrir cada sección y la cabecera responde al puntero y al teclado. Los tres títulos principales comparten la escala tipográfica. Una línea fina separa la cabecera de Detalle por Item de los totales. Tasación retira del flujo visual la cobertura y las fechas ESI, mientras conserva los avisos de cotización parcial y la consulta de metadatos en Jita.
 
 Comparación local en Chromium a 390, 630, 980 y 1440 px en ES/EN y Light/Dark. Los dos controles abren y cierran con teclado y sus títulos comparten tamaño. El selector se acotó a Ventas tras detectar que la primera versión hacía visible el selector de planes en Jita. Publicación condicionada a CI y comparación HTTPS.
+
+### Publicación verificada el 2026-11-04
+
+v1.0.189 está publicada. El primer CI detectó dos pruebas que pulsaban el centro del resumen de Detalle por Item, donde hay importes copiables. El divisor se colocó en el espacio existente y las pruebas ahora pulsan la acción visible. Pasaron las dos pruebas focales, las 16 combinaciones de Ventas, la matriz de Jita y los cuatro flujos de GitHub del reintento. Las capturas finales de Ventas a 1440 px se revisaron en ambos temas.
+
+Fuente 8d8cce8301ad59e10288b12fdd3253c8a46d6c1f. Compilación 5a72bc23c8829b5ee506729e596dc6f3428e14dc. Rebuild y Pages 41785732110. El HTML público, el compilado local y GitHub coinciden. Tamaño 2.592.609 bytes y blob f26ee9863f62e5afdf5c24ae994b42662430d7c9. Cierre de la entrega visual solicitada. Pendientes de esta entrega: ninguno.
+
+Para retomar en otro chat: «Continúa Market Moves+ desde v1.0.189 LIVE. Lee AGENTS.md, EVE_PRODUCT_DESIGN_PROTOCOL.md, DSS.md y HANDOFF_CSS_187.md. Los desplegables de Ventas ya tienen acciones textuales y Tasación está alineada con Inventario. Verifica HEAD/main y retoma la auditoría incremental de CSS».
