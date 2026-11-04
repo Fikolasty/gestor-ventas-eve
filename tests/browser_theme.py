@@ -1433,7 +1433,7 @@ class ThemeBrowserTests(unittest.TestCase):
                     bottom:s.borderBottomWidth,height:el.getBoundingClientRect().height};
             }""")
             self.assertEqual(row_style['borderLeft'],'0px')
-            self.assertEqual(row_style['groupBorder'],'1px')
+            self.assertEqual(row_style['groupBorder'],'0px')
             self.assertEqual(row_style['bottom'],'1px')
             self.assertGreaterEqual(row_style['height'],40)
             for width in (1440,390):
@@ -1494,9 +1494,9 @@ class ThemeBrowserTests(unittest.TestCase):
                 const a=document.querySelector('#pkSpeedBox').getBoundingClientRect();
                 const b=document.querySelector('#vFinanceDetails').getBoundingClientRect();
                 const c=document.querySelector('#unitCourierBox').getBoundingClientRect();
-                return {aX:a.x,aY:a.y,bX:b.x,bY:b.y,bBottom:b.bottom,cY:c.y};
+                return {aY:a.y,aWidth:a.width,bY:b.y,bWidth:b.width,bBottom:b.bottom,cY:c.y};
             }""")
-            self.assertAlmostEqual(geom['aX'],geom['bX'],delta=2)
+            self.assertGreater(geom['bWidth'],geom['aWidth'],geom)
             self.assertLess(geom['aY'],geom['bY'],geom)
             self.assertGreaterEqual(geom['cY'],geom['bBottom']-1,geom)
             if language=='es':

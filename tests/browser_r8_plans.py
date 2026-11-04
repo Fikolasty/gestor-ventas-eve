@@ -88,7 +88,7 @@ class R8PlanTests(unittest.TestCase):
   self.page.evaluate("""()=>{setFlip(true);C.buyMode='buy';S.items.forEach(o=>o.jita.topBuy=null);refreshNow();}""")
   self.assertIsNone(self.page.evaluate('flipPlanAccounting(lastP)'))
   self.assertTrue(self.page.locator('#vCap .jita-warning').is_visible())
-  self.assertTrue(self.page.locator('#pkResultWarning').is_visible())
+  self.assertFalse(self.page.locator('#pkPlanContent').is_visible())
   self.page.locator('#unitCourierHeading').click()
   self.assertEqual(self.page.locator('#freightLotFinal').inner_text(),'—')
   self.assertNotRegex(self.page.locator('#pSum').inner_text(),r'NaN|Infinity|undefined')
