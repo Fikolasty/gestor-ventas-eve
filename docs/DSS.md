@@ -1848,3 +1848,31 @@ v1.0.189 está publicada. El primer CI detectó dos pruebas que pulsaban el cent
 Fuente 8d8cce8301ad59e10288b12fdd3253c8a46d6c1f. Compilación 5a72bc23c8829b5ee506729e596dc6f3428e14dc. Rebuild y Pages 41785732110. El HTML público, el compilado local y GitHub coinciden. Tamaño 2.592.609 bytes y blob f26ee9863f62e5afdf5c24ae994b42662430d7c9. Cierre de la entrega visual solicitada. Pendientes de esta entrega: ninguno.
 
 Para retomar en otro chat: «Continúa Market Moves+ desde v1.0.189 LIVE. Lee AGENTS.md, EVE_PRODUCT_DESIGN_PROTOCOL.md, DSS.md y HANDOFF_CSS_187.md. Los desplegables de Ventas ya tienen acciones textuales y Tasación está alineada con Inventario. Verifica HEAD/main y retoma la auditoría incremental de CSS».
+
+### Auditoría local de continuidad — 2026-11-04
+
+Base local `61ced55`, con `main` y la referencia local `origin/main` en el mismo commit. El HTML local coincide con el blob certificado de v1.0.189.
+
+Primer alcance propuesto para la limpieza incremental. Revisar las tres reglas de presentación de `.appr-meta` en `80-product-ux.css`. Tasación crea ese nodo siempre con `hidden`, y Jita usa su texto para la descripción accesible y el tooltip del botón de información. La limpieza se limita a esas reglas y conserva el nodo, sus textos y el estilo de `.appr-partial`.
+
+Pasaron siete pruebas focales Node de cobertura, fechas y copy. Falta la comparación de Chromium en Ventas y Jita antes de retirar las reglas. Solo se ha documentado la auditoría. Aprobación de rediseño no aplicable. Publicación nueva pendiente de un incremento implementado y verificado.
+
+## v1.0.190 — Gavetas de Ventas, candidata aprobada
+
+El propietario aprobó aplicar la maqueta. Elige tu plan y Detalle por Item usan una cabecera de grafito profundo en Dark o blanca en Light, con una línea cobriza y sin flechas ni etiquetas de apertura. Planes, Análisis, Resultado y Distribución comparten esa superficie. Detalle conserva los totales al cerrar. Al abrir aparecen el refresco y los selectores planos. En Ventas se ocultan el icono de información y el menú secundario Ordenar. Los encabezados conservan su ordenación individual. Precio Jita / Jita Price identifica Orden / Inmediata. La cantidad sigue indicando el lote y las cifras se copian como texto con aviso animado. Fórmulas, tasas y ESI/SSO se conservan.
+
+Build local v1.0.190, blob `52b6718c45af89112cc9905af41d6a44c0c093c5`. Pasaron 170 Node, 16 Python, ocho legacy y 16 combinaciones focales Chromium de Ventas a 390/630/980/1440 px en ES/EN y Dark/Light. Se comprobaron teclado, cantidad constante y copia con portapapeles simulado. Revisadas capturas finales a 1440 px con los cuatro paneles abiertos y datos sintéticos. Suite Chromium completa y verificación pública pendientes. No queda aprobación visual pendiente.
+
+La revisión automática bloqueó la carga a GitHub del archivo del flujo de publicación existente por sus permisos de escritura, actualización de main y despliegue de Pages. El cambio local ajusta la versión y el mensaje de verificación del flujo existente. Main no avanzó y la candidata no está publicada. Hace falta autorización explícita para ese archivo antes de reintentar.
+
+El propietario autorizó explícitamente el ajuste del flujo existente. La revisión aceptó el reintento por Fiko y las fuentes se subieron a main en `b1e1a4f6c1bd50321fefab068af07d095ef0e1b2`, sin force desde `61ced55`. La certificación de Actions, Pages y HTTPS sigue pendiente. Esta nota de seguimiento del DSS permanece local.
+
+Verificación adicional en Chromium con permisos de lectura y escritura del portapapeles y datos sintéticos. Cantidad 300 en ambas escalas, envío unitario −2 y del lote −600, activación por clic y Enter, aviso «Copiado» y desaparición automática comprobados.
+
+El primer flujo de publicación `41808946245` detuvo Pages con 135/136 Chromium. La prueba de legibilidad requiere encabezados de al menos 12,2 px y la propuesta inicial usaba 12 px. Se corrigió a 13 px en `39f25c0a` sin cambiar el umbral de la prueba. Las 16 combinaciones focales volvieron a pasar y se revisaron capturas nuevas de Ventas a 1440 px en ambos temas. Compilado corregido `4385e84a19b80905eefb7ff5b5216f638edff3e5`. El segundo flujo debe certificar Pages y HTTPS.
+
+### v1.0.190 LIVE certificada — 2026-11-04
+
+Publicada por Fiko tras aprobación del propietario. Fuente inicial `b1e1a4f6`, corrección tipográfica `39f25c0aa43cbf2427af33cd45c85fb1129704ce`, compilado `d37ff5e255d97014a85b25640391918a77950fdb`. Los cuatro flujos del reintento pasaron. Build `41809841166`, Versiones `41809841036`, Minería `41809841028`, Rebuild y Pages `41809840998`. Compile `126506046686` y Deploy `126508839955`. CI 170 Node, 16 Python, ocho legacy y 136/136 Chromium en 408,775 s.
+
+HTTPS 200 en https://fikolasty.github.io/gestor-ventas-eve/ sin query y con solicitud sin caché. HTML público, compilado local y GitHub idénticos, 2.595.013 bytes y blob `4385e84a19b80905eefb7ff5b5216f638edff3e5`. Capturas finales a 1440 px Dark y Light del mismo estado con cuatro paneles abiertos y datos sintéticos. Se verificó la copia real en Chromium con datos de prueba. ESI/SSO real extremo a extremo queda fuera de la verificación de esta entrega. Aprobación y publicación cerradas.

@@ -80,3 +80,15 @@ La consolidación de la promoción ya se publicó en v1.0.188. La auditoría des
 Implementación aprobada y compilada localmente. Cabeceras oscuras o blancas, línea cobriza sin flecha, cuatro paneles con la misma superficie, siete columnas divididas y refresco dentro de Detalle por Item. Precio Jita / Jita Price, Orden / Inmediata y Lote / Unidad conservan su función. La limpieza de `.appr-meta` queda como trabajo independiente.
 
 Última LIVE certificada v1.0.189. Los gates locales y las limitaciones de v1.0.190 están en el cierre del DSS. No certificar la candidata hasta comprobar cuatro Actions, Pages y coincidencia HTTPS.
+
+La revisión automática bloqueó la carga del flujo de publicación. Main sigue en `61ced55`. La candidata, el compilado y el cierre documental permanecen locales.
+
+Actualización posterior. El propietario autorizó el ajuste y Fiko avanzó main a `b1e1a4f6` con las fuentes de v1.0.190. La certificación remota sigue pendiente.
+
+El primer CI detuvo Pages por el tamaño de los encabezados del listado. La corrección `39f25c0a` restablece la legibilidad a 13 px. Compilado local corregido `4385e84a19b80905eefb7ff5b5216f638edff3e5`. Las 16 combinaciones focales y la copia real en Chromium están verificadas con datos de prueba.
+
+### Cierre v1.0.190 LIVE
+
+Última LIVE v1.0.190, publicada el 2026-11-04. Corrección Fiko `39f25c0a`, compilado `d37ff5e2`, cuatro Actions correctas y 136/136 Chromium. Pages `41809840998`. HTML público, local y GitHub idénticos, 2.595.013 bytes y blob `4385e84a19b80905eefb7ff5b5216f638edff3e5`. El cierre del DSS sustituye todos los estados candidatos y pendientes de esta entrega.
+
+Para retomar en otro chat: «Continúa Market Moves+ desde v1.0.190 LIVE. Revisa AGENTS.md, DSS y HANDOFF_CSS_187.md. Las gavetas de Ventas y la copia del listado ya están publicadas. Verifica HEAD/main antes de retomar la auditoría incremental CSS».
