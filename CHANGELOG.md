@@ -1,9 +1,9 @@
-## v1.0.193 — Distribución simétrica y borde común en planes
+## v1.0.193 — Distribución simétrica y borde común en planes — LIVE certificada
 
 - Distribución50/50 con barras alineadas, total en cabecera y destinos breves ES/EN.
 - Explicación de estimación en ayuda inline; avisos contables condicionales preservados.
 - Retirada la columna vacía de alternativos: total y diferencia alineados al importe seleccionado.
-- Diseño aprobado; QA y publicación en docs/HANDOFF_DISTRIBUTION_193.md. Última LIVE192 hasta cierre remoto.
+- Fuente Fiko374a113f, buildae31b620;4Actions SUCCESS y170Node/16Python/8legacy/139Chromium CI PASS. HTTPS/local/GitHub idénticos,blob1db02ca13da0e2badc08c662a154133d1934dde2. Cierre en docs/HANDOFF_DISTRIBUTION_193.md.
 
 ## v1.0.192 — limpieza incremental CSS de Tasación — LIVE certificada
 

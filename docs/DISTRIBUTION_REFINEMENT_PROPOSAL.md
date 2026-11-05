@@ -1,6 +1,6 @@
 # Distribución y destinos — propuesta local desde v192, 2026-11-05
 
-**Actualización: propuesta r3 aprobada por el propietario e implementada localmente como candidata193**, junto al alineado de importes de planes alternativos pedido en su siguiente captura. Ver `docs/HANDOFF_DISTRIBUTION_193.md` y cierre del DSS. Los estados de propuesta pendiente siguientes son históricos; la publicación aún requiere gates remotos. Última LIVE192.
+**Actualización: propuesta r3 aprobada y publicada como v193 LIVE**, junto al alineado de importes de planes alternativos pedido en la siguiente captura. Fuente Fiko374a113f, buildae31b620,4Actions/139Chromium CI PASS y HTTPS/local/GitHub idénticos,blob1db02ca1. Ver `docs/HANDOFF_DISTRIBUTION_193.md` y cierre del DSS. Los estados de propuesta pendiente siguientes son históricos. Última LIVE193, sin aprobación ni gate pendiente; la implementación final usa datos del motor, no los números estáticos del prototipo.
 
 ## Petición y diagnóstico
 

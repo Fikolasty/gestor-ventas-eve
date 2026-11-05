@@ -1,5 +1,9 @@
 # PROGRESS — Market Moves+
 
+## 2026-11-05 — v1.0.193 LIVE certificada
+
+Distribución r3 aprobada y publicada50/50, barras alineadas, copy compacto, ayuda inline y avisos contables conservados. Importe y diferencia de alternativos comparten borde con seleccionado, sin cuarta columna vacía. Fuente Fiko374a113fa63e7d78c74a85087b67ac2dbf777139, buildae31b620cb1bf3f195f534f35b48446dab0b7c79;4Actions SUCCESS (Pages41979728604),170Node/16Python/8legacy/139Chromium CI PASS430,408s. Local139Chromium293,132s y170Node/16Python/8legacy PASS; capturas finales1440ES Dark/Light completas, ayuda y EN revisadas. HTTPS200 sin query/sin caché,HTML público/local/GitHub idénticos2.602.997bytesLF,blob1db02ca13da0e2badc08c662a154133d1934dde2. Sin cambios económicos,ESI/SSO o persistencia. No quedan aprobaciones ni gates pendientes. Kit activo docs/HANDOFF_DISTRIBUTION_193.md; auditoríaCSS de Tasación sigue siguiente alcance. Alerta continuidadAMARILLA por dos publicaciones192/193 en este chat; preparar próximo antes de otra etapa larga.
+
 ## 2026-11-05 — v1.0.192 LIVE certificada
 
 Publicación Fiko: fuente55bd0eaa, prueba67450146 y build00586924. Cuatro Actions SUCCESS (Pages41975435983),169Node/16Python/8legacy/136Chromium CI PASS (319,386s). HTTPS200 sin query y sin caché, HTML público/local/GitHub idénticos:2.596.975bytesLF,blob714c182198a868f45894cfefdab097c91558518d. Limpieza de tres reglas de metadatos ocultos,210bytes menos, sin cambios visibles ni económicos.160estados y20parejas desktop idénticas PASS locales. Cierra todos los pendientes192 anteriores. Kit activo docs/HANDOFF_CSS_192.md; siguiente familia solo propuesta. Documentación final se publica en commit posterior al build certificado.

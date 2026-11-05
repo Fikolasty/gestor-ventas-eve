@@ -1,5 +1,7 @@
 # Continuidad CSS v1.0.192 — 2026-11-05
 
+**Continuidad vigente: v193 LIVE certificada.** El feedback aprobado de Distribución y el alineado de importes alternativos ya están publicados. Kit activo `docs/HANDOFF_DISTRIBUTION_193.md`; este documento conserva el historial de192. Cuatro Actions/139Chromium CI PASS y HTTPS/local/GitHub idénticos,blob1db02ca1. No retomar estados candidatos posteriores como pendientes actuales.
+
 ## Estado actual
 
 **v1.0.192 LIVE CERTIFICADA — 2026-11-05.** Este cierre sustituye los estados candidatos y gates pendientes del historial de este documento. Fuente Fiko `55bd0eaa`, prueba corregida `67450146`, build `00586924`. Cuatro Actions SUCCESS, Pages `41975435983`, compile `127073068369` y deploy `127075028221`. CI 169 Node/16 Python/ocho legacy/136 Chromium PASS (319,386 s). HTTPS200 sin query y sin caché: HTML público/local/GitHub idénticos, 2.596.975 bytesLF y blob `714c182198a868f45894cfefdab097c91558518d`. No queda aprobación ni gate de publicación pendiente. La siguiente familia CSS sigue solo propuesta.

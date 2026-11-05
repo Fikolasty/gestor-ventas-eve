@@ -2,7 +2,7 @@
 
 ## Estado
 
-**Candidata local aprobada; última LIVE v192.** El propietario aprobó la propuesta r3 de Distribución y pidió desplazar a la derecha los importes de planes alternativos. Publicación autorizada dentro del alcance incremental y del permiso continuo; no hay aprobación visual pendiente. No declarar LIVE193 hasta Fiko, cuatro Actions y coincidencia HTTPS/local/GitHub.
+**v1.0.193 LIVE CERTIFICADA — 2026-11-05.** Este cierre sustituye todos los estados candidata/local/pendiente del historial. Fuente Fiko `374a113fa63e7d78c74a85087b67ac2dbf777139`, build bot `ae31b620cb1bf3f195f534f35b48446dab0b7c79`. Cuatro Actions SUCCESS: Versiones41979728549, Minería41979728561, Build41979728611, Rebuild/Pages41979728604; compile127086811197 y deploy127089581256. CI170Node/16Python/8legacy/139Chromium PASS430,408s. HTTPS200 sin query y sin caché: público/local/GitHub idénticos,2.602.997bytesLF,blob1db02ca13da0e2badc08c662a154133d1934dde2. No queda aprobación visual ni gate de publicación pendiente.
 
 Base remota de cierre192: main `30929a93ccd42b74d4f54da1d448d3584ace9a8f`. HEAD local permanece en `61ced55` con cambios190–192 publicados; preservarlos, enviar solo el incremento sobre main remoto sin force. Workflows existentes solo versión192→193; prueba de versión alineada a193 antes de Node.
 
@@ -26,6 +26,16 @@ Capturas finales: `tests/artifacts/theme/v193-final-r2-*`. Datos sintéticos del
 
 Build local193 canónicoLF: **2.602.997 bytes**, blob **`1db02ca13da0e2badc08c662a154133d1934dde2`**. No editar index a mano. Acciones/publicación/HTTPS pendientes al crear este kit; cierre posterior sustituirá estos estados.
 
-## Siguiente paso
+## Siguiente paso y prompt de arranque
 
-Cerrar gate integral y publicación. La auditoría incremental CSS del título de Tasación sigue pendiente, sin implementarla automáticamente. No extender el patrón a otros módulos. La confirmación manual ESI del propietario del2026-11-02 sigue registrada; el agente no ha repetido login ESI/SSO real en esta entrega.
+La auditoría incremental CSS del título de Tasación sigue pendiente, sin implementarla automáticamente como rediseño. No extender el patrón a otros módulos. La confirmación manual ESI del propietario del2026-11-02 sigue registrada; el agente no ha repetido login ESI/SSO real en esta entrega.
+
+**Continuidad AMARILLA:** se publicaron v192 y v193 en este chat. Preparar el siguiente antes de otra etapa larga; el contador reinicia al comenzar un chat nuevo. No existe un medidor fiable de ventana restante. DSS/AGENTS conservan la política preventiva12mensajes/2publicaciones y16mensajes/3publicaciones, y el aviso temprano si el historial es especialmente pesado.
+
+Prompt: «Continúa Market Moves+ desde v1.0.193 LIVE. Lee AGENTS.md, protocolo, DSS, PRODUCT_DESIGN_REFINEMENT y HANDOFF_DISTRIBUTION_193.md. Verifica main remoto; el build certificado es ae31b620 y su HTML1db02ca1. Distribución50/50, ayuda inline y los importes alternativos alineados a la derecha ya están publicados/aprobados; no repetir la maqueta. Retoma la auditoría incremental CSS del título Tasación/Inventario con evidencia de cascada y sin rediseño, preservando motor,ESI,SSO,persistencia y cambios locales».
+
+El cierre documental puede avanzar main después del build sin alterar el HTML certificado; verificar HEAD remoto al iniciar. HEAD local antiguo61ced55 y cambios publicados190–193 no equivalen a una rama lista para push. Preservar todo y componer solo incrementos sobre el árbol remoto verificado. Propuestas r1–r3 son historia visual; capturas finales de implementación son v193-final-r2. Kits CSS187/CSS192 y SALES191 conservan antecedentes, no pendientes de publicación actuales.
+
+### Envío remoto
+
+Fuente Fiko374a113fa63e7d78c74a85087b67ac2dbf777139 sobre main30929a93, árbol34b2469c752b86b43892b0db5947c6fb08b351e8.17blobs verificados y actualización protegida sin force; index.html excluido. Actions/Pages/HTTPS pendientes. Notas de seguimiento locales hasta el cierre documental.
