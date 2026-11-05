@@ -2,7 +2,7 @@
 
 ## Estado real
 
-**Siguiente corrección solicitada: v1.0.195 candidata**, restaurar Elige tu plan plegable y cerrado inicialmente. Ver `docs/HANDOFF_PLAN_DISCLOSURE_195.md`;194 sigue LIVE hasta su gate remoto.
+**Continuidad vigente: v1.0.195 LIVE certificada**, Elige tu plan plegable y cerrado inicialmente. Ver `docs/HANDOFF_PLAN_DISCLOSURE_195.md`; cuatro Actions SUCCESS y HTML público/local/GitHub idénticos3966f39b. Este kit conserva el historial194.
 
 **v1.0.194 LIVE CERTIFICADA.** Todos los gates cerrados; ver cierre remoto al final. La dirección visual fue aprobada y la publicación se completó mediante Fiko/Fikolasty. Los estados pendientes del historial siguiente quedan sustituidos.
 

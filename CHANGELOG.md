@@ -1,8 +1,9 @@
-## v1.0.195 — Elige tu plan plegable — candidata
+## v1.0.195 — Elige tu plan plegable — LIVE certificada
 
 - Cabecera pulsable y accesible; comienza minimizado y conserva su estado en cada repintado.
 - Detalle y Pasos independientes; composición interior, importes y motor intactos.
-- Auditoría CSS de cabeceras pausada; no se publica saneamiento40/60. QA/publicación en docs/HANDOFF_PLAN_DISCLOSURE_195.md.
+- Fiko bc51ced0, build6bc575c7; cuatro Actions SUCCESS,171Node/16Python/8legacy/146Chromium CI PASS y HTML público/local/GitHub idénticos3966f39b.
+- Auditoría CSS de cabeceras pausada; no se publica saneamiento40/60. Cierre en docs/HANDOFF_PLAN_DISCLOSURE_195.md.
 
 ## v1.0.194 — Unidad/Lote y referencia Jita claras — LIVE certificada
 

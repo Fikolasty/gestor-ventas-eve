@@ -2,6 +2,8 @@
 
 ## Alcance acordado y estado
 
+**Auditoría pausada y sin limpieza publicada.** v1.0.195 LIVE corresponde únicamente a restaurar el plegado de planes;40/60 conservan sus blobs194. Las verificaciones propuestas siguientes siguen pendientes. Continuidad vigente: docs/HANDOFF_PLAN_DISCLOSURE_195.md.
+
 El propietario pidió continuar tras el cierre LIVE194. Se retoma exclusivamente la auditoría incremental propuesta de Tasación/Inventario; no hay rediseño ni cambio de copy. Base main5c55b25be23e0004e1b42c3bf719003d82be017d, HTML194 certificado c7a33258775dccd701c147821be6a2190f629a68 (2.605.727bytesLF). HEAD local antiguo y cambios publicados previos se preservan. No aprobación visual pendiente para retirar CSS comprobablemente redundante; publicación sujeta a QA completo.
 
 ## Diagnóstico previo a implementación
