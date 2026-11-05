@@ -1,7 +1,7 @@
-## v1.0.196 — limpieza CSS de cabeceras — candidata
+## v1.0.196 — limpieza CSS de cabeceras — LIVE certificada
 
 - Retiradas dos reglas sobrescritas de Tasación/Inventario:408bytes menos, aspecto y JavaScript conservados.
-- 192estados y24parejas PNG idénticos. QA/publicación en docs/HANDOFF_CSS_196.md.
+- 192estados y24parejas PNG idénticos;171Node/16Python/8legacy/146Chromium CI y cuatro Actions SUCCESS. Fuente68522b8f, build0225ac94; HTML público/local/GitHub idénticos97f42eeb. Cierre en docs/HANDOFF_CSS_196.md.
 
 ## v1.0.195 — Elige tu plan plegable — LIVE certificada
 

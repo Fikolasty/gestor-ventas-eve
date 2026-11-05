@@ -2,6 +2,8 @@
 
 ## Alcance y base
 
+**v1.0.196 LIVE CERTIFICADA.** Cierre remoto al final; sustituye los estados en curso/pendientes siguientes.
+
 Continuación solicitada tras v1.0.195 LIVE. Base remota Fiko main086f0238b1bdeeb79e49db75028dfc08bcf8edbc, árbol eddf1423f5cd3a36a3c45aa154d5845bc672aa3c. HTML195 canónico3966f39b7bc3c1d1f181f02705e3702eccb189ae,2.606.524bytesLF; copia exacta local en .qa-audit/css-headings-196/before.html. HEAD local antiguo61ced55 y cambios190–195 ya publicados se preservan. No subir todo el checkout ni editar index manualmente.
 
 Se retoma el diagnóstico pausado en CSS_HEADINGS_AUDIT_195.md. Solo dos reglas redundantes de Tasación/Inventario, sin rediseño ni cambios de copy. Aprobación de dirección no pendiente; la publicación incremental está autorizada tras QA por Fiko/cuatroActions/Pages/HTTP.
@@ -32,3 +34,17 @@ La copia diferencial after195.html se conserva en .qa-audit/css-headings-196; su
 ### Gate local196 cerrado
 
 146/146Chromium PASS376,610s sobre build19697f42eeb;171Node/16Python/8legacy PASS. Diferencial192estados y24parejas PNG idénticos, capturas finales r2 inspeccionadas. Otras52fuentes de la aplicación idénticas al árbol remoto195; solo cambian las dos hojas CSS auditadas. Sin cambios posteriores de producto. Última LIVE195; Fiko/cuatroActions/Pages/HTTPS pendientes. No aprobación visual pendiente.
+
+## Siguiente familia propuesta, sin implementación
+
+Después del cierre196, diagnosticar las tres reglas de40 que definen la retícula `.hero-intro:not(.no-appr)`, el box model común de sus dos tarjetas y el display/flex-direction de `.appr`.60 parece cubrirlas con declaraciones importantes; confirmar especificidad/media queries y diferencial antes de retirar. No incluir textarea/paste-foot ni toda la familia: max-height, padding o line-height pueden seguir activos. Los títulos auditados196 y el estado plegable195 ya están cerrados; no rediseñar ni extender por parecido de texto.
+
+## Cierre LIVE v1.0.196 — 2026-11-05
+
+Publicación incremental certificada mediante Fiko/Fikolasty. Fuente `68522b8f24c99d9a195ac56b19b0a500e4e571d1`, build bot `0225ac945c0f2ffe7c1bdbf3ee2ec40e380b50f9`. Cuatro Actions SUCCESS: Build42045135146, Versiones42045134985, Minería42045135271 y Rebuild/Pages42045135385; compile127305922848 y deploy127310701131 SUCCESS.
+
+CI171Node/16Python/8legacy/146Chromium PASS (455,182s). Local171Node/16Python/8legacy/146Chromium PASS (376,610s). Diferencial sobre la misma versión195:192estados,37propiedades calculadas y geometría/textos/foco idénticos;24parejas PNG1440ES idénticas byte a byte. Capturas finales css-headings196-r2 revisadas después del último cambio visual. Fixtures sintéticos y red bloqueada; sin prueba ESI/SSO real extremo a extremo en esta entrega.
+
+HTTPS200 independiente sin query/sin caché confirma v1.0.196: HTML público/local canónico/GitHub idénticos, **2.606.116bytesLF**, blob **`97f42eeb8501a4d4c37789495f2836367091532c`**. Index generado exclusivamente por CI.14archivos del incremento verificados;52fuentes restantes de la aplicación intactas. Se retiran únicamente dos reglas sobrescritas de cabeceras40/60,408bytes menos sin mejora de velocidad medida. Los dos bloques JavaScript eran idénticos a195 antes de asignar versión196; copy, temas, motor, tasas, ESI/SSO, permisos y persistencia conservados. Elige tu plan mantiene el plegado cerrado por defecto de195.
+
+Este cierre sustituye todos los estados candidata/pendiente196 anteriores. Sin aprobación de diseño ni gate de publicación pendiente. Informe docs/CSS_HEADINGS_AUDIT_196.md y kit activo docs/HANDOFF_CSS_196.md. Siguiente familia solo propuesta: diagnosticar las tres reglas históricas del contenedor de tarjetas en40 frente a60, conservando propiedades activas del textarea. No se implementa ese siguiente alcance en196. Continuar en este chat sin avisos por contadores. El cierre documental posterior puede avanzar main sin alterar el HTML certificado.

@@ -1,6 +1,6 @@
 # Elige tu plan — plegado v1.0.195
 
-**Siguiente incremento196 candidata:** limpieza CSS de cabeceras, ver docs/HANDOFF_CSS_196.md.195 sigue LIVE hasta su cierre remoto.
+**Continuidad vigente: v1.0.196 LIVE certificada.** Limpieza CSS de cabeceras publicada, cuatro Actions SUCCESS y HTML público/local/GitHub idénticos97f42eeb. Ver docs/HANDOFF_CSS_196.md. El plegado195 sigue intacto; este kit conserva su historia.
 
 **v1.0.195 LIVE CERTIFICADA.** Último cierre remoto al final; sustituye todos los estados candidatos/pendientes del historial. No hay aprobación ni gate pendiente.
 
