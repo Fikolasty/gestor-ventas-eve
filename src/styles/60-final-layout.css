@@ -13,12 +13,6 @@
   box-sizing:border-box!important;
 }
 .hero-intro:not(.no-appr)>.appr .appr-title,
-.hero-intro:not(.no-appr)>.paste .paste-head{
-  display:flex!important;align-items:center!important;flex:0 0 35px!important;
-  height:35px!important;min-height:35px!important;
-  margin:0 0 10px!important;padding:0 0 8px!important;box-sizing:border-box!important;
-}
-.hero-intro:not(.no-appr)>.appr .appr-title,
 .hero-intro:not(.no-appr)>.paste .paste-title{
   font:750 1.08rem/1.25 var(--f-ui)!important;letter-spacing:.025em!important;
   text-transform:uppercase!important;margin:0!important;white-space:nowrap!important;

@@ -1,5 +1,12 @@
 # PROGRESS — Market Moves+
 
+## v1.0.196 candidata — CSS de cabeceras, 2026-11-05
+
+Solo se retiran dos reglas históricas de Tasación/Inventario en40-sales-ui.css y60-final-layout.css comprobadas como sobrescritas. Se conservan tipografía activa, media queries, temas finales, controles y todo JS. Copy ES/EN sin cambios; no ajuste de composición. Diferencial contra195:192estados con37propiedades calculadas/geometría/textos/foco idénticos y24parejas PNG1440ES idénticas, capturas finales css-headings196-r2 revisadas. Scripts ensamblados idénticos sobre la misma versión195;408bytes menos, sin promesa de rendimiento medido.
+
+Build196:2.606.116bytesLF,blob97f42eeb8501a4d4c37789495f2836367091532c.171Node/16Python/8legacy PASS;146Chromium local en curso. Workflows existentes y aserción de versión alineados a196. No cambios de motor/tasas/ESI/SSO/permisos/persistencia ni plegado del plan195. No aprobación visual pendiente; publicación autorizada tras Fiko/cuatroActions/Pages/HTTPS idéntico. Última LIVE195 hasta cierre. Informe docs/CSS_HEADINGS_AUDIT_196.md; kit docs/HANDOFF_CSS_196.md. Continuar aquí sin avisos por contadores.
+
+
 ## Cierre LIVE v1.0.195 — 2026-11-05
 
 La corrección solicitada del plegado está publicada y certificada por Fiko/Fikolasty. Fuente `bc51ced06cae2392db0ce3e04d621314140f6b21`, build bot `6bc575c7a9663bc7261ff6790ff15c41a9517a09`. Cuatro Actions SUCCESS: Build42001197093, Versiones42001197103, Minería42001197115 y Rebuild/Pages42001197108. Compile127156551693 y deploy127160249966 SUCCESS.
@@ -1652,3 +1659,7 @@ Tres alcances del propietario implementados: Unidad/Lote coherente y Precio Sell
 ### Gate local final cerrado
 
 146/146 Chromium PASS299,822s sobre el build final3966f39b;171 Node/16 Python/8legacy PASS. Comparador48estados y6parejas PNG idénticas PASS. Capturas v195-plan-r1 finales revisadas tras el último cambio de producto; no ajustes posteriores. Sustituye las expectativas heredadas corregidas y los pendientes locales anteriores. Solo Fiko/Actions/Pages/HTTPS pendientes; última LIVE194.
+
+### Gate local196 cerrado
+
+146/146Chromium PASS376,610s sobre build19697f42eeb;171Node/16Python/8legacy PASS. Diferencial192estados y24parejas PNG idénticos, capturas finales r2 inspeccionadas. Otras52fuentes de la aplicación idénticas al árbol remoto195; solo cambian las dos hojas CSS auditadas. Sin cambios posteriores de producto. Última LIVE195; Fiko/cuatroActions/Pages/HTTPS pendientes. No aprobación visual pendiente.

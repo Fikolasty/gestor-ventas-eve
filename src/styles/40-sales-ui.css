@@ -124,7 +124,6 @@ html.light #verdict .v-plan-name{color:#ad4b27}
 .hero-intro:not(.no-appr){display:grid;grid-template-columns:repeat(2,minmax(0,1fr));align-items:stretch;gap:16px}
 .hero-intro:not(.no-appr)>.appr,.hero-intro:not(.no-appr)>.paste{margin:0;min-width:0;min-height:220px;padding:16px;box-sizing:border-box}
 .hero-intro:not(.no-appr)>.appr{display:flex;flex-direction:column}
-.hero-intro:not(.no-appr)>.appr .appr-title{margin:0 0 12px!important;flex:none;line-height:28px}
 .hero-intro:not(.no-appr)>.appr .appr-g{flex:1;min-height:138px}
 .hero-intro:not(.no-appr)>.paste{display:flex;flex-direction:column;gap:0}
 .hero-intro:not(.no-appr)>.paste textarea{display:block;flex:1;min-height:138px;max-height:none;margin:0;resize:vertical;padding:8px 10px;line-height:1.5}

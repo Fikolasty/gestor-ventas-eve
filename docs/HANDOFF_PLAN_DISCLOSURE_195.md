@@ -1,5 +1,7 @@
 # Elige tu plan — plegado v1.0.195
 
+**Siguiente incremento196 candidata:** limpieza CSS de cabeceras, ver docs/HANDOFF_CSS_196.md.195 sigue LIVE hasta su cierre remoto.
+
 **v1.0.195 LIVE CERTIFICADA.** Último cierre remoto al final; sustituye todos los estados candidatos/pendientes del historial. No hay aprobación ni gate pendiente.
 
 ## v1.0.195 candidata — restaurar plegado del plan, 2026-11-05

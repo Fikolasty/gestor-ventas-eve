@@ -20,3 +20,7 @@ Comparación diferencial sobre la misma versión194 para aislar CSS: Ventas/Jita
 ## Pausa por corrección del propietario
 
 Antes de ejecutar el comparador, el propietario solicitó restaurar Elige tu plan plegable y minimizado por defecto. Se restituyeron exactamente40/60 a sus blobs LIVE194 (aad110f8/735eca77). No se publica limpieza CSS en195 ni se afirma equivalencia verificada. Los dos candidatos de retirada requieren retomar auditoría después de cerrar la corrección funcional.
+
+## Auditoría retomada como196
+
+El propietario pidió continuar tras el cierre195. Diagnóstico y diferencial ahora en docs/CSS_HEADINGS_AUDIT_196.md;192estados/24parejas PNG idénticos. El archivo195 conserva el estado histórico de pausa, no es el informe vigente. Gate final/publicación196 en docs/HANDOFF_CSS_196.md.

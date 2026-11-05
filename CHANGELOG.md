@@ -1,3 +1,8 @@
+## v1.0.196 — limpieza CSS de cabeceras — candidata
+
+- Retiradas dos reglas sobrescritas de Tasación/Inventario:408bytes menos, aspecto y JavaScript conservados.
+- 192estados y24parejas PNG idénticos. QA/publicación en docs/HANDOFF_CSS_196.md.
+
 ## v1.0.195 — Elige tu plan plegable — LIVE certificada
 
 - Cabecera pulsable y accesible; comienza minimizado y conserva su estado en cada repintado.
