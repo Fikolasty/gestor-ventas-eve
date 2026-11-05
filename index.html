@@ -7,7 +7,7 @@
 <meta name="referrer" content="no-referrer">
 <title>Market Moves+ · SIGMA GRINDSET</title>
 <style>
-/* ================= Market Moves+ v1.0.194 =================
+/* ================= Market Moves+ v1.0.195 =================
    Paleta: azul de base, naranja = acción, verde/rojo = ganancia/pérdida.
    Sin backdrop-filter: el vidrio se finge con rgba + bordes. */
 *{box-sizing:border-box;margin:0;padding:0}
@@ -8989,7 +8989,11 @@ body.is-jita #pSum .mm-plan-continuous {display:none}
   background:transparent!important;
   border:0!important;
   box-shadow:none!important;
-  cursor:default;
+  width:100%;text-align:left;font:inherit;color:inherit;
+  cursor:pointer;
+}
+#pSum .mm-plan-continuous > .mm-plan-heading:focus-visible {
+  outline:2px solid var(--ion);outline-offset:-3px;
 }
 #pSum .mm-plan-continuous > .mm-plan-heading::before,
 #pSum .mm-plan-continuous > .mm-plan-heading::after {content:none!important}
@@ -9523,8 +9527,8 @@ Contraband Freight = no</textarea><small>Una regla por línea: Nombre = tax tota
   <!-- 1. Resultado simple -->
   <section class="summary res mm-plan-area" id="pSum" hidden>
     <section class="mm-plan-continuous" aria-labelledby="pkPlanTitle">
-    <header class="mm-section-head mm-plan-heading" id="pkPlanToggle"><span class="mm-plan-heading-copy"><span class="mm-title" id="pkPlanTitle" role="heading" aria-level="2" data-i18n="picker.chooseTitle">ELIGE TU PLAN</span><span class="mm-section-sub" data-i18n="picker.chooseSubtitle">COMPARA LAS RUTAS Y DESCUBRE CUÁNTO RECIBIRÍAS</span></span></header>
-    <div id="pkPlanContent" class="mm-plan-content">
+    <button type="button" class="mm-section-head mm-plan-heading" id="pkPlanToggle" aria-controls="pkPlanContent" aria-expanded="false" aria-labelledby="pkPlanTitle"><span class="mm-plan-heading-copy"><span class="mm-title" id="pkPlanTitle" role="heading" aria-level="2" data-i18n="picker.chooseTitle">ELIGE TU PLAN</span><span class="mm-section-sub" data-i18n="picker.chooseSubtitle">COMPARA LAS RUTAS Y DESCUBRE CUÁNTO RECIBIRÍAS</span></span></button>
+    <div id="pkPlanContent" class="mm-plan-content" hidden>
     <div class="fb2" id="flipBuy" hidden></div>
     <div class="mm-plan-layout">
       <section class="mm-plan-drawer" id="pkOverviewDrawer">
@@ -9742,13 +9746,13 @@ Contraband Freight = no</textarea><small>Una regla por línea: Nombre = tax tota
 <button type="button" class="totop" id="toTop" aria-label="Volver arriba" title="Volver arriba (Inicio)" hidden><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 14l6-6 6 6"/></svg></button>
 <footer class="foot">
   <p class="foot-sec"><span class="ic i-lock" aria-hidden="true"></span>Tu inventario no se guarda: al cerrar o recargar se borra. Solo tus Ajustes quedan en este navegador.</p>
-  <div class="foot-by">Creado por <b>Fiko McGivert</b> · <span class="mm-footer-corp-logo vg" role="img" aria-label="Vanguardia DR"></span>Vanguardia DR · SIGMA GRINDSET · <span class="ver">v1.0.194</span></div>
+  <div class="foot-by">Creado por <b>Fiko McGivert</b> · <span class="mm-footer-corp-logo vg" role="img" aria-label="Vanguardia DR"></span>Vanguardia DR · SIGMA GRINDSET · <span class="ver">v1.0.195</span></div>
 </footer>
 
 <script>
 'use strict';
 /* ============================================================
-   Market Moves+ v1.0.194 — SIGMA GRINDSET / Vanguardia DR
+   Market Moves+ v1.0.195 — SIGMA GRINDSET / Vanguardia DR
    Flujo:  pegado → items → carga (ESI: precios, volúmenes, historial) → verificación → plan → vista
      1. Pegado      parsePaste(): parser posicional de columnas de EVE (Name · Quantity · … · Volume · Est. Price).
      2. Carga       esiItems(): trae todo lo que falta; mientras carga, refresh() NO pinta (S.loading).
@@ -11956,7 +11960,7 @@ function clearViews(){
   ['pCtr','pSum'].forEach(id=>{const e=$(id);if(e)e.hidden=true;});
   $('deep').hidden=true;delete $('deep').dataset.uiReady;
   lastP=null;repaintPlanGroup=null;paintAppraisal();discRows=[];czCards=[];lastCs=[];czIdx=0;S.planMode=null;ICON_POOL={};
-  stepOpen=null;vShow=Object.create(null);vSort=Object.create(null);vQuery=Object.create(null);pkView={sort:'net',dir:-1,filter:'all',open:true};if($('stepHead'))$('stepHead').textContent='';
+  stepOpen=null;vShow=Object.create(null);vSort=Object.create(null);vQuery=Object.create(null);pkView={sort:'net',dir:-1,filter:'all',open:true,expanded:false};syncPlanDisclosure();if($('stepHead'))$('stepHead').textContent='';
 }
 function paintWhereSold(P,none){
   const rowsIn=P.rows;
@@ -12932,7 +12936,7 @@ $('bEsiMin').addEventListener('click',async()=>{
 // El óptimo va SIEMPRE primero; los demás de mejor a peor por defecto. Todo sale de modeTotal() con los Ajustes,
 // la ruta (flip) y el switch de envío actuales: aquí no se calcula nada nuevo, solo se ordena y se pinta.
 // Elegir un plan recalcula (S.planMode → refreshNow). Orden y filtro viven en memoria (pkView) y se vacían al limpiar.
-let pkView={sort:'net',dir:-1,filter:'all',open:true}; // B.6: mostrar alternativas desde el inicio
+let pkView={sort:'net',dir:-1,filter:'all',open:true,expanded:false}; // B.6: mostrar alternativas desde el inicio
 // C.5c: present the selected plan using existing route/time classifications.
 // These descriptions are qualitative, never a forecast of fills or a risk score.
 function paintPlanAnalysis(P,chosen,comparisons=[]){
@@ -13098,9 +13102,22 @@ document.addEventListener('focusin',e=>{if(!planSortMenu.hidden&&!planSortMenu.c
 window.addEventListener('resize',()=>closePlanSort());
 document.addEventListener('scroll',()=>{if(!planSortMenu.hidden)placePlanSort();},true);
 window.visualViewport?.addEventListener('resize',()=>closePlanSort());
+// Preserve the outer disclosure across price, language and plan repaints.
+function syncPlanDisclosure(){
+  const button=$('pkPlanToggle'),content=$('pkPlanContent');
+  const expanded=!!pkView.expanded&&!button.hidden;
+  content.hidden=!expanded;
+  button.setAttribute('aria-expanded',String(expanded));
+}
+function setPlanExpanded(expanded){
+  pkView.expanded=!!expanded;
+  closePlanSort();
+  syncPlanDisclosure();
+}
+$('pkPlanToggle').addEventListener('click',()=>setPlanExpanded(!pkView.expanded));
 function paintPicker(P){
   const box=$('pk'),bar=$('pkNote'),tools=$('pkTools'),others=$('pkOthers');
-  $('pkPlanContent').hidden=false;
+  syncPlanDisclosure();
   $('vFinanceDetails').open=true;
   box.textContent='';bar.textContent='';tools.textContent='';others.textContent='';
   const investment=S.flip?flipPlanAccounting(P)?.buy:null;
@@ -13457,7 +13474,7 @@ function paintSummary(P){
   const box=$('pSum'),none=!P.rows.length||P.missing.length===P.rows.length;
   box.hidden=!S.items.length;
   $('pkPlanToggle').hidden=none;$('stepDrawer').hidden=none;
-  if(none)$('pkPlanContent').hidden=true;
+  syncPlanDisclosure();
   paintCourierUnits(P);
   if(JitaContext.active){document.title=tx('jita.title')+' · Market Moves+';return;}
   if(box.hidden||none)return;
