@@ -329,3 +329,17 @@ Informe docs/CSS_CONTAINERS_AUDIT_197.md; continuidad docs/HANDOFF_CSS_197.md. P
 ### Gate local197 cerrado
 
 146/146Chromium PASS377,321s sobre build197ffed3c26;171Node/16Python/8legacy PASS. Diferencial232estados y24parejas PNG idénticos,41propiedades calculadas y capturas finales r1 revisadas.53fuentes restantes intactas y JS idéntico antes de cambiar etiqueta de versión. Sin cambios de producto posteriores. Última LIVE196; Fiko/cuatroActions/Pages/HTTPS pendientes. No aprobación visual pendiente.
+
+## Cierre LIVE v1.0.197 — 2026-11-05
+
+Publicación certificada por Fiko/Fikolasty. Fuente del incremento `6b6eb9e30365126b095160d185b86d4c4b00ae1e`; recuperación de CI `1f528c77bf5879b3032da95ebe7d6d1395f0737a` (comentario de workflow y diagnóstico,54fuentes de aplicación/HTML intactos); build bot final `327526852764e7b31be38ec61ede633158a368c1`.
+
+Gates confirmados: Build Market Moves+42050677992 del incremento original (sus insumos permanecen idénticos), Versiones42055996192 y Minería42055996228 de recuperación, y Rebuild/Pages42055996493 SUCCESS. La recuperación solo modificó un comentario del workflow de Rebuild, por lo que no volvió a disparar el workflow Build por su filtro de rutas; se conserva su validación aprobada del mismo producto. Rebuild repitió todos los tests. Compile127344418439 y deploy127354402736 SUCCESS.
+
+CI final171Node/16Python/8legacy/146Chromium PASS (442,855s). Local171Node/16Python/8legacy/146Chromium PASS (377,321s). Diferencial:232estados (192composición y40fronteras760/761/860/861/981),41propiedades calculadas/geometría/textos/foco idénticos y24parejas PNG1440ES idénticas byte a byte. Capturas finales css-containers197-r1 revisadas completo/parcial/texto largo en Dark/Light después del último cambio visual. Fixtures sintéticos sin red; no ESI/SSO real extremo a extremo en esta entrega.
+
+Los intentos previos de Pages42050677830 fallaron por timeout: deploy127329570790 y reintento127336487894. Sus tests habían pasado146/146 (359,631s), pero el despliegue quedó en updating_pages/estado vacío para el identificador anterior. Se generó una corrida, artefacto e identificador nuevos sin cambiar producto, permisos, timeout ni gates; el nuevo despliegue sí terminó. La causa interna del servicio no se establece a partir de estos logs. Los fallos anteriores quedan documentados y sustituidos por el cierre final, sin ocultarlos ni tratarlos como fallos de CSS.
+
+HTTPS200 independiente sin query y sin caché confirma v1.0.197: HTML público/local canónico/GitHub idénticos, **2.605.794bytesLF**, blob **`ffed3c26cd15c033c04b3d5fc45ab9a13c5953de`**. Index generado exclusivamente por CI. Se retiran solo tres reglas sobrescritas de contenedores en40,322bytes menos sin rendimiento medido. Media queries, textarea/paste-foot, copy, temas y los dos bloquesJS sobre la misma versión196 conservados.53fuentes restantes de la aplicación intactas. Plan plegable195, economía, ESI/SSO, permisos y persistencia sin cambios.
+
+Este cierre sustituye todos los estados candidata/pendiente197 anteriores. No queda aprobación visual ni gate de publicación pendiente. Informe docs/CSS_CONTAINERS_AUDIT_197.md y kit activo docs/HANDOFF_CSS_197.md. Siguiente alcance solo por diagnosticar: las reglas restantes de contenido .appr-g/.paste y la mediaquery860 de40 frente a60; no se implementa automáticamente. Continuar en este chat sin avisos por contadores. Cierre documental posterior puede avanzar main sin alterar el HTML certificado.
