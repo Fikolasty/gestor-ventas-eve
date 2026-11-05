@@ -1757,3 +1757,6 @@ Fuente protegida362f5079369a61b25acf72ff024aaddc787b4c91, árbol6768f74ac842efe6
 
 
 **v1.0.200 LIVE certificada:** fuenteebfc728b,build459b9dd1;181Node/16Python/8legacy/149Chromium y4Actions PASS;HTMLHTTPS/local/GitHub idénticoee0019e1 (2613089bytesLF). Manejo de fallos ESI y origen de precios corregidos; proveedor ESI aún intermitente, no se certifica su recuperación. Ver cierre final de DSS y continuidad docs/HANDOFF_APPRAISAL_200.md.
+
+
+**201 candidata:** retirada de la frase de total parcial solicitada; título parcial e importes conservados.3Chromium focales/64renders PASS; publicación pendiente, última LIVE200. Evidencia canónica al final de DSS. Continuidad: docs/HANDOFF_APPRAISAL_200.md.

@@ -57,8 +57,8 @@ class Jita184Tests(unittest.TestCase):
    p.locator('#jitaShip').uncheck();assert not p.evaluate('C.shipOn')
    p.locator('#jitaShip').check();assert p.evaluate('C.shipOn')
    p.evaluate("selectAppModule('ventas')");p.evaluate("selectAppModule('jita')");assert p.evaluate('S.items===sharedItems')
-   # Incomplete quote stays visible as a warning, rather than only in hidden metadata.
-   p.evaluate("S.items[0].jita.topBuy=null;refreshNow()");assert p.locator('#appr .appr-partial').is_visible();p.evaluate("S.items[0].jita.topBuy=24700;refreshNow()")
+   # Partial status stays in the heading; the owner removed its repeated notice.
+   p.evaluate("S.items[0].jita.topBuy=null;refreshNow()");assert 'PARCIAL' in p.locator('#appr h2').inner_text();p.evaluate("S.items[0].jita.topBuy=24700;refreshNow()")
    # Saving is conditional, not an unconditional Buy recommendation.
    p.evaluate("S.items.forEach(o=>o.jita.topBuy=o.jita.topSell);refreshNow()");assert 'elimina su ahorro' in p.locator('.jita-purchase-guide').inner_text();p.evaluate("S.items.forEach((o,i)=>o.jita.topBuy=[24700,814080,1779000,9961000][i]);C.buyMode='sell';$('tradePurchaseMode').value='sell';syncTradePurchasePicker();refreshNow()")
    # Settings changes must flow through canonical calculation helpers.

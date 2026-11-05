@@ -86,7 +86,6 @@ function paintAppraisal(){
     notice.setAttribute('role','status');const retry=el('button','ghost',tx('ledger.refresh'));retry.type='button';
     retry.addEventListener('click',()=>{retry.disabled=true;esiItems(true);});notice.append(' ',retry);box.append(notice);
   }
-  if(ok&&partial){const note=el('p','appr-partial',tx('appraisal.partialNote'));note.setAttribute('role','status');box.append(note);}
   if(regional){
     const note=el('p','appr-no-price',tx('appraisal.regionalNote'));
     note.setAttribute('role','status');box.append(note);

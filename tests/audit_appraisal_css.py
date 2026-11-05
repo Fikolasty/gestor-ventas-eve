@@ -85,7 +85,7 @@ def run(before, after, output):
           info.evaluate('e=>e.blur()')
          elif info.count():
           assert not info.is_visible(),key
-        if state=='partial':assert p.locator('#appr .appr-partial[role=status]').is_visible(),key
+        if state=='partial':assert p.locator('#appr h2').inner_text().upper().startswith(('TASACIÓN PARCIAL','PARTIAL APPRAISAL')),key
         semantics.append(p.locator('#appr').text_content())
         snapshots.append(p.evaluate(SNAPSHOT))
         if width==1440 and lang=='es':
