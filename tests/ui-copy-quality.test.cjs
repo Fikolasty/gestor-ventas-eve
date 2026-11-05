@@ -96,3 +96,18 @@ test('General separates affiliation status from estimated-price context in ES/EN
   assert.ok(shell.includes('<strong class="no-tr">ES</strong>'));
   assert.ok(shell.includes('<strong class="no-tr">EN</strong>'));
 });
+
+test('distribution copy has short bilingual headings and distinguishes sale value from proceeds',()=>{
+ const catalog=JSON.parse(fs.readFileSync('src/i18n/ui.json','utf8'));
+ for(const key of ['distribution.sale','distribution.destinations','distribution.help','distribution.net']){
+  for(const lang of ['es','en']){
+   assert.ok(catalog[key]?.[lang]?.trim(),key+' '+lang);
+   assert.ok(catalog[key][lang].length<=30,key+' '+lang);
+  }
+ }
+ assert.doesNotMatch(catalog['distribution.sale'].es,/beneficio|bruta/i);
+ assert.doesNotMatch(catalog['distribution.sale'].en,/profit|gross/i);
+ for(const key of ['distribution.order','distribution.instant','distribution.compressedOrder','distribution.compressedInstant','distribution.reprocessed']){
+  for(const lang of ['es','en'])assert.ok(catalog[key][lang].includes('{market}'),key+' '+lang);
+ }
+});

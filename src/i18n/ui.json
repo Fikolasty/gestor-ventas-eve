@@ -1,4 +1,56 @@
 {
+  "distribution.sale": {
+    "es": "Venta del plan",
+    "en": "Plan sales"
+  },
+  "distribution.destinations": {
+    "es": "Destinos de venta",
+    "en": "Sales destinations"
+  },
+  "distribution.help": {
+    "es": "Sobre esta estimación",
+    "en": "About this estimate"
+  },
+  "distribution.net": {
+    "es": "Neto",
+    "en": "Net proceeds"
+  },
+  "distribution.order": {
+    "es": "{market} · Orden de venta",
+    "en": "{market} · Sell order"
+  },
+  "distribution.instant": {
+    "es": "{market} · Venta inmediata",
+    "en": "{market} · Instant sale"
+  },
+  "distribution.compressedOrder": {
+    "es": "{market} · Hielo comprimido · Orden",
+    "en": "{market} · Compressed ice · Order"
+  },
+  "distribution.compressedInstant": {
+    "es": "{market} · Hielo comprimido · Inmediata",
+    "en": "{market} · Compressed ice · Instant"
+  },
+  "distribution.reprocessed": {
+    "es": "{market} · Reproceso",
+    "en": "{market} · Reprocessed"
+  },
+  "distribution.buyback": {
+    "es": "Buyback",
+    "en": "Buyback"
+  },
+  "distribution.direct": {
+    "es": "Venta a un jugador",
+    "en": "Player sale"
+  },
+  "distribution.production": {
+    "es": "Producción",
+    "en": "Production"
+  },
+  "distribution.brokerScc": {
+    "es": "Broker y SCC",
+    "en": "Broker and SCC"
+  },
   "picker.distributionDestinations": {
     "es": "Distribución y destinos",
     "en": "Distribution & destinations"

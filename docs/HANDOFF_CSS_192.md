@@ -27,3 +27,11 @@ Main avanzado por Fiko con SHA esperado y sin force a55bd0eaad7924b57d14bb0af835
 ### Primer gate y corrección
 
 Rebuild41975284159 detuvo Pages por una prueba con versión191 fija. Ajustada solo la aserción a192;169Node locales PASS. Commit de corrección Fiko674501465226dfe89f0cd58f7929d4ea3111d8c5, sin cambio de HTML/CSS. Nueva certificación remota pendiente.
+
+## Prioridad actual — feedback de Distribución, 2026-11-05
+
+El propietario pausa la siguiente familia CSS y pide revisar asimetría y textos de Distribución y destinos. Solo propuesta local de50/50, barras alineadas y copy compacto, sin cambios de producto ni publicación. Ver docs/DISTRIBUTION_REFINEMENT_PROPOSAL.md y final DSS. Preview1440ES Dark/Light revisado, matriz390/630/980/1440 sin overflow; dirección pendiente de revisión, QA ES/EN/condicionales de implementación pendiente. Última LIVE192, sin modificación de su HTML.
+
+### Continuidad actual — candidata193 aprobada
+
+La propuesta de Distribución fue aprobada por el propietario, junto al alineado a la derecha de importes alternativos. Implementación local y QA en docs/HANDOFF_DISTRIBUTION_193.md y DSS. La auditoría CSS de Tasación sigue pendiente; no hay alcance de rediseño extra. Última LIVE192 hasta cierre remoto193.

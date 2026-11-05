@@ -36,7 +36,7 @@ test('B.6 preserves actual plan accounting, sorting, filters, selected-route ref
   assert.match(picker,/fmt\(Math\.abs\(t\.net\)\)/);
   assert.match(picker,/tx\('trade\.proceedsOnly'\)/);
   assert.match(view,/function verdictFinance\(P,tradeAccounting\)/);
-  assert.match(view,/if\(ks\.length>1\)box\.append\(bar\)/);
+  assert.match(view,/box\.append\(bar,lg\)/); // v193 keeps a full-width bar even for one destination.
   assert.doesNotMatch(html,/class="pk-hd"/);
 });
 

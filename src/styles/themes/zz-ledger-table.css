@@ -353,7 +353,7 @@ body:not(.is-jita) #vCap .v-finance::after {
 }
 @media(min-width:881px) {
   #pSum .mm-plan-continuous #vFinanceDetails .mm-finance-details-body {
-    grid-template-columns:minmax(0,1.45fr) minmax(0,1fr);
+    grid-template-columns:repeat(2,minmax(0,1fr));
     column-gap:24px;
   }
 }
@@ -443,4 +443,77 @@ body:not(.is-jita) #vCap .v-finance::after {
     font:700 14px/1.4 var(--f-ui);
     text-transform:uppercase;
   }
+}
+
+/* v193: approved distribution composition and alternative amounts on the same edge. */
+#pSum .mm-plan-continuous #pkInsightsDrawer #pkInsightsContent #vFinanceDetails {border:0!important}
+#pSum .mm-plan-continuous #vFinanceDetails .mm-finance-details-body {
+  display:grid!important;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:0!important;
+  padding:18px 18px 22px!important;
+}
+#pSum .mm-plan-continuous #vFinanceDetails .mm-distribution-column {
+  display:grid;
+  grid-template-rows:subgrid;
+  min-width:0;
+  margin:0;
+  padding:0 22px;
+  border:0;
+  border-left:1px solid transparent;
+  box-sizing:border-box;
+}
+#pSum .mm-plan-continuous #vFinanceDetails #ovFlow {grid-column:1;grid-row:1/span 3}
+#pSum .mm-plan-continuous #vFinanceDetails #ovDestW {
+  grid-column:2;grid-row:1/span 3;
+  padding:0 22px;
+  border:0;
+  border-left:1px solid var(--line2);
+}
+#pSum .mm-plan-continuous #vFinanceDetails #ovDest {display:contents}
+#pSum .mm-plan-continuous #vFinanceDetails .mm-distribution-heading {
+  display:flex;align-items:baseline;align-self:start;justify-content:space-between;flex-wrap:wrap;
+  gap:4px 12px;min-height:30px;margin:0 0 12px;min-width:0;
+}
+#pSum .mm-plan-continuous #vFinanceDetails .mm-distribution-heading h4 {
+  margin:0!important;font:700 14px/1.4 var(--f-ui)!important;
+  color:var(--mut);letter-spacing:.045em;text-transform:uppercase;
+}
+#pSum .mm-plan-continuous #vFinanceDetails .mm-distribution-heading>b {
+  min-width:0;max-width:100%;margin-left:auto;
+  font:600 14px/1.4 var(--f-num);color:var(--gain);text-align:right;overflow-wrap:anywhere;
+}
+#pSum .mm-plan-continuous #vFinanceDetails .ov-bar {grid-row:2;align-self:start;margin:0 0 18px!important;height:10px!important}
+#pSum .mm-plan-continuous #vFinanceDetails .ov-leg {
+  grid-row:3;align-self:start;display:grid;grid-template-columns:minmax(0,1fr);gap:12px!important;margin:0!important;
+}
+#pSum .mm-plan-continuous #vFinanceDetails .ov-leg>div {min-height:36px}
+#pSum .mm-plan-continuous #vFinanceDetails .mm-finance-details-body:has(>#ovDestW[hidden]) {grid-template-columns:minmax(0,1fr)}
+#pSum .mm-plan-continuous #vFinanceDetails #pkFeesNote {margin-top:16px}
+#pSum .mm-plan-continuous #pkInsightsToggle {
+  display:flex!important;align-items:center;justify-content:space-between;flex-wrap:wrap;
+  padding-right:18px!important;
+}
+#pSum .mm-plan-continuous #distributionHelp {display:block;margin-left:auto}
+#pSum .mm-plan-continuous #distributionHelp[hidden] {display:none}
+#pSum .mm-plan-continuous #distributionHelp[open] {flex-basis:100%}
+#pSum .mm-plan-continuous #distributionHelp>summary {
+  display:grid;place-items:center;box-sizing:border-box;width:32px;min-height:32px;margin-left:auto;
+  padding:0;border:1px solid var(--line2);border-radius:50%;list-style:none;
+  font:600 12px var(--f-ui);color:var(--mut);cursor:pointer;text-transform:none;
+}
+#pSum .mm-plan-continuous #distributionHelp>summary::-webkit-details-marker {display:none}
+#pSum .mm-plan-continuous #distributionHelp>summary:focus-visible {outline:2px solid var(--clay);outline-offset:3px}
+#pSum .mm-plan-continuous #distributionHelp .distribution-help-body {margin:8px 18px 12px;color:var(--mut);font:400 14px/1.5 var(--f-ui);text-transform:none;letter-spacing:normal}
+#pSum .mm-plan-continuous #vEstimateHelp {margin:0}
+@media(min-width:601px) {
+  #pSum .mm-plan-continuous :is(#pk,#pkOthers)>.pk-o {
+    grid-template-columns:18px minmax(0,1fr) auto!important;
+    padding-right:12px!important;
+  }
+}
+@media(max-width:880px) {
+  #pSum .mm-plan-continuous #vFinanceDetails .mm-finance-details-body {grid-template-columns:minmax(0,1fr);padding:12px!important}
+  #pSum .mm-plan-continuous #vFinanceDetails #ovFlow {padding:0 4px 18px}
+  #pSum .mm-plan-continuous #vFinanceDetails #ovDestW {grid-column:1;grid-row:4/span 3;border-left:1px solid transparent;border-top:1px solid var(--line2);padding:18px 4px 0}
 }

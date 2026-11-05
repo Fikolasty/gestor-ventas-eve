@@ -128,9 +128,15 @@ function paintWhereSold(P,none){
    if(tot>0){const bar=el('div','ov-bar'),lg=el('div','ov-leg');
      ks.forEach(k=>{const v=sums[k],i=el('i');i.style.width=(v/tot*100)+'%';i.style.background=DC[k]||'#9c9a92';i.title=(PLAN_L[k]||k)+': '+fmt(v);bar.append(i);
        const n=rowsIn.filter(r=>r.best===k).length,d=el('div'),sw=el('span','ov-sw');sw.style.background=DC[k]||'#9c9a92';
-       d.append(sw,el('b',null,v/tot>0&&v/tot<.005?'<1%':pct(v/tot)+'%'),el('small',null,routeSummaryName(k)+' · '+n+(S.lang==='en'?(n===1?' item':' items'):(n===1?' item':' items'))));lg.append(d);});
-     if(ks.length>1)box.append(bar);
-     box.append(lg);}}
+       d.append(sw,el('b',null,v/tot>0&&v/tot<.005?'<1%':pct(v/tot)+'%'),el('small',null,distributionRouteLabel(k)+' · '+n+(n===1?' Item':' Items')));lg.append(d);});
+     box.append(bar,lg);}}
+}
+// Short destination labels belong only to this chart; route names elsewhere stay intact.
+function distributionRouteLabel(k){
+ const market=['null','fN','rNull'].includes(k)?nullSystem():'Jita';
+ const key={null:'distribution.order',fN:'distribution.order',jOrd:'distribution.order',fJ:'distribution.order',jInst:'distribution.instant',fJI:'distribution.instant',
+   cOrd:'distribution.compressedOrder',cInst:'distribution.compressedInstant',rNull:'distribution.reprocessed',rJita:'distribution.reprocessed',bb:'distribution.buyback',disc:'distribution.direct'}[k];
+ return key?tx(key,{market}):routeSummaryName(k);
 }
 // El texto del resumen se deriva de los items y del modo activos, nunca del nombre de una ruta fija.
 // Compact descriptions are per destination, never whole-lot plan names.
@@ -303,6 +309,7 @@ function paintVerdict(P){
   // without competing with the large net figure. Missing purchase basis stays visible.
   const estimateHelp=$('vEstimateHelp');
   estimateHelp.hidden=!!none||purchaseUnknown;
+  $('distributionHelp').hidden=estimateHelp.hidden;
   estimateHelp.dataset.i18n=estimateKey;
   estimateHelp.textContent=tx(estimateKey);
   const amount=$('vIsk');
@@ -388,10 +395,11 @@ function paintVerdict(P){
      paintDecisionExplanations(paintReprocessingDecision(P),costAnswer,
        $('vCap').dataset.explanationExpanded==='true');
    }
-   if(!none&&sum>0){const hd=el('div','ov-sum');hd.append(el('span',null,'Valor de venta del plan'),el('b',null,fmt(sum)));
+   if(!none&&sum>0){const hd=el('div','ov-sum mm-distribution-heading');hd.append(el('h4',null,tx('distribution.sale')),el('b','num',fmt(sum)));
      const bar=el('div','ov-bar'),lg=el('div','ov-leg');
      segs.forEach(([l,v,c,k])=>{const i=el('i');i.style.width=(v/sum*100)+'%';i.style.background=c;i.title=l+': '+fmt(v);bar.append(i);
-       const d=el('div',k),sw=el('span','ov-sw');sw.style.background=c;d.append(sw,el('b',null,(k==='cost'?'−':'')+fmt(v)),el('small',null,l+' · '+pct(v/sum)+'%'));lg.append(d);});
+       const displayKey={'Te queda':'distribution.net','Envío':'picker.shippingLabel','Compresión':'picker.compression','Producción':'distribution.production','Broker y SCC':'distribution.brokerScc'}[l];
+       const d=el('div',k),sw=el('span','ov-sw');sw.style.background=c;d.append(sw,el('b',null,(k==='cost'?'−':'')+fmt(v)),el('small',null,(displayKey?tx(displayKey):l)+' · '+pct(v/sum)+'%'));lg.append(d);});
      fb.append(hd,bar,lg);}}
   if($('deep').hidden)return; // Contratos y tablas detalladas siguen siendo bajo demanda.
   // v1.0.19: sin pestañas por tipo; los pasos cubren el plan completo

@@ -1591,3 +1591,11 @@ Para retomar en otro chat: «Continúa Market Moves+ desde v1.0.189 LIVE. Lee AG
 ### Seguimiento 2026-11-05 — candidata192 para publicar
 
 El propietario plantea publicar; se procede con su autorización continua y el QA completado. Workflows solo191→192; build192 idéntico al de limpieza al normalizar la versión,2.596.975bytesLF,blob714c182198a868f45894cfefdab097c91558518d. Publicación/Actions/HTTPS pendientes; última LIVE191. Kit activo docs/HANDOFF_CSS_192.md. No hay nuevo rediseño.
+
+## 2026-11-05 — candidata193 aprobada
+
+Distribución y borde de importes de planes implementados tras aprobación del propietario.169Node/16Python/8legacy y tres focales Chromium PASS; integral final en curso. Capturas1440ES Light/Dark completas y ayuda abierta r2 revisadas, ES/EN y390/630/980/1440 sin overflow. Sin cambio financiero o ESI/SSO. Última LIVE192, publicación193 pendiente. Kit docs/HANDOFF_DISTRIBUTION_193.md; detalle final DSS.
+
+### Gate local final193
+
+170Node/16Python/8legacy/139Chromium PASS293,132s; tres focales ampliadas PASS8,227s y capturas finales r2 revisadas. Sustituye el pendiente integral previo. Publicación remota pendiente, última LIVE192. Sin aprobación visual pendiente. La revisión automática de la plantilla fue aclarada mediante ruta/SHA y aceptada; no se carga index.html manualmente.

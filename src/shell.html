@@ -302,9 +302,9 @@ Contraband Freight = no</textarea><small>Una regla por línea: Nombre = tax tota
         </div>
       </section>
       <section class="mm-plan-drawer" id="pkInsightsDrawer">
-        <div class="mm-plan-drawer-head" id="pkInsightsToggle"><h3 data-i18n="picker.distributionDestinations">Distribución y destinos</h3></div>
+        <div class="mm-plan-drawer-head" id="pkInsightsToggle"><h3 data-i18n="picker.distributionDestinations">Distribución y destinos</h3><details id="distributionHelp" hidden><summary aria-label="Sobre esta estimación" data-i18n-aria-label="distribution.help"><span aria-hidden="true">i</span></summary><div class="distribution-help-body"><p id="vEstimateHelp" hidden></p></div></details></div>
         <div class="mm-plan-drawer-body" id="pkInsightsContent">
-      <details class="ov-card ov-flow mm-finance-details" id="vFinanceDetails" open><summary data-i18n="verdict.inspectBreakdown">Ver distribución de ingresos y destinos</summary><div class="mm-finance-details-body"><h4 data-i18n="picker.moneyOrigin">DE DÓNDE SALE TU ISK</h4><div id="ovFlow"></div><div class="mm-dest-inline" id="ovDestW"><h4 data-i18n="picker.salesDestinationUpper">DÓNDE SE VENDE</h4><div id="ovDest"></div></div><p class="mm-finance-estimate" id="pkFeesNote" hidden></p><p class="mm-finance-estimate" id="vEstimateHelp" hidden></p></div></details>
+      <details class="ov-card ov-flow mm-finance-details" id="vFinanceDetails" open><summary data-i18n="verdict.inspectBreakdown">Ver distribución de ingresos y destinos</summary><div class="mm-finance-details-body"><div class="mm-distribution-column" id="ovFlow"></div><div class="mm-dest-inline mm-distribution-column" id="ovDestW"><div class="mm-distribution-heading"><h4 data-i18n="distribution.destinations">Destinos de venta</h4></div><div id="ovDest"></div></div><p class="mm-finance-estimate" id="pkFeesNote" hidden></p></div></details>
         </div>
       </section>
     </div>

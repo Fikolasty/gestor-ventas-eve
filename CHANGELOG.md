@@ -1,3 +1,10 @@
+## v1.0.193 — Distribución simétrica y borde común en planes
+
+- Distribución50/50 con barras alineadas, total en cabecera y destinos breves ES/EN.
+- Explicación de estimación en ayuda inline; avisos contables condicionales preservados.
+- Retirada la columna vacía de alternativos: total y diferencia alineados al importe seleccionado.
+- Diseño aprobado; QA y publicación en docs/HANDOFF_DISTRIBUTION_193.md. Última LIVE192 hasta cierre remoto.
+
 ## v1.0.192 — limpieza incremental CSS de Tasación — LIVE certificada
 
 - Retiradas tres reglas de presentación de metadatos siempre ocultos; 210 bytes menos en el HTML.
