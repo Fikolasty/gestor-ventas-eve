@@ -7,7 +7,7 @@
 <meta name="referrer" content="no-referrer">
 <title>Market Moves+ · SIGMA GRINDSET</title>
 <style>
-/* ================= Market Moves+ v1.0.196 =================
+/* ================= Market Moves+ v1.0.197 =================
    Paleta: azul de base, naranja = acción, verde/rojo = ganancia/pérdida.
    Sin backdrop-filter: el vidrio se finge con rgba + bordes. */
 *{box-sizing:border-box;margin:0;padding:0}
@@ -1494,9 +1494,6 @@ html.light #verdict .v-plan-name{color:#ad4b27}
 
 
 /* Tasación e inventario: una sola regla, sin capas contradictorias. */
-.hero-intro:not(.no-appr){display:grid;grid-template-columns:repeat(2,minmax(0,1fr));align-items:stretch;gap:16px}
-.hero-intro:not(.no-appr)>.appr,.hero-intro:not(.no-appr)>.paste{margin:0;min-width:0;min-height:220px;padding:16px;box-sizing:border-box}
-.hero-intro:not(.no-appr)>.appr{display:flex;flex-direction:column}
 .hero-intro:not(.no-appr)>.appr .appr-g{flex:1;min-height:138px}
 .hero-intro:not(.no-appr)>.paste{display:flex;flex-direction:column;gap:0}
 .hero-intro:not(.no-appr)>.paste textarea{display:block;flex:1;min-height:138px;max-height:none;margin:0;resize:vertical;padding:8px 10px;line-height:1.5}
@@ -9739,13 +9736,13 @@ Contraband Freight = no</textarea><small>Una regla por línea: Nombre = tax tota
 <button type="button" class="totop" id="toTop" aria-label="Volver arriba" title="Volver arriba (Inicio)" hidden><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 14l6-6 6 6"/></svg></button>
 <footer class="foot">
   <p class="foot-sec"><span class="ic i-lock" aria-hidden="true"></span>Tu inventario no se guarda: al cerrar o recargar se borra. Solo tus Ajustes quedan en este navegador.</p>
-  <div class="foot-by">Creado por <b>Fiko McGivert</b> · <span class="mm-footer-corp-logo vg" role="img" aria-label="Vanguardia DR"></span>Vanguardia DR · SIGMA GRINDSET · <span class="ver">v1.0.196</span></div>
+  <div class="foot-by">Creado por <b>Fiko McGivert</b> · <span class="mm-footer-corp-logo vg" role="img" aria-label="Vanguardia DR"></span>Vanguardia DR · SIGMA GRINDSET · <span class="ver">v1.0.197</span></div>
 </footer>
 
 <script>
 'use strict';
 /* ============================================================
-   Market Moves+ v1.0.196 — SIGMA GRINDSET / Vanguardia DR
+   Market Moves+ v1.0.197 — SIGMA GRINDSET / Vanguardia DR
    Flujo:  pegado → items → carga (ESI: precios, volúmenes, historial) → verificación → plan → vista
      1. Pegado      parsePaste(): parser posicional de columnas de EVE (Name · Quantity · … · Volume · Est. Price).
      2. Carga       esiItems(): trae todo lo que falta; mientras carga, refresh() NO pinta (S.loading).
