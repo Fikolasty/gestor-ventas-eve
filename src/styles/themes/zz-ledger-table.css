@@ -494,18 +494,7 @@ body:not(.is-jita) #vCap .v-finance::after {
   display:flex!important;align-items:center;justify-content:space-between;flex-wrap:wrap;
   padding-right:18px!important;
 }
-#pSum .mm-plan-continuous #distributionHelp {display:block;margin-left:auto}
-#pSum .mm-plan-continuous #distributionHelp[hidden] {display:none}
-#pSum .mm-plan-continuous #distributionHelp[open] {flex-basis:100%}
-#pSum .mm-plan-continuous #distributionHelp>summary {
-  display:grid;place-items:center;box-sizing:border-box;width:32px;min-height:32px;margin-left:auto;
-  padding:0;border:1px solid var(--line2);border-radius:50%;list-style:none;
-  font:600 12px var(--f-ui);color:var(--mut);cursor:pointer;text-transform:none;
-}
-#pSum .mm-plan-continuous #distributionHelp>summary::-webkit-details-marker {display:none}
-#pSum .mm-plan-continuous #distributionHelp>summary:focus-visible {outline:2px solid var(--clay);outline-offset:3px}
-#pSum .mm-plan-continuous #distributionHelp .distribution-help-body {margin:8px 18px 12px;color:var(--mut);font:400 14px/1.5 var(--f-ui);text-transform:none;letter-spacing:normal}
-#pSum .mm-plan-continuous #vEstimateHelp {margin:0}
+
 @media(min-width:601px) {
   #pSum .mm-plan-continuous :is(#pk,#pkOthers)>.pk-o {
     grid-template-columns:18px minmax(0,1fr) auto!important;
@@ -517,3 +506,30 @@ body:not(.is-jita) #vCap .v-finance::after {
   #pSum .mm-plan-continuous #vFinanceDetails #ovFlow {padding:0 4px 18px}
   #pSum .mm-plan-continuous #vFinanceDetails #ovDestW {grid-column:1;grid-row:4/span 3;border-left:1px solid transparent;border-top:1px solid var(--line2);padding:18px 4px 0}
 }
+
+/* v194: one quoted sales price and a coherent displayed unit count. */
+body:not(.is-jita) #pSum #unitCourierBox #ledger.ledger-fusion {
+  --ledger-columns:minmax(0,1.8fr) minmax(0,.5fr) minmax(0,.65fr) minmax(0,1.05fr) minmax(0,1.05fr) minmax(0,1.2fr);
+}
+body:not(.is-jita) #pSum #unitCourierBox #ledger .ledger-market-columns [data-lsort="jb"],
+body:not(.is-jita) #pSum #unitCourierBox #ledger #lots .lot-table-buy {display:none!important}
+body:not(.is-jita) #pSum #unitCourierBox #ledger #lots .lot-head.ledger-market-row>.lot-table-cell {grid-column:auto!important;grid-row:auto!important}
+body:not(.is-jita) #pSum #unitCourierBox #ledger #lots .lot-meta {display:flex;flex-direction:column;align-items:flex-start;gap:3px}
+body:not(.is-jita) #pSum #unitCourierBox #ledger #lots .lot-batch-context {color:var(--mut);font:400 13px/1.4 var(--f-ui)}
+body:not(.is-jita) #pSum #unitCourierBox #ledger .ledger-market-columns [data-lsort="q"]:disabled {opacity:1;cursor:default}
+@media(min-width:1201px){
+ body:not(.is-jita) #pSum #unitCourierBox #ledger.ledger-fusion :is(.ledger-market-columns,#lots .lot-head.ledger-market-row) {grid-template-columns:var(--ledger-columns)!important}
+}
+/* Only Dark Steps adopts the already approved neighboring Sales surface. */
+html:not(.light) body:not(.is-jita) #pSum #stepDrawer,
+html:not(.light) body:not(.is-jita) #pSum #stepDrawer #bDeep.step-toggle,
+html:not(.light) body:not(.is-jita) #pSum #stepDrawer #vPlan>.stp,
+html:not(.light) body:not(.is-jita) #pSum #stepDrawer .stp-b {background:var(--sales-drawer-face)!important}
+html:not(.light) body:not(.is-jita) #pSum #stepDrawer {box-shadow:none!important}
+html:not(.light) body:not(.is-jita) #pSum #stepDrawer #bDeep.step-toggle:hover,
+html:not(.light) body:not(.is-jita) #pSum #stepDrawer .stp-h:hover {background:var(--sales-drawer-hover)!important}
+
+/* The mirrored ISK total keeps its semantic sign even when the button is hovered. */
+body:not(.is-jita) #pSum #stepDrawer #bDeep #stepDrawerTotal.pos {color:var(--gain)!important}
+body:not(.is-jita) #pSum #stepDrawer #bDeep #stepDrawerTotal.neg {color:var(--loss)!important}
+body:not(.is-jita) #pSum #stepDrawer #bDeep #stepDrawerTotal:not(.pos):not(.neg) {color:var(--mut)!important}

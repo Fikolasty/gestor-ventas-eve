@@ -26,7 +26,7 @@ class Ledger173Tests(unittest.TestCase):
  def tearDown(self):self.assertEqual(self.errors,[]);self.page.close()
  def test_reference_shows_actual_unit_and_batch_cost_without_changing_buyback_plan(self):
   row=self.page.locator('#lots .lot').first
-  self.assertEqual(row.locator('.lot-table-quantity .copy').inner_text(),'300')
+  self.assertEqual(row.locator('.lot-table-quantity .copy').inner_text(),'1')
   self.assertEqual(row.locator('.lot-table-freight .copy').get_attribute('data-v'),'-2')
   self.assertEqual(row.locator('.lot-table-result .copy').get_attribute('data-v'),'8')
   self.assertEqual(self.page.locator('#unitCourierTotal').get_attribute('data-v'),'-700')

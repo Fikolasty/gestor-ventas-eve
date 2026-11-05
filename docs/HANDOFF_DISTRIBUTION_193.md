@@ -39,3 +39,11 @@ El cierre documental puede avanzar main después del build sin alterar el HTML c
 ### Envío remoto
 
 Fuente Fiko374a113fa63e7d78c74a85087b67ac2dbf777139 sobre main30929a93, árbol34b2469c752b86b43892b0db5947c6fb08b351e8.17blobs verificados y actualización protegida sin force; index.html excluido. Actions/Pages/HTTPS pendientes. Notas de seguimiento locales hasta el cierre documental.
+
+## Prioridad actual — Unidad/Lote y precio, propuesta 2026-11-05
+
+El propietario pausa la auditoría CSS de títulos y cuestiona cantidad constante en Unidad y columnas Compra/Venta. Diagnóstico y prototipo en docs/LEDGER_UNITS_CLARITY_PROPOSAL.md y final DSS: cantidad mostrada1 con lote real contextual, una referencia de precio según Orden/Inmediata, seis columnas solo en Ventas. Solo propuesta local pendiente de aprobación; no hay cambio de fuentes/index/economía ni publicación. LIVE193 intacta, sin candidata194. Prototipo ES1440 Dark/Light de Unidad/Lote revisado, matriz390/630/980/1440 sin overflow y cantidades reales preservadas; QA de implementación completo pendiente. No retomar automáticamente CSS hasta resolver este feedback.
+
+## Continuidad actual — candidata194
+
+La simplificación de Unidad/Lote quedó aprobada con precisión Orden=Sell e Inmediata=Buy. Se implementan también el retiro de la ayuda de Distribución y la superficie Dark de Pasos solicitados. Estado real en docs/HANDOFF_LEDGER_UNITS_194.md y final DSS. Última LIVE193 hasta cierre remoto194; sin aprobación visual pendiente, gate final en curso. La auditoría CSS de títulos no avanzó a fuentes y sigue pausada.

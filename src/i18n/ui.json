@@ -1,4 +1,28 @@
 {
+  "ledger.tablePrice": {
+    "es": "Precio",
+    "en": "Price"
+  },
+  "ledger.jitaReference": {
+    "es": "Referencia Jita",
+    "en": "Jita reference"
+  },
+  "ledger.quoteSell": {
+    "es": "Referencia Jita Sell",
+    "en": "Jita Sell reference"
+  },
+  "ledger.quoteBuy": {
+    "es": "Referencia Jita Buy",
+    "en": "Jita Buy reference"
+  },
+  "ledger.batchContext": {
+    "es": "Lote: {count} Items",
+    "en": "Batch: {count} Items"
+  },
+  "ledger.batchSingle": {
+    "es": "Lote: 1 Item",
+    "en": "Batch: 1 Item"
+  },
   "distribution.sale": {
     "es": "Venta del plan",
     "en": "Plan sales"

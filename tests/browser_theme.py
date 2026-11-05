@@ -954,12 +954,12 @@ class ThemeBrowserTests(unittest.TestCase):
         from browser_ledger173 import FIXTURE
         self.page.evaluate(FIXTURE)
         self.page.evaluate("S.api['example paste'].id=34;paintLot(lastP.rows[0])")
-        for lang,labels in [('es',['Item','Cantidad','Volumen','Compra','Venta']),('en',['Item','Quantity','Volume','Buy','Sell'])]:
+        for lang,labels in [('es',['Item','Cantidad','Volumen','Precio']),('en',['Item','Quantity','Volume','Price'])]:
             self.page.evaluate('l=>setLang(l)',lang)
-            self.assertEqual(self.page.locator('.ledger-market-columns button').all_inner_texts()[:5],[x.upper() for x in labels])
+            self.assertEqual(self.page.locator('.ledger-market-columns button:visible').all_inner_texts()[:4],[x.upper() for x in labels])
             self.assertEqual(self.page.locator('#lots .lot-table-result .copy').first.get_attribute('data-v'),'8')
             self.assertEqual(self.page.locator('#lots .lot-table-freight .copy').first.get_attribute('data-v'),'-2')
-            self.assertEqual(self.page.locator('#lots .lot-table-quantity .copy').first.inner_text(),'300')
+            self.assertEqual(self.page.locator('#lots .lot-table-quantity .copy').first.inner_text(),'1')
             self.assertEqual(self.page.locator('#lots img.ti').first.get_attribute('data-tid'),'34')
             self.assertTrue(self.page.evaluate("!!($('pkPlanOptions').compareDocumentPosition($('unitCourierBox'))&Node.DOCUMENT_POSITION_FOLLOWING)"))
 
@@ -1919,7 +1919,7 @@ class ThemeBrowserTests(unittest.TestCase):
                     checks=self.page.evaluate("""() => {
                         const row=document.querySelector('#lots .lot');
                         const outer=document.querySelector('#ledger');
-                        const parts=['.lot-info','.lot-table-quantity','.lot-table-volume','.lot-table-buy','.lot-table-sell']
+                        const parts=['.lot-info','.lot-table-quantity','.lot-table-volume','.lot-table-sell']
                             .map(sel=>row.querySelector(sel).getBoundingClientRect());
                         const card=row.getBoundingClientRect();
                         return {parent:getComputedStyle(outer).backgroundColor,
@@ -1928,7 +1928,7 @@ class ThemeBrowserTests(unittest.TestCase):
                             cardLeft:card.left,cardRight:card.right,
                             slots:parts.map(r=>({left:r.left,right:r.right,top:r.top,bottom:r.bottom})),
                             col:getComputedStyle(row.querySelector('.lot-head')).gridTemplateColumns,
-                            copies:[...row.querySelectorAll('.copy')].map(e=>({z:getComputedStyle(e).zIndex,
+                            copies:[...row.querySelectorAll('.copy')].filter(e=>e.checkVisibility()).map(e=>({z:getComputedStyle(e).zIndex,
                                 r:e.getBoundingClientRect().right})),
                             toggleZ:getComputedStyle(row.querySelector('.lot-open')).zIndex};
                     }""")
@@ -1941,7 +1941,7 @@ class ThemeBrowserTests(unittest.TestCase):
                         self.assertTrue(all(abs((checks['slots'][0]['top']+checks['slots'][0]['bottom'])/2-
                             (s['top']+s['bottom'])/2)<3 for s in checks['slots']),checks)
                         self.assertTrue(all(checks['slots'][i]['right']<checks['slots'][i+1]['left']
-                            for i in range(4)),checks)
+                            for i in range(len(checks['slots'])-1)),checks)
                     if width==390:
                         self.assertGreaterEqual(checks['slots'][1]['top'],checks['slots'][0]['bottom'],checks)
                     if width==1440:
@@ -1952,7 +1952,7 @@ class ThemeBrowserTests(unittest.TestCase):
             self.page.set_viewport_size({'width':1440,'height':900})
             self.page.evaluate('document.documentElement.classList.remove("light")')
             first=self.page.locator('#lots .lot').first
-            price=first.locator('.lot-table-buy .copy')
+            price=first.locator('.lot-table-sell .copy')
             price.click()
             self.assertEqual(first.locator('.lot-open').get_attribute('aria-expanded'),'false')
             self.assertEqual(self.page.evaluate('window.__b14Copies.at(-1)'),'243010')

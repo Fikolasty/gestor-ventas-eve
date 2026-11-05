@@ -17,10 +17,11 @@ test('Sales presents the plan and distribution without disclosure controls',()=>
   assert.doesNotMatch(html,/id="pkResult"/);
 });
 
-test('finance disclosure retains ordinary estimation context and exceptional warnings remain visible',()=>{
+test('generic estimation help stays hidden while exceptional warnings remain visible',()=>{
   assert.equal((html.match(/id="vEstimateHelp"/g)||[]).length,1);
   assert.match(verdict,/estimate\.hidden=!!none\|\|!purchaseUnknown/);
-  assert.match(verdict,/estimateHelp\.hidden=!!none\|\|purchaseUnknown/);
+  assert.match(verdict,/estimateHelp\.hidden=true/);
+  assert.doesNotMatch(html,/id="distributionHelp"/);
   assert.match(css,/#verdict #vRouteCaption\{display:none\}/);
   assert.match(css,/#verdict #vCap \.v-finance\{overflow:hidden;border-radius:9px\}/);
 });

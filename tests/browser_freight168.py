@@ -83,7 +83,7 @@ class Freight168Tests(unittest.TestCase):
     for light in [False,True]:
      self.page.evaluate('v=>document.documentElement.classList.toggle("light",v)',light)
      self.assertLessEqual(self.page.evaluate('document.documentElement.scrollWidth-innerWidth'),1)
-     self.assertEqual(rows.first.locator('.lot-table-quantity .copy').inner_text(),'300')
+     self.assertEqual(rows.first.locator('.lot-table-quantity .copy').inner_text(),'1')
      self.assertNotIn('ISK/',self.page.locator('.ledger-market-columns').inner_text())
   self.page.locator('[data-ledger-mode=lot]').click()
   self.assertEqual(rows.first.locator('.lot-table-result .copy').get_attribute('data-v'),'2400')

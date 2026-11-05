@@ -302,7 +302,7 @@ Contraband Freight = no</textarea><small>Una regla por línea: Nombre = tax tota
         </div>
       </section>
       <section class="mm-plan-drawer" id="pkInsightsDrawer">
-        <div class="mm-plan-drawer-head" id="pkInsightsToggle"><h3 data-i18n="picker.distributionDestinations">Distribución y destinos</h3><details id="distributionHelp" hidden><summary aria-label="Sobre esta estimación" data-i18n-aria-label="distribution.help"><span aria-hidden="true">i</span></summary><div class="distribution-help-body"><p id="vEstimateHelp" hidden></p></div></details></div>
+        <div class="mm-plan-drawer-head" id="pkInsightsToggle"><h3 data-i18n="picker.distributionDestinations">Distribución y destinos</h3><p id="vEstimateHelp" hidden aria-hidden="true"></p></div>
         <div class="mm-plan-drawer-body" id="pkInsightsContent">
       <details class="ov-card ov-flow mm-finance-details" id="vFinanceDetails" open><summary data-i18n="verdict.inspectBreakdown">Ver distribución de ingresos y destinos</summary><div class="mm-finance-details-body"><div class="mm-distribution-column" id="ovFlow"></div><div class="mm-dest-inline mm-distribution-column" id="ovDestW"><div class="mm-distribution-heading"><h4 data-i18n="distribution.destinations">Destinos de venta</h4></div><div id="ovDest"></div></div><p class="mm-finance-estimate" id="pkFeesNote" hidden></p></div></details>
         </div>
@@ -335,7 +335,7 @@ Contraband Freight = no</textarea><small>Una regla por línea: Nombre = tax tota
               <button type="button" class="ledger-sort" data-lsort="q"><span data-i18n="ledger.quantity">Cantidad</span><span class="sort-arrow" aria-hidden="true"></span></button>
               <button type="button" class="ledger-sort" data-lsort="v"><span data-i18n="ledger.tableVolume">Volumen</span><span class="sort-arrow" aria-hidden="true"></span></button>
               <button type="button" class="ledger-sort" data-lsort="jb"><span data-i18n="ledger.tableBuy">Compra</span><span class="sort-arrow" aria-hidden="true"></span></button>
-              <button type="button" class="ledger-sort" data-lsort="js"><span data-i18n="ledger.tableSell">Venta</span><span class="sort-arrow" aria-hidden="true"></span></button>
+              <button type="button" class="ledger-sort" data-lsort="js"><span id="ledgerPriceColumn" data-i18n="ledger.tablePrice">Precio</span><span class="sort-arrow" aria-hidden="true"></span></button>
               <button type="button" class="ledger-sort" data-lsort="freight"><span id="ledgerFreightColumn" data-i18n="ledger.referenceShipping">Envío</span><span class="sort-arrow" aria-hidden="true"></span></button>
               <button type="button" class="ledger-sort" data-lsort="result"><span id="ledgerResultColumn" data-i18n="ledger.referenceNet">Te queda</span><span class="sort-arrow" aria-hidden="true"></span></button>
             </div>

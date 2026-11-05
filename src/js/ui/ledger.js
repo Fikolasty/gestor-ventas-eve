@@ -69,7 +69,7 @@ function buildLot(o){
   toggle.setAttribute('aria-label',tx('ledger.openItem',{item:o.name}));
   const nm=el('span','lot-name'),nameCopy=copyBtn(o.name,o.name);nameCopy.classList.add('lot-name-copy');nameCopy.removeAttribute('title');nm.append(el('b'));nm.querySelector('b').append(nameCopy);const tag=el('span','tag');
   const qty=el('span','lot-qty'),dest=el('span','lot-dest');
-  const info=el('span','lot-info'),meta=el('span','lot-meta'),headerWarning=el('span','lot-header-warning');headerWarning.hidden=true;meta.append(headerWarning);info.append(nm,meta);
+  const info=el('span','lot-info'),meta=el('span','lot-meta'),headerWarning=el('span','lot-header-warning'),batchContext=el('span','lot-batch-context');headerWarning.hidden=true;batchContext.hidden=true;meta.append(headerWarning,batchContext);info.append(nm,meta);
   const route=el('span','lot-route'),routeLabel=el('span','lot-k',tx('ledger.selectedRoute'));
   const routeMain=el('span','lot-route-main');routeMain.append(dest,tag);route.append(routeLabel,routeMain);
   // Both headline amounts have the same quiet, keyboard-accessible copy
@@ -84,7 +84,7 @@ function buildLot(o){
   const body=el('div','lot-body');body.hidden=true;body.id='lot-detail-'+(++lotDetailId);toggle.setAttribute('aria-controls',body.id);
   body.append(selectedSummary);
   const trade=el('div','lot-reference-trade'),investment=marketCell('freight.purchaseColumn','lot-reference-investment'),profit=marketCell('freight.profitColumn','lot-reference-profit');trade.append(investment.cell,profit.cell);selectedSummary.append(trade);trade.hidden=true;
-  const ui={nm,lot,head:toggle,tag,qty,dest,routeLabel,net,netLabel,ppLabel,body,ppB,selectedSummary,nameCopy,headerWarning,trade,investment,profit,market:{quantity,volume,buy,sell,freight,result},detailsReady:false};
+  const ui={nm,lot,head:toggle,tag,qty,dest,routeLabel,net,netLabel,ppLabel,body,ppB,selectedSummary,nameCopy,headerWarning,batchContext,trade,investment,profit,market:{quantity,volume,buy,sell,freight,result},detailsReady:false};
   const x=el('button','lot-x');x.type='button';x.title=tx('ledger.removeItem',{item:o.name});x.setAttribute('aria-label',x.title);
   ui.removeButton=x;
   o.ui=ui;lot.append(head,toggle,x,body);LOT_OF.set(lot,o); // delegated independent disclosure/copy/remove
@@ -373,14 +373,21 @@ function prepareLedgerReference(P){
   ledgerReferenceByItem.clear();ledgerReference.rows.forEach(r=>ledgerReferenceByItem.set(r.o,r));
 }
 const ledgerValueFormat=new Intl.NumberFormat('en-US',{maximumFractionDigits:6});
+// The sales table quotes the selected side of Jita, never an acquisition cost
+// or a manually adjusted listing. Financial projections keep their own inputs.
+function ledgerQuotedSale(o){return ledgerSaleMode==='instant'?o.jita?.topBuy:o.jita?.topSell;}
 function paintLotMarket(r){
   const u=r.o.ui;if(!u)return;
   const lot=ledgerValueMode==='lot',factor=lot?r.q:1;
   const reference=ledgerReferenceByItem.get(r.o);
-  const entries=[['quantity',r.q,'ledger.quantity',false],
+  const sales=!JitaContext.active;
+  if(u.batchContext.hidden!==(!sales||lot))u.batchContext.hidden=!sales||lot;
+  setLotLeafText(u.batchContext,tx(r.q===1?'ledger.batchSingle':'ledger.batchContext',{count:fmtQ(r.q)}));
+  const price=sales?ledgerQuotedSale(r.o):r.o.jita?.topSell;
+  const entries=[['quantity',sales&&!lot&&r.q>0?1:r.q,'ledger.quantity',false],
     ['volume',Number.isFinite(r.o.m3u)?r.o.m3u*factor:null,'ledger.tableVolume',false],
     ['buy',Number.isFinite(r.o.jita?.topBuy)?r.o.jita.topBuy*factor:null,'ledger.tableBuy',true],
-    ['sell',Number.isFinite(r.o.jita?.topSell)?r.o.jita.topSell*factor:null,'ledger.tableSell',true],
+    ['sell',Number.isFinite(price)?price*factor:null,sales?'ledger.tablePrice':'ledger.tableSell',true],
     ['freight',Number.isFinite(reference?.courierPerUnit)?-reference.courierPerUnit*factor:null,'ledger.referenceShipping',true],
     ['result',Number.isFinite(reference?.referenceAfter)?reference.referenceAfter/r.q*factor:null,'ledger.referenceNet',true]];
   for(const [key,value,label,money] of entries){
@@ -389,7 +396,8 @@ function paintLotMarket(r){
     const shown=!valid?'—':money?NF2.format(value)+' ISK':ledgerValueFormat.format(value)+(key==='volume'?' m³':'');
     setLotLeafText(button,shown,'copy'+(money?' cp-n '+(valid?sgn(value):''):''));
     setLotAttr(button,'data-v',!valid?'':String(Math.round(value*(money?100:1e6))/(money?100:1e6)));
-    setLotAttr(button,'aria-label',tx('ledger.copyField',{field:tx(label),item:r.o.name,value:shown}));
+    const field=sales&&key==='sell'?tx(ledgerSaleMode==='instant'?'ledger.quoteBuy':'ledger.quoteSell'):tx(label);
+    setLotAttr(button,'aria-label',tx('ledger.copyField',{field,item:r.o.name,value:shown}));
     if(button.disabled===valid)button.disabled=!valid;
   }
   setLotAttr(u.nameCopy,'aria-label',tx('ledger.copyName',{item:r.o.name}));
@@ -422,7 +430,10 @@ $('ledgerSaleMode').addEventListener('click',event=>{
 });
 function paintLedgerReference(){
   const ref=ledgerReference;if(!ref)return;
-  const market=S.flip&&C.shipOn?nullSystem():'Jita 4-4';setLotLeafText($('ledgerValueScope'),S.flip?market:tx('ledger.jitaPrice'));
+  const market=S.flip&&C.shipOn?nullSystem():'Jita 4-4';setLotLeafText($('ledgerValueScope'),S.flip?market:tx(JitaContext.active?'ledger.jitaPrice':'ledger.jitaReference'));
+  const priceHeading=$('ledgerPriceColumn');priceHeading.removeAttribute('data-i18n');setLotLeafText(priceHeading,tx(JitaContext.active?'ledger.tableSell':'ledger.tablePrice'));
+  const quantitySort=$('ledger').querySelector('[data-lsort="q"]');quantitySort.disabled=!JitaContext.active&&ledgerValueMode==='unit';
+  if(!JitaContext.active&&(ledgerSort.key==='jb'||quantitySort.disabled&&ledgerSort.key==='q')){ledgerSort={key:null,dir:1};applyLedgerSort();}
   $('ledgerSaleMode').hidden=S.flip;
   $('ledgerSaleMode').querySelectorAll('button').forEach(b=>setLotAttr(b,'aria-pressed',String(b.dataset.ledgerSale===ledgerSaleMode)));
   for(const [id,amount] of [['freightLotBefore',ref.before],['unitCourierTotal',Number.isFinite(ref.shipCost)?-ref.shipCost:null],['freightLotFinal',ref.after]]){
@@ -491,7 +502,7 @@ function applyLedgerSort(){
     const factor=ledgerValueMode==='lot'?(r?r.q:o.qty):1;
     if(k==='v')return Number.isFinite(o.m3u)?o.m3u*factor:-Infinity;
     if(k==='jb')return Number.isFinite(o.jita?.topBuy)?o.jita.topBuy*factor:-Infinity;
-    if(k==='js')return Number.isFinite(o.jita?.topSell)?o.jita.topSell*factor:-Infinity;
+    if(k==='js'){const price=JitaContext.active?o.jita?.topSell:ledgerQuotedSale(o);return Number.isFinite(price)?price*factor:-Infinity;}
     if(k==='freight'){const n=ledgerReferenceByItem.get(o)?.courierPerUnit;return Number.isFinite(n)?n*factor:-Infinity;}
     if(k==='result'){const v=JitaContext.active?currentJitaPurchase?.byItem.get(o)?.cost:ledgerReferenceByItem.get(o)?.referenceAfter;return Number.isFinite(v)?v/(r?.q||o.qty||1)*factor:-Infinity;}
     if(k==='d')return r&&r.best?(OPTS.find(x=>x[0]===r.best)||['',''])[1].toLocaleLowerCase('es'):'';

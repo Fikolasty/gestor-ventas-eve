@@ -111,3 +111,15 @@ test('distribution copy has short bilingual headings and distinguishes sale valu
   for(const lang of ['es','en'])assert.ok(catalog[key][lang].includes('{market}'),key+' '+lang);
  }
 });
+
+test('sales quote and batch context labels stay short, bilingual and unambiguous',()=>{
+ for(const key of ['ledger.tablePrice','ledger.jitaReference','ledger.quoteSell','ledger.quoteBuy','ledger.batchContext','ledger.batchSingle']){
+  for(const lang of ['es','en'])assert.ok(messages[key]?.[lang]?.trim(),key+' '+lang);
+ }
+ for(const lang of ['es','en']){
+  assert.ok(messages['ledger.tablePrice'][lang].length<=10);
+  assert.ok(messages['ledger.quoteSell'][lang].includes('Sell'));
+  assert.ok(messages['ledger.quoteBuy'][lang].includes('Buy'));
+  assert.ok(messages['ledger.batchContext'][lang].includes('{count}'));
+ }
+});

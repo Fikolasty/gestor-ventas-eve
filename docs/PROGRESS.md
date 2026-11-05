@@ -1603,3 +1603,11 @@ Distribución y borde de importes de planes implementados tras aprobación del p
 ### Gate local final193
 
 170Node/16Python/8legacy/139Chromium PASS293,132s; tres focales ampliadas PASS8,227s y capturas finales r2 revisadas. Sustituye el pendiente integral previo. Publicación remota pendiente, última LIVE192. Sin aprobación visual pendiente. La revisión automática de la plantilla fue aclarada mediante ruta/SHA y aceptada; no se carga index.html manualmente.
+
+## 2026-11-05 — candidata194 aprobada
+
+Tres alcances del propietario implementados: Unidad/Lote coherente y Precio Sell/Buy según Orden/Inmediata, retiro de ayuda genérica de Distribución, Pasos Dark con grafito vecino y neto semántico.171Node/16Python/8legacy y focales PASS; gate final143Chromium en curso tras corregir color detectado en capturas. No publicación todavía, LIVE193. Kit docs/HANDOFF_LEDGER_UNITS_194.md; CSS títulos pausado antes de tocar40/60.
+
+### Gate final local194
+
+143Chromium PASS304,147s,171Node/16Python/8legacy y focales finales PASS. Build194c7a33258,2.605.727bytesLF; capturas r2 revisadas y sin retoques posteriores. Certificación remota pendiente; LIVE193.

@@ -305,11 +305,10 @@ function paintVerdict(P){
   const estimate=$('vEstimate');estimate.hidden=!!none||!purchaseUnknown;
   const estimateKey=purchaseUnknown?'trade.purchaseUnavailableShort':flipAcct?'verdict.estimateTrade':'verdict.estimateSale';
   estimate.dataset.i18n=estimateKey;estimate.textContent=tx(estimateKey);
-  // The ordinary estimate caveat remains auditable inside financial details,
-  // without competing with the large net figure. Missing purchase basis stays visible.
+  // Compatibility metadata stays hidden; the owner removed the generic help UI.
+  // Conditional accounting and missing-purchase warnings remain in their views.
   const estimateHelp=$('vEstimateHelp');
-  estimateHelp.hidden=!!none||purchaseUnknown;
-  $('distributionHelp').hidden=estimateHelp.hidden;
+  estimateHelp.hidden=true;
   estimateHelp.dataset.i18n=estimateKey;
   estimateHelp.textContent=tx(estimateKey);
   const amount=$('vIsk');

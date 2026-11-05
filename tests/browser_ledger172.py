@@ -34,7 +34,7 @@ class Ledger172Tests(unittest.TestCase):
   self.assertEqual(row.locator('.lot-panel-grid').count(),0)
   before=self.page.evaluate('JSON.stringify([lastP.best,S.items.map(o=>[o.name,o.qty,o.m3u,o.ref,o.refMan])])')
   for selector,value in [('.lot-name-copy','Sample module A'),('.lot-table-quantity .copy','50'),
-       ('.lot-table-volume .copy','0.05'),('.lot-table-buy .copy','550000000'),('.lot-table-sell .copy','600000000')]:
+       ('.lot-table-volume .copy','0.05'),('.lot-table-sell .copy','600000000')]:
    cell=row.locator(selector);text=cell.inner_text();cell.click()
    expect(self.page.locator('#ledgerCopyFeedback')).to_be_visible()
    self.assertEqual(self.page.evaluate('copies.at(-1)'),value)
@@ -45,7 +45,7 @@ class Ledger172Tests(unittest.TestCase):
   self.page.locator('[data-ledger-mode=unit]').click()
   self.assertEqual(row.locator('.lot-table-volume .copy').get_attribute('data-v'),'0.001')
   self.assertEqual(row.locator('.lot-table-buy .copy').get_attribute('data-v'),'11000000')
-  self.assertEqual(row.locator('.lot-table-quantity .copy').inner_text(),'50')
+  self.assertEqual(row.locator('.lot-table-quantity .copy').inner_text(),'1')
   self.assertEqual(self.page.evaluate('JSON.stringify([lastP.best,S.items.map(o=>[o.name,o.qty,o.m3u,o.ref,o.refMan])])'),before)
   row.locator('.lot-open').focus();self.page.keyboard.press('Enter')
   expect(row.locator('.lot-body')).to_be_visible()
@@ -57,13 +57,13 @@ class Ledger172Tests(unittest.TestCase):
  def test_sort_preserves_items_open_details_and_unknown_quotes(self):
   before=self.page.evaluate('S.items.map(o=>o.name)')
   self.page.locator('#lots .lot-open').first.click()
-  self.page.locator('[data-lsort=jb]').click()
+  self.page.locator('[data-lsort=js]').click()
   self.assertEqual(self.page.locator('#lots .lot-name-copy').first.inner_text(),before[0])
   self.page.locator('[data-ledger-mode=unit]').click()
   self.assertEqual(self.page.locator('#lots .lot-name-copy').first.inner_text(),before[1])
   self.assertEqual(self.page.evaluate('S.items.map(o=>o.name)'),before)
   self.assertTrue(self.page.evaluate('!S.items[0].ui.body.hidden'))
-  self.page.locator('[data-lsort=jb]').click();self.page.locator('[data-lsort=jb]').click()
+  self.page.locator('[data-lsort=js]').click();self.page.locator('[data-lsort=js]').click()
   self.assertEqual(self.page.locator('#lots .lot-name-copy').all_inner_texts(),before)
   self.page.evaluate('()=>{S.items[0].jita.topBuy=null;S.items[0].m3u=null;paintLot(S.items[0].ui.last)}')
   for sel in ['.lot-table-buy','.lot-table-volume']:
@@ -84,7 +84,7 @@ class Ledger172Tests(unittest.TestCase):
       self.page.mouse.move(0,0)
       self.assertLessEqual(self.page.evaluate('document.documentElement.scrollWidth-innerWidth'),1)
       geometry.append(self.page.locator('#lots .lot').evaluate_all('es=>es.map(e=>{const r=e.getBoundingClientRect();return [r.width,r.height]})'))
-      bounds=self.page.locator('#lots .lot-head .copy').evaluate_all('es=>es.map(e=>{const a=e.getBoundingClientRect(),r=e.closest(".lot").getBoundingClientRect();return a.left>=r.left-1&&a.right<=r.right+1})')
+      bounds=self.page.locator('#lots .lot-head .copy:visible').evaluate_all('es=>es.map(e=>{const a=e.getBoundingClientRect(),r=e.closest(".lot").getBoundingClientRect();return a.left>=r.left-1&&a.right<=r.right+1})')
       self.assertTrue(all(bounds),(lang,width,state,light))
       if width==1440 or (lang=='es' and state==2):
        self.page.locator('#ledger').screenshot(path=str(out/f'ledger172-final-{lang}-{width}-{state}-{"light" if light else "dark"}.png'),animations='disabled')

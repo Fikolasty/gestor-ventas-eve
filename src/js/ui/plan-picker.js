@@ -197,7 +197,7 @@ function paintPicker(P){
   // B.19: display the *same* selected-plan net in the steps drawer header.
   // This is a mirror of the canonical result, never a new financial formula.
   const stepNet=$('stepDrawerTotal');
-  stepNet.className='num'+(chosen.t.net<0?' neg':'');
+  stepNet.className='num '+sgn(chosen.t.net);
   stepNet.textContent=selectedNet.textContent;
   const includesImport=P.rows.some(r=>r.best==='fN');
   const onlyImport=includesImport&&P.rows.every(r=>!r.best||r.best==='fN');
