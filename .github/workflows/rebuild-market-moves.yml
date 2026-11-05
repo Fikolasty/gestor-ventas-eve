@@ -139,6 +139,7 @@ jobs:
             exit 1
           else
             # The verified artifact already matches the repository.
+            # Still publish a fresh Pages artifact when retrying deployment.
             echo "published=true" >> "$GITHUB_OUTPUT"
           fi
 

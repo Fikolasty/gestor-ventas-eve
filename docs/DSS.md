@@ -2115,3 +2115,15 @@ Baseline y copia posterior sobre196 guardadas antes de asignar197, SHA256 del ar
 ### Gate local197 cerrado
 
 146/146Chromium PASS377,321s sobre build197ffed3c26;171Node/16Python/8legacy PASS. Diferencial232estados y24parejas PNG idénticos,41propiedades calculadas y capturas finales r1 revisadas.53fuentes restantes intactas y JS idéntico antes de cambiar etiqueta de versión. Sin cambios de producto posteriores. Última LIVE196; Fiko/cuatroActions/Pages/HTTPS pendientes. No aprobación visual pendiente.
+
+### Fuente197 enviada por Fiko
+
+Fuente6b6eb9e30365126b095160d185b86d4c4b00ae1e, árbol3e2ad4babbb0926e4948f56cf8aa5e79b4b10aee.13blobs verificados y53fuentes restantes intactas. Main avanzado desde3261a9f1 con expected_sha/force:false; index.html excluido. Minería42050677940, Build42050677992 y Versiones42050677786 SUCCESS; Rebuild/Pages42050677830 en curso. Última LIVE196 hasta cierre remoto/HTTPS.
+
+### Primer despliegue197: timeout de Pages, reintento sin cambios
+
+Compile127325617413 PASS:171Node/16Python/8legacy/146Chromium (359,631s). Build bot241adcb84c3d92cbb801e5053e208eb87952aece conserva indexffed3c26. Deploy127329570790 falló el2026-11-05T15:18:02Z por Timeout reached, aborting tras permanecer en updating_pages durante10min; la acción canceló ese despliegue. No es fallo de CSS ni de tests. Se solicita por Fiko reejecutar solo los jobs fallidos del run42050677830, conservando artefacto y código. No cambiar timeout ni relajar gates. Estado general GitHub Status consultado: sin incidencia general informada; esto no determina la causa de este despliegue. Última LIVE196 hasta reintento correcto y HTTPS idéntico.
+
+### Recuperación197 con artefacto e identificador nuevos
+
+El segundo despliegue127336487894 (attempt2) también agotó10min de espera el2026-11-05T15:29:25Z. Sus logs mostraron Current status vacío para el mismo deployment ID6b6eb9e30365126b095160d185b86d4c4b00ae1e. Compile fue reutilizado (alias127336490011, tiempos originales15:01:13–15:07:50), no falló ninguna prueba. Se genera una corrida completa nueva para descartar un identificador/artefacto atascado: solo comentario aclaratorio en el workflow existente sobre publicar un artefacto nuevo aunque el HTML ya coincida. No se cambia timeout, permisos, acciones, gates, lógica ni HTMLffed3c26. Source main de base241adcb84c3d92cbb801e5053e208eb87952aece. Nuevo CI debe repetir todas las pruebas y Pages/HTTPS antes de LIVE. Los intentos previos fallidos se conservan como historia, no se ocultan.
