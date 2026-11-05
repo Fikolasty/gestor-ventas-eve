@@ -373,3 +373,8 @@ Redondeo hacia arriba al millón por contrato SIGMA según los Items empaquetado
 
 
 Gate local199 cerrado:148Chromium (471,169s),178Node/16Python/8legacy PASS; guarda no-finita final repetida con178Node y2focales Chromium192estados sobre buildaab23515 (2610811bytesLF). Ver DSS para la precisión temporal de la corrida general y las capturas finales r3. Fiko/main/4Actions/Pages/HTTPS pendientes; última LIVE198. Sin aprobación visual pendiente.
+
+
+## Productividad — 2026-11-05
+
+Aplicar la decisión «Productividad sin reducir calidad» al final de DSS: pruebas focales durante desarrollo, una validación completa al congelar, sin duplicación local/CI rutinaria, documentación canónica breve y avisos por cambios relevantes. Mantener los gates financieros/visuales y Fiko/Actions/Pages/HTTPS. Documentos maestros completos al iniciar; en el mismo chat, consultar después solo lo cambiado/relevante.

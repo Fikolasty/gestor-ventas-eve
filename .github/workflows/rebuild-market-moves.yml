@@ -1,4 +1,5 @@
 name: Rebuild Market Moves distributable
+# v199 recovery: issue a fresh Pages deployment ID after the previous ID timed out.
 on:
   push:
     branches: [main]

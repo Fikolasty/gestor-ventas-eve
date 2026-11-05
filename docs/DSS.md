@@ -2207,3 +2207,25 @@ Sin aprobación visual pendiente para este cambio puntual solicitado. Última LI
 Capturas finales freight199-r3 regeneradas después de la última guarda; recibo/distribución en los ocho estados1440ES (completo/parcial/ausente/largo × Dark/Light) idénticos píxel a píxel a los recortes r2 ya inspeccionados. Se revisó de nuevo la pareja parcial r3. Las capturas completas y la matriz conservan controles, cuatro paneles y semántica ISK. Fixtures sintéticos; la Tasación114920001/148055001/181190000 y el volumen6000.04 se reproducen como prueba de la captura, no como certificación del mercado histórico ni actual.
 
 HTML199 final canónicoLF:2610811bytes,blob aab235156184811ac01fd7f1b3153c54f3f21165,SHA256be04542c8c034cd5dae2722a15de46407138d0bdec3a7ea44c79ccc9e1456028. Once fuentes modificadas y47fuentes restantes idénticas al main198c4f0dead. Manifiesto explícito34archivos; quedan fuera index.html, los estados QA generados por CI y HANDOFF_CSS_187 preexistente. Fiko confirmado comoFikolasty106491008, main198 y árbol44f2ec19 verificados. Los blobs de fuente no mueven la rama; falta publicación protegida expected_sha/force:false, cuatroActions/Pages y HTTPS idéntico. Última LIVE198; sin aprobación visual pendiente. Kit activo docs/HANDOFF_FREIGHT_199.md.
+
+
+### Fuente199 enviada por Fiko
+
+Fuente protegida362f5079369a61b25acf72ff024aaddc787b4c91, árbol6768f74ac842efe62b69bd7e4191519fe91de74d; main avanzado desdec4f0dead con expected_sha y force:false.34blobs verificados y219archivos previos restantes preservados; index.html excluido. Versiones42108215925, Build42108215941 y Minería42108216001 SUCCESS. Rebuild/Pages42108215949 en curso; Chromium CI/Pages/HTTPS pendientes. Última LIVE198 hasta cierre remoto. No aprobación visual pendiente.
+
+
+## Productividad sin reducir calidad — decisión del propietario, 2026-11-05
+
+El propietario pide reducir tiempo y tokens: evitar ciclos de más de30min por cambios pequeños. Aplicación inmediata: leer los documentos maestros completos al iniciar y luego solo secciones cambiadas/relevantes del mismo chat; diagnóstico y diff acotados; pruebas focales durante implementación y una sola validación completa del artefacto congelado, usando CI como gate integral sin duplicarlo localmente por rutina. Repetir pruebas por cambios/fallos concretos, no por costumbre. Mantener regresiones financieras y revisión visual de estados afectados, ambos temas/idiomas y anchos pertinentes; no rebajar gates de producción ni declarar LIVE sin Actions/Pages/HTTPS.
+
+DSS conserva la decisión canónica una sola vez. AGENTS/PROGRESS/continuidad enlazan el estado vigente; evitar copiar el mismo informe en todos los documentos. Actualizar SDD/SPEC únicamente cuando cambie su contrato. Agrupar lecturas y operaciones independientes, reutilizar artefactos por hash y consultar CI con intervalos razonables. Reintentar solo el job de despliegue si su artefacto y gates siguen válidos. Avisar ante un cambio de fase, resultado, fallo o decisión requerida; no narrar cada herramienta. Conservar Fiko, expected_sha/force:false, aislamiento de cambios y verificación final del HTML. No prometer una duración o cuota de tokens fija: medir por separado trabajo activo y espera externa.
+
+
+### Primer intento de Pages199: timeout, reintento solo del despliegue
+
+Compile127528589708 SUCCESS: CI178Node/16Python/8legacy/148Chromium (416,332s). Build bot9c17ae28ef3849f8560798c19dea3263d1db86c7; index2610811bytes,blobaab235156184811ac01fd7f1b3153c54f3f21165 idéntico al local. Deploy127532673310 falló tras agotar10min en Pages. HTTPS independiente21:09:30Z todavía servía198 (blob73037a5b). Se reintenta solo el job fallido del run42108215949, conservando artefacto y gates exitosos. No cambios de producto ni repetición de suites. Última LIVE198 hasta Actions/Pages/HTTPS correctos.
+
+
+### Recuperación199 con identificador nuevo, sin cambios de producto
+
+El primer deploy127532673310 agotó10min en updating_pages y fue cancelado. El reintento127538626094 reutiliza el mismo ID362f5079369a61b25acf72ff024aaddc787b4c91. El incidente197 ya documentó que ese patrón también quedó atascado al reintentar. Para evitar otra espera completa, se crea una fuente nueva con solo un comentario del workflow y documentación. La concurrencia existente cancel-in-progress:true cancela el reintento al entrar la corrida nueva. No se alteran timeout, permisos, jobs, pruebas ni contenido del artefacto; index conserva blobaab23515 y2610811bytes. El workflow actual exige repetir CI para obtener ID nuevo, limitación de recuperación que queda registrada para una mejora posterior, sin implementar ahora un pipeline distinto. No hay nueva ejecución local completa: el producto no cambia y ya está validado. Rebuild nuevo, Pages y HTTPS pendientes; última LIVE198.
