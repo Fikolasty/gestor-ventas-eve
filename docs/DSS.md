@@ -1924,3 +1924,23 @@ Estado: auditoría y limpieza local, sin commit remoto ni nueva versión. Últim
 El propietario plantea publicar tras la revisión ya completada. Se aplica su autorización continua: no se repite una revisión visual sin cambios nuevos. Perfil GitHub comprobado Fiko/Fikolasty; main sigue `32cdda66`. Los workflows existentes cambian exclusivamente191→192. Build192 es exactamente el compilado de limpieza verificado con sustitución de la versión, sin diferencias adicionales; 2.596.975 bytesLF, blob `714c182198a868f45894cfefdab097c91558518d`.
 
 Conservar los gates locales ya completados:169Node/16Python/8legacy/136Chromium,160estados diferenciales y20parejas de capturas idénticas. Se envía únicamente el incremento sobre el árbol remoto vigente, preservando las fuentes191 y los cambios locales previos. Certificación remota/Pages/HTTPS pendiente; última LIVE191. Informe docs/CSS_AUDIT_191.md y nuevo kit docs/HANDOFF_CSS_192.md. Sin aprobación visual pendiente ni nuevo alcance de diseño/economía.
+
+### Fuentes192 publicadas — certificación remota pendiente
+
+Fiko/Fikolasty avanzó main desde32cdda66, con expected_sha y force:false, al commit `55bd0eaad7924b57d14bb0af8355d66f2863e633` (árbol `62abdf04f2c5468709f293fa2a04ccfbafedba0b`). Once blobs de fuentes/tests/workflows/documentación verificados por SHA. No se subió index.html ni se reenviaron cambios v190–191. Esperando los cuatro workflows, Pages y HTTPS idéntico al build192 local. No declarar aún LIVE192.
+
+### Corrección del gate de versión
+
+Primer Rebuild41975284159 bloqueó Pages antes de compilar:168/169 Node, una aserción de tests/c5c-plans.test.cjs aún exigía python3 build.py1.0.191. Se actualiza solamente a1.0.192, conservando las comprobaciones de main y permisos del workflow candidato.169/169Node locales PASS tras el ajuste. Fuente inicial55bd0eaa; commit Fiko de prueba674501465226dfe89f0cd58f7929d4ea3111d8c5, hijo del registro CI d8194c65, sin force. HTML local y CSS intactos. Esperando nuevo gate completo remoto; LIVE sigue191.
+
+## v1.0.192 LIVE CERTIFICADA — cierre 2026-11-05
+
+Publicado el incremento de limpieza CSS por Fiko/Fikolasty. Este cierre sustituye los estados locales/candidatos y pendientes192 anteriores. Fuente protegida `55bd0eaad7924b57d14bb0af8355d66f2863e633`, corrección de la aserción de versión `674501465226dfe89f0cd58f7929d4ea3111d8c5`, build bot `00586924a2670d84b26809ba159eefcfabdbf24a`. Árbol del build `7bc2deee3fef13a8e417a1cd2eadef10cf4e5d2a`. Main avanzado con SHA esperado y sin force; no se reenviaron fuentes de190–191 ni HTML manual.
+
+Cuatro Actions SUCCESS en el intento corregido: Versiones41975435998, Minería41975435984, Build41975436018 y Rebuild/Pages41975435983. Compile127073068369 y deploy127075028221 SUCCESS. CI169Node/16Python/8legacy/136Chromium PASS; Chromium319,386s. El primer intento41975284159 se detuvo antes del build por una aserción que aún exigía191; se actualizó solo a192 conservando los controles de permisos/main. El gate completo posterior sustituye ese bloqueo.
+
+HTTPS independiente200, sin query, Cache-Control:no-cache y Pragma:no-cache, en https://fikolasty.github.io/gestor-ventas-eve/. Comparación byte a byte del HTML público con el local canónicoLF y blob del árbol GitHub:2.596.975bytes, `714c182198a868f45894cfefdab097c91558518d`. Reducción neta210bytes frente191. No se afirma una mejora de velocidad medida.
+
+Se conservan nodo oculto de metadatos, fechas/cobertura, descripción accesible y tooltip de Jita y aviso de precios parciales. Tres reglas visuales retiradas y comentario contiguo actualizado; sin cambios en diseño,copy,JS del producto,finanzas,ESI/SSO,permisos o persistencia.160estados diferenciales y20parejas desktop idénticas, revisión manual Dark/Light de Ventas completo y Jita parcial; fixtures, no cotizaciones vivas. Local169Node/16Python/8legacy/136Chromium PASS324,827s y169Node tras actualizar la aserción. Build192 idéntico al limpiado verificado al normalizar la versión; no hubo otro cambio CSS después de capturas. Se conserva la verificación manual ESI reportada por el propietario el2026-11-02; el agente no hizo una nueva sesión ESI/SSO real.
+
+Última LIVE192. No queda aprobación ni gate de publicación pendiente. Informe docs/CSS_AUDIT_191.md, comparador tests/audit_appraisal_css.py y kit activo docs/HANDOFF_CSS_192.md. HANDOFF_SALES_191 conserva el cierre del diseño previo. Siguiente familia solo propuesta: auditoría de propietarios del título Tasación/Inventario; no iniciada automáticamente. El cierre documental se publica mediante commit posterior que puede avanzar main sin alterar el HTML certificado.

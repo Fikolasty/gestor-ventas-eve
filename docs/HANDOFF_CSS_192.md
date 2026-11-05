@@ -2,7 +2,7 @@
 
 ## Estado actual
 
-**Candidata autorizada para publicar por el propietario.** Última LIVE v1.0.191; no declarar v192 LIVE hasta cerrar cuatro Actions, Pages y comparación HTTPS/local/GitHub.
+**v1.0.192 LIVE CERTIFICADA — 2026-11-05.** Este cierre sustituye los estados candidatos y gates pendientes del historial de este documento. Fuente Fiko `55bd0eaa`, prueba corregida `67450146`, build `00586924`. Cuatro Actions SUCCESS, Pages `41975435983`, compile `127073068369` y deploy `127075028221`. CI 169 Node/16 Python/ocho legacy/136 Chromium PASS (319,386 s). HTTPS200 sin query y sin caché: HTML público/local/GitHub idénticos, 2.596.975 bytesLF y blob `714c182198a868f45894cfefdab097c91558518d`. No queda aprobación ni gate de publicación pendiente. La siguiente familia CSS sigue solo propuesta.
 
 Alcance: retirar exclusivamente tres reglas visuales de `.appr-meta` en `80-product-ux.css`. El nodo oculto conserva cobertura/fechas y alimenta la descripción accesible y tooltip de Jita. Aviso `.appr-partial` intacto. No cambia diseño, copy, JS, economía, ESI/SSO, permisos ni almacenamiento. El propietario preguntó si hacía falta otra revisión o publicar; se procede con su autorización continua y el QA completo ya terminado.
 
@@ -19,3 +19,11 @@ Inventario de propietarios del título Tasación/Inventario entre30/40/60/80 y t
 ## Prompt de arranque
 
 Continúa Market Moves+ desde el cierre real de v1.0.192 en DSS y este kit. Verifica main y el estado de publicación; la etiqueta candidata solo queda sustituida cuando exista certificación explícita. Lee protocolo, DSS, PRODUCT_DESIGN_REFINEMENT y CSS_AUDIT_191. Preserva cambios locales y el diseño191. La próxima familia CSS es una auditoría de propietarios del título Tasación/Inventario, no un rediseño.
+
+### Envío de fuentes
+
+Main avanzado por Fiko con SHA esperado y sin force a55bd0eaad7924b57d14bb0af8355d66f2863e633; árbol62abdf04f2c5468709f293fa2a04ccfbafedba0b. Once blobs verificados por SHA. Actions/Pages/HTTPS pendientes. Esta nota es local hasta el cierre documental.
+
+### Primer gate y corrección
+
+Rebuild41975284159 detuvo Pages por una prueba con versión191 fija. Ajustada solo la aserción a192;169Node locales PASS. Commit de corrección Fiko674501465226dfe89f0cd58f7929d4ea3111d8c5, sin cambio de HTML/CSS. Nueva certificación remota pendiente.

@@ -1,9 +1,9 @@
-## v1.0.192 — limpieza incremental CSS de Tasación
+## v1.0.192 — limpieza incremental CSS de Tasación — LIVE certificada
 
 - Retiradas tres reglas de presentación de metadatos siempre ocultos; 210 bytes menos en el HTML.
 - Cobertura, fechas, ayuda accesible de Jita y aviso de precios parciales conservados.
 - Sin diferencias en 160 estados y 20 parejas de capturas desktop; 169 Node/16 Python/8 legacy/136 Chromium PASS locales.
-- Publicación pendiente de Actions, Pages y HTTPS idéntico. Auditoría: docs/CSS_AUDIT_191.md; continuidad: docs/HANDOFF_CSS_192.md.
+- Fiko `55bd0eaa`, prueba `67450146`, build `00586924`; cuatro Actions SUCCESS y136Chromium CI PASS. HTTPS/local/GitHub idénticos, blob714c182198a868f45894cfefdab097c91558518d. Auditoría: docs/CSS_AUDIT_191.md; continuidad: docs/HANDOFF_CSS_192.md.
 
 ## v1.0.183 — General y header r3 — LIVE certificada
 

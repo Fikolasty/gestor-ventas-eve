@@ -1,5 +1,7 @@
 # Continuidad de Ventas v1.0.191
 
+**Continuidad actual: v1.0.192 LIVE certificada — 2026-11-05.** Limpieza CSS publicada sin cambiar el diseño191. Ver `docs/HANDOFF_CSS_192.md` y cierre DSS para las cuatro Actions,136Chromium CI y coincidencia HTTPS/local/GitHub. Este documento conserva la historia191; sus pendientes posteriores de la limpieza192 ya están cerrados.
+
 **Última LIVE certificada v1.0.191.** Este cierre sustituye los estados candidatos del historial de abajo. Publicación por Fiko el 2026-11-04. Fuentes `9e8bed21`, pruebas `48d11b28`, compilado `2254b6cb`. Cuatro Actions correctas, Pages `41818995240` en el segundo intento y 136/136 Chromium en CI y local. HTML público, local y GitHub idénticos, 2.597.185 bytes, blob `6e7117ff8dc47998a96297c5dabfb5ba90e0e492`. Ver el cierre v1.0.191 del DSS. No queda aprobación ni gate pendiente.
 
 ## Estado
