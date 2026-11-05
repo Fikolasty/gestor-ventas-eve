@@ -1,5 +1,16 @@
 # PROGRESS — Market Moves+
 
+## Cierre LIVE v1.0.198 — 2026-11-05
+
+Publicación certificada por Fiko/Fikolasty. Fuente `0890cdd345d7b1f2ce5fa5f8d27d63f56496bf8c`, build bot `65449a141888bdc1a91e4a409c630fea6de7c517`. Cuatro Actions SUCCESS del incremento: Versiones42066337285, Build42066337136, Minería42066337125 y Rebuild/Pages42066337113. Compile127381319659 y deploy127391218725 SUCCESS. No reintentos ni cambios de timeout/permisos/gates en esta entrega.
+
+CI171Node/16Python/8legacy/146Chromium PASS (368,610s). Local171Node/16Python/8legacy/146Chromium PASS (393,971s). Diferencial232estados (192composición y40fronteras760/761/860/861/981),41propiedades calculadas/geometría/textos/foco idénticos y24parejas PNG1440ES idénticas byte a byte. Capturas finales css-content198-r1 revisadas completo/parcial/texto largo en Dark/Light después del último cambio visual. Los artefactos congelados before197/after197 mantuvieron su SHA256 mientras index198 se probaba en paralelo. Fixtures sintéticos y red bloqueada, sin ESI/SSO real extremo a extremo en esta entrega.
+
+HTTPS200 independiente sin query/sin caché confirma v1.0.198: HTML público/local canónico/GitHub idénticos, **2.605.556bytesLF**, blob **`73037a5b91a9f063dc1eb594d89afb504fc50ba8`**. Index generado exclusivamente por CI.11archivos del incremento verificados;53fuentes restantes de la aplicación intactas. Se retiran solo tres reglas sobrescritas de40 para .appr-g/.paste y grid-template-columns en860:238bytes menos sin rendimiento medido. Los propietarios vigentes de60, textarea/paste-foot, temas y copy conservados. Dos bloquesJS idénticos sobre la misma versión197; economía, ESI/SSO, permisos, persistencia y plan plegable195 sin cambios.
+
+Este cierre sustituye todos los estados candidata/pendiente198 anteriores. Sin aprobación visual ni gate de publicación pendiente. Informe docs/CSS_CONTENT_AUDIT_198.md y kit activo docs/HANDOFF_CSS_198.md. Siguiente familia solo propuesta: auditar propiedades del textarea y referencias de .paste-foot, preservando line-height/display/max-height hasta demostrar su sustitución y verificando build.py/DOM/bClear antes de retirar estilos sin uso. No se implementa ese siguiente alcance en198. Continuar en este chat sin avisos por contadores. Cierre documental posterior puede avanzar main sin alterar el HTML certificado.
+
+
 ## v1.0.198 candidata — CSS de contenido y responsive, 2026-11-05
 
 El propietario aprueba informar y ejecutar la siguiente familia. Se retiran tres reglas históricas de40: flex/min-height de .appr-g, display/flex-direction/gap de .paste y la mediaquery860 que solo repetía grid-template-columns.60 conserva sus propietarios importantes y el corte860 completo. Textarea/paste-foot, tipografía, superficies, controles y demás mediaqueries se mantienen. Copy ES/EN sin cambios; no rediseño.
