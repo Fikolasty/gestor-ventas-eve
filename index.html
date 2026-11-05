@@ -7,7 +7,7 @@
 <meta name="referrer" content="no-referrer">
 <title>Market Moves+ · SIGMA GRINDSET</title>
 <style>
-/* ================= Market Moves+ v1.0.191 =================
+/* ================= Market Moves+ v1.0.192 =================
    Paleta: azul de base, naranja = acción, verde/rojo = ganancia/pérdida.
    Sin backdrop-filter: el vidrio se finge con rgba + bordes. */
 *{box-sizing:border-box;margin:0;padding:0}
@@ -6333,10 +6333,7 @@ body .top.mm-ho-root #mmTabs>.mm-ho-main #navHome{display:none!important}
  #pSum #unitCourierRows .mm-unit-trade {gap:12px}
 }
 
-/* v1.0.171 — appraisal quote coverage and honest ESI query dates. */
-#appr .appr-meta {margin-top:12px;padding-top:10px;border-top:1px solid var(--line2);color:var(--mut);font:400 14px/1.5 var(--f-ui);overflow-wrap:anywhere}
-#appr .appr-meta p {margin:0}
-#appr .appr-meta p+p {margin-top:4px}
+  /* Appraisal partial-price warning remains visible; quote metadata stays hidden. */
 #appr .appr-partial {margin:8px 0 0;color:var(--thrust);font:500 14px/1.5 var(--f-ui)}
 
 /* Settings r5: warm graphite drawers, independent compact desktop lanes. */
@@ -9656,13 +9653,13 @@ Contraband Freight = no</textarea><small>Una regla por línea: Nombre = tax tota
 <button type="button" class="totop" id="toTop" aria-label="Volver arriba" title="Volver arriba (Inicio)" hidden><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 14l6-6 6 6"/></svg></button>
 <footer class="foot">
   <p class="foot-sec"><span class="ic i-lock" aria-hidden="true"></span>Tu inventario no se guarda: al cerrar o recargar se borra. Solo tus Ajustes quedan en este navegador.</p>
-  <div class="foot-by">Creado por <b>Fiko McGivert</b> · <span class="mm-footer-corp-logo vg" role="img" aria-label="Vanguardia DR"></span>Vanguardia DR · SIGMA GRINDSET · <span class="ver">v1.0.191</span></div>
+  <div class="foot-by">Creado por <b>Fiko McGivert</b> · <span class="mm-footer-corp-logo vg" role="img" aria-label="Vanguardia DR"></span>Vanguardia DR · SIGMA GRINDSET · <span class="ver">v1.0.192</span></div>
 </footer>
 
 <script>
 'use strict';
 /* ============================================================
-   Market Moves+ v1.0.191 — SIGMA GRINDSET / Vanguardia DR
+   Market Moves+ v1.0.192 — SIGMA GRINDSET / Vanguardia DR
    Flujo:  pegado → items → carga (ESI: precios, volúmenes, historial) → verificación → plan → vista
      1. Pegado      parsePaste(): parser posicional de columnas de EVE (Name · Quantity · … · Volume · Est. Price).
      2. Carga       esiItems(): trae todo lo que falta; mientras carga, refresh() NO pinta (S.loading).
