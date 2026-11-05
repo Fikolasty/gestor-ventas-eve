@@ -2,6 +2,8 @@
 
 ## Estado real
 
+**Siguiente corrección solicitada: v1.0.195 candidata**, restaurar Elige tu plan plegable y cerrado inicialmente. Ver `docs/HANDOFF_PLAN_DISCLOSURE_195.md`;194 sigue LIVE hasta su gate remoto.
+
 **v1.0.194 LIVE CERTIFICADA.** Todos los gates cerrados; ver cierre remoto al final. La dirección visual fue aprobada y la publicación se completó mediante Fiko/Fikolasty. Los estados pendientes del historial siguiente quedan sustituidos.
 
 Base remota verificada `d168d06fb3727d9dca0f6eb97b21dee3c9de71ae`, árbol `abda449719ff50be301a7bee481f827d6f6422d2`. HEAD local sigue antiguo61ced55 con fuentes190–193 publicadas como cambios locales: conservarlas y enviar únicamente el incremento194 sobre el árbol remoto, sin force. No editar index.html a mano ni subirlo por el conector; lo genera CI.

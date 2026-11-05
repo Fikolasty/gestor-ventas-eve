@@ -271,3 +271,17 @@ HTTPS independiente sin query y sin caché confirma v1.0.194: HTML público/loca
 Ya LIVE: Ventas con Precio exacto Orden=Jita Sell/Inmediata=Jita Buy, Unidad muestra1 con contexto del lote real, Lote conserva cantidad real, copia/ordenación coherentes; Jita conserva siete columnas. Retirada la ayuda genérica de Distribución. Pasos Dark usa grafito cálido vecino; neto total aplica color monetario semántico en ambos temas. Motor financiero, tasas, ESI/SSO, permisos, inventario y persistencia intactos. No quedan aprobaciones ni gates de publicación pendientes.
 
 Kit activo `docs/HANDOFF_LEDGER_UNITS_194.md`. La auditoría CSS de títulos Tasación/Inventario sigue pausada antes de editar40/60; requiere retomar diagnóstico incremental, sin rediseño automático. Continuar en este chat sin avisos por contadores. El cierre documental posterior puede avanzar main sin alterar el HTML certificado.
+
+## v1.0.195 candidata — restaurar plegado del plan, 2026-11-05
+
+Corrección expresa del propietario: «Elige tu plan» debe poder desplegarse/minimizarse y comenzar cerrado. La cabecera se había convertido en header estático y paintPicker imponía hidden=false. Se restaura button nativo con aria-controls/aria-expanded, mismo título ES/EN, sin iconos nuevos ni cambio de composición interior. pkView.expanded comienza false, se conserva al repintar por precios/idioma/selección y se reinicia al vaciar inventario. Solo cambia estado de presentación en memoria; cerrar también descarta el menú flotante de ordenación. Detalle por Item y Pasos mantienen sus estados independientes. Sin cambios financieros, tasas, permisos, ESI/SSO o almacenamiento.
+
+Auditoría CSS de cabeceras pausada antes de verificar: se restituyeron exactamente40/60 a LIVE194 (aad110f8/735eca77), no se publica ese saneamiento en195. Diagnóstico pendiente en docs/CSS_HEADINGS_AUDIT_195.md; el número del archivo identifica la sesión, no una entrega CSS realizada.
+
+QA local:171 Node/16 Python/ocho legacy PASS; tres pruebas nuevas de disclosure PASS6,670s. Matriz ES/EN390/630/980/1440, cerrado/abierto, Light/Dark, texto largo, cotizaciones ausentes, inventario vacío y contexto Jita. Clic/Enter/Espacio, refresco, selección de plan, menú sort y reset comprobados. Capturas únicas v195-plan-r1 revisadas en1440ES cerrado/abierto ambos temas, con Pasos abiertos para comprobar independencia. Datos sintéticos sin ESI vivo. Pruebas antiguas de composición abren ahora el botón explícitamente; guardas financieras y geometría preservadas. Repetición integral Chromium y publicación remota pendientes.
+
+Build195 local:2.606.524bytesLF,blob3966f39b7bc3c1d1f181f02705e3702eccb189ae. Workflows y aserción de versión195 alineados. Última LIVE194; no aprobación de diseño pendiente para esta corrección solicitada. No declarar LIVE sin Fiko/cuatroActions/Pages/HTTPS idéntico. Kit activo docs/HANDOFF_PLAN_DISCLOSURE_195.md. Continuar en este chat sin avisos por contadores.
+
+### Gate local final cerrado
+
+146/146 Chromium PASS299,822s sobre el build final3966f39b;171 Node/16 Python/8legacy PASS. Comparador48estados y6parejas PNG idénticas PASS. Capturas v195-plan-r1 finales revisadas tras el último cambio de producto; no ajustes posteriores. Sustituye las expectativas heredadas corregidas y los pendientes locales anteriores. Solo Fiko/Actions/Pages/HTTPS pendientes; última LIVE194.

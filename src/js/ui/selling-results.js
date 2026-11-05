@@ -116,7 +116,7 @@ function clearViews(){
   ['pCtr','pSum'].forEach(id=>{const e=$(id);if(e)e.hidden=true;});
   $('deep').hidden=true;delete $('deep').dataset.uiReady;
   lastP=null;repaintPlanGroup=null;paintAppraisal();discRows=[];czCards=[];lastCs=[];czIdx=0;S.planMode=null;ICON_POOL={};
-  stepOpen=null;vShow=Object.create(null);vSort=Object.create(null);vQuery=Object.create(null);pkView={sort:'net',dir:-1,filter:'all',open:true};if($('stepHead'))$('stepHead').textContent='';
+  stepOpen=null;vShow=Object.create(null);vSort=Object.create(null);vQuery=Object.create(null);pkView={sort:'net',dir:-1,filter:'all',open:true,expanded:false};syncPlanDisclosure();if($('stepHead'))$('stepHead').textContent='';
 }
 function paintWhereSold(P,none){
   const rowsIn=P.rows;

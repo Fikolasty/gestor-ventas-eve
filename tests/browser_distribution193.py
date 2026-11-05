@@ -17,6 +17,7 @@ class Distribution193Tests(unittest.TestCase):
   self.errors=[];self.p.on('pageerror',lambda e:self.errors.append(str(e)))
   self.p.route('https://**/*',lambda r:r.abort())
   self.p.goto((ROOT/'index.html').as_uri(),wait_until='domcontentloaded');self.p.evaluate(FIXTURE)
+  self.p.locator('#pkPlanToggle').click()
  def tearDown(self):self.assertEqual(self.errors,[]);self.p.close()
  def settle(self):
   self.p.evaluate("async()=>{await document.fonts.ready;document.activeElement?.blur();scrollTo({top:0,behavior:'instant'});await new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)));}")

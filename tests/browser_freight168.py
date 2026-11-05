@@ -19,14 +19,19 @@ class Freight168Tests(unittest.TestCase):
   self.page.evaluate(FIXTURE)
  def tearDown(self):self.assertEqual(self.errors,[]);self.page.close()
  def test_defaults_keyboard_and_refresh_preserve_independent_drawers(self):
-  self.assertTrue(self.page.locator('#pkInsightsContent').is_visible())
+  self.assertFalse(self.page.locator('#pkInsightsContent').is_visible())
   self.assertFalse(self.page.locator('#unitCourierContent').is_visible())
   self.page.locator('#unitCourierToggle').press('Enter')
   self.assertTrue(self.page.locator('#unitCourierContent').is_visible())
+  self.assertFalse(self.page.locator('#pkInsightsContent').is_visible())
+  self.page.locator('#pkPlanToggle').press('Enter')
   self.assertTrue(self.page.locator('#pkInsightsContent').is_visible())
   self.page.evaluate('refreshNow()')
   self.assertTrue(self.page.locator('#unitCourierContent').is_visible())
   self.assertTrue(self.page.locator('#pkInsightsContent').is_visible())
+  self.page.locator('#pkPlanToggle').press('Space')
+  self.assertFalse(self.page.locator('#pkInsightsContent').is_visible())
+  self.assertTrue(self.page.locator('#unitCourierContent').is_visible())
  def test_batch_arithmetic_unit_payload_and_clipboard_match_actual_allocation(self):
   data=self.page.evaluate("""()=>{const rows=ledgerReference.rows;return {
    before:ledgerReference.before,ship:ledgerReference.shipCost,

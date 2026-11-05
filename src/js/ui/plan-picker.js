@@ -4,7 +4,7 @@
 // El óptimo va SIEMPRE primero; los demás de mejor a peor por defecto. Todo sale de modeTotal() con los Ajustes,
 // la ruta (flip) y el switch de envío actuales: aquí no se calcula nada nuevo, solo se ordena y se pinta.
 // Elegir un plan recalcula (S.planMode → refreshNow). Orden y filtro viven en memoria (pkView) y se vacían al limpiar.
-let pkView={sort:'net',dir:-1,filter:'all',open:true}; // B.6: mostrar alternativas desde el inicio
+let pkView={sort:'net',dir:-1,filter:'all',open:true,expanded:false}; // B.6: mostrar alternativas desde el inicio
 // C.5c: present the selected plan using existing route/time classifications.
 // These descriptions are qualitative, never a forecast of fills or a risk score.
 function paintPlanAnalysis(P,chosen,comparisons=[]){
@@ -170,9 +170,22 @@ document.addEventListener('focusin',e=>{if(!planSortMenu.hidden&&!planSortMenu.c
 window.addEventListener('resize',()=>closePlanSort());
 document.addEventListener('scroll',()=>{if(!planSortMenu.hidden)placePlanSort();},true);
 window.visualViewport?.addEventListener('resize',()=>closePlanSort());
+// Preserve the outer disclosure across price, language and plan repaints.
+function syncPlanDisclosure(){
+  const button=$('pkPlanToggle'),content=$('pkPlanContent');
+  const expanded=!!pkView.expanded&&!button.hidden;
+  content.hidden=!expanded;
+  button.setAttribute('aria-expanded',String(expanded));
+}
+function setPlanExpanded(expanded){
+  pkView.expanded=!!expanded;
+  closePlanSort();
+  syncPlanDisclosure();
+}
+$('pkPlanToggle').addEventListener('click',()=>setPlanExpanded(!pkView.expanded));
 function paintPicker(P){
   const box=$('pk'),bar=$('pkNote'),tools=$('pkTools'),others=$('pkOthers');
-  $('pkPlanContent').hidden=false;
+  syncPlanDisclosure();
   $('vFinanceDetails').open=true;
   box.textContent='';bar.textContent='';tools.textContent='';others.textContent='';
   const investment=S.flip?flipPlanAccounting(P)?.buy:null;
@@ -529,7 +542,7 @@ function paintSummary(P){
   const box=$('pSum'),none=!P.rows.length||P.missing.length===P.rows.length;
   box.hidden=!S.items.length;
   $('pkPlanToggle').hidden=none;$('stepDrawer').hidden=none;
-  if(none)$('pkPlanContent').hidden=true;
+  syncPlanDisclosure();
   paintCourierUnits(P);
   if(JitaContext.active){document.title=tx('jita.title')+' · Market Moves+';return;}
   if(box.hidden||none)return;

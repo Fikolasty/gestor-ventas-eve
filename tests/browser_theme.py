@@ -294,7 +294,7 @@ class ThemeBrowserTests(unittest.TestCase):
                 ship:{},prod:0,net:{},cant:false};
             lastP=window.__filterMock={mode:null,rows:[row],Vs:0,shipCost:0,best:100000};
             document.querySelector('#verdict').hidden=false;
-            document.querySelector('#pSum').hidden=false;document.querySelector('#stepDrawer').hidden=false;document.querySelector('#pkPlanToggle').hidden=false;
+            document.querySelector('#pSum').hidden=false;document.querySelector('#stepDrawer').hidden=false;document.querySelector('#pkPlanToggle').hidden=false;setPlanExpanded(true);
 
             pkView.open=true;pkView.filter='all';paintPicker(lastP);
         }""")
@@ -302,7 +302,7 @@ class ThemeBrowserTests(unittest.TestCase):
             self.page.set_viewport_size({'width':width,'height':900})
             for lang in ('es','en'):
                 self.page.evaluate('setLang',lang)
-                self.page.evaluate("lastP=window.__filterMock;pkView.open=true;pkView.filter='all';document.querySelector('#verdict').hidden=false;document.querySelector('#pSum').hidden=false;document.querySelector('#stepDrawer').hidden=false;document.querySelector('#pkPlanToggle').hidden=false;paintPicker(lastP)")
+                self.page.evaluate("lastP=window.__filterMock;pkView.open=true;pkView.filter='all';document.querySelector('#verdict').hidden=false;document.querySelector('#pSum').hidden=false;document.querySelector('#stepDrawer').hidden=false;document.querySelector('#pkPlanToggle').hidden=false;setPlanExpanded(true);paintPicker(lastP)")
                 for light in (False,True):
                     self.page.evaluate('(on)=>document.documentElement.classList.toggle("light",on)',light)
                     self.assertTrue(self.page.locator('[data-pkf="fast"]').is_visible(),
@@ -455,7 +455,7 @@ class ThemeBrowserTests(unittest.TestCase):
                 };
                 lastP={mode:null,rows:[row],Vs:0,shipCost:0,best:10000000};
                 document.querySelector('#verdict').hidden=false;
-                document.querySelector('#pSum').hidden=false;document.querySelector('#stepDrawer').hidden=false;document.querySelector('#pkPlanToggle').hidden=false;
+                document.querySelector('#pSum').hidden=false;document.querySelector('#stepDrawer').hidden=false;document.querySelector('#pkPlanToggle').hidden=false;setPlanExpanded(true);
                 paintPicker(lastP);
             }""")
         fixture()
@@ -514,7 +514,7 @@ class ThemeBrowserTests(unittest.TestCase):
         self.page.evaluate("""() => {
             document.body.classList.remove('is-loading');
             const ledger=document.querySelector('#ledger');
-            document.querySelector('#verdict').hidden=false;document.querySelector('#pSum').hidden=false;document.querySelector('#stepDrawer').hidden=false;document.querySelector('#pkPlanToggle').hidden=false;document.querySelector('#unitCourierBox').hidden=false;ledger.hidden=false;
+            document.querySelector('#verdict').hidden=false;document.querySelector('#pSum').hidden=false;document.querySelector('#stepDrawer').hidden=false;document.querySelector('#pkPlanToggle').hidden=false;setPlanExpanded(true);document.querySelector('#unitCourierBox').hidden=false;ledger.hidden=false;
             ledger.open=false;
         }""")
         for light in (False,True):
@@ -554,6 +554,7 @@ class ThemeBrowserTests(unittest.TestCase):
         from playwright.sync_api import expect
         from browser_ledger173 import FIXTURE
         self.page.evaluate(FIXTURE)
+        self.page.locator('#pkPlanToggle').click()
         self.page.evaluate("""()=>{
             $('ledger').open=false;
             $('vFinanceDetails').open=true;
@@ -595,7 +596,7 @@ class ThemeBrowserTests(unittest.TestCase):
                 ship:{},prod:0,net:{},cant:false
             };
             lastP={mode:null,rows:[row],Vs:0,shipCost:0,best:100000};
-            document.querySelector('#pSum').hidden=false;document.querySelector('#stepDrawer').hidden=false;document.querySelector('#pkPlanToggle').hidden=false;
+            document.querySelector('#pSum').hidden=false;document.querySelector('#stepDrawer').hidden=false;document.querySelector('#pkPlanToggle').hidden=false;setPlanExpanded(true);
 
             pkView.open=true;pkView.filter='all';
             paintPicker(lastP);
@@ -698,7 +699,7 @@ class ThemeBrowserTests(unittest.TestCase):
             stepOpen=new Set(['null']);
             // B.19: the steps are now children of the summary drawer, so
             // synthetic fixtures must expose its ancestor as well.
-            document.querySelector('#pSum').hidden=false;document.querySelector('#stepDrawer').hidden=false;document.querySelector('#pkPlanToggle').hidden=false;
+            document.querySelector('#pSum').hidden=false;document.querySelector('#stepDrawer').hidden=false;document.querySelector('#pkPlanToggle').hidden=false;setPlanExpanded(true);
             document.querySelector('#deep').hidden=false;
             paintVerdict({rows,missing:[],toBB:[],bbGross:0,mode:null,best:1440,Vs:0,shipCost:0});
         }""")
@@ -1005,7 +1006,7 @@ class ThemeBrowserTests(unittest.TestCase):
                     // ordinary language switches intentionally preserve disclosure state.
                     document.querySelector('#vFinanceDetails').open=false;
                     paintVerdict(P);
-                    document.querySelector('#pSum').hidden=false;document.querySelector('#stepDrawer').hidden=false;document.querySelector('#pkPlanToggle').hidden=false;
+                    document.querySelector('#pSum').hidden=false;document.querySelector('#stepDrawer').hidden=false;document.querySelector('#pkPlanToggle').hidden=false;setPlanExpanded(true);
 
                     paintPicker(P);
                     paintCourierUnits(P);
@@ -1297,7 +1298,7 @@ class ThemeBrowserTests(unittest.TestCase):
                 window.__b4Plan={rows:[row],best:15370696854,mode:null,
                     shipCost:0,Vs:0,missing:[],toBB:[]};
                 document.querySelector('#verdict').hidden=false;
-                document.querySelector('#pSum').hidden=false;document.querySelector('#stepDrawer').hidden=false;document.querySelector('#pkPlanToggle').hidden=false;
+                document.querySelector('#pSum').hidden=false;document.querySelector('#stepDrawer').hidden=false;document.querySelector('#pkPlanToggle').hidden=false;setPlanExpanded(true);
 
                 paintPicker(window.__b4Plan);
                 paintCourierUnits(window.__b4Plan);
@@ -1343,7 +1344,7 @@ class ThemeBrowserTests(unittest.TestCase):
                     missing:[],toBB:[]};
                 window.__b6Plan=P;
                 const detail=document.querySelector('#vFinanceDetails');detail.open=false;
-                paintVerdict(P);document.querySelector('#pSum').hidden=false;document.querySelector('#stepDrawer').hidden=false;document.querySelector('#pkPlanToggle').hidden=false;
+                paintVerdict(P);document.querySelector('#pSum').hidden=false;document.querySelector('#stepDrawer').hidden=false;document.querySelector('#pkPlanToggle').hidden=false;setPlanExpanded(true);
 
                 pkView.open=true;pkView.filter='all';pkView.sort='net';pkView.dir=-1;
                 paintPicker(P);
@@ -1413,7 +1414,7 @@ class ThemeBrowserTests(unittest.TestCase):
                 const P={rows:[row],best:1050000,mode:null,shipCost:0,Vs:0,
                     missing:[],toBB:[]};
                 window.__b6aFixture={P,row};
-                paintVerdict(P);document.querySelector('#pSum').hidden=false;document.querySelector('#stepDrawer').hidden=false;document.querySelector('#pkPlanToggle').hidden=false;
+                paintVerdict(P);document.querySelector('#pSum').hidden=false;document.querySelector('#stepDrawer').hidden=false;document.querySelector('#pkPlanToggle').hidden=false;setPlanExpanded(true);
 
                 paintPicker(P);paintCourierUnits(P);
             }""")
@@ -1520,7 +1521,7 @@ class ThemeBrowserTests(unittest.TestCase):
                 const P={rows:[row],best:1050000,mode:null,shipCost:0,Vs:0,
                     missing:[],toBB:[]};
                 window.__b6cFixture={P,row};
-                paintVerdict(P);document.querySelector('#pSum').hidden=false;document.querySelector('#stepDrawer').hidden=false;document.querySelector('#pkPlanToggle').hidden=false;
+                paintVerdict(P);document.querySelector('#pSum').hidden=false;document.querySelector('#stepDrawer').hidden=false;document.querySelector('#pkPlanToggle').hidden=false;setPlanExpanded(true);
 
                 paintPicker(P);paintCourierUnits(P);
             }""")
@@ -1585,17 +1586,17 @@ class ThemeBrowserTests(unittest.TestCase):
                 missing:[],toBB:[]};
             window.__b7Fixture=P;
             document.querySelector('#verdict').hidden=false;
-            document.querySelector('#pSum').hidden=false;document.querySelector('#stepDrawer').hidden=false;document.querySelector('#pkPlanToggle').hidden=false;
+            document.querySelector('#pSum').hidden=false;document.querySelector('#stepDrawer').hidden=false;document.querySelector('#pkPlanToggle').hidden=false;setPlanExpanded(true);
             paintVerdict(P);paintPicker(P);paintCourierUnits(P);
         }""")
-        self.assertEqual(self.page.locator('#pkPlanToggle').evaluate('e=>e.tagName'),'HEADER')
+        self.assertEqual(self.page.locator('#pkPlanToggle').evaluate('e=>e.tagName'),'BUTTON')
         for id in ('pkPlanOptions','pkSpeedBox','vFinanceDetails','bDeep'):
             expect(self.page.locator('#'+id)).to_be_visible()
         for language in ('es','en'):
             self.page.evaluate('setLang',language)
             self.page.evaluate("""() => {
                 const P=window.__b7Fixture;
-                paintVerdict(P);document.querySelector('#pSum').hidden=false;document.querySelector('#stepDrawer').hidden=false;document.querySelector('#pkPlanToggle').hidden=false;
+                paintVerdict(P);document.querySelector('#pSum').hidden=false;document.querySelector('#stepDrawer').hidden=false;document.querySelector('#pkPlanToggle').hidden=false;setPlanExpanded(true);
                 paintPicker(P);paintCourierUnits(P);
             }""")
             for width in (1440,390):
@@ -1659,7 +1660,7 @@ class ThemeBrowserTests(unittest.TestCase):
             self.page.evaluate('paintPicker(window.__b7Fixture)')
             expect(self.page.locator('#pkTools .pk-fb.on')).to_have_attribute('data-pkf','fast')
             self.assertEqual(self.page.locator('#pkSort').input_value(),'speed:1')
-            self.assertIsNone(self.page.locator('#pkPlanToggle').get_attribute('aria-expanded'))
+            self.assertEqual(self.page.locator('#pkPlanToggle').get_attribute('aria-expanded'),'true')
             expect(self.page.locator('#vFinanceDetails')).to_be_visible()
             self.page.evaluate('pkView.filter="all";paintPicker(lastP)')
 
@@ -1679,7 +1680,7 @@ class ThemeBrowserTests(unittest.TestCase):
 
             paintVerdict(P);
             document.querySelector('#verdict').hidden=false;
-            document.querySelector('#pSum').hidden=false;document.querySelector('#stepDrawer').hidden=false;document.querySelector('#pkPlanToggle').hidden=false;
+            document.querySelector('#pSum').hidden=false;document.querySelector('#stepDrawer').hidden=false;document.querySelector('#pkPlanToggle').hidden=false;setPlanExpanded(true);
             paintPicker(P);
         }""")
         for language in ('es','en'):
@@ -1689,7 +1690,7 @@ class ThemeBrowserTests(unittest.TestCase):
 
                 paintVerdict(P);
                 document.querySelector('#verdict').hidden=false;
-                document.querySelector('#pSum').hidden=false;document.querySelector('#stepDrawer').hidden=false;document.querySelector('#pkPlanToggle').hidden=false;
+                document.querySelector('#pSum').hidden=false;document.querySelector('#stepDrawer').hidden=false;document.querySelector('#pkPlanToggle').hidden=false;setPlanExpanded(true);
                 paintPicker(P);
             }""")
             expect(self.page.locator('#pSum')).to_be_visible()
@@ -1737,7 +1738,7 @@ class ThemeBrowserTests(unittest.TestCase):
             paintVerdict(P);
             paintSummary(P);
             document.querySelector('#verdict').hidden=false;
-            document.querySelector('#pSum').hidden=false;document.querySelector('#stepDrawer').hidden=false;document.querySelector('#pkPlanToggle').hidden=false;
+            document.querySelector('#pSum').hidden=false;document.querySelector('#stepDrawer').hidden=false;document.querySelector('#pkPlanToggle').hidden=false;setPlanExpanded(true);
             document.querySelector('#deep').hidden=false;
             document.querySelector('#bDeep').setAttribute('aria-expanded','true');
             paintVerdict(P);
@@ -1759,7 +1760,7 @@ class ThemeBrowserTests(unittest.TestCase):
             self.page.evaluate("""() => {
                 paintSummary(window.__b19Fixture);
                 document.querySelector('#verdict').hidden=false;
-                document.querySelector('#pSum').hidden=false;document.querySelector('#stepDrawer').hidden=false;document.querySelector('#pkPlanToggle').hidden=false;
+                document.querySelector('#pSum').hidden=false;document.querySelector('#stepDrawer').hidden=false;document.querySelector('#pkPlanToggle').hidden=false;setPlanExpanded(true);
                 document.querySelector('#deep').hidden=false;
                 document.querySelector('#bDeep').setAttribute('aria-expanded','true');
                 paintVerdict(window.__b19Fixture);
@@ -1837,7 +1838,7 @@ class ThemeBrowserTests(unittest.TestCase):
             const o={name:'Pyerite',qty:20000,m3u:1,ref:15.74,checks:[],jita:{}};
             const r={o,q:20000,best:'bb',auto:'bb',np:15.74,jl:15.74,bbUnit:15.74,
                 g:{bb:314800},net:{bb:314800},ship:{},prod:0,vol:20000,qd:0,hint:{},courierAllocated:0};
-            const ledger=document.querySelector('#ledger');document.querySelector('#verdict').hidden=false;document.querySelector('#pSum').hidden=false;document.querySelector('#stepDrawer').hidden=false;document.querySelector('#pkPlanToggle').hidden=false;document.querySelector('#unitCourierBox').hidden=false;ledger.hidden=false;ledger.open=true;
+            const ledger=document.querySelector('#ledger');document.querySelector('#verdict').hidden=false;document.querySelector('#pSum').hidden=false;document.querySelector('#stepDrawer').hidden=false;document.querySelector('#pkPlanToggle').hidden=false;setPlanExpanded(true);document.querySelector('#unitCourierBox').hidden=false;ledger.hidden=false;ledger.open=true;
             document.querySelector('#lots').replaceChildren(buildLot(o));paintLot(r);
             ledger.open=false;
         }""")
@@ -1901,7 +1902,7 @@ class ThemeBrowserTests(unittest.TestCase):
                         bbUnit:d.price,g:{[d.best]:d.net},net:{[d.best]:d.net},
                         ship:{},prod:0,vol:d.qty,qd:0,hint:{},courierAllocated:0});
                 }
-                const ledger=document.querySelector('#ledger');document.querySelector('#verdict').hidden=false;document.querySelector('#pSum').hidden=false;document.querySelector('#stepDrawer').hidden=false;document.querySelector('#pkPlanToggle').hidden=false;document.querySelector('#unitCourierBox').hidden=false;ledger.hidden=false;ledger.open=true;
+                const ledger=document.querySelector('#ledger');document.querySelector('#verdict').hidden=false;document.querySelector('#pSum').hidden=false;document.querySelector('#stepDrawer').hidden=false;document.querySelector('#pkPlanToggle').hidden=false;setPlanExpanded(true);document.querySelector('#unitCourierBox').hidden=false;ledger.hidden=false;ledger.open=true;
                 window.__b14Copies=[];
                 Object.defineProperty(navigator,'clipboard',{configurable:true,
                     value:{writeText:v=>{window.__b14Copies.push(v);return Promise.resolve();}}});
@@ -1977,7 +1978,7 @@ class ThemeBrowserTests(unittest.TestCase):
                     ship:{},prod:0,vol:350000,qd:0,hint:{},courierAllocated:0};
                 document.querySelector('#lots').replaceChildren();
                 S.items=[o];document.querySelector('#lots').append(buildLot(o));
-                paintLot(r);document.querySelector('#verdict').hidden=false;document.querySelector('#pSum').hidden=false;document.querySelector('#stepDrawer').hidden=false;document.querySelector('#pkPlanToggle').hidden=false;document.querySelector('#unitCourierBox').hidden=false;document.querySelector('#ledger').hidden=false;
+                paintLot(r);document.querySelector('#verdict').hidden=false;document.querySelector('#pSum').hidden=false;document.querySelector('#stepDrawer').hidden=false;document.querySelector('#pkPlanToggle').hidden=false;setPlanExpanded(true);document.querySelector('#unitCourierBox').hidden=false;document.querySelector('#ledger').hidden=false;
                 document.querySelector('#ledger').open=true;
                 Object.defineProperty(navigator,'clipboard',{configurable:true,
                     value:{writeText:v=>{window.__b4Copy=v;return Promise.resolve();}}});
@@ -2082,7 +2083,7 @@ class ThemeBrowserTests(unittest.TestCase):
                 g:{null:5000,jOrd:4500},net:{null:5000,jOrd:4500},
                 ship:{},prod:0,vol:7,qd:0,hint:{},courierAllocated:0};
             S.items=[o];document.querySelector('#lots').replaceChildren(buildLot(o));
-            const ledger=document.querySelector('#ledger');document.querySelector('#verdict').hidden=false;document.querySelector('#pSum').hidden=false;document.querySelector('#stepDrawer').hidden=false;document.querySelector('#pkPlanToggle').hidden=false;document.querySelector('#unitCourierBox').hidden=false;ledger.hidden=false;ledger.open=true;
+            const ledger=document.querySelector('#ledger');document.querySelector('#verdict').hidden=false;document.querySelector('#pSum').hidden=false;document.querySelector('#stepDrawer').hidden=false;document.querySelector('#pkPlanToggle').hidden=false;setPlanExpanded(true);document.querySelector('#unitCourierBox').hidden=false;ledger.hidden=false;ledger.open=true;
             paintLot(r);
         }""")
         toggle=self.page.locator('#lots .lot-open')
@@ -2109,7 +2110,7 @@ class ThemeBrowserTests(unittest.TestCase):
                 guide:{k:'null',unit:800,relistFee:75,days:3},
                 ship:{},prod:0,vol:7,qd:0,hint:{},courierAllocated:0};
             S.items=[o];document.querySelector('#lots').replaceChildren(buildLot(o));
-            const ledger=document.querySelector('#ledger');document.querySelector('#verdict').hidden=false;document.querySelector('#pSum').hidden=false;document.querySelector('#stepDrawer').hidden=false;document.querySelector('#pkPlanToggle').hidden=false;document.querySelector('#unitCourierBox').hidden=false;ledger.hidden=false;ledger.open=true;
+            const ledger=document.querySelector('#ledger');document.querySelector('#verdict').hidden=false;document.querySelector('#pSum').hidden=false;document.querySelector('#stepDrawer').hidden=false;document.querySelector('#pkPlanToggle').hidden=false;setPlanExpanded(true);document.querySelector('#unitCourierBox').hidden=false;ledger.hidden=false;ledger.open=true;
             paintLot(r);
         }""")
         self.page.locator('#lots .lot-open').click()
@@ -2217,7 +2218,7 @@ class ThemeBrowserTests(unittest.TestCase):
                       {m:'Strontium Clathrates',n:253210,np:594.40,p:5015}],
                 ship:{},prod:0,vol:161500,qd:0,hint:{},courierAllocated:0};
             S.items=[o];document.querySelector('#lots').replaceChildren(buildLot(o));
-            const ledger=document.querySelector('#ledger');document.querySelector('#verdict').hidden=false;document.querySelector('#pSum').hidden=false;document.querySelector('#stepDrawer').hidden=false;document.querySelector('#pkPlanToggle').hidden=false;document.querySelector('#unitCourierBox').hidden=false;ledger.hidden=false;ledger.open=true;
+            const ledger=document.querySelector('#ledger');document.querySelector('#verdict').hidden=false;document.querySelector('#pSum').hidden=false;document.querySelector('#stepDrawer').hidden=false;document.querySelector('#pkPlanToggle').hidden=false;setPlanExpanded(true);document.querySelector('#unitCourierBox').hidden=false;ledger.hidden=false;ledger.open=true;
             paintLot(r);
         }""")
         self.page.locator('#lots .lot-open').click()
@@ -2557,6 +2558,8 @@ class ThemeBrowserTests(unittest.TestCase):
                 paintVerdict(window.__paladinP0);
                 paintSummary(window.__paladinP0);
             }""")
+            if self.page.locator('#pkPlanToggle').get_attribute('aria-expanded')=='false':
+                self.page.locator('#pkPlanToggle').click()
             expect(self.page.locator('#vIsk')).to_contain_text('655,549,500')
             expect(self.page.locator('#flipBuy')).to_contain_text('6,432,867,000')
             self.assertIn('655,549,500',self.page.locator('#flipBuy').inner_text())
@@ -2647,7 +2650,7 @@ class ThemeBrowserTests(unittest.TestCase):
                     skew:0,checks:[],refMan:null,m3uMan:null,
                     jita:{buy:9200,sell:10000,topBuy:9200,topSell:10000,vol:5}};
                 S.items=[o];syncLots();
-                const ledger=document.querySelector('#ledger');document.querySelector('#verdict').hidden=false;document.querySelector('#pSum').hidden=false;document.querySelector('#stepDrawer').hidden=false;document.querySelector('#pkPlanToggle').hidden=false;document.querySelector('#unitCourierBox').hidden=false;ledger.hidden=false;ledger.open=true;
+                const ledger=document.querySelector('#ledger');document.querySelector('#verdict').hidden=false;document.querySelector('#pSum').hidden=false;document.querySelector('#stepDrawer').hidden=false;document.querySelector('#pkPlanToggle').hidden=false;setPlanExpanded(true);document.querySelector('#unitCourierBox').hidden=false;ledger.hidden=false;ledger.open=true;
                 refreshNow();
                 const ui=o.ui;
                 const leaves=[ui.removeButton,ui.qty,ui.ppLabel,ui.netLabel,ui.net,
@@ -2691,7 +2694,7 @@ class ThemeBrowserTests(unittest.TestCase):
                 ship:{},prod:0,vol:350000,qd:0,hint:{},courierAllocated:0};
             document.querySelector('#lots').replaceChildren();
             S.items=[o];document.querySelector('#lots').append(buildLot(o));paintLot(r);
-            const ledger=document.querySelector('#ledger');document.querySelector('#verdict').hidden=false;document.querySelector('#pSum').hidden=false;document.querySelector('#stepDrawer').hidden=false;document.querySelector('#pkPlanToggle').hidden=false;document.querySelector('#unitCourierBox').hidden=false;ledger.hidden=false;ledger.open=true;
+            const ledger=document.querySelector('#ledger');document.querySelector('#verdict').hidden=false;document.querySelector('#pSum').hidden=false;document.querySelector('#stepDrawer').hidden=false;document.querySelector('#pkPlanToggle').hidden=false;setPlanExpanded(true);document.querySelector('#unitCourierBox').hidden=false;ledger.hidden=false;ledger.open=true;
         }""")
         self.page.locator('#lots .lot-open').click()
         self.page.locator('#lots .lot-analysis>summary').click()
@@ -2753,7 +2756,7 @@ class ThemeBrowserTests(unittest.TestCase):
             self.page.evaluate("""(lang)=>{
                 setLang(lang);document.body.classList.add("is-jita");
                 const ledger=document.querySelector('#ledger');
-                document.querySelector('#verdict').hidden=false;document.querySelector('#pSum').hidden=false;document.querySelector('#stepDrawer').hidden=false;document.querySelector('#pkPlanToggle').hidden=false;document.querySelector('#unitCourierBox').hidden=false;ledger.hidden=false;ledger.open=true;
+                document.querySelector('#verdict').hidden=false;document.querySelector('#pSum').hidden=false;document.querySelector('#stepDrawer').hidden=false;document.querySelector('#pkPlanToggle').hidden=false;setPlanExpanded(true);document.querySelector('#unitCourierBox').hidden=false;ledger.hidden=false;ledger.open=true;
                 document.querySelector('#lots').innerHTML=
                   '<div class="lot" style="height:76px"><strong style="padding:12px">Test Item</strong></div>';
             }""",lang)

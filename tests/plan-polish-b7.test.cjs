@@ -8,12 +8,14 @@ const html=src('shell.html'),css=src('styles/80-product-ux.css');
 const picker=src('js/ui/plan-picker.js'),verdict=src('js/ui/selling-results.js');
 const keys=JSON.parse(src('i18n/ui.json'));
 
-test('Sales presents the plan and distribution without disclosure controls',()=>{
-  assert.match(html,/<header[^>]*id="pkPlanToggle"/);
-  assert.match(html,/<div id="pkPlanContent" class="mm-plan-content">/);
+test('Sales plan disclosure starts collapsed and preserves the shared inner composition',()=>{
+  assert.match(html,/<button[^>]*id="pkPlanToggle"[^>]*aria-controls="pkPlanContent"[^>]*aria-expanded="false"/);
+  assert.match(html,/<div id="pkPlanContent" class="mm-plan-content" hidden>/);
   assert.match(html,/id="pkOverviewContent"[\s\S]*?id="pkPlanOptions"[\s\S]*?id="pkSpeedBox"/);
   assert.match(html,/id="pkInsightsContent"[\s\S]*?id="vFinanceDetails" open>/);
-  assert.doesNotMatch(picker,/pkPanelCollapsed|pkOverviewCollapsed|pkInsightsCollapsed/);
+  assert.match(picker,/expanded:false/);
+  assert.match(picker,/syncPlanDisclosure\(\)/);
+  assert.doesNotMatch(picker,/\$\('pkPlanContent'\)\.hidden=false/);
   assert.doesNotMatch(html,/id="pkResult"/);
 });
 

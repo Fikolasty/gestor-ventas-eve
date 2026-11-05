@@ -280,7 +280,11 @@ body.is-jita #pSum .mm-plan-continuous {display:none}
   background:transparent!important;
   border:0!important;
   box-shadow:none!important;
-  cursor:default;
+  width:100%;text-align:left;font:inherit;color:inherit;
+  cursor:pointer;
+}
+#pSum .mm-plan-continuous > .mm-plan-heading:focus-visible {
+  outline:2px solid var(--ion);outline-offset:-3px;
 }
 #pSum .mm-plan-continuous > .mm-plan-heading::before,
 #pSum .mm-plan-continuous > .mm-plan-heading::after {content:none!important}

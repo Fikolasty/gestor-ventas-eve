@@ -30,6 +30,8 @@ class C5cPlanTests(unittest.TestCase):
         self.page.goto((ROOT/'index.html').as_uri(),wait_until='domcontentloaded')
         self.page.evaluate(FIXTURE)
         expect(self.page.locator('#pSum')).to_be_visible()
+        expect(self.page.locator('#pkPlanContent')).to_be_hidden()
+        self.page.locator('#pkPlanToggle').click()
         self.assertEqual(self.page.locator('#pkPlanToggle .mm-plan-toggle-chevron').count(),0)
         self.assertEqual(self.page.locator('#pk [aria-current="true"]').count(),1)
         self.assertEqual(self.page.locator('#pkOthers [aria-current="true"]').count(),0)
@@ -66,7 +68,7 @@ class C5cPlanTests(unittest.TestCase):
                     self.page.locator('#pSum').screenshot(path=str(out/f'{stamp}-{lang}-{width}-{"light" if light else "dark"}.png'),animations='disabled')
                     expect(self.page.locator('#pkOverviewContent')).to_be_visible()
                     expect(self.page.locator('#pkInsightsContent')).to_be_visible()
-                    self.assertEqual(self.page.locator('#pkPlanToggle').evaluate('e=>e.tagName'),'HEADER')
+                    self.assertEqual(self.page.locator('#pkPlanToggle').evaluate('e=>e.tagName'),'BUTTON')
                 for dark,light in zip(*geometry):
                     for key in ('x','y','w','h'):
                         self.assertAlmostEqual(dark[key],light[key],delta=1,msg=f'{width} {lang} {key}')
@@ -77,6 +79,8 @@ class C5cPlanTests(unittest.TestCase):
         self.page.evaluate('()=>document.activeElement?.blur()')
         self.assertEqual(shortcut.evaluate('(el)=>getComputedStyle(el).outlineWidth'),'0px')
         shortcut.focus()
+        self.page.keyboard.press('Tab');self.page.keyboard.press('Shift+Tab')
+        expect(shortcut).to_be_focused()
         self.assertEqual(shortcut.evaluate('(el)=>getComputedStyle(el).outlineWidth'),'2px')
         self.assertTrue(self.page.locator('.c5c-donut').is_visible())
         self.page.locator('#pkOthers [data-m="jInst"]').click()

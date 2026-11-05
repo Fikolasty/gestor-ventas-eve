@@ -26,6 +26,7 @@ class R8PlanTests(unittest.TestCase):
   self.page=self.browser.new_page(viewport={'width':1440,'height':1000},reduced_motion='reduce')
   self.errors=[];self.page.on('pageerror',lambda e:self.errors.append(str(e)))
   self.page.route('https://**/*',lambda r:r.abort());self.page.goto((ROOT/'index.html').as_uri(),wait_until='domcontentloaded');self.page.evaluate(FIXTURE)
+  self.page.locator('#pkPlanToggle').click()
  def tearDown(self):
   self.assertEqual(self.errors,[]);self.page.close()
  def test_guide_tracks_only_left_selection_and_exact_relative_delta(self):

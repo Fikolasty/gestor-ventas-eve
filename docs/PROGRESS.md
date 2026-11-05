@@ -1,5 +1,16 @@
 # PROGRESS — Market Moves+
 
+## v1.0.195 candidata — restaurar plegado del plan, 2026-11-05
+
+Corrección expresa del propietario: «Elige tu plan» debe poder desplegarse/minimizarse y comenzar cerrado. La cabecera se había convertido en header estático y paintPicker imponía hidden=false. Se restaura button nativo con aria-controls/aria-expanded, mismo título ES/EN, sin iconos nuevos ni cambio de composición interior. pkView.expanded comienza false, se conserva al repintar por precios/idioma/selección y se reinicia al vaciar inventario. Solo cambia estado de presentación en memoria; cerrar también descarta el menú flotante de ordenación. Detalle por Item y Pasos mantienen sus estados independientes. Sin cambios financieros, tasas, permisos, ESI/SSO o almacenamiento.
+
+Auditoría CSS de cabeceras pausada antes de verificar: se restituyeron exactamente40/60 a LIVE194 (aad110f8/735eca77), no se publica ese saneamiento en195. Diagnóstico pendiente en docs/CSS_HEADINGS_AUDIT_195.md; el número del archivo identifica la sesión, no una entrega CSS realizada.
+
+QA local:171 Node/16 Python/ocho legacy PASS; tres pruebas nuevas de disclosure PASS6,670s. Matriz ES/EN390/630/980/1440, cerrado/abierto, Light/Dark, texto largo, cotizaciones ausentes, inventario vacío y contexto Jita. Clic/Enter/Espacio, refresco, selección de plan, menú sort y reset comprobados. Capturas únicas v195-plan-r1 revisadas en1440ES cerrado/abierto ambos temas, con Pasos abiertos para comprobar independencia. Datos sintéticos sin ESI vivo. Pruebas antiguas de composición abren ahora el botón explícitamente; guardas financieras y geometría preservadas. Repetición integral Chromium y publicación remota pendientes.
+
+Build195 local:2.606.524bytesLF,blob3966f39b7bc3c1d1f181f02705e3702eccb189ae. Workflows y aserción de versión195 alineados. Última LIVE194; no aprobación de diseño pendiente para esta corrección solicitada. No declarar LIVE sin Fiko/cuatroActions/Pages/HTTPS idéntico. Kit activo docs/HANDOFF_PLAN_DISCLOSURE_195.md. Continuar en este chat sin avisos por contadores.
+
+
 ## Cierre LIVE v1.0.194 — 2026-11-05
 
 Este cierre sustituye todos los estados candidata y pendientes194 anteriores. Publicada mediante Fiko/Fikolasty: fuente `32c2ec933ae080360588acd1a3883c1f1c1101d5`, build bot `d55bea6d944bfc75ba9c85eb023734029106ef2b`. Cuatro Actions SUCCESS: Versiones41996431185, Build41996431374, Minería41996431217 y Rebuild/Pages41996431183. Compile127140628015 y deploy127143978887 SUCCESS.
@@ -1624,3 +1635,7 @@ Tres alcances del propietario implementados: Unidad/Lote coherente y Precio Sell
 ### Gate final local194
 
 143Chromium PASS304,147s,171Node/16Python/8legacy y focales finales PASS. Build194c7a33258,2.605.727bytesLF; capturas r2 revisadas y sin retoques posteriores. Certificación remota pendiente; LIVE193.
+
+### Gate local final cerrado
+
+146/146 Chromium PASS299,822s sobre el build final3966f39b;171 Node/16 Python/8legacy PASS. Comparador48estados y6parejas PNG idénticas PASS. Capturas v195-plan-r1 finales revisadas tras el último cambio de producto; no ajustes posteriores. Sustituye las expectativas heredadas corregidas y los pendientes locales anteriores. Solo Fiko/Actions/Pages/HTTPS pendientes; última LIVE194.
