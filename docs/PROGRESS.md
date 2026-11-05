@@ -1,5 +1,14 @@
 # PROGRESS — Market Moves+
 
+## v1.0.198 candidata — CSS de contenido y responsive, 2026-11-05
+
+El propietario aprueba informar y ejecutar la siguiente familia. Se retiran tres reglas históricas de40: flex/min-height de .appr-g, display/flex-direction/gap de .paste y la mediaquery860 que solo repetía grid-template-columns.60 conserva sus propietarios importantes y el corte860 completo. Textarea/paste-foot, tipografía, superficies, controles y demás mediaqueries se mantienen. Copy ES/EN sin cambios; no rediseño.
+
+238bytes menos. Artefactos congelados before197/after197 aíslan CSS y conservan los dos bloquesJS idénticos. Build198:2.605.556bytesLF,blob73037a5b91a9f063dc1eb594d89afb504fc50ba8.53fuentes restantes de la aplicación idénticas a main197. Los dos workflows existentes y su aserción solo cambian197→198; se conserva el comentario de recuperación de Pages197 sin alterar timeout/permisos/gates.
+
+171Node/16Python/8legacy PASS. Diferencial232estados/24parejas PNG y gate146Chromium en curso en paralelo, con archivos congelados separados de index198. Datos sintéticos con red bloqueada; no ESI/SSO vivo. Sin aprobación visual pendiente; última LIVE197 hasta Fiko/Actions/Pages/HTTPS idéntico. Plan plegable195, semántica194, economía y persistencia conservados. Informe docs/CSS_CONTENT_AUDIT_198.md y continuidad docs/HANDOFF_CSS_198.md. Seguir en este chat sin avisos por contadores.
+
+
 ## Cierre LIVE v1.0.197 — 2026-11-05
 
 Publicación certificada por Fiko/Fikolasty. Fuente del incremento `6b6eb9e30365126b095160d185b86d4c4b00ae1e`; recuperación de CI `1f528c77bf5879b3032da95ebe7d6d1395f0737a` (comentario de workflow y diagnóstico,54fuentes de aplicación/HTML intactos); build bot final `327526852764e7b31be38ec61ede633158a368c1`.
@@ -1702,3 +1711,7 @@ Tres alcances del propietario implementados: Unidad/Lote coherente y Precio Sell
 ### Gate local197 cerrado
 
 146/146Chromium PASS377,321s sobre build197ffed3c26;171Node/16Python/8legacy PASS. Diferencial232estados y24parejas PNG idénticos,41propiedades calculadas y capturas finales r1 revisadas.53fuentes restantes intactas y JS idéntico antes de cambiar etiqueta de versión. Sin cambios de producto posteriores. Última LIVE196; Fiko/cuatroActions/Pages/HTTPS pendientes. No aprobación visual pendiente.
+
+### Gate local198 cerrado
+
+146/146Chromium PASS393,971s sobre build19873037a5b;171Node/16Python/8legacy PASS. Diferencial232estados y24parejas PNG idénticos,41propiedades calculadas y capturas finales r1 revisadas. SHA256 de before197/after197 congelados coincide con los dos reportes; no se alteraron mientras index198 se probaba en paralelo.53fuentes restantes intactas; dos bloquesJS idénticos antes de asignar198. Sin cambios de producto posteriores. Última LIVE197; Fiko/cuatroActions/Pages/HTTPS pendientes. No aprobación visual pendiente.

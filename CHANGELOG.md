@@ -1,3 +1,8 @@
+## v1.0.198 — limpieza CSS de contenido y responsive — candidata
+
+- Retiradas tres reglas sobrescritas de Tasación/Inventario:238bytes menos, aspecto y JS conservados.
+- QA y publicación en docs/HANDOFF_CSS_198.md.
+
 ## v1.0.197 — limpieza CSS de contenedores — LIVE certificada
 
 - Retiradas tres reglas sobrescritas de Tasación/Inventario:322bytes menos, apariencia y JS conservados.

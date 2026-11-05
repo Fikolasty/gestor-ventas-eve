@@ -1,5 +1,7 @@
 # Continuidad CSS v1.0.197 — 2026-11-05
 
+**Siguiente incremento198 candidata:** .appr-g/.paste y mediaquery860. Ver docs/HANDOFF_CSS_198.md;197 sigue LIVE hasta cierre remoto.
+
 **v1.0.197 LIVE CERTIFICADA.** Cierre remoto al final, sustituye los estados candidatos, pendientes e intentos fallidos anteriores. Sin aprobaciones ni gates pendientes.
 
 ## v1.0.197 candidata — CSS de contenedores, 2026-11-05

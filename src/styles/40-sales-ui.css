@@ -121,13 +121,10 @@ html.light #verdict .v-plan-name{color:#ad4b27}
 
 
 /* Tasación e inventario: una sola regla, sin capas contradictorias. */
-.hero-intro:not(.no-appr)>.appr .appr-g{flex:1;min-height:138px}
-.hero-intro:not(.no-appr)>.paste{display:flex;flex-direction:column;gap:0}
 .hero-intro:not(.no-appr)>.paste textarea{display:block;flex:1;min-height:138px;max-height:none;margin:0;resize:vertical;padding:8px 10px;line-height:1.5}
 .hero-intro:not(.no-appr)>.paste .paste-foot{flex:none;min-height:43px;margin-top:8px;padding:6px 2px 0;border-top:1px solid var(--line2)}
 .hero-intro:not(.no-appr)>.paste .paste-foot #bClear{margin-left:auto}
 .appr-no-price{color:var(--thrust);font-size:.79rem;line-height:1.4;margin:8px 0 0}
-@media(max-width:860px){.hero-intro:not(.no-appr){grid-template-columns:minmax(0,1fr)!important}}
 
 /* Pasos de venta: el botón de copiar forma parte del panel negro, no ocupa una fila externa. */
 .stp-b.two>.stp-main>.pl{margin:0!important;align-self:stretch}
