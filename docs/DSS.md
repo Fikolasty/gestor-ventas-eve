@@ -840,19 +840,19 @@ Mediante mock de `window.fetch` con peticiones ficticias (40 ms) y umbral de 12 
 **Cierre LIVE B.21 v1.0.158 — 2026-10-28 (DSS §64):** fuente Fiko protegida `5f1d51a2c6f77800c3b04d1e081aad25ab95b116`, compilación Actions `700b6c83bddb4282bdd8f65ec11748bf50823b93`; `index.html` Git blob `88ff393faf9c1d0a3afce62b2d5ef5dc985dfc0b`, **2.388.017 bytes**. Las cuatro Actions aprobaron: Build, Versiones, Minería, Rebuild/Chromium/Pages (run `40760492517`). **130/130 Node, 16/16 Python, 57/57 Chromium**. CI registró Pages `success` y confirmó por HTTPS `v1.0.158` en la URL pública. Las capturas Chromium `b21-discord-1440-dark/light.png` y `b21-discord-390-dark/light.png` se inspeccionaron: números tipográficos cobrizos sin círculos, tres filas compactas y nota/previsualización legibles. El escenario B.21 probó ambos destinos frente a ambos idiomas de interfaz, con igualdad exacta entre `#dMsg` y `#dCopyMsg.dataset.v`; SIGMA siempre WTS/Price/Contract at en inglés, Vanguardia siempre VENDO/Precio/Contrato en español. Se verificó marcador de versión pública por CI; **no** se realizó comparación hash independiente de la descarga HTTPS. Sin cambios en fórmulas, destinos, ESI/SSO. **Última LIVE B.21 v1.0.158.**
 
 
-## 65. Alerta de continuidad para nuevas conversaciones — política operativa
+## 65. Continuidad de conversaciones — política operativa vigente
 
-## Política de continuidad de chats — aviso preventivo de migración (2026-10-28)
+## Política de continuidad de chats — avisos solo cuando sean necesarios (2026-11-05)
 
-**Motivo:** las conversaciones de desarrollo largas pueden perder contexto operativo. Estos umbrales son preventivos, no un contador exacto de tokens ni una alerta del sistema.
+**Decisión del propietario:** continuar en el chat actual por defecto. Esta política sustituye los umbrales preventivos del2026-10-28 y cualquier aviso automático basado en contadores.
 
-- **Umbral AMARILLO:** al llegar a **12 mensajes sustantivos del usuario relativos al desarrollo** en un chat, **o a 2 versiones LIVE publicadas** desde su comienzo (lo primero que ocurra), emitir en la respuesta siguiente **«⚠️ ALERTA DE CONTINUIDAD — conviene preparar el siguiente chat»**. Resumir versión LIVE, HEAD, cambios pendientes y tests, sin interrumpir una corrección urgente.
-- **Umbral ROJO:** al llegar a **16 mensajes sustantivos**, **3 publicaciones LIVE** o al detectar un historial especialmente pesado por logs y capturas, **crear kit antes de iniciar otra etapa larga de implementación**. Ofrecer enlace y prompt para migrar. Continuar aquí solo si el usuario lo prefiere.
-- Tras cada publicación grande, actualizar DSS y continuidad para reducir el coste del traspaso. El usuario puede pedir kit en cualquier momento.
-- **Limitación honesta:** no existe medidor fiable de ventana restante ni aviso autónomo sin mensajes nuevos. Las alertas solo aparecen **en una respuesta de chat** y estos umbrales no garantizan evitar todo recorte; con uso intensivo de herramientas, avisar antes.
-- El kit debe identificar última LIVE y SHA de main, HTML compilado, protocolo y DSS o referencias canónicas verificadas, decisiones visuales, trabajo pendiente, tests/Actions, prompt de arranque y separación expresa de fuentes antiguas.
-
-**Al comenzar un chat nuevo**, reiniciar el contador de mensajes del usuario a cero. Mantener la regla en AGENTS.md, DSS y el kit.
+- **No emitir avisos ni proponer migración por cantidad de mensajes, versiones publicadas, longitud del historial, logs o capturas.** No mantener contadores AMARILLO/ROJO ni crear kits automáticamente por esos motivos.
+- Mantener DSS y documentación de continuidad actualizados durante el trabajo, sin convertir esa documentación en una solicitud de cambiar de chat.
+- Avisar solo ante un problema concreto y comprobable de continuidad que afecte a la fiabilidad del trabajo y no se haya podido resolver consultando el repositorio y la documentación. Explicar el problema observado y por qué cambiar de chat ayudaría; no presentar una sospecha como agotamiento detectado.
+- No existe un medidor fiable de ventana restante. No afirmar que se conoce su disponibilidad ni inferir que hace falta otro chat por la longitud de la conversación.
+- Preparar un kit de migración cuando el usuario lo pida o cuando una transición esté realmente justificada por el problema anterior. Tener un kit actualizado no obliga a migrar ni interrumpe el trabajo.
+- Si se prepara un kit, identificar última LIVE, SHA remoto verificado, HTML compilado, referencias canónicas, decisiones, pendientes, pruebas y prompt de arranque; distinguir historia de estado vigente.
+- Las alertas y recomendaciones anteriores por umbrales son históricas y no deben reactivarse en este chat ni en los siguientes. Mantener esta política coherente en AGENTS.md, DSS y el kit activo.
 
 
 ## 66. C.2 — saneamiento CSS de Discord, candidata v1.0.159 (2026-10-28)
@@ -1985,4 +1985,11 @@ Dos revisiones automáticas rechazaron blobs por confundir plantilla fuente con 
 
 Última LIVE193. Kit activo docs/HANDOFF_DISTRIBUTION_193.md; propuesta conserva historia en docs/DISTRIBUTION_REFINEMENT_PROPOSAL.md. Sin aprobación ni gate de publicación pendiente. La auditoría incremental CSS del título de Tasación/Inventario sigue propuesta para el próximo tramo, sin rediseño automático. Cierre documental posterior puede avanzar main sin alterar el HTML certificado.
 
-⚠️ ALERTA DE CONTINUIDAD — conviene preparar el siguiente chat. Se alcanzan dos publicaciones LIVE(192 y193) desde el comienzo de este chat. Estado para migrar: LIVE193, main del buildae31b620, sin cambios de producto pendientes,170Node/16Python/8legacy/139Chromium locales y CI PASS. Verificar main tras el commit documental de cierre. Kit y prompt de arranque en HANDOFF_DISTRIBUTION_193; reiniciar contador en un chat nuevo. Esta regla es preventiva y no mide tokens restantes.
+Registro histórico: tras publicar192/193 se emitió un aviso automático por dos versiones conforme a la política anterior. El propietario rechazó esa necesidad y retiró los umbrales el2026-11-05. Ese aviso no constituye una instrucción vigente de migración; continuar en este chat.
+
+
+## Continuidad — retirada de avisos por contadores, 2026-11-05
+
+Petición expresa del propietario: «no avises si realmente no es necesario». Se retiran los umbrales por mensajes/publicaciones y cualquier recomendación automática basada en longitud, logs o capturas. Continuar aquí por defecto. Solo advertir ante un problema concreto, comprobable y no resuelto de continuidad que afecte a la fiabilidad; explicar la evidencia y la utilidad real de una transición. No se dispone de medidor fiable de ventana restante. Documentar y tener kit no obligan a migrar. AGENTS.md, DSS§65 y HANDOFF_DISTRIBUTION_193.md se actualizan de forma coherente. Sustituye la alerta histórica del cierre193 y todas las reglas anteriores de AMARILLO/ROJO.
+
+Cambio exclusivamente documental; LIVE193, HTML1db02ca13da0e2badc08c662a154133d1934dde2 y tests de producto intactos. Sin nueva versión, build o prueba funcional necesaria. Verificación de diff y ausencia de instrucciones activas por contadores. Este cambio se publica únicamente como documentación por Fiko, sin alterar el HTML certificado.
