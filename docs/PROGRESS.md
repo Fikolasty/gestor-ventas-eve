@@ -1,5 +1,9 @@
 # PROGRESS — Market Moves+
 
+## 2026-11-05 — auditoría CSS desde v191 LIVE
+
+Main remoto `32cdda66` verificado; fuentes locales coincidentes con v191 antes del cambio, aunque HEAD local continúa en v189. Limpieza local de las tres reglas visuales de metadatos ocultos de Tasación, sin retirar sus textos/accesibilidad de Jita ni el aviso parcial. Comparación de 160 estados y 20 parejas desktop idénticas PASS; 169 Node/16 Python/ocho legacy/136 Chromium PASS (324,827 s). No publicado; HTML local de auditoría diferente del certificado v191. Sin aprobación visual pendiente. Detalles y cierre de pruebas en `docs/CSS_AUDIT_191.md`; continuidad en `docs/HANDOFF_SALES_191.md` y DSS. Próxima familia solo propuesta: propietarios del título Tasación/Inventario.
+
 ## 2026-10-30 — v1.0.171 LIVE; Listado únicamente propuesto
 
 
@@ -1579,3 +1583,7 @@ v1.0.189 está publicada. El primer CI detectó dos pruebas que pulsaban el cent
 Fuente 8d8cce8301ad59e10288b12fdd3253c8a46d6c1f. Compilación 5a72bc23c8829b5ee506729e596dc6f3428e14dc. Rebuild y Pages 41785732110. El HTML público, el compilado local y GitHub coinciden. Tamaño 2.592.609 bytes y blob f26ee9863f62e5afdf5c24ae994b42662430d7c9. Cierre de la entrega visual solicitada. Pendientes de esta entrega: ninguno.
 
 Para retomar en otro chat: «Continúa Market Moves+ desde v1.0.189 LIVE. Lee AGENTS.md, EVE_PRODUCT_DESIGN_PROTOCOL.md, DSS.md y HANDOFF_CSS_187.md. Los desplegables de Ventas ya tienen acciones textuales y Tasación está alineada con Inventario. Verifica HEAD/main y retoma la auditoría incremental de CSS».
+
+### Seguimiento 2026-11-05 — candidata192 para publicar
+
+El propietario plantea publicar; se procede con su autorización continua y el QA completado. Workflows solo191→192; build192 idéntico al de limpieza al normalizar la versión,2.596.975bytesLF,blob714c182198a868f45894cfefdab097c91558518d. Publicación/Actions/HTTPS pendientes; última LIVE191. Kit activo docs/HANDOFF_CSS_192.md. No hay nuevo rediseño.

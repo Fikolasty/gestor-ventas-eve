@@ -13,3 +13,15 @@
 ## Prompt de arranque
 
 Continúa Market Moves+ desde v1.0.191 LIVE. Lee AGENTS.md, el protocolo, el DSS y este kit antes de editar. Verifica main remoto y conserva los cambios locales. Elige tu plan continuo, Distribución a todo el ancho y la tabla alineada a la izquierda ya están publicados. La auditoría de CSS de Tasación es un alcance independiente. HANDOFF_CSS_187.md conserva el historial anterior.
+
+## Continuidad CSS — 2026-11-05
+
+La auditoría independiente de Tasación se retomó desde main remoto `32cdda66`. Se retiraron localmente tres reglas de presentación de `.appr-meta`, conservando su nodo oculto, descripción accesible y tooltip de Jita, fechas/cobertura y aviso parcial. Ver **`docs/CSS_AUDIT_191.md`** para diagnóstico, pruebas, hashes y siguiente familia propuesta.
+
+Comparación diferencial: 160 estados sin diferencias visibles, 20 parejas desktop idénticas y capturas Dark/Light revisadas. 169 Node, 16 Python, ocho suites legacy y **136/136 Chromium PASS** (324,827 s). No se publica ni se versiona este pequeño corte. Última LIVE v191; el build local v191 contiene ahora la limpieza y difiere del HTML público certificado. Ninguna aprobación de rediseño pendiente.
+
+HEAD local sigue en `61ced55` con las fuentes v190–191 previamente publicadas como cambios locales: preservarlas. Antes de una futura publicación, reconciliar ese estado con main remoto sin reescribir historial ni enviar de nuevo cambios ajenos. No retomar los previews antiguos del final del DSS como propuestas actuales: la composición continua ya fue aprobada y publicada en v191.
+
+## Publicación v192 — seguimiento 2026-11-05
+
+El propietario plantea publicar y se prepara el corte con su autorización continua. La decisión local anterior de agruparlo queda sustituida por esta publicación. Workflows solo191→192; build192 idéntico al verificado al normalizar la versión, blob714c182198a868f45894cfefdab097c91558518d. Gates remotos pendientes. Kit activo docs/HANDOFF_CSS_192.md; este documento conserva la certificación191 y la auditoría inicial.

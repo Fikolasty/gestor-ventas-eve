@@ -237,3 +237,7 @@ CI170Node/16Python/8legacy y136Chromium PASS411.415s. Local170Node/16Python/8leg
 HTTPS200 independiente sin query y Cache-Control:no-cache; HTML público/local/GitHub idénticos:2592879bytes,blob42113f91658dfbb5a78b6f8889e0361196c41aae. Última LIVE187; no queda aprobación ni gate de publicación pendiente en este incremento. El cierre documental posterior puede avanzar main sin alterar el HTML certificado. Auditoría docs/CSS_CLEANUP_187.md y kit activo docs/HANDOFF_CSS_187.md; HANDOFF_HEADER_186 queda histórico.
 
 Siguiente alcance recomendado, aún no implementado: auditar propiedades activas compartidas entre80/94/60 y su tema final, consolidar un propietario por propiedad solo después de medir equivalencia. Mantener line-height de la flecha y demás dependencias activas; no borrar por grep ni retirar adaptadores nativos, PI pausado o light.py. No iniciar un rediseño de colores o composición dentro de la limpieza.
+
+## v1.0.192 candidata autorizada — 2026-11-05
+
+Se prepara publicación del corte CSS ya verificado tras la petición del propietario, con la autorización continua de publicación. Workflows existentes: solo versión191→192. Gates locales169Node/16Python/8legacy/136Chromium y160estados/20parejas idénticas. HTML192 canónico2.596.975bytes,blob714c182198a868f45894cfefdab097c91558518d. Actions/Pages/HTTPS aún pendientes; última LIVE191. Kit activo docs/HANDOFF_CSS_192.md; auditoría docs/CSS_AUDIT_191.md. Preservar el checkout con cambios previos191 ya publicados. Sin rediseño o cambio económico.
