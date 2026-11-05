@@ -336,8 +336,9 @@ function paintVerdict(P){
    const routeKey=P.mode?'verdict.selectedRoute':'verdict.recommendedRoute';
    $('vRouteCaption').dataset.i18n=routeKey;$('vRouteCaption').textContent=tx(routeKey);}
   {const fa=!P.mode&&P.rows.some(r=>r.fast);
-    $('vTitle').textContent=tx(P.mode?'verdict.selectedTitle':'verdict.planTitle');
-    $('vSubtitle').textContent=tx(S.flip?'trade.tradeSubtitle':P.mode?'verdict.selectedSubtitle':'verdict.planSubtitle');
+    const pastedEstimate=typeof esiLoadFailure!=='undefined'&&esiLoadFailure&&P.rows.some(r=>r.q>0&&!r.o.jita&&r.o.refMan==null&&r.o.pasteRef!=null);
+    $('vTitle').textContent=tx(pastedEstimate?'verdict.pastedEstimate':P.mode?'verdict.selectedTitle':'verdict.planTitle');
+    $('vSubtitle').textContent=tx(pastedEstimate?'verdict.pastedEstimateNote':S.flip?'trade.tradeSubtitle':P.mode?'verdict.selectedSubtitle':'verdict.planSubtitle');
     if(fa&&$('vWhat').textContent)$('vWhat').textContent+=' · por rapidez';
     const cap=$('vCap'),explanationExpanded=!!cap.querySelector('.mm-explanation-pair[open]');
     cap.replaceChildren();

@@ -1,4 +1,20 @@
 {
+  "appraisal.apiHttpFailure": {
+    "es": "No se pudieron cargar todas las cotizaciones de Jita: ESI respondió HTTP {code}. Los precios recibidos se conservan.",
+    "en": "Some Jita quotes could not be loaded: ESI returned HTTP {code}. Received prices are retained."
+  },
+  "appraisal.apiFailure": {
+    "es": "No se pudieron cargar todas las cotizaciones de Jita. Los precios recibidos se conservan; vuelve a intentarlo.",
+    "en": "Some Jita quotes could not be loaded. Received prices are retained; try again."
+  },
+  "verdict.pastedEstimate": {
+    "es": "Estimación con valores pegados",
+    "en": "Estimate from pasted values"
+  },
+  "verdict.pastedEstimateNote": {
+    "es": "Faltan cotizaciones de Jita; este resultado no compara precios actuales de mercado.",
+    "en": "Jita quotes are missing; this result does not compare current market prices."
+  },
   "freight.formula": {
     "es": "Fórmula:",
     "en": "Formula:"

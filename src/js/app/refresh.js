@@ -39,7 +39,8 @@ function paintAppraisal(){
   // courier, selected sales plan, or taxes. Preserve its DOM on unrelated edits
   // to avoid needless allocations, lost focus and repeated MutationObserver work.
   const its=S.items.filter(o=>o.qty>0);
-  const key=JSON.stringify([S.lang,its.map(o=>[
+  const failure=typeof esiLoadFailure==='undefined'?null:esiLoadFailure;
+  const key=JSON.stringify([S.lang,failure,its.map(o=>[
     o.name,o.qty,o.m3u,o.jita?.id,o.jita?.topBuy,o.jita?.topSell,
     o.jita?.regionBuy,o.jita?.regionSell,o.jita?.queriedAt
   ])]);
@@ -80,11 +81,16 @@ function paintAppraisal(){
   }
   const queried=el('p','appr-queried',tx('appraisal.queried',{date}));queried.title=tx('appraisal.dateHelp');
   meta.append(' ',queried);box.append(meta);
+  if(failure){
+    const notice=el('p','appr-partial',tx(failure.code?'appraisal.apiHttpFailure':'appraisal.apiFailure',{code:failure.code}));
+    notice.setAttribute('role','status');const retry=el('button','ghost',tx('ledger.refresh'));retry.type='button';
+    retry.addEventListener('click',()=>{retry.disabled=true;esiItems(true);});notice.append(' ',retry);box.append(notice);
+  }
   if(ok&&partial){const note=el('p','appr-partial',tx('appraisal.partialNote'));note.setAttribute('role','status');box.append(note);}
   if(regional){
     const note=el('p','appr-no-price',tx('appraisal.regionalNote'));
     note.setAttribute('role','status');box.append(note);
-  }else if(!ok){
+  }else if(!ok&&!failure){
     const note=el('p','appr-no-price',its.some(o=>o.jita&&o.jita.id)
       ?tx('appraisal.noOrders')
       :tx('appraisal.notLoaded'));

@@ -1,6 +1,7 @@
 // ================= API de EVE (ESI) =================
 const ESI_BASES=['https://esi.evetech.net/latest','https://esi.evetech.net'];
 let esiBase=null;
+let esiLoadFailure=null;
 const idCache={},volCache={},volAlt={},grpOf={},catCache={};
 // v1.0.46: reintentos. Firefox muestra NetworkError cuando ESI corta o responde sin cabeceras CORS
 // (p. ej. límite de peticiones o un error pasajero). Se reintenta con espera (0,8 s → 1,6 s → 3,2 s) antes de rendirse.
@@ -35,7 +36,7 @@ async function esiFetch(path,opt){
         if(r.ok){esiBase=b;return r;}
         if(r.status===401||r.status===403)throw new Error('acceso denegado ('+r.status+')');
         if(r.status===420||r.status===429){const h=Number(r.headers.get('Retry-After'));const wait=Number.isFinite(h)&&h>0?Math.min(h*1000,60000):Math.min(2000*Math.pow(2,tryN),16000);last=new Error('la API pidió esperar (límite de peticiones)');await sleep(wait);break;}
-        last=new Error('respondió '+r.status);
+        last=new Error('respondió '+r.status);last.httpStatus=r.status;
         if(r.status===404||r.status===400)continue; // otra base
       }catch(e){if(/denegado/.test(e.message))throw e;last=e;}
     }
@@ -136,21 +137,29 @@ function walkBuys(a,qty){
 }
 async function fetchTypes(names,withHist){
   const[ids]=await Promise.all([resolveIds(names),loadCcp()]);
-  const known=names.filter(n=>ids[n.toLowerCase()]);let done=0;
+  const known=names.filter(n=>ids[n.toLowerCase()]),failures=[];let done=0;
   await pool(known,ESI_POOL,async n=>{
+    try{
     const id=ids[n.toLowerCase()];
     const[b,v,h]=await Promise.all([jitaBook(id).then(book=>({...book,queriedAt:Date.now()})),typeVolume(id),withHist(n)?history30(id):Promise.resolve(null)]);
     const cat=grpOf[id]!=null?await groupCat(grpOf[id]):null;
     S.api[n.toLowerCase()]={...b,vol:v,alt:volAlt[id],hist:h,ccp:ccp?ccp[id]:null,id,cat};applyBait(S.api[n.toLowerCase()]);
     ++done;status('esiStatus','Consultando Jita: '+done+' de '+known.length+'…');
     if(S.loading)setLoading(true,'Consultando Jita: '+done+' de '+known.length+' items…',done/known.length,document.body.classList.contains('is-updating'));
+    }catch(error){failures.push({name:n,error});}
   });
+  if(failures.length){
+    const error=new Error(failures[0].error.message);
+    error.httpStatus=failures[0].error.httpStatus;error.failedNames=failures.map(f=>f.name);
+    throw error; // Every worker has settled; successful quotes remain usable.
+  }
   return names.filter(n=>!ids[n.toLowerCase()]);
 }
 let esiBusy=false;
 let esiAgain=false;
 async function esiItems(all){
   if(esiBusy){esiAgain=true;return;}esiBusy=true;$('bEsi').disabled=true;
+  esiLoadFailure=null;
   if(all&&S.items.length)setLoading(true,'Actualizando precios de Jita…',0,true);
   try{
     const names=new Set();
@@ -166,11 +175,13 @@ async function esiItems(all){
     status('esiStatus','Buscando '+names.size+' item(s) en la API de EVE…');
     if(S.loading)setLoading(true,'Buscando '+names.size+' item(s) en la API de EVE…',.05,document.body.classList.contains('is-updating'));
     const unknown=(await fetchTypes([...names],n=>!!itemByName(n))).filter(n=>itemByName(n));
-    S.items.forEach(o=>{o.notFound=unknown.includes(o.name);const a=S.api[o.name.toLowerCase()];if(a)o.jita=a;verify(o,true);derive(o);});
-    syncLots();
+    S.items.forEach(o=>{o.notFound=unknown.includes(o.name);});
     ledgerCta(); // v1.0.51: Ver los N items (los avisos se ven en cada item)
-  }catch(e){status('esiStatus','No se pudo conectar con la API de EVE ('+e.message+').','err');}
+  }catch(e){esiLoadFailure={code:e.httpStatus||null,names:e.failedNames||[]};status('esiStatus','No se pudo conectar con la API de EVE ('+e.message+').','err');}
   finally{
+    // A failed Item must not discard the other Items that finished correctly.
+    S.items.forEach(o=>{const a=S.api[o.name.toLowerCase()];if(a)o.jita=a;verify(o,true);derive(o);});
+    syncLots();
     esiBusy=false;$('bEsi').disabled=false;
     if(esiAgain&&S.items.length&&needsFetch()){esiAgain=false;esiItems(false);return;}
     esiAgain=false;

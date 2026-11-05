@@ -30,7 +30,7 @@ jobs:
           fi
       - name: Compile site
         run: |
-            python build.py 1.0.199
+            python build.py 1.0.200
       - name: JavaScript syntax check
         run: |
           node --check src/script.js

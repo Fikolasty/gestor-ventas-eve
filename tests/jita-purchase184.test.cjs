@@ -44,3 +44,9 @@ test('missing and atypical Buy quotes identify the Item without inventing a purc
  assert.equal(m.rows[0].purchaseIssue,'jita.noBuy');assert.equal(m.rows[1].purchaseIssue,'jita.reviewBuy');assert.equal(m.rows[2].purchaseIssue,null);
  assert.ok(m.rows[2].purchase>0);b.o.buyMan=1;assert.equal(math.jitaPurchaseModel({rows:[b]},'buy').rows[0].purchaseIssue,null);
 });
+
+test('pasted Est. Price is not an executable Sell purchase when ESI failed',()=>{
+ reset();const r=row();r.o.pasteRef=10;r.o.jita={};
+ const m=math.jitaPurchaseModel({rows:[r]},'sell');assert.equal(m.raw,null);assert.equal(m.cost,null);assert.equal(m.rows[0].purchaseIssue,'jita.noSell');
+ r.o.refMan=10;assert.equal(math.jitaPurchaseModel({rows:[r]},'sell').raw,3000,'explicit manual price remains usable');
+});

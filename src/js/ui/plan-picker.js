@@ -416,6 +416,9 @@ function tradePurchaseUnitAt(r,basis){
   const o=r.o;
   const manual=o.buyMan;
   const isManual=Number.isFinite(manual)&&manual>0;
+  // EVE's pasted Est. Price is not an executable Jita Sell quote.
+  if(basis==='sell'&&o.pasteRef!=null&&o.refMan==null&&
+     !Number.isFinite(o.jita?.sell)&&!Number.isFinite(o.jita?.topSell))return null;
   const u=basis==='buy'?(isManual?manual:o.jita?.topBuy):o.ref;
   if(basis==='buy'&&!isManual&&Number.isFinite(u)&&u>0){
     const ask=o.jita?.topSell;

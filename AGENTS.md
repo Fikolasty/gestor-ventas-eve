@@ -381,3 +381,6 @@ Aplicar la decisión «Productividad sin reducir calidad» al final de DSS: prue
 
 
 **v1.0.199 LIVE certificada:** fuente362f5079, recuperación752cef50, build e069442c;178Node/16Python/8legacy/148Chromium y cuatro gates SUCCESS, HTTPS/local/GitHub idénticos (2610811bytesLF,blobaab23515). Envío por contrato y diagnóstico de compra vigentes. Productividad aprobada: ver decisión y cierre final en DSS, sin duplicar suites/documentación por rutina. Kit activo docs/HANDOFF_FREIGHT_199.md; CSS textarea/paste-foot pendiente, sin iniciar. Sin aprobación ni publicación pendiente.
+
+
+**v1.0.200 candidata:** reparación del manejo de errores ESI/504 y del origen de precios pegados. Diagnóstico, contrato y QA canónicos al final de DSS; continuidad docs/HANDOFF_APPRAISAL_200.md.181Node/16Python/focalChromium PASS;149Chromium/Actions/Pages/HTTPS pendientes. Última LIVE199; no afirmar recuperación del servidor ESI.
