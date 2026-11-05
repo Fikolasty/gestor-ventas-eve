@@ -1,3 +1,8 @@
+## v1.0.197 — limpieza CSS de contenedores — candidata
+
+- Retiradas tres reglas sobrescritas de Tasación/Inventario:322bytes menos, apariencia y JS conservados.
+- Auditoría, QA y publicación en docs/HANDOFF_CSS_197.md.
+
 ## v1.0.196 — limpieza CSS de cabeceras — LIVE certificada
 
 - Retiradas dos reglas sobrescritas de Tasación/Inventario:408bytes menos, aspecto y JavaScript conservados.

@@ -30,7 +30,7 @@ SNAPSHOT = """() => {
 }"""
 
 
-def run(before, after, output):
+def run(before, after, output, *, widths=(1440,980,630,390), states=('empty','complete','partial','missing','regional','long')):
  output.mkdir(parents=True, exist_ok=True)
  results=[]
  with sync_playwright() as pw:
@@ -45,9 +45,9 @@ def run(before, after, output):
    p.add_style_tag(content='*,*::before,*::after{transition:none!important;animation:none!important;caret-color:transparent!important}')
    pages.append(p)
   for module in ('ventas','jita'):
-   for state in ('empty','complete','partial','missing','regional','long'):
+   for state in states:
     for lang in ('es','en'):
-     for width in (1440,980,630,390):
+     for width in widths:
       for light in (False,True):
        key=f'{module}-{state}-{lang}-{width}-'+('light' if light else 'dark')
        snapshots=[]

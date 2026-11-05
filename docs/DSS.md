@@ -2095,3 +2095,23 @@ CI171Node/16Python/8legacy/146Chromium PASS (455,182s). Local171Node/16Python/8l
 HTTPS200 independiente sin query/sin caché confirma v1.0.196: HTML público/local canónico/GitHub idénticos, **2.606.116bytesLF**, blob **`97f42eeb8501a4d4c37789495f2836367091532c`**. Index generado exclusivamente por CI.14archivos del incremento verificados;52fuentes restantes de la aplicación intactas. Se retiran únicamente dos reglas sobrescritas de cabeceras40/60,408bytes menos sin mejora de velocidad medida. Los dos bloques JavaScript eran idénticos a195 antes de asignar versión196; copy, temas, motor, tasas, ESI/SSO, permisos y persistencia conservados. Elige tu plan mantiene el plegado cerrado por defecto de195.
 
 Este cierre sustituye todos los estados candidata/pendiente196 anteriores. Sin aprobación de diseño ni gate de publicación pendiente. Informe docs/CSS_HEADINGS_AUDIT_196.md y kit activo docs/HANDOFF_CSS_196.md. Siguiente familia solo propuesta: diagnosticar las tres reglas históricas del contenedor de tarjetas en40 frente a60, conservando propiedades activas del textarea. No se implementa ese siguiente alcance en196. Continuar en este chat sin avisos por contadores. El cierre documental posterior puede avanzar main sin alterar el HTML certificado.
+
+## v1.0.197 candidata — CSS de contenedores, 2026-11-05
+
+El propietario autorizó avanzar con la familia propuesta: solo tres reglas redundantes de40 para retícula, box model común y display/flex-direction de Tasación.60 conserva el control mediante declaraciones importantes. Textarea/paste-foot, media queries, tipografía, temas y copy intactos. No cambia la interfaz ni JS;322bytes menos en el HTML canónico, sin mejora de velocidad medida.
+
+Comparación en curso con232estados:192de composición completa y40de fronteras760/761/860/861/981px,41propiedades calculadas/geometría/textos/foco y24parejas PNG1440ES. Ventas/Jita, ES/EN, Dark/Light, vacío/completo/parcial/ausente/regional/texto largo; datos sintéticos sin red.53fuentes restantes idénticas a main196 y dos bloques JavaScript ensamblados idénticos antes de asignar versión nueva. No aprobación visual pendiente; gates local/remoto pendientes, última LIVE196.
+
+Informe docs/CSS_CONTAINERS_AUDIT_197.md; continuidad docs/HANDOFF_CSS_197.md. Publicación por Fiko con expected_sha/force:false y HTML generado solo por CI. Conservar plan plegable195, semántica194, economía/ESI/SSO/permisos/persistencia. Continuar en este chat sin avisos por contadores.
+
+## Diferencial cerrado197 y QA final en curso
+
+232estados PASS:192composición completa y40fronterasresponsive.41propiedades calculadas, geometría, texto/metadatos y foco idénticos;24parejas PNG1440ES idénticas byte a byte. Capturas finales css-containers197-r1 revisadas: Ventas completo, Jita parcial y texto largo, siempre Dark/Light del mismo estado e idioma. Comparador bloquea red, reinicia cada fixture y estabiliza transiciones/animaciones/caret para capturas estáticas sin tolerancia de píxeles. Los argumentos por defecto del comparador196 se conservan;197 lo reutiliza con la matriz ampliada.
+
+Baseline y copia posterior sobre196 guardadas antes de asignar197, SHA256 del archivo posterior coincide con ambos reportes. HTML tras limpieza aún etiquetado196:2.605.794bytesLF,blob0317d1067c3648cab97ae4846de56afd3de245ea; dos bloquesJS idénticos a LIVE196.322bytes menos, sin rendimiento medido. Workflows existentes y aserción de versión alineados a197 después de cerrar el diferencial; no cambios de CSS posteriores a las capturas.
+
+171Node/16Python/ocho legacy PASS;146Chromium completo en curso sobre197.53fuentes restantes idénticas a main196. No aprobación visual pendiente; Fiko/Actions/Pages/HTTPS aún pendientes, última LIVE196.
+
+### Gate local197 cerrado
+
+146/146Chromium PASS377,321s sobre build197ffed3c26;171Node/16Python/8legacy PASS. Diferencial232estados y24parejas PNG idénticos,41propiedades calculadas y capturas finales r1 revisadas.53fuentes restantes intactas y JS idéntico antes de cambiar etiqueta de versión. Sin cambios de producto posteriores. Última LIVE196; Fiko/cuatroActions/Pages/HTTPS pendientes. No aprobación visual pendiente.

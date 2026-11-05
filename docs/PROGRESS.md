@@ -1,5 +1,14 @@
 # PROGRESS — Market Moves+
 
+## v1.0.197 candidata — CSS de contenedores, 2026-11-05
+
+El propietario autorizó avanzar con la familia propuesta: solo tres reglas redundantes de40 para retícula, box model común y display/flex-direction de Tasación.60 conserva el control mediante declaraciones importantes. Textarea/paste-foot, media queries, tipografía, temas y copy intactos. No cambia la interfaz ni JS;322bytes menos en el HTML canónico, sin mejora de velocidad medida.
+
+Comparación en curso con232estados:192de composición completa y40de fronteras760/761/860/861/981px,41propiedades calculadas/geometría/textos/foco y24parejas PNG1440ES. Ventas/Jita, ES/EN, Dark/Light, vacío/completo/parcial/ausente/regional/texto largo; datos sintéticos sin red.53fuentes restantes idénticas a main196 y dos bloques JavaScript ensamblados idénticos antes de asignar versión nueva. No aprobación visual pendiente; gates local/remoto pendientes, última LIVE196.
+
+Informe docs/CSS_CONTAINERS_AUDIT_197.md; continuidad docs/HANDOFF_CSS_197.md. Publicación por Fiko con expected_sha/force:false y HTML generado solo por CI. Conservar plan plegable195, semántica194, economía/ESI/SSO/permisos/persistencia. Continuar en este chat sin avisos por contadores.
+
+
 ## Cierre LIVE v1.0.196 — 2026-11-05
 
 Publicación incremental certificada mediante Fiko/Fikolasty. Fuente `68522b8f24c99d9a195ac56b19b0a500e4e571d1`, build bot `0225ac945c0f2ffe7c1bdbf3ee2ec40e380b50f9`. Cuatro Actions SUCCESS: Build42045135146, Versiones42045134985, Minería42045135271 y Rebuild/Pages42045135385; compile127305922848 y deploy127310701131 SUCCESS.
@@ -1674,3 +1683,7 @@ Tres alcances del propietario implementados: Unidad/Lote coherente y Precio Sell
 ### Gate local196 cerrado
 
 146/146Chromium PASS376,610s sobre build19697f42eeb;171Node/16Python/8legacy PASS. Diferencial192estados y24parejas PNG idénticos, capturas finales r2 inspeccionadas. Otras52fuentes de la aplicación idénticas al árbol remoto195; solo cambian las dos hojas CSS auditadas. Sin cambios posteriores de producto. Última LIVE195; Fiko/cuatroActions/Pages/HTTPS pendientes. No aprobación visual pendiente.
+
+### Gate local197 cerrado
+
+146/146Chromium PASS377,321s sobre build197ffed3c26;171Node/16Python/8legacy PASS. Diferencial232estados y24parejas PNG idénticos,41propiedades calculadas y capturas finales r1 revisadas.53fuentes restantes intactas y JS idéntico antes de cambiar etiqueta de versión. Sin cambios de producto posteriores. Última LIVE196; Fiko/cuatroActions/Pages/HTTPS pendientes. No aprobación visual pendiente.

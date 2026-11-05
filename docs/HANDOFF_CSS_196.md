@@ -1,5 +1,7 @@
 # Continuidad CSS v1.0.196 — 2026-11-05
 
+**Siguiente incremento197 candidata:** contenedores Tasación/Inventario. Ver docs/HANDOFF_CSS_197.md;196 sigue LIVE hasta el cierre remoto.
+
 **v1.0.196 LIVE CERTIFICADA.** Cierre remoto al final, sustituye todos los estados candidatos y pendientes del historial. Sin aprobaciones ni gates pendientes.
 
 ## v1.0.196 candidata — CSS de cabeceras, 2026-11-05
