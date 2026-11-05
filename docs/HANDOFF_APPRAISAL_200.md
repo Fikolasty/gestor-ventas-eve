@@ -1,9 +1,9 @@
-# Continuidad activa — Tasación200
+# Continuidad activa — LIVE v1.0.200
 
-Última LIVE199, main documental f2cad8047446891e1b7d9cb58817dfdcf39c9bd5; HTML1992610811bytes,blobaab23515. Reparación200 local de fallo ESI: HTTP504 real en las seis consultas de órdenes; IDs y status sí respondieron200. No atribuir a fórmulas de envío sin evidencia.
+Reparación publicada2026-11-05. Fuenteebfc728bbe568262448fc84d6baa463e58b1af2a;build459b9dd198ba6d432d2123e607420218318ea0dd. HTML2613089bytesLF,blobee0019e13a042f9b18f388058643049636f51189,HTTPS/local/GitHub idénticos22:12:19Z. Cuatro Actions SUCCESS, Rebuild/Pages42117245679;181Node/16Python/8legacy/149Chromium542,111s PASS. Evidencia canónica al final de DSS.
 
-Se conservan éxitos por Item, se espera a todos los workers, se aplican al inventario aun en error y se libera carga. Error/reintento visible en Tasación. Ventas etiqueta referencias pegadas; Compra Sell no inventa cotización a partir de Est.Price, salvo precio manual deliberado. Ver diagnóstico/evidencia canónicos al final de DSS.
+Se conservan y aplican éxitos por Item aunque fallen otros; se espera al fin de los workers y se libera carga. Error/reintento visible junto a Tasación. Ventas etiqueta estimaciones pegadas; Compra Sell no usa Est.Price sin cotización o precio manual explícito. Tasas y envío199 intactos.
 
-181Node/16Python y focalChromium de pegado/fallo total/parcial/recuperación/64renders PASS; capturas appraisal200-r2 revisadas. Gate149Chromium completo solo en CI. Fiko/Actions/Pages/HTTPS pendientes: no decir LIVE200 todavía. No prometer precios reales mientras ESI continúe504.
+ESI real respondió504 en órdenes de los seis tipos; después mostró respuesta intermitente. No afirmar que el proveedor fue restablecido: la reparación es del manejo en la app. El test controla fallo total, parcial5/6 y recuperación6/6,32renders en ambos contextos/idiomas/temas/anchos; capturas appraisal200-r2. No SSO real. Sigue pendiente la disponibilidad del proveedor; no inventar precios.
 
-Preservar cambios anteriores del checkout antiguo61ced55; solo manifiesto explícito sobre main remoto, Fiko/Fikolasty, expected_sha y force:false. Index generado por CI. Documentación breve, sin duplicar suites; seguir en este chat, CSS pendiente sin iniciar.
+Continuar en este chat. CSS textarea/paste-foot sigue pendiente, sin ampliar alcance automáticamente. Aplicar productividad: focales durante desarrollo, una pasada completa en CI al congelar y documentación canónica breve. Checkout antiguo61ced55 con cambios ya publicados: preservar. Fiko únicamente, manifiesto explícito, expected_sha/force:false; index solo por build/CI. Cierre documental posterior puede avanzar main sin cambiar HTML certificado.

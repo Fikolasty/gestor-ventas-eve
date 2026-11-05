@@ -1754,3 +1754,6 @@ Fuente protegida362f5079369a61b25acf72ff024aaddc787b4c91, árbol6768f74ac842efe6
 
 
 **v1.0.200 candidata:** reparación del manejo de errores ESI/504 y del origen de precios pegados. Diagnóstico, contrato y QA canónicos al final de DSS; continuidad docs/HANDOFF_APPRAISAL_200.md.181Node/16Python/focalChromium PASS;149Chromium/Actions/Pages/HTTPS pendientes. Última LIVE199; no afirmar recuperación del servidor ESI.
+
+
+**v1.0.200 LIVE certificada:** fuenteebfc728b,build459b9dd1;181Node/16Python/8legacy/149Chromium y4Actions PASS;HTMLHTTPS/local/GitHub idénticoee0019e1 (2613089bytesLF). Manejo de fallos ESI y origen de precios corregidos; proveedor ESI aún intermitente, no se certifica su recuperación. Ver cierre final de DSS y continuidad docs/HANDOFF_APPRAISAL_200.md.
