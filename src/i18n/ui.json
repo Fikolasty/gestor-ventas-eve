@@ -1,4 +1,20 @@
 {
+  "freight.formula": {
+    "es": "Fórmula:",
+    "en": "Formula:"
+  },
+  "jita.reviewBuy": {
+    "es": "Buy fuera del rango de seguridad. Introduce un precio de compra manual para usarlo.",
+    "en": "Buy is outside the safety range. Enter a manual purchase price to use it."
+  },
+  "jita.noBuy": {
+    "es": "Sin cotización Buy válida.",
+    "en": "No valid Buy quote."
+  },
+  "jita.noSell": {
+    "es": "Sin cotización Sell válida.",
+    "en": "No valid Sell quote."
+  },
   "ledger.tablePrice": {
     "es": "Precio",
     "en": "Price"

@@ -299,7 +299,7 @@ function guideFor(r,Vall){
   let others=Object.keys(r.net).filter(x=>x!==k&&x!=='disc'&&r.net[x]!=null);
   if(!others.length&&k!=='disc'&&r.net.disc!=null)others=['disc']; // jugador: solo si no hay otra
   const alt=others.length?others.reduce((a,b)=>r.net[b]>r.net[a]?b:a):null,altNet=alt!=null?r.net[alt]:null;
-  const s=r.ship[k],share=s?courierShare(s.v,s.c,Vall):0,g={k,alt,altNet};
+  const s=r.ship[k],share=s?(Number.isFinite(r.courierAllocated)?r.courierAllocated:courierShare(s.v,s.c,Vall)):0,g={k,alt,altNet};
   if(k==='null'||k==='jOrd'||k==='fN'||k==='fJ'){
     const isN=k==='null'||k==='fN',unit=isN?r.np:r.jl,rate=isN?rateNull():rateJita(),broker=isN?C.brokerNull+C.scc:C.broker;
     g.unit=unit;

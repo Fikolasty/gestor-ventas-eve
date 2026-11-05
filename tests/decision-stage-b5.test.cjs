@@ -4,6 +4,7 @@ const assert=require('node:assert/strict');
 const fs=require('node:fs');
 const vm=require('node:vm');
 
+const courierEntries=vm.runInNewContext(fs.readFileSync('src/js/domain/courier.js','utf8')+'\ncourierEntries',{C:{},S:{}});
 const planning=fs.readFileSync('src/js/domain/planning.js','utf8');
 const resultView=fs.readFileSync('src/js/ui/selling-results.js','utf8');
 const styling=fs.readFileSync('src/styles/80-product-ux.css','utf8');
@@ -16,7 +17,7 @@ const body=planning.slice(start,end);
 const freight=(v)=>v>0?Math.ceil(Math.ceil(v)/100)*200+Math.ceil(v):0;
 const create=vm.runInNewContext('('+body+')',{
   S:{flip:false},resolveOre:name=>name==='Ore'?{cat:'ore'}:name==='Ice'?{cat:'ice'}:null,
-  courierCost:freight
+  courierEntries,C:{maxVol:350000},courierCost:freight
 });
 const row=(g,ship,selected='jOrd',name='Ore')=>({o:{name},q:1,prod:0,best:selected,g,ship});
 

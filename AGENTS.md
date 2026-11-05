@@ -365,3 +365,11 @@ CI171Node/16Python/8legacy/146Chromium PASS (368,610s). Local171Node/16Python/8l
 HTTPS200 independiente sin query/sin caché confirma v1.0.198: HTML público/local canónico/GitHub idénticos, **2.605.556bytesLF**, blob **`73037a5b91a9f063dc1eb594d89afb504fc50ba8`**. Index generado exclusivamente por CI.11archivos del incremento verificados;53fuentes restantes de la aplicación intactas. Se retiran solo tres reglas sobrescritas de40 para .appr-g/.paste y grid-template-columns en860:238bytes menos sin rendimiento medido. Los propietarios vigentes de60, textarea/paste-foot, temas y copy conservados. Dos bloquesJS idénticos sobre la misma versión197; economía, ESI/SSO, permisos, persistencia y plan plegable195 sin cambios.
 
 Este cierre sustituye todos los estados candidata/pendiente198 anteriores. Sin aprobación visual ni gate de publicación pendiente. Informe docs/CSS_CONTENT_AUDIT_198.md y kit activo docs/HANDOFF_CSS_198.md. Siguiente familia solo propuesta: auditar propiedades del textarea y referencias de .paste-foot, preservando line-height/display/max-height hasta demostrar su sustitución y verificando build.py/DOM/bClear antes de retirar estilos sin uso. No se implementa ese siguiente alcance en198. Continuar en este chat sin avisos por contadores. Cierre documental posterior puede avanzar main sin alterar el HTML certificado.
+
+
+## v1.0.199 candidata solicitada — 2026-11-05
+
+Redondeo hacia arriba al millón por contrato SIGMA según los Items empaquetados; mismo coste final en planes/contratos/copias y fórmula exacta pequeña. Diagnóstico de compras ausentes/atípicas por Item, sin cambiar guardas Buy ni inventar total.178Node/16Python/8legacy PASS;148Chromium completo y publicación Fiko/Actions/HTTPS pendientes. Última LIVE198; sin aprobación visual pendiente. DSS al final, docs/FREIGHT_ROUNDING_199.md y kit activo docs/HANDOFF_FREIGHT_199.md. Auditoría CSS pendiente pausada por esta petición, continuar en el mismo chat.
+
+
+Gate local199 cerrado:148Chromium (471,169s),178Node/16Python/8legacy PASS; guarda no-finita final repetida con178Node y2focales Chromium192estados sobre buildaab23515 (2610811bytesLF). Ver DSS para la precisión temporal de la corrida general y las capturas finales r3. Fiko/main/4Actions/Pages/HTTPS pendientes; última LIVE198. Sin aprobación visual pendiente.

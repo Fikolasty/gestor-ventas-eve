@@ -2,28 +2,8 @@
 // Buyback: un Item Exchange. Envío a Jita: lo que viaja se reparte en contratos de hasta C.maxVol m³
 // (los items grandes primero; una pila se divide si no cabe). Cada courier: recompensa = base + ISK/m³ × vol + % × colateral.
 // Jugador: un Item Exchange por lo que se vende por Discord (solo si el plan lo elige).
-function packCouriers(P){
-  if(!C.shipOn)return [];
-  const ent=[];
-  P.rows.forEach(r=>{const k=r.best;if(!k||!SHIPS[k]||!r.ship[k])return;
-    if(k==='rJita'&&r.mins)r.mins.forEach(x=>{const u=prodVol(x.m);if(x.n>0)ent.push({n:x.m,q:x.n,u,c:(x.p||0)});});
-    else if(['cOrd','cInst'].includes(k)&&r.comp){
-      ent.push({n:r.comp.name,q:r.q,u:r.comp.vol/r.q,c:r.comp.coll/r.q});
-    }
-    else{const q=r.q;if(q>0)ent.push({n:r.o.name,q,u:r.ship[k].v/q,c:appraisalSell(r.o)});}});
-  ent.sort((a,b)=>b.u*b.q-a.u*a.q);
-  const cap=C.maxVol>0?C.maxVol:Infinity,out=[];let cur=null;
-  const open=()=>{cur={items:[],v:0,c:0};out.push(cur);};
-  ent.forEach(e=>{let left=e.q;
-    while(left>0){
-      if(!cur)open();
-      let fit=e.u>0?Math.floor((cap-cur.v)/e.u+1e-9):left;
-      if(fit<=0){if(cur.items.length){open();continue;}fit=1;} // un solo item más grande que el contrato
-      const t=Math.min(left,fit);cur.items.push({n:e.n,q:t,v:t*e.u,c:t*e.c});cur.v+=t*e.u;cur.c+=t*e.c;left-=t;
-      if(left>0)open();}});
-  out.forEach(k=>{k.v=Math.ceil(k.v);k.c=Math.ceil(k.c);k.reward=courierRaw(k.v,k.c);});
-  return out;
-}
+function packCouriers(P){return courierQuote(P.rows).contracts;}
+
 const DEST=()=>S.flip?nullSystem():'Jita';
 const destStation=()=>S.flip?($('cNullDest').value.trim()||nullSystem()):'Jita IV - Moon 4 - Caldari Navy Assembly Plant';
 // v110: Contratos y Envío. Izquierda: un contrato a la vez (carrusel: flechas, puntos, teclado, deslizar).
@@ -56,7 +36,7 @@ function ctrSpecs(P,cs,dr){
     title:'Contrato '+(++cn)+' · Courier a '+DEST()+(cs.length>1?' ('+(i+1)+' de '+cs.length+')':''),amt:fmt(k.reward),items:k.items,
     fields:[['Tipo de contrato','Courier'],['Name',($('cAssignee').value.trim()||'SIGMA Freight'),($('cAssignee').value.trim()||'SIGMA Freight')],['Destino',destStation(),destStation()],
       ['Recompensa (Reward)',fmt(k.reward),String(Math.ceil(k.reward))],['Colateral',fmt(k.c),String(Math.ceil(k.c))],['Volumen',fmtV(Math.round(k.v*100)/100),String(Math.ceil(k.v))],
-      ['Cálculo',fmt(C.base)+' + '+C.perM3+' ISK × '+NF0.format(Math.ceil(k.v))+' m³ + '+pct(C.collPct)+'% del colateral']]}));
+      ['Cálculo',fmt(C.base)+' + '+C.perM3+' ISK × '+NF0.format(Math.ceil(k.v))+' m³ + '+pct(C.collPct)+'% del colateral = '+fmt(k.raw)]]}));
   if(dr.length){const tot=dr.reduce((a,r)=>a+(r.g.disc||0),0);
     out.push({cls:'pl',tag:['p-disc k-disc','Jugador'],lab:'Jugador',title:'Contrato '+(++cn)+' · A un Jugador',amt:fmt(tot),items:dr.map(r=>({n:r.o.name,q:r.q})),
       fields:[['Tipo de contrato','Item Exchange'],['Name','Al jugador que acepte en Discord'],['Ubicación',$('discLoc').value],['Recibiré (ISK)',fmt(tot),(Math.round(tot*100)/100).toFixed(2)]]});}
@@ -153,10 +133,10 @@ $('dLink').addEventListener('input',refresh);
 // B = reprocesado: lo que se puede reprocesar viaja como material; lo demás viaja como está.
 function paintScenarios(P){
   const box=$('fScn');box.textContent='';
-  const build=(title,pick)=>{let V=0,Cc=0,G=0;const list=[],miss=[];
+  const build=(title,pick)=>{let V=0,Cc=0,G=0;const list=[],miss=[],moving=[];
     P.rows.forEach(r=>{const k=pick(r);if(!k||r.g[k]==null||!r.ship[k]){miss.push(r.o.name);return;}
-      V+=r.ship[k].v;Cc+=r.ship[k].c;G+=r.g[k]-r.prod;list.push([['cOrd','cInst'].includes(k)&&r.comp?r.comp.name:(k==='rJita'?(isIce(r.o.name)?'Productos de ':'Minerales de '):'')+r.o.name,r.ship[k].v]);});
-    const cost=V>0?courierCost(V,Cc):0;return{title,V,Cc,G,cost,net:G-cost,list,miss,n:V>0?trips(V):0};};
+      moving.push({...r,best:k});V+=r.ship[k].v;Cc+=r.ship[k].c;G+=r.g[k]-r.prod;list.push([['cOrd','cInst'].includes(k)&&r.comp?r.comp.name:(k==='rJita'?(isIce(r.o.name)?'Productos de ':'Minerales de '):'')+r.o.name,r.ship[k].v]);});
+    const freight=courierQuote(moving),cost=freight.shipCost;return{title,V,Cc,G,cost,net:G-cost,list,miss,n:freight.contracts.length};};
   const anyOre=P.rows.some(r=>r.g.rJita!=null);
   const allRef=P.rows.length&&P.rows.every(r=>ORE_PRODUCTS.has(r.o.name.toLowerCase())||ICE_PRODUCTS.has(r.o.name.toLowerCase()));
   const A=build(anyOre?'Todo a Jita Sin Refinar':allRef?'Todo a Jita (ya Refinado)':'Todo a Jita',r=>'jOrd');

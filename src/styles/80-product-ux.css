@@ -3307,3 +3307,7 @@ body.mm-settings-compact #settings .c5c-tools{position:absolute;top:20px;right:6
 body.mm-settings-compact #settings .st-wrap>.modern-tabs{margin-top:0!important}
 body.mm-settings-compact #settings .c5c-skillbook-icon[hidden]{display:none!important}
 @media(max-width:650px){body.mm-settings-compact #settings .c5c-tools{top:16px;right:60px}body.mm-settings-compact #settings>h2{font-size:22px}}
+
+/* Shipping formula is supporting detail, never a second payable amount. */
+.freight-formula{display:block;color:var(--mut);font-size:12px;line-height:1.5;margin-top:4px;overflow-wrap:anywhere}
+.jita-quote-issues{margin:4px 0 12px;padding-inline-start:20px;color:var(--mut);font-size:12px;line-height:1.5;overflow-wrap:anywhere}

@@ -16,7 +16,7 @@ test('Jita reference allocates one shared bill then divides by each Item quantit
 test('contract thresholds, collateral and fixed fees match the canonical full-shipment calculation',()=>{
  for(const q of [1,300,1000,1001,2001]){
   const p=math.ledgerRouteProjection({rows:[row(q,1)]},'jOrd');
-  assert.equal(p.shipCost,math.courierCost(q,q*10));
+  assert.equal(p.shipCost,Math.ceil(q/1000)*1000000);
   assert.equal(p.rows[0].courierAllocated,p.shipCost);
  }
 });

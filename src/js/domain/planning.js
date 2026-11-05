@@ -42,7 +42,26 @@ function mostProfitableMix(rows,Vall){
     });
     return {gross,V,coll,wait};
   };
-  const value=t=>({net:t.gross-(t.V>0?courierCost(t.V,t.coll):0),wait:t.wait});
+  const entryOptions=active.map((r,i)=>Object.fromEntries(candidates[i].map(k=>[k,courierEntries([r],()=>k)])));
+  const entryIds=entryOptions.map(options=>{
+    const ids=new Map();return Object.fromEntries(Object.entries(options).map(([k,entries])=>{
+      const signature=JSON.stringify(entries);if(!ids.has(signature))ids.set(signature,ids.size);
+      return [k,ids.get(signature)];
+    }));
+  });
+  const freightCache=new Map();
+  const value=(t,keys)=>{
+    let cost=0;
+    if(t.V>0){
+      if(C.maxVol>0&&t.V<=C.maxVol)cost=courierCost(t.V,t.coll);
+      else{
+        const signature=keys.map((k,i)=>entryIds[i][k]??'-').join(',');
+        if(!freightCache.has(signature))freightCache.set(signature,courierCost(t.V,t.coll,keys.flatMap((k,i)=>entryOptions[i][k]||[])));
+        cost=freightCache.get(signature);
+      }
+    }
+    return {net:t.gross-cost,wait:t.wait};
+  };
   // Never trade away a financially meaningful gain for a speed preference.
   const better=(a,b)=>a.net>b.net+.5||(Math.abs(a.net-b.net)<=.5&&a.wait<b.wait);
   const bestOf=(i,requireShipping)=>{
@@ -64,7 +83,7 @@ function mostProfitableMix(rows,Vall){
       for(let i=0;i<active.length;i++){
         const old=chosen[i];if(!old)continue;
         const row=active[i],oldShip=ship(row,old);
-        let top=value(state),preferred=old,selected=state;
+        let top=value(state,chosen),preferred=old,selected=state;
         for(const k of candidates[i]){
           if(k===old)continue;
           const newShip=ship(row,k);
@@ -74,14 +93,15 @@ function mostProfitableMix(rows,Vall){
             coll:Math.max(0,state.coll-(oldShip?.c||0)+(newShip?.c||0)),
             wait:state.wait+(speed(k)-speed(old))*Math.max(1,row.q)
           };
-          const trial=value(trialState);
+          const trialKeys=chosen.slice();trialKeys[i]=k;
+          const trial=value(trialState,trialKeys);
           if(better(trial,top)){top=trial;preferred=k;selected=trialState;}
         }
         if(preferred!==old){chosen[i]=preferred;state=selected;changed=true;}
       }
       if(!changed)break;
     }
-    const final=value(state);
+    const final=value(state,chosen);
     if(!winner||better(final,winningScore)){winner=chosen;winningScore=final;}
   }
   if(!winner)return;
@@ -110,7 +130,7 @@ function protectBestSaleRoute(rows,Vall){
       const ship=r.ship[k];
       if(ship){volume+=ship.v;collateral+=ship.c;}
     }
-    return gross-(volume>0?courierCost(volume,collateral):0);
+    return gross-(volume>0?courierCost(volume,collateral,courierEntries(active,pick)):0);
   };
   let bestNet=saleValue(r=>r.best),betterMode=null;
   const modes=['null','bb','jOrd','jInst','cOrd','cInst','rNull','rJita','fN','fJ','fJI'];
@@ -143,12 +163,12 @@ function assessReprocessing(P){
     const original=r.best&&r.ship[r.best];
     const restVolume=Math.max(0,P.Vs-(original?.v||0));
     const restCollateral=Math.max(0,P.Cs-(original?.c||0));
-    const restFreight=restVolume>0?courierCost(restVolume,restCollateral):0;
+    const restFreight=restVolume>0?courierCost(restVolume,restCollateral,courierEntries(P.rows.filter(x=>x!==r))):0;
     const routeNet={};
     Object.keys(r.g).forEach(k=>{
       if(!Number.isFinite(r.g[k]))return;
       const sh=r.ship[k],volume=restVolume+(sh?.v||0),collateral=restCollateral+(sh?.c||0);
-      const marginalFreight=(volume>0?courierCost(volume,collateral):0)-restFreight;
+      const marginalFreight=(volume>0?courierCost(volume,collateral,courierEntries(P.rows,x=>x===r?k:x.best)):0)-restFreight;
       routeNet[k]=r.g[k]-r.prod-marginalFreight;
     });
     const pick=keys=>keys.filter(k=>Number.isFinite(routeNet[k]))
@@ -274,7 +294,7 @@ function computePlan(){
   {const sh=rows.filter(r=>r.best&&r.ship[r.best]);
    if(sh.length){
      const V=sh.reduce((a,r)=>a+r.ship[r.best].v,0),Cc=sh.reduce((a,r)=>a+r.ship[r.best].c,0);
-     const viaJita=sh.reduce((a,r)=>a+r.g[r.best]-r.prod,0)-courierCost(V,Cc);
+     const viaJita=sh.reduce((a,r)=>a+r.g[r.best]-r.prod,0)-courierCost(V,Cc,courierEntries(sh));
      const stay=r=>{const ks=(S.flip?['fJ','fJI']:['null','bb','rNull']).filter(k=>r.g[k]!=null);const k=ks.length?ks.reduce((a,b)=>r.g[b]>r.g[a]?b:a):(r.g.disc!=null?'disc':null);return k;};
      const alt=sh.map(stay);
      if(alt.every(k=>k)){const quedarse=sh.reduce((a,r,i)=>a+r.g[alt[i]]-r.prod,0);
@@ -301,7 +321,7 @@ function computePlan(){
         const travelling=r.ship[r.best];
         // Marginal courier cost includes extra contracts triggered by this particular cargo.
         // Unlike pro-rata averages, this captures the huge step change at the volume cap.
-        const marginal=courierCost(totalV,totalC)-courierCost(Math.max(0,totalV-travelling.v),Math.max(0,totalC-travelling.c));
+        const marginal=courierCost(totalV,totalC,courierEntries(moving))-courierCost(Math.max(0,totalV-travelling.v),Math.max(0,totalC-travelling.c),courierEntries(moving.filter(x=>x!==r)));
         const afterCost=r.g[r.best]-Math.max(0,marginal);
         if(r.g[alt]>afterCost+0.01){
           r.best=alt;r.noShip=true;r.fast=null;r.guide=guideFor(r,Vall);changed=true;
@@ -327,14 +347,14 @@ function computePlan(){
       const ice=moving.filter(r=>isIce(r.o.name));
       const totalV=moving.reduce((a,r)=>a+r.ship[r.best].v,0);
       const totalC=moving.reduce((a,r)=>a+r.ship[r.best].c,0);
-      const totalFreight=courierCost(totalV,totalC);
+      const totalFreight=courierCost(totalV,totalC,courierEntries(moving));
       let changed=false;
       for(const r of ice){
         const local=['null','bb','rNull'].filter(k=>Number.isFinite(r.g[k]));
         if(!local.length)continue;
         const alternative=local.reduce((a,b)=>r.g[b]>r.g[a]?b:a);
         const sh=r.ship[r.best];
-        const marginal=Math.max(0,totalFreight-courierCost(Math.max(0,totalV-sh.v),Math.max(0,totalC-sh.c)));
+        const marginal=Math.max(0,totalFreight-courierCost(Math.max(0,totalV-sh.v),Math.max(0,totalC-sh.c),courierEntries(moving.filter(x=>x!==r))));
         const ownerExtra=r.g[r.best]-marginal-r.g[alternative];
         if(marginal>ownerExtra+.01){
           r.freightGuard={cost:marginal,ownerExtra,alternative};
@@ -355,25 +375,26 @@ function computePlan(){
   // 2ª pasada: courier real solo de lo que viaja
   let Vs=0,Cs=0,gross=0,valShip=0,valStay=0;
   rows.forEach(r=>{if(!r.best)return;const g=r.g[r.best]-r.prod;gross+=g;const s=r.ship[r.best];if(s){Vs+=s.v;Cs+=s.c;valShip+=Math.max(0,g);}else valStay+=Math.max(0,g);});
-  const coll=Cs,shipCost=Vs>0?courierCost(Vs,coll):0;
+  const coll=Cs,freight=courierQuote(rows),shipCost=freight.shipCost;
   const KN=S.flip?'fN':'null',KJ=S.flip?'fJ':'jOrd';
   const wN=rows.filter(r=>r.g[KN]!=null),wJ=rows.filter(r=>r.g[KJ]!=null);
   let allNull,allJita,VJ,allJitaCost;
   if(S.flip){ // VJ/allJitaCost = llevar TODO a HY-RWO
-    VJ=wN.reduce((a,r)=>a+r.vol,0);const CN=wN.reduce((a,r)=>a+r.coll,0);allJitaCost=VJ>0?courierCost(VJ,CN):0;
+    VJ=wN.reduce((a,r)=>a+r.vol,0);const CN=wN.reduce((a,r)=>a+r.coll,0);allJitaCost=VJ>0?courierCost(VJ,CN,courierEntries(wN,()=>KN)):0;
     allNull=wN.length?wN.reduce((a,r)=>a+r.g.fN-r.prod,0)-allJitaCost:null;
     allJita=wJ.length?wJ.reduce((a,r)=>a+r.g.fJ-r.prod,0):null;
   }else{
   allNull=wN.length?wN.reduce((a,r)=>a+r.g.null-r.prod,0):null;
   VJ=wJ.reduce((a,r)=>a+r.vol,0);const CJ=wJ.reduce((a,r)=>a+r.coll,0);
-  allJitaCost=VJ>0?courierCost(VJ,CJ):0;
+  allJitaCost=VJ>0?courierCost(VJ,CJ,courierEntries(wJ,()=>KJ)):0;
   allJita=wJ.length?wJ.reduce((a,r)=>a+r.g.jOrd-r.prod,0)-allJitaCost:null;}
   const wB=rows.filter(r=>r.g.bb!=null),allBB=wB.length?wB.reduce((a,r)=>a+r.g.bb-r.prod,0):null;
   const toBB=rows.filter(r=>r.best==='bb'),bbGross=toBB.reduce((a,r)=>a+r.g.bb,0);
-  const result={mode:M,allBB,nBBno:rows.filter(r=>r.hint.bb==='el Buyback no lo acepta').length,toBB,bbGross,rows,Vs,Cs:coll,shipCost,best:gross-shipCost,valShip,valStay,allNull,allJita,allJitaCost,VJ,
+  const result={mode:M,allBB,nBBno:rows.filter(r=>r.hint.bb==='el Buyback no lo acepta').length,toBB,bbGross,rows,Vs,Cs:coll,...freight,shipCost,best:gross-shipCost,valShip,valStay,allNull,allJita,allJitaCost,VJ,
     nShip:rows.filter(r=>r.best&&SHIPS[r.best]).length,nStay:rows.filter(r=>r.best&&!SHIPS[r.best]).length,missing:rows.filter(r=>!r.best)};
   assessReprocessing(result);
   allocateCourier(result);
+  rows.forEach(r=>{if(r.best){r.net[r.best]=r.g[r.best]-r.prod-r.courierAllocated;r.guide=guideFor(r,Vall);}});
   return result;
 }
 
@@ -408,8 +429,9 @@ function ledgerRouteProjection(P,key){
   const completeFreight=!transported||rows.every(r=>r.referenceVolume&&r.referenceCollateral);
   const Vs=transported?rows.reduce((s,r)=>s+r.ship[key].v,0):0;
   const Cs=transported?rows.reduce((s,r)=>s+r.ship[key].c,0):0;
-  const shipCost=completeFreight?(Vs>0?courierCost(Vs,Cs):0):null;
-  const projection={rows,Vs,Cs,shipCost,key,transported,completeFreight};
+  const freight=completeFreight?courierQuote(rows):{shipCost:null,shipRaw:null,contracts:[]};
+  const shipCost=freight.shipCost;
+  const projection={rows,Vs,Cs,...freight,shipCost,key,transported,completeFreight};
   if(completeFreight)allocateCourier(projection);
   else rows.forEach(r=>{r.courierAllocated=null;r.courierPerUnit=null;});
   rows.forEach(r=>{r.referenceAfter=Number.isFinite(r.referenceBefore)&&Number.isFinite(r.courierAllocated)?r.referenceBefore-r.courierAllocated:null;});
@@ -422,7 +444,7 @@ function ledgerRouteProjection(P,key){
 // m='auto' = óptimo. Los items que no admiten m siguen el óptimo (igual que computePlan con S.planMode=m).
 function modeTotal(P,m){let g=0,V=0,Cc=0,n=0;
   P.rows.forEach(r=>{const k=m==='auto'?r.auto:(r.g[m]!=null?(n++,m):r.auto);if(!k)return;g+=r.g[k]-r.prod;const s=r.ship[k];if(s){V+=s.v;Cc+=s.c;}});
-  return{net:g-(V>0?courierCost(V,Cc):0),n};}
+  return{net:g-(V>0?courierCost(V,Cc,courierEntries(P.rows,r=>m==='auto'?r.auto:(r.g[m]!=null?m:r.auto))):0),n};}
 // Codes remain stable for persisted settings; visible route copy comes from ui.json.
 const MODES=['auto','fN','fJ','fJI','null','jOrd','jInst','cOrd','cInst','bb','rNull','rJita','disc']
   .map(m=>[m,'route.'+m]);

@@ -1,13 +1,14 @@
 'use strict';
 const test=require('node:test'),assert=require('node:assert/strict');
 const fs=require('node:fs'),vm=require('node:vm');
+const courierEntries=vm.runInNewContext(fs.readFileSync('src/js/domain/courier.js','utf8')+'\ncourierEntries',{C:{},S:{}});
 const planning=fs.readFileSync('src/js/domain/planning.js','utf8');
 const begin=planning.indexOf('function protectBestSaleRoute(');
 const end=planning.indexOf('function computePlan()',begin);
 assert.ok(begin>=0&&end>begin,'Planning helper exists');
 function makeGuard(shipping){
   return vm.runInNewContext(planning.slice(begin,end)+'\nprotectBestSaleRoute;',{
-    courierCost:(v,c)=>v>0?shipping:0,
+    courierEntries,courierCost:(v,c)=>v>0?shipping:0,
     guideFor:()=> 'selling guidance'
   });
 }

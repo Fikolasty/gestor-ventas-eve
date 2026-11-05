@@ -201,7 +201,7 @@ function paintCostExplanation(P,cost){
   }else if(!cost.importIncluded)explain(tx('decision.marketCharges'),tx('decision.marketNone'));
   if(cost.importIncluded)explain(tx('decision.importNetTarget'),tx('decision.importNetTargetBody'));
   explain(tx('decision.shipping'),cost.ship>0.5?
-    tx('decision.shippingBody',{amount:fmt(cost.ship),contracts:trips(P.Vs),volume:fmtV(P.Vs),base:fmt(C.base),unit:fmt(C.perM3),collateral:pct(C.collPct)}):tx('decision.shippingNone'));
+    tx('decision.shippingBody',{amount:fmt(cost.ship),contracts:packCouriers(P).length,volume:fmtV(P.Vs),base:fmt(C.base),unit:fmt(C.perM3),collateral:pct(C.collPct)}):tx('decision.shippingNone'));
   if(cost.refinery>0.5)explain(tx('decision.refiningFee'),tx('decision.refiningBody',{amount:fmt(cost.refinery),rate:pct(Number($('rTax').value)/100)}));
   if(cost.compression>0.5)explain(tx('decision.compression'),tx('decision.compressionBody',{amount:fmt(cost.compression)}));
   if(cost.production>0.5)explain(tx('decision.production'),tx('decision.productionBody',{amount:fmt(cost.production)}));
@@ -369,7 +369,7 @@ function paintVerdict(P){
   $('vsN').textContent=String(S.items.length);$('vsV').textContent=fmtV(Math.round(vTot*10)/10);
   // El reparto económico alimenta el detalle voluntario del resultado, incluso
   // si Pasos para vender permanece cerrado. Los pasos pesados siguen diferidos.
-  {const u=P.rows.reduce((a,r)=>a+(r.q||0),0),n=vTot>0?trips(vTot):0;
+  {const u=P.rows.reduce((a,r)=>a+(r.q||0),0),n=courierPack(P.rows.filter(r=>r.q>0).map(r=>({n:r.o.name,q:r.q,u:r.vol/r.q,c:r.coll/r.q}))).length;
    $('vsNs').textContent=fmtQ(u)+(u===1?' unidad':' unidades');
    $('vsVs').textContent=n&&SH()?'Si lo envías todo: '+n+(n>1?' contratos':' contrato'):'';}
   {// lo que pagas en taxes, broker y relists con tu plan (según Ajustes): valor de lista × cada %
@@ -563,7 +563,7 @@ function paintVerdict(P){
       main.append(list);pl.append(box);return;
     }
     if(k==='ship'){
-      const vol=shipRows.reduce((a,r)=>a+(r.ship[r.best]?r.ship[r.best].v:0),0),n=trips(vol);
+      const vol=shipRows.reduce((a,r)=>a+(r.ship[r.best]?r.ship[r.best].v:0),0),n=packCouriers(P).length;
       const {box,main}=stepBox('ship',i+1,'Envío a '+dest+' con SIGMA Freight','Envío',shipRows.length+(shipRows.length===1?' item':' items')+' · '+fmtV(Math.round(vol))+' · '+n+(n===1?' contrato':' contratos')+' · llega en '+C.cDays[0]+'–'+C.cDays[1]+' días',-(P.shipCost||0),'costo del envío');
       main.append(ctItems(shipRows.map(r=>({n:r.comp&&['cOrd','cInst'].includes(r.best)?r.comp.name:r.o.name,q:r.q,v:r.ship[r.best]?r.ship[r.best].v:0})),true));pl.append(box);return;}
     const g=rowsIn.filter(r=>r.best===k),[title,where,sub]=STEP[k]||[PLAN_L[k]||k,'',''];
@@ -672,7 +672,7 @@ function paintVerdict(P){
     li.append(box);rl.append(li);});
   if(rl._activateRep){rl._activateRep();delete rl._activateRep;}
   // v1.0.22: la comparación con otros planes vive en Elige un Plan. Aquí solo la tarjeta del envío.
-  {const sh=P.rows.filter(r=>r.best&&SHIPS[r.best]),n=trips(P.Vs);
+  {const sh=P.rows.filter(r=>r.best&&SHIPS[r.best]),n=packCouriers(P).length;
    $('ovShip').hidden=!SH();$('aCourT').textContent=(S.lang==='en'?'Shipping to ':'Envío a ')+DEST();
    $('aCourier').textContent=P.Vs>0?'−'+fmt(P.shipCost):'0 ISK';$('aCourier').className=P.Vs>0?'neg':'zero';
    $('aCourS').textContent=P.Vs>0?fmtV(Math.round(P.Vs))+' · '+n+(n>1?' contratos':' contrato')+' · '+sh.length+(sh.length===1?' item':' items'):'Tu plan no envía nada.';}

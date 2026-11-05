@@ -20,10 +20,10 @@ function paintRefCmp(r,q,nets){
   let gNr=0;P.forEach(x=>{const u=nullList(x.m,x.p,x.b,null,x.n);gNr+=x.n*u;});
   const nRe=side(gNr,fee,bN,0);
   // Jita
-  const uJo=jitaList(r.key,oS,oB,q),shO=oV>0?courierCost(q*oV,q*oS):0;
+  const uJo=jitaList(r.key,oS,oB,q),shO=oV>0?courierCost(q*oV,q*oS,[{n:r.key,q,u:oV,c:oS}]):0;
   const jNo=side(q*uJo,0,C.broker,shO);
   let gJr=0,vJ=0,cJ=0;P.forEach(x=>{const u=jitaList(x.m,x.p,x.b,x.n);gJr+=x.n*u;vJ+=x.n*prodVol(x.m);cJ+=x.n*x.p;});
-  const jRe=side(gJr,fee,C.broker,courierCost(vJ,cJ));
+  const jRe=side(gJr,fee,C.broker,courierCost(vJ,cJ,P.map(x=>({n:x.m,q:x.n,u:prodVol(x.m),c:x.p}))));
   const card=(title,priceNo,priceRe,A,B,hasShip,where)=>{
     const d=el('div','rx-c '+(B.net>A.net?'yes':'no'));
     // titular grande: la respuesta de este mercado
@@ -136,7 +136,7 @@ function paintRepro(){
   // ---- ¿Refinar o vender el ore? Sin y con courier ----
   const orePr=parseFloat($('rOrePrice').value)||0,oreVol=parseFloat($('rOreVol').value)||0,fee=refineryFee(r,q,nets);
   let minV=0;Object.keys(nets).forEach(m=>minV+=nets[m]*prodVol(m));
-  const oreColl=q*orePr,cOre=oreVol>0&&orePr>0?courierCost(q*oreVol,oreColl):null,cMin=ok&&total>0?courierCost(minV,total):null;
+  const oreColl=q*orePr,cOre=oreVol>0&&orePr>0?courierCost(q*oreVol,oreColl,[{n:r.key,q,u:oreVol,c:orePr}]):null,cMin=ok&&total>0?courierCost(minV,total,Object.keys(nets).map(m=>({n:m,q:nets[m],u:prodVol(m),c:minPrice(m)}))):null;
   const oreIt=itemByName(r.key),oreA=S.api[r.key.toLowerCase()],oreBuy=oreIt&&oreIt.jita?oreIt.jita.buy:(oreA?oreA.buy:null);
   const npOre=orePr>0?nullList(r.key,orePr,oreBuy,oreIt?oreIt.nullSeen:null,q):null;
   const opts=[ // [nombre, sin courier, costo courier (null = no viaja)]
@@ -186,15 +186,15 @@ function paintOreVsMin(r,q,nets){
   const oreVol=parseFloat($('rOreVol').value)||0,box=$('oreVsMin');box.hidden=!(q>0&&oreVol>0);if(box.hidden)return;
   const mins=Object.keys(nets),op2=parseFloat($('rOrePrice').value)||0,oreV=q*oreVol,oreColl=op2>0?q*op2:0;
   let minV=0,minColl=0,priced=0;mins.forEach(m=>{minV+=nets[m]*prodVol(m);const p=minPrice(m);if(p!=null){minColl+=nets[m]*p;priced++;}});
-  const all=priced===mins.length,cO=op2>0?courierCost(oreV,oreColl):null,cM=all?courierCost(minV,minColl):null;
+  const all=priced===mins.length,cO=op2>0?courierCost(oreV,oreColl,[{n:r.key,q,u:oreVol,c:op2}]):null,cM=all?courierCost(minV,minColl,mins.map(m=>({n:m,q:nets[m],u:prodVol(m),c:minPrice(m)}))):null;
   $('ovmOreName').textContent=r.key;
   const tb=$('tOreVsMin').querySelector('tbody');tb.textContent='';
-  [['Volumen',fmtV(oreV),fmtV(minV)],['Contratos',String(trips(oreV)||'—'),String(trips(minV)||'—')],['Colateral',op2>0?fmt(oreColl):'—',all?fmt(minColl):'—'],['Costo del envío',cO!=null?fmt(cO):'—',cM!=null?fmt(cM):'—']]
+  [['Volumen',fmtV(oreV),fmtV(minV)],['Contratos',String(courierPack([{n:r.key,q,u:oreVol,c:op2}]).length||'—'),String(courierPack(mins.map(m=>({n:m,q:nets[m],u:prodVol(m),c:minPrice(m)||0}))).length||'—')],['Colateral',op2>0?fmt(oreColl):'—',all?fmt(minColl):'—'],['Costo del envío',cO!=null?fmt(cO):'—',cM!=null?fmt(cM):'—']]
     .forEach(([a,b,c])=>{const tr=el('tr');tr.append(el('td',null,a),el('td','r',b),el('td','r',c));tb.append(tr);});
   const vw=$('ovmVerdict'),vd=$('ovmDetail');
   if(cO==null||cM==null){vw.textContent='—';vd.textContent='Faltan '+[!(op2>0)?'el precio del ore':null,!all?'precios de minerales':null].filter(Boolean).join(' y ')+'.';return;}
   const d=cO-cM;vw.textContent=d>.5?'Envía los minerales: ahorras '+fmt(d):d<-.5?'Envía el ore: ahorras '+fmt(-d):'Da igual: empate';
-  vd.textContent='Ore: '+fmt(cO)+' en '+trips(oreV)+' contrato(s) · Minerales: '+fmt(cM)+' en '+trips(minV)+' contrato(s).';
+  vd.textContent='Ore: '+fmt(cO)+' en '+courierPack([{n:r.key,q,u:oreVol,c:op2}]).length+' contrato(s) · Minerales: '+fmt(cM)+' en '+courierPack(mins.map(m=>({n:m,q:nets[m],u:prodVol(m),c:minPrice(m)||0}))).length+' contrato(s).';
 }
 $('rOre').addEventListener('change',()=>{S.repro.dirty=false;fillFromItem(true);refresh();});
 ['rQty','rOrePrice','rOreVol'].forEach(id=>$(id).addEventListener('input',()=>{S.repro.dirty=true;paintRepro();}));

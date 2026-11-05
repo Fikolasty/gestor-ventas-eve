@@ -1644,3 +1644,11 @@ CI170Node/16Python/8legacy y136Chromium PASS411.415s. Local170Node/16Python/8leg
 HTTPS200 independiente sin query y Cache-Control:no-cache; HTML público/local/GitHub idénticos:2592879bytes,blob42113f91658dfbb5a78b6f8889e0361196c41aae. Última LIVE187; no queda aprobación ni gate de publicación pendiente en este incremento. El cierre documental posterior puede avanzar main sin alterar el HTML certificado. Auditoría docs/CSS_CLEANUP_187.md y kit activo docs/HANDOFF_CSS_187.md; HANDOFF_HEADER_186 queda histórico.
 
 Siguiente alcance recomendado, aún no implementado: auditar propiedades activas compartidas entre80/94/60 y su tema final, consolidar un propietario por propiedad solo después de medir equivalencia. Mantener line-height de la flecha y demás dependencias activas; no borrar por grep ni retirar adaptadores nativos, PI pausado o light.py. No iniciar un rediseño de colores o composición dentro de la limpieza.
+
+
+## v1.0.199 — candidata solicitada, 2026-11-05
+
+Excepción económica explícita del propietario: facturar cada contrato SIGMA según sus Items reales, redondeando su recompensa al millón superior, y sumar después los contratos. El coste final alimenta planes, alternativas, reparto unitario, contratos/copias y referencias; las unidades no se redondean al millón. Fórmula exacta pequeña, sin badge. Guardas Buy y datos ausentes conservadas; el aviso nombra los Items y el motivo. Ver DSS al final y docs/FREIGHT_ROUNDING_199.md; kit activo docs/HANDOFF_FREIGHT_199.md.178Node/16Python/8legacy PASS, gate148Chromium y Fiko/Actions/HTTPS pendientes. Última LIVE198; sin aprobación visual pendiente para este alcance. Auditoría CSS textarea/paste-foot en pausa.
+
+
+Gate local199 cerrado:148Chromium (471,169s),178Node/16Python/8legacy PASS; guarda no-finita final repetida con178Node y2focales Chromium192estados sobre buildaab23515 (2610811bytesLF). Ver DSS para la precisión temporal de la corrida general y las capturas finales r3. Fiko/main/4Actions/Pages/HTTPS pendientes; última LIVE198. Sin aprobación visual pendiente.

@@ -42,14 +42,14 @@ function jitaPurchaseModel(P,basis=C.buyMode,personal=true){
     const unit=tradePurchaseUnitAt(r,basis),purchase=tradePurchaseCostAt(r,basis);
     const raw=Number.isFinite(unit)?unit*r.q:null;
     const listing=personal?null:jitaResaleListing(r,firstItemByName);
-    return {...r,listing,raw,purchase,cost:Number.isFinite(purchase)&&Number.isFinite(r.courierAllocated)?purchase+r.courierAllocated:null};
+    return {...r,listing,raw,purchase,purchaseIssue:tradePurchaseIssueAt(r,basis),cost:Number.isFinite(purchase)&&Number.isFinite(r.courierAllocated)?purchase+r.courierAllocated:null};
   });
   const sum=key=>rows.length&&rows.every(r=>Number.isFinite(r[key]))?rows.reduce((s,r)=>s+r[key],0):null;
   const raw=sum('raw'),purchase=sum('purchase'),cost=sum('cost');
   const gross=personal?(rows.length&&rows.every(r=>Number.isFinite(C.shipOn?r.np:r.jl))?rows.reduce((s,r)=>s+(C.shipOn?r.np:r.jl)*r.q,0):null):
     rows.length&&rows.every(r=>Number.isFinite(r.listing.price))?rows.reduce((s,r)=>s+r.listing.price*r.q,0):null;
   const net=personal?projection.before:Number.isFinite(gross)&&rateNull()>0?gross*rateNull():null;
-  return {projection,rows,byItem:new Map(rows.map(r=>[r.o,r])),basis,raw,purchase,cost,ship:projection.shipCost,
+  return {projection,rows,byItem:new Map(rows.map(r=>[r.o,r])),basis,raw,purchase,cost,ship:projection.shipCost,shipRaw:projection.shipRaw,
     fee:Number.isFinite(raw)&&Number.isFinite(purchase)?purchase-raw:null,gross,
     sellingFees:Number.isFinite(gross)&&Number.isFinite(net)?gross-net:null,
     profit:Number.isFinite(net)&&Number.isFinite(cost)?net-cost:null};
@@ -79,9 +79,13 @@ function paintJitaReceipt(P){
   $('vTitle').textContent=tx('jita.title');$('vSubtitle').hidden=true;$('vMetric').hidden=true;$('vEstimate').hidden=true;$('vEstimateHelp').hidden=true;$('vRouteW').hidden=true;
   const amount=$('vIsk');amount.className='v-isk num jita-neutral';amount.replaceChildren(document.createTextNode(Number.isFinite(m.cost)?NF0.format(Math.round(m.cost)):'—'),el('span',null,'ISK'));
   amount.title=tx('jita.totalHelp');amount.setAttribute('aria-label',amount.title+' '+jitaMoney(m.cost));
-  const line=el('div','v-finance jita-receipt-lines');line.append(jitaField('jita.purchase',m.raw,true),jitaField('jita.fee',m.fee,true),jitaField('jita.shipping',m.ship,true));cap.replaceChildren(line);
+  const line=el('div','v-finance jita-receipt-lines'),shipping=jitaField('jita.shipping',m.ship,true);
+  appendFreightFormula(shipping,m.shipRaw,m.ship);
+  line.append(jitaField('jita.purchase',m.raw,true),jitaField('jita.fee',m.fee,true),shipping);cap.replaceChildren(line);
   cap.append(el('p','jita-fee-note',tx(C.buyMode==='buy'?'jita.buyFee':'jita.sellFee')+(JitaContext.personal?' '+tx('jita.personalTax'):'')));
-  if(!Number.isFinite(m.cost)){const warning=el('p','jita-warning',tx(!m.projection.completeFreight?'ledger.referenceMissingFreight':'jita.missingPurchase'));warning.setAttribute('role','status');cap.append(warning);}
+  if(!Number.isFinite(m.cost)){const warning=el('p','jita-warning',tx(!m.projection.completeFreight?'ledger.referenceMissingFreight':'jita.missingPurchase'));warning.setAttribute('role','status');cap.append(warning);
+    if(m.rows.some(r=>r.purchaseIssue)){const list=el('ul','jita-quote-issues');
+      m.rows.filter(r=>r.purchaseIssue).forEach(r=>list.append(el('li',null,r.o.name+': '+tx(r.purchaseIssue))));cap.append(list);}}
   if(!JitaContext.personal){
     const resale=el('div','v-finance jita-receipt-lines jita-resale');resale.append(jitaField('jita.gross',m.gross,false,m.gross>0?'pos':''),jitaField('jita.sellingFees',m.sellingFees,true),jitaField('jita.profit',m.profit,false,sgn(m.profit)));
     cap.append(resale,el('p','jita-fee-note',tx('jita.resaleNull')+(C.shipOn?'':' '+tx('jita.resaleNoCourier',{market:nullSystem()}))));

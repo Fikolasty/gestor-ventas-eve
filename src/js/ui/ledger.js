@@ -428,6 +428,13 @@ $('ledgerSaleMode').addEventListener('click',event=>{
   ledgerSaleMode=button.dataset.ledgerSale;prepareLedgerReference(lastP);
   lastP.rows.forEach(paintLotMarket);paintLedgerReference();if(ledgerSort.key)applyLedgerSort();
 });
+// The primary shipping amount is the payable bill; the exact formula is secondary.
+function appendFreightFormula(parent,raw,billed){
+  const old=parent.querySelector('.freight-formula');if(old)old.remove();
+  if(!Number.isFinite(raw)||!Number.isFinite(billed)||raw===billed)return;
+  const note=el('small','freight-formula',tx('freight.formula')+' ');
+  note.append(el('span','num '+(raw>0?'neg':''),(raw>0?'−':'')+NF2.format(raw)+' ISK'));parent.append(note);
+}
 function paintLedgerReference(){
   const ref=ledgerReference;if(!ref)return;
   const market=S.flip&&C.shipOn?nullSystem():'Jita 4-4';setLotLeafText($('ledgerValueScope'),S.flip?market:tx(JitaContext.active?'ledger.jitaPrice':'ledger.jitaReference'));
@@ -456,6 +463,8 @@ function paintLedgerReference(){
   }
   $('unitCourierSubtitle').textContent=tx('ledger.referenceScope',{market,scale});
   paintJitaLedgerReference();
+  const freight=JitaContext.active?currentJitaPurchase:ref;
+  appendFreightFormula($('unitCourierTotal').parentElement,freight?.shipRaw,JitaContext.active?freight?.ship:freight?.shipCost);
   applyLedgerPage();
 }
 function ledgerAmountCopy(amount){

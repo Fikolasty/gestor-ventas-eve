@@ -24,18 +24,19 @@ class Ledger173Tests(unittest.TestCase):
   self.page.on('pageerror',lambda e:self.errors.append(str(e)));self.page.route('https://**/*',lambda r:r.abort())
   self.page.goto((ROOT/'index.html').as_uri(),wait_until='domcontentloaded');self.page.evaluate(FIXTURE)
  def tearDown(self):self.assertEqual(self.errors,[]);self.page.close()
+ # 700 raw ISK now bills 1m; allocation keeps the original 600:100 ratio.
  def test_reference_shows_actual_unit_and_batch_cost_without_changing_buyback_plan(self):
   row=self.page.locator('#lots .lot').first
   self.assertEqual(row.locator('.lot-table-quantity .copy').inner_text(),'1')
-  self.assertEqual(row.locator('.lot-table-freight .copy').get_attribute('data-v'),'-2')
-  self.assertEqual(row.locator('.lot-table-result .copy').get_attribute('data-v'),'8')
-  self.assertEqual(self.page.locator('#unitCourierTotal').get_attribute('data-v'),'-700')
+  self.assertEqual(row.locator('.lot-table-freight .copy').get_attribute('data-v'),'-2857.14')
+  self.assertEqual(row.locator('.lot-table-result .copy').get_attribute('data-v'),'-2847.14')
+  self.assertEqual(self.page.locator('#unitCourierTotal').get_attribute('data-v'),'-1000000')
   before=self.page.evaluate('JSON.stringify([lastP.best,lastP.rows.map(r=>[r.best,r.g,r.ship,r.courierAllocated])])')
   self.page.locator('[data-ledger-mode=lot]').click()
-  self.assertEqual(row.locator('.lot-table-freight .copy').get_attribute('data-v'),'-600')
-  self.assertEqual(row.locator('.lot-table-result .copy').get_attribute('data-v'),'2400')
+  self.assertEqual(row.locator('.lot-table-freight .copy').get_attribute('data-v'),'-857142.86')
+  self.assertEqual(row.locator('.lot-table-result .copy').get_attribute('data-v'),'-854142.86')
   self.page.locator('[data-ledger-sale=instant]').click()
-  self.assertEqual(row.locator('.lot-table-result .copy').get_attribute('data-v'),'2100')
+  self.assertEqual(row.locator('.lot-table-result .copy').get_attribute('data-v'),'-854442.86')
   self.assertEqual(self.page.evaluate('JSON.stringify([lastP.best,lastP.rows.map(r=>[r.best,r.g,r.ship,r.courierAllocated])])'),before)
   self.assertTrue(self.page.evaluate("lastP.rows.every(r=>r.best==='bb'&&r.courierAllocated===0)"))
  def test_copy_header_refresh_and_disclosure_are_independent_keyboard_actions(self):

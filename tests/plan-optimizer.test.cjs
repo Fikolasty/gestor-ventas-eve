@@ -3,13 +3,14 @@
 const fs=require('node:fs');
 const vm=require('node:vm');
 const assert=require('node:assert/strict');
+const courierEntries=vm.runInNewContext(fs.readFileSync('src/js/domain/courier.js','utf8')+'\ncourierEntries',{C:{},S:{}});
 const source=fs.readFileSync('src/js/domain/planning.js','utf8');
 const start=source.indexOf('function mostProfitableMix(rows,Vall){');
 const end=source.indexOf('function protectBestSaleRoute(rows,Vall){',start);
 assert(start>=0&&end>start,'Expected reusable highest-net route optimizer');
 const body=source.slice(start,end);
 const freight=(volume,collateral)=>volume>0?300+0.01*volume+0.001*collateral:0;
-const optimize=vm.runInNewContext('('+body+')',{courierCost:freight,guideFor:()=>null});
+const optimize=vm.runInNewContext('('+body+')',{courierEntries,C:{maxVol:350000},courierCost:freight,guideFor:()=>null});
 const row=(g,ship={},q=1,best='null')=>({g,ship,q,best,prod:0,net:{},o:{name:'Test ore'},guide:null});
 const run=rows=>{optimize(rows,rows.length*100);return rows.map(r=>r.best);};
 

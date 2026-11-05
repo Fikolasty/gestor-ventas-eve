@@ -958,8 +958,8 @@ class ThemeBrowserTests(unittest.TestCase):
         for lang,labels in [('es',['Item','Cantidad','Volumen','Precio']),('en',['Item','Quantity','Volume','Price'])]:
             self.page.evaluate('l=>setLang(l)',lang)
             self.assertEqual(self.page.locator('.ledger-market-columns button:visible').all_inner_texts()[:4],[x.upper() for x in labels])
-            self.assertEqual(self.page.locator('#lots .lot-table-result .copy').first.get_attribute('data-v'),'8')
-            self.assertEqual(self.page.locator('#lots .lot-table-freight .copy').first.get_attribute('data-v'),'-2')
+            self.assertEqual(self.page.locator('#lots .lot-table-result .copy').first.get_attribute('data-v'),'-2847.14')
+            self.assertEqual(self.page.locator('#lots .lot-table-freight .copy').first.get_attribute('data-v'),'-2857.14')
             self.assertEqual(self.page.locator('#lots .lot-table-quantity .copy').first.inner_text(),'1')
             self.assertEqual(self.page.locator('#lots img.ti').first.get_attribute('data-tid'),'34')
             self.assertTrue(self.page.evaluate("!!($('pkPlanOptions').compareDocumentPosition($('unitCourierBox'))&Node.DOCUMENT_POSITION_FOLLOWING)"))
@@ -975,8 +975,8 @@ class ThemeBrowserTests(unittest.TestCase):
                 for light in (False,True):
                     self.page.evaluate('v=>document.documentElement.classList.toggle("light",v)',light)
                     self.assertEqual(self.page.locator('#lots>.lot').count(),2)
-                    self.assertEqual(self.page.locator('#lots .lot-table-freight .copy').first.get_attribute('data-v'),'-2')
-                    self.assertEqual(self.page.locator('#lots .lot-table-result .copy').first.get_attribute('data-v'),'8')
+                    self.assertEqual(self.page.locator('#lots .lot-table-freight .copy').first.get_attribute('data-v'),'-2857.14')
+                    self.assertEqual(self.page.locator('#lots .lot-table-result .copy').first.get_attribute('data-v'),'-2847.14')
                     geometry=self.page.locator('#ledger').evaluate("""el=>({height:el.getBoundingClientRect().height,
                      head:el.querySelector('#unitCourierToggle').getBoundingClientRect().height,
                      table:el.querySelector('#unitCourierRows').getBoundingClientRect().height,

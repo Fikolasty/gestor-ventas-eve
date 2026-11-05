@@ -259,3 +259,11 @@ Para toda fila activa del plan seleccionado, el sistema necesita ruta de venta y
 Fórmulas: `Inversión_Buy = ∑(q × precioBuy × (1 + broker))`, `Inversión_Sell = ∑(q × precioSell)`, `Beneficio = P.best − Inversión`, `ROI = Beneficio / Inversión` para inversión positiva. `P.best` ya incorpora venta neta y transporte, por lo que no se debe volver a descontar el courier en `Beneficio`. **Presupuesto y objetivo no son liquidez o llenado real de órdenes**, y el margen configurado de HY-RWO no debe presentarse como venta confirmada.
 
 **Regresión ilustrativa:** 7 Paladin a Jita Buy 905,4 M/u, broker hipotético 1,5 %, inversión 6.432.867.000 y beneficio 655.549.500 a partir de los ingresos/flete de la captura del propietario. `tests/trade-purchase-capital.test.cjs` comprueba la fórmula y las guardas. Chromium y EVE ESI real siguen pendientes; lanzamiento público v1.0.126 **no comprobado ni efectuado** por falta de acceso operativo al conector GitHub Fiko, aunque la autorización de push del propietario ya existe.
+
+
+## v1.0.199 — candidata solicitada, 2026-11-05
+
+Excepción económica explícita del propietario: facturar cada contrato SIGMA según sus Items reales, redondeando su recompensa al millón superior, y sumar después los contratos. El coste final alimenta planes, alternativas, reparto unitario, contratos/copias y referencias; las unidades no se redondean al millón. Fórmula exacta pequeña, sin badge. Guardas Buy y datos ausentes conservadas; el aviso nombra los Items y el motivo. Ver DSS al final y docs/FREIGHT_ROUNDING_199.md; kit activo docs/HANDOFF_FREIGHT_199.md.178Node/16Python/8legacy PASS, gate148Chromium y Fiko/Actions/HTTPS pendientes. Última LIVE198; sin aprobación visual pendiente para este alcance. Auditoría CSS textarea/paste-foot en pausa.
+
+
+Gate local199 cerrado:148Chromium (471,169s),178Node/16Python/8legacy PASS; guarda no-finita final repetida con178Node y2focales Chromium192estados sobre buildaab23515 (2610811bytesLF). Ver DSS para la precisión temporal de la corrida general y las capturas finales r3. Fiko/main/4Actions/Pages/HTTPS pendientes; última LIVE198. Sin aprobación visual pendiente.

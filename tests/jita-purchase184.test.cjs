@@ -35,3 +35,12 @@ test('anomalous posted Buy is never substituted with the sanitized sell-to-bids 
 test('zero quantity is excluded and an empty inventory has no invented zero budget',()=>{
  reset();assert.equal(math.jitaPurchaseModel({rows:[]}).cost,null);assert.equal(math.jitaPurchaseModel({rows:[row(0),row(1)]}).raw,10);
 });
+
+test('missing and atypical Buy quotes identify the Item without inventing a purchase total',()=>{
+ reset();const a=row(),b=row(),c=row();a.o.name='Missing Buy';a.o.jita.topBuy=null;
+ b.o.name='Tiny bid';b.o.jita.topBuy=1;b.o.jita.topSell=100;
+ c.o.name='Valid';const m=math.jitaPurchaseModel({rows:[a,b,c]},'buy');
+ assert.equal(m.cost,null);assert.equal(m.raw,null);assert.equal(m.profit,null);
+ assert.equal(m.rows[0].purchaseIssue,'jita.noBuy');assert.equal(m.rows[1].purchaseIssue,'jita.reviewBuy');assert.equal(m.rows[2].purchaseIssue,null);
+ assert.ok(m.rows[2].purchase>0);b.o.buyMan=1;assert.equal(math.jitaPurchaseModel({rows:[b]},'buy').rows[0].purchaseIssue,null);
+});

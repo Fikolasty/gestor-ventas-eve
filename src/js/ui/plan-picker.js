@@ -426,6 +426,12 @@ function tradePurchaseUnitAt(r,basis){
   }
   return Number.isFinite(u)&&u>0?u:null;
 }
+// Report why the existing budget guard rejects a quote; no fallback price.
+function tradePurchaseIssueAt(r,basis){
+  if(tradePurchaseUnitAt(r,basis)!=null)return null;
+  const quote=basis==='buy'?r.o.jita?.topBuy:r.o.ref;
+  return basis==='buy'&&Number.isFinite(quote)&&quote>0?'jita.reviewBuy':basis==='buy'?'jita.noBuy':'jita.noSell';
+}
 function tradePurchaseCost(r){return tradePurchaseCostAt(r,C.buyMode);}
 function tradePurchaseCostAt(r,basis){
   const unit=tradePurchaseUnitAt(r,basis);

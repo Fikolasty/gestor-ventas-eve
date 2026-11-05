@@ -1726,3 +1726,17 @@ Tres alcances del propietario implementados: Unidad/Lote coherente y Precio Sell
 ### Gate local198 cerrado
 
 146/146Chromium PASS393,971s sobre build19873037a5b;171Node/16Python/8legacy PASS. Diferencial232estados y24parejas PNG idénticos,41propiedades calculadas y capturas finales r1 revisadas. SHA256 de before197/after197 congelados coincide con los dos reportes; no se alteraron mientras index198 se probaba en paralelo.53fuentes restantes intactas; dos bloquesJS idénticos antes de asignar198. Sin cambios de producto posteriores. Última LIVE197; Fiko/cuatroActions/Pages/HTTPS pendientes. No aprobación visual pendiente.
+
+
+## v1.0.199 — candidata solicitada, 2026-11-05
+
+Excepción económica explícita del propietario: facturar cada contrato SIGMA según sus Items reales, redondeando su recompensa al millón superior, y sumar después los contratos. El coste final alimenta planes, alternativas, reparto unitario, contratos/copias y referencias; las unidades no se redondean al millón. Fórmula exacta pequeña, sin badge. Guardas Buy y datos ausentes conservadas; el aviso nombra los Items y el motivo. Ver DSS al final y docs/FREIGHT_ROUNDING_199.md; kit activo docs/HANDOFF_FREIGHT_199.md.178Node/16Python/8legacy PASS, gate148Chromium y Fiko/Actions/HTTPS pendientes. Última LIVE198; sin aprobación visual pendiente para este alcance. Auditoría CSS textarea/paste-foot en pausa.
+
+
+### Gate local199 cerrado y artefacto final congelado
+
+148/148Chromium PASS471,169s,178Node/16Python/8legacy PASS. La guarda final de redondeo rechaza NaN/Infinity/ausencia en lugar de transformarlos en envío gratis; se añadió durante la corrida general, después de sus primeros tests. Por precisión de trazabilidad, no se atribuye toda esa corrida a un único HTML: tras esa guarda se repitieron178Node y los dos focales Chromium (63,387s,192estados) sobre el artefacto final. CI debe repetir148/148 sobre ese mismo build antes de LIVE. Los fallos iniciales de seis expectativas antiguas y los dos del segundo pase quedan sustituidos por el pase completo final, sin desactivar tests ni relajar geometría/copia.
+
+Capturas finales freight199-r3 regeneradas después de la última guarda; recibo/distribución en los ocho estados1440ES (completo/parcial/ausente/largo × Dark/Light) idénticos píxel a píxel a los recortes r2 ya inspeccionados. Se revisó de nuevo la pareja parcial r3. Las capturas completas y la matriz conservan controles, cuatro paneles y semántica ISK. Fixtures sintéticos; la Tasación114920001/148055001/181190000 y el volumen6000.04 se reproducen como prueba de la captura, no como certificación del mercado histórico ni actual.
+
+HTML199 final canónicoLF:2610811bytes,blob aab235156184811ac01fd7f1b3153c54f3f21165,SHA256be04542c8c034cd5dae2722a15de46407138d0bdec3a7ea44c79ccc9e1456028. Once fuentes modificadas y47fuentes restantes idénticas al main198c4f0dead. Manifiesto explícito34archivos; quedan fuera index.html, los estados QA generados por CI y HANDOFF_CSS_187 preexistente. Fiko confirmado comoFikolasty106491008, main198 y árbol44f2ec19 verificados. Los blobs de fuente no mueven la rama; falta publicación protegida expected_sha/force:false, cuatroActions/Pages y HTTPS idéntico. Última LIVE198; sin aprobación visual pendiente. Kit activo docs/HANDOFF_FREIGHT_199.md.

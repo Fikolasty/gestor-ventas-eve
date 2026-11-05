@@ -67,7 +67,8 @@ class Freight168Tests(unittest.TestCase):
 
  def test_unit_equation_is_independent_of_quantity_and_final_copies_visible_cents(self):
   # Canonical real calculation: 1% collateral on 60,000 + 134,260 = 1,942.60.
-  # Its allocation is 600 / 300 = 2 and 1342.60 / 5 = 268.52 per unit.
+  # Bill rounds to 1m. Allocate that bill by the same 600:1342.60 weights,
+  # then divide by quantity; unit amounts themselves never round to millions.
   self.page.evaluate(UNIT_FIXTURE)
   self.page.evaluate("""()=>{
    C.perM3=0;C.collPct=.01;
@@ -76,11 +77,13 @@ class Freight168Tests(unittest.TestCase):
    refreshNow();
   }""")
   rows=self.page.locator('#lots>.lot')
-  self.assertAlmostEqual(self.page.evaluate('ledgerReference.shipCost'),1942.60,places=2)
-  for i,shipping,final in [(0,'-2','8'),(1,'-268.52','24454.93')]:
-   self.assertEqual(rows.nth(i).locator('.lot-table-freight .copy').get_attribute('data-v'),shipping)
-   button=rows.nth(i).locator('.lot-table-result .copy');self.assertEqual(button.get_attribute('data-v'),final)
-   button.click();self.assertEqual(self.page.evaluate('window.copied'),final)
+  self.assertAlmostEqual(self.page.evaluate('ledgerReference.shipRaw'),1942.60,places=2)
+  self.assertEqual(self.page.evaluate('ledgerReference.shipCost'),1000000)
+  for i,weight,qty,price in [(0,600,300,10),(1,1342.60,5,24723.45)]:
+   shipping=-1000000*weight/1942.60/qty;final=price+shipping
+   self.assertAlmostEqual(float(rows.nth(i).locator('.lot-table-freight .copy').get_attribute('data-v')),round(shipping,2),places=2)
+   button=rows.nth(i).locator('.lot-table-result .copy');self.assertAlmostEqual(float(button.get_attribute('data-v')),round(final,2),places=2)
+   button.click();self.assertEqual(self.page.evaluate('window.copied'),button.get_attribute('data-v'))
   for width in [1440,980,630,390]:
    self.page.set_viewport_size({'width':width,'height':1000})
    for lang in ['es','en']:
@@ -91,8 +94,8 @@ class Freight168Tests(unittest.TestCase):
      self.assertEqual(rows.first.locator('.lot-table-quantity .copy').inner_text(),'1')
      self.assertNotIn('ISK/',self.page.locator('.ledger-market-columns').inner_text())
   self.page.locator('[data-ledger-mode=lot]').click()
-  self.assertEqual(rows.first.locator('.lot-table-result .copy').get_attribute('data-v'),'2400')
-  self.assertEqual(rows.first.locator('.lot-table-freight .copy').get_attribute('data-v'),'-600')
+  self.assertEqual(rows.first.locator('.lot-table-result .copy').get_attribute('data-v'),'-305864.41')
+  self.assertEqual(rows.first.locator('.lot-table-freight .copy').get_attribute('data-v'),'-308864.41')
   self.assertEqual(rows.first.locator('.lot-table-quantity .copy').inner_text(),'300')
 
  def test_unified_detail_covers_local_shipped_unknown_and_trade_profit(self):
@@ -105,8 +108,8 @@ class Freight168Tests(unittest.TestCase):
   }""")
   rows=self.page.locator('#lots>.lot')
   self.assertEqual(self.page.locator('#freightLotBefore').get_attribute('data-v'),'3500')
-  self.assertEqual(self.page.locator('#freightLotFinal').get_attribute('data-v'),'4200')
-  for i,investment,profit in [(0,'-10','-4'),(1,'-100','-30')]:
+  self.assertEqual(self.page.locator('#freightLotFinal').get_attribute('data-v'),'1003500')
+  for i,investment,profit in [(0,'-10','-2859.14'),(1,'-100','-28581.43')]:
    rows.nth(i).locator('.lot-open').click();rows.nth(i).locator('.lot-analysis>summary').click()
    self.assertEqual(rows.nth(i).locator('.lot-reference-investment .copy').get_attribute('data-v'),investment)
    button=rows.nth(i).locator('.lot-reference-profit .copy');self.assertEqual(button.get_attribute('data-v'),profit)
