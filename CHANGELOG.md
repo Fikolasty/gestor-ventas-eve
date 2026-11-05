@@ -1,8 +1,8 @@
-## v1.0.194 — Unidad/Lote y referencia Jita claras
+## v1.0.194 — Unidad/Lote y referencia Jita claras — LIVE certificada
 
 - Ventas muestra una sola referencia: Orden=Jita Sell; Inmediata=Jita Buy. Unidad muestra1 y conserva el lote real como contexto, con copia/sorting coherentes.
 - Se elimina la ayuda general de Distribución y se iguala Pasos Dark al grafito cálido vecino. Neto total con color semántico correcto.
-- Jita, cuatro paneles, finanzas, cantidades reales y permisos intactos.171Node/16Python/8legacy y focales PASS; gate final/publicación en docs/HANDOFF_LEDGER_UNITS_194.md.
+- Jita, cuatro paneles, finanzas, cantidades reales y permisos intactos.171Node/16Python/8legacy/143Chromium CI PASS; cuatro Actions SUCCESS y HTML público/local/GitHub idénticos. Fuente32c2ec93, buildd55bea6d; cierre en docs/HANDOFF_LEDGER_UNITS_194.md.
 
 ## v1.0.193 — Distribución simétrica y borde común en planes — LIVE certificada
 

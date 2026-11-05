@@ -2,7 +2,7 @@
 
 ## Estado real
 
-**Candidata implementada y aprobada; última LIVE193.** El propietario aprobó la simplificación del listado, precisó «Orden=Sell, Inmediata=Buy», pidió eliminar la ayuda general de Distribución y señaló el color de Pasos. Publicar tras QA con autorización continua, exclusivamente mediante Fiko/Fikolasty. No queda aprobación de dirección visual pendiente; sí Actions/Pages/HTTPS hasta el cierre.
+**v1.0.194 LIVE CERTIFICADA.** Todos los gates cerrados; ver cierre remoto al final. La dirección visual fue aprobada y la publicación se completó mediante Fiko/Fikolasty. Los estados pendientes del historial siguiente quedan sustituidos.
 
 Base remota verificada `d168d06fb3727d9dca0f6eb97b21dee3c9de71ae`, árbol `abda449719ff50be301a7bee481f827d6f6422d2`. HEAD local sigue antiguo61ced55 con fuentes190–193 publicadas como cambios locales: conservarlas y enviar únicamente el incremento194 sobre el árbol remoto, sin force. No editar index.html a mano ni subirlo por el conector; lo genera CI.
 
@@ -40,3 +40,19 @@ Continuar en el chat actual por defecto. No emitir avisos por mensajes/versiones
 ### Cierre local final
 
 143/143Chromium PASS304,147s,171Node/16Python/8legacy PASS. Focales4/4 PASS13,004s; Light24estados idéntico salvo clase/color del neto total documentado. Capturas r2 revisadas y fuente final sin ajustes posteriores. Buildc7a33258775dccd701c147821be6a2190f629a68,2.605.727bytesLF. Solo remoto/Pages/HTTPS pendientes; no aprobación visual pendiente.
+
+### Envío remoto
+
+Fuente Fiko32c2ec933ae080360588acd1a3883c1f1c1101d5, árbol2b5a1cfe7254831d6eb3130c3caad5f064f124e8,25blobs verificados; main actualizado desde d168d06f con expected_sha y sin force. index.html excluido. El rechazo automático de la plantilla se resolvió verificando el SHA del contenido saliente y sus marcadores; no se subió un artefacto manual. Actions/Pages/HTTPS pendientes. Esta nota se incorpora al cierre documental posterior.
+
+## Cierre LIVE v1.0.194 — 2026-11-05
+
+Este cierre sustituye todos los estados candidata y pendientes194 anteriores. Publicada mediante Fiko/Fikolasty: fuente `32c2ec933ae080360588acd1a3883c1f1c1101d5`, build bot `d55bea6d944bfc75ba9c85eb023734029106ef2b`. Cuatro Actions SUCCESS: Versiones41996431185, Build41996431374, Minería41996431217 y Rebuild/Pages41996431183. Compile127140628015 y deploy127143978887 SUCCESS.
+
+CI:171 Node/16 Python/8 legacy/143 Chromium PASS (434,332s). Local final:171 Node/16 Python/8 legacy/143 Chromium PASS (304,147s), cuatro focales PASS13,004s y comparación Light24estados PASS con la excepción documentada del color semántico del neto. Capturas finales únicas v194-final-r2 revisadas tras el último ajuste, desktop1440 ES Dark/Light y matriz390/630/980/1440 ES/EN. Datos sintéticos; no se probó ESI/SSO real extremo a extremo en esta entrega.
+
+HTTPS independiente sin query y sin caché confirma v1.0.194: HTML público/local canónico/GitHub idénticos, **2.605.727 bytes**, blob **`c7a33258775dccd701c147821be6a2190f629a68`**. Index generado exclusivamente por CI. La revisión automática de create_blob confundió inicialmente la plantilla fuente con el artefacto; se resolvió contrastando el contenido exacto y su SHA, sin cambiar de identidad ni eludir el control. No fue un fallo de tests ni de Actions.
+
+Ya LIVE: Ventas con Precio exacto Orden=Jita Sell/Inmediata=Jita Buy, Unidad muestra1 con contexto del lote real, Lote conserva cantidad real, copia/ordenación coherentes; Jita conserva siete columnas. Retirada la ayuda genérica de Distribución. Pasos Dark usa grafito cálido vecino; neto total aplica color monetario semántico en ambos temas. Motor financiero, tasas, ESI/SSO, permisos, inventario y persistencia intactos. No quedan aprobaciones ni gates de publicación pendientes.
+
+Kit activo `docs/HANDOFF_LEDGER_UNITS_194.md`. La auditoría CSS de títulos Tasación/Inventario sigue pausada antes de editar40/60; requiere retomar diagnóstico incremental, sin rediseño automático. Continuar en este chat sin avisos por contadores. El cierre documental posterior puede avanzar main sin alterar el HTML certificado.

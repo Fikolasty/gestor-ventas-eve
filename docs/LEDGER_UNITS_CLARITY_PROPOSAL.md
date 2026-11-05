@@ -1,6 +1,6 @@
 # Claridad de Unidad/Lote y referencia de precio — 2026-11-05
 
-**Propuesta aprobada e implementada como candidata194.** La aclaración posterior del propietario fija cotizaciones exactas: Orden=`topSell`, Inmediata=`topBuy`; sustituye el uso de `unitFor()` sugerido en el prototipo. También se retira la ayuda general de Distribución y se armoniza Pasos Dark. Estado de pruebas/publicación en `docs/HANDOFF_LEDGER_UNITS_194.md` y final DSS. Última LIVE193 hasta certificación194; los pendientes de aprobación del historial siguiente quedan sustituidos.
+**Propuesta aprobada, implementada y publicada como v1.0.194 LIVE certificada.** La aclaración posterior del propietario fija cotizaciones exactas: Orden=`topSell`, Inmediata=`topBuy`; sustituye el uso de `unitFor()` sugerido en el prototipo. También se retira la ayuda general de Distribución y se armoniza Pasos Dark. Estado de pruebas/publicación en `docs/HANDOFF_LEDGER_UNITS_194.md` y final DSS. Última LIVE194; cuatro Actions SUCCESS y HTML público/local/GitHub idénticos c7a33258. Los pendientes del historial siguiente quedan sustituidos.
 
 ## Petición y prioridad
 

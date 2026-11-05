@@ -2015,3 +2015,19 @@ Build1942.605.727bytesLF,blobc7a33258775dccd701c147821be6a2190f629a68. Fiko/main
 ### Gate local final194 cerrado
 
 143/143Chromium PASS304,147s sobre el build finalc7a33258,171Node/16Python/8legacy PASS. Cuatro focales finales PASS13,004s y comparador Light24estados PASS con la excepción semántica documentada del total. Capturas r2 inspeccionadas después del último cambio visual; no hay cambios de producto posteriores. Se sustituyen los pendientes de repetición local anteriores. Falta certificación Fiko/cuatroActions/Pages/HTTPS; última LIVE193.
+
+### Fuentes194 enviadas por Fiko
+
+Commit32c2ec933ae080360588acd1a3883c1f1c1101d5, árbol2b5a1cfe7254831d6eb3130c3caad5f064f124e8,25blobs verificados por SHA. Main avanzado desde d168d06f con SHA esperado y force:false. No se envió index.html; la plantilla src/shell.html conserva los marcadores de ensamblado. Revisión automática rechazó su carga al confundirla con el HTML generado. Se verificó el hash del contenido exacto saliente84.021bytes (78cd7b7e), distinto del generado2.605.727bytes(c7a33258), y se contrastó la plantilla remota; el mismo envío fue finalmente aceptado. Sin bypass, cambio de identidad ni cambios de código para eludir la revisión. Fiko/Fikolasty id106491008 comprobado. Esperando cuatroActions/Pages/HTTPS; LIVE193 hasta cierre.
+
+## Cierre LIVE v1.0.194 — 2026-11-05
+
+Este cierre sustituye todos los estados candidata y pendientes194 anteriores. Publicada mediante Fiko/Fikolasty: fuente `32c2ec933ae080360588acd1a3883c1f1c1101d5`, build bot `d55bea6d944bfc75ba9c85eb023734029106ef2b`. Cuatro Actions SUCCESS: Versiones41996431185, Build41996431374, Minería41996431217 y Rebuild/Pages41996431183. Compile127140628015 y deploy127143978887 SUCCESS.
+
+CI:171 Node/16 Python/8 legacy/143 Chromium PASS (434,332s). Local final:171 Node/16 Python/8 legacy/143 Chromium PASS (304,147s), cuatro focales PASS13,004s y comparación Light24estados PASS con la excepción documentada del color semántico del neto. Capturas finales únicas v194-final-r2 revisadas tras el último ajuste, desktop1440 ES Dark/Light y matriz390/630/980/1440 ES/EN. Datos sintéticos; no se probó ESI/SSO real extremo a extremo en esta entrega.
+
+HTTPS independiente sin query y sin caché confirma v1.0.194: HTML público/local canónico/GitHub idénticos, **2.605.727 bytes**, blob **`c7a33258775dccd701c147821be6a2190f629a68`**. Index generado exclusivamente por CI. La revisión automática de create_blob confundió inicialmente la plantilla fuente con el artefacto; se resolvió contrastando el contenido exacto y su SHA, sin cambiar de identidad ni eludir el control. No fue un fallo de tests ni de Actions.
+
+Ya LIVE: Ventas con Precio exacto Orden=Jita Sell/Inmediata=Jita Buy, Unidad muestra1 con contexto del lote real, Lote conserva cantidad real, copia/ordenación coherentes; Jita conserva siete columnas. Retirada la ayuda genérica de Distribución. Pasos Dark usa grafito cálido vecino; neto total aplica color monetario semántico en ambos temas. Motor financiero, tasas, ESI/SSO, permisos, inventario y persistencia intactos. No quedan aprobaciones ni gates de publicación pendientes.
+
+Kit activo `docs/HANDOFF_LEDGER_UNITS_194.md`. La auditoría CSS de títulos Tasación/Inventario sigue pausada antes de editar40/60; requiere retomar diagnóstico incremental, sin rediseño automático. Continuar en este chat sin avisos por contadores. El cierre documental posterior puede avanzar main sin alterar el HTML certificado.

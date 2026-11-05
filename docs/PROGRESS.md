@@ -1,8 +1,21 @@
 # PROGRESS — Market Moves+
 
+## Cierre LIVE v1.0.194 — 2026-11-05
+
+Este cierre sustituye todos los estados candidata y pendientes194 anteriores. Publicada mediante Fiko/Fikolasty: fuente `32c2ec933ae080360588acd1a3883c1f1c1101d5`, build bot `d55bea6d944bfc75ba9c85eb023734029106ef2b`. Cuatro Actions SUCCESS: Versiones41996431185, Build41996431374, Minería41996431217 y Rebuild/Pages41996431183. Compile127140628015 y deploy127143978887 SUCCESS.
+
+CI:171 Node/16 Python/8 legacy/143 Chromium PASS (434,332s). Local final:171 Node/16 Python/8 legacy/143 Chromium PASS (304,147s), cuatro focales PASS13,004s y comparación Light24estados PASS con la excepción documentada del color semántico del neto. Capturas finales únicas v194-final-r2 revisadas tras el último ajuste, desktop1440 ES Dark/Light y matriz390/630/980/1440 ES/EN. Datos sintéticos; no se probó ESI/SSO real extremo a extremo en esta entrega.
+
+HTTPS independiente sin query y sin caché confirma v1.0.194: HTML público/local canónico/GitHub idénticos, **2.605.727 bytes**, blob **`c7a33258775dccd701c147821be6a2190f629a68`**. Index generado exclusivamente por CI. La revisión automática de create_blob confundió inicialmente la plantilla fuente con el artefacto; se resolvió contrastando el contenido exacto y su SHA, sin cambiar de identidad ni eludir el control. No fue un fallo de tests ni de Actions.
+
+Ya LIVE: Ventas con Precio exacto Orden=Jita Sell/Inmediata=Jita Buy, Unidad muestra1 con contexto del lote real, Lote conserva cantidad real, copia/ordenación coherentes; Jita conserva siete columnas. Retirada la ayuda genérica de Distribución. Pasos Dark usa grafito cálido vecino; neto total aplica color monetario semántico en ambos temas. Motor financiero, tasas, ESI/SSO, permisos, inventario y persistencia intactos. No quedan aprobaciones ni gates de publicación pendientes.
+
+Kit activo `docs/HANDOFF_LEDGER_UNITS_194.md`. La auditoría CSS de títulos Tasación/Inventario sigue pausada antes de editar40/60; requiere retomar diagnóstico incremental, sin rediseño automático. Continuar en este chat sin avisos por contadores. El cierre documental posterior puede avanzar main sin alterar el HTML certificado.
+
+
 ## 2026-11-05 — v1.0.193 LIVE certificada
 
-Distribución r3 aprobada y publicada50/50, barras alineadas, copy compacto, ayuda inline y avisos contables conservados. Importe y diferencia de alternativos comparten borde con seleccionado, sin cuarta columna vacía. Fuente Fiko374a113fa63e7d78c74a85087b67ac2dbf777139, buildae31b620cb1bf3f195f534f35b48446dab0b7c79;4Actions SUCCESS (Pages41979728604),170Node/16Python/8legacy/139Chromium CI PASS430,408s. Local139Chromium293,132s y170Node/16Python/8legacy PASS; capturas finales1440ES Dark/Light completas, ayuda y EN revisadas. HTTPS200 sin query/sin caché,HTML público/local/GitHub idénticos2.602.997bytesLF,blob1db02ca13da0e2badc08c662a154133d1934dde2. Sin cambios económicos,ESI/SSO o persistencia. No quedan aprobaciones ni gates pendientes. Kit activo docs/HANDOFF_DISTRIBUTION_193.md; auditoríaCSS de Tasación sigue siguiente alcance. Alerta continuidadAMARILLA por dos publicaciones192/193 en este chat; preparar próximo antes de otra etapa larga.
+Distribución r3 aprobada y publicada50/50, barras alineadas, copy compacto, ayuda inline y avisos contables conservados. Importe y diferencia de alternativos comparten borde con seleccionado, sin cuarta columna vacía. Fuente Fiko374a113fa63e7d78c74a85087b67ac2dbf777139, buildae31b620cb1bf3f195f534f35b48446dab0b7c79;4Actions SUCCESS (Pages41979728604),170Node/16Python/8legacy/139Chromium CI PASS430,408s. Local139Chromium293,132s y170Node/16Python/8legacy PASS; capturas finales1440ES Dark/Light completas, ayuda y EN revisadas. HTTPS200 sin query/sin caché,HTML público/local/GitHub idénticos2.602.997bytesLF,blob1db02ca13da0e2badc08c662a154133d1934dde2. Sin cambios económicos,ESI/SSO o persistencia. No quedan aprobaciones ni gates pendientes. Kit activo docs/HANDOFF_DISTRIBUTION_193.md; auditoríaCSS de Tasación sigue siguiente alcance. Aviso histórico retirado expresamente por el propietario: seguir en este chat sin avisos automáticos por contadores.
 
 ## 2026-11-05 — v1.0.192 LIVE certificada
 

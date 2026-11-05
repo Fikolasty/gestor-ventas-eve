@@ -2,6 +2,8 @@
 
 ## Estado
 
+**Continuidad vigente: v1.0.194 LIVE certificada.** Ver `docs/HANDOFF_LEDGER_UNITS_194.md`. La ayuda general descrita aquí se retiró por petición posterior del propietario; este kit conserva historia193.
+
 **v1.0.193 LIVE CERTIFICADA — 2026-11-05.** Este cierre sustituye todos los estados candidata/local/pendiente del historial. Fuente Fiko `374a113fa63e7d78c74a85087b67ac2dbf777139`, build bot `ae31b620cb1bf3f195f534f35b48446dab0b7c79`. Cuatro Actions SUCCESS: Versiones41979728549, Minería41979728561, Build41979728611, Rebuild/Pages41979728604; compile127086811197 y deploy127089581256. CI170Node/16Python/8legacy/139Chromium PASS430,408s. HTTPS200 sin query y sin caché: público/local/GitHub idénticos,2.602.997bytesLF,blob1db02ca13da0e2badc08c662a154133d1934dde2. No queda aprobación visual ni gate de publicación pendiente.
 
 Base remota de cierre192: main `30929a93ccd42b74d4f54da1d448d3584ace9a8f`. HEAD local permanece en `61ced55` con cambios190–192 publicados; preservarlos, enviar solo el incremento sobre main remoto sin force. Workflows existentes solo versión192→193; prueba de versión alineada a193 antes de Node.

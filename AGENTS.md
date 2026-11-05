@@ -259,3 +259,15 @@ La regla anterior de aviso por dos publicaciones queda retirada por petición de
 ## v194 candidata aprobada — 2026-11-05
 
 Ventas: una referencia Precio, Orden=topSell e Inmediata=topBuy exactos, Unidadcantidad1 con contexto lote real y Lote cantidad real. Copia/sorting coherentes; Jita siete columnas y economía intactos. Retirada ayuda genérica de Distribución; Pasos Dark misma superficie cálida que vecinos y neto con color semántico.171Node/16Python/8legacy/focales PASS;143Chromium primer pase PASS302,104s y repetición final en curso tras corregir el color observado. HTML1942.605.727bytesLF,blobc7a33258775dccd701c147821be6a2190f629a68. Última LIVE193; Fiko/4Actions/Pages/HTTPS pendientes. Kit activo docs/HANDOFF_LEDGER_UNITS_194.md. No queda aprobación de diseño pendiente. Sin avisos automáticos por contadores; seguir en este chat.
+
+## Cierre LIVE v1.0.194 — 2026-11-05
+
+Este cierre sustituye todos los estados candidata y pendientes194 anteriores. Publicada mediante Fiko/Fikolasty: fuente `32c2ec933ae080360588acd1a3883c1f1c1101d5`, build bot `d55bea6d944bfc75ba9c85eb023734029106ef2b`. Cuatro Actions SUCCESS: Versiones41996431185, Build41996431374, Minería41996431217 y Rebuild/Pages41996431183. Compile127140628015 y deploy127143978887 SUCCESS.
+
+CI:171 Node/16 Python/8 legacy/143 Chromium PASS (434,332s). Local final:171 Node/16 Python/8 legacy/143 Chromium PASS (304,147s), cuatro focales PASS13,004s y comparación Light24estados PASS con la excepción documentada del color semántico del neto. Capturas finales únicas v194-final-r2 revisadas tras el último ajuste, desktop1440 ES Dark/Light y matriz390/630/980/1440 ES/EN. Datos sintéticos; no se probó ESI/SSO real extremo a extremo en esta entrega.
+
+HTTPS independiente sin query y sin caché confirma v1.0.194: HTML público/local canónico/GitHub idénticos, **2.605.727 bytes**, blob **`c7a33258775dccd701c147821be6a2190f629a68`**. Index generado exclusivamente por CI. La revisión automática de create_blob confundió inicialmente la plantilla fuente con el artefacto; se resolvió contrastando el contenido exacto y su SHA, sin cambiar de identidad ni eludir el control. No fue un fallo de tests ni de Actions.
+
+Ya LIVE: Ventas con Precio exacto Orden=Jita Sell/Inmediata=Jita Buy, Unidad muestra1 con contexto del lote real, Lote conserva cantidad real, copia/ordenación coherentes; Jita conserva siete columnas. Retirada la ayuda genérica de Distribución. Pasos Dark usa grafito cálido vecino; neto total aplica color monetario semántico en ambos temas. Motor financiero, tasas, ESI/SSO, permisos, inventario y persistencia intactos. No quedan aprobaciones ni gates de publicación pendientes.
+
+Kit activo `docs/HANDOFF_LEDGER_UNITS_194.md`. La auditoría CSS de títulos Tasación/Inventario sigue pausada antes de editar40/60; requiere retomar diagnóstico incremental, sin rediseño automático. Continuar en este chat sin avisos por contadores. El cierre documental posterior puede avanzar main sin alterar el HTML certificado.
