@@ -1,8 +1,8 @@
-## 1.0.205 — Producción de Fuel Blocks (candidata)
+## 1.0.205 — Producción de Fuel Blocks (LIVE)
 
 - Módulo nativo Plan/Materiales/Resultado: cuatro combustibles, stock, faltantes, cotizaciones compartidas y resultados de caja/económicos.
 - Perfil industrial con estructuras/rigs/habilidades, EIV e índice ESI; transporte manual repartido por lote sin duplicar cargos. Sin precios demo ni nuevos permisos.
-- Composición compacta, copia, ES/EN y Dark/Light. Estado y límites en docs/PRODUCTION_205.md; no LIVE hasta certificación de publicación.
+- Composición compacta, copia, ES/EN y Dark/Light. Certificada:205Node/16Python/8legacy/155Chromium,4Actions yHTTPS idéntico8fa354a5. Estado y límites en docs/PRODUCTION_205.md.
 
 ## 1.0.204 — limpieza CSS de controles retirados
 

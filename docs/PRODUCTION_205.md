@@ -1,6 +1,6 @@
 # Producción de Fuel Blocks — v1.0.205
 
-Estado: candidata local autorizada por el propietario el2026-11-06 para integrar y publicar tras QA. No LIVE hasta Actions/Pages/HTTPS.
+**LIVE v1.0.205 certificada2026-11-06.** Fuente final0ad6c3e6,build8c94e9b8;4Actions y155Chromium PASS;HTML público/canónico/GitHub idéntico8fa354a5. El cierre al final sustituye las notas históricas de candidatura y gates pendientes.
 
 ## Alcance
 
@@ -42,3 +42,14 @@ El segundo CI42271943431 pasó154/155Chromium (464,787s): el desborde global que
 ### Precisión de copia de duración205
 
 Se protege explícitamente que Duración por trabajo, presentada en horas, copie el mismo valor en horas con precisión completa (38.40h →38.4), sin convertirlo implícitamente a minutos. Corrección exclusivamente de presentación/copia, sin cambio en tiempos o costes. Cinco focales finales PASS, incluido portapapeles y fuentes. Nueva corrida integral todavía pendiente; LIVE204 intacto.
+
+
+## Cierre LIVE v1.0.205 — Producción de Fuel Blocks,2026-11-06
+
+Integración publicada y certificada mediante Fiko/Fikolasty. Fuente inicial93f8651f7430b633c2b0dcae60240f71bb08981e; recuperación de ancho b7090afebb3a8c888e6dada4f61853bd4e6ce888; tipografía/early gate b0b958e7a69f7b7fe654a760638ea82063d14a1c; fuente final0ad6c3e6c23340a4968afbd85753cae507a1b725. Build bot8c94e9b879b198be16747d914a881b9314048301. Cuatro Actions SUCCESS:Versiones42274628808,Build42274628833,Minería42274628855,Rebuild/Pages42274628847. Compile128087821292 y deploy128093931685 SUCCESS. CI205Node/16Python/8legacy,prueba tipográfica temprana y155/155Chromium (553,463s) PASS. Local205Node/16Python/8legacy,152Chromium iniciales y cinco focales finales PASS. La corrida final sustituye los bloqueos históricos de8px/una etiqueta; no se relajaron las pruebas ni se ocultó el desborde.
+
+HTTPS independiente2026-11-06T19:06:53.283104Z confirmó v1.0.205 y la navegación Producción. HTML público/local canónico/GitHub idénticos:2.671.267bytesLF,blob8fa354a52cdee5a8adf78a65873a4e632c46bf3d. https://fikolasty.github.io/gestor-ventas-eve/. El cierre documental posterior puede avanzar main sin alterar este HTML.
+
+LIVE incluye Plan/Materiales/Resultado de los cuatro Fuel Blocks, cálculo industrial puro, estructura/rigs/habilidades, EIV/índice, stock/faltantes, precios/manuales, reparto de envío y resultados de caja/económicos. La composición compacta, divisores cálidos, cifras copiables, ES/EN y Dark/Light están integrados; las pestañas móviles usan anchos naturales y conservan nombres completos. Cotizaciones por cliente/cache ESI existentes; permisos y persistencia no ampliados. No hay precios demo. Referencias/adjuntos/maquetas originales permanecen locales; únicamente código integrado, pruebas y documentación técnica pública se publicaron.
+
+Límites: resultados estimados al mejor nivel de Jita; no se certifica profundidad ni ejecución de órdenes. Sin sesión SSO/ESI con personaje real ni cotejo de factura industrial en cliente; impuestos especiales/recargos y total manual de instalación son explícitos. Contrato y fuentes en docs/PRODUCTION_205.md. No hay aprobación ni publicación pendiente para205. Las notas anteriores de candidata/no integrado/quórum pendientes son históricas y quedan sustituidas por este cierre. Próximo alcance acordado: cabecera de La ruta más rentable según la referencia del propietario, con coste de venta separado de inversión y sin alterar el motor; aún no implementada con205.
