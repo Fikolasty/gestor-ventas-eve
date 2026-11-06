@@ -1,11 +1,7 @@
-# Continuidad activa — LIVE v1.0.202
+# Continuidad activa — LIVE v1.0.203
 
-Compra Jita muestra el mismo topBuy crudo disponible que Tasación, respetando precios manuales. Importe parcial identificado: compras cotizadas + su comisión + envío conocido de todo el lote una vez. Pendientes no se convierten en cero; presupuesto completo, beneficio y comparación Buy/Sell siguen desconocidos si falta algún precio. Guardas conservadoras por defecto fuera del recibo Jita, protección Sell200 y retirada de nota201 conservadas.
+Cerrado el tramo histórico CSS de textarea/paste-foot: tres reglas sin DOM y cinco declaraciones sobrescritas retiradas. Display/max-height/line-height conservados. Aspecto, JS, copy, economía y comportamiento intactos;396bytes menos sin rendimiento medido.
 
-Fuente7c3fe4b0e08b43ea8bd500128591978b5277bf8f;buildfbeffd94d9698efda32c7c598e59bebe16fd786e. HTML2614969bytesLF,blob28fbabc609c2fc8aa891399857dc9921b1c735c5;HTTPS/local/GitHub idénticos2026-11-06T02:57:10Z (día5 local). Cuatro Actions SUCCESS, Rebuild/Pages42152511315,compile127678840621,deploy127681347723. CI184Node/16Python/8legacy/150Chromium413,327s PASS. Local3focales/208renders y capturas purchase202-r1 revisadas; fixtures sintéticos, no SSO/ESI real recertificado. Decisiones/evidencia canónicas al final de DSS. Sin aprobación ni publicación pendiente.
+Fuente041d07cb, corrección de versión e10d5f33, build9a5d83cd. Cuatro Actions SUCCESS, Rebuild/Pages42159849220,compile127702675811,deploy127708844334. CI184Node/16Python/8legacy/150Chromium PASS; diferencial local232estados y24parejas PNG idénticos. HTML público/local/GitHub61bbc06bf849d4109239ab20bb8e6d34dcbf243e,2614573bytesLF;HTTPS200 idéntico2026-11-06T04:20:22Z. Evidencia y límites canónicos al final de DSS.
 
-Seguir en este chat; CSS textarea/paste-foot pendiente sin iniciar automáticamente. Productividad: focales durante desarrollo, una corrida completa en CI, documentación breve. Preservar checkout antiguo61ced55 con cambios ya publicados. Fiko exclusivo, manifiesto explícito, expected_sha/force:false; index solo por build/CI. Cierre documental puede avanzar main sin alterar HTML certificado.
-
-## Incremento activo203 — CSS del inventario
-
-Autorizado por el propietario. Tres reglas de pie sin DOM y cinco declaraciones sobrescritas retiradas; display/max-height/line-height conservados.396bytes menos, sin cambios de producto o JS. Diferencial232estados/24parejas PNG idénticos cerrado; gate integral en CI y publicación pendientes. Evidencia canónica al final de DSS. Build local20361bbc06b; última LIVE202. No repetir cabeceras/contenedores/contenido196–198.
+Sin publicación pendiente. No repetir cabeceras/contenedores/contenido196–198 ni este tramo203; no iniciar otra familia automáticamente. Mantener propuesta y adjuntos Fuel Blocks exclusivamente locales, sin implementar ni publicar. Seguir en este chat. Fiko exclusivo; preservar checkout antiguo y cambios previos. Antes de versionar, revisar referencias de versión en ambos workflows y tests/c5c-plans.test.cjs. Focales durante desarrollo, una corrida integral en CI y comparación pública final.
