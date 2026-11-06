@@ -39,17 +39,24 @@ function jitaPurchaseModel(P,basis=C.buyMode,personal=true){
   const projection=ledgerRouteProjection(P,C.shipOn?'fN':'fJ');
   const firstItemByName=new Map();P.rows.forEach(r=>{const key=String(r.o.name).toLowerCase();if(!firstItemByName.has(key))firstItemByName.set(key,r.o);});
   const rows=projection.rows.map(r=>{
-    const unit=tradePurchaseUnitAt(r,basis),purchase=tradePurchaseCostAt(r,basis);
+    const unit=tradePurchaseUnitAt(r,basis,true),purchase=tradePurchaseCostAt(r,basis,true);
     const raw=Number.isFinite(unit)?unit*r.q:null;
     const listing=personal?null:jitaResaleListing(r,firstItemByName);
-    return {...r,listing,raw,purchase,purchaseIssue:tradePurchaseIssueAt(r,basis),cost:Number.isFinite(purchase)&&Number.isFinite(r.courierAllocated)?purchase+r.courierAllocated:null};
+    return {...r,listing,raw,purchase,purchaseIssue:tradePurchaseIssueAt(r,basis,true),cost:Number.isFinite(purchase)&&Number.isFinite(r.courierAllocated)?purchase+r.courierAllocated:null};
   });
   const sum=key=>rows.length&&rows.every(r=>Number.isFinite(r[key]))?rows.reduce((s,r)=>s+r[key],0):null;
   const raw=sum('raw'),purchase=sum('purchase'),cost=sum('cost');
+  // Same raw Jita Buy reference as Appraisal. Keep partial display amounts
+  // separate from the complete budget used for profit and Buy/Sell advice.
+  const priced=rows.filter(r=>Number.isFinite(r.purchase));
+  const partialRaw=priced.length?priced.reduce((s,r)=>s+r.raw,0):null;
+  const partialPurchase=priced.length?priced.reduce((s,r)=>s+r.purchase,0):null;
+  const partialFee=priced.length?partialPurchase-partialRaw:null;
+  const partialCost=priced.length&&Number.isFinite(projection.shipCost)?partialPurchase+projection.shipCost:null;
   const gross=personal?(rows.length&&rows.every(r=>Number.isFinite(C.shipOn?r.np:r.jl))?rows.reduce((s,r)=>s+(C.shipOn?r.np:r.jl)*r.q,0):null):
     rows.length&&rows.every(r=>Number.isFinite(r.listing.price))?rows.reduce((s,r)=>s+r.listing.price*r.q,0):null;
   const net=personal?projection.before:Number.isFinite(gross)&&rateNull()>0?gross*rateNull():null;
-  return {projection,rows,byItem:new Map(rows.map(r=>[r.o,r])),basis,raw,purchase,cost,ship:projection.shipCost,shipRaw:projection.shipRaw,
+  return {projection,rows,byItem:new Map(rows.map(r=>[r.o,r])),basis,raw,purchase,cost,partialRaw,partialPurchase,partialFee,partialCost,priced:priced.length,partial:priced.length>0&&priced.length<rows.length,ship:projection.shipCost,shipRaw:projection.shipRaw,
     fee:Number.isFinite(raw)&&Number.isFinite(purchase)?purchase-raw:null,gross,
     sellingFees:Number.isFinite(gross)&&Number.isFinite(net)?gross-net:null,
     profit:Number.isFinite(net)&&Number.isFinite(cost)?net-cost:null};
@@ -76,14 +83,14 @@ function jitaField(key,value,charge=false,tone=''){
 }
 function paintJitaReceipt(P){
   const m=currentJitaPurchase,cap=$('vCap');if(!m)return;
-  $('vTitle').textContent=tx('jita.title');$('vSubtitle').hidden=true;$('vMetric').hidden=true;$('vEstimate').hidden=true;$('vEstimateHelp').hidden=true;$('vRouteW').hidden=true;
-  const amount=$('vIsk');amount.className='v-isk num jita-neutral';amount.replaceChildren(document.createTextNode(Number.isFinite(m.cost)?NF0.format(Math.round(m.cost)):'—'),el('span',null,'ISK'));
-  amount.title=tx('jita.totalHelp');amount.setAttribute('aria-label',amount.title+' '+jitaMoney(m.cost));
+  $('vTitle').textContent=tx(m.partial?'jita.partialTitle':'jita.title');$('vSubtitle').hidden=true;$('vMetric').hidden=true;$('vEstimate').hidden=true;$('vEstimateHelp').hidden=true;$('vRouteW').hidden=true;
+  const shownCost=m.cost??m.partialCost,amount=$('vIsk');amount.className='v-isk num jita-neutral';amount.replaceChildren(document.createTextNode(Number.isFinite(shownCost)?NF0.format(Math.round(shownCost)):'—'),el('span',null,'ISK'));
+  amount.title=tx(m.partial?'jita.partialTotalHelp':'jita.totalHelp');amount.setAttribute('aria-label',amount.title+' '+jitaMoney(shownCost));
   const line=el('div','v-finance jita-receipt-lines'),shipping=jitaField('jita.shipping',m.ship,true);
   appendFreightFormula(shipping,m.shipRaw,m.ship);
-  line.append(jitaField('jita.purchase',m.raw,true),jitaField('jita.fee',m.fee,true),shipping);cap.replaceChildren(line);
+  line.append(jitaField(m.partial?'jita.partialPurchase':'jita.purchase',m.raw??m.partialRaw,true),jitaField('jita.fee',m.fee??m.partialFee,true),shipping);cap.replaceChildren(line);
   cap.append(el('p','jita-fee-note',tx(C.buyMode==='buy'?'jita.buyFee':'jita.sellFee')+(JitaContext.personal?' '+tx('jita.personalTax'):'')));
-  if(!Number.isFinite(m.cost)){const warning=el('p','jita-warning',tx(!m.projection.completeFreight?'ledger.referenceMissingFreight':'jita.missingPurchase'));warning.setAttribute('role','status');cap.append(warning);
+  if(!Number.isFinite(m.cost)){const warning=el('p','jita-warning',tx(!m.projection.completeFreight?'ledger.referenceMissingFreight':m.partial?'jita.partialPurchaseNote':'jita.missingPurchase',{priced:m.priced,total:m.rows.length}));warning.setAttribute('role','status');cap.append(warning);
     if(m.rows.some(r=>r.purchaseIssue)){const list=el('ul','jita-quote-issues');
       m.rows.filter(r=>r.purchaseIssue).forEach(r=>list.append(el('li',null,r.o.name+': '+tx(r.purchaseIssue))));cap.append(list);}}
   if(!JitaContext.personal){
@@ -99,11 +106,11 @@ function paintJitaReceipt(P){
 function paintJitaLedgerReference(){
   const m=currentJitaPurchase,active=JitaContext.active;
   const label=$('freightLotBefore').parentElement.firstElementChild;
-  label.dataset.i18n=active?'jita.purchaseWithFee':'freight.lotBefore';label.textContent=tx(label.dataset.i18n);
+  label.dataset.i18n=active&&m?.partial?'jita.partialPurchaseWithFee':active?'jita.purchaseWithFee':'freight.lotBefore';label.textContent=tx(label.dataset.i18n);
   $('ledgerPriceHelpContent').dataset.i18n=active?'jita.ledgerHelp':'ledger.referenceHelp';$('ledgerPriceHelpContent').textContent=tx($('ledgerPriceHelpContent').dataset.i18n);
   if(!active||!m)return;
-  setJitaAmount($('freightLotBefore'),m.purchase);setJitaAmount($('unitCourierTotal'),m.ship,true);setJitaAmount($('freightLotFinal'),m.cost);
-  $('ledgerLotFinalLabel').textContent=tx('jita.finalBatch');$('ledgerResultColumn').textContent=tx('jita.final')+' / '+tx(ledgerValueMode==='unit'?'ledger.referenceUnit':'ledger.referenceBatch');
+  setJitaAmount($('freightLotBefore'),m.purchase??m.partialPurchase);setJitaAmount($('unitCourierTotal'),m.ship,true);setJitaAmount($('freightLotFinal'),m.cost??m.partialCost);
+  $('ledgerLotFinalLabel').textContent=tx(m.partial?'jita.partialFinalBatch':'jita.finalBatch');$('ledgerResultColumn').textContent=tx('jita.final')+' / '+tx(ledgerValueMode==='unit'?'ledger.referenceUnit':'ledger.referenceBatch');
   $('ledgerTradeTotals').hidden=true;$('ledgerSaleMode').hidden=true;
   if(!JitaContext.personal)$('ledgerValueScope').textContent=nullSystem();
   const warning=$('ledgerReferenceWarning');warning.hidden=Number.isFinite(m.cost);warning.textContent=tx(!m.projection.completeFreight?'ledger.referenceMissingFreight':'jita.missingPurchase');
@@ -115,6 +122,7 @@ function paintJitaLotMarket(r){
   setJitaAmount(u.market.result.button,Number.isFinite(row.cost)?row.cost/factor:null);
   setLotLeafText(u.market.result.label,tx('jita.final'));u.trade.hidden=JitaContext.personal;
   if(!JitaContext.personal){
+    setJitaAmount(u.investment.button,Number.isFinite(row.purchase)?-row.purchase/factor:null);
     const profit=Number.isFinite(row.listing?.price)&&rateNull()>0&&Number.isFinite(row.cost)?row.listing.price*r.q*rateNull()-row.cost:null;
     const value=Number.isFinite(profit)?profit/factor:null;
     setJitaAmount(u.profit.button,value);u.profit.button.className='copy cp-n '+(Number.isFinite(value)?sgn(value):'');
@@ -123,7 +131,7 @@ function paintJitaLotMarket(r){
 function paintJitaLotSummary(r){
   const u=r.o.ui,row=currentJitaPurchase?.byItem.get(r.o);if(!JitaContext.active||!u||!row)return;
   setLotLeafText(u.routeLabel,tx('jita.destination'));setLotLeafText(u.netLabel,tx('jita.finalBatch'));setJitaAmount(u.net,row.cost);
-  setLotLeafText(u.ppLabel,tx('jita.purchaseUnit'));setJitaAmount(u.ppB,tradePurchaseUnit(r));
+  setLotLeafText(u.ppLabel,tx('jita.purchaseUnit'));setJitaAmount(u.ppB,tradePurchaseUnitAt(r,C.buyMode,true));
   setLotLeafText(u.dest,!JitaContext.personal||C.shipOn?nullSystem():'Jita 4-4','lot-dest pill');
 }
 function paintJitaLotDetails(r){
@@ -144,7 +152,7 @@ function paintJitaLotDetails(r){
   if(!active||!row)return;
   u.pBody.replaceChildren();compare.replaceChildren();
   for(const basis of ['buy','sell']){
-    const unit=tradePurchaseUnitAt(r,basis),purchase=tradePurchaseCostAt(r,basis),cost=Number.isFinite(purchase)&&Number.isFinite(row.courierAllocated)?purchase+row.courierAllocated:null;
+    const unit=tradePurchaseUnitAt(r,basis,true),purchase=tradePurchaseCostAt(r,basis,true),cost=Number.isFinite(purchase)&&Number.isFinite(row.courierAllocated)?purchase+row.courierAllocated:null;
     const tr=el('tr'),price=el('td'),final=el('td');
     const unitCopy=ledgerAmountCopy(unit),finalCopy=ledgerAmountCopy(Number.isFinite(cost)?cost/r.q:null);setJitaAmount(unitCopy,unit);setJitaAmount(finalCopy,Number.isFinite(cost)?cost/r.q:null);price.append(unitCopy);final.append(finalCopy);
     price.className='r jita-neutral';final.className='r jita-neutral';tr.append(el('td',null,basis==='buy'?'Buy':'Sell'),price,el('td','muted',tx(basis==='buy'?'jita.buyFee':'jita.sellFee')),final);u.pBody.append(tr);

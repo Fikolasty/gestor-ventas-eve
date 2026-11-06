@@ -1,4 +1,28 @@
 {
+  "jita.partialTitle": {
+    "es": "Tu compra en Jita · parcial",
+    "en": "Your Jita purchase · partial"
+  },
+  "jita.partialPurchase": {
+    "es": "Compra parcial",
+    "en": "Partial purchase"
+  },
+  "jita.partialPurchaseWithFee": {
+    "es": "Compra parcial con comisión",
+    "en": "Partial purchase with fee"
+  },
+  "jita.partialFinalBatch": {
+    "es": "Coste parcial del lote",
+    "en": "Partial batch cost"
+  },
+  "jita.partialTotalHelp": {
+    "es": "Suma de compras cotizadas, su comisión y el envío del lote completo. Faltan precios de compra.",
+    "en": "Sum of quoted purchases, their fee and shipping for the entire batch. Purchase prices are missing."
+  },
+  "jita.partialPurchaseNote": {
+    "es": "Hay precio para {priced}/{total} Items. El coste completo sigue pendiente.",
+    "en": "Prices are available for {priced}/{total} Items. The complete cost is still pending."
+  },
   "appraisal.apiHttpFailure": {
     "es": "No se pudieron cargar todas las cotizaciones de Jita: ESI respondió HTTP {code}. Los precios recibidos se conservan.",
     "en": "Some Jita quotes could not be loaded: ESI returned HTTP {code}. Received prices are retained."

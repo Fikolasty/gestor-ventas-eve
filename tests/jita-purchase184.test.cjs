@@ -29,7 +29,7 @@ test('unknown purchase, collateral and volume propagate instead of producing par
  r.o.m3u=1;delete r.o.jita.topSell;m=math.jitaPurchaseModel({rows:[r]});assert.equal(m.cost,null);
 });
 test('anomalous posted Buy is never substituted with the sanitized sell-to-bids quote',()=>{
- reset();const r=row();r.o.jita={topBuy:.01,topSell:10,buy:.01};assert.equal(math.jitaPurchaseModel({rows:[r]},'buy').cost,null);
+ reset();const r=row();r.o.jita={topBuy:.01,topSell:10,buy:.001};const m=math.jitaPurchaseModel({rows:[r]},'buy');assert.equal(m.raw,3);assert.ok(Math.abs(m.cost-(1000000+3*1.015))<1e-8);
  r.o.buyMan=7;assert.equal(math.jitaPurchaseModel({rows:[r]},'buy').raw,2100);
 });
 test('zero quantity is excluded and an empty inventory has no invented zero budget',()=>{
@@ -41,7 +41,7 @@ test('missing and atypical Buy quotes identify the Item without inventing a purc
  b.o.name='Tiny bid';b.o.jita.topBuy=1;b.o.jita.topSell=100;
  c.o.name='Valid';const m=math.jitaPurchaseModel({rows:[a,b,c]},'buy');
  assert.equal(m.cost,null);assert.equal(m.raw,null);assert.equal(m.profit,null);
- assert.equal(m.rows[0].purchaseIssue,'jita.noBuy');assert.equal(m.rows[1].purchaseIssue,'jita.reviewBuy');assert.equal(m.rows[2].purchaseIssue,null);
+ assert.equal(m.rows[0].purchaseIssue,'jita.noBuy');assert.equal(m.rows[1].purchaseIssue,null);assert.equal(m.rows[2].purchaseIssue,null);
  assert.ok(m.rows[2].purchase>0);b.o.buyMan=1;assert.equal(math.jitaPurchaseModel({rows:[b]},'buy').rows[0].purchaseIssue,null);
 });
 
@@ -49,4 +49,19 @@ test('pasted Est. Price is not an executable Sell purchase when ESI failed',()=>
  reset();const r=row();r.o.pasteRef=10;r.o.jita={};
  const m=math.jitaPurchaseModel({rows:[r]},'sell');assert.equal(m.raw,null);assert.equal(m.cost,null);assert.equal(m.rows[0].purchaseIssue,'jita.noSell');
  r.o.refMan=10;assert.equal(math.jitaPurchaseModel({rows:[r]},'sell').raw,3000,'explicit manual price remains usable');
+});
+
+test('partial Jita Buy matches the available raw Appraisal sum and keeps full profit unknown',()=>{
+ reset();const a=row(),b=row(),c=row();a.o.jita.topBuy=null;b.o.jita.topBuy=1;b.o.jita.buy=.01;
+ const m=math.jitaPurchaseModel({rows:[a,b,c]},'buy');
+ assert.equal(m.partialRaw,2700);assert.equal(m.partial,true);assert.equal(m.priced,2);
+ assert.equal(m.partialPurchase,2700*1.015);assert.ok(Math.abs(m.partialFee-40.5)<1e-8);
+ assert.equal(m.partialCost,2700*1.015+1000000,'include the whole batch courier once, even for unquoted Items');
+ assert.equal(m.raw,null);assert.equal(m.purchase,null);assert.equal(m.cost,null);assert.equal(m.profit,null);
+ c.o.jita.topBuy=null;b.o.jita.topBuy=null;const empty=math.jitaPurchaseModel({rows:[a,b,c]},'buy');
+ assert.equal(empty.partialRaw,null);assert.equal(empty.partialFee,null);assert.equal(empty.partialCost,null);
+});
+test('unknown freight is never free in a partial purchase estimate',()=>{
+ reset();const a=row(),b=row();a.o.jita.topBuy=null;b.o.m3u=null;
+ const m=math.jitaPurchaseModel({rows:[a,b]},'buy');assert.equal(m.partialRaw,2400);assert.equal(m.ship,null);assert.equal(m.partialCost,null);
 });

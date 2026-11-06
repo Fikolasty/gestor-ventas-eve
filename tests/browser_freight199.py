@@ -31,10 +31,12 @@ class Freight199Tests(unittest.TestCase):
   p=self.page
   m=p.evaluate('({raw:currentJitaPurchase.shipRaw,ship:currentJitaPurchase.ship,cost:currentJitaPurchase.cost,issues:currentJitaPurchase.rows.map(r=>r.purchaseIssue),contracts:packCouriers(jitaTransportPlan(lastP))})')
   self.assertEqual(m['raw'],15730553);self.assertEqual(m['ship'],16000000);self.assertIsNone(m['cost'])
-  self.assertEqual(m['issues'].count('jita.noBuy'),3);self.assertEqual(m['issues'].count('jita.reviewBuy'),1)
+  self.assertEqual(m['issues'].count('jita.noBuy'),3);self.assertEqual(m['issues'].count('jita.reviewBuy'),0)
   self.assertEqual(m['contracts'][0]['reward'],16000000);self.assertEqual(m['contracts'][0]['raw'],15730553)
-  self.assertEqual(p.locator('.jita-quote-issues li').count(),4)
-  self.assertIn('Sylramic Fibers Reaction Formula',p.locator('.jita-quote-issues').inner_text())
+  self.assertEqual(p.locator('.jita-quote-issues li').count(),3)
+  self.assertIn('Hexite Reaction Formula',p.locator('.jita-quote-issues').inner_text())
+  self.assertIn('114,920,001.00',p.locator('#vCap .jita-receipt-lines').first.locator('.v-finance-item').first.inner_text())
+  self.assertIn('PARCIAL',p.locator('#vTitle').inner_text().upper())
   self.assertIn('15,730,553.00',p.locator('#vCap .freight-formula').inner_text())
   self.assertIn('16,000,000.00',p.locator('#vCap .jita-receipt-lines').first.locator('.v-finance-item').last.locator('strong').inner_text())
   p.locator('#unitCourierTotal').click();self.assertEqual(p.evaluate('window.copied'),'-16000000')
@@ -56,7 +58,23 @@ class Freight199Tests(unittest.TestCase):
     self.assertLessEqual(p.evaluate('document.documentElement.scrollWidth-innerWidth'),1,(lang,width,state,drawers,light))
     sizes.append(p.locator('#verdict').evaluate('e=>[e.getBoundingClientRect().width,e.getBoundingClientRect().height]'))
     if lang=='es' and width==1440 and drawers=='all':
-     p.screenshot(path=str(out/f'freight199-r3-{state}-es-{"light" if light else "dark"}.png'),full_page=True,animations='disabled')
+     p.screenshot(path=str(out/f'purchase202-r1-{state}-es-{"light" if light else "dark"}.png'),full_page=True,animations='disabled')
    for a,b in zip(*sizes):self.assertAlmostEqual(a,b,delta=1,msg=str((lang,width,state,drawers)))
+
+ def test_partial_personal_buy_matches_appraisal_and_copy(self):
+  p=self.page;p.evaluate('JitaContext.personal=true;refreshNow()')
+  self.assertEqual(p.evaluate('currentJitaPurchase.partialRaw'),114920001)
+  self.assertEqual(p.locator('#appr .t-buy button').get_attribute('data-v'),'114920001')
+  self.assertIn('114,920,001.00',p.locator('#vCap .jita-receipt-lines').first.locator('.v-finance-item').first.inner_text())
+  self.assertIsNone(p.evaluate('currentJitaPurchase.cost'))
+  expected=p.evaluate('114920001*(1+C.broker)+16000000')
+  final=p.locator('#freightLotFinal');self.assertAlmostEqual(float(final.get_attribute('data-v')),expected,places=2)
+  final.click();self.assertEqual(p.evaluate('window.copied'),final.get_attribute('data-v'))
+  for lang,width in product(['es','en'],[1440,980,630,390]):
+   p.set_viewport_size({'width':width,'height':1100});p.evaluate('setLang',lang)
+   for light in [False,True]:
+    p.evaluate('v=>document.documentElement.classList.toggle("light",v)',light)
+    self.assertLessEqual(p.evaluate('document.documentElement.scrollWidth-innerWidth'),1)
+    if width==1440 and lang=='es':p.locator('#verdict').screenshot(path=str(ROOT/'tests/artifacts/theme'/f'purchase202-r1-personal-{light}.png'),animations='disabled')
 
 if __name__=='__main__':unittest.main()

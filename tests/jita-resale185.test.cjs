@@ -36,3 +36,10 @@ test('revenue estimates never change acquisition budget and missing inputs never
  const {C,row,math}=setup();const personal=math.jitaPurchaseModel({rows:[row]},'sell',true);C.nullNonMod=1.1;row.o.jitaMarkup=.2;let resale=math.jitaPurchaseModel({rows:[row]},'sell',false);assert.equal(resale.cost,personal.cost);
  row.o.ref=null;C.nullNonMod=1;resale=math.jitaPurchaseModel({rows:[row]},'buy',false);assert.equal(resale.gross,null);assert.equal(resale.profit,null);assert.ok(resale.cost>0);
 });
+
+test('partial acquisition display never becomes a complete resale profit',()=>{
+ const {C,row,math}=setup();const missing={...row,o:{...row.o,name:'Missing Buy',jita:{...row.o.jita,topBuy:null}}};
+ const m=math.jitaPurchaseModel({rows:[row,missing]},'buy',false);
+ assert.equal(m.partialRaw,240);assert.equal(m.priced,1);assert.equal(m.partial,true);
+ assert.equal(m.raw,null);assert.equal(m.cost,null);assert.equal(m.profit,null);
+});

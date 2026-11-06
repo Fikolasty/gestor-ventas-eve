@@ -412,7 +412,7 @@ $('pkOpportunity').addEventListener('click',e=>{
 // Paladin buy order. NEVER reuse it as the acquisition price (2026-10-25 P0).
 // Neither quote guarantees depth/fill or a sale at the target Null price.
 function tradePurchaseUnit(r){return tradePurchaseUnitAt(r,C.buyMode);}
-function tradePurchaseUnitAt(r,basis){
+function tradePurchaseUnitAt(r,basis,rawBuy=false){
   const o=r.o;
   const manual=o.buyMan;
   const isManual=Number.isFinite(manual)&&manual>0;
@@ -420,7 +420,7 @@ function tradePurchaseUnitAt(r,basis){
   if(basis==='sell'&&o.pasteRef!=null&&o.refMan==null&&
      !Number.isFinite(o.jita?.sell)&&!Number.isFinite(o.jita?.topSell))return null;
   const u=basis==='buy'?(isManual?manual:o.jita?.topBuy):o.ref;
-  if(basis==='buy'&&!isManual&&Number.isFinite(u)&&u>0){
+  if(basis==='buy'&&!rawBuy&&!isManual&&Number.isFinite(u)&&u>0){
     const ask=o.jita?.topSell;
     // Conservative PRODUCT policy, not an EVE rule: a 4x+ gap to best ask
     // or crossed buy/ask book should not silently create a giant ROI. Let
@@ -430,14 +430,14 @@ function tradePurchaseUnitAt(r,basis){
   return Number.isFinite(u)&&u>0?u:null;
 }
 // Report why the existing budget guard rejects a quote; no fallback price.
-function tradePurchaseIssueAt(r,basis){
-  if(tradePurchaseUnitAt(r,basis)!=null)return null;
+function tradePurchaseIssueAt(r,basis,rawBuy=false){
+  if(tradePurchaseUnitAt(r,basis,rawBuy)!=null)return null;
   const quote=basis==='buy'?r.o.jita?.topBuy:r.o.ref;
   return basis==='buy'&&Number.isFinite(quote)&&quote>0?'jita.reviewBuy':basis==='buy'?'jita.noBuy':'jita.noSell';
 }
 function tradePurchaseCost(r){return tradePurchaseCostAt(r,C.buyMode);}
-function tradePurchaseCostAt(r,basis){
-  const unit=tradePurchaseUnitAt(r,basis);
+function tradePurchaseCostAt(r,basis,rawBuy=false){
+  const unit=tradePurchaseUnitAt(r,basis,rawBuy);
   return unit==null?null:unit*r.q*(basis==='buy'?1+C.broker:1);
 }
 function flipPlanAccounting(P){

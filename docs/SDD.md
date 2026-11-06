@@ -1180,3 +1180,6 @@ Gate local199 cerrado:148Chromium (471,169s),178Node/16Python/8legacy PASS; guar
 
 
 **v1.0.200 LIVE certificada:** fuenteebfc728b,build459b9dd1;181Node/16Python/8legacy/149Chromium y4Actions PASS;HTMLHTTPS/local/GitHub idénticoee0019e1 (2613089bytesLF). Manejo de fallos ESI y origen de precios corregidos; proveedor ESI aún intermitente, no se certifica su recuperación. Ver cierre final de DSS y continuidad docs/HANDOFF_APPRAISAL_200.md.
+
+
+**202 candidata:** Compra Jita usa topBuy crudo como Tasación y muestra subtotal parcial identificado, con su comisión y el envío conocido del lote una vez. Total completo/beneficio siguen desconocidos si faltan precios. Otros contratos conservan su guarda por defecto.184Node y3Chromium focales PASS; publicación pendiente, LIVE201. Decisión y evidencia canónicas al final de DSS; continuidad HANDOFF_APPRAISAL_200.md reutilizada.

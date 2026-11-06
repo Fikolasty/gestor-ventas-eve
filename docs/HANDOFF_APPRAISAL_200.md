@@ -5,3 +5,6 @@ Retirada la frase de total parcial solicitada; título parcial, importes y cober
 Lógica200 de errores ESI y envío199 intactos. Error HTTP/reintento sigue visible cuando corresponde; proveedor ESI no se recertifica por retirar este texto. Evidencia y decisiones canónicas al final de DSS. Se reutiliza este kit, sin crear otro por versión.
 
 Seguir en este chat. CSS textarea/paste-foot pendiente, sin iniciar automáticamente. Aplicar productividad: focales durante edición, una pasada completa en CI y documentación breve. Preservar checkout antiguo61ced55 y cambios previos; Fiko exclusivo, manifiesto explícito, expected_sha/force:false; index generado por CI. Un cierre documental puede avanzar main sin cambiar el HTML certificado.
+
+
+**202 candidata:** Compra Jita usa topBuy crudo como Tasación y muestra subtotal parcial identificado, con su comisión y el envío conocido del lote una vez. Total completo/beneficio siguen desconocidos si faltan precios. Otros contratos conservan su guarda por defecto.184Node y3Chromium focales PASS; publicación pendiente, LIVE201. Decisión y evidencia canónicas al final de DSS; continuidad HANDOFF_APPRAISAL_200.md reutilizada.
