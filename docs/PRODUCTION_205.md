@@ -37,3 +37,8 @@ El primer CI42270299437 bloqueó correctamente Pages:102/154Chromium PASS y52fal
 ### Recuperación tipográfica205 — nombres completos
 
 El segundo CI42271943431 pasó154/155Chromium (464,787s): el desborde global quedó resuelto; solo falló la nueva prueba de límites de texto con Arial/Linux, porque las columnas iguales no daban suficiente ancho al nombre largo. Se cambia el menú móvil a columnas de ancho natural, distribuidas dentro del ancho disponible, sin cortar nombres ni reducir fuente. Test ampliado a monospace y diagnóstico de cada celda. Cinco focales locales PASS. CI ejecutará primero esta prueba específica antes de la suite completa, para fallar pronto sin relajar ningún gate. Sigue LIVE204; nueva publicación205 pendiente.
+
+
+### Precisión de copia de duración205
+
+Se protege explícitamente que Duración por trabajo, presentada en horas, copie el mismo valor en horas con precisión completa (38.40h →38.4), sin convertirlo implícitamente a minutos. Corrección exclusivamente de presentación/copia, sin cambio en tiempos o costes. Cinco focales finales PASS, incluido portapapeles y fuentes. Nueva corrida integral todavía pendiente; LIVE204 intacto.
