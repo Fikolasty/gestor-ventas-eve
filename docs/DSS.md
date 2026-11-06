@@ -2291,3 +2291,12 @@ Se separan importes parciales de los totales completos del modelo. Compra parcia
 Regresiones locales184Node PASS, incluidos presupuesto parcial con flete completo una vez, ausencia total, flete desconocido, bid atípica y beneficio completo nulo.3Chromium focales PASS: matriz192renders de composición y16renders del estado personal de la captura; Buy114920001 idéntico a Tasación, copia parcial y comisión verificados. Capturas purchase202-r1 personales/resale1440ES Dark/Light inspeccionadas. Datos sintéticos; no cotizaciones ESI reales ni SSO. Una sola corrida integral150Chromium y suites restantes queda para CI.
 
 Build local202:2614969bytesLF,blob28fbabc609c2fc8aa891399857dc9921b1c735c5. Sin aprobación visual pendiente para esta corrección solicitada; última LIVE201, Fiko/Actions/Pages/HTTPS pendientes. Continuidad en HANDOFF_APPRAISAL_200.md reutilizada; aplicar productividad y no iniciar la auditoría CSS pendiente durante este cierre.
+
+
+## Cierre LIVE v1.0.202 — 2026-11-05
+
+Compra Jita usa topBuy crudo como Tasación, incluidos Buy atípicos, y muestra su estimación parcial identificada; las guardas conservadoras permanecen por defecto en los demás contratos. Comisión de los Items cotizados y envío conocido del lote completo se suman una vez. No se presenta subtotal como presupuesto/beneficio completo ni se inventan precios para los pendientes. Override manual y validación Sell200 conservados. La nota retirada de Tasación201 no vuelve.
+
+Fuente Fiko7c3fe4b0e08b43ea8bd500128591978b5277bf8f;buildfbeffd94d9698efda32c7c598e59bebe16fd786e.16archivos verificados en el build final. Cuatro Actions SUCCESS: Versiones42152511123, Minería42152511134, Build42152511141 y Rebuild/Pages42152511315. Compile127678840621 y deploy127681347723success. CI184Node/16Python/8legacy/150Chromium413,327s PASS. Local184Node y3focales Chromium (65,995s matriz192renders +2,368s personal16renders), capturas purchase202-r1 en1440ES Dark/Light revisadas. Sin duplicación de la corrida integral local.
+
+HTTPS200 independiente sin query/no-cache2026-11-06T02:57:10.939331Z (día5 en America/La_Paz): público/local canónicoLF/GitHub idénticos,2614969bytes,blob28fbabc609c2fc8aa891399857dc9921b1c735c5. Sin aprobación ni publicación pendiente. Sustituye candidata202. Datos de los tests/capturas sintéticos, no se recertifica ESI/SSO real. Continuidad HANDOFF_APPRAISAL_200.md reutilizada. CSS pendiente sin iniciar. Un cierre documental puede avanzar main sin modificar el HTML certificado.
