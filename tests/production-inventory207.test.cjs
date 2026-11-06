@@ -25,3 +25,10 @@ test('Missing permission, changed pilot and changed page count reject the snapsh
  const a=auth([[asset(1,44,20)],[asset(2,44,30)]]),original=a.assets;a.assets=async page=>{const r=await original(page);if(page===2)r.headers.set('X-Pages','3');return r;};await assert.rejects(load(a,[44]),/pagination/);
  const b=auth([[asset(1,44,20)]]);b.assets=async()=>{b.identity=()=>({id:90000002,assets:true});return {headers:new Map(),json:async()=>[asset(1,44,20)]};};await assert.rejects(load(b,[44]),/Character changed/);
 });
+test('Page-specific modification dates are valid; page-one cache rollover is rejected',async()=>{
+ const {productionInventory:load}=api(),a=auth([[asset(1,44,20)],[asset(2,44,30)]]),read=a.assets;
+ let firstReads=0;a.assets=async page=>{const r=await read(page);r.headers.set('Last-Modified',page===1?'Fri, 06 Nov 2026 10:00:00 GMT':'Fri, 06 Nov 2026 10:00:02 GMT');if(page===1)firstReads++;return r;};
+ assert.equal((await load(a,[44])).locations[0].stock[44],50);assert.equal(firstReads,2);
+ firstReads=0;a.assets=async page=>{const r=await read(page);if(page===1&&++firstReads>1)r.headers.set('Last-Modified','Fri, 06 Nov 2026 11:00:00 GMT');return r;};
+ await assert.rejects(load(a,[44]),/cache changed/);
+});

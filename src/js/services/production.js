@@ -48,10 +48,16 @@ async function productionInventory(auth,materialIds){
  if(pages>1&&Number.isFinite(expiry)&&expiry<=Date.now()+10000)throw Error('Inventory cache refreshing; retry shortly');
  for(let page=2;page<=pages;page++){
   const r=await auth.assets(page);
-  if(Number(r.headers.get('X-Pages')||1)!==pages||(stamp&&r.headers.get('Last-Modified')!==stamp))throw Error('Inventory changed during pagination');
+  // Last-Modified is page-specific; ESI does not guarantee identical dates
+  // across pages. Detect cache rollover via page 1, not unrelated timestamps.
+  if(Number(r.headers.get('X-Pages')||1)!==pages)throw Error('Inventory changed during pagination');
   const data=await r.json();if(!Array.isArray(data))throw Error('Invalid assets page');rows.push(...data);
  }
  if(Number.isFinite(expiry)&&pages>1&&expiry<=Date.now())throw Error('Inventory expired during pagination');
+ if(pages>1){
+  const check=await auth.assets(1),etag=first.headers.get('ETag');
+  if(Number(check.headers.get('X-Pages')||1)!==pages||(etag?check.headers.get('ETag')!==etag:stamp?check.headers.get('Last-Modified')!==stamp:false))throw Error('Inventory cache changed during pagination');
+ }
  if(auth.identity()?.id!==pilot.id)throw Error('Character changed');
  const locations=productionAssetLocations(rows,materialIds),names={};
  await pool([...new Set(locations.map(g=>g.root))].filter(id=>id>=60000000&&id<64000000),ESI_POOL,async id=>{
