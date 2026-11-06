@@ -1,3 +1,7 @@
+# v1.0.208 — candidata
+
+Menú del personaje simplificado; permisos y sincronización en Perfil de Ajustes. Callback SSO raíz unificado para los dos alias de Pages. CI/Pages pendientes. Ver docs/PROFILE_208.md.
+
 # v1.0.207 LIVE — inventario personal ESI y stock
 
 Importación opcional por ubicación, revisión y aplicación selectiva a Disponible. Entrada estable sin spinner y acción junto a Requerido. CI210Node/16Python/8legacy/160Chromium; cuatro Actions/Pages/HTTPS PASS. Sin cambios económicos. ESI/SSO real no verificado. Ver docs/INVENTORY_207.md.

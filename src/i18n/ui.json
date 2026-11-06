@@ -2364,12 +2364,12 @@
     "en": "Copy amount: {amount}"
   },
   "sso.syncSettings": {
-    "es": "Actualizar datos ESI",
-    "en": "Refresh ESI data"
+    "es": "Actualizar perfil",
+    "en": "Refresh profile"
   },
   "sso.authorizeSettings": {
-    "es": "Autorizar standings e implantes",
-    "en": "Authorize standings and implants"
+    "es": "Autorizar datos del perfil",
+    "en": "Authorize profile data"
   },
   "sso.syncingSettings": {
     "es": "Consultando habilidades, standings e implantes autorizados…",
@@ -2380,8 +2380,8 @@
     "en": "Character data synced. Other settings remain manual."
   },
   "sso.settingsPermissionsNeeded": {
-    "es": "Habilidades sincronizadas. Autoriza standings e implantes desde el menú del personaje para rellenar esos ajustes; entretanto siguen siendo manuales.",
-    "en": "Skills synced. Authorize standings and implants from the character menu to populate those settings; they remain manual in the meantime."
+    "es": "Habilidades sincronizadas. Puedes autorizar relaciones e implante desde este perfil; mientras tanto, esos ajustes siguen siendo manuales.",
+    "en": "Skills synced. You can authorize standings and implants from this profile; those settings remain manual until then."
   },
   "sso.syncPartial": {
     "es": "Sincronización incompleta. Conservamos los ajustes de las consultas fallidas; revísalos o vuelve a actualizar los datos ESI.",
@@ -3718,5 +3718,97 @@
   "production.stockModified": {
     "es": "Datos de ESI",
     "en": "ESI data"
+  },
+  "sso.connect": {
+    "es": "Conectar",
+    "en": "Connect"
+  },
+  "sso.disconnect": {
+    "es": "Desconectar",
+    "en": "Disconnect"
+  },
+  "sso.profile": {
+    "es": "Perfil",
+    "en": "Profile"
+  },
+  "sso.characterOptions": {
+    "es": "Opciones del personaje",
+    "en": "Character options"
+  },
+  "sso.authorizeInventory": {
+    "es": "Autorizar inventario",
+    "en": "Authorize inventory"
+  },
+  "sso.openInventory": {
+    "es": "Abrir inventario en Producción",
+    "en": "Open inventory in Production"
+  },
+  "sso.access.title": {
+    "es": "Conexión con EVE",
+    "en": "EVE connection"
+  },
+  "sso.access.intro": {
+    "es": "Elige qué datos de tu personaje compartes y para qué se usan.",
+    "en": "Choose which character data you share and how it is used."
+  },
+  "sso.access.skills": {
+    "es": "Habilidades",
+    "en": "Skills"
+  },
+  "sso.access.skillsHelp": {
+    "es": "Niveles activos para calcular impuestos, comisiones y reproceso. Producción permite aplicar tus habilidades industriales.",
+    "en": "Active levels for taxes, fees and reprocessing. Production lets you apply your industry skills."
+  },
+  "sso.access.standings": {
+    "es": "Relaciones del personaje",
+    "en": "Character standings"
+  },
+  "sso.access.standingsHelp": {
+    "es": "Tu relación con Caldari State y Caldari Navy ajusta la comisión de órdenes en Jita.",
+    "en": "Your standings with Caldari State and Caldari Navy adjust Jita order fees."
+  },
+  "sso.access.implants": {
+    "es": "Implante activo",
+    "en": "Active implant"
+  },
+  "sso.access.implantsHelp": {
+    "es": "El implante de reproceso de tu clon activo ajusta el rendimiento estimado.",
+    "en": "The reprocessing implant in your active clone adjusts the estimated yield."
+  },
+  "sso.access.assets": {
+    "es": "Inventario personal",
+    "en": "Personal inventory"
+  },
+  "sso.access.assetsHelp": {
+    "es": "Materiales por ubicación para revisar e importar Disponible en Producción. Solo se consultan cuando lo pides.",
+    "en": "Materials by location to review and import Available stock in Production. Fetched only when you request them."
+  },
+  "sso.access.authorized": {
+    "es": "Acceso autorizado",
+    "en": "Access authorized"
+  },
+  "sso.access.optional": {
+    "es": "Sin autorizar",
+    "en": "Not authorized"
+  },
+  "sso.access.offline": {
+    "es": "Sin conexión",
+    "en": "Not connected"
+  },
+  "sso.access.note": {
+    "es": "El acceso es de solo lectura. Los ajustes manuales se conservan si una consulta falla.",
+    "en": "Access is read-only. Manual settings are preserved if a request fails."
+  },
+  "sso.disconnected": {
+    "es": "Desconectado. Se conservan tus ajustes manuales.",
+    "en": "Disconnected. Your manual settings are preserved."
+  },
+  "sso.callbackFailed": {
+    "es": "No se pudo conectar con EVE. Vuelve a intentarlo desde Conectar. Detalle: {error}",
+    "en": "Could not connect to EVE. Try Connect again. Details: {error}"
+  },
+  "sso.requestMissing": {
+    "es": "La solicitud de acceso ha caducado. Inicia de nuevo desde Conectar.",
+    "en": "The login request expired. Start again with Connect."
   }
 }

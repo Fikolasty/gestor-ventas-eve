@@ -1,7 +1,10 @@
 /* EVE SSO v1: PKCE public client; no client secret or persistent access tokens. */
 (function eveLogin(){
   const $e=id=>document.getElementById(id), button=$e('eveIdentityButton'), menu=$e('eveIdentityMenu');
-  const base=location.origin+location.pathname, key='mm.eve.pkce', persistentKey='mm.eve.session.v1';
+  // Pages serves both / and /index.html. CCP requires an exact registered
+  // callback: never derive two production redirect URIs from those aliases.
+  const pagesHost=location.hostname==='fikolasty.github.io'&&/^\/gestor-ventas-eve\/(?:index\.html)?$/.test(location.pathname);
+  const base=location.origin+(pagesHost?'/gestor-ventas-eve/':location.pathname), key='mm.eve.pkce', persistentKey='mm.eve.session.v1';
   // Configurar una sola vez tras registrar Market Moves+ en EVE Developers. Es público, nunca un Client Secret.
   const EVE_CLIENT_ID='114bbd2659384151ac3b0096f183dd3b';
   const skillScope='esi-skills.read_skills.v1',standingsScope='esi-characters.read_standings.v1',implantsScope='esi-clones.read_implants.v1';
@@ -33,14 +36,38 @@
     })().finally(()=>{refreshPending=null;});
     return refreshPending;
   }
-  const status=msg=>{const e=$e('eveLoginStatus');e.textContent=msg;if(/^Error|^No se pudo|^No se pudieron|^Unable|^Could not/i.test(msg)){console.warn('EVE SSO:',msg);alert(msg);}};
+  const status=msg=>{const e=$e('eveLoginStatus'),key=Object.keys(UI_TEXT).find(k=>k.startsWith('sso.')&&(UI_TEXT[k].es===msg||UI_TEXT[k].en===msg));if(key)e.dataset.i18n=key;else e.removeAttribute('data-i18n');e.textContent=msg;e.hidden=!msg;};
   const b64=a=>btoa(String.fromCharCode(...new Uint8Array(a))).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');
   const rand=n=>b64(crypto.getRandomValues(new Uint8Array(n)));
   async function challenge(v){return b64(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(v)));}
-  const refreshUI=()=>{const on=!!session;$e('evePilotName').textContent=on?session.name:'Iniciar sesión';$e('eveLogout').hidden=!on;$e('eveSync').hidden=!on;$e('eveSync').dataset.i18n=session&&(!session.scopes.includes(standingsScope)||!session.scopes.includes(implantsScope))?'sso.authorizeSettings':'sso.syncSettings';$e('eveSync').textContent=tx($e('eveSync').dataset.i18n);$e('eveIdentityButton').setAttribute('aria-label',on?'Opciones del personaje':'Iniciar sesión con EVE Online');
+  function closeMenu(focus=false){if(menu.hidePopover&&menu.matches(':popover-open'))menu.hidePopover();menu.hidden=true;button.setAttribute('aria-expanded','false');if(focus)button.focus();}
+  function openProfile(){closeMenu();togglePanel('settings',true);$e('mm-settings-tab-1').click();$e('eveAccessTitle').focus({preventScroll:true});$e('eveAccessPanel').scrollIntoView({block:'start',behavior:'auto'});}
+  const refreshUI=()=>{const on=!!session;
+    if(on){$e('evePilotName').removeAttribute('data-i18n');$e('evePilotName').classList.add('no-tr');$e('evePilotName').textContent=session.name;}
+    else{$e('evePilotName').classList.remove('no-tr');$e('evePilotName').dataset.i18n='sso.connect';$e('evePilotName').textContent=tx('sso.connect');}
+    $e('eveProfile').hidden=$e('eveLogout').hidden=$e('eveSync').hidden=!on;
+    $e('eveConnect').hidden=$e('eveProfileConnect').hidden=on;
+    $e('eveAuthorizeSettings').hidden=!on||session.scopes.includes(standingsScope)&&session.scopes.includes(implantsScope);
+    $e('eveInventoryAccess').hidden=!on;$e('eveInventoryAccess').dataset.i18n=on&&session.scopes.includes(assetsScope)?'sso.openInventory':'sso.authorizeInventory';
+    $e('eveInventoryAccess').textContent=tx($e('eveInventoryAccess').dataset.i18n);
+    $e('eveAccessPilot').textContent=on?session.name:tx('sso.access.offline');
+    const scopes={skills:skillScope,standings:standingsScope,implants:implantsScope,assets:assetsScope};
+    for(const [key,scope] of Object.entries(scopes)){const e=document.querySelector('[data-access-state="'+key+'"]'),allowed=on&&session.scopes.includes(scope);e.dataset.i18n=!on?'sso.access.offline':allowed?'sso.access.authorized':'sso.access.optional';e.textContent=tx(e.dataset.i18n);e.dataset.allowed=String(!!allowed);}
+    button.setAttribute('aria-label',tx(on?'sso.characterOptions':'sso.connect'));
     $e('evePortrait').hidden=!on;if(on)$e('evePortrait').src='https://images.evetech.net/characters/'+session.id+'/portrait?size=64';else $e('evePortrait').removeAttribute('src');window.dispatchEvent(new Event('mm-eve-identity'));};
-  button.addEventListener('click',()=>{if(!session){startLogin();return;}menu.hidden=!menu.hidden;button.setAttribute('aria-expanded',String(!menu.hidden));});
-  document.addEventListener('click',e=>{if(!e.target.closest('#eveIdentity')){menu.hidden=true;button.setAttribute('aria-expanded','false');}});
+  window.mmEveRefreshUI=refreshUI;
+  button.addEventListener('click',()=>{
+    if(!menu.hidden){closeMenu();return;}
+    const r=button.getBoundingClientRect(),width=Math.min(180,innerWidth-32);
+    menu.style.width=width+'px';menu.style.left=Math.max(16,Math.min(r.right-width,innerWidth-width-16))+'px';menu.style.top=(r.bottom+6)+'px';
+    menu.hidden=false;menu.showPopover?.();button.setAttribute('aria-expanded','true');menu.querySelector('button:not([hidden])')?.focus();
+  });
+  menu.addEventListener('toggle',e=>{if(e.newState==='closed'){menu.hidden=true;button.setAttribute('aria-expanded','false');}});
+  menu.addEventListener('keydown',e=>{if(e.key==='Escape'){closeMenu(true);return;}if(['ArrowDown','ArrowUp'].includes(e.key)){e.preventDefault();const buttons=[...menu.querySelectorAll('button:not([hidden])')],index=buttons.indexOf(document.activeElement);buttons[(index+(e.key==='ArrowDown'?1:-1)+buttons.length)%buttons.length]?.focus();}});
+  document.addEventListener('click',e=>{if(!e.target.closest('#eveIdentity'))closeMenu();});
+  window.addEventListener('resize',()=>closeMenu());
+  $e('eveProfile').addEventListener('click',openProfile);
+  [$e('eveConnect'),$e('eveProfileConnect')].forEach(b=>b.addEventListener('click',()=>{closeMenu();startLogin();}));
   async function startLogin(extended=false,assets=false){
     const client=EVE_CLIENT_ID;
     if(!client){alert(tx('sso.missingClient'));return;}
@@ -48,7 +75,7 @@
       const granted=(session?.scopes||[]).filter(s=>[skillScope,standingsScope,implantsScope,assetsScope].includes(s));
       const requested=[...new Set([...(extended?scope.split(' '):[skillScope]),...granted,...(assets?[assetsScope]:[])])];
       const u=new URL('https://login.eveonline.com/v2/oauth/authorize');u.searchParams.set('response_type','code');u.searchParams.set('client_id',client);u.searchParams.set('redirect_uri',base);u.searchParams.set('scope',requested.join(' '));u.searchParams.set('state',state);u.searchParams.set('code_challenge',await challenge(verifier));u.searchParams.set('code_challenge_method','S256');location.assign(u.href);
-    }catch(err){const message=tx('sso.loginOpenFailed',{error:err?.message||String(err)});status(message);alert(message);console.error('EVE SSO redirect failed',err);}
+    }catch(err){const message=tx('sso.loginOpenFailed',{error:err?.message||String(err)});openProfile();status(message);console.error('EVE SSO redirect failed',err);}
   }
   function saveSkill(id,level){const e=$e(id);if(!e)return false;const v=String(level);if(![...e.options].some(o=>o.value===v))return false;e.dataset.mmSkillSource='esi';e.value=v;e.dispatchEvent(new Event('change',{bubbles:true}));return true;}
   const processingNames=[...new Set(Object.values(ORE_SKILL))];
@@ -150,13 +177,16 @@
     status(message);$e('eveLoginStatus').hidden=!failed.length&&!missing.length;
     mmUpdateSettingsSkillNotes();stSave();refresh();
   }
-  $e('eveSync').addEventListener('click',()=>{if(!session)return;if(!session.scopes.includes(standingsScope)||!session.scopes.includes(implantsScope)){startLogin(true);return;}sync();});
-  $e('eveLogout').addEventListener('click',()=>{sessionEpoch++;esiProcessingSkills=null;clearSources();readSkills(false);SkillUI.setPilot(null);window.mmProductionSkills?.(null);clearSaved();session=null;marketAlliance='';refreshMarketControls();syncNullRouteLabels();menu.hidden=true;button.setAttribute('aria-expanded','false');refreshUI();status('Desconectado. Se conservan tus ajustes manuales.');});
+  $e('eveSync').addEventListener('click',()=>{if(session)sync();});
+  $e('eveAuthorizeSettings').addEventListener('click',()=>{if(session)startLogin(true);});
+  $e('eveInventoryAccess').addEventListener('click',()=>{selectAppModule('production');ProductionUI.setTab('materials');const trigger=document.querySelector('[data-import-open]');if(trigger?.getAttribute('aria-expanded')!=='true')trigger?.click();if(!session?.scopes.includes(assetsScope))document.querySelector('[data-import-authorize]')?.click();});
+  $e('eveLogout').addEventListener('click',()=>{sessionEpoch++;esiProcessingSkills=null;clearSources();readSkills(false);SkillUI.setPilot(null);window.mmProductionSkills?.(null);clearSaved();session=null;marketAlliance='';refreshMarketControls();syncNullRouteLabels();closeMenu();refreshUI();status(tx('sso.disconnected'));});
+  refreshUI();
   (async()=>{const u=new URL(location.href),code=u.searchParams.get('code'),state=u.searchParams.get('state');
     if(!code&&!u.searchParams.has('error')){if(stored()){try{await renew();if(session){await syncAlliance();await sync();}}catch(err){console.warn('EVE session restore failed',err);}}return;}
     u.searchParams.delete('code');u.searchParams.delete('state');u.searchParams.delete('error');u.searchParams.delete('error_description');history.replaceState(null,'',u.pathname+u.search+u.hash);
-    const saved=sessionStorage.getItem(key);sessionStorage.removeItem(key);menu.hidden=false;button.setAttribute('aria-expanded','true');
-    if(!saved){status('No se encontró una solicitud SSO válida.');return;}
+    const saved=sessionStorage.getItem(key);sessionStorage.removeItem(key);
+    if(!saved){openProfile();status(tx('sso.requestMissing'));return;}
     try{const req=JSON.parse(saved);
       if(!code||!state||req.state!==state||req.redirect!==base||Date.now()-req.at>600000)throw Error('Callback no coincide o expiró.');
       const data=new URLSearchParams({grant_type:'authorization_code',code,client_id:req.client,code_verifier:req.verifier,redirect_uri:req.redirect});
@@ -184,7 +214,7 @@
       if(!scopeOK)throw Error('EVE no concedió el permiso de lectura de skills.');
       const id=Number(String(pilot.sub||'').match(/^CHARACTER:EVE:(\d+)$/)?.[1]),name=pilot.name;
       if(!Number.isSafeInteger(id)||!name)throw Error('Identidad de personaje no verificada.');
-      session={id,name,token:tokens.access_token,scopes:scopesOf(tokens.access_token),expires:Date.now()+(tokens.expires_in||1200)*1000-30000,refresh:tokens.refresh_token||null};persist();refreshUI();menu.hidden=true;button.setAttribute('aria-expanded','false');await syncAlliance();await sync();
-    }catch(err){status('Error de SSO: '+err.message);}
+      session={id,name,token:tokens.access_token,scopes:scopesOf(tokens.access_token),expires:Date.now()+(tokens.expires_in||1200)*1000-30000,refresh:tokens.refresh_token||null};persist();refreshUI();closeMenu();await syncAlliance();await sync();
+    }catch(err){openProfile();status(tx('sso.callbackFailed',{error:err.message}));}
   })();
 })();

@@ -124,6 +124,7 @@ function setLang(l){
   // Do not mount or recalculate a hidden module.
   if(document.body.classList.contains('mm-mining')&&typeof MineUI!=='undefined')MineUI.shown();
   window.mmProductionRender?.();
+  window.mmEveRefreshUI?.();
   if(lastP)refreshNow();}
 $('langSel').addEventListener('change',e=>setLang(e.target.value));
 $('langButtons').addEventListener('click',event=>{

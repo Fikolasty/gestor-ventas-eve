@@ -112,7 +112,8 @@ class ESISettingsTests(unittest.TestCase):
   self.scopes=[SKILL];self.boot()
   self.assertFalse(any('/standings/' in u or '/implants/' in u for u in self.requests))
   self.assertEqual(self.state()['imp'],.04)
-  self.assertIn('Autorizar',self.page.locator('#eveSync').text_content())
+  self.assertIn('Autorizar',self.page.locator('#eveAuthorizeSettings').text_content())
+  self.assertIn('Actualizar',self.page.locator('#eveSync').text_content())
   self.assertIsNone(self.page.locator('#eveLoginStatus').get_attribute('hidden'))
  def test_endpoint_failure_preserves_its_setting_but_other_endpoints_work(self):
   self.fail={'standings','implants'};self.boot();s=self.state()

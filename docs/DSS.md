@@ -2399,3 +2399,10 @@ Fuente inicial Fiko09d347cd8ed8c325a624a7739e4088a6b749bdb1, corrección de cohe
 HTTPS independiente2026-11-06T23:11:31.389343Z confirmó v207 y coincidencia exacta público/local canónico/GitHub:2.694.913bytesLF,blob a2c68bd51a438ca625ef9dac3512738e20b2508f. https://fikolasty.github.io/gestor-ventas-eve/. Este cierre sustituye el estado candidato207. La documentación posterior puede avanzar main sin alterar el HTML certificado.
 
 Límites: no se verificó ESI/SSO con personaje real ni se modificó la aplicación privada en CCP; el scope debe estar habilitado en su registro y concedido explícitamente por el personaje. Nombres de estructuras sin permiso adicional se muestran como ID. Snapshots solo en memoria; plan temporal durante redirect expira10min; caché ESI con fecha visible. No se importan assets de corporación ni se mueven materiales. No hay aprobación de diseño pendiente para207. Cabecera de La ruta más rentable sigue pospuesta. Contrato público: docs/INVENTORY_207.md.
+
+
+## v1.0.208 — Perfil ESI y callback canónico, candidata autorizada
+
+El propietario solicita menú solo Perfil/Desconectar con sesión y Conectar sin sesión. Se trasladan #eveSync/#eveLoginStatus al Perfil de Ajustes, con cuatro grupos de datos y estado real del permiso, explicación simple ES/EN, paleta/divisores existentes y acciones de consulta/autorizar separadas. Menú top layer, límites/hit-test/foco/teclado comprobados; no párrafos en dropdown.
+
+El propietario aportó además invalid_request de CCP: callback con index.html no coincide con registro. El código fija el callback raíz de producción para ambos alias; login básico solo skills y PKCE conservados. El registro CCP debe coincidir exactamente; no se modifica desde código ni se afirma ESI/SSO real probado. Local210Node/16Python y pruebas focales Perfil, sincronización firmada e inventario PASS; capturas desktop1440 Dark/Light inspeccionadas y matriz390/630/980/1440 ES/EN. Ver docs/PROFILE_208.md. Candidata local, sin rediseño amplio ni cambios económicos; última LIVE207 hasta Actions/Pages/HTTPS.

@@ -124,9 +124,9 @@ class ThemeBrowserTests(unittest.TestCase):
 
     def test_ssologin_label_roundtrips_in_both_languages(self):
         self.page.evaluate("setLang('en')")
-        self.page.wait_for_function("document.querySelector('#evePilotName')?.textContent.trim()==='Login'")
+        self.page.wait_for_function("document.querySelector('#evePilotName')?.textContent.trim()==='Connect'")
         self.page.evaluate("setLang('es')")
-        self.page.wait_for_function("document.querySelector('#evePilotName')?.textContent.trim()==='Iniciar sesión'")
+        self.page.wait_for_function("document.querySelector('#evePilotName')?.textContent.trim()==='Conectar'")
 
     def test_b13_main_navigation_tabs_have_identical_light_dark_geometry(self):
         """C.5b: flat shared tabs and identical Light/Dark geometry."""
