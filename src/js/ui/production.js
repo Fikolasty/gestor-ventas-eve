@@ -16,6 +16,52 @@ const ProductionUI=(()=>{
   catch(e){return {valid:false,complete:false,priceComplete:false,rows:[],shipped:[],blocks:0,purchases:0,fuel:fuels.find(f=>f.id===state.fuel)};}
  }
  let expanded=new Set();
+ let importOpen=false,importBusy=false,importError=false,inventory=null,importLocation='',importSelection=new Set(),importApplied='',importSerial=0,importPilot=null;
+ const importAuth=()=>window.mmProductionInventoryAuth;
+ const locationLabel=g=>`${inventory.names[g.root]||t('locationId')+' '+g.root} · ${g.container?(inventory.names[g.container]||t('containerId')+' '+g.container):t('personalHangar')}`;
+ function inventoryImport(m){
+  const pilot=importAuth()?.identity(),source=inventory?.locations.find(g=>g.id===importLocation);
+  return `<section class="fp-stock-import-shell" aria-label="${t('importInventory')}"><div class="fp-stock-import-toolbar"><div><strong>${t('inventory')}</strong><span>${escape(importApplied||t('stockHint'))}</span></div><button type="button" class="ghost fp-stock-import-trigger" data-import-open aria-expanded="${importOpen}" aria-controls="fp-stock-import-drawer"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v11m-4-4 4 4 4-4M4 15v5h16v-5"/></svg>${t('importInventory')}</button></div>
+  ${importOpen?`<div class="fp-stock-import-drawer" id="fp-stock-import-drawer" aria-busy="${importBusy}"><header><h3>${t('reviewInventory')}</h3><span>${escape(pilot?.name||'')}</span></header>
+  ${!pilot?.assets?`<p class="fp-import-permission">${t('permissionStock')}</p><button type="button" class="btn" data-import-authorize>${t('authorizeInventory')}</button>`:`<button type="button" class="ghost" data-import-fetch ${importBusy?'disabled':''}>${t(importBusy?'loading':'queryStock')}</button>`}
+  <p class="fp-import-permission" role="status">${importError?t('inventoryFailed'):inventory&&!inventory.locations.length?t('noInventory'):''}</p>
+  ${source?`<div class="fp-import-context"><label>${t('stockLocation')}<select data-import-location>${inventory.locations.map(g=>`<option value="${g.id}" ${g.id===importLocation?'selected':''}>${escape(locationLabel(g))}</option>`).join('')}</select></label><div><span>${t('character')}</span><strong>${escape(inventory.pilot.name)}</strong></div><p>${t('locationOnly')}</p></div>
+  <table class="fp-import-review"><thead><tr>${['labelMaterial','currentStock','foundStock','apply'].map(k=>`<th scope="col">${t(k)}</th>`).join('')}</tr></thead><tbody>${m.rows.map(r=>`<tr><td>${escape(r.name)}</td><td>${quantity(r.owned)}</td><td>${quantity(source.stock[r.id]??0)}</td><td><input type="checkbox" data-import-check="${r.id}" ${importSelection.has(r.id)?'checked':''} aria-label="${t('apply')} ${escape(r.name)}"></td></tr>`).join('')}</tbody></table><p class="fp-import-permission">${t('stockCached')}: ${escape(new Date(inventory.queriedAt).toLocaleString())}${Number.isFinite(inventory.updatedAt)?' · '+t('stockModified')+': '+escape(new Date(inventory.updatedAt).toLocaleString()):''}</p>`:''}
+  <footer><p>${quantity(importSelection.size)} ${t('selectedStock')}</p><div><button type="button" class="ghost" data-import-cancel>${t('cancelImport')}</button><button type="button" class="btn" data-import-apply ${!source||!importSelection.size||importBusy?'disabled':''}>${t('applyStock')}</button></div></footer><p class="fp-import-permission">${t('readOnlyStock')}</p></div>`:''}</section>`;
+ }
+ async function fetchInventory(){
+  const serial=++importSerial,pilot=importAuth()?.identity();inventory=null;importSelection.clear();importBusy=true;importError=false;render();
+  try{const result=await productionInventory(importAuth(),[...new Set(fuels.flatMap(f=>f.materials.map(m=>m.id)))]);if(serial!==importSerial||pilot?.id!==importAuth()?.identity()?.id)return;inventory=result;importLocation=result.locations[0]?.id||'';importSelection=new Set(calculate().rows.filter(r=>result.locations[0]?.stock[r.id]>0).map(r=>r.id));}
+  catch(e){if(serial===importSerial)importError=true;}
+  finally{if(serial===importSerial){importBusy=false;render();}}
+ }
+ // Only the explicit Apply operation mutates stock. Cancel invalidates in-flight work.
+ document.getElementById('production').addEventListener('click',e=>{
+  if(e.target.closest('[data-import-open]')){importOpen=!importOpen;render();if(importOpen&&importAuth()?.identity()?.assets&&!inventory&&!importBusy)fetchInventory();}
+  if(e.target.closest('[data-import-cancel]')){importSerial++;importBusy=false;importOpen=false;inventory=null;render();root.querySelector('[data-import-open]')?.focus();}
+  if(e.target.closest('[data-import-fetch]'))fetchInventory();
+  if(e.target.closest('[data-import-authorize]')){
+   // Explicit consent redirect: short-lived tab-only draft, consumed on return.
+   try{sessionStorage.setItem('mm.production.authDraft',JSON.stringify({at:Date.now(),state}));}catch(e){}
+   importAuth()?.authorize();
+  }
+  if(e.target.closest('[data-import-apply]')){
+   const source=inventory?.locations.find(g=>g.id===importLocation);
+   if(!source||importBusy||inventory.pilot.id!==importAuth()?.identity()?.id)return;
+   const ids=new Set(calculate().rows.map(r=>r.id));for(const id of importSelection)if(ids.has(id))state.owned[id]=source.stock[id]??0;
+   importApplied=t('importedStock')+': '+locationLabel(source);importOpen=false;render();root.querySelector('[data-import-open]')?.focus();
+  }
+ });
+ document.getElementById('production').addEventListener('change',e=>{
+  if(e.target.matches('[data-import-location]')){e.stopImmediatePropagation();importLocation=e.target.value;const source=inventory?.locations.find(g=>g.id===importLocation);importSelection=new Set(calculate().rows.filter(r=>source?.stock[r.id]>0).map(r=>r.id));render();root.querySelector('[data-import-location]')?.focus();}
+  if(e.target.matches('[data-import-check]')){e.stopImmediatePropagation();const id=Number(e.target.dataset.importCheck);if(e.target.checked)importSelection.add(id);else importSelection.delete(id);render();root.querySelector(`[data-import-check="${id}"]`)?.focus();}
+ },true);
+ window.addEventListener('mm-eve-identity',()=>{
+  const id=importAuth()?.identity()?.id||null;
+  if(importPilot!==id||!importAuth()?.identity()?.assets){importSerial++;importBusy=false;inventory=null;importSelection.clear();importApplied='';importPilot=id;if(active)render();}
+ });
+ try{const raw=sessionStorage.getItem('mm.production.authDraft');sessionStorage.removeItem('mm.production.authDraft');if(raw){const draft=JSON.parse(raw);if(Date.now()-draft.at<600000&&draft.state){for(const key of Object.keys(state))if(Object.hasOwn(draft.state,key))state[key]=draft.state[key];state.tab='materials';importOpen=true;queueMicrotask(()=>{selectAppModule('production');});}}}catch(e){}
+
  function renderMaterials(m){
   const missingCount=m.rows.filter(r=>r.missing>0).length;
   const stockChars=Math.max(t('owned').length,...m.rows.map(r=>String(r.owned).length));
@@ -23,10 +69,11 @@ const ProductionUI=(()=>{
   return `<section role="tabpanel" id="fp-materials" aria-labelledby="fp-tab-materials" ${state.tab!=='materials'?'hidden':''}><section class="panel fp-material-card" style="--fp-stock-width:calc(${stockChars}ch + 36px)">
    <header class="fp-material-top"><div><h3 class="fp-panel-title">${t('ready')}</h3><p class="fp-material-meta">${quantity(m.rows.length)} ${t('labelMaterials')} · ${quantity(missingCount)} ${t('labelWithShortages')}</p></div>
    <div class="fp-material-total"><strong>${money(m.valid?-m.purchases:null)}</strong><p class="fp-material-meta">${t('labelEstimatedPurchase')}${m.priceComplete?'':` · ${t('partial')}`}</p></div></header>
+   ${inventoryImport(m)}
    <div class="fp-material-controls">${pick('acquire',t('buyMode'),[['sell',t('instant')],['buy',t('order')],['discount',t('discount')]])}<label>${t('shipping')}<span class="fp-isk-input"><input data-state="shipping" type="number" min="0" step=".01" value="${state.shipping}" aria-label="${t('shipping')}"><span aria-hidden="true">ISK</span></span></label></div>
    <table class="fp-material-table" aria-label="${t('ready')}"><thead><tr>${[t('labelMaterial'),t('required'),t('owned'),t('missing'),t('labelPriceUnit'),t('shipment'),t('purchase')].map(h=>`<th scope="col">${h}</th>`).join('')}</tr></thead>
    ${m.rows.map(r=>`<tbody class="fp-material" data-id="${r.id}" data-open="${expanded.has(String(r.id))}"><tr class="fp-material-row"><td><button type="button" class="fp-material-toggle" data-material-toggle="${r.id}" aria-expanded="${expanded.has(String(r.id))}" aria-controls="fp-detail-${r.id}" title="${t('labelPriceAndShipping')}">${escape(r.name)}</button></td>
-   <td>${quantity(r.required)}</td><td class="fp-owned-cell"><input data-material="owned" data-id="${r.id}" type="number" min="0" step="1" value="${r.owned}" aria-label="${t('stock')} · ${escape(r.name)}"></td><td>${quantity(r.missing)}</td><td>${money(r.price,false)}</td><td>${money(-r.shipping,false)}</td><td>${money(r.cost==null?null:-r.cost,false)}</td></tr>
+   <td class="fp-required-cell"><div class="fp-required-editor">${quantity(r.required)}<button type="button" class="fp-complete" data-complete="${r.id}" ${r.owned>=r.required?'disabled':''} title="${t('completeHint')}" aria-label="${t('completeStock')} · ${escape(r.name)}"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 12h12m-4-4 4 4-4 4M20 5v14"/></svg></button></div></td><td class="fp-owned-cell"><div class="fp-owned-editor"><input data-material="owned" data-id="${r.id}" type="text" inputmode="numeric" autocomplete="off" spellcheck="false" value="${num(r.owned)}" aria-label="${t('stock')} · ${escape(r.name)}"></div></td><td>${quantity(r.missing)}</td><td>${money(r.price,false)}</td><td>${money(-r.shipping,false)}</td><td>${money(r.cost==null?null:-r.cost,false)}</td></tr>
    <tr class="fp-material-extra" id="fp-detail-${r.id}" ${expanded.has(String(r.id))?'':'hidden'}><td colspan="${columns}"><div class="fp-material-detail">
    <div class="fp-detail-field"><span class="fp-detail-label">${t('labelQuantity')}:</span><div class="fp-detail-value">${quantity(r.used)}</div></div>
    <label class="fp-detail-field"><span class="fp-detail-label">${t('labelPrice')}:</span><input data-material="manual" data-id="${r.id}" aria-label="${t('manual')} · ${escape(r.name)}" type="number" min="0" step=".01" value="${state.manual[r.id]??''}" placeholder="${r.price??'—'}"></label>
@@ -46,6 +93,7 @@ const ProductionUI=(()=>{
   // Read the native disclosure before replacing its DOM; user choice wins.
   const profileOpen=!!root.querySelector('#fp-industry-profile')?.open;
   const active=root.contains(document.activeElement)?document.activeElement:null;
+  const retainedOwned=active?.matches('[data-material=owned]')?active:null;
   const focus=active?.matches('input,select')?{key:active.dataset.state,material:active.dataset.material,id:active.dataset.id,value:active.value}:null;
   const m=calculate(),dt=(m.seconds||0)/3600,hours=Math.floor(dt),mins=Math.floor(((m.seconds||0)%3600)/60);
   const dataTime=Math.max(0,...m.rows.map(r=>r.queriedAt||0));
@@ -70,13 +118,15 @@ const ProductionUI=(()=>{
   root.querySelectorAll('.fp-money').forEach(span=>{const b=copyBtn(Number(span.dataset.value),span.textContent);b.classList.add('fp-copy');b.setAttribute('aria-label',(t('labelCopy'))+span.textContent);span.replaceChildren(b);});
   root.querySelectorAll('.fp-value').forEach(span=>{const b=copyBtn(span.dataset.copy,span.textContent);b.classList.remove('cp-n','isk-pos','isk-neg');b.classList.add('fp-copy');b.setAttribute('aria-label',(t('labelCopy'))+span.textContent);span.replaceChildren(b);});
   const headerCopy=root.querySelector('.fp-material-total .fp-copy');if(headerCopy&&headerCopy.textContent.endsWith(' ISK')){const unit=document.createElement('small');unit.textContent='ISK';headerCopy.replaceChildren(document.createTextNode(Number.isInteger(Number(headerCopy.parentElement.dataset.value))?headerCopy.textContent.slice(0,-4).replace(/\.00$/,''):headerCopy.textContent.slice(0,-4)),unit);}
-  if(focus){const selector=focus.material?`[data-material="${focus.material}"][data-id="${focus.id}"]`:`[data-state="${focus.key}"]`;const next=root.querySelector(selector);if(next){next.value=focus.value;next.focus({preventScroll:true});}}
+  if(focus){const selector=focus.material?`[data-material="${focus.material}"][data-id="${focus.id}"]`:`[data-state="${focus.key}"]`;const next=root.querySelector(selector);if(next){if(retainedOwned){next.replaceWith(retainedOwned);retainedOwned.focus({preventScroll:true});}else{next.value=focus.value;next.focus({preventScroll:true});}}}
 
  }
- root.addEventListener('input',e=>{if(e.target.dataset.material!=='owned')return;const value=Number(e.target.value||0);if(!Number.isSafeInteger(value)||value<0){e.target.setCustomValidity(t('validation'));return;}e.target.setCustomValidity('');state.owned[Number(e.target.dataset.id)]=value;render();});
- root.addEventListener('click',e=>{const toggle=e.target.closest('[data-material-toggle]')||(!e.target.closest('input,button,select,a')?e.target.closest('.fp-material-row')?.querySelector('[data-material-toggle]'):null);if(toggle){const id=toggle.dataset.materialToggle;if(expanded.has(id))expanded.delete(id);else expanded.add(id);render();root.querySelector(`[data-material-toggle="${id}"]`)?.focus({preventScroll:true});return;}const b=e.target.closest('[data-tab]');if(!b)return;state.tab=b.dataset.tab;render();root.querySelector(`#fp-tab-${state.tab}`)?.focus();});
+ const stockNumber=value=>{const text=String(value).trim();if(!text)return 0;if(!/^(?:\d+|\d{1,3}(?:[,\s\u00a0]\d{3})+)$/.test(text))return null;const n=Number(text.replace(/[,\s\u00a0]/g,''));return Number.isSafeInteger(n)&&n>=0?n:null;};
+ root.addEventListener('input',e=>{if(e.target.dataset.material!=='owned')return;const value=stockNumber(e.target.value);e.target.setCustomValidity(value==null?t('wholeQuantity'):'');if(value==null)return;state.owned[Number(e.target.dataset.id)]=value;render();});
+ root.addEventListener('keydown',e=>{if(e.target.matches('[data-material=owned]')&&e.key==='Enter'){e.target.blur();return;}if(e.target.dataset.material==='owned'&&e.key==='Enter'){e.preventDefault();e.target.blur();}});
+ root.addEventListener('click',e=>{const complete=e.target.closest('[data-complete]');if(complete){const row=calculate().rows.find(r=>r.id===Number(complete.dataset.complete));if(row&&row.owned<row.required){state.owned[row.id]=row.required;render();root.querySelector(`[data-complete="${row.id}"]`)?.focus();}return;}const toggle=e.target.closest('[data-material-toggle]');if(toggle){const id=toggle.dataset.materialToggle;if(expanded.has(id))expanded.delete(id);else expanded.add(id);render();root.querySelector(`[data-material-toggle="${id}"]`)?.focus({preventScroll:true});return;}const b=e.target.closest('[data-tab]');if(!b)return;state.tab=b.dataset.tab;render();root.querySelector(`#fp-tab-${state.tab}`)?.focus();});
  root.addEventListener('keydown',e=>{if(!e.target.matches('.fp-tabs button')||!['ArrowLeft','ArrowRight'].includes(e.key))return;e.preventDefault();const tabs=['plan','materials','result'];state.tab=tabs[(tabs.indexOf(state.tab)+(e.key==='ArrowRight'?1:-1)+3)%3];render();root.querySelector(`#fp-tab-${state.tab}`).focus();});
- root.addEventListener('change',e=>{const key=e.target.dataset.state,id=Number(e.target.dataset.id),material=e.target.dataset.material;if(['owned','sent'].includes(material)&&(!Number.isSafeInteger(Number(e.target.value))||Number(e.target.value)<0)){e.target.setCustomValidity(t('validation'));return;}e.target.setCustomValidity?.('');if(key){state[key]=['kind','acquire','sale','facility','security'].includes(key)?e.target.value:e.target.value===''&&['install','index','fuelPrice'].includes(key)?null:Number(e.target.value);if(key==='facility'){state.facilityTax=state.facility==='station'?.25:1;if(state.facility==='station')state.rigM=state.rigT=0;if(['azbel','sotiyo'].includes(state.facility))state.rigT=state.rigM;}if(key==='rigM'&&['azbel','sotiyo'].includes(state.facility))state.rigT=state.rigM;if(key==='systemId'){state.index=null;systemNotice='';industryRequest++;}}if(material)state[material][id]=material==='included'?e.target.checked:e.target.value===''&&material==='manual'?undefined:Number(e.target.value);if(material&&material!=='owned')expanded.add(String(id));render();if(key==='fuel')updatePrices();});
+ root.addEventListener('change',e=>{const key=e.target.dataset.state,id=Number(e.target.dataset.id),material=e.target.dataset.material;if(material==='owned'){const value=stockNumber(e.target.value);if(value==null)return;state.owned[id]=value;e.target.value=num(value);render();return;}if(['owned','sent'].includes(material)&&(!Number.isSafeInteger(Number(e.target.value))||Number(e.target.value)<0)){e.target.setCustomValidity(t('validation'));return;}e.target.setCustomValidity?.('');if(key){state[key]=['kind','acquire','sale','facility','security'].includes(key)?e.target.value:e.target.value===''&&['install','index','fuelPrice'].includes(key)?null:Number(e.target.value);if(key==='facility'){state.facilityTax=state.facility==='station'?.25:1;if(state.facility==='station')state.rigM=state.rigT=0;if(['azbel','sotiyo'].includes(state.facility))state.rigT=state.rigM;}if(key==='rigM'&&['azbel','sotiyo'].includes(state.facility))state.rigT=state.rigM;if(key==='systemId'){state.index=null;systemNotice='';industryRequest++;}}if(material)state[material][id]=material==='included'?e.target.checked:e.target.value===''&&material==='manual'?undefined:Number(e.target.value);if(material&&material!=='owned')expanded.add(String(id));render();if(key==='fuel')updatePrices();});
 
  async function updatePrices(singleId){
   if(loading)return;

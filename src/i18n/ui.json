@@ -3606,5 +3606,117 @@
   "production.noShipment": {
     "es": "Sin materiales seleccionados para envío",
     "en": "No materials selected for shipping"
+  },
+  "production.completeHint": {
+    "es": "Usar la cantidad requerida como disponible",
+    "en": "Use the required quantity as available"
+  },
+  "production.completeStock": {
+    "es": "Completar disponible",
+    "en": "Fill available stock"
+  },
+  "production.wholeQuantity": {
+    "es": "Introduce una cantidad entera",
+    "en": "Enter a whole quantity"
+  },
+  "production.inventory": {
+    "es": "Inventario",
+    "en": "Inventory"
+  },
+  "production.importInventory": {
+    "es": "Importar inventario ESI",
+    "en": "Import ESI inventory"
+  },
+  "production.stockHint": {
+    "es": "Introduce tu stock o impórtalo por ubicación.",
+    "en": "Enter stock or import it by location."
+  },
+  "production.reviewInventory": {
+    "es": "Revisar inventario",
+    "en": "Review inventory"
+  },
+  "production.stockLocation": {
+    "es": "Ubicación del stock",
+    "en": "Stock location"
+  },
+  "production.character": {
+    "es": "Personaje",
+    "en": "Character"
+  },
+  "production.locationOnly": {
+    "es": "Solo se importa el stock de esta ubicación.",
+    "en": "Only stock at this location is imported."
+  },
+  "production.currentStock": {
+    "es": "Disponible actual",
+    "en": "Currently available"
+  },
+  "production.foundStock": {
+    "es": "Inventario encontrado",
+    "en": "Inventory found"
+  },
+  "production.apply": {
+    "es": "Aplicar",
+    "en": "Apply"
+  },
+  "production.applyStock": {
+    "es": "Aplicar a Disponible",
+    "en": "Apply to Available"
+  },
+  "production.cancelImport": {
+    "es": "Cancelar",
+    "en": "Cancel"
+  },
+  "production.selectedStock": {
+    "es": "materiales seleccionados · podrás editarlos después.",
+    "en": "materials selected · you can edit them afterwards."
+  },
+  "production.readOnlyStock": {
+    "es": "Inventario personal de solo lectura. No incluye carga de naves, entregas, stock bloqueado ni seguridad de activos. Cada contenedor se elige por separado.",
+    "en": "Read-only personal inventory. Ship cargo, deliveries, locked stock and asset safety are excluded. Each container is selected separately."
+  },
+  "production.authorizeInventory": {
+    "es": "Autorizar lectura de inventario",
+    "en": "Authorize inventory access"
+  },
+  "production.permissionStock": {
+    "es": "Conecta tu personaje y autoriza la lectura de su inventario para consultar ubicaciones.",
+    "en": "Connect your character and authorize inventory access to browse stock locations."
+  },
+  "production.inventoryFailed": {
+    "es": "No se pudo obtener el inventario completo. Reintenta; tu stock no ha cambiado.",
+    "en": "Could not retrieve the complete inventory. Retry; your stock has not changed."
+  },
+  "production.noInventory": {
+    "es": "No se encontraron materiales compatibles en hangares o contenedores accesibles.",
+    "en": "No matching materials found in accessible hangars or containers."
+  },
+  "production.importedStock": {
+    "es": "Stock importado",
+    "en": "Imported stock"
+  },
+  "production.locationId": {
+    "es": "Ubicación",
+    "en": "Location"
+  },
+  "production.containerId": {
+    "es": "Contenedor",
+    "en": "Container"
+  },
+  "production.personalHangar": {
+    "es": "Hangar personal",
+    "en": "Personal hangar"
+  },
+  "production.queryStock": {
+    "es": "Consultar inventario",
+    "en": "Fetch inventory"
+  },
+  "production.stockCached": {
+    "es": "ESI puede mostrar inventario en caché. Consulta",
+    "en": "ESI may return cached inventory. Retrieved"
+  },
+  "production.stockModified": {
+    "es": "Datos de ESI",
+    "en": "ESI data"
   }
 }

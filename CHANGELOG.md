@@ -1,3 +1,7 @@
+# v1.0.207 — candidata
+
+Inventario personal ESI opcional en Producción: revisión por ubicación y aplicación selectiva a Disponible. Entrada estable de stock y acción junto a Requerido. CI/Pages pendientes; consulta docs/INVENTORY_207.md.
+
 ## 1.0.206 — perfil industrial estable (LIVE)
 
 - Perfil industrial y logística conserva abierto/cerrado al editar campos o repintar resultados y consultas. Sin cambios de cálculo o almacenamiento.

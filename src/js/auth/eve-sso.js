@@ -5,6 +5,7 @@
   // Configurar una sola vez tras registrar Market Moves+ en EVE Developers. Es público, nunca un Client Secret.
   const EVE_CLIENT_ID='114bbd2659384151ac3b0096f183dd3b';
   const skillScope='esi-skills.read_skills.v1',standingsScope='esi-characters.read_standings.v1',implantsScope='esi-clones.read_implants.v1';
+  const assetsScope='esi-assets.read_assets.v1';
   const scope=[skillScope,standingsScope,implantsScope].join(' ');
   const scopesOf=token=>{try{const part=token.split('.')[1].replace(/-/g,'+').replace(/_/g,'/');const v=JSON.parse(atob(part.padEnd(Math.ceil(part.length/4)*4,'='))).scp;return Array.isArray(v)?v:typeof v==='string'?v.split(/\s+/):[];}catch(e){return [];}};
   let session=null,refreshPending=null,sessionEpoch=0,syncSerial=0,applyingESI=false;
@@ -37,20 +38,45 @@
   const rand=n=>b64(crypto.getRandomValues(new Uint8Array(n)));
   async function challenge(v){return b64(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(v)));}
   const refreshUI=()=>{const on=!!session;$e('evePilotName').textContent=on?session.name:'Iniciar sesión';$e('eveLogout').hidden=!on;$e('eveSync').hidden=!on;$e('eveSync').dataset.i18n=session&&(!session.scopes.includes(standingsScope)||!session.scopes.includes(implantsScope))?'sso.authorizeSettings':'sso.syncSettings';$e('eveSync').textContent=tx($e('eveSync').dataset.i18n);$e('eveIdentityButton').setAttribute('aria-label',on?'Opciones del personaje':'Iniciar sesión con EVE Online');
-    $e('evePortrait').hidden=!on;if(on)$e('evePortrait').src='https://images.evetech.net/characters/'+session.id+'/portrait?size=64';else $e('evePortrait').removeAttribute('src');};
+    $e('evePortrait').hidden=!on;if(on)$e('evePortrait').src='https://images.evetech.net/characters/'+session.id+'/portrait?size=64';else $e('evePortrait').removeAttribute('src');window.dispatchEvent(new Event('mm-eve-identity'));};
   button.addEventListener('click',()=>{if(!session){startLogin();return;}menu.hidden=!menu.hidden;button.setAttribute('aria-expanded',String(!menu.hidden));});
   document.addEventListener('click',e=>{if(!e.target.closest('#eveIdentity')){menu.hidden=true;button.setAttribute('aria-expanded','false');}});
-  async function startLogin(extended=false){
+  async function startLogin(extended=false,assets=false){
     const client=EVE_CLIENT_ID;
     if(!client){alert(tx('sso.missingClient'));return;}
     try{const verifier=rand(48),state=rand(24);sessionStorage.setItem(key,JSON.stringify({verifier,state,client,redirect:base,at:Date.now()}));
-      const u=new URL('https://login.eveonline.com/v2/oauth/authorize');u.searchParams.set('response_type','code');u.searchParams.set('client_id',client);u.searchParams.set('redirect_uri',base);u.searchParams.set('scope',extended?scope:skillScope);u.searchParams.set('state',state);u.searchParams.set('code_challenge',await challenge(verifier));u.searchParams.set('code_challenge_method','S256');location.assign(u.href);
+      const granted=(session?.scopes||[]).filter(s=>[skillScope,standingsScope,implantsScope,assetsScope].includes(s));
+      const requested=[...new Set([...(extended?scope.split(' '):[skillScope]),...granted,...(assets?[assetsScope]:[])])];
+      const u=new URL('https://login.eveonline.com/v2/oauth/authorize');u.searchParams.set('response_type','code');u.searchParams.set('client_id',client);u.searchParams.set('redirect_uri',base);u.searchParams.set('scope',requested.join(' '));u.searchParams.set('state',state);u.searchParams.set('code_challenge',await challenge(verifier));u.searchParams.set('code_challenge_method','S256');location.assign(u.href);
     }catch(err){const message=tx('sso.loginOpenFailed',{error:err?.message||String(err)});status(message);alert(message);console.error('EVE SSO redirect failed',err);}
   }
   function saveSkill(id,level){const e=$e(id);if(!e)return false;const v=String(level);if(![...e.options].some(o=>o.value===v))return false;e.dataset.mmSkillSource='esi';e.value=v;e.dispatchEvent(new Event('change',{bubbles:true}));return true;}
   const processingNames=[...new Set(Object.values(ORE_SKILL))];
   const mapping=[['Accounting','skAcc'],['Broker Relations','skBR'],['Advanced Broker Relations','cAbr'],['Reprocessing','skRep'],['Reprocessing Efficiency','skRepE']];
   async function jsonESI(path,token){const resp=await fetch('https://esi.evetech.net/latest/'+path+'?compatibility_date=2026-10-01',{headers:token?{Authorization:'Bearer '+token}:{},cache:'no-store'});if(!resp.ok)throw Error('ESI HTTP '+resp.status);return resp.json();}
+  // Restricted read capability; tokens never leave this closure. Uses the shared
+  // network semaphore and respects Retry-After without persisting private assets.
+  async function inventoryRequest(suffix,body){
+    const epoch=sessionEpoch,id=session?.id;
+    if(!id)throw Error('Not connected');
+    for(let attempt=0;attempt<3;attempt++){
+      if(Date.now()>session.expires)await renew();
+      if(epoch!==sessionEpoch||session?.id!==id||!session.scopes.includes(assetsScope))throw Error('Inventory permission required');
+      const r=await esiNetworkFetch('https://esi.evetech.net/latest/characters/'+id+'/assets/'+suffix,{method:body?'POST':'GET',credentials:'omit',referrerPolicy:'no-referrer',headers:{Authorization:'Bearer '+session.token,...(body?{'Content-Type':'application/json'}:{})},...(body?{body:JSON.stringify(body)}:{})});
+      if(epoch!==sessionEpoch||session?.id!==id)throw Error('Character changed');
+      if(r.ok)return r;
+      if(r.status===401&&attempt===0){await renew();continue;}
+      if((r.status===420||r.status===429)&&attempt<2){const delay=Number(r.headers.get('Retry-After'));if(!Number.isFinite(delay)||delay<=0||delay>30)throw Error('ESI rate limited; retry later');await sleep(delay*1000);continue;}
+      throw Error('Inventory ESI HTTP '+r.status);
+    }
+    throw Error('Inventory unavailable');
+  }
+  window.mmProductionInventoryAuth=Object.freeze({
+    identity:()=>session?{id:session.id,name:session.name,assets:session.scopes.includes(assetsScope)}:null,
+    authorize:async()=>{if(!session&&stored()){try{await renew();}catch(e){/* Consent can establish a new session. */}}return startLogin(false,true);},
+    assets:page=>{if(!Number.isSafeInteger(page)||page<1)throw Error('Invalid page');return inventoryRequest('?compatibility_date=2026-10-01&page='+page);},
+    names:ids=>{if(!Array.isArray(ids)||ids.length>1000||ids.some(id=>!Number.isSafeInteger(id)||id<=0))throw Error('Invalid asset IDs');return inventoryRequest('names/?compatibility_date=2026-10-01',ids);}
+  });
   function clearSources(){
     document.querySelectorAll('#settings [data-mm-skill-source="esi"]').forEach(e=>{e.dataset.mmSkillSource='manual';e.dispatchEvent(new Event('change',{bubbles:true}));});
     ['cStdFac','cStdCorp','refImp'].forEach(id=>{delete $e(id).dataset.mmSettingSource;});
