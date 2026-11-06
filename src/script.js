@@ -128,7 +128,7 @@ function status(id,msg,cls){const s=$(id);s.textContent=msg;s.className='status'
 // v1.0.51: el resumen de Listado de Items Registrados funciona como botón: Ver los N items ▾ / Ocultar los items ▴
 function ledgerCta(){status('esiStatus','','');}
 
-/*__MODULE_MARKET_PRICING__*//*__MODULE_COURIER__*//*__MODULE_INVENTORY_PARSER__*/// Precedencia: a mano > API > pegado
+/*__MODULE_MARKET_PRICING__*//*__MODULE_PRODUCTION_DATA__*//*__MODULE_PRODUCTION_MATERIALS__*//*__MODULE_PRODUCTION_DOMAIN__*//*__MODULE_COURIER__*//*__MODULE_INVENTORY_PARSER__*/// Precedencia: a mano > API > pegado
 function derive(o){
   const j=o.jita||{};
   o.ref=o.refMan!=null?o.refMan:(j.sell!=null?j.sell:o.pasteRef);
@@ -183,6 +183,7 @@ function pruneCaches(){
   const keep=new Set();
   const add=n=>{const k=String(n).toLowerCase();keep.add(k);const ore=resolveOre(n);if(ore)Object.keys(ore.d.out).forEach(m=>keep.add(m.toLowerCase()));};
   S.items.forEach(o=>add(o.name));
+  if(window.mmProductionCacheNames)window.mmProductionCacheNames().forEach(add);
   const ids=new Set(),groups=new Set();
   Object.keys(S.api).forEach(k=>{
     if(keep.has(k)){if(S.api[k]?.id)ids.add(String(S.api[k].id));}
@@ -234,7 +235,7 @@ function removeFromPaste(name){
   syncFromPaste(false);
 }
 
-/*__MODULE_ESI__*/// ================= Verificación del pegado contra la API =================
+/*__MODULE_ESI__*//*__MODULE_PRODUCTION_SERVICE__*/// ================= Verificación del pegado contra la API =================
 // El juego redondea el volumen a 2 decimales → tolerancia 0.005 + 0.1%.
 function verify(o,allowDeduce){
   const ch=[];o.checks=ch;const a=o.jita;
@@ -371,4 +372,4 @@ function paintGuide(ol,r){
   }
 }
 
-/*__MODULE_LEDGER_UI__*//*__MODULE_SELLING_RESULTS__*//*__MODULE_FULFILLMENT_UI__*//*__MODULE_REFINING_VIEW__*//*__MODULE_PLAN_PICKER__*//*__MODULE_JITA__*//*__MODULE_REFRESH__*//*__MODULE_MINING_BRIDGE__*//*__MODULE_SETTINGS_UI__*//*__MODULE_SKILLS_BRIDGE__*//*__MODULE_TRANSLATOR__*//*__MODULE_SETTINGS_PERSISTENCE__*//*__MODULE_EVE_SSO__*/
+/*__MODULE_LEDGER_UI__*//*__MODULE_SELLING_RESULTS__*//*__MODULE_FULFILLMENT_UI__*//*__MODULE_REFINING_VIEW__*//*__MODULE_PLAN_PICKER__*//*__MODULE_JITA__*//*__MODULE_REFRESH__*//*__MODULE_MINING_BRIDGE__*//*__MODULE_SETTINGS_UI__*//*__MODULE_SKILLS_BRIDGE__*//*__MODULE_TRANSLATOR__*//*__MODULE_SETTINGS_PERSISTENCE__*//*__MODULE_EVE_SSO__*//*__MODULE_PRODUCTION_UI__*/

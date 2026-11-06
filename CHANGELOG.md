@@ -1,3 +1,9 @@
+## 1.0.205 — Producción de Fuel Blocks (candidata)
+
+- Módulo nativo Plan/Materiales/Resultado: cuatro combustibles, stock, faltantes, cotizaciones compartidas y resultados de caja/económicos.
+- Perfil industrial con estructuras/rigs/habilidades, EIV e índice ESI; transporte manual repartido por lote sin duplicar cargos. Sin precios demo ni nuevos permisos.
+- Composición compacta, copia, ES/EN y Dark/Light. Estado y límites en docs/PRODUCTION_205.md; no LIVE hasta certificación de publicación.
+
 ## 1.0.204 — limpieza CSS de controles retirados
 
 - Retirados estilos del antiguo menú de Inventario y botones sin DOM; controles reales conservados.5.915bytes menos, scripts y apariencia idénticos.

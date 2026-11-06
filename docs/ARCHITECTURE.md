@@ -101,3 +101,10 @@ Owner91-settings-skills reemplaza reglas dedicadas anteriores de Skills en80 y e
 ## Jita184
 
 `src/js/ui/jita.js` separa contexto y presentación sin clonar inventario ni motor. Los helpers de adquisición aceptan base explícita, y el presupuesto reutiliza ledgerRouteProjection/allocateCourier. Refresh prepara una sola proyección para la tabla, el recibo y los contratos. `93-jita.css` es el owner de composición local y `zzz-jita.css` fija colores Light tras el generador heredado. Estado/publicación: HANDOFF_184 y DSS.
+
+
+## v1.0.205 — Producción nativa, candidata autorizada (2026-11-06)
+
+Integración solicitada y autorizada por el propietario: Plan/Materiales/Resultado de Fuel Blocks con composición compacta acordada. Recetas SDE públicas, stock/faltantes, dominio industrial puro y adaptadores sobre ESI/tasas/caché existentes. Perfiles y rigs contrastados con atributos oficiales; diferencia entre caja y coste de oportunidad, envío manual repartido por lote sin doble cargo. No hay precios demo, nuevos scopes o persistencia de planes/stock. [Contrato, fuentes y límites](PRODUCTION_205.md).
+
+QA local205Node/16Python/8legacy PASS;152Chromium generales y cuatro focales finales del módulo PASS. Matriz ES/EN y Dark/Light a390/630/980/1440, perfil abierto, vacíos/importes largos, copia, edición, menú, navegación y respuestas ESI simuladas. CI definitivo154Chromium, cuatro Actions, Pages y HTTPS pendientes. Sin prueba con personaje real ni factura industrial real. Última LIVE204 hasta cierre certificado.

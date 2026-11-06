@@ -20,6 +20,7 @@ CSS_PARTS = (
     "92-settings-general-header.css",
     "93-jita.css",
     "94-title-referral.css",
+    "95-production.css",
 )
 # Light theme order mirrors the former light_extra.css; the final shared table
 # geometry follows generated Light rules so both themes use identical layout.
@@ -38,9 +39,13 @@ def light_sources(read):
 JS_PARTS = (
     ("/*__MODULE_FORMAT__*/", ("js", "ui", "format.js")),
     ("/*__MODULE_MARKET_PRICING__*/", ("js", "domain", "market-pricing.js")),
+    ("/*__MODULE_PRODUCTION_DATA__*/", ("js", "domain", "production-data.js")),
+    ("/*__MODULE_PRODUCTION_MATERIALS__*/", ("js", "domain", "production-materials.js")),
+    ("/*__MODULE_PRODUCTION_DOMAIN__*/", ("js", "domain", "production.js")),
     ("/*__MODULE_COURIER__*/", ("js", "domain", "courier.js")),
     ("/*__MODULE_INVENTORY_PARSER__*/", ("js", "inventory", "parser.js")),
     ("/*__MODULE_ESI__*/", ("js", "services", "esi.js")),
+    ("/*__MODULE_PRODUCTION_SERVICE__*/", ("js", "services", "production.js")),
     ("/*__MODULE_REFINING__*/", ("js", "domain", "refining.js")),
     ("/*__MODULE_MATERIAL_ECONOMICS__*/", ("js", "domain", "material-economics.js")),
     ("/*__MODULE_PLANNING__*/", ("js", "domain", "planning.js")),
@@ -57,6 +62,7 @@ JS_PARTS = (
     ("/*__MODULE_TRANSLATOR__*/", ("js", "i18n", "translator.js")),
     ("/*__MODULE_SETTINGS_PERSISTENCE__*/", ("js", "app", "settings-persistence.js")),
     ("/*__MODULE_EVE_SSO__*/", ("js", "auth", "eve-sso.js")),
+    ("/*__MODULE_PRODUCTION_UI__*/", ("js", "ui", "production.js")),
 )
 
 def css_sources(read):

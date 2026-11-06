@@ -1,0 +1,182 @@
+/* Native Production workspace — approved compact composition. */
+#production{max-width:min(1360px,94vw);margin:34px auto 40px;padding:0 20px;color:var(--txt)}
+#production [hidden]{display:none!important}
+#production .fp-heading{display:flex;align-items:center;justify-content:space-between;gap:20px;margin-bottom:22px}
+#production h2{font-size:26px;letter-spacing:.035em}
+#production .fp-sub{color:var(--mut);font-size:14px;margin-top:5px}
+#production .fp-example{font-size:12px;color:var(--mut);border:1px solid var(--line2);border-radius:6px;padding:6px 10px;white-space:nowrap}
+#production .fp-tabs{display:flex;gap:24px;border-bottom:1px solid var(--line2);margin:0 0 20px}
+#production .fp-tabs button{padding:10px 0 12px;font-size:15px;color:var(--mut);border-bottom:2px solid transparent}
+#production .fp-tabs button[aria-selected=true]{color:var(--txt);border-bottom-color:var(--clay);font-weight:700}
+#production .fp-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+#production .panel{padding:22px;border-radius:11px;background:var(--glass,var(--surface-card));border:1px solid var(--line2);box-shadow:none;margin:0;min-width:0}
+#production .fp-panel-title{font-size:15px;letter-spacing:.025em;margin-bottom:20px}
+#production .fp-fields{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px 16px}
+#production label{font-size:13px;line-height:1.35;color:var(--mut);min-width:0}
+#production label>input,#production label>select{margin-top:7px;min-height:40px;font-size:14px}
+#production .fp-wide{grid-column:1/-1}
+#production .fp-note{font-size:13px;line-height:1.5;color:var(--mut);margin-top:16px}
+#production .fp-overview{display:grid;grid-template-columns:1fr 1fr;gap:24px 16px}
+#production .fp-overview dt{font-size:13px;color:var(--mut);margin-bottom:6px}
+#production .fp-overview dd{font-size:24px;font-weight:650;line-height:1.2}
+#production .fp-overview .fp-wide dd{font-size:42px;letter-spacing:-.02em}
+#production .fp-rule{border-top:1px solid var(--line2);margin-top:24px;padding-top:18px}
+#production .fp-quiet{font-size:13px;color:var(--mut)}
+#production .fp-toolbar{display:flex;align-items:center;justify-content:space-between;gap:18px;margin-bottom:16px;flex-wrap:wrap}
+#production .fp-toolbar h3{margin:0}
+#production .fp-toolbar label{display:flex;align-items:center;gap:12px}
+#production .fp-toolbar select{width:auto;min-width:200px;margin:0}
+#production .fp-material-detail{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;padding:16px 20px 20px;background:var(--surface-card)}
+#production .fp-material-detail small{display:block;margin-bottom:7px;color:var(--mut)}
+#production .fp-material-detail label:has(input[type=checkbox]){display:flex;gap:10px;align-items:center}
+#production .fp-material-detail input[type=checkbox]{width:18px;height:18px;margin:0}
+#production .fp-kpis{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));margin-bottom:22px}
+#production .fp-kpis>div{padding:0 22px;border-left:1px solid var(--line2)}
+#production .fp-kpis>div:first-child{padding-left:0;border-left:0}
+#production .fp-kpis dt{color:var(--mut);font-size:13px;margin-bottom:8px}
+#production .fp-kpis dd{font-size:25px;font-weight:650;overflow-wrap:anywhere}
+#production .fp-lines>div{display:flex;justify-content:space-between;align-items:baseline;gap:20px;padding:12px 0;border-bottom:1px solid var(--line2);font-size:14px}
+#production .fp-lines dt{color:var(--mut)}
+#production .fp-lines dd{text-align:right;font-weight:600}
+#production .fp-lines>div:last-child{border:0}
+#production .fp-comparison{margin-top:16px;padding-top:16px;border-top:1px solid var(--line2)}
+#production .fp-comparison h4{font-size:14px;margin-bottom:8px}
+#production .fp-comparison strong{font-size:22px;display:block}
+#production .fp-comparison p{font-size:13px;line-height:1.5;color:var(--mut);margin-top:6px}
+#production .fp-money{white-space:normal;overflow-wrap:anywhere;font-variant-numeric:tabular-nums}
+#production button:focus-visible,#production summary:focus-visible{outline:2px solid var(--ion);outline-offset:3px}
+#production .fp-copy{padding:0!important;margin:0!important;width:auto!important;min-width:0!important;min-height:0!important;display:inline!important;border:0!important;border-radius:0!important;background:transparent!important;box-shadow:none!important;font:inherit!important;text-align:inherit;color:inherit;white-space:normal;overflow-wrap:anywhere}
+#production .fp-owned-cell input{padding:7px 8px;min-width:0;width:100%;height:34px;text-align:left;font-size:13px;border:1px solid var(--line2);background:var(--surface-card)}
+#production .fp-quantity{color:inherit;font-variant-numeric:tabular-nums}
+#production .fp-validation{color:var(--loss);font-size:13px;margin-top:14px}
+html.light #production .panel{background:var(--glass,rgba(251,249,245,.95));border-color:var(--line2)}
+html.light #production input,html.light #production select{background:var(--surface-card);color:var(--txt);border-color:var(--line2)}
+@media(max-width:760px){#production .fp-grid{grid-template-columns:1fr}#production .fp-heading{align-items:flex-start;flex-direction:column;gap:10px}#production .fp-kpis{grid-template-columns:1fr;gap:16px}#production .fp-kpis>div{padding:0;border:0}#production .fp-material-detail{grid-template-columns:1fr 1fr}}
+@media(max-width:520px){#production{padding:0 12px;margin-top:24px}#production .panel{padding:18px 14px}#production .fp-fields{grid-template-columns:1fr 1fr}#production .fp-material-detail{padding:14px 8px;gap:12px}}
+
+/* Material workspace: native content-sized columns, existing palette. */
+#production .fp-material-card{padding:0;overflow:clip;--fp-fine:var(--line2)}
+#production .fp-material-top{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));border-bottom:1px solid var(--fp-fine);background:var(--surface-panel)}
+#production .fp-material-top>div{min-height:90px;padding:15px 22px;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;gap:6px;min-width:0}
+#production .fp-material-top>div+div{border-left:1px solid var(--line2)}
+#production .fp-material-top .fp-panel-title{margin:0;font-size:21px;line-height:1.2;font-weight:700;text-transform:uppercase;letter-spacing:0}
+#production .fp-material-meta{color:var(--mut);font-size:10.5px;line-height:1.3;font-weight:700;text-transform:uppercase;letter-spacing:.08em}
+#production .fp-material-total strong{font-size:38px;line-height:1.05;font-weight:700;min-width:0;max-width:100%}
+#production .fp-material-total small{font:700 15px/1 var(--f-ui);color:var(--txt);margin-left:9px}
+#production .fp-material-controls{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));border-bottom:1px solid var(--fp-fine);background:var(--surface-card)}
+#production .fp-material-controls>label{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:14px;padding:10px 22px;font-size:12px;font-weight:650;text-transform:uppercase;letter-spacing:.02em}
+#production .fp-material-controls>label+label{border-left:1px solid var(--line2)}
+#production .fp-material-controls select,#production .fp-isk-input{width:190px;min-width:0;max-width:100%;height:36px;min-height:36px;margin:0;font:650 13px/1.2 var(--f-ui);text-transform:none;letter-spacing:0}
+#production .fp-material-controls select{padding:8px 12px;border-radius:6px;appearance:auto!important;background-image:none!important}
+#production .fp-isk-input{display:flex;align-items:center;gap:8px;background:var(--surface-card);border:1px solid var(--line2);border-radius:6px;padding:0 12px;color:var(--txt)}
+#production .fp-isk-input input{width:100%;min-width:0;height:100%;border:0!important;background:transparent!important;padding:0;margin:0;font:inherit}
+#production .fp-isk-input>span{font-size:11px;color:var(--mut)}
+#production .fp-isk-input:focus-within{outline:2px solid var(--ion);outline-offset:2px}
+#production .fp-isk-input input:focus{box-shadow:none}
+#production .fp-material-table{width:100%;margin:0!important;border-collapse:collapse;table-layout:auto;font-size:13px;font-variant-numeric:tabular-nums}
+#production .fp-material-table th{padding:11px 16px;font-size:11px;line-height:1.3;font-weight:700;letter-spacing:.03em;color:var(--mut);text-transform:uppercase;white-space:nowrap;text-align:left;background:var(--void);border-bottom:1px solid var(--line2)}
+#production .fp-material-row>td{padding:6px 16px;height:39px;font-size:13px;font-weight:600;line-height:1.3;text-align:left;white-space:nowrap;border-bottom:1px solid var(--line2)}
+#production .fp-material{background:var(--surface-card)}
+#production .fp-material-row>td+td,#production .fp-material-table th+th{border-left:1px solid color-mix(in srgb,var(--line2) 65%,transparent)}
+#production .fp-material-table th:first-child,#production .fp-material-row>td:first-child{padding-left:22px}
+#production .fp-material-row>td:first-child{white-space:normal}
+#production .fp-material-toggle{font:700 13px/1.3 var(--f-ui);text-align:left;white-space:normal;padding:0;color:var(--txt)}
+#production .fp-material-toggle:hover{color:var(--clay)}
+#production .fp-material-row:hover>td,#production .fp-material[data-open=true] .fp-material-row>td{background:var(--surface-panel)}
+#production .fp-material-table .fp-money,#production .fp-material-table .fp-copy{white-space:nowrap}
+#production .fp-material-table .fp-owned-cell{padding-left:8px}
+#production .fp-material-table .fp-owned-cell input{width:var(--fp-stock-width);max-width:100%;height:26px;padding:3px 8px;border-radius:5px;text-align:left;font:600 13px/1 var(--f-ui);background:transparent!important}
+#production .fp-material-extra>td{padding:0!important;border:0}
+#production .fp-material-detail{padding:16px 22px 20px;border-bottom:1px solid var(--fp-fine)}
+#production .fp-material-detail>[data-compact-only]{display:none}
+#production .fp-material-footer{display:flex;align-items:center;justify-content:space-between;gap:20px;min-height:57px;padding:11px 22px;border-top:1px solid var(--fp-fine);color:var(--mut);font-size:12px;line-height:1.5}
+#production .fp-material-footer p{margin:0}
+#production .fp-material-footer strong{font-weight:700;color:var(--txt)}
+#production .fp-currency-note{white-space:nowrap}
+@media(max-width:1050px){#production .fp-material-table th:nth-child(n+5),#production .fp-material-row>td:nth-child(n+5){display:none}#production .fp-material-controls>label{grid-template-columns:1fr;gap:8px}#production .fp-material-controls select,#production .fp-isk-input{width:100%}#production .fp-material-total strong{font-size:28px}#production .fp-material-detail>[data-compact-only]{display:block}}
+@media(max-width:620px){#production .fp-material-top,#production .fp-material-controls{grid-template-columns:1fr}#production .fp-material-top>div+div{border-left:0;border-top:1px solid var(--line2)}#production .fp-material-controls>label+label{border-left:0;border-top:1px solid var(--line2)}#production .fp-material-controls>label{grid-template-columns:minmax(0,1fr) 160px;gap:12px}#production .fp-material-top>div{padding:16px;min-height:80px}#production .fp-material-controls>label{padding:10px 16px}#production .fp-material-table th,#production .fp-material-row>td{padding-left:12px;padding-right:12px}#production .fp-material-table th:first-child,#production .fp-material-row>td:first-child{padding-left:16px}#production .fp-material-footer{padding:14px 16px;align-items:flex-start;flex-direction:column;gap:6px}}
+@media(max-width:520px){#production .fp-material-table th:nth-child(2),#production .fp-material-row>td:nth-child(2){display:none}#production .fp-material-row>td:first-child{max-width:145px}#production .fp-material-detail{grid-template-columns:1fr 1fr;padding:14px 16px;gap:14px}#production .fp-material-detail .fp-money,#production .fp-material-detail .fp-copy{white-space:normal}#production .fp-material-controls>label{grid-template-columns:minmax(0,1fr) minmax(0,150px)}}
+
+@media(max-width:1050px){#production .fp-material-table .fp-owned-cell input{height:34px}}
+
+/* Section seam: the existing warm, centre-lit Sales divider, not a gold grid. */
+#production{--fp-seam:#ab775a}
+html.light #production{--fp-seam:#a56d4b}
+#production .fp-material-top,#production .fp-material-footer{position:relative}
+#production .fp-material-top{border-bottom-color:transparent}
+#production .fp-material-footer{border-top-color:transparent}
+#production .fp-material-top::after,#production .fp-material-footer::before{
+ content:"";position:absolute;left:22px;right:22px;height:1px;
+ background:linear-gradient(90deg,transparent,var(--fp-seam),transparent);pointer-events:none
+}
+#production .fp-material-top::after{bottom:-1px}
+#production .fp-material-footer::before{top:-1px}
+#production #fp-plan .fp-panel-title,#production #fp-result .panel>.fp-panel-title,#production #fp-result .fp-toolbar{
+ position:relative;padding-bottom:16px;margin-bottom:20px
+}
+#production #fp-plan .fp-panel-title::after,#production #fp-result .panel>.fp-panel-title::after,#production #fp-result .fp-toolbar::after{
+ content:"";position:absolute;inset:auto 0 0;height:1px;
+ background:linear-gradient(90deg,transparent,var(--fp-seam),transparent);pointer-events:none
+}
+#production #fp-result .fp-toolbar .fp-panel-title{margin-bottom:0}
+@media(max-width:620px){#production .fp-material-top::after,#production .fp-material-footer::before{left:16px;right:16px}}
+
+/* Native customizable select: the browser places its picker in the top layer.
+   Older browsers retain the platform select popup, outside ancestor overflow. */
+#production .fp-material-controls select{width:240px;max-width:100%}
+@supports (appearance:base-select){
+ #production select,#production .fp-material-controls select,#production select::picker(select){appearance:base-select!important}
+ #production select{align-items:center}
+ #production select::picker(select){
+  background:var(--surface-panel);color:var(--txt);border:1px solid var(--line2);
+  border-radius:6px;padding:4px;max-height:320px;overflow:auto;
+  box-shadow:0 8px 20px rgba(0,0,0,.22);font:500 13px/1.4 var(--f-ui)
+ }
+ #production select option{padding:10px 12px;border-radius:3px;white-space:normal}
+ #production select option:hover,#production select option:focus-visible{background:var(--void)}
+ #production select option:checked{font-weight:700}
+}
+@media(max-width:1050px){#production .fp-material-controls select{width:100%}}
+
+/* Expanded material: compact horizontal label/value cells. */
+#production .fp-material-detail{gap:0;padding:4px 22px 8px;align-items:stretch;contain:inline-size}
+#production .fp-material-detail>.fp-detail-field{display:flex!important;flex-direction:row;gap:8px;align-items:center!important;min-width:0;padding:10px 16px;text-align:left;margin:0}
+#production .fp-detail-field:not(:nth-child(4n+1)){border-left:1px solid var(--line2)}
+#production .fp-detail-field:nth-child(n+5){border-top:1px solid var(--line2)}
+#production .fp-detail-label{display:block;color:var(--mut);font:600 13px/1.4 var(--f-ui);margin:0;flex:none}
+#production .fp-detail-value{display:flex;align-items:center;gap:10px;min-height:34px;min-width:0;font:600 14px/1.4 var(--f-ui);color:var(--txt);overflow-wrap:anywhere}
+#production .fp-material-detail>.fp-detail-field input:not([type=checkbox]){display:block;width:100%;min-width:0;height:34px;min-height:34px;margin:0;padding:6px 8px;font:600 14px/1.4 var(--f-ui)}
+#production .fp-detail-value input[type=checkbox]{flex:none;width:20px;height:20px;margin:0;accent-color:var(--clay)}
+#production .fp-material-detail>[data-compact-only]{padding:16px 18px;border-top:1px solid var(--line2)}
+#production .fp-material-detail>[data-compact-only] small{font:600 13px/1.4 var(--f-ui);margin-bottom:10px}
+@media(max-width:760px){
+ #production .fp-material-detail{padding:4px 8px 8px}
+ #production .fp-material-detail>.fp-detail-field{padding:10px 12px}
+ #production .fp-detail-field{border-left:0!important}
+ #production .fp-detail-field:nth-child(even){border-left:1px solid var(--line2)!important}
+ #production .fp-detail-field:nth-child(n+3){border-top:1px solid var(--line2)}
+}
+
+@media(max-width:1050px) and (min-width:761px){
+ #production .fp-material-detail>.fp-detail-field{flex-wrap:wrap;gap:4px 8px;padding:10px 12px}
+ #production .fp-detail-value{min-height:28px}
+}
+@media(max-width:520px){
+ #production .fp-material-detail>.fp-detail-field{flex-wrap:wrap;gap:4px 8px;padding:10px 8px}
+ #production .fp-material-detail>.fp-detail-field input:not([type=checkbox]){max-width:100%}
+}
+
+body[data-mm-view="production"]>.hero,body[data-mm-view="production"]>main{display:none!important}
+#production[hidden]{display:none!important}
+#production .fp-heading+ .fp-note{margin-bottom:16px}
+#production .fp-material-card{padding:0!important}
+#production .fp-material-total strong{overflow-wrap:anywhere}
+#production .fp-fields details>summary{cursor:pointer;color:var(--txt);font-size:14px;font-weight:600}
+#production .fp-fields button{align-self:end;min-height:40px}
+#production .fp-fields input{max-width:100%}
+
+#production .fp-item-refresh{font:500 11px/1.3 var(--f-ui);color:var(--mut);padding:3px 0;min-height:24px;white-space:nowrap}
+#production .fp-detail-field:last-of-type .fp-detail-value{flex-wrap:wrap}
+
+/* One native picker indicator in both themes; neutralize the legacy CSS arrow. */
+#production select{background-image:none!important}

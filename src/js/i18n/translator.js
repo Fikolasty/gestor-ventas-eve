@@ -123,6 +123,7 @@ function setLang(l){
   // language so previously generated English labels also return to Spanish.
   // Do not mount or recalculate a hidden module.
   if(document.body.classList.contains('mm-mining')&&typeof MineUI!=='undefined')MineUI.shown();
+  window.mmProductionRender?.();
   if(lastP)refreshNow();}
 $('langSel').addEventListener('change',e=>setLang(e.target.value));
 $('langButtons').addEventListener('click',event=>{

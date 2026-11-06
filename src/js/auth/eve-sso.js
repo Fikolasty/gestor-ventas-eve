@@ -97,6 +97,7 @@
         readSkills(false);
       }finally{applyingESI=false;}
       SkillUI.setPilot({name:session.name,skills:data.skills});
+      window.mmProductionSkills?.(data.skills);
     })()];
     const missing=[];
     if(allowed.includes(standingsScope))tasks.push((async()=>{
@@ -124,7 +125,7 @@
     mmUpdateSettingsSkillNotes();stSave();refresh();
   }
   $e('eveSync').addEventListener('click',()=>{if(!session)return;if(!session.scopes.includes(standingsScope)||!session.scopes.includes(implantsScope)){startLogin(true);return;}sync();});
-  $e('eveLogout').addEventListener('click',()=>{sessionEpoch++;esiProcessingSkills=null;clearSources();readSkills(false);SkillUI.setPilot(null);clearSaved();session=null;marketAlliance='';refreshMarketControls();syncNullRouteLabels();menu.hidden=true;button.setAttribute('aria-expanded','false');refreshUI();status('Desconectado. Se conservan tus ajustes manuales.');});
+  $e('eveLogout').addEventListener('click',()=>{sessionEpoch++;esiProcessingSkills=null;clearSources();readSkills(false);SkillUI.setPilot(null);window.mmProductionSkills?.(null);clearSaved();session=null;marketAlliance='';refreshMarketControls();syncNullRouteLabels();menu.hidden=true;button.setAttribute('aria-expanded','false');refreshUI();status('Desconectado. Se conservan tus ajustes manuales.');});
   (async()=>{const u=new URL(location.href),code=u.searchParams.get('code'),state=u.searchParams.get('state');
     if(!code&&!u.searchParams.has('error')){if(stored()){try{await renew();if(session){await syncAlliance();await sync();}}catch(err){console.warn('EVE session restore failed',err);}}return;}
     u.searchParams.delete('code');u.searchParams.delete('state');u.searchParams.delete('error');u.searchParams.delete('error_description');history.replaceState(null,'',u.pathname+u.search+u.hash);

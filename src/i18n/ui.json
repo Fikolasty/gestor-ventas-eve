@@ -3066,5 +3066,545 @@
   "ledger.jitaPrice": {
     "es": "Precio Jita",
     "en": "Jita Price"
+  },
+  "production.title": {
+    "es": "PRODUCCIÓN",
+    "en": "PRODUCTION"
+  },
+  "production.sub": {
+    "es": "Fuel Blocks",
+    "en": "Fuel Blocks"
+  },
+  "production.example": {
+    "es": "Propuesta local · datos de ejemplo",
+    "en": "Local proposal · example data"
+  },
+  "production.plan": {
+    "es": "Plan",
+    "en": "Plan"
+  },
+  "production.materials": {
+    "es": "Materiales",
+    "en": "Materials"
+  },
+  "production.result": {
+    "es": "Resultado",
+    "en": "Result"
+  },
+  "production.batch": {
+    "es": "TU LOTE",
+    "en": "YOUR BATCH"
+  },
+  "production.output": {
+    "es": "PRODUCCIÓN PREVISTA",
+    "en": "PLANNED OUTPUT"
+  },
+  "production.fuel": {
+    "es": "Combustible",
+    "en": "Fuel"
+  },
+  "production.kind": {
+    "es": "Blueprint",
+    "en": "Blueprint"
+  },
+  "production.jobs": {
+    "es": "Trabajos",
+    "en": "Jobs"
+  },
+  "production.runs": {
+    "es": "Runs por trabajo",
+    "en": "Runs per job"
+  },
+  "production.slots": {
+    "es": "Trabajos simultáneos",
+    "en": "Concurrent jobs"
+  },
+  "production.available": {
+    "es": "Runs disponibles por copia",
+    "en": "Runs available per copy"
+  },
+  "production.profile": {
+    "es": "Perfil de fabricación",
+    "en": "Manufacturing profile"
+  },
+  "production.profileValue": {
+    "es": "Estación · sin bonos de estructura ni rigs",
+    "en": "Station · no structure or rig bonuses"
+  },
+  "production.profileNote": {
+    "es": "Un blueprint por trabajo. Habilidades manuales; puedes sincronizarlas desde tu sesión ESI.",
+    "en": "One blueprint per job. Manual skills; you can sync them from your ESI session."
+  },
+  "production.blocks": {
+    "es": "Fuel Blocks",
+    "en": "Fuel Blocks"
+  },
+  "production.totalRuns": {
+    "es": "Runs totales",
+    "en": "Total runs"
+  },
+  "production.waves": {
+    "es": "Tandas",
+    "en": "Waves"
+  },
+  "production.duration": {
+    "es": "Duración del lote",
+    "en": "Batch duration"
+  },
+  "production.volume": {
+    "es": "Volumen del producto",
+    "en": "Product volume"
+  },
+  "production.timeNote": {
+    "es": "La duración cuenta las tandas necesarias según tus trabajos simultáneos.",
+    "en": "Duration includes the waves needed for your concurrent job limit."
+  },
+  "production.next": {
+    "es": "Revisar materiales",
+    "en": "Review materials"
+  },
+  "production.required": {
+    "es": "Requerido",
+    "en": "Required"
+  },
+  "production.owned": {
+    "es": "Disponible",
+    "en": "Available"
+  },
+  "production.missing": {
+    "es": "Por comprar",
+    "en": "To buy"
+  },
+  "production.price": {
+    "es": "Precio unitario",
+    "en": "Unit price"
+  },
+  "production.shipment": {
+    "es": "Envío",
+    "en": "Shipping"
+  },
+  "production.purchase": {
+    "es": "Compra",
+    "en": "Purchase"
+  },
+  "production.buyMode": {
+    "es": "Adquisición",
+    "en": "Acquisition"
+  },
+  "production.instant": {
+    "es": "Compra inmediata (Sell)",
+    "en": "Buy immediately (Sell)"
+  },
+  "production.order": {
+    "es": "Orden de compra (Buy)",
+    "en": "Place buy order (Buy)"
+  },
+  "production.editHint": {
+    "es": "Edita Disponible para recalcular la compra. Abre un material para ajustar precio y envío.",
+    "en": "Edit Available to recalculate purchases. Open a material to adjust price and shipping."
+  },
+  "production.shipping": {
+    "es": "Envío del lote",
+    "en": "Batch shipping"
+  },
+  "production.shippingNote": {
+    "es": "El envío se reparte por igual entre los materiales seleccionados.",
+    "en": "Shipping is shared equally between selected materials."
+  },
+  "production.lots": {
+    "es": "materiales seleccionados",
+    "en": "selected materials"
+  },
+  "production.perLot": {
+    "es": "por material",
+    "en": "per material"
+  },
+  "production.none": {
+    "es": "Envío pendiente de asignación",
+    "en": "Shipping allocation pending"
+  },
+  "production.stock": {
+    "es": "Stock disponible",
+    "en": "Available stock"
+  },
+  "production.manual": {
+    "es": "Precio manual",
+    "en": "Manual price"
+  },
+  "production.send": {
+    "es": "Incluir en el envío",
+    "en": "Include in shipment"
+  },
+  "production.units": {
+    "es": "Unidades enviadas",
+    "en": "Shipped units"
+  },
+  "production.economic": {
+    "es": "Beneficio económico",
+    "en": "Economic profit"
+  },
+  "production.cash": {
+    "es": "Beneficio de caja",
+    "en": "Cash profit"
+  },
+  "production.even": {
+    "es": "Precio de equilibrio",
+    "en": "Break-even price"
+  },
+  "production.expenses": {
+    "es": "COSTES DEL LOTE",
+    "en": "BATCH COSTS"
+  },
+  "production.comparison": {
+    "es": "COMPARA TUS OPCIONES",
+    "en": "COMPARE YOUR OPTIONS"
+  },
+  "production.sale": {
+    "es": "Venta del combustible",
+    "en": "Fuel sale"
+  },
+  "production.saleOrder": {
+    "es": "Orden de venta (Sell)",
+    "en": "Place sell order (Sell)"
+  },
+  "production.saleInstant": {
+    "es": "Venta inmediata (Buy)",
+    "en": "Sell immediately (Buy)"
+  },
+  "production.install": {
+    "es": "Instalación del lote",
+    "en": "Batch installation"
+  },
+  "production.ownedValue": {
+    "es": "Stock propio consumido",
+    "en": "Own stock consumed"
+  },
+  "production.net": {
+    "es": "Ingreso neto de venta",
+    "en": "Net sale proceeds"
+  },
+  "production.cashCost": {
+    "es": "Coste de caja",
+    "en": "Cash cost"
+  },
+  "production.econCost": {
+    "es": "Coste económico",
+    "en": "Economic cost"
+  },
+  "production.vsStock": {
+    "es": "Fabricar frente a vender tus insumos",
+    "en": "Manufacture versus selling your inputs"
+  },
+  "production.vsBuy": {
+    "es": "Fabricar frente a comprar Fuel",
+    "en": "Manufacture versus buying Fuel"
+  },
+  "production.vsStockNote": {
+    "es": "Diferencia tras compras, gastos y valor neto de los materiales propios utilizados.",
+    "en": "Difference after purchases, expenses and net value of own materials consumed."
+  },
+  "production.vsBuyNote": {
+    "es": "Ahorro económico frente a comprar la misma cantidad de bloques en el mismo destino.",
+    "en": "Economic saving versus buying the same block quantity at the same destination."
+  },
+  "production.cashNote": {
+    "es": "El stock propio no exige una compra nueva, pero tiene valor económico.",
+    "en": "Own stock requires no new purchase, but has economic value."
+  },
+  "production.validation": {
+    "es": "Revisa runs disponibles, cantidades y número de trabajos.",
+    "en": "Check available runs, quantities and job count."
+  },
+  "production.partial": {
+    "es": "Parcial",
+    "en": "Partial"
+  },
+  "production.unknown": {
+    "es": "Sin datos",
+    "en": "No data"
+  },
+  "production.stockZero": {
+    "es": "No se suman precios ausentes como cero.",
+    "en": "Missing prices are not treated as zero."
+  },
+  "production.fixture": {
+    "es": "La instalación se estima con EIV, índice y tasas del perfil industrial. Verifica cargos especiales y el importe del cliente.",
+    "en": "Installation is estimated from EIV, index and industry profile rates. Check special surcharges and the in-game quote."
+  },
+  "production.ready": {
+    "es": "Materiales y presupuesto",
+    "en": "Materials and budget"
+  },
+  "production.toResult": {
+    "es": "Ver resultado",
+    "en": "View result"
+  },
+  "production.update": {
+    "es": "Actualizar precios",
+    "en": "Update prices"
+  },
+  "production.loading": {
+    "es": "Consultando ESI…",
+    "en": "Loading ESI…"
+  },
+  "production.empty": {
+    "es": "Actualiza precios para consultar Jita. Puedes introducir precios manuales.",
+    "en": "Update prices to query Jita. You can enter manual prices."
+  },
+  "production.estimate": {
+    "es": "Estimación Jita 4-4 · tasas de Ajustes · órdenes sin ejecución garantizada",
+    "en": "Jita 4-4 estimate · rates from Settings · orders may not fill"
+  },
+  "production.partialData": {
+    "es": "Faltan datos para completar el resultado. Revisa precios e instalación.",
+    "en": "Some data is missing. Check prices and installation."
+  },
+  "production.facility": {
+    "es": "Instalación",
+    "en": "Facility"
+  },
+  "production.station": {
+    "es": "Estación NPC",
+    "en": "NPC station"
+  },
+  "production.security": {
+    "es": "Seguridad",
+    "en": "Security"
+  },
+  "production.high": {
+    "es": "Alta seguridad",
+    "en": "High security"
+  },
+  "production.low": {
+    "es": "Baja seguridad",
+    "en": "Low security"
+  },
+  "production.null": {
+    "es": "Null / agujero de gusano",
+    "en": "Null / wormhole"
+  },
+  "production.rigM": {
+    "es": "Rig de materiales",
+    "en": "Material rig"
+  },
+  "production.rigT": {
+    "es": "Rig de tiempo",
+    "en": "Time rig"
+  },
+  "production.noRig": {
+    "es": "Sin rig",
+    "en": "No rig"
+  },
+  "production.systemId": {
+    "es": "Sistema · ID",
+    "en": "System · ID"
+  },
+  "production.systemLoad": {
+    "es": "Consultar sistema",
+    "en": "Load system"
+  },
+  "production.index": {
+    "es": "Índice industrial %",
+    "en": "Industry index %"
+  },
+  "production.facilityTax": {
+    "es": "Tasa de instalación %",
+    "en": "Facility tax %"
+  },
+  "production.sccTax": {
+    "es": "SCC industrial %",
+    "en": "Industry SCC %"
+  },
+  "production.alphaTax": {
+    "es": "Recargo Alpha %",
+    "en": "Alpha surcharge %"
+  },
+  "production.regionTax": {
+    "es": "Recargo regional %",
+    "en": "Regional surcharge %"
+  },
+  "production.industry": {
+    "es": "Industry · nivel",
+    "en": "Industry · level"
+  },
+  "production.advanced": {
+    "es": "Advanced Industry · nivel",
+    "en": "Advanced Industry · level"
+  },
+  "production.outbound": {
+    "es": "Envío del Fuel a Jita",
+    "en": "Fuel shipping to Jita"
+  },
+  "production.fuelPrice": {
+    "es": "Precio de venta manual",
+    "en": "Manual sale price"
+  },
+  "production.advancedGroup": {
+    "es": "Perfil industrial y logística",
+    "en": "Industry profile and logistics"
+  },
+  "production.installHint": {
+    "es": "Deja vacío para calcular con precios ajustados CCP e índice. Un importe manual sustituye la estimación del lote.",
+    "en": "Leave blank to calculate from CCP adjusted prices and index. A manual amount replaces the batch estimate."
+  },
+  "production.scope": {
+    "es": "Materiales comprados en Jita; venta y comparación del Fuel en Jita. Introduce cada traslado real una sola vez.",
+    "en": "Materials bought in Jita; fuel sale and purchase comparison in Jita. Enter each actual shipment once."
+  },
+  "production.syncSkills": {
+    "es": "Usar habilidades ESI",
+    "en": "Use ESI skills"
+  },
+  "production.noSkills": {
+    "es": "Conecta tu personaje y actualiza sus habilidades primero.",
+    "en": "Connect your character and refresh skills first."
+  },
+  "production.industryWarning": {
+    "es": "Se requiere Industry I para instalar estos trabajos.",
+    "en": "Industry I is required to install these jobs."
+  },
+  "production.jobLong": {
+    "es": "El trabajo supera 30 días; revisa su instalabilidad en el cliente.",
+    "en": "Job exceeds 30 days; check installation eligibility in game."
+  },
+  "production.discount": {
+    "es": "Orden con descuento",
+    "en": "Discounted buy order"
+  },
+  "production.discountPercent": {
+    "es": "Descuento sobre Sell %",
+    "en": "Discount from Sell %"
+  },
+  "production.quoteMissing": {
+    "es": "Sin cotización",
+    "en": "No quote"
+  },
+  "production.sourceEsi": {
+    "es": "ESI · Jita 4-4",
+    "en": "ESI · Jita 4-4"
+  },
+  "production.sourceManual": {
+    "es": "Precio manual",
+    "en": "Manual price"
+  },
+  "production.updated": {
+    "es": "Última consulta",
+    "en": "Last query"
+  },
+  "production.blocksHour": {
+    "es": "Bloques por hora",
+    "en": "Blocks per hour"
+  },
+  "production.profitHour": {
+    "es": "Beneficio por hora",
+    "en": "Profit per hour"
+  },
+  "production.perJob": {
+    "es": "Duración por trabajo",
+    "en": "Duration per job"
+  },
+  "production.marginBlock": {
+    "es": "Beneficio por bloque",
+    "en": "Profit per block"
+  },
+  "production.eiv": {
+    "es": "Valor estimado industrial",
+    "en": "Estimated industry value"
+  },
+  "production.specialHelp": {
+    "es": "Rigs de fabricación de estructuras y Fuel Blocks; el bono se ajusta por seguridad. Los recargos regionales y Alpha son entradas manuales.",
+    "en": "Structure and Fuel Block manufacturing rigs; bonus scales with security. Regional and Alpha surcharges are manual inputs."
+  },
+  "production.skillSource": {
+    "es": "Habilidades sincronizadas de ESI",
+    "en": "Skills synced from ESI"
+  },
+  "production.labelMaterials": {
+    "es": "materiales",
+    "en": "materials"
+  },
+  "production.labelWithShortages": {
+    "es": "con faltantes",
+    "en": "with shortages"
+  },
+  "production.labelEstimatedPurchase": {
+    "es": "Compra estimada",
+    "en": "Estimated purchase"
+  },
+  "production.labelMaterial": {
+    "es": "Material",
+    "en": "Material"
+  },
+  "production.labelPriceUnit": {
+    "es": "Precio / u.",
+    "en": "Price / unit"
+  },
+  "production.labelPriceAndShipping": {
+    "es": "Precio y envío",
+    "en": "Price and shipping"
+  },
+  "production.labelQuantity": {
+    "es": "Cantidad",
+    "en": "Quantity"
+  },
+  "production.labelPrice": {
+    "es": "Precio",
+    "en": "Price"
+  },
+  "production.labelUnits": {
+    "es": "Unidades",
+    "en": "Units"
+  },
+  "production.labelIncludeMaterial": {
+    "es": "Incluir material",
+    "en": "Include material"
+  },
+  "production.labelUnit": {
+    "es": "u.",
+    "en": "unit"
+  },
+  "production.labelSource": {
+    "es": "Origen",
+    "en": "Source"
+  },
+  "production.labelShippedMaterials": {
+    "es": "materiales con envío",
+    "en": "shipped materials"
+  },
+  "production.labelAmountsInIsk": {
+    "es": "Importes en ISK",
+    "en": "Amounts in ISK"
+  },
+  "production.labelEnUs": {
+    "es": "es-ES",
+    "en": "en-US"
+  },
+  "production.labelOriginalBpo": {
+    "es": "Original (BPO)",
+    "en": "Original (BPO)"
+  },
+  "production.labelCopyBpc": {
+    "es": "Copia (BPC)",
+    "en": "Copy (BPC)"
+  },
+  "production.labelCopy": {
+    "es": "Copiar ",
+    "en": "Copy "
+  },
+  "module.production": {
+    "es": "Producción",
+    "en": "Production"
+  },
+  "production.updateShort": {
+    "es": "Actualizar",
+    "en": "Refresh"
+  },
+  "production.rigCombined": {
+    "es": "Rig de eficiencia",
+    "en": "Efficiency rig"
+  },
+  "production.noShipment": {
+    "es": "Sin materiales seleccionados para envío",
+    "en": "No materials selected for shipping"
   }
 }

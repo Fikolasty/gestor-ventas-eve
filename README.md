@@ -5,6 +5,8 @@ Pegas tu inventario de EVE y la página te dice, item por item, dónde ganas má
 vender en Null (HY-RWO), poner una orden en Jita, vender al instante en Jita, el Buyback de la alianza, reprocesar o vender a otro jugador.
 Descuenta los taxes, el Broker y el envío con SIGMA Freight.
 
+El módulo **Producción** planifica los cuatro Fuel Blocks con stock, precios Jita y costes industriales. Consulta [alcance, fórmulas y límites](docs/PRODUCTION_205.md).
+
 👉 **Usarla:** https://fikolasty.github.io/gestor-ventas-eve/
 (también puedes descargar `index.html` y abrirlo con doble clic: funciona igual, sin instalar nada).
 

@@ -123,11 +123,20 @@ async function history30(id){
     return{daily:vol/30,avg30:vol>0?last.reduce((a,d)=>a+d.average*d.volume,0)/vol:null};
   }catch(e){return null;}
 }
-let ccp=null; // precio promedio de Fenris (una descarga por sesión)
-async function loadCcp(){
-  if(ccp)return;
-  try{const arr=await (await esiFetch('/markets/prices/')).json();ccp={};if(Array.isArray(arr))arr.forEach(x=>{if(typeof x.average_price==='number')ccp[x.type_id]=x.average_price;});}
-  catch(e){ccp={};}
+let ccp=null; // average_price remains the parser's reference, never adjusted_price.
+let ccpAdjusted={},ccpQueriedAt=null,ccpWait=null;
+async function loadCcp(force=false){
+  if(ccpWait)return ccpWait;
+  if(ccp&&!force)return;
+  ccpWait=(async()=>{try{
+    const arr=await (await esiFetch('/markets/prices/')).json();
+    if(!Array.isArray(arr))throw new Error('Invalid CCP price response');
+    const averages={},adjusted={};
+    arr.forEach(x=>{if(Number.isFinite(x.average_price))averages[x.type_id]=x.average_price;
+      if(Number.isFinite(x.adjusted_price)&&x.adjusted_price>=0)adjusted[x.type_id]=x.adjusted_price;});
+    ccp=averages;ccpAdjusted=adjusted;ccpQueriedAt=Date.now();
+  }catch(e){if(!ccp)ccp={};}finally{ccpWait=null;}})();
+  return ccpWait;
 }
 // Vender al instante: recorre las compras de Jita con tu cantidad, respetando el mínimo de cada orden
 function walkBuys(a,qty){

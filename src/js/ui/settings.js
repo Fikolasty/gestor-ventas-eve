@@ -4,10 +4,12 @@ function selectAppModule(name){
   // PI EN PAUSA: conservar la implementación completa para reactivarla en una futura versión.
   // Mientras está oculta en la navegación, no permitir activarla mediante accesos antiguos.
   if(name==='pi')name='ventas';
-  if(!['ventas','jita','mining','pi','skills'].includes(name))return;
+  if(!['ventas','jita','mining','pi','skills','production'].includes(name))return;
   if(name==='ventas'||name==='jita')activateJitaContext(name==='jita');
   // C.5b: navigation changes the visible workspace, never the Sales inventory.
   document.body.dataset.mmView=name;
+  $('production').hidden=name!=='production';
+  if(name==='production')window.mmProductionShown?.();
   document.body.classList.toggle('mm-mining',name==='mining');
   document.body.classList.toggle('mm-pi',name==='pi');
   document.body.classList.toggle('mm-skills',name==='skills');
@@ -55,7 +57,7 @@ function mmSyncWorkspaceTabs(){
 function togglePanel(id,force){
   if(id==='mining'){selectAppModule(force===false?'ventas':'mining');return;}
   if(!['settings','help'].includes(id))return;
-  if(document.body.classList.contains('mm-mining')||document.body.classList.contains('mm-pi')||document.body.classList.contains('mm-skills'))selectAppModule('ventas');
+  if(document.body.dataset.mmView==='production'||document.body.classList.contains('mm-mining')||document.body.classList.contains('mm-pi')||document.body.classList.contains('mm-skills'))selectAppModule('ventas');
   const s=$(id),open=force!=null?force:s.hidden;
   if(open){
     const other=id==='settings'?'help':'settings';
