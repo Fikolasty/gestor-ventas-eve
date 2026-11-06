@@ -180,3 +180,13 @@ body[data-mm-view="production"]>.hero,body[data-mm-view="production"]>main{displ
 
 /* One native picker indicator in both themes; neutralize the legacy CSS arrow. */
 #production select{background-image:none!important}
+
+/* Five native module tabs must fit the mobile header on Linux and Windows. */
+@media(max-width:630px){
+ body .top.mm-ho-root #mmTabs>.mm-ho-main{width:100%!important;max-width:100%!important;box-sizing:border-box}
+ body .top.mm-ho-root #mmTabs>.mm-ho-main .mm-modgroup{
+  display:grid!important;grid-template-columns:repeat(5,minmax(0,1fr));
+  flex:1 1 auto!important;width:100%!important;max-width:100%!important;gap:2px!important
+ }
+ body .top.mm-ho-root #mmTabs>.mm-ho-main .mm-modgroup .mm-mod{padding-inline:2px!important;min-width:0!important}
+}

@@ -96,3 +96,14 @@ class ProductionTests(unittest.TestCase):
      self.p.evaluate('()=>ProductionUI.setTab("plan")');self.p.locator('#fp-plan details').evaluate('(e)=>e.open=true')
      self.assertTrue(self.p.evaluate('document.documentElement.scrollWidth<=innerWidth+1'))
      if width==1440 and lang=='es':self.p.screenshot(path=str(OUT/f'profile-open-es-1440-{"light" if light else "dark"}.png'),full_page=True)
+
+ def test_five_navigation_tabs_fit_mobile_with_font_stress(self):
+  for lang in ['es','en']:
+   self.p.evaluate('setLang',lang)
+   for width in [390,630,980,1440]:
+    self.p.set_viewport_size({'width':width,'height':1100})
+    for font in ['Arial','Verdana']:
+     for light in [False,True]:
+      self.p.evaluate('(x)=>{document.documentElement.classList.toggle("light",x.light);document.querySelectorAll("#mmTabs [data-mm-module]").forEach(e=>e.style.setProperty("font-family",x.font,"important"))}',{'light':light,'font':font})
+      self.assertTrue(self.p.evaluate('document.documentElement.scrollWidth<=innerWidth+1'),(lang,width,font,light))
+      self.assertTrue(self.p.locator('#mmTabs [data-mm-module]').evaluate_all('es=>es.filter(e=>e.getBoundingClientRect().width).every(e=>{const label=e.querySelector(".mm-mod-label")||e,r=document.createRange();r.selectNodeContents(label);const b=r.getBoundingClientRect(),a=e.getBoundingClientRect();return b.left>=a.left-1&&b.right<=a.right+1})'),(lang,width,font,light))

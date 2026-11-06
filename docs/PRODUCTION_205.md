@@ -27,3 +27,8 @@ Dominio puro: production-data.js / production-materials.js / production.js. Adap
 205Node/16Python/8legacy PASS locales. Regresión general local152Chromium PASS en378,305s, más focales finales del módulo; la nueva suite definitiva tiene154tests para CI. Matriz ES/EN×Dark/Light×390/630/980/1440, cerrados/uno/todos, perfil abierto, datos ausentes/importes largos; se verifican navegación, actualización de precios/sistema con fixtures, campos, copia, popup y estabilidad. Capturas finales se revisan tras congelar el build. Sin prueba ESI/SSO con personaje real ni comparación de una factura industrial real; los impuestos especiales son entradas explícitas. Los resultados son estimaciones revisables con el importe del cliente.
 
 Publicación Fiko, cuatro Actions, Pages y comparación independiente HTTPS pendientes. Última LIVE204 hasta cierre certificado en DSS.
+
+
+### Recuperación del gate205 — cinco pestañas móviles
+
+El primer CI42270299437 bloqueó correctamente Pages:102/154Chromium PASS y52fallos de composición por el mismo desborde global8px a390px en Linux al añadir Producción;205Node/16Python/8legacy sí pasaron. La última LIVE siguió siendo204. Se fija una retícula de cinco columnas iguales en el menú móvil (sin ocultar overflow, recortar nombres ni reducir fuente); el contenedor se limita al ancho disponible. Nuevo test fuerza Arial/Verdana y comprueba límites reales del texto en ES/EN y ambos temas a390/630/980/1440. Cinco focales finales PASS. La suite definitiva pasa a155Chromium; publicación todavía pendiente de nueva corrida completa, cuatro Actions y HTTPS. CSS/test son el único cambio funcional de esta recuperación; fórmulas intactas.
