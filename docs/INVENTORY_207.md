@@ -1,6 +1,6 @@
 # Inventario personal de Producción — v1.0.207
 
-Estado: candidata implementada; publicación pendiente de CI/Pages/HTTPS.
+Estado: LIVE certificada. Cuatro Actions, Pages y HTTPS verificados; HTML idéntico al build local.
 
 Dirección aprobada por el propietario: importar por ubicación, revisar materiales y aplicar únicamente los seleccionados a Disponible. La edición manual permanece disponible. El icono junto a Requerido completa Disponible sin reducir excedentes. Solo el nombre del material despliega su detalle; las cantidades siguen siendo copiables.
 
@@ -26,3 +26,7 @@ No se ha probado SSO/ESI con un personaje real. La aplicación registrada en CCP
 Referencias primarias consultadas: [OpenAPI ESI](https://esi.evetech.net/meta/openapi.json), [X-Pages](https://developers.eveonline.com/docs/services/esi/pagination/x-pages/), [SSO y permisos](https://developers.eveonline.com/docs/services/sso/).
 
 No se modifican fórmulas industriales, tasas, precios Jita, SIGMA Freight, tasador ni lógica económica.
+
+## Cierre de publicación
+
+Fuente67eb820e897f559524eff5bd015822a8c3e58bba; build78dab3d3290e5da718e399f064c67b244bee6708. CI210Node/16Python/8legacy/160Chromium PASS; cuatro Actions SUCCESS, Pages42309180194. HTTPS2026-11-06T23:11:31.389343Z:2.694.913bytesLF,blob a2c68bd51a438ca625ef9dac3512738e20b2508f, igual a local/GitHub. Se revalida la página1 al terminar la paginación; Last-Modified puede diferir entre páginas. Fixtures y snapshots de prueba no son inventario de un personaje real.

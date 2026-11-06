@@ -1,6 +1,6 @@
-# v1.0.207 — candidata
+# v1.0.207 LIVE — inventario personal ESI y stock
 
-Inventario personal ESI opcional en Producción: revisión por ubicación y aplicación selectiva a Disponible. Entrada estable de stock y acción junto a Requerido. CI/Pages pendientes; consulta docs/INVENTORY_207.md.
+Importación opcional por ubicación, revisión y aplicación selectiva a Disponible. Entrada estable sin spinner y acción junto a Requerido. CI210Node/16Python/8legacy/160Chromium; cuatro Actions/Pages/HTTPS PASS. Sin cambios económicos. ESI/SSO real no verificado. Ver docs/INVENTORY_207.md.
 
 ## 1.0.206 — perfil industrial estable (LIVE)
 
