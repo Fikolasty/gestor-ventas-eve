@@ -1,7 +1,7 @@
 ## 1.0.204 — limpieza CSS de controles retirados
 
 - Retirados estilos del antiguo menú de Inventario y botones sin DOM; controles reales conservados.5.915bytes menos, scripts y apariencia idénticos.
-- 232estados/24parejas PNG idénticos y focales locales PASS. CI integral y publicación pendientes; evidencia canónica al final de docs/DSS.md.
+- LIVE certificada:232estados/24parejas PNG idénticos,184Node/16Python/8legacy/150Chromium y cuatro Actions PASS. HTML público/local/GitHub76fa3bb3 idéntico; evidencia canónica al final de docs/DSS.md.
 
 ## 1.0.203 — limpieza CSS del inventario
 
