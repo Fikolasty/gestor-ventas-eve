@@ -43,6 +43,8 @@ const ProductionUI=(()=>{
  const root=document.getElementById('production');root.setAttribute('aria-label','Fuel Blocks');
  function render(){
   lang=S.lang==='en'?'en':'es';
+  // Read the native disclosure before replacing its DOM; user choice wins.
+  const profileOpen=!!root.querySelector('#fp-industry-profile')?.open;
   const active=root.contains(document.activeElement)?document.activeElement:null;
   const focus=active?.matches('input,select')?{key:active.dataset.state,material:active.dataset.material,id:active.dataset.id,value:active.value}:null;
   const m=calculate(),dt=(m.seconds||0)/3600,hours=Math.floor(dt),mins=Math.floor(((m.seconds||0)%3600)/60);
@@ -53,7 +55,7 @@ const ProductionUI=(()=>{
    <div class="fp-wide">${pick('fuel',t('fuel'),fuels.map(f=>[f.id,f.name]))}</div>
    ${pick('kind',t('kind'),[['BPO',t('labelOriginalBpo')],['BPC',t('labelCopyBpc')]])}${input('me','ME %')}${input('te','TE %')}
    ${input('jobs',t('jobs'))}${input('runs',t('runs'))}${input('slots',t('slots'))}${state.kind==='BPC'?`<div class="fp-wide">${input('available',t('available'))}</div>`:''}
-   <div class="fp-wide">${pick('facility',t('facility'),[['station',t('station')],['raitaru','Raitaru'],['azbel','Azbel'],['sotiyo','Sotiyo']])}</div><details class="fp-wide fp-rule"><summary>${t('advancedGroup')}</summary><div class="fp-fields" style="margin-top:16px">
+   <div class="fp-wide">${pick('facility',t('facility'),[['station',t('station')],['raitaru','Raitaru'],['azbel','Azbel'],['sotiyo','Sotiyo']])}</div><details id="fp-industry-profile" class="fp-wide fp-rule" ${profileOpen?'open':''}><summary>${t('advancedGroup')}</summary><div class="fp-fields" style="margin-top:16px">
    ${pick('security',t('security'),[['high',t('high')],['low',t('low')],['null',t('null')]])}
    ${pick('rigM',t(['azbel','sotiyo'].includes(state.facility)?'rigCombined':'rigM'),[[0,t('noRig')],[1,'T1'],[2,'T2']])}${['azbel','sotiyo'].includes(state.facility)?'':pick('rigT',t('rigT'),[[0,t('noRig')],[1,'T1'],[2,'T2']])}
    ${input('industry',t('industry'))}${input('advanced',t('advanced'))}<button type="button" class="ghost" data-production-skills>${t('syncSkills')}</button>

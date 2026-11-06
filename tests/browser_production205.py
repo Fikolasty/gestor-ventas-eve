@@ -111,3 +111,32 @@ class ProductionTests(unittest.TestCase):
       self.assertTrue(self.p.evaluate('document.documentElement.scrollWidth<=innerWidth+1'),(lang,width,font,light))
       cells=self.p.locator('#mmTabs [data-mm-module]').evaluate_all('es=>es.filter(e=>e.getBoundingClientRect().width).map(e=>{const label=e.querySelector(".mm-mod-label")||e,r=document.createRange();r.selectNodeContents(label);const b=r.getBoundingClientRect(),a=e.getBoundingClientRect();return {label:e.textContent.trim(),textWidth:b.width,cellWidth:a.width,left:b.left-a.left,right:a.right-b.right,fit:b.left>=a.left-1&&b.right<=a.right+1}})')
       self.assertTrue(all(x['fit'] for x in cells),(lang,width,font,light,cells))
+
+ def test_industry_profile_preserves_user_open_state_during_rerenders(self):
+  self.show()
+  self.assertFalse(self.p.locator('#fp-plan details').evaluate('(e)=>e.open'))
+  for lang in ['es','en']:
+   self.p.evaluate('setLang',lang)
+   for width in [1440,980,630,390]:
+    self.p.set_viewport_size({'width':width,'height':1100})
+    for light in [False,True]:
+     self.p.evaluate('(light)=>{document.documentElement.classList.toggle("light",light);ProductionUI.setTab("plan")}',light)
+     profile=self.p.locator('#fp-plan details');profile.locator('summary').click()
+     self.assertTrue(profile.evaluate('(e)=>e.open'))
+     for key,value in [('industry','2'),('advanced','1'),('index','4.5'),('facilityTax','1'),('sccTax','4'),('alphaTax','.25'),('regionTax','0'),('install','100'),('outbound','700')]:
+      field=self.p.locator(f'[data-state="{key}"]');field.fill(value);field.press('Tab')
+      self.assertTrue(profile.evaluate('(e)=>e.open'),(lang,width,light,key))
+     self.p.locator('[data-state="security"]').select_option('low')
+     self.assertTrue(profile.evaluate('(e)=>e.open'))
+     self.p.locator('[data-production-system]').click()
+     self.p.wait_for_function('()=>ProductionUI.state.index===5')
+     self.assertTrue(profile.evaluate('(e)=>e.open'))
+     self.p.evaluate('setLang','en' if lang=='es' else 'es')
+     self.assertTrue(profile.evaluate('(e)=>e.open'))
+     self.p.evaluate('setLang',lang)
+     self.assertTrue(profile.evaluate('(e)=>e.open'))
+     self.p.evaluate('()=>{ProductionUI.setTab("materials");ProductionUI.setTab("plan")}')
+     self.assertTrue(profile.evaluate('(e)=>e.open'))
+     if width==1440 and lang=='es':self.p.screenshot(path=str(OUT/f'profile206-open-es-1440-{"light" if light else "dark"}.png'),full_page=True)
+     profile.locator('summary').click();self.p.evaluate('()=>ProductionUI.render()')
+     self.assertFalse(profile.evaluate('(e)=>e.open'))
