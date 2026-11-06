@@ -1209,3 +1209,10 @@ Límites: resultados estimados al mejor nivel de Jita; no se certifica profundid
 ## Producción: lectura opcional de inventario personal v1.0.207
 
 La nueva capacidad mmProductionInventoryAuth limita lectura autenticada a assets/names del personaje actual; tokens permanecen dentro de eve-sso.js y las solicitudes pasan por el semáforo de red compartido. productionInventory recupera todas las páginas y productionAssetLocations separa hangar/contenedor, excluyendo cargo/locked/entregas/safety y evitando doble conteo. Revisar no cambia el plan; Aplicar actualiza únicamente Disponible de los materiales elegidos. Assets en memoria; borrador temporal de plan, sin assets/tokens, solo para el redirect de consentimiento. Scopes previos preservados; lectura assets requiere permiso opcional explícito. Contrato: docs/INVENTORY_207.md. LIVE207 certificada:4Actions/210Node/16Python/8legacy/160Chromium PASS; público/local/GitHub idénticos,a2c68bd51a438ca625ef9dac3512738e20b2508f. No se verificó SSO/ESI real ni configuración privada de scopes de CCP.
+
+
+## Perfil y acceso ESI v1.0.208
+
+El menú del personaje se limita a Perfil/Desconectar con sesión y Conectar sin ella. El nuevo bloque Conexión con EVE, dentro del tab de Personaje e Impuestos, conserva los nodos originales de sincronización y estado, explica cuatro tipos de lectura y muestra autorización por scope sin confundirla con descarga exitosa. Las acciones de actualizar, ampliar permisos del perfil e inventario quedan separadas y usan los flujos existentes; ningún scope nuevo.
+
+El callback de producción es canónico: https://fikolasty.github.io/gestor-ventas-eve/ desde ambos alias de Pages. Se conserva PKCE y el login básico de skills. El registro privado en CCP debe coincidir con ese URI; no fue modificado por el agente. Contrato: docs/PROFILE_208.md. LIVE208 certificada:4Actions/210Node/16Python/8legacy/164Chromium PASS; HTTPS/local/GitHub idénticos,blob13b36b980d0e1edcb13aadf4120c0ce79b80b6ad. ESI/SSO real y registro CCP no verificados.

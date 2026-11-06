@@ -1,6 +1,6 @@
 # Perfil y conexión EVE — v1.0.208
 
-Estado: candidata implementada; publicación pendiente de CI/Pages/HTTPS.
+Estado: LIVE certificada. Cuatro Actions/Pages/HTTPS verificados; HTML público idéntico al build local.
 
 ## Alcance aprobado
 
@@ -25,3 +25,7 @@ Referencia: [SSO CCP: redirects y scopes registrados](https://developers.eveonli
 Pruebas focales cubren acciones exactas del menú por sesión, ausencia de textos largos en el menú, navegación a Perfil, permisos parciales/desconexión, top layer por hit-test, ES/EN, Dark/Light y 390/630/980/1440. Reconexión simulada desde ambos alias comprueba callback raíz, scope básico y PKCE. Se conservan los tests firmados RSA, revisiones contra edición manual, datos parciales, logout y flujo de inventario.
 
 No se probó el acceso con un personaje real ni se verificó el registro privado de CCP. No hay cambios en fórmulas, tasas, Tasación, inventario del plan ni persistencia.
+
+## Evidencia de publicación
+
+Fuente f103043e6c97e7e4905aee3f6cdc481e98abd6da; build50c7d0371cf74fd8ba928d8ae453a4ec6b9cc579; Pages42312645470. CI210Node/16Python/8legacy/164Chromium PASS y cuatro Actions SUCCESS. HTTPS2026-11-06T23:49:09.536150Z:2.706.603bytesLF,blob13b36b980d0e1edcb13aadf4120c0ce79b80b6ad, igual a local/GitHub. La comprobación firmada usa personajes/tokens sintéticos; acceso real no certificado.

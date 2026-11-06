@@ -1,6 +1,6 @@
-# v1.0.208 — candidata
+# v1.0.208 LIVE — Perfil ESI y retorno SSO
 
-Menú del personaje simplificado; permisos y sincronización en Perfil de Ajustes. Callback SSO raíz unificado para los dos alias de Pages. CI/Pages pendientes. Ver docs/PROFILE_208.md.
+Menú Perfil/Desconectar o Conectar; permisos y sincronización en Perfil de Ajustes. Callback SSO raíz canónico desde ambos alias de Pages.4Actions/210Node/16Python/8legacy/164Chromium/Pages/HTTPS PASS. Configuración privada CCP y personaje real no verificados. Ver docs/PROFILE_208.md.
 
 # v1.0.207 LIVE — inventario personal ESI y stock
 
