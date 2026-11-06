@@ -2271,3 +2271,12 @@ Contrato vigente: Est.Price pegado no sirve como compra Sell ejecutable sin Sell
 Petición explícita del propietario sobre captura real200: retirar solo «Total parcial: faltan cotizaciones. Cada lado suma solo los Items con precio disponible». Se elimina su creación de DOM; el encabezado Tasación parcial/Partial appraisal, cobertura accesible y sumas permanecen. El aviso HTTP/reintento200 es independiente y se conserva. Sin cambios de fórmulas, datos, ESI, estilos ni almacenamiento. Se ajustan aserciones de presentación y dos comparadores históricos para seguir comprobando el encabezado parcial en vez del texto eliminado.
 
 Focal local:3Chromium PASS,64renders de Tasación completo/parcial/ausente/regional, ES/EN,390/630/980/1440,Dark/Light. Capturas appraisal201-r1 parcial1440 Dark/Light revisadas después del cambio. Gate completo149Chromium y demás suites solo en CI; sin duplicarlo localmente. Sin aprobación visual pendiente para la eliminación solicitada. Última LIVE200, publicación201 Fiko/Actions/Pages/HTTPS pendiente. Continuidad vigente HANDOFF_APPRAISAL_200.md, sin crear otro kit.
+
+
+## Cierre LIVE v1.0.201 — 2026-11-05
+
+Frase de total parcial retirada por petición explícita del propietario. Título Tasación parcial/Partial appraisal, cobertura y cifras intactos; aviso HTTP y reintento200 conservados. Fuente Fiko d93cd254a9909aed1b9b767d87906a78b622b7b0;buildd247cba91e6ba3977f6f2b380ab0f5f2c2c8ac85.13archivos del incremento verificados; sin cambios adicionales de producto.
+
+Cuatro Actions SUCCESS: Build42133016622, Minería42133016555, Versiones42133016600 y Rebuild/Pages42133016561. Compile127614077888 y deploy127616601312success. CI181Node/16Python/8legacy/149Chromium340,197s PASS. Local3Chromium5,653s,64renders y capturas finales appraisal201-r1 parcial1440ES Dark/Light revisadas. No se duplicó el gate completo localmente.
+
+HTTPS200 independiente sin query/no-cache:2026-11-06T00:03:26.574814Z (2026-11-05 en America/La_Paz), público/local canónicoLF/GitHub idénticos,2612955bytes,blob95ba2f1763957228e7457a5457daab706a1410fc. Sin aprobación ni publicación pendiente. Sustituye candidata201. Continuidad HANDOFF_APPRAISAL_200.md reutilizada. ESI/SSO vivo no se vuelve a certificar en este cambio de copy; cálculo, tasas y disponibilidad de datos conservados. CSS pendiente sin iniciar.

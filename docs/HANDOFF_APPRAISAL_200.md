@@ -1,12 +1,7 @@
-# Continuidad activa — LIVE v1.0.200
+# Continuidad activa — LIVE v1.0.201
 
-Reparación publicada2026-11-05. Fuenteebfc728bbe568262448fc84d6baa463e58b1af2a;build459b9dd198ba6d432d2123e607420218318ea0dd. HTML2613089bytesLF,blobee0019e13a042f9b18f388058643049636f51189,HTTPS/local/GitHub idénticos22:12:19Z. Cuatro Actions SUCCESS, Rebuild/Pages42117245679;181Node/16Python/8legacy/149Chromium542,111s PASS. Evidencia canónica al final de DSS.
+Retirada la frase de total parcial solicitada; título parcial, importes y cobertura conservados. Fuente Fiko d93cd254a9909aed1b9b767d87906a78b622b7b0;buildd247cba91e6ba3977f6f2b380ab0f5f2c2c8ac85. HTML2612955bytesLF,blob95ba2f1763957228e7457a5457daab706a1410fc;HTTPS/local/GitHub idénticos2026-11-06T00:03:26Z (día5 local). Cuatro Actions SUCCESS, Rebuild/Pages42133016561. CI181Node/16Python/8legacy/149Chromium340,197s PASS; local3focales/64renders y capturas appraisal201-r1 revisadas. Sin aprobación ni gate pendiente.
 
-Se conservan y aplican éxitos por Item aunque fallen otros; se espera al fin de los workers y se libera carga. Error/reintento visible junto a Tasación. Ventas etiqueta estimaciones pegadas; Compra Sell no usa Est.Price sin cotización o precio manual explícito. Tasas y envío199 intactos.
+Lógica200 de errores ESI y envío199 intactos. Error HTTP/reintento sigue visible cuando corresponde; proveedor ESI no se recertifica por retirar este texto. Evidencia y decisiones canónicas al final de DSS. Se reutiliza este kit, sin crear otro por versión.
 
-ESI real respondió504 en órdenes de los seis tipos; después mostró respuesta intermitente. No afirmar que el proveedor fue restablecido: la reparación es del manejo en la app. El test controla fallo total, parcial5/6 y recuperación6/6,32renders en ambos contextos/idiomas/temas/anchos; capturas appraisal200-r2. No SSO real. Sigue pendiente la disponibilidad del proveedor; no inventar precios.
-
-Continuar en este chat. CSS textarea/paste-foot sigue pendiente, sin ampliar alcance automáticamente. Aplicar productividad: focales durante desarrollo, una pasada completa en CI al congelar y documentación canónica breve. Checkout antiguo61ced55 con cambios ya publicados: preservar. Fiko únicamente, manifiesto explícito, expected_sha/force:false; index solo por build/CI. Cierre documental posterior puede avanzar main sin cambiar HTML certificado.
-
-
-**201 candidata:** retirada de la frase de total parcial solicitada; título parcial e importes conservados.3Chromium focales/64renders PASS; publicación pendiente, última LIVE200. Evidencia canónica al final de DSS. Continuidad: docs/HANDOFF_APPRAISAL_200.md.
+Seguir en este chat. CSS textarea/paste-foot pendiente, sin iniciar automáticamente. Aplicar productividad: focales durante edición, una pasada completa en CI y documentación breve. Preservar checkout antiguo61ced55 y cambios previos; Fiko exclusivo, manifiesto explícito, expected_sha/force:false; index generado por CI. Un cierre documental puede avanzar main sin cambiar el HTML certificado.
