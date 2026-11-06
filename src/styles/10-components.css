@@ -44,7 +44,6 @@ textarea::-webkit-resizer{background:transparent}
 .paste textarea:placeholder-shown{text-align:center;font-size:1.35rem;font-weight:500;padding-top:40px;line-height:1.5} /* v1.0.13: mensaje centrado y grande; al pegar vuelve al estilo normal */
 .paste textarea::placeholder{color:var(--mut);opacity:1}
 @media (max-width:600px){.paste textarea:placeholder-shown{font-size:1.1rem;padding-top:44px}}
-.paste-foot{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:6px 10px 8px;flex-wrap:wrap}
 .status{font-size:.85rem;color:var(--mut)} .status.ok{color:var(--gain)} .status.err{color:var(--thrust)}
 
 /* ---------- paneles ---------- */

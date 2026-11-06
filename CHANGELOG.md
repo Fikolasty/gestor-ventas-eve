@@ -1,3 +1,8 @@
+## 1.0.203 — limpieza CSS del inventario
+
+- Retiradas tres reglas sin uso de paste-foot y cinco declaraciones sobrescritas del textarea; display, max-height y line-height conservados.
+- Sin cambios de copy, interacción, JavaScript o cálculo. Verificación diferencial y publicación pendientes; detalle canónico al final de docs/DSS.md.
+
 ## v1.0.198 — limpieza CSS de contenido y responsive — LIVE certificada
 
 - Retiradas tres reglas sobrescritas de Tasación/Inventario:238bytes menos, aspecto y JS conservados.
