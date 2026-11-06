@@ -26,7 +26,6 @@ test('Listado gets a scoped neutral solid background in both states and themes',
 test('Primary disclosure chevrons reuse shared size and stroke, without touching sorting',()=>{
   assert.match(css, /--mm-chevron-size:9px;--mm-chevron-stroke:1\.75px/);
   for(const selector of [
-    '.mm-sales-mode-chevron',
     '#settings .mm-market-chevron',
     'details.panel>summary>.fold-chevron',
     '#pSum #bDeep .step-toggle-chevron',

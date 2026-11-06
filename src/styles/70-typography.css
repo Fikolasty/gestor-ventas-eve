@@ -226,65 +226,6 @@
 }
 .mm-section-head>.mm-title{grid-row:1!important}
 .mm-section-head>.mm-section-sub{grid-row:2!important}
-/* Product UX: one global navigation level; Sales context belongs to its workspace.
-   Existing business mode buttons and shipping inputs are re-parented, not cloned. */
-.hero .mm-sales-mode-picker{position:relative;flex:0 0 auto;min-width:0}
-.hero .mm-sales-mode-picker>.mm-sales-mode-trigger{
-  display:inline-flex;align-items:center;justify-content:space-between;gap:16px;
-  min-width:167px;min-height:37px;margin:0;padding:8px 12px;
-  border:1px solid var(--line2);border-radius:9px;background:var(--surface-card);
-  color:var(--txt);font:700 .81rem/1.3 var(--f-ui);cursor:pointer;
-  list-style:none;box-shadow:none;
-}
-.hero .mm-sales-mode-picker>.mm-sales-mode-trigger::-webkit-details-marker{display:none}
-.hero .mm-sales-mode-picker>.mm-sales-mode-trigger::marker{content:""}
-.hero .mm-sales-mode-picker>.mm-sales-mode-trigger:hover,
-.hero .mm-sales-mode-picker[open]>.mm-sales-mode-trigger{
-  border-color:var(--ion);background:var(--surface-panel);
-}
-.hero .mm-sales-mode-trigger:focus-visible{outline:2px solid var(--ion);outline-offset:3px}
-.hero .mm-sales-mode-chevron{font-size:1.1rem;line-height:1;color:var(--mut);transition:transform .15s ease}
-.hero .mm-sales-mode-picker[open] .mm-sales-mode-chevron{transform:rotate(180deg)}
-.hero .mm-sales-mode-picker #businessSwitch{
-  position:absolute!important;z-index:65;top:calc(100% + 6px);left:0;
-  display:block!important;width:max-content!important;min-width:188px;max-width:calc(100vw - 32px);
-  margin:0!important;padding:5px!important;border:1px solid var(--line2)!important;
-  border-radius:11px!important;background:var(--surface-panel)!important;
-  box-shadow:0 14px 32px rgba(0,0,0,.32)!important;
-}
-.hero .mm-sales-mode-picker:not([open]) #businessSwitch{display:none!important}
-.hero .mm-sales-mode-picker #businessSwitch>.mm-business-tabs{
-  display:flex!important;flex-direction:column!important;align-items:stretch!important;
-  justify-content:stretch!important;gap:2px!important;
-  margin:0!important;padding:0!important;width:100%!important;
-  min-width:0!important;border:0!important;background:transparent!important;
-}
-.hero .mm-sales-mode-picker #businessSwitch .mm-business-tab{
-  display:flex!important;justify-content:flex-start!important;align-items:center!important;
-  width:100%!important;min-height:37px!important;
-  padding:8px 11px!important;margin:0!important;text-align:left!important;
-  color:var(--txt)!important;border-radius:7px!important;
-  border:1px solid transparent!important;font:650 .81rem/1.3 var(--f-ui)!important;
-}
-.hero .mm-sales-mode-picker #businessSwitch .mm-business-tab.on{
-  background:rgba(217,119,87,.15)!important;color:var(--txt)!important;
-}
-.hero .mm-sales-mode-picker #businessSwitch .mm-business-tab:hover{
-  background:rgba(217,119,87,.11)!important;
-}
-.hero .mm-sales-mode-picker #businessSwitch .mm-business-tab .ic{
-  display:inline-block!important;width:16px;height:16px;flex:0 0 16px;
-}
-html.light .hero .mm-sales-mode-picker #businessSwitch{
-  background:#faf8f5!important;box-shadow:0 12px 26px rgba(66,51,39,.15)!important;
-}
-html.light .hero .mm-sales-mode-picker>.mm-sales-mode-trigger{
-  background:rgba(250,248,245,.92);color:var(--txt);
-}
-@media(max-width:690px){
-  .hero .mm-sales-mode-picker>.mm-sales-mode-trigger{min-height:39px}
-}
-
 /* Information hierarchy: concise help under section titles, never text floating
    in a phantom second grid column or shouting in all caps. */
 #settings>.lead{

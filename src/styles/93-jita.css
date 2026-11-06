@@ -1,5 +1,4 @@
 /* Jita proposal only. Equal-width groups share the existing product switch track. */
-body.is-jita .mm-sales-mode-picker{display:none!important}
 body.is-jita #verdict #vSubtitle,body.is-jita #verdict #vMetric{display:none!important}
 body.is-jita #verdict .ov-hd{grid-template-columns:minmax(0,1fr) auto minmax(0,1fr)!important;gap:8px 16px!important;margin-bottom:12px!important;min-height:64px}
 body.is-jita #verdict .ov-hd .ov-ttl{grid-column:1;grid-row:1;align-self:center}

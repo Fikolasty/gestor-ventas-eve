@@ -182,8 +182,7 @@ html.light #settings .mm-market-option.is-selected{background:rgba(161,86,55,.11
   #settings .mm-market-trigger,#settings .mm-market-chevron{transition:none}
 }
 
-/* Sales task selector is inside the inventory heading, aligned with the input
-   instead of floating in the hero background. Keep the original state/handlers. */
+/* Inventory heading and live status retain their current layout. */
 .hero #heroIntro .paste{overflow:visible}
 .hero #heroIntro .paste .paste-head{
   position:relative;z-index:30;display:flex!important;align-items:center!important;
@@ -194,25 +193,9 @@ html.light #settings .mm-market-option.is-selected{background:rgba(161,86,55,.11
   flex:1 1 auto;margin:0!important;max-width:none!important;
   min-width:0;text-align:left!important;font-size:.74rem!important;
 }
-.hero #heroIntro .paste .paste-head .mm-sales-mode-picker{
-  flex:0 0 auto;margin-left:auto;order:3;position:relative;z-index:30;
-}
-.hero #heroIntro .paste .paste-head .mm-sales-mode-trigger{
-  min-width:184px;min-height:39px;
-  font:550 .83rem/1.35 var(--f-ui)!important;
-  padding:9px 12px;border-radius:8px;gap:13px;
-}
-.hero #heroIntro .paste .paste-head #businessSwitch{
-  left:auto!important;right:0!important;min-width:205px;
-  max-width:min(270px,calc(100vw - 40px));box-sizing:border-box;
-}
-.hero #heroIntro .paste .paste-head .mm-sales-mode-picker .mm-business-tab{
-  font:550 .83rem/1.35 var(--f-ui)!important;min-height:39px!important;
-}
 @media(max-width:550px){
  .hero #heroIntro .paste .paste-head{flex-wrap:wrap}
  .hero #heroIntro .paste .paste-head .status{order:4;flex-basis:100%}
- .hero #heroIntro .paste .paste-head .mm-sales-mode-trigger{min-width:154px}
 }
 
 /* Refinery profile lives in Settings and is reflected in Mining. */
@@ -293,18 +276,6 @@ html.light body .top.mm-ho-root .mm-top-actions>.top-header-action,
 html.light body .top.mm-ho-root .mm-top-actions>.top-guide-action,
 html.light body .top.mm-ho-root .mm-top-actions .mm-theme{background:transparent!important}
 /* Native summary arrow is drawn with CSS: no text glyph or circular button. */
-.hero #heroIntro .paste .paste-head .mm-sales-mode-trigger{
-  border-radius:7px!important;font-weight:590!important;
-}
-.hero #heroIntro .paste .paste-head .mm-sales-mode-chevron{
-  display:inline-block!important;flex:0 0 8px;width:8px;height:8px;
-  margin:0 3px 4px 0;line-height:0;font-size:0!important;
-  border-right:1.5px solid currentColor;border-bottom:1.5px solid currentColor;
-  transform:rotate(45deg);opacity:.78;
-}
-.hero #heroIntro .paste .paste-head .mm-sales-mode-picker[open] .mm-sales-mode-chevron{
-  transform:translateY(3px) rotate(225deg);
-}
 @media(max-width:1260px){
   body .top.mm-ho-root{padding-bottom:11px!important}
   body .top.mm-ho-root #mmTabs>.mm-ho-main{margin-top:8px!important}
@@ -603,7 +574,6 @@ html.light #ledger{box-shadow:0 2px 10px rgba(25,20,17,.08)!important}
    in the annotated screenshot, plus equivalent financial detail disclosures.
    Sort direction arrows are intentionally excluded. */
 :root{--mm-chevron-size:9px;--mm-chevron-stroke:1.75px}
-.hero #heroIntro .paste .paste-head .mm-sales-mode-chevron,
 #settings .mm-market-chevron,
 details.panel>summary>.fold-chevron,
 #pSum #bDeep .step-toggle-chevron{
@@ -615,7 +585,6 @@ details.panel>summary>.fold-chevron,
   color:var(--mut)!important;font-size:0!important;line-height:0!important;
   transform:rotate(45deg)!important;transition:transform .18s ease;
 }
-.hero #heroIntro .paste .paste-head .mm-sales-mode-picker[open] .mm-sales-mode-chevron,
 #settings .mm-market-picker.is-open .mm-market-chevron,
 details.panel[open]>summary>.fold-chevron,
 #pSum #bDeep[aria-expanded="true"] .step-toggle-chevron{
@@ -640,7 +609,6 @@ details.panel[open]>summary:not(:has(.fold-chevron))::after,
   transform:rotate(225deg)!important;
 }
 @media(prefers-reduced-motion:reduce){
-  .hero #heroIntro .paste .paste-head .mm-sales-mode-chevron,
   #settings .mm-market-chevron,details.panel>summary>.fold-chevron,
   #pSum #bDeep .step-toggle-chevron,
   details.panel>summary:not(:has(.fold-chevron))::after,

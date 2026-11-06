@@ -351,17 +351,11 @@ html.light #verdict .v-plan-name{color:#ad4b27}
 .hero-intro>.paste{padding:14px 16px!important;gap:0!important}
 .hero-intro>.paste .paste-head{min-height:28px;display:flex;align-items:center;gap:10px;margin:0 0 12px;flex-wrap:wrap}
 .hero-intro>.paste .paste-title{margin:0 auto 0 0!important;display:inline-flex;align-items:center;gap:9px;font-size:1.05rem!important;line-height:28px;color:var(--txt);white-space:nowrap}
-.hero-intro>.paste .paste-title .ic{width:18px;height:18px;color:var(--ion)}
 .hero-intro>.paste .paste-head .status{margin-left:auto;max-width:50%;font-size:.78rem;line-height:1.3}
-.hero-intro>.paste .paste-head #bClear{flex:none;margin:0;padding:6px 10px}
 .hero-intro>.paste textarea{width:100%;box-sizing:border-box;border:1px solid var(--line2)!important;border-radius:var(--r-sm);background:rgba(12,12,12,.66)!important;padding:11px 13px!important;min-height:138px;flex:1;resize:vertical}
-.hero-intro:not(.no-appr)>.paste textarea{min-height:138px}
 @media(max-width:780px){.hero-intro>.paste .paste-head .status{order:3;max-width:none;flex-basis:100%;margin-left:0}.hero-intro>.paste .paste-head{row-gap:4px}}
 
 
-.hero-intro .paste-head .paste-home{display:inline-grid;place-items:center;min-width:34px;height:34px;padding:6px;border:1px solid var(--line2);border-radius:8px;color:var(--ion)}
-.hero-intro .paste-head .paste-home:hover{background:rgba(217,119,87,.12);border-color:var(--ion)}
-.hero-intro .paste-head .paste-home .ic{width:18px;height:18px}
 
 /* Discord reutiliza la columna derecha; el análisis de envío ya no se muestra. */
 #pCtr .discord-side{min-width:0;padding:14px;border:1px solid var(--line);border-radius:var(--r-md);background:var(--panel,#252523)}
