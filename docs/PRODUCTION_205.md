@@ -32,3 +32,8 @@ Publicación Fiko, cuatro Actions, Pages y comparación independiente HTTPS pend
 ### Recuperación del gate205 — cinco pestañas móviles
 
 El primer CI42270299437 bloqueó correctamente Pages:102/154Chromium PASS y52fallos de composición por el mismo desborde global8px a390px en Linux al añadir Producción;205Node/16Python/8legacy sí pasaron. La última LIVE siguió siendo204. Se fija una retícula de cinco columnas iguales en el menú móvil (sin ocultar overflow, recortar nombres ni reducir fuente); el contenedor se limita al ancho disponible. Nuevo test fuerza Arial/Verdana y comprueba límites reales del texto en ES/EN y ambos temas a390/630/980/1440. Cinco focales finales PASS. La suite definitiva pasa a155Chromium; publicación todavía pendiente de nueva corrida completa, cuatro Actions y HTTPS. CSS/test son el único cambio funcional de esta recuperación; fórmulas intactas.
+
+
+### Recuperación tipográfica205 — nombres completos
+
+El segundo CI42271943431 pasó154/155Chromium (464,787s): el desborde global quedó resuelto; solo falló la nueva prueba de límites de texto con Arial/Linux, porque las columnas iguales no daban suficiente ancho al nombre largo. Se cambia el menú móvil a columnas de ancho natural, distribuidas dentro del ancho disponible, sin cortar nombres ni reducir fuente. Test ampliado a monospace y diagnóstico de cada celda. Cinco focales locales PASS. CI ejecutará primero esta prueba específica antes de la suite completa, para fallar pronto sin relajar ningún gate. Sigue LIVE204; nueva publicación205 pendiente.

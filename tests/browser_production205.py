@@ -102,8 +102,9 @@ class ProductionTests(unittest.TestCase):
    self.p.evaluate('setLang',lang)
    for width in [390,630,980,1440]:
     self.p.set_viewport_size({'width':width,'height':1100})
-    for font in ['Arial','Verdana']:
+    for font in ['Arial','Verdana','monospace']:
      for light in [False,True]:
       self.p.evaluate('(x)=>{document.documentElement.classList.toggle("light",x.light);document.querySelectorAll("#mmTabs [data-mm-module]").forEach(e=>e.style.setProperty("font-family",x.font,"important"))}',{'light':light,'font':font})
       self.assertTrue(self.p.evaluate('document.documentElement.scrollWidth<=innerWidth+1'),(lang,width,font,light))
-      self.assertTrue(self.p.locator('#mmTabs [data-mm-module]').evaluate_all('es=>es.filter(e=>e.getBoundingClientRect().width).every(e=>{const label=e.querySelector(".mm-mod-label")||e,r=document.createRange();r.selectNodeContents(label);const b=r.getBoundingClientRect(),a=e.getBoundingClientRect();return b.left>=a.left-1&&b.right<=a.right+1})'),(lang,width,font,light))
+      cells=self.p.locator('#mmTabs [data-mm-module]').evaluate_all('es=>es.filter(e=>e.getBoundingClientRect().width).map(e=>{const label=e.querySelector(".mm-mod-label")||e,r=document.createRange();r.selectNodeContents(label);const b=r.getBoundingClientRect(),a=e.getBoundingClientRect();return {label:e.textContent.trim(),textWidth:b.width,cellWidth:a.width,left:b.left-a.left,right:a.right-b.right,fit:b.left>=a.left-1&&b.right<=a.right+1}})')
+      self.assertTrue(all(x['fit'] for x in cells),(lang,width,font,light,cells))
