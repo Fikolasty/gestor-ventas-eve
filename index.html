@@ -7,7 +7,7 @@
 <meta name="referrer" content="no-referrer">
 <title>Market Moves+ · SIGMA GRINDSET</title>
 <style>
-/* ================= Market Moves+ v1.0.205 =================
+/* ================= Market Moves+ v1.0.206 =================
    Paleta: azul de base, naranja = acción, verde/rojo = ganancia/pérdida.
    Sin backdrop-filter: el vidrio se finge con rgba + bordes. */
 *{box-sizing:border-box;margin:0;padding:0}
@@ -9828,13 +9828,13 @@ Contraband Freight = no</textarea><small>Una regla por línea: Nombre = tax tota
 <button type="button" class="totop" id="toTop" aria-label="Volver arriba" title="Volver arriba (Inicio)" hidden><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 14l6-6 6 6"/></svg></button>
 <footer class="foot">
   <p class="foot-sec"><span class="ic i-lock" aria-hidden="true"></span>Tu inventario no se guarda: al cerrar o recargar se borra. Solo tus Ajustes quedan en este navegador.</p>
-  <div class="foot-by">Creado por <b>Fiko McGivert</b> · <span class="mm-footer-corp-logo vg" role="img" aria-label="Vanguardia DR"></span>Vanguardia DR · SIGMA GRINDSET · <span class="ver">v1.0.205</span></div>
+  <div class="foot-by">Creado por <b>Fiko McGivert</b> · <span class="mm-footer-corp-logo vg" role="img" aria-label="Vanguardia DR"></span>Vanguardia DR · SIGMA GRINDSET · <span class="ver">v1.0.206</span></div>
 </footer>
 
 <script>
 'use strict';
 /* ============================================================
-   Market Moves+ v1.0.205 — SIGMA GRINDSET / Vanguardia DR
+   Market Moves+ v1.0.206 — SIGMA GRINDSET / Vanguardia DR
    Flujo:  pegado → items → carga (ESI: precios, volúmenes, historial) → verificación → plan → vista
      1. Pegado      parsePaste(): parser posicional de columnas de EVE (Name · Quantity · … · Volume · Est. Price).
      2. Carga       esiItems(): trae todo lo que falta; mientras carga, refresh() NO pinta (S.loading).
@@ -16881,6 +16881,8 @@ const ProductionUI=(()=>{
  const root=document.getElementById('production');root.setAttribute('aria-label','Fuel Blocks');
  function render(){
   lang=S.lang==='en'?'en':'es';
+  // Read the native disclosure before replacing its DOM; user choice wins.
+  const profileOpen=!!root.querySelector('#fp-industry-profile')?.open;
   const active=root.contains(document.activeElement)?document.activeElement:null;
   const focus=active?.matches('input,select')?{key:active.dataset.state,material:active.dataset.material,id:active.dataset.id,value:active.value}:null;
   const m=calculate(),dt=(m.seconds||0)/3600,hours=Math.floor(dt),mins=Math.floor(((m.seconds||0)%3600)/60);
@@ -16891,7 +16893,7 @@ const ProductionUI=(()=>{
    <div class="fp-wide">${pick('fuel',t('fuel'),fuels.map(f=>[f.id,f.name]))}</div>
    ${pick('kind',t('kind'),[['BPO',t('labelOriginalBpo')],['BPC',t('labelCopyBpc')]])}${input('me','ME %')}${input('te','TE %')}
    ${input('jobs',t('jobs'))}${input('runs',t('runs'))}${input('slots',t('slots'))}${state.kind==='BPC'?`<div class="fp-wide">${input('available',t('available'))}</div>`:''}
-   <div class="fp-wide">${pick('facility',t('facility'),[['station',t('station')],['raitaru','Raitaru'],['azbel','Azbel'],['sotiyo','Sotiyo']])}</div><details class="fp-wide fp-rule"><summary>${t('advancedGroup')}</summary><div class="fp-fields" style="margin-top:16px">
+   <div class="fp-wide">${pick('facility',t('facility'),[['station',t('station')],['raitaru','Raitaru'],['azbel','Azbel'],['sotiyo','Sotiyo']])}</div><details id="fp-industry-profile" class="fp-wide fp-rule" ${profileOpen?'open':''}><summary>${t('advancedGroup')}</summary><div class="fp-fields" style="margin-top:16px">
    ${pick('security',t('security'),[['high',t('high')],['low',t('low')],['null',t('null')]])}
    ${pick('rigM',t(['azbel','sotiyo'].includes(state.facility)?'rigCombined':'rigM'),[[0,t('noRig')],[1,'T1'],[2,'T2']])}${['azbel','sotiyo'].includes(state.facility)?'':pick('rigT',t('rigT'),[[0,t('noRig')],[1,'T1'],[2,'T2']])}
    ${input('industry',t('industry'))}${input('advanced',t('advanced'))}<button type="button" class="ghost" data-production-skills>${t('syncSkills')}</button>
