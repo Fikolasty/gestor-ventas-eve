@@ -1,7 +1,7 @@
-## 1.0.206 — perfil industrial estable (candidata)
+## 1.0.206 — perfil industrial estable (LIVE)
 
 - Perfil industrial y logística conserva abierto/cerrado al editar campos o repintar resultados y consultas. Sin cambios de cálculo o almacenamiento.
-- Regresión nativa ES/EN, ambos temas y cuatro anchos. Publicación pendiente de CI/Pages/HTTPS; última LIVE205.
+- Regresión nativa ES/EN, ambos temas y cuatro anchos.156Chromium/205Node/16Python/8legacy y4Actions PASS;HTTPS/GitHub/build idénticosb1b8ac0a.
 
 ## 1.0.205 — Producción de Fuel Blocks (LIVE)
 
