@@ -1,6 +1,6 @@
 # Consentimiento e inventario personal — v1.0.209
 
-Estado: candidata; publicación pendiente de Actions/Pages/HTTPS.
+Estado: LIVE certificada. Cuatro Actions/Pages/HTTPS verificados; HTML público idéntico al build local.
 
 ## Solicitud aprobada
 
@@ -24,3 +24,7 @@ Una solicitud pública sin credenciales con los cuatro scopes y callback raíz f
 Nombres de estaciones y contenedores se resuelven como antes; estructuras sin permiso adicional siguen identificadas por ID. No se requiere conocer manualmente ese ID para recuperar el árbol personal de assets. El inventario puede estar en caché de ESI. No hay cambios en fórmulas, tasas, asignación de envío ni permisos de corporación.
 
 Referencias primarias: [SSO CCP](https://developers.eveonline.com/docs/services/sso/), [árbol de assets oficial, histórico](https://docs.esi.evetech.net/docs/asset_location_id.html), [grupo12](https://esi.evetech.net/latest/universe/groups/12/), [grupo340](https://esi.evetech.net/latest/universe/groups/340/), [grupo448](https://esi.evetech.net/latest/universe/groups/448/), [grupo649](https://esi.evetech.net/latest/universe/groups/649/).
+
+## Cierre
+
+Fuente110f30911d9c2122a6182053571933ff1a8f6d30; build009f4d368991480800aa9345d0588896bd16ab4e. CI212Node/16Python/8legacy/165Chromium PASS; cuatro Actions SUCCESS y Pages42317199666. HTTPS2026-11-07T00:28:18.323164Z:2.707.924bytesLF,blobfeb05f2866060ff62cf19baa215efeb357742e9b, igual a local/GitHub. Datos privados del personaje no verificados; se mantiene exclusión de materiales Locked.
