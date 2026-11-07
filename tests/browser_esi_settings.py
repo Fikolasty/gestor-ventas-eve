@@ -120,6 +120,19 @@ class ESISettingsTests(unittest.TestCase):
  def test_endpoint_failure_preserves_its_setting_but_other_endpoints_work(self):
   self.fail={'standings','implants'};self.boot();s=self.state()
   self.assertEqual((s['fac'],s['corp'],s['imp']),(0,0,.04));self.assertEqual(s['abr'],5)
+ def test_manual_profile_refresh_reports_progress_success_and_failure(self):
+  self.scopes.extend(['esi-assets.read_assets.v1','esi-universe.read_structures.v1'])
+  self.boot();p=self.page
+  p.locator('#eveIdentityButton').click();p.locator('#eveProfile').click()
+  button=p.locator('#eveSync');status=p.locator('#eveLoginStatus')
+  self.assertEqual(p.locator('[data-access="structures"] h4').inner_text(),'Nombres de estructuras')
+  self.assertFalse(status.is_visible())
+  self.assertTrue(button.evaluate('e=>{e.click();return e.disabled&&document.querySelector("#eveLoginStatus").textContent.includes("Consultando")}'))
+  p.wait_for_function('()=>!document.querySelector("#eveSync").disabled')
+  self.assertTrue(status.is_visible());self.assertIn('sincronizados',status.inner_text())
+  self.fail={'standings'};button.click()
+  p.wait_for_function('()=>!document.querySelector("#eveSync").disabled')
+  self.assertTrue(status.is_visible());self.assertIn('incompleta',status.inner_text())
  def test_logout_discards_pending_private_responses(self):
   self.delay=True;self.boot();self.page.wait_for_function("document.querySelector('#eveLoginStatus').textContent.includes('Consultando')")
   self.page.wait_for_timeout(50);self.page.evaluate("$('eveLogout').click()")

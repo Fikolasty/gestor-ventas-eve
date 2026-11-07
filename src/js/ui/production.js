@@ -34,10 +34,10 @@ const ProductionUI=(()=>{
   const unresolved=inventory?.locations.some(g=>!(g.root>=60000000&&g.root<64000000)&&!inventory.names[g.root]);
   return `<section class="fp-stock-import-shell" aria-label="${t('importInventory')}"><div class="fp-stock-import-toolbar"><div><strong>${t('inventory')}</strong><span>${escape(importApplied||t('stockHint'))}</span></div><button type="button" class="ghost fp-stock-import-trigger" data-import-open aria-expanded="${importOpen}" aria-controls="fp-stock-import-drawer"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v11m-4-4 4 4 4-4M4 15v5h16v-5"/></svg>${t('importInventory')}</button></div>
   ${importOpen?`<div class="fp-stock-import-drawer" id="fp-stock-import-drawer" aria-busy="${importBusy}"><header><h3>${t('reviewInventory')}</h3><span>${escape(pilot?.name||'')}</span></header>
-  ${!pilot?.assets?`<p class="fp-import-permission">${t('permissionStock')}</p><button type="button" class="btn" data-import-authorize>${t('authorizeInventory')}</button>`:`<button type="button" class="ghost" data-import-fetch ${importBusy?'disabled':''}>${t(importBusy?'loading':'queryStock')}</button>`}
+  ${!pilot?.assets?`<p class="fp-import-permission">${t('permissionStock')}</p><button type="button" class="btn" data-import-authorize>${tx(pilot?'sso.authorizeSettings':'sso.connect')}</button>`:`<button type="button" class="ghost" data-import-fetch ${importBusy?'disabled':''}>${t(importBusy?'loading':'queryStock')}</button>`}
   <p class="fp-import-permission" role="status">${importError?t('inventoryFailed'):inventory&&!hasLocations?t('noPersonalHangars'):''}</p>
   ${hasLocations?`<div class="fp-import-context"><label>${t('stockLocation')}<select data-import-location><option value="" ${!source?'selected':''}>${t('chooseStockLocation')}</option>${inventoryOptions(m.rows)}</select></label><div><span>${t('character')}</span><strong>${escape(inventory.pilot.name)}</strong></div><p>${source?escape(locationLabel(source)):t('locationOnly')}</p></div>`:''}
-  ${unresolved?`<p class="fp-import-permission">${t(pilot?.structures?'structureNameUnavailable':'structureNamePermission')}</p>${pilot?.structures?'':`<button type="button" class="ghost" data-import-authorize-structures>${t('authorizeStructureNames')}</button>`}`:''}
+  ${unresolved?`<p class="fp-import-permission">${t(pilot?.structures?'structureNameUnavailable':'structureNamePermission')}</p>${pilot?.assets&&!pilot.structures?`<button type="button" class="ghost" data-import-authorize>${tx('sso.authorizeSettings')}</button>`:''}`:''}
   ${source&&!hasStock?`<p class="fp-import-permission">${t('noRecipeStock')}</p>`:''}
   ${locked.length?`<p class="fp-import-permission">${t('lockedStock')}: ${locked.map(r=>`${escape(r.name)} ${quantity(source.locked[r.id])}`).join(' · ')}.</p>`:''}
   ${source?`<table class="fp-import-review"><thead><tr>${['labelMaterial','currentStock','foundStock','apply'].map(k=>`<th scope="col">${t(k)}</th>`).join('')}</tr></thead><tbody>${m.rows.map(r=>`<tr><td>${escape(r.name)}</td><td>${quantity(r.owned)}</td><td>${quantity(source.stock[r.id]??0)}</td><td><input type="checkbox" data-import-check="${r.id}" ${importSelection.has(r.id)?'checked':''} ${hasStock?'':'disabled'} aria-label="${t('apply')} ${escape(r.name)}"></td></tr>`).join('')}</tbody></table>`:''}
@@ -60,10 +60,10 @@ const ProductionUI=(()=>{
   if(e.target.closest('[data-import-open]')){importOpen=!importOpen;render();if(importOpen&&importAuth()?.identity()?.assets&&!inventory&&!importBusy)fetchInventory();}
   if(e.target.closest('[data-import-cancel]')){importSerial++;importBusy=false;importOpen=false;inventory=null;render();root.querySelector('[data-import-open]')?.focus();}
   if(e.target.closest('[data-import-fetch]'))fetchInventory();
-  if(e.target.closest('[data-import-authorize],[data-import-authorize-structures]')){
+  if(e.target.closest('[data-import-authorize]')){
    // Explicit consent redirect: short-lived tab-only draft, consumed on return.
    try{sessionStorage.setItem('mm.production.authDraft',JSON.stringify({at:Date.now(),state}));}catch(e){}
-   if(e.target.closest('[data-import-authorize-structures]'))importAuth()?.authorizeStructures();else importAuth()?.authorize();
+   importAuth()?.authorize();
   }
   if(e.target.closest('[data-import-apply]')){
    const source=inventory?.locations.find(g=>g.id===importLocation);

@@ -1,3 +1,7 @@
+# v1.0.211 — consentimiento EVE y actualización de perfil
+
+Los cinco permisos usados se solicitan juntos. Perfil muestra los permisos concedidos y el resultado de Actualizar perfil. Publicación en verificación.
+
 # v1.0.210 LIVE — ubicaciones de inventario
 
 Hangares agrupados por estación/estructura, nombre y sistema cuando ESI los devuelve, Locked separado y elección explícita.4Actions/214Node/16Python/8legacy/167Chromium/Pages/HTTPS PASS. Permiso opcional de nombres requiere registro CCP. Ver docs/INVENTORY_LOCATIONS_210.md.

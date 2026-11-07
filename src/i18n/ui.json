@@ -3675,10 +3675,6 @@
     "es": "Inventario personal de solo lectura. No incluye carga de naves, entregas, stock bloqueado ni seguridad de activos. Cada contenedor se elige por separado.",
     "en": "Read-only personal inventory. Ship cargo, deliveries, locked stock and asset safety are excluded. Each container is selected separately."
   },
-  "production.authorizeInventory": {
-    "es": "Autorizar lectura de inventario",
-    "en": "Authorize inventory access"
-  },
   "production.permissionStock": {
     "es": "Conecta tu personaje y autoriza la lectura de su inventario para consultar ubicaciones.",
     "en": "Connect your character and authorize inventory access to browse stock locations."
@@ -3734,10 +3730,6 @@
   "sso.characterOptions": {
     "es": "Opciones del personaje",
     "en": "Character options"
-  },
-  "sso.authorizeInventory": {
-    "es": "Autorizar inventario",
-    "en": "Authorize inventory"
   },
   "sso.openInventory": {
     "es": "Abrir inventario en Producción",
@@ -3838,10 +3830,6 @@
   "production.structureNamePermission": {
     "es": "Autoriza la lectura de estructuras para ver su nombre y sistema.",
     "en": "Authorize structure lookup to see their names and systems."
-  },
-  "production.authorizeStructureNames": {
-    "es": "Autorizar nombres de estructuras",
-    "en": "Authorize structure names"
   },
   "production.selectedStockSingle": {
     "es": "material seleccionado · podrás editarlo después.",

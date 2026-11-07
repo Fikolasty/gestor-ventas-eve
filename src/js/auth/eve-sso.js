@@ -11,7 +11,8 @@
   const assetsScope='esi-assets.read_assets.v1';
   const structureScope='esi-universe.read_structures.v1';
   // Owner-approved single consent for the implemented read capabilities.
-  const scope=[skillScope,standingsScope,implantsScope,assetsScope].join(' ');
+  const requestedScopes=[skillScope,standingsScope,implantsScope,assetsScope,structureScope];
+  const syncButton=$e('eveSync');
   const scopesOf=token=>{try{const part=token.split('.')[1].replace(/-/g,'+').replace(/_/g,'/');const v=JSON.parse(atob(part.padEnd(Math.ceil(part.length/4)*4,'='))).scp;return Array.isArray(v)?v:typeof v==='string'?v.split(/\s+/):[];}catch(e){return [];}};
   let session=null,refreshPending=null,sessionEpoch=0,syncSerial=0,applyingESI=false;
   const revisions=new Map();
@@ -47,11 +48,10 @@
   const refreshUI=()=>{const on=!!session;
     if(on){$e('evePilotName').removeAttribute('data-i18n');$e('evePilotName').classList.add('no-tr');$e('evePilotName').textContent=session.name;}
     else{$e('evePilotName').classList.remove('no-tr');$e('evePilotName').dataset.i18n='sso.connect';$e('evePilotName').textContent=tx('sso.connect');}
-    $e('eveProfile').hidden=$e('eveLogout').hidden=$e('eveSync').hidden=!on;
+    $e('eveProfile').hidden=$e('eveLogout').hidden=syncButton.hidden=!on;
     $e('eveConnect').hidden=$e('eveProfileConnect').hidden=on;
-    $e('eveAuthorizeSettings').hidden=!on||scope.split(' ').every(s=>session.scopes.includes(s));
-    $e('eveInventoryAccess').hidden=!on;$e('eveInventoryAccess').dataset.i18n=on&&session.scopes.includes(assetsScope)?'sso.openInventory':'sso.authorizeInventory';
-    $e('eveInventoryAccess').textContent=tx($e('eveInventoryAccess').dataset.i18n);
+    $e('eveAuthorizeSettings').hidden=!on||requestedScopes.every(scope=>session.scopes.includes(scope));
+    $e('eveInventoryAccess').hidden=!on;
     $e('eveAccessPilot').textContent=on?session.name:tx('sso.access.offline');
     const scopes={skills:skillScope,standings:standingsScope,implants:implantsScope,assets:assetsScope,structures:structureScope};
     for(const [key,scope] of Object.entries(scopes)){const e=document.querySelector('[data-access-state="'+key+'"]'),allowed=on&&session.scopes.includes(scope);e.dataset.i18n=!on?'sso.access.offline':allowed?'sso.access.authorized':'sso.access.optional';e.textContent=tx(e.dataset.i18n);e.dataset.allowed=String(!!allowed);}
@@ -70,12 +70,11 @@
   window.addEventListener('resize',()=>closeMenu());
   $e('eveProfile').addEventListener('click',openProfile);
   [$e('eveConnect'),$e('eveProfileConnect')].forEach(b=>b.addEventListener('click',()=>{closeMenu();startLogin();}));
-  async function startLogin(structureNames=false){
+  async function startLogin(){
     const client=EVE_CLIENT_ID;
     if(!client){alert(tx('sso.missingClient'));return;}
     try{const verifier=rand(48),state=rand(24);sessionStorage.setItem(key,JSON.stringify({verifier,state,client,redirect:base,at:Date.now()}));
-      const requested=[...scope.split(' '),...(structureNames||session?.scopes.includes(structureScope)?[structureScope]:[])];
-      const u=new URL('https://login.eveonline.com/v2/oauth/authorize');u.searchParams.set('response_type','code');u.searchParams.set('client_id',client);u.searchParams.set('redirect_uri',base);u.searchParams.set('scope',requested.join(' '));u.searchParams.set('state',state);u.searchParams.set('code_challenge',await challenge(verifier));u.searchParams.set('code_challenge_method','S256');location.assign(u.href);
+      const u=new URL('https://login.eveonline.com/v2/oauth/authorize');u.searchParams.set('response_type','code');u.searchParams.set('client_id',client);u.searchParams.set('redirect_uri',base);u.searchParams.set('scope',requestedScopes.join(' '));u.searchParams.set('state',state);u.searchParams.set('code_challenge',await challenge(verifier));u.searchParams.set('code_challenge_method','S256');location.assign(u.href);
     }catch(err){const message=tx('sso.loginOpenFailed',{error:err?.message||String(err)});openProfile();status(message);console.error('EVE SSO redirect failed',err);}
   }
   function saveSkill(id,level){const e=$e(id);if(!e)return false;const v=String(level);if(![...e.options].some(o=>o.value===v))return false;e.dataset.mmSkillSource='esi';e.value=v;e.dispatchEvent(new Event('change',{bubbles:true}));return true;}
@@ -103,7 +102,6 @@
   window.mmProductionInventoryAuth=Object.freeze({
     identity:()=>session?{id:session.id,name:session.name,assets:session.scopes.includes(assetsScope),structures:session.scopes.includes(structureScope)}:null,
     authorize:async()=>{if(!session&&stored()){try{await renew();}catch(e){/* Consent can establish a new session. */}}return startLogin();},
-    authorizeStructures:()=>startLogin(true),
     structure:id=>{if(!Number.isSafeInteger(id)||id<=0)throw Error('Invalid structure ID');return productionRead('universe/structures/'+id+'/?compatibility_date=2026-10-01',structureScope);},
     assets:page=>{if(!Number.isSafeInteger(page)||page<1)throw Error('Invalid page');return inventoryRequest('?compatibility_date=2026-10-01&page='+page);},
     names:ids=>{if(!Array.isArray(ids)||ids.length>1000||ids.some(id=>!Number.isSafeInteger(id)||id<=0))throw Error('Invalid asset IDs');return inventoryRequest('names/?compatibility_date=2026-10-01',ids);}
@@ -126,14 +124,18 @@
       if(marketChoice==='auto'&&typeof refresh==='function')refresh();
     }catch(e){console.warn('Unable to detect market affiliation',e);}
   }
-  async function sync(){
-    if(!session)return;
-    const epoch=sessionEpoch,pilotId=session.id;
-    if(Date.now()>session.expires){try{await renew();}catch(err){status(tx('sso.syncFailed',{error:err.message}));return;}if(!session||epoch!==sessionEpoch)return;}
-    const token=session.token,allowed=session.scopes,serial=++syncSerial,snapshot=new Map(revisions);
+  async function sync(showResult=false){
+    if(!session||(!showResult&&syncButton.disabled))return;
+    const epoch=sessionEpoch,pilotId=session.id,serial=++syncSerial,snapshot=new Map(revisions);
     const current=()=>epoch===sessionEpoch&&session?.id===pilotId&&serial===syncSerial;
     const unchanged=(...ids)=>ids.every(id=>(revisions.get(id)||0)===(snapshot.get(id)||0));
     status(tx('sso.syncingSettings'));
+    if(Date.now()>session.expires){
+      try{await renew();}
+      catch(err){if(epoch===sessionEpoch&&serial===syncSerial)status(tx('sso.syncFailed',{error:err.message}));return;}
+      if(!current())return;
+    }
+    const token=session.token,allowed=session.scopes;
     const tasks=[(async()=>{
       const data=await jsonESI('characters/'+pilotId+'/skills/',token);
       if(!Array.isArray(data.skills)||data.skills.some(x=>!Number.isSafeInteger(x.skill_id)||!Number.isInteger(x.active_skill_level)||x.active_skill_level<0||x.active_skill_level>5))throw Error('Invalid ESI skills');
@@ -156,7 +158,7 @@
       SkillUI.setPilot({name:session.name,skills:data.skills});
       window.mmProductionSkills?.(data.skills);
     })()];
-    const missing=[];
+    const missing=requestedScopes.some(scope=>!allowed.includes(scope));
     if(allowed.includes(standingsScope))tasks.push((async()=>{
       const data=await jsonESI('characters/'+pilotId+'/standings/',token);
       if(!Array.isArray(data)||data.some(x=>!Number.isSafeInteger(x.from_id)||!['faction','npc_corp','agent'].includes(x.from_type)||!Number.isFinite(x.standing)||x.standing < -10||x.standing > 10))throw Error('Invalid ESI standings');
@@ -166,25 +168,32 @@
       if(!current())return;
       applyingESI=true;
       try{if(unchanged('cBroker')){if(unchanged('cStdFac'))saveSetting('cStdFac',faction);if(unchanged('cStdCorp'))saveSetting('cStdCorp',corp);brokerFromBR();}}finally{applyingESI=false;}
-    })());else missing.push(standingsScope);
+    })());
     if(allowed.includes(implantsScope))tasks.push((async()=>{
       const data=await jsonESI('characters/'+pilotId+'/implants/',token);
       if(!Array.isArray(data)||data.some(x=>!Number.isSafeInteger(x)))throw Error('Invalid ESI implants');
       // Official type IDs RX-801, RX-802 and RX-804. Active clone only.
       const implant=Math.max(0,...data.map(id=>({27175:.01,27169:.02,27174:.04})[id]||0));
       if(current()&&unchanged('refImp')){applyingESI=true;try{saveSetting('refImp',implant);}finally{applyingESI=false;}}
-    })());else missing.push(implantsScope);
-    if(!allowed.includes(assetsScope))missing.push(assetsScope);
+    })());
     const results=await Promise.allSettled(tasks);
     if(!current())return;
     const failed=results.filter(x=>x.status==='rejected');
-    const message=tx(failed.length?'sso.syncPartial':missing.length?'sso.settingsPermissionsNeeded':'sso.settingsSynced');
-    status(message);$e('eveLoginStatus').hidden=!failed.length&&!missing.length;
+    const message=tx(failed.length?'sso.syncPartial':missing?'sso.settingsPermissionsNeeded':'sso.settingsSynced');
+    status(message);
+    if(!showResult&&!failed.length&&!missing)$e('eveLoginStatus').hidden=true;
     mmUpdateSettingsSkillNotes();stSave();refresh();
   }
-  $e('eveSync').addEventListener('click',()=>{if(session)sync();});
+  syncButton.addEventListener('click',async()=>{
+    if(!session||syncButton.disabled)return;
+    const epoch=sessionEpoch;
+    syncButton.disabled=true;
+    try{await sync(true);}
+    catch(err){if(epoch===sessionEpoch)status(tx('sso.syncFailed',{error:err.message}));}
+    finally{syncButton.disabled=false;}
+  });
   $e('eveAuthorizeSettings').addEventListener('click',()=>{if(session)startLogin();});
-  $e('eveInventoryAccess').addEventListener('click',()=>{selectAppModule('production');ProductionUI.setTab('materials');const trigger=document.querySelector('[data-import-open]');if(trigger?.getAttribute('aria-expanded')!=='true')trigger?.click();if(!session?.scopes.includes(assetsScope))document.querySelector('[data-import-authorize]')?.click();});
+  $e('eveInventoryAccess').addEventListener('click',()=>{selectAppModule('production');ProductionUI.setTab('materials');const trigger=document.querySelector('[data-import-open]');if(trigger?.getAttribute('aria-expanded')!=='true')trigger?.click();});
   $e('eveLogout').addEventListener('click',()=>{sessionEpoch++;esiProcessingSkills=null;clearSources();readSkills(false);SkillUI.setPilot(null);window.mmProductionSkills?.(null);clearSaved();session=null;marketAlliance='';refreshMarketControls();syncNullRouteLabels();closeMenu();refreshUI();status(tx('sso.disconnected'));});
   refreshUI();
   (async()=>{const u=new URL(location.href),code=u.searchParams.get('code'),state=u.searchParams.get('state');

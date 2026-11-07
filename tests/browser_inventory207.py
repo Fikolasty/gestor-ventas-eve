@@ -68,7 +68,7 @@ class InventoryTests(base.unittest.TestCase):
   self.p.locator('[data-import-authorize]').click();self.p.wait_for_url('https://login.eveonline.com/v2/oauth/authorize**')
   from urllib.parse import urlparse,parse_qs
   scopes=set(parse_qs(urlparse(self.p.url).query)['scope'][0].split())
-  self.assertEqual(scopes,{'esi-skills.read_skills.v1','esi-characters.read_standings.v1','esi-clones.read_implants.v1','esi-assets.read_assets.v1'})
+  self.assertEqual(scopes,{'esi-skills.read_skills.v1','esi-characters.read_standings.v1','esi-clones.read_implants.v1','esi-assets.read_assets.v1','esi-universe.read_structures.v1'})
   self.p.goto((ROOT/'index.html').as_uri(),wait_until='domcontentloaded');self.p.wait_for_function('document.body.dataset.mmView==="production"')
   self.assertEqual(self.p.evaluate('ProductionUI.state.owned[44]'),777)
   self.assertIsNone(self.p.evaluate('sessionStorage.getItem("mm.production.authDraft")'))
@@ -123,7 +123,7 @@ class InventoryTests(base.unittest.TestCase):
   self.p.route('**/characters/90000001/assets/**',lambda r:r.fulfill(json=[dict(item_id=1,type_id=44,quantity=3000,location_id=1030000000001,location_type='item',location_flag='Hangar',is_singleton=False)],headers={'X-Pages':'1'}))
   self.p.evaluate('ProductionUI.state.owned[44]=777');self.p.locator('[data-import-open]').click()
   self.p.route('https://login.eveonline.com/v2/oauth/authorize**',lambda r:r.fulfill(body='Synthetic structure consent'))
-  self.p.locator('[data-import-authorize-structures]').click();self.p.wait_for_url('https://login.eveonline.com/v2/oauth/authorize**')
+  self.p.get_by_role('button',name='Autorizar acceso',exact=True).click();self.p.wait_for_url('https://login.eveonline.com/v2/oauth/authorize**')
   from urllib.parse import urlparse,parse_qs
   scopes=set(parse_qs(urlparse(self.p.url).query)['scope'][0].split())
   self.assertEqual(scopes,{'esi-skills.read_skills.v1','esi-characters.read_standings.v1','esi-clones.read_implants.v1','esi-assets.read_assets.v1','esi-universe.read_structures.v1'})

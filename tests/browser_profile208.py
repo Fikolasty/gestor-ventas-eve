@@ -17,14 +17,16 @@ class ProfileTests(unittest.TestCase):
   self.assertEqual(self.page.evaluate('document.body.dataset.mmView'),'settings')
   self.assertTrue(self.page.locator('#mm-settings-panel-1').is_visible())
  def test_menu_profile_permissions_and_logout(self):
-  self.scopes=[base.SKILL];self.boot();p=self.page
+  self.scopes=[base.SKILL,base.STANDINGS,base.IMPLANTS,'esi-assets.read_assets.v1'];self.boot();p=self.page
   p.locator('#eveIdentityButton').click()
   self.assertEqual(p.locator('#eveIdentityMenu button:visible').all_text_contents(),['Perfil','Desconectar'])
   self.assertEqual(p.locator('#eveIdentityMenu #eveSync,#eveIdentityMenu #eveLoginStatus').count(),0)
   self.assertTrue(p.locator('#eveProfile').evaluate('(e)=>{const r=e.getBoundingClientRect();return document.elementFromPoint(r.x+r.width/2,r.y+r.height/2)===e}'))
   p.locator('#eveProfile').click();self.assertTrue(p.locator('#eveAccessPanel').is_visible())
   self.assertEqual(p.locator('[data-access-state="skills"]').inner_text(),'Acceso autorizado')
-  self.assertEqual(p.locator('[data-access-state="assets"]').inner_text(),'Sin autorizar')
+  self.assertEqual(p.locator('[data-access-state="assets"]').inner_text(),'Acceso autorizado')
+  self.assertEqual(p.locator('[data-access-state="structures"]').inner_text(),'Sin autorizar')
+  self.assertTrue(p.locator('#eveAuthorizeSettings').is_visible())
   p.locator('#eveIdentityButton').click();p.locator('#eveLogout').click()
   p.locator('#eveIdentityButton').click();self.assertEqual(p.locator('#eveIdentityMenu button:visible').all_text_contents(),['Conectar'])
   p.keyboard.press('Escape');self.assertFalse(p.locator('#eveIdentityMenu').is_visible())
@@ -38,7 +40,7 @@ class ProfileTests(unittest.TestCase):
    self.page.locator('#eveIdentityButton').click();self.page.locator('#eveConnect').click();self.page.wait_for_url('https://login.eveonline.com/v2/oauth/authorize**')
    q=parse_qs(urlparse(self.page.url).query)
    self.assertEqual(q['redirect_uri'],['https://fikolasty.github.io/gestor-ventas-eve/'])
-   self.assertEqual(set(q['scope'][0].split()),{base.SKILL,base.STANDINGS,base.IMPLANTS,'esi-assets.read_assets.v1'});self.assertEqual(q['code_challenge_method'],['S256'])
+   self.assertEqual(set(q['scope'][0].split()),{base.SKILL,base.STANDINGS,base.IMPLANTS,'esi-assets.read_assets.v1','esi-universe.read_structures.v1'});self.assertEqual(q['code_challenge_method'],['S256'])
  def test_profile_theme_language_responsive(self):
   OUT.mkdir(parents=True,exist_ok=True);self.boot();self.profile();p=self.page
   for lang in ['es','en']:
