@@ -1,6 +1,6 @@
-# v1.0.211 — consentimiento EVE y actualización de perfil
+# v1.0.211 LIVE — consentimiento EVE y actualización de perfil
 
-Los cinco permisos usados se solicitan juntos. Perfil muestra los permisos concedidos y el resultado de Actualizar perfil. Publicación en verificación.
+Los cinco permisos usados se solicitan juntos. Perfil muestra el acceso concedido y el resultado de Actualizar perfil. Cuatro Actions, 168 Chromium y verificación del HTML público completadas.
 
 # v1.0.210 LIVE — ubicaciones de inventario
 

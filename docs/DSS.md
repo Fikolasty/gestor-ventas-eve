@@ -2459,3 +2459,7 @@ HTTPS independiente2026-11-07T05:39:43.013111Z confirmó v210 y coincidencia pú
 Conectar solicita en una sola pantalla de EVE los cinco permisos de lectura ya utilizados. Perfil refleja los permisos del token y ofrece Autorizar acceso a sesiones anteriores incompletas. Producción usa el mismo consentimiento y conserva el borrador. Actualizar perfil muestra progreso y resultado. Los nombres y sistemas dependen de la respuesta de ESI y del acceso del personaje a la estructura.
 
 QA local con datos simulados: 214 Node, 16 Python y 24 Chromium focales. Build local LF de 2.714.085 bytes, blob `8abb8601f499a81c7c23e5baa4413615ee5f3a9f`. El propietario confirmó la habilitación del permiso en CCP. Candidata hasta verificar Actions, Pages y HTTPS. Consentimiento y ubicaciones de un personaje real pendientes de comprobación.
+
+### v1.0.211 LIVE verificada
+
+Fuente Fiko `5e7a1bf33d6db1310bc20318d3a7d6b4c5ccd59c`, build `a237bc6ac4f433fdfa11c1e7f11f1878138f9cac`. Cuatro Actions SUCCESS (42352023128, 42352023199, 42352023080 y Rebuild/Pages 42352023095). CI 214 Node, 16 Python, ocho pruebas heredadas y 168 Chromium PASS. HTTPS 200 y coincidencia pública, local y GitHub del HTML LF de 2.714.085 bytes (blob `8abb8601f499a81c7c23e5baa4413615ee5f3a9f`). El consentimiento y el inventario del personaje real quedan por verificar. Los nombres y sistemas se muestran cuando ESI devuelve esos datos.
