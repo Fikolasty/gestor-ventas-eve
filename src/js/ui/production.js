@@ -19,20 +19,39 @@ const ProductionUI=(()=>{
  let importOpen=false,importBusy=false,importError=false,inventory=null,importLocation='',importSelection=new Set(),importApplied='',importSerial=0,importPilot=null,resumeImport=false;
  const importAuth=()=>window.mmProductionInventoryAuth;
  function resumeInventory(){if(resumeImport&&active&&importOpen&&importAuth()?.identity()?.assets){resumeImport=false;fetchInventory();}}
- const locationLabel=g=>`${inventory.names[g.root]||t('locationId')+' '+g.root} · ${g.container?(inventory.names[g.container]||t('containerId')+' '+g.container):t('personalHangar')}`;
+ const rootLabel=(data,id)=>{const name=data.names[id]||t('locationId')+' '+id,system=data.systems[id];return system&&!name.startsWith(system)?system+' · '+name:name;};
+ const compartmentLabel=(data,g)=>g.container?(data.names[g.container]||t('containerId')+' '+g.container):t('personalHangar');
+ const locationLabel=g=>`${rootLabel(inventory,g.root)} · ${compartmentLabel(inventory,g)}`;
+ const matchingStock=(rows,g)=>rows.some(r=>g?.stock[r.id]>0);
+ function inventoryOptions(rows){
+  const roots=new Map();for(const group of inventory.locations){if(!roots.has(group.root))roots.set(group.root,[]);roots.get(group.root).push(group);}
+  return [...roots].sort(([a],[b])=>rootLabel(inventory,a).localeCompare(rootLabel(inventory,b),lang,{numeric:true})).map(([id,groups])=>`<optgroup label="${escape(rootLabel(inventory,id))}">${groups.sort((a,b)=>Number(!!a.container)-Number(!!b.container)).map(g=>`<option value="${g.id}" ${g.id===importLocation?'selected':''}>${escape(compartmentLabel(inventory,g))}${matchingStock(rows,g)?'':` · ${t('noAvailableStock')}`}</option>`).join('')}</optgroup>`).join('');
+ }
  function inventoryImport(m){
   const pilot=importAuth()?.identity(),source=inventory?.locations.find(g=>g.id===importLocation);
+  const hasStock=matchingStock(m.rows,source),hasLocations=!!inventory?.locations.length;
+  const locked=m.rows.filter(r=>source?.locked[r.id]>0);
+  const unresolved=inventory?.locations.some(g=>!(g.root>=60000000&&g.root<64000000)&&!inventory.names[g.root]);
   return `<section class="fp-stock-import-shell" aria-label="${t('importInventory')}"><div class="fp-stock-import-toolbar"><div><strong>${t('inventory')}</strong><span>${escape(importApplied||t('stockHint'))}</span></div><button type="button" class="ghost fp-stock-import-trigger" data-import-open aria-expanded="${importOpen}" aria-controls="fp-stock-import-drawer"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v11m-4-4 4 4 4-4M4 15v5h16v-5"/></svg>${t('importInventory')}</button></div>
   ${importOpen?`<div class="fp-stock-import-drawer" id="fp-stock-import-drawer" aria-busy="${importBusy}"><header><h3>${t('reviewInventory')}</h3><span>${escape(pilot?.name||'')}</span></header>
   ${!pilot?.assets?`<p class="fp-import-permission">${t('permissionStock')}</p><button type="button" class="btn" data-import-authorize>${t('authorizeInventory')}</button>`:`<button type="button" class="ghost" data-import-fetch ${importBusy?'disabled':''}>${t(importBusy?'loading':'queryStock')}</button>`}
-  <p class="fp-import-permission" role="status">${importError?t('inventoryFailed'):inventory&&!inventory.locations.length?t('noInventory'):''}</p>
-  ${source?`<div class="fp-import-context"><label>${t('stockLocation')}<select data-import-location>${inventory.locations.map(g=>`<option value="${g.id}" ${g.id===importLocation?'selected':''}>${escape(locationLabel(g))}</option>`).join('')}</select></label><div><span>${t('character')}</span><strong>${escape(inventory.pilot.name)}</strong></div><p>${t('locationOnly')}</p></div>
-  <table class="fp-import-review"><thead><tr>${['labelMaterial','currentStock','foundStock','apply'].map(k=>`<th scope="col">${t(k)}</th>`).join('')}</tr></thead><tbody>${m.rows.map(r=>`<tr><td>${escape(r.name)}</td><td>${quantity(r.owned)}</td><td>${quantity(source.stock[r.id]??0)}</td><td><input type="checkbox" data-import-check="${r.id}" ${importSelection.has(r.id)?'checked':''} aria-label="${t('apply')} ${escape(r.name)}"></td></tr>`).join('')}</tbody></table><p class="fp-import-permission">${t('stockCached')}: ${escape(new Date(inventory.queriedAt).toLocaleString())}${Number.isFinite(inventory.updatedAt)?' · '+t('stockModified')+': '+escape(new Date(inventory.updatedAt).toLocaleString()):''}</p>`:''}
-  <footer><p>${quantity(importSelection.size)} ${t('selectedStock')}</p><div><button type="button" class="ghost" data-import-cancel>${t('cancelImport')}</button><button type="button" class="btn" data-import-apply ${!source||!importSelection.size||importBusy?'disabled':''}>${t('applyStock')}</button></div></footer><p class="fp-import-permission">${t('readOnlyStock')}</p></div>`:''}</section>`;
+  <p class="fp-import-permission" role="status">${importError?t('inventoryFailed'):inventory&&!hasLocations?t('noPersonalHangars'):''}</p>
+  ${hasLocations?`<div class="fp-import-context"><label>${t('stockLocation')}<select data-import-location><option value="" ${!source?'selected':''}>${t('chooseStockLocation')}</option>${inventoryOptions(m.rows)}</select></label><div><span>${t('character')}</span><strong>${escape(inventory.pilot.name)}</strong></div><p>${source?escape(locationLabel(source)):t('locationOnly')}</p></div>`:''}
+  ${unresolved?`<p class="fp-import-permission">${t(pilot?.structures?'structureNameUnavailable':'structureNamePermission')}</p>${pilot?.structures?'':`<button type="button" class="ghost" data-import-authorize-structures>${t('authorizeStructureNames')}</button>`}`:''}
+  ${source&&!hasStock?`<p class="fp-import-permission">${t('noRecipeStock')}</p>`:''}
+  ${locked.length?`<p class="fp-import-permission">${t('lockedStock')}: ${locked.map(r=>`${escape(r.name)} ${quantity(source.locked[r.id])}`).join(' · ')}.</p>`:''}
+  ${source?`<table class="fp-import-review"><thead><tr>${['labelMaterial','currentStock','foundStock','apply'].map(k=>`<th scope="col">${t(k)}</th>`).join('')}</tr></thead><tbody>${m.rows.map(r=>`<tr><td>${escape(r.name)}</td><td>${quantity(r.owned)}</td><td>${quantity(source.stock[r.id]??0)}</td><td><input type="checkbox" data-import-check="${r.id}" ${importSelection.has(r.id)?'checked':''} ${hasStock?'':'disabled'} aria-label="${t('apply')} ${escape(r.name)}"></td></tr>`).join('')}</tbody></table>`:''}
+  ${inventory?`<p class="fp-import-permission">${t('stockCached')}: ${escape(new Date(inventory.queriedAt).toLocaleString())}${Number.isFinite(inventory.updatedAt)?' · '+t('stockModified')+': '+escape(new Date(inventory.updatedAt).toLocaleString()):''}</p>`:''}
+  <footer><p>${quantity(importSelection.size)} ${t(importSelection.size===1?'selectedStockSingle':'selectedStock')}</p><div><button type="button" class="ghost" data-import-cancel>${t('cancelImport')}</button><button type="button" class="btn" data-import-apply ${!hasStock||!importSelection.size||importBusy?'disabled':''}>${t('applyStock')}</button></div></footer><p class="fp-import-permission">${t('readOnlyStock')}</p></div>`:''}</section>`;
  }
  async function fetchInventory(){
   const serial=++importSerial,pilot=importAuth()?.identity();inventory=null;importSelection.clear();importBusy=true;importError=false;render();
-  try{const result=await productionInventory(importAuth(),[...new Set(fuels.flatMap(f=>f.materials.map(m=>m.id)))]);if(serial!==importSerial||pilot?.id!==importAuth()?.identity()?.id)return;inventory=result;importLocation=result.locations[0]?.id||'';importSelection=new Set(calculate().rows.filter(r=>result.locations[0]?.stock[r.id]>0).map(r=>r.id));}
+  try{
+   const result=await productionInventory(importAuth(),[...new Set(fuels.flatMap(f=>f.materials.map(m=>m.id)))]);if(serial!==importSerial||pilot?.id!==importAuth()?.identity()?.id)return;
+   inventory=result;const rows=calculate().rows,matches=result.locations.filter(g=>matchingStock(rows,g)||rows.some(r=>g.locked[r.id]>0));
+   const source=result.locations.find(g=>g.id===importLocation)||(new Set(result.locations.map(g=>g.root)).size===1?(matches.length===1?matches[0]:result.locations.length===1?result.locations[0]:null):null);
+   importLocation=source?.id||'';importSelection=new Set(rows.filter(r=>source?.stock[r.id]>0).map(r=>r.id));
+  }
   catch(e){if(serial===importSerial)importError=true;}
   finally{if(serial===importSerial){importBusy=false;render();}}
  }
@@ -41,14 +60,14 @@ const ProductionUI=(()=>{
   if(e.target.closest('[data-import-open]')){importOpen=!importOpen;render();if(importOpen&&importAuth()?.identity()?.assets&&!inventory&&!importBusy)fetchInventory();}
   if(e.target.closest('[data-import-cancel]')){importSerial++;importBusy=false;importOpen=false;inventory=null;render();root.querySelector('[data-import-open]')?.focus();}
   if(e.target.closest('[data-import-fetch]'))fetchInventory();
-  if(e.target.closest('[data-import-authorize]')){
+  if(e.target.closest('[data-import-authorize],[data-import-authorize-structures]')){
    // Explicit consent redirect: short-lived tab-only draft, consumed on return.
    try{sessionStorage.setItem('mm.production.authDraft',JSON.stringify({at:Date.now(),state}));}catch(e){}
-   importAuth()?.authorize();
+   if(e.target.closest('[data-import-authorize-structures]'))importAuth()?.authorizeStructures();else importAuth()?.authorize();
   }
   if(e.target.closest('[data-import-apply]')){
    const source=inventory?.locations.find(g=>g.id===importLocation);
-   if(!source||importBusy||inventory.pilot.id!==importAuth()?.identity()?.id)return;
+   if(!source||!matchingStock(calculate().rows,source)||importBusy||inventory.pilot.id!==importAuth()?.identity()?.id)return;
    const ids=new Set(calculate().rows.map(r=>r.id));for(const id of importSelection)if(ids.has(id))state.owned[id]=source.stock[id]??0;
    importApplied=t('importedStock')+': '+locationLabel(source);importOpen=false;render();root.querySelector('[data-import-open]')?.focus();
   }
@@ -59,7 +78,7 @@ const ProductionUI=(()=>{
  },true);
  window.addEventListener('mm-eve-identity',()=>{
   const id=importAuth()?.identity()?.id||null;
-  if(importPilot!==id||!importAuth()?.identity()?.assets){importSerial++;importBusy=false;inventory=null;importSelection.clear();importApplied='';importPilot=id;if(active)render();}resumeInventory();
+  if(importPilot!==id||!importAuth()?.identity()?.assets){importSerial++;importBusy=false;inventory=null;importLocation='';importSelection.clear();importApplied='';importPilot=id;if(active)render();}resumeInventory();
  });
  try{const raw=sessionStorage.getItem('mm.production.authDraft');sessionStorage.removeItem('mm.production.authDraft');if(raw){const draft=JSON.parse(raw);if(Date.now()-draft.at<600000&&draft.state){for(const key of Object.keys(state))if(Object.hasOwn(draft.state,key))state[key]=draft.state[key];state.tab='materials';importOpen=true;resumeImport=true;queueMicrotask(()=>{selectAppModule('production');resumeInventory();});}}}catch(e){}
 

@@ -66,7 +66,7 @@ class ESISettingsTests(unittest.TestCase):
   self.page.evaluate('refreshNow()')
  def state(self):return self.page.evaluate("({tax:C.tax,broker:C.broker,abr:C.abr,rep:S.sk.Reprocessing,eff:S.sk['Reprocessing Efficiency'],simple:S.sk['Simple Ore Processing'],ice:S.sk['Ice Processing'],imp:C.ref.imp,fac:C.stdFac,corp:C.stdCorp})")
  def test_signed_login_populates_actual_active_levels_and_derived_rates(self):
-  self.scopes.append('esi-assets.read_assets.v1')
+  self.scopes.extend(['esi-assets.read_assets.v1','esi-universe.read_structures.v1'])
   # Real browser RSA verification with an ephemeral synthetic key, not a bypass.
   self.page.unroute('**/*',self.route)
   self.page.route('https://mm.test/**',lambda r:r.fulfill(body='<html></html>',content_type='text/html'))
@@ -88,7 +88,7 @@ class ESISettingsTests(unittest.TestCase):
   self.assertNotIn('code=',self.page.url)
   self.assertEqual(self.page.locator('#skAcc').input_value(),'4')
   self.assertEqual(self.page.locator('#cTax').input_value(),'4.2')
-  self.assertEqual(self.page.locator('[data-access-state][data-allowed="true"]').count(),4)
+  self.assertEqual(self.page.locator('[data-access-state][data-allowed="true"]').count(),5)
  def test_per_material_levels_survive_refresh_and_switch_then_manual_override(self):
   self.boot();self.page.evaluate("$('rOre').value='Veldspar';refreshNow();refreshNow()")
   self.assertEqual(self.page.locator('#skOre').input_value(),'2')

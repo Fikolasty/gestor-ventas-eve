@@ -1,3 +1,7 @@
+# v1.0.210 — candidata
+
+Catálogo de hangares agrupado por ubicación, nombres de estación/sistema y lectura opcional de estructuras. Materiales bloqueados visibles por separado. CI/Pages pendientes; docs/INVENTORY_LOCATIONS_210.md.
+
 # v1.0.209 LIVE — consentimiento único e inventario nullsec
 
 Cuatro permisos usados en un solo acceso. Corregidos contenedores de estructuras item/Cargo; consulta reanudada tras autorización.4Actions/212Node/16Python/8legacy/165Chromium/Pages/HTTPS PASS. Datos privados del personaje no verificados; Locked excluido. Ver docs/CONSENT_INVENTORY_209.md.

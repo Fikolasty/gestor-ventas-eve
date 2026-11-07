@@ -9,7 +9,8 @@
   const EVE_CLIENT_ID='114bbd2659384151ac3b0096f183dd3b';
   const skillScope='esi-skills.read_skills.v1',standingsScope='esi-characters.read_standings.v1',implantsScope='esi-clones.read_implants.v1';
   const assetsScope='esi-assets.read_assets.v1';
-  // Owner-approved single consent for the four implemented read capabilities.
+  const structureScope='esi-universe.read_structures.v1';
+  // Owner-approved single consent for the implemented read capabilities.
   const scope=[skillScope,standingsScope,implantsScope,assetsScope].join(' ');
   const scopesOf=token=>{try{const part=token.split('.')[1].replace(/-/g,'+').replace(/_/g,'/');const v=JSON.parse(atob(part.padEnd(Math.ceil(part.length/4)*4,'='))).scp;return Array.isArray(v)?v:typeof v==='string'?v.split(/\s+/):[];}catch(e){return [];}};
   let session=null,refreshPending=null,sessionEpoch=0,syncSerial=0,applyingESI=false;
@@ -52,7 +53,7 @@
     $e('eveInventoryAccess').hidden=!on;$e('eveInventoryAccess').dataset.i18n=on&&session.scopes.includes(assetsScope)?'sso.openInventory':'sso.authorizeInventory';
     $e('eveInventoryAccess').textContent=tx($e('eveInventoryAccess').dataset.i18n);
     $e('eveAccessPilot').textContent=on?session.name:tx('sso.access.offline');
-    const scopes={skills:skillScope,standings:standingsScope,implants:implantsScope,assets:assetsScope};
+    const scopes={skills:skillScope,standings:standingsScope,implants:implantsScope,assets:assetsScope,structures:structureScope};
     for(const [key,scope] of Object.entries(scopes)){const e=document.querySelector('[data-access-state="'+key+'"]'),allowed=on&&session.scopes.includes(scope);e.dataset.i18n=!on?'sso.access.offline':allowed?'sso.access.authorized':'sso.access.optional';e.textContent=tx(e.dataset.i18n);e.dataset.allowed=String(!!allowed);}
     button.setAttribute('aria-label',tx(on?'sso.characterOptions':'sso.connect'));
     $e('evePortrait').hidden=!on;if(on)$e('evePortrait').src='https://images.evetech.net/characters/'+session.id+'/portrait?size=64';else $e('evePortrait').removeAttribute('src');window.dispatchEvent(new Event('mm-eve-identity'));};
@@ -69,11 +70,11 @@
   window.addEventListener('resize',()=>closeMenu());
   $e('eveProfile').addEventListener('click',openProfile);
   [$e('eveConnect'),$e('eveProfileConnect')].forEach(b=>b.addEventListener('click',()=>{closeMenu();startLogin();}));
-  async function startLogin(extended=false,assets=false){
+  async function startLogin(structureNames=false){
     const client=EVE_CLIENT_ID;
     if(!client){alert(tx('sso.missingClient'));return;}
     try{const verifier=rand(48),state=rand(24);sessionStorage.setItem(key,JSON.stringify({verifier,state,client,redirect:base,at:Date.now()}));
-      const requested=scope.split(' ');
+      const requested=[...scope.split(' '),...(structureNames||session?.scopes.includes(structureScope)?[structureScope]:[])];
       const u=new URL('https://login.eveonline.com/v2/oauth/authorize');u.searchParams.set('response_type','code');u.searchParams.set('client_id',client);u.searchParams.set('redirect_uri',base);u.searchParams.set('scope',requested.join(' '));u.searchParams.set('state',state);u.searchParams.set('code_challenge',await challenge(verifier));u.searchParams.set('code_challenge_method','S256');location.assign(u.href);
     }catch(err){const message=tx('sso.loginOpenFailed',{error:err?.message||String(err)});openProfile();status(message);console.error('EVE SSO redirect failed',err);}
   }
@@ -83,13 +84,13 @@
   async function jsonESI(path,token){const resp=await fetch('https://esi.evetech.net/latest/'+path+'?compatibility_date=2026-10-01',{headers:token?{Authorization:'Bearer '+token}:{},cache:'no-store'});if(!resp.ok)throw Error('ESI HTTP '+resp.status);return resp.json();}
   // Restricted read capability; tokens never leave this closure. Uses the shared
   // network semaphore and respects Retry-After without persisting private assets.
-  async function inventoryRequest(suffix,body){
+  async function productionRead(path,permission,body){
     const epoch=sessionEpoch,id=session?.id;
     if(!id)throw Error('Not connected');
     for(let attempt=0;attempt<3;attempt++){
-      if(Date.now()>session.expires)await renew();
-      if(epoch!==sessionEpoch||session?.id!==id||!session.scopes.includes(assetsScope))throw Error('Inventory permission required');
-      const r=await esiNetworkFetch('https://esi.evetech.net/latest/characters/'+id+'/assets/'+suffix,{method:body?'POST':'GET',credentials:'omit',referrerPolicy:'no-referrer',headers:{Authorization:'Bearer '+session.token,...(body?{'Content-Type':'application/json'}:{})},...(body?{body:JSON.stringify(body)}:{})});
+      if(session&&Date.now()>session.expires)await renew();
+      if(epoch!==sessionEpoch||session?.id!==id||!session.scopes.includes(permission))throw Error('Inventory permission required');
+      const r=await esiNetworkFetch('https://esi.evetech.net/latest/'+path,{method:body?'POST':'GET',credentials:'omit',referrerPolicy:'no-referrer',headers:{Authorization:'Bearer '+session.token,...(body?{'Content-Type':'application/json'}:{})},...(body?{body:JSON.stringify(body)}:{})});
       if(epoch!==sessionEpoch||session?.id!==id)throw Error('Character changed');
       if(r.ok)return r;
       if(r.status===401&&attempt===0){await renew();continue;}
@@ -98,9 +99,12 @@
     }
     throw Error('Inventory unavailable');
   }
+  const inventoryRequest=(suffix,body)=>productionRead('characters/'+session?.id+'/assets/'+suffix,assetsScope,body);
   window.mmProductionInventoryAuth=Object.freeze({
-    identity:()=>session?{id:session.id,name:session.name,assets:session.scopes.includes(assetsScope)}:null,
-    authorize:async()=>{if(!session&&stored()){try{await renew();}catch(e){/* Consent can establish a new session. */}}return startLogin(false,true);},
+    identity:()=>session?{id:session.id,name:session.name,assets:session.scopes.includes(assetsScope),structures:session.scopes.includes(structureScope)}:null,
+    authorize:async()=>{if(!session&&stored()){try{await renew();}catch(e){/* Consent can establish a new session. */}}return startLogin();},
+    authorizeStructures:()=>startLogin(true),
+    structure:id=>{if(!Number.isSafeInteger(id)||id<=0)throw Error('Invalid structure ID');return productionRead('universe/structures/'+id+'/?compatibility_date=2026-10-01',structureScope);},
     assets:page=>{if(!Number.isSafeInteger(page)||page<1)throw Error('Invalid page');return inventoryRequest('?compatibility_date=2026-10-01&page='+page);},
     names:ids=>{if(!Array.isArray(ids)||ids.length>1000||ids.some(id=>!Number.isSafeInteger(id)||id<=0))throw Error('Invalid asset IDs');return inventoryRequest('names/?compatibility_date=2026-10-01',ids);}
   });
@@ -179,7 +183,7 @@
     mmUpdateSettingsSkillNotes();stSave();refresh();
   }
   $e('eveSync').addEventListener('click',()=>{if(session)sync();});
-  $e('eveAuthorizeSettings').addEventListener('click',()=>{if(session)startLogin(true);});
+  $e('eveAuthorizeSettings').addEventListener('click',()=>{if(session)startLogin();});
   $e('eveInventoryAccess').addEventListener('click',()=>{selectAppModule('production');ProductionUI.setTab('materials');const trigger=document.querySelector('[data-import-open]');if(trigger?.getAttribute('aria-expanded')!=='true')trigger?.click();if(!session?.scopes.includes(assetsScope))document.querySelector('[data-import-authorize]')?.click();});
   $e('eveLogout').addEventListener('click',()=>{sessionEpoch++;esiProcessingSkills=null;clearSources();readSkills(false);SkillUI.setPilot(null);window.mmProductionSkills?.(null);clearSaved();session=null;marketAlliance='';refreshMarketControls();syncNullRouteLabels();closeMenu();refreshUI();status(tx('sso.disconnected'));});
   refreshUI();

@@ -3810,5 +3810,49 @@
   "sso.requestMissing": {
     "es": "La solicitud de acceso ha caducado. Inicia de nuevo desde Conectar.",
     "en": "The login request expired. Start again with Connect."
+  },
+  "production.chooseStockLocation": {
+    "es": "Elige una ubicación",
+    "en": "Choose a location"
+  },
+  "production.noAvailableStock": {
+    "es": "Sin materiales disponibles",
+    "en": "No available materials"
+  },
+  "production.noRecipeStock": {
+    "es": "Esta ubicación no tiene materiales disponibles para la receta actual.",
+    "en": "This location has no available materials for the current recipe."
+  },
+  "production.noPersonalHangars": {
+    "es": "ESI no devolvió ubicaciones de tu hangar personal.",
+    "en": "ESI returned no personal hangar locations."
+  },
+  "production.lockedStock": {
+    "es": "Materiales bloqueados que no se importan",
+    "en": "Locked materials excluded from import"
+  },
+  "production.structureNameUnavailable": {
+    "es": "ESI no devolvió el nombre de algunas estructuras. Puedes elegirlas por su ID.",
+    "en": "ESI did not return names for some structures. You can select them by ID."
+  },
+  "production.structureNamePermission": {
+    "es": "Autoriza la lectura de estructuras para ver su nombre y sistema.",
+    "en": "Authorize structure lookup to see their names and systems."
+  },
+  "production.authorizeStructureNames": {
+    "es": "Autorizar nombres de estructuras",
+    "en": "Authorize structure names"
+  },
+  "production.selectedStockSingle": {
+    "es": "material seleccionado · podrás editarlo después.",
+    "en": "material selected · you can edit it afterwards."
+  },
+  "sso.access.structures": {
+    "es": "Nombres de estructuras",
+    "en": "Structure names"
+  },
+  "sso.access.structuresHelp": {
+    "es": "Identifica las estructuras y sistemas de tu inventario cuando tienes acceso en EVE.",
+    "en": "Identify the structures and systems in your inventory when you have access in EVE."
   }
 }

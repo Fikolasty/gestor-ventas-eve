@@ -36,12 +36,27 @@ test('Personal container within a nullsec structure accepts item roots and verif
  const {productionAssetLocations:locations}=api();
  const records=[asset(100,17366,1,1030000000001,'Hangar','item'),asset(101,23,1,100,'Unlocked','item'),asset(102,44,500,101,'Cargo','item'),asset(103,44,600,100,'Unlocked','item'),asset(104,44,700,100,'Locked','item'),asset(105,587,1,1030000000001,'Hangar','item'),asset(106,44,800,105,'Cargo','item')];
  const result=locations(records,[44],new Set([23,17366]));
- assert.equal(result.length,2);assert.equal(result.find(g=>g.id==='101').root,1030000000001);
+ assert.equal(result.length,3);assert.equal(result.find(g=>g.id==='101').root,1030000000001);
  assert.equal(result.find(g=>g.id==='101').stock[44],500);assert.equal(result.find(g=>g.id==='100').stock[44],600);
  assert.equal(result.some(g=>g.id==='105'),false);
 });
 test('Inventory adapter resolves public parent type before accepting Cargo, never treating ships as containers',async()=>{
  const records=[asset(100,23,1,1030000000001,'Hangar','item'),asset(101,44,3000,100,'Cargo','item'),asset(102,587,1,1030000000001,'Hangar','item'),asset(103,44,4000,102,'Cargo','item')];
  const {productionInventory:load}=api({esiFetch:async url=>({json:async()=>({group_id:url.includes('/23/')?12:25})})});
- const result=await load(auth([records]),[44]);assert.equal(result.locations.length,1);assert.equal(result.locations[0].stock[44],3000);
+ const result=await load(auth([records]),[44]);assert.equal(result.locations.length,2);assert.equal(result.locations.find(g=>g.container===100).stock[44],3000);
+});
+test('Every personal hangar stays discoverable; locked recipe materials are separate from available stock',()=>{
+ const {productionAssetLocations:locations}=api();
+ const result=locations([asset(1,587,1,60003760,'ShipHangar'),asset(2,23,1,1030000000001,'Hangar','item'),asset(3,44,1200,2,'Locked','item'),asset(4,587,1,60003761),asset(5,44,99,2004,'AssetSafety','other')],[44]);
+ assert.deepEqual([...new Set(result.map(g=>g.root))],[60003760,60003761,1030000000001]);
+ const bin=result.find(g=>g.container===2);assert.equal(bin.locked[44],1200);assert.equal(bin.stock[44],undefined);
+});
+test('Structure permission resolves name and system; unavailable metadata leaves the hangar and stock intact',async()=>{
+ const a=auth([[asset(1,44,30,1030000000001,'Hangar','item')]]);let requests=0;
+ a.structure=async()=>{requests++;return {json:async()=>({name:'Fixture refinery',solar_system_id:30000142})};};
+ const {productionInventory:load}=api({esiFetch:async()=>({json:async()=>({name:'Fixture system'})})});
+ let result=await load(a,[44]);assert.equal(requests,0);assert.equal(result.locations[0].stock[44],30);
+ const identity=a.identity;a.identity=()=>({...identity(),structures:true});
+ result=await load(a,[44]);assert.equal(requests,1);assert.equal(result.names[1030000000001],'Fixture refinery');assert.equal(result.systems[1030000000001],'Fixture system');
+ a.structure=async()=>{throw Error('403')};result=await load(a,[44]);assert.equal(result.names[1030000000001],undefined);assert.equal(result.locations[0].stock[44],30);
 });

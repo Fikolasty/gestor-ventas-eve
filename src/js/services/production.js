@@ -10,8 +10,8 @@ async function productionQuote(type,force=false){
  }).finally(()=>productionQuoteWait.delete(type.id));
  productionQuoteWait.set(type.id,wait);return wait;
 }
-// Personal inventory only. Exact hangars/containers are separate locations:
-// no cargo, deliveries, locked stock, asset safety or implicit recursive totals.
+// Discover personal hangars independently of recipe matches. Exact containers
+// stay separate; locked materials are visible for review but never available.
 function productionAssetLocations(records,materialIds,containerTypes=new Set()){
  const byId=new Map(),wanted=new Set(materialIds),groups=new Map();
  for(const a of records){
@@ -19,33 +19,41 @@ function productionAssetLocations(records,materialIds,containerTypes=new Set()){
   if(byId.has(a.item_id))throw Error('Repeated asset: inconsistent pagination');
   byId.set(a.item_id,a);
  }
+ const isRoot=a=>['station','other','item'].includes(a.location_type)&&a.location_id!==2004;
+ function groupFor(root,container=null){
+  const key=String(container??root);
+  if(!groups.has(key))groups.set(key,{id:key,root,container,stock:{},locked:{}});
+  return groups.get(key);
+ }
  function rootOf(a){
-  const seen=new Set();let node=a;
+  const seen=new Set();let node=a,locked=false;
   while(byId.has(node.location_id)){
    const parent=byId.get(node.location_id);
-   if(seen.has(node.item_id)||!(node.location_flag==='Unlocked'||node.location_flag==='Cargo'&&containerTypes.has(parent.type_id)))return null;
+   if(seen.has(node.item_id)||!(['Unlocked','Locked'].includes(node.location_flag)||node.location_flag==='Cargo'&&containerTypes.has(parent.type_id)))return null;
+   locked ||= node.location_flag==='Locked';
    seen.add(node.item_id);node=byId.get(node.location_id);
   }
-  return node.location_flag==='Hangar'&&['station','other','item'].includes(node.location_type)?node.location_id:null;
+  return node.location_flag==='Hangar'&&isRoot(node)?{root:node.location_id,locked}:null;
  }
+ for(const a of records)if(!byId.has(a.location_id)&&isRoot(a)&&(a.location_flag==='Hangar'||a.location_flag==='ShipHangar'&&a.location_id>=60000000&&a.location_id<64000000))groupFor(a.location_id);
  for(const a of records){
   if(!wanted.has(a.type_id))continue;
-  const root=rootOf(a);if(root==null)continue;
-  const container=byId.has(a.location_id)?a.location_id:null,key=String(a.location_id);
-  if(!groups.has(key))groups.set(key,{id:key,root,container,stock:{}});
-  const group=groups.get(key),sum=(group.stock[a.type_id]||0)+a.quantity;
+  const location=rootOf(a);if(!location)continue;
+  const group=groupFor(location.root,byId.has(a.location_id)?a.location_id:null),stock=location.locked?group.locked:group.stock;
+  const sum=(stock[a.type_id]||0)+a.quantity;
   if(!Number.isSafeInteger(sum))throw Error('Asset quantity overflow');
-  group.stock[a.type_id]=sum;
+  stock[a.type_id]=sum;
  }
  return [...groups.values()].sort((a,b)=>a.root-b.root||Number(a.id)-Number(b.id));
 }
 const productionContainerTypeCache=new Map();
 async function productionInventory(auth,materialIds){
  const pilot=auth.identity();if(!pilot?.assets)throw Error('Inventory permission required');
- const first=await auth.assets(1),pages=Number(first.headers.get('X-Pages')||1);
+ const first=await auth.assets(1),pageHeader=first.headers.get('X-Pages'),pages=Number(pageHeader||1);
  if(!Number.isSafeInteger(pages)||pages<1||pages>10000)throw Error('Invalid assets pagination');
  const stamp=first.headers.get('Last-Modified'),expiry=Date.parse(first.headers.get('Expires'));
  const rows=await first.json();if(!Array.isArray(rows))throw Error('Invalid assets page');
+ if(!pageHeader&&rows.length>=1000)throw Error('Missing inventory page count');
  // Avoid completing a snapshot across an expired page cache.
  if(pages>1&&Number.isFinite(expiry)&&expiry<=Date.now()+10000)throw Error('Inventory cache refreshing; retry shortly');
  for(let page=2;page<=pages;page++){
@@ -80,14 +88,26 @@ async function productionInventory(auth,materialIds){
   productionContainerTypeCache.set(id,[12,340,448,649].includes(type.group_id));
  });
  const containerTypes=new Set([...candidates].filter(id=>productionContainerTypeCache.get(id)));
- const locations=productionAssetLocations(rows,materialIds,containerTypes),names={};
- await pool([...new Set(locations.map(g=>g.root))].filter(id=>id>=60000000&&id<64000000),ESI_POOL,async id=>{
-  try{const station=await (await esiFetch('/universe/stations/'+id+'/')).json();if(typeof station.name==='string')names[id]=station.name;}catch(e){/* An unresolved name remains an explicit location ID. */}
+ const locations=productionAssetLocations(rows,materialIds,containerTypes),names={},systems={},systemIds={};
+ await pool([...new Set(locations.map(g=>g.root))],ESI_POOL,async id=>{
+  try{
+   const station=id>=60000000&&id<64000000;
+   if(!station&&(!pilot.structures||!auth.structure))return;
+   const place=await (await (station?esiFetch('/universe/stations/'+id+'/'):auth.structure(id))).json();
+   if(typeof place.name==='string'&&place.name.trim())names[id]=place.name;
+   const systemId=station?place.system_id:place.solar_system_id;
+   if(Number.isSafeInteger(systemId)&&systemId>0)systemIds[id]=systemId;
+  }catch(e){/* ESI can deny structure metadata without invalidating its assets. */}
  });
+ const systemNames={};
+ await pool([...new Set(Object.values(systemIds))],ESI_POOL,async id=>{
+  try{const system=await (await esiFetch('/universe/systems/'+id+'/')).json();if(typeof system.name==='string')systemNames[id]=system.name;}catch(e){}
+ });
+ for(const [root,id] of Object.entries(systemIds))if(systemNames[id])systems[root]=systemNames[id];
  const containers=locations.filter(g=>g.container).map(g=>g.container);
  for(let i=0;i<containers.length;i+=1000){try{const result=await (await auth.names(containers.slice(i,i+1000))).json();for(const x of result)if(containers.includes(x.item_id)&&typeof x.name==='string'&&x.name!=='None')names[x.item_id]=x.name;}catch(e){/* IDs remain usable without guessing names. */}}
  if(auth.identity()?.id!==pilot.id)throw Error('Character changed');
- return {pilot,locations,names,itemCount:rows.length,queriedAt:Date.now(),updatedAt:stamp?Date.parse(stamp):null};
+ return {pilot,locations,names,systems,itemCount:rows.length,queriedAt:Date.now(),updatedAt:stamp?Date.parse(stamp):null};
 }
 let productionIndices=null,productionIndicesAt=0,productionIndexWait=null;
 async function productionSystem(systemId){
