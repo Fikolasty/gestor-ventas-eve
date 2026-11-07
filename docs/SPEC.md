@@ -317,3 +317,8 @@ El callback de producción es canónico: https://fikolasty.github.io/gestor-vent
 ## Consentimiento e inventario209
 
 Por instrucción explícita del propietario, el primer acceso solicita skills/standings/implants/assets juntos; sustituye el login histórico de solo skills. Los extras PI/jobs/minería registrados no se solicitan. Sesiones previas pueden completar acceso. Assets personales admiten raíz Hangar de tipo item para estructuras y Cargo de contenedores verificados mediante grupo público, manteniendo exclusión de naves/Locked/safety/entregas y selección explícita. El regreso de autorización de inventario reanuda la consulta solicitada sin descargar assets en cada login normal. Contrato docs/CONSENT_INVENTORY_209.md. LIVE209 certificada:4Actions/212Node/16Python/8legacy/165Chromium PASS; HTTPS/local/GitHub idénticos,blobfeb05f2866060ff62cf19baa215efeb357742e9b. ESI/SSO del personaje real no certificado.
+
+
+## Catálogo de ubicaciones v1.0.210
+
+Hangares descubiertos antes de filtrar receta, selector agrupado y cantidades Locked separadas. Estaciones/sistemas públicos, estructuras por GET privado con esi-universe.read_structures.v1 y ACL; fallback por ID conserva stock. Consentimiento explícito de nombres con borrador preservado y cuatro scopes de acceso habitual intactos. Ver docs/INVENTORY_LOCATIONS_210.md. LIVE certificada:4Actions/214Node/16Python/8legacy/167Chromium PASS; HTTPS/local/GitHub idénticos,528bc96068824cb64d08d011b0c8330e6bbbc65c. Registro CCP y personaje real no verificados.

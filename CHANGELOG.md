@@ -1,6 +1,6 @@
-# v1.0.210 — candidata
+# v1.0.210 LIVE — ubicaciones de inventario
 
-Catálogo de hangares agrupado por ubicación, nombres de estación/sistema y lectura opcional de estructuras. Materiales bloqueados visibles por separado. CI/Pages pendientes; docs/INVENTORY_LOCATIONS_210.md.
+Hangares agrupados por estación/estructura, nombre y sistema cuando ESI los devuelve, Locked separado y elección explícita.4Actions/214Node/16Python/8legacy/167Chromium/Pages/HTTPS PASS. Permiso opcional de nombres requiere registro CCP. Ver docs/INVENTORY_LOCATIONS_210.md.
 
 # v1.0.209 LIVE — consentimiento único e inventario nullsec
 
