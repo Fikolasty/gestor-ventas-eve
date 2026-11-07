@@ -1,3 +1,7 @@
+# v1.0.209 — candidata
+
+Consentimiento único para cuatro permisos de lectura usados. Corrección de assets en contenedores de estructuras item/Cargo y reanudación de consulta tras autorizar. CI/Pages pendientes. Ver docs/CONSENT_INVENTORY_209.md.
+
 # v1.0.208 LIVE — Perfil ESI y retorno SSO
 
 Menú Perfil/Desconectar o Conectar; permisos y sincronización en Perfil de Ajustes. Callback SSO raíz canónico desde ambos alias de Pages.4Actions/210Node/16Python/8legacy/164Chromium/Pages/HTTPS PASS. Configuración privada CCP y personaje real no verificados. Ver docs/PROFILE_208.md.

@@ -12,7 +12,7 @@ async function productionQuote(type,force=false){
 }
 // Personal inventory only. Exact hangars/containers are separate locations:
 // no cargo, deliveries, locked stock, asset safety or implicit recursive totals.
-function productionAssetLocations(records,materialIds){
+function productionAssetLocations(records,materialIds,containerTypes=new Set()){
  const byId=new Map(),wanted=new Set(materialIds),groups=new Map();
  for(const a of records){
   if(!a||!['item_id','location_id','type_id'].every(k=>Number.isSafeInteger(a[k])&&a[k]>0)||!Number.isSafeInteger(a.quantity)||a.quantity<1||typeof a.location_flag!=='string')throw Error('Invalid assets');
@@ -22,10 +22,11 @@ function productionAssetLocations(records,materialIds){
  function rootOf(a){
   const seen=new Set();let node=a;
   while(byId.has(node.location_id)){
-   if(seen.has(node.item_id)||node.location_flag!=='Unlocked')return null;
+   const parent=byId.get(node.location_id);
+   if(seen.has(node.item_id)||!(node.location_flag==='Unlocked'||node.location_flag==='Cargo'&&containerTypes.has(parent.type_id)))return null;
    seen.add(node.item_id);node=byId.get(node.location_id);
   }
-  return node.location_flag==='Hangar'&&(node.location_type==='station'||node.location_type==='other')?node.location_id:null;
+  return node.location_flag==='Hangar'&&['station','other','item'].includes(node.location_type)?node.location_id:null;
  }
  for(const a of records){
   if(!wanted.has(a.type_id))continue;
@@ -38,6 +39,7 @@ function productionAssetLocations(records,materialIds){
  }
  return [...groups.values()].sort((a,b)=>a.root-b.root||Number(a.id)-Number(b.id));
 }
+const productionContainerTypeCache=new Map();
 async function productionInventory(auth,materialIds){
  const pilot=auth.identity();if(!pilot?.assets)throw Error('Inventory permission required');
  const first=await auth.assets(1),pages=Number(first.headers.get('X-Pages')||1);
@@ -59,14 +61,33 @@ async function productionInventory(auth,materialIds){
   if(Number(check.headers.get('X-Pages')||1)!==pages||(etag?check.headers.get('ETag')!==etag:stamp?check.headers.get('Last-Modified')!==stamp:false))throw Error('Inventory cache changed during pagination');
  }
  if(auth.identity()?.id!==pilot.id)throw Error('Character changed');
- const locations=productionAssetLocations(rows,materialIds),names={};
+ // Resolve only Cargo ancestors of relevant materials. A container and a ship
+ // can both expose Cargo: never infer which one it is from that flag alone.
+ const byId=new Map(rows.map(a=>[a.item_id,a])),wanted=new Set(materialIds),candidates=new Set();
+ for(const a of rows){
+  if(!wanted.has(a.type_id))continue;
+  let node=a;const seen=new Set();
+  while(byId.has(node.location_id)&&!seen.has(node.item_id)){
+   seen.add(node.item_id);const parent=byId.get(node.location_id);
+   if(node.location_flag==='Cargo')candidates.add(parent.type_id);node=parent;
+  }
+ }
+ await pool([...candidates],ESI_POOL,async id=>{
+  if(productionContainerTypeCache.has(id))return;
+  const type=await (await esiFetch('/universe/types/'+id+'/')).json();
+  if(!Number.isSafeInteger(type.group_id))throw Error('Container type unavailable');
+  // CCP groups: Cargo, Secure Cargo, Audit Log Secure and Freight Container.
+  productionContainerTypeCache.set(id,[12,340,448,649].includes(type.group_id));
+ });
+ const containerTypes=new Set([...candidates].filter(id=>productionContainerTypeCache.get(id)));
+ const locations=productionAssetLocations(rows,materialIds,containerTypes),names={};
  await pool([...new Set(locations.map(g=>g.root))].filter(id=>id>=60000000&&id<64000000),ESI_POOL,async id=>{
   try{const station=await (await esiFetch('/universe/stations/'+id+'/')).json();if(typeof station.name==='string')names[id]=station.name;}catch(e){/* An unresolved name remains an explicit location ID. */}
  });
  const containers=locations.filter(g=>g.container).map(g=>g.container);
  for(let i=0;i<containers.length;i+=1000){try{const result=await (await auth.names(containers.slice(i,i+1000))).json();for(const x of result)if(containers.includes(x.item_id)&&typeof x.name==='string'&&x.name!=='None')names[x.item_id]=x.name;}catch(e){/* IDs remain usable without guessing names. */}}
  if(auth.identity()?.id!==pilot.id)throw Error('Character changed');
- return {pilot,locations,names,queriedAt:Date.now(),updatedAt:stamp?Date.parse(stamp):null};
+ return {pilot,locations,names,itemCount:rows.length,queriedAt:Date.now(),updatedAt:stamp?Date.parse(stamp):null};
 }
 let productionIndices=null,productionIndicesAt=0,productionIndexWait=null;
 async function productionSystem(systemId){

@@ -29,7 +29,7 @@ class ProfileTests(unittest.TestCase):
   p.locator('#eveIdentityButton').click();self.assertEqual(p.locator('#eveIdentityMenu button:visible').all_text_contents(),['Conectar'])
   p.keyboard.press('Escape');self.assertFalse(p.locator('#eveIdentityMenu').is_visible())
   self.assertEqual(p.locator('[data-access-state="skills"]').inner_text(),'Sin conexión')
- def test_reconnect_from_both_pages_aliases_requests_basic_scope_and_canonical_callback(self):
+ def test_reconnect_from_both_pages_aliases_requests_used_scopes_and_canonical_callback(self):
   self.page.route('https://fikolasty.github.io/gestor-ventas-eve/**',lambda r:r.fulfill(body=(ROOT/'index.html').read_text(encoding='utf-8'),content_type='text/html'))
   self.page.route('https://login.eveonline.com/v2/oauth/authorize**',lambda r:r.fulfill(body='Synthetic consent'))
   from urllib.parse import urlparse,parse_qs
@@ -38,7 +38,7 @@ class ProfileTests(unittest.TestCase):
    self.page.locator('#eveIdentityButton').click();self.page.locator('#eveConnect').click();self.page.wait_for_url('https://login.eveonline.com/v2/oauth/authorize**')
    q=parse_qs(urlparse(self.page.url).query)
    self.assertEqual(q['redirect_uri'],['https://fikolasty.github.io/gestor-ventas-eve/'])
-   self.assertEqual(q['scope'],[base.SKILL]);self.assertEqual(q['code_challenge_method'],['S256'])
+   self.assertEqual(set(q['scope'][0].split()),{base.SKILL,base.STANDINGS,base.IMPLANTS,'esi-assets.read_assets.v1'});self.assertEqual(q['code_challenge_method'],['S256'])
  def test_profile_theme_language_responsive(self):
   OUT.mkdir(parents=True,exist_ok=True);self.boot();self.profile();p=self.page
   for lang in ['es','en']:

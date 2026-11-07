@@ -2368,8 +2368,8 @@
     "en": "Refresh profile"
   },
   "sso.authorizeSettings": {
-    "es": "Autorizar datos del perfil",
-    "en": "Authorize profile data"
+    "es": "Autorizar acceso",
+    "en": "Authorize access"
   },
   "sso.syncingSettings": {
     "es": "Consultando habilidades, standings e implantes autorizados…",
@@ -2380,8 +2380,8 @@
     "en": "Character data synced. Other settings remain manual."
   },
   "sso.settingsPermissionsNeeded": {
-    "es": "Habilidades sincronizadas. Puedes autorizar relaciones e implante desde este perfil; mientras tanto, esos ajustes siguen siendo manuales.",
-    "en": "Skills synced. You can authorize standings and implants from this profile; those settings remain manual until then."
+    "es": "Datos disponibles sincronizados. Completa el acceso para habilitar los datos pendientes.",
+    "en": "Available data synced. Complete authorization to enable the remaining data."
   },
   "sso.syncPartial": {
     "es": "Sincronización incompleta. Conservamos los ajustes de las consultas fallidas; revísalos o vuelve a actualizar los datos ESI.",
@@ -3748,8 +3748,8 @@
     "en": "EVE connection"
   },
   "sso.access.intro": {
-    "es": "Elige qué datos de tu personaje compartes y para qué se usan.",
-    "en": "Choose which character data you share and how it is used."
+    "es": "Consulta qué datos de tu personaje compartes y para qué se usan.",
+    "en": "See which character data you share and how it is used."
   },
   "sso.access.skills": {
     "es": "Habilidades",

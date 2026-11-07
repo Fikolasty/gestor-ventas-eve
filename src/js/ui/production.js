@@ -16,8 +16,9 @@ const ProductionUI=(()=>{
   catch(e){return {valid:false,complete:false,priceComplete:false,rows:[],shipped:[],blocks:0,purchases:0,fuel:fuels.find(f=>f.id===state.fuel)};}
  }
  let expanded=new Set();
- let importOpen=false,importBusy=false,importError=false,inventory=null,importLocation='',importSelection=new Set(),importApplied='',importSerial=0,importPilot=null;
+ let importOpen=false,importBusy=false,importError=false,inventory=null,importLocation='',importSelection=new Set(),importApplied='',importSerial=0,importPilot=null,resumeImport=false;
  const importAuth=()=>window.mmProductionInventoryAuth;
+ function resumeInventory(){if(resumeImport&&active&&importOpen&&importAuth()?.identity()?.assets){resumeImport=false;fetchInventory();}}
  const locationLabel=g=>`${inventory.names[g.root]||t('locationId')+' '+g.root} · ${g.container?(inventory.names[g.container]||t('containerId')+' '+g.container):t('personalHangar')}`;
  function inventoryImport(m){
   const pilot=importAuth()?.identity(),source=inventory?.locations.find(g=>g.id===importLocation);
@@ -58,9 +59,9 @@ const ProductionUI=(()=>{
  },true);
  window.addEventListener('mm-eve-identity',()=>{
   const id=importAuth()?.identity()?.id||null;
-  if(importPilot!==id||!importAuth()?.identity()?.assets){importSerial++;importBusy=false;inventory=null;importSelection.clear();importApplied='';importPilot=id;if(active)render();}
+  if(importPilot!==id||!importAuth()?.identity()?.assets){importSerial++;importBusy=false;inventory=null;importSelection.clear();importApplied='';importPilot=id;if(active)render();}resumeInventory();
  });
- try{const raw=sessionStorage.getItem('mm.production.authDraft');sessionStorage.removeItem('mm.production.authDraft');if(raw){const draft=JSON.parse(raw);if(Date.now()-draft.at<600000&&draft.state){for(const key of Object.keys(state))if(Object.hasOwn(draft.state,key))state[key]=draft.state[key];state.tab='materials';importOpen=true;queueMicrotask(()=>{selectAppModule('production');});}}}catch(e){}
+ try{const raw=sessionStorage.getItem('mm.production.authDraft');sessionStorage.removeItem('mm.production.authDraft');if(raw){const draft=JSON.parse(raw);if(Date.now()-draft.at<600000&&draft.state){for(const key of Object.keys(state))if(Object.hasOwn(draft.state,key))state[key]=draft.state[key];state.tab='materials';importOpen=true;resumeImport=true;queueMicrotask(()=>{selectAppModule('production');resumeInventory();});}}}catch(e){}
 
  function renderMaterials(m){
   const missingCount=m.rows.filter(r=>r.missing>0).length;

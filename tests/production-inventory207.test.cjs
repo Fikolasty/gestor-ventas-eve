@@ -32,3 +32,16 @@ test('Page-specific modification dates are valid; page-one cache rollover is rej
  firstReads=0;a.assets=async page=>{const r=await read(page);if(page===1&&++firstReads>1)r.headers.set('Last-Modified','Fri, 06 Nov 2026 11:00:00 GMT');return r;};
  await assert.rejects(load(a,[44]),/cache changed/);
 });
+test('Personal container within a nullsec structure accepts item roots and verified Cargo containers',()=>{
+ const {productionAssetLocations:locations}=api();
+ const records=[asset(100,17366,1,1030000000001,'Hangar','item'),asset(101,23,1,100,'Unlocked','item'),asset(102,44,500,101,'Cargo','item'),asset(103,44,600,100,'Unlocked','item'),asset(104,44,700,100,'Locked','item'),asset(105,587,1,1030000000001,'Hangar','item'),asset(106,44,800,105,'Cargo','item')];
+ const result=locations(records,[44],new Set([23,17366]));
+ assert.equal(result.length,2);assert.equal(result.find(g=>g.id==='101').root,1030000000001);
+ assert.equal(result.find(g=>g.id==='101').stock[44],500);assert.equal(result.find(g=>g.id==='100').stock[44],600);
+ assert.equal(result.some(g=>g.id==='105'),false);
+});
+test('Inventory adapter resolves public parent type before accepting Cargo, never treating ships as containers',async()=>{
+ const records=[asset(100,23,1,1030000000001,'Hangar','item'),asset(101,44,3000,100,'Cargo','item'),asset(102,587,1,1030000000001,'Hangar','item'),asset(103,44,4000,102,'Cargo','item')];
+ const {productionInventory:load}=api({esiFetch:async url=>({json:async()=>({group_id:url.includes('/23/')?12:25})})});
+ const result=await load(auth([records]),[44]);assert.equal(result.locations.length,1);assert.equal(result.locations[0].stock[44],3000);
+});

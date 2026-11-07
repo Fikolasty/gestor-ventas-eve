@@ -72,3 +72,18 @@ class InventoryTests(base.unittest.TestCase):
   self.p.goto((ROOT/'index.html').as_uri(),wait_until='domcontentloaded');self.p.wait_for_function('document.body.dataset.mmView==="production"')
   self.assertEqual(self.p.evaluate('ProductionUI.state.owned[44]'),777)
   self.assertIsNone(self.p.evaluate('sessionStorage.getItem("mm.production.authDraft")'))
+ def test_resume_authorized_import_reads_container_in_nullsec_structure(self):
+  def assets(r):
+   if '/names/' in r.request.url:return r.fulfill(json=[{'item_id':1000000000001,'name':'Fixture materials container'}])
+   return r.fulfill(json=[
+    {'item_id':1000000000001,'type_id':23,'quantity':1,'location_id':1030000000001,'location_type':'item','location_flag':'Hangar','is_singleton':True},
+    {'item_id':1000000000002,'type_id':44,'quantity':3000,'location_id':1000000000001,'location_type':'item','location_flag':'Cargo','is_singleton':False}],headers={'X-Pages':'1'})
+  self.p.route('**/characters/90000001/assets/**',assets)
+  self.p.route('**/universe/types/23/**',lambda r:r.fulfill(json={'group_id':12,'name':'Cargo container'}))
+  self.p.evaluate('''()=>{ProductionUI.state.owned[44]=777;sessionStorage.setItem('mm.production.authDraft',JSON.stringify({at:Date.now(),state:ProductionUI.state}))}''')
+  self.p.reload(wait_until='domcontentloaded');self.p.wait_for_selector('[data-import-check="44"]')
+  self.assertEqual(self.p.evaluate('ProductionUI.state.owned[44]'),777)
+  self.assertIn('Fixture materials container',self.p.locator('[data-import-location]').inner_text())
+  self.p.locator('[data-import-apply]').click()
+  self.assertEqual(self.p.evaluate('ProductionUI.state.owned[44]'),3000)
+  self.assertEqual(self.p.evaluate('ProductionUI.calculate().rows.find(r=>r.id===44).missing'),4200)

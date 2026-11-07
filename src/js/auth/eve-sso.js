@@ -9,7 +9,8 @@
   const EVE_CLIENT_ID='114bbd2659384151ac3b0096f183dd3b';
   const skillScope='esi-skills.read_skills.v1',standingsScope='esi-characters.read_standings.v1',implantsScope='esi-clones.read_implants.v1';
   const assetsScope='esi-assets.read_assets.v1';
-  const scope=[skillScope,standingsScope,implantsScope].join(' ');
+  // Owner-approved single consent for the four implemented read capabilities.
+  const scope=[skillScope,standingsScope,implantsScope,assetsScope].join(' ');
   const scopesOf=token=>{try{const part=token.split('.')[1].replace(/-/g,'+').replace(/_/g,'/');const v=JSON.parse(atob(part.padEnd(Math.ceil(part.length/4)*4,'='))).scp;return Array.isArray(v)?v:typeof v==='string'?v.split(/\s+/):[];}catch(e){return [];}};
   let session=null,refreshPending=null,sessionEpoch=0,syncSerial=0,applyingESI=false;
   const revisions=new Map();
@@ -47,7 +48,7 @@
     else{$e('evePilotName').classList.remove('no-tr');$e('evePilotName').dataset.i18n='sso.connect';$e('evePilotName').textContent=tx('sso.connect');}
     $e('eveProfile').hidden=$e('eveLogout').hidden=$e('eveSync').hidden=!on;
     $e('eveConnect').hidden=$e('eveProfileConnect').hidden=on;
-    $e('eveAuthorizeSettings').hidden=!on||session.scopes.includes(standingsScope)&&session.scopes.includes(implantsScope);
+    $e('eveAuthorizeSettings').hidden=!on||scope.split(' ').every(s=>session.scopes.includes(s));
     $e('eveInventoryAccess').hidden=!on;$e('eveInventoryAccess').dataset.i18n=on&&session.scopes.includes(assetsScope)?'sso.openInventory':'sso.authorizeInventory';
     $e('eveInventoryAccess').textContent=tx($e('eveInventoryAccess').dataset.i18n);
     $e('eveAccessPilot').textContent=on?session.name:tx('sso.access.offline');
@@ -72,8 +73,7 @@
     const client=EVE_CLIENT_ID;
     if(!client){alert(tx('sso.missingClient'));return;}
     try{const verifier=rand(48),state=rand(24);sessionStorage.setItem(key,JSON.stringify({verifier,state,client,redirect:base,at:Date.now()}));
-      const granted=(session?.scopes||[]).filter(s=>[skillScope,standingsScope,implantsScope,assetsScope].includes(s));
-      const requested=[...new Set([...(extended?scope.split(' '):[skillScope]),...granted,...(assets?[assetsScope]:[])])];
+      const requested=scope.split(' ');
       const u=new URL('https://login.eveonline.com/v2/oauth/authorize');u.searchParams.set('response_type','code');u.searchParams.set('client_id',client);u.searchParams.set('redirect_uri',base);u.searchParams.set('scope',requested.join(' '));u.searchParams.set('state',state);u.searchParams.set('code_challenge',await challenge(verifier));u.searchParams.set('code_challenge_method','S256');location.assign(u.href);
     }catch(err){const message=tx('sso.loginOpenFailed',{error:err?.message||String(err)});openProfile();status(message);console.error('EVE SSO redirect failed',err);}
   }
@@ -170,6 +170,7 @@
       const implant=Math.max(0,...data.map(id=>({27175:.01,27169:.02,27174:.04})[id]||0));
       if(current()&&unchanged('refImp')){applyingESI=true;try{saveSetting('refImp',implant);}finally{applyingESI=false;}}
     })());else missing.push(implantsScope);
+    if(!allowed.includes(assetsScope))missing.push(assetsScope);
     const results=await Promise.allSettled(tasks);
     if(!current())return;
     const failed=results.filter(x=>x.status==='rejected');
