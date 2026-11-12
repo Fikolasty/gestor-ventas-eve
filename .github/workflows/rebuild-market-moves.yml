@@ -84,7 +84,7 @@ jobs:
       - name: Validate Light/Dark and EVE login translations in Chromium
         id: browser_checks
         run: |
-          PYTHONPATH=tests python3 -m unittest browser_production205.ProductionTests.test_five_navigation_tabs_fit_mobile_with_font_stress -v
+          PYTHONPATH=tests python3 -m unittest browser_production205.ProductionTests.test_five_navigation_tabs_fit_mobile_with_font_stress browser_production205.ProductionTests.test_composition_and_editing -v
           python3 -m unittest discover -s tests -p 'browser_*.py' -v
       - name: Upload Light/Dark responsive screenshots
         if: always()

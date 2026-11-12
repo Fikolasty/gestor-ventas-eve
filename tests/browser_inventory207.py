@@ -6,7 +6,7 @@ from urllib.parse import parse_qs, urlparse
 import browser_production205 as base
 
 ROOT=base.ROOT
-OUT=ROOT/'.qa-audit/production-stock-panels-r1'
+OUT=ROOT/'.qa-audit/production-stock-panels-r2'
 ASSETS='esi-assets.read_assets.v1'
 STRUCTURES='esi-universe.read_structures.v1'
 SKILLS='esi-skills.read_skills.v1'
@@ -126,7 +126,7 @@ class InventoryTests(base.unittest.TestCase):
        const r=el.getBoundingClientRect();return [r.x-origin.x,r.y-origin.y,r.width,r.height];
       });
      }'''))
-     if width==1440 and lang=='es':self.p.screenshot(path=str(OUT/f'stock-panels-r1-es-1440-{"light" if light else "dark"}.png'),full_page=True)
+     if width==1440 and lang=='es':self.p.screenshot(path=str(OUT/f'stock-panels-r2-es-1440-{"light" if light else "dark"}.png'),full_page=True)
     self.assertEqual(geometry[0],geometry[1],(lang,width))
 
  def test_consent_keeps_system_and_resumes_automatic_import(self):

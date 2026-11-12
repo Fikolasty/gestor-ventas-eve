@@ -267,8 +267,19 @@ body[data-mm-view="production"]>.hero,body[data-mm-view="production"]>main{displ
 #production .fp-material-detail>.fp-stock-sources{grid-column:1/-1;align-items:start!important;flex-wrap:wrap}
 #production .fp-stock-sources ul{margin:0;padding:0;list-style:none;overflow-wrap:anywhere}
 @media(max-width:1050px){
- #production .fp-material-table th,#production .fp-material-row>td{padding-inline:10px}
+ #production .fp-material-table th,#production .fp-material-row>td{padding-inline:8px}
+ #production .fp-material-table th{white-space:normal}
  #production .fp-material-table th[rowspan]:first-child,#production .fp-material-row>td:first-child{padding-left:16px}
+ #production .fp-material-table .fp-owned-cell input{width:90px;flex-basis:90px}
+}
+@media(min-width:901px) and (max-width:1050px){
+ #production .fp-material-table{table-layout:fixed}
+ #production .fp-material-table col{width:11%}
+ #production .fp-material-table colgroup:first-child col:first-child{width:19%}
+ #production .fp-material-table colgroup:first-child col:nth-child(2),
+ #production .fp-material-table colgroup:first-child col:nth-child(3){width:13%}
+ #production .fp-material-row>td,#production .fp-material-table .fp-money,#production .fp-material-table .fp-copy{white-space:normal}
+ #production .fp-required-editor{gap:4px;flex-wrap:wrap}
 }
 @media(max-width:630px){
  #production .fp-source-panels{grid-template-columns:1fr}

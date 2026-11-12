@@ -2,7 +2,7 @@
 import json,pathlib,unittest
 from playwright.sync_api import sync_playwright
 ROOT=pathlib.Path(__file__).resolve().parents[1]
-OUT=ROOT/'.qa-audit/production-stock-panels-result-r1'
+OUT=ROOT/'.qa-audit/production-stock-panels-result-r2'
 class ProductionTests(unittest.TestCase):
  @classmethod
  def setUpClass(cls):
@@ -62,6 +62,13 @@ class ProductionTests(unittest.TestCase):
        }'''),(lang,width,light))
        if width>=980:
         self.assertTrue(self.p.locator('.fp-table-scroll').evaluate('e=>e.scrollWidth<=e.clientWidth+1'),(lang,width,light))
+       if width==980:
+        root=self.p.locator('#production')
+        for font in ['Arial','Verdana']:
+         root.evaluate('(el,font)=>el.style.setProperty("--f-ui",font+", sans-serif")',font)
+         dimensions=self.p.locator('.fp-table-scroll').evaluate('e=>[e.scrollWidth,e.clientWidth]')
+         self.assertLessEqual(dimensions[0],dimensions[1]+1,(lang,width,light,font,dimensions))
+        root.evaluate('el=>el.style.removeProperty("--f-ui")')
       geometry.append(self.p.locator('#production').evaluate('e=>[...e.querySelectorAll("input,select,button,.panel")].filter(x=>x.getBoundingClientRect().width).map(x=>{const r=x.getBoundingClientRect();return[r.x,r.y,r.width,r.height]})'))
       if width==1440 and lang=='es':self.p.screenshot(path=str(OUT/f'{tab}-es-1440-{"light" if light else "dark"}.png'),full_page=True)
       if tab=='result':
