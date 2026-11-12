@@ -2463,3 +2463,10 @@ QA local con datos simulados: 214 Node, 16 Python y 24 Chromium focales. Build l
 ### v1.0.211 LIVE verificada
 
 Fuente Fiko `5e7a1bf33d6db1310bc20318d3a7d6b4c5ccd59c`, build `a237bc6ac4f433fdfa11c1e7f11f1878138f9cac`. Cuatro Actions SUCCESS (42352023128, 42352023199, 42352023080 y Rebuild/Pages 42352023095). CI 214 Node, 16 Python, ocho pruebas heredadas y 168 Chromium PASS. HTTPS 200 y coincidencia pública, local y GitHub del HTML LF de 2.714.085 bytes (blob `8abb8601f499a81c7c23e5baa4413615ee5f3a9f`). El consentimiento y el inventario del personaje real quedan por verificar. Los nombres y sistemas se muestran cuando ESI devuelve esos datos.
+
+
+## v1.0.212 candidata — Producción
+
+La importación pide el sistema solar antes de consultar ESI. Disponible se aplica automáticamente con el stock confirmado. Los precios de Jita se actualizan y el costo se calcula sobre el faltante. Resultado compara el desembolso por bloque y el beneficio de Orden de venta y Venta inmediata. La cobertura incompleta queda pendiente cuando puede afectar el cálculo.
+
+QA previo del incremento local con ESI y SSO simulados. 216 Node, 16 Python y 13 Chromium de Producción e Inventario. El cierre LIVE requiere Actions, Pages y HTTPS.

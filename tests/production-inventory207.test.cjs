@@ -60,3 +60,14 @@ test('Structure permission resolves name and system; unavailable metadata leaves
  result=await load(a,[44]);assert.equal(requests,1);assert.equal(result.names[1030000000001],'Fixture refinery');assert.equal(result.systems[1030000000001],'Fixture system');
  a.structure=async()=>{throw Error('403')};result=await load(a,[44]);assert.equal(result.names[1030000000001],undefined);assert.equal(result.locations[0].stock[44],30);
 });
+test('Filtered inventory totals include only confirmed hangars in the chosen solar system',async()=>{
+ const {productionInventory:load}=api({esiFetch:async url=>({json:async()=>({
+  name:'Station',system_id:url.includes('/60003762/')?30001234:30000142,
+ })})});
+ const snapshot=await load(auth([[asset(1,44,20),asset(2,44,30,60003761),asset(3,44,900,60003762),asset(4,9848,100,1030000000001,'Hangar','item')]]),[44,9848],{id:30000142,name:'Jita'});
+ assert.equal(snapshot.stock[44],50);
+ assert.equal(snapshot.stock[9848],undefined);
+ assert.equal(snapshot.unknown.has(9848),true);
+ assert.equal(snapshot.unknown.has(44),false);
+ assert.equal(snapshot.locations.length,2);
+});

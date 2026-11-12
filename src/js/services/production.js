@@ -47,7 +47,20 @@ function productionAssetLocations(records,materialIds,containerTypes=new Set()){
  return [...groups.values()].sort((a,b)=>a.root-b.root||Number(a.id)-Number(b.id));
 }
 const productionContainerTypeCache=new Map();
-async function productionInventory(auth,materialIds){
+async function resolveProductionInventorySystem(query){
+ const text=query.trim();
+ if(!text)return null;
+ if(/^\d+$/.test(text)){
+  const id=Number(text);
+  if(!Number.isSafeInteger(id)||id<=0)return null;
+  const system=await (await esiFetch('/universe/systems/'+id+'/')).json();
+  return typeof system.name==='string'&&system.name?{id,name:system.name}:null;
+ }
+ const matches=await (await esiFetch('/universe/ids/',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify([text])})).json();
+ const system=matches.systems?.find(x=>x.name.toLowerCase()===text.toLowerCase());
+ return Number.isSafeInteger(system?.id)&&system.id>0?system:null;
+}
+async function productionInventory(auth,materialIds,system=null){
  const pilot=auth.identity();if(!pilot?.assets)throw Error('Inventory permission required');
  const first=await auth.assets(1),pageHeader=first.headers.get('X-Pages'),pages=Number(pageHeader||1);
  if(!Number.isSafeInteger(pages)||pages<1||pages>10000)throw Error('Invalid assets pagination');
@@ -88,7 +101,9 @@ async function productionInventory(auth,materialIds){
   productionContainerTypeCache.set(id,[12,340,448,649].includes(type.group_id));
  });
  const containerTypes=new Set([...candidates].filter(id=>productionContainerTypeCache.get(id)));
- const locations=productionAssetLocations(rows,materialIds,containerTypes),names={},systems={},systemIds={};
+ const groups=productionAssetLocations(rows,materialIds,containerTypes);
+ const locations=system?groups.filter(g=>Object.keys(g.stock).length):groups;
+ const names={},systems={},systemIds={};
  await pool([...new Set(locations.map(g=>g.root))],ESI_POOL,async id=>{
   try{
    const station=id>=60000000&&id<64000000;
@@ -99,15 +114,25 @@ async function productionInventory(auth,materialIds){
    if(Number.isSafeInteger(systemId)&&systemId>0)systemIds[id]=systemId;
   }catch(e){/* ESI can deny structure metadata without invalidating its assets. */}
  });
- const systemNames={};
- await pool([...new Set(Object.values(systemIds))],ESI_POOL,async id=>{
+ const systemNames=system?{[system.id]:system.name}:{};
+ await pool(system?[]:[...new Set(Object.values(systemIds))],ESI_POOL,async id=>{
   try{const system=await (await esiFetch('/universe/systems/'+id+'/')).json();if(typeof system.name==='string')systemNames[id]=system.name;}catch(e){}
  });
  for(const [root,id] of Object.entries(systemIds))if(systemNames[id])systems[root]=systemNames[id];
- const containers=locations.filter(g=>g.container).map(g=>g.container);
+ const selected=system?locations.filter(g=>systemIds[g.root]===system.id):locations;
+ const containers=selected.filter(g=>g.container).map(g=>g.container);
  for(let i=0;i<containers.length;i+=1000){try{const result=await (await auth.names(containers.slice(i,i+1000))).json();for(const x of result)if(containers.includes(x.item_id)&&typeof x.name==='string'&&x.name!=='None')names[x.item_id]=x.name;}catch(e){/* IDs remain usable without guessing names. */}}
  if(auth.identity()?.id!==pilot.id)throw Error('Character changed');
- return {pilot,locations,names,systems,itemCount:rows.length,queriedAt:Date.now(),updatedAt:stamp?Date.parse(stamp):null};
+ const stock={},unknown=new Set();
+ if(system){
+  for(const group of selected)for(const [id,quantity] of Object.entries(group.stock)){
+   const total=(stock[id]??0)+quantity;
+   if(!Number.isSafeInteger(total))throw Error('Asset quantity overflow');
+   stock[id]=total;
+  }
+  for(const group of locations)if(!systemIds[group.root])for(const id of Object.keys(group.stock))unknown.add(Number(id));
+ }
+ return {pilot,system,locations:selected,names,systems,stock,unknown,itemCount:rows.length,queriedAt:Date.now(),updatedAt:stamp?Date.parse(stamp):null};
 }
 let productionIndices=null,productionIndicesAt=0,productionIndexWait=null;
 async function productionSystem(systemId){

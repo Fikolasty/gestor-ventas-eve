@@ -123,3 +123,15 @@ test('sales quote and batch context labels stay short, bilingual and unambiguous
   assert.ok(messages['ledger.batchContext'][lang].includes('{count}'));
  }
 });
+
+test('production comparison distinguishes unit price, cash cost and inventory in ES/EN',()=>{
+ for(const key of Object.keys(messages).filter(key=>key.startsWith('production.compare'))){
+  for(const lang of ['es','en'])assert.ok(messages[key][lang]?.trim(),key+' '+lang);
+ }
+ for(const lang of ['es','en']){
+  const read=key=>messages['production.'+key][lang];
+  assert.notEqual(read('compareCost'),read('compareUnit'));
+  assert.notEqual(read('compareCashTotal'),read('compareWithStock'));
+  assert.match(read('compareHelpText'),/Jita Buy.*Jita Sell/);
+ }
+});

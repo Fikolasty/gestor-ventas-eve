@@ -3068,8 +3068,8 @@
     "en": "Jita Price"
   },
   "production.title": {
-    "es": "PRODUCCIÓN",
-    "en": "PRODUCTION"
+    "es": "Producción de Fuel Blocks",
+    "en": "Fuel Block Production"
   },
   "production.sub": {
     "es": "Fuel Blocks",
@@ -3338,6 +3338,110 @@
   "production.toResult": {
     "es": "Ver resultado",
     "en": "View result"
+  },
+  "production.compareOrder": {
+    "es": "Orden",
+    "en": "Buy Order"
+  },
+  "production.compareInstant": {
+    "es": "Inmediato",
+    "en": "Instant Buy"
+  },
+  "production.compareCost": {
+    "es": "Costo",
+    "en": "Cost"
+  },
+  "production.compareUnit": {
+    "es": "Precio Unitario",
+    "en": "Unit Price"
+  },
+  "production.pending": {
+    "es": "Pendiente",
+    "en": "Pending"
+  },
+  "production.compareOptions": {
+    "es": "Envío de Materiales",
+    "en": "Materials Shipping"
+  },
+  "production.compareSaleMode": {
+    "es": "Compra de Materiales",
+    "en": "Materials Purchase Mode"
+  },
+  "production.compareProfitHeading": {
+    "es": "Rentabilidad en Jita",
+    "en": "Profitability in Jita"
+  },
+  "production.compareSaleUnit": {
+    "es": "Precio por Bloque",
+    "en": "Price per Block"
+  },
+  "production.compareNetProfit": {
+    "es": "Beneficio Neto Estimado",
+    "en": "Estimated Net Profit"
+  },
+  "production.compareResult": {
+    "es": "Resultado de Producción",
+    "en": "Production Result"
+  },
+  "production.compareBack": {
+    "es": "Volver a Materiales",
+    "en": "Back to Materials"
+  },
+  "production.compareOutput": {
+    "es": "Producción",
+    "en": "Output"
+  },
+  "production.compareBlocks": {
+    "es": "bloques",
+    "en": "blocks"
+  },
+  "production.comparePerBlock": {
+    "es": "Desembolso por Bloque",
+    "en": "Cash Cost per Block"
+  },
+  "production.compareMissingInstall": {
+    "es": "Falta el costo de instalación",
+    "en": "Installation cost is missing"
+  },
+  "production.compareBreakdown": {
+    "es": "Desglose del Costo",
+    "en": "Cost Breakdown"
+  },
+  "production.compareConcept": {
+    "es": "Concepto",
+    "en": "Cost Item"
+  },
+  "production.compareMaterials": {
+    "es": "Materiales por Comprar",
+    "en": "Materials to Buy"
+  },
+  "production.compareInbound": {
+    "es": "Envío de Materiales",
+    "en": "Materials Shipping"
+  },
+  "production.compareCashTotal": {
+    "es": "Desembolso Total",
+    "en": "Total Cash Cost"
+  },
+  "production.compareStockValue": {
+    "es": "Valor del Inventario Usado",
+    "en": "Value of Inventory Used"
+  },
+  "production.compareWithStock": {
+    "es": "Costo con Inventario",
+    "en": "Cost Including Inventory"
+  },
+  "production.compareHelp": {
+    "es": "Qué Incluye el Costo",
+    "en": "What the Cost Includes"
+  },
+  "production.compareHelpText": {
+    "es": "El desembolso suma la compra de materiales, su envío y la instalación. El costo con inventario añade lo que podrías recibir por vender los materiales que ya tienes y vas a usar. Orden usa Jita Buy más la comisión de compra. Inmediato usa Jita Sell. Un precio manual reemplaza la cotización en ambas modalidades.",
+    "en": "Cash cost adds materials purchases, their shipping and installation. Cost including inventory adds what you could receive by selling the materials you already own and will use. Buy Order uses Jita Buy plus the broker fee. Instant Buy uses Jita Sell. A manual price overrides the quote in both modes."
+  },
+  "production.compareSaleAnalysis": {
+    "es": "Análisis de Venta",
+    "en": "Sale Analysis"
   },
   "production.update": {
     "es": "Actualizar precios",
@@ -3627,9 +3731,37 @@
     "es": "Importar inventario ESI",
     "en": "Import ESI inventory"
   },
+  "production.inventorySystem": {
+    "es": "Sistema Solar",
+    "en": "Solar System"
+  },
+  "production.inventorySystemHeading": {
+    "es": "Sistema del Inventario",
+    "en": "Inventory System"
+  },
+  "production.materialQuotes": {
+    "es": "Precios de Jita",
+    "en": "Jita Prices"
+  },
+  "production.inventorySystemMissing": {
+    "es": "No se encontró el sistema solar",
+    "en": "Solar system not found"
+  },
+  "production.inventoryPartial": {
+    "es": "Inventario incompleto",
+    "en": "Incomplete inventory"
+  },
+  "production.inventoryLoaded": {
+    "es": "Disponible actualizado",
+    "en": "Available stock updated"
+  },
+  "production.inventoryAuthorize": {
+    "es": "Autorizar y Consultar",
+    "en": "Authorize and Fetch"
+  },
   "production.stockHint": {
-    "es": "Introduce tu stock o impórtalo por ubicación.",
-    "en": "Enter stock or import it by location."
+    "es": "Introduce tus cantidades o consulta un sistema solar.",
+    "en": "Enter your quantities or look up a solar system."
   },
   "production.reviewInventory": {
     "es": "Revisar inventario",
