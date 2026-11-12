@@ -162,6 +162,6 @@ assert(salesHTML.includes('Appraisal and inventory: exact same card box'));
 assert(salesHTML.includes('grid-template-columns:repeat(2,minmax(0,1fr))!important'));
 assert(salesHTML.includes('top-header-action')&&salesHTML.includes('top-guide-action'));
 assert.equal((salesHTML.match(/id="themeLight"/g)||[]).length,1);
-assert(salesJS.includes('function computePlan()')&&salesJS.includes('function selectAppModule(name)'));
+assert(salesJS.includes('function computePlan()')&&salesJS.includes('function selectAppModule(name,'));
 assert(salesJS.includes('function syncBusinessMode()')&&salesJS.includes('function syncShipSwitch()'));
 console.log('PASS: approved header, responsive CSS, unique controls, persisted margin and original engines.');
