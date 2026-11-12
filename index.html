@@ -7,7 +7,7 @@
 <meta name="referrer" content="no-referrer">
 <title>Market Moves+ · SIGMA GRINDSET</title>
 <style>
-/* ================= Market Moves+ v1.0.216 =================
+/* ================= Market Moves+ v1.0.217 =================
    Paleta: azul de base, naranja = acción, verde/rojo = ganancia/pérdida.
    Sin backdrop-filter: el vidrio se finge con rgba + bordes. */
 *{box-sizing:border-box;margin:0;padding:0}
@@ -10020,13 +10020,13 @@ Contraband Freight = no</textarea><small>Una regla por línea: Nombre = tax tota
 <button type="button" class="totop" id="toTop" aria-label="Volver arriba" title="Volver arriba (Inicio)" hidden><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 14l6-6 6 6"/></svg></button>
 <footer class="foot">
   <p class="foot-sec"><span class="ic i-lock" aria-hidden="true"></span>Tu inventario no se guarda: al cerrar o recargar se borra. Solo tus Ajustes quedan en este navegador.</p>
-  <div class="foot-by">Creado por <b>Fiko McGivert</b> · <span class="mm-footer-corp-logo vg" role="img" aria-label="Vanguardia DR"></span>Vanguardia DR · SIGMA GRINDSET · <span class="ver">v1.0.216</span></div>
+  <div class="foot-by">Creado por <b>Fiko McGivert</b> · <span class="mm-footer-corp-logo vg" role="img" aria-label="Vanguardia DR"></span>Vanguardia DR · SIGMA GRINDSET · <span class="ver">v1.0.217</span></div>
 </footer>
 
 <script>
 'use strict';
 /* ============================================================
-   Market Moves+ v1.0.216 — SIGMA GRINDSET / Vanguardia DR
+   Market Moves+ v1.0.217 — SIGMA GRINDSET / Vanguardia DR
    Flujo:  pegado → items → carga (ESI: precios, volúmenes, historial) → verificación → plan → vista
      1. Pegado      parsePaste(): parser posicional de columnas de EVE (Name · Quantity · … · Volume · Est. Price).
      2. Carga       esiItems(): trae todo lo que falta; mientras carga, refresh() NO pinta (S.loading).
@@ -16194,7 +16194,31 @@ const SkillUI=(()=>{
 
 // ================= Ajustes y Guía de Uso =================
 // Pestañas persistentes, conservando la comparativa minera existente.
-function selectAppModule(name){
+const appRoutes={ventas:'ventas',jita:'jita',mining:'mineria',skills:'habilidades',production:'produccion'};
+const productionRoutes={plan:'plan',materials:'materiales',result:'resultado'};
+function syncAppRoute(replace=false){
+  const view=document.body.dataset.mmView;
+  if(!Object.hasOwn(appRoutes,view))return;
+  const hash='#'+appRoutes[view]+(view==='production'?'/'+productionRoutes[ProductionUI.state.tab]:'');
+  if(location.hash!==hash){
+    if(replace)history.replaceState(null,'',hash);
+    else history.pushState(null,'',hash);
+  }
+}
+function applyAppRoute(hash){
+  const [path,section,...extra]=hash.slice(1).split('/');
+  if(extra.length)return;
+  const view=Object.keys(appRoutes).find(key=>appRoutes[key]===path);
+  if(!view){
+    if(!path&&!section)selectAppModule('ventas',false);
+    return;
+  }
+  if(view!=='production'&&section!==undefined)return;
+  const tab=view==='production'?Object.keys(productionRoutes).find(key=>productionRoutes[key]===(section||'plan')):null;
+  if(view==='production'&&!tab)return;
+  selectAppModule(view,false,tab);
+}
+function selectAppModule(name,writeRoute=true,productionTab=null){
   // PI EN PAUSA: conservar la implementación completa para reactivarla en una futura versión.
   // Mientras está oculta en la navegación, no permitir activarla mediante accesos antiguos.
   if(name==='pi')name='ventas';
@@ -16203,7 +16227,7 @@ function selectAppModule(name){
   // C.5b: navigation changes the visible workspace, never the Sales inventory.
   document.body.dataset.mmView=name;
   $('production').hidden=name!=='production';
-  if(name==='production')window.mmProductionShown?.();
+  if(name==='production')window.mmProductionShown?.(productionTab);
   document.body.classList.toggle('mm-mining',name==='mining');
   document.body.classList.toggle('mm-pi',name==='pi');
   document.body.classList.toggle('mm-skills',name==='skills');
@@ -16224,6 +16248,7 @@ function selectAppModule(name){
   }else{$('mining').hidden=true;$('pi').hidden=true;$('skills').hidden=true;$('settings').hidden=true;$('help').hidden=true;}
   document.querySelectorAll('.side-i[data-panel="mining"]').forEach(b=>b.setAttribute('aria-pressed',String(name==='mining')));
   if(name==='ventas'||name==='jita')refreshNow();
+  if(writeRoute)syncAppRoute();
 }
 const mmTabs=[...document.querySelectorAll('#mmTabs [data-mm-module]')];
 mmTabs.forEach((b,i)=>{
@@ -16282,7 +16307,10 @@ document.querySelectorAll('.x-close').forEach(b=>b.addEventListener('click',()=>
 // Home and the brand explicitly restart the volatile workspace. Settings remain
 // in the original localStorage key and are restored by the normal boot process.
 // No confirmation popup: normal tab navigation never invokes this handler.
-const navigateHome=()=>{window.location.reload();};
+const navigateHome=()=>{
+  if(location.hash)history.replaceState(null,'',location.pathname+location.search);
+  window.location.reload();
+};
 $('navHome').addEventListener('click',navigateHome);
 // Brand and hero title are native anchors: the browser owns modified clicks,
 // middle-click and keyboard activation. Do not intercept them with reload().
@@ -17069,7 +17097,7 @@ stRestore();syncDeps();brokerNote();buildOreSelect();readBB();syncLots();refresh
   async function startLogin(){
     const client=EVE_CLIENT_ID;
     if(!client){alert(tx('sso.missingClient'));return;}
-    try{const verifier=rand(48),state=rand(24);sessionStorage.setItem(key,JSON.stringify({verifier,state,client,redirect:base,at:Date.now()}));
+    try{const verifier=rand(48),state=rand(24);sessionStorage.setItem(key,JSON.stringify({verifier,state,client,redirect:base,route:location.hash,at:Date.now()}));
       const u=new URL('https://login.eveonline.com/v2/oauth/authorize');u.searchParams.set('response_type','code');u.searchParams.set('client_id',client);u.searchParams.set('redirect_uri',base);u.searchParams.set('scope',requestedScopes.join(' '));u.searchParams.set('state',state);u.searchParams.set('code_challenge',await challenge(verifier));u.searchParams.set('code_challenge_method','S256');location.assign(u.href);
     }catch(err){const message=tx('sso.loginOpenFailed',{error:err?.message||String(err)});openProfile();status(message);console.error('EVE SSO redirect failed',err);}
   }
@@ -17224,7 +17252,12 @@ stRestore();syncDeps();brokerNote();buildOreSelect();readBB();syncLots();refresh
       if(!scopeOK)throw Error('EVE no concedió el permiso de lectura de skills.');
       const id=Number(String(pilot.sub||'').match(/^CHARACTER:EVE:(\d+)$/)?.[1]),name=pilot.name;
       if(!Number.isSafeInteger(id)||!name)throw Error('Identidad de personaje no verificada.');
-      session={id,name,token:tokens.access_token,scopes:scopesOf(tokens.access_token),expires:Date.now()+(tokens.expires_in||1200)*1000-30000,refresh:tokens.refresh_token||null};persist();refreshUI();closeMenu();await syncAlliance();await sync();
+      session={id,name,token:tokens.access_token,scopes:scopesOf(tokens.access_token),expires:Date.now()+(tokens.expires_in||1200)*1000-30000,refresh:tokens.refresh_token||null};persist();refreshUI();closeMenu();
+      if(!location.hash&&typeof req.route==='string'&&req.route.startsWith('#')){
+        applyAppRoute(req.route);
+        syncAppRoute(true);
+      }
+      await syncAlliance();await sync();
     }catch(err){openProfile();status(tx('sso.callbackFailed',{error:err.message}));}
   })();
 })();
@@ -17563,10 +17596,12 @@ const ProductionUI=(()=>{
   setOwned(Number(field.dataset.id),value);
   render();
  });
- function setTab(tab){
+ function setTab(tab,writeRoute=true){
+  if(!Object.hasOwn(productionRoutes,tab))return;
   state.tab=tab;
   render();
   resumeInventory();
+  if(writeRoute&&document.body.dataset.mmView==='production')syncAppRoute();
   if(tab==='result'){
    const estimate=calculateManufacturing();
    if(estimate.valid&&estimate.install==null)refreshInstall();
@@ -17621,9 +17656,12 @@ const ProductionUI=(()=>{
  const cacheNames=()=>active?fuels.flatMap(f=>[f.name,...f.materials.map(m=>m.name)]):[];
  window.mmProductionCacheNames=cacheNames;
  window.mmProductionRender=()=>{if(document.body.dataset.mmView==='production')render();};
- window.mmProductionShown=()=>{active=true;root.hidden=false;render();resumeInventory();};
+ window.mmProductionShown=tab=>{active=true;root.hidden=false;setTab(tab??state.tab,false);};
  return {state,calculate,render,cacheNames,updatePrices,updateSystem,setExpanded(ids){expanded=new Set(ids.map(String));render();},setTab};
 })();
+
+if(location.hash)applyAppRoute(location.hash);
+window.addEventListener('hashchange',()=>applyAppRoute(location.hash));
 
 </script>
 
