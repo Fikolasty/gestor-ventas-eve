@@ -333,10 +333,12 @@ const ProductionUI=(()=>{
   setOwned(Number(field.dataset.id),value);
   render();
  });
- function setTab(tab){
+ function setTab(tab,writeRoute=true){
+  if(!Object.hasOwn(productionRoutes,tab))return;
   state.tab=tab;
   render();
   resumeInventory();
+  if(writeRoute&&document.body.dataset.mmView==='production')syncAppRoute();
   if(tab==='result'){
    const estimate=calculateManufacturing();
    if(estimate.valid&&estimate.install==null)refreshInstall();
@@ -391,6 +393,9 @@ const ProductionUI=(()=>{
  const cacheNames=()=>active?fuels.flatMap(f=>[f.name,...f.materials.map(m=>m.name)]):[];
  window.mmProductionCacheNames=cacheNames;
  window.mmProductionRender=()=>{if(document.body.dataset.mmView==='production')render();};
- window.mmProductionShown=()=>{active=true;root.hidden=false;render();resumeInventory();};
+ window.mmProductionShown=tab=>{active=true;root.hidden=false;setTab(tab??state.tab,false);};
  return {state,calculate,render,cacheNames,updatePrices,updateSystem,setExpanded(ids){expanded=new Set(ids.map(String));render();},setTab};
 })();
+
+if(location.hash)applyAppRoute(location.hash);
+window.addEventListener('hashchange',()=>applyAppRoute(location.hash));

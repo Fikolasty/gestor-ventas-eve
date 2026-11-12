@@ -73,7 +73,7 @@
   async function startLogin(){
     const client=EVE_CLIENT_ID;
     if(!client){alert(tx('sso.missingClient'));return;}
-    try{const verifier=rand(48),state=rand(24);sessionStorage.setItem(key,JSON.stringify({verifier,state,client,redirect:base,at:Date.now()}));
+    try{const verifier=rand(48),state=rand(24);sessionStorage.setItem(key,JSON.stringify({verifier,state,client,redirect:base,route:location.hash,at:Date.now()}));
       const u=new URL('https://login.eveonline.com/v2/oauth/authorize');u.searchParams.set('response_type','code');u.searchParams.set('client_id',client);u.searchParams.set('redirect_uri',base);u.searchParams.set('scope',requestedScopes.join(' '));u.searchParams.set('state',state);u.searchParams.set('code_challenge',await challenge(verifier));u.searchParams.set('code_challenge_method','S256');location.assign(u.href);
     }catch(err){const message=tx('sso.loginOpenFailed',{error:err?.message||String(err)});openProfile();status(message);console.error('EVE SSO redirect failed',err);}
   }
@@ -228,7 +228,12 @@
       if(!scopeOK)throw Error('EVE no concedió el permiso de lectura de skills.');
       const id=Number(String(pilot.sub||'').match(/^CHARACTER:EVE:(\d+)$/)?.[1]),name=pilot.name;
       if(!Number.isSafeInteger(id)||!name)throw Error('Identidad de personaje no verificada.');
-      session={id,name,token:tokens.access_token,scopes:scopesOf(tokens.access_token),expires:Date.now()+(tokens.expires_in||1200)*1000-30000,refresh:tokens.refresh_token||null};persist();refreshUI();closeMenu();await syncAlliance();await sync();
+      session={id,name,token:tokens.access_token,scopes:scopesOf(tokens.access_token),expires:Date.now()+(tokens.expires_in||1200)*1000-30000,refresh:tokens.refresh_token||null};persist();refreshUI();closeMenu();
+      if(!location.hash&&typeof req.route==='string'&&req.route.startsWith('#')){
+        applyAppRoute(req.route);
+        syncAppRoute(true);
+      }
+      await syncAlliance();await sync();
     }catch(err){openProfile();status(tx('sso.callbackFailed',{error:err.message}));}
   })();
 })();

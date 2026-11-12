@@ -57,7 +57,7 @@ test('C.4a: Settings, Guide, translator and persistence keep the supported bundl
   const assembled = bundle.script();
   assert.match(assembled, /const S=\{/);
   assert.match(assembled, /function computePlan\(\)/);
-  assert.match(assembled, /function selectAppModule\(name\)/);
+  assert.match(assembled, /function selectAppModule\(name,writeRoute=true,productionTab=null\)/);
   assert.match(assembled, /function stRestore\(\)/);
   assert.match(assembled, /function setLang\(l\)/);
   assert.doesNotMatch(assembled, /\/\*__MODULE_[A-Z_]+__\*\//);

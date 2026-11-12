@@ -10,3 +10,7 @@ Los selectores rotulados aplican el inventario automáticamente. Los nombres lar
 ### v1.0.216 — Edición de Disponible y costo de instalación
 
 Disponible formatea cantidades y recalcula al escribir. Al abrir Resultado, se consultan los datos para estimar instalación cuando falta ese costo. Se conserva el costo manual y se ofrece reintentar si falta información. Publicación pendiente de Actions y comprobación HTTPS.
+
+### v1.0.217 — Enlaces directos a pestañas
+
+Las vistas principales y las tres pestañas de Producción tienen enlaces estables con fragmentos. Atrás, Adelante y Recargar restauran la vista. EVE SSO conserva el callback y restaura la pestaña de origen tras validar el retorno. Publicación pendiente de Actions y comprobación HTTPS.

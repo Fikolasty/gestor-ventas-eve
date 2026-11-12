@@ -1,6 +1,30 @@
 // ================= Ajustes y Guía de Uso =================
 // Pestañas persistentes, conservando la comparativa minera existente.
-function selectAppModule(name){
+const appRoutes={ventas:'ventas',jita:'jita',mining:'mineria',skills:'habilidades',production:'produccion'};
+const productionRoutes={plan:'plan',materials:'materiales',result:'resultado'};
+function syncAppRoute(replace=false){
+  const view=document.body.dataset.mmView;
+  if(!Object.hasOwn(appRoutes,view))return;
+  const hash='#'+appRoutes[view]+(view==='production'?'/'+productionRoutes[ProductionUI.state.tab]:'');
+  if(location.hash!==hash){
+    if(replace)history.replaceState(null,'',hash);
+    else history.pushState(null,'',hash);
+  }
+}
+function applyAppRoute(hash){
+  const [path,section,...extra]=hash.slice(1).split('/');
+  if(extra.length)return;
+  const view=Object.keys(appRoutes).find(key=>appRoutes[key]===path);
+  if(!view){
+    if(!path&&!section)selectAppModule('ventas',false);
+    return;
+  }
+  if(view!=='production'&&section!==undefined)return;
+  const tab=view==='production'?Object.keys(productionRoutes).find(key=>productionRoutes[key]===(section||'plan')):null;
+  if(view==='production'&&!tab)return;
+  selectAppModule(view,false,tab);
+}
+function selectAppModule(name,writeRoute=true,productionTab=null){
   // PI EN PAUSA: conservar la implementación completa para reactivarla en una futura versión.
   // Mientras está oculta en la navegación, no permitir activarla mediante accesos antiguos.
   if(name==='pi')name='ventas';
@@ -9,7 +33,7 @@ function selectAppModule(name){
   // C.5b: navigation changes the visible workspace, never the Sales inventory.
   document.body.dataset.mmView=name;
   $('production').hidden=name!=='production';
-  if(name==='production')window.mmProductionShown?.();
+  if(name==='production')window.mmProductionShown?.(productionTab);
   document.body.classList.toggle('mm-mining',name==='mining');
   document.body.classList.toggle('mm-pi',name==='pi');
   document.body.classList.toggle('mm-skills',name==='skills');
@@ -30,6 +54,7 @@ function selectAppModule(name){
   }else{$('mining').hidden=true;$('pi').hidden=true;$('skills').hidden=true;$('settings').hidden=true;$('help').hidden=true;}
   document.querySelectorAll('.side-i[data-panel="mining"]').forEach(b=>b.setAttribute('aria-pressed',String(name==='mining')));
   if(name==='ventas'||name==='jita')refreshNow();
+  if(writeRoute)syncAppRoute();
 }
 const mmTabs=[...document.querySelectorAll('#mmTabs [data-mm-module]')];
 mmTabs.forEach((b,i)=>{
@@ -88,7 +113,10 @@ document.querySelectorAll('.x-close').forEach(b=>b.addEventListener('click',()=>
 // Home and the brand explicitly restart the volatile workspace. Settings remain
 // in the original localStorage key and are restored by the normal boot process.
 // No confirmation popup: normal tab navigation never invokes this handler.
-const navigateHome=()=>{window.location.reload();};
+const navigateHome=()=>{
+  if(location.hash)history.replaceState(null,'',location.pathname+location.search);
+  window.location.reload();
+};
 $('navHome').addEventListener('click',navigateHome);
 // Brand and hero title are native anchors: the browser owns modified clicks,
 // middle-click and keyboard activation. Do not intercept them with reload().

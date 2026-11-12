@@ -77,7 +77,7 @@ class ESISettingsTests(unittest.TestCase):
    const body=enc({alg:'RS256',kid:'test'})+'.'+enc({iss:'https://login.eveonline.com',aud:['114bbd2659384151ac3b0096f183dd3b','EVE Online'],exp:Math.floor(Date.now()/1000)+1200,scp:scopes,sub:'CHARACTER:EVE:90000001',name:'Synthetic pilot'});
    const sig=await crypto.subtle.sign('RSASSA-PKCS1-v1_5',keys.privateKey,new TextEncoder().encode(body));
    const jwk=await crypto.subtle.exportKey('jwk',keys.publicKey);jwk.kid='test';
-   sessionStorage.setItem('mm.eve.pkce',JSON.stringify({verifier:'synthetic-verifier',state:'test-state',client:'114bbd2659384151ac3b0096f183dd3b',redirect:location.origin+location.pathname,at:Date.now()}));
+   sessionStorage.setItem('mm.eve.pkce',JSON.stringify({verifier:'synthetic-verifier',state:'test-state',client:'114bbd2659384151ac3b0096f183dd3b',redirect:location.origin+location.pathname,route:'#produccion/materiales',at:Date.now()}));
    return {jwk,token:body+'.'+btoa(String.fromCharCode(...new Uint8Array(sig))).replaceAll('+','-').replaceAll('/','_').replaceAll('=','')};
   }""",self.scopes)
   self.jwk=signed['jwk'];self.login_token=signed['token'];self.page.unroute('**/*');self.page.route('**/*',self.route)
@@ -86,6 +86,8 @@ class ESISettingsTests(unittest.TestCase):
   self.assertEqual((s['simple'],s['ice'],s['rep'],s['imp']),(2,0,5,.02))
   self.assertAlmostEqual(self.page.evaluate('relistPot(.02)'),.004)
   self.assertNotIn('code=',self.page.url)
+  self.assertTrue(self.page.url.endswith('#produccion/materiales'))
+  self.assertTrue(self.page.locator('#fp-materials').is_visible())
   self.assertEqual(self.page.locator('#skAcc').input_value(),'4')
   self.assertEqual(self.page.locator('#cTax').input_value(),'4.2')
   self.assertEqual(self.page.locator('[data-access-state][data-allowed="true"]').count(),5)
