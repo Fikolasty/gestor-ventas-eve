@@ -2470,3 +2470,7 @@ Fuente Fiko `5e7a1bf33d6db1310bc20318d3a7d6b4c5ccd59c`, build `a237bc6ac4f433fdf
 La importación pide el sistema solar antes de consultar ESI. Disponible se aplica automáticamente con el stock confirmado. Los precios de Jita se actualizan y el costo se calcula sobre el faltante. Resultado compara el desembolso por bloque y el beneficio de Orden de venta y Venta inmediata. La cobertura incompleta queda pendiente cuando puede afectar el cálculo.
 
 QA previo del incremento local con ESI y SSO simulados. 216 Node, 16 Python y 13 Chromium de Producción e Inventario. El cierre LIVE requiere Actions, Pages y HTTPS.
+
+### v1.0.214 — Estaciones y cabecera compacta de Materiales
+
+El selector de estación aparece tras elegir el sistema y empieza en Todas las Estaciones. El filtro actualiza las cantidades y ambos presupuestos. El origen se consulta dentro del detalle plegable del material. La cabecera omite la lista repetida y alinea Orden e Inmediato con la tabla en escritorio. QA local: 216 Node, 16 Python y 6 Chromium con ESI simulado. Publicación pendiente de Actions y comprobación HTTPS.

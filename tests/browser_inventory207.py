@@ -6,7 +6,7 @@ from urllib.parse import parse_qs, urlparse
 import browser_production205 as base
 
 ROOT=base.ROOT
-OUT=ROOT/'.qa-audit/production-stock-picker-r2'
+OUT=ROOT/'.qa-audit/production-station-picker-r2'
 ASSETS='esi-assets.read_assets.v1'
 STRUCTURES='esi-universe.read_structures.v1'
 SKILLS='esi-skills.read_skills.v1'
@@ -89,6 +89,16 @@ class InventoryTests(base.unittest.TestCase):
   self.wait_inventory()
   self.assertEqual(self.asset_calls,before)
   self.assertEqual(self.row(44)['owned'],5000)
+  station=self.p.locator('[data-import-station]')
+  self.assertEqual(station.locator('option').evaluate_all('options=>options.map(option=>option.value)'),['','60003760','60003761'])
+  station.select_option('60003761')
+  self.wait_inventory()
+  self.assertEqual(self.row(44)['owned'],2000)
+  self.assertEqual(self.row(44)['cost'],104000)
+  self.assertEqual(self.row(9848)['owned'],0)
+  station.select_option('')
+  self.wait_inventory()
+  self.assertEqual(self.row(44)['owned'],5000)
   self.assertEqual(self.row(9848)['owned'],2500)
   self.assertEqual(self.row(3689)['owned'],0)
   self.assertEqual(self.row(44)['missing'],2200)
@@ -100,6 +110,8 @@ class InventoryTests(base.unittest.TestCase):
   self.assertEqual(self.p.locator('[data-import-apply]').count(),0)
   self.p.locator('[data-material-toggle="44"]').click()
   sources=self.p.locator('#fp-detail-44 .fp-stock-sources')
+  self.assertFalse(sources.evaluate('el=>el.open'))
+  sources.locator('summary').click()
   self.assertIn('60003760',sources.inner_text())
   self.assertIn('60003761',sources.inner_text())
   self.assertNotIn('60003762',sources.inner_text())
@@ -107,6 +119,7 @@ class InventoryTests(base.unittest.TestCase):
   field.fill('2 500')
   self.assertEqual(self.row(44)['owned'],2500)
   self.load('HY-RWO')
+  self.assertEqual(self.p.locator('[data-import-station]').input_value(),'')
   self.assertEqual(self.row(44)['owned'],99000)
   self.assertEqual(self.row(9848)['owned'],0)
 
@@ -141,7 +154,7 @@ class InventoryTests(base.unittest.TestCase):
       });
      }'''))
      self.assertEqual(self.p.locator('#fp-view-result').count(),0)
-     if width==1440 and lang=='es':self.p.screenshot(path=str(OUT/f'stock-picker-r2-es-1440-{"light" if light else "dark"}.png'),full_page=True)
+     if width==1440 and lang=='es':self.p.screenshot(path=str(OUT/f'compact-stock-es-1440-{"light" if light else "dark"}.png'),full_page=True)
     self.assertEqual(geometry[0],geometry[1],(lang,width))
 
  def test_consent_keeps_system_and_resumes_automatic_import(self):
@@ -174,7 +187,7 @@ class InventoryTests(base.unittest.TestCase):
   self.load('Jita')
   self.assertEqual(self.row(44)['owned'],5000)
   self.assertEqual(self.p.locator('#cProductionSystem').input_value(),'HY-RWO')
-  self.assertIn('Fixture station 60003761',self.p.locator('.fp-inventory-stations').inner_text())
+  self.assertIn('Fixture station 60003761',self.p.locator('[data-import-station]').inner_text())
 
  def test_nullsec_container_locked_and_unresolved_stock(self):
   self.records.extend([
@@ -191,6 +204,7 @@ class InventoryTests(base.unittest.TestCase):
   self.assertEqual(self.p.locator('[data-material="owned"][data-id="9848"]').input_value(),'')
   self.assertEqual(self.p.locator('.fp-budget .fp-pending').count(),2)
   self.p.locator('[data-material-toggle="44"]').click()
+  self.p.locator('#fp-detail-44 .fp-stock-sources summary').click()
   self.assertIn('Fixture materials crate',self.p.locator('#fp-detail-44 .fp-stock-sources').inner_text())
   self.p.locator('[data-material="owned"][data-id="9848"]').fill('0')
   self.assertEqual(self.p.locator('.fp-budget .fp-pending').count(),0)

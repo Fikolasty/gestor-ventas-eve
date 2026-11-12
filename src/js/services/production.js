@@ -126,16 +126,16 @@ async function productionInventory(auth,materialIds,system=null){
  const catalog={pilot,locations,names,systems,systemIds,systemNames,itemCount:rows.length,queriedAt:Date.now(),updatedAt:stamp?Date.parse(stamp):null};
  return system?productionInventoryForSystem(catalog,system):catalog;
 }
-function productionInventoryForSystem(catalog,system){
+function productionInventoryForSystem(catalog,system,station=null){
  const {locations,systemIds}=catalog;
- const selected=locations.filter(group=>systemIds[group.root]===system.id);
+ const selected=locations.filter(group=>systemIds[group.root]===system.id&&(station===null||group.root===station));
  const stock={},unknown=new Set();
  for(const group of selected)for(const [id,quantity] of Object.entries(group.stock)){
    const total=(stock[id]??0)+quantity;
    if(!Number.isSafeInteger(total))throw Error('Asset quantity overflow');
    stock[id]=total;
  }
- for(const group of locations)if(!systemIds[group.root])for(const id of Object.keys(group.stock))unknown.add(Number(id));
+ for(const group of locations)if(!systemIds[group.root]&&(station===null||group.root===station))for(const id of Object.keys(group.stock))unknown.add(Number(id));
  return {...catalog,system,locations:selected,stock,unknown};
 }
 let productionIndices=null,productionIndicesAt=0,productionIndexWait=null;

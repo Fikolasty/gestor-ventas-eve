@@ -33,7 +33,7 @@ const ProductionUI=(()=>{
  const open=id=>root.querySelector('#'+id)?.open?'open':'';
  let expanded=new Set();
  let importBusy=false,importError='',inventory=null,importSerial=0,resumeImport=false;
- let catalog=null,inventoryQuery=null,importPilot=null,configuredSystem=null,defaultSystem=null;
+ let catalog=null,inventoryQuery=null,inventoryStation=null,importPilot=null,configuredSystem=null,defaultSystem=null;
  const inventoryOverrides=new Set();
  const materialIds=[...new Set(fuels.flatMap(f=>f.materials.map(m=>m.id)))];
  const importAuth=()=>window.mmProductionInventoryAuth;
@@ -42,6 +42,7 @@ const ProductionUI=(()=>{
  const inventorySystems=()=>[...new Set(Object.values(catalog?.systemIds??{}))].map(id=>({id,name:catalog.systemNames[id]||String(id)}))
   .sort((a,b)=>a.name.localeCompare(b.name,lang));
  const stockUncertain=id=>inventory?.unknown.has(id)&&!inventoryOverrides.has(id);
+ const stationsInSystem=id=>[...new Set((catalog?.locations??[]).filter(group=>catalog.systemIds[group.root]===id).map(group=>group.root))];
  function setOwned(id,value){state.owned[id]=value;if(inventory)inventoryOverrides.add(id);}
  function resumeInventory(){
   if(!active||root.hidden||state.tab!=='materials'||!importAuth()?.identity()?.assets)return;
@@ -60,8 +61,6 @@ const ProductionUI=(()=>{
    inventory.system.name+' · '+t(inventory.unknown.size?'inventoryPartial':'inventoryLoaded'):unresolved?t('inventoryPartial'):'';
   const systems=inventorySystems();
   if(defaultSystem&&!systems.some(system=>system.id===defaultSystem.id))systems.unshift(defaultSystem);
-  const stations=[...new Set((inventory?.locations??[]).filter(group=>rows.some(row=>group.stock[row.id]>0&&!inventoryOverrides.has(row.id)))
-   .map(group=>inventory.names[group.root]||t('locationId')+' '+group.root))];
   const dataTime=Math.max(0,...rows.map(row=>row.queriedAt||0));
   const quoteHelp=dataTime?t('updated')+' '+new Date(dataTime).toLocaleString(t('labelEnUs')):t('estimate');
   return `<div class="fp-source-panels">
@@ -72,11 +71,14 @@ const ProductionUI=(()=>{
       <option value="" disabled ${stockSystem()===''?'selected':''}>${escape(!pilot?.assets&&productionPreference()?productionPreference():t(importBusy?'loading':systems.length?'chooseInventorySystem':'inventorySystemsEmpty'))}</option>
       ${systems.map(({id,name})=>`<option value="${id}" ${String(id)===String(stockSystem())?'selected':''}>${escape(name)}</option>`).join('')}
      </select>
+     ${inventory?`<select data-import-station aria-label="${t('inventoryStation')}" ${importBusy?'disabled':''}>
+      <option value="">${t('inventoryAllStations')}</option>
+      ${stationsInSystem(inventory.system.id).map(id=>`<option value="${id}" ${id===inventoryStation?'selected':''}>${escape(catalog.names[id]||t('locationId')+' '+id)}</option>`).join('')}
+     </select>`:''}
      <button type="submit" class="ghost" data-import-fetch ${importBusy?'disabled':''}>${t(importBusy?'loading':pilot?.assets?'importInventory':'inventoryAuthorize')}</button>
      <button type="button" class="ghost" data-production-refresh title="${escape(quoteHelp)}" ${loading?'disabled':''}>${t(loading?'loading':'update')}</button>
     </form>
-    <p class="fp-source-status" role="status">${escape(status)}</p>
-    ${stations.length?`<ul class="fp-inventory-stations" aria-label="${t('stockLocation')}">${stations.map(station=>`<li>${escape(station)}</li>`).join('')}</ul>`:''}
+    <p class="fp-source-status ${inventory&&!inventory.unknown.size&&!importBusy&&!importError?'fp-stock-status-quiet':''}" role="status">${escape(status)}</p>
     ${pilot?.assets&&!pilot.structures&&unresolved?`<button type="button" class="ghost" data-import-structures>${tx('sso.authorizeSettings')}</button>`:''}
    </section>
    <section class="fp-source-panel fp-budget-panel" aria-label="${t('ready')}" aria-busy="${loading}">
@@ -92,10 +94,11 @@ const ProductionUI=(()=>{
    const bin=g.container?(inventory.names[g.container]||t('containerId')+' '+g.container):t('personalHangar');
    return `<li>${escape(root+' · '+bin)} · ${quantity(g.stock[id])}</li>`;
   });
-  return places.length?`<div class="fp-detail-field fp-stock-sources"><span class="fp-detail-label">${t('stockLocation')}</span><ul>${places.join('')}</ul></div>`:'';
+  return places.length?`<details class="fp-stock-sources" id="fp-stock-${id}" ${open('fp-stock-'+id)}><summary>${t('stockLocation')}</summary><ul>${places.join('')}</ul></details>`:'';
  }
- function applyInventorySystem(system,ownedBeforeRequest=state.owned){
-  inventory=productionInventoryForSystem(catalog,system);inventoryQuery=String(system.id);
+ function applyInventorySystem(system,ownedBeforeRequest=state.owned,station=inventoryStation){
+  inventoryStation=stationsInSystem(system.id).includes(station)?station:null;
+  inventory=productionInventoryForSystem(catalog,system,inventoryStation);inventoryQuery=String(system.id);
   inventoryOverrides.clear();
   for(const id of materialIds)if(state.owned[id]!==ownedBeforeRequest[id])inventoryOverrides.add(id);
   updatePrices();
@@ -138,10 +141,14 @@ const ProductionUI=(()=>{
   if(e.target.closest('[data-import-structures]'))authorizeInventory();
  });
  inventoryRoot.addEventListener('change',e=>{
-  if(!e.target.matches('[data-import-system]'))return;
+  if(!e.target.matches('[data-import-system],[data-import-station]'))return;
   e.stopImmediatePropagation();
+  if(e.target.matches('[data-import-station]')){
+   if(inventory){importError='';applyInventorySystem(inventory.system,state.owned,Number(e.target.value)||null);}
+   return;
+  }
   const id=Number(e.target.value),system=inventorySystems().find(s=>s.id===id)??(defaultSystem?.id===id?defaultSystem:null);
-  if(system){importError='';applyInventorySystem(system);}
+  if(system){importError='';applyInventorySystem(system,state.owned,null);}
  },true);
  inventoryRoot.addEventListener('submit',e=>{
   if(!e.target.matches('[data-import-form]'))return;
@@ -151,7 +158,7 @@ const ProductionUI=(()=>{
  window.addEventListener('mm-eve-identity',()=>{
   const pilot=importAuth()?.identity(),id=pilot?.id??null;
   if(importPilot!==id||!pilot?.assets){
-   importSerial++;importBusy=false;catalog=null;inventory=null;defaultSystem=null;inventoryQuery=resumeImport?inventoryQuery:null;
+   importSerial++;importBusy=false;catalog=null;inventory=null;inventoryStation=null;defaultSystem=null;inventoryQuery=resumeImport?inventoryQuery:null;
    inventoryOverrides.clear();importError='';importPilot=id;
    if(active)render();
   }
@@ -283,6 +290,7 @@ const ProductionUI=(()=>{
   });
   if(tableScroll)root.querySelector('.fp-table-scroll').scrollLeft=tableScroll;
   if(active?.matches('[data-import-system]'))root.querySelector('[data-import-system]')?.focus({preventScroll:true});
+  else if(active?.matches('[data-import-station]'))root.querySelector('[data-import-station]')?.focus({preventScroll:true});
   else if(focus){const selector=focus.material?`[data-material="${focus.material}"][data-id="${focus.id}"]`:`[data-state="${focus.key}"]`;const next=root.querySelector(selector);if(next){if(retainedOwned){next.replaceWith(retainedOwned);retainedOwned.focus({preventScroll:true});}else{next.value=focus.value;next.focus({preventScroll:true});}}}
 
  }

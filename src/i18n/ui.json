@@ -3747,6 +3747,14 @@
     "es": "Sistema Solar",
     "en": "Solar System"
   },
+  "production.inventoryStation": {
+    "es": "Estación del Inventario",
+    "en": "Inventory Station"
+  },
+  "production.inventoryAllStations": {
+    "es": "Todas las Estaciones",
+    "en": "All Stations"
+  },
   "production.inventorySystemHeading": {
     "es": "Sistema del Inventario",
     "en": "Inventory System"
