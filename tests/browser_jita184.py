@@ -36,8 +36,8 @@ class Jita184Tests(unittest.TestCase):
      if width==1440:
       rect=p.locator('#jitaPurchaseControls').bounding_box();cap=p.locator('#verdict .ov-hd').bounding_box();assert abs(rect['x']+rect['width']/2-cap['x']-cap['width']/2)<1
   
-     assert p.locator('.top-header-action .ic').bounding_box()['width']==28
-     assert p.locator('.top-guide-action .ic').bounding_box()['height']==28
+     assert p.locator('.top-header-action .ic').bounding_box()['width']==18
+     assert p.locator('.top-guide-action .ic').bounding_box()['height']==18
      assert not p.locator('#vIsk').inner_text().startswith(('−','-'))
      assert p.evaluate('document.documentElement.scrollWidth-innerWidth')<=1,(lang,width,purpose,basis,ship)
      m=p.evaluate("()=>{const m=jitaPurchaseModel(lastP);return {cost:m.cost,raw:m.raw,fee:m.fee,ship:m.ship,copy:+$('freightLotFinal').dataset.v,allocated:m.rows.reduce((s,r)=>s+r.courierAllocated,0)}}")
@@ -76,7 +76,7 @@ class Jita184Tests(unittest.TestCase):
      p.screenshot(path='tests/artifacts/theme/jita184-final-'+purpose+'-es-'+('light' if light else 'dark')+'.png',full_page=True)
    p.evaluate("JitaContext.personal=true;$('themeLight').checked=true;$('themeLight').dispatchEvent(new Event('change',{bubbles:true}));refreshNow()");p.locator('#verdict .ov-hd').screenshot(path='tests/artifacts/theme/jita184-header-final-es-dark.png')
    assert errors==[],errors
-   print(f'r6: {count} states PASS; shared inventory, receipt reconciliation, warning retained, conditional Buy advice, native Buy/Sell change, symmetric top cards and 28px icons PASS')
+   print(f'r6: {count} states PASS; shared inventory, receipt reconciliation, warning retained, conditional Buy advice, native Buy/Sell change, symmetric top cards and 18px icons PASS')
    b.close()
 
  def test_details_settings_and_workspace_roundtrip(self):

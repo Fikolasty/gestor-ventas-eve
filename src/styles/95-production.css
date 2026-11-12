@@ -320,6 +320,7 @@ body[data-mm-view="production"]>.hero,body[data-mm-view="production"]>main{displ
 @media(min-width:901px) and (max-width:1050px){
  #production .fp-material-card{--fp-inventory-split:56%;--fp-stock-start:32%}
  #production .fp-budget{padding-inline:8px}
+ #production .fp-budget strong{font-size:clamp(10px,calc(100cqi / (var(--amount-length,12) * .72 + 3.6)),32px)}
  #production .fp-budget-panel .fp-source-status{margin-inline:8px}
  #production .fp-material-table{table-layout:fixed}
  #production .fp-material-table col{width:11%}
