@@ -6,3 +6,7 @@ El selector de estación aparece tras elegir el sistema y empieza en Todas las E
 ### v1.0.215 — Materiales y cabecera principal
 
 Los selectores rotulados aplican el inventario automáticamente. Los nombres largos se abrevian en el campo cerrado. Actualizar Precios pasa a la cabecera. Los dos presupuestos copiables usan cifras adaptables, con el verde semántico en el importe positivo de Orden. Divisores del presupuesto y del detalle alineados con la tabla. La cabecera principal usa divisores finos, iconos reducidos e interruptor centrado. Los relojes pasan al pie. Publicación pendiente de Actions y comprobación HTTPS.
+
+### v1.0.216 — Edición de Disponible y costo de instalación
+
+Disponible formatea cantidades y recalcula al escribir. Al abrir Resultado, se consultan los datos para estimar instalación cuando falta ese costo. Se conserva el costo manual y se ofrece reintentar si falta información. Publicación pendiente de Actions y comprobación HTTPS.

@@ -2,7 +2,7 @@
 const ProductionUI=(()=>{
  const fuels=FUEL_RECIPES;
  const state={fuel:4247,jobs:10,runs:200,me:10,te:20,slots:1,kind:'BPO',available:200,shipping:0,outbound:0,install:null,acquire:'sell',sale:'order',tab:'plan',owned:{},sent:{},included:{},manual:{},discount:{},fuelPrice:null,facility:'station',security:'high',rigM:0,rigT:0,industry:1,advanced:0,systemId:30000142,index:null,facilityTax:.25,sccTax:4,alphaTax:0,regionTax:0};
- let lang='es',loading=false,priceNotice='',skillNotice='',systemNotice='',refreshAll=false,industryRequest=0,active=false;
+ let lang='es',loading=false,priceNotice='',skillNotice='',systemNotice='',refreshAll=false,industryRequest=0,installRequest=null,active=false;
  const t=k=>{const key='production.'+k;return tx(key);},num=(v,d=0)=>new Intl.NumberFormat('en-US',{minimumFractionDigits:d,maximumFractionDigits:d}).format(v);
  const quoteMap=()=>Object.fromEntries(fuels.flatMap(f=>[f,...f.materials]).map(x=>[x.id,S.api[x.name.toLowerCase()]]));
  const rates=()=>({broker:C.broker,instant:rateInst(),order:rateJita()});
@@ -216,11 +216,12 @@ const ProductionUI=(()=>{
   ];
   const totals=modes.map(({label,estimate:m})=>{
    const cost=m.allocation?.complete&&m.expenses!=null?m.expenses/m.blocks:null;
-   const caption=cost!=null?'comparePerBlock':!m.valid?'validation':m.stockComplete===false?'inventoryPartial':!m.priceComplete?'quoteMissing':!m.allocation.complete?'none':'compareMissingInstall';
+   const caption=cost!=null?'comparePerBlock':!m.valid?'validation':m.stockComplete===false?'inventoryPartial':!m.priceComplete?'quoteMissing':!m.allocation.complete?'none':installRequest===state.systemId?'loading':'compareMissingInstall';
    return `<div><h4>${label}</h4><strong>${cost==null?pending():debit(cost)}</strong><p>${t(caption)}</p></div>`;
   }).join('');
   return `<section class="panel fp-result-card">
    <header class="fp-section-head"><h3 class="fp-panel-title" id="fp-result-heading" tabindex="-1">${t('compareResult')}</h3><button type="button" class="ghost" data-tab="materials" id="fp-back-materials">${t('compareBack')}</button></header>
+   ${first.valid&&first.install==null&&installRequest!==state.systemId?`<div class="fp-install-retry"><button type="button" class="ghost" data-install-retry>${t('retryInstall')}</button></div>`:''}
    <div class="fp-result-metrics"><div><h4>${t('compareOutput')}</h4><strong>${first.valid?quantity(first.blocks):'—'} <small>${t('compareBlocks')}</small></strong><p>${escape(first.fuel?.name||'')}</p></div>${totals}</div>
    <details class="fp-disclosure" id="fp-cost-breakdown" ${open('fp-cost-breakdown')}><summary>${t('compareBreakdown')}</summary>
     <table class="fp-cost-table"><thead><tr><th scope="col">${t('compareConcept')}</th>${modes.map(({label})=>`<th scope="col">${label} · ISK</th>`).join('')}</tr></thead>
@@ -296,12 +297,66 @@ const ProductionUI=(()=>{
   else if(focus){const selector=focus.material?`[data-material="${focus.material}"][data-id="${focus.id}"]`:`[data-state="${focus.key}"]`;const next=root.querySelector(selector);if(next){if(retainedOwned){next.replaceWith(retainedOwned);retainedOwned.focus({preventScroll:true});}else{next.value=focus.value;next.focus({preventScroll:true});}}}
 
  }
- const stockNumber=value=>{const text=String(value).trim();if(!text)return 0;if(!/^(?:\d+|\d{1,3}(?:[,\s\u00a0]\d{3})+)$/.test(text))return null;const n=Number(text.replace(/[,\s\u00a0]/g,''));return Number.isSafeInteger(n)&&n>=0?n:null;};
- root.addEventListener('input',e=>{if(e.target.dataset.material!=='owned')return;const value=stockNumber(e.target.value);e.target.setCustomValidity(value==null?t('wholeQuantity'):'');if(value==null)return;setOwned(Number(e.target.dataset.id),value);render();});
+ const stockNumber=value=>{
+  const text=String(value).trim();
+  if(!/^[\d,\s]*$/.test(text))return null;
+  const n=Number(text.replace(/[,\s]/g,''));
+  return Number.isSafeInteger(n)?n:null;
+ };
+ root.addEventListener('beforeinput',e=>{
+  const field=e.target;
+  if(field.dataset.material!=='owned'||e.inputType!=='deleteContentBackward')return;
+  const start=field.selectionStart;
+  if(start===field.selectionEnd&&field.value[start-1]===',')field.setSelectionRange(start-2,start);
+ });
+ root.addEventListener('focusout',e=>{
+  const field=e.target;
+  if(field.dataset.material!=='owned')return;
+  const id=Number(field.dataset.id);
+  const value=inventory&&!inventoryOverrides.has(id)?inventory.stock[id]??0:state.owned[id]??0;
+  field.value=stockUncertain(id)&&!value?'':num(value);
+  field.setCustomValidity('');
+ });
+ root.addEventListener('input',e=>{
+  const field=e.target;
+  if(field.dataset.material!=='owned')return;
+  const value=stockNumber(field.value);
+  field.setCustomValidity(value==null?t('wholeQuantity'):'');
+  if(value==null)return;
+  const digitsBefore=field.value.slice(0,field.selectionStart).replace(/\D/g,'').length;
+  field.value=field.value.trim()?num(value):'';
+  let caret=0;
+  for(let digits=0;caret<field.value.length&&digits<digitsBefore;caret++){
+   if(/\d/.test(field.value[caret]))digits++;
+  }
+  field.setSelectionRange(caret,caret);
+  setOwned(Number(field.dataset.id),value);
+  render();
+ });
+ function setTab(tab){
+  state.tab=tab;
+  render();
+  resumeInventory();
+  if(tab==='result'){
+   const estimate=calculateManufacturing();
+   if(estimate.valid&&estimate.install==null)refreshInstall();
+  }
+ }
+ async function refreshInstall(){
+  const id=state.systemId;
+  if(installRequest===id)return;
+  installRequest=id;
+  render();
+  try{
+   await Promise.all([state.index==null?updateSystem():null,loadCcp(true)]);
+  }finally{
+   if(installRequest===id){installRequest=null;render();}
+  }
+ }
  root.addEventListener('keydown',e=>{if(e.target.matches('[data-material=owned]')&&e.key==='Enter'){e.target.blur();return;}if(e.target.dataset.material==='owned'&&e.key==='Enter'){e.preventDefault();e.target.blur();}});
- root.addEventListener('click',e=>{const complete=e.target.closest('[data-complete]');if(complete){const row=calculateManufacturing().rows.find(r=>r.id===Number(complete.dataset.complete));if(row&&row.owned<row.required){setOwned(row.id,row.required);render();root.querySelector(`[data-complete="${row.id}"]`)?.focus();}return;}const toggle=e.target.closest('[data-material-toggle]');if(toggle){const id=toggle.dataset.materialToggle;if(expanded.has(id))expanded.delete(id);else expanded.add(id);render();root.querySelector(`[data-material-toggle="${id}"]`)?.focus({preventScroll:true});return;}const b=e.target.closest('[data-tab]');if(!b)return;state.tab=b.dataset.tab;render();root.querySelector(`#fp-tab-${state.tab}`)?.focus();resumeInventory();});
- root.addEventListener('keydown',e=>{if(!e.target.matches('.fp-tabs button')||!['ArrowLeft','ArrowRight','Home','End'].includes(e.key))return;e.preventDefault();const tabs=['plan','materials','result'];state.tab=e.key==='Home'?tabs[0]:e.key==='End'?tabs.at(-1):tabs[(tabs.indexOf(state.tab)+(e.key==='ArrowRight'?1:-1)+3)%3];render();root.querySelector(`#fp-tab-${state.tab}`).focus();resumeInventory();});
- root.addEventListener('change',e=>{const key=e.target.dataset.state,id=Number(e.target.dataset.id),material=e.target.dataset.material;if(material==='owned'){const value=stockNumber(e.target.value);if(value==null)return;setOwned(id,value);e.target.value=num(value);render();return;}if(['owned','sent'].includes(material)&&(!Number.isSafeInteger(Number(e.target.value))||Number(e.target.value)<0)){e.target.setCustomValidity(t('validation'));return;}e.target.setCustomValidity?.('');if(key){state[key]=['kind','acquire','sale','facility','security'].includes(key)?e.target.value:e.target.value===''&&['install','index','fuelPrice'].includes(key)?null:Number(e.target.value);if(key==='facility'){state.facilityTax=state.facility==='station'?.25:1;if(state.facility==='station')state.rigM=state.rigT=0;if(['azbel','sotiyo'].includes(state.facility))state.rigT=state.rigM;}if(key==='rigM'&&['azbel','sotiyo'].includes(state.facility))state.rigT=state.rigM;if(key==='systemId'){state.index=null;systemNotice='';industryRequest++;}}if(material)state[material][id]=material==='included'?e.target.checked:e.target.value===''&&material==='manual'?undefined:Number(e.target.value);if(material&&material!=='owned')expanded.add(String(id));render();if(key==='fuel')updatePrices();});
+ root.addEventListener('click',e=>{const complete=e.target.closest('[data-complete]');if(complete){const row=calculateManufacturing().rows.find(r=>r.id===Number(complete.dataset.complete));if(row&&row.owned<row.required){setOwned(row.id,row.required);render();root.querySelector(`[data-complete="${row.id}"]`)?.focus();}return;}const toggle=e.target.closest('[data-material-toggle]');if(toggle){const id=toggle.dataset.materialToggle;if(expanded.has(id))expanded.delete(id);else expanded.add(id);render();root.querySelector(`[data-material-toggle="${id}"]`)?.focus({preventScroll:true});return;}const b=e.target.closest('[data-tab]');if(!b)return;setTab(b.dataset.tab);root.querySelector(`#fp-tab-${state.tab}`)?.focus();});
+ root.addEventListener('keydown',e=>{if(!e.target.matches('.fp-tabs button')||!['ArrowLeft','ArrowRight','Home','End'].includes(e.key))return;e.preventDefault();const tabs=['plan','materials','result'];setTab(e.key==='Home'?tabs[0]:e.key==='End'?tabs.at(-1):tabs[(tabs.indexOf(state.tab)+(e.key==='ArrowRight'?1:-1)+3)%3]);root.querySelector(`#fp-tab-${state.tab}`).focus();});
+ root.addEventListener('change',e=>{const key=e.target.dataset.state,id=Number(e.target.dataset.id),material=e.target.dataset.material;if(material==='owned')return;if(material==='sent'&&(!Number.isSafeInteger(Number(e.target.value))||Number(e.target.value)<0)){e.target.setCustomValidity(t('validation'));return;}e.target.setCustomValidity?.('');if(key){state[key]=['kind','acquire','sale','facility','security'].includes(key)?e.target.value:e.target.value===''&&['install','index','fuelPrice'].includes(key)?null:Number(e.target.value);if(key==='facility'){state.facilityTax=state.facility==='station'?.25:1;if(state.facility==='station')state.rigM=state.rigT=0;if(['azbel','sotiyo'].includes(state.facility))state.rigT=state.rigM;}if(key==='rigM'&&['azbel','sotiyo'].includes(state.facility))state.rigT=state.rigM;if(key==='systemId'){state.index=null;systemNotice='';industryRequest++;}}if(material)state[material][id]=material==='included'?e.target.checked:e.target.value===''&&material==='manual'?undefined:Number(e.target.value);if(material&&material!=='owned')expanded.add(String(id));render();if(key==='fuel')updatePrices();});
 
  async function updatePrices(singleId){
   if(loading){if(!singleId)refreshAll=true;return;}
@@ -325,6 +380,7 @@ const ProductionUI=(()=>{
   if(e.target.closest('[data-production-refresh]'))updatePrices();
   const item=e.target.closest('[data-production-item]');if(item)updatePrices(Number(item.dataset.productionItem));
   if(e.target.closest('[data-production-system]'))updateSystem();
+  if(e.target.closest('[data-install-retry]'))refreshInstall();
   if(e.target.closest('[data-production-skills]')){
    if(!pilotSkills){skillNotice=t('noSkills');render();return;}
    state.industry=pilotSkills.get(3380)??0;state.advanced=pilotSkills.get(3388)??0;skillNotice=t('skillSource');render();
@@ -336,5 +392,5 @@ const ProductionUI=(()=>{
  window.mmProductionCacheNames=cacheNames;
  window.mmProductionRender=()=>{if(document.body.dataset.mmView==='production')render();};
  window.mmProductionShown=()=>{active=true;root.hidden=false;render();resumeInventory();};
- return {state,calculate,render,cacheNames,updatePrices,updateSystem,setExpanded(ids){expanded=new Set(ids.map(String));render();},setTab(tab){state.tab=tab;render();resumeInventory();}};
+ return {state,calculate,render,cacheNames,updatePrices,updateSystem,setExpanded(ids){expanded=new Set(ids.map(String));render();},setTab};
 })();

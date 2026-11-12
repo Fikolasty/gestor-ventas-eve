@@ -3399,6 +3399,10 @@
     "es": "Desembolso por Bloque",
     "en": "Cash Cost per Block"
   },
+  "production.retryInstall": {
+    "es": "Consultar Costo de Instalación",
+    "en": "Check Installation Cost"
+  },
   "production.compareMissingInstall": {
     "es": "Falta el costo de instalación",
     "en": "Installation cost is missing"

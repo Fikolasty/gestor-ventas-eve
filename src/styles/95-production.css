@@ -343,3 +343,5 @@ body[data-mm-view="production"]>.hero,body[data-mm-view="production"]>main{displ
  #production .fp-cost-help{margin-inline:12px}
 }
 
+
+#production .fp-install-retry{padding:10px 22px;background:var(--surface-card)}
