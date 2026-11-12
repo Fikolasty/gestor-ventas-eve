@@ -54,35 +54,32 @@ const ProductionUI=(()=>{
   }
   if(resumeImport||!catalog){resumeImport=false;fetchInventory();}
  }
- function renderMaterialSources(rows,modes){
+ function renderMaterialSources(modes){
   const pilot=importAuth()?.identity();
   const unresolved=catalog?.locations.some(group=>!catalog.systemIds[group.root]);
   const status=importError?t(importError):inventory?
    inventory.system.name+' · '+t(inventory.unknown.size?'inventoryPartial':'inventoryLoaded'):unresolved?t('inventoryPartial'):'';
   const systems=inventorySystems();
   if(defaultSystem&&!systems.some(system=>system.id===defaultSystem.id))systems.unshift(defaultSystem);
-  const dataTime=Math.max(0,...rows.map(row=>row.queriedAt||0));
-  const quoteHelp=dataTime?t('updated')+' '+new Date(dataTime).toLocaleString(t('labelEnUs')):t('estimate');
   return `<div class="fp-source-panels">
-   <section class="fp-source-panel" aria-labelledby="fp-inventory-heading" aria-busy="${importBusy}">
-    <h4 id="fp-inventory-heading">${t('inventorySystemHeading')}</h4>
+   <section class="fp-source-panel" aria-label="${t('inventorySystemHeading')}" aria-busy="${importBusy}">
     <form class="fp-import-system-form" data-import-form>
-     <select data-import-system aria-label="${t('inventorySystem')}" ${importBusy||!systems.length?'disabled':''}>
+     <label><span>${t('chooseInventorySystem')}</span><select data-import-system ${importBusy||!systems.length?'disabled':''}>
       <option value="" disabled ${stockSystem()===''?'selected':''}>${escape(!pilot?.assets&&productionPreference()?productionPreference():t(importBusy?'loading':systems.length?'chooseInventorySystem':'inventorySystemsEmpty'))}</option>
       ${systems.map(({id,name})=>`<option value="${id}" ${String(id)===String(stockSystem())?'selected':''}>${escape(name)}</option>`).join('')}
-     </select>
-     ${inventory?`<select data-import-station aria-label="${t('inventoryStation')}" ${importBusy?'disabled':''}>
+     </select></label>
+     <label><span>${t('chooseInventoryStation')}</span><select data-import-station ${importBusy||!inventory?'disabled':''}>
+      <button><selectedcontent></selectedcontent></button>
       <option value="">${t('inventoryAllStations')}</option>
-      ${stationsInSystem(inventory.system.id).map(id=>`<option value="${id}" ${id===inventoryStation?'selected':''}>${escape(catalog.names[id]||t('locationId')+' '+id)}</option>`).join('')}
-     </select>`:''}
-     <button type="submit" class="ghost" data-import-fetch ${importBusy?'disabled':''}>${t(importBusy?'loading':pilot?.assets?'importInventory':'inventoryAuthorize')}</button>
-     <button type="button" class="ghost" data-production-refresh title="${escape(quoteHelp)}" ${loading?'disabled':''}>${t(loading?'loading':'update')}</button>
+      ${(inventory?stationsInSystem(inventory.system.id):[]).map(id=>`<option value="${id}" ${id===inventoryStation?'selected':''}>${escape(catalog.names[id]||t('locationId')+' '+id)}</option>`).join('')}
+     </select></label>
+     ${!pilot?.assets||importError==='inventoryFailed'?`<button type="submit" class="ghost" data-import-fetch ${importBusy?'disabled':''}>${t(pilot?.assets?'inventoryRetry':'inventoryAuthorize')}</button>`:''}
     </form>
     <p class="fp-source-status ${inventory&&!inventory.unknown.size&&!importBusy&&!importError?'fp-stock-status-quiet':''}" role="status">${escape(status)}</p>
     ${pilot?.assets&&!pilot.structures&&unresolved?`<button type="button" class="ghost" data-import-structures>${tx('sso.authorizeSettings')}</button>`:''}
    </section>
    <section class="fp-source-panel fp-budget-panel" aria-label="${t('ready')}" aria-busy="${loading}">
-    <div class="fp-budgets">${modes.map(({label,estimate})=>`<div class="fp-budget"><h4>${label}</h4><strong>${estimate.priceComplete?money(estimate.purchases):pending()}</strong></div>`).join('')}</div>
+    <div class="fp-budgets">${modes.map(({label,estimate},index)=>`<div class="fp-budget ${index===0?'fp-budget-order':''}"><h4>${label}</h4><strong>${estimate.priceComplete?money(estimate.purchases):pending()}</strong></div>`).join('')}</div>
     <p class="fp-source-status" role="status">${escape(priceNotice)}</p>
    </section>
   </div>`;
@@ -179,11 +176,13 @@ const ProductionUI=(()=>{
  }catch(e){}
 
  function renderMaterials(m,modes){
+  const dataTime=Math.max(0,...m.rows.map(row=>row.queriedAt||0));
+  const quoteHelp=dataTime?t('updated')+' '+new Date(dataTime).toLocaleString(t('labelEnUs')):t('estimate');
   const modeHead=modes.map(({label})=>`<th class="fp-method-head" scope="colgroup" colspan="2">${label}</th>`).join('');
   const modeColumns=modes.map(()=>`<th class="fp-method-start" scope="col">${t('compareCost')}</th><th scope="col">${t('compareUnit')}</th>`).join('');
   return `<section role="tabpanel" id="fp-materials" aria-labelledby="fp-tab-materials" ${state.tab!=='materials'?'hidden':''}><section class="panel fp-material-card">
-   <header class="fp-section-head"><h3 class="fp-panel-title">${t('ready')}</h3></header>
-   ${renderMaterialSources(m.rows,modes)}
+   <header class="fp-section-head"><h3 class="fp-panel-title">${t('ready')}</h3><button type="button" class="ghost" data-production-refresh title="${escape(quoteHelp)}" ${loading?'disabled':''}>${t(loading?'loading':'update')}</button></header>
+   ${renderMaterialSources(modes)}
    <div class="fp-table-scroll" role="region" aria-label="${t('ready')}" tabindex="0">
    <table class="fp-material-table" aria-label="${t('ready')}"><colgroup><col><col><col><col></colgroup><colgroup><col><col></colgroup><colgroup><col><col></colgroup><thead><tr>${['labelMaterial','required','owned','missing'].map(key=>`<th scope="col" rowspan="2">${t(key)}</th>`).join('')}${modeHead}</tr><tr>${modeColumns}</tr></thead>
    ${m.rows.map((r,i)=>`<tbody class="fp-material" data-id="${r.id}" data-open="${expanded.has(String(r.id))}"><tr class="fp-material-row"><td><button type="button" class="fp-material-toggle" data-material-toggle="${r.id}" aria-expanded="${expanded.has(String(r.id))}" aria-controls="fp-detail-${r.id}" title="${t('labelPriceAndShipping')}">${escape(r.name)}</button></td>
@@ -286,7 +285,10 @@ const ProductionUI=(()=>{
   root.querySelectorAll('.fp-budget .fp-copy,.fp-result-metrics .fp-money .fp-copy,.fp-profit-value .fp-copy').forEach(copy=>{
    const unit=document.createElement('small');unit.textContent='ISK';
    const amount=copy.textContent.slice(0,-4);
-   copy.replaceChildren(document.createTextNode(copy.closest('.fp-budget')?amount.replace(/\.00$/,''):amount),unit);
+   const budget=copy.closest('.fp-budget');
+   const displayAmount=budget?amount.replace(/\.00$/,''):amount;
+   if(budget)budget.style.setProperty('--amount-length',String(displayAmount.length));
+   copy.replaceChildren(document.createTextNode(displayAmount),unit);
   });
   if(tableScroll)root.querySelector('.fp-table-scroll').scrollLeft=tableScroll;
   if(active?.matches('[data-import-system]'))root.querySelector('[data-import-system]')?.focus({preventScroll:true});

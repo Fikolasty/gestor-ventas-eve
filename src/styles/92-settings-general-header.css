@@ -31,20 +31,18 @@ body .top.mm-ho-root #mmTabs>.mm-ho-main .mm-modgroup .mm-mod{position:relative!
 body .top.mm-ho-root #mmTabs>.mm-ho-main .mm-modgroup .mm-mod[aria-selected=true]{background:color-mix(in srgb,var(--clay) 10%,var(--surface-card))!important;box-shadow:0 2px 5px #00000018!important}
 body .top.mm-ho-root #mmTabs>.mm-ho-main .mm-modgroup .mm-mod[aria-selected=true]::after{content:''!important;display:block!important;position:absolute;left:6px;right:6px;bottom:0;height:2px;border-radius:0;background:var(--clay);opacity:1!important;transform:none!important}
 body .top.mm-ho-root>.mm-top-actions>.top-header-action,body .top.mm-ho-root>.mm-top-actions>.top-guide-action{position:relative;width:44px!important;min-width:44px!important;height:44px!important;padding:5px!important;border-radius:4px!important;box-shadow:0 2px 5px #00000010!important}
-body .top.mm-ho-root .mm-top-actions :is(.top-header-action,.top-guide-action) .ic{width:28px!important;height:28px!important;flex-basis:28px!important}
+body .top.mm-ho-root .mm-top-actions :is(.top-header-action,.top-guide-action) .ic{width:18px!important;height:18px!important;flex-basis:18px!important}
 body .top.mm-ho-root>.mm-top-actions>.top-header-action[aria-pressed=true],body .top.mm-ho-root>.mm-top-actions>.top-guide-action[aria-pressed=true]{box-shadow:0 2px 5px #00000018!important}
 body .top.mm-ho-root>.mm-top-actions>.top-header-action[aria-pressed=true]::after,body .top.mm-ho-root>.mm-top-actions>.top-guide-action[aria-pressed=true]::after{content:'';position:absolute;left:6px;right:6px;bottom:0;height:2px;background:var(--clay);border-radius:0}
-body .top.mm-ho-root .mm-header-clock{display:flex!important;align-items:center;gap:8px!important;font:400 11px/1.3 var(--f-ui)!important;margin:0 4px 0 0!important;white-space:nowrap;flex-basis:auto!important;order:0!important}
 body .mm-header-clock time{font-weight:600!important;font-variant-numeric:tabular-nums}
 body .mm-clock-divider{color:var(--line2)}
 body .top.mm-ho-root .mm-top-actions .mm-theme{order:20;min-width:36px!important;width:36px!important;height:36px!important;min-height:36px!important;padding:0!important;margin:0 0 0 4px!important;border:0!important;background:transparent!important;box-shadow:none!important}
 body .top.mm-ho-root .mm-theme #themeTxt{display:none!important}
-body .top.mm-ho-root .mm-theme .sw-t{width:32px!important;height:18px!important}
-body .top.mm-ho-root .mm-theme .sw-t::before{width:14px!important;height:14px!important;top:2px!important;left:2px!important}
+body .top.mm-ho-root .mm-theme .sw-t{box-sizing:border-box;width:32px!important;height:18px!important;border:0!important}
+body .top.mm-ho-root .mm-theme .sw-t::before{width:14px!important;height:14px!important;top:2px!important;left:2px!important;transform:none!important}
 body .top.mm-ho-root .mm-theme input:checked+.sw-t::before{transform:translateX(14px)!important}
 body .foot-by .mm-footer-corp-logo{display:inline-block;width:16px;height:16px;vertical-align:-3px;margin-right:4px;background-size:contain;background-repeat:no-repeat;background-position:center}
 #settings.mm-general-layout #langButtons .no-tr{font-weight:750;color:var(--txt)!important;opacity:1!important}
-@media(max-width:760px){body .top.mm-ho-root .mm-header-clock{flex-basis:100%!important;justify-content:flex-end;order:30!important;margin-top:3px!important;font-size:10.5px!important}}
 
 
 #settings.mm-general-layout #mm-settings-panel-0 .mm-general-market .st-tt::after{content:none!important;display:none!important}
@@ -84,3 +82,6 @@ body .top.mm-ho-root #eveIdentityMenu #eveLogout{border-top:1px solid var(--line
 #settings .eve-access-card [hidden]{display:none!important}
 #settings .eve-access-card #eveLoginStatus{display:block;font:400 13px/1.5 var(--f-ui);margin-top:12px;overflow-wrap:anywhere}
 @media(max-width:630px){#settings .eve-access-card>header{align-items:flex-start;flex-direction:column;gap:10px;padding:16px}#settings #eveAccessPilot{text-align:left}#settings .eve-access-row{grid-template-columns:minmax(0,1fr) 112px;gap:12px;padding:14px 16px}#settings .eve-access-state{padding-left:12px}#settings .eve-access-card>footer{padding:16px}#settings .eve-access-actions{align-items:stretch;flex-direction:column}}
+
+body .foot .mm-header-clock{display:flex;justify-content:center;align-items:center;gap:8px;margin:0 0 8px;color:var(--mut);font:400 12px/1.4 var(--f-ui)}
+body .top.mm-ho-root #mmTabs .mm-modgroup .mm-mod+.mm-mod::before{content:"";position:absolute;inset-block:25%;inset-inline-start:-3px;width:1px;background:var(--line2);pointer-events:none}

@@ -285,7 +285,7 @@ $('themeLight').addEventListener('change',e=>{document.documentElement.classList
   topActions.className='mm-top-actions';
   const clock=document.createElement('div');clock.id='headerClock';clock.className='mm-header-clock';clock.setAttribute('aria-live','off');
   clock.innerHTML='<span class="no-tr">EVE Time: <time id="eveClock">--:--</time></span><span class="mm-clock-divider" aria-hidden="true">|</span><span class="no-tr">Local Time: <time id="localClock">--:--</time></span>';
-  topActions.append(clock);
+  document.querySelector('.foot').prepend(clock);
   if(settings){settings.classList.add('top-header-action');settings.setAttribute('aria-label','Ajustes');settings.title='Ajustes';topActions.append(settings);}
   if(guide){guide.classList.add('top-guide-action');guide.setAttribute('aria-label','Guía de uso');guide.title='Guía de uso';topActions.append(guide);}
   const profile=document.createElement('div');profile.className='mm-profile-row';

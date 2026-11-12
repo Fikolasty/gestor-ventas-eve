@@ -6,7 +6,7 @@ from urllib.parse import parse_qs, urlparse
 import browser_production205 as base
 
 ROOT=base.ROOT
-OUT=ROOT/'.qa-audit/production-station-picker-r2'
+OUT=ROOT/'.qa-audit/production-materials-header-r6'
 ASSETS='esi-assets.read_assets.v1'
 STRUCTURES='esi-universe.read_structures.v1'
 SKILLS='esi-skills.read_skills.v1'
@@ -59,10 +59,10 @@ class InventoryTests(base.unittest.TestCase):
   return r.fulfill(json={'systems':[{'name':name,'id':id} for name,id in systems.items() if name in r.request.post_data_json]})
 
  def station_response(self,station,system):
-  return lambda route:route.fulfill(json={'name':f'Fixture station {station}','system_id':system})
+  return lambda route:route.fulfill(json={'name':'Fixture station '+str(station)+(' · Extremely long private structure name for layout verification' if station==60003761 else ''),'system_id':system})
 
  def wait_inventory(self):
-  self.p.wait_for_function('()=>document.querySelector("#fp-inventory-heading").parentElement.getAttribute("aria-busy")==="false"')
+  self.p.wait_for_function('()=>document.querySelector(".fp-source-panel").getAttribute("aria-busy")==="false"')
   self.p.wait_for_function('()=>!document.querySelector("[data-production-refresh]").disabled')
 
  def load(self,system='Jita'):
@@ -106,8 +106,10 @@ class InventoryTests(base.unittest.TestCase):
   self.assertEqual(self.row(44)['cost'],44000)
   self.assertEqual(self.p.evaluate('ProductionUI.calculate().purchases'),36944000)
   self.assertEqual(self.p.locator('.fp-budget .fp-money').count(),2)
-  self.assertTrue(self.p.locator('.fp-budget .fp-copy').evaluate_all('buttons=>buttons.every(button=>getComputedStyle(button).color===getComputedStyle(button.closest(".fp-budget")).color)'))
+  self.assertTrue(self.p.locator('.fp-budget-order .fp-copy').evaluate('e=>getComputedStyle(e).color!==getComputedStyle(e.closest(".fp-budget")).color'))
+  self.assertTrue(self.p.locator('.fp-section-head [data-production-refresh]').is_visible())
   self.assertEqual(self.p.locator('[data-import-apply]').count(),0)
+  self.assertEqual(self.p.locator('[data-import-fetch]').count(),0)
   self.p.locator('[data-material-toggle="44"]').click()
   sources=self.p.locator('#fp-detail-44 .fp-stock-sources')
   self.assertFalse(sources.evaluate('el=>el.open'))
@@ -124,12 +126,14 @@ class InventoryTests(base.unittest.TestCase):
   self.assertEqual(self.row(9848)['owned'],0)
 
  def test_failure_and_logout_preserve_manual_stock(self):
-  self.p.evaluate('()=>{ProductionUI.state.owned[44]=123;ProductionUI.render()}')
   self.asset_fail=True
+  self.login([SKILLS,ASSETS])
+  self.p.evaluate('()=>{ProductionUI.state.owned[44]=123;ProductionUI.render()}')
   self.wait_inventory()
   self.p.locator('[data-import-fetch]').click();self.wait_inventory()
   self.assertEqual(self.row(44)['owned'],123)
   self.asset_fail=False
+  self.p.locator('[data-import-fetch]').click();self.wait_inventory()
   self.load()
   self.assertEqual(self.row(44)['owned'],5000)
   self.p.locator('#eveIdentityButton').click()
@@ -138,7 +142,10 @@ class InventoryTests(base.unittest.TestCase):
 
  def test_system_picker_and_sources_theme_language_responsive(self):
   self.load()
+  self.p.locator('[data-import-station]').select_option('60003761')
+  self.wait_inventory()
   self.p.locator('[data-material-toggle="44"]').click()
+  self.p.evaluate('''()=>{for(const row of ProductionUI.calculate().rows)ProductionUI.state.manual[row.id]=5_000_000;ProductionUI.render()}''')
   for lang in ['es','en']:
    self.p.evaluate('setLang',lang)
    for width in [1440,980,630,390]:
@@ -149,10 +156,44 @@ class InventoryTests(base.unittest.TestCase):
      self.assertTrue(self.p.evaluate('document.documentElement.scrollWidth<=innerWidth+1'),(lang,width,light))
      geometry.append(self.p.locator('[data-import-form]').evaluate('''form=>{
       const origin=form.getBoundingClientRect();
-      return [...form.querySelectorAll("input,button")].map(el=>{
+      return [...form.querySelectorAll("select,:scope>button")].map(el=>{
        const r=el.getBoundingClientRect();return [r.x-origin.x,r.y-origin.y,r.width,r.height];
       });
      }'''))
+     if width>630:
+      self.assertTrue(self.p.locator('.fp-source-panels').evaluate("""panel=>{
+       const labels=[...panel.querySelectorAll('label>span,h4')].map(el=>el.getBoundingClientRect().top);
+       return Math.max(...labels)-Math.min(...labels)<=1;
+      }"""),(lang,width,light))
+     if width>=901:
+      self.assertTrue(self.p.locator('.fp-material-card').evaluate("""card=>{
+       const totals=[...card.querySelectorAll('.fp-budget')];
+       const headings=[...card.querySelectorAll('.fp-method-head')];
+       const fields=[...card.querySelectorAll('.fp-material-extra:not([hidden]) .fp-detail-field')].slice(1,4);
+       const stock=card.querySelector('.fp-material-table th[rowspan]:nth-child(3)');
+       const aligned=(a,b)=>Math.abs(a.getBoundingClientRect().left-b.getBoundingClientRect().left)<=2;
+       const band=card.querySelector('.fp-source-panels').getBoundingClientRect();
+       return totals.every((total,i)=>aligned(total,headings[i])&&
+        Math.abs(total.getBoundingClientRect().top-band.top)<=1&&
+        Math.abs(total.getBoundingClientRect().bottom-band.bottom)<=1)
+        &&fields.every((field,i)=>aligned(field,[stock,...headings][i]));
+      }"""),(lang,width,light))
+     budgets=self.p.locator('.fp-budget .fp-copy')
+     self.assertEqual(budgets.count(),2)
+     self.assertTrue(budgets.first.evaluate('''e=>{
+      const probe=document.createElement('span');
+      probe.style.color='var(--gain)';
+      e.parentElement.append(probe);
+      const matches=getComputedStyle(e).color===getComputedStyle(probe).color;
+      probe.remove();
+      return matches;
+     }'''))
+     self.assertTrue(budgets.evaluate_all("""buttons=>buttons.every(button=>{
+      const r=button.getBoundingClientRect(), box=button.closest('.fp-budget').getBoundingClientRect();
+      return r.left>=box.left&&r.right<=box.right+1;
+     })"""),(lang,width,light))
+     selected=self.p.locator('[data-import-station] selectedcontent')
+     self.assertTrue(selected.evaluate('el=>el.scrollWidth>el.clientWidth&&getComputedStyle(el).textOverflow==="ellipsis"'))
      self.assertEqual(self.p.locator('#fp-view-result').count(),0)
      if width==1440 and lang=='es':self.p.screenshot(path=str(OUT/f'compact-stock-es-1440-{"light" if light else "dark"}.png'),full_page=True)
     self.assertEqual(geometry[0],geometry[1],(lang,width))

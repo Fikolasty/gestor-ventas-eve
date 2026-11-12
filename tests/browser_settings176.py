@@ -56,8 +56,8 @@ class Settings176Tests(unittest.TestCase):
     for light in [False,True]:
      p.evaluate("v=>{const sw=$('themeLight');sw.checked=!v;sw.dispatchEvent(new Event('change',{bubbles:true}))}",light)
      boxes.append(p.locator('.top').bounding_box());self.assertLessEqual(p.evaluate('document.documentElement.scrollWidth-innerWidth'),1)
-     self.assertTrue(p.locator('#headerClock').evaluate('e=>{const a=e.getBoundingClientRect(),b=e.closest("header").getBoundingClientRect();return a.left>=b.left&&a.right<=b.right&&a.bottom<=b.bottom}'))
-     if width==1440:p.locator('.top').screenshot(path=str(ROOT/'tests/artifacts/theme'/('settings176-header-final2-'+lang+'-'+('light' if light else 'dark')+'.png')))
+     self.assertTrue(p.locator('#headerClock').evaluate('e=>{const a=e.getBoundingClientRect(),b=e.closest("footer").getBoundingClientRect();return a.left>=b.left&&a.right<=b.right&&a.bottom<=b.bottom}'))
+     if width==1440:p.locator('.top').screenshot(path=str(ROOT/'tests/artifacts/theme'/('header-preview-r1-'+lang+'-'+('light' if light else 'dark')+'.png')))
     self.assertEqual(boxes[0],boxes[1])
   p.close()
  def test_all_native_settings_dropdowns_fit_and_keep_their_change_handlers(self):

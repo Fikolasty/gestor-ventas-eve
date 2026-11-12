@@ -3736,8 +3736,8 @@
     "en": "Production System"
   },
   "production.chooseInventorySystem": {
-    "es": "Elige un Sistema",
-    "en": "Choose a System"
+    "es": "Selecciona Sistema",
+    "en": "Select System"
   },
   "production.inventorySystemsEmpty": {
     "es": "Sistemas del Inventario",
@@ -3746,6 +3746,14 @@
   "production.inventorySystem": {
     "es": "Sistema Solar",
     "en": "Solar System"
+  },
+  "production.chooseInventoryStation": {
+    "es": "Selecciona Estación",
+    "en": "Select Station"
+  },
+  "production.inventoryRetry": {
+    "es": "Reintentar Inventario",
+    "en": "Retry Inventory"
   },
   "production.inventoryStation": {
     "es": "Estación del Inventario",
