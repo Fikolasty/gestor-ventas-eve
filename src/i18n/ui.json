@@ -3444,8 +3444,8 @@
     "en": "Sale Analysis"
   },
   "production.update": {
-    "es": "Actualizar precios",
-    "en": "Update prices"
+    "es": "Actualizar Precios",
+    "en": "Update Prices"
   },
   "production.loading": {
     "es": "Consultando ESI…",
@@ -3730,6 +3730,18 @@
   "production.importInventory": {
     "es": "Importar inventario ESI",
     "en": "Import ESI inventory"
+  },
+  "production.defaultSystem": {
+    "es": "Sistema de Producción",
+    "en": "Production System"
+  },
+  "production.chooseInventorySystem": {
+    "es": "Elige un Sistema",
+    "en": "Choose a System"
+  },
+  "production.inventorySystemsEmpty": {
+    "es": "Sistemas del Inventario",
+    "en": "Inventory Systems"
   },
   "production.inventorySystem": {
     "es": "Sistema Solar",

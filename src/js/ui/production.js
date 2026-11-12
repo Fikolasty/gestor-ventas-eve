@@ -33,35 +33,54 @@ const ProductionUI=(()=>{
  const open=id=>root.querySelector('#'+id)?.open?'open':'';
  let expanded=new Set();
  let importBusy=false,importError='',inventory=null,importSerial=0,resumeImport=false;
- let inventoryQuery=null,importPilot=null;
+ let catalog=null,inventoryQuery=null,importPilot=null,configuredSystem=null,defaultSystem=null;
  const inventoryOverrides=new Set();
  const materialIds=[...new Set(fuels.flatMap(f=>f.materials.map(m=>m.id)))];
  const importAuth=()=>window.mmProductionInventoryAuth;
- const stockSystem=()=>inventoryQuery??(state.systemId===30000142?'Jita':String(state.systemId));
+ const productionPreference=()=>document.getElementById('cProductionSystem').value.trim();
+ const stockSystem=()=>inventoryQuery??defaultSystem?.id??'';
+ const inventorySystems=()=>[...new Set(Object.values(catalog?.systemIds??{}))].map(id=>({id,name:catalog.systemNames[id]||String(id)}))
+  .sort((a,b)=>a.name.localeCompare(b.name,lang));
  const stockUncertain=id=>inventory?.unknown.has(id)&&!inventoryOverrides.has(id);
  function setOwned(id,value){state.owned[id]=value;if(inventory)inventoryOverrides.add(id);}
  function resumeInventory(){
-  if(resumeImport&&active&&importAuth()?.identity()?.assets){resumeImport=false;fetchInventory();}
+  if(!active||root.hidden||state.tab!=='materials'||!importAuth()?.identity()?.assets)return;
+  const preference=productionPreference();
+  if(configuredSystem!==preference){
+   if(configuredSystem!==null){inventoryQuery=null;inventory=null;inventoryOverrides.clear();}
+   configuredSystem=preference;defaultSystem=null;catalog=null;
+   importSerial++;importBusy=false;importError='';
+  }
+  if(resumeImport||!catalog){resumeImport=false;fetchInventory();}
  }
- function renderMaterialSources(rows){
+ function renderMaterialSources(rows,modes){
   const pilot=importAuth()?.identity();
+  const unresolved=catalog?.locations.some(group=>!catalog.systemIds[group.root]);
   const status=importError?t(importError):inventory?
-   inventory.system.name+' · '+t(inventory.unknown.size?'inventoryPartial':'inventoryLoaded'):'';
+   inventory.system.name+' · '+t(inventory.unknown.size?'inventoryPartial':'inventoryLoaded'):unresolved?t('inventoryPartial'):'';
+  const systems=inventorySystems();
+  if(defaultSystem&&!systems.some(system=>system.id===defaultSystem.id))systems.unshift(defaultSystem);
+  const stations=[...new Set((inventory?.locations??[]).filter(group=>rows.some(row=>group.stock[row.id]>0&&!inventoryOverrides.has(row.id)))
+   .map(group=>inventory.names[group.root]||t('locationId')+' '+group.root))];
   const dataTime=Math.max(0,...rows.map(row=>row.queriedAt||0));
   const quoteHelp=dataTime?t('updated')+' '+new Date(dataTime).toLocaleString(t('labelEnUs')):t('estimate');
   return `<div class="fp-source-panels">
    <section class="fp-source-panel" aria-labelledby="fp-inventory-heading" aria-busy="${importBusy}">
     <h4 id="fp-inventory-heading">${t('inventorySystemHeading')}</h4>
     <form class="fp-import-system-form" data-import-form>
-     <input data-import-system type="text" required maxlength="80" aria-label="${t('inventorySystem')}" placeholder="${t('inventorySystem')}" value="${escape(stockSystem())}">
+     <select data-import-system aria-label="${t('inventorySystem')}" ${importBusy||!systems.length?'disabled':''}>
+      <option value="" disabled ${stockSystem()===''?'selected':''}>${escape(!pilot?.assets&&productionPreference()?productionPreference():t(importBusy?'loading':systems.length?'chooseInventorySystem':'inventorySystemsEmpty'))}</option>
+      ${systems.map(({id,name})=>`<option value="${id}" ${String(id)===String(stockSystem())?'selected':''}>${escape(name)}</option>`).join('')}
+     </select>
      <button type="submit" class="ghost" data-import-fetch ${importBusy?'disabled':''}>${t(importBusy?'loading':pilot?.assets?'importInventory':'inventoryAuthorize')}</button>
+     <button type="button" class="ghost" data-production-refresh title="${escape(quoteHelp)}" ${loading?'disabled':''}>${t(loading?'loading':'update')}</button>
     </form>
     <p class="fp-source-status" role="status">${escape(status)}</p>
-    ${pilot?.assets&&!pilot.structures&&inventory?.unknown.size?`<button type="button" class="ghost" data-import-structures>${tx('sso.authorizeSettings')}</button>`:''}
+    ${stations.length?`<ul class="fp-inventory-stations" aria-label="${t('stockLocation')}">${stations.map(station=>`<li>${escape(station)}</li>`).join('')}</ul>`:''}
+    ${pilot?.assets&&!pilot.structures&&unresolved?`<button type="button" class="ghost" data-import-structures>${tx('sso.authorizeSettings')}</button>`:''}
    </section>
-   <section class="fp-source-panel" aria-labelledby="fp-quotes-heading" aria-busy="${loading}">
-    <h4 id="fp-quotes-heading">${t('materialQuotes')}</h4>
-    <button type="button" class="ghost" data-production-refresh title="${escape(quoteHelp)}" ${loading?'disabled':''}>${t(loading?'loading':'update')}</button>
+   <section class="fp-source-panel fp-budget-panel" aria-label="${t('ready')}" aria-busy="${loading}">
+    <div class="fp-budgets">${modes.map(({label,estimate})=>`<div class="fp-budget"><h4>${label}</h4><strong>${estimate.priceComplete?money(estimate.purchases):pending()}</strong></div>`).join('')}</div>
     <p class="fp-source-status" role="status">${escape(priceNotice)}</p>
    </section>
   </div>`;
@@ -75,6 +94,12 @@ const ProductionUI=(()=>{
   });
   return places.length?`<div class="fp-detail-field fp-stock-sources"><span class="fp-detail-label">${t('stockLocation')}</span><ul>${places.join('')}</ul></div>`:'';
  }
+ function applyInventorySystem(system,ownedBeforeRequest=state.owned){
+  inventory=productionInventoryForSystem(catalog,system);inventoryQuery=String(system.id);
+  inventoryOverrides.clear();
+  for(const id of materialIds)if(state.owned[id]!==ownedBeforeRequest[id])inventoryOverrides.add(id);
+  updatePrices();
+ }
  async function fetchInventory(){
   if(importBusy)return;
   const serial=++importSerial,pilot=importAuth()?.identity();
@@ -82,14 +107,24 @@ const ProductionUI=(()=>{
   const current=()=>serial===importSerial&&pilot?.id===importAuth()?.identity()?.id;
   importBusy=true;importError='';render();
   try{
-   const system=await resolveProductionInventorySystem(stockSystem());
+   const snapshot=await productionInventory(importAuth(),materialIds);
    if(!current())return;
-   if(!system){importError='inventorySystemMissing';return;}
-   const snapshot=await productionInventory(importAuth(),materialIds,system);
-   if(!current())return;
-   inventory=snapshot;inventoryOverrides.clear();
-   for(const id of materialIds)if(state.owned[id]!==ownedBeforeRequest[id])inventoryOverrides.add(id);
-   updatePrices();
+   catalog=snapshot;
+   const systems=inventorySystems(),preferred=configuredSystem||productionPreference();
+   if(preferred&&!defaultSystem){
+    const resolved=systems.find(s=>String(s.id)===preferred||s.name.toLowerCase()===preferred.toLowerCase())
+     ??await resolveProductionInventorySystem(preferred);
+    if(!current())return;
+    defaultSystem=resolved;
+    if(defaultSystem&&state.systemId!==defaultSystem.id){
+     state.systemId=defaultSystem.id;state.index=null;systemNotice='';industryRequest++;
+    }
+   }
+   const requested=inventoryQuery??defaultSystem?.id;
+   const system=systems.find(s=>String(s.id)===String(requested)||s.name.toLowerCase()===String(requested).toLowerCase())
+    ??(String(defaultSystem?.id)===String(requested)?defaultSystem:null);
+   if(system)applyInventorySystem(system,ownedBeforeRequest);
+   else if(requested||preferred)importError='inventorySystemMissing';
   }catch(e){if(current())importError='inventoryFailed';}
   finally{if(current()){importBusy=false;render();}}
  }
@@ -102,19 +137,22 @@ const ProductionUI=(()=>{
  inventoryRoot.addEventListener('click',e=>{
   if(e.target.closest('[data-import-structures]'))authorizeInventory();
  });
- inventoryRoot.addEventListener('input',e=>{if(e.target.matches('[data-import-system]'))inventoryQuery=e.target.value;});
- inventoryRoot.addEventListener('change',e=>{if(e.target.matches('[data-import-system]'))e.stopImmediatePropagation();},true);
+ inventoryRoot.addEventListener('change',e=>{
+  if(!e.target.matches('[data-import-system]'))return;
+  e.stopImmediatePropagation();
+  const id=Number(e.target.value),system=inventorySystems().find(s=>s.id===id)??(defaultSystem?.id===id?defaultSystem:null);
+  if(system){importError='';applyInventorySystem(system);}
+ },true);
  inventoryRoot.addEventListener('submit',e=>{
   if(!e.target.matches('[data-import-form]'))return;
   e.preventDefault();
-  inventoryQuery=e.target.querySelector('[data-import-system]').value.trim();
-  if(!inventoryQuery){importError='inventorySystemMissing';render();return;}
   if(importAuth()?.identity()?.assets)fetchInventory();else authorizeInventory();
  });
  window.addEventListener('mm-eve-identity',()=>{
   const pilot=importAuth()?.identity(),id=pilot?.id??null;
   if(importPilot!==id||!pilot?.assets){
-   importSerial++;importBusy=false;inventory=null;inventoryOverrides.clear();importError='';importPilot=id;
+   importSerial++;importBusy=false;catalog=null;inventory=null;defaultSystem=null;inventoryQuery=resumeImport?inventoryQuery:null;
+   inventoryOverrides.clear();importError='';importPilot=id;
    if(active)render();
   }
   resumeInventory();
@@ -126,19 +164,19 @@ const ProductionUI=(()=>{
    const draft=JSON.parse(raw);
    if(Date.now()-draft.at<600000&&draft.state){
     for(const key of Object.keys(state))if(Object.hasOwn(draft.state,key))state[key]=draft.state[key];
-    inventoryQuery=typeof draft.system==='string'?draft.system:null;
-    state.tab='materials';resumeImport=!!inventoryQuery;
+    inventoryQuery=typeof draft.system==='string'&&draft.system?draft.system:null;
+    state.tab='materials';resumeImport=true;
     queueMicrotask(()=>{selectAppModule('production');resumeInventory();});
    }
   }
  }catch(e){}
 
  function renderMaterials(m,modes){
-  const modeHead=modes.map(({label,estimate})=>`<th class="fp-method-head" scope="colgroup" colspan="2"><span>${label}</span><strong>${estimate.priceComplete?debit(estimate.purchases):pending()}</strong></th>`).join('');
+  const modeHead=modes.map(({label})=>`<th class="fp-method-head" scope="colgroup" colspan="2">${label}</th>`).join('');
   const modeColumns=modes.map(()=>`<th class="fp-method-start" scope="col">${t('compareCost')}</th><th scope="col">${t('compareUnit')}</th>`).join('');
   return `<section role="tabpanel" id="fp-materials" aria-labelledby="fp-tab-materials" ${state.tab!=='materials'?'hidden':''}><section class="panel fp-material-card">
-   <header class="fp-section-head"><h3 class="fp-panel-title">${t('ready')}</h3><button type="button" class="btn" data-tab="result" id="fp-view-result">${t('toResult')}</button></header>
-   ${renderMaterialSources(m.rows)}
+   <header class="fp-section-head"><h3 class="fp-panel-title">${t('ready')}</h3></header>
+   ${renderMaterialSources(m.rows,modes)}
    <div class="fp-table-scroll" role="region" aria-label="${t('ready')}" tabindex="0">
    <table class="fp-material-table" aria-label="${t('ready')}"><colgroup><col><col><col><col></colgroup><colgroup><col><col></colgroup><colgroup><col><col></colgroup><thead><tr>${['labelMaterial','required','owned','missing'].map(key=>`<th scope="col" rowspan="2">${t(key)}</th>`).join('')}${modeHead}</tr><tr>${modeColumns}</tr></thead>
    ${m.rows.map((r,i)=>`<tbody class="fp-material" data-id="${r.id}" data-open="${expanded.has(String(r.id))}"><tr class="fp-material-row"><td><button type="button" class="fp-material-toggle" data-material-toggle="${r.id}" aria-expanded="${expanded.has(String(r.id))}" aria-controls="fp-detail-${r.id}" title="${t('labelPriceAndShipping')}">${escape(r.name)}</button></td>
@@ -238,10 +276,10 @@ const ProductionUI=(()=>{
    <section class="panel"><h3 class="fp-panel-title">${t('comparison')}</h3><div class="fp-comparison" style="border:0;margin:0;padding:0"><h4>${t('vsStock')}</h4><strong>${money(m.profit)}</strong><p>${t('vsStockNote')}</p></div><div class="fp-comparison"><h4>${t('vsBuy')}</h4><strong>${money(m.buySaving)}</strong><p>${t('vsBuyNote')}</p></div></section></div></details></section>`;
   root.querySelectorAll('.fp-money').forEach(span=>{const b=copyBtn(Number(span.dataset.value),span.textContent);b.classList.add('fp-copy');b.setAttribute('aria-label',(t('labelCopy'))+span.textContent);span.replaceChildren(b);});
   root.querySelectorAll('.fp-value').forEach(span=>{const b=copyBtn(span.dataset.copy,span.textContent);b.classList.remove('cp-n','isk-pos','isk-neg');b.classList.add('fp-copy');b.setAttribute('aria-label',(t('labelCopy'))+span.textContent);span.replaceChildren(b);});
-  root.querySelectorAll('.fp-method-head .fp-copy,.fp-result-metrics .fp-money .fp-copy,.fp-profit-value .fp-copy').forEach(copy=>{
+  root.querySelectorAll('.fp-budget .fp-copy,.fp-result-metrics .fp-money .fp-copy,.fp-profit-value .fp-copy').forEach(copy=>{
    const unit=document.createElement('small');unit.textContent='ISK';
    const amount=copy.textContent.slice(0,-4);
-   copy.replaceChildren(document.createTextNode(copy.closest('.fp-method-head')?amount.replace(/\.00$/,''):amount),unit);
+   copy.replaceChildren(document.createTextNode(copy.closest('.fp-budget')?amount.replace(/\.00$/,''):amount),unit);
   });
   if(tableScroll)root.querySelector('.fp-table-scroll').scrollLeft=tableScroll;
   if(active?.matches('[data-import-system]'))root.querySelector('[data-import-system]')?.focus({preventScroll:true});
@@ -251,8 +289,8 @@ const ProductionUI=(()=>{
  const stockNumber=value=>{const text=String(value).trim();if(!text)return 0;if(!/^(?:\d+|\d{1,3}(?:[,\s\u00a0]\d{3})+)$/.test(text))return null;const n=Number(text.replace(/[,\s\u00a0]/g,''));return Number.isSafeInteger(n)&&n>=0?n:null;};
  root.addEventListener('input',e=>{if(e.target.dataset.material!=='owned')return;const value=stockNumber(e.target.value);e.target.setCustomValidity(value==null?t('wholeQuantity'):'');if(value==null)return;setOwned(Number(e.target.dataset.id),value);render();});
  root.addEventListener('keydown',e=>{if(e.target.matches('[data-material=owned]')&&e.key==='Enter'){e.target.blur();return;}if(e.target.dataset.material==='owned'&&e.key==='Enter'){e.preventDefault();e.target.blur();}});
- root.addEventListener('click',e=>{const complete=e.target.closest('[data-complete]');if(complete){const row=calculateManufacturing().rows.find(r=>r.id===Number(complete.dataset.complete));if(row&&row.owned<row.required){setOwned(row.id,row.required);render();root.querySelector(`[data-complete="${row.id}"]`)?.focus();}return;}const toggle=e.target.closest('[data-material-toggle]');if(toggle){const id=toggle.dataset.materialToggle;if(expanded.has(id))expanded.delete(id);else expanded.add(id);render();root.querySelector(`[data-material-toggle="${id}"]`)?.focus({preventScroll:true});return;}const b=e.target.closest('[data-tab]');if(!b)return;state.tab=b.dataset.tab;render();const focusId=b.id==='fp-view-result'?'fp-result-heading':b.id==='fp-back-materials'?'fp-view-result':`fp-tab-${state.tab}`;root.querySelector('#'+focusId)?.focus();});
- root.addEventListener('keydown',e=>{if(!e.target.matches('.fp-tabs button')||!['ArrowLeft','ArrowRight','Home','End'].includes(e.key))return;e.preventDefault();const tabs=['plan','materials','result'];state.tab=e.key==='Home'?tabs[0]:e.key==='End'?tabs.at(-1):tabs[(tabs.indexOf(state.tab)+(e.key==='ArrowRight'?1:-1)+3)%3];render();root.querySelector(`#fp-tab-${state.tab}`).focus();});
+ root.addEventListener('click',e=>{const complete=e.target.closest('[data-complete]');if(complete){const row=calculateManufacturing().rows.find(r=>r.id===Number(complete.dataset.complete));if(row&&row.owned<row.required){setOwned(row.id,row.required);render();root.querySelector(`[data-complete="${row.id}"]`)?.focus();}return;}const toggle=e.target.closest('[data-material-toggle]');if(toggle){const id=toggle.dataset.materialToggle;if(expanded.has(id))expanded.delete(id);else expanded.add(id);render();root.querySelector(`[data-material-toggle="${id}"]`)?.focus({preventScroll:true});return;}const b=e.target.closest('[data-tab]');if(!b)return;state.tab=b.dataset.tab;render();root.querySelector(`#fp-tab-${state.tab}`)?.focus();resumeInventory();});
+ root.addEventListener('keydown',e=>{if(!e.target.matches('.fp-tabs button')||!['ArrowLeft','ArrowRight','Home','End'].includes(e.key))return;e.preventDefault();const tabs=['plan','materials','result'];state.tab=e.key==='Home'?tabs[0]:e.key==='End'?tabs.at(-1):tabs[(tabs.indexOf(state.tab)+(e.key==='ArrowRight'?1:-1)+3)%3];render();root.querySelector(`#fp-tab-${state.tab}`).focus();resumeInventory();});
  root.addEventListener('change',e=>{const key=e.target.dataset.state,id=Number(e.target.dataset.id),material=e.target.dataset.material;if(material==='owned'){const value=stockNumber(e.target.value);if(value==null)return;setOwned(id,value);e.target.value=num(value);render();return;}if(['owned','sent'].includes(material)&&(!Number.isSafeInteger(Number(e.target.value))||Number(e.target.value)<0)){e.target.setCustomValidity(t('validation'));return;}e.target.setCustomValidity?.('');if(key){state[key]=['kind','acquire','sale','facility','security'].includes(key)?e.target.value:e.target.value===''&&['install','index','fuelPrice'].includes(key)?null:Number(e.target.value);if(key==='facility'){state.facilityTax=state.facility==='station'?.25:1;if(state.facility==='station')state.rigM=state.rigT=0;if(['azbel','sotiyo'].includes(state.facility))state.rigT=state.rigM;}if(key==='rigM'&&['azbel','sotiyo'].includes(state.facility))state.rigT=state.rigM;if(key==='systemId'){state.index=null;systemNotice='';industryRequest++;}}if(material)state[material][id]=material==='included'?e.target.checked:e.target.value===''&&material==='manual'?undefined:Number(e.target.value);if(material&&material!=='owned')expanded.add(String(id));render();if(key==='fuel')updatePrices();});
 
  async function updatePrices(singleId){
@@ -287,6 +325,6 @@ const ProductionUI=(()=>{
  const cacheNames=()=>active?fuels.flatMap(f=>[f.name,...f.materials.map(m=>m.name)]):[];
  window.mmProductionCacheNames=cacheNames;
  window.mmProductionRender=()=>{if(document.body.dataset.mmView==='production')render();};
- window.mmProductionShown=()=>{active=true;root.hidden=false;render();};
- return {state,calculate,render,cacheNames,updatePrices,updateSystem,setExpanded(ids){expanded=new Set(ids.map(String));render();},setTab(tab){state.tab=tab;render();}};
+ window.mmProductionShown=()=>{active=true;root.hidden=false;render();resumeInventory();};
+ return {state,calculate,render,cacheNames,updatePrices,updateSystem,setExpanded(ids){expanded=new Set(ids.map(String));render();},setTab(tab){state.tab=tab;render();resumeInventory();}};
 })();

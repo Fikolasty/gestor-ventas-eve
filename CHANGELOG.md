@@ -1,3 +1,7 @@
+# v1.0.213 — selector de sistemas en Producción
+
+Ajustes guarda el sistema predeterminado y Materiales muestra las estaciones y los presupuestos.
+
 # v1.0.212 — inventario por sistema y rentabilidad en Producción
 
 Elige un sistema solar, carga Disponible automáticamente y actualiza las cotizaciones de Jita. Compara el costo de compra de los faltantes y el beneficio por modo de venta.

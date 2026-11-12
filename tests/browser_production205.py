@@ -2,7 +2,7 @@
 import json,pathlib,unittest
 from playwright.sync_api import sync_playwright
 ROOT=pathlib.Path(__file__).resolve().parents[1]
-OUT=ROOT/'.qa-audit/production-stock-panels-result-r2'
+OUT=ROOT/'.qa-audit/production-stock-picker-result-r1'
 class ProductionTests(unittest.TestCase):
  @classmethod
  def setUpClass(cls):
@@ -99,7 +99,7 @@ class ProductionTests(unittest.TestCase):
   field=self.p.locator('[data-material="owned"][data-id="44"]');field.fill('1.5')
   self.assertEqual(field.count(),1);self.assertFalse(field.evaluate('(e)=>e.checkValidity()'))
   field.fill('7000');self.assertEqual(self.p.evaluate('ProductionUI.calculate().rows.find(x=>x.id===44).missing'),200)
-  self.p.locator('#fp-view-result').click()
+  self.p.locator('#fp-tab-result').click()
   self.p.locator('[data-state="acquire"]').click();option=self.p.locator('[data-state="acquire"] option').nth(1)
   self.assertTrue(option.evaluate('(e)=>{const r=e.getBoundingClientRect();return document.elementFromPoint(r.x+r.width/2,r.y+r.height/2)===e}'))
   option.click();self.assertEqual(self.p.evaluate('ProductionUI.state.acquire'),'buy')
@@ -151,13 +151,13 @@ class ProductionTests(unittest.TestCase):
    s.owned[44]=2;
    ProductionUI.setTab('materials');}''')
   amounts=lambda locator: [float(v) for v in self.p.locator(locator).evaluate_all('items=>items.map(x=>x.dataset.value)')]
-  self.assertEqual(amounts('.fp-method-head .fp-money'),[-20.6,-40])
+  self.assertEqual(amounts('.fp-budget .fp-money'),[20.6,40])
   row=self.p.locator('.fp-material[data-id="44"] .fp-material-row')
   self.assertEqual(row.locator('td').count(),8)
   self.assertEqual(row.locator('td').nth(5).inner_text(),'10')
   self.assertEqual(row.locator('td').nth(7).inner_text(),'20')
-  self.p.locator('#fp-view-result').click()
-  self.assertTrue(self.p.locator('#fp-result-heading').evaluate('e=>e===document.activeElement'))
+  self.p.locator('#fp-tab-result').click()
+  self.assertTrue(self.p.locator('#fp-tab-result').evaluate('e=>e===document.activeElement'))
   self.assertEqual(amounts('.fp-result-metrics .fp-money'),[-132.6/40,-152/40])
   self.assertFalse(self.p.locator('#fp-cost-breakdown').evaluate('e=>e.open'))
   self.p.locator('#fp-cost-breakdown>summary').press('Enter')
@@ -172,15 +172,15 @@ class ProductionTests(unittest.TestCase):
   self.assertEqual(amounts('.fp-result-metrics .fp-money'),[-152/40])
   self.assertEqual(self.p.locator('.fp-cost-total').last.locator('td').all_inner_texts(),['—','—'])
   self.p.locator('#fp-back-materials').click()
-  self.assertTrue(self.p.locator('#fp-view-result').evaluate('e=>e===document.activeElement'))
-  self.assertEqual(self.p.locator('.fp-method-head .fp-pending').count(),1)
-  self.assertEqual(amounts('.fp-method-head .fp-money'),[-40])
+  self.assertTrue(self.p.locator('#fp-tab-materials').evaluate('e=>e===document.activeElement'))
+  self.assertEqual(self.p.locator('.fp-budget .fp-pending').count(),1)
+  self.assertEqual(amounts('.fp-budget .fp-money'),[40])
   self.p.evaluate('()=>{Object.defineProperty(navigator,"clipboard",{configurable:true,value:{writeText:async v=>{window.__copied=v}}});}')
-  self.p.locator('.fp-method-head .fp-money button').click()
-  self.assertEqual(self.p.evaluate('window.__copied'),'-40')
+  self.p.locator('.fp-budget .fp-money button').click()
+  self.assertEqual(self.p.evaluate('window.__copied'),'40')
   self.p.evaluate('()=>{ProductionUI.state.manual[44]=15;ProductionUI.render()}')
-  order,instant=amounts('.fp-method-head .fp-money')
-  self.assertAlmostEqual(order,-30.9);self.assertEqual(instant,-30)
+  order,instant=amounts('.fp-budget .fp-money')
+  self.assertAlmostEqual(order,30.9);self.assertEqual(instant,30)
   self.p.evaluate('()=>{ProductionUI.state.outbound=-1;ProductionUI.render()}')
   self.assertEqual(row.locator('td').count(),8)
   self.assertFalse(self.p.evaluate('ProductionUI.calculate().valid'))

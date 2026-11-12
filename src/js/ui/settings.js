@@ -191,7 +191,8 @@ $('navHome').addEventListener('click',navigateHome);
     active.querySelector('.st-l').textContent=tx('settings.general.active');
     market.querySelector('.st-g').prepend(active);
     language.className='mm-general-language';
-    const pair=document.createElement('div');pair.className='mm-general-pair';pair.append(market,language);general.append(pair);
+    const pair=document.createElement('div');pair.className='mm-general-pair';pair.append(market,language);
+    general.append(pair,general.querySelector('.st-production-default'));
     const help=document.createElement('div');help.className='mm-general-help';
     for(const keys of [['modeTitle','modeHelp'],['priceTitle','priceHelp']]){
       const part=document.createElement('div');

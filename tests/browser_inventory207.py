@@ -6,7 +6,7 @@ from urllib.parse import parse_qs, urlparse
 import browser_production205 as base
 
 ROOT=base.ROOT
-OUT=ROOT/'.qa-audit/production-stock-panels-r2'
+OUT=ROOT/'.qa-audit/production-stock-picker-r2'
 ASSETS='esi-assets.read_assets.v1'
 STRUCTURES='esi-universe.read_structures.v1'
 SKILLS='esi-skills.read_skills.v1'
@@ -30,6 +30,7 @@ class InventoryTests(base.unittest.TestCase):
   self.p.route('https://login.eveonline.com/v2/oauth/token',lambda r:r.fulfill(json={'access_token':self.token,'refresh_token':'fixture-refresh','expires_in':1200}))
   self.p.route('https://esi.evetech.net/**/characters/90000001/**',self.character)
   self.p.route('**/universe/ids/**',self.system_ids)
+  self.p.route('**/universe/systems/30001234/**',lambda r:r.fulfill(json={'name':'HY-RWO','security_status':0}))
   for station,system in [(60003760,30000142),(60003761,30000142),(60003762,30001234)]:
    self.p.route(f'**/universe/stations/{station}/**',self.station_response(station,system))
   self.p.evaluate('''()=>localStorage.setItem('mm.eve.session.v1',JSON.stringify({id:90000001,name:'Fixture pilot',refresh:'fixture-refresh',client:'114bbd2659384151ac3b0096f183dd3b'}))''')
@@ -60,22 +61,33 @@ class InventoryTests(base.unittest.TestCase):
  def station_response(self,station,system):
   return lambda route:route.fulfill(json={'name':f'Fixture station {station}','system_id':system})
 
- def load(self,system='Jita'):
-  self.p.locator('[data-import-system]').fill(system)
-  self.p.locator('[data-import-fetch]').click()
+ def wait_inventory(self):
   self.p.wait_for_function('()=>document.querySelector("#fp-inventory-heading").parentElement.getAttribute("aria-busy")==="false"')
   self.p.wait_for_function('()=>!document.querySelector("[data-production-refresh]").disabled')
+
+ def load(self,system='Jita'):
+  self.wait_inventory()
+  ids={'Jita':'30000142','HY-RWO':'30001234'}
+  self.p.locator('[data-import-system]').select_option(ids[system])
+  self.wait_inventory()
 
  def row(self,id):
   return self.p.evaluate('id=>ProductionUI.calculate().rows.find(row=>row.id===id)',id)
 
  def test_selected_system_applies_all_materials_and_refreshes_quotes(self):
   self.assertTrue(self.p.locator('[data-import-system]').is_visible())
-  self.assertEqual(self.asset_calls,0)
-  self.load('Wrong system')
-  self.assertEqual(self.asset_calls,0)
-  self.load('Jita')
-  self.assertEqual(self.asset_calls,1)
+  self.wait_inventory()
+  systems=self.p.locator('[data-import-system] option').all_text_contents()
+  self.assertIn('Jita',systems)
+  self.assertIn('HY-RWO',systems)
+  before=self.asset_calls
+  picker=self.p.locator('[data-import-system]')
+  picker.click()
+  option=picker.locator('option[value="30000142"]')
+  self.assertTrue(option.evaluate('el=>{const r=el.getBoundingClientRect();return document.elementFromPoint(r.x+r.width/2,r.y+r.height/2)===el}'))
+  option.click()
+  self.wait_inventory()
+  self.assertEqual(self.asset_calls,before)
   self.assertEqual(self.row(44)['owned'],5000)
   self.assertEqual(self.row(9848)['owned'],2500)
   self.assertEqual(self.row(3689)['owned'],0)
@@ -83,7 +95,8 @@ class InventoryTests(base.unittest.TestCase):
   self.assertEqual(self.row(44)['price'],20)
   self.assertEqual(self.row(44)['cost'],44000)
   self.assertEqual(self.p.evaluate('ProductionUI.calculate().purchases'),36944000)
-  self.assertEqual(self.p.locator('.fp-method-head .fp-money').count(),2)
+  self.assertEqual(self.p.locator('.fp-budget .fp-money').count(),2)
+  self.assertTrue(self.p.locator('.fp-budget .fp-copy').evaluate_all('buttons=>buttons.every(button=>getComputedStyle(button).color===getComputedStyle(button.closest(".fp-budget")).color)'))
   self.assertEqual(self.p.locator('[data-import-apply]').count(),0)
   self.p.locator('[data-material-toggle="44"]').click()
   sources=self.p.locator('#fp-detail-44 .fp-stock-sources')
@@ -100,7 +113,8 @@ class InventoryTests(base.unittest.TestCase):
  def test_failure_and_logout_preserve_manual_stock(self):
   self.p.evaluate('()=>{ProductionUI.state.owned[44]=123;ProductionUI.render()}')
   self.asset_fail=True
-  self.load()
+  self.wait_inventory()
+  self.p.locator('[data-import-fetch]').click();self.wait_inventory()
   self.assertEqual(self.row(44)['owned'],123)
   self.asset_fail=False
   self.load()
@@ -126,13 +140,14 @@ class InventoryTests(base.unittest.TestCase):
        const r=el.getBoundingClientRect();return [r.x-origin.x,r.y-origin.y,r.width,r.height];
       });
      }'''))
-     if width==1440 and lang=='es':self.p.screenshot(path=str(OUT/f'stock-panels-r2-es-1440-{"light" if light else "dark"}.png'),full_page=True)
+     self.assertEqual(self.p.locator('#fp-view-result').count(),0)
+     if width==1440 and lang=='es':self.p.screenshot(path=str(OUT/f'stock-picker-r2-es-1440-{"light" if light else "dark"}.png'),full_page=True)
     self.assertEqual(geometry[0],geometry[1],(lang,width))
 
  def test_consent_keeps_system_and_resumes_automatic_import(self):
   self.login([SKILLS,'esi-characters.read_standings.v1','esi-clones.read_implants.v1'])
   self.p.route('https://login.eveonline.com/v2/oauth/authorize**',lambda r:r.fulfill(body='Mock consent page'))
-  self.p.locator('[data-import-system]').fill('HY-RWO')
+  self.p.evaluate('()=>{document.querySelector("#cProductionSystem").value="HY-RWO";stSaveNow()}')
   self.p.locator('[data-import-fetch]').click()
   self.p.wait_for_url('https://login.eveonline.com/v2/oauth/authorize**')
   scopes=set(parse_qs(urlparse(self.p.url).query)['scope'][0].split())
@@ -142,6 +157,24 @@ class InventoryTests(base.unittest.TestCase):
   self.p.goto((ROOT/'index.html').as_uri(),wait_until='domcontentloaded')
   self.p.wait_for_function('()=>ProductionUI.calculate().rows.some(r=>r.id===44&&r.owned===99000)')
   self.assertIsNone(self.p.evaluate('sessionStorage.getItem("mm.production.authDraft")'))
+
+ def test_saved_production_system_applies_on_entry_and_override_is_session_only(self):
+  self.p.locator('.top-header-action').first.click()
+  self.p.locator('#settings .modern-tab').first.click()
+  self.p.locator('#cProductionSystem').fill('HY-RWO')
+  self.p.wait_for_function('()=>JSON.parse(localStorage.getItem("gestorVentas.ajustes.v1"))?.f?.cProductionSystem==="HY-RWO"')
+  for theme in ('dark','light'):
+   self.p.evaluate('(light)=>document.documentElement.classList.toggle("light",light)',theme=='light')
+   self.p.locator('#mm-settings-panel-0').screenshot(path=str(OUT/f'production-setting-es-1440-{theme}.png'))
+  self.login([SKILLS,ASSETS])
+  self.wait_inventory()
+  self.assertEqual(self.p.locator('[data-import-system]').input_value(),'30001234')
+  self.assertEqual(self.row(44)['owned'],99000)
+  self.assertEqual(self.p.evaluate('ProductionUI.state.systemId'),30001234)
+  self.load('Jita')
+  self.assertEqual(self.row(44)['owned'],5000)
+  self.assertEqual(self.p.locator('#cProductionSystem').input_value(),'HY-RWO')
+  self.assertIn('Fixture station 60003761',self.p.locator('.fp-inventory-stations').inner_text())
 
  def test_nullsec_container_locked_and_unresolved_stock(self):
   self.records.extend([
@@ -156,8 +189,8 @@ class InventoryTests(base.unittest.TestCase):
   self.load('HY-RWO')
   self.assertEqual(self.row(44)['owned'],102000)
   self.assertEqual(self.p.locator('[data-material="owned"][data-id="9848"]').input_value(),'')
-  self.assertEqual(self.p.locator('.fp-method-head .fp-pending').count(),2)
+  self.assertEqual(self.p.locator('.fp-budget .fp-pending').count(),2)
   self.p.locator('[data-material-toggle="44"]').click()
   self.assertIn('Fixture materials crate',self.p.locator('#fp-detail-44 .fp-stock-sources').inner_text())
   self.p.locator('[data-material="owned"][data-id="9848"]').fill('0')
-  self.assertEqual(self.p.locator('.fp-method-head .fp-pending').count(),0)
+  self.assertEqual(self.p.locator('.fp-budget .fp-pending').count(),0)

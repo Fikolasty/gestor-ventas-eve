@@ -123,16 +123,20 @@ async function productionInventory(auth,materialIds,system=null){
  const containers=selected.filter(g=>g.container).map(g=>g.container);
  for(let i=0;i<containers.length;i+=1000){try{const result=await (await auth.names(containers.slice(i,i+1000))).json();for(const x of result)if(containers.includes(x.item_id)&&typeof x.name==='string'&&x.name!=='None')names[x.item_id]=x.name;}catch(e){/* IDs remain usable without guessing names. */}}
  if(auth.identity()?.id!==pilot.id)throw Error('Character changed');
+ const catalog={pilot,locations,names,systems,systemIds,systemNames,itemCount:rows.length,queriedAt:Date.now(),updatedAt:stamp?Date.parse(stamp):null};
+ return system?productionInventoryForSystem(catalog,system):catalog;
+}
+function productionInventoryForSystem(catalog,system){
+ const {locations,systemIds}=catalog;
+ const selected=locations.filter(group=>systemIds[group.root]===system.id);
  const stock={},unknown=new Set();
- if(system){
-  for(const group of selected)for(const [id,quantity] of Object.entries(group.stock)){
+ for(const group of selected)for(const [id,quantity] of Object.entries(group.stock)){
    const total=(stock[id]??0)+quantity;
    if(!Number.isSafeInteger(total))throw Error('Asset quantity overflow');
    stock[id]=total;
-  }
-  for(const group of locations)if(!systemIds[group.root])for(const id of Object.keys(group.stock))unknown.add(Number(id));
  }
- return {pilot,system,locations:selected,names,systems,stock,unknown,itemCount:rows.length,queriedAt:Date.now(),updatedAt:stamp?Date.parse(stamp):null};
+ for(const group of locations)if(!systemIds[group.root])for(const id of Object.keys(group.stock))unknown.add(Number(id));
+ return {...catalog,system,locations:selected,stock,unknown};
 }
 let productionIndices=null,productionIndicesAt=0,productionIndexWait=null;
 async function productionSystem(systemId){
