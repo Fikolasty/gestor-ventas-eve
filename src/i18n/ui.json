@@ -4131,13 +4131,25 @@
     "es": "Elige qué vas a minar y cuánto tardas en descargar. Compara lo que cada nave puede recoger durante una hora completa.",
     "en": "Choose what to mine and how long unloading takes. Compare what each ship can collect over a full hour."
   },
+  "lunar.scenarioRead": {"es": "Entiende tu Escenario", "en": "Understand Your Scenario"},
+  "lunar.scenarioReadFirst": {"es": "Empieza por lo que vas a minar. Elige el mineral, hielo o gas que tienes a mano y las naves y el equipo que podrías usar. Si normalmente vuelves a descargar, cuenta el viaje de ida, la descarga y el regreso. Si tu flota comprime ese material en el sitio, el cálculo puede ahorrarte ese viaje.", "en": "Start with the ore, ice or gas available to you, then consider the ships and fittings you can use. Include the round trip and unloading time. On-grid compression can save that trip."},
+  "lunar.scenarioReadSecond": {"es": "El resultado estima cuánto recogerías en una hora completa. Una nave puede extraer más rápido y aun así quedar atrás si llena antes la bodega.", "en": "The result estimates what you can collect in a full hour. A ship can mine faster and still fall behind if its hold fills sooner."},
+  "lunar.scenarioConfigure": {"es": "Elige las condiciones que quieres probar. Jita Buy es el precio por unidad al vender al instante. Jita Sell es el precio por unidad de las órdenes de venta. El resultado se actualiza con cada cambio.", "en": "Choose the conditions you want to try. Jita Buy is the unit price when selling immediately. Jita Sell is the unit price of sell orders. The result updates with each change."},
+  "lunar.scenarioBoostHelp": {"es": "Bonificaciones al Máximo", "en": "Maximum Boosts"},
+  "lunar.resetScenario": {"es": "Restablecer", "en": "Reset"},
+  "lunar.boostPrefix": {"es":"Con apoyo de flota, la estimación usa","en":"With fleet support, the estimate uses"},
+  "lunar.boostMax": {"es": "{ship} al máximo", "en": "{ship} at maximum"},
+  "lunar.boost.cycle": {"es": "Ciclo", "en": "Cycle"},
+  "lunar.boost.critical": {"es": "Probabilidad de crítico", "en": "Critical chance"},
+  "lunar.boost.residue": {"es": "Residuo", "en": "Residue"},
+  "lunar.boostDrones": {"es": "Los drones no reciben el boost.", "en": "Drones do not receive boosts."},
   "lunar.session": {
-    "es": "Tu Sesión de Minería",
-    "en": "Your Mining Session"
+    "es": "Configura tu Sesión",
+    "en": "Configure Your Session"
   },
   "lunar.result": {
-    "es": "Resultado del Escenario",
-    "en": "Scenario Result"
+    "es": "Resultado de la Sesión",
+    "en": "Session Result"
   },
   "lunar.firstPlace": {
     "es": "★ 1.er Lugar",
@@ -4156,8 +4168,8 @@
     "en": "Effective m³/h"
   },
   "lunar.unload": {
-    "es": "Descarga (s)",
-    "en": "Unload (s)"
+    "es": "Tiempo Muerto (s)",
+    "en": "Downtime (s)"
   },
   "lunar.unloadHelp": {
     "es": "El tiempo de descarga incluye el viaje de ida, la descarga y el regreso a la roca.",
@@ -4188,24 +4200,24 @@
     "en": "Material"
   },
   "lunar.field.shipClass": {
-    "es": "Tipo de Nave",
-    "en": "Ship Class"
+    "es": "Nave",
+    "en": "Ship"
   },
   "lunar.field.tier": {
     "es": "Fitting",
     "en": "Fit"
   },
   "lunar.field.lv": {
-    "es": "Habilidades",
-    "en": "Skills"
+    "es": "Habilidad",
+    "en": "Skill"
   },
   "lunar.field.imp": {
     "es": "Implantes",
     "en": "Implants"
   },
   "lunar.field.boost": {
-    "es": "Boost de Flota",
-    "en": "Fleet Boost"
+    "es": "Boost",
+    "en": "Boost"
   },
   "lunar.field.met": {
     "es": "Unidad",
@@ -4303,6 +4315,11 @@
     "es": "Lee cada fila para comparar naves con el mismo tipo de fitting. Luego baja por una columna para ver cuánto cambia el rendimiento de esa nave al cambiar de equipo.",
     "en": "Read across a row to compare ships with the same fitting tier. Then read down a column to see how a change in equipment affects that ship."
   },
+  "lunar.chooseMaterial": {"es": "Escoge Material", "en": "Choose Material"},
+  "lunar.jitaPrice": {"es": "Precio", "en": "Price"},
+  "lunar.valuation": {"es": "Formato", "en": "Format"},
+  "lunar.compressed": {"es": "Comprimido", "en": "Compressed"},
+  "lunar.uncompressed": {"es": "Sin comprimir", "en": "Uncompressed"},
   "lunar.shipDetails": {
     "es": "Bodega, Viajes y Bonificaciones",
     "en": "Hold, Trips and Bonuses"

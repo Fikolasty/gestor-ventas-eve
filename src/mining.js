@@ -14,8 +14,9 @@ const MineUI=(()=>{
   const TIERS=['T1','T2','Faction'],TL={T1:'Full T1',T2:'Full T2',Faction:'Facción'};
   const MATL={moon:'Moon ore',ice:'Hielo',gas:'Gas'};
   const DEF={moon:'Monazite',ice:'Krystallos',gas:'Golden Cytoserocin'};
-  const S={view:'ships',mat:'moon',lv:5,imp:0,boost:'',met:'m3',tier:'Faction',shipClass:'barge',costShip:'Covetor',item:{...DEF},base:'buy',cmp:true,
-    att:'base',patt:'base',acc:1,accq:'1',hrs:3,barge:'Retriever',ptier:'T1',plexManual:null,esPlex:15,omegaPlex:500,cmpv:'1',boost2:'',pimp:'1',dmat:'moon',freeSP:1000000,daysAfter:30,iceLoc:'jita',unloadSec:65};
+  const SCENARIO_DEFAULTS={mat:'moon',lv:5,imp:0,boost:'',met:'m3',tier:'Faction',shipClass:'barge',base:'buy',cmp:true,iceLoc:'jita',unloadSec:65};
+  const S={...SCENARIO_DEFAULTS,view:'ships',costShip:'Covetor',item:{...DEF},
+    att:'base',patt:'base',acc:1,accq:'1',hrs:3,barge:'Retriever',ptier:'T1',plexManual:null,esPlex:15,omegaPlex:500,cmpv:'1',boost2:'',pimp:'1',dmat:'moon',freeSP:1000000,daysAfter:30};
 
   // Solo la configuración del plan minero se persiste, sin inventario ni precios ESI.
   const MINING_PLAN_KEY='marketMoves.miningPlan.v1';
@@ -207,7 +208,7 @@ const MineUI=(()=>{
     pruneMiningPriceCache();
     const id=priceId();if(!id)return;const st=$q('.mn-pst');
     if(PRICE[id]&&Date.now()-PRICE[id].at<5*60e3){paint();return;}
-    st.classList.remove('err');st.replaceChildren(document.createTextNode('Consultando Jita 4-4…'));
+    st.classList.remove('err');
     const my=loading=id;
     try{await fetchPrice(id);}catch(e){
       // Repaint all financial views as well as the price field: an ESI error
@@ -353,7 +354,7 @@ const MineUI=(()=>{
      '</div>'+
    '</details>'+
    '<div class="mn-turnaround"><div class="mn-turnaround-heading"><label for="mnUnloadSec">Tiempo muerto por descarga</label>'+INFO('travel')+'</div>'+
-     '<div class="mn-turnaround-input"><input id="mnUnloadSec" type="number" min="0" max="900" step="5" value="65" inputmode="numeric"><span>segundos</span>'+
+     '<div class="mn-turnaround-input"><input id="mnUnloadSec" type="number" min="0" max="900" step="1" value="65" inputmode="numeric"><span>segundos</span>'+
        '<button type="button" class="mn-unload-default" title="Restaurar 65 segundos">Restablecer</button></div>'+
      '<small id="mnUnloadExplain">Incluye traslado, descarga y regreso. ⓘ para ver el desglose.</small></div>'+
    '</div>'+
@@ -364,7 +365,7 @@ const MineUI=(()=>{
     '<div class="mn-v-ships">'+
    '<section class="mn-controls-unified" aria-labelledby="mnScenarioTitle">'+
      '<div class="mn-guide-heading">'+
-       '<span class="mn-guide-number" aria-hidden="true">1</span>'+
+       '<span class="mn-guide-number" aria-hidden="true">2</span>'+
        '<div class="mn-guide-copy"><h2 id="mnScenarioTitle">'+tx('lunar.session')+'</h2>'+
          '<p>Elige las condiciones de minería. Cada cambio actualiza automáticamente las recomendaciones y los resultados de abajo.</p></div>'+
      '</div>'+
@@ -400,17 +401,16 @@ const MineUI=(()=>{
        '<p class="mn-iii-estimate" hidden><span class="mn-guidance-symbol" aria-hidden="true">i</span><span><strong>Skills III · escenario estimado.</strong> Los datos IV/V se extrapolan y algunos módulos podrían requerir skills mayores; los implantes están desactivados.</span></p>'+
        '<p class="mn-imp-estimate" hidden><span class="mn-guidance-symbol" aria-hidden="true">i</span><span><strong>Implantes 4% · estimación.</strong> Los datos de origen solo incluyen Sin y 5%; el coste del implante 4% no forma parte de la inversión.</span></p>'+
      '</div>'+
-     '<p class="mn-bst" hidden></p>'+
-     '</aside>'+
+      '</aside>'+
    '</section>'+
    '<div class="mn-price" hidden>'+
-     '<label>Qué minas<select class="mn-item"></select></label>'+
-     '<label>Precio en Jita 4-4<select class="mn-base"><option value="buy">Jita Buy (vender al instante)</option><option value="sell">Jita Sell (con orden)</option></select></label>'+
-     '<label>Valorar como<select class="mn-cmp"><option value="1">Comprimido (1:1 en unidades)</option><option value="0">Sin comprimir</option></select></label>'+
+     '<label><span data-i18n="lunar.chooseMaterial">Escoge Material</span><select class="mn-item"></select></label>'+
+     '<label><span data-i18n="lunar.jitaPrice">Precio en Jita 4-4</span><select class="mn-base"><option value="buy">Jita Buy (vender al instante)</option><option value="sell">Jita Sell (con orden)</option></select></label>'+
+     '<label><span data-i18n="lunar.valuation">Formato del Material</span><select class="mn-cmp"><option value="1" data-i18n="lunar.compressed">Comprimido</option><option value="0" data-i18n="lunar.uncompressed">Sin comprimir</option></select></label>'+
      '<p class="mn-pst"></p>'+
    '</div>'+
    '<section class="mn-results-header" aria-labelledby="mnResultsTitle">'+
-     '<div class="mn-guide-heading"><span class="mn-guide-number" aria-hidden="true">2</span>'+
+     '<div class="mn-guide-heading"><span class="mn-guide-number" aria-hidden="true">3</span>'+
        '<div class="mn-guide-copy"><h2 id="mnResultsTitle">'+tx('lunar.result')+'</h2>'+
          '<p>'+tx('lunar.effectiveIntro')+'</p></div></div>'+
    '</section>'+
@@ -421,7 +421,6 @@ const MineUI=(()=>{
    '</section>'+
    '<div class="mn-result-title"><div><h3>Mejores naves por escalón</h3><p>La ganadora se calcula con las condiciones y tiempos de viaje elegidos.</p></div></div>'+
    '<div class="mn-kpi"></div>'+
-   '<div class="mn-result-title"><div><h3>Comparación de naves</h3><p>Producción, bodega, viajes y bonos de la clase seleccionada.</p></div></div>'+
    '<div class="mn-all-ships"></div>'+
    '<div class="mn-card mn-yield-card"><h3 data-i18n="lunar.yieldByFit">Rendimiento por Fitting</h3><div class="mn-yield-matrix"></div></div>'+
    '<div class="mn-card"><h3>Fit y Detalle · Inversión por Nave</h3><p class="mn-note">Componentes reales del fit elegido, con cantidad, precio unitario y subtotal. La inversión se recalcula al actualizar ESI o cambiar un precio manual.</p>'+
@@ -549,9 +548,9 @@ const MineUI=(()=>{
     Object.keys(groups).forEach(g=>{const og=document.createElement('optgroup');og.label=g;
       groups[g].forEach(m=>{const o=new Option(m.n,m.n);o.className='no-tr';og.appendChild(o);});sel.appendChild(og);});
     sel.value=S.item[S.mat];}
-  function paintPrice(){const box=$q('.mn-price');box.hidden=S.met!=='isk';if(box.hidden)return;
+  function paintPrice(){const box=$q('.mn-price'),st=$q('.mn-pst');box.hidden=S.met!=='isk';st.hidden=box.hidden;if(box.hidden)return;
     $q('.mn-base').value=S.base;$q('.mn-cmp').value=S.cmp?'1':'0';
-    const m=item(),p=PRICE[priceId()],st=$q('.mn-pst');st.classList.remove('err');
+    st.classList.remove('err');
     if(S.mat==='ice'&&S.iceLoc!=='jita'){
       const val=iceUnitPrice();
       st.textContent=val==null?'Faltan precios para el escenario de hielo; revisa ESI o introduce precios manuales.':
@@ -559,21 +558,43 @@ const MineUI=(()=>{
         ': '+NF2.format(val)+' ISK netos por unidad de hielo minada.';
       st.classList.toggle('err',val==null);return;
     }
-    const v=unitPrice();if(v==null){
-      st.classList.toggle('err',!priceInflight.has(Number(priceId())));
-      st.replaceChildren(document.createTextNode(marketPriceState(priceId(),S.base)));return;
+    const id=priceId(),material=item();
+    const buy=manualQuote(id,'buy')??PRICE[id]?.buy;
+    const sell=manualQuote(id,'sell')??PRICE[id]?.sell;
+    const quote=value=>Number.isFinite(value)?NF2.format(value)+' ISK':'—';
+    const primary=h('span','mn-quote-buy');
+    primary.append(h('span','','Jita Buy · ISK/u.'),h('strong','',quote(buy)));
+    const name=h('span','mn-quote-material');
+    if(id&&material){
+      const icon=h('img');
+      icon.src='https://images.evetech.net/types/'+id+'/icon?size=32';
+      icon.alt='';
+      icon.width=24;
+      icon.height=24;
+      icon.addEventListener('error',()=>icon.remove(),{once:true});
+      name.append(icon,h('span','',(S.cmp&&material.cid?'Compressed ':'')+material.n));
     }
-    const header=h('span','mn-pst-title','Precio '+(S.base==='buy'?'Jita Buy':'Jita Sell')+' · por unidad');
-    const amount=h('b','mn-pst-main',NF2.format(v)+' ISK');
-    const meta=h('span','mn-pst-meta',(S.cmp&&m.cid?'Compressed ':'')+m.n+
-      ' · '+NF1.format(m.vol)+' m³/u'+
-      ' · '+(manualQuote(priceId(),S.base)!=null?'✎ manual':'ESI '+(p?.at?new Date(p.at).toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'}):'')));
-    st.replaceChildren(header,amount,meta);}
-  function paintBoost(){const p=$q('.mn-bst'),b=BOOST.get(S.boost);p.hidden=!b;if(!b)return;
+    const secondary=h('span','mn-quote-sell');
+    secondary.append(h('span','','Jita Sell'),h('strong','',quote(sell)));
+    st.replaceChildren(primary,name,secondary);
+    if(buy==null&&sell==null){
+      const status=marketPriceState(id,S.base);
+      if(status)st.append(h('small','',status));
+    }
+  }
+  function paintBoost(){
+    const help=$q('.mn-scenario-boost'),b=BOOST.get(S.boost);
+    help.hidden=!b;
+    if(!b)return;
+    help.firstChild.textContent=' '+tx('lunar.boostPrefix')+' ';
+    const tip=help.querySelector('[role=tooltip]');
     const pc=v=>(v>0?'+':'−')+NF1.format(Math.abs(v))+'%';
-    p.replaceChildren(h('b','',b.n+' al máximo'),document.createTextNode(' (Mining Foreman Burst II, Mining Director V, mindlink, skill de la nave V y '+b.core+'): '),
-      document.createTextNode('ciclo '+pc(b.cycle)+' · probabilidad de crítico '+pc(b.crit)+' · residuo '+pc(b.residue)+'. '),
-      document.createTextNode('Los drones no se benefician.'));}
+    tip.replaceChildren(h('strong','',tx('lunar.boostMax',{ship:b.n})));
+    for(const [key,value] of [['cycle',b.cycle],['critical',b.crit],['residue',b.residue]]){
+      tip.append(h('span','',tx('lunar.boost.'+key)+' '+pc(value)));
+    }
+    tip.append(h('small','',tx('lunar.boostDrones')));
+  }
   function best(tier,ex,key){let b=null;SHIPS.filter(s=>EX.has(s)===ex).forEach(s=>{const r=row(s,tier);if(!r)return;const v=key(r);if(v==null)return;if(!b||v>b.v)b={s,r,v};});return b;}
   function paintTake(){const p=$q('.mn-take');p.replaceChildren();
     const ex=S.shipClass==='exhumer',winner=best(S.tier,ex,val),autonomy=best(S.tier,ex,r=>r.fill);
@@ -1515,21 +1536,56 @@ const MineUI=(()=>{
     const originalUnloadLabel=unloadLabel.textContent;
     const unloadInput=unload.querySelector('input');
     const unloadReset=unload.querySelector('.mn-unload-default');
-    const heading=controls.querySelector('.mn-guide-copy p');
-    heading.dataset.i18n='lunar.unloadHelp';
-    heading.textContent=tx('lunar.unloadHelp');
-    basic.append(unload);
-    controls.insertBefore(basic,groups);
-    const advanced=h('details','mn-editorial-details');
-    const summary=h('summary','',tx('lunar.advanced'));
-    summary.dataset.i18n='lunar.advanced';
+    const localized=(tag,key)=>{
+      const node=h(tag,'',tx(key));
+      node.dataset.i18n=key;
+      return node;
+    };
+    const intro=h('section','mn-scenario-intro');
+    const title=h('h2');
+    const number=h('span','mn-guide-number','1');
+    number.setAttribute('aria-hidden','true');
+    title.append(number,localized('span','lunar.scenarioRead'));
+    intro.append(title,localized('p','lunar.scenarioReadFirst'),localized('p','lunar.scenarioReadSecond'));
+    controls.before(intro);
+    const copy=localized('p','lunar.scenarioConfigure');
+    controls.querySelector('.mn-guide-copy p').replaceWith(copy);
     const context=$q('.mn-context-aside');
     context.hidden=true;
     groups.hidden=true;
+    const panel=h('div','mn-scenario-panel');
     const notes=h('div','mn-editorial-notes');
-    notes.append(context.querySelector('.mn-guidance'),context.querySelector('.mn-bst'));
-    advanced.append(summary,advancedFields,notes,groups,context);
-    controls.append(advanced);
+    notes.append(context.querySelector('.mn-guidance'));
+    const boostHelp=h('span','mn-scenario-boost');
+    const trigger=localized('button','lunar.scenarioBoostHelp');
+    trigger.type='button';
+    trigger.setAttribute('aria-describedby','mnBoostTooltip');
+    const tip=h('span');
+    tip.id='mnBoostTooltip';
+    tip.setAttribute('role','tooltip');
+    boostHelp.append(document.createTextNode(' '+tx('lunar.boostPrefix')+' '),trigger,document.createTextNode('.'),tip);
+    boostHelp.addEventListener('keydown',event=>{
+      if(event.key==='Escape')boostHelp.classList.add('is-dismissed');
+    });
+    for(const event of ['pointerleave','focusout','click']){
+      boostHelp.addEventListener(event,()=>boostHelp.classList.remove('is-dismissed'));
+    }
+    copy.after(boostHelp);
+    controls.querySelector('.mn-guide-heading').append($q('.mn-pst'));
+    const reset=localized('button','lunar.resetScenario');
+    reset.type='button';
+    reset.className='mn-scenario-reset';
+    reset.addEventListener('click',()=>{
+      Object.assign(S,SCENARIO_DEFAULTS,{item:{...DEF}});
+      if(!selectedShips().includes(S.costShip))S.costShip=selectedShips()[0];
+      unloadInput.value=String(S.unloadSec);
+      fillItems();
+      paint();
+      needPrices();
+    });
+    basic.append(unload,...advancedFields.children,$q('.mn-price'),reset);
+    panel.append(basic,notes);
+    controls.insertBefore(panel,groups);
     const comparison=h('section','mn-comparison-page');
     const comparisonHeader=h('header','mn-scenario-hero mn-compare-hero');
     const comparisonTitle=h('h2','',tx('lunar.compareTitle')+' ');
@@ -1596,32 +1652,17 @@ const MineUI=(()=>{
     const resultNodes=[];
     for(let node=recap;node;node=node.nextElementSibling)resultNodes.push(node);
     const shipList=$q('.mn-all-ships');
-    const shipListHeading=shipList.previousElementSibling;
     const analysis=$q('.mn-analysis-panels');
     const analysisNav=$q('.mn-analysis-tabs');
     const analysisAnchor=document.createComment('Mining analysis tools');
     analysisNav.before(analysisAnchor);
-    const methodDetails=h('details','mn-editorial-details');
-    const methodSummary=h('summary','',tx('lunar.method'));
-    methodSummary.dataset.i18n='lunar.method';
-    const methodCopy=h('p','',tx('lunar.methodCopy'));
-    methodCopy.dataset.i18n='lunar.methodCopy';
-    methodDetails.append(methodSummary,methodCopy);
-    $q('.mn-result-spotlight').after(methodDetails);
-    methodDetails.append($q('.mn-turnaround .mn-info-popup').cloneNode(true));
-    methodDetails.lastElementChild.className='mn-editorial-method-note';
-    const compare=h('button','mn-editorial-compare',tx('lunar.label4'));
-    compare.type='button';
-    compare.dataset.i18n='lunar.label4';
-    compare.addEventListener('click',()=>document.querySelector('[data-guide-view=compare]').click());
-    methodDetails.after(compare);
     return ()=>{
       const ships=S.view==='ships';
       if(ships){
         if(unload.parentElement!==basic)basic.append(unload);
         if(toolbar.parentElement!==tools){
           selectedDetail.before(shipList);
-          fittingDetail.append(...resultNodes.filter(node=>node!==shipList&&node!==shipListHeading));
+          fittingDetail.append(...resultNodes.filter(node=>node!==shipList));
           comparisonContent.append(tools);
           tools.append(toolbar,refinery,sharedIntro,shared);
         }
@@ -1645,7 +1686,7 @@ const MineUI=(()=>{
       if(ships)unloadLabel.dataset.i18n='lunar.unload';
       else delete unloadLabel.dataset.i18n;
       const label=ships?tx('lunar.unload'):originalUnloadLabel;
-      unloadReset.hidden=ships&&Number(unloadInput.value)===65;
+      unloadReset.hidden=ships;
       if(unloadLabel.textContent!==label)unloadLabel.textContent=label;
       for(const select of controls.querySelectorAll('[data-scenario-key]')){
         select.disabled=select.dataset.scenarioKey==='imp'&&S.lv===3;
@@ -1693,13 +1734,13 @@ const MineUI=(()=>{
     root.addEventListener('click',e=>{
       const b=e.target.closest('[data-mining-jump]');if(!b)return;
       if(!['ships','plan','max'].includes(b.dataset.miningJump))return;
-      S.view=b.dataset.miningJump;paint();needPrices();
+      showView(b.dataset.miningJump);
       $q('.mn-toolbar').scrollIntoView({behavior:'smooth',block:'start'});
     });
     $q('.mn-skills-reload').addEventListener('click',()=>loadSkillBooks(true));
     $q('.mn-ice-market').addEventListener('change',e=>{S.iceLoc=e.target.value;paint();needPrices();});
     const unload=$q('#mnUnloadSec');
-    unload.addEventListener('change',()=>{const v=Number(unload.value);
+    unload.addEventListener('change',()=>{const v=unload.valueAsNumber;
       S.unloadSec=Number.isFinite(v)?Math.max(0,Math.min(900,v)):65;
       unload.value=String(S.unloadSec);paint();});
     $q('.mn-unload-default').addEventListener('click',()=>{S.unloadSec=65;unload.value='65';paint();});
@@ -1742,5 +1783,6 @@ const MineUI=(()=>{
       window.addEventListener('pagehide',()=>chartResize.disconnect(),{once:true});
     }}
   // el panel empieza oculto: al abrirlo se dibujan los gráficos con su ancho real
-  return{mount,shown(){if(root){paint();requestAnimationFrame(drawCharts);}}};
+  function showView(view){S.view=view;paint();needPrices();}
+  return{mount,showView,shown(){if(root){paint();requestAnimationFrame(drawCharts);}}};
 })();

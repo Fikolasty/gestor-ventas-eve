@@ -2494,3 +2494,5 @@ v1.0.219 candidata. Escenario con encabezado editorial, pestañas centradas y na
 v1.0.220 candidata. Escenario completo con diseño editorial, controles reales, resultado destacado y herramientas originales. Pendiente Actions y verificación pública.
 
 v1.0.221 candidata. Guías restaura el fondo de estación. Minería Lunar y Escenario comparten tipografía principal y panel. Se iguala la numeración, se retiran los iconos de información de los campos básicos y el detalle se abre en Comparar Naves. Pendiente Actions y verificación pública.
+
+Escenario v1.0.223 aprobado por el propietario. Cotización Buy/Sell al lado de la guía, once campos al valorar en ISK/h, selectores opacos, reinicio de sesión, ayuda inline y render con degradado. Build y pruebas focales de Chromium, copy y Minería aprobados. Certificación remota pendiente.

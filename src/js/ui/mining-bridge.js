@@ -19,12 +19,11 @@ miningGuideTools.addEventListener('click',event=>{
   tools.hidden=view==='guide';
   tools.dataset.guideView=view;
   if(view==='guide')return;
-  tools.querySelector('[data-mining-jump=ships]')?.click();
+  MineUI.showView('ships');
   if(view==='fits')tools.querySelector('.mn-analysis-tabs [data-tab=fits]')?.click();
   if(view==='compare'&&tools.querySelector('.mn-analysis-tabs [data-tab=fits][aria-selected=true]')){
     tools.querySelector('.mn-analysis-tabs [data-tab=visual]')?.click();
   }
-  miningGuideTools.scrollIntoView({block:'start',behavior:'instant'});
 });
 $('copy-vrd').addEventListener('click',async()=>{
   try{
