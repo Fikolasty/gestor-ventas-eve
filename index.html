@@ -7,7 +7,7 @@
 <meta name="referrer" content="no-referrer">
 <title>Market Moves+ · SIGMA GRINDSET</title>
 <style>
-/* ================= Market Moves+ v1.0.223 =================
+/* ================= Market Moves+ v1.0.224 =================
    Paleta: azul de base, naranja = acción, verde/rojo = ganancia/pérdida.
    Sin backdrop-filter: el vidrio se finge con rgba + bordes. */
 *{box-sizing:border-box;margin:0;padding:0}
@@ -7213,11 +7213,9 @@ body.mm-mining .hero>.title{display:none!important} body.mm-mining .hero{padding
 #mining #mnRoot .mn-editorial-details>summary::after{display:none}
 #mining #mnRoot .mn-editorial-details[open]{padding-bottom:16px}
 #mining #mnRoot .mn-editorial-details[open]>summary{border-bottom:1px solid var(--line2);margin-bottom:12px}
-#mining .mn-editorial-method-note{color:var(--mut);margin-top:8px}
 #mining #mnRoot .mn-editorial-details :is(.mn-config-groups,.mn-context-aside)[hidden]{display:none!important}
-#mining #mnRoot .mn-editorial-advanced{border:0;background:transparent;padding:0}
-#mining .mn-editorial-notes :is(.mn-guidance,.mn-bst){background:none;border:0;box-shadow:none;padding:0;margin:0}
-#mining .mn-editorial-notes :is(.mn-guidance p,.mn-bst):not([hidden]){margin-top:12px;color:var(--mut)}
+#mining .mn-editorial-notes .mn-guidance{background:none;border:0;box-shadow:none;padding:0;margin:0}
+#mining .mn-editorial-notes .mn-guidance p:not([hidden]){margin-top:12px;color:var(--mut)}
 #mining .mn-editorial-notes .mn-guidance-symbol{display:none}
 @supports (appearance:base-select){
  #mining :is(.mn-editorial-basic,.mn-price) select,#mining :is(.mn-editorial-basic,.mn-price) select::picker(select){appearance:base-select}
@@ -7967,8 +7965,6 @@ html.light #mining #mnRoot .mn-scenario-panel select{--scenario-select-bg:#eae9e
 .mn-price .mn-pst{font-size:.86rem;color:var(--mut);line-height:1.45;flex:1 1 16rem}
 .mn-price .mn-pst b{color:var(--txt);font-weight:600}
 .mn-price .mn-pst.err{color:var(--loss)}
-.mn-bst{margin:0;font-size:.86rem;color:var(--mut);line-height:1.5;padding:8px 12px;border-radius:var(--r-sm);border:1px solid rgba(222,220,209,.09);background:#151515}
-.mn-bst b{color:var(--txt);font-weight:600}
 .mn-take{font-family:var(--f-serif);color:#e5e3da;font-size:1.03rem;line-height:1.6;margin:0}
 .mn-take b{color:var(--txt);font-weight:600}
 .mn-sec{font:600 .74rem var(--f-ui);letter-spacing:.06em;text-transform:uppercase;color:var(--dim);margin:6px 0 -6px}
@@ -7996,8 +7992,6 @@ html.light #mining #mnRoot .mn-scenario-panel select{--scenario-select-bg:#eae9e
 .mn td.cell i{position:absolute;right:8px;bottom:3px;height:3px;border-radius:2px;opacity:.85}
 .mn td.cell.best span{font-weight:700;color:var(--txt)}
 .mn .mn-w{color:var(--thrust);cursor:help}
-.mn-leg{display:flex;flex-wrap:wrap;gap:14px;font-size:.8rem;color:var(--mut);margin-bottom:6px}
-.mn-leg i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:6px;vertical-align:-1px}
 .mn-chart{position:relative;min-height:20rem}
 .mn-chart.sm{min-height:13rem}
 .mn-chart svg{display:block;width:100%;height:auto;overflow:visible}
@@ -8280,7 +8274,6 @@ html.light #mining .mn-price-overridden .mn-edit-source{color:#8e5a06}
 #mining .mn-ship-name h4{font:600 1.14rem var(--f-serif);margin:2px 0 0;color:var(--txt)}
 #mining .mn-ship-crown{border:1px solid rgba(226,176,88,.4);background:rgba(233,170,71,.09);color:#ecc17d;padding:4px 6px;border-radius:6px;white-space:nowrap;font-size:.68rem}
 #mining .mn-ship-production strong{display:block;font:650 1.18rem var(--f-num);color:var(--txt)}
-#mining .mn-ship-production small{display:block;color:var(--mut);font-size:.76rem;margin-top:2px}
 #mining .mn-ship-stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:0}
 #mining .mn-ship-stats>div{padding:7px 8px;border:1px solid rgba(222,220,209,.08);background:rgba(255,255,255,.025);border-radius:6px;min-width:0}
 #mining .mn-ship-stats dt{font-size:.7rem;color:var(--mut);margin:0 0 2px}
@@ -8313,9 +8306,6 @@ html.light #mining .mn-kpi .mn-kpi-winner{background:rgba(224,170,79,.12)}
 #mining .mn-price label{font-size:.94rem;font-weight:650;color:var(--txt);display:flex;flex-direction:column;min-width:0;gap:6px}
 #mining .mn-price select{width:100%;min-width:0;max-width:100%;margin:0;font-size:.98rem;line-height:1.35;padding:10px}
 #mining .mn-price .mn-pst{min-width:0;display:flex;flex-direction:column;justify-content:center;gap:6px;padding:10px 14px;border:1px solid rgba(222,220,209,.13);border-radius:9px;background:rgba(255,255,255,.035);font-size:.86rem;line-height:1.5}
-#mining .mn-pst-title{font-size:.78rem;font-weight:650;letter-spacing:.02em;color:var(--mut)}
-#mining .mn-pst-main{font:700 1.34rem/1.18 var(--f-num);color:var(--txt);font-variant-numeric:tabular-nums}
-#mining .mn-pst-meta{font-size:.76rem;line-height:1.45;color:var(--mut);overflow-wrap:anywhere}
 #mining .mn-fit-cards{display:grid;grid-template-columns:1fr;gap:15px}
 #mining .mn-fit-card{min-width:0;padding:16px;border:1px solid rgba(222,220,209,.14);border-radius:12px;background:rgba(255,255,255,.025)}
 #mining .mn-fit-head{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap;border-bottom:1px solid rgba(222,220,209,.12);padding-bottom:10px;margin-bottom:14px}
@@ -8404,7 +8394,6 @@ html.light #mining .mn-price .mn-pst{background:rgba(255,255,255,.74);border-col
 #mining .mn-guidance .mn-iii-estimate[hidden],#mining .mn-guidance .mn-imp-estimate[hidden]{display:none}
 #mining .mn-guidance strong{color:var(--txt);font-weight:650}
 #mining .mn-guidance-symbol{display:grid;place-items:center;flex:none;width:18px;height:18px;border-radius:50%;background:rgba(206,164,97,.18);color:var(--ion);font:700 .76rem var(--f-ui);margin-top:1px}
-#mining .mn-controls-unified .mn-bst{margin:14px 0 0;padding:11px 13px;border-radius:9px;background:rgba(100,160,200,.05)}
 #mining .mn-price{margin:0;border-color:rgba(222,220,209,.13)}
 #mining .mn-results-header{padding:14px 2px 0;margin-top:3px}
 #mining .mn-results-recap{border:1px solid rgba(222,220,209,.15);border-left:3px solid rgba(226,171,96,.6);border-radius:12px;background:linear-gradient(125deg,rgba(226,171,96,.075),rgba(20,21,23,.55) 65%);padding:16px 19px}
@@ -8466,7 +8455,6 @@ html.light #mining .mn-guidance .mn-iii-estimate,html.light #mining .mn-guidance
 #mining .mn-context-hint{font-size:.85rem;line-height:1.6;color:var(--mut);margin:0}
 #mining .mn-context-aside .mn-guidance{margin-top:10px}
 #mining .mn-context-aside .mn-guidance p{font-size:.87rem;line-height:1.6}
-#mining .mn-context-aside>.mn-bst{margin-top:13px!important;font-size:.86rem;line-height:1.6}
 #mining details.mn-info{position:relative;display:inline-flex;align-items:center;overflow:visible;border:0;padding:0!important;margin:0;background:transparent!important;border-radius:50%;box-shadow:none;line-height:1}
 #mining details.mn-info>summary{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;min-width:20px;padding:0;margin:0;border:1px solid rgba(122,169,214,.56);background:rgba(100,149,205,.10);color:#9dccf3;border-radius:50%;list-style:none;cursor:help;font:650 15px/1 var(--f-ui)}
 #mining details.mn-info>summary::before{display:none!important;content:none!important}
@@ -8557,7 +8545,7 @@ html.light #mining .mn-fit-fallback{border-color:rgba(40,100,150,.22);background
    typography, spacing and card surfaces as Sales, without changing calculations. */
 #mining,#mining .mn{font-family:var(--f-ui);color:var(--txt)}
 #mining .mn{margin-top:12px;gap:14px}
-#mining :is(.mn-card,.mn-price,.mn-bst,.mn-kpi>div,.mn-price-editor,.mn-ice-settings,.mn-turnaround,.mn-guidance,.mn-config-group,.mn-context-aside,.mn-ship-card,.mn-fit-budget,.mn-results-recap,.mn-shared-intro,.mn-config-group-intro){
+#mining :is(.mn-card,.mn-price,.mn-kpi>div,.mn-price-editor,.mn-ice-settings,.mn-turnaround,.mn-guidance,.mn-config-group,.mn-context-aside,.mn-ship-card,.mn-fit-budget,.mn-results-recap,.mn-shared-intro,.mn-config-group-intro){
   border:1px solid var(--line)!important;
   border-radius:var(--r-md)!important;
   background:var(--surface-card)!important;
@@ -8568,7 +8556,7 @@ html.light #mining .mn-fit-fallback{border-color:rgba(40,100,150,.22);background
 #mining :is(.mn-card h3,.mn-result-title,.mn-sec,.mn-config-group h3){
   font-family:var(--f-ui)!important;color:var(--txt)!important;
 }
-#mining :is(.mn-card .mn-note,.mn-lbl,.mn-bst,.mn-pst,.mn-price label,.mn-kpi small,.mn-shared-intro small){
+#mining :is(.mn-card .mn-note,.mn-lbl,.mn-pst,.mn-price label,.mn-kpi small,.mn-shared-intro small){
   color:var(--mut)!important;
 }
 #mining :is(.mn-kpi b,.mn-kpi .v,.mn-take,.mn-card h3,.mn-ship-stats b){font-family:var(--f-ui)!important}
@@ -8577,7 +8565,7 @@ html.light #mining .mn-fit-fallback{border-color:rgba(40,100,150,.22);background
 }
 #mining :is(.mn-views button,.mn-toolbar button,.mn-config-group button){font-family:var(--f-ui)}
 #mining .mn-module-heading{margin-bottom:16px}
-html.light #mining :is(.mn-card,.mn-price,.mn-bst,.mn-kpi>div,.mn-price-editor,.mn-ice-settings,.mn-turnaround,.mn-guidance,.mn-config-group,.mn-context-aside,.mn-ship-card,.mn-fit-budget,.mn-results-recap,.mn-shared-intro,.mn-config-group-intro){
+html.light #mining :is(.mn-card,.mn-price,.mn-kpi>div,.mn-price-editor,.mn-ice-settings,.mn-turnaround,.mn-guidance,.mn-config-group,.mn-context-aside,.mn-ship-card,.mn-fit-budget,.mn-results-recap,.mn-shared-intro,.mn-config-group-intro){
   background:var(--surface-card)!important;
   border-color:var(--line)!important;
   color:var(--txt)!important;
@@ -10388,13 +10376,13 @@ Mining Drone I x5</pre><button type="button" id="copy-vrd" data-i18n="lunar.labe
 <button type="button" class="totop" id="toTop" aria-label="Volver arriba" title="Volver arriba (Inicio)" hidden><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 14l6-6 6 6"/></svg></button>
 <footer class="foot">
   <p class="foot-sec"><span class="ic i-lock" aria-hidden="true"></span>Tu inventario no se guarda: al cerrar o recargar se borra. Solo tus Ajustes quedan en este navegador.</p>
-  <div class="foot-by">Creado por <b>Fiko McGivert</b> · <span class="mm-footer-corp-logo vg" role="img" aria-label="Vanguardia DR"></span>Vanguardia DR · SIGMA GRINDSET · <span class="ver">v1.0.223</span></div>
+  <div class="foot-by">Creado por <b>Fiko McGivert</b> · <span class="mm-footer-corp-logo vg" role="img" aria-label="Vanguardia DR"></span>Vanguardia DR · SIGMA GRINDSET · <span class="ver">v1.0.224</span></div>
 </footer>
 
 <script>
 'use strict';
 /* ============================================================
-   Market Moves+ v1.0.223 — SIGMA GRINDSET / Vanguardia DR
+   Market Moves+ v1.0.224 — SIGMA GRINDSET / Vanguardia DR
    Flujo:  pegado → items → carga (ESI: precios, volúmenes, historial) → verificación → plan → vista
      1. Pegado      parsePaste(): parser posicional de columnas de EVE (Name · Quantity · … · Volume · Est. Price).
      2. Carga       esiItems(): trae todo lo que falta; mientras carga, refresh() NO pinta (S.loading).
@@ -16543,7 +16531,7 @@ const MineUI=(()=>{
     const controls=$q('.mn-controls-unified');
     const groups=$q('.mn-config-groups');
     const basic=h('div','mn-editorial-basic');
-    const advancedFields=h('div','mn-editorial-basic mn-editorial-advanced');
+    const advancedFields=document.createDocumentFragment();
     for(const key of ['mat','shipClass','tier','lv','imp','boost','met']){
       const original=groups.querySelector('[data-k="'+key+'"]');
       const field=original.closest('.mn-config-field');
