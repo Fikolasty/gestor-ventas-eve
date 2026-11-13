@@ -1500,7 +1500,7 @@ const MineUI=(()=>{
     const controls=$q('.mn-controls-unified');
     const groups=$q('.mn-config-groups');
     const basic=h('div','mn-editorial-basic');
-    const advancedFields=h('div','mn-editorial-basic mn-editorial-advanced');
+    const advancedFields=document.createDocumentFragment();
     for(const key of ['mat','shipClass','tier','lv','imp','boost','met']){
       const original=groups.querySelector('[data-k="'+key+'"]');
       const field=original.closest('.mn-config-field');

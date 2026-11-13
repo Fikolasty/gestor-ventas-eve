@@ -142,11 +142,9 @@ body.mm-mining .hero>.title{display:none!important} body.mm-mining .hero{padding
 #mining #mnRoot .mn-editorial-details>summary::after{display:none}
 #mining #mnRoot .mn-editorial-details[open]{padding-bottom:16px}
 #mining #mnRoot .mn-editorial-details[open]>summary{border-bottom:1px solid var(--line2);margin-bottom:12px}
-#mining .mn-editorial-method-note{color:var(--mut);margin-top:8px}
 #mining #mnRoot .mn-editorial-details :is(.mn-config-groups,.mn-context-aside)[hidden]{display:none!important}
-#mining #mnRoot .mn-editorial-advanced{border:0;background:transparent;padding:0}
-#mining .mn-editorial-notes :is(.mn-guidance,.mn-bst){background:none;border:0;box-shadow:none;padding:0;margin:0}
-#mining .mn-editorial-notes :is(.mn-guidance p,.mn-bst):not([hidden]){margin-top:12px;color:var(--mut)}
+#mining .mn-editorial-notes .mn-guidance{background:none;border:0;box-shadow:none;padding:0;margin:0}
+#mining .mn-editorial-notes .mn-guidance p:not([hidden]){margin-top:12px;color:var(--mut)}
 #mining .mn-editorial-notes .mn-guidance-symbol{display:none}
 @supports (appearance:base-select){
  #mining :is(.mn-editorial-basic,.mn-price) select,#mining :is(.mn-editorial-basic,.mn-price) select::picker(select){appearance:base-select}
