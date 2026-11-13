@@ -7,7 +7,7 @@
 <meta name="referrer" content="no-referrer">
 <title>Market Moves+ · SIGMA GRINDSET</title>
 <style>
-/* ================= Market Moves+ v1.0.225 =================
+/* ================= Market Moves+ v1.0.226 =================
    Paleta: azul de base, naranja = acción, verde/rojo = ganancia/pérdida.
    Sin backdrop-filter: el vidrio se finge con rgba + bordes. */
 *{box-sizing:border-box;margin:0;padding:0}
@@ -7333,7 +7333,8 @@ html.light #mining #mnRoot .mn-price select{color-scheme:light}
 #mining #mnRoot .mn-price option{font-weight:500;color:var(--txt)}
 
 #mining #mnRoot .mn-scenario-intro{padding:24px 0 22px;border-bottom:1px solid var(--line2)}
-#mining #mnRoot .mn-scenario-intro h2{font:750 24px/1.3 var(--f-ui);margin:0 0 12px}
+#mining #mnRoot .mn-scenario-intro h2{display:flex;align-items:baseline;gap:10px;font:750 24px/1.3 var(--f-ui);margin:0 0 12px}
+#mining #mnRoot .mn-scenario-intro .mn-guide-number{display:inline;height:auto;margin:0}
 #mining #mnRoot .mn-scenario-intro p{max-width:78ch;font-size:16px;line-height:1.65;margin:0 0 10px}
 #mining #mnRoot>.mn-scenario-hero h2 span{color:var(--clay)}
 #mining #mnRoot>.mn-scenario-hero::after{background:linear-gradient(90deg,transparent,var(--clay),transparent)}
@@ -10402,13 +10403,13 @@ Mining Drone I x5</pre><button type="button" id="copy-vrd" data-i18n="lunar.labe
 <button type="button" class="totop" id="toTop" aria-label="Volver arriba" title="Volver arriba (Inicio)" hidden><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 14l6-6 6 6"/></svg></button>
 <footer class="foot">
   <p class="foot-sec"><span class="ic i-lock" aria-hidden="true"></span>Tu inventario no se guarda: al cerrar o recargar se borra. Solo tus Ajustes quedan en este navegador.</p>
-  <div class="foot-by">Creado por <b>Fiko McGivert</b> · <span class="mm-footer-corp-logo vg" role="img" aria-label="Vanguardia DR"></span>Vanguardia DR · SIGMA GRINDSET · <span class="ver">v1.0.225</span></div>
+  <div class="foot-by">Creado por <b>Fiko McGivert</b> · <span class="mm-footer-corp-logo vg" role="img" aria-label="Vanguardia DR"></span>Vanguardia DR · SIGMA GRINDSET · <span class="ver">v1.0.226</span></div>
 </footer>
 
 <script>
 'use strict';
 /* ============================================================
-   Market Moves+ v1.0.225 — SIGMA GRINDSET / Vanguardia DR
+   Market Moves+ v1.0.226 — SIGMA GRINDSET / Vanguardia DR
    Flujo:  pegado → items → carga (ESI: precios, volúmenes, historial) → verificación → plan → vista
      1. Pegado      parsePaste(): parser posicional de columnas de EVE (Name · Quantity · … · Volume · Est. Price).
      2. Carga       esiItems(): trae todo lo que falta; mientras carga, refresh() NO pinta (S.loading).
