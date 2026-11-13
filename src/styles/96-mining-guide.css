@@ -262,7 +262,8 @@ html.light #mining #mnRoot .mn-price select{color-scheme:light}
 #mining #mnRoot .mn-price option{font-weight:500;color:var(--txt)}
 
 #mining #mnRoot .mn-scenario-intro{padding:24px 0 22px;border-bottom:1px solid var(--line2)}
-#mining #mnRoot .mn-scenario-intro h2{font:750 24px/1.3 var(--f-ui);margin:0 0 12px}
+#mining #mnRoot .mn-scenario-intro h2{display:flex;align-items:baseline;gap:10px;font:750 24px/1.3 var(--f-ui);margin:0 0 12px}
+#mining #mnRoot .mn-scenario-intro .mn-guide-number{display:inline;height:auto;margin:0}
 #mining #mnRoot .mn-scenario-intro p{max-width:78ch;font-size:16px;line-height:1.65;margin:0 0 10px}
 #mining #mnRoot>.mn-scenario-hero h2 span{color:var(--clay)}
 #mining #mnRoot>.mn-scenario-hero::after{background:linear-gradient(90deg,transparent,var(--clay),transparent)}
