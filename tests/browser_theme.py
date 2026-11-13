@@ -740,12 +740,13 @@ class ThemeBrowserTests(unittest.TestCase):
         self.assertIn("no siempre descuentan",self.page.locator(".mn-reading-caution").inner_text())
         buttons=self.page.locator("[data-mining-jump]")
         self.assertEqual(buttons.count(),3)
+        self.page.locator(".mn-comparison-tools > summary").click()
         self.page.locator('[data-k=view] [data-v=plan]').click()
         expect(self.page.locator(".mn-v-plan")).to_be_visible()
         self.page.locator('[data-k=view] [data-v=max]').click()
         expect(self.page.locator(".mn-v-max")).to_be_visible()
         self.page.locator('[data-k=view] [data-v=ships]').click()
-        expect(self.page.locator(".mn-v-ships")).to_be_visible()
+        expect(self.page.locator(".mn-comparison-page")).to_be_visible()
         self.page.evaluate("setLang('en')")
         expect(self.page.locator("#mnReadingTitle")).to_have_text(
             "From your first barge to your first Omega")
@@ -811,6 +812,7 @@ class ThemeBrowserTests(unittest.TestCase):
         from playwright.sync_api import expect
         self.page.evaluate("selectAppModule('mining')")
         self.page.locator('[data-guide-view="compare"]').click()
+        self.page.locator('.mn-comparison-tools > summary').click()
         editor = self.page.locator('#mining .mn-price-editor')
         editor.wait_for(state='attached', timeout=10000)
         for light in (False, True):
