@@ -4182,5 +4182,161 @@
   "lunar.effectiveIntro": {
     "es": "Rendimiento efectivo con los viajes incluidos.",
     "en": "Effective yield including travel time."
+  },
+  "lunar.field.mat": {
+    "es": "Material",
+    "en": "Material"
+  },
+  "lunar.field.shipClass": {
+    "es": "Tipo de Nave",
+    "en": "Ship Class"
+  },
+  "lunar.field.tier": {
+    "es": "Fitting",
+    "en": "Fit"
+  },
+  "lunar.field.lv": {
+    "es": "Habilidades",
+    "en": "Skills"
+  },
+  "lunar.field.imp": {
+    "es": "Implantes",
+    "en": "Implants"
+  },
+  "lunar.field.boost": {
+    "es": "Boost de Flota",
+    "en": "Fleet Boost"
+  },
+  "lunar.field.met": {
+    "es": "Unidad",
+    "en": "Unit"
+  },
+  "lunar.option.mat.moon": {
+    "es": "Mineral lunar",
+    "en": "Moon ore"
+  },
+  "lunar.option.mat.ice": {
+    "es": "Hielo",
+    "en": "Ice"
+  },
+  "lunar.option.mat.gas": {
+    "es": "Gas",
+    "en": "Gas"
+  },
+  "lunar.option.shipClass.barge": {
+    "es": "Barcazas",
+    "en": "Barges"
+  },
+  "lunar.option.shipClass.exhumer": {
+    "es": "Exhumers",
+    "en": "Exhumers"
+  },
+  "lunar.option.tier.T1": {
+    "es": "T1",
+    "en": "T1"
+  },
+  "lunar.option.tier.T2": {
+    "es": "T2",
+    "en": "T2"
+  },
+  "lunar.option.tier.Faction": {
+    "es": "Facción",
+    "en": "Faction"
+  },
+  "lunar.option.lv.3": {
+    "es": "III · estimado",
+    "en": "III · estimated"
+  },
+  "lunar.option.lv.4": {
+    "es": "IV",
+    "en": "IV"
+  },
+  "lunar.option.lv.5": {
+    "es": "V",
+    "en": "V"
+  },
+  "lunar.option.imp.0": {
+    "es": "Sin implantes",
+    "en": "No implants"
+  },
+  "lunar.option.imp.4": {
+    "es": "4%",
+    "en": "4%"
+  },
+  "lunar.option.imp.5": {
+    "es": "5%",
+    "en": "5%"
+  },
+  "lunar.option.boost.none": {
+    "es": "Sin boost",
+    "en": "No boost"
+  },
+  "lunar.compareTitle": {
+    "es": "COMPARAR",
+    "en": "COMPARE"
+  },
+  "lunar.compareAccent": {
+    "es": "NAVES",
+    "en": "SHIPS"
+  },
+  "lunar.comparisonTools": {
+    "es": "Herramientas de Minería",
+    "en": "Mining Tools"
+  },
+  "lunar.compareIntro": {
+    "es": "Mira cuánto rinde cada nave con las condiciones que elegiste en Escenario.",
+    "en": "See how much each ship yields under the conditions you chose in Scenario."
+  },
+  "lunar.compareStep.choose": {
+    "es": "Elige tu Nave",
+    "en": "Choose Your Ship"
+  },
+  "lunar.compareStep.choose.copy": {
+    "es": "Empieza por el rendimiento por hora. Si minas sin compresión, abre la ficha de una nave y mira cuánto tarda en llenar la bodega y cuántos viajes harías.",
+    "en": "Start with the hourly yield. If you mine without compression, open a ship to see how quickly its hold fills and how many trips you would make."
+  },
+  "lunar.compareStep.compare": {
+    "es": "Compara los Fittings",
+    "en": "Compare Fittings"
+  },
+  "lunar.compareStep.compare.copy": {
+    "es": "Lee cada fila para comparar naves con el mismo tipo de fitting. Luego baja por una columna para ver cuánto cambia el rendimiento de esa nave al cambiar de equipo.",
+    "en": "Read across a row to compare ships with the same fitting tier. Then read down a column to see how a change in equipment affects that ship."
+  },
+  "lunar.shipDetails": {
+    "es": "Bodega, Viajes y Bonificaciones",
+    "en": "Hold, Trips and Bonuses"
+  },
+  "lunar.compareStep.fleet": {
+    "es": "Compara el Apoyo de Flota",
+    "en": "Compare Fleet Support"
+  },
+  "lunar.compareStep.fleet.copy": {
+    "es": "Si vas a minar en flota, compara la nave que elegiste con y sin apoyo. El apoyo puede acortar los ciclos y, cuando permite comprimir en el sitio, ahorrar viajes de descarga.",
+    "en": "If you mine in a fleet, compare your selected ship with and without support. Boosts can shorten cycles, and on-grid compression can save unloading trips."
+  },
+  "lunar.fleetDetails": {
+    "es": "Comparar Porpoise, Orca y Rorqual",
+    "en": "Compare Porpoise, Orca and Rorqual"
+  },
+  "lunar.fleetNote": {
+    "es": "El cálculo supone boosts al máximo y compresión en el sitio cuando aplica. Los drones no reciben el boost.",
+    "en": "Assumes maximum boosts and on-grid compression where applicable. Drones do not receive boosts."
+  },
+  "lunar.noSupport": {
+    "es": "Sin Apoyo",
+    "en": "No Support"
+  },
+  "lunar.yieldByFit": {
+    "es": "Rendimiento por Fitting",
+    "en": "Yield by Fitting"
+  },
+  "lunar.yieldScale": {
+    "es": "Rendimiento efectivo. Las líneas usan la misma escala.",
+    "en": "Effective yield. The lines use the same scale."
+  },
+  "lunar.yieldFitting": {
+    "es": "Fitting",
+    "en": "Fitting"
   }
 }

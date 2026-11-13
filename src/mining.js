@@ -134,7 +134,10 @@ const MineUI=(()=>{
     if(!(eff>0)||!(hold>0))return eff;
     return eff/(1+eff*(seconds-120)/(3600*hold));
   }
-  const minSec=s=>Math.floor(s/60)+' min '+String(Math.round(s%60)).padStart(2,'0')+' s';
+  const minSec=s=>{
+    const seconds=Math.round(s);
+    return Math.floor(seconds/60)+' min '+String(seconds%60).padStart(2,'0')+' s';
+  };
 
   // Guristas / norte Nullsec: Golden Cytoserocin (Tenal), Amber Cytoserocin (Vale),
   // Mykoserocin que aparece en Venal/Tenal. Se excluyen gases de WH y otras regiones.
@@ -144,7 +147,7 @@ const MineUI=(()=>{
         matByName=new Map(MATS.map(m=>[m.n,m]));
   const MOON_ORDER=['Exceptional (R64)','Rare (R32)','Uncommon (R16)','Common (R8)','Ubiquitous (R4)'];
   const sortedMats=mat=>MATS.filter(m=>m.cat===mat).sort((a,b)=>(mat==='moon'?MOON_ORDER.indexOf(a.grp)-MOON_ORDER.indexOf(b.grp):0)||a.n.localeCompare(b.n,'en'));
-  let root=null,$q=null,drawn=false,lastW=0;
+  let root=null,$q=null,lastW=0;
 
   // ---------- precio y métrica ----------
   const item=()=>matByName.get(S.item[S.mat]);
@@ -153,7 +156,6 @@ const MineUI=(()=>{
   const iskh=r=>{const m=item(),p=unitPrice();return m&&p!=null?r.eff/m.vol*p:null;};
   const val=r=>S.met==='isk'?iskh(r):r.eff;
   const fmtV=v=>v==null?'—':(S.met==='isk'?cmpISK(v)+' ISK/h':NF0.format(v)+' m³/h');
-  const fmtAx=v=>S.met==='isk'?cmpISK(v):(v>=1000?NF0.format(v/1000)+'k':NF0.format(v));
 
   const ESI='https://esi.evetech.net/latest',FORGE=10000002,JITA44=60003760;
   let loading=null,miningCooldownUntil=0;
@@ -421,7 +423,7 @@ const MineUI=(()=>{
    '<div class="mn-kpi"></div>'+
    '<div class="mn-result-title"><div><h3>Comparación de naves</h3><p>Producción, bodega, viajes y bonos de la clase seleccionada.</p></div></div>'+
    '<div class="mn-all-ships"></div>'+
-   '<div class="mn-card"><h3>Comparativa visual</h3><p class="mn-note">Producción efectiva de las naves seleccionadas y sus tres escalones de fit.</p><div class="mn-leg"></div><div class="mn-chart mn-bars"></div></div>'+
+   '<div class="mn-card mn-yield-card"><h3 data-i18n="lunar.yieldByFit">Rendimiento por Fitting</h3><div class="mn-yield-matrix"></div></div>'+
    '<div class="mn-card"><h3>Fit y Detalle · Inversión por Nave</h3><p class="mn-note">Componentes reales del fit elegido, con cantidad, precio unitario y subtotal. La inversión se recalcula al actualizar ESI o cambiar un precio manual.</p>'+
      '<div class="mn-fit-cards"></div><p class="mn-note mn-invst" style="margin-top:10px"></p></div>'+
    '<div class="mn-card mn-training"><h3>Ruta recomendada de entrenamiento</h3><p class="mn-note">Empieza por desbloquear tu nave, aumenta el yield y después especialízate. Días acumulados aproximados desde personaje nuevo y precios de skillbooks en Jita Sell.</p>'+
@@ -616,6 +618,7 @@ const MineUI=(()=>{
     image.alt='';
     image.width=size;
     image.height=size;
+    image.addEventListener('error',()=>image.remove(),{once:true});
     return image;
   }
   function paintSpotlight(winner){
@@ -651,22 +654,63 @@ const MineUI=(()=>{
     }
     host.append(card,table);
   }
+  let comparisonShip;
+  function paintFleetSupport(ship){
+    const host=$q('.mn-fleet-values');
+    if(!ship){host.replaceChildren();return;}
+    const base=calcRow('',S.lv,S.lv===3?0:S.imp,S.mat,S.tier,ship)?.eff;
+    host.previousElementSibling.textContent=ship;
+    host.replaceChildren(...[['',0],['Porpoise',42244],['Orca',28606],['Rorqual',28352]].map(([boost,id])=>{
+      const card=h('div','mn-fleet-ship');
+      const yieldPerHour=calcRow(boost,S.lv,S.lv===3?0:S.imp,S.mat,S.tier,ship)?.eff;
+      if(id){
+        const image=h('img');
+        image.src='https://images.evetech.net/types/'+id+'/render?size=256';
+        image.alt='';
+        image.loading='lazy';
+        card.append(image);
+      }
+      card.append(h('b','',boost||tx('lunar.noSupport')),h('strong','',Number.isFinite(yieldPerHour)?NF0.format(yieldPerHour)+' m³/h':'—'));
+      if(boost&&base>0&&Number.isFinite(yieldPerHour))card.append(h('small','',NF1.format((yieldPerHour/base-1)*100)+'%'));
+      return card;
+    }));
+  }
   function paintAllShips(){
-    const host=$q('.mn-all-ships');host.replaceChildren();
+    const host=$q('.mn-all-ships');
+    const ships=selectedShips();
+    const panel=$q('.mn-selected-ship');
+    host.replaceChildren();
     const ex=S.shipClass==='exhumer',winner=best(S.tier,ex,r=>r.eff);
+    if(!ships.includes(comparisonShip))comparisonShip=winner?.s||ships[0];
+    panel.replaceChildren();
+    paintFleetSupport(comparisonShip);
     paintSpotlight(winner);
-    for(const ship of selectedShips()){
+    for(const ship of ships){
         const r=row(ship,S.tier);if(!r)continue;
-        const win=winner?.s===ship,card=h('article','mn-ship-card'+(win?' mn-ship-winner':''));
-        const head=h('header','mn-ship-head'),names=h('div','mn-ship-name');
-        names.append(h('small','',ex?'EXHUMER · '+TL[S.tier]:'BARGE · '+TL[S.tier]),h('h4','',ship));
-        const icon=shipImage(ship,'icon',32);
-        if(icon)head.append(icon);
+        const win=winner?.s===ship,card=h('div','mn-ship-card'+(win?' mn-ship-winner':''));
+        card.dataset.ship=ship;
+        const summary=h('button','mn-ship-summary');
+        summary.type='button';
+        summary.setAttribute('aria-pressed',String(ship===comparisonShip));
+        summary.addEventListener('click',()=>{
+          comparisonShip=ship;
+          paintAllShips();
+          host.querySelector('[aria-pressed=true]')?.focus({preventScroll:true});
+        });
+        const detail=h('div','mn-ship-detail');
+        const head=h('div','mn-ship-head'),names=h('div','mn-ship-name');
+        names.append(h('h4','',ship));
+        const render=shipImage(ship,'render',512);
+        if(render){
+          const portrait=h('div','mn-ship-portrait');
+          portrait.append(render);
+          summary.append(portrait);
+        }
         head.append(names);
         if(win){const star=h('span','mn-ship-crown','★ Mejor '+(ex?'Exhumer':'Barge'));star.title=document.documentElement.lang==='en'?'Highest effective yield in its class and tier':'Mayor rendimiento efectivo en su clase y escalón';head.append(star);}
-        card.append(head);
+        summary.append(head);
         const production=h('div','mn-ship-production');
-        production.append(h('strong','',fmtV(val(r))),h('small','','Efectivo · '+NF0.format(r.tot)+' m³/h brutos'));card.append(production);
+        production.append(h('strong','',fmtV(val(r))));summary.append(production);
         const stats=h('dl','mn-ship-stats');
         [
           ['Bodega',NF0.format(r.hold)+' m³'],
@@ -678,38 +722,51 @@ const MineUI=(()=>{
           ['Ciclo de módulo',NF2.format(r.cyc)+' s'],
           ['Crítico',NF2.format(r.critP)+'%']
         ].forEach(([title,value])=>{const div=h('div','');div.append(h('dt','',title),h('dd','',value));stats.append(div);});
-        card.append(stats,h('div','mn-ship-bonus-title',document.documentElement.lang==='en'?'Ship and skill bonuses':'Bonificaciones de nave y habilidades'));
-        const ul=h('ul','mn-ship-bonuses');bonusParts(ship,S.mat).forEach(t=>ul.append(h('li','',t)));card.append(ul);
-        if(r.notes?.length)card.append(h('small','mn-ship-notes','⚠ '+r.notes.join(' · ')));
+        detail.append(stats,h('div','mn-ship-bonus-title',document.documentElement.lang==='en'?'Ship and skill bonuses':'Bonificaciones de nave y habilidades'));
+        const ul=h('ul','mn-ship-bonuses');bonusParts(ship,S.mat).forEach(t=>ul.append(h('li','',t)));detail.append(ul);
+        if(r.notes?.length)detail.append(h('small','mn-ship-notes','⚠ '+r.notes.join(' · ')));
+        card.append(summary);
+        if(ship===comparisonShip){detail.prepend(h('h4','',ship));panel.append(detail);}
         host.append(card);
     }
   }
-  function paintBars(){const box=$q('.mn-bars'),lg=$q('.mn-leg');lg.replaceChildren();
-    TIERS.forEach((t,i)=>{const s=h('span');s.append(h('i','bg'+(i+1)),document.createTextNode(TL[t]));lg.appendChild(s);});
-    box.querySelectorAll('svg,.mn-empty').forEach(n=>n.remove());const W=box.clientWidth;if(W<50)return;
-    const data=selectedShips().map(s=>({s,rows:TIERS.map(t=>row(s,t))}));
-    const max=Math.max(0,...data.flatMap(d=>d.rows.map(r=>r&&val(r)!=null?val(r):0)));
-    if(!(max>0)){
-      const message=S.met==='isk'?(S.mat==='ice'&&S.iceLoc!=='jita'?
-        'Faltan cotizaciones para valorar el hielo con la ruta seleccionada. Revisa Ajustes y Editar precios.':
-        marketPriceState(priceId(),S.base)):'No hay datos de extracción para este escenario.';
-      box.appendChild(h('div','mn-empty',message));return;
-    }
-    const H=340,mL=86,mR=58,mT=4,mB=22,svg=el('svg',{viewBox:'0 0 '+W+' '+H,role:'img','aria-label':'Producción por nave y escalón'});
-    const tk=ticks(max,W<480?3:5),top=tk[tk.length-1],x=v=>mL+(W-mL-mR)*v/top;
-    const band=(H-mT-mB)/data.length,inner=band*.78,bh=inner/3;
-    tk.forEach(v=>{svg.appendChild(el('line',{x1:x(v),x2:x(v),y1:mT,y2:H-mB,class:'gl'}));svg.appendChild(el('text',{x:x(v),y:H-4,'text-anchor':'middle',class:'tk'},fmtAx(v)));});
-    const tt=tip(box);
-    data.forEach((d,si)=>{const y0=mT+si*band+(band-inner)/2;
-      svg.appendChild(el('text',{x:mL-8,y:y0+inner/2,dy:'.35em','text-anchor':'end',class:'lb'+(EX.has(d.s)?' ex':'')},d.s));
-      d.rows.forEach((r,i)=>{if(!r)return;const tot=val(r);if(tot==null)return;const k=r.tot>0?tot/r.tot:0,mod=r.mod*k,y=y0+i*bh,hh=bh-2;
-        svg.appendChild(el('rect',{x:x(0),y,height:hh,width:Math.max(0,x(mod)-x(0)),rx:2,class:'f'+(i+1)}));
-        if(r.dr>0)svg.appendChild(el('rect',{x:x(mod),y,height:hh,width:Math.max(0,x(tot)-x(mod)),rx:2,class:'f'+(i+1),'fill-opacity':.42}));
-        svg.appendChild(el('text',{x:x(tot)+4,y:y+hh/2,dy:'.35em',class:'vl'},fmtAx(tot)));
-        const hit=el('rect',{x:mL,y,height:bh,width:W-mL,fill:'transparent'});
-        hit.addEventListener('mousemove',ev=>tt.show(ev,d.s+' · '+TL[TIERS[i]],[fmtV(tot),'Módulos '+NF0.format(r.mod)+' m³/h · Drones '+NF0.format(r.dr)+' m³/h','Bodega llena en '+NF1.format(r.fill)+' min']));
-        hit.addEventListener('mouseleave',()=>tt.hide());svg.appendChild(hit);});});
-    box.appendChild(svg);}
+  function paintYieldMatrix(){
+    const host=$q('.mn-yield-matrix');
+    const ships=selectedShips();
+    const yields=TIERS.map(tier=>ships.map(ship=>{
+      const result=row(ship,tier);
+      return result?val(result):null;
+    }));
+    const max=Math.max(0,...yields.flat().filter(Number.isFinite));
+    const table=h('table');
+    table.createCaption().textContent=tx('lunar.yieldScale');
+    const headers=table.createTHead().insertRow();
+    [tx('lunar.yieldFitting'),...ships].forEach(label=>{
+      const th=h('th','',label);
+      th.scope='col';
+      headers.append(th);
+    });
+    const body=table.createTBody();
+    yields.forEach((values,index)=>{
+      const tr=body.insertRow(),th=h('th','',TL[TIERS[index]]);
+      th.scope='row';
+      tr.append(th);
+      values.forEach(value=>{
+        const cell=tr.insertCell();
+        cell.append(h('strong','',fmtV(value)));
+        if(max>0&&Number.isFinite(value)){
+          const track=h('span','mn-yield-track');
+          track.setAttribute('aria-hidden','true');
+          const bar=h('span','mn-yield-bar');
+          bar.style.inlineSize=(100*value/max)+'%';
+          if(value===max)bar.classList.add('mn-yield-best');
+          track.append(bar);
+          cell.append(track);
+        }
+      });
+    });
+    host.replaceChildren(table);
+  }
   function fitRows(ship){
     const k=[Math.max(4,S.lv),S.mat,S.tier,ship].join('|');
     return MINE.fits[k]||[];
@@ -1354,7 +1411,7 @@ const MineUI=(()=>{
     if(S.view==='plan'){paintPlan();paintMonths();return;}if(S.view==='max'){paintMax();return;}
     $q('.mn-iii-estimate').hidden=S.lv!==3;
     $q('.mn-imp-estimate').hidden=S.lv===3||S.imp!==4;
-    paintBoost();paintPrice();paintTake();paintKpi();paintAllShips();paintDetail();paintInvestNote();paintTraining();drawCharts();}
+    paintBoost();paintPrice();paintTake();paintKpi();paintAllShips();paintDetail();paintInvestNote();paintTraining();paintYieldMatrix();}
   function needPrices(){
     // El material seleccionado es la primera cotización en TODAS las vistas.
     // Antes Rendimiento Nave pedía los fits, no el ore/hielo/gas, por lo que
@@ -1377,7 +1434,7 @@ const MineUI=(()=>{
     // La última pintura ocurre cuando terminan las consultas, también si ESI falla.
     if(ids.some(id=>!PRICE[id]))paint();
   }
-  function drawCharts(){if(!root||!root.offsetParent)return;lastW=root.clientWidth;if(S.view==='plan'){drawCum({moon:planCalc('moon'),ice:planCalc('ice'),gas:planCalc('gas')});return;}if(S.view==='max')return;paintBars();drawn=true;}
+  function drawCharts(){if(!root||!root.offsetParent)return;lastW=root.clientWidth;if(S.view==='plan'){drawCum({moon:planCalc('moon'),ice:planCalc('ice'),gas:planCalc('gas')});return;}}
 
   // Secondary navigation: all panels remain mounted for existing painting and ESI updates.
   function mountAnalysisTabs(){
@@ -1386,7 +1443,7 @@ const MineUI=(()=>{
     const cards=[...shipView.querySelectorAll('.mn-card')];
     const findCard=title=>cards.find(e=>e.querySelector('h3')?.textContent?.trim().startsWith(title));
     const sections=[
-      ['visual','Comparativa visual',findCard('Comparativa visual')],
+      ['visual',tx('lunar.yieldByFit'),shipView.querySelector('.mn-yield-card')],
       ['fits','Fit e inversión',findCard('Fit y Detalle')],
       ['skills','Entrenamiento',findCard('Ruta recomendada')],
       ['reco','Recomendaciones',shipView.querySelector('.mn-reco')],
@@ -1405,7 +1462,15 @@ const MineUI=(()=>{
     sections.forEach(([id,label,section],i)=>{
       const b=document.createElement('button');b.type='button';b.className='mn-analysis-tab';b.dataset.tab=id;
       b.setAttribute('role','tab');b.textContent=label;b.addEventListener('click',()=>activate(id));
-      b.addEventListener('keydown',e=>{if(!['ArrowRight','ArrowLeft','Home','End'].includes(e.key))return;e.preventDefault();const pos=e.key==='Home'?0:e.key==='End'?tabs.length-1:(tabs.indexOf(b)+(e.key==='ArrowRight'?1:-1)+tabs.length)%tabs.length;tabs[pos].focus();activate(tabs[pos].dataset.tab)});
+      if(id==='visual')b.dataset.i18n='lunar.yieldByFit';
+      b.addEventListener('keydown',e=>{
+        if(!['ArrowRight','ArrowLeft','Home','End'].includes(e.key))return;
+        e.preventDefault();
+        const available=tabs.filter(tab=>tab.dataset.tab!=='fits'||root.dataset.guideView!=='compare');
+        const pos=e.key==='Home'?0:e.key==='End'?available.length-1:(available.indexOf(b)+(e.key==='ArrowRight'?1:-1)+available.length)%available.length;
+        available[pos].focus();
+        activate(available[pos].dataset.tab);
+      });
       nav.append(b);tabs.push(b);panels.append(section);
     });
     activate('visual');
@@ -1414,20 +1479,33 @@ const MineUI=(()=>{
     const controls=$q('.mn-controls-unified');
     const groups=$q('.mn-config-groups');
     const basic=h('div','mn-editorial-basic');
-    for(const key of ['mat','shipClass','tier']){
+    const advancedFields=h('div','mn-editorial-basic mn-editorial-advanced');
+    for(const key of ['mat','shipClass','tier','lv','imp','boost','met']){
       const original=groups.querySelector('[data-k="'+key+'"]');
       const field=original.closest('.mn-config-field');
-      const label=h('label','',field.querySelector('.mn-lbl').textContent);
+      const label=h('label');
+      const labelKey='lunar.field.'+key;
+      const caption=h('span','',tx(labelKey));
+      caption.dataset.i18n=labelKey;
+      label.append(caption);
       const select=h('select');
       select.dataset.scenarioKey=key;
       for(const button of original.querySelectorAll('button')){
-        select.add(new Option(button.textContent,button.dataset.v));
+        const option=new Option(button.textContent,button.dataset.v);
+        if(['mat','shipClass','tier','lv','imp','boost'].includes(key)){
+          const optionKey='lunar.option.'+key+'.'+(button.dataset.v||'none');
+          if(key!=='boost'||!button.dataset.v){
+            option.dataset.i18n=optionKey;
+            option.textContent=tx(optionKey);
+          }
+        }
+        select.add(option);
       }
       select.addEventListener('change',()=>{
         [...original.querySelectorAll('button')].find(button=>button.dataset.v===select.value)?.click();
       });
       label.append(select);
-      basic.append(label);
+      (['mat','shipClass','tier'].includes(key)?basic:advancedFields).append(label);
       field.hidden=true;
     }
     groups.firstElementChild.hidden=true;
@@ -1445,17 +1523,69 @@ const MineUI=(()=>{
     const advanced=h('details','mn-editorial-details');
     const summary=h('summary','',tx('lunar.advanced'));
     summary.dataset.i18n='lunar.advanced';
-    advanced.append(summary,groups,$q('.mn-context-aside'));
+    const context=$q('.mn-context-aside');
+    context.hidden=true;
+    groups.hidden=true;
+    const notes=h('div','mn-editorial-notes');
+    notes.append(context.querySelector('.mn-guidance'),context.querySelector('.mn-bst'));
+    advanced.append(summary,advancedFields,notes,groups,context);
     controls.append(advanced);
-    const extras=h('details','mn-editorial-details mn-editorial-extras');
-    const extrasSummary=h('summary','',tx('lunar.tools'));
-    extrasSummary.dataset.i18n='lunar.tools';
-    extras.append(extrasSummary);
-    $q('.mn-result-spotlight').after(extras);
+    const comparison=h('section','mn-comparison-page');
+    const comparisonHeader=h('header','mn-scenario-hero mn-compare-hero');
+    const comparisonTitle=h('h2','',tx('lunar.compareTitle')+' ');
+    comparisonTitle.append(h('span','',tx('lunar.compareAccent')));
+    const comparisonIntro=h('p','',tx('lunar.compareIntro'));
+    comparisonIntro.dataset.i18n='lunar.compareIntro';
+    comparisonHeader.append(comparisonTitle,comparisonIntro);
+    const comparisonContent=h('div','mn-comparison-content');
+    const comparisonSteps=['choose','compare','fleet'].map((id,index)=>{
+      const step=h('section','mn-comparison-step');
+      const titleKey='lunar.compareStep.'+id;
+      const copyKey=titleKey+'.copy';
+      const heading=h('h3');
+      const number=h('span','mn-comparison-number',String(index+1));
+      const title=h('span','',tx(titleKey));
+      title.dataset.i18n=titleKey;
+      const copy=h('p','',tx(copyKey));
+      copy.dataset.i18n=copyKey;
+      heading.append(number,title);
+      step.append(heading,copy);
+      return step;
+    });
+    const disclosure=(key,children)=>{
+      const box=h('details','mn-editorial-details mn-comparison-disclosure');
+      const heading=h('summary','',tx(key));
+      heading.dataset.i18n=key;
+      box.append(heading,...children);
+      return box;
+    };
+    const selectedShip=h('div','mn-selected-ship');
+    const selectedDetail=disclosure('lunar.shipDetails',[selectedShip]);
+    const fittingDetail=disclosure('lunar.yieldByFit',[]);
+    const fleetTitle=h('h4');
+    const fleetValues=h('div','mn-fleet-values');
+    const fleetNote=h('p','',tx('lunar.fleetNote'));
+    fleetNote.dataset.i18n='lunar.fleetNote';
+    comparisonSteps[2].append(disclosure('lunar.fleetDetails',[fleetTitle,fleetValues,fleetNote]));
+    comparisonSteps[1].append(fittingDetail);
+    comparisonSteps[0].append(selectedDetail);
+    comparisonContent.append(...comparisonSteps);
+    comparison.append(comparisonHeader,comparisonContent);
+    const fitting=h('section','mn-fitting-page');
+    const fittingHeader=h('header','mn-scenario-hero');
+    const fittingTitle=h('h2','',tx('lunar.label5'));
+    fittingTitle.dataset.i18n='lunar.label5';
+    fittingHeader.append(fittingTitle);
+    fitting.append(fittingHeader);
+    root.append(comparison,fitting);
     const shared=unloadHome;
     const sharedIntro=$q('.mn-shared-intro');
     const refinery=$q('.mn-refinery-status');
     const toolbar=$q('.mn-toolbar');
+    const tools=h('details','mn-editorial-details mn-comparison-tools');
+    const toolsSummary=h('summary','',tx('lunar.comparisonTools'));
+    toolsSummary.dataset.i18n='lunar.comparisonTools';
+    tools.append(toolsSummary);
     const recap=$q('.mn-results-recap');
     const sharedAnchor=document.createComment('Mining shared controls');
     refinery.before(sharedAnchor);
@@ -1465,6 +1595,12 @@ const MineUI=(()=>{
     recap.before(recapAnchor);
     const resultNodes=[];
     for(let node=recap;node;node=node.nextElementSibling)resultNodes.push(node);
+    const shipList=$q('.mn-all-ships');
+    const shipListHeading=shipList.previousElementSibling;
+    const analysis=$q('.mn-analysis-panels');
+    const analysisNav=$q('.mn-analysis-tabs');
+    const analysisAnchor=document.createComment('Mining analysis tools');
+    analysisNav.before(analysisAnchor);
     const methodDetails=h('details','mn-editorial-details');
     const methodSummary=h('summary','',tx('lunar.method'));
     methodSummary.dataset.i18n='lunar.method';
@@ -1483,13 +1619,27 @@ const MineUI=(()=>{
       const ships=S.view==='ships';
       if(ships){
         if(unload.parentElement!==basic)basic.append(unload);
-        if(toolbar.parentElement!==extras)extras.append(toolbar,refinery,sharedIntro,shared,...resultNodes);
+        if(toolbar.parentElement!==tools){
+          selectedDetail.before(shipList);
+          fittingDetail.append(...resultNodes.filter(node=>node!==shipList&&node!==shipListHeading));
+          comparisonContent.append(tools);
+          tools.append(toolbar,refinery,sharedIntro,shared);
+        }
+        const analysisPage=root.dataset.guideView==='fits'?fitting:fittingDetail;
+        if(analysis.parentElement!==analysisPage){
+          analysisPage.append(analysis);
+        }
+        const title=tx('lunar.compareTitle')+' ';
+        if(comparisonTitle.firstChild.textContent!==title)comparisonTitle.firstChild.textContent=title;
+        const accent=tx('lunar.compareAccent');
+        if(comparisonTitle.lastChild.textContent!==accent)comparisonTitle.lastChild.textContent=accent;
       }else{
         if(unload.parentElement!==unloadHome)unloadHome.append(unload);
-        if(toolbar.parentElement===extras){
+        if(toolbar.parentElement===tools){
           toolbarAnchor.after(toolbar);
           sharedAnchor.after(refinery,sharedIntro,shared);
           recapAnchor.after(...resultNodes);
+          analysisAnchor.after(analysisNav,analysis);
         }
       }
       if(ships)unloadLabel.dataset.i18n='lunar.unload';
@@ -1497,7 +1647,8 @@ const MineUI=(()=>{
       const label=ships?tx('lunar.unload'):originalUnloadLabel;
       unloadReset.hidden=ships&&Number(unloadInput.value)===65;
       if(unloadLabel.textContent!==label)unloadLabel.textContent=label;
-      for(const select of basic.querySelectorAll('select')){
+      for(const select of controls.querySelectorAll('[data-scenario-key]')){
+        select.disabled=select.dataset.scenarioKey==='imp'&&S.lv===3;
         select.value=S[select.dataset.scenarioKey];
       }
     };

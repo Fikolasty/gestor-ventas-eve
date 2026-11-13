@@ -17,14 +17,14 @@ miningGuideTools.addEventListener('click',event=>{
   miningGuide.hidden=view!=='guide';
   const tools=$('mnRoot');
   tools.hidden=view==='guide';
+  tools.dataset.guideView=view;
   if(view==='guide')return;
   tools.querySelector('[data-mining-jump=ships]')?.click();
-  const extras=tools.querySelector('.mn-editorial-extras');
-  if(extras)extras.open=view!=='scenario';
   if(view==='fits')tools.querySelector('.mn-analysis-tabs [data-tab=fits]')?.click();
-  const section={scenario:'.mn-scenario-hero',compare:'.mn-results-header',fits:'.mn-analysis-panels'}[view];
-  if(view==='scenario')miningGuideTools.scrollIntoView({block:'start'});
-  else tools.querySelector(section)?.scrollIntoView({block:'start'});
+  if(view==='compare'&&tools.querySelector('.mn-analysis-tabs [data-tab=fits][aria-selected=true]')){
+    tools.querySelector('.mn-analysis-tabs [data-tab=visual]')?.click();
+  }
+  miningGuideTools.scrollIntoView({block:'start',behavior:'instant'});
 });
 $('copy-vrd').addEventListener('click',async()=>{
   try{

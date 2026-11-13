@@ -212,7 +212,7 @@ assert(!source.includes('Autonomía: Minutos hasta Llenar la Bodega'),'gráfica 
 assert(!source.includes('function paintPivot()')&&!source.includes('function paintHold()'),'lógica visual sin uso');
 const labels=source.indexOf("['0','Sin'],['4','4%'],['5','5%']");
 assert(labels>=0,'selector de implantes no está en orden ascendente');
-assert(source.includes("S.shipClass==='exhumer'")&&source.includes('for(const ship of selectedShips())'),
+assert(source.includes("S.shipClass==='exhumer'")&&source.includes('const ships=selectedShips();') && source.includes('for(const ship of ships)'),
   'las tarjetas no siguen Barges / Exhumers');
 assert(source.includes('S.costShip')&&source.includes('MINE.fits[k]||[]'),
   'el presupuesto no depende de nave/material/tier/skills');
