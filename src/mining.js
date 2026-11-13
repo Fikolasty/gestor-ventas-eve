@@ -1435,6 +1435,8 @@ const MineUI=(()=>{
     const unloadHome=unload.parentElement;
     const unloadLabel=unload.querySelector('label');
     const originalUnloadLabel=unloadLabel.textContent;
+    const unloadInput=unload.querySelector('input');
+    const unloadReset=unload.querySelector('.mn-unload-default');
     const heading=controls.querySelector('.mn-guide-copy p');
     heading.dataset.i18n='lunar.unloadHelp';
     heading.textContent=tx('lunar.unloadHelp');
@@ -1470,6 +1472,13 @@ const MineUI=(()=>{
     methodCopy.dataset.i18n='lunar.methodCopy';
     methodDetails.append(methodSummary,methodCopy);
     $q('.mn-result-spotlight').after(methodDetails);
+    methodDetails.append($q('.mn-turnaround .mn-info-popup').cloneNode(true));
+    methodDetails.lastElementChild.className='mn-editorial-method-note';
+    const compare=h('button','mn-editorial-compare',tx('lunar.label4'));
+    compare.type='button';
+    compare.dataset.i18n='lunar.label4';
+    compare.addEventListener('click',()=>document.querySelector('[data-guide-view=compare]').click());
+    methodDetails.after(compare);
     return ()=>{
       const ships=S.view==='ships';
       if(ships){
@@ -1486,6 +1495,7 @@ const MineUI=(()=>{
       if(ships)unloadLabel.dataset.i18n='lunar.unload';
       else delete unloadLabel.dataset.i18n;
       const label=ships?tx('lunar.unload'):originalUnloadLabel;
+      unloadReset.hidden=ships&&Number(unloadInput.value)===65;
       if(unloadLabel.textContent!==label)unloadLabel.textContent=label;
       for(const select of basic.querySelectorAll('select')){
         select.value=S[select.dataset.scenarioKey];

@@ -88,9 +88,6 @@ body.mm-mining .hero>.title{display:none!important} body.mm-mining .hero{padding
 #mining #mnRoot:not(.mn-editorial) .mn-scenario-hero{display:none}
 #mining .mn-editorial .mn-toolbar{margin-top:12px}
 
-body.mm-mining{background:var(--header-surface)}
-body.mm-mining::before{display:none}
-body.mm-mining #mining.panel:has(#mnRoot.mn-editorial:not([hidden])){background:transparent!important;box-shadow:none!important;border:0!important}
 #mining .mn-editorial-basic{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;padding:16px;border:1px solid var(--line2);border-radius:8px;background:var(--surface-card)}
 #mining .mn-editorial-basic>label{display:grid;gap:4px;align-content:start;min-width:0;font-weight:650}
 #mining .mn-editorial-basic :is(select,input){width:100%;min-width:0;min-height:36px}
@@ -113,8 +110,6 @@ body.mm-mining #mining.panel:has(#mnRoot.mn-editorial:not([hidden])){background:
 #mining .mn-editorial-basic .mn-turnaround-input{display:flex;gap:6px}
 #mining .mn-editorial-basic .mn-turnaround-input>button{flex:none}
 
-body.mm-mining:has(#mnRoot.mn-editorial:not([hidden])){background:var(--surface-card)!important}
-body.mm-mining:has(#mnRoot.mn-editorial:not([hidden]))::after{display:none}
 #mining .mn-editorial-basic>label,#mining .mn-editorial-basic .mn-turnaround{display:grid;grid-template-rows:20px 36px;gap:6px;align-content:start}
 #mining .mn-editorial-basic .mn-turnaround-heading{margin:0;line-height:20px}
 #mining .mn-editorial-basic :is(select,input){height:36px;margin:0}
@@ -124,3 +119,22 @@ body.mm-mining:has(#mnRoot.mn-editorial:not([hidden]))::after{display:none}
 #mining .mn-editorial-details>summary::after{display:none}
 #mining .mn-editorial-details{background:none;border:0;box-shadow:none}
 #mining .mn-editorial :is(.mn-controls-unified,.mn-results-header) .mn-guide-copy p{max-width:none}
+
+/* Match the rendered lunar typography, including the app's global heading rules. */
+#mining .lunar-guide-header h1,#mining #mnRoot .mn-scenario-hero h2{
+ font:800 clamp(32px,5.3vw,76px)/1.1 var(--f-ui)!important;
+ letter-spacing:-.035em!important;margin:0 0 14px;text-align:center
+}
+#mining #mnRoot .mn-editorial-basic .mn-info,#mining #mnRoot .mn-config-field .mn-info{display:none}
+#mining .mn-editorial .mn-guide-heading{gap:0}
+#mining .lunar-guide article h2,#mining #mnRoot .mn-editorial-heading,
+#mining #mnRoot .mn-guide-heading h2,#mining #mnRoot .mn-guide-number{
+ font:700 24px/1.25 var(--f-ui)!important;letter-spacing:normal!important
+}
+#mining #mnRoot .mn-guide-number{margin-inline-end:10px}
+#mining #mnRoot .mn-spotlight-copy strong{font:800 clamp(26px,4vw,38px)/1.15 var(--f-ui)!important}
+#mining .mn-editorial-basic .mn-turnaround-input input{flex:1}
+#mining .mn-editorial-basic .mn-turnaround-input button[hidden]{display:none!important}
+#mining .mn-editorial-details{margin:8px 0;padding:0}
+#mining .mn-editorial-compare{margin:8px 0;padding:6px 0;background:none;border:0;border-radius:0;color:var(--txt);text-decoration:underline;text-underline-offset:4px}
+#mining .guide-tools:has([data-guide-view=scenario][aria-pressed=true])~#mnRoot .mn-editorial-extras:not([open]){display:none}

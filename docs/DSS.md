@@ -2492,3 +2492,5 @@ v1.0.218 candidata. Guías integra la operación lunar, el fitting VRD y las her
 v1.0.219 candidata. Escenario con encabezado editorial, pestañas centradas y nave ganadora con render oficial. Minería Lunar renombrada. Seis escenarios en Chromium coincidieron en cifras y ganadora con v1.0.218. Pendiente de Pages.
 
 v1.0.220 candidata. Escenario completo con diseño editorial, controles reales, resultado destacado y herramientas originales. Pendiente Actions y verificación pública.
+
+v1.0.221 candidata. Guías restaura el fondo de estación. Minería Lunar y Escenario comparten tipografía principal y panel. Se iguala la numeración, se retiran los iconos de información de los campos básicos y el detalle se abre en Comparar Naves. Pendiente Actions y verificación pública.
