@@ -240,7 +240,7 @@ class ThemeBrowserTests(unittest.TestCase):
         self.assertIn("Planetary Industry (PI) lets you extract",
                       self.page.locator("#pi").text_content())
         self.page.evaluate("selectAppModule('mining')")
-        self.page.locator('[data-guide-view="scenario"]').click()
+        self.page.locator('[data-guide-view="compare"]').click()
         expect(self.page.locator("#mining .mn-ship-bonus-title").first).to_have_text(
             "Ship and skill bonuses", timeout=10000)
         self.page.evaluate("setLang('es')")
@@ -731,7 +731,7 @@ class ThemeBrowserTests(unittest.TestCase):
     def test_mining_editorial_guide_navigates_calculators_bilingually(self):
         from playwright.sync_api import expect
         self.page.evaluate("selectAppModule('mining')")
-        self.page.locator('[data-guide-view="scenario"]').click()
+        self.page.locator('[data-guide-view="compare"]').click()
         expect(self.page.locator("#mnReadingTitle")).to_have_text(
             "De tu primera barge a tu primera Omega")
         # Editorial lead belongs to the Mining page, not inside its toolbar.
@@ -740,11 +740,11 @@ class ThemeBrowserTests(unittest.TestCase):
         self.assertIn("no siempre descuentan",self.page.locator(".mn-reading-caution").inner_text())
         buttons=self.page.locator("[data-mining-jump]")
         self.assertEqual(buttons.count(),3)
-        self.page.locator('[data-mining-jump="plan"]').click()
+        self.page.locator('[data-k=view] [data-v=plan]').click()
         expect(self.page.locator(".mn-v-plan")).to_be_visible()
-        self.page.locator('[data-mining-jump="max"]').click()
+        self.page.locator('[data-k=view] [data-v=max]').click()
         expect(self.page.locator(".mn-v-max")).to_be_visible()
-        self.page.locator('[data-mining-jump="ships"]').click()
+        self.page.locator('[data-k=view] [data-v=ships]').click()
         expect(self.page.locator(".mn-v-ships")).to_be_visible()
         self.page.evaluate("setLang('en')")
         expect(self.page.locator("#mnReadingTitle")).to_have_text(
@@ -810,7 +810,7 @@ class ThemeBrowserTests(unittest.TestCase):
         """Native Mining accordions keep keyboard behavior and never dress help as a menu."""
         from playwright.sync_api import expect
         self.page.evaluate("selectAppModule('mining')")
-        self.page.locator('[data-guide-view="scenario"]').click()
+        self.page.locator('[data-guide-view="compare"]').click()
         editor = self.page.locator('#mining .mn-price-editor')
         editor.wait_for(state='attached', timeout=10000)
         for light in (False, True):

@@ -4142,5 +4142,45 @@
   "lunar.firstPlace": {
     "es": "★ 1.er Lugar",
     "en": "★ 1st Place"
+  },
+  "lunar.ship": {
+    "es": "Nave",
+    "en": "Ship"
+  },
+  "lunar.gross": {
+    "es": "Bruto m³/h",
+    "en": "Gross m³/h"
+  },
+  "lunar.effective": {
+    "es": "Efectivo m³/h",
+    "en": "Effective m³/h"
+  },
+  "lunar.unload": {
+    "es": "Descarga (s)",
+    "en": "Unload (s)"
+  },
+  "lunar.unloadHelp": {
+    "es": "El tiempo de descarga incluye el viaje de ida, la descarga y el regreso a la roca.",
+    "en": "Unloading time includes the trip out, unloading and the return to the rock."
+  },
+  "lunar.advanced": {
+    "es": "Habilidades, implantes y boosts",
+    "en": "Skills, implants and boosts"
+  },
+  "lunar.tools": {
+    "es": "Comparativa Detallada y Herramientas",
+    "en": "Detailed Comparison and Tools"
+  },
+  "lunar.method": {
+    "es": "Cómo se Calcula",
+    "en": "How It Is Calculated"
+  },
+  "lunar.methodCopy": {
+    "es": "El rendimiento efectivo incluye el tiempo para llenar la bodega y el viaje de descarga cuando corresponde.",
+    "en": "Effective yield includes the time to fill the hold and the unloading trip when applicable."
+  },
+  "lunar.effectiveIntro": {
+    "es": "Rendimiento efectivo con los viajes incluidos.",
+    "en": "Effective yield including travel time."
   }
 }

@@ -1,5 +1,5 @@
 #mining .lunar-guide{max-width:1120px;margin:0 auto;padding:24px 0 32px;color:var(--txt)}
-#mining .lunar-guide h1{font:800 clamp(30px,5vw,50px)/1.1 var(--f-ui);letter-spacing:-.035em;margin:0 0 14px}
+#mining .lunar-guide h1,#mining .mn-scenario-hero h2{font:800 clamp(30px,5vw,50px)/1.1 var(--f-ui);letter-spacing:-.035em;margin:0 0 14px}
 #mining .lunar-guide p{margin:0;font-size:16px;line-height:1.65}
 #mining .lunar-guide .intro{color:var(--mut)}
 #mining .lunar-guide .toc{display:flex;flex-wrap:wrap;gap:10px 18px;margin-top:22px;padding:12px 0;border-block:1px solid var(--line2)}
@@ -46,19 +46,21 @@ body.mm-mining .hero>.title{display:none!important} body.mm-mining .hero{padding
 
 #mining .lunar-guide-header h1 .guide-title-text,#mining .lunar-guide h2 .guide-step-title{color:inherit;margin:0}
 
+
+#mining .lunar-guide-header h1{text-align:center}
+
 #mining .guide-areas{justify-content:center}
 #mining .guide-tools{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0;padding-block:0}
 #mining .guide-tools button{position:relative;min-width:0;white-space:normal}
 #mining .guide-tools button+button::before{content:"";position:absolute;inset:25% auto 25% 0;width:1px;background:var(--line2)}
 #mining .lunar-guide-header h1,#mining .mn-scenario-hero{text-align:center}
 #mining .mn-scenario-hero{padding:20px 16px 24px;scroll-margin-top:85px;background:linear-gradient(90deg,transparent,var(--thrust),transparent) center bottom/100% 1px no-repeat}
-#mining .mn-scenario-hero h2{font:800 clamp(28px,5vw,52px)/1.12 var(--f-ui);margin:0 0 8px}
 #mining .mn-scenario-hero h2 span{color:var(--thrust)}
 #mining .mn-scenario-hero p{color:var(--mut);margin:0}
-#mining .mn-result-spotlight{position:relative;isolation:isolate;overflow:hidden;min-height:180px;margin:12px 0;border:1px solid var(--thrust);border-radius:8px;background:#211a12;color:#faf9f5}
+#mining .mn-spotlight-card{position:relative;isolation:isolate;overflow:hidden;min-height:180px;margin:12px 0;border:1px solid var(--thrust);border-radius:8px;background:#211a12;color:#faf9f5}
 #mining .mn-result-spotlight[hidden]{display:none}
-#mining .mn-result-spotlight img{position:absolute;right:0;top:0;width:55%;height:100%;object-fit:cover;object-position:center;z-index:-2}
-#mining .mn-result-spotlight::before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,#211a12 30%,#211a12a0 52%,transparent);z-index:-1}
+#mining .mn-spotlight-card>img{position:absolute;right:0;top:0;width:55%;height:100%;object-fit:cover;object-position:center;z-index:-2}
+#mining .mn-spotlight-card::before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,#211a12 30%,#211a12a0 52%,transparent);z-index:-1}
 #mining .mn-spotlight-copy{padding:20px}
 #mining .mn-spotlight-rank{color:#edbb68;font-weight:750}
 #mining .mn-spotlight-copy h3{margin:2px 0;font-size:24px}
@@ -68,3 +70,57 @@ body.mm-mining .hero>.title{display:none!important} body.mm-mining .hero{padding
  #mining .guide-tools{grid-template-columns:repeat(2,minmax(0,1fr))}
  #mining .guide-tools button:nth-child(3)::before{display:none}
 }
+
+#mining #mnRoot{max-width:1120px;margin-inline:auto;min-width:0}
+#mining .guide-tools{scroll-margin-top:85px}
+#mining .mn-editorial .mn-reading-path{display:none}
+#mining .mn-editorial .mn-v-ships{display:flex;flex-direction:column;min-width:0}
+#mining .mn-editorial .mn-controls-unified{display:block;background:transparent;border:0;padding:18px 0}
+#mining .mn-editorial .mn-context-aside{margin-top:12px;background:var(--surface-card);border-color:var(--line2)}
+#mining .mn-editorial .mn-config-groups{display:grid;gap:8px}
+#mining .mn-editorial .mn-config-group{background:var(--surface-card);border-color:var(--line2)}
+#mining .mn-result-spotlight:not([hidden]){display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.45fr);gap:16px;align-items:center;padding:16px;background:var(--surface-card);border:1px solid var(--line2);border-radius:8px}
+#mining .mn-spotlight-table{width:100%;font-variant-numeric:tabular-nums;text-align:left;border-collapse:collapse;font-size:13px}
+#mining .mn-spotlight-table :is(th,td){padding:7px 4px;border-bottom:1px solid var(--line2)}
+#mining .mn-spotlight-table img{width:24px;height:24px;vertical-align:middle;margin-inline-end:5px}
+#mining .mn-spotlight-first td:last-child{color:var(--thrust);font-weight:750}
+@media(max-width:680px){#mining .mn-result-spotlight:not([hidden]){grid-template-columns:minmax(0,1fr)}}
+#mining #mnRoot:not(.mn-editorial) .mn-scenario-hero{display:none}
+#mining .mn-editorial .mn-toolbar{margin-top:12px}
+
+body.mm-mining{background:var(--header-surface)}
+body.mm-mining::before{display:none}
+body.mm-mining #mining.panel:has(#mnRoot.mn-editorial:not([hidden])){background:transparent!important;box-shadow:none!important;border:0!important}
+#mining .mn-editorial-basic{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;padding:16px;border:1px solid var(--line2);border-radius:8px;background:var(--surface-card)}
+#mining .mn-editorial-basic>label{display:grid;gap:4px;align-content:start;min-width:0;font-weight:650}
+#mining .mn-editorial-basic :is(select,input){width:100%;min-width:0;min-height:36px}
+#mining .mn-editorial-basic>.mn-turnaround{margin:0;padding:0;background:none;border:0;min-width:0}
+#mining .mn-editorial-basic .mn-turnaround-heading{margin:0 0 4px}
+#mining .mn-editorial-basic .mn-turnaround-input>span,#mining .mn-editorial-basic #mnUnloadExplain{display:none}
+#mining .mn-editorial-details{margin:12px 0}
+#mining .mn-editorial-details>summary{cursor:pointer;color:var(--mut)}
+#mining .mn-editorial-details[open]>summary{margin-bottom:10px}
+#mining .mn-editorial .mn-results-header{border-top:1px solid var(--line2);padding-top:18px}
+#mining .mn-editorial .mn-guide-heading{margin-bottom:14px}
+#mining .mn-editorial .mn-guide-number{background:none;border:0;color:var(--clay);width:auto;min-width:0}
+@media(max-width:760px){#mining .mn-editorial-basic{grid-template-columns:repeat(2,minmax(0,1fr))}}
+#mining .mn-editorial .mn-controls-unified{margin:0}
+#mining .mn-editorial .mn-v-ships{gap:0}
+#mining .mn-editorial .mn-guide-heading{align-items:baseline}
+#mining .mn-editorial-basic>.mn-turnaround{box-shadow:none;background:transparent!important;border:0!important}
+#mining .mn-spotlight-card>img{width:100%}
+#mining .mn-editorial-basic select{padding:6px 10px}
+#mining .mn-editorial-basic .mn-turnaround-input{display:flex;gap:6px}
+#mining .mn-editorial-basic .mn-turnaround-input>button{flex:none}
+
+body.mm-mining:has(#mnRoot.mn-editorial:not([hidden])){background:var(--surface-card)!important}
+body.mm-mining:has(#mnRoot.mn-editorial:not([hidden]))::after{display:none}
+#mining .mn-editorial-basic>label,#mining .mn-editorial-basic .mn-turnaround{display:grid;grid-template-rows:20px 36px;gap:6px;align-content:start}
+#mining .mn-editorial-basic .mn-turnaround-heading{margin:0;line-height:20px}
+#mining .mn-editorial-basic :is(select,input){height:36px;margin:0}
+#mining .mn-editorial-basic .mn-turnaround-input{min-width:0;align-items:center}
+#mining .mn-editorial-basic .mn-turnaround-input button{height:36px;margin:0}
+#mining .mn-editorial-details>summary{list-style:revert;display:list-item;padding:4px 0;border:0;border-radius:0;background:none;box-shadow:none;font-weight:500}
+#mining .mn-editorial-details>summary::after{display:none}
+#mining .mn-editorial-details{background:none;border:0;box-shadow:none}
+#mining .mn-editorial :is(.mn-controls-unified,.mn-results-header) .mn-guide-copy p{max-width:none}

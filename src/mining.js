@@ -311,6 +311,7 @@ const MineUI=(()=>{
     '</ol>'+
     '<p class="mn-reading-caution" data-i18n="mining.grossWarning">Los ISK/h mostrados no siempre descuentan impuestos, refinería o transporte: son estimaciones de producción, no necesariamente ganancia final.</p>'+
   '</section>'+
+   '<header class="mn-scenario-hero"><h2>'+tx('lunar.scenarioTitle')+' <span>'+tx('lunar.scenarioAccent')+'</span></h2><p>'+tx('lunar.scenarioIntro')+'</p></header>'+
    '<div class="mn-toolbar">'+
   '<div class="mn-views">'+SEG('view',[['ships','Rendimiento Nave'],['plan','Plan Omega'],['max','Nave Maxeada']])+'</div>'+
 
@@ -359,10 +360,9 @@ const MineUI=(()=>{
     '<p class="mn-note">Referencia Pyfa del build '+String(MINE.build)+'. Los upgrades ultra caros Aoede / Ingenii se muestran aparte porque necesitan validar el fit/CPU contra un SDE actualizado; no inflamos los números.</p>'+
     '<div class="mn-maxbody"></div></div></div>'+
     '<div class="mn-v-ships">'+
-   '<header class="mn-scenario-hero"><h2>'+tx('lunar.scenarioTitle')+' <span>'+tx('lunar.scenarioAccent')+'</span></h2><p>'+tx('lunar.scenarioIntro')+'</p></header>'+
    '<section class="mn-controls-unified" aria-labelledby="mnScenarioTitle">'+
      '<div class="mn-guide-heading">'+
-       '<span class="mn-guide-number" aria-hidden="true">01</span>'+
+       '<span class="mn-guide-number" aria-hidden="true">1</span>'+
        '<div class="mn-guide-copy"><h2 id="mnScenarioTitle">'+tx('lunar.session')+'</h2>'+
          '<p>Elige las condiciones de minería. Cada cambio actualiza automáticamente las recomendaciones y los resultados de abajo.</p></div>'+
      '</div>'+
@@ -408,9 +408,9 @@ const MineUI=(()=>{
      '<p class="mn-pst"></p>'+
    '</div>'+
    '<section class="mn-results-header" aria-labelledby="mnResultsTitle">'+
-     '<div class="mn-guide-heading"><span class="mn-guide-number" aria-hidden="true">02</span>'+
+     '<div class="mn-guide-heading"><span class="mn-guide-number" aria-hidden="true">2</span>'+
        '<div class="mn-guide-copy"><h2 id="mnResultsTitle">'+tx('lunar.result')+'</h2>'+
-         '<p>Compara producción efectiva, autonomía e inversión. Todo responde a la configuración de arriba.</p></div></div>'+
+         '<p>'+tx('lunar.effectiveIntro')+'</p></div></div>'+
    '</section>'+
    '<div class="mn-result-spotlight" hidden></div>'+
    '<section class="mn-results-recap" aria-label="Resumen del escenario">'+
@@ -610,20 +610,46 @@ const MineUI=(()=>{
   }
   function shipImage(ship,variant,size){
     const id=MINE.ships.find(entry=>entry.n===ship)?.id;
-    return id?el('img',{src:'https://images.evetech.net/types/'+id+'/'+variant+'?size='+size,
-      alt:'',width:size,height:size,loading:'lazy'}):null;
+    if(!id)return null;
+    const image=h('img');
+    image.src='https://images.evetech.net/types/'+id+'/'+variant+'?size='+size;
+    image.alt='';
+    image.width=size;
+    image.height=size;
+    return image;
   }
   function paintSpotlight(winner){
     const host=$q('.mn-result-spotlight');
     host.replaceChildren();
     host.hidden=!winner;
     if(!winner)return;
+    const card=h('div','mn-spotlight-card');
     const image=shipImage(winner.s,'render',512);
-    if(image)host.append(image);
+    if(image)card.append(image);
     const copy=h('div','mn-spotlight-copy');
+    const value=val(winner.r);
     copy.append(h('span','mn-spotlight-rank',tx('lunar.firstPlace')),h('h3','',winner.s),
-      h('strong','',val(winner.r)==null?NF0.format(winner.r.eff)+' m³/h':fmtV(val(winner.r))));
-    host.append(copy);
+      h('strong','',value==null?NF0.format(winner.r.eff)+' m³/h':fmtV(value)));
+    card.append(copy);
+    const table=h('table','mn-spotlight-table');
+    const header=table.createTHead().insertRow();
+    for(const key of ['lunar.ship','lunar.gross','lunar.effective']){
+      const cell=h('th','',tx(key));cell.scope='col';header.append(cell);
+    }
+    const body=table.createTBody();
+    const rows=selectedShips().map(ship=>({ship,rate:row(ship,S.tier)}))
+      .filter(entry=>entry.rate).sort((a,b)=>b.rate.eff-a.rate.eff);
+    for(const {ship,rate} of rows){
+      const tr=body.insertRow();
+      const cell=tr.insertCell();
+      const icon=shipImage(ship,'icon',32);
+      if(icon)cell.append(icon);
+      cell.append(ship);
+      tr.insertCell().textContent=NF0.format(rate.tot);
+      tr.insertCell().textContent=NF0.format(rate.eff);
+      if(ship===winner.s)tr.className='mn-spotlight-first';
+    }
+    host.append(card,table);
   }
   function paintAllShips(){
     const host=$q('.mn-all-ships');host.replaceChildren();
@@ -1323,6 +1349,8 @@ const MineUI=(()=>{
       (S.shipClass==='exhumer'?'Exhumers':'Barges')+' · '+MATL[S.mat]+' · '+TL[S.tier]+' · Skills '+['','I','II','III','IV','V'][S.lv]+
       ' · Implantes '+(S.lv===3?'Sin':S.imp?S.imp+'%':'Sin')+' · '+(S.boost||'Sin boost')+' · '+(S.met==='isk'?'ISK/h':'m³/h');
     $q('.mn-omega-tools').hidden=S.view!=='plan';$q('.mn-v-ships').hidden=S.view!=='ships';$q('.mn-v-plan').hidden=S.view!=='plan';$q('.mn-v-max').hidden=S.view!=='max';
+    root.classList.toggle('mn-editorial',S.view==='ships');
+    syncEditorialScenario?.();
     if(S.view==='plan'){paintPlan();paintMonths();return;}if(S.view==='max'){paintMax();return;}
     $q('.mn-iii-estimate').hidden=S.lv!==3;
     $q('.mn-imp-estimate').hidden=S.lv===3||S.imp!==4;
@@ -1382,8 +1410,91 @@ const MineUI=(()=>{
     });
     activate('visual');
   }
+  function mountEditorialScenario(){
+    const controls=$q('.mn-controls-unified');
+    const groups=$q('.mn-config-groups');
+    const basic=h('div','mn-editorial-basic');
+    for(const key of ['mat','shipClass','tier']){
+      const original=groups.querySelector('[data-k="'+key+'"]');
+      const field=original.closest('.mn-config-field');
+      const label=h('label','',field.querySelector('.mn-lbl').textContent);
+      const select=h('select');
+      select.dataset.scenarioKey=key;
+      for(const button of original.querySelectorAll('button')){
+        select.add(new Option(button.textContent,button.dataset.v));
+      }
+      select.addEventListener('change',()=>{
+        [...original.querySelectorAll('button')].find(button=>button.dataset.v===select.value)?.click();
+      });
+      label.append(select);
+      basic.append(label);
+      field.hidden=true;
+    }
+    groups.firstElementChild.hidden=true;
+    const unload=$q('.mn-turnaround');
+    const unloadHome=unload.parentElement;
+    const unloadLabel=unload.querySelector('label');
+    const originalUnloadLabel=unloadLabel.textContent;
+    const heading=controls.querySelector('.mn-guide-copy p');
+    heading.dataset.i18n='lunar.unloadHelp';
+    heading.textContent=tx('lunar.unloadHelp');
+    basic.append(unload);
+    controls.insertBefore(basic,groups);
+    const advanced=h('details','mn-editorial-details');
+    const summary=h('summary','',tx('lunar.advanced'));
+    summary.dataset.i18n='lunar.advanced';
+    advanced.append(summary,groups,$q('.mn-context-aside'));
+    controls.append(advanced);
+    const extras=h('details','mn-editorial-details mn-editorial-extras');
+    const extrasSummary=h('summary','',tx('lunar.tools'));
+    extrasSummary.dataset.i18n='lunar.tools';
+    extras.append(extrasSummary);
+    $q('.mn-result-spotlight').after(extras);
+    const shared=unloadHome;
+    const sharedIntro=$q('.mn-shared-intro');
+    const refinery=$q('.mn-refinery-status');
+    const toolbar=$q('.mn-toolbar');
+    const recap=$q('.mn-results-recap');
+    const sharedAnchor=document.createComment('Mining shared controls');
+    refinery.before(sharedAnchor);
+    const toolbarAnchor=document.createComment('Mining toolbar');
+    toolbar.before(toolbarAnchor);
+    const recapAnchor=document.createComment('Mining comparison details');
+    recap.before(recapAnchor);
+    const resultNodes=[];
+    for(let node=recap;node;node=node.nextElementSibling)resultNodes.push(node);
+    const methodDetails=h('details','mn-editorial-details');
+    const methodSummary=h('summary','',tx('lunar.method'));
+    methodSummary.dataset.i18n='lunar.method';
+    const methodCopy=h('p','',tx('lunar.methodCopy'));
+    methodCopy.dataset.i18n='lunar.methodCopy';
+    methodDetails.append(methodSummary,methodCopy);
+    $q('.mn-result-spotlight').after(methodDetails);
+    return ()=>{
+      const ships=S.view==='ships';
+      if(ships){
+        if(unload.parentElement!==basic)basic.append(unload);
+        if(toolbar.parentElement!==extras)extras.append(toolbar,refinery,sharedIntro,shared,...resultNodes);
+      }else{
+        if(unload.parentElement!==unloadHome)unloadHome.append(unload);
+        if(toolbar.parentElement===extras){
+          toolbarAnchor.after(toolbar);
+          sharedAnchor.after(refinery,sharedIntro,shared);
+          recapAnchor.after(...resultNodes);
+        }
+      }
+      if(ships)unloadLabel.dataset.i18n='lunar.unload';
+      else delete unloadLabel.dataset.i18n;
+      const label=ships?tx('lunar.unload'):originalUnloadLabel;
+      if(unloadLabel.textContent!==label)unloadLabel.textContent=label;
+      for(const select of basic.querySelectorAll('select')){
+        select.value=S[select.dataset.scenarioKey];
+      }
+    };
+  }
+  let syncEditorialScenario;
   // ---------- montaje ----------
-  function mount(r){if(root)return;restoreMiningPlan();root=r;root.classList.add('mn');root.innerHTML=HTML;$q=s=>root.querySelector(s);mountAnalysisTabs();
+  function mount(r){if(root)return;restoreMiningPlan();root=r;root.classList.add('mn');root.innerHTML=HTML;$q=s=>root.querySelector(s);mountAnalysisTabs();syncEditorialScenario=mountEditorialScenario();
     const bonusSwitch=$q('#mnFreeSpSwitch');
     bonusSwitch.addEventListener('change',()=>{S.freeSP=bonusSwitch.checked?1000000:0;paint();});
     const accField=$q('.pl-stp[data-k="acc"]');

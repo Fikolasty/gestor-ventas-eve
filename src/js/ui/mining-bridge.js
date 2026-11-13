@@ -19,9 +19,12 @@ miningGuideTools.addEventListener('click',event=>{
   tools.hidden=view==='guide';
   if(view==='guide')return;
   tools.querySelector('[data-mining-jump=ships]')?.click();
+  const extras=tools.querySelector('.mn-editorial-extras');
+  if(extras)extras.open=view!=='scenario';
   if(view==='fits')tools.querySelector('.mn-analysis-tabs [data-tab=fits]')?.click();
   const section={scenario:'.mn-scenario-hero',compare:'.mn-results-header',fits:'.mn-analysis-panels'}[view];
-  tools.querySelector(section)?.scrollIntoView({block:'start'});
+  if(view==='scenario')miningGuideTools.scrollIntoView({block:'start'});
+  else tools.querySelector(section)?.scrollIntoView({block:'start'});
 });
 $('copy-vrd').addEventListener('click',async()=>{
   try{
