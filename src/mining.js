@@ -590,8 +590,8 @@ const MineUI=(()=>{
     const tip=help.querySelector('[role=tooltip]');
     const pc=v=>(v>0?'+':'−')+NF1.format(Math.abs(v))+'%';
     tip.replaceChildren(h('strong','',tx('lunar.boostMax',{ship:b.n})));
-    for(const [key,value] of [['cycle',b.cycle],['critical',b.crit],['residue',b.residue]]){
-      tip.append(h('span','',tx('lunar.boost.'+key)+' '+pc(value)));
+    for(const [key,value] of [['lunar.boost.cycle',b.cycle],['lunar.boost.critical',b.crit],['lunar.boost.residue',b.residue]]){
+      tip.append(h('span','',tx(key)+' '+pc(value)));
     }
     tip.append(h('small','',tx('lunar.boostDrones')));
   }
