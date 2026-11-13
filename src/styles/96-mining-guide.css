@@ -45,3 +45,26 @@ body.mm-mining .hero>.title{display:none!important} body.mm-mining .hero{padding
 @media(max-width:760px){#mining .covetor-step{grid-template-columns:1fr;gap:16px}}
 
 #mining .lunar-guide-header h1 .guide-title-text,#mining .lunar-guide h2 .guide-step-title{color:inherit;margin:0}
+
+#mining .guide-areas{justify-content:center}
+#mining .guide-tools{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0;padding-block:0}
+#mining .guide-tools button{position:relative;min-width:0;white-space:normal}
+#mining .guide-tools button+button::before{content:"";position:absolute;inset:25% auto 25% 0;width:1px;background:var(--line2)}
+#mining .lunar-guide-header h1,#mining .mn-scenario-hero{text-align:center}
+#mining .mn-scenario-hero{padding:20px 16px 24px;scroll-margin-top:85px;background:linear-gradient(90deg,transparent,var(--thrust),transparent) center bottom/100% 1px no-repeat}
+#mining .mn-scenario-hero h2{font:800 clamp(28px,5vw,52px)/1.12 var(--f-ui);margin:0 0 8px}
+#mining .mn-scenario-hero h2 span{color:var(--thrust)}
+#mining .mn-scenario-hero p{color:var(--mut);margin:0}
+#mining .mn-result-spotlight{position:relative;isolation:isolate;overflow:hidden;min-height:180px;margin:12px 0;border:1px solid var(--thrust);border-radius:8px;background:#211a12;color:#faf9f5}
+#mining .mn-result-spotlight[hidden]{display:none}
+#mining .mn-result-spotlight img{position:absolute;right:0;top:0;width:55%;height:100%;object-fit:cover;object-position:center;z-index:-2}
+#mining .mn-result-spotlight::before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,#211a12 30%,#211a12a0 52%,transparent);z-index:-1}
+#mining .mn-spotlight-copy{padding:20px}
+#mining .mn-spotlight-rank{color:#edbb68;font-weight:750}
+#mining .mn-spotlight-copy h3{margin:2px 0;font-size:24px}
+#mining .mn-spotlight-copy strong{color:#ffe5b8;font-size:clamp(24px,4vw,38px)}
+#mining .mn-ship-head img{width:32px;height:32px;flex:none;border-radius:4px}
+@media(max-width:440px){
+ #mining .guide-tools{grid-template-columns:repeat(2,minmax(0,1fr))}
+ #mining .guide-tools button:nth-child(3)::before{display:none}
+}

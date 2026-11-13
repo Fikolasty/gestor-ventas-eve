@@ -20,7 +20,7 @@ miningGuideTools.addEventListener('click',event=>{
   if(view==='guide')return;
   tools.querySelector('[data-mining-jump=ships]')?.click();
   if(view==='fits')tools.querySelector('.mn-analysis-tabs [data-tab=fits]')?.click();
-  const section={scenario:'.mn-controls-unified',compare:'.mn-results-header',fits:'.mn-analysis-panels'}[view];
+  const section={scenario:'.mn-scenario-hero',compare:'.mn-results-header',fits:'.mn-analysis-panels'}[view];
   tools.querySelector(section)?.scrollIntoView({block:'start'});
 });
 $('copy-vrd').addEventListener('click',async()=>{

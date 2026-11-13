@@ -4016,8 +4016,8 @@
     "en": "Mining"
   },
   "lunar.label2": {
-    "es": "Guía Lunar",
-    "en": "Moon Mining Guide"
+    "es": "Minería Lunar",
+    "en": "Moon Mining"
   },
   "lunar.label3": {
     "es": "Escenario",
@@ -4118,5 +4118,29 @@
   "lunar.copyFailed": {
     "es": "Selecciona el fitting para copiarlo.",
     "en": "Select the fit text to copy it."
+  },
+  "lunar.scenarioTitle": {
+    "es": "ESTIMA TU",
+    "en": "ESTIMATE YOUR"
+  },
+  "lunar.scenarioAccent": {
+    "es": "RENDIMIENTO",
+    "en": "YIELD"
+  },
+  "lunar.scenarioIntro": {
+    "es": "Elige qué vas a minar y cuánto tardas en descargar. Compara lo que cada nave puede recoger durante una hora completa.",
+    "en": "Choose what to mine and how long unloading takes. Compare what each ship can collect over a full hour."
+  },
+  "lunar.session": {
+    "es": "Tu Sesión de Minería",
+    "en": "Your Mining Session"
+  },
+  "lunar.result": {
+    "es": "Resultado del Escenario",
+    "en": "Scenario Result"
+  },
+  "lunar.firstPlace": {
+    "es": "★ 1.er Lugar",
+    "en": "★ 1st Place"
   }
 }

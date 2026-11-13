@@ -359,10 +359,11 @@ const MineUI=(()=>{
     '<p class="mn-note">Referencia Pyfa del build '+String(MINE.build)+'. Los upgrades ultra caros Aoede / Ingenii se muestran aparte porque necesitan validar el fit/CPU contra un SDE actualizado; no inflamos los números.</p>'+
     '<div class="mn-maxbody"></div></div></div>'+
     '<div class="mn-v-ships">'+
+   '<header class="mn-scenario-hero"><h2>'+tx('lunar.scenarioTitle')+' <span>'+tx('lunar.scenarioAccent')+'</span></h2><p>'+tx('lunar.scenarioIntro')+'</p></header>'+
    '<section class="mn-controls-unified" aria-labelledby="mnScenarioTitle">'+
      '<div class="mn-guide-heading">'+
        '<span class="mn-guide-number" aria-hidden="true">01</span>'+
-       '<div class="mn-guide-copy"><h2 id="mnScenarioTitle">Configura tu escenario</h2>'+
+       '<div class="mn-guide-copy"><h2 id="mnScenarioTitle">'+tx('lunar.session')+'</h2>'+
          '<p>Elige las condiciones de minería. Cada cambio actualiza automáticamente las recomendaciones y los resultados de abajo.</p></div>'+
      '</div>'+
      '<div class="mn-config-groups">'+
@@ -408,9 +409,10 @@ const MineUI=(()=>{
    '</div>'+
    '<section class="mn-results-header" aria-labelledby="mnResultsTitle">'+
      '<div class="mn-guide-heading"><span class="mn-guide-number" aria-hidden="true">02</span>'+
-       '<div class="mn-guide-copy"><h2 id="mnResultsTitle">Resultados de tu escenario</h2>'+
+       '<div class="mn-guide-copy"><h2 id="mnResultsTitle">'+tx('lunar.result')+'</h2>'+
          '<p>Compara producción efectiva, autonomía e inversión. Todo responde a la configuración de arriba.</p></div></div>'+
    '</section>'+
+   '<div class="mn-result-spotlight" hidden></div>'+
    '<section class="mn-results-recap" aria-label="Resumen del escenario">'+
      '<div class="mn-results-recap-top"><span>Lectura rápida</span><small><span aria-hidden="true">●</span> Escenario actualizado</small></div>'+
      '<p class="mn-take"></p>'+
@@ -606,14 +608,34 @@ const MineUI=(()=>{
     out.push('Rol: '+b.role[['moon','ice','gas'].indexOf(mat)]);
     return out;
   }
+  function shipImage(ship,variant,size){
+    const id=MINE.ships.find(entry=>entry.n===ship)?.id;
+    return id?el('img',{src:'https://images.evetech.net/types/'+id+'/'+variant+'?size='+size,
+      alt:'',width:size,height:size,loading:'lazy'}):null;
+  }
+  function paintSpotlight(winner){
+    const host=$q('.mn-result-spotlight');
+    host.replaceChildren();
+    host.hidden=!winner;
+    if(!winner)return;
+    const image=shipImage(winner.s,'render',512);
+    if(image)host.append(image);
+    const copy=h('div','mn-spotlight-copy');
+    copy.append(h('span','mn-spotlight-rank',tx('lunar.firstPlace')),h('h3','',winner.s),
+      h('strong','',val(winner.r)==null?NF0.format(winner.r.eff)+' m³/h':fmtV(val(winner.r))));
+    host.append(copy);
+  }
   function paintAllShips(){
     const host=$q('.mn-all-ships');host.replaceChildren();
     const ex=S.shipClass==='exhumer',winner=best(S.tier,ex,r=>r.eff);
+    paintSpotlight(winner);
     for(const ship of selectedShips()){
         const r=row(ship,S.tier);if(!r)continue;
         const win=winner?.s===ship,card=h('article','mn-ship-card'+(win?' mn-ship-winner':''));
         const head=h('header','mn-ship-head'),names=h('div','mn-ship-name');
         names.append(h('small','',ex?'EXHUMER · '+TL[S.tier]:'BARGE · '+TL[S.tier]),h('h4','',ship));
+        const icon=shipImage(ship,'icon',32);
+        if(icon)head.append(icon);
         head.append(names);
         if(win){const star=h('span','mn-ship-crown','★ Mejor '+(ex?'Exhumer':'Barge'));star.title=document.documentElement.lang==='en'?'Highest effective yield in its class and tier':'Mayor rendimiento efectivo en su clase y escalón';head.append(star);}
         card.append(head);
