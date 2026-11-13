@@ -7,7 +7,7 @@
 <meta name="referrer" content="no-referrer">
 <title>Market Moves+ · SIGMA GRINDSET</title>
 <style>
-/* ================= Market Moves+ v1.0.220 =================
+/* ================= Market Moves+ v1.0.221 =================
    Paleta: azul de base, naranja = acción, verde/rojo = ganancia/pérdida.
    Sin backdrop-filter: el vidrio se finge con rgba + bordes. */
 *{box-sizing:border-box;margin:0;padding:0}
@@ -7159,9 +7159,6 @@ body.mm-mining .hero>.title{display:none!important} body.mm-mining .hero{padding
 #mining #mnRoot:not(.mn-editorial) .mn-scenario-hero{display:none}
 #mining .mn-editorial .mn-toolbar{margin-top:12px}
 
-body.mm-mining{background:var(--header-surface)}
-body.mm-mining::before{display:none}
-body.mm-mining #mining.panel:has(#mnRoot.mn-editorial:not([hidden])){background:transparent!important;box-shadow:none!important;border:0!important}
 #mining .mn-editorial-basic{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;padding:16px;border:1px solid var(--line2);border-radius:8px;background:var(--surface-card)}
 #mining .mn-editorial-basic>label{display:grid;gap:4px;align-content:start;min-width:0;font-weight:650}
 #mining .mn-editorial-basic :is(select,input){width:100%;min-width:0;min-height:36px}
@@ -7184,8 +7181,6 @@ body.mm-mining #mining.panel:has(#mnRoot.mn-editorial:not([hidden])){background:
 #mining .mn-editorial-basic .mn-turnaround-input{display:flex;gap:6px}
 #mining .mn-editorial-basic .mn-turnaround-input>button{flex:none}
 
-body.mm-mining:has(#mnRoot.mn-editorial:not([hidden])){background:var(--surface-card)!important}
-body.mm-mining:has(#mnRoot.mn-editorial:not([hidden]))::after{display:none}
 #mining .mn-editorial-basic>label,#mining .mn-editorial-basic .mn-turnaround{display:grid;grid-template-rows:20px 36px;gap:6px;align-content:start}
 #mining .mn-editorial-basic .mn-turnaround-heading{margin:0;line-height:20px}
 #mining .mn-editorial-basic :is(select,input){height:36px;margin:0}
@@ -7195,6 +7190,25 @@ body.mm-mining:has(#mnRoot.mn-editorial:not([hidden]))::after{display:none}
 #mining .mn-editorial-details>summary::after{display:none}
 #mining .mn-editorial-details{background:none;border:0;box-shadow:none}
 #mining .mn-editorial :is(.mn-controls-unified,.mn-results-header) .mn-guide-copy p{max-width:none}
+
+/* Match the rendered lunar typography, including the app's global heading rules. */
+#mining .lunar-guide-header h1,#mining #mnRoot .mn-scenario-hero h2{
+ font:800 clamp(32px,5.3vw,76px)/1.1 var(--f-ui)!important;
+ letter-spacing:-.035em!important;margin:0 0 14px;text-align:center
+}
+#mining #mnRoot .mn-editorial-basic .mn-info,#mining #mnRoot .mn-config-field .mn-info{display:none}
+#mining .mn-editorial .mn-guide-heading{gap:0}
+#mining .lunar-guide article h2,#mining #mnRoot .mn-editorial-heading,
+#mining #mnRoot .mn-guide-heading h2,#mining #mnRoot .mn-guide-number{
+ font:700 24px/1.25 var(--f-ui)!important;letter-spacing:normal!important
+}
+#mining #mnRoot .mn-guide-number{margin-inline-end:10px}
+#mining #mnRoot .mn-spotlight-copy strong{font:800 clamp(26px,4vw,38px)/1.15 var(--f-ui)!important}
+#mining .mn-editorial-basic .mn-turnaround-input input{flex:1}
+#mining .mn-editorial-basic .mn-turnaround-input button[hidden]{display:none!important}
+#mining .mn-editorial-details{margin:8px 0;padding:0}
+#mining .mn-editorial-compare{margin:8px 0;padding:6px 0;background:none;border:0;border-radius:0;color:var(--txt);text-decoration:underline;text-underline-offset:4px}
+#mining .guide-tools:has([data-guide-view=scenario][aria-pressed=true])~#mnRoot .mn-editorial-extras:not([open]){display:none}
 /* ===== tema claro (generado desde el oscuro por light.py) ===== */
 html.light{--header-surface:rgba(240,237,229,0.96);--ticker-surface:rgba(240,237,229,0.91);--ticker-hover:rgba(240,237,229,0.96);--surface-card:rgba(240,237,229,0.9);--surface-result:linear-gradient(180deg,rgba(240,237,229,0.91),rgba(240,237,229,0.96));--surface-panel:rgba(240,237,229,0.96);--void:#e4e3dd;--hull:#e2e0da;--hull2:#e0ded8;--line:rgba(31,30,29,0.114);--line2:rgba(31,30,29,0.125);--txt:#1c1c1a;--mut:#54524d;--dim:#6c6a64;--ion:#413f3c;--blue:#a39d8b;--clay:#c96442;--thrust:#a67526;--gain:#418b62;--loss:#a92c23}
 html.light body::after{background:repeating-linear-gradient(180deg,rgba(31,30,29,0.011) 0 1px,transparent 1px 3px),
@@ -10183,13 +10197,13 @@ Mining Drone I x5</pre><button type="button" id="copy-vrd" data-i18n="lunar.labe
 <button type="button" class="totop" id="toTop" aria-label="Volver arriba" title="Volver arriba (Inicio)" hidden><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 14l6-6 6 6"/></svg></button>
 <footer class="foot">
   <p class="foot-sec"><span class="ic i-lock" aria-hidden="true"></span>Tu inventario no se guarda: al cerrar o recargar se borra. Solo tus Ajustes quedan en este navegador.</p>
-  <div class="foot-by">Creado por <b>Fiko McGivert</b> · <span class="mm-footer-corp-logo vg" role="img" aria-label="Vanguardia DR"></span>Vanguardia DR · SIGMA GRINDSET · <span class="ver">v1.0.220</span></div>
+  <div class="foot-by">Creado por <b>Fiko McGivert</b> · <span class="mm-footer-corp-logo vg" role="img" aria-label="Vanguardia DR"></span>Vanguardia DR · SIGMA GRINDSET · <span class="ver">v1.0.221</span></div>
 </footer>
 
 <script>
 'use strict';
 /* ============================================================
-   Market Moves+ v1.0.220 — SIGMA GRINDSET / Vanguardia DR
+   Market Moves+ v1.0.221 — SIGMA GRINDSET / Vanguardia DR
    Flujo:  pegado → items → carga (ESI: precios, volúmenes, historial) → verificación → plan → vista
      1. Pegado      parsePaste(): parser posicional de columnas de EVE (Name · Quantity · … · Volume · Est. Price).
      2. Carga       esiItems(): trae todo lo que falta; mientras carga, refresh() NO pinta (S.loading).
@@ -16273,6 +16287,8 @@ const MineUI=(()=>{
     const unloadHome=unload.parentElement;
     const unloadLabel=unload.querySelector('label');
     const originalUnloadLabel=unloadLabel.textContent;
+    const unloadInput=unload.querySelector('input');
+    const unloadReset=unload.querySelector('.mn-unload-default');
     const heading=controls.querySelector('.mn-guide-copy p');
     heading.dataset.i18n='lunar.unloadHelp';
     heading.textContent=tx('lunar.unloadHelp');
@@ -16308,6 +16324,13 @@ const MineUI=(()=>{
     methodCopy.dataset.i18n='lunar.methodCopy';
     methodDetails.append(methodSummary,methodCopy);
     $q('.mn-result-spotlight').after(methodDetails);
+    methodDetails.append($q('.mn-turnaround .mn-info-popup').cloneNode(true));
+    methodDetails.lastElementChild.className='mn-editorial-method-note';
+    const compare=h('button','mn-editorial-compare',tx('lunar.label4'));
+    compare.type='button';
+    compare.dataset.i18n='lunar.label4';
+    compare.addEventListener('click',()=>document.querySelector('[data-guide-view=compare]').click());
+    methodDetails.after(compare);
     return ()=>{
       const ships=S.view==='ships';
       if(ships){
@@ -16324,6 +16347,7 @@ const MineUI=(()=>{
       if(ships)unloadLabel.dataset.i18n='lunar.unload';
       else delete unloadLabel.dataset.i18n;
       const label=ships?tx('lunar.unload'):originalUnloadLabel;
+      unloadReset.hidden=ships&&Number(unloadInput.value)===65;
       if(unloadLabel.textContent!==label)unloadLabel.textContent=label;
       for(const select of basic.querySelectorAll('select')){
         select.value=S[select.dataset.scenarioKey];
