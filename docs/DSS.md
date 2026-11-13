@@ -2498,3 +2498,5 @@ v1.0.221 candidata. Guías restaura el fondo de estación. Minería Lunar y Esce
 Escenario v1.0.223 aprobado por el propietario. Cotización Buy/Sell al lado de la guía, once campos al valorar en ISK/h, selectores opacos, reinicio de sesión, ayuda inline y render con degradado. Build y pruebas focales de Chromium, copy y Minería aprobados. Certificación remota pendiente.
 
 Limpieza incremental v1.0.224. Retira reglas sin referencias y evita crear un contenedor temporal de campos. Comparación píxel a píxel contra v1.0.223 en m³/h e ISK/h, cuatro anchos y ambos temas. Build y pruebas focales aprobados. Certificación de Pages pendiente.
+
+Fittings v1.0.225 autorizado para publicar. Guía de dos pasos, buscador, foto por Type ID, selector y fitting alineados, texto seleccionable y desglose de Jita Sell. Build y pruebas focales aprobados. Chromium local verificado a cuatro anchos, ES/EN y Dark/Light. Importación en EVE sin verificar. Certificación de Pages pendiente.

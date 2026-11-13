@@ -4320,6 +4320,14 @@
   "lunar.valuation": {"es": "Formato", "en": "Format"},
   "lunar.compressed": {"es": "Comprimido", "en": "Compressed"},
   "lunar.uncompressed": {"es": "Sin comprimir", "en": "Uncompressed"},
+  "lunar.fitChoose": {"es": "Encuentra tu Nave", "en": "Find Your Ship"},
+  "lunar.fitIntro": {"es": "Escribe parte del nombre de la nave y selecciónala en el listado. El fitting usa el material, las habilidades y el nivel de equipo que elegiste en Escenario.", "en": "Type part of the ship name and select it from the list. The fitting uses the material, skills and equipment tier you chose in Scenario."},
+  "lunar.fitRead": {"es": "Abre el fitting para revisar los módulos y drones. Puedes seleccionar el texto para copiarlo.", "en": "Open the fitting to review its modules and drones. Select the text to copy it."},
+  "lunar.fitSearch": {"es": "Buscar Nave", "en": "Search Ships"},
+  "lunar.fitInvestment": {"es": "Calcula la Inversión", "en": "Estimate the Investment"},
+  "lunar.fitCostIntro": {"es": "El total suma el casco y los componentes del desglose a precio Jita Sell. Abre el desglose para ver cuánto aporta cada componente.", "en": "The total adds the hull and the listed components at Jita Sell prices. Open the breakdown to see how much each component costs."},
+  "lunar.fitBreakdown": {"es": "Ver Desglose de Costes", "en": "View Cost Breakdown"},
+  "lunar.fitNoMatches": {"es": "Sin coincidencias.", "en": "No matches."},
   "lunar.shipDetails": {
     "es": "Bodega, Viajes y Bonificaciones",
     "en": "Hold, Trips and Bonuses"

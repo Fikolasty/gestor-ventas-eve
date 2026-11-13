@@ -325,3 +325,29 @@ html.light #mining #mnRoot .mn-scenario-panel select{--scenario-select-bg:#fff}
  #mining #mnRoot .mn-scenario-boost{position:static}
  #mining #mnRoot .mn-guide-copy{position:relative}
 }
+
+#mining .mn-fitting-page>.mn-analysis-panels{display:none}
+#mining .mn-fitting-guide{padding:0}
+#mining .mn-fitting-guide article>h3{font:750 24px/1.25 var(--f-ui);margin:0 0 12px}
+#mining .mn-fit-step-number{color:var(--clay);margin-inline-end:10px}
+#mining .mn-fitting-guide .covetor-step{row-gap:12px}
+#mining .mn-fitting-guide .covetor-media,#mining .mn-fitting-guide .mn-fit-disclosure{width:100%;min-width:0}
+#mining .mn-fitting-guide .covetor-media,#mining .mn-fitting-guide .covetor-step>.mn-fit-disclosure{max-width:380px;justify-self:end}
+#mining .mn-fitting-guide .covetor-media figure{margin:0}
+#mining .mn-fitting-guide .covetor-media img{aspect-ratio:2;object-fit:cover}
+#mining #mnRoot .mn-fitting-guide :is(.mn-fit-search,.mn-fit-disclosure){display:block;padding:12px 16px;box-sizing:border-box}
+#mining .mn-fit-search{max-width:360px;background:var(--surface-card);border:1px solid var(--line2);border-radius:8px}
+#mining .mn-fitting-guide summary{position:relative;display:flex;align-items:center;min-height:24px;padding-inline-end:22px;list-style:none}
+#mining .mn-fitting-guide summary::-webkit-details-marker{display:none}
+#mining #mnRoot .mn-fitting-guide details>summary::after{position:absolute;top:50%;right:7px;margin:0;transform:translateY(-50%) rotate(45deg)}
+#mining #mnRoot .mn-fitting-guide details[open]>summary::after{transform:translateY(-50%) rotate(225deg)}
+#mining .mn-fit-search input{width:100%;margin-top:8px}
+#mining .mn-fit-options{display:grid;gap:4px;margin-top:8px}
+#mining .mn-fit-options button{background:none;border:0;border-bottom:1px solid var(--line2);color:var(--txt);text-align:start;padding:8px}
+#mining .mn-fit-disclosure pre{white-space:pre-wrap;overflow-wrap:anywhere;user-select:text}
+#mining .mn-fit-guide-total .mn-fit-total{background:none;border:0;padding:0;margin:12px 0}
+#mining .mn-fit-guide-budget{overflow:auto}
+@media(max-width:760px){
+ #mining .mn-fitting-guide .covetor-step>.mn-fit-search{grid-row:2}
+ #mining .mn-fitting-guide :is(.covetor-media,.covetor-step>.mn-fit-disclosure){justify-self:start}
+}

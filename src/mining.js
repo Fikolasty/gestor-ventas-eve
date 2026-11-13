@@ -922,6 +922,89 @@ const MineUI=(()=>{
       cards.append(card);
     }
     if(activeFitShip)activate(activeFitShip);
+    updateFittingGuide?.();
+  }
+  let updateFittingGuide;
+  function mountFittingGuide(page){
+    const guide=h('div','lunar-guide mn-fitting-guide');
+    const section=(number,key)=>{
+      const article=h('article'),title=h('h3');
+      const marker=h('span','mn-fit-step-number',number);
+      marker.setAttribute('aria-hidden','true');
+      const label=h('span','',tx(key));
+      label.dataset.i18n=key;
+      title.append(marker,label);
+      article.append(title);
+      guide.append(article);
+      return article;
+    };
+    const text=(tag,key)=>{
+      const node=h(tag,'',tx(key));
+      node.dataset.i18n=key;
+      return node;
+    };
+    const choose=section('1','lunar.fitChoose');
+    const layout=h('div','step covetor-step');
+    const copy=h('div','covetor-copy');
+    copy.append(text('p','lunar.fitIntro'),text('p','lunar.fitRead'));
+    const media=h('div','covetor-media'),figure=h('figure');
+    media.append(figure);
+    const chooser=h('details','mn-fit-search'),selected=h('summary');
+    const search=h('input');
+    search.type='search';
+    search.autocomplete='off';
+    search.setAttribute('aria-label',tx('lunar.fitSearch'));
+    search.dataset.i18nAriaLabel='lunar.fitSearch';
+    const options=h('div','mn-fit-options');
+    chooser.append(selected,search,options);
+    const fit=h('details','fit mn-fit-disclosure'),caption=h('summary'),code=h('pre');
+    fit.append(caption,code);
+    layout.append(copy,media,chooser,fit);
+    choose.append(layout);
+    const investment=section('2','lunar.fitInvestment');
+    const total=h('div','mn-fit-guide-total');
+    const breakdown=h('details','fit mn-fit-disclosure');
+    const budget=h('div','mn-fit-guide-budget');
+    breakdown.append(text('summary','lunar.fitBreakdown'),budget);
+    investment.append(text('p','lunar.fitCostIntro'),total,breakdown);
+    page.append(guide);
+
+    function filter(){
+      const term=search.value.trim().toLowerCase();
+      const ships=selectedShips().filter(ship=>row(ship,S.tier)&&ship.toLowerCase().includes(term));
+      options.replaceChildren(...ships.map(ship=>{
+        const button=h('button','',ship);
+        button.type='button';
+        button.addEventListener('click',()=>{
+          activeFitShip=ship;
+          paintDetail();
+          chooser.open=false;
+          selected.focus({preventScroll:true});
+        });
+        return button;
+      }));
+      if(!ships.length)options.append(text('p','lunar.fitNoMatches'));
+    }
+    search.addEventListener('input',filter);
+    chooser.addEventListener('toggle',()=>{if(chooser.open)search.focus();});
+
+    return ()=>{
+      if(root.dataset.guideView!=='fits')return;
+      const ship=activeFitShip;
+      const data=ship&&row(ship,S.tier);
+      const card=$q('.mn-fit-card:not([hidden])');
+      selected.textContent=ship||tx('lunar.fitSearch');
+      caption.textContent=tx('lunar.label5')+' · '+(ship||'—');
+      const src=shipImage(ship,'render',512);
+      if(figure.firstElementChild?.src!==src?.src){
+        figure.replaceChildren(...(src?[src]:[]));
+      }
+      code.textContent=data?'['+ship+', '+TL[S.tier]+']\n\n'+
+        [data.low,data.mid,data.high,data.rigs,data.drones].filter(Boolean).join('\n\n'):'—';
+      total.replaceChildren(...(card?[card.querySelector('.mn-fit-total').cloneNode(true)]:[]));
+      budget.replaceChildren(...(card?[card.querySelector('.mn-fit-budget').cloneNode(true)]:[]));
+      filter();
+    };
   }
   function shipFitIds(){return selectedShips().flatMap(s=>fitRows(s).map(x=>x[0]));}
   function paintInvestNote(){const n=$q('.mn-invst'),ids=[...shipFitIds(),...(S.imp===5&&S.lv!==3?MINE.impl[S.mat]:[])],miss=ids.filter(id=>sellOf(id)==null).length;
@@ -1633,6 +1716,7 @@ const MineUI=(()=>{
     fittingTitle.dataset.i18n='lunar.label5';
     fittingHeader.append(fittingTitle);
     fitting.append(fittingHeader);
+    updateFittingGuide=mountFittingGuide(fitting);
     root.append(comparison,fitting);
     const shared=unloadHome;
     const sharedIntro=$q('.mn-shared-intro');
