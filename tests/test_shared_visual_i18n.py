@@ -13,9 +13,11 @@ def read(*parts):
 class SharedUiTests(unittest.TestCase):
     def test_modules_and_guide_share_sales_headings(self):
         html = read("shell.html")
-        for section in ("mining", "skills", "help"):
+        for section in ("skills", "help"):
             start = html.index('id="' + section + '"')
             self.assertIn('mm-section-head mm-module-heading', html[start:start + 600], section)
+        self.assertIn('class="guide-areas"', html)
+        self.assertIn('class="lunar-guide"', html)
         self.assertNotIn('Skill Plan</span>', html)
         self.assertIn('data-i18n="module.skills">Habilidades</span>', html)
         self.assertNotIn('No pide tu contraseña de EVE ni inicio de sesión', html)

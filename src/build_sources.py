@@ -21,6 +21,7 @@ CSS_PARTS = (
     "93-jita.css",
     "94-title-referral.css",
     "95-production.css",
+    "96-mining-guide.css",
 )
 # Light theme order mirrors the former light_extra.css; the final shared table
 # geometry follows generated Light rules so both themes use identical layout.

@@ -4006,5 +4006,117 @@
   "sso.access.structuresHelp": {
     "es": "Identifica las estructuras y sistemas de tu inventario cuando tienes acceso en EVE.",
     "en": "Identify the structures and systems in your inventory when you have access in EVE."
+  },
+  "lunar.label0": {
+    "es": "Guías",
+    "en": "Guides"
+  },
+  "lunar.label1": {
+    "es": "Minería",
+    "en": "Mining"
+  },
+  "lunar.label2": {
+    "es": "Guía Lunar",
+    "en": "Moon Mining Guide"
+  },
+  "lunar.label3": {
+    "es": "Escenario",
+    "en": "Scenario"
+  },
+  "lunar.label4": {
+    "es": "Comparar Naves",
+    "en": "Compare Ships"
+  },
+  "lunar.label5": {
+    "es": "Fittings",
+    "en": "Fits"
+  },
+  "lunar.label6": {
+    "es": "MINERÍA LUNAR EN",
+    "en": "MOON MINING IN"
+  },
+  "lunar.label7": {
+    "es": "Tu Primera Covetor",
+    "en": "Your First Covetor"
+  },
+  "lunar.label8": {
+    "es": "Camino a la Luna",
+    "en": "Getting to the Moon"
+  },
+  "lunar.label9": {
+    "es": "Minería sin Residuo",
+    "en": "Mining Without Residue"
+  },
+  "lunar.label10": {
+    "es": "De Vuelta a HY-RWO",
+    "en": "Back to HY-RWO"
+  },
+  "lunar.label11": {
+    "es": "Abrir Ventas →",
+    "en": "Open Sales →"
+  },
+  "lunar.label12": {
+    "es": "Copiar Fitting",
+    "en": "Copy Fit"
+  },
+  "lunar.label13": {
+    "es": "Fitting estándar · [VRD] Miner T1 (Newbie)",
+    "en": "Standard Fit · [VRD] Miner T1 (Newbie)"
+  },
+  "lunar.label14": {
+    "es": "Traslado",
+    "en": "Travel"
+  },
+  "lunar.label15": {
+    "es": "Sistema y horario",
+    "en": "System and time"
+  },
+  "lunar.label16": {
+    "es": "Portal o bridge",
+    "en": "Portal or bridge"
+  },
+  "lunar.label17": {
+    "es": "Confirmación de fractura",
+    "en": "Fracture confirmation"
+  },
+  "lunar.paragraph0": {
+    "es": "Si quieres empezar a minar en barcaza desde el primer día, activa Omega y canjea el <strong>Mining Barge Operations Expert System</strong> en el piloto que va a minar. Te presta habilidades durante siete días. Pon en cola las habilidades permanentes desde el primer día.",
+    "en": "To start barge mining on day one, activate Omega and redeem the <strong>Mining Barge Operations Expert System</strong> on your miner. It lends you skills for seven days. Queue the permanent skills on day one."
+  },
+  "lunar.paragraph1": {
+    "es": "Si prefieres ahorrar el Expert System, entrena primero y activa Omega cuando estés listo para usar la barcaza. El tiempo de entrenamiento depende de tu personaje. Antes de comprar módulos, simula el fitting y revisa qué requisitos te faltan para usarlo completo.",
+    "en": "To save the cost of the Expert System, train first and activate Omega when you are ready to fly the barge. Training time depends on your pilot. Simulate the fit before buying modules to see which requirements you still need."
+  },
+  "lunar.paragraph2": {
+    "es": "Si tienes disponible el bono de <a href=\"https://www.eveonline.com/signup?invc=8eee72c3-8b98-424c-9d24-ac5532e358ca\">1,000,000 SP del enlace de referido</a>, puedes usar esos puntos para adelantar los requisitos pendientes.",
+    "en": "If you have the <a href=\"https://www.eveonline.com/signup?invc=8eee72c3-8b98-424c-9d24-ac5532e358ca\">1,000,000 SP referral bonus</a>, you can spend those points on missing requirements."
+  },
+  "lunar.paragraph3": {
+    "es": "Para una R64 de alianza, verifica el residuo de todo el equipo de extracción. Cuando tengas la nave lista, confirma la luna, el sistema y la hora en <a href=\"https://auth2.sigmagrindset.net/\" target=\"_blank\" rel=\"noopener noreferrer\">SIGMA Auth</a>.",
+    "en": "For alliance R64 moons, check all extraction equipment for residue. Once your ship is ready, confirm the moon, system and time in <a href=\"https://auth2.sigmagrindset.net/\" target=\"_blank\" rel=\"noopener noreferrer\">SIGMA Auth</a>."
+  },
+  "lunar.paragraph4": {
+    "es": "Coordina el viaje con los portalers. Si tienes un bridge directo con una Rorqual, confirma la salida con quien lo opera. Al llegar, espera el aviso de Discord antes de empezar a minar. Si todavía no estás en el servidor, abre la <a href=\"https://auth2.sigmagrindset.net/services/\" target=\"_blank\" rel=\"noopener noreferrer\">invitación a Discord en Servicios de SIGMA</a>.",
+    "en": "Coordinate travel with the portal pilots. If you have a direct Rorqual bridge, confirm departure with its operator. Wait for the Discord announcement before mining. You can get a <a href=\"https://auth2.sigmagrindset.net/services/\" target=\"_blank\" rel=\"noopener noreferrer\">Discord invitation in SIGMA Services</a>."
+  },
+  "lunar.paragraph5": {
+    "es": "En una R64 de alianza, usa solo un fitting de extracción sin residuo. Un ciclo puede extraer mineral para tu bodega y también destruir parte de la roca si el equipo genera residuo.",
+    "en": "Use a zero-residue extraction fit on alliance R64 moons. Equipment with residue can remove ore from the rock in addition to the ore delivered to your hold."
+  },
+  "lunar.paragraph6": {
+    "es": "El Modulated Strip Miner II puede generar residuo incluso sin cristal. Para esta operación, equipa Strip Miner I u ORE Strip Miner y comprueba los drones antes de activarlos.",
+    "en": "A Modulated Strip Miner II can generate residue even without a crystal. Use Strip Miner I or ORE Strip Miner for this operation and check your mining drones before activating them."
+  },
+  "lunar.paragraph7": {
+    "es": "Coordina el regreso o el transporte con tu corporación. Con el mineral en HY-RWO, pide una cotización de reproceso. Luego compara cuánto te queda por cada ruta de venta, con sus comisiones y envío.",
+    "en": "Coordinate your return or hauling with your corporation. Once the ore is in HY-RWO, request a reprocessing quote, then compare your proceeds across sales routes after fees and shipping."
+  },
+  "lunar.copied": {
+    "es": "Fitting copiado",
+    "en": "Fit copied"
+  },
+  "lunar.copyFailed": {
+    "es": "Selecciona el fitting para copiarlo.",
+    "en": "Select the fit text to copy it."
   }
 }

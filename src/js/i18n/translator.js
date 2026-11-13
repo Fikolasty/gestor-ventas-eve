@@ -104,6 +104,10 @@ function syncCssLocale(){
 function setLang(l){
   S.lang=l==='en'?'en':'es';document.documentElement.lang=S.lang;syncLanguageChoices();syncCssLocale();SkillUI.setLanguage(S.lang);syncShipSwitch();syncBusinessMode();
   if(i18nObs){i18nObs.disconnect();i18nObs=null;}
+  // Guide paragraphs contain links and emphasis from the bundled translation catalog.
+  document.querySelectorAll('[data-lunar-html]').forEach(node=>{
+    node.innerHTML=tx(node.dataset.lunarHtml);
+  });
   if(S.lang==='en'){
     i18nWalk(document.documentElement);
     i18nObs=new MutationObserver(ms=>{if(i18nBusy)return;i18nBusy=true;

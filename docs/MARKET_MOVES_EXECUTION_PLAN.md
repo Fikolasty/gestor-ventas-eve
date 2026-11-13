@@ -14,3 +14,5 @@ Disponible formatea cantidades y recalcula al escribir. Al abrir Resultado, se c
 ### v1.0.217 — Enlaces directos a pestañas
 
 Las vistas principales y las tres pestañas de Producción tienen enlaces estables con fragmentos. Atrás, Adelante y Recargar restauran la vista. EVE SSO conserva el callback y restaura la pestaña de origen tras validar el retorno. Publicación pendiente de Actions y comprobación HTTPS.
+
+v1.0.218 candidata. Guías integra la operación lunar, el fitting VRD y las herramientas originales. Pendiente de Actions y HTTPS.

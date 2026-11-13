@@ -259,7 +259,7 @@ assert(source.includes('id="mnResultsTitle"'),'falta el encabezado de resultados
 assert(source.includes('class="mn-results-recap"'),'resumen sin bloque de lectura rápida');
 assert(source.includes('class="mn-guidance"'),'estimaciones sin aviso contextual');
 // The Mining section owns the same heading component as Sales in the shell.
-assert(html.includes('<header class="mm-section-head mm-module-heading"><h2 class="mm-title">MINERÍA</h2>'),'Minería debe compartir la cabecera visual de Ventas');
+assert(html.includes('class="guide-areas"') && html.includes('class="lunar-guide"'),'Guías debe mostrar la introducción lunar');
 assert(!source.includes('class="mn-module-intro"'),'No se debe renderizar una segunda cabecera antigua dentro de Minería');
 assert(source.includes("if(S.view==='plan'){paintPlan();paintMonths();return;}"),'no modificar la vista Omega');
 assert(source.includes("if(S.view==='max'){paintMax();return;}"),'no modificar Nave Maxiada');

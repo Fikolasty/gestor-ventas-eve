@@ -8,7 +8,7 @@ const build=fs.readFileSync('build.py','utf8');
 const bridge=fs.readFileSync('src/skills.js','utf8');
 assert.match(shell,/data-mm-module="skills"/);
 assert.match(shell,/class="mm-mod-label">Ventas<\/span>/);
-assert.match(shell,/class="mm-mod-label">Minería<\/span>/);
+assert.match(shell,/class="mm-mod-label" data-i18n="lunar.label0">Guías<\/span>/);
 assert.match(shell,/class="mm-mod-label" data-i18n="module.skills">Habilidades<\/span>/);
 assert.match(shell,/id="mmTabSkills" title="Habilidades" aria-label="Habilidades" data-i18n-title="module.skills" data-i18n-aria-label="module.skills"/);
 assert.doesNotMatch(shell,/class="mm-mod-label">Skill Plan<\/span>/);

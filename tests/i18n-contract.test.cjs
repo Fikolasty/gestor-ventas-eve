@@ -27,7 +27,11 @@ test('HTML catalog keys and accessible-attribute keys exist',()=>{
   }
 });
 test('visible static labels, descriptions, Settings, Guide and PI have EN entries',()=>{
-  const html=shell.replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi,'')
+  const html=shell.replace(/<p data-lunar-html="([^"]+)">([\s\S]*?)<\/p>/g,(_,key,copy)=>{
+    assert.equal(ui[key]?.es,copy,key);
+    assert.ok(ui[key]?.en,key);
+    return '';
+  }).replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi,'')
     .replace(/<style\b[^>]*>[\s\S]*?<\/style>/gi,'')
     .replace(/<!--[\s\S]*?-->/g,'');
   const visible=[...html.matchAll(/>([^<>]+)</g)]

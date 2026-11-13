@@ -1,0 +1,47 @@
+#mining .lunar-guide{max-width:1120px;margin:0 auto;padding:24px 0 32px;color:var(--txt)}
+#mining .lunar-guide h1{font:800 clamp(30px,5vw,50px)/1.1 var(--f-ui);letter-spacing:-.035em;margin:0 0 14px}
+#mining .lunar-guide p{margin:0;font-size:16px;line-height:1.65}
+#mining .lunar-guide .intro{color:var(--mut)}
+#mining .lunar-guide .toc{display:flex;flex-wrap:wrap;gap:10px 18px;margin-top:22px;padding:12px 0;border-block:1px solid var(--line2)}
+#mining .lunar-guide a{color:var(--txt);text-underline-offset:4px}
+#mining .lunar-guide [data-guide-step=mnRoot]{font-weight:700}
+#mining .lunar-guide article{padding:22px 0;scroll-margin-top:96px}
+#mining .lunar-guide article+article{border-top:1px solid var(--line2)}
+#mining .lunar-guide h2{font-size:24px;margin:0 0 12px}
+#mining .lunar-guide h2 span{color:var(--clay);margin-right:10px}
+#mining .lunar-guide .step>*+*{margin-top:12px}
+#mining .lunar-guide .fit,#mining .lunar-guide .route{display:flex;align-items:center;gap:16px;padding:16px;border:1px solid var(--line2);border-radius:9px;background:var(--surface-card);position:relative}
+#mining .lunar-guide .fit::before{content:"";position:absolute;inset:0 12px auto;height:1px;background:linear-gradient(90deg,transparent,var(--clay),transparent)}
+#mining .lunar-guide .fit img{width:clamp(76px,14vw,144px);height:auto;border-radius:5px}
+#mining .lunar-guide .fit h3{margin:0 0 4px}
+#mining .lunar-guide .route{justify-content:space-around;text-align:center;flex-wrap:wrap}
+#mining .lunar-guide .route small{display:block;color:var(--mut)}
+#mining #mnRoot{scroll-margin-top:96px}
+#mining .lunar-guide-header{position:relative;padding:24px 0 26px}
+#mining .lunar-guide-header::after{content:"";position:absolute;inset:auto 0 0;height:2px;background:linear-gradient(90deg,transparent,color-mix(in srgb,var(--thrust) 68%,transparent),transparent);clip-path:polygon(0 100%,50% 0,100% 100%)}
+#mining .lunar-guide-header h1 span{color:var(--thrust)}
+#mining .lunar-guide .intro,#mining .lunar-guide .step>p,#mining .lunar-guide .step>ol{max-width:76ch}
+#mining .lunar-guide .toc{border-top:0;margin-top:0}
+body[data-mm-view=mining] :is(.hero-home-link,.hero-referral){display:none!important}
+#mining .guide-areas,#mining .guide-tools{max-width:1120px;margin:auto;display:flex;gap:8px;flex-wrap:wrap;padding:10px 0;border-bottom:1px solid var(--line2)}
+#mining .guide-areas span{font-size:22px;font-weight:750;text-transform:uppercase;border-bottom:2px solid var(--clay);padding:3px 12px}
+#mining .guide-tools button{padding:7px 12px;background:transparent;color:var(--txt);border:0;border-bottom:2px solid transparent;border-radius:0;box-shadow:none;font:600 14px var(--f-ui)}
+#mining .guide-tools button[aria-pressed=true]{background:transparent;border-bottom-color:var(--clay);box-shadow:none}
+#mining .lunar-guide-header{padding-top:0}
+#mining .lunar-guide .sales-link{display:inline-block;padding:8px 14px;border:1px solid var(--clay);border-radius:6px;font-weight:700;text-decoration:none}
+#mining #mnRoot[hidden],#mining .lunar-guide[hidden]{display:none!important}
+#mining #mnRoot{margin-top:18px}
+#mining :is(.mn-controls-unified,.mn-results-header,.mn-analysis-panels){scroll-margin-top:85px}
+#mining .lunar-guide details.fit{display:block} #vrd-fit{white-space:pre-wrap;overflow-wrap:anywhere} #mining .lunar-guide summary{cursor:pointer}
+body.mm-mining .hero>.title{display:none!important} body.mm-mining .hero{padding-top:20px}
+#mining .covetor-step{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:28px;align-items:start}
+#mining .covetor-step>*{margin:0}
+#mining .covetor-copy p+p{margin-top:14px}
+#mining .covetor-media figure{margin:0 0 12px;overflow:hidden;border-radius:9px;border:1px solid var(--line2)}
+#mining .covetor-media img{display:block;width:100%;height:auto;aspect-ratio:16/9;object-fit:cover}
+#mining .covetor-media details{padding:12px 16px}
+#mining #vrd-fit{font:13px/1.5 ui-monospace,monospace;margin:12px 0;user-select:text}
+#mining #copy-vrd{border:1px solid var(--line2);border-radius:6px;background:var(--surface-card);color:var(--txt);padding:6px 10px}
+@media(max-width:760px){#mining .covetor-step{grid-template-columns:1fr;gap:16px}}
+
+#mining .lunar-guide-header h1 .guide-title-text,#mining .lunar-guide h2 .guide-step-title{color:inherit;margin:0}
