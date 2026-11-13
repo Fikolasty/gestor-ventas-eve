@@ -1,7 +1,7 @@
 # Market Moves+ — last verified CI build
 
-- Source commit: `ea3ef4adce29ee95076edee100850f35f046c52f`
-- Workflow run: `43374376037`
-- Version: `1.0.219`
+- Source commit: `317408b4573a56ec39bfaf8693f9ed70e5482847`
+- Workflow run: `43377138885`
+- Version: `1.0.220`
 - Verified before publication: Python source assembly, Node syntax, SIGMA Freight formula regression, build, Chromium Light/Dark contrast and Login/Iniciar sesión checks.
 - Limitation: automated headless checks do not replace human visual review of every view or live ESI/SSO.
