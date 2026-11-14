@@ -22,3 +22,5 @@ v1.0.219 candidata. Escenario con encabezado editorial, pestañas centradas y na
 v1.0.220 candidata. Escenario completo con diseño editorial, controles reales, resultado destacado y herramientas originales. Pendiente Actions y verificación pública.
 
 v1.0.221 candidata. Guías restaura el fondo de estación. Minería Lunar y Escenario comparten tipografía principal y panel. Se iguala la numeración, se retiran los iconos de información de los campos básicos y el detalle se abre en Comparar Naves. Pendiente Actions y verificación pública.
+
+v1.0.233 candidata. Cuatro cabeceras de Minería centradas sin subtítulo, con filete y acento cobre comunes. Fittings & Inversión usa caja de título en el tab. Los párrafos de los pasos conservan la explicación. 64 comprobaciones Chromium, ocho capturas y 16 pruebas Python en la copia de publicación.

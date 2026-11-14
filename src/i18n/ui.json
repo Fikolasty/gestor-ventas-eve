@@ -4028,9 +4028,11 @@
     "en": "Compare Ships"
   },
   "lunar.label5": {
-    "es": "FITTINGS & INVERSIÓN",
-    "en": "FITTINGS & INVESTMENT"
+    "es": "Fittings & Inversión",
+    "en": "Fittings & Investment"
   },
+  "lunar.fittingsTitle": {"es":"FITTINGS &","en":"FITTINGS &"},
+  "lunar.fittingsAccent": {"es":"INVERSIÓN","en":"INVESTMENT"},
   "lunar.label6": {
     "es": "MINERÍA",
     "en": "MOON"
@@ -4124,10 +4126,6 @@
   "lunar.scenarioAccent": {
     "es": "RENDIMIENTO",
     "en": "YIELD"
-  },
-  "lunar.scenarioIntro": {
-    "es": "Elige qué vas a minar y cuánto tardas en descargar. Compara lo que cada nave puede recoger durante una hora completa.",
-    "en": "Choose what to mine and how long unloading takes. Compare what each ship can collect over a full hour."
   },
   "lunar.scenarioRead": {"es": "Entiende tu Escenario", "en": "Understand Your Scenario"},
   "lunar.scenarioReadFirst": {"es": "En las flotas de Nullsec es habitual viajar por jump o bridge. En la luna, la Rorqual da boost y comprime el mineral en el sitio. Si eliges ese apoyo, el tiempo muerto por descarga queda en cero.", "en": "Nullsec fleets often travel by jump or bridge. At the moon, the Rorqual boosts the fleet and compresses ore on grid. With that support selected, unloading downtime is zero."},
@@ -4293,10 +4291,6 @@
   "lunar.comparisonTools": {
     "es": "Herramientas de Minería",
     "en": "Mining Tools"
-  },
-  "lunar.compareIntro": {
-    "es": "Mira cuánto rinde cada nave con las condiciones que elegiste en Escenario.",
-    "en": "See how much each ship yields under the conditions you chose in Scenario."
   },
   "lunar.compareStep.choose": {
     "es": "Elige tu Nave",

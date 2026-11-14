@@ -305,7 +305,7 @@ const MineUI=(()=>{
     options.map(([value,label])=>'<option value="'+value+'">'+label+'</option>').join('')+'</select>';
   const planSelect=(key,options)=>miningSelect('mn-plan-select',options).replace('<select ', '<select data-plan-key="'+key+'" ');
   const HTML=
-   '<header class="mn-scenario-hero"><h2>'+tx('lunar.scenarioTitle')+' <span>'+tx('lunar.scenarioAccent')+'</span></h2><p>'+tx('lunar.scenarioIntro')+'</p></header>'+
+   '<header class="mn-scenario-hero"><h2><span class="guide-title-text" data-i18n="lunar.scenarioTitle">'+tx('lunar.scenarioTitle')+'</span> <span data-i18n="lunar.scenarioAccent">'+tx('lunar.scenarioAccent')+'</span></h2></header>'+
   '<div class="mn-omega-tools">'+
     '<label class="mn-sp-toggle" for="mnFreeSpSwitch" title="Se necesita un enlace de invitación válido para reclamar los SP">'+
       '<input type="checkbox" id="mnFreeSpSwitch" class="mn-sp-checkbox" checked>'+
@@ -1689,9 +1689,7 @@ const MineUI=(()=>{
     const comparisonHeader=h('header','mn-scenario-hero mn-compare-hero');
     const comparisonTitle=h('h2','',tx('lunar.compareTitle')+' ');
     comparisonTitle.append(h('span','',tx('lunar.compareAccent')));
-    const comparisonIntro=h('p','',tx('lunar.compareIntro'));
-    comparisonIntro.dataset.i18n='lunar.compareIntro';
-    comparisonHeader.append(comparisonTitle,comparisonIntro);
+    comparisonHeader.append(comparisonTitle);
     const comparisonContent=h('div','mn-comparison-content');
     const comparisonSteps=['choose','compare','fleet'].map((id,index)=>{
       const step=h('section','mn-comparison-step');
@@ -1728,8 +1726,12 @@ const MineUI=(()=>{
     comparison.append(comparisonHeader,comparisonContent);
     const fitting=h('section','mn-fitting-page');
     const fittingHeader=h('header','mn-scenario-hero');
-    const fittingTitle=h('h2','',tx('lunar.label5'));
-    fittingTitle.dataset.i18n='lunar.label5';
+    const fittingTitle=h('h2');
+    const fittingHeading=h('span','guide-title-text',tx('lunar.fittingsTitle'));
+    fittingHeading.dataset.i18n='lunar.fittingsTitle';
+    const fittingAccent=h('span','',tx('lunar.fittingsAccent'));
+    fittingAccent.dataset.i18n='lunar.fittingsAccent';
+    fittingTitle.append(fittingHeading,' ',fittingAccent);
     fittingHeader.append(fittingTitle);
     fitting.append(fittingHeader);
     updateFittingGuide=mountFittingGuide(fitting);

@@ -1,10 +1,18 @@
 # DSS — Design Standards & Session Handoff · Market Moves+
 
-**Última actualización:** 2026-11-01 · **v1.0.182 LIVE CERTIFICADA**: Skills compactos/simétricos, signos centrados, nivel único y porcentajes bold/naranja; títulos laterales con línea fina y superficies invertidas en Ajustes. Fuente09d99023/builda2c4e71f;4Actions/127Chromium PASS, HTTPS idéntico. Kit docs/HANDOFF_182.md.
+**Cierre histórico:** 2026-11-01 · **v1.0.182 LIVE CERTIFICADA**: Skills compactos/simétricos, signos centrados, nivel único y porcentajes bold/naranja; títulos laterales con línea fina y superficies invertidas en Ajustes. Fuente09d99023/builda2c4e71f;4Actions/127Chromium PASS, HTTPS idéntico. Kit docs/HANDOFF_182.md.
 
 **Continuidad de versión:** la release anterior v1.0.126 (P0 Paladin + A+B.1) quedó verificada con fuente `205ec9fa`, build `c716f7aa`, Actions/Pages `40215891182`, blob `9601d5f8`; ver §9. La etapa B.2 se implementó inicialmente **local** sobre `dcdb6195` (§10) y posteriormente se publicó tras autorización expresa y QA (§11). El usuario concedió también **autorización continua de publicación de mejoras incrementales bien probadas**, registrada en §1.8.
 
 Este DSS es el respaldo prioritario de **decisiones visuales, estado verificable y traspaso entre chats**. Léelo junto con `docs/SDD.md`, `docs/SPEC.md`, `docs/PROGRESS.md` y `CHANGELOG.md`. No confundir código probado localmente con publicación en GitHub.
+
+## Referencia vigente · 14 de noviembre de 2026
+
+- **Cabeceras entre pestañas hermanas.** Revisarlas juntas. En Minería, los tabs usan caja de título y las cuatro vistas usan un título editorial centrado, con una palabra en cobre, el mismo filete y la misma separación hasta el contenido. Las cuatro prescinden de subtítulo. Cada paso conserva su párrafo cuando ayuda a entender una decisión.
+- **Composición.** Usar dos columnas cuando relacionen elementos, como explicación y foto o dos planes comparables. Alinear títulos, cifras, fotos y controles a una retícula común. Usar el ancho disponible, mantener márgenes equivalentes y apilar en móvil según el orden de lectura. Anclar flechas al extremo derecho, centradas verticalmente, y acciones de copiar o actualizar al borde derecho de su bloque.
+- **Controles y color.** Reutilizar el selector temático opaco, con apertura inferior, teclado, elipsis para la selección larga y lista que pueda salir del contenedor. Revisar que el menú visible use el mismo fondo que el campo. Usar cobre para acento y foco visual, verde y rojo para importes según su signo, y superficies cálidas de la paleta. Reservar el filete para separar cabeceras o bloques que lo necesiten.
+- **Patrones retirados en Minería.** Barra heredada que alternaba vistas completas dentro de Herramientas, botones segmentados antiguos en Omega, cajas alrededor de texto continuo y avisos que repetían lo visible. El contenido de la guía se mantiene al interactuar con sus herramientas.
+- **Verificación.** Comparar la composición completa en ES/EN, Dark/Light y 390/630/980/1440 px. Revisar alineación, texto largo, teclado y estados abierto/cerrado. Usar los cierres de versión del final como evidencia histórica y este resumen como referencia de diseño.
 
 ## 1. Acuerdo operativo permanente
 
@@ -2502,3 +2510,5 @@ Limpieza incremental v1.0.224. Retira reglas sin referencias y evita crear un co
 Fittings v1.0.225 autorizado para publicar. Guía de dos pasos, buscador, foto por Type ID, selector y fitting alineados, texto seleccionable y desglose de Jita Sell. Build y pruebas focales aprobados. Chromium local verificado a cuatro anchos, ES/EN y Dark/Light. Importación en EVE sin verificar. Certificación de Pages pendiente.
 
 Biblioteca de Fittings v1.0.227 autorizada. Incluye Covetor, cuatro QRF y cuatro bombarderos BLOPS. Los mínimos QRF/BLOPS se derivaron del SDE CCP 3698585 con dependencias transitivas. Max es una recomendación, no una simulación de CPU/PG. Chromium local verificó nueve entradas, ES/EN, 390/630/980/1440 y ambos temas. Pages pendiente.
+
+v1.0.233 candidata. Cuatro cabeceras de Minería centradas sin subtítulo, con filete y acento cobre comunes. Fittings & Inversión usa caja de título en el tab. Los párrafos de los pasos conservan la explicación. 64 comprobaciones Chromium, ocho capturas y 16 pruebas Python en la copia de publicación.
