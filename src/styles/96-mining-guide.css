@@ -147,22 +147,22 @@ body.mm-mining .hero>.title{display:none!important} body.mm-mining .hero{padding
 #mining .mn-editorial-notes .mn-guidance p:not([hidden]){margin-top:12px;color:var(--mut)}
 #mining .mn-editorial-notes .mn-guidance-symbol{display:none}
 @supports (appearance:base-select){
- #mining :is(.mn-editorial-basic,.mn-price) select,#mining :is(.mn-editorial-basic,.mn-price) select::picker(select){appearance:base-select}
- #mining :is(.mn-editorial-basic,.mn-price) select::picker(select){
+ #mining :is(.mn-editorial-basic,.mn-price) select,#skills .library-top select,#mining :is(.mn-editorial-basic,.mn-price) select::picker(select),#skills .library-top select::picker(select){appearance:base-select}
+ #mining :is(.mn-editorial-basic,.mn-price) select::picker(select),#skills .library-top select::picker(select){
   background:var(--surface-panel);color:var(--txt);border:1px solid var(--line2);
   border-radius:8px;padding:4px;margin-top:4px;box-shadow:0 8px 22px #0004;
   max-height:280px;overflow:auto
  }
- #mining :is(.mn-editorial-basic,.mn-price) select::picker-icon{color:var(--mut)}
- #mining :is(.mn-editorial-basic,.mn-price) option{padding:8px 10px;border-radius:4px}
- #mining :is(.mn-editorial-basic,.mn-price) option:is(:hover,:focus-visible,:checked){background:var(--void);color:var(--txt)}
+ #mining :is(.mn-editorial-basic,.mn-price) select::picker-icon,#skills .library-top select::picker-icon{color:var(--mut)}
+ #mining :is(.mn-editorial-basic,.mn-price) option,#skills .library-top option{padding:8px 10px;border-radius:4px}
+ #mining :is(.mn-editorial-basic,.mn-price) option:is(:hover,:focus-visible,:checked),#skills .library-top option:is(:hover,:focus-visible,:checked){background:var(--void);color:var(--txt)}
 }
 #mining #mnRoot .mn-editorial-details .mn-config-groups{grid-template-columns:minmax(0,1fr)}
 #mining #mnRoot .mn-editorial-details .mn-config-group{min-width:0}
 #mining #mnRoot .mn-editorial-details :is(.mn-ctl,.pk-flt){flex-wrap:wrap;min-width:0;max-width:100%}
 #mining #mnRoot .mn-controls-unified{background:transparent!important;box-shadow:none!important}
 @supports (appearance:base-select){
- #mining :is(.mn-editorial-basic,.mn-price) select{background-image:none!important}
+ #mining :is(.mn-editorial-basic,.mn-price) select,#skills .library-top select{background-image:none!important}
 }
 
 #mining #mnRoot :is(.mn-comparison-page,.mn-fitting-page){display:none}
@@ -309,15 +309,15 @@ html.light #mining #mnRoot .mn-price select{color-scheme:light}
 #mining #mnRoot .mn-scenario-boost:not(.is-dismissed):is(:hover,:focus-within) [role=tooltip]{display:grid;gap:5px}
 #mining #mnRoot .mn-scenario-reset{grid-column:-2/-1;min-height:36px;background:transparent;color:var(--txt);border:1px solid var(--clay);border-radius:6px;font-weight:700;padding:7px 14px;box-shadow:none}
 #mining #mnRoot .mn-scenario-reset:focus-visible{outline:2px solid var(--clay);outline-offset:2px}
-#mining #mnRoot .mn-scenario-panel select{--scenario-select-bg:#101010;background:var(--scenario-select-bg)!important}
-html.light #mining #mnRoot .mn-scenario-panel select{--scenario-select-bg:#fff}
+#mining #mnRoot .mn-scenario-panel select,#skills .library-top select{--scenario-select-bg:#101010;background:var(--scenario-select-bg)!important}
+html.light #mining #mnRoot .mn-scenario-panel select,html.light #skills .library-top select{--scenario-select-bg:#fff}
 #mining #mnRoot .mn-spotlight-card>img{mask-image:linear-gradient(to right,transparent 0%,rgba(0,0,0,.3) 19%,#000 53%);mask-repeat:no-repeat}
 @supports (appearance:base-select){
- #mining #mnRoot .mn-scenario-panel select{justify-content:space-between;padding-inline:10px}
- #mining #mnRoot .mn-scenario-panel select::picker(select){background:var(--scenario-select-bg)!important;opacity:1;backdrop-filter:none;max-block-size:min(60dvh,440px);overflow:auto;inline-size:max-content;min-inline-size:anchor-size(width);max-inline-size:calc(100dvw - 24px)}
- #mining #mnRoot .mn-scenario-panel select selectedcontent{display:block;min-inline-size:0;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
- #mining #mnRoot .mn-scenario-panel select::picker-icon{flex:none;margin-inline-start:auto}
- #mining #mnRoot .mn-scenario-panel select option{white-space:normal;overflow-wrap:anywhere}
+ #mining #mnRoot .mn-scenario-panel select,#skills .library-top select{justify-content:space-between;padding-inline:10px}
+ #mining #mnRoot .mn-scenario-panel select::picker(select),#skills .library-top select::picker(select){background:var(--scenario-select-bg)!important;opacity:1;backdrop-filter:none;max-block-size:min(60dvh,440px);overflow:auto;inline-size:max-content;min-inline-size:anchor-size(width);max-inline-size:calc(100dvw - 24px)}
+ #mining #mnRoot .mn-scenario-panel select selectedcontent,#skills .library-top select selectedcontent{display:block;min-inline-size:0;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+ #mining #mnRoot .mn-scenario-panel select::picker-icon,#skills .library-top select::picker-icon{flex:none;margin-inline-start:auto}
+ #mining #mnRoot .mn-scenario-panel select option,#skills .library-top select option{white-space:normal;overflow-wrap:anywhere}
 }
 @media(max-width:760px){
  #mining #mnRoot .mn-controls-unified>.mn-guide-heading{grid-template-columns:auto minmax(0,1fr)}
@@ -432,3 +432,18 @@ html.light #mining #mnRoot .mn-scenario-panel select{--scenario-select-bg:#fff}
 #skills .library-top select{font:650 14px/1.4 var(--f-ui)}
 #skills .library-grid pre{font:400 14px/1.65 var(--f-ui)}
 #skills .library-bar button{font:700 13px/1.4 var(--f-ui)}
+
+#mining #mnRoot .mn-fitting-guide>.mn-fit-inline[hidden],
+#mining #mnRoot .mn-fitting-guide .mn-fit-standard[hidden]{display:none}
+#mining #mnRoot .mn-fitting-guide .mn-fit-inline>pre{position:static;max-height:none;margin:12px 0 0;padding-top:12px;border-top:1px solid var(--line2)}
+#mining #mnRoot .mn-fitting-guide .mn-fit-standard{margin-top:12px}
+#mining #mnRoot .mn-fitting-guide>p{max-width:76ch}
+
+@supports (appearance:base-select){#skills .library-top select,#skills .library-top select::picker(select){appearance:base-select!important}}
+
+@supports (appearance:base-select){
+ #skills .library-top select::picker(select){
+  position-area:block-end span-inline-end;
+  position-try-fallbacks:none;
+ }
+}

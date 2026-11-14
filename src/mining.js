@@ -925,6 +925,8 @@ const MineUI=(()=>{
     updateFittingGuide?.();
   }
   let updateFittingGuide;
+  const HULK_STANDARD="[Hulk, Hulk - ORE Strip (Intermedio)]\nMining Laser Upgrade II\nMining Laser Upgrade II\nMining Laser Upgrade II\n\nMultispectrum Shield Hardener II\nMining Survey Chipset II\nMedium Shield Extender II\nMedium Shield Extender II\n\nORE Strip Miner\nORE Strip Miner\n\nMedium Low Friction Nozzle Joints I\nMedium Low Friction Nozzle Joints I\n\nHornet EC-300 x5\nAcolyte II x5\n\nInherent Implants 'Highwall' Mining MX-1005 x1\nMining Laser Upgrade II x3\nInertial Stabilizers II x3";
+  const HULK_BEGINNER="[Hulk, Hulk - T1 Strip (Iniciante)]\nMining Laser Upgrade II\nMining Laser Upgrade II\nMining Laser Upgrade II\n\nMedium F-S9 Regolith Compact Shield Extender\nMedium F-S9 Regolith Compact Shield Extender\nMultispectrum Shield Hardener II\nMining Survey Chipset II\n\nStrip Miner I\nStrip Miner I\n\nMedium Low Friction Nozzle Joints I\nMedium Low Friction Nozzle Joints I\n\n\n\nAcolyte I x5\nMining Drone I x5\n\nInherent Implants 'Highwall' Mining MX-1003 x1\nWarp Core Stabilizer II x1\n50MN Y-T8 Compact Microwarpdrive x1\nPrototype Cloaking Device I x1\nMedium Processor Overclocking Unit I x1\nInertial Stabilizers II x2";
   function mountFittingGuide(page){
     const guide=h('div','lunar-guide mn-fitting-guide');
     const section=(number,key)=>{
@@ -943,6 +945,7 @@ const MineUI=(()=>{
       node.dataset.i18n=key;
       return node;
     };
+    guide.append(text('p','lunar.fitOverview'));
     const choose=section('1','lunar.fitChoose');
     const layout=h('div','step covetor-step');
     const copy=h('div','covetor-copy');
@@ -958,9 +961,17 @@ const MineUI=(()=>{
     const options=h('div','mn-fit-options');
     chooser.append(selected,search,options);
     const fit=h('details','fit mn-fit-disclosure'),caption=h('summary'),code=h('pre');
+    code.classList.add('no-tr');
+    fit.classList.add('mn-fit-inline');
+    const hulkFits=['lunar.hulkBeginner','lunar.hulkStandard'].map((key,index)=>{
+      const disclosure=h('details','fit mn-fit-disclosure mn-fit-inline mn-fit-standard');
+      disclosure.append(text('summary',key),text('p','lunar.hulkStandardNote'),
+        h('pre','no-tr',[HULK_BEGINNER,HULK_STANDARD][index]));
+      return disclosure;
+    });
     fit.append(caption,code);
     layout.append(copy,media,chooser,fit);
-    choose.append(layout);
+    choose.append(layout,...hulkFits);
     const investment=section('2','lunar.fitInvestment');
     const total=h('div','mn-fit-guide-total');
     const breakdown=h('details','fit mn-fit-disclosure');
@@ -994,7 +1005,8 @@ const MineUI=(()=>{
       const data=ship&&row(ship,S.tier);
       const card=$q('.mn-fit-card:not([hidden])');
       selected.textContent=ship||tx('lunar.fitSearch');
-      caption.textContent=tx('lunar.label5')+' · '+(ship||'—');
+      caption.textContent=tx('lunar.fitShow')+' · '+(ship||'—');
+      hulkFits.forEach(disclosure=>{disclosure.hidden=ship!=='Hulk';});
       const src=shipImage(ship,'render',512);
       if(figure.firstElementChild?.src!==src?.src){
         figure.replaceChildren(...(src?[src]:[]));

@@ -4028,8 +4028,8 @@
     "en": "Compare Ships"
   },
   "lunar.label5": {
-    "es": "Fittings",
-    "en": "Fits"
+    "es": "FITTINGS & INVERSIÓN",
+    "en": "FITTINGS & INVESTMENT"
   },
   "lunar.label6": {
     "es": "MINERÍA LUNAR EN",
@@ -4321,7 +4321,12 @@
   "lunar.compressed": {"es": "Comprimido", "en": "Compressed"},
   "lunar.uncompressed": {"es": "Sin comprimir", "en": "Uncompressed"},
   "lunar.fitChoose": {"es": "Encuentra tu Nave", "en": "Find Your Ship"},
-  "lunar.fitIntro": {"es": "Escribe parte del nombre de la nave y selecciónala en el listado. El fitting usa el material, las habilidades y el nivel de equipo que elegiste en Escenario.", "en": "Type part of the ship name and select it from the list. The fitting uses the material, skills and equipment tier you chose in Scenario."},
+  "lunar.fitOverview": {"es": "Aquí puedes revisar el equipo de cada nave y estimar la inversión a precios de Jita Sell. El fitting del escenario refleja el material, las habilidades y el nivel de equipo que elegiste en Escenario.", "en": "Review each ship’s equipment and estimate the investment at Jita Sell prices. The scenario fitting reflects your material, skills and equipment tier."},
+  "lunar.fitShow": {"es": "Ver Fitting", "en": "View Fitting"},
+  "lunar.hulkBeginner": {"es": "Hulk Iniciante · T1 Strip", "en": "Beginner Hulk · T1 Strip"},
+  "lunar.hulkStandard": {"es": "Hulk Intermedio · ORE Strip", "en": "Intermediate Hulk · ORE Strip"},
+  "lunar.hulkStandardNote": {"es": "Este es el fitting estándar compartido para Exhumers. La inversión de abajo corresponde al fitting de Escenario.", "en": "This is the shared standard Exhumer fitting. The investment below applies to the Scenario fitting."},
+  "lunar.fitIntro": {"es": "Escoge la nave que quieres equipar. Escribe parte de su nombre y selecciónala en el listado.", "en": "Choose the ship you want to fit. Type part of its name and select it from the list."},
   "lunar.fitRead": {"es": "Abre el fitting para revisar los módulos y drones. Puedes seleccionar el texto para copiarlo.", "en": "Open the fitting to review its modules and drones. Select the text to copy it."},
   "lunar.fitSearch": {"es": "Buscar Nave", "en": "Search Ships"},
   "lunar.fitInvestment": {"es": "Calcula la Inversión", "en": "Estimate the Investment"},

@@ -873,6 +873,27 @@ class ThemeBrowserTests(unittest.TestCase):
         picker.select_option("covetor")
         expect(library.locator('.library-plan-half:visible')).to_have_count(0)
 
+    def test_fitting_library_picker_matches_field_in_both_themes(self):
+        self.page.evaluate("selectAppModule('skills')")
+        picker = self.page.locator('#library-select')
+        for light in (False, True):
+            self.page.evaluate("(light)=>document.documentElement.classList.toggle('light',light)", light)
+            for width in (390, 630, 980, 1440):
+                self.page.set_viewport_size({'width': width, 'height': 950})
+                picker.click()
+                self.assertTrue(picker.evaluate("""el => {
+                    const menu = getComputedStyle(el, '::picker(select)');
+                    return el.matches(':open') && menu.appearance === 'base-select' &&
+                        menu.opacity === '1' && menu.backgroundColor.startsWith('rgb(') &&
+                        menu.positionTryFallbacks === 'none' &&
+                        el.querySelector('option').getBoundingClientRect().top >= el.getBoundingClientRect().bottom - 1 &&
+                        menu.backgroundColor === getComputedStyle(el).backgroundColor;
+                }"""))
+                picker.locator('option').last.scroll_into_view_if_needed()
+                self.page.keyboard.press('Escape')
+        picker.select_option('Purifier')
+        self.assertIn('PURIFIER', self.page.locator('#library-fit-name').inner_text())
+
     def test_fitting_library_language_and_theme(self):
         from playwright.sync_api import expect
         self.page.evaluate("selectAppModule('skills')")
