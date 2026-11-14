@@ -142,13 +142,13 @@ class ThemeBrowserTests(unittest.TestCase):
                     self.page.evaluate('(v)=>document.documentElement.classList.toggle("light",v)',light)
                     styles=self.page.evaluate("""() => {
                         const specs=['#mmTabs>.mm-ho-main','#mmTabs>.mm-ho-main .mm-modgroup',
-                          '#mmTabVentas','#mmTabMining'];
+                          '#mmTabVentas','#mmTabJita','#mmTabMining','#mmTabProduction'];
                         return specs.map(sel=>{const e=document.querySelector(sel),s=getComputedStyle(e),r=e.getBoundingClientRect();
                           return {background:s.backgroundColor,borderWidth:s.borderTopWidth,
                             radius:parseFloat(s.borderTopLeftRadius),
                             left:r.left,right:r.right,top:r.top,bottom:r.bottom,width:r.width,height:r.height};});
                     }""")
-                    self.assertEqual(len(styles),5)
+                    self.assertEqual(len(styles),6)
                     for group in styles[:2]:
                         self.assertEqual(group['background'],'rgba(0, 0, 0, 0)',(width,language,light,group))
                         self.assertEqual(group['borderWidth'],'0px',(width,language,light,group))
