@@ -873,6 +873,34 @@ class ThemeBrowserTests(unittest.TestCase):
         picker.select_option("covetor")
         expect(library.locator('.library-plan-half:visible')).to_have_count(0)
 
+    def test_mining_fitting_chevrons_keep_their_anchor(self):
+        self.page.evaluate("selectAppModule('mining')")
+        self.page.locator('[data-guide-view=scenario]').click()
+        self.page.locator('[data-scenario-key=shipClass]').select_option('exhumer')
+        self.page.locator('[data-guide-view=fits]').click()
+        guide = self.page.locator('.mn-fitting-guide')
+        guide.locator('.mn-fit-search > summary').click()
+        guide.get_by_role('button', name='Hulk', exact=True).click()
+        panels = guide.locator('.mn-fit-search, .mn-fit-disclosure')
+        self.assertEqual(panels.count(), 4)
+        for light in (False, True):
+            self.page.evaluate("light=>document.documentElement.classList.toggle('light',light)", light)
+            for width in (390, 630, 980, 1440):
+                self.page.set_viewport_size({'width': width, 'height': 950})
+                for opened in (0, 1, 4):
+                    result = panels.evaluate_all("""(nodes,opened)=>nodes.map((panel,i)=>{
+                        panel.open=i<opened;
+                        const summary=panel.querySelector('summary');
+                        const style=getComputedStyle(summary,'::after');
+                        const matrix=new DOMMatrixReadOnly(style.transform);
+                        return style.position==='absolute' && style.right==='7px' &&
+                            style.marginRight==='0px' && style.borderRightStyle==='solid' &&
+                            Math.abs(parseFloat(style.top)-summary.clientHeight/2)<=1 &&
+                            Math.abs(matrix.f+parseFloat(style.height)/2)<=1 &&
+                            (panel.open?matrix.a<0:matrix.a>0);
+                    })""", opened)
+                    self.assertTrue(all(result), (light, width, opened, result))
+
     def test_fitting_library_picker_matches_field_in_both_themes(self):
         self.page.evaluate("selectAppModule('skills')")
         picker = self.page.locator('#library-select')

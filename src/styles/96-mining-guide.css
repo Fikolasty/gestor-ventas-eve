@@ -333,14 +333,14 @@ html.light #mining #mnRoot .mn-scenario-panel select,html.light #skills .library
 #mining .mn-fit-step-number{color:var(--clay);margin-inline-end:10px}
 #mining .mn-fitting-guide .covetor-step{row-gap:12px}
 #mining .mn-fitting-guide .covetor-media,#mining .mn-fitting-guide .mn-fit-disclosure{width:100%;min-width:0}
-#mining .mn-fitting-guide .covetor-media,#mining .mn-fitting-guide .covetor-step>.mn-fit-disclosure{max-width:380px;justify-self:end}
+#mining .mn-fitting-guide .covetor-media{display:grid;gap:12px;max-width:380px;justify-self:end}
 #mining .mn-fitting-guide .covetor-media figure{margin:0}
 #mining .mn-fitting-guide .covetor-media img{aspect-ratio:2;object-fit:cover}
 #mining #mnRoot .mn-fitting-guide :is(.mn-fit-search,.mn-fit-disclosure){display:block;padding:12px 16px;box-sizing:border-box}
-#mining .mn-fit-search{max-width:360px;background:var(--surface-card);border:1px solid var(--line2);border-radius:8px}
+#mining .mn-fit-search{min-width:0;background:var(--surface-card);border:1px solid var(--line2);border-radius:8px}
 #mining .mn-fitting-guide summary{position:relative;display:flex;align-items:center;min-height:24px;padding-inline-end:22px;list-style:none}
 #mining .mn-fitting-guide summary::-webkit-details-marker{display:none}
-#mining #mnRoot .mn-fitting-guide details>summary::after{position:absolute;top:50%;right:7px;margin:0;transform:translateY(-50%) rotate(45deg)}
+#mining #mnRoot .mn-fitting-guide details>summary::after{position:absolute;inset-block-start:50%;inset-inline-end:7px;margin:0;transform-origin:center;transform:translateY(-50%) rotate(45deg);transition:none}
 #mining #mnRoot .mn-fitting-guide details[open]>summary::after{transform:translateY(-50%) rotate(225deg)}
 #mining .mn-fit-search input{width:100%;margin-top:8px}
 #mining .mn-fit-options{display:grid;gap:4px;margin-top:8px}
@@ -349,8 +349,7 @@ html.light #mining #mnRoot .mn-scenario-panel select,html.light #skills .library
 #mining .mn-fit-guide-total .mn-fit-total{background:none;border:0;padding:0;margin:12px 0}
 #mining .mn-fit-guide-budget{overflow:auto}
 @media(max-width:760px){
- #mining .mn-fitting-guide .covetor-step>.mn-fit-search{grid-row:2}
- #mining .mn-fitting-guide :is(.covetor-media,.covetor-step>.mn-fit-disclosure){justify-self:start}
+ #mining .mn-fitting-guide .covetor-media{justify-self:start}
 }
 
 
@@ -436,8 +435,9 @@ html.light #mining #mnRoot .mn-scenario-panel select,html.light #skills .library
 #mining #mnRoot .mn-fitting-guide>.mn-fit-inline[hidden],
 #mining #mnRoot .mn-fitting-guide .mn-fit-standard[hidden]{display:none}
 #mining #mnRoot .mn-fitting-guide .mn-fit-inline>pre{position:static;max-height:none;margin:12px 0 0;padding-top:12px;border-top:1px solid var(--line2)}
-#mining #mnRoot .mn-fitting-guide .mn-fit-standard{margin-top:12px}
-#mining #mnRoot .mn-fitting-guide>p{max-width:76ch}
+#mining .mn-hulk-fits:not([hidden]){display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;align-items:start;margin-top:12px}
+@media(max-width:760px){#mining .mn-hulk-fits:not([hidden]){grid-template-columns:minmax(0,1fr)}}
+#mining #mnRoot .mn-fitting-guide .covetor-copy p{max-width:76ch}
 
 @supports (appearance:base-select){#skills .library-top select,#skills .library-top select::picker(select){appearance:base-select!important}}
 

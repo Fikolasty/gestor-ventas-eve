@@ -945,13 +945,11 @@ const MineUI=(()=>{
       node.dataset.i18n=key;
       return node;
     };
-    guide.append(text('p','lunar.fitOverview'));
     const choose=section('1','lunar.fitChoose');
     const layout=h('div','step covetor-step');
     const copy=h('div','covetor-copy');
-    copy.append(text('p','lunar.fitIntro'),text('p','lunar.fitRead'));
+    copy.append(text('p','lunar.fitOverview'),text('p','lunar.fitIntro'));
     const media=h('div','covetor-media'),figure=h('figure');
-    media.append(figure);
     const chooser=h('details','mn-fit-search'),selected=h('summary');
     const search=h('input');
     search.type='search';
@@ -960,18 +958,17 @@ const MineUI=(()=>{
     search.dataset.i18nAriaLabel='lunar.fitSearch';
     const options=h('div','mn-fit-options');
     chooser.append(selected,search,options);
-    const fit=h('details','fit mn-fit-disclosure'),caption=h('summary'),code=h('pre');
-    code.classList.add('no-tr');
-    fit.classList.add('mn-fit-inline');
     const hulkFits=['lunar.hulkBeginner','lunar.hulkStandard'].map((key,index)=>{
       const disclosure=h('details','fit mn-fit-disclosure mn-fit-inline mn-fit-standard');
       disclosure.append(text('summary',key),text('p','lunar.hulkStandardNote'),
         h('pre','no-tr',[HULK_BEGINNER,HULK_STANDARD][index]));
       return disclosure;
     });
-    fit.append(caption,code);
-    layout.append(copy,media,chooser,fit);
-    choose.append(layout,...hulkFits);
+    media.append(chooser,figure);
+    layout.append(copy,media);
+    const hulkGrid=h('div','mn-hulk-fits');
+    hulkGrid.append(...hulkFits);
+    choose.append(layout,hulkGrid);
     const investment=section('2','lunar.fitInvestment');
     const total=h('div','mn-fit-guide-total');
     const breakdown=h('details','fit mn-fit-disclosure');
@@ -1002,17 +999,13 @@ const MineUI=(()=>{
     return ()=>{
       if(root.dataset.guideView!=='fits')return;
       const ship=activeFitShip;
-      const data=ship&&row(ship,S.tier);
       const card=$q('.mn-fit-card:not([hidden])');
       selected.textContent=ship||tx('lunar.fitSearch');
-      caption.textContent=tx('lunar.fitShow')+' · '+(ship||'—');
-      hulkFits.forEach(disclosure=>{disclosure.hidden=ship!=='Hulk';});
+      hulkGrid.hidden=ship!=='Hulk';
       const src=shipImage(ship,'render',512);
       if(figure.firstElementChild?.src!==src?.src){
         figure.replaceChildren(...(src?[src]:[]));
       }
-      code.textContent=data?'['+ship+', '+TL[S.tier]+']\n\n'+
-        [data.low,data.mid,data.high,data.rigs,data.drones].filter(Boolean).join('\n\n'):'—';
       total.replaceChildren(...(card?[card.querySelector('.mn-fit-total').cloneNode(true)]:[]));
       budget.replaceChildren(...(card?[card.querySelector('.mn-fit-budget').cloneNode(true)]:[]));
       filter();
