@@ -19,7 +19,7 @@ miningGuideTools.addEventListener('click',event=>{
   tools.hidden=view==='guide';
   tools.dataset.guideView=view;
   if(view==='guide')return;
-  MineUI.showView('ships');
+  MineUI.showView();
   if(view==='fits')tools.querySelector('.mn-analysis-tabs [data-tab=fits]')?.click();
   if(view==='compare'&&tools.querySelector('.mn-analysis-tabs [data-tab=fits][aria-selected=true]')){
     tools.querySelector('.mn-analysis-tabs [data-tab=visual]')?.click();

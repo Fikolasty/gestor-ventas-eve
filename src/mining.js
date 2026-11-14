@@ -15,14 +15,14 @@ const MineUI=(()=>{
   const MATL={moon:'Moon ore',ice:'Hielo',gas:'Gas'};
   const DEF={moon:'Monazite',ice:'Krystallos',gas:'Golden Cytoserocin'};
   const SCENARIO_DEFAULTS={mat:'moon',lv:5,imp:0,boost:'',met:'m3',tier:'Faction',shipClass:'barge',base:'buy',cmp:true,iceLoc:'jita',unloadSec:65};
-  const S={...SCENARIO_DEFAULTS,view:'ships',costShip:'Covetor',item:{...DEF},
-    att:'base',patt:'base',acc:1,accq:'1',hrs:3,barge:'Retriever',ptier:'T1',plexManual:null,esPlex:15,omegaPlex:500,cmpv:'1',boost2:'',pimp:'1',dmat:'moon',freeSP:1000000,daysAfter:30};
+  const S={...SCENARIO_DEFAULTS,costShip:'Covetor',item:{...DEF},
+    att:'base',patt:'base',acc:1,hrs:3,barge:'Retriever',ptier:'T1',plexManual:null,esPlex:15,omegaPlex:500,cmpv:'1',boost2:'',pimp:'1',dmat:'moon',freeSP:1000000,daysAfter:30};
 
   // Solo la configuración del plan minero se persiste, sin inventario ni precios ESI.
   const MINING_PLAN_KEY='marketMoves.miningPlan.v1';
   const savedKeys=['mat','lv','imp','boost','met','tier','shipClass','costShip','att','patt','acc',
     'hrs','daysAfter','barge','ptier','plexManual','esPlex','omegaPlex','cmp','base','boost2',
-    'pimp','dmat','freeSP','iceLoc','unloadSec','view','item'];
+    'pimp','dmat','freeSP','iceLoc','unloadSec','item'];
   let saveTimer=0,lastSaved='';
   function miningSaveNow(){
     if(saveTimer){clearTimeout(saveTimer);saveTimer=0;}
@@ -61,7 +61,7 @@ const MineUI=(()=>{
       S.daysAfter=Math.max(1,Math.min(30,S.daysAfter));
       S.acc=Math.max(1,Math.min(1000,S.acc));
       S.hrs=Math.max(.5,Math.min(24,S.hrs));
-      S.view=['ships','plan','max'].includes(S.view)?S.view:'ships';
+      S.att=['base','remap','remap3','remap5'].includes(S.att)?S.att:'base';
     }catch(e){}
   }
   let esSaved=null; // PLEX de Expert System guardado al pasar a Exhumer (que pone esPlex en 0)
@@ -278,7 +278,6 @@ const MineUI=(()=>{
   }
   const iskPerM3=m=>{const x=matItem(m),v=m==='ice'?iceUnitPrice():quote(matPriceId(m),S.base);
     return x&&v!=null?v/x.vol:null;};
-  const ATTL={base:'Base 20/20',remap:'Remap',remap3:'Remap + implantes +3',remap5:'Remap + implantes +5'};
   // El 1M SP de referido es OPCIONAL: referencia aproximada a 30 SP/min.
   // No confundir una equivalencia de horas con simulación exacta de un fit Pyfa por día.
   const bonusDays=()=>S.freeSP/30/60/24;
@@ -302,23 +301,12 @@ const MineUI=(()=>{
     gear:'El fit muestra nombre, Type ID, cantidad y precio Jita. Pulsa ⓘ junto a cada componente para conocer su función y abrir su ficha.'
   };
   const INFO=(key)=>'<details class="mn-info"><summary aria-label="Información: '+key+'" title="Información · pasar el mouse o pulsar">ⓘ</summary><div class="mn-info-popup" role="note">'+HINTS[key]+'</div></details>';
+  const miningSelect=(name,options)=>'<select class="'+name+'"><button type="button"><selectedcontent></selectedcontent></button>'+
+    options.map(([value,label])=>'<option value="'+value+'">'+label+'</option>').join('')+'</select>';
+  const planSelect=(key,options)=>miningSelect('mn-plan-select',options).replace('<select ', '<select data-plan-key="'+key+'" ');
   const HTML=
-  '<section class="mn-reading-path" aria-labelledby="mnReadingTitle">'+
-    '<span class="mn-reading-eyebrow" data-i18n="mining.guideEyebrow">GUÍA INTERACTIVA · MINERÍA EN NULLSEC</span>'+
-    '<h2 id="mnReadingTitle" data-i18n="mining.guideTitle">De tu primera barge a tu primera Omega</h2>'+
-    '<p class="mn-reading-intro" data-i18n="mining.guideIntro">Empieza con tu nave, compara tus números y descubre cuándo podrías pagar Omega. No son ingresos garantizados.</p>'+
-    '<ol class="mn-reading-chapters">'+
-      '<li><span class="mn-reading-index">01</span><div><h3 data-i18n="mining.guideOne">Tu primera nave</h3><p data-i18n="mining.guideOneText">Compara skills, fitting, producción y viajes.</p></div><button type="button" data-mining-jump="ships" data-i18n="mining.guideOneAction">Comparar naves</button></li>'+
-      '<li><span class="mn-reading-index">02</span><div><h3 data-i18n="mining.guideTwo">Tu primera Omega</h3><p data-i18n="mining.guideTwoText">Calcula horas, cuentas, PLEX y entrenamiento.</p></div><button type="button" data-mining-jump="plan" data-i18n="mining.guideTwoAction">Plan Omega</button></li>'+
-      '<li><span class="mn-reading-index">03</span><div><h3 data-i18n="mining.guideThree">Tu siguiente mejora</h3><p data-i18n="mining.guideThreeText">Compara el potencial de naves avanzadas.</p></div><button type="button" data-mining-jump="max" data-i18n="mining.guideThreeAction">Ver naves avanzadas</button></li>'+
-    '</ol>'+
-    '<p class="mn-reading-caution" data-i18n="mining.grossWarning">Los ISK/h mostrados no siempre descuentan impuestos, refinería o transporte: son estimaciones de producción, no necesariamente ganancia final.</p>'+
-  '</section>'+
    '<header class="mn-scenario-hero"><h2>'+tx('lunar.scenarioTitle')+' <span>'+tx('lunar.scenarioAccent')+'</span></h2><p>'+tx('lunar.scenarioIntro')+'</p></header>'+
-   '<div class="mn-toolbar">'+
-  '<div class="mn-views">'+SEG('view',[['ships','Rendimiento Nave'],['plan','Plan Omega'],['max','Nave Maxeada']])+'</div>'+
-
-  '<div class="mn-omega-tools" hidden>'+
+  '<div class="mn-omega-tools">'+
     '<label class="mn-sp-toggle" for="mnFreeSpSwitch" title="Se necesita un enlace de invitación válido para reclamar los SP">'+
       '<input type="checkbox" id="mnFreeSpSwitch" class="mn-sp-checkbox" checked>'+
       '<span class="mn-sp-track" aria-hidden="true"></span>'+
@@ -326,9 +314,7 @@ const MineUI=(()=>{
     '</label>'+
     '<a class="mn-sp-cta" href="https://www.eveonline.com/recruit" target="_blank" rel="noopener noreferrer" title="Programa oficial de EVE. Reclamar el bono requiere una invitación válida.">FREE 1 Million SP! <span aria-hidden="true">↗</span></a>'+
   '</div>'+
-'</div>'+
    '<div class="mn-refinery-status" hidden><span class="mn-refinery-status-label" data-i18n="refinery.miningSummary">Tu refinería</span><strong class="mn-refinery-status-yield">—</strong><span class="mn-refinery-status-fee">—</span><span class="mn-refinery-status-market"></span></div>'+
-   '<div class="mn-shared-intro"><strong>Ajustes compartidos</strong>'+INFO('shared')+'</div>'+
    '<div class="mn-shared-layout">'+
    '<div class="mn-ice-settings" hidden><label for="mnIceMarket">Hielo · valor según Ajustes</label>'+
      '<select id="mnIceMarket" class="mn-ice-market"><option value="jita">Jita según precio elegido</option><option value="hy">Venta en HY-RWO</option><option value="bb">Contrato Buyback Mayhem</option><option value="refine">Reprocesar en HY y vender productos</option></select>'+
@@ -354,14 +340,10 @@ const MineUI=(()=>{
      '</div>'+
    '</details>'+
    '<div class="mn-turnaround"><div class="mn-turnaround-heading"><label for="mnUnloadSec">Tiempo muerto por descarga</label>'+INFO('travel')+'</div>'+
-     '<div class="mn-turnaround-input"><input id="mnUnloadSec" type="number" min="0" max="900" step="1" value="65" inputmode="numeric"><span>segundos</span>'+
-       '<button type="button" class="mn-unload-default" title="Restaurar 65 segundos">Restablecer</button></div>'+
+     '<div class="mn-turnaround-input"><input id="mnUnloadSec" type="number" min="0" max="900" step="1" value="65" inputmode="numeric"><span>segundos</span></div>'+
      '<small id="mnUnloadExplain">Incluye traslado, descarga y regreso. ⓘ para ver el desglose.</small></div>'+
    '</div>'+
-   '<div class="mn-v-max" hidden><div class="mn-card"><h3>Nave Maxiada · Comparación Pura</h3>'+
-    '<p class="mn-note">Skills V · implantes +5% · Full Facción. Sin Omega, compras ni inversión. Se muestran m³/h efectivos y, cuando ESI ofrece precios, ISK/h. El ajuste de boost viene del comparador de naves.</p>'+
-    '<p class="mn-note">Referencia Pyfa del build '+String(MINE.build)+'. Los upgrades ultra caros Aoede / Ingenii se muestran aparte porque necesitan validar el fit/CPU contra un SDE actualizado; no inflamos los números.</p>'+
-    '<div class="mn-maxbody"></div></div></div>'+
+   '<div class="mn-v-max"><div class="mn-maxbody"></div></div>'+
     '<div class="mn-v-ships">'+
    '<section class="mn-controls-unified" aria-labelledby="mnScenarioTitle">'+
      '<div class="mn-guide-heading">'+
@@ -425,10 +407,13 @@ const MineUI=(()=>{
    '<div class="mn-card mn-yield-card"><h3 data-i18n="lunar.yieldByFit">Rendimiento por Fitting</h3><div class="mn-yield-matrix"></div></div>'+
    '<div class="mn-card"><h3>Fit y Detalle · Inversión por Nave</h3><p class="mn-note">Componentes reales del fit elegido, con cantidad, precio unitario y subtotal. La inversión se recalcula al actualizar ESI o cambiar un precio manual.</p>'+
      '<div class="mn-fit-cards"></div><p class="mn-note mn-invst" style="margin-top:10px"></p></div>'+
-   '<div class="mn-card mn-training"><h3>Ruta recomendada de entrenamiento</h3><p class="mn-note">Empieza por desbloquear tu nave, aumenta el yield y después especialízate. Días acumulados aproximados desde personaje nuevo y precios de skillbooks en Jita Sell.</p>'+
-     '<div class="mn-training-controls"><div class="mn-ctl"><div><span class="mn-lbl">Atributos de entrenamiento</span>'+SEG('att',[['base','Base 20/20'],['remap','Remap'],['remap3','Remap +3'],['remap5','Remap +5']])+'</div></div>'+
-       '<button type="button" class="mn-skills-reload">Actualizar skillbooks · ESI ↻</button></div>'+
-     '<div class="mn-tr-path"></div><div class="mn-books"></div><p class="mn-note mn-trn"></p></div>'+
+   '<section class="mn-card mn-training"><div class="mn-training-head"><div><h3 data-i18n="lunar.trainingTitle">Ruta de Entrenamiento</h3>'+
+     '<p data-i18n="lunar.trainingIntro">El tiempo es acumulado desde un personaje nuevo.</p></div>'+
+     '<label><span data-i18n="lunar.trainingAttributes">Atributos de Entrenamiento</span>'+miningSelect('mn-training-profile',[['base','Base 20/20'],['remap','Remap'],['remap3','Remap +3'],['remap5','Remap +5']])+'</label></div>'+
+     '<p class="mn-tr-target"></p><div class="mn-tr-path"></div>'+
+     '<details class="mn-editorial-details mn-training-plans"><summary data-i18n="lunar.trainingExport">Plan Completo para EVE</summary><div class="mn-training-plan-grid"></div></details>'+
+     '<details class="mn-editorial-details mn-training-books"><summary><span data-i18n="lunar.trainingBooks">Coste de los Libros</span><strong class="mn-books-total"></strong></summary>'+
+     '<div class="mn-books"></div><div class="mn-books-actions"><p class="mn-note mn-trn" role="status"></p><button type="button" class="mn-skills-reload"></button></div></details></section>'+
 
    '<details class="mn-reco"><summary>Qué Nave Recomendar</summary><div class="mn-prose">'+
      '<h4>Jugador Nuevo (Barges)</h4><ul>'+
@@ -461,33 +446,22 @@ const MineUI=(()=>{
    '</div></details>'+
    '</div>'+
    // ---------- vista: plan para Omega nuevo ----------
-   '<div class="mn-v-plan" hidden>'+
-   '<div class="pl-hero">'+
-     '<h3>¿Una cuenta nueva se paga sola el segundo mes?</h3>'+
-     '<p>Un personaje nuevo pasa a Omega, compra el Expert System de barge y mina desde el primer día mientras entrena. Abajo ves cuánto te queda a los 28 días, ya pagado el próximo Omega, y cuánto deja cada mes después.</p>'+
-     '<ol class="pl-steps">'+
-       '<li><span class="pl-sn">1</span><b>Día 1</b><span>Pasas a Omega y compras el Expert System: te presta las skills de barge por 7 días.</span></li>'+
-       '<li><span class="pl-sn">2</span><b>Días 1 a 7</b><span>Minas con las skills prestadas mientras entrenas Industry V y Mining Barge I.</span></li>'+
-       '<li><span class="pl-sn">3</span><b>Días 8 a 28</b><span>Minas con tus propias skills y juntas el ISK del próximo Omega.</span></li>'+
-       '<li><span class="pl-sn">4</span><b>Mes 2</b><span>Con las skills a IV y Cybernetics V, pones los implantes de minería +5%.</span></li>'+
-       '<li><span class="pl-sn">5</span><b>Después</b><span>Sigues entrenando hacia la Exhumer mientras la cuenta se paga sola.</span></li>'+
-     '</ol>'+
-   '</div>'+
+   '<div class="mn-v-plan">'+
    '<div class="mn-card pl-setup"><h3>Tu Escenario</h3>'+
      '<div class="pl-grid">'+
-       '<div class="pl-f pl-wide"><span class="pl-l">Cuentas</span><div class="pl-row">'+'<div class="pl-stp" data-k="acc" data-min="1" data-max="1000" data-st="1"><button type="button" data-d="-1" aria-label="Menos">−</button><input type="text" inputmode="decimal" class="pl-in" aria-label="acc"><span class="pl-suf"></span><button type="button" data-d="1" aria-label="Más">+</button></div>'+SEG('accq',[['1','1'],['5','5'],['10','10'],['25','25'],['50','50'],['100','100']])+'</div><small>Todo se multiplica por tus cuentas.</small></div>'+
+       '<div class="pl-f pl-wide"><span class="pl-l">Cuentas</span><div class="pl-row">'+'<div class="pl-stp" data-k="acc" data-min="1" data-max="1000" data-st="1"><button type="button" data-d="-1" aria-label="Menos">−</button><input type="text" inputmode="decimal" class="pl-in" aria-label="acc"><span class="pl-suf"></span><button type="button" data-d="1" aria-label="Más">+</button></div>'+'</div><small>Todo se multiplica por tus cuentas.</small></div>'+
        '<div class="pl-f"><span class="pl-l">Horas de minado al día</span>'+'<div class="pl-stp" data-k="hrs" data-min="0.5" data-max="24" data-st="0.5"><button type="button" data-d="-1" aria-label="Menos">−</button><input type="text" inputmode="decimal" class="pl-in" aria-label="hrs"><span class="pl-suf">h</span><button type="button" data-d="1" aria-label="Más">+</button></div>'+'<small>Por cuenta.</small></div>'+'<div class="pl-f pl-wide"><span class="pl-l">Días que minas por mes, después del mes 1</span>'+
   '<div class="pl-row"><div class="pl-stp" data-k="daysAfter" data-min="1" data-max="30" data-st="1"><button type="button" data-d="-1" aria-label="Menos">−</button><input type="text" inputmode="numeric" class="pl-in" aria-label="Días de minado cada mes desde el mes 2"><span class="pl-suf">días</span><button type="button" data-d="1" aria-label="Más">+</button></div>'+
-  SEG('daysAfter',[['7','7 días'],['14','14'],['21','21'],['30','30']])+'</div>'+
+  '</div>'+
   '<small>7 días = una semana de minería por mes. Las habilidades se entrenan los 30 días y el Omega mensual se paga completo.</small></div>'+
-       '<div class="pl-f"><span class="pl-l">Nave</span><div class="pl-shiprow"><span class="pl-sl">Barge</span>'+SEG('barge',[['Procurer','Procurer'],['Retriever','Retriever'],['Covetor','Covetor']])+'</div><div class="pl-shiprow"><span class="pl-sl">Exhumer</span>'+SEG('barge',[['Skiff','Skiff'],['Mackinaw','Mackinaw'],['Hulk','Hulk']])+'</div><small class="pl-bh"></small></div>'+
-       '<div class="pl-f"><span class="pl-l">Fit</span>'+SEG('ptier',[['T1','Full T1'],['T2','Full T2'],['Faction','Facción']])+'<small>Lo que tus skills aún no permiten se usa en su versión menor.</small></div>'+
+       '<div class="pl-f"><span class="pl-l">Nave</span>'+planSelect('barge',[['Procurer','Procurer'],['Retriever','Retriever'],['Covetor','Covetor'],['Skiff','Skiff'],['Mackinaw','Mackinaw'],['Hulk','Hulk']])+'<small class="pl-bh"></small></div>'+
+       '<div class="pl-f"><span class="pl-l">Fit</span>'+planSelect('ptier',[['T1','Full T1'],['T2','Full T2'],['Faction','Facción']])+'<small>Lo que tus skills aún no permiten se usa en su versión menor.</small></div>'+
      '</div>'+
      '<h4 class="pl-sub">Entrenamiento, implantes y boost</h4>'+
      '<div class="pl-grid">'+
-       '<div class="pl-f"><span class="pl-l">Atributos</span>'+SEG('patt',[['base','Base 20/20'],['remap','Remap'],['remap3','Remap + atributos +3']])+'<small class="pl-ah"></small></div>'+
-       '<div class="pl-f"><span class="pl-l">Implantes de minería +5%</span>'+SEG('pimp',[['1','Sí, desde el mes 2'],['0','No']])+'<small class="pl-ih"></small></div>'+
-       '<div class="pl-f"><span class="pl-l">Boost desde el mes 2</span>'+SEG('boost2',[['','Sin boost'],['Porpoise','Porpoise'],['Orca','Orca'],['Rorqual','Rorqual']])+'<small>Al máximo. Orca y Rorqual comprimen en el mismo grid y no hay viajes a descargar (la Porpoise, solo en gas).</small></div>'+
+       '<div class="pl-f"><span class="pl-l">Atributos</span>'+planSelect('patt',[['base','Base 20/20'],['remap','Remap'],['remap3','Remap + atributos +3']])+'<small class="pl-ah"></small></div>'+
+       '<div class="pl-f"><span class="pl-l">Implantes de minería +5%</span>'+planSelect('pimp',[['1','Sí, desde el mes 2'],['0','No']])+'<small class="pl-ih"></small></div>'+
+       '<div class="pl-f"><span class="pl-l">Boost desde el mes 2</span>'+planSelect('boost2',[['','Sin boost'],['Porpoise','Porpoise'],['Orca','Orca'],['Rorqual','Rorqual']])+'<small>Al máximo. Orca y Rorqual comprimen en el mismo grid y no hay viajes a descargar (la Porpoise, solo en gas).</small></div>'+
      '</div>'+
      '<h4 class="pl-sub">Precios</h4>'+
      '<div class="pl-prices">'+
@@ -496,14 +470,14 @@ const MineUI=(()=>{
          '<small class="pl-plexs"></small><button type="button" class="pl-link pl-plexrs" hidden>Volver al precio de ESI</button></div>'+
        '<div class="pl-tile"><span class="pl-l">Expert System</span>'+'<div class="pl-stp" data-k="esPlex" data-min="0" data-max="1000" data-st="1"><button type="button" data-d="-1" aria-label="Menos">−</button><input type="text" inputmode="decimal" class="pl-in" aria-label="esPlex"><span class="pl-suf">PLEX</span><button type="button" data-d="1" aria-label="Más">+</button></div>'+'<small class="pl-esi"></small></div>'+
        '<div class="pl-tile"><span class="pl-l">Omega de 30 días</span>'+'<div class="pl-stp" data-k="omegaPlex" data-min="0" data-max="5000" data-st="10"><button type="button" data-d="-1" aria-label="Menos">−</button><input type="text" inputmode="decimal" class="pl-in" aria-label="omegaPlex"><span class="pl-suf">PLEX</span><button type="button" data-d="1" aria-label="Más">+</button></div>'+'<small class="pl-omi"></small></div>'+
-       '<div class="pl-tile"><span class="pl-l">Vendes el mineral</span>'+SEG('base',[['buy','Jita Buy'],['sell','Jita Sell']])+
-         SEG('cmpv',[['1','Comprimido'],['0','Sin comprimir']])+'<small>Jita Buy: vendes al instante. Jita Sell: pones una orden y esperas.</small></div>'+
+       '<div class="pl-tile"><span class="pl-l">Vendes el mineral</span>'+planSelect('base',[['buy','Jita Buy'],['sell','Jita Sell']])+
+         planSelect('cmpv',[['1','Comprimido'],['0','Sin comprimir']])+'<small>Jita Buy: vendes al instante. Jita Sell: pones una orden y esperas.</small></div>'+
      '</div>'+
      '<p class="pl-status"></p>'+
    '</div>'+
    '<div class="pl-vh"><h3 class="pl-vt"></h3><p class="mn-take pl-take"></p></div>'+
    '<div class="pl-tiles"></div>'+
-   '<div class="mn-card pl-det"><div class="pl-deth"><h3>Detalle</h3>'+SEG('dmat',[['moon','Moon ore'],['ice','Hielo'],['gas','Gas']])+'</div><div class="pl-detb"></div></div>'+
+   '<div class="mn-card pl-det"><div class="pl-deth"><h3>Detalle</h3>'+planSelect('dmat',[['moon','Moon ore'],['ice','Hielo'],['gas','Gas']])+'</div><div class="pl-detb"></div></div>'+
    '<details class="mn-plan-d"><summary>Plan de Entrenamiento Paso a Paso</summary><div class="mn-prose mn-plan-l"></div></details>'+
    '<details class="mn-plan-how"><summary>Cómo se Calcula</summary><div class="mn-prose"><ul>'+
      '<li><b>Personaje nuevo</b>: atributos 20/20/20/20/19 y las skills con que empiezan todas las razas (Mining III, Science IV, CPU Management IV, Industry I, Mining Frigate I, Spaceship Command III, Drones I…). Entrena como Omega: atributo principal + la mitad del secundario, por minuto.</li>'+
@@ -541,7 +515,8 @@ const MineUI=(()=>{
   const ticks=(max,n)=>{const st=nice(max/n),out=[0];while(out[out.length-1]<max-1e-9)out.push(out[out.length-1]+st);return out;}; // el último tick siempre cubre el máximo
 
   // ---------- pintar ----------
-  function seg(){root.querySelectorAll('.pk-flt').forEach(g=>{const k=g.dataset.k,cur=String(S[k]);
+  function seg(){root.querySelectorAll('.mn-plan-select').forEach(select=>{select.value=String(S[select.dataset.planKey]);});
+    root.querySelectorAll('.pk-flt').forEach(g=>{const k=g.dataset.k,cur=String(S[k]);
     g.querySelectorAll('.pk-fb').forEach(b=>{const on=b.dataset.v===cur;b.classList.toggle('on',on);b.setAttribute('aria-pressed',String(on));});});}
   function fillItems(){const sel=$q('.mn-item');sel.replaceChildren();const groups={};
     sortedMats(S.mat).forEach(m=>{(groups[m.grp]||(groups[m.grp]=[])).push(m);});
@@ -675,26 +650,33 @@ const MineUI=(()=>{
     }
     host.append(card,table);
   }
-  let comparisonShip;
+  let comparisonShip,fleetSelection='Rorqual';
   function paintFleetSupport(ship){
     const host=$q('.mn-fleet-values');
-    if(!ship){host.replaceChildren();return;}
+    const detail=$q('.mn-fleet-detail-value');
+    if(!ship){host.replaceChildren();detail.textContent='';return;}
     const base=calcRow('',S.lv,S.lv===3?0:S.imp,S.mat,S.tier,ship)?.eff;
-    host.previousElementSibling.textContent=ship;
-    host.replaceChildren(...[['',0],['Porpoise',42244],['Orca',28606],['Rorqual',28352]].map(([boost,id])=>{
-      const card=h('div','mn-fleet-ship');
-      const yieldPerHour=calcRow(boost,S.lv,S.lv===3?0:S.imp,S.mat,S.tier,ship)?.eff;
-      if(id){
-        const image=h('img');
-        image.src='https://images.evetech.net/types/'+id+'/render?size=256';
-        image.alt='';
-        image.loading='lazy';
-        card.append(image);
-      }
-      card.append(h('b','',boost||tx('lunar.noSupport')),h('strong','',Number.isFinite(yieldPerHour)?NF0.format(yieldPerHour)+' m³/h':'—'));
-      if(boost&&base>0&&Number.isFinite(yieldPerHour))card.append(h('small','',NF1.format((yieldPerHour/base-1)*100)+'%'));
+    const supports=[['Porpoise',42244],['Orca',28606],['Rorqual',28352]].map(([boost,id])=>
+      ({boost,id,rate:calcRow(boost,S.lv,S.lv===3?0:S.imp,S.mat,S.tier,ship)}));
+    const winner=supports.reduce((best,entry)=>entry.rate&&(!best||entry.rate.eff>best.rate.eff)?entry:best,null);
+    function selectSupport(entry){
+      fleetSelection=entry.boost;
+      for(const card of host.children)card.setAttribute('aria-pressed',String(card.dataset.boost===entry.boost));
+      const gain=base>0&&entry.rate?NF1.format((entry.rate.eff/base-1)*100)+'%':'—';
+      detail.textContent=ship+' · '+entry.boost+' · '+tx('lunar.fleetBaseline')+' '+(Number.isFinite(base)?NF0.format(base)+' m³/h':'—')+' · '+gain;
+    }
+    host.replaceChildren(...supports.map(entry=>{
+      const {boost,id,rate}=entry;
+      const card=h('button','mn-fleet-ship'+(entry===winner?' mn-ship-winner':''));
+      card.type='button';card.dataset.boost=boost;
+      const image=h('img');image.src='https://images.evetech.net/types/'+id+'/render?size=128';image.alt='';image.loading='lazy';
+      const label=h('span');
+      label.append(h('b','',(entry===winner?'★ ':'')+boost),h('strong','',rate?NF0.format(rate.eff)+' m³/h':'—'));
+      card.append(image,label);
+      card.onclick=()=>selectSupport(entry);
       return card;
     }));
+    selectSupport(supports.find(entry=>entry.boost===fleetSelection)||supports[0]);
   }
   function paintAllShips(){
     const host=$q('.mn-all-ships');
@@ -1020,12 +1002,34 @@ const MineUI=(()=>{
   const extraSkillNames=mat=>mat==='moon'?['Mining','Astrogeology','Mining Barge','Mining Upgrades','Mining Precision','Mining Drone Operation']:
     mat==='ice'?['Ice Harvesting','Mining Barge','Mining Upgrades','Mining Precision','Ice Harvesting Drone Operation']:
     ['Gas Cloud Harvesting','Mining Barge','Astrogeology'];
-  const trainingNames=()=>[...new Set(MINE.train.plan[S.mat].map(x=>x[0])
-    .concat(S.lv===5?extraSkillNames(S.mat):[],S.shipClass==='exhumer'?['Exhumers']:[],S.imp===5?['Cybernetics']:[]))];
+  const trainingStages=()=>{
+    const {plan,stages}=MINE.train, mat=S.mat, steps=plan[mat], st=stages[mat];
+    const ex=S.shipClass==='exhumer';
+    const result=[
+      {number:1,start:0,steps:steps.slice(0,st.barge)},
+      {number:2,start:st.barge,steps:steps.slice(st.barge,st.yield_)},
+    ];
+    if(ex)result.push({number:3,start:st.yield_,steps:steps.slice(st.yield_,st.exhumer)});
+    if(S.lv===5){
+      const names=extraSkillNames(mat);
+      if(ex)names.push('Exhumers');
+      const achieved=new Map(steps.slice(0,ex?st.exhumer:st.yield_));
+      result.push({number:4,steps:names.filter(name=>achieved.get(name)!==5).map(name=>[name,5])});
+    }
+    return result;
+  };
+  const trainingNames=()=>[...new Set(trainingStages().flatMap(stage=>stage.steps.map(([name])=>name)))];
+  const roman=['','I','II','III','IV','V'];
+  function trainingDuration(hours){
+    const minutes=Math.round(hours*60);
+    const d=Math.floor(minutes/1440),h=Math.floor(minutes%1440/60),m=minutes%60;
+    return [d&&d+'D',h&&h+'h',m&&m+'m'].filter(Boolean).join(' ')||'0m';
+  }
   async function loadSkillBooks(force=false){
     if(skillBusy||!root)return;
     const names=trainingNames();
-    if(!force&&names.every(n=>SKILL_RESOLVED.has(n)))return;
+    const resolved=names.every(n=>SKILL_RESOLVED.has(n));
+    if(!force&&resolved&&names.every(n=>!SKILL_BOOK_IDS[n]||Date.now()-(PRICE[SKILL_BOOK_IDS[n]]?.at||0)<5*60e3))return;
     skillBusy=true;skillError='';paintTraining();
     try{
       const missing=force?names:names.filter(n=>!SKILL_RESOLVED.has(n));
@@ -1043,75 +1047,87 @@ const MineUI=(()=>{
       await loadMany(ids,err=>{quoteError=err;},force);
       if(quoteError)skillError=String(quoteError.message||quoteError);
     }catch(e){skillError=String(e.message||e);}
-    finally{skillBusy=false;paintTraining();}
+    finally{
+      skillBusy=false;paintTraining();
+      if(root.dataset.guideView==='compare'&&trainingNames().some(name=>!names.includes(name)))loadSkillBooks();
+    }
   }
   function paintTraining(){
     const path=$q('.mn-tr-path'),books=$q('.mn-books');if(!path)return;
-    path.replaceChildren();books.replaceChildren();
-    const T=MINE.train,mat=S.mat,steps=T.plan[mat],ends=T.ends[mat][S.att],st=T.stages[mat],
-      ex=S.shipClass==='exhumer',targetShip=selectedShips().includes(S.costShip)?S.costShip:selectedShips()[0];
-    const target=T.targets[[S.lv===5?5:4,mat,S.tier,targetShip].join('|')];
-    const stages=[
-      {name:'1 · Desbloquear tu Barge',stop:st.barge,
-       why:'Prioriza prerrequisitos: Mining, Astrogeology, Mining Frigate, Industry y Mining Barge. Empieza a minar con la nave antes de invertir en especializaciones avanzadas.'},
-      {name:'2 · Subir extracción y eficiencia',stop:st.yield_,
-       why:mat==='moon'?'Mejora Mining Barge, Astrogeology, Mining Precision, Mining Upgrades y drones, en el orden de desbloqueo del fit.':
-         mat==='ice'?'Prioriza Ice Harvesting, Mining Barge y Mining Upgrades: reducir ciclos aumenta m³/h. Mejora drones y Mining Precision después.':
-         'Prioriza Gas Cloud Harvesting V para habilitar harvesters superiores; continúa con Mining Barge y Astrogeology.'}
-    ];
-    if(ex)stages.push({name:'3 · Acceder a Exhumer',stop:st.exhumer,
-      why:'Astrogeology V, Mining Barge V, Spaceship Command y Exhumers I desbloquean la clase. El entrenamiento sigue siendo un prerrequisito, incluso cuando el módulo mejora el yield.'});
-    let cursor=0;
-    stages.forEach(stage=>{
+    const T=MINE.train,mat=S.mat,ends=T.ends[mat][S.att],stages=trainingStages();
+    const target=T.targets[[S.lv===5?5:4,mat,S.tier,S.costShip].join('|')];
+    $q('.mn-training-profile').value=S.att;
+    const duration=S.lv!==3&&Number.isFinite(target?.[S.att])?' · ≈ '+trainingDuration(target[S.att]):'';
+    $q('.mn-tr-target').textContent=tx('lunar.trainingTarget')+' · '+S.costShip+' · '+roman[S.lv]+duration;
+    const planRows=[[],[]];
+    path.replaceChildren(...stages.map(({number,start,steps})=>{
       const section=h('section','mn-tr-stage'),head=h('div','mn-tr-stage-head');
-      const endIndex=Math.max(cursor,stage.stop-1);
-      head.append(h('h4','',stage.name),h('span','mn-tr-days','≈ día '+NF1.format(days(ends[endIndex]))));
-      section.append(head,h('p','mn-tr-why',stage.why));
-      const list=h('ol','mn-tr-steps'),parts=steps.slice(cursor,stage.stop);
+      const timed=start!=null;
+      const stageKey='lunar.trainingStage'+number;
+      head.append(h('h4','',number+' · '+tx(stageKey)),
+        h('span','mn-tr-days',timed?'≈ '+trainingDuration(ends[start+steps.length-1]):tx('lunar.trainingPriority')));
+      const list=h('ol','mn-tr-steps');
       const compact=[];
-      parts.forEach(([name,level],i)=>{
-        const prev=compact[compact.length-1];
-        if(prev&&prev.name===name&&level===prev.end+1){prev.end=level;prev.idx=cursor+i;}
-        else compact.push({name,start:level,end:level,idx:cursor+i});
+      steps.forEach(([name,level],i)=>{
+        const prev=compact.at(-1);
+        if(prev&&prev.name===name&&level===prev.end+1){prev.end=level;prev.idx=i;}
+        else compact.push({name,start:level,end:level,idx:i});
+        planRows[number<=2?0:1].push(name+' '+roman[level]);
       });
       compact.forEach(x=>{
-        const roman=['','I','II','III','IV','V'],li=h('li',''),label=x.name+' '+(x.start===x.end?roman[x.end]:roman[x.start]+'–'+roman[x.end]);
-        li.append(h('span','',label),h('small','', 'Día '+NF1.format(days(ends[x.idx]))));
+        const levels=x.start===x.end?roman[x.end]:roman[x.start]+'–'+roman[x.end];
+        const li=h('li','');
+        li.append(h('span','',x.name+' '+levels));
+        if(timed)li.append(h('small','',trainingDuration(ends[start+x.idx])));
         list.append(li);
       });
-      section.append(list);path.append(section);cursor=stage.stop;
-    });
-    if(S.lv===5){
-      const section=h('section','mn-tr-stage');
-      section.append(h('h4','','4 · Especialización hacia V'),h('p','mn-tr-why',
-        'Orden recomendado por aumento de extracción después de los prerequisitos. Estos son objetivos, no un calendario exacto adicional.'));
-      const order=extraSkillNames(mat);
-      if(ex)order.push('Exhumers');
-      const ol=h('ol','mn-tr-steps');order.forEach(name=>ol.append(h('li','',name+' V')));
-      section.append(ol);path.append(section);
+      section.append(head,h('p','mn-tr-why',tx(stageKey+'Intro')),list);
+      return section;
+    }));
+    const plans=$q('.mn-training-plan-grid');
+    const signature=JSON.stringify([document.documentElement.lang,planRows]);
+    if(plans.dataset.signature!==signature){
+      plans.dataset.signature=signature;
+      plans.replaceChildren(...planRows.flatMap((rows,i)=>{
+        if(!rows.length)return [];
+        const code=h('pre','',rows.join(String.fromCharCode(10))), title=tx(i?'lunar.trainingMax':'lunar.trainingBasic');
+        code.tabIndex=0;code.setAttribute('aria-label',title);
+        const button=h('button','mn-training-copy',tx('lunar.trainingCopy'));
+        button.type='button';button.setAttribute('aria-label',tx('lunar.trainingCopy')+' · '+title);
+        const status=h('span','mn-training-copy-status');status.setAttribute('role','status');
+        button.onclick=async()=>{
+          try{await navigator.clipboard.writeText(code.textContent);status.textContent=tx('lunar.copied');}
+          catch{const range=document.createRange();range.selectNodeContents(code);const selection=getSelection();
+            selection.removeAllRanges();selection.addRange(range);status.textContent=tx('lunar.copyFailed');}
+        };
+        const heading=h('div','mn-training-plan-head');
+        const label=h('div');
+        const advanced=stages.filter(stage=>stage.number>2).map(stage=>stage.number).join(' + ');
+        label.append(h('h4','',title),h('small','',i?tx('lunar.trainingContinued')+' · '+advanced:tx('lunar.trainingBasicSteps')));
+        heading.append(label,button);
+        const section=h('section','mn-training-plan');section.append(heading,code,status);
+        return [section];
+      }));
     }
-    const top=h('p','mn-tr-target');
-    top.textContent='Objetivo '+(S.lv===3?'III (estimación)':S.lv===5?'V':'IV')+
-      ' · '+(ex?'Exhumer':'Barge')+' · '+TL[S.tier]+
-      ' · '+ATTL[S.att]+': '+(S.lv===3?'sin tiempo exacto validado para skills III':
-        target?'≈ '+NF1.format(days(target[S.att]))+' días desde personaje nuevo para el fit de referencia':'sin calendario completo')+'.';
-    path.prepend(top);
+    books.replaceChildren();
     const names=trainingNames(),tbl=h('table','mn-books-table'),thead=tbl.createTHead().insertRow();
-    ['Skillbook (una compra)','Jita Sell'].forEach(x=>thead.append(h('th','',x)));
+    [tx('lunar.trainingBook'),'Jita Sell'].forEach(x=>thead.append(h('th','',x)));
     const body=tbl.createTBody();
     let total=0,missing=0;
     names.forEach(name=>{
       const id=SKILL_BOOK_IDS[name],p=id?quote(id,'sell'):null,tr=body.insertRow();
-      tr.append(h('td','',name),h('td','',p==null?'Sin cotización':cmpISK(p)+' ISK'));
+      tr.append(h('td','',name),h('td','',p==null?tx('lunar.trainingMissing'):cmpISK(p)+' ISK'));
       if(p==null)missing++;else total+=p;
     });
-    books.append(h('h4','',document.documentElement.lang==='en'?'Skillbook costs in Jita 4-4':'Coste de los libros de habilidades en Jita 4-4'),tbl);
-    const note=h('p','mn-books-total',missing?'Subtotal conocido: '+cmpISK(total)+' ISK · '+missing+' sin precio.':'Total de libros: '+cmpISK(total)+' ISK');
-    books.append(note);
+    books.append(tbl);
+    const totalLabel=$q('.mn-books-total');
+    totalLabel.textContent=(missing?tx('lunar.trainingSubtotal')+' · ':'')+
+      (total>0?'−'+cmpISK(total)+' ISK':'—');
+    totalLabel.classList.toggle('isk-neg',total>0);
     $q('.mn-skills-reload').disabled=skillBusy;
-    $q('.mn-skills-reload').textContent=skillBusy?'Consultando ESI…':'Actualizar skillbooks · ESI ↻';
-    $q('.mn-trn').textContent=skillError?'Error de consulta: '+skillError:
-      'Los precios de libros corresponden a Jita Sell cuando hay órdenes. Si un libro no tiene orden, se indica sin cotización; nunca se inventa el coste. La ruta es una prioridad de progreso, no un optimizador exhaustivo de SP.';
+    $q('.mn-skills-reload').textContent=tx(skillBusy?'lunar.trainingLoading':'lunar.trainingRefresh');
+    $q('.mn-trn').textContent=skillError?tx('lunar.trainingError')+' '+skillError:
+      missing?missing+' · '+tx('lunar.trainingMissing'):'Jita 4-4 · Sell';
   }
   // ---------- plan para Omega nuevo ----------
   const PLEX={sell:null,buy:null,avg:null,src:null,at:0};
@@ -1171,7 +1187,7 @@ const MineUI=(()=>{
   const fmtN=v=>Number.isInteger(v)?NF0.format(v):NF1.format(v);
   function paintSetup(){S.cmpv=S.cmp?'1':'0';
     root.querySelectorAll('.pl-stp').forEach(st=>{const i=st.querySelector('.pl-in');if(i!==document.activeElement)i.value=fmtN(S[st.dataset.k]);});
-    S.accq=String(S.acc);const sw=$q('#mnFreeSpSwitch');if(sw)sw.checked=!!S.freeSP;const rng=$q('.pl-acc-range');if(rng)rng.value=String(Math.min(100,S.acc));
+    const sw=$q('#mnFreeSpSwitch');if(sw)sw.checked=!!S.freeSP;const rng=$q('.pl-acc-range');if(rng)rng.value=String(Math.min(100,S.acc));
     const ex=BARGE_OF[S.barge];
     $q('.pl-bh').textContent={Procurer:'La más dura.',Retriever:'La bodega más grande.',Covetor:'La que más mina.',Skiff:'La más dura.',Mackinaw:'La mejor autonomía.',Hulk:'La que más mina.'}[S.barge]+(ex?' El primer mes minas con la '+ex+' mientras entrenas Exhumers.':'');
     $q('.pl-ah').textContent={base:'Como sale un personaje nuevo.',remap:'Atributos repartidos para entrenar este plan lo más rápido posible.',remap3:'Remap + 4 implantes de atributos +3 para entrenar más rápido (no son de minería; su precio entra en la inversión).'}[S.patt];
@@ -1287,14 +1303,17 @@ const MineUI=(()=>{
 
   // ----- Máximos sin costos: mismas filas Pyfa para 6 naves y 3 actividades -----
   function paintMax(){
-    const host=$q('.mn-maxbody');host.replaceChildren();
-    ['moon','ice','gas'].forEach(m=>{
+    const host=$q('.mn-maxbody');
+    const wasOpen=host.querySelector('.mn-maxcost')?.open||false;
+    host.replaceChildren();
+    const materials=['moon','ice','gas'];
+    materials.filter(m=>m===(maxMaterial||S.mat)).forEach(m=>{
       const card=h('section','mn-maxcat'),heading=h('h3','',MATL[m]+' · '+S.item[m]);card.append(heading);
       const unit=iskPerM3(m),table=h('table','mn-max-table');
       const thead=table.createTHead().insertRow();
       ['Nave','Rendimiento efectivo','ISK/h','Bodega · hasta llenar'].forEach(label=>thead.append(h('th','',label)));
       const body=table.createTBody();
-      const rows=SHIPS.map(ship=>calcRow(S.boost,5,1,m,'Faction',ship)).filter(Boolean).sort((a,b)=>b.eff-a.eff);
+      const rows=SHIPS.map(ship=>calcRow(maxBoost??S.boost,5,1,m,'Faction',ship)).filter(Boolean).sort((a,b)=>b.eff-a.eff);
       rows.forEach((r,i)=>{
         const tr=body.insertRow();if(i===0)tr.classList.add('mn-maxbest');
         tr.append(h('td','',r.ship+(i===0?' ★':'')),h('td','',NF0.format(r.eff)+' m³/h'),
@@ -1307,8 +1326,8 @@ const MineUI=(()=>{
         (S.cmp?' (valoración comprimida).':'.')));
       host.append(card);
     });
-    const costly=h('div','mn-maxcost');
-    const title=h('h3','', 'Upgrades endgame (precio de mercado)');
+    const costly=h('details','mn-editorial-details mn-maxcost');costly.open=wasOpen;
+    const title=h('summary','',tx('lunar.maxUpgrades'));
     costly.append(title);
     [[22615,"'Aoede' Mining Laser Upgrade (moon)"],[22623,"'Ingenii' Ice Harvester Upgrade (hielo)"]].forEach(([id,name])=>{
       const val=sellOf(id);costly.append(h('p','',name+' · '+(val!=null?cmpISK(val)+' ISK por unidad':'precio no disponible')));
@@ -1316,6 +1335,7 @@ const MineUI=(()=>{
     costly.append(h('p','mn-note','Estos módulos se consultan para cotizar el endgame; las filas Pyfa mostradas no simulan una sustitución no validada del fit T2, por lo que no se promete que sean el máximo teórico absoluto.'));
     host.append(costly);
   }
+  let maxMaterial,maxBoost;
   // ----- Trayectoria mensual honesta, con hitos calculados del entrenamiento -----
 
   // Modelo auxiliar puro: curva estimativa entre los dos hitos medidos por Pyfa (IV, V).
@@ -1400,19 +1420,16 @@ const MineUI=(()=>{
   let selectedCostId=null;
   function editableCostIds(){
     const ids=new Set();
-    if(S.view==='ships'){
-      fitRows(S.costShip).forEach(([id])=>ids.add(Number(id)));
-      if(S.imp===5&&S.lv!==3)for(const id of MINE.impl[S.mat]||[])ids.add(Number(id));
-    }
-    else if(S.view==='max'){
-      for(const m of ['moon','ice','gas'])for(const ship of SHIPS)(MINE.fits[['5',m,'Faction',ship].join('|')]||[]).forEach(pair=>ids.add(Number(pair[0])));
-    }else{
-      for(const m of ['moon','ice','gas']){
-        (planFit(m)?.items||[]).forEach(pair=>ids.add(Number(pair[0])));
-        for(const id of MINE.impl[m]||[])ids.add(Number(id));
+    fitRows(S.costShip).forEach(([id])=>ids.add(Number(id)));
+    if(S.imp===5&&S.lv!==3)for(const id of MINE.impl[S.mat]||[])ids.add(Number(id));
+    for(const m of ['moon','ice','gas']){
+      (planFit(m)?.items||[]).forEach(([id])=>ids.add(Number(id)));
+      for(const id of MINE.impl[m]||[])ids.add(Number(id));
+      for(const ship of SHIPS){
+        for(const [id] of MINE.fits[['5',m,'Faction',ship].join('|')]||[])ids.add(Number(id));
       }
-      for(const id of MINE.attrImpl['3']||[])ids.add(Number(id));
     }
+    for(const id of MINE.attrImpl['3']||[])ids.add(Number(id));
     return [...ids].filter(id=>Number.isInteger(id)&&id>0).sort((a,b)=>String(MINE.names[a]||a).localeCompare(String(MINE.names[b]||b)));
   }
   function paintPriceEditor(){
@@ -1438,8 +1455,7 @@ const MineUI=(()=>{
       cell.classList.toggle('mn-price-overridden',custom!=null);
     }
     const shipSel=$q('.mn-edit-ship');
-    shipSel.closest('label').hidden=S.view!=='ships';
-    if(S.view==='ships'){
+    {
       const ships=selectedShips(),signature=ships.join('|');
       if(shipSel.dataset.signature!==signature){
         shipSel.replaceChildren(...ships.map(ship=>new Option(ship,ship)));
@@ -1461,7 +1477,7 @@ const MineUI=(()=>{
     inp.disabled=id==null;$q('.mn-edit-cost-reset').disabled=custom==null;
     $q('.mn-edit-cost-source').textContent=custom!=null?'✎ Precio manual: usado en el presupuesto.':v!=null?'ESI: Jita Sell o Buy si no hay Sell.':'Sin cotización ESI; introduce el precio manual.';
     const budget=$q('.mn-edit-budget');budget.replaceChildren();
-    if(S.view==='ships'){
+    {
       let total=0,missing=0;
       const table=h('table','mn-editor-budget-table'),head=table.createTHead().insertRow();
       ['Componente','Cantidad','Precio/u','Subtotal'].forEach(v=>head.append(h('th','',v)));
@@ -1488,7 +1504,7 @@ const MineUI=(()=>{
     button.disabled=true;button.textContent='Consultando ESI…';
     status.textContent=document.documentElement.lang==='en'?'Updating Jita 4-4 without overwriting manual prices…':'Actualizando Jita 4-4, sin borrar precios manuales…';
     const ids=[...['moon','ice','gas'].map(matPriceId),...editableCostIds(),
-      ...(S.view==='ships'?shipFitIds():[])];
+      ...shipFitIds(),...(toolsOpen()?[22615,22623]:[])];
     try{
       let failure=null;
       await loadMany(ids,err=>{failure=err;},true);
@@ -1499,7 +1515,7 @@ const MineUI=(()=>{
   }
   function paintIceSettings(){
     const box=$q('.mn-ice-settings');if(!box)return;
-    box.hidden=S.view==='ships'&&S.mat!=='ice';
+    box.hidden=!toolsOpen()&&S.mat!=='ice';
     $q('.mn-ice-market').value=S.iceLoc;
     const p=C.ice;
     const note=S.iceLoc==='hy'?'Hielo en HY '+(p.on?'según Ajustes: '+(p.nullMode==='jbuy'?'Jita Buy −'+NF1.format(p.nullDisc*100)+'%':p.nullMode==='jita'?'Jita Buy':'+ margen'):'según precio local general')+', menos tasas locales.'
@@ -1510,14 +1526,11 @@ const MineUI=(()=>{
   }
 
   function paint(){if(!root)return;scheduleMiningSave();S.cmpv=S.cmp?'1':'0';seg();paintRefineryStatus();
-    root.querySelectorAll('[data-mining-jump]').forEach(b=>b.setAttribute('aria-current',b.dataset.miningJump===S.view?'step':'false'));
     paintPriceEditor();paintIceSettings();const scenario=$q('.mn-scenario-now');if(scenario)scenario.textContent=
       (S.shipClass==='exhumer'?'Exhumers':'Barges')+' · '+MATL[S.mat]+' · '+TL[S.tier]+' · Skills '+['','I','II','III','IV','V'][S.lv]+
       ' · Implantes '+(S.lv===3?'Sin':S.imp?S.imp+'%':'Sin')+' · '+(S.boost||'Sin boost')+' · '+(S.met==='isk'?'ISK/h':'m³/h');
-    $q('.mn-omega-tools').hidden=S.view!=='plan';$q('.mn-v-ships').hidden=S.view!=='ships';$q('.mn-v-plan').hidden=S.view!=='plan';$q('.mn-v-max').hidden=S.view!=='max';
-    root.classList.toggle('mn-editorial',S.view==='ships');
     syncEditorialScenario?.();
-    if(S.view==='plan'){paintPlan();paintMonths();return;}if(S.view==='max'){paintMax();return;}
+    if(toolsOpen()){paintPlan();paintMonths();paintMax();}
     $q('.mn-iii-estimate').hidden=S.lv!==3;
     $q('.mn-imp-estimate').hidden=S.lv===3||S.imp!==4;
     paintBoost();paintPrice();paintTake();paintKpi();paintAllShips();paintDetail();paintInvestNote();paintTraining();paintYieldMatrix();}
@@ -1525,25 +1538,24 @@ const MineUI=(()=>{
     // El material seleccionado es la primera cotización en TODAS las vistas.
     // Antes Rendimiento Nave pedía los fits, no el ore/hielo/gas, por lo que
     // ISK/h quedaba sin precio tras restaurar los ajustes de una sesión.
-    let ids;
-    if(S.view==='max'){
-      ids=[matPriceId(S.mat),...['moon','ice','gas'].map(matPriceId),22615,22623];
-    }else if(S.view==='plan'){
-      ids=[matPriceId(S.dmat),...['moon','ice','gas'].flatMap(m=>[
+    let ids=[matPriceId(S.mat),...shipFitIds(),...(S.imp?(MINE.impl[S.mat]||[]):[])];
+    if(toolsOpen()){
+      ids.push(...['moon','ice','gas'].flatMap(m=>[
         matPriceId(m),...(planFit(m)?.items||[]).map(x=>x[0]),...(MINE.impl[m]||[])
-      ]),...(MINE.attrImpl['3']||[])];
-      if(!PLEX.at){bulkBusy++;loadPlex().finally(()=>{bulkBusy--;paint();});}
-    }else{
-      ids=[matPriceId(S.mat),...shipFitIds(),...(S.imp?(MINE.impl[S.mat]||[]):[])];
+      ]),...(MINE.attrImpl['3']||[]),22615,22623);
+      if(Date.now()-PLEX.at>=5*60e3&&!plexLoading){
+        plexLoading=true;bulkBusy++;
+        loadPlex().finally(()=>{plexLoading=false;bulkBusy--;paint();});
+      }
     }
-    if(S.iceLoc==='refine'&&((S.view==='ships'&&S.mat==='ice')||S.view==='plan'||S.view==='max'))ids.push(...iceProducts());
+    if(S.iceLoc==='refine'&&(S.mat==='ice'||toolsOpen()))ids.push(...iceProducts());
     ids=[...new Set(ids.filter(id=>Number.isInteger(Number(id))&&Number(id)>0).map(Number))];
     loadMany(ids,()=>paint());
-    if(S.view==='ships')loadSkillBooks();
+    if(root.dataset.guideView==='compare')loadSkillBooks();
     // La última pintura ocurre cuando terminan las consultas, también si ESI falla.
     if(ids.some(id=>!PRICE[id]))paint();
   }
-  function drawCharts(){if(!root||!root.offsetParent)return;lastW=root.clientWidth;if(S.view==='plan'){drawCum({moon:planCalc('moon'),ice:planCalc('ice'),gas:planCalc('gas')});return;}}
+  function drawCharts(){if(!toolsOpen()||!root.offsetParent)return;lastW=root.clientWidth;drawCum({moon:planCalc('moon'),ice:planCalc('ice'),gas:planCalc('gas')});}
 
   // Secondary navigation: all panels remain mounted for existing painting and ESI updates.
   function mountAnalysisTabs(){
@@ -1554,7 +1566,7 @@ const MineUI=(()=>{
     const sections=[
       ['visual',tx('lunar.yieldByFit'),shipView.querySelector('.mn-yield-card')],
       ['fits','Fit e inversión',findCard('Fit y Detalle')],
-      ['skills','Entrenamiento',findCard('Ruta recomendada')],
+      ['skills',tx('lunar.trainingTab'),shipView.querySelector('.mn-training')],
       ['reco','Recomendaciones',shipView.querySelector('.mn-reco')],
       ['method','Cómo se calculó',shipView.querySelector('.mn-how')]
     ].filter(x=>x[2]);
@@ -1572,6 +1584,7 @@ const MineUI=(()=>{
       const b=document.createElement('button');b.type='button';b.className='mn-analysis-tab';b.dataset.tab=id;
       b.setAttribute('role','tab');b.textContent=label;b.addEventListener('click',()=>activate(id));
       if(id==='visual')b.dataset.i18n='lunar.yieldByFit';
+      if(id==='skills')b.dataset.i18n='lunar.trainingTab';
       b.addEventListener('keydown',e=>{
         if(!['ArrowRight','ArrowLeft','Home','End'].includes(e.key))return;
         e.preventDefault();
@@ -1621,9 +1634,7 @@ const MineUI=(()=>{
     const unload=$q('.mn-turnaround');
     const unloadHome=unload.parentElement;
     const unloadLabel=unload.querySelector('label');
-    const originalUnloadLabel=unloadLabel.textContent;
     const unloadInput=unload.querySelector('input');
-    const unloadReset=unload.querySelector('.mn-unload-default');
     const localized=(tag,key)=>{
       const node=h(tag,'',tx(key));
       node.dataset.i18n=key;
@@ -1705,12 +1716,12 @@ const MineUI=(()=>{
     };
     const selectedShip=h('div','mn-selected-ship');
     const selectedDetail=disclosure('lunar.shipDetails',[selectedShip]);
-    const fittingDetail=disclosure('lunar.yieldByFit',[]);
-    const fleetTitle=h('h4');
+    const fittingDetail=disclosure('lunar.analysisDetails',[]);
     const fleetValues=h('div','mn-fleet-values');
     const fleetNote=h('p','',tx('lunar.fleetNote'));
     fleetNote.dataset.i18n='lunar.fleetNote';
-    comparisonSteps[2].append(disclosure('lunar.fleetDetails',[fleetTitle,fleetValues,fleetNote]));
+    const fleetDetail=h('p','mn-fleet-detail-value');fleetDetail.setAttribute('aria-live','polite');
+    comparisonSteps[2].append(fleetValues,disclosure('lunar.fleetCompare',[fleetDetail,fleetNote]));
     comparisonSteps[1].append(fittingDetail);
     comparisonSteps[0].append(selectedDetail);
     comparisonContent.append(...comparisonSteps);
@@ -1724,59 +1735,59 @@ const MineUI=(()=>{
     updateFittingGuide=mountFittingGuide(fitting);
     root.append(comparison,fitting);
     const shared=unloadHome;
-    const sharedIntro=$q('.mn-shared-intro');
     const refinery=$q('.mn-refinery-status');
-    const toolbar=$q('.mn-toolbar');
     const tools=h('details','mn-editorial-details mn-comparison-tools');
-    const toolsSummary=h('summary','',tx('lunar.comparisonTools'));
-    toolsSummary.dataset.i18n='lunar.comparisonTools';
-    tools.append(toolsSummary);
+    tools.append(localized('summary','lunar.comparisonTools'),localized('p','mining.grossWarning'));
+    const omega=$q('.mn-v-plan'),max=$q('.mn-v-max');
+    omega.prepend(localized('h3','lunar.omegaTitle'),localized('p','lunar.omegaIntro'));
+    max.prepend(localized('h3','lunar.maxTitle'),localized('p','lunar.maxIntro'));
+    const omegaOptions=h('details','mn-editorial-details mn-omega-options');
+    const setup=omega.querySelector('.pl-setup');
+    const primary=h('div','mn-omega-primary pl-grid');
+    for(const select of omega.querySelectorAll('.mn-plan-select')){
+      const label=select.closest('.pl-f,.pl-tile,.pl-deth')?.querySelector('h3,.pl-l')?.textContent.trim();
+      select.setAttribute('aria-label',select.dataset.planKey==='cmpv'?tx('lunar.valuation'):(label||select.dataset.planKey));
+    }
+    for(const key of ['hrs','daysAfter','acc','barge']){
+      const control=key==='barge'?setup.querySelector('[data-plan-key="barge"]'):setup.querySelector('[data-k="'+key+'"]');
+      const field=control.closest('.pl-f');field.classList.remove('pl-wide');primary.append(field);
+    }
+    setup.querySelector('h3').remove();
+    setup.before(primary,omegaOptions);
+    omegaOptions.append(localized('summary','lunar.omegaOptions'),$q('.mn-omega-tools'),setup);
+    const maxControls=h('div','mn-max-controls');
+    const setupMaxField=(key,label,choices,onChange)=>{
+      const field=h('label');field.append(localized('span',label));
+      field.insertAdjacentHTML('beforeend',miningSelect('mn-max-select',choices));
+      const select=field.querySelector('select');select.dataset.maxKey=key;
+      select.onchange=()=>{onChange(select.value);paintMax();};
+      maxControls.append(field);
+      return select;
+    };
+    setupMaxField('material','lunar.maxMaterial',[['moon','Moon ore'],['ice','Ice'],['gas','Gas']],v=>{maxMaterial=v;});
+    setupMaxField('boost','lunar.maxBoost',[['',tx('lunar.noSupport')],['Porpoise','Porpoise'],['Orca','Orca'],['Rorqual','Rorqual']],v=>{maxBoost=v;});
+    max.querySelector('.mn-maxbody').before(maxControls);
     const recap=$q('.mn-results-recap');
-    const sharedAnchor=document.createComment('Mining shared controls');
-    refinery.before(sharedAnchor);
-    const toolbarAnchor=document.createComment('Mining toolbar');
-    toolbar.before(toolbarAnchor);
-    const recapAnchor=document.createComment('Mining comparison details');
-    recap.before(recapAnchor);
     const resultNodes=[];
     for(let node=recap;node;node=node.nextElementSibling)resultNodes.push(node);
     const shipList=$q('.mn-all-ships');
     const analysis=$q('.mn-analysis-panels');
-    const analysisNav=$q('.mn-analysis-tabs');
-    const analysisAnchor=document.createComment('Mining analysis tools');
-    analysisNav.before(analysisAnchor);
+    basic.append(unload);
+    selectedDetail.before(shipList);
+    fittingDetail.append(...resultNodes.filter(node=>node!==shipList));
+    comparisonContent.append(tools);
+    tools.append(omega,max,refinery,shared);
+    tools.addEventListener('toggle',()=>{
+      if(tools.open){paint();needPrices();requestAnimationFrame(drawCharts);}
+    });
+    unloadLabel.dataset.i18n='lunar.unload';
     return ()=>{
-      const ships=S.view==='ships';
-      if(ships){
-        if(unload.parentElement!==basic)basic.append(unload);
-        if(toolbar.parentElement!==tools){
-          selectedDetail.before(shipList);
-          fittingDetail.append(...resultNodes.filter(node=>node!==shipList));
-          comparisonContent.append(tools);
-          tools.append(toolbar,refinery,sharedIntro,shared);
-        }
-        const analysisPage=root.dataset.guideView==='fits'?fitting:fittingDetail;
-        if(analysis.parentElement!==analysisPage){
-          analysisPage.append(analysis);
-        }
-        const title=tx('lunar.compareTitle')+' ';
-        if(comparisonTitle.firstChild.textContent!==title)comparisonTitle.firstChild.textContent=title;
-        const accent=tx('lunar.compareAccent');
-        if(comparisonTitle.lastChild.textContent!==accent)comparisonTitle.lastChild.textContent=accent;
-      }else{
-        if(unload.parentElement!==unloadHome)unloadHome.append(unload);
-        if(toolbar.parentElement===tools){
-          toolbarAnchor.after(toolbar);
-          sharedAnchor.after(refinery,sharedIntro,shared);
-          recapAnchor.after(...resultNodes);
-          analysisAnchor.after(analysisNav,analysis);
-        }
-      }
-      if(ships)unloadLabel.dataset.i18n='lunar.unload';
-      else delete unloadLabel.dataset.i18n;
-      const label=ships?tx('lunar.unload'):originalUnloadLabel;
-      unloadReset.hidden=ships;
-      if(unloadLabel.textContent!==label)unloadLabel.textContent=label;
+      const analysisPage=root.dataset.guideView==='fits'?fitting:fittingDetail;
+      if(analysis.parentElement!==analysisPage)analysisPage.append(analysis);
+      comparisonTitle.firstChild.textContent=tx('lunar.compareTitle')+' ';
+      comparisonTitle.lastChild.textContent=tx('lunar.compareAccent');
+      maxControls.querySelector('[data-max-key=material]').value=maxMaterial||S.mat;
+      maxControls.querySelector('[data-max-key=boost]').value=maxBoost??S.boost;
       for(const select of controls.querySelectorAll('[data-scenario-key]')){
         select.disabled=select.dataset.scenarioKey==='imp'&&S.lv===3;
         select.value=S[select.dataset.scenarioKey];
@@ -1785,7 +1796,7 @@ const MineUI=(()=>{
   }
   let syncEditorialScenario;
   // ---------- montaje ----------
-  function mount(r){if(root)return;restoreMiningPlan();root=r;root.classList.add('mn');root.innerHTML=HTML;$q=s=>root.querySelector(s);mountAnalysisTabs();syncEditorialScenario=mountEditorialScenario();
+  function mount(r){if(root)return;restoreMiningPlan();root=r;root.classList.add('mn','mn-editorial');root.innerHTML=HTML;$q=s=>root.querySelector(s);mountAnalysisTabs();syncEditorialScenario=mountEditorialScenario();
     const bonusSwitch=$q('#mnFreeSpSwitch');
     bonusSwitch.addEventListener('change',()=>{S.freeSP=bonusSwitch.checked?1000000:0;paint();});
     const accField=$q('.pl-stp[data-k="acc"]');
@@ -1820,23 +1831,17 @@ const MineUI=(()=>{
       if(!id)return;setManual(id,mat?S.base:'sell',null);paint();
     });
 
-    root.addEventListener('click',e=>{
-      const b=e.target.closest('[data-mining-jump]');if(!b)return;
-      if(!['ships','plan','max'].includes(b.dataset.miningJump))return;
-      showView(b.dataset.miningJump);
-      $q('.mn-toolbar').scrollIntoView({behavior:'smooth',block:'start'});
-    });
+    $q('.mn-training-profile').addEventListener('change',e=>{S.att=e.target.value;paint();});
     $q('.mn-skills-reload').addEventListener('click',()=>loadSkillBooks(true));
     $q('.mn-ice-market').addEventListener('change',e=>{S.iceLoc=e.target.value;paint();needPrices();});
     const unload=$q('#mnUnloadSec');
     unload.addEventListener('change',()=>{const v=unload.valueAsNumber;
       S.unloadSec=Number.isFinite(v)?Math.max(0,Math.min(900,v)):65;
       unload.value=String(S.unloadSec);paint();});
-    $q('.mn-unload-default').addEventListener('click',()=>{S.unloadSec=65;unload.value='65';paint();});
     $q('.mn-build').textContent=String(MINE.build);
-    root.addEventListener('click',e=>{const b=e.target.closest('.pk-fb');if(!b)return;const k=b.closest('.pk-flt').dataset.k,v=b.dataset.v;
+    function applyMiningOption(k,v){
       const prevBarge=k==='barge'?S.barge:null;
-      if(k==='accq'){S.acc=Number(v);}else if(k==='daysAfter'){S.daysAfter=Number(v);}else if(k==='cmpv'){S.cmp=v==='1';S.cmpv=v;}else S[k]=(k==='lv'||k==='imp')?Number(v):v;
+      if(k==='cmpv'){S.cmp=v==='1';S.cmpv=v;}else S[k]=(k==='lv'||k==='imp')?Number(v):v;
       if(k==='barge'&&prevBarge!==v){const wasEx=!!BARGE_OF[prevBarge],isEx=!!BARGE_OF[v];
         if(isEx&&!wasEx){esSaved=S.esPlex;S.esPlex=0;}
         else if(!isEx&&wasEx&&esSaved!=null){S.esPlex=esSaved;esSaved=null;}}
@@ -1844,12 +1849,19 @@ const MineUI=(()=>{
       if(k==='shipClass'&&!selectedShips().includes(S.costShip))S.costShip=selectedShips()[0];
       if(k==='mat')fillItems();
       paint();if(S.met==='isk'&&(k==='mat'||k==='met'))loadPrice();
-      if(['view','mat','lv','tier','imp','shipClass','barge','ptier','patt','cmpv','boost'].includes(k))needPrices();});
+      if(['mat','lv','tier','imp','shipClass','barge','ptier','patt','cmpv','boost'].includes(k))needPrices();
+    }
+    root.addEventListener('click',e=>{const b=e.target.closest('.pk-fb');if(b)applyMiningOption(b.closest('.pk-flt').dataset.k,b.dataset.v);});
+    root.addEventListener('change',e=>{const select=e.target.closest('.mn-plan-select');if(select)applyMiningOption(select.dataset.planKey,select.value);});
     // pasos − / + y campos de texto
     root.addEventListener('click',e=>{const b=e.target.closest('.pl-stp button');if(!b)return;const st=b.closest('.pl-stp'),k=st.dataset.k;
       const v=Math.round((S[k]+Number(b.dataset.d)*Number(st.dataset.st))*10)/10,v2=Math.max(Number(st.dataset.min),Math.min(Number(st.dataset.max),v));if(k==='esPlex'&&v2!==S.esPlex)esSaved=null;S[k]=v2;paint();});
     root.addEventListener('change',e=>{const i=e.target.closest('.pl-stp .pl-in');if(!i)return;const st=i.closest('.pl-stp'),k=st.dataset.k;
-      let v=parseFloat(String(i.value).replace(/[^0-9.]/g,''));if(!isFinite(v)){paint();return;}if(k==='acc'||k==='daysAfter')v=Math.round(v);
+      const raw=i.value.trim();
+      const normalized=k==='hrs'&&/^\d+,\d{1,2}$/.test(raw)?raw.replace(',','.'):raw.replaceAll(',','');
+      let v=/^\d+(?:\.\d+)?$/.test(normalized)?Number(normalized):NaN;
+      if(!Number.isFinite(v)){i.value=fmtN(S[k]);return;}
+      if(k!=='hrs')v=Math.round(v);
       const v2=Math.max(Number(st.dataset.min),Math.min(Number(st.dataset.max),v));if(k==='esPlex'&&v2!==S.esPlex)esSaved=null;S[k]=v2;paint();});
     root.addEventListener('keydown',e=>{if(e.key==='Enter'&&e.target.closest('.pl-in,.pl-plexin'))e.target.blur();if(e.key==='Escape'&&e.target.closest('.pl-plexin')){e.target.value='';e.target.blur();}});
     const pin=$q('.pl-plexin');
@@ -1872,6 +1884,8 @@ const MineUI=(()=>{
       window.addEventListener('pagehide',()=>chartResize.disconnect(),{once:true});
     }}
   // el panel empieza oculto: al abrirlo se dibujan los gráficos con su ancho real
-  function showView(view){S.view=view;paint();needPrices();}
+  const toolsOpen=()=>root?.dataset.guideView==='compare'&&$q('.mn-comparison-tools')?.open;
+  let plexLoading=false;
+  function showView(){paint();needPrices();}
   return{mount,showView,shown(){if(root){paint();requestAnimationFrame(drawCharts);}}};
 })();

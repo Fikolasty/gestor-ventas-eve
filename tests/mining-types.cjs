@@ -44,7 +44,7 @@ assert(calc.includes('drone_waste_p'),'generador debe incluir residuo de drones'
 assert(generator.includes("'droneWaste'"),'generador no coincide con schema actual');
 assert(js.includes('function itemHelp(id,name)'),'tooltips de fichas ausentes');
 assert(js.includes('mn-context-aside')&&js.includes('mn-info-popup'),'falta panel de ayuda contextual');
-assert(js.includes('INFO(\'shared\')')&&js.includes('INFO(\'travel\')'));
+assert(js.includes('INFO(\'travel\')')&&js.includes('mining.grossWarning'));
 for(const tag of ["shipClass","mat","tier","lv","imp","boost","met"])
  assert(js.includes("INFO('"+tag+"')"),'falta el ⓘ de '+tag);
 console.log('OK: 864 combinaciones, 5 typeIDs de drones, T1/T2/Facción, bonuses/residuos, tooltip y generador.');

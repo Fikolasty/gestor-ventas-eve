@@ -72,7 +72,6 @@ body.mm-mining .hero>.title{display:none!important} body.mm-mining .hero{padding
 
 #mining #mnRoot{max-width:1120px;margin-inline:auto;min-width:0}
 #mining .guide-tools{scroll-margin-top:85px}
-#mining .mn-editorial .mn-reading-path{display:none}
 #mining .mn-editorial .mn-v-ships{display:flex;flex-direction:column;min-width:0}
 #mining .mn-editorial .mn-controls-unified{display:block;background:transparent;border:0;padding:18px 0}
 #mining .mn-editorial .mn-context-aside{margin-top:12px;background:var(--surface-card);border-color:var(--line2)}
@@ -85,7 +84,6 @@ body.mm-mining .hero>.title{display:none!important} body.mm-mining .hero{padding
 #mining .mn-spotlight-first td:last-child{color:var(--thrust);font-weight:750}
 @media(max-width:680px){#mining .mn-result-spotlight:not([hidden]){grid-template-columns:minmax(0,1fr)}}
 #mining #mnRoot:not(.mn-editorial) .mn-scenario-hero{display:none}
-#mining .mn-editorial .mn-toolbar{margin-top:12px}
 
 #mining .mn-editorial-basic{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;padding:16px;border:1px solid var(--line2);border-radius:8px;background:var(--surface-card)}
 #mining .mn-editorial-basic>label{display:grid;gap:4px;align-content:start;min-width:0;font-weight:650}
@@ -447,4 +445,57 @@ html.light #mining #mnRoot .mn-scenario-panel select,html.light #skills .library
   position-area:block-end span-inline-end;
   position-try-fallbacks:none;
  }
+}
+
+#mining #mnRoot :is(.mn-training-head,.mn-tr-path,.mn-training-plan-grid){display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+#mining #mnRoot .mn-training-head{grid-template-columns:minmax(0,1fr) minmax(170px,235px);align-items:start}
+#mining #mnRoot .mn-training-head p,#mining #mnRoot .mn-tr-target{margin:6px 0 12px}
+#mining #mnRoot .mn-tr-stage{margin:0;padding:14px;background:var(--surface-card);min-width:0}
+#mining #mnRoot .mn-tr-stage-head{gap:8px}
+#mining #mnRoot .mn-tr-days{white-space:nowrap}
+#mining #mnRoot :is(.mn-training-plan-head,.mn-books-actions){display:flex;justify-content:space-between;align-items:start;flex-wrap:wrap;gap:10px}
+#mining #mnRoot :is(.mn-training-copy,.mn-skills-reload){margin-inline-start:auto;border:1px solid var(--clay);background:transparent;color:var(--txt);border-radius:6px;padding:6px 11px;font-weight:700}
+#mining #mnRoot .mn-training-plan-grid,#mining #mnRoot :is(.mn-books,.mn-books-actions){padding:12px 15px}
+#mining #mnRoot .mn-training-plan pre{height:180px;overflow:auto;margin:10px 0 4px;padding:10px;background:var(--surface-panel);border-radius:6px;white-space:pre-wrap}
+#mining #mnRoot .mn-training-copy-status{display:block;text-align:right;min-height:1.3em}
+#mining #mnRoot .mn-training-plan+.mn-training-plan{border-inline-start:1px solid var(--line2);padding-inline-start:14px}
+#mining #mnRoot .mn-training-books summary{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
+#mining #mnRoot .mn-books-total{margin:0;font-size:inherit}
+#mining #mnRoot .mn-fleet-values{grid-template-columns:repeat(3,minmax(0,1fr));margin:12px 0}
+#mining #mnRoot .mn-fleet-ship{display:flex;align-items:center;gap:12px;text-align:left;background:var(--surface-card)}
+#mining #mnRoot .mn-fleet-ship img{width:54px;height:54px;flex:none;border-radius:4px}
+#mining #mnRoot .mn-fleet-ship strong{display:block}
+#mining #mnRoot .mn-fleet-ship.mn-ship-winner,#mining #mnRoot .mn-fleet-ship[aria-pressed=true]{border-color:var(--clay)}
+#mining #mnRoot .mn-fleet-ship[aria-pressed=true]{box-shadow:inset 0 -2px var(--clay)}
+#mining #mnRoot .mn-comparison-tools>div{margin:15px}
+#mining #mnRoot .mn-comparison-tools>p{margin:12px 15px;color:var(--mut)}
+#mining #mnRoot .mn-comparison-tools :is(.pl-tile,.pl-vc,.mn-plan-d,.mn-plan-how,.mn-edit-cell,.mn-edit-advanced){background:var(--surface-card);color:var(--txt);border-color:var(--line2)}
+#mining #mnRoot .mn-comparison-tools .pl-vc.best{border-color:var(--clay)}
+#mining #mnRoot .mn-comparison-tools .mn-prose{color:var(--mut)}
+#mining #mnRoot .mn-comparison-tools .pl-deth select{width:min(100%,235px)}
+#mining #mnRoot .mn-comparison-tools .pl-setup{padding-block:8px;background:transparent;border:0}
+#mining #mnRoot .mn-v-max{padding-top:16px;border-top:1px solid var(--line2)}
+#mining #mnRoot :is(.mn-v-plan,.mn-v-max)>h3{font-size:1.2rem}
+#mining #mnRoot :is(.mn-v-plan,.mn-v-max)>p{max-width:75ch;color:var(--mut)}
+#mining #mnRoot .mn-omega-primary{grid-template-columns:repeat(4,minmax(0,1fr));align-items:start}
+#mining #mnRoot .mn-omega-primary .pl-row{display:block}
+#mining #mnRoot .mn-omega-options :is(.pl-setup,.mn-omega-tools){margin:12px}
+#mining #mnRoot .mn-max-controls{display:grid;grid-template-columns:repeat(2,minmax(0,235px));gap:12px;margin:12px 0}
+#mining #mnRoot .mn-maxcat{overflow:auto}
+#mining #mnRoot .mn-maxcost>p,#mining #mnRoot .mn-fleet-detail-value{padding:4px 14px}
+#mining #mnRoot .mn-comparison-tools .mn-omega-tools{justify-content:flex-start}
+#mining #mnRoot :is(.mn-training-profile,.mn-plan-select,.mn-max-select,.mn-comparison-tools select){--mine-picker-bg:#101010;min-width:0;width:100%;min-height:36px;background:var(--mine-picker-bg)}
+html.light #mining #mnRoot :is(.mn-training-profile,.mn-comparison-tools select){--mine-picker-bg:#fff}
+@supports (appearance:base-select){
+ #mining #mnRoot :is(.mn-training-profile,.mn-comparison-tools select),
+ #mining #mnRoot :is(.mn-training-profile,.mn-comparison-tools select)::picker(select){appearance:base-select}
+ #mining #mnRoot :is(.mn-training-profile,.mn-comparison-tools select)::picker(select){position-area:block-end span-inline-end;position-try-fallbacks:none;background:var(--mine-picker-bg);opacity:1;color:var(--txt);border:1px solid var(--line2);border-radius:6px;overflow:auto;max-block-size:42dvh;min-inline-size:anchor-size(width);max-inline-size:calc(100dvw - 24px)}
+ #mining #mnRoot :is(.mn-training-profile,.mn-comparison-tools select) selectedcontent{overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+ #mining #mnRoot :is(.mn-training-profile,.mn-comparison-tools select)::picker-icon{margin-inline-start:auto;flex:none}
+ #mining #mnRoot :is(.mn-training-profile,.mn-comparison-tools select) option{padding:6px 10px}
+}
+@media(max-width:760px){
+ #mining #mnRoot :is(.mn-training-head,.mn-tr-path,.mn-training-plan-grid,.mn-fleet-values){grid-template-columns:minmax(0,1fr)}
+ #mining #mnRoot .mn-training-plan+.mn-training-plan{padding-inline-start:0;border-inline-start:0}
+ #mining #mnRoot .mn-omega-primary{grid-template-columns:repeat(2,minmax(0,1fr))}
 }

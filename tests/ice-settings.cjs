@@ -54,7 +54,7 @@ C.bb.special['heavy water']='no';
 assert.equal(bb(C,{buy:100,sell:120},{name:'Heavy Water'},5,{g:{},hint:{}}).g.bb,undefined,
  'respetar excepción no acepta');
 
-assert(mining.includes('daysAfter:30')&&mining.includes("['7','7 días']"),'faltan días editables');
+assert(mining.includes('daysAfter:30')&&mining.includes('data-k="daysAfter" data-min="1" data-max="30"'),'faltan días editables');
 assert(mining.includes("(month===1?28:S.daysAfter)*S.acc"),'la proyección ignora días elegidos');
 assert(mining.includes("iskh*S.hrs*S.daysAfter"),'tarjetas IV ignoran días elegidos');
 assert(mining.includes("28+(month-2)*30"),'las skills deben seguir entrenando por días naturales');

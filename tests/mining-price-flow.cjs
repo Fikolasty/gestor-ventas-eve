@@ -11,11 +11,13 @@ function segment(start,end){
   return source.slice(first,last);
 }
 const need=segment('  function needPrices(){','  function drawCharts(){');
-const state={view:'ships',mat:'moon',cmp:true,iceLoc:'jita',imp:0,dmat:'gas'};
+const state={mat:'moon',cmp:true,iceLoc:'jita',imp:0,dmat:'gas'};
+let open=false;
 const mats={moon:{id:45511,cid:62507},ice:{id:16262,cid:28434},gas:{id:30370,cid:30370}};
 const calls=[],paintCalls=[],skillsCalls=[],prices={};
 const ctx={
   S:state, PRICE:prices,MINE:{impl:{moon:[9],ice:[10],gas:[11]},attrImpl:{'3':[12]}},
+  toolsOpen:()=>open,root:{dataset:{guideView:'compare'}},
   matPriceId:m=>state.cmp?mats[m].cid:mats[m].id,
   shipFitIds:()=>[22544,17482],planFit:m=>({items:[[m==='moon'?95:96,2]]}),
   iceProducts:()=>[16272,16274],loadMany:(ids,done)=>{calls.push(ids);done(null)},
@@ -23,23 +25,24 @@ const ctx={
   PLEX:{at:Date.now()},bulkBusy:0
 };
 const needPrices=vm.runInNewContext(need+'\nneedPrices;',ctx);
-function check(view,mat,cmp,iceLoc,expected){
-  Object.assign(state,{view,mat,cmp,iceLoc,dmat:'gas',imp:0});
+function check(tools,mat,cmp,iceLoc,expected){
+  open=tools;
+  Object.assign(state,{mat,cmp,iceLoc,dmat:'gas',imp:0});
   needPrices();const ids=calls.at(-1);
-  assert.equal(ids[0],expected,'Priority: selected item '+view+'/'+mat+'/'+cmp);
+  assert.equal(ids[0],expected,'Priority: selected item '+tools+'/'+mat+'/'+cmp);
   assert.equal(new Set(ids).size,ids.length,'Deduplicate price queries');
   return ids;
 }
-let ids=check('ships','moon',true,'jita',62507);
+let ids=check(false,'moon',true,'jita',62507);
 assert(ids.includes(22544)&&ids.includes(17482),'Loading the mineral must not drop ship and fit');
 assert.equal(skillsCalls.length,1,'Mining training gets skillbook prices');
-ids=check('ships','moon',false,'jita',45511);
-ids=check('ships','ice',true,'refine',28434);
+assert(!ids.includes(22615),'Closed tools do not need advanced upgrade prices');
+ids=check(false,'moon',false,'jita',45511);
+ids=check(false,'ice',true,'refine',28434);
 assert(ids.includes(16272)&&ids.includes(16274),'Ice refine requires isotope/product market prices');
-ids=check('plan','moon',true,'jita',mats.gas.cid);
+ids=check(true,'moon',true,'jita',mats.moon.cid);
 assert(ids.includes(mats.moon.cid)&&ids.includes(mats.ice.cid),'Plan Omega needs all material valuations');
 assert(ids.includes(12)&&ids.includes(95),'Plan Omega includes attribute implants and fittings');
-ids=check('max','ice',false,'jita',16262);
 assert(ids.includes(22615)&&ids.includes(22623),'Nave Maxeada includes expensive upgrades');
 assert.equal(paintCalls.length,calls.length*2,'Show loading and finished prices');
 // Test that a manual entry overrides ESI but deleting it recovers ESI unchanged.

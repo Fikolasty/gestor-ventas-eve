@@ -729,32 +729,71 @@ class ThemeBrowserTests(unittest.TestCase):
         self.assertTrue(no_overflow)
 
     def test_mining_editorial_guide_navigates_calculators_bilingually(self):
-        from playwright.sync_api import expect
+        calls=[]
+        def market(route):
+            url=route.request.url
+            if '/universe/ids/' in url:
+                names=route.request.post_data_json
+                calls.append('books')
+                route.fulfill(json={'inventory_types':[{'id':900000+i,'name':name} for i,name in enumerate(names)]})
+            elif '/markets/19000001/orders/' in url:
+                calls.append('plex')
+                route.fulfill(json=[{'price':6000000,'volume_remain':10,'is_buy_order':False}])
+            elif '/markets/10000002/orders/' in url:
+                calls.append('jita')
+                route.fulfill(json=[{'price':250000,'location_id':60003760,'volume_remain':10,'is_buy_order':False}])
+            else:
+                route.abort()
+        self.page.route('https://esi.evetech.net/**',market)
+        self.page.context.grant_permissions(['clipboard-read','clipboard-write'])
         self.page.evaluate("selectAppModule('mining')")
-        self.page.locator('[data-guide-view="compare"]').click()
-        expect(self.page.locator("#mnReadingTitle")).to_have_text(
-            "De tu primera barge a tu primera Omega")
-        # Editorial lead belongs to the Mining page, not inside its toolbar.
-        self.assertTrue(self.page.evaluate(
-            "document.querySelector('.mn-reading-path').parentElement.id==='mnRoot'"))
-        self.assertIn("no siempre descuentan",self.page.locator(".mn-reading-caution").inner_text())
-        buttons=self.page.locator("[data-mining-jump]")
-        self.assertEqual(buttons.count(),3)
-        self.page.locator(".mn-comparison-tools > summary").click()
-        self.page.locator('[data-k=view] [data-v=plan]').click()
-        expect(self.page.locator(".mn-v-plan")).to_be_visible()
-        self.page.locator('[data-k=view] [data-v=max]').click()
-        expect(self.page.locator(".mn-v-max")).to_be_visible()
-        self.page.locator('[data-k=view] [data-v=ships]').click()
-        expect(self.page.locator(".mn-comparison-page")).to_be_visible()
+        self.page.locator('[data-guide-view=scenario]').click()
+        self.page.locator('[data-scenario-key=shipClass]').select_option('exhumer')
+        self.page.locator('[data-scenario-key=lv]').select_option('5')
+        self.page.locator('[data-guide-view=compare]').click()
+        root=self.page.locator('#mnRoot')
+        tools=root.locator('.mn-comparison-tools')
+        tools.locator(':scope > summary').click()
+        expect(tools.locator(".mn-v-plan")).to_be_visible()
+        expect(tools.locator(".mn-v-max")).to_be_visible()
+        hours=tools.locator('[data-k=hrs] input')
+        hours.fill('4,5')
+        hours.press('Enter')
+        expect(hours).to_have_value('4.5')
+        tools.locator('[data-max-key=material]').select_option('gas')
+        expect(tools.locator('.mn-maxcat')).to_have_count(1)
+        expect(root).to_have_attribute('data-guide-view','compare')
+        fleet=root.locator('.mn-fleet-values button')
+        expect(fleet).to_have_count(3)
+        fleet.first.click()
+        expect(fleet.first).to_have_attribute('aria-pressed','true')
+        analysis=root.locator('.mn-comparison-step').nth(1)
+        analysis.locator('summary').first.click()
+        analysis.locator('[data-tab=skills]').click()
+        expect(analysis.locator('.mn-tr-stage')).to_have_count(4)
+        expect(analysis.locator('.mn-tr-days').first).to_have_text(re.compile(r'≈ .*D'))
+        analysis.locator('.mn-training-plans summary').click()
+        expect(analysis.locator('.mn-training-plan pre')).to_have_count(2)
+        for index in range(2):
+            plan=analysis.locator('.mn-training-plan').nth(index)
+            plan.locator('button').click()
+            expect(plan.get_by_role('status')).to_have_text(re.compile(r'copiad',re.I))
+            self.assertEqual(self.page.evaluate('navigator.clipboard.readText()').replace('\r\n','\n'),
+                             plan.locator('pre').inner_text())
+        analysis.locator('.mn-training-books summary').click()
+        expect(analysis.locator('.mn-books-total')).to_have_text(re.compile(r'^−.*ISK$'),timeout=10000)
+        tools.locator('.mn-omega-options summary').click()
+        expect(tools.locator('.pl-plexin')).to_have_value('6,000,000')
+        self.assertTrue({'books','plex','jita'}.issubset(calls))
+        for width in (390,630,980,1440):
+            self.page.set_viewport_size({'width':width,'height':900})
+            for light in (False,True):
+                self.page.evaluate("(light)=>document.documentElement.classList.toggle('light',light)",light)
+                self.assertTrue(self.page.evaluate('document.documentElement.scrollWidth <= innerWidth+1'),
+                                (width,light))
         self.page.evaluate("setLang('en')")
-        expect(self.page.locator("#mnReadingTitle")).to_have_text(
-            "From your first barge to your first Omega")
-        self.assertIn("not necessarily final profit",
-                      self.page.locator(".mn-reading-caution").inner_text())
-        self.page.evaluate("setLang('es')")
-        expect(self.page.locator("#mnReadingTitle")).to_have_text(
-            "De tu primera barge a tu primera Omega")
+        expect(tools.locator(".mn-v-plan > h3")).to_have_text("Omega Plan")
+        expect(analysis.locator('.mn-training-plan h4').first).to_have_text("Basic Plan")
 
     def test_refiner_profile_tracks_skills_implant_and_saved_fee(self):
         self.page.evaluate("['skRep','skRepE','skOre'].forEach(id=>{$(id).value='5';$(id).dispatchEvent(new Event('change',{bubbles:true}))});paintRefineryProfile()")

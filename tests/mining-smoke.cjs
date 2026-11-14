@@ -126,11 +126,11 @@ assert(targetV>209&&targetV<217,'V se aproxima a mes 8 según datos históricos'
 assert(source.includes("28+(month-2)*30"),'mes 2 debe empezar al terminar día 28, sin hueco de días');
 assert(source.includes('S.acc'), 'ingresos escalables por cuentas');
 
-assert(source.includes('class="mn-toolbar"'),'falta la barra de tabs con controles compactos');
+assert(!source.includes('class="mn-toolbar"'),'la barra anterior no debería montarse');
 assert(source.includes('id="mnFreeSpSwitch"'),'falta checkbox SP accesible');
 assert(source.includes("bonusSwitch.addEventListener('change'"),'el switch no esta conectado al estado');
 assert(source.includes('S.freeSP=bonusSwitch.checked?1000000:0'),'toggle debe conservar exactamente los valores de SP');
-assert(source.includes(".mn-omega-tools').hidden=S.view!=='plan'"),'mostrar SP solo en tab Plan Omega');
+assert(source.includes("omegaOptions.append("), "SP se monta en los supuestos de Omega");
 assert(source.includes('href="https://www.eveonline.com/recruit"'),'falta enlace al sitio oficial');
 assert(source.includes('rel="noopener noreferrer"'),'enlace externo no esta protegido');
 assert(!source.includes('plan.prepend(bonusButton)'),'sigue el antiguo boton ancho de SP');
@@ -261,7 +261,7 @@ assert(source.includes('class="mn-guidance"'),'estimaciones sin aviso contextual
 // The Mining section owns the same heading component as Sales in the shell.
 assert(html.includes('class="guide-areas"') && html.includes('class="lunar-guide"'),'Guías debe mostrar la introducción lunar');
 assert(!source.includes('class="mn-module-intro"'),'No se debe renderizar una segunda cabecera antigua dentro de Minería');
-assert(source.includes("if(S.view==='plan'){paintPlan();paintMonths();return;}"),'no modificar la vista Omega');
-assert(source.includes("if(S.view==='max'){paintMax();return;}"),'no modificar Nave Maxiada');
+assert(source.includes("if(toolsOpen()){paintPlan();paintMonths();paintMax();}"),'no modificar la vista Omega');
+assert(source.includes("tools.append(omega,max,refinery,shared)"),'no modificar Nave Maxiada');
 assert(source.includes("e.target.closest('.pk-fb')"),'los filtros de la guía deben conservar delegación de eventos');
 console.log('OK — guía visual sin duplicar filtros ni alterar rutas de cálculo.');
