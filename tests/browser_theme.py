@@ -858,103 +858,37 @@ class ThemeBrowserTests(unittest.TestCase):
                 editor.locator(':scope > summary').press('Enter')
                 expect(editor).not_to_have_attribute('open', '')
 
-    def test_skills_b3_plan_and_skill_chevrons_follow_shared_geometry(self):
-        """Sandboxed Skills inherits the same neutral arrow in both themes and languages."""
+    def test_fitting_library_selects_plans_and_preserves_import_text(self):
         from playwright.sync_api import expect
-        import re
         self.page.evaluate("selectAppModule('skills')")
-        frame = self.page.frame_locator('#skillRoot iframe.skills-app-frame')
-        plan = frame.locator('.steps>details').first
-        expect(plan).to_be_visible(timeout=10000)
-        for light in (False, True):
-            self.page.evaluate("""(value) => {
-                const sw=document.querySelector('#themeLight');
-                sw.checked=!value;
-                sw.dispatchEvent(new Event('change',{bubbles:true}));
-            }""", light)
-            self.page.evaluate("setLang('en')" if light else "setLang('es')")
-            expect(frame.locator('#catTitle')).to_have_text(
-                'CORE SKILLS' if light else 'HABILIDADES BÁSICAS')
-            for width in (1440, 390):
-                self.page.set_viewport_size({'width': width, 'height': 900})
-                expect(plan).to_be_visible()
-                sales_arrow = '1px'
-                chev = plan.locator(':scope > summary > .chev')
-                expect(chev).to_have_css('width', '9px')
-                expect(chev).to_have_css('height', '9px')
-                expect(chev).to_have_css('border-right-width', sales_arrow)
-                expect(chev).to_have_css('transform', re.compile(r'matrix\(0\.7071'))
-                plan.locator(':scope > summary').focus()
-                plan.locator(':scope > summary').press('Enter')
-                expect(plan).to_have_attribute('open', '')
-                expect(chev).to_have_css('transform', re.compile(r'matrix\(-0\.7071'))
-                if (width == 1440 and not light) or (width == 390 and light):
-                    out = INDEX.parent / 'tests' / 'artifacts' / 'theme'
-                    out.mkdir(parents=True, exist_ok=True)
-                    plan.locator(':scope > summary').screenshot(
-                        path=str(out / f'b3-skills-{"light-390" if light else "dark-1440"}.png'),
-                        animations='disabled')
-                skill = plan.locator('.skill-row').first
-                expect(skill).to_be_visible()
-                skill_chev=skill.locator(':scope > summary > .chev')
-                expect(skill_chev).to_have_css('width','9px')
-                expect(skill_chev).to_have_css('height','9px')
-                expect(skill_chev).to_have_css('border-right-width',sales_arrow)
-                # Skills can repaint on an asynchronous quote completion;
-                # test the native summary click and open state in one DOM turn.
-                skill_opened = skill.evaluate("""el => {
-                    el.open=false;
-                    el.querySelector(':scope > summary').click();
-                    return el.open;
-                }""")
-                self.assertTrue(skill_opened, 'Nested Skills disclosure did not open')
-                plan.locator(':scope > summary').press('Enter')
-                expect(plan).not_to_have_attribute('open', '')
+        library = self.page.locator('#skillRoot .library-guide')
+        picker = library.locator('select')
+        expect(picker.locator('option')).to_have_count(9)
+        for ship in ("Vagabond", "Drake Navy Issue", "Vedmak", "Harbinger Navy Issue",
+                     "Hound", "Manticore", "Nemesis", "Purifier"):
+            picker.select_option(ship)
+            expect(library.locator('.library-plan-half:visible')).to_have_count(2)
+            self.assertTrue(library.locator('section:last-child pre').text_content().startswith('['+ship+','))
+        expect(library.locator('.library-plan-half').first.locator('pre')).to_contain_text('Torpedoes V')
+        picker.select_option("covetor")
+        expect(library.locator('.library-plan-half:visible')).to_have_count(0)
 
-    def test_skill_plan_iframe_language_roundtrip(self):
+    def test_fitting_library_language_and_theme(self):
         from playwright.sync_api import expect
         self.page.evaluate("selectAppModule('skills')")
-        frame = self.page.frame_locator("#skillRoot iframe.skills-app-frame")
-        title = frame.locator("#catTitle")
-        title.wait_for(state="visible", timeout=10000)
-        self.page.evaluate("setLang('en')")
-        expect(title).to_have_text("CORE SKILLS", timeout=10000)
-        self.page.evaluate("setLang('es')")
-        expect(title).to_have_text("HABILIDADES BÁSICAS", timeout=10000)
-
-    def test_skills_inherits_parent_fonts_and_dark_light_surfaces(self):
-        from playwright.sync_api import expect
-        import re
-        self.page.evaluate("selectAppModule('skills')")
-        iframe = self.page.frame_locator("#skillRoot iframe.skills-app-frame")
-        html = iframe.locator("html")
-        html.wait_for(state="attached")
-        self.page.evaluate("""() => {
-            const sw=document.querySelector('#themeLight');
-            sw.checked=false;
-            sw.dispatchEvent(new Event('change',{bubbles:true}));
-        }""")
-        expect(html).to_have_class(re.compile(r"mm-light"))
-        child = html.evaluate("""el => ({
-            text:getComputedStyle(el).getPropertyValue('--mm-txt').trim(),
-            font:getComputedStyle(el).getPropertyValue('--mm-font').trim(),
-            bg:getComputedStyle(el.ownerDocument.querySelector('.main')).backgroundColor
-        })""")
-        host = self.page.evaluate("""() => ({
-            text:getComputedStyle(document.documentElement).getPropertyValue('--txt').trim(),
-            font:getComputedStyle(document.body).fontFamily
-        })""")
-        self.assertEqual(child["text"], host["text"])
-        self.assertEqual(child["font"], host["font"])
-        self.assertGreater(brightness(child["bg"]), 180, child["bg"])
-        self.page.evaluate("""() => {
-            const sw=document.querySelector('#themeLight');
-            sw.checked=true;
-            sw.dispatchEvent(new Event('change',{bubbles:true}));
-        }""")
-        expect(html).not_to_have_class(re.compile(r"mm-light"))
-        dark = iframe.locator(".main").evaluate("el=>getComputedStyle(el).backgroundColor")
-        self.assertLess(brightness(dark), 120, dark)
+        library = self.page.locator('#skillRoot .library-guide')
+        library.locator('select').select_option("Hound")
+        for lang in ("es", "en"):
+            self.page.evaluate("(lang)=>setLang(lang)",lang)
+            expect(library.locator('.library-plan-half h3').first).to_have_text(
+                'Minimum Plan' if lang=='en' else 'Plan Mínimo')
+            for light in (False, True):
+                self.page.evaluate("(light)=>document.documentElement.classList.toggle('light',light)",light)
+                for width in (390,630,980,1440):
+                    self.page.set_viewport_size({'width':width,'height':950})
+                    self.assertTrue(library.evaluate('n=>n.scrollWidth<=n.clientWidth+1'))
+                    self.assertTrue(library.locator('pre').evaluate_all(
+                        "ns=>ns.every(n=>getComputedStyle(n).fontSize==='14px')"))
 
     def test_freight_unit_table_shows_owner_net_and_icon_in_both_languages(self):
         from browser_ledger173 import FIXTURE

@@ -2500,3 +2500,5 @@ Escenario v1.0.223 aprobado por el propietario. Cotización Buy/Sell al lado de 
 Limpieza incremental v1.0.224. Retira reglas sin referencias y evita crear un contenedor temporal de campos. Comparación píxel a píxel contra v1.0.223 en m³/h e ISK/h, cuatro anchos y ambos temas. Build y pruebas focales aprobados. Certificación de Pages pendiente.
 
 Fittings v1.0.225 autorizado para publicar. Guía de dos pasos, buscador, foto por Type ID, selector y fitting alineados, texto seleccionable y desglose de Jita Sell. Build y pruebas focales aprobados. Chromium local verificado a cuatro anchos, ES/EN y Dark/Light. Importación en EVE sin verificar. Certificación de Pages pendiente.
+
+Biblioteca de Fittings v1.0.227 autorizada. Incluye Covetor, cuatro QRF y cuatro bombarderos BLOPS. Los mínimos QRF/BLOPS se derivaron del SDE CCP 3698585 con dependencias transitivas. Max es una recomendación, no una simulación de CPU/PG. Chromium local verificó nueve entradas, ES/EN, 390/630/980/1440 y ambos temas. Pages pendiente.

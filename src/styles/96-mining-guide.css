@@ -352,3 +352,83 @@ html.light #mining #mnRoot .mn-scenario-panel select{--scenario-select-bg:#fff}
  #mining .mn-fitting-guide .covetor-step>.mn-fit-search{grid-row:2}
  #mining .mn-fitting-guide :is(.covetor-media,.covetor-step>.mn-fit-disclosure){justify-self:start}
 }
+
+
+#skills:has(.library-guide)>header{display:none}
+#skills .library-guide{max-width:1120px;margin:auto;padding:30px 0;color:var(--txt)}
+#skills .lunar-guide-header{padding-bottom:22px;text-align:center;border-bottom:1px solid var(--line2)}
+#skills h1{font:850 clamp(30px,5.5vw,74px)/1.05 var(--f-ui);margin:0}
+#skills h1 span,#skills article h2 span{color:var(--clay)}
+#skills article{padding-top:22px}
+#skills article h2{margin:0 0 12px}
+#skills article h2 span{margin-inline-end:8px}
+#skills article p{font:400 16px/1.65 var(--f-ui);max-width:76ch;margin:0 0 18px}
+#skills .library-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.5fr);gap:20px;padding:16px;border:1px solid var(--line2);border-radius:8px;background:var(--surface-card)}
+#skills .library-grid>section{min-width:0;border-inline-start:1px solid var(--line2);padding-inline-start:20px}
+#skills .library-grid label{display:block;margin-bottom:6px;font-weight:700}
+#skills .library-grid select{width:100%;min-width:0}
+#skills .library-bar{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}
+#skills .library-bar h3{margin:0}
+#skills .library-bar button{background:transparent;color:var(--txt);border:1px solid var(--clay);border-radius:6px;padding:8px 14px;font-weight:700}
+#skills pre{white-space:pre-wrap;overflow-wrap:anywhere;user-select:text;line-height:1.55;margin-bottom:0}
+@media(max-width:760px){#skills .library-grid{grid-template-columns:minmax(0,1fr)}#skills .library-grid>section{border-inline-start:0;border-top:1px solid var(--line2);padding:12px 0 0}}
+
+
+#skills:has(.library-guide)>.mm-section-head{display:none!important}
+#skills .library-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:24px;padding:20px}
+#skills .library-grid>section{padding-inline-start:24px}
+#skills .library-bar{min-height:38px;border-bottom:1px solid var(--line2);padding-bottom:8px}
+#skills .library-bar button{border-color:var(--line2);font-size:13px;padding:5px 9px;color:var(--txt)}
+#skills .library-bar button:hover,#skills .library-bar button:focus-visible{border-color:var(--clay)}
+#skills .library-plans{margin-top:16px;padding-top:12px;border-top:1px solid var(--line2)}
+#skills .library-plans button{margin:8px 8px 0 0}
+#skills .library-plans [aria-pressed=true]{border-color:var(--clay)}
+#skills .library-plans p{font-size:14px;margin:8px 0}
+@media(max-width:760px){#skills .library-grid{grid-template-columns:minmax(0,1fr)}#skills .library-grid>section{padding-inline-start:0}}
+
+
+#skills .library-top{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px;align-items:center;margin-bottom:18px}
+#skills .library-top p{margin:0}
+#skills .library-top label{display:block;margin-bottom:6px;font-weight:700}
+#skills .library-top select{width:100%;min-width:0}
+#skills .library-grid>.library-skills{padding-inline-start:0;border-inline-start:0;border-top:0}
+#skills .library-skills h3{min-height:38px;margin:0;padding-bottom:8px;border-bottom:1px solid var(--line2)}
+#skills .library-skills .library-plans{padding:0;margin:4px 0 0;border:0}
+#skills .library-skills [hidden]{display:none!important}
+@media(max-width:760px){#skills .library-top{grid-template-columns:minmax(0,1fr);gap:10px}}
+
+
+#skills .library-skills .library-bar h3{min-height:0;padding:0;border:0}
+#skills .library-grid>.library-skills .library-bar{min-height:38px}
+
+#skills .library-grid .library-bar button{margin:0;align-self:center}#skills .library-grid .library-bar{box-sizing:content-box;min-height:38px}
+
+#skills .library-grid pre{box-sizing:border-box; block-size:clamp(220px,45vh,420px);overflow:auto;overscroll-behavior:contain;scrollbar-color:var(--mut) transparent;padding-inline-end:10px;margin:8px 0 0}
+#skills .library-grid pre:focus-visible{outline:2px solid var(--clay);outline-offset:2px}
+
+
+#skills .library-grid{--library-height:clamp(300px,52vh,500px)}
+#skills .library-grid>section{min-width:0}
+#skills .library-grid>section:last-child>pre{block-size:var(--library-height)}
+#skills .library-split:has(.library-plan-half:not([hidden])){display:grid;grid-template-rows:repeat(2,minmax(0,1fr));gap:12px;block-size:calc(var(--library-height) + 55px)}
+#skills .library-plan-half:not([hidden]){display:flex;flex-direction:column;min-height:0}
+#skills .library-plan-half>pre{block-size:auto;min-height:0;flex:1}
+
+#skills .library-plan-half:last-of-type .library-bar{border-bottom-color:color-mix(in srgb,var(--clay) 65%,var(--line2))}#skills .library-plan-half:last-of-type .library-bar h3{color:var(--clay)}
+#skills .library-plan-half:first-child .library-bar{border-bottom-color:var(--line2)}#skills .library-plan-half:first-child .library-bar h3{color:var(--mut)}#skills .library-grid>section:last-child>.library-bar{position:relative}#skills .library-grid>section:last-child>.library-bar::after{content:"";position:absolute;inset:auto 0 -1px;height:2px;background:linear-gradient(90deg,transparent,var(--clay),transparent);clip-path:polygon(0 100%,50% 0,100% 100%)}#skills .library-grid>section:last-child>.library-bar h3{color:var(--txt);font-weight:800}
+
+#skills .library-grid .library-bar{border-bottom-color:var(--library-heading-accent)!important}
+#skills .library-grid .library-bar h3{color:var(--library-heading-accent)!important;font-weight:800}
+#skills .library-plan-half:first-child .library-bar{--library-heading-accent:var(--clay)}
+#skills .library-plan-half:last-of-type .library-bar{--library-heading-accent:var(--clay)}
+#skills .library-grid>section:last-child>.library-bar{--library-heading-accent:var(--clay)}
+#skills .library-grid>section:last-child>.library-bar::after{background:linear-gradient(90deg,transparent,var(--library-heading-accent),transparent)}
+
+
+#skills .library-guide .lunar-guide-header h1{font:800 clamp(32px,5.3vw,76px)/1.1 var(--f-ui)!important;letter-spacing:-.035em!important;margin:0 0 14px}
+#skills .library-guide article>h2{font:700 24px/1.25 var(--f-ui)!important;letter-spacing:normal!important}
+#skills .library-top p{font:400 16px/1.65 var(--f-ui)}
+#skills .library-bar h3{font:750 18px/1.3 var(--f-ui)}
+#skills .library-top select{font:650 14px/1.4 var(--f-ui)}
+#skills .library-grid pre{font:400 14px/1.65 var(--f-ui)}
+#skills .library-bar button{font:700 13px/1.4 var(--f-ui)}
