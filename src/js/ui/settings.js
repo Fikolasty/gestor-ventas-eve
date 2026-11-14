@@ -38,7 +38,7 @@ function selectAppModule(name,writeRoute=true,productionTab=null){
   document.body.classList.toggle('mm-pi',name==='pi');
   document.body.classList.toggle('mm-skills',name==='skills');
   document.querySelectorAll('#mmTabs [data-mm-module]').forEach(b=>{
-    const active=b.dataset.mmModule===name;
+    const active=b.dataset.mmModule===(name==='skills'?'mining':name);
     b.setAttribute('aria-selected',String(active));b.tabIndex=active?0:-1;
     b.classList.toggle('on',active);
   });
@@ -71,7 +71,7 @@ document.body.dataset.mmView='ventas';
 function mmSyncWorkspaceTabs(){
   const view=document.body.dataset.mmView;
   document.querySelectorAll('#mmTabs [data-mm-module]').forEach(b=>{
-    const active=b.dataset.mmModule===view;
+    const active=b.dataset.mmModule===(view==='skills'?'mining':view);
     b.setAttribute('aria-selected',String(active));
     b.tabIndex=active?0:-1;
     b.classList.toggle('on',active);

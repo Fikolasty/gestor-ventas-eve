@@ -142,7 +142,7 @@ class ThemeBrowserTests(unittest.TestCase):
                     self.page.evaluate('(v)=>document.documentElement.classList.toggle("light",v)',light)
                     styles=self.page.evaluate("""() => {
                         const specs=['#mmTabs>.mm-ho-main','#mmTabs>.mm-ho-main .mm-modgroup',
-                          '#mmTabVentas','#mmTabMining','#mmTabSkills'];
+                          '#mmTabVentas','#mmTabMining'];
                         return specs.map(sel=>{const e=document.querySelector(sel),s=getComputedStyle(e),r=e.getBoundingClientRect();
                           return {background:s.backgroundColor,borderWidth:s.borderTopWidth,
                             radius:parseFloat(s.borderTopLeftRadius),
@@ -185,7 +185,7 @@ class ThemeBrowserTests(unittest.TestCase):
     def test_guide_ticker_settings_and_skills_tabs_translate_both_ways(self):
         self.page.evaluate("setLang('en')")
         self.page.wait_for_function(
-            "() => document.querySelector('#mmTabSkills .mm-mod-label')?.textContent.trim()==='Skills'"
+            "() => document.querySelector('#mining .guide-areas a:last-child')?.textContent.trim()==='Skills'"
         )
         self.assertIn("New pilot? Get", self.page.locator(".hero-referral").inner_text())
         self.assertIn("1,000,000 FREE SP", self.page.locator(".hero-referral").inner_text())
@@ -194,7 +194,7 @@ class ThemeBrowserTests(unittest.TestCase):
         self.assertIn("Home Market", self.page.locator("#settings").text_content())
         self.page.evaluate("setLang('es')")
         self.page.wait_for_function(
-            "() => document.querySelector('#mmTabSkills .mm-mod-label')?.textContent.trim()==='Habilidades'"
+            "() => document.querySelector('#mining .guide-areas a:last-child')?.textContent.trim()==='Habilidades'"
         )
         self.assertIn("¿Nuevo piloto? Consigue", self.page.locator(".hero-referral").inner_text())
         self.assertIn("1,000,000 SP GRATIS", self.page.locator(".hero-referral").inner_text())

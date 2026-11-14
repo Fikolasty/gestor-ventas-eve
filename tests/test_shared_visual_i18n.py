@@ -19,7 +19,7 @@ class SharedUiTests(unittest.TestCase):
         self.assertIn('class="guide-areas"', html)
         self.assertIn('class="lunar-guide"', html)
         self.assertNotIn('Skill Plan</span>', html)
-        self.assertIn('data-i18n="module.skills">Habilidades</span>', html)
+        self.assertIn('data-i18n="module.skills">Habilidades</a>', html)
         self.assertNotIn('No pide tu contraseña de EVE ni inicio de sesión', html)
         self.assertIn('data-i18n="verdict.showSteps">Ver pasos para vender', html)
         self.assertIn('Privacidad y acceso a EVE', html)

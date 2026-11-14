@@ -41,7 +41,7 @@ class General183Tests(unittest.TestCase):
    p.evaluate('l=>setLang(l)',lang)
    for light in [False,True]:
     p.evaluate("v=>{$('themeLight').checked=!v;$('themeLight').dispatchEvent(new Event('change',{bubbles:true}))}",light)
-    for selector in ['#mmTabVentas','#mmTabMining','#mmTabSkills']:
+    for selector in ['#mmTabVentas','#mmTabMining']:
      p.locator(selector).click();s=p.locator(selector).evaluate("e=>{const s=getComputedStyle(e,'::after');return{display:s.display,height:s.height,radius:s.borderRadius,opacity:s.opacity}}")
      self.assertEqual(s,{'display':'block','height':'2px','radius':'0px','opacity':'1'})
     self.assertEqual(p.locator('.mm-top-actions').evaluate("e=>e.lastElementChild.contains(document.querySelector('#themeLight'))"),True)

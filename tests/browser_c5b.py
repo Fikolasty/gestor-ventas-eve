@@ -59,7 +59,7 @@ class C5bWorkspaceTests(unittest.TestCase):
         self.assertEqual(state["controls"], state["panelIds"])
         self.assertEqual(state["view"], "settings")
         self.assertTrue(self.page.locator("#navHome").is_hidden())
-        self.assertEqual(self.page.locator("#mmTabSkills .mm-mod-label").inner_text(), "Habilidades")
+        self.assertEqual(self.page.locator('#mining .guide-areas [data-i18n="module.skills"]').text_content(), "Habilidades")
 
         tabs = self.page.locator("#settings .modern-tab")
         tabs.first.focus()

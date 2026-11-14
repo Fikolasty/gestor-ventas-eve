@@ -92,7 +92,6 @@
     <button type="button" class="mm-mod on" data-mm-module="ventas" role="tab" aria-controls="salesBody" aria-selected="true" id="mmTabVentas" title="Ventas" aria-label="Ventas"><span class="mm-mod-label">Ventas</span></button>
     <button type="button" class="mm-mod" data-mm-module="jita" role="tab" aria-controls="salesBody" aria-selected="false" id="mmTabJita"><span class="mm-mod-label">Jita</span></button>
     <button type="button" class="mm-mod" data-mm-module="mining" role="tab" aria-controls="mining" aria-selected="false" id="mmTabMining" title="Guías" aria-label="Guías" data-i18n-title="lunar.label0" data-i18n-aria-label="lunar.label0"><span class="mm-mining-icon" aria-hidden="true"><img class="mm-eve-hulk-icon" src="__HULK_ICON__" alt="" width="28" height="26"></span><span class="mm-mod-label" data-i18n="lunar.label0">Guías</span></button>
-    <button type="button" class="mm-mod" data-mm-module="skills" role="tab" aria-controls="skills" aria-selected="false" id="mmTabSkills" title="Habilidades" aria-label="Habilidades" data-i18n-title="module.skills" data-i18n-aria-label="module.skills"><span class="mm-skills-icon" aria-hidden="true"><span class="ic i-key"></span><img class="mm-eve-skill-icon" src="https://images.evetech.net/types/3426/icon?size=64" alt="" width="20" height="20" loading="lazy" onerror="this.hidden=true"></span><span class="mm-mod-label" data-i18n="module.skills">Habilidades</span></button>
     <button type="button" class="mm-mod" data-mm-module="production" role="tab" aria-controls="production" aria-selected="false" id="mmTabProduction"><span class="mm-mod-label" data-i18n="module.production">Producción</span></button>
     <!-- PI temporalmente fuera de navegación; conservar para reactivar más adelante.
     <button type="button" class="mm-mod" data-mm-module="pi" role="tab" aria-controls="pi" aria-selected="false" id="mmTabPi">Industria Planetaria · PI</button>
@@ -178,7 +177,7 @@ Contraband Freight = no</textarea><small>Una regla por línea: Nombre = tax tota
     </div>
   </section>
     <section class="panel" id="mining" hidden>
-<nav class="guide-areas" aria-label="Guías"><span aria-current="page" data-i18n="lunar.label1">Minería</span></nav>
+<nav class="guide-areas" aria-label="Guías" data-i18n-aria-label="lunar.label0"><a href="#mineria" aria-current="page" data-i18n="lunar.label1">Minería</a><a href="#habilidades" data-i18n="module.skills">Habilidades</a></nav>
 <nav class="guide-tools" aria-label="Minería">
 <button type="button" data-guide-view="guide" aria-pressed="true" data-i18n="lunar.label2">Minería Lunar</button>
 <button type="button" data-guide-view="scenario" aria-pressed="false" data-i18n="lunar.label3">Escenario</button>
@@ -215,7 +214,7 @@ Mining Drone I x5</pre><button type="button" id="copy-vrd" data-i18n="lunar.labe
 <article id="vender"><h2><span>4</span><span class="guide-step-title" data-i18n="lunar.label10">De Vuelta a HY-RWO</span></h2><div class="step"><p data-lunar-html="lunar.paragraph7">Coordina el regreso o el transporte con tu corporación. Con el mineral en HY-RWO, pide una cotización de reproceso. Luego compara cuánto te queda por cada ruta de venta, con sus comisiones y envío.</p><div class="estimate"><a class="sales-link" href="#ventas" data-i18n="lunar.label11">Abrir Ventas →</a></div></div></article>
 </div><div id="mnRoot" hidden></div>
   </section>
-  <section class="panel mm-skills-panel" id="skills" role="tabpanel" aria-labelledby="mmTabSkills" hidden><header class="mm-section-head mm-module-heading"><h2 class="mm-title">PLANES DE HABILIDADES</h2><p class="mm-section-sub">ENTRENAMIENTO, SKILLBOOKS Y PLANES PERSONALIZADOS</p></header><div id="skillRoot"></div></section>
+  <section class="panel mm-skills-panel" id="skills" role="tabpanel" aria-labelledby="mmTabMining" hidden><nav class="guide-areas" aria-label="Guías" data-i18n-aria-label="lunar.label0"><a href="#mineria" data-i18n="lunar.label1">Minería</a><a href="#habilidades" aria-current="page" data-i18n="module.skills">Habilidades</a></nav><header class="mm-section-head mm-module-heading"><h2 class="mm-title">PLANES DE HABILIDADES</h2><p class="mm-section-sub">ENTRENAMIENTO, SKILLBOOKS Y PLANES PERSONALIZADOS</p></header><div id="skillRoot"></div></section>
   <section class="panel mm-pi-panel" id="pi" role="tabpanel" aria-label="Industria Planetaria (temporalmente deshabilitada)" hidden>
     <header class="mm-section-head"><h2 class="mm-title">INDUSTRIA PLANETARIA</h2><p class="mm-section-sub">PLANIFICA TU PI Y PRODUCCIÓN DE FUEL BLOCKS</p></header>
 
