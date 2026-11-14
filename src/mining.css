@@ -99,7 +99,6 @@
 /* v1.0.31: plan para Omega nuevo, rediseñado */
 .mn input[type=number]::-webkit-inner-spin-button,.mn input[type=number]::-webkit-outer-spin-button{-webkit-appearance:none;margin:0}
 .mn input[type=number]{-moz-appearance:textfield;appearance:textfield}
-.pl-setup h3{margin-bottom:12px}
 .pl-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,17rem),1fr));gap:16px 20px}
 .pl-f{display:flex;flex-direction:column;gap:6px;min-width:0}
 .pl-f.pl-wide{grid-column:1/-1}
@@ -117,7 +116,6 @@
 .pl-prices{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,14rem),1fr));gap:10px}
 .pl-tile{display:flex;flex-direction:column;gap:6px;padding:12px 14px;border-radius:var(--r-sm);background:#0f0f0f;border:1px solid rgba(222,220,209,.09);min-width:0}
 .pl-tile>b{font:600 1.25rem var(--f-num);color:var(--txt)}
-.pl-tile .pk-flt{align-self:flex-start}
 .pl-plexw{display:flex;align-items:baseline;gap:6px;cursor:text;border-radius:8px;padding:2px 8px 2px 0;border:1px solid transparent;transition:border-color .12s,background .12s}
 .pl-plexw:hover{border-color:rgba(222,220,209,.14);background:rgba(222,220,209,.03)}
 .pl-plexw:focus-within{border-color:var(--ion);background:#0b0b0b;padding-left:8px}
@@ -185,7 +183,6 @@
 .pl-mki{display:inline-block;width:3px;height:12px;border-radius:2px;margin-right:6px;vertical-align:-2px}
 .pl-mki.b{background:var(--mn-t1)} .pl-mki.d{background:var(--txt)} .pl-mki.x{background:var(--mn-ex)} .pl-mki.i{background:var(--mn-t2)}
 .pl-tl .pl-warn{color:var(--thrust)!important}
-.pl-tile .pk-flt+.pk-flt{margin-top:2px}
 
 
 /* v1.0.69 [ChatGPT]: adaptación del módulo histórico al gestor actual */

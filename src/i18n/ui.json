@@ -4032,9 +4032,10 @@
     "en": "FITTINGS & INVESTMENT"
   },
   "lunar.label6": {
-    "es": "MINERÍA LUNAR EN",
-    "en": "MOON MINING IN"
+    "es": "MINERÍA",
+    "en": "MOON"
   },
+  "lunar.titleSecond": {"es":"LUNAR","en":"MINING"},
   "lunar.label7": {
     "es": "Tu Primera Covetor",
     "en": "Your First Covetor"
@@ -4107,10 +4108,7 @@
     "es": "El Modulated Strip Miner II puede generar residuo incluso sin cristal. Para esta operación, equipa Strip Miner I u ORE Strip Miner y comprueba los drones antes de activarlos.",
     "en": "A Modulated Strip Miner II can generate residue even without a crystal. Use Strip Miner I or ORE Strip Miner for this operation and check your mining drones before activating them."
   },
-  "lunar.paragraph7": {
-    "es": "Coordina el regreso o el transporte con tu corporación. Con el mineral en HY-RWO, pide una cotización de reproceso. Luego compara cuánto te queda por cada ruta de venta, con sus comisiones y envío.",
-    "en": "Coordinate your return or hauling with your corporation. Once the ore is in HY-RWO, request a reprocessing quote, then compare your proceeds across sales routes after fees and shipping."
-  },
+  "lunar.paragraph7": {"es": "Al terminar la sesión, coordina el regreso con la flota. Si comprimiste con la Rorqual, ya llevas el mineral listo para trasladar. En HY-RWO, pide una cotización de reproceso antes de comparar rutas de venta. El domingo se cobra un 25% solo sobre el mineral extraído de lunas de alianza. Las lunas de corporación y los demás materiales de minería quedan exentos.", "en": "At the end of the session, coordinate your return with the fleet. If you compressed with the Rorqual, the ore is ready to haul. In HY-RWO, request a reprocessing quote before comparing sales routes. On Sunday, a 25% tax applies only to ore mined from alliance moons. Corporation moons and other mining materials are exempt."},
   "lunar.copied": {
     "es": "Fitting copiado",
     "en": "Fit copied"
@@ -4132,8 +4130,9 @@
     "en": "Choose what to mine and how long unloading takes. Compare what each ship can collect over a full hour."
   },
   "lunar.scenarioRead": {"es": "Entiende tu Escenario", "en": "Understand Your Scenario"},
-  "lunar.scenarioReadFirst": {"es": "Empieza por lo que vas a minar. Elige el mineral, hielo o gas que tienes a mano y las naves y el equipo que podrías usar. Si normalmente vuelves a descargar, cuenta el viaje de ida, la descarga y el regreso. Si tu flota comprime ese material en el sitio, el cálculo puede ahorrarte ese viaje.", "en": "Start with the ore, ice or gas available to you, then consider the ships and fittings you can use. Include the round trip and unloading time. On-grid compression can save that trip."},
-  "lunar.scenarioReadSecond": {"es": "El resultado estima cuánto recogerías en una hora completa. Una nave puede extraer más rápido y aun así quedar atrás si llena antes la bodega.", "en": "The result estimates what you can collect in a full hour. A ship can mine faster and still fall behind if its hold fills sooner."},
+  "lunar.scenarioReadFirst": {"es": "En las flotas de Nullsec es habitual viajar por jump o bridge. En la luna, la Rorqual da boost y comprime el mineral en el sitio. Si eliges ese apoyo, el tiempo muerto por descarga queda en cero.", "en": "Nullsec fleets often travel by jump or bridge. At the moon, the Rorqual boosts the fleet and compresses ore on grid. With that support selected, unloading downtime is zero."},
+  "lunar.noUnloadWithCompression": {"es":"Compresión en el sitio","en":"On-grid compression"},
+  "lunar.scenarioReadSecond": {"es": "Si minas por tu cuenta y necesitas descargar, cuenta la ida, la descarga y el regreso a la roca. El resultado estima cuánto recoges durante una hora de minería. El viaje de la flota, el reproceso y el impuesto lunar se consideran aparte.", "en": "If you mine solo and need to unload, include the trip out, unloading, and the return to the rock. The result estimates what you collect in an hour of mining. Fleet travel, reprocessing, and moon tax are accounted for separately."},
   "lunar.scenarioConfigure": {"es": "Elige las condiciones que quieres probar. Jita Buy es el precio por unidad al vender al instante. Jita Sell es el precio por unidad de las órdenes de venta. El resultado se actualiza con cada cambio.", "en": "Choose the conditions you want to try. Jita Buy is the unit price when selling immediately. Jita Sell is the unit price of sell orders. The result updates with each change."},
   "lunar.scenarioBoostHelp": {"es": "Bonificaciones al Máximo", "en": "Maximum Boosts"},
   "lunar.resetScenario": {"es": "Restablecer", "en": "Reset"},

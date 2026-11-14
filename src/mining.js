@@ -341,7 +341,7 @@ const MineUI=(()=>{
    '</details>'+
    '<div class="mn-turnaround"><div class="mn-turnaround-heading"><label for="mnUnloadSec">Tiempo muerto por descarga</label>'+INFO('travel')+'</div>'+
      '<div class="mn-turnaround-input"><input id="mnUnloadSec" type="number" min="0" max="900" step="1" value="65" inputmode="numeric"><span>segundos</span></div>'+
-     '<small id="mnUnloadExplain">Incluye traslado, descarga y regreso. ⓘ para ver el desglose.</small></div>'+
+     '<small id="mnUnloadExplain"></small></div>'+
    '</div>'+
    '<div class="mn-v-max"><div class="mn-maxbody"></div></div>'+
     '<div class="mn-v-ships">'+
@@ -1788,6 +1788,10 @@ const MineUI=(()=>{
       comparisonTitle.lastChild.textContent=tx('lunar.compareAccent');
       maxControls.querySelector('[data-max-key=material]').value=maxMaterial||S.mat;
       maxControls.querySelector('[data-max-key=boost]').value=maxBoost??S.boost;
+      const compressed=compression(S);
+      unloadInput.disabled=compressed;
+      if(document.activeElement!==unloadInput)unloadInput.value=String(compressed?0:S.unloadSec);
+      $q('#mnUnloadExplain').textContent=compressed?tx('lunar.noUnloadWithCompression'):'';
       for(const select of controls.querySelectorAll('[data-scenario-key]')){
         select.disabled=select.dataset.scenarioKey==='imp'&&S.lv===3;
         select.value=S[select.dataset.scenarioKey];
