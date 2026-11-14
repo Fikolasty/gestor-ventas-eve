@@ -1,3 +1,14 @@
+# Market Moves+ · Plan de ejecución
+
+## Estado y orden de trabajo vigentes
+
+1. **Minería.** Cerrar la revisión conjunta de sus cuatro cabeceras en la entrega v1.0.233. El [DSS](DSS.md#referencia-vigente--14-de-noviembre-de-2026) concentra las reglas de composición y controles que se reutilizan.
+2. **Siguiente pasada.** Auditar los selectores de Minería y de la Biblioteca de Fittings por el riesgo recurrente de menú nativo, recorte y flechas desalineadas. Reutilizar el patrón ya aprobado y retirar reglas solo al comprobar sus consumidores y su efecto en ambos temas.
+3. **Después.** Continuar con las vistas restantes por incrementos. Revisar cada familia de vistas a pantalla completa antes de extender un patrón. Conservar el motor y sus resultados al migrar la presentación.
+
+Los acuerdos y maquetas anteriores se conservan como historial. La navegación vigente usa Ventas, Jita, Guías y Producción en la cabecera, y Minería y Habilidades dentro de Guías.
+
+## Historial de entregas
 
 ### v1.0.214 — Estaciones y cabecera compacta de Materiales
 
