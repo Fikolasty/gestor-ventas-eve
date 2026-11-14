@@ -35,3 +35,7 @@ v1.0.220 candidata. Escenario completo con diseño editorial, controles reales, 
 v1.0.221 candidata. Guías restaura el fondo de estación. Minería Lunar y Escenario comparten tipografía principal y panel. Se iguala la numeración, se retiran los iconos de información de los campos básicos y el detalle se abre en Comparar Naves. Pendiente Actions y verificación pública.
 
 v1.0.233 candidata. Cuatro cabeceras de Minería centradas sin subtítulo, con filete y acento cobre comunes. Fittings & Inversión usa caja de título en el tab. Los párrafos de los pasos conservan la explicación. 64 comprobaciones Chromium, ocho capturas y 16 pruebas Python en la copia de publicación.
+
+**v1.0.233 LIVE.** Fuente Fiko 4d38bd9, build d449a78, Pages 43642337134. Cuatro controles aprobados; HTML HTTPS idéntico a la compilación verificada (25b8c029729841746ea5e6a3ef1afc66399e9dfe).
+
+Auditoría siguiente en curso. Chromium detectó fondo translúcido en el campo cerrado de los selectores de Herramientas aunque el menú era opaco. Candidata local de CSS con 112 comprobaciones de igualdad entre campo y menú a cuatro anchos en Dark/Light. Pendientes apertura, texto largo y teclado antes de publicar ese corte.

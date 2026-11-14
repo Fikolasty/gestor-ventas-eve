@@ -2512,3 +2512,7 @@ Fittings v1.0.225 autorizado para publicar. Guía de dos pasos, buscador, foto p
 Biblioteca de Fittings v1.0.227 autorizada. Incluye Covetor, cuatro QRF y cuatro bombarderos BLOPS. Los mínimos QRF/BLOPS se derivaron del SDE CCP 3698585 con dependencias transitivas. Max es una recomendación, no una simulación de CPU/PG. Chromium local verificó nueve entradas, ES/EN, 390/630/980/1440 y ambos temas. Pages pendiente.
 
 v1.0.233 candidata. Cuatro cabeceras de Minería centradas sin subtítulo, con filete y acento cobre comunes. Fittings & Inversión usa caja de título en el tab. Los párrafos de los pasos conservan la explicación. 64 comprobaciones Chromium, ocho capturas y 16 pruebas Python en la copia de publicación.
+
+**v1.0.233 LIVE.** Fuente Fiko 4d38bd9, build d449a78, Pages 43642337134. Cuatro controles aprobados; HTML HTTPS idéntico a la compilación verificada (25b8c029729841746ea5e6a3ef1afc66399e9dfe).
+
+Auditoría siguiente en curso. Chromium detectó fondo translúcido en el campo cerrado de los selectores de Herramientas aunque el menú era opaco. Candidata local de CSS con 112 comprobaciones de igualdad entre campo y menú a cuatro anchos en Dark/Light. Pendientes apertura, texto largo y teclado antes de publicar ese corte.
