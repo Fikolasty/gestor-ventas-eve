@@ -7,7 +7,7 @@
 <meta name="referrer" content="no-referrer">
 <title>Market Moves+ · SIGMA GRINDSET</title>
 <style>
-/* ================= Market Moves+ v1.0.228 =================
+/* ================= Market Moves+ v1.0.229 =================
    Paleta: azul de base, naranja = acción, verde/rojo = ganancia/pérdida.
    Sin backdrop-filter: el vidrio se finge con rgba + bordes. */
 *{box-sizing:border-box;margin:0;padding:0}
@@ -7404,14 +7404,14 @@ html.light #mining #mnRoot .mn-scenario-panel select,html.light #skills .library
 #mining .mn-fit-step-number{color:var(--clay);margin-inline-end:10px}
 #mining .mn-fitting-guide .covetor-step{row-gap:12px}
 #mining .mn-fitting-guide .covetor-media,#mining .mn-fitting-guide .mn-fit-disclosure{width:100%;min-width:0}
-#mining .mn-fitting-guide .covetor-media,#mining .mn-fitting-guide .covetor-step>.mn-fit-disclosure{max-width:380px;justify-self:end}
+#mining .mn-fitting-guide .covetor-media{display:grid;gap:12px;max-width:380px;justify-self:end}
 #mining .mn-fitting-guide .covetor-media figure{margin:0}
 #mining .mn-fitting-guide .covetor-media img{aspect-ratio:2;object-fit:cover}
 #mining #mnRoot .mn-fitting-guide :is(.mn-fit-search,.mn-fit-disclosure){display:block;padding:12px 16px;box-sizing:border-box}
-#mining .mn-fit-search{max-width:360px;background:var(--surface-card);border:1px solid var(--line2);border-radius:8px}
+#mining .mn-fit-search{min-width:0;background:var(--surface-card);border:1px solid var(--line2);border-radius:8px}
 #mining .mn-fitting-guide summary{position:relative;display:flex;align-items:center;min-height:24px;padding-inline-end:22px;list-style:none}
 #mining .mn-fitting-guide summary::-webkit-details-marker{display:none}
-#mining #mnRoot .mn-fitting-guide details>summary::after{position:absolute;top:50%;right:7px;margin:0;transform:translateY(-50%) rotate(45deg)}
+#mining #mnRoot .mn-fitting-guide details>summary::after{position:absolute;inset-block-start:50%;inset-inline-end:7px;margin:0;transform-origin:center;transform:translateY(-50%) rotate(45deg);transition:none}
 #mining #mnRoot .mn-fitting-guide details[open]>summary::after{transform:translateY(-50%) rotate(225deg)}
 #mining .mn-fit-search input{width:100%;margin-top:8px}
 #mining .mn-fit-options{display:grid;gap:4px;margin-top:8px}
@@ -7420,8 +7420,7 @@ html.light #mining #mnRoot .mn-scenario-panel select,html.light #skills .library
 #mining .mn-fit-guide-total .mn-fit-total{background:none;border:0;padding:0;margin:12px 0}
 #mining .mn-fit-guide-budget{overflow:auto}
 @media(max-width:760px){
- #mining .mn-fitting-guide .covetor-step>.mn-fit-search{grid-row:2}
- #mining .mn-fitting-guide :is(.covetor-media,.covetor-step>.mn-fit-disclosure){justify-self:start}
+ #mining .mn-fitting-guide .covetor-media{justify-self:start}
 }
 
 
@@ -7507,8 +7506,9 @@ html.light #mining #mnRoot .mn-scenario-panel select,html.light #skills .library
 #mining #mnRoot .mn-fitting-guide>.mn-fit-inline[hidden],
 #mining #mnRoot .mn-fitting-guide .mn-fit-standard[hidden]{display:none}
 #mining #mnRoot .mn-fitting-guide .mn-fit-inline>pre{position:static;max-height:none;margin:12px 0 0;padding-top:12px;border-top:1px solid var(--line2)}
-#mining #mnRoot .mn-fitting-guide .mn-fit-standard{margin-top:12px}
-#mining #mnRoot .mn-fitting-guide>p{max-width:76ch}
+#mining .mn-hulk-fits:not([hidden]){display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;align-items:start;margin-top:12px}
+@media(max-width:760px){#mining .mn-hulk-fits:not([hidden]){grid-template-columns:minmax(0,1fr)}}
+#mining #mnRoot .mn-fitting-guide .covetor-copy p{max-width:76ch}
 
 @supports (appearance:base-select){#skills .library-top select,#skills .library-top select::picker(select){appearance:base-select!important}}
 
@@ -10498,13 +10498,13 @@ Mining Drone I x5</pre><button type="button" id="copy-vrd" data-i18n="lunar.labe
 <button type="button" class="totop" id="toTop" aria-label="Volver arriba" title="Volver arriba (Inicio)" hidden><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 14l6-6 6 6"/></svg></button>
 <footer class="foot">
   <p class="foot-sec"><span class="ic i-lock" aria-hidden="true"></span>Tu inventario no se guarda: al cerrar o recargar se borra. Solo tus Ajustes quedan en este navegador.</p>
-  <div class="foot-by">Creado por <b>Fiko McGivert</b> · <span class="mm-footer-corp-logo vg" role="img" aria-label="Vanguardia DR"></span>Vanguardia DR · SIGMA GRINDSET · <span class="ver">v1.0.228</span></div>
+  <div class="foot-by">Creado por <b>Fiko McGivert</b> · <span class="mm-footer-corp-logo vg" role="img" aria-label="Vanguardia DR"></span>Vanguardia DR · SIGMA GRINDSET · <span class="ver">v1.0.229</span></div>
 </footer>
 
 <script>
 'use strict';
 /* ============================================================
-   Market Moves+ v1.0.228 — SIGMA GRINDSET / Vanguardia DR
+   Market Moves+ v1.0.229 — SIGMA GRINDSET / Vanguardia DR
    Flujo:  pegado → items → carga (ESI: precios, volúmenes, historial) → verificación → plan → vista
      1. Pegado      parsePaste(): parser posicional de columnas de EVE (Name · Quantity · … · Volume · Est. Price).
      2. Carga       esiItems(): trae todo lo que falta; mientras carga, refresh() NO pinta (S.loading).
@@ -16098,13 +16098,11 @@ const MineUI=(()=>{
       node.dataset.i18n=key;
       return node;
     };
-    guide.append(text('p','lunar.fitOverview'));
     const choose=section('1','lunar.fitChoose');
     const layout=h('div','step covetor-step');
     const copy=h('div','covetor-copy');
-    copy.append(text('p','lunar.fitIntro'),text('p','lunar.fitRead'));
+    copy.append(text('p','lunar.fitOverview'),text('p','lunar.fitIntro'));
     const media=h('div','covetor-media'),figure=h('figure');
-    media.append(figure);
     const chooser=h('details','mn-fit-search'),selected=h('summary');
     const search=h('input');
     search.type='search';
@@ -16113,18 +16111,17 @@ const MineUI=(()=>{
     search.dataset.i18nAriaLabel='lunar.fitSearch';
     const options=h('div','mn-fit-options');
     chooser.append(selected,search,options);
-    const fit=h('details','fit mn-fit-disclosure'),caption=h('summary'),code=h('pre');
-    code.classList.add('no-tr');
-    fit.classList.add('mn-fit-inline');
     const hulkFits=['lunar.hulkBeginner','lunar.hulkStandard'].map((key,index)=>{
       const disclosure=h('details','fit mn-fit-disclosure mn-fit-inline mn-fit-standard');
       disclosure.append(text('summary',key),text('p','lunar.hulkStandardNote'),
         h('pre','no-tr',[HULK_BEGINNER,HULK_STANDARD][index]));
       return disclosure;
     });
-    fit.append(caption,code);
-    layout.append(copy,media,chooser,fit);
-    choose.append(layout,...hulkFits);
+    media.append(chooser,figure);
+    layout.append(copy,media);
+    const hulkGrid=h('div','mn-hulk-fits');
+    hulkGrid.append(...hulkFits);
+    choose.append(layout,hulkGrid);
     const investment=section('2','lunar.fitInvestment');
     const total=h('div','mn-fit-guide-total');
     const breakdown=h('details','fit mn-fit-disclosure');
@@ -16155,17 +16152,13 @@ const MineUI=(()=>{
     return ()=>{
       if(root.dataset.guideView!=='fits')return;
       const ship=activeFitShip;
-      const data=ship&&row(ship,S.tier);
       const card=$q('.mn-fit-card:not([hidden])');
       selected.textContent=ship||tx('lunar.fitSearch');
-      caption.textContent=tx('lunar.fitShow')+' · '+(ship||'—');
-      hulkFits.forEach(disclosure=>{disclosure.hidden=ship!=='Hulk';});
+      hulkGrid.hidden=ship!=='Hulk';
       const src=shipImage(ship,'render',512);
       if(figure.firstElementChild?.src!==src?.src){
         figure.replaceChildren(...(src?[src]:[]));
       }
-      code.textContent=data?'['+ship+', '+TL[S.tier]+']\n\n'+
-        [data.low,data.mid,data.high,data.rigs,data.drones].filter(Boolean).join('\n\n'):'—';
       total.replaceChildren(...(card?[card.querySelector('.mn-fit-total').cloneNode(true)]:[]));
       budget.replaceChildren(...(card?[card.querySelector('.mn-fit-budget').cloneNode(true)]:[]));
       filter();
