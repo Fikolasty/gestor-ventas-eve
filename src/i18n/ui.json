@@ -4329,6 +4329,7 @@
   "lunar.trainingError": {"es":"Error de cotización.","en":"Could not load prices."},
   "lunar.analysisDetails": {"es":"Rendimiento, Inversión y Entrenamiento","en":"Yield, Investment and Training"},
   "lunar.omegaTitle": {"es":"Plan Omega","en":"Omega Plan"},
+  "lunar.effectiveVolume": {"es":"Volumen Efectivo","en":"Effective Volume"},
   "lunar.unitBuy": {"es": "Jita Buy · Por Unidad", "en": "Jita Buy · Per Unit"},
   "lunar.lotBuy": {"es": "Jita Buy · Lote de 1 Hora", "en": "Jita Buy · 1-Hour Lot"},
   "lunar.lotUnits": {"es": "{count} unidades", "en": "{count} units"},
