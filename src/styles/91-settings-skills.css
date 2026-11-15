@@ -40,7 +40,7 @@ body.mm-settings-compact #settings #mm-settings-panel-1 .c5c-skill-note{grid-col
 body.mm-settings-compact #settings #mm-settings-panel-1 .mm-skill-value{color:var(--clay)!important;font-weight:750!important;white-space:nowrap}
 body.mm-settings-compact #settings :is(#mm-settings-panel-0,#mm-settings-panel-2,#mm-settings-panel-3) fieldset.st:not(.c5c-fixed)>legend{background:var(--mm-settings-head)!important}
 body.mm-settings-compact #settings :is(#mm-settings-panel-0,#mm-settings-panel-2,#mm-settings-panel-3) fieldset.st:not(.c5c-fixed):not(.closed){background:var(--mm-settings-body)!important}
-body.mm-settings-compact #settings :is(#mm-settings-panel-0,#mm-settings-panel-1,#mm-settings-panel-2,#mm-settings-panel-3) :is(.st-f input:not([type=checkbox]),.st-f select,.st-f textarea){background:var(--mm-settings-input)!important}
+body.mm-settings-compact #settings :is(#mm-settings-panel-0,#mm-settings-panel-1,#mm-settings-panel-2,#mm-settings-panel-3) :is(.st-f input:not([type=checkbox]),.st-f select,.st-f textarea){background-color:var(--mm-settings-input)!important}
 @media(max-width:1050px){body.mm-settings-compact #settings #mm-settings-panel-1 .c5c-skills>.st-g{grid-template-columns:repeat(2,minmax(0,312px))!important;max-width:636px}}
 @media(max-width:650px){body.mm-settings-compact #settings #mm-settings-panel-1 .c5c-skills>.st-g{grid-template-columns:minmax(0,312px)!important;max-width:312px}body.mm-settings-compact #settings{grid-template-columns:minmax(0,1fr)}body.mm-settings-compact #settings>.lead{grid-column:1;grid-row:2;display:block;margin:0 80px 0 0!important}body.mm-settings-compact #settings>.st-wrap{grid-row:3}body.mm-settings-compact #settings>.lead::before{display:none}}
 

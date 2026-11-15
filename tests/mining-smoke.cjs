@@ -261,7 +261,7 @@ assert(source.includes('class="mn-guidance"'),'estimaciones sin aviso contextual
 // The Mining section owns the same heading component as Sales in the shell.
 assert(html.includes('class="guide-areas"') && html.includes('class="lunar-guide"'),'Guías debe mostrar la introducción lunar');
 assert(!source.includes('class="mn-module-intro"'),'No se debe renderizar una segunda cabecera antigua dentro de Minería');
-assert(source.includes("if(toolsOpen()){paintPlan();paintMonths();paintMax();}"),'no modificar la vista Omega');
-assert(source.includes("tools.append(omega,max,refinery,shared)"),'no modificar Nave Maxiada');
+assert(source.includes("if(root.dataset.guideView==='omega'){paintPlan();paintMonths();}"),'Plan Omega debe calcular en su pestaña');
+assert(source.includes("tools.append(max,refinery,shared)"),'no modificar Nave Maxiada');
 assert(source.includes("e.target.closest('.pk-fb')"),'los filtros de la guía deben conservar delegación de eventos');
 console.log('OK — guía visual sin duplicar filtros ni alterar rutas de cálculo.');

@@ -35,7 +35,7 @@ class GlobalBrandTests(unittest.TestCase):
                             for selector in ("#mmTabVentas", "#mmTabJita", "#mmTabMining"):
                                 page.locator(selector).click()
                                 check(selector)
-                            for view in ("guide", "scenario", "compare", "fits"):
+                            for view in ("guide", "scenario", "compare", "fits", "omega"):
                                 page.locator(f"#mining [data-guide-view={view}]").click()
                                 check(view)
                             page.locator('#mining .guide-areas a[href="#habilidades"]').click()

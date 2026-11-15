@@ -375,7 +375,10 @@ details.panel[open]>summary:not(:has(.fold-chevron))::after,.mn details[open]>su
 #pk>.pk-o::after{content:""!important;width:9px;height:9px;border-right:2px solid var(--ion);border-bottom:2px solid var(--ion);font-size:0!important;transform:translateY(-65%) rotate(45deg)!important}
 #pk>.pk-o[aria-expanded=true]::after{transform:translateY(-30%) rotate(225deg)!important}
 .lot-row .chev,.lot .chev{font-size:0!important;display:inline-block;width:9px;height:9px;border-right:2px solid var(--ion);border-bottom:2px solid var(--ion);transform:rotate(45deg);transition:transform .18s ease}
-select{appearance:none;-webkit-appearance:none;padding-right:30px!important;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23c3bcb1' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E")!important;background-repeat:no-repeat!important;background-position:right 9px center!important;background-size:16px!important}
+:root{--mm-select-chevron:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23c3bcb1' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E")}
+html.light{--mm-select-chevron:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23575047' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E")}
+select{appearance:none;-webkit-appearance:none;padding-inline-end:29px!important;background-image:var(--mm-select-chevron)!important;background-repeat:no-repeat!important;background-position:right 8px center!important;background-size:16px!important}
+@supports (appearance:base-select){select::picker-icon{display:none}}
 
 /* HOME en la barra superior: icono sin borde ni superficie. */
 #mmTabs .mm-home{display:inline-grid;place-items:center;align-self:center;width:40px;height:38px;padding:0;margin-right:auto;background:transparent!important;border:0!important;border-radius:0!important;box-shadow:none!important;color:var(--ion);cursor:pointer}

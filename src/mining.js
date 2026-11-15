@@ -341,7 +341,7 @@ const MineUI=(()=>{
    '</details>'+
    '<div class="mn-turnaround"><div class="mn-turnaround-heading"><label for="mnUnloadSec">Tiempo muerto por descarga</label>'+INFO('travel')+'</div>'+
      '<div class="mn-turnaround-input"><input id="mnUnloadSec" type="number" min="0" max="900" step="1" value="65" inputmode="numeric"><span>segundos</span></div>'+
-     '<small id="mnUnloadExplain"></small></div>'+
+     '</div>'+
    '</div>'+
    '<div class="mn-v-max"><div class="mn-maxbody"></div></div>'+
     '<div class="mn-v-ships">'+
@@ -534,11 +534,15 @@ const MineUI=(()=>{
       st.classList.toggle('err',val==null);return;
     }
     const id=priceId(),material=item();
+    const byVolume=S.met==='m3';
+    const winner=best(S.tier,S.shipClass==='exhumer',r=>r.eff);
     const buy=manualQuote(id,'buy')??PRICE[id]?.buy;
     const sell=manualQuote(id,'sell')??PRICE[id]?.sell;
     const quote=value=>Number.isFinite(value)?NF2.format(value)+' ISK':'—';
-    const primary=h('span','mn-quote-buy');
-    primary.append(h('span','','Jita Buy · ISK/u.'),h('strong','',quote(buy)));
+    const primary=h('span',byVolume?'mn-quote-buy mn-volume-summary':'mn-quote-buy');
+    const amount=h('strong','',byVolume?(winner?NF0.format(winner.r.eff):'—'):(Number.isFinite(buy)?NF2.format(buy):'—'));
+    if(byVolume?winner:Number.isFinite(buy))amount.append(' ',h('small','mn-summary-unit',byVolume?'m³/h':'ISK'));
+    primary.append(h('span','',byVolume?tx('lunar.effectiveVolume'):tx('lunar.unitBuy')),amount);
     const name=h('span','mn-quote-material');
     if(id&&material){
       const icon=h('img');
@@ -550,8 +554,20 @@ const MineUI=(()=>{
       name.append(icon,h('span','',(S.cmp&&material.cid?'Compressed ':'')+material.n));
     }
     const secondary=h('span','mn-quote-sell');
-    secondary.append(h('span','','Jita Sell'),h('strong','',quote(sell)));
+    if(!byVolume)secondary.append(h('span','','Jita Sell'),h('strong','',quote(sell)));
     st.replaceChildren(primary,name,secondary);
+    if(!byVolume){
+      const units=winner&&material?.vol>0?Math.floor(winner.r.eff/material.vol):null;
+      const lot=h('span','mn-session-lot');
+      const value=h('span','mn-quote-buy');
+      const total=h('strong','',units!=null&&Number.isFinite(buy)?NF0.format(units*buy):'—');
+      if(units!=null&&Number.isFinite(buy))total.append(' ',h('small','mn-summary-unit','ISK'));
+      value.append(h('span','',tx('lunar.lotBuy')),total);
+      lot.append(value);
+      if(units!=null)lot.append(h('span','',tx('lunar.lotUnits',{count:NF0.format(units)})));
+      lot.append(h('span','mn-quote-sell','Jita Sell'),h('strong','mn-lot-sell',units!=null&&Number.isFinite(sell)?quote(units*sell):'—'));
+      st.append(lot);
+    }
     if(buy==null&&sell==null){
       const status=marketPriceState(id,S.base);
       if(status)st.append(h('small','',status));
@@ -1531,7 +1547,8 @@ const MineUI=(()=>{
       (S.shipClass==='exhumer'?'Exhumers':'Barges')+' · '+MATL[S.mat]+' · '+TL[S.tier]+' · Skills '+['','I','II','III','IV','V'][S.lv]+
       ' · Implantes '+(S.lv===3?'Sin':S.imp?S.imp+'%':'Sin')+' · '+(S.boost||'Sin boost')+' · '+(S.met==='isk'?'ISK/h':'m³/h');
     syncEditorialScenario?.();
-    if(toolsOpen()){paintPlan();paintMonths();paintMax();}
+    if(root.dataset.guideView==='omega'){paintPlan();paintMonths();}
+    if(root.dataset.guideView==='compare'&&toolsOpen())paintMax();
     $q('.mn-iii-estimate').hidden=S.lv!==3;
     $q('.mn-imp-estimate').hidden=S.lv===3||S.imp!==4;
     paintBoost();paintPrice();paintTake();paintKpi();paintAllShips();paintDetail();paintInvestNote();paintTraining();paintYieldMatrix();}
@@ -1556,7 +1573,7 @@ const MineUI=(()=>{
     // La última pintura ocurre cuando terminan las consultas, también si ESI falla.
     if(ids.some(id=>!PRICE[id]))paint();
   }
-  function drawCharts(){if(!toolsOpen()||!root.offsetParent)return;lastW=root.clientWidth;drawCum({moon:planCalc('moon'),ice:planCalc('ice'),gas:planCalc('gas')});}
+  function drawCharts(){if(root?.dataset.guideView!=='omega'||!root.offsetParent)return;lastW=root.clientWidth;drawCum({moon:planCalc('moon'),ice:planCalc('ice'),gas:planCalc('gas')});}
 
   // Secondary navigation: all panels remain mounted for existing painting and ESI updates.
   function mountAnalysisTabs(){
@@ -1671,7 +1688,7 @@ const MineUI=(()=>{
       boostHelp.addEventListener(event,()=>boostHelp.classList.remove('is-dismissed'));
     }
     copy.after(boostHelp);
-    controls.querySelector('.mn-guide-heading').append($q('.mn-pst'));
+    const quotes=$q('.mn-pst');
     const reset=localized('button','lunar.resetScenario');
     reset.type='button';
     reset.className='mn-scenario-reset';
@@ -1683,9 +1700,11 @@ const MineUI=(()=>{
       paint();
       needPrices();
     });
-    basic.append(unload,...advancedFields.children,$q('.mn-price'),reset);
+    basic.append(...advancedFields.children,$q('.mn-price'),unload,reset);
     panel.append(basic,notes);
-    controls.insertBefore(panel,groups);
+    const sessionLayout=h('div','mn-session-layout');
+    sessionLayout.append(panel,quotes);
+    controls.insertBefore(sessionLayout,groups);
     const comparison=h('section','mn-comparison-page');
     const comparisonHeader=h('header','mn-scenario-hero mn-compare-hero');
     const comparisonTitle=h('h2','',tx('lunar.compareTitle')+' ');
@@ -1742,7 +1761,12 @@ const MineUI=(()=>{
     const tools=h('details','mn-editorial-details mn-comparison-tools');
     tools.append(localized('summary','lunar.comparisonTools'),localized('p','mining.grossWarning'));
     const omega=$q('.mn-v-plan'),max=$q('.mn-v-max');
-    omega.prepend(localized('h3','lunar.omegaTitle'),localized('p','lunar.omegaIntro'));
+    const omegaPage=h('section','mn-omega-page');
+    const omegaHeading=h('header','mn-scenario-hero');
+    omegaHeading.append(localized('h2','lunar.omegaTitle'));
+    omega.prepend(localized('p','lunar.omegaIntro'));
+    omegaPage.append(omegaHeading,omega);
+    root.append(omegaPage);
     max.prepend(localized('h3','lunar.maxTitle'),localized('p','lunar.maxIntro'));
     const omegaOptions=h('details','mn-editorial-details mn-omega-options');
     const setup=omega.querySelector('.pl-setup');
@@ -1775,11 +1799,11 @@ const MineUI=(()=>{
     for(let node=recap;node;node=node.nextElementSibling)resultNodes.push(node);
     const shipList=$q('.mn-all-ships');
     const analysis=$q('.mn-analysis-panels');
-    basic.append(unload);
+
     selectedDetail.before(shipList);
     fittingDetail.append(...resultNodes.filter(node=>node!==shipList));
     comparisonContent.append(tools);
-    tools.append(omega,max,refinery,shared);
+    tools.append(max,refinery,shared);
     tools.addEventListener('toggle',()=>{
       if(tools.open){paint();needPrices();requestAnimationFrame(drawCharts);}
     });
@@ -1794,7 +1818,6 @@ const MineUI=(()=>{
       const compressed=compression(S);
       unloadInput.disabled=compressed;
       if(document.activeElement!==unloadInput)unloadInput.value=String(compressed?0:S.unloadSec);
-      $q('#mnUnloadExplain').textContent=compressed?tx('lunar.noUnloadWithCompression'):'';
       for(const select of controls.querySelectorAll('[data-scenario-key]')){
         select.disabled=select.dataset.scenarioKey==='imp'&&S.lv===3;
         select.value=S[select.dataset.scenarioKey];
@@ -1891,7 +1914,7 @@ const MineUI=(()=>{
       window.addEventListener('pagehide',()=>chartResize.disconnect(),{once:true});
     }}
   // el panel empieza oculto: al abrirlo se dibujan los gráficos con su ancho real
-  const toolsOpen=()=>root?.dataset.guideView==='compare'&&$q('.mn-comparison-tools')?.open;
+  const toolsOpen=()=>root?.dataset.guideView==='omega'||(root?.dataset.guideView==='compare'&&$q('.mn-comparison-tools')?.open);
   let plexLoading=false;
   function showView(){paint();needPrices();}
   return{mount,showView,shown(){if(root){paint();requestAnimationFrame(drawCharts);}}};
