@@ -4015,10 +4015,7 @@
     "es": "Minería",
     "en": "Mining"
   },
-  "lunar.label2": {
-    "es": "Minería Lunar",
-    "en": "Moon Mining"
-  },
+  "lunar.label2": {"es": "Primera Operación", "en": "First Operation"},
   "lunar.label3": {
     "es": "Escenario",
     "en": "Scenario"
@@ -4033,15 +4030,9 @@
   },
   "lunar.fittingsTitle": {"es":"FITTINGS &","en":"FITTINGS &"},
   "lunar.fittingsAccent": {"es":"INVERSIÓN","en":"INVESTMENT"},
-  "lunar.label6": {
-    "es": "MINERÍA",
-    "en": "MOON"
-  },
-  "lunar.titleSecond": {"es":"LUNAR","en":"MINING"},
-  "lunar.label7": {
-    "es": "Tu Primera Covetor",
-    "en": "Your First Covetor"
-  },
+  "lunar.label6": {"es": "¿CÓMO MINAR EN", "en": "HOW TO MINE IN"},
+  "lunar.titleSecond": {"es": "NULLSEC?", "en": "NULLSEC?"},
+  "lunar.label7": {"es": "Prepara tu Operación", "en": "Prepare Your Operation"},
   "lunar.label8": {
     "es": "Camino a la Luna",
     "en": "Getting to the Moon"
@@ -4082,6 +4073,7 @@
     "es": "Confirmación de fractura",
     "en": "Fracture confirmation"
   },
+  "lunar.operationIntro": {"es": "En nullsec, la operación empieza antes de salir de la estación. Elige qué vas a minar, revisa el fitting y decide cómo vas a mover la carga. Si minas solo, planea dónde descargar y cuánto te tomará volver al belt. Si vas con varias cuentas o con tu corp, coordina el traslado y confirma qué nave dará boost y compresión en el sitio. Más abajo verás cómo prepararte para una luna de alianza, qué equipo usar para evitar el residuo en una R64 y cómo regresar a HY-RWO para cotizar el reproceso.", "en": "In nullsec, the operation starts before you undock. Choose what to mine, check your fitting, and plan how to move the haul. If you mine solo, decide where to unload and how long it will take to return to the belt. If you fly with multiple accounts or with your corp, coordinate travel and confirm which ship will provide boosts and on-site compression. Below, you will learn how to prepare for an alliance moon, which equipment avoids residue on an R64, and how to return to HY-RWO for a reprocessing quote."},
   "lunar.paragraph0": {
     "es": "Si quieres empezar a minar en barcaza desde el primer día, activa Omega y canjea el <strong>Mining Barge Operations Expert System</strong> en el piloto que va a minar. Te presta habilidades durante siete días. Pon en cola las habilidades permanentes desde el primer día.",
     "en": "To start barge mining on day one, activate Omega and redeem the <strong>Mining Barge Operations Expert System</strong> on your miner. It lends you skills for seven days. Queue the permanent skills on day one."

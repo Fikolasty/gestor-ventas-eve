@@ -626,9 +626,10 @@ const MineUI=(()=>{
     const image=shipImage(winner.s,'render',512);
     if(image)card.append(image);
     const copy=h('div','mn-spotlight-copy');
-    const value=val(winner.r);
-    copy.append(h('span','mn-spotlight-rank',tx('lunar.firstPlace')),h('h3','',winner.s),
-      h('strong','',value==null?NF0.format(winner.r.eff)+' m³/h':fmtV(value)));
+    const value=val(winner.r),inISK=S.met==='isk'&&value!=null;
+    const amount=h('strong','',inISK?cmpISK(value):NF0.format(value??winner.r.eff));
+    amount.append(' ',h('small','mn-summary-unit',inISK?'ISK/h':'m³/h'));
+    copy.append(h('span','mn-spotlight-rank',tx('lunar.firstPlace')),h('h3','',winner.s),amount);
     card.append(copy);
     const table=h('table','mn-spotlight-table');
     const header=table.createTHead().insertRow();
