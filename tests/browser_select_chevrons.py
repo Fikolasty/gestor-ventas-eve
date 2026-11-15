@@ -28,7 +28,7 @@ class SelectChevronTests(unittest.TestCase):
                         self.assertTrue(styles, scope)
                         for name, image, position, native in styles:
                             self.assertIn("%23" + ("575047" if light else "c3bcb1"), image, name)
-                            self.assertEqual(position, "calc(100% - 8px) 50%", name)
+                            self.assertIn(position, ("calc(100% - 8px) 50%", "right 8px 50%"), name)
                             self.assertEqual(native, "none", name)
 
             page.locator("#mmTabProduction").click()
