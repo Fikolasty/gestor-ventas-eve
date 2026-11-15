@@ -754,12 +754,8 @@ class ThemeBrowserTests(unittest.TestCase):
         root=self.page.locator('#mnRoot')
         tools=root.locator('.mn-comparison-tools')
         tools.locator(':scope > summary').click()
-        expect(tools.locator(".mn-v-plan")).to_be_visible()
+        expect(root.locator(".mn-v-plan")).to_be_hidden()
         expect(tools.locator(".mn-v-max")).to_be_visible()
-        hours=tools.locator('[data-k=hrs] input')
-        hours.fill('4,5')
-        hours.press('Enter')
-        expect(hours).to_have_value('4.5')
         tools.locator('[data-max-key=material]').select_option('gas')
         expect(tools.locator('.mn-maxcat')).to_have_count(1)
         expect(root).to_have_attribute('data-guide-view','compare')
@@ -782,8 +778,15 @@ class ThemeBrowserTests(unittest.TestCase):
                              plan.locator('pre').inner_text())
         analysis.locator('.mn-training-books summary').click()
         expect(analysis.locator('.mn-books-total')).to_have_text(re.compile(r'^−.*ISK$'),timeout=10000)
-        tools.locator('.mn-omega-options summary').click()
-        expect(tools.locator('.pl-plexin')).to_have_value('6,000,000')
+        self.page.locator('[data-guide-view=omega]').click()
+        omega=root.locator('.mn-omega-page')
+        expect(omega.locator('.mn-v-plan')).to_be_visible()
+        hours=omega.locator('[data-k=hrs] input')
+        hours.fill('4,5')
+        hours.press('Enter')
+        expect(hours).to_have_value('4.5')
+        omega.locator('.mn-omega-options summary').click()
+        expect(omega.locator('.pl-plexin')).to_have_value('6,000,000')
         self.assertTrue({'books','plex','jita'}.issubset(calls))
         for width in (390,630,980,1440):
             self.page.set_viewport_size({'width':width,'height':900})
@@ -792,7 +795,7 @@ class ThemeBrowserTests(unittest.TestCase):
                 self.assertTrue(self.page.evaluate('document.documentElement.scrollWidth <= innerWidth+1'),
                                 (width,light))
         self.page.evaluate("setLang('en')")
-        expect(tools.locator(".mn-v-plan > h3")).to_have_text("Omega Plan")
+        expect(omega.locator("header h2")).to_have_text("Omega Plan")
         expect(analysis.locator('.mn-training-plan h4').first).to_have_text("Basic Plan")
 
     def test_refiner_profile_tracks_skills_implant_and_saved_fee(self):
@@ -932,7 +935,7 @@ class ThemeBrowserTests(unittest.TestCase):
                         const summary=panel.querySelector('summary');
                         const style=getComputedStyle(summary,'::after');
                         const matrix=new DOMMatrixReadOnly(style.transform);
-                        return style.position==='absolute' && style.right==='7px' &&
+                        return style.position==='absolute' && style.right==='0px' &&
                             style.marginRight==='0px' && style.borderRightStyle==='solid' &&
                             Math.abs(parseFloat(style.top)-summary.clientHeight/2)<=1 &&
                             Math.abs(matrix.f+parseFloat(style.height)/2)<=1 &&
